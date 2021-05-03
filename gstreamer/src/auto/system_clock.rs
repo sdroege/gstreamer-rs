@@ -46,13 +46,14 @@ unsafe impl Sync for SystemClock {}
 pub const NONE_SYSTEM_CLOCK: Option<&SystemClock> = None;
 
 pub trait SystemClockExt: 'static {
-    #[doc(alias = "get_property_clock_type")]
+    #[doc(alias = "clock-type")]
     fn clock_type(&self) -> ClockType;
 
-    #[doc(alias = "set_property_clock_type")]
+    #[doc(alias = "clock-type")]
     fn set_clock_type(&self, clock_type: ClockType);
 
-    fn connect_property_clock_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "clock-type")]
+    fn connect_clock_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -83,7 +84,8 @@ impl<O: IsA<SystemClock>> SystemClockExt for O {
         }
     }
 
-    fn connect_property_clock_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "clock-type")]
+    fn connect_clock_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

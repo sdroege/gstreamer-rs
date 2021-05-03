@@ -23,12 +23,15 @@ pub const NONE_URI_HANDLER: Option<&URIHandler> = None;
 
 pub trait URIHandlerExt: 'static {
     #[doc(alias = "gst_uri_handler_get_protocols")]
+    #[doc(alias = "get_protocols")]
     fn protocols(&self) -> Vec<glib::GString>;
 
     #[doc(alias = "gst_uri_handler_get_uri")]
+    #[doc(alias = "get_uri")]
     fn uri(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_uri_handler_get_uri_type")]
+    #[doc(alias = "get_uri_type")]
     fn uri_type(&self) -> URIType;
 
     #[doc(alias = "gst_uri_handler_set_uri")]

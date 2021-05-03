@@ -24,6 +24,7 @@ impl AppSink {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_app_sink_get_buffer_list_support")]
+    #[doc(alias = "get_buffer_list_support")]
     pub fn is_buffer_list_support(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_app_sink_get_buffer_list_support(
@@ -33,26 +34,31 @@ impl AppSink {
     }
 
     #[doc(alias = "gst_app_sink_get_caps")]
+    #[doc(alias = "get_caps")]
     pub fn caps(&self) -> Option<gst::Caps> {
         unsafe { from_glib_full(ffi::gst_app_sink_get_caps(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_sink_get_drop")]
+    #[doc(alias = "get_drop")]
     pub fn is_drop(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_sink_get_drop(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_sink_get_emit_signals")]
+    #[doc(alias = "get_emit_signals")]
     pub fn emits_signals(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_sink_get_emit_signals(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_sink_get_max_buffers")]
+    #[doc(alias = "get_max_buffers")]
     pub fn max_buffers(&self) -> u32 {
         unsafe { ffi::gst_app_sink_get_max_buffers(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_app_sink_get_wait_on_eos")]
+    #[doc(alias = "get_wait_on_eos")]
     pub fn is_wait_on_eos(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_sink_get_wait_on_eos(self.to_glib_none().0)) }
     }
@@ -154,7 +160,7 @@ impl AppSink {
         }
     }
 
-    #[doc(alias = "get_property_buffer_list")]
+    #[doc(alias = "buffer-list")]
     pub fn is_buffer_list(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
@@ -169,7 +175,7 @@ impl AppSink {
         }
     }
 
-    #[doc(alias = "set_property_buffer_list")]
+    #[doc(alias = "buffer-list")]
     pub fn set_buffer_list(&self, buffer_list: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -180,6 +186,7 @@ impl AppSink {
         }
     }
 
+    #[doc(alias = "eos")]
     pub fn connect_eos<F: Fn(&AppSink) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn eos_trampoline<F: Fn(&AppSink) + Send + 'static>(
             this: *mut ffi::GstAppSink,
@@ -201,7 +208,8 @@ impl AppSink {
         }
     }
 
-    pub fn connect_property_buffer_list_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+    #[doc(alias = "buffer-list")]
+    pub fn connect_buffer_list_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -228,7 +236,8 @@ impl AppSink {
         }
     }
 
-    pub fn connect_property_caps_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+    #[doc(alias = "caps")]
+    pub fn connect_caps_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -253,7 +262,8 @@ impl AppSink {
         }
     }
 
-    pub fn connect_property_drop_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+    #[doc(alias = "drop")]
+    pub fn connect_drop_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -278,7 +288,8 @@ impl AppSink {
         }
     }
 
-    pub fn connect_property_emit_signals_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+    #[doc(alias = "emit-signals")]
+    pub fn connect_emit_signals_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -305,7 +316,8 @@ impl AppSink {
         }
     }
 
-    pub fn connect_property_eos_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+    #[doc(alias = "eos")]
+    pub fn connect_eos_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -330,7 +342,8 @@ impl AppSink {
         }
     }
 
-    pub fn connect_property_max_buffers_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+    #[doc(alias = "max-buffers")]
+    pub fn connect_max_buffers_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -357,7 +370,8 @@ impl AppSink {
         }
     }
 
-    pub fn connect_property_wait_on_eos_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+    #[doc(alias = "wait-on-eos")]
+    pub fn connect_wait_on_eos_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

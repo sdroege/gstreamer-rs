@@ -48,6 +48,7 @@ impl PadTemplate {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_pad_template_new_with_gtype")]
+    #[doc(alias = "new_with_gtype")]
     pub fn with_gtype(
         name_template: &str,
         direction: PadDirection,
@@ -69,6 +70,7 @@ impl PadTemplate {
     }
 
     #[doc(alias = "gst_pad_template_get_caps")]
+    #[doc(alias = "get_caps")]
     pub fn caps(&self) -> Caps {
         unsafe { from_glib_full(ffi::gst_pad_template_get_caps(self.to_glib_none().0)) }
     }
@@ -76,6 +78,7 @@ impl PadTemplate {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_pad_template_get_documentation_caps")]
+    #[doc(alias = "get_documentation_caps")]
     pub fn documentation_caps(&self) -> Caps {
         unsafe {
             from_glib_full(ffi::gst_pad_template_get_documentation_caps(
@@ -103,7 +106,6 @@ impl PadTemplate {
         }
     }
 
-    #[doc(alias = "get_property_direction")]
     pub fn direction(&self) -> PadDirection {
         unsafe {
             let mut value = glib::Value::from_type(<PadDirection as StaticType>::static_type());
@@ -120,7 +122,6 @@ impl PadTemplate {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    #[doc(alias = "get_property_gtype")]
     pub fn gtype(&self) -> glib::types::Type {
         unsafe {
             let mut value =
@@ -136,7 +137,7 @@ impl PadTemplate {
         }
     }
 
-    #[doc(alias = "get_property_name_template")]
+    #[doc(alias = "name-template")]
     pub fn name_template(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
@@ -151,7 +152,6 @@ impl PadTemplate {
         }
     }
 
-    #[doc(alias = "get_property_presence")]
     pub fn presence(&self) -> PadPresence {
         unsafe {
             let mut value = glib::Value::from_type(<PadPresence as StaticType>::static_type());
@@ -166,6 +166,7 @@ impl PadTemplate {
         }
     }
 
+    #[doc(alias = "pad-created")]
     pub fn connect_pad_created<F: Fn(&PadTemplate, &Pad) + Send + Sync + 'static>(
         &self,
         f: F,

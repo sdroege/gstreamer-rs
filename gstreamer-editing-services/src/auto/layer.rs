@@ -80,24 +80,31 @@ pub trait LayerExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_layer_get_active_for_track")]
+    #[doc(alias = "get_active_for_track")]
     fn is_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool;
 
     #[doc(alias = "ges_layer_get_auto_transition")]
+    #[doc(alias = "get_auto_transition")]
     fn is_auto_transition(&self) -> bool;
 
     #[doc(alias = "ges_layer_get_clips")]
+    #[doc(alias = "get_clips")]
     fn clips(&self) -> Vec<Clip>;
 
     #[doc(alias = "ges_layer_get_clips_in_interval")]
+    #[doc(alias = "get_clips_in_interval")]
     fn clips_in_interval(&self, start: gst::ClockTime, end: gst::ClockTime) -> Vec<Clip>;
 
     #[doc(alias = "ges_layer_get_duration")]
+    #[doc(alias = "get_duration")]
     fn duration(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_layer_get_priority")]
+    #[doc(alias = "get_priority")]
     fn priority(&self) -> u32;
 
     #[doc(alias = "ges_layer_get_timeline")]
+    #[doc(alias = "get_timeline")]
     fn timeline(&self) -> Option<Timeline>;
 
     #[doc(alias = "ges_layer_is_empty")]
@@ -123,19 +130,21 @@ pub trait LayerExt: 'static {
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[doc(alias = "active-changed")]
     //fn connect_active_changed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "clip-added")]
     fn connect_clip_added<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "clip-removed")]
     fn connect_clip_removed<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "auto-transition")]
+    fn connect_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg_attr(feature = "v1_16", deprecated = "Since 1.16")]
-    fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "priority")]
+    fn connect_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Layer>> LayerExt for O {
@@ -322,10 +331,12 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[doc(alias = "active-changed")]
     //fn connect_active_changed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Empty ctype tracks: *.PtrArray TypeId { ns_id: 1, id: 17 }
     //}
 
+    #[doc(alias = "clip-added")]
     fn connect_clip_added<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn clip_added_trampoline<P, F: Fn(&P, &Clip) + 'static>(
             this: *mut ffi::GESLayer,
@@ -353,6 +364,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
+    #[doc(alias = "clip-removed")]
     fn connect_clip_removed<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn clip_removed_trampoline<P, F: Fn(&P, &Clip) + 'static>(
             this: *mut ffi::GESLayer,
@@ -380,10 +392,8 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "auto-transition")]
+    fn connect_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_auto_transition_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESLayer,
             _param_spec: glib::ffi::gpointer,
@@ -407,7 +417,8 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "priority")]
+    fn connect_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_priority_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESLayer,
             _param_spec: glib::ffi::gpointer,

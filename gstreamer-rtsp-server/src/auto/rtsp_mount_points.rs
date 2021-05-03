@@ -43,6 +43,7 @@ pub trait RTSPMountPointsExt: 'static {
     fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Result<glib::GString, glib::BoolError>;
 
     #[doc(alias = "gst_rtsp_mount_points_match")]
+    #[doc(alias = "match")]
     fn match_(&self, path: &str) -> (RTSPMediaFactory, i32);
 
     #[doc(alias = "gst_rtsp_mount_points_remove_factory")]

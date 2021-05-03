@@ -37,9 +37,11 @@ pub trait TagSetterExt: 'static {
     //fn add_tags(&self, mode: TagMergeMode, tag: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     #[doc(alias = "gst_tag_setter_get_tag_list")]
+    #[doc(alias = "get_tag_list")]
     fn tag_list(&self) -> Option<TagList>;
 
     #[doc(alias = "gst_tag_setter_get_tag_merge_mode")]
+    #[doc(alias = "get_tag_merge_mode")]
     fn tag_merge_mode(&self) -> TagMergeMode;
 
     #[doc(alias = "gst_tag_setter_merge_tags")]

@@ -30,16 +30,19 @@ glib::wrapper! {
 
 impl Player {
     #[doc(alias = "gst_player_get_audio_video_offset")]
+    #[doc(alias = "get_audio_video_offset")]
     pub fn audio_video_offset(&self) -> i64 {
         unsafe { ffi::gst_player_get_audio_video_offset(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_player_get_color_balance")]
+    #[doc(alias = "get_color_balance")]
     pub fn color_balance(&self, type_: PlayerColorBalanceType) -> f64 {
         unsafe { ffi::gst_player_get_color_balance(self.to_glib_none().0, type_.into_glib()) }
     }
 
     #[doc(alias = "gst_player_get_current_audio_track")]
+    #[doc(alias = "get_current_audio_track")]
     pub fn current_audio_track(&self) -> Option<PlayerAudioInfo> {
         unsafe {
             from_glib_full(ffi::gst_player_get_current_audio_track(
@@ -49,6 +52,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_current_subtitle_track")]
+    #[doc(alias = "get_current_subtitle_track")]
     pub fn current_subtitle_track(&self) -> Option<PlayerSubtitleInfo> {
         unsafe {
             from_glib_full(ffi::gst_player_get_current_subtitle_track(
@@ -58,6 +62,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_current_video_track")]
+    #[doc(alias = "get_current_video_track")]
     pub fn current_video_track(&self) -> Option<PlayerVideoInfo> {
         unsafe {
             from_glib_full(ffi::gst_player_get_current_video_track(
@@ -67,6 +72,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_current_visualization")]
+    #[doc(alias = "get_current_visualization")]
     pub fn current_visualization(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_player_get_current_visualization(
@@ -76,46 +82,55 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_duration")]
+    #[doc(alias = "get_duration")]
     pub fn duration(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::gst_player_get_duration(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_media_info")]
+    #[doc(alias = "get_media_info")]
     pub fn media_info(&self) -> Option<PlayerMediaInfo> {
         unsafe { from_glib_full(ffi::gst_player_get_media_info(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_multiview_flags")]
+    #[doc(alias = "get_multiview_flags")]
     pub fn multiview_flags(&self) -> gst_video::VideoMultiviewFlags {
         unsafe { from_glib(ffi::gst_player_get_multiview_flags(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_multiview_mode")]
+    #[doc(alias = "get_multiview_mode")]
     pub fn multiview_mode(&self) -> gst_video::VideoMultiviewFramePacking {
         unsafe { from_glib(ffi::gst_player_get_multiview_mode(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_mute")]
+    #[doc(alias = "get_mute")]
     pub fn is_muted(&self) -> bool {
         unsafe { from_glib(ffi::gst_player_get_mute(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_pipeline")]
+    #[doc(alias = "get_pipeline")]
     pub fn pipeline(&self) -> gst::Element {
         unsafe { from_glib_full(ffi::gst_player_get_pipeline(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_position")]
+    #[doc(alias = "get_position")]
     pub fn position(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::gst_player_get_position(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_rate")]
+    #[doc(alias = "get_rate")]
     pub fn rate(&self) -> f64 {
         unsafe { ffi::gst_player_get_rate(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_player_get_subtitle_uri")]
+    #[doc(alias = "get_subtitle_uri")]
     pub fn subtitle_uri(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::gst_player_get_subtitle_uri(self.to_glib_none().0)) }
     }
@@ -123,16 +138,19 @@ impl Player {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_player_get_subtitle_video_offset")]
+    #[doc(alias = "get_subtitle_video_offset")]
     pub fn subtitle_video_offset(&self) -> i64 {
         unsafe { ffi::gst_player_get_subtitle_video_offset(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_player_get_uri")]
+    #[doc(alias = "get_uri")]
     pub fn uri(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::gst_player_get_uri(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_video_snapshot")]
+    #[doc(alias = "get_video_snapshot")]
     pub fn video_snapshot(
         &self,
         format: PlayerSnapshotFormat,
@@ -148,6 +166,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_volume")]
+    #[doc(alias = "get_volume")]
     pub fn volume(&self) -> f64 {
         unsafe { ffi::gst_player_get_volume(self.to_glib_none().0) }
     }
@@ -325,7 +344,6 @@ impl Player {
         }
     }
 
-    #[doc(alias = "get_property_suburi")]
     pub fn suburi(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
@@ -340,7 +358,6 @@ impl Player {
         }
     }
 
-    #[doc(alias = "set_property_suburi")]
     pub fn set_suburi(&self, suburi: Option<&str>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -351,7 +368,7 @@ impl Player {
         }
     }
 
-    #[doc(alias = "get_property_video_multiview_flags")]
+    #[doc(alias = "video-multiview-flags")]
     pub fn video_multiview_flags(&self) -> gst_video::VideoMultiviewFlags {
         unsafe {
             let mut value = glib::Value::from_type(
@@ -368,7 +385,7 @@ impl Player {
         }
     }
 
-    #[doc(alias = "set_property_video_multiview_flags")]
+    #[doc(alias = "video-multiview-flags")]
     pub fn set_video_multiview_flags(&self, video_multiview_flags: gst_video::VideoMultiviewFlags) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -379,7 +396,7 @@ impl Player {
         }
     }
 
-    #[doc(alias = "get_property_video_multiview_mode")]
+    #[doc(alias = "video-multiview-mode")]
     pub fn video_multiview_mode(&self) -> gst_video::VideoMultiviewFramePacking {
         unsafe {
             let mut value = glib::Value::from_type(
@@ -396,7 +413,7 @@ impl Player {
         }
     }
 
-    #[doc(alias = "set_property_video_multiview_mode")]
+    #[doc(alias = "video-multiview-mode")]
     pub fn set_video_multiview_mode(
         &self,
         video_multiview_mode: gst_video::VideoMultiviewFramePacking,
@@ -411,6 +428,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_audio_streams")]
+    #[doc(alias = "get_audio_streams")]
     pub fn audio_streams(info: &PlayerMediaInfo) -> Vec<PlayerAudioInfo> {
         skip_assert_initialized!();
         unsafe {
@@ -421,6 +439,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_subtitle_streams")]
+    #[doc(alias = "get_subtitle_streams")]
     pub fn subtitle_streams(info: &PlayerMediaInfo) -> Vec<PlayerSubtitleInfo> {
         skip_assert_initialized!();
         unsafe {
@@ -431,6 +450,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_video_streams")]
+    #[doc(alias = "get_video_streams")]
     pub fn video_streams(info: &PlayerMediaInfo) -> Vec<PlayerVideoInfo> {
         skip_assert_initialized!();
         unsafe {
@@ -446,6 +466,7 @@ impl Player {
         unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_player_visualizations_get()) }
     }
 
+    #[doc(alias = "buffering")]
     pub fn connect_buffering<F: Fn(&Player, i32) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn buffering_trampoline<F: Fn(&Player, i32) + Send + 'static>(
             this: *mut ffi::GstPlayer,
@@ -468,6 +489,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "end-of-stream")]
     pub fn connect_end_of_stream<F: Fn(&Player) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn end_of_stream_trampoline<F: Fn(&Player) + Send + 'static>(
             this: *mut ffi::GstPlayer,
@@ -489,6 +511,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "error")]
     pub fn connect_error<F: Fn(&Player, &glib::Error) + Send + 'static>(
         &self,
         f: F,
@@ -514,6 +537,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "media-info-updated")]
     pub fn connect_media_info_updated<F: Fn(&Player, &PlayerMediaInfo) + Send + 'static>(
         &self,
         f: F,
@@ -541,6 +565,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "mute-changed")]
     pub fn connect_mute_changed<F: Fn(&Player) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn mute_changed_trampoline<F: Fn(&Player) + Send + 'static>(
             this: *mut ffi::GstPlayer,
@@ -562,6 +587,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "state-changed")]
     pub fn connect_state_changed<F: Fn(&Player, PlayerState) + Send + 'static>(
         &self,
         f: F,
@@ -589,6 +615,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "uri-loaded")]
     pub fn connect_uri_loaded<F: Fn(&Player, &str) + Send + 'static>(
         &self,
         f: F,
@@ -617,6 +644,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "video-dimensions-changed")]
     pub fn connect_video_dimensions_changed<F: Fn(&Player, i32, i32) + Send + 'static>(
         &self,
         f: F,
@@ -645,6 +673,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "volume-changed")]
     pub fn connect_volume_changed<F: Fn(&Player) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn volume_changed_trampoline<F: Fn(&Player) + Send + 'static>(
             this: *mut ffi::GstPlayer,
@@ -666,6 +695,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "warning")]
     pub fn connect_warning<F: Fn(&Player, &glib::Error) + Send + 'static>(
         &self,
         f: F,
@@ -691,7 +721,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_audio_video_offset_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "audio-video-offset")]
+    pub fn connect_audio_video_offset_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -718,7 +749,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_current_audio_track_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "current-audio-track")]
+    pub fn connect_current_audio_track_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -745,9 +777,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_current_subtitle_track_notify<
-        F: Fn(&Player) + Send + Sync + 'static,
-    >(
+    #[doc(alias = "current-subtitle-track")]
+    pub fn connect_current_subtitle_track_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -774,7 +805,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_current_video_track_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "current-video-track")]
+    pub fn connect_current_video_track_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -801,7 +833,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_duration_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "duration")]
+    pub fn connect_duration_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -826,7 +859,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_media_info_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "media-info")]
+    pub fn connect_media_info_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -853,7 +887,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_mute_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "mute")]
+    pub fn connect_mute_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -878,7 +913,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_pipeline_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "pipeline")]
+    pub fn connect_pipeline_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -903,7 +939,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_position_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "position")]
+    pub fn connect_position_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -928,7 +965,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_rate_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "rate")]
+    pub fn connect_rate_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -955,7 +993,8 @@ impl Player {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn connect_property_subtitle_video_offset_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "subtitle-video-offset")]
+    pub fn connect_subtitle_video_offset_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -982,7 +1021,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_suburi_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "suburi")]
+    pub fn connect_suburi_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1007,7 +1047,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_uri_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "uri")]
+    pub fn connect_uri_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1032,7 +1073,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_video_multiview_flags_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "video-multiview-flags")]
+    pub fn connect_video_multiview_flags_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1059,7 +1101,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_video_multiview_mode_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "video-multiview-mode")]
+    pub fn connect_video_multiview_mode_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1086,7 +1129,8 @@ impl Player {
         }
     }
 
-    pub fn connect_property_volume_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    #[doc(alias = "volume")]
+    pub fn connect_volume_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

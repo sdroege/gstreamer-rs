@@ -35,15 +35,19 @@ pub trait ChildProxyExt: 'static {
     //fn get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     #[doc(alias = "gst_child_proxy_get_child_by_index")]
+    #[doc(alias = "get_child_by_index")]
     fn child_by_index(&self, index: u32) -> Option<glib::Object>;
 
     #[doc(alias = "gst_child_proxy_get_child_by_name")]
+    #[doc(alias = "get_child_by_name")]
     fn child_by_name(&self, name: &str) -> Option<glib::Object>;
 
     #[doc(alias = "gst_child_proxy_get_children_count")]
+    #[doc(alias = "get_children_count")]
     fn children_count(&self) -> u32;
 
     //#[doc(alias = "gst_child_proxy_get_valist")]
+    //#[doc(alias = "get_valist")]
     //fn valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
     //#[doc(alias = "gst_child_proxy_lookup")]
@@ -55,11 +59,13 @@ pub trait ChildProxyExt: 'static {
     //#[doc(alias = "gst_child_proxy_set_valist")]
     //fn set_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
+    #[doc(alias = "child-added")]
     fn connect_child_added<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "child-removed")]
     fn connect_child_removed<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -129,6 +135,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
     //    unsafe { TODO: call ffi:gst_child_proxy_set_valist() }
     //}
 
+    #[doc(alias = "child-added")]
     fn connect_child_added<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -164,6 +171,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         }
     }
 
+    #[doc(alias = "child-removed")]
     fn connect_child_removed<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(
         &self,
         f: F,

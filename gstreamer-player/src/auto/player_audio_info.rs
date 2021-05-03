@@ -16,16 +16,19 @@ glib::wrapper! {
 
 impl PlayerAudioInfo {
     #[doc(alias = "gst_player_audio_info_get_bitrate")]
+    #[doc(alias = "get_bitrate")]
     pub fn bitrate(&self) -> i32 {
         unsafe { ffi::gst_player_audio_info_get_bitrate(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_player_audio_info_get_channels")]
+    #[doc(alias = "get_channels")]
     pub fn channels(&self) -> i32 {
         unsafe { ffi::gst_player_audio_info_get_channels(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_player_audio_info_get_language")]
+    #[doc(alias = "get_language")]
     pub fn language(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_player_audio_info_get_language(
@@ -35,11 +38,13 @@ impl PlayerAudioInfo {
     }
 
     #[doc(alias = "gst_player_audio_info_get_max_bitrate")]
+    #[doc(alias = "get_max_bitrate")]
     pub fn max_bitrate(&self) -> i32 {
         unsafe { ffi::gst_player_audio_info_get_max_bitrate(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_player_audio_info_get_sample_rate")]
+    #[doc(alias = "get_sample_rate")]
     pub fn sample_rate(&self) -> i32 {
         unsafe { ffi::gst_player_audio_info_get_sample_rate(self.to_glib_none().0) }
     }

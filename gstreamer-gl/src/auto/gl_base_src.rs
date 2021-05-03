@@ -27,13 +27,14 @@ unsafe impl Sync for GLBaseSrc {}
 pub const NONE_GL_BASE_SRC: Option<&GLBaseSrc> = None;
 
 pub trait GLBaseSrcExt: 'static {
-    #[doc(alias = "get_property_timestamp_offset")]
+    #[doc(alias = "timestamp-offset")]
     fn timestamp_offset(&self) -> i64;
 
-    #[doc(alias = "set_property_timestamp_offset")]
+    #[doc(alias = "timestamp-offset")]
     fn set_timestamp_offset(&self, timestamp_offset: i64);
 
-    fn connect_property_timestamp_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "timestamp-offset")]
+    fn connect_timestamp_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -64,7 +65,8 @@ impl<O: IsA<GLBaseSrc>> GLBaseSrcExt for O {
         }
     }
 
-    fn connect_property_timestamp_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "timestamp-offset")]
+    fn connect_timestamp_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

@@ -55,6 +55,7 @@ impl GLShader {
     //}
 
     //#[doc(alias = "gst_gl_shader_new_with_stages")]
+    //#[doc(alias = "new_with_stages")]
     //pub fn with_stages<P: IsA<GLContext>>(context: &P, error: &mut glib::Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
     //    unsafe { TODO: call ffi:gst_gl_shader_new_with_stages() }
     //}
@@ -133,6 +134,7 @@ impl GLShader {
     }
 
     #[doc(alias = "gst_gl_shader_get_attribute_location")]
+    #[doc(alias = "get_attribute_location")]
     pub fn attribute_location(&self, name: &str) -> i32 {
         unsafe {
             ffi::gst_gl_shader_get_attribute_location(self.to_glib_none().0, name.to_glib_none().0)
@@ -140,6 +142,7 @@ impl GLShader {
     }
 
     #[doc(alias = "gst_gl_shader_get_program_handle")]
+    #[doc(alias = "get_program_handle")]
     pub fn program_handle(&self) -> i32 {
         unsafe { ffi::gst_gl_shader_get_program_handle(self.to_glib_none().0) }
     }
@@ -363,6 +366,7 @@ impl GLShader {
     }
 
     #[doc(alias = "gst_gl_shader_use")]
+    #[doc(alias = "use")]
     pub fn use_(&self) {
         unsafe {
             ffi::gst_gl_shader_use(self.to_glib_none().0);
@@ -423,7 +427,8 @@ impl GLShader {
         }
     }
 
-    pub fn connect_property_linked_notify<F: Fn(&GLShader) + Send + Sync + 'static>(
+    #[doc(alias = "linked")]
+    pub fn connect_linked_notify<F: Fn(&GLShader) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

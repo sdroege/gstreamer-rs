@@ -30,12 +30,14 @@ impl GLContext {
     }
 
     #[doc(alias = "gst_gl_context_get_current")]
+    #[doc(alias = "get_current")]
     pub fn current() -> Option<GLContext> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_gl_context_get_current()) }
     }
 
     #[doc(alias = "gst_gl_context_get_current_gl_api")]
+    #[doc(alias = "get_current_gl_api")]
     pub fn current_gl_api(platform: GLPlatform) -> (GLAPI, u32, u32) {
         assert_initialized_main_thread!();
         unsafe {
@@ -90,21 +92,27 @@ pub trait GLContextExt: 'static {
     fn fill_info(&self) -> Result<(), glib::Error>;
 
     #[doc(alias = "gst_gl_context_get_display")]
+    #[doc(alias = "get_display")]
     fn display(&self) -> GLDisplay;
 
     #[doc(alias = "gst_gl_context_get_gl_api")]
+    #[doc(alias = "get_gl_api")]
     fn gl_api(&self) -> GLAPI;
 
     #[doc(alias = "gst_gl_context_get_gl_platform")]
+    #[doc(alias = "get_gl_platform")]
     fn gl_platform(&self) -> GLPlatform;
 
     #[doc(alias = "gst_gl_context_get_gl_platform_version")]
+    #[doc(alias = "get_gl_platform_version")]
     fn gl_platform_version(&self) -> (i32, i32);
 
     #[doc(alias = "gst_gl_context_get_gl_version")]
+    #[doc(alias = "get_gl_version")]
     fn gl_version(&self) -> (i32, i32);
 
     #[doc(alias = "gst_gl_context_get_window")]
+    #[doc(alias = "get_window")]
     fn window(&self) -> Option<GLWindow>;
 
     #[doc(alias = "gst_gl_context_is_shared")]

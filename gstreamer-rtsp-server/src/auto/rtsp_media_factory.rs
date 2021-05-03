@@ -56,60 +56,77 @@ pub trait RTSPMediaFactoryExt: 'static {
     fn create_element(&self, url: &gst_rtsp::RTSPUrl) -> Result<gst::Element, glib::BoolError>;
 
     #[doc(alias = "gst_rtsp_media_factory_get_address_pool")]
+    #[doc(alias = "get_address_pool")]
     fn address_pool(&self) -> Option<RTSPAddressPool>;
 
     #[doc(alias = "gst_rtsp_media_factory_get_buffer_size")]
+    #[doc(alias = "get_buffer_size")]
     fn buffer_size(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_media_factory_get_clock")]
+    #[doc(alias = "get_clock")]
     fn clock(&self) -> Option<gst::Clock>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_media_factory_get_do_retransmission")]
+    #[doc(alias = "get_do_retransmission")]
     fn does_retransmission(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_media_factory_get_dscp_qos")]
+    #[doc(alias = "get_dscp_qos")]
     fn dscp_qos(&self) -> i32;
 
     #[doc(alias = "gst_rtsp_media_factory_get_latency")]
+    #[doc(alias = "get_latency")]
     fn latency(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_media_factory_get_launch")]
+    #[doc(alias = "get_launch")]
     fn launch(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_media_factory_get_max_mcast_ttl")]
+    #[doc(alias = "get_max_mcast_ttl")]
     fn max_mcast_ttl(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_media_factory_get_media_gtype")]
+    #[doc(alias = "get_media_gtype")]
     fn media_gtype(&self) -> glib::types::Type;
 
     #[doc(alias = "gst_rtsp_media_factory_get_multicast_iface")]
+    #[doc(alias = "get_multicast_iface")]
     fn multicast_iface(&self) -> Option<glib::GString>;
 
     //#[doc(alias = "gst_rtsp_media_factory_get_permissions")]
+    //#[doc(alias = "get_permissions")]
     //fn permissions(&self) -> /*Ignored*/Option<RTSPPermissions>;
 
     #[doc(alias = "gst_rtsp_media_factory_get_profiles")]
+    #[doc(alias = "get_profiles")]
     fn profiles(&self) -> gst_rtsp::RTSPProfile;
 
     #[doc(alias = "gst_rtsp_media_factory_get_protocols")]
+    #[doc(alias = "get_protocols")]
     fn protocols(&self) -> gst_rtsp::RTSPLowerTrans;
 
     #[doc(alias = "gst_rtsp_media_factory_get_publish_clock_mode")]
+    #[doc(alias = "get_publish_clock_mode")]
     fn publish_clock_mode(&self) -> RTSPPublishClockMode;
 
     #[doc(alias = "gst_rtsp_media_factory_get_retransmission_time")]
+    #[doc(alias = "get_retransmission_time")]
     fn retransmission_time(&self) -> gst::ClockTime;
 
     #[doc(alias = "gst_rtsp_media_factory_get_suspend_mode")]
+    #[doc(alias = "get_suspend_mode")]
     fn suspend_mode(&self) -> RTSPSuspendMode;
 
     #[doc(alias = "gst_rtsp_media_factory_get_transport_mode")]
+    #[doc(alias = "get_transport_mode")]
     fn transport_mode(&self) -> RTSPTransportMode;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -197,97 +214,108 @@ pub trait RTSPMediaFactoryExt: 'static {
     #[doc(alias = "gst_rtsp_media_factory_set_transport_mode")]
     fn set_transport_mode(&self, mode: RTSPTransportMode);
 
+    #[doc(alias = "bind-mcast-address")]
     fn get_property_bind_mcast_address(&self) -> bool;
 
+    #[doc(alias = "bind-mcast-address")]
     fn set_property_bind_mcast_address(&self, bind_mcast_address: bool);
 
+    #[doc(alias = "dscp-qos")]
     fn get_property_dscp_qos(&self) -> i32;
 
+    #[doc(alias = "dscp-qos")]
     fn set_property_dscp_qos(&self, dscp_qos: i32);
 
+    #[doc(alias = "max-mcast-ttl")]
     fn get_property_max_mcast_ttl(&self) -> u32;
 
+    #[doc(alias = "max-mcast-ttl")]
     fn set_property_max_mcast_ttl(&self, max_mcast_ttl: u32);
 
-    #[doc(alias = "get_property_stop_on_disconnect")]
+    #[doc(alias = "stop-on-disconnect")]
     fn is_stop_on_disconnect(&self) -> bool;
 
+    #[doc(alias = "media-configure")]
     fn connect_media_configure<F: Fn(&Self, &RTSPMedia) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "media-constructed")]
     fn connect_media_constructed<F: Fn(&Self, &RTSPMedia) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_bind_mcast_address_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "bind-mcast-address")]
+    fn connect_bind_mcast_address_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_buffer_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "buffer-size")]
+    fn connect_buffer_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "clock")]
+    fn connect_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "dscp-qos")]
+    fn connect_dscp_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_dscp_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "eos-shutdown")]
+    fn connect_eos_shutdown_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_eos_shutdown_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "latency")]
+    fn connect_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
+        -> SignalHandlerId;
+
+    #[doc(alias = "launch")]
+    fn connect_launch_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "max-mcast-ttl")]
+    fn connect_max_mcast_ttl_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "profiles")]
+    fn connect_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_launch_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "protocols")]
+    fn connect_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_max_mcast_ttl_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "shared")]
+    fn connect_shared_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "stop-on-disconnect")]
+    fn connect_stop_on_disconnect_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "suspend-mode")]
+    fn connect_suspend_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn connect_property_shared_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn connect_property_stop_on_disconnect_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn connect_property_suspend_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn connect_property_transport_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "transport-mode")]
+    fn connect_transport_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -743,6 +771,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
+    #[doc(alias = "media-configure")]
     fn connect_media_configure<F: Fn(&Self, &RTSPMedia) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -776,6 +805,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
+    #[doc(alias = "media-constructed")]
     fn connect_media_constructed<F: Fn(&Self, &RTSPMedia) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -809,7 +839,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn connect_property_bind_mcast_address_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "bind-mcast-address")]
+    fn connect_bind_mcast_address_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -839,7 +870,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn connect_property_buffer_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "buffer-size")]
+    fn connect_buffer_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -866,10 +898,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn connect_property_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "clock")]
+    fn connect_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_clock_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
@@ -893,7 +923,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn connect_property_dscp_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "dscp-qos")]
+    fn connect_dscp_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -920,7 +951,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn connect_property_eos_shutdown_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "eos-shutdown")]
+    fn connect_eos_shutdown_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -947,7 +979,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "latency")]
+    fn connect_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -974,10 +1007,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn connect_property_launch_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "launch")]
+    fn connect_launch_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_launch_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
@@ -1001,7 +1032,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn connect_property_max_mcast_ttl_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "max-mcast-ttl")]
+    fn connect_max_mcast_ttl_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1028,7 +1060,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn connect_property_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "profiles")]
+    fn connect_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1055,7 +1088,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn connect_property_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "protocols")]
+    fn connect_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1082,10 +1116,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn connect_property_shared_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "shared")]
+    fn connect_shared_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_shared_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
@@ -1109,7 +1141,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn connect_property_stop_on_disconnect_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "stop-on-disconnect")]
+    fn connect_stop_on_disconnect_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1139,7 +1172,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn connect_property_suspend_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "suspend-mode")]
+    fn connect_suspend_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1166,7 +1200,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn connect_property_transport_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "transport-mode")]
+    fn connect_transport_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

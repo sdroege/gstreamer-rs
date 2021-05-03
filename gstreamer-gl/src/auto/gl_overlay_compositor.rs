@@ -63,7 +63,6 @@ impl GLOverlayCompositor {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "get_property_yinvert")]
     pub fn is_yinvert(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
@@ -80,7 +79,6 @@ impl GLOverlayCompositor {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "set_property_yinvert")]
     pub fn set_yinvert(&self, yinvert: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -103,7 +101,8 @@ impl GLOverlayCompositor {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn connect_property_yinvert_notify<F: Fn(&GLOverlayCompositor) + Send + Sync + 'static>(
+    #[doc(alias = "yinvert")]
+    pub fn connect_yinvert_notify<F: Fn(&GLOverlayCompositor) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

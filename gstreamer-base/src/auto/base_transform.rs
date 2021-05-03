@@ -28,9 +28,11 @@ pub const NONE_BASE_TRANSFORM: Option<&BaseTransform> = None;
 
 pub trait BaseTransformExt: 'static {
     //#[doc(alias = "gst_base_transform_get_allocator")]
+    //#[doc(alias = "get_allocator")]
     //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
 
     #[doc(alias = "gst_base_transform_get_buffer_pool")]
+    #[doc(alias = "get_buffer_pool")]
     fn buffer_pool(&self) -> Option<gst::BufferPool>;
 
     #[doc(alias = "gst_base_transform_is_in_place")]
@@ -74,16 +76,12 @@ pub trait BaseTransformExt: 'static {
     #[doc(alias = "gst_base_transform_update_src_caps")]
     fn update_src_caps(&self, updated_caps: &gst::Caps) -> Result<(), glib::error::BoolError>;
 
-    #[doc(alias = "get_property_qos")]
     fn is_qos(&self) -> bool;
 
-    #[doc(alias = "set_property_qos")]
     fn set_qos(&self, qos: bool);
 
-    fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "qos")]
+    fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<BaseTransform>> BaseTransformExt for O {
@@ -235,10 +233,8 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
         }
     }
 
-    fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "qos")]
+    fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstBaseTransform,
             _param_spec: glib::ffi::gpointer,

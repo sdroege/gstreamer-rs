@@ -45,15 +45,19 @@ pub trait PipelineExt: 'static {
     fn auto_clock(&self);
 
     #[doc(alias = "gst_pipeline_get_auto_flush_bus")]
+    #[doc(alias = "get_auto_flush_bus")]
     fn is_auto_flush_bus(&self) -> bool;
 
     #[doc(alias = "gst_pipeline_get_delay")]
+    #[doc(alias = "get_delay")]
     fn delay(&self) -> ClockTime;
 
     #[doc(alias = "gst_pipeline_get_latency")]
+    #[doc(alias = "get_latency")]
     fn latency(&self) -> ClockTime;
 
     #[doc(alias = "gst_pipeline_get_pipeline_clock")]
+    #[doc(alias = "get_pipeline_clock")]
     fn pipeline_clock(&self) -> Clock;
 
     #[doc(alias = "gst_pipeline_set_auto_flush_bus")]
@@ -68,20 +72,18 @@ pub trait PipelineExt: 'static {
     #[doc(alias = "gst_pipeline_use_clock")]
     fn use_clock<P: IsA<Clock>>(&self, clock: Option<&P>);
 
-    fn connect_property_auto_flush_bus_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "auto-flush-bus")]
+    fn connect_auto_flush_bus_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "delay")]
+    fn connect_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "latency")]
+    fn connect_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
+        -> SignalHandlerId;
 }
 
 impl<O: IsA<Pipeline>> PipelineExt for O {
@@ -149,7 +151,8 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
-    fn connect_property_auto_flush_bus_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "auto-flush-bus")]
+    fn connect_auto_flush_bus_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -179,10 +182,8 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
-    fn connect_property_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "delay")]
+    fn connect_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_delay_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstPipeline,
             _param_spec: glib::ffi::gpointer,
@@ -206,7 +207,8 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
-    fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "latency")]
+    fn connect_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

@@ -118,6 +118,7 @@ impl Registry {
     }
 
     #[doc(alias = "gst_registry_get_feature_list")]
+    #[doc(alias = "get_feature_list")]
     pub fn feature_list(&self, type_: glib::types::Type) -> Vec<PluginFeature> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_registry_get_feature_list(
@@ -128,6 +129,7 @@ impl Registry {
     }
 
     #[doc(alias = "gst_registry_get_feature_list_by_plugin")]
+    #[doc(alias = "get_feature_list_by_plugin")]
     pub fn feature_list_by_plugin(&self, name: &str) -> Vec<PluginFeature> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_registry_get_feature_list_by_plugin(
@@ -138,11 +140,13 @@ impl Registry {
     }
 
     #[doc(alias = "gst_registry_get_feature_list_cookie")]
+    #[doc(alias = "get_feature_list_cookie")]
     pub fn feature_list_cookie(&self) -> u32 {
         unsafe { ffi::gst_registry_get_feature_list_cookie(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_registry_get_plugin_list")]
+    #[doc(alias = "get_plugin_list")]
     pub fn plugin_list(&self) -> Vec<Plugin> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_registry_get_plugin_list(
@@ -228,6 +232,7 @@ impl Registry {
         unsafe { from_glib_none(ffi::gst_registry_get()) }
     }
 
+    #[doc(alias = "feature-added")]
     pub fn connect_feature_added<F: Fn(&Registry, &PluginFeature) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -255,6 +260,7 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "plugin-added")]
     pub fn connect_plugin_added<F: Fn(&Registry, &Plugin) + Send + Sync + 'static>(
         &self,
         f: F,

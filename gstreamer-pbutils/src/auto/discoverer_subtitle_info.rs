@@ -16,6 +16,7 @@ glib::wrapper! {
 
 impl DiscovererSubtitleInfo {
     #[doc(alias = "gst_discoverer_subtitle_info_get_language")]
+    #[doc(alias = "get_language")]
     pub fn language(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_discoverer_subtitle_info_get_language(

@@ -31,9 +31,11 @@ pub trait AudioBaseSrcExt: 'static {
     //fn create_ringbuffer(&self) -> /*Ignored*/Option<AudioRingBuffer>;
 
     #[doc(alias = "gst_audio_base_src_get_provide_clock")]
+    #[doc(alias = "get_provide_clock")]
     fn is_provide_clock(&self) -> bool;
 
     //#[doc(alias = "gst_audio_base_src_get_slave_method")]
+    //#[doc(alias = "get_slave_method")]
     //fn slave_method(&self) -> /*Ignored*/AudioBaseSrcSlaveMethod;
 
     #[doc(alias = "gst_audio_base_src_set_provide_clock")]
@@ -42,50 +44,56 @@ pub trait AudioBaseSrcExt: 'static {
     //#[doc(alias = "gst_audio_base_src_set_slave_method")]
     //fn set_slave_method(&self, method: /*Ignored*/AudioBaseSrcSlaveMethod);
 
-    #[doc(alias = "get_property_actual_buffer_time")]
+    #[doc(alias = "actual-buffer-time")]
     fn actual_buffer_time(&self) -> i64;
 
-    #[doc(alias = "get_property_actual_latency_time")]
+    #[doc(alias = "actual-latency-time")]
     fn actual_latency_time(&self) -> i64;
 
-    #[doc(alias = "get_property_buffer_time")]
+    #[doc(alias = "buffer-time")]
     fn buffer_time(&self) -> i64;
 
-    #[doc(alias = "set_property_buffer_time")]
+    #[doc(alias = "buffer-time")]
     fn set_buffer_time(&self, buffer_time: i64);
 
-    #[doc(alias = "get_property_latency_time")]
+    #[doc(alias = "latency-time")]
     fn latency_time(&self) -> i64;
 
-    #[doc(alias = "set_property_latency_time")]
+    #[doc(alias = "latency-time")]
     fn set_latency_time(&self, latency_time: i64);
 
-    fn connect_property_actual_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "actual-buffer-time")]
+    fn connect_actual_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_actual_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "actual-latency-time")]
+    fn connect_actual_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "buffer-time")]
+    fn connect_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "latency-time")]
+    fn connect_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_provide_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "provide-clock")]
+    fn connect_provide_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_slave_method_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "slave-method")]
+    fn connect_slave_method_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -197,7 +205,8 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         }
     }
 
-    fn connect_property_actual_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "actual-buffer-time")]
+    fn connect_actual_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -227,7 +236,8 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         }
     }
 
-    fn connect_property_actual_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "actual-latency-time")]
+    fn connect_actual_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -257,7 +267,8 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         }
     }
 
-    fn connect_property_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "buffer-time")]
+    fn connect_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -284,7 +295,8 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         }
     }
 
-    fn connect_property_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "latency-time")]
+    fn connect_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -311,7 +323,8 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         }
     }
 
-    fn connect_property_provide_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "provide-clock")]
+    fn connect_provide_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -338,7 +351,8 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         }
     }
 
-    fn connect_property_slave_method_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "slave-method")]
+    fn connect_slave_method_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

@@ -22,6 +22,7 @@ impl GLDisplayEGL {
     }
 
     //#[doc(alias = "gst_gl_display_egl_new_with_egl_display")]
+    //#[doc(alias = "new_with_egl_display")]
     //pub fn with_egl_display(display: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLDisplayEGL {
     //    unsafe { TODO: call ffi:gst_gl_display_egl_new_with_egl_display() }
     //}
@@ -37,6 +38,7 @@ impl GLDisplayEGL {
     }
 
     //#[doc(alias = "gst_gl_display_egl_get_from_native")]
+    //#[doc(alias = "get_from_native")]
     //pub fn from_native(type_: /*Ignored*/gst_gl::GLDisplayType, display: /*Unimplemented*/Fundamental: UIntPtr) -> /*Unimplemented*/Option<Fundamental: Pointer> {
     //    unsafe { TODO: call ffi:gst_gl_display_egl_get_from_native() }
     //}

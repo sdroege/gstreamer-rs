@@ -34,6 +34,7 @@ impl AudioStreamAlign {
     }
 
     #[doc(alias = "gst_audio_stream_align_get_alignment_threshold")]
+    #[doc(alias = "get_alignment_threshold")]
     pub fn alignment_threshold(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_audio_stream_align_get_alignment_threshold(
@@ -43,6 +44,7 @@ impl AudioStreamAlign {
     }
 
     #[doc(alias = "gst_audio_stream_align_get_discont_wait")]
+    #[doc(alias = "get_discont_wait")]
     pub fn discont_wait(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_audio_stream_align_get_discont_wait(mut_override(
@@ -52,11 +54,13 @@ impl AudioStreamAlign {
     }
 
     #[doc(alias = "gst_audio_stream_align_get_rate")]
+    #[doc(alias = "get_rate")]
     pub fn rate(&self) -> i32 {
         unsafe { ffi::gst_audio_stream_align_get_rate(mut_override(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_audio_stream_align_get_samples_since_discont")]
+    #[doc(alias = "get_samples_since_discont")]
     pub fn samples_since_discont(&self) -> u64 {
         unsafe {
             ffi::gst_audio_stream_align_get_samples_since_discont(mut_override(
@@ -66,6 +70,7 @@ impl AudioStreamAlign {
     }
 
     #[doc(alias = "gst_audio_stream_align_get_timestamp_at_discont")]
+    #[doc(alias = "get_timestamp_at_discont")]
     pub fn timestamp_at_discont(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_audio_stream_align_get_timestamp_at_discont(

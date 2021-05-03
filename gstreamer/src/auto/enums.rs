@@ -844,6 +844,7 @@ pub enum EventType {
 
 impl EventType {
     #[doc(alias = "gst_event_type_get_flags")]
+    #[doc(alias = "get_flags")]
     pub fn flags(self) -> EventTypeFlags {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_event_type_get_flags(self.into_glib())) }
@@ -1139,17 +1140,20 @@ pub enum Format {
 
 impl Format {
     #[doc(alias = "gst_format_get_by_nick")]
+    #[doc(alias = "get_by_nick")]
     pub fn by_nick(nick: &str) -> Format {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_format_get_by_nick(nick.to_glib_none().0)) }
     }
 
     //#[doc(alias = "gst_format_get_details")]
+    //#[doc(alias = "get_details")]
     //pub fn details(self) -> /*Ignored*/Option<FormatDefinition> {
     //    unsafe { TODO: call ffi:gst_format_get_details() }
     //}
 
     #[doc(alias = "gst_format_get_name")]
+    #[doc(alias = "get_name")]
     pub fn name(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_format_get_name(self.into_glib())) }

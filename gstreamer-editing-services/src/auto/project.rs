@@ -58,12 +58,15 @@ pub trait ProjectExt: 'static {
     ) -> Result<Option<Asset>, glib::Error>;
 
     #[doc(alias = "ges_project_get_asset")]
+    #[doc(alias = "get_asset")]
     fn asset(&self, id: &str, extractable_type: glib::types::Type) -> Option<Asset>;
 
     #[doc(alias = "ges_project_get_loading_assets")]
+    #[doc(alias = "get_loading_assets")]
     fn loading_assets(&self) -> Vec<Asset>;
 
     #[doc(alias = "ges_project_get_uri")]
+    #[doc(alias = "get_uri")]
     fn uri(&self) -> Option<glib::GString>;
 
     #[doc(alias = "ges_project_list_assets")]
@@ -87,30 +90,38 @@ pub trait ProjectExt: 'static {
         overwrite: bool,
     ) -> Result<(), glib::Error>;
 
+    #[doc(alias = "asset-added")]
     fn connect_asset_added<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "asset-loading")]
     fn connect_asset_loading<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "asset-removed")]
     fn connect_asset_removed<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "error-loading")]
     fn connect_error_loading<F: Fn(&Self, &Timeline, &glib::Error) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "error-loading-asset")]
     fn connect_error_loading_asset<F: Fn(&Self, &glib::Error, &str, glib::types::Type) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "loaded")]
     fn connect_loaded<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "loading")]
     fn connect_loading<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "missing-uri")]
     fn connect_missing_uri<F: Fn(&Self, &glib::Error, &Asset) -> Option<glib::GString> + 'static>(
         &self,
         f: F,
@@ -271,6 +282,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "asset-added")]
     fn connect_asset_added<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn asset_added_trampoline<P, F: Fn(&P, &Asset) + 'static>(
             this: *mut ffi::GESProject,
@@ -298,6 +310,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "asset-loading")]
     fn connect_asset_loading<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn asset_loading_trampoline<P, F: Fn(&P, &Asset) + 'static>(
             this: *mut ffi::GESProject,
@@ -325,6 +338,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "asset-removed")]
     fn connect_asset_removed<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn asset_removed_trampoline<P, F: Fn(&P, &Asset) + 'static>(
             this: *mut ffi::GESProject,
@@ -354,6 +368,7 @@ impl<O: IsA<Project>> ProjectExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "error-loading")]
     fn connect_error_loading<F: Fn(&Self, &Timeline, &glib::Error) + 'static>(
         &self,
         f: F,
@@ -389,6 +404,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "error-loading-asset")]
     fn connect_error_loading_asset<
         F: Fn(&Self, &glib::Error, &str, glib::types::Type) + 'static,
     >(
@@ -428,6 +444,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "loaded")]
     fn connect_loaded<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn loaded_trampoline<P, F: Fn(&P, &Timeline) + 'static>(
             this: *mut ffi::GESProject,
@@ -457,6 +474,7 @@ impl<O: IsA<Project>> ProjectExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "loading")]
     fn connect_loading<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn loading_trampoline<P, F: Fn(&P, &Timeline) + 'static>(
             this: *mut ffi::GESProject,
@@ -484,6 +502,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "missing-uri")]
     fn connect_missing_uri<
         F: Fn(&Self, &glib::Error, &Asset) -> Option<glib::GString> + 'static,
     >(

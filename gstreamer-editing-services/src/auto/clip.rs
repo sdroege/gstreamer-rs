@@ -73,11 +73,13 @@ pub trait ClipExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_get_duration_limit")]
+    #[doc(alias = "get_duration_limit")]
     fn duration_limit(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_get_internal_time_from_timeline_time")]
+    #[doc(alias = "get_internal_time_from_timeline_time")]
     fn internal_time_from_timeline_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
@@ -85,14 +87,17 @@ pub trait ClipExt: 'static {
     ) -> Result<gst::ClockTime, glib::Error>;
 
     #[doc(alias = "ges_clip_get_layer")]
+    #[doc(alias = "get_layer")]
     fn layer(&self) -> Option<Layer>;
 
     #[doc(alias = "ges_clip_get_supported_formats")]
+    #[doc(alias = "get_supported_formats")]
     fn supported_formats(&self) -> TrackType;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_get_timeline_time_from_internal_time")]
+    #[doc(alias = "get_timeline_time_from_internal_time")]
     fn timeline_time_from_internal_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
@@ -102,18 +107,22 @@ pub trait ClipExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_get_timeline_time_from_source_frame")]
+    #[doc(alias = "get_timeline_time_from_source_frame")]
     fn timeline_time_from_source_frame(
         &self,
         frame_number: FrameNumber,
     ) -> Result<gst::ClockTime, glib::Error>;
 
     #[doc(alias = "ges_clip_get_top_effect_index")]
+    #[doc(alias = "get_top_effect_index")]
     fn top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P) -> i32;
 
     #[doc(alias = "ges_clip_get_top_effect_position")]
+    #[doc(alias = "get_top_effect_position")]
     fn top_effect_position<P: IsA<BaseEffect>>(&self, effect: &P) -> i32;
 
     #[doc(alias = "ges_clip_get_top_effects")]
+    #[doc(alias = "get_top_effects")]
     fn top_effects(&self) -> Vec<TrackElement>;
 
     #[doc(alias = "ges_clip_move_to_layer")]
@@ -165,17 +174,14 @@ pub trait ClipExt: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_duration_limit_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "duration-limit")]
+    fn connect_duration_limit_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_layer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "layer")]
+    fn connect_layer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_supported_formats_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "supported-formats")]
+    fn connect_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Clip>> ClipExt for O {
@@ -521,10 +527,8 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_duration_limit_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "duration-limit")]
+    fn connect_duration_limit_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_limit_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESClip,
             _param_spec: glib::ffi::gpointer,
@@ -548,7 +552,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn connect_property_layer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "layer")]
+    fn connect_layer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_layer_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESClip,
             _param_spec: glib::ffi::gpointer,
@@ -572,10 +577,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn connect_property_supported_formats_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "supported-formats")]
+    fn connect_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_supported_formats_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESClip,
             _param_spec: glib::ffi::gpointer,

@@ -16,26 +16,31 @@ glib::wrapper! {
 
 impl DiscovererVideoInfo {
     #[doc(alias = "gst_discoverer_video_info_get_bitrate")]
+    #[doc(alias = "get_bitrate")]
     pub fn bitrate(&self) -> u32 {
         unsafe { ffi::gst_discoverer_video_info_get_bitrate(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_discoverer_video_info_get_depth")]
+    #[doc(alias = "get_depth")]
     pub fn depth(&self) -> u32 {
         unsafe { ffi::gst_discoverer_video_info_get_depth(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_discoverer_video_info_get_height")]
+    #[doc(alias = "get_height")]
     pub fn height(&self) -> u32 {
         unsafe { ffi::gst_discoverer_video_info_get_height(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_discoverer_video_info_get_max_bitrate")]
+    #[doc(alias = "get_max_bitrate")]
     pub fn max_bitrate(&self) -> u32 {
         unsafe { ffi::gst_discoverer_video_info_get_max_bitrate(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_discoverer_video_info_get_width")]
+    #[doc(alias = "get_width")]
     pub fn width(&self) -> u32 {
         unsafe { ffi::gst_discoverer_video_info_get_width(self.to_glib_none().0) }
     }

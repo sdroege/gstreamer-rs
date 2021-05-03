@@ -24,11 +24,12 @@ pub const NONE_CONTROL_SOURCE: Option<&ControlSource> = None;
 
 pub trait ControlSourceExt: 'static {
     #[doc(alias = "gst_control_source_get_value")]
-    fn get_value(&self, timestamp: ClockTime) -> Option<f64>;
+    #[doc(alias = "control_source_get_value")]
+    fn value(&self, timestamp: ClockTime) -> Option<f64>;
 }
 
 impl<O: IsA<ControlSource>> ControlSourceExt for O {
-    fn get_value(&self, timestamp: ClockTime) -> Option<f64> {
+    fn value(&self, timestamp: ClockTime) -> Option<f64> {
         unsafe {
             let mut value = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_control_source_get_value(

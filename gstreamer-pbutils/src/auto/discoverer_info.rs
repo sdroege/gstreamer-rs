@@ -23,6 +23,7 @@ impl DiscovererInfo {
     }
 
     #[doc(alias = "gst_discoverer_info_get_audio_streams")]
+    #[doc(alias = "get_audio_streams")]
     pub fn audio_streams(&self) -> Vec<DiscovererStreamInfo> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_audio_streams(
@@ -32,6 +33,7 @@ impl DiscovererInfo {
     }
 
     #[doc(alias = "gst_discoverer_info_get_container_streams")]
+    #[doc(alias = "get_container_streams")]
     pub fn container_streams(&self) -> Vec<DiscovererStreamInfo> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_container_streams(
@@ -41,6 +43,7 @@ impl DiscovererInfo {
     }
 
     #[doc(alias = "gst_discoverer_info_get_duration")]
+    #[doc(alias = "get_duration")]
     pub fn duration(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::gst_discoverer_info_get_duration(self.to_glib_none().0)) }
     }
@@ -48,16 +51,19 @@ impl DiscovererInfo {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_discoverer_info_get_live")]
+    #[doc(alias = "get_live")]
     pub fn is_live(&self) -> bool {
         unsafe { from_glib(ffi::gst_discoverer_info_get_live(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_discoverer_info_get_misc")]
+    #[doc(alias = "get_misc")]
     pub fn misc(&self) -> Option<gst::Structure> {
         unsafe { from_glib_none(ffi::gst_discoverer_info_get_misc(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_discoverer_info_get_missing_elements_installer_details")]
+    #[doc(alias = "get_missing_elements_installer_details")]
     pub fn missing_elements_installer_details(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(
@@ -69,16 +75,19 @@ impl DiscovererInfo {
     }
 
     #[doc(alias = "gst_discoverer_info_get_result")]
+    #[doc(alias = "get_result")]
     pub fn result(&self) -> DiscovererResult {
         unsafe { from_glib(ffi::gst_discoverer_info_get_result(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_discoverer_info_get_seekable")]
+    #[doc(alias = "get_seekable")]
     pub fn is_seekable(&self) -> bool {
         unsafe { from_glib(ffi::gst_discoverer_info_get_seekable(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_discoverer_info_get_stream_info")]
+    #[doc(alias = "get_stream_info")]
     pub fn stream_info(&self) -> Option<DiscovererStreamInfo> {
         unsafe {
             from_glib_full(ffi::gst_discoverer_info_get_stream_info(
@@ -88,6 +97,7 @@ impl DiscovererInfo {
     }
 
     #[doc(alias = "gst_discoverer_info_get_stream_list")]
+    #[doc(alias = "get_stream_list")]
     pub fn stream_list(&self) -> Vec<DiscovererStreamInfo> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_stream_list(
@@ -97,6 +107,7 @@ impl DiscovererInfo {
     }
 
     #[doc(alias = "gst_discoverer_info_get_streams")]
+    #[doc(alias = "get_streams")]
     pub fn streams(&self, streamtype: glib::types::Type) -> Vec<DiscovererStreamInfo> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_streams(
@@ -107,6 +118,7 @@ impl DiscovererInfo {
     }
 
     #[doc(alias = "gst_discoverer_info_get_subtitle_streams")]
+    #[doc(alias = "get_subtitle_streams")]
     pub fn subtitle_streams(&self) -> Vec<DiscovererStreamInfo> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_subtitle_streams(
@@ -116,21 +128,25 @@ impl DiscovererInfo {
     }
 
     #[doc(alias = "gst_discoverer_info_get_tags")]
+    #[doc(alias = "get_tags")]
     pub fn tags(&self) -> Option<gst::TagList> {
         unsafe { from_glib_none(ffi::gst_discoverer_info_get_tags(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_discoverer_info_get_toc")]
+    #[doc(alias = "get_toc")]
     pub fn toc(&self) -> Option<gst::Toc> {
         unsafe { from_glib_none(ffi::gst_discoverer_info_get_toc(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_discoverer_info_get_uri")]
+    #[doc(alias = "get_uri")]
     pub fn uri(&self) -> Option<glib::GString> {
         unsafe { from_glib_none(ffi::gst_discoverer_info_get_uri(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_discoverer_info_get_video_streams")]
+    #[doc(alias = "get_video_streams")]
     pub fn video_streams(&self) -> Vec<DiscovererStreamInfo> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_video_streams(

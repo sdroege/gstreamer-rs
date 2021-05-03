@@ -75,122 +75,157 @@ pub trait RTSPStreamExt: 'static {
     //fn complete_stream(&self, transport: /*Ignored*/&gst_rtsp::RTSPTransport) -> bool;
 
     #[doc(alias = "gst_rtsp_stream_get_address_pool")]
+    #[doc(alias = "get_address_pool")]
     fn address_pool(&self) -> Option<RTSPAddressPool>;
 
     #[doc(alias = "gst_rtsp_stream_get_buffer_size")]
+    #[doc(alias = "get_buffer_size")]
     fn buffer_size(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_caps")]
+    #[doc(alias = "get_caps")]
     fn caps(&self) -> Option<gst::Caps>;
 
     #[doc(alias = "gst_rtsp_stream_get_control")]
+    #[doc(alias = "get_control")]
     fn control(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_stream_get_current_seqnum")]
+    #[doc(alias = "get_current_seqnum")]
     fn current_seqnum(&self) -> u16;
 
     #[doc(alias = "gst_rtsp_stream_get_dscp_qos")]
+    #[doc(alias = "get_dscp_qos")]
     fn dscp_qos(&self) -> i32;
 
     #[doc(alias = "gst_rtsp_stream_get_index")]
+    #[doc(alias = "get_index")]
     fn index(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_joined_bin")]
+    #[doc(alias = "get_joined_bin")]
     fn joined_bin(&self) -> Option<gst::Bin>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_stream_get_max_mcast_ttl")]
+    #[doc(alias = "get_max_mcast_ttl")]
     fn max_mcast_ttl(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_mtu")]
+    #[doc(alias = "get_mtu")]
     fn mtu(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_multicast_address")]
+    #[doc(alias = "get_multicast_address")]
     fn multicast_address(&self, family: gio::SocketFamily) -> Option<RTSPAddress>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_stream_get_multicast_client_addresses")]
+    #[doc(alias = "get_multicast_client_addresses")]
     fn multicast_client_addresses(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_stream_get_multicast_iface")]
+    #[doc(alias = "get_multicast_iface")]
     fn multicast_iface(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_stream_get_profiles")]
+    #[doc(alias = "get_profiles")]
     fn profiles(&self) -> gst_rtsp::RTSPProfile;
 
     #[doc(alias = "gst_rtsp_stream_get_protocols")]
+    #[doc(alias = "get_protocols")]
     fn protocols(&self) -> gst_rtsp::RTSPLowerTrans;
 
     #[doc(alias = "gst_rtsp_stream_get_pt")]
+    #[doc(alias = "get_pt")]
     fn pt(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_publish_clock_mode")]
+    #[doc(alias = "get_publish_clock_mode")]
     fn publish_clock_mode(&self) -> RTSPPublishClockMode;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_stream_get_rate_control")]
+    #[doc(alias = "get_rate_control")]
     fn is_rate_control(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_stream_get_rates")]
+    #[doc(alias = "get_rates")]
     fn rates(&self) -> Option<(f64, f64)>;
 
     #[doc(alias = "gst_rtsp_stream_get_retransmission_pt")]
+    #[doc(alias = "get_retransmission_pt")]
     fn retransmission_pt(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_retransmission_time")]
+    #[doc(alias = "get_retransmission_time")]
     fn retransmission_time(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_rtsp_stream_get_rtcp_multicast_socket")]
+    #[doc(alias = "get_rtcp_multicast_socket")]
     fn rtcp_multicast_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
 
     #[doc(alias = "gst_rtsp_stream_get_rtcp_socket")]
+    #[doc(alias = "get_rtcp_socket")]
     fn rtcp_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
 
     #[doc(alias = "gst_rtsp_stream_get_rtp_multicast_socket")]
+    #[doc(alias = "get_rtp_multicast_socket")]
     fn rtp_multicast_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
 
     #[doc(alias = "gst_rtsp_stream_get_rtp_socket")]
+    #[doc(alias = "get_rtp_socket")]
     fn rtp_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
 
     #[doc(alias = "gst_rtsp_stream_get_rtpinfo")]
+    #[doc(alias = "get_rtpinfo")]
     fn rtpinfo(&self) -> Option<(u32, u32, u32, gst::ClockTime)>;
 
     #[doc(alias = "gst_rtsp_stream_get_rtpsession")]
+    #[doc(alias = "get_rtpsession")]
     fn rtpsession(&self) -> Option<glib::Object>;
 
     //#[doc(alias = "gst_rtsp_stream_get_server_port")]
+    //#[doc(alias = "get_server_port")]
     //fn server_port(&self, server_port: /*Ignored*/gst_rtsp::RTSPRange, family: gio::SocketFamily);
 
     #[doc(alias = "gst_rtsp_stream_get_sinkpad")]
+    #[doc(alias = "get_sinkpad")]
     fn sinkpad(&self) -> Option<gst::Pad>;
 
     #[doc(alias = "gst_rtsp_stream_get_srcpad")]
+    #[doc(alias = "get_srcpad")]
     fn srcpad(&self) -> Option<gst::Pad>;
 
     #[doc(alias = "gst_rtsp_stream_get_srtp_encoder")]
+    #[doc(alias = "get_srtp_encoder")]
     fn srtp_encoder(&self) -> Option<gst::Element>;
 
     #[doc(alias = "gst_rtsp_stream_get_ssrc")]
+    #[doc(alias = "get_ssrc")]
     fn ssrc(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_ulpfec_enabled")]
+    #[doc(alias = "get_ulpfec_enabled")]
     fn is_ulpfec_enabled(&self) -> bool;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_stream_get_ulpfec_percentage")]
+    #[doc(alias = "get_ulpfec_percentage")]
     fn ulpfec_percentage(&self) -> u32;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_stream_get_ulpfec_pt")]
+    #[doc(alias = "get_ulpfec_pt")]
     fn ulpfec_pt(&self) -> u32;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -378,32 +413,36 @@ pub trait RTSPStreamExt: 'static {
     #[doc(alias = "gst_rtsp_stream_verify_mcast_ttl")]
     fn verify_mcast_ttl(&self, ttl: u32) -> bool;
 
+    #[doc(alias = "new-rtcp-encoder")]
     fn connect_new_rtcp_encoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "new-rtp-encoder")]
     fn connect_new_rtp_encoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "new-rtp-rtcp-decoder")]
     fn connect_new_rtp_rtcp_decoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_control_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "control")]
+    fn connect_control_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
+        -> SignalHandlerId;
+
+    #[doc(alias = "profiles")]
+    fn connect_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn connect_property_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "protocols")]
+    fn connect_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -1196,6 +1235,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
+    #[doc(alias = "new-rtcp-encoder")]
     fn connect_new_rtcp_encoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1229,6 +1269,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
+    #[doc(alias = "new-rtp-encoder")]
     fn connect_new_rtp_encoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1262,6 +1303,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
+    #[doc(alias = "new-rtp-rtcp-decoder")]
     fn connect_new_rtp_rtcp_decoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1295,7 +1337,8 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn connect_property_control_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "control")]
+    fn connect_control_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1322,7 +1365,8 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn connect_property_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "profiles")]
+    fn connect_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1349,7 +1393,8 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn connect_property_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "protocols")]
+    fn connect_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

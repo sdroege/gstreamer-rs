@@ -92,7 +92,7 @@ impl GLViewConvert {
         }
     }
 
-    #[doc(alias = "get_property_downmix_mode")]
+    #[doc(alias = "downmix-mode")]
     pub fn downmix_mode(&self) -> GLStereoDownmix {
         unsafe {
             let mut value = glib::Value::from_type(<GLStereoDownmix as StaticType>::static_type());
@@ -107,7 +107,7 @@ impl GLViewConvert {
         }
     }
 
-    #[doc(alias = "set_property_downmix_mode")]
+    #[doc(alias = "downmix-mode")]
     pub fn set_downmix_mode(&self, downmix_mode: GLStereoDownmix) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -118,7 +118,7 @@ impl GLViewConvert {
         }
     }
 
-    #[doc(alias = "get_property_input_flags_override")]
+    #[doc(alias = "input-flags-override")]
     pub fn input_flags_override(&self) -> gst_video::VideoMultiviewFlags {
         unsafe {
             let mut value = glib::Value::from_type(
@@ -135,7 +135,7 @@ impl GLViewConvert {
         }
     }
 
-    #[doc(alias = "set_property_input_flags_override")]
+    #[doc(alias = "input-flags-override")]
     pub fn set_input_flags_override(&self, input_flags_override: gst_video::VideoMultiviewFlags) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -146,7 +146,7 @@ impl GLViewConvert {
         }
     }
 
-    #[doc(alias = "get_property_input_mode_override")]
+    #[doc(alias = "input-mode-override")]
     pub fn input_mode_override(&self) -> gst_video::VideoMultiviewMode {
         unsafe {
             let mut value = glib::Value::from_type(
@@ -163,7 +163,7 @@ impl GLViewConvert {
         }
     }
 
-    #[doc(alias = "set_property_input_mode_override")]
+    #[doc(alias = "input-mode-override")]
     pub fn set_input_mode_override(&self, input_mode_override: gst_video::VideoMultiviewMode) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -174,7 +174,7 @@ impl GLViewConvert {
         }
     }
 
-    #[doc(alias = "get_property_output_flags_override")]
+    #[doc(alias = "output-flags-override")]
     pub fn output_flags_override(&self) -> gst_video::VideoMultiviewFlags {
         unsafe {
             let mut value = glib::Value::from_type(
@@ -191,7 +191,7 @@ impl GLViewConvert {
         }
     }
 
-    #[doc(alias = "set_property_output_flags_override")]
+    #[doc(alias = "output-flags-override")]
     pub fn set_output_flags_override(&self, output_flags_override: gst_video::VideoMultiviewFlags) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -202,7 +202,7 @@ impl GLViewConvert {
         }
     }
 
-    #[doc(alias = "get_property_output_mode_override")]
+    #[doc(alias = "output-mode-override")]
     pub fn output_mode_override(&self) -> gst_video::VideoMultiviewMode {
         unsafe {
             let mut value = glib::Value::from_type(
@@ -219,7 +219,7 @@ impl GLViewConvert {
         }
     }
 
-    #[doc(alias = "set_property_output_mode_override")]
+    #[doc(alias = "output-mode-override")]
     pub fn set_output_mode_override(&self, output_mode_override: gst_video::VideoMultiviewMode) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -230,7 +230,8 @@ impl GLViewConvert {
         }
     }
 
-    pub fn connect_property_downmix_mode_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(
+    #[doc(alias = "downmix-mode")]
+    pub fn connect_downmix_mode_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -257,9 +258,8 @@ impl GLViewConvert {
         }
     }
 
-    pub fn connect_property_input_flags_override_notify<
-        F: Fn(&GLViewConvert) + Send + Sync + 'static,
-    >(
+    #[doc(alias = "input-flags-override")]
+    pub fn connect_input_flags_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -286,9 +286,8 @@ impl GLViewConvert {
         }
     }
 
-    pub fn connect_property_input_mode_override_notify<
-        F: Fn(&GLViewConvert) + Send + Sync + 'static,
-    >(
+    #[doc(alias = "input-mode-override")]
+    pub fn connect_input_mode_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -315,9 +314,8 @@ impl GLViewConvert {
         }
     }
 
-    pub fn connect_property_output_flags_override_notify<
-        F: Fn(&GLViewConvert) + Send + Sync + 'static,
-    >(
+    #[doc(alias = "output-flags-override")]
+    pub fn connect_output_flags_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -344,9 +342,8 @@ impl GLViewConvert {
         }
     }
 
-    pub fn connect_property_output_mode_override_notify<
-        F: Fn(&GLViewConvert) + Send + Sync + 'static,
-    >(
+    #[doc(alias = "output-mode-override")]
+    pub fn connect_output_mode_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

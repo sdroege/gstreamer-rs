@@ -30,6 +30,7 @@ pub const NONE_PROXY_PAD: Option<&ProxyPad> = None;
 
 pub trait ProxyPadExt: 'static {
     #[doc(alias = "gst_proxy_pad_get_internal")]
+    #[doc(alias = "get_internal")]
     fn internal(&self) -> Option<ProxyPad>;
 }
 

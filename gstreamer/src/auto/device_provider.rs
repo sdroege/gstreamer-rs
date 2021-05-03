@@ -44,15 +44,19 @@ pub trait DeviceProviderExt: 'static {
     fn device_remove<P: IsA<Device>>(&self, device: &P);
 
     #[doc(alias = "gst_device_provider_get_bus")]
+    #[doc(alias = "get_bus")]
     fn bus(&self) -> Bus;
 
     #[doc(alias = "gst_device_provider_get_devices")]
+    #[doc(alias = "get_devices")]
     fn devices(&self) -> Vec<Device>;
 
     #[doc(alias = "gst_device_provider_get_factory")]
+    #[doc(alias = "get_factory")]
     fn factory(&self) -> Option<DeviceProviderFactory>;
 
     #[doc(alias = "gst_device_provider_get_hidden_providers")]
+    #[doc(alias = "get_hidden_providers")]
     fn hidden_providers(&self) -> Vec<glib::GString>;
 
     #[doc(alias = "gst_device_provider_hide_provider")]
@@ -67,11 +71,13 @@ pub trait DeviceProviderExt: 'static {
     #[doc(alias = "gst_device_provider_unhide_provider")]
     fn unhide_provider(&self, name: &str);
 
+    #[doc(alias = "provider-hidden")]
     fn connect_provider_hidden<F: Fn(&Self, &str) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "provider-unhidden")]
     fn connect_provider_unhidden<F: Fn(&Self, &str) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -182,6 +188,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
+    #[doc(alias = "provider-hidden")]
     fn connect_provider_hidden<F: Fn(&Self, &str) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -215,6 +222,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
+    #[doc(alias = "provider-unhidden")]
     fn connect_provider_unhidden<F: Fn(&Self, &str) + Send + Sync + 'static>(
         &self,
         f: F,

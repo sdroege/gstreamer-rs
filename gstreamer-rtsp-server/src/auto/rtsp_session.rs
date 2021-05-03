@@ -49,15 +49,19 @@ pub trait RTSPSessionExt: 'static {
     ) -> Vec<RTSPSessionMedia>;
 
     #[doc(alias = "gst_rtsp_session_get_header")]
+    #[doc(alias = "get_header")]
     fn header(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_session_get_media")]
+    #[doc(alias = "get_media")]
     fn media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32);
 
     #[doc(alias = "gst_rtsp_session_get_sessionid")]
+    #[doc(alias = "get_sessionid")]
     fn sessionid(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_session_get_timeout")]
+    #[doc(alias = "get_timeout")]
     fn timeout(&self) -> u32;
 
     //#[doc(alias = "gst_rtsp_session_is_expired")]
@@ -91,29 +95,30 @@ pub trait RTSPSessionExt: 'static {
     #[doc(alias = "gst_rtsp_session_touch")]
     fn touch(&self);
 
-    #[doc(alias = "get_property_extra_timeout")]
+    #[doc(alias = "extra-timeout")]
     fn extra_timeout(&self) -> u32;
 
-    #[doc(alias = "set_property_extra_timeout")]
+    #[doc(alias = "extra-timeout")]
     fn set_extra_timeout(&self, extra_timeout: u32);
 
-    #[doc(alias = "get_property_timeout_always_visible")]
+    #[doc(alias = "timeout-always-visible")]
     fn is_timeout_always_visible(&self) -> bool;
 
-    #[doc(alias = "set_property_timeout_always_visible")]
+    #[doc(alias = "timeout-always-visible")]
     fn set_timeout_always_visible(&self, timeout_always_visible: bool);
 
-    fn connect_property_extra_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "extra-timeout")]
+    fn connect_extra_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "timeout")]
+    fn connect_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
+        -> SignalHandlerId;
 
-    fn connect_property_timeout_always_visible_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "timeout-always-visible")]
+    fn connect_timeout_always_visible_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -314,7 +319,8 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn connect_property_extra_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "extra-timeout")]
+    fn connect_extra_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -341,7 +347,8 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "timeout")]
+    fn connect_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -368,7 +375,8 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn connect_property_timeout_always_visible_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "timeout-always-visible")]
+    fn connect_timeout_always_visible_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

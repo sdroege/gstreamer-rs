@@ -17,7 +17,7 @@ glib::wrapper! {
 }
 
 impl PlayerGMainContextSignalDispatcher {
-    #[doc(alias = "get_property_application_context")]
+    #[doc(alias = "application-context")]
     pub fn application_context(&self) -> Option<glib::MainContext> {
         unsafe {
             let mut value =

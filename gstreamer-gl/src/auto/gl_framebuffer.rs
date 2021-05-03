@@ -29,6 +29,7 @@ impl GLFramebuffer {
     }
 
     #[doc(alias = "gst_gl_framebuffer_new_with_default_depth")]
+    #[doc(alias = "new_with_default_depth")]
     pub fn with_default_depth<P: IsA<GLContext>>(
         context: &P,
         width: u32,
@@ -61,9 +62,11 @@ pub trait GLFramebufferExt: 'static {
     //fn draw_to_texture(&self, mem: &mut GLMemory, func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Fundamental: Pointer>) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool;
 
     #[doc(alias = "gst_gl_framebuffer_get_effective_dimensions")]
+    #[doc(alias = "get_effective_dimensions")]
     fn effective_dimensions(&self) -> (u32, u32);
 
     #[doc(alias = "gst_gl_framebuffer_get_id")]
+    #[doc(alias = "get_id")]
     fn id(&self) -> u32;
 }
 

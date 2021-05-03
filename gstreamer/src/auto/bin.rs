@@ -53,17 +53,21 @@ pub trait GstBinExt: 'static {
     fn find_unlinked_pad(&self, direction: PadDirection) -> Option<Pad>;
 
     #[doc(alias = "gst_bin_get_by_interface")]
+    #[doc(alias = "get_by_interface")]
     fn by_interface(&self, iface: glib::types::Type) -> Option<Element>;
 
     #[doc(alias = "gst_bin_get_by_name")]
+    #[doc(alias = "get_by_name")]
     fn by_name(&self, name: &str) -> Option<Element>;
 
     #[doc(alias = "gst_bin_get_by_name_recurse_up")]
+    #[doc(alias = "get_by_name_recurse_up")]
     fn by_name_recurse_up(&self, name: &str) -> Option<Element>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_bin_get_suppressed_flags")]
+    #[doc(alias = "get_suppressed_flags")]
     fn suppressed_flags(&self) -> ElementFlags;
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -106,20 +110,21 @@ pub trait GstBinExt: 'static {
     #[doc(alias = "gst_bin_sync_children_states")]
     fn sync_children_states(&self) -> Result<(), glib::error::BoolError>;
 
-    #[doc(alias = "get_property_async_handling")]
+    #[doc(alias = "async-handling")]
     fn is_async_handling(&self) -> bool;
 
-    #[doc(alias = "set_property_async_handling")]
+    #[doc(alias = "async-handling")]
     fn set_async_handling(&self, async_handling: bool);
 
-    #[doc(alias = "get_property_message_forward")]
+    #[doc(alias = "message-forward")]
     fn is_message_forward(&self) -> bool;
 
-    #[doc(alias = "set_property_message_forward")]
+    #[doc(alias = "message-forward")]
     fn set_message_forward(&self, message_forward: bool);
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "deep-element-added")]
     fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -127,27 +132,32 @@ pub trait GstBinExt: 'static {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "deep-element-removed")]
     fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "element-added")]
     fn connect_element_added<F: Fn(&Self, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "element-removed")]
     fn connect_element_removed<F: Fn(&Self, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_async_handling_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "async-handling")]
+    fn connect_async_handling_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "message-forward")]
+    fn connect_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -338,6 +348,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "deep-element-added")]
     fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -375,6 +386,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "deep-element-removed")]
     fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -410,6 +422,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "element-added")]
     fn connect_element_added<F: Fn(&Self, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -443,6 +456,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "element-removed")]
     fn connect_element_removed<F: Fn(&Self, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -476,7 +490,8 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    fn connect_property_async_handling_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "async-handling")]
+    fn connect_async_handling_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -506,7 +521,8 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    fn connect_property_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "message-forward")]
+    fn connect_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

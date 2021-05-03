@@ -23,11 +23,13 @@ glib::wrapper! {
 
 impl AppSrc {
     #[doc(alias = "gst_app_src_get_caps")]
+    #[doc(alias = "get_caps")]
     pub fn caps(&self) -> Option<gst::Caps> {
         unsafe { from_glib_full(ffi::gst_app_src_get_caps(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_src_get_current_level_bytes")]
+    #[doc(alias = "get_current_level_bytes")]
     pub fn current_level_bytes(&self) -> u64 {
         unsafe { ffi::gst_app_src_get_current_level_bytes(self.to_glib_none().0) }
     }
@@ -35,26 +37,31 @@ impl AppSrc {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_app_src_get_duration")]
+    #[doc(alias = "get_duration")]
     pub fn duration(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::gst_app_src_get_duration(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_src_get_emit_signals")]
+    #[doc(alias = "get_emit_signals")]
     pub fn emits_signals(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_src_get_emit_signals(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_src_get_max_bytes")]
+    #[doc(alias = "get_max_bytes")]
     pub fn max_bytes(&self) -> u64 {
         unsafe { ffi::gst_app_src_get_max_bytes(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_app_src_get_size")]
+    #[doc(alias = "get_size")]
     pub fn size(&self) -> i64 {
         unsafe { ffi::gst_app_src_get_size(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_app_src_get_stream_type")]
+    #[doc(alias = "get_stream_type")]
     pub fn stream_type(&self) -> AppStreamType {
         unsafe { from_glib(ffi::gst_app_src_get_stream_type(self.to_glib_none().0)) }
     }
@@ -108,7 +115,6 @@ impl AppSrc {
         }
     }
 
-    #[doc(alias = "get_property_block")]
     pub fn is_block(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
@@ -123,7 +129,6 @@ impl AppSrc {
         }
     }
 
-    #[doc(alias = "set_property_block")]
     pub fn set_block(&self, block: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -134,7 +139,6 @@ impl AppSrc {
         }
     }
 
-    #[doc(alias = "get_property_format")]
     pub fn format(&self) -> gst::Format {
         unsafe {
             let mut value = glib::Value::from_type(<gst::Format as StaticType>::static_type());
@@ -149,7 +153,6 @@ impl AppSrc {
         }
     }
 
-    #[doc(alias = "set_property_format")]
     pub fn set_format(&self, format: gst::Format) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -162,7 +165,7 @@ impl AppSrc {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "get_property_handle_segment_change")]
+    #[doc(alias = "handle-segment-change")]
     pub fn is_handle_segment_change(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
@@ -179,7 +182,7 @@ impl AppSrc {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "set_property_handle_segment_change")]
+    #[doc(alias = "handle-segment-change")]
     pub fn set_handle_segment_change(&self, handle_segment_change: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -190,7 +193,7 @@ impl AppSrc {
         }
     }
 
-    #[doc(alias = "get_property_is_live")]
+    #[doc(alias = "is-live")]
     pub fn is_live(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
@@ -205,7 +208,7 @@ impl AppSrc {
         }
     }
 
-    #[doc(alias = "set_property_is_live")]
+    #[doc(alias = "is-live")]
     pub fn set_is_live(&self, is_live: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -216,7 +219,7 @@ impl AppSrc {
         }
     }
 
-    #[doc(alias = "get_property_max_latency")]
+    #[doc(alias = "max-latency")]
     pub fn max_latency(&self) -> i64 {
         unsafe {
             let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
@@ -231,7 +234,7 @@ impl AppSrc {
         }
     }
 
-    #[doc(alias = "set_property_max_latency")]
+    #[doc(alias = "max-latency")]
     pub fn set_max_latency(&self, max_latency: i64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -242,7 +245,7 @@ impl AppSrc {
         }
     }
 
-    #[doc(alias = "get_property_min_latency")]
+    #[doc(alias = "min-latency")]
     pub fn min_latency(&self) -> i64 {
         unsafe {
             let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
@@ -257,7 +260,7 @@ impl AppSrc {
         }
     }
 
-    #[doc(alias = "set_property_min_latency")]
+    #[doc(alias = "min-latency")]
     pub fn set_min_latency(&self, min_latency: i64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -268,7 +271,7 @@ impl AppSrc {
         }
     }
 
-    #[doc(alias = "get_property_min_percent")]
+    #[doc(alias = "min-percent")]
     pub fn min_percent(&self) -> u32 {
         unsafe {
             let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
@@ -283,7 +286,7 @@ impl AppSrc {
         }
     }
 
-    #[doc(alias = "set_property_min_percent")]
+    #[doc(alias = "min-percent")]
     pub fn set_min_percent(&self, min_percent: u32) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -294,6 +297,7 @@ impl AppSrc {
         }
     }
 
+    #[doc(alias = "enough-data")]
     pub fn connect_enough_data<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -318,6 +322,7 @@ impl AppSrc {
         }
     }
 
+    #[doc(alias = "need-data")]
     pub fn connect_need_data<F: Fn(&AppSrc, u32) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -343,6 +348,7 @@ impl AppSrc {
         }
     }
 
+    #[doc(alias = "seek-data")]
     pub fn connect_seek_data<F: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>(
         &self,
         f: F,
@@ -370,7 +376,8 @@ impl AppSrc {
         }
     }
 
-    pub fn connect_property_block_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    #[doc(alias = "block")]
+    pub fn connect_block_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -395,7 +402,8 @@ impl AppSrc {
         }
     }
 
-    pub fn connect_property_caps_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    #[doc(alias = "caps")]
+    pub fn connect_caps_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -420,7 +428,8 @@ impl AppSrc {
         }
     }
 
-    pub fn connect_property_current_level_bytes_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    #[doc(alias = "current-level-bytes")]
+    pub fn connect_current_level_bytes_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -449,7 +458,8 @@ impl AppSrc {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn connect_property_duration_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    #[doc(alias = "duration")]
+    pub fn connect_duration_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -474,7 +484,8 @@ impl AppSrc {
         }
     }
 
-    pub fn connect_property_emit_signals_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    #[doc(alias = "emit-signals")]
+    pub fn connect_emit_signals_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -501,7 +512,8 @@ impl AppSrc {
         }
     }
 
-    pub fn connect_property_format_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    #[doc(alias = "format")]
+    pub fn connect_format_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -528,7 +540,8 @@ impl AppSrc {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn connect_property_handle_segment_change_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    #[doc(alias = "handle-segment-change")]
+    pub fn connect_handle_segment_change_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -555,7 +568,8 @@ impl AppSrc {
         }
     }
 
-    pub fn connect_property_is_live_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    #[doc(alias = "is-live")]
+    pub fn connect_is_live_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -580,7 +594,8 @@ impl AppSrc {
         }
     }
 
-    pub fn connect_property_max_bytes_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    #[doc(alias = "max-bytes")]
+    pub fn connect_max_bytes_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -605,7 +620,8 @@ impl AppSrc {
         }
     }
 
-    pub fn connect_property_max_latency_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    #[doc(alias = "max-latency")]
+    pub fn connect_max_latency_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -632,7 +648,8 @@ impl AppSrc {
         }
     }
 
-    pub fn connect_property_min_latency_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    #[doc(alias = "min-latency")]
+    pub fn connect_min_latency_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -659,7 +676,8 @@ impl AppSrc {
         }
     }
 
-    pub fn connect_property_min_percent_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    #[doc(alias = "min-percent")]
+    pub fn connect_min_percent_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -686,7 +704,8 @@ impl AppSrc {
         }
     }
 
-    pub fn connect_property_size_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    #[doc(alias = "size")]
+    pub fn connect_size_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -711,7 +730,8 @@ impl AppSrc {
         }
     }
 
-    pub fn connect_property_stream_type_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    #[doc(alias = "stream-type")]
+    pub fn connect_stream_type_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

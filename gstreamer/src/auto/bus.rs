@@ -57,6 +57,7 @@ impl Bus {
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //#[doc(alias = "gst_bus_get_pollfd")]
+    //#[doc(alias = "get_pollfd")]
     //pub fn pollfd(&self, fd: /*Ignored*/glib::PollFD) {
     //    unsafe { TODO: call ffi:gst_bus_get_pollfd() }
     //}
@@ -125,6 +126,7 @@ impl Bus {
         }
     }
 
+    #[doc(alias = "message")]
     pub fn connect_message<F: Fn(&Bus, &Message) + Send + 'static>(
         &self,
         detail: Option<&str>,
@@ -155,6 +157,7 @@ impl Bus {
         }
     }
 
+    #[doc(alias = "sync-message")]
     pub fn connect_sync_message<F: Fn(&Bus, &Message) + Send + Sync + 'static>(
         &self,
         detail: Option<&str>,

@@ -49,27 +49,35 @@ pub trait VideoDecoderExt: 'static {
     fn allocate_output_buffer(&self) -> Result<gst::Buffer, glib::BoolError>;
 
     #[doc(alias = "gst_video_decoder_get_buffer_pool")]
+    #[doc(alias = "get_buffer_pool")]
     fn buffer_pool(&self) -> Option<gst::BufferPool>;
 
     #[doc(alias = "gst_video_decoder_get_estimate_rate")]
+    #[doc(alias = "get_estimate_rate")]
     fn estimate_rate(&self) -> i32;
 
     #[doc(alias = "gst_video_decoder_get_max_decode_time")]
+    #[doc(alias = "get_max_decode_time")]
     fn max_decode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
 
     #[doc(alias = "gst_video_decoder_get_max_errors")]
+    #[doc(alias = "get_max_errors")]
     fn max_errors(&self) -> i32;
 
     #[doc(alias = "gst_video_decoder_get_needs_format")]
+    #[doc(alias = "get_needs_format")]
     fn needs_format(&self) -> bool;
 
     #[doc(alias = "gst_video_decoder_get_packetized")]
+    #[doc(alias = "get_packetized")]
     fn is_packetized(&self) -> bool;
 
     #[doc(alias = "gst_video_decoder_get_pending_frame_size")]
+    #[doc(alias = "get_pending_frame_size")]
     fn pending_frame_size(&self) -> usize;
 
     #[doc(alias = "gst_video_decoder_get_qos_proportion")]
+    #[doc(alias = "get_qos_proportion")]
     fn qos_proportion(&self) -> f64;
 
     #[doc(alias = "gst_video_decoder_merge_tags")]
@@ -95,27 +103,24 @@ pub trait VideoDecoderExt: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "get_property_qos")]
     fn is_qos(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "set_property_qos")]
     fn set_qos(&self, qos: bool);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "max-errors")]
+    fn connect_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "qos")]
+    fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
@@ -273,7 +278,8 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "max-errors")]
+    fn connect_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -302,10 +308,8 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "qos")]
+    fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstVideoDecoder,
             _param_spec: glib::ffi::gpointer,

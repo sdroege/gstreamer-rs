@@ -31,45 +31,57 @@ pub trait BaseSinkExt: 'static {
     //fn do_preroll(&self, obj: /*Ignored*/&gst::MiniObject) -> gst::FlowReturn;
 
     #[doc(alias = "gst_base_sink_get_blocksize")]
+    #[doc(alias = "get_blocksize")]
     fn blocksize(&self) -> u32;
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_base_sink_get_drop_out_of_segment")]
+    #[doc(alias = "get_drop_out_of_segment")]
     fn is_drop_out_of_segment(&self) -> bool;
 
     #[doc(alias = "gst_base_sink_get_last_sample")]
+    #[doc(alias = "get_last_sample")]
     fn last_sample(&self) -> Option<gst::Sample>;
 
     #[doc(alias = "gst_base_sink_get_latency")]
+    #[doc(alias = "get_latency")]
     fn latency(&self) -> gst::ClockTime;
 
     #[doc(alias = "gst_base_sink_get_max_bitrate")]
+    #[doc(alias = "get_max_bitrate")]
     fn max_bitrate(&self) -> u64;
 
     #[doc(alias = "gst_base_sink_get_max_lateness")]
+    #[doc(alias = "get_max_lateness")]
     fn max_lateness(&self) -> i64;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_base_sink_get_processing_deadline")]
+    #[doc(alias = "get_processing_deadline")]
     fn processing_deadline(&self) -> gst::ClockTime;
 
     #[doc(alias = "gst_base_sink_get_render_delay")]
+    #[doc(alias = "get_render_delay")]
     fn render_delay(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_base_sink_get_stats")]
+    #[doc(alias = "get_stats")]
     fn stats(&self) -> gst::Structure;
 
     #[doc(alias = "gst_base_sink_get_sync")]
+    #[doc(alias = "get_sync")]
     fn is_sync(&self) -> bool;
 
     #[doc(alias = "gst_base_sink_get_throttle_time")]
+    #[doc(alias = "get_throttle_time")]
     fn throttle_time(&self) -> u64;
 
     #[doc(alias = "gst_base_sink_get_ts_offset")]
+    #[doc(alias = "get_ts_offset")]
     fn ts_offset(&self) -> gst::ClockTimeDiff;
 
     #[doc(alias = "gst_base_sink_is_async_enabled")]
@@ -121,89 +133,88 @@ pub trait BaseSinkExt: 'static {
     #[doc(alias = "gst_base_sink_set_ts_offset")]
     fn set_ts_offset(&self, offset: gst::ClockTimeDiff);
 
-    #[doc(alias = "get_property_async")]
+    #[doc(alias = "async")]
     fn is_async(&self) -> bool;
 
-    #[doc(alias = "set_property_async")]
+    #[doc(alias = "async")]
     fn set_async(&self, async_: bool);
 
-    #[doc(alias = "get_property_enable_last_sample")]
+    #[doc(alias = "enable-last-sample")]
     fn enables_last_sample(&self) -> bool;
 
-    #[doc(alias = "set_property_enable_last_sample")]
+    #[doc(alias = "enable-last-sample")]
     fn set_enable_last_sample(&self, enable_last_sample: bool);
 
-    #[doc(alias = "get_property_qos")]
     fn is_qos(&self) -> bool;
 
-    #[doc(alias = "set_property_qos")]
     fn set_qos(&self, qos: bool);
 
-    fn connect_property_async_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "async")]
+    fn connect_async_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "blocksize")]
+    fn connect_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "enable-last-sample")]
+    fn connect_enable_last_sample_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_enable_last_sample_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "last-sample")]
+    fn connect_last_sample_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_last_sample_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "max-bitrate")]
+    fn connect_max_bitrate_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_max_bitrate_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn connect_property_max_lateness_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "max-lateness")]
+    fn connect_max_lateness_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn connect_property_processing_deadline_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "processing-deadline")]
+    fn connect_processing_deadline_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "qos")]
+    fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_render_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "render-delay")]
+    fn connect_render_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "stats")]
+    fn connect_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "sync")]
+    fn connect_sync_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "throttle-time")]
+    fn connect_throttle_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_sync_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn connect_property_throttle_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn connect_property_ts_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "ts-offset")]
+    fn connect_ts_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -470,10 +481,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    fn connect_property_async_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "async")]
+    fn connect_async_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_async_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
@@ -497,7 +506,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    fn connect_property_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "blocksize")]
+    fn connect_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -524,7 +534,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    fn connect_property_enable_last_sample_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "enable-last-sample")]
+    fn connect_enable_last_sample_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -554,7 +565,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    fn connect_property_last_sample_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "last-sample")]
+    fn connect_last_sample_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -581,7 +593,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    fn connect_property_max_bitrate_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "max-bitrate")]
+    fn connect_max_bitrate_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -608,7 +621,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    fn connect_property_max_lateness_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "max-lateness")]
+    fn connect_max_lateness_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -637,7 +651,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn connect_property_processing_deadline_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "processing-deadline")]
+    fn connect_processing_deadline_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -667,10 +682,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "qos")]
+    fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
@@ -694,7 +707,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    fn connect_property_render_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "render-delay")]
+    fn connect_render_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -723,10 +737,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "stats")]
+    fn connect_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_stats_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
@@ -750,10 +762,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    fn connect_property_sync_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "sync")]
+    fn connect_sync_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_sync_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
@@ -777,7 +787,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    fn connect_property_throttle_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "throttle-time")]
+    fn connect_throttle_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -804,7 +815,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    fn connect_property_ts_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "ts-offset")]
+    fn connect_ts_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

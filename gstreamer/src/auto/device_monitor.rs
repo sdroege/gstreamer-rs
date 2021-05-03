@@ -31,15 +31,19 @@ pub const NONE_DEVICE_MONITOR: Option<&DeviceMonitor> = None;
 
 pub trait DeviceMonitorExt: 'static {
     #[doc(alias = "gst_device_monitor_get_bus")]
+    #[doc(alias = "get_bus")]
     fn bus(&self) -> Bus;
 
     #[doc(alias = "gst_device_monitor_get_devices")]
+    #[doc(alias = "get_devices")]
     fn devices(&self) -> Vec<Device>;
 
     #[doc(alias = "gst_device_monitor_get_providers")]
+    #[doc(alias = "get_providers")]
     fn providers(&self) -> Vec<glib::GString>;
 
     #[doc(alias = "gst_device_monitor_get_show_all_devices")]
+    #[doc(alias = "get_show_all_devices")]
     fn shows_all_devices(&self) -> bool;
 
     #[doc(alias = "gst_device_monitor_set_show_all_devices")]
@@ -51,13 +55,14 @@ pub trait DeviceMonitorExt: 'static {
     #[doc(alias = "gst_device_monitor_stop")]
     fn stop(&self);
 
-    #[doc(alias = "get_property_show_all")]
+    #[doc(alias = "show-all")]
     fn shows_all(&self) -> bool;
 
-    #[doc(alias = "set_property_show_all")]
+    #[doc(alias = "show-all")]
     fn set_show_all(&self, show_all: bool);
 
-    fn connect_property_show_all_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "show-all")]
+    fn connect_show_all_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -144,7 +149,8 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 
-    fn connect_property_show_all_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "show-all")]
+    fn connect_show_all_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

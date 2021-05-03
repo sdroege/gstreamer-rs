@@ -178,6 +178,7 @@ pub fn debug_unset_threshold_for_name(name: &str) {
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[doc(alias = "gst_get_main_executable_path")]
+#[doc(alias = "get_main_executable_path")]
 pub fn main_executable_path() -> Result<glib::GString, glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {

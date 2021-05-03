@@ -60,12 +60,15 @@ pub trait GLDisplayExt: 'static {
     fn filter_gl_api(&self, gl_api: GLAPI);
 
     #[doc(alias = "gst_gl_display_get_gl_api")]
+    #[doc(alias = "get_gl_api")]
     fn gl_api(&self) -> GLAPI;
 
     #[doc(alias = "gst_gl_display_get_gl_api_unlocked")]
+    #[doc(alias = "get_gl_api_unlocked")]
     fn gl_api_unlocked(&self) -> GLAPI;
 
     #[doc(alias = "gst_gl_display_get_handle_type")]
+    #[doc(alias = "get_handle_type")]
     fn handle_type(&self) -> GLDisplayType;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -81,6 +84,7 @@ pub trait GLDisplayExt: 'static {
     //#[doc(alias = "gst_gl_display_retrieve_window")]
     //fn retrieve_window(&self, data: /*Unimplemented*/Option<Fundamental: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Fundamental: Pointer>, /*Unimplemented*/Option<Fundamental: Pointer>) -> i32) -> Option<GLWindow>;
 
+    #[doc(alias = "create-context")]
     fn connect_create_context<F: Fn(&Self, &GLContext) -> GLContext + Send + Sync + 'static>(
         &self,
         f: F,
@@ -189,6 +193,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
     //    unsafe { TODO: call ffi:gst_gl_display_retrieve_window() }
     //}
 
+    #[doc(alias = "create-context")]
     fn connect_create_context<F: Fn(&Self, &GLContext) -> GLContext + Send + Sync + 'static>(
         &self,
         f: F,

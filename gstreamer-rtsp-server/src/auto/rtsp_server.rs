@@ -86,32 +86,41 @@ pub trait RTSPServerExt: 'static {
     ) -> Result<glib::Source, glib::Error>;
 
     #[doc(alias = "gst_rtsp_server_get_address")]
+    #[doc(alias = "get_address")]
     fn address(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_server_get_auth")]
+    #[doc(alias = "get_auth")]
     fn auth(&self) -> Option<RTSPAuth>;
 
     #[doc(alias = "gst_rtsp_server_get_backlog")]
+    #[doc(alias = "get_backlog")]
     fn backlog(&self) -> i32;
 
     #[doc(alias = "gst_rtsp_server_get_bound_port")]
+    #[doc(alias = "get_bound_port")]
     fn bound_port(&self) -> i32;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_server_get_content_length_limit")]
+    #[doc(alias = "get_content_length_limit")]
     fn content_length_limit(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_server_get_mount_points")]
+    #[doc(alias = "get_mount_points")]
     fn mount_points(&self) -> Option<RTSPMountPoints>;
 
     #[doc(alias = "gst_rtsp_server_get_service")]
+    #[doc(alias = "get_service")]
     fn service(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_server_get_session_pool")]
+    #[doc(alias = "get_session_pool")]
     fn session_pool(&self) -> Option<RTSPSessionPool>;
 
     #[doc(alias = "gst_rtsp_server_get_thread_pool")]
+    #[doc(alias = "get_thread_pool")]
     fn thread_pool(&self) -> Option<RTSPThreadPool>;
 
     #[doc(alias = "gst_rtsp_server_set_address")]
@@ -149,46 +158,50 @@ pub trait RTSPServerExt: 'static {
         initial_buffer: Option<&str>,
     ) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "content-length-limit")]
     fn get_property_content_length_limit(&self) -> u32;
 
+    #[doc(alias = "content-length-limit")]
     fn set_property_content_length_limit(&self, content_length_limit: u32);
 
+    #[doc(alias = "client-connected")]
     fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_address_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "address")]
+    fn connect_address_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
+        -> SignalHandlerId;
+
+    #[doc(alias = "backlog")]
+    fn connect_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
+        -> SignalHandlerId;
+
+    #[doc(alias = "bound-port")]
+    fn connect_bound_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "content-length-limit")]
+    fn connect_content_length_limit_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_bound_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "mount-points")]
+    fn connect_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_content_length_limit_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "service")]
+    fn connect_service_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
+        -> SignalHandlerId;
 
-    fn connect_property_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn connect_property_service_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn connect_property_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "session-pool")]
+    fn connect_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -449,6 +462,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "client-connected")]
     fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -482,7 +496,8 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn connect_property_address_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "address")]
+    fn connect_address_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -509,7 +524,8 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn connect_property_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "backlog")]
+    fn connect_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -536,7 +552,8 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn connect_property_bound_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "bound-port")]
+    fn connect_bound_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -563,7 +580,8 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn connect_property_content_length_limit_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "content-length-limit")]
+    fn connect_content_length_limit_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -593,7 +611,8 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn connect_property_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "mount-points")]
+    fn connect_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -620,7 +639,8 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn connect_property_service_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "service")]
+    fn connect_service_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -647,7 +667,8 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn connect_property_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "session-pool")]
+    fn connect_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

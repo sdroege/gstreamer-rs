@@ -21,18 +21,23 @@ pub const NONE_PLAYER_STREAM_INFO: Option<&PlayerStreamInfo> = None;
 
 pub trait PlayerStreamInfoExt: 'static {
     #[doc(alias = "gst_player_stream_info_get_caps")]
+    #[doc(alias = "get_caps")]
     fn caps(&self) -> Option<gst::Caps>;
 
     #[doc(alias = "gst_player_stream_info_get_codec")]
+    #[doc(alias = "get_codec")]
     fn codec(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_player_stream_info_get_index")]
+    #[doc(alias = "get_index")]
     fn index(&self) -> i32;
 
     #[doc(alias = "gst_player_stream_info_get_stream_type")]
+    #[doc(alias = "get_stream_type")]
     fn stream_type(&self) -> glib::GString;
 
     #[doc(alias = "gst_player_stream_info_get_tags")]
+    #[doc(alias = "get_tags")]
     fn tags(&self) -> Option<gst::TagList>;
 }
 

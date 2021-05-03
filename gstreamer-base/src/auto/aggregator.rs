@@ -34,12 +34,15 @@ pub const NONE_AGGREGATOR: Option<&Aggregator> = None;
 
 pub trait AggregatorExt: 'static {
     //#[doc(alias = "gst_aggregator_get_allocator")]
+    //#[doc(alias = "get_allocator")]
     //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
 
     #[doc(alias = "gst_aggregator_get_buffer_pool")]
+    #[doc(alias = "get_buffer_pool")]
     fn buffer_pool(&self) -> Option<gst::BufferPool>;
 
     #[doc(alias = "gst_aggregator_get_latency")]
+    #[doc(alias = "get_latency")]
     fn latency(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -70,56 +73,59 @@ pub trait AggregatorExt: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "get_property_emit_signals")]
+    #[doc(alias = "emit-signals")]
     fn emits_signals(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "set_property_emit_signals")]
+    #[doc(alias = "emit-signals")]
     fn set_emit_signals(&self, emit_signals: bool);
 
-    #[doc(alias = "get_property_start_time")]
+    #[doc(alias = "start-time")]
     fn start_time(&self) -> u64;
 
-    #[doc(alias = "set_property_start_time")]
+    #[doc(alias = "start-time")]
     fn set_start_time(&self, start_time: u64);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "get_property_start_time_selection")]
+    #[doc(alias = "start-time-selection")]
     fn start_time_selection(&self) -> AggregatorStartTimeSelection;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "set_property_start_time_selection")]
+    #[doc(alias = "start-time-selection")]
     fn set_start_time_selection(&self, start_time_selection: AggregatorStartTimeSelection);
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[doc(alias = "samples-selected")]
     //fn connect_samples_selected<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "emit-signals")]
+    fn connect_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "latency")]
+    fn connect_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
+        -> SignalHandlerId;
 
-    fn connect_property_start_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "start-time")]
+    fn connect_start_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_start_time_selection_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "start-time-selection")]
+    fn connect_start_time_selection_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -282,13 +288,15 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[doc(alias = "samples-selected")]
     //fn connect_samples_selected<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored segment: Gst.Segment
     //}
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "emit-signals")]
+    fn connect_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -317,7 +325,8 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "latency")]
+    fn connect_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -344,7 +353,8 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    fn connect_property_start_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "start-time")]
+    fn connect_start_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -373,7 +383,8 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_start_time_selection_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "start-time-selection")]
+    fn connect_start_time_selection_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

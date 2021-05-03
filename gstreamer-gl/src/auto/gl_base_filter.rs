@@ -35,15 +35,14 @@ pub trait GLBaseFilterExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_gl_base_filter_get_gl_context")]
+    #[doc(alias = "get_gl_context")]
     fn gl_context(&self) -> Option<GLContext>;
 
-    #[doc(alias = "get_property_context")]
     fn context(&self) -> Option<GLContext>;
 
-    fn connect_property_context_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "context")]
+    fn connect_context_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
+        -> SignalHandlerId;
 }
 
 impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
@@ -81,7 +80,8 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
         }
     }
 
-    fn connect_property_context_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "context")]
+    fn connect_context_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

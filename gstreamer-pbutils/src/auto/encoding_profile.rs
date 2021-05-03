@@ -58,38 +58,49 @@ pub trait EncodingProfileExt: 'static {
     fn copy(&self) -> EncodingProfile;
 
     #[doc(alias = "gst_encoding_profile_get_allow_dynamic_output")]
+    #[doc(alias = "get_allow_dynamic_output")]
     fn allows_dynamic_output(&self) -> bool;
 
     #[doc(alias = "gst_encoding_profile_get_description")]
+    #[doc(alias = "get_description")]
     fn description(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_encoding_profile_get_file_extension")]
+    #[doc(alias = "get_file_extension")]
     fn file_extension(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_encoding_profile_get_format")]
+    #[doc(alias = "get_format")]
     fn format(&self) -> gst::Caps;
 
     #[doc(alias = "gst_encoding_profile_get_input_caps")]
+    #[doc(alias = "get_input_caps")]
     fn input_caps(&self) -> gst::Caps;
 
     #[doc(alias = "gst_encoding_profile_get_name")]
+    #[doc(alias = "get_name")]
     fn name(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_encoding_profile_get_presence")]
+    #[doc(alias = "get_presence")]
     fn presence(&self) -> u32;
 
     #[doc(alias = "gst_encoding_profile_get_preset")]
+    #[doc(alias = "get_preset")]
     fn preset(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_encoding_profile_get_preset_name")]
+    #[doc(alias = "get_preset_name")]
     fn preset_name(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_encoding_profile_get_single_segment")]
+    #[doc(alias = "get_single_segment")]
     fn is_single_segment(&self) -> bool;
 
     #[doc(alias = "gst_encoding_profile_get_type_nick")]
+    #[doc(alias = "get_type_nick")]
     fn type_nick(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_encoding_profile_is_enabled")]

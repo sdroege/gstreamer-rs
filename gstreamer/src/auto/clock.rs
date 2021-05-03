@@ -95,21 +95,27 @@ pub trait ClockExt: 'static {
     fn adjust_unlocked(&self, internal: ClockTime) -> ClockTime;
 
     #[doc(alias = "gst_clock_get_calibration")]
+    #[doc(alias = "get_calibration")]
     fn calibration(&self) -> (ClockTime, ClockTime, ClockTime, ClockTime);
 
     #[doc(alias = "gst_clock_get_internal_time")]
+    #[doc(alias = "get_internal_time")]
     fn internal_time(&self) -> ClockTime;
 
     #[doc(alias = "gst_clock_get_master")]
+    #[doc(alias = "get_master")]
     fn master(&self) -> Option<Clock>;
 
     #[doc(alias = "gst_clock_get_resolution")]
+    #[doc(alias = "get_resolution")]
     fn resolution(&self) -> ClockTime;
 
     #[doc(alias = "gst_clock_get_time")]
+    #[doc(alias = "get_time")]
     fn time(&self) -> ClockTime;
 
     #[doc(alias = "gst_clock_get_timeout")]
+    #[doc(alias = "get_timeout")]
     fn timeout(&self) -> ClockTime;
 
     #[doc(alias = "gst_clock_is_synced")]
@@ -154,31 +160,33 @@ pub trait ClockExt: 'static {
     #[doc(alias = "gst_clock_wait_for_sync")]
     fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError>;
 
-    #[doc(alias = "get_property_window_size")]
+    #[doc(alias = "window-size")]
     fn window_size(&self) -> i32;
 
-    #[doc(alias = "set_property_window_size")]
+    #[doc(alias = "window-size")]
     fn set_window_size(&self, window_size: i32);
 
-    #[doc(alias = "get_property_window_threshold")]
+    #[doc(alias = "window-threshold")]
     fn window_threshold(&self) -> i32;
 
-    #[doc(alias = "set_property_window_threshold")]
+    #[doc(alias = "window-threshold")]
     fn set_window_threshold(&self, window_threshold: i32);
 
+    #[doc(alias = "synced")]
     fn connect_synced<F: Fn(&Self, bool) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "timeout")]
+    fn connect_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
+        -> SignalHandlerId;
+
+    #[doc(alias = "window-size")]
+    fn connect_window_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_window_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn connect_property_window_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "window-threshold")]
+    fn connect_window_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -443,6 +451,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "synced")]
     fn connect_synced<F: Fn(&Self, bool) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn synced_trampoline<P, F: Fn(&P, bool) + Send + Sync + 'static>(
             this: *mut ffi::GstClock,
@@ -470,7 +479,8 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "timeout")]
+    fn connect_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -497,7 +507,8 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn connect_property_window_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "window-size")]
+    fn connect_window_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -524,7 +535,8 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn connect_property_window_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "window-threshold")]
+    fn connect_window_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

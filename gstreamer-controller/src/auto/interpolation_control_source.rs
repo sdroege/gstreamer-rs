@@ -46,16 +46,12 @@ unsafe impl Sync for InterpolationControlSource {}
 pub const NONE_INTERPOLATION_CONTROL_SOURCE: Option<&InterpolationControlSource> = None;
 
 pub trait InterpolationControlSourceExt: 'static {
-    #[doc(alias = "get_property_mode")]
     fn mode(&self) -> InterpolationMode;
 
-    #[doc(alias = "set_property_mode")]
     fn set_mode(&self, mode: InterpolationMode);
 
-    fn connect_property_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "mode")]
+    fn connect_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<InterpolationControlSource>> InterpolationControlSourceExt for O {
@@ -84,10 +80,8 @@ impl<O: IsA<InterpolationControlSource>> InterpolationControlSourceExt for O {
         }
     }
 
-    fn connect_property_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "mode")]
+    fn connect_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mode_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstInterpolationControlSource,
             _param_spec: glib::ffi::gpointer,

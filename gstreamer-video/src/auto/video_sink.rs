@@ -27,13 +27,14 @@ unsafe impl Sync for VideoSink {}
 pub const NONE_VIDEO_SINK: Option<&VideoSink> = None;
 
 pub trait VideoSinkExt: 'static {
-    #[doc(alias = "get_property_show_preroll_frame")]
+    #[doc(alias = "show-preroll-frame")]
     fn shows_preroll_frame(&self) -> bool;
 
-    #[doc(alias = "set_property_show_preroll_frame")]
+    #[doc(alias = "show-preroll-frame")]
     fn set_show_preroll_frame(&self, show_preroll_frame: bool);
 
-    fn connect_property_show_preroll_frame_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "show-preroll-frame")]
+    fn connect_show_preroll_frame_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -64,7 +65,8 @@ impl<O: IsA<VideoSink>> VideoSinkExt for O {
         }
     }
 
-    fn connect_property_show_preroll_frame_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "show-preroll-frame")]
+    fn connect_show_preroll_frame_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

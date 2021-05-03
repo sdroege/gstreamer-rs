@@ -36,11 +36,13 @@ pub trait VideoEncoderExt: 'static {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_video_encoder_get_max_encode_time")]
+    #[doc(alias = "get_max_encode_time")]
     fn max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_encoder_get_min_force_key_unit_interval")]
+    #[doc(alias = "get_min_force_key_unit_interval")]
     fn min_force_key_unit_interval(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -70,23 +72,20 @@ pub trait VideoEncoderExt: 'static {
     #[doc(alias = "gst_video_encoder_set_qos_enabled")]
     fn set_qos_enabled(&self, enabled: bool);
 
-    #[doc(alias = "get_property_qos")]
     fn is_qos(&self) -> bool;
 
-    #[doc(alias = "set_property_qos")]
     fn set_qos(&self, qos: bool);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "min-force-key-unit-interval")]
+    fn connect_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "qos")]
+    fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
@@ -212,7 +211,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "min-force-key-unit-interval")]
+    fn connect_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -242,10 +242,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
-    fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "qos")]
+    fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstVideoEncoder,
             _param_spec: glib::ffi::gpointer,

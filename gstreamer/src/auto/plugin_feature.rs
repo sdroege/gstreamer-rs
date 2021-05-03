@@ -26,9 +26,11 @@ pub trait PluginFeatureExt: 'static {
     fn check_version(&self, min_major: u32, min_minor: u32, min_micro: u32) -> bool;
 
     #[doc(alias = "gst_plugin_feature_get_plugin")]
+    #[doc(alias = "get_plugin")]
     fn plugin(&self) -> Option<Plugin>;
 
     #[doc(alias = "gst_plugin_feature_get_plugin_name")]
+    #[doc(alias = "get_plugin_name")]
     fn plugin_name(&self) -> Option<glib::GString>;
 }
 

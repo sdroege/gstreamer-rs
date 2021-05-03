@@ -57,9 +57,11 @@ pub trait RTSPSessionPoolExt: 'static {
     fn find(&self, sessionid: &str) -> Option<RTSPSession>;
 
     #[doc(alias = "gst_rtsp_session_pool_get_max_sessions")]
+    #[doc(alias = "get_max_sessions")]
     fn max_sessions(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_session_pool_get_n_sessions")]
+    #[doc(alias = "get_n_sessions")]
     fn n_sessions(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_session_pool_remove")]
@@ -68,12 +70,14 @@ pub trait RTSPSessionPoolExt: 'static {
     #[doc(alias = "gst_rtsp_session_pool_set_max_sessions")]
     fn set_max_sessions(&self, max: u32);
 
+    #[doc(alias = "session-removed")]
     fn connect_session_removed<F: Fn(&Self, &RTSPSession) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_max_sessions_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "max-sessions")]
+    fn connect_max_sessions_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -172,6 +176,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
         }
     }
 
+    #[doc(alias = "session-removed")]
     fn connect_session_removed<F: Fn(&Self, &RTSPSession) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -205,7 +210,8 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
         }
     }
 
-    fn connect_property_max_sessions_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "max-sessions")]
+    fn connect_max_sessions_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

@@ -29,6 +29,7 @@ impl TestClock {
     }
 
     #[doc(alias = "gst_test_clock_new_with_start_time")]
+    #[doc(alias = "new_with_start_time")]
     pub fn with_start_time(start_time: gst::ClockTime) -> TestClock {
         assert_initialized_main_thread!();
         unsafe {
@@ -52,6 +53,7 @@ impl TestClock {
     }
 
     #[doc(alias = "gst_test_clock_get_next_entry_time")]
+    #[doc(alias = "get_next_entry_time")]
     pub fn next_entry_time(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_test_clock_get_next_entry_time(
@@ -123,7 +125,7 @@ impl TestClock {
         }
     }
 
-    #[doc(alias = "get_property_clock_type")]
+    #[doc(alias = "clock-type")]
     pub fn clock_type(&self) -> gst::ClockType {
         unsafe {
             let mut value = glib::Value::from_type(<gst::ClockType as StaticType>::static_type());
@@ -138,7 +140,7 @@ impl TestClock {
         }
     }
 
-    #[doc(alias = "set_property_clock_type")]
+    #[doc(alias = "clock-type")]
     pub fn set_clock_type(&self, clock_type: gst::ClockType) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -149,7 +151,7 @@ impl TestClock {
         }
     }
 
-    #[doc(alias = "get_property_start_time")]
+    #[doc(alias = "start-time")]
     pub fn start_time(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
@@ -169,7 +171,8 @@ impl TestClock {
     //    unsafe { TODO: call ffi:gst_test_clock_id_list_get_latest_time() }
     //}
 
-    pub fn connect_property_clock_type_notify<F: Fn(&TestClock) + Send + Sync + 'static>(
+    #[doc(alias = "clock-type")]
+    pub fn connect_clock_type_notify<F: Fn(&TestClock) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

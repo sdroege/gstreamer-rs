@@ -17,6 +17,7 @@ glib::wrapper! {
 
 impl Preset {
     #[doc(alias = "gst_preset_get_app_dir")]
+    #[doc(alias = "get_app_dir")]
     pub fn app_dir() -> Option<std::path::PathBuf> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_preset_get_app_dir()) }
@@ -46,12 +47,15 @@ pub trait PresetExt: 'static {
     fn delete_preset(&self, name: &str) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_preset_get_meta")]
+    #[doc(alias = "get_meta")]
     fn meta(&self, name: &str, tag: &str) -> Option<glib::GString>;
 
     #[doc(alias = "gst_preset_get_preset_names")]
+    #[doc(alias = "get_preset_names")]
     fn preset_names(&self) -> Vec<glib::GString>;
 
     #[doc(alias = "gst_preset_get_property_names")]
+    #[doc(alias = "get_property_names")]
     fn property_names(&self) -> Vec<glib::GString>;
 
     #[doc(alias = "gst_preset_is_editable")]

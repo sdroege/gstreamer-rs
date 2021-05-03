@@ -31,18 +31,23 @@ pub trait AudioBaseSinkExt: 'static {
     //fn create_ringbuffer(&self) -> /*Ignored*/Option<AudioRingBuffer>;
 
     #[doc(alias = "gst_audio_base_sink_get_alignment_threshold")]
+    #[doc(alias = "get_alignment_threshold")]
     fn alignment_threshold(&self) -> gst::ClockTime;
 
     #[doc(alias = "gst_audio_base_sink_get_discont_wait")]
+    #[doc(alias = "get_discont_wait")]
     fn discont_wait(&self) -> gst::ClockTime;
 
     #[doc(alias = "gst_audio_base_sink_get_drift_tolerance")]
+    #[doc(alias = "get_drift_tolerance")]
     fn drift_tolerance(&self) -> i64;
 
     #[doc(alias = "gst_audio_base_sink_get_provide_clock")]
+    #[doc(alias = "get_provide_clock")]
     fn is_provide_clock(&self) -> bool;
 
     //#[doc(alias = "gst_audio_base_sink_get_slave_method")]
+    //#[doc(alias = "get_slave_method")]
     //fn slave_method(&self) -> /*Ignored*/AudioBaseSinkSlaveMethod;
 
     #[doc(alias = "gst_audio_base_sink_report_device_failure")]
@@ -66,60 +71,68 @@ pub trait AudioBaseSinkExt: 'static {
     //#[doc(alias = "gst_audio_base_sink_set_slave_method")]
     //fn set_slave_method(&self, method: /*Ignored*/AudioBaseSinkSlaveMethod);
 
-    #[doc(alias = "get_property_buffer_time")]
+    #[doc(alias = "buffer-time")]
     fn buffer_time(&self) -> i64;
 
-    #[doc(alias = "set_property_buffer_time")]
+    #[doc(alias = "buffer-time")]
     fn set_buffer_time(&self, buffer_time: i64);
 
-    #[doc(alias = "get_property_can_activate_pull")]
+    #[doc(alias = "can-activate-pull")]
     fn can_activate_pull(&self) -> bool;
 
-    #[doc(alias = "set_property_can_activate_pull")]
+    #[doc(alias = "can-activate-pull")]
     fn set_can_activate_pull(&self, can_activate_pull: bool);
 
-    #[doc(alias = "get_property_latency_time")]
+    #[doc(alias = "latency-time")]
     fn latency_time(&self) -> i64;
 
-    #[doc(alias = "set_property_latency_time")]
+    #[doc(alias = "latency-time")]
     fn set_latency_time(&self, latency_time: i64);
 
-    fn connect_property_alignment_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "alignment-threshold")]
+    fn connect_alignment_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "buffer-time")]
+    fn connect_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_can_activate_pull_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "can-activate-pull")]
+    fn connect_can_activate_pull_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_discont_wait_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "discont-wait")]
+    fn connect_discont_wait_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_drift_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "drift-tolerance")]
+    fn connect_drift_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "latency-time")]
+    fn connect_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_provide_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "provide-clock")]
+    fn connect_provide_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_slave_method_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "slave-method")]
+    fn connect_slave_method_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -284,7 +297,8 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
-    fn connect_property_alignment_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "alignment-threshold")]
+    fn connect_alignment_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -314,7 +328,8 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
-    fn connect_property_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "buffer-time")]
+    fn connect_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -341,7 +356,8 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
-    fn connect_property_can_activate_pull_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "can-activate-pull")]
+    fn connect_can_activate_pull_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -371,7 +387,8 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
-    fn connect_property_discont_wait_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "discont-wait")]
+    fn connect_discont_wait_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -398,7 +415,8 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
-    fn connect_property_drift_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "drift-tolerance")]
+    fn connect_drift_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -428,7 +446,8 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
-    fn connect_property_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "latency-time")]
+    fn connect_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -455,7 +474,8 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
-    fn connect_property_provide_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "provide-clock")]
+    fn connect_provide_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -482,7 +502,8 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
-    fn connect_property_slave_method_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "slave-method")]
+    fn connect_slave_method_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

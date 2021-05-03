@@ -33,15 +33,19 @@ pub trait DeviceExt: 'static {
     fn create_element(&self, name: Option<&str>) -> Result<Element, glib::BoolError>;
 
     #[doc(alias = "gst_device_get_caps")]
+    #[doc(alias = "get_caps")]
     fn caps(&self) -> Option<Caps>;
 
     #[doc(alias = "gst_device_get_device_class")]
+    #[doc(alias = "get_device_class")]
     fn device_class(&self) -> glib::GString;
 
     #[doc(alias = "gst_device_get_display_name")]
+    #[doc(alias = "get_display_name")]
     fn display_name(&self) -> glib::GString;
 
     #[doc(alias = "gst_device_get_properties")]
+    #[doc(alias = "get_properties")]
     fn properties(&self) -> Option<Structure>;
 
     #[doc(alias = "gst_device_has_classes")]
@@ -56,6 +60,7 @@ pub trait DeviceExt: 'static {
         element: &P,
     ) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "removed")]
     fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
@@ -131,6 +136,7 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
+    #[doc(alias = "removed")]
     fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn removed_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstDevice,

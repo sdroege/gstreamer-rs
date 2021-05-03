@@ -572,6 +572,7 @@ impl GLSLVersion {
     }
 
     #[doc(alias = "gst_glsl_version_to_string")]
+    #[doc(alias = "to_string")]
     pub fn to_str(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_glsl_version_to_string(self.into_glib())) }
@@ -786,6 +787,7 @@ impl GLTextureTarget {
     }
 
     #[doc(alias = "gst_gl_texture_target_to_string")]
+    #[doc(alias = "to_string")]
     pub fn to_str(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_gl_texture_target_to_string(self.into_glib())) }

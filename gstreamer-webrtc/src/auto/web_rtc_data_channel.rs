@@ -86,7 +86,7 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[doc(alias = "get_property_buffered_amount")]
+    #[doc(alias = "buffered-amount")]
     pub fn buffered_amount(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
@@ -101,7 +101,7 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[doc(alias = "get_property_buffered_amount_low_threshold")]
+    #[doc(alias = "buffered-amount-low-threshold")]
     pub fn buffered_amount_low_threshold(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
@@ -116,7 +116,7 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[doc(alias = "set_property_buffered_amount_low_threshold")]
+    #[doc(alias = "buffered-amount-low-threshold")]
     pub fn set_buffered_amount_low_threshold(&self, buffered_amount_low_threshold: u64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -127,7 +127,6 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[doc(alias = "get_property_id")]
     pub fn id(&self) -> i32 {
         unsafe {
             let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
@@ -140,7 +139,6 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[doc(alias = "get_property_label")]
     pub fn label(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
@@ -155,7 +153,7 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[doc(alias = "get_property_max_packet_lifetime")]
+    #[doc(alias = "max-packet-lifetime")]
     pub fn max_packet_lifetime(&self) -> i32 {
         unsafe {
             let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
@@ -170,7 +168,7 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[doc(alias = "get_property_max_retransmits")]
+    #[doc(alias = "max-retransmits")]
     pub fn max_retransmits(&self) -> i32 {
         unsafe {
             let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
@@ -185,7 +183,6 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[doc(alias = "get_property_negotiated")]
     pub fn is_negotiated(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
@@ -200,7 +197,6 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[doc(alias = "get_property_ordered")]
     pub fn is_ordered(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
@@ -215,7 +211,6 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[doc(alias = "get_property_priority")]
     pub fn priority(&self) -> WebRTCPriorityType {
         unsafe {
             let mut value =
@@ -231,7 +226,6 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[doc(alias = "get_property_protocol")]
     pub fn protocol(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
@@ -246,7 +240,7 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[doc(alias = "get_property_ready_state")]
+    #[doc(alias = "ready-state")]
     pub fn ready_state(&self) -> WebRTCDataChannelState {
         unsafe {
             let mut value =
@@ -262,6 +256,7 @@ impl WebRTCDataChannel {
         }
     }
 
+    #[doc(alias = "close")]
     pub fn connect_close<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -294,6 +289,7 @@ impl WebRTCDataChannel {
         };
     }
 
+    #[doc(alias = "on-buffered-amount-low")]
     pub fn connect_on_buffered_amount_low<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -320,6 +316,7 @@ impl WebRTCDataChannel {
         }
     }
 
+    #[doc(alias = "on-close")]
     pub fn connect_on_close<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -346,6 +343,7 @@ impl WebRTCDataChannel {
         }
     }
 
+    #[doc(alias = "on-error")]
     pub fn connect_on_error<F: Fn(&WebRTCDataChannel, &glib::Error) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -373,6 +371,7 @@ impl WebRTCDataChannel {
         }
     }
 
+    #[doc(alias = "on-message-data")]
     pub fn connect_on_message_data<
         F: Fn(&WebRTCDataChannel, Option<&glib::Bytes>) + Send + Sync + 'static,
     >(
@@ -407,6 +406,7 @@ impl WebRTCDataChannel {
         }
     }
 
+    #[doc(alias = "on-message-string")]
     pub fn connect_on_message_string<
         F: Fn(&WebRTCDataChannel, Option<&str>) + Send + Sync + 'static,
     >(
@@ -441,6 +441,7 @@ impl WebRTCDataChannel {
         }
     }
 
+    #[doc(alias = "on-open")]
     pub fn connect_on_open<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -467,6 +468,7 @@ impl WebRTCDataChannel {
         }
     }
 
+    #[doc(alias = "send-data")]
     pub fn connect_send_data<
         F: Fn(&WebRTCDataChannel, Option<&glib::Bytes>) + Send + Sync + 'static,
     >(
@@ -509,6 +511,7 @@ impl WebRTCDataChannel {
         };
     }
 
+    #[doc(alias = "send-string")]
     pub fn connect_send_string<F: Fn(&WebRTCDataChannel, Option<&str>) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -549,9 +552,8 @@ impl WebRTCDataChannel {
         };
     }
 
-    pub fn connect_property_buffered_amount_notify<
-        F: Fn(&WebRTCDataChannel) + Send + Sync + 'static,
-    >(
+    #[doc(alias = "buffered-amount")]
+    pub fn connect_buffered_amount_notify<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -578,7 +580,8 @@ impl WebRTCDataChannel {
         }
     }
 
-    pub fn connect_property_buffered_amount_low_threshold_notify<
+    #[doc(alias = "buffered-amount-low-threshold")]
+    pub fn connect_buffered_amount_low_threshold_notify<
         F: Fn(&WebRTCDataChannel) + Send + Sync + 'static,
     >(
         &self,
@@ -607,9 +610,8 @@ impl WebRTCDataChannel {
         }
     }
 
-    pub fn connect_property_ready_state_notify<
-        F: Fn(&WebRTCDataChannel) + Send + Sync + 'static,
-    >(
+    #[doc(alias = "ready-state")]
+    pub fn connect_ready_state_notify<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

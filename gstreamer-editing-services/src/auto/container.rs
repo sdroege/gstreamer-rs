@@ -51,6 +51,7 @@ pub trait GESContainerExt: 'static {
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_container_get_children")]
+    #[doc(alias = "get_children")]
     fn children(&self, recursive: bool) -> Vec<TimelineElement>;
 
     #[doc(alias = "ges_container_remove")]
@@ -59,20 +60,22 @@ pub trait GESContainerExt: 'static {
     #[doc(alias = "ges_container_ungroup")]
     fn ungroup(&self, recursive: bool) -> Vec<Container>;
 
-    #[doc(alias = "get_property_height")]
     fn height(&self) -> u32;
 
+    #[doc(alias = "child-added")]
     fn connect_child_added<F: Fn(&Self, &TimelineElement) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "child-removed")]
     fn connect_child_removed<F: Fn(&Self, &TimelineElement) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "height")]
+    fn connect_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Container>> GESContainerExt for O {
@@ -155,6 +158,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
+    #[doc(alias = "child-added")]
     fn connect_child_added<F: Fn(&Self, &TimelineElement) + 'static>(
         &self,
         f: F,
@@ -185,6 +189,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
+    #[doc(alias = "child-removed")]
     fn connect_child_removed<F: Fn(&Self, &TimelineElement) + 'static>(
         &self,
         f: F,
@@ -215,7 +220,8 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
-    fn connect_property_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "height")]
+    fn connect_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_height_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESContainer,
             _param_spec: glib::ffi::gpointer,

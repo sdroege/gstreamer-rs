@@ -16,11 +16,13 @@ glib::wrapper! {
 
 impl EncodingVideoProfile {
     #[doc(alias = "gst_encoding_video_profile_get_pass")]
+    #[doc(alias = "get_pass")]
     pub fn pass(&self) -> u32 {
         unsafe { ffi::gst_encoding_video_profile_get_pass(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_encoding_video_profile_get_variableframerate")]
+    #[doc(alias = "get_variableframerate")]
     pub fn is_variableframerate(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_encoding_video_profile_get_variableframerate(

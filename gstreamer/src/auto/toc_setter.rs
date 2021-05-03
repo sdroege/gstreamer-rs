@@ -24,6 +24,7 @@ pub const NONE_TOC_SETTER: Option<&TocSetter> = None;
 
 pub trait TocSetterExt: 'static {
     #[doc(alias = "gst_toc_setter_get_toc")]
+    #[doc(alias = "get_toc")]
     fn toc(&self) -> Option<Toc>;
 
     #[doc(alias = "gst_toc_setter_reset")]

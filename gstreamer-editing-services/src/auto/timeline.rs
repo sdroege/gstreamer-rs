@@ -47,6 +47,7 @@ impl Timeline {
     }
 
     #[doc(alias = "ges_timeline_new_from_uri")]
+    #[doc(alias = "new_from_uri")]
     pub fn from_uri(uri: &str) -> Result<Option<Timeline>, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
@@ -87,43 +88,55 @@ pub trait TimelineExt: 'static {
     fn commit_sync(&self) -> bool;
 
     #[doc(alias = "ges_timeline_get_auto_transition")]
+    #[doc(alias = "get_auto_transition")]
     fn is_auto_transition(&self) -> bool;
 
     #[doc(alias = "ges_timeline_get_duration")]
+    #[doc(alias = "get_duration")]
     fn duration(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_get_element")]
+    #[doc(alias = "get_element")]
     fn element(&self, name: &str) -> Option<TimelineElement>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_timeline_get_frame_at")]
+    #[doc(alias = "get_frame_at")]
     fn frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_timeline_get_frame_time")]
+    #[doc(alias = "get_frame_time")]
     fn frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_get_groups")]
+    #[doc(alias = "get_groups")]
     fn groups(&self) -> Vec<Group>;
 
     #[doc(alias = "ges_timeline_get_layer")]
+    #[doc(alias = "get_layer")]
     fn layer(&self, priority: u32) -> Option<Layer>;
 
     #[doc(alias = "ges_timeline_get_layers")]
+    #[doc(alias = "get_layers")]
     fn layers(&self) -> Vec<Layer>;
 
     #[doc(alias = "ges_timeline_get_pad_for_track")]
+    #[doc(alias = "get_pad_for_track")]
     fn pad_for_track<P: IsA<Track>>(&self, track: &P) -> Option<gst::Pad>;
 
     #[doc(alias = "ges_timeline_get_snapping_distance")]
+    #[doc(alias = "get_snapping_distance")]
     fn snapping_distance(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_get_track_for_pad")]
+    #[doc(alias = "get_track_for_pad")]
     fn track_for_pad<P: IsA<gst::Pad>>(&self, pad: &P) -> Option<Track>;
 
     #[doc(alias = "ges_timeline_get_tracks")]
+    #[doc(alias = "get_tracks")]
     fn tracks(&self) -> Vec<Track>;
 
     #[doc(alias = "ges_timeline_is_empty")]
@@ -169,50 +182,58 @@ pub trait TimelineExt: 'static {
     #[doc(alias = "ges_timeline_set_snapping_distance")]
     fn set_snapping_distance(&self, snapping_distance: gst::ClockTime);
 
+    #[doc(alias = "commited")]
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "group-added")]
     fn connect_group_added<F: Fn(&Self, &Group) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    //#[doc(alias = "group-removed")]
     //fn connect_group_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "layer-added")]
     fn connect_layer_added<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "layer-removed")]
     fn connect_layer_removed<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "select-element-track")]
     fn connect_select_element_track<F: Fn(&Self, &Clip, &TrackElement) -> Track + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    //#[doc(alias = "select-tracks-for-object")]
     //fn connect_select_tracks_for_object<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "snapping-ended")]
     fn connect_snapping_ended<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "snapping-started")]
     fn connect_snapping_started<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "track-added")]
     fn connect_track_added<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "track-removed")]
     fn connect_track_removed<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "auto-transition")]
+    fn connect_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "duration")]
+    fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_snapping_distance_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "snapping-distance")]
+    fn connect_snapping_distance_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Timeline>> TimelineExt for O {
@@ -483,6 +504,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "commited")]
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn commited_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimeline,
@@ -506,6 +528,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "group-added")]
     fn connect_group_added<F: Fn(&Self, &Group) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn group_added_trampoline<P, F: Fn(&P, &Group) + 'static>(
             this: *mut ffi::GESTimeline,
@@ -533,10 +556,12 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    //#[doc(alias = "group-removed")]
     //fn connect_group_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Empty ctype children: *.PtrArray TypeId { ns_id: 1, id: 54 }
     //}
 
+    #[doc(alias = "layer-added")]
     fn connect_layer_added<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn layer_added_trampoline<P, F: Fn(&P, &Layer) + 'static>(
             this: *mut ffi::GESTimeline,
@@ -564,6 +589,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "layer-removed")]
     fn connect_layer_removed<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn layer_removed_trampoline<P, F: Fn(&P, &Layer) + 'static>(
             this: *mut ffi::GESTimeline,
@@ -593,6 +619,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "select-element-track")]
     fn connect_select_element_track<F: Fn(&Self, &Clip, &TrackElement) -> Track + 'static>(
         &self,
         f: F,
@@ -630,10 +657,12 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    //#[doc(alias = "select-tracks-for-object")]
     //fn connect_select_tracks_for_object<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Empty ctype return value *.PtrArray TypeId { ns_id: 1, id: 17 }
     //}
 
+    #[doc(alias = "snapping-ended")]
     fn connect_snapping_ended<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(
         &self,
         f: F,
@@ -671,6 +700,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "snapping-started")]
     fn connect_snapping_started<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(
         &self,
         f: F,
@@ -708,6 +738,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "track-added")]
     fn connect_track_added<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn track_added_trampoline<P, F: Fn(&P, &Track) + 'static>(
             this: *mut ffi::GESTimeline,
@@ -735,6 +766,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "track-removed")]
     fn connect_track_removed<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn track_removed_trampoline<P, F: Fn(&P, &Track) + 'static>(
             this: *mut ffi::GESTimeline,
@@ -762,10 +794,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "auto-transition")]
+    fn connect_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_auto_transition_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimeline,
             _param_spec: glib::ffi::gpointer,
@@ -789,7 +819,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "duration")]
+    fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimeline,
             _param_spec: glib::ffi::gpointer,
@@ -813,10 +844,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn connect_property_snapping_distance_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "snapping-distance")]
+    fn connect_snapping_distance_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_snapping_distance_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimeline,
             _param_spec: glib::ffi::gpointer,

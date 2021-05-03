@@ -44,13 +44,12 @@ unsafe impl Sync for TriggerControlSource {}
 pub const NONE_TRIGGER_CONTROL_SOURCE: Option<&TriggerControlSource> = None;
 
 pub trait TriggerControlSourceExt: 'static {
-    #[doc(alias = "get_property_tolerance")]
     fn tolerance(&self) -> i64;
 
-    #[doc(alias = "set_property_tolerance")]
     fn set_tolerance(&self, tolerance: i64);
 
-    fn connect_property_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "tolerance")]
+    fn connect_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -81,7 +80,8 @@ impl<O: IsA<TriggerControlSource>> TriggerControlSourceExt for O {
         }
     }
 
-    fn connect_property_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "tolerance")]
+    fn connect_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

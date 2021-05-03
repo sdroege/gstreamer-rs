@@ -18,12 +18,14 @@ glib::wrapper! {
 
 impl DateTime {
     #[doc(alias = "gst_date_time_new_from_g_date_time")]
+    #[doc(alias = "new_from_g_date_time")]
     pub fn from_g_date_time(dt: &glib::DateTime) -> DateTime {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_date_time_new_from_g_date_time(dt.to_glib_full())) }
     }
 
     #[doc(alias = "gst_date_time_new_from_iso8601_string")]
+    #[doc(alias = "new_from_iso8601_string")]
     pub fn from_iso8601_string(string: &str) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -35,6 +37,7 @@ impl DateTime {
     }
 
     #[doc(alias = "gst_date_time_new_from_unix_epoch_local_time")]
+    #[doc(alias = "new_from_unix_epoch_local_time")]
     pub fn from_unix_epoch_local_time(secs: i64) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -46,6 +49,7 @@ impl DateTime {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_date_time_new_from_unix_epoch_local_time_usecs")]
+    #[doc(alias = "new_from_unix_epoch_local_time_usecs")]
     pub fn from_unix_epoch_local_time_usecs(usecs: i64) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -57,6 +61,7 @@ impl DateTime {
     }
 
     #[doc(alias = "gst_date_time_new_from_unix_epoch_utc")]
+    #[doc(alias = "new_from_unix_epoch_utc")]
     pub fn from_unix_epoch_utc(secs: i64) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -68,6 +73,7 @@ impl DateTime {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_date_time_new_from_unix_epoch_utc_usecs")]
+    #[doc(alias = "new_from_unix_epoch_utc_usecs")]
     pub fn from_unix_epoch_utc_usecs(usecs: i64) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -89,6 +95,7 @@ impl DateTime {
     }
 
     #[doc(alias = "gst_date_time_get_year")]
+    #[doc(alias = "get_year")]
     pub fn year(&self) -> i32 {
         unsafe { ffi::gst_date_time_get_year(self.to_glib_none().0) }
     }

@@ -51,6 +51,7 @@ impl GLSLStage {
     }
 
     #[doc(alias = "gst_glsl_stage_new_with_string")]
+    #[doc(alias = "new_with_string")]
     pub fn with_string<P: IsA<GLContext>>(
         context: &P,
         type_: u32,
@@ -71,6 +72,7 @@ impl GLSLStage {
     }
 
     #[doc(alias = "gst_glsl_stage_new_with_strings")]
+    #[doc(alias = "new_with_strings")]
     pub fn with_strings<P: IsA<GLContext>>(
         context: &P,
         type_: u32,
@@ -106,21 +108,25 @@ impl GLSLStage {
     }
 
     #[doc(alias = "gst_glsl_stage_get_handle")]
+    #[doc(alias = "get_handle")]
     pub fn handle(&self) -> u32 {
         unsafe { ffi::gst_glsl_stage_get_handle(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_glsl_stage_get_profile")]
+    #[doc(alias = "get_profile")]
     pub fn profile(&self) -> GLSLProfile {
         unsafe { from_glib(ffi::gst_glsl_stage_get_profile(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_glsl_stage_get_shader_type")]
+    #[doc(alias = "get_shader_type")]
     pub fn shader_type(&self) -> u32 {
         unsafe { ffi::gst_glsl_stage_get_shader_type(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_glsl_stage_get_version")]
+    #[doc(alias = "get_version")]
     pub fn version(&self) -> GLSLVersion {
         unsafe { from_glib(ffi::gst_glsl_stage_get_version(self.to_glib_none().0)) }
     }

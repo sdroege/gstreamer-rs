@@ -21,27 +21,35 @@ pub const NONE_DISCOVERER_STREAM_INFO: Option<&DiscovererStreamInfo> = None;
 
 pub trait DiscovererStreamInfoExt: 'static {
     #[doc(alias = "gst_discoverer_stream_info_get_caps")]
+    #[doc(alias = "get_caps")]
     fn caps(&self) -> Option<gst::Caps>;
 
     #[doc(alias = "gst_discoverer_stream_info_get_misc")]
+    #[doc(alias = "get_misc")]
     fn misc(&self) -> Option<gst::Structure>;
 
     #[doc(alias = "gst_discoverer_stream_info_get_next")]
+    #[doc(alias = "get_next")]
     fn next(&self) -> Option<DiscovererStreamInfo>;
 
     #[doc(alias = "gst_discoverer_stream_info_get_previous")]
+    #[doc(alias = "get_previous")]
     fn previous(&self) -> Option<DiscovererStreamInfo>;
 
     #[doc(alias = "gst_discoverer_stream_info_get_stream_id")]
+    #[doc(alias = "get_stream_id")]
     fn stream_id(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_discoverer_stream_info_get_stream_type_nick")]
+    #[doc(alias = "get_stream_type_nick")]
     fn stream_type_nick(&self) -> glib::GString;
 
     #[doc(alias = "gst_discoverer_stream_info_get_tags")]
+    #[doc(alias = "get_tags")]
     fn tags(&self) -> Option<gst::TagList>;
 
     #[doc(alias = "gst_discoverer_stream_info_get_toc")]
+    #[doc(alias = "get_toc")]
     fn toc(&self) -> Option<gst::Toc>;
 }
 

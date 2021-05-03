@@ -27,15 +27,19 @@ pub const NONE_RTSP_STREAM_TRANSPORT: Option<&RTSPStreamTransport> = None;
 
 pub trait RTSPStreamTransportExt: 'static {
     #[doc(alias = "gst_rtsp_stream_transport_get_rtpinfo")]
+    #[doc(alias = "get_rtpinfo")]
     fn rtpinfo(&self, start_time: gst::ClockTime) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_stream_transport_get_stream")]
+    #[doc(alias = "get_stream")]
     fn stream(&self) -> Option<RTSPStream>;
 
     //#[doc(alias = "gst_rtsp_stream_transport_get_transport")]
+    //#[doc(alias = "get_transport")]
     //fn transport(&self) -> /*Ignored*/Option<gst_rtsp::RTSPTransport>;
 
     #[doc(alias = "gst_rtsp_stream_transport_get_url")]
+    #[doc(alias = "get_url")]
     fn url(&self) -> Option<gst_rtsp::RTSPUrl>;
 
     #[doc(alias = "gst_rtsp_stream_transport_is_timed_out")]

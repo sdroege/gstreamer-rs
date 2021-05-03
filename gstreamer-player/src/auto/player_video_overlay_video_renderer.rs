@@ -32,6 +32,7 @@ impl PlayerVideoOverlayVideoRenderer {
     }
 
     #[doc(alias = "gst_player_video_overlay_video_renderer_get_render_rectangle")]
+    #[doc(alias = "get_render_rectangle")]
     pub fn render_rectangle(&self) -> (i32, i32, i32, i32) {
         unsafe {
             let mut x = mem::MaybeUninit::uninit();
@@ -54,6 +55,7 @@ impl PlayerVideoOverlayVideoRenderer {
     }
 
     //#[doc(alias = "gst_player_video_overlay_video_renderer_get_window_handle")]
+    //#[doc(alias = "get_window_handle")]
     //pub fn window_handle(&self) -> /*Unimplemented*/Option<Fundamental: Pointer> {
     //    unsafe { TODO: call ffi:gst_player_video_overlay_video_renderer_get_window_handle() }
     //}
@@ -76,7 +78,7 @@ impl PlayerVideoOverlayVideoRenderer {
     //    unsafe { TODO: call ffi:gst_player_video_overlay_video_renderer_set_window_handle() }
     //}
 
-    #[doc(alias = "get_property_video_sink")]
+    #[doc(alias = "video-sink")]
     pub fn video_sink(&self) -> Option<gst::Element> {
         unsafe {
             let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
@@ -91,7 +93,7 @@ impl PlayerVideoOverlayVideoRenderer {
         }
     }
 
-    #[doc(alias = "set_property_video_sink")]
+    #[doc(alias = "video-sink")]
     pub fn set_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -112,7 +114,8 @@ impl PlayerVideoOverlayVideoRenderer {
     //    unsafe { TODO: call ffi:gst_player_video_overlay_video_renderer_new_with_sink() }
     //}
 
-    pub fn connect_property_video_sink_notify<
+    #[doc(alias = "video-sink")]
+    pub fn connect_video_sink_notify<
         F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static,
     >(
         &self,
@@ -141,7 +144,8 @@ impl PlayerVideoOverlayVideoRenderer {
         }
     }
 
-    pub fn connect_property_window_handle_notify<
+    #[doc(alias = "window-handle")]
+    pub fn connect_window_handle_notify<
         F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static,
     >(
         &self,

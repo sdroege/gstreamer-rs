@@ -19,9 +19,11 @@ pub const NONE_EXTRACTABLE: Option<&Extractable> = None;
 
 pub trait ExtractableExt: 'static {
     #[doc(alias = "ges_extractable_get_asset")]
+    #[doc(alias = "get_asset")]
     fn asset(&self) -> Option<Asset>;
 
     #[doc(alias = "ges_extractable_get_id")]
+    #[doc(alias = "get_id")]
     fn id(&self) -> Option<glib::GString>;
 
     #[doc(alias = "ges_extractable_set_asset")]

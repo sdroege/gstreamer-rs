@@ -21,6 +21,7 @@ impl GLDisplayX11 {
     }
 
     //#[doc(alias = "gst_gl_display_x11_new_with_display")]
+    //#[doc(alias = "new_with_display")]
     //pub fn with_display(display: /*Unimplemented*/Fundamental: Pointer) -> GLDisplayX11 {
     //    unsafe { TODO: call ffi:gst_gl_display_x11_new_with_display() }
     //}

@@ -44,57 +44,49 @@ unsafe impl Sync for LFOControlSource {}
 pub const NONE_LFO_CONTROL_SOURCE: Option<&LFOControlSource> = None;
 
 pub trait LFOControlSourceExt: 'static {
-    #[doc(alias = "get_property_amplitude")]
     fn amplitude(&self) -> f64;
 
-    #[doc(alias = "set_property_amplitude")]
     fn set_amplitude(&self, amplitude: f64);
 
-    #[doc(alias = "get_property_frequency")]
     fn frequency(&self) -> f64;
 
-    #[doc(alias = "set_property_frequency")]
     fn set_frequency(&self, frequency: f64);
 
-    #[doc(alias = "get_property_offset")]
     fn offset(&self) -> f64;
 
-    #[doc(alias = "set_property_offset")]
     fn set_offset(&self, offset: f64);
 
-    #[doc(alias = "get_property_timeshift")]
     fn timeshift(&self) -> u64;
 
-    #[doc(alias = "set_property_timeshift")]
     fn set_timeshift(&self, timeshift: u64);
 
-    #[doc(alias = "get_property_waveform")]
     fn waveform(&self) -> LFOWaveform;
 
-    #[doc(alias = "set_property_waveform")]
     fn set_waveform(&self, waveform: LFOWaveform);
 
-    fn connect_property_amplitude_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "amplitude")]
+    fn connect_amplitude_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_frequency_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "frequency")]
+    fn connect_frequency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "offset")]
+    fn connect_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[doc(alias = "timeshift")]
+    fn connect_timeshift_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_timeshift_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn connect_property_waveform_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "waveform")]
+    fn connect_waveform_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -221,7 +213,8 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
-    fn connect_property_amplitude_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "amplitude")]
+    fn connect_amplitude_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -248,7 +241,8 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
-    fn connect_property_frequency_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "frequency")]
+    fn connect_frequency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -275,10 +269,8 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
-    fn connect_property_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "offset")]
+    fn connect_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_offset_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstLFOControlSource,
             _param_spec: glib::ffi::gpointer,
@@ -302,7 +294,8 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
-    fn connect_property_timeshift_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "timeshift")]
+    fn connect_timeshift_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -329,7 +322,8 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
-    fn connect_property_waveform_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "waveform")]
+    fn connect_waveform_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

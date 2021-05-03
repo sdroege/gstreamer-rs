@@ -38,6 +38,7 @@ pub const NONE_URI_CLIP: Option<&UriClip> = None;
 
 pub trait UriClipExt: 'static {
     #[doc(alias = "ges_uri_clip_get_uri")]
+    #[doc(alias = "get_uri")]
     fn uri(&self) -> Option<glib::GString>;
 
     #[doc(alias = "ges_uri_clip_is_image")]
@@ -52,14 +53,14 @@ pub trait UriClipExt: 'static {
     #[doc(alias = "ges_uri_clip_set_mute")]
     fn set_mute(&self, mute: bool);
 
-    fn connect_property_is_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "is-image")]
+    fn connect_is_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_mute_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "mute")]
+    fn connect_mute_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_supported_formats_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "supported-formats")]
+    fn connect_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<UriClip>> UriClipExt for O {
@@ -87,7 +88,8 @@ impl<O: IsA<UriClip>> UriClipExt for O {
         }
     }
 
-    fn connect_property_is_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "is-image")]
+    fn connect_is_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_is_image_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESUriClip,
             _param_spec: glib::ffi::gpointer,
@@ -111,7 +113,8 @@ impl<O: IsA<UriClip>> UriClipExt for O {
         }
     }
 
-    fn connect_property_mute_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "mute")]
+    fn connect_mute_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mute_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESUriClip,
             _param_spec: glib::ffi::gpointer,
@@ -135,10 +138,8 @@ impl<O: IsA<UriClip>> UriClipExt for O {
         }
     }
 
-    fn connect_property_supported_formats_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "supported-formats")]
+    fn connect_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_supported_formats_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESUriClip,
             _param_spec: glib::ffi::gpointer,

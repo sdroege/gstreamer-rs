@@ -29,6 +29,7 @@ impl RTSPUrl {
     }
 
     #[doc(alias = "gst_rtsp_url_get_request_uri")]
+    #[doc(alias = "get_request_uri")]
     pub fn request_uri(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::gst_rtsp_url_get_request_uri(self.to_glib_none().0)) }
     }
@@ -36,6 +37,7 @@ impl RTSPUrl {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_url_get_request_uri_with_control")]
+    #[doc(alias = "get_request_uri_with_control")]
     pub fn request_uri_with_control(&self, control_path: &str) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_url_get_request_uri_with_control(

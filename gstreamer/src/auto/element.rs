@@ -87,36 +87,47 @@ pub trait ElementExt: 'static {
     fn foreach_src_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
 
     #[doc(alias = "gst_element_get_base_time")]
+    #[doc(alias = "get_base_time")]
     fn base_time(&self) -> ClockTime;
 
     #[doc(alias = "gst_element_get_bus")]
+    #[doc(alias = "get_bus")]
     fn bus(&self) -> Option<Bus>;
 
     #[doc(alias = "gst_element_get_clock")]
+    #[doc(alias = "get_clock")]
     fn clock(&self) -> Option<Clock>;
 
     #[doc(alias = "gst_element_get_compatible_pad")]
+    #[doc(alias = "get_compatible_pad")]
     fn compatible_pad<P: IsA<Pad>>(&self, pad: &P, caps: Option<&Caps>) -> Option<Pad>;
 
     #[doc(alias = "gst_element_get_compatible_pad_template")]
+    #[doc(alias = "get_compatible_pad_template")]
     fn compatible_pad_template(&self, compattempl: &PadTemplate) -> Option<PadTemplate>;
 
     #[doc(alias = "gst_element_get_context")]
+    #[doc(alias = "get_context")]
     fn context(&self, context_type: &str) -> Option<Context>;
 
     #[doc(alias = "gst_element_get_contexts")]
+    #[doc(alias = "get_contexts")]
     fn contexts(&self) -> Vec<Context>;
 
     #[doc(alias = "gst_element_get_factory")]
+    #[doc(alias = "get_factory")]
     fn factory(&self) -> Option<ElementFactory>;
 
     #[doc(alias = "gst_element_get_request_pad")]
+    #[doc(alias = "get_request_pad")]
     fn request_pad_simple(&self, name: &str) -> Option<Pad>;
 
     #[doc(alias = "gst_element_get_start_time")]
+    #[doc(alias = "get_start_time")]
     fn start_time(&self) -> ClockTime;
 
     #[doc(alias = "gst_element_get_static_pad")]
+    #[doc(alias = "get_static_pad")]
     fn static_pad(&self, name: &str) -> Option<Pad>;
 
     #[doc(alias = "gst_element_is_locked_state")]
@@ -231,13 +242,16 @@ pub trait ElementExt: 'static {
     #[doc(alias = "gst_element_unlink_pads")]
     fn unlink_pads<P: IsA<Element>>(&self, srcpadname: &str, dest: &P, destpadname: &str);
 
+    #[doc(alias = "no-more-pads")]
     fn connect_no_more_pads<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "pad-added")]
     fn connect_pad_added<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "pad-removed")]
     fn connect_pad_removed<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -688,6 +702,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "no-more-pads")]
     fn connect_no_more_pads<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn no_more_pads_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstElement,
@@ -711,6 +726,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "pad-added")]
     fn connect_pad_added<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -741,6 +757,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "pad-removed")]
     fn connect_pad_removed<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
         &self,
         f: F,

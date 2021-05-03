@@ -24,9 +24,11 @@ pub const NONE_CONTROL_BINDING: Option<&ControlBinding> = None;
 
 pub trait ControlBindingExt: 'static {
     #[doc(alias = "gst_control_binding_get_value")]
+    #[doc(alias = "get_value")]
     fn value(&self, timestamp: ClockTime) -> Option<glib::Value>;
 
     //#[doc(alias = "gst_control_binding_get_value_array")]
+    //#[doc(alias = "get_value_array")]
     //fn is_value_array(&self, timestamp: ClockTime, interval: ClockTime, values: /*Unimplemented*/&[&Fundamental: Pointer]) -> bool;
 
     #[doc(alias = "gst_control_binding_is_disabled")]
@@ -43,7 +45,6 @@ pub trait ControlBindingExt: 'static {
         last_sync: ClockTime,
     ) -> bool;
 
-    #[doc(alias = "get_property_object")]
     fn object(&self) -> Option<Object>;
 }
 

@@ -50,14 +50,15 @@ pub trait AggregatorPadExt: 'static {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "get_property_emit_signals")]
+    #[doc(alias = "emit-signals")]
     fn emits_signals(&self) -> bool;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "set_property_emit_signals")]
+    #[doc(alias = "emit-signals")]
     fn set_emit_signals(&self, emit_signals: bool);
 
+    #[doc(alias = "buffer-consumed")]
     fn connect_buffer_consumed<F: Fn(&Self, &gst::Buffer) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -65,7 +66,8 @@ pub trait AggregatorPadExt: 'static {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn connect_property_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "emit-signals")]
+    fn connect_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -142,6 +144,7 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
         }
     }
 
+    #[doc(alias = "buffer-consumed")]
     fn connect_buffer_consumed<F: Fn(&Self, &gst::Buffer) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -177,7 +180,8 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn connect_property_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "emit-signals")]
+    fn connect_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

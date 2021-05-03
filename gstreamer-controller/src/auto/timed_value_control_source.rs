@@ -30,9 +30,11 @@ pub trait TimedValueControlSourceExt: 'static {
     //fn find_control_point_iter(&self, timestamp: gst::ClockTime) -> /*Ignored*/Option<glib::SequenceIter>;
 
     //#[doc(alias = "gst_timed_value_control_source_get_all")]
+    //#[doc(alias = "get_all")]
     //fn all(&self) -> /*Ignored*/Vec<gst::TimedValue>;
 
     #[doc(alias = "gst_timed_value_control_source_get_count")]
+    #[doc(alias = "get_count")]
     fn count(&self) -> i32;
 
     #[doc(alias = "gst_timed_value_control_source_set")]
@@ -47,16 +49,19 @@ pub trait TimedValueControlSourceExt: 'static {
     #[doc(alias = "gst_timed_value_control_source_unset_all")]
     fn unset_all(&self);
 
+    #[doc(alias = "value-added")]
     fn connect_value_added<F: Fn(&Self, &ControlPoint) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "value-changed")]
     fn connect_value_changed<F: Fn(&Self, &ControlPoint) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
+    #[doc(alias = "value-removed")]
     fn connect_value_removed<F: Fn(&Self, &ControlPoint) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -105,6 +110,7 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
         }
     }
 
+    #[doc(alias = "value-added")]
     fn connect_value_added<F: Fn(&Self, &ControlPoint) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -138,6 +144,7 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
         }
     }
 
+    #[doc(alias = "value-changed")]
     fn connect_value_changed<F: Fn(&Self, &ControlPoint) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -171,6 +178,7 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
         }
     }
 
+    #[doc(alias = "value-removed")]
     fn connect_value_removed<F: Fn(&Self, &ControlPoint) + Send + Sync + 'static>(
         &self,
         f: F,

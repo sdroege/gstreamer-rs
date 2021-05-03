@@ -43,23 +43,23 @@ pub const NONE_RTSP_MEDIA_FACTORY_URI: Option<&RTSPMediaFactoryURI> = None;
 
 pub trait RTSPMediaFactoryURIExt: 'static {
     #[doc(alias = "gst_rtsp_media_factory_uri_get_uri")]
+    #[doc(alias = "get_uri")]
     fn uri(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_media_factory_uri_set_uri")]
     fn set_uri(&self, uri: &str);
 
-    #[doc(alias = "get_property_use_gstpay")]
+    #[doc(alias = "use-gstpay")]
     fn uses_gstpay(&self) -> bool;
 
-    #[doc(alias = "set_property_use_gstpay")]
+    #[doc(alias = "use-gstpay")]
     fn set_use_gstpay(&self, use_gstpay: bool);
 
-    fn connect_property_uri_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "uri")]
+    fn connect_uri_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_use_gstpay_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "use-gstpay")]
+    fn connect_use_gstpay_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -107,10 +107,8 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
         }
     }
 
-    fn connect_property_uri_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "uri")]
+    fn connect_uri_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_uri_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstRTSPMediaFactoryURI,
             _param_spec: glib::ffi::gpointer,
@@ -134,7 +132,8 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
         }
     }
 
-    fn connect_property_use_gstpay_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "use-gstpay")]
+    fn connect_use_gstpay_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

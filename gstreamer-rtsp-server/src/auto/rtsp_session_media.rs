@@ -40,23 +40,29 @@ pub trait RTSPSessionMediaExt: 'static {
     //fn alloc_channels(&self, range: /*Ignored*/gst_rtsp::RTSPRange) -> bool;
 
     #[doc(alias = "gst_rtsp_session_media_get_base_time")]
+    #[doc(alias = "get_base_time")]
     fn base_time(&self) -> gst::ClockTime;
 
     #[doc(alias = "gst_rtsp_session_media_get_media")]
+    #[doc(alias = "get_media")]
     fn media(&self) -> Option<RTSPMedia>;
 
     #[doc(alias = "gst_rtsp_session_media_get_rtpinfo")]
+    #[doc(alias = "get_rtpinfo")]
     fn rtpinfo(&self) -> Option<glib::GString>;
 
     //#[doc(alias = "gst_rtsp_session_media_get_rtsp_state")]
+    //#[doc(alias = "get_rtsp_state")]
     //fn rtsp_state(&self) -> /*Ignored*/gst_rtsp::RTSPState;
 
     #[doc(alias = "gst_rtsp_session_media_get_transport")]
+    #[doc(alias = "get_transport")]
     fn transport(&self, idx: u32) -> Option<RTSPStreamTransport>;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_rtsp_session_media_get_transports")]
+    #[doc(alias = "get_transports")]
     fn transports(&self) -> Vec<RTSPStreamTransport>;
 
     #[doc(alias = "gst_rtsp_session_media_matches")]

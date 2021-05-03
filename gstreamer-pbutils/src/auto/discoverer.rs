@@ -84,7 +84,7 @@ impl Discoverer {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "get_property_use_cache")]
+    #[doc(alias = "use-cache")]
     pub fn uses_cache(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
@@ -101,7 +101,7 @@ impl Discoverer {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "set_property_use_cache")]
+    #[doc(alias = "use-cache")]
     pub fn set_use_cache(&self, use_cache: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -112,6 +112,7 @@ impl Discoverer {
         }
     }
 
+    #[doc(alias = "discovered")]
     pub fn connect_discovered<
         F: Fn(&Discoverer, &DiscovererInfo, Option<&glib::Error>) + Send + Sync + 'static,
     >(
@@ -148,6 +149,7 @@ impl Discoverer {
         }
     }
 
+    #[doc(alias = "finished")]
     pub fn connect_finished<F: Fn(&Discoverer) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -172,6 +174,7 @@ impl Discoverer {
         }
     }
 
+    #[doc(alias = "source-setup")]
     pub fn connect_source_setup<F: Fn(&Discoverer, &gst::Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -199,6 +202,7 @@ impl Discoverer {
         }
     }
 
+    #[doc(alias = "starting")]
     pub fn connect_starting<F: Fn(&Discoverer) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -225,7 +229,8 @@ impl Discoverer {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn connect_property_use_cache_notify<F: Fn(&Discoverer) + Send + Sync + 'static>(
+    #[doc(alias = "use-cache")]
+    pub fn connect_use_cache_notify<F: Fn(&Discoverer) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

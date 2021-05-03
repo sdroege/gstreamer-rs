@@ -31,39 +31,51 @@ pub trait AudioDecoderExt: 'static {
     fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError>;
 
     #[doc(alias = "gst_audio_decoder_get_audio_info")]
+    #[doc(alias = "get_audio_info")]
     fn audio_info(&self) -> Option<AudioInfo>;
 
     #[doc(alias = "gst_audio_decoder_get_delay")]
+    #[doc(alias = "get_delay")]
     fn delay(&self) -> i32;
 
     #[doc(alias = "gst_audio_decoder_get_drainable")]
+    #[doc(alias = "get_drainable")]
     fn is_drainable(&self) -> bool;
 
     #[doc(alias = "gst_audio_decoder_get_estimate_rate")]
+    #[doc(alias = "get_estimate_rate")]
     fn estimate_rate(&self) -> i32;
 
     #[doc(alias = "gst_audio_decoder_get_latency")]
+    #[doc(alias = "get_latency")]
     fn latency(&self) -> (gst::ClockTime, gst::ClockTime);
 
     #[doc(alias = "gst_audio_decoder_get_max_errors")]
+    #[doc(alias = "get_max_errors")]
     fn max_errors(&self) -> i32;
 
     #[doc(alias = "gst_audio_decoder_get_min_latency")]
+    #[doc(alias = "get_min_latency")]
     fn min_latency(&self) -> gst::ClockTime;
 
     #[doc(alias = "gst_audio_decoder_get_needs_format")]
+    #[doc(alias = "get_needs_format")]
     fn needs_format(&self) -> bool;
 
     #[doc(alias = "gst_audio_decoder_get_parse_state")]
+    #[doc(alias = "get_parse_state")]
     fn parse_state(&self) -> (bool, bool);
 
     #[doc(alias = "gst_audio_decoder_get_plc")]
+    #[doc(alias = "get_plc")]
     fn is_plc(&self) -> bool;
 
     #[doc(alias = "gst_audio_decoder_get_plc_aware")]
+    #[doc(alias = "get_plc_aware")]
     fn plc_aware(&self) -> i32;
 
     #[doc(alias = "gst_audio_decoder_get_tolerance")]
+    #[doc(alias = "get_tolerance")]
     fn tolerance(&self) -> gst::ClockTime;
 
     #[doc(alias = "gst_audio_decoder_merge_tags")]
@@ -109,22 +121,23 @@ pub trait AudioDecoderExt: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "max-errors")]
+    fn connect_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_min_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "min-latency")]
+    fn connect_min_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_plc_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "plc")]
+    fn connect_plc_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "tolerance")]
+    fn connect_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -347,7 +360,8 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "max-errors")]
+    fn connect_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -374,7 +388,8 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    fn connect_property_min_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "min-latency")]
+    fn connect_min_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -401,10 +416,8 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    fn connect_property_plc_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "plc")]
+    fn connect_plc_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_plc_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstAudioDecoder,
             _param_spec: glib::ffi::gpointer,
@@ -428,7 +441,8 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    fn connect_property_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "tolerance")]
+    fn connect_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

@@ -125,18 +125,23 @@ pub trait AssetExt: 'static {
     fn extract(&self) -> Result<Extractable, glib::Error>;
 
     #[doc(alias = "ges_asset_get_error")]
+    #[doc(alias = "get_error")]
     fn error(&self) -> Option<glib::Error>;
 
     #[doc(alias = "ges_asset_get_extractable_type")]
+    #[doc(alias = "get_extractable_type")]
     fn extractable_type(&self) -> glib::types::Type;
 
     #[doc(alias = "ges_asset_get_id")]
+    #[doc(alias = "get_id")]
     fn id(&self) -> Option<glib::GString>;
 
     #[doc(alias = "ges_asset_get_proxy")]
+    #[doc(alias = "get_proxy")]
     fn proxy(&self) -> Option<Asset>;
 
     #[doc(alias = "ges_asset_get_proxy_target")]
+    #[doc(alias = "get_proxy_target")]
     fn proxy_target(&self) -> Option<Asset>;
 
     #[doc(alias = "ges_asset_list_proxies")]
@@ -148,10 +153,11 @@ pub trait AssetExt: 'static {
     #[doc(alias = "ges_asset_unproxy")]
     fn unproxy<P: IsA<Asset>>(&self, proxy: &P) -> Result<(), glib::error::BoolError>;
 
-    fn connect_property_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "proxy")]
+    fn connect_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_proxy_target_notify<F: Fn(&Self) + 'static>(&self, f: F)
-        -> SignalHandlerId;
+    #[doc(alias = "proxy-target")]
+    fn connect_proxy_target_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Asset>> AssetExt for O {
@@ -227,7 +233,8 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
-    fn connect_property_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "proxy")]
+    fn connect_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_proxy_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESAsset,
             _param_spec: glib::ffi::gpointer,
@@ -251,10 +258,8 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
-    fn connect_property_proxy_target_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "proxy-target")]
+    fn connect_proxy_target_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_proxy_target_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESAsset,
             _param_spec: glib::ffi::gpointer,

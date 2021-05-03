@@ -41,46 +41,44 @@ impl Default for Group {
 pub const NONE_GROUP: Option<&Group> = None;
 
 pub trait GroupExt: 'static {
-    #[doc(alias = "get_property_duration")]
     fn duration(&self) -> u64;
 
-    #[doc(alias = "set_property_duration")]
     fn set_duration(&self, duration: u64);
 
-    #[doc(alias = "get_property_in_point")]
+    #[doc(alias = "in-point")]
     fn in_point(&self) -> u64;
 
-    #[doc(alias = "set_property_in_point")]
+    #[doc(alias = "in-point")]
     fn set_in_point(&self, in_point: u64);
 
-    #[doc(alias = "get_property_max_duration")]
+    #[doc(alias = "max-duration")]
     fn max_duration(&self) -> u64;
 
-    #[doc(alias = "set_property_max_duration")]
+    #[doc(alias = "max-duration")]
     fn set_max_duration(&self, max_duration: u64);
 
-    #[doc(alias = "get_property_priority")]
     fn priority(&self) -> u32;
 
-    #[doc(alias = "set_property_priority")]
     fn set_priority(&self, priority: u32);
 
-    #[doc(alias = "get_property_start")]
     fn start(&self) -> u64;
 
-    #[doc(alias = "set_property_start")]
     fn set_start(&self, start: u64);
 
-    fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "duration")]
+    fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_in_point_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "in-point")]
+    fn connect_in_point_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_max_duration_notify<F: Fn(&Self) + 'static>(&self, f: F)
-        -> SignalHandlerId;
+    #[doc(alias = "max-duration")]
+    fn connect_max_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "priority")]
+    fn connect_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "start")]
+    fn connect_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Group>> GroupExt for O {
@@ -204,7 +202,8 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "duration")]
+    fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESGroup,
             _param_spec: glib::ffi::gpointer,
@@ -228,7 +227,8 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    fn connect_property_in_point_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "in-point")]
+    fn connect_in_point_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_in_point_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESGroup,
             _param_spec: glib::ffi::gpointer,
@@ -252,10 +252,8 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    fn connect_property_max_duration_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "max-duration")]
+    fn connect_max_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_max_duration_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESGroup,
             _param_spec: glib::ffi::gpointer,
@@ -279,7 +277,8 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "priority")]
+    fn connect_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_priority_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESGroup,
             _param_spec: glib::ffi::gpointer,
@@ -303,7 +302,8 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    fn connect_property_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "start")]
+    fn connect_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_start_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESGroup,
             _param_spec: glib::ffi::gpointer,

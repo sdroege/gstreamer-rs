@@ -65,13 +65,14 @@ pub trait BaseParseExt: 'static {
     #[doc(alias = "gst_base_parse_set_ts_at_offset")]
     fn set_ts_at_offset(&self, offset: usize);
 
-    #[doc(alias = "get_property_disable_passthrough")]
+    #[doc(alias = "disable-passthrough")]
     fn is_disable_passthrough(&self) -> bool;
 
-    #[doc(alias = "set_property_disable_passthrough")]
+    #[doc(alias = "disable-passthrough")]
     fn set_disable_passthrough(&self, disable_passthrough: bool);
 
-    fn connect_property_disable_passthrough_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "disable-passthrough")]
+    fn connect_disable_passthrough_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -199,7 +200,8 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 
-    fn connect_property_disable_passthrough_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "disable-passthrough")]
+    fn connect_disable_passthrough_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

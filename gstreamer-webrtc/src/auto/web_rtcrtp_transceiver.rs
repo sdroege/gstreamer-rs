@@ -38,7 +38,6 @@ glib::wrapper! {
 impl WebRTCRTPTransceiver {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "get_property_direction")]
     pub fn direction(&self) -> WebRTCRTPTransceiverDirection {
         unsafe {
             let mut value = glib::Value::from_type(
@@ -57,7 +56,6 @@ impl WebRTCRTPTransceiver {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "set_property_direction")]
     pub fn set_direction(&self, direction: WebRTCRTPTransceiverDirection) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -68,7 +66,6 @@ impl WebRTCRTPTransceiver {
         }
     }
 
-    #[doc(alias = "get_property_mlineindex")]
     pub fn mlineindex(&self) -> u32 {
         unsafe {
             let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
@@ -83,7 +80,6 @@ impl WebRTCRTPTransceiver {
         }
     }
 
-    #[doc(alias = "get_property_receiver")]
     pub fn receiver(&self) -> Option<WebRTCRTPReceiver> {
         unsafe {
             let mut value =
@@ -99,7 +95,6 @@ impl WebRTCRTPTransceiver {
         }
     }
 
-    #[doc(alias = "get_property_sender")]
     pub fn sender(&self) -> Option<WebRTCRTPSender> {
         unsafe {
             let mut value = glib::Value::from_type(<WebRTCRTPSender as StaticType>::static_type());
@@ -116,9 +111,8 @@ impl WebRTCRTPTransceiver {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn connect_property_direction_notify<
-        F: Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static,
-    >(
+    #[doc(alias = "direction")]
+    pub fn connect_direction_notify<F: Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

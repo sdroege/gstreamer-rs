@@ -22,15 +22,19 @@ pub const NONE_VIDEO_ORIENTATION: Option<&VideoOrientation> = None;
 
 pub trait VideoOrientationExt: 'static {
     #[doc(alias = "gst_video_orientation_get_hcenter")]
+    #[doc(alias = "get_hcenter")]
     fn hcenter(&self) -> Option<i32>;
 
     #[doc(alias = "gst_video_orientation_get_hflip")]
+    #[doc(alias = "get_hflip")]
     fn hflip(&self) -> Option<bool>;
 
     #[doc(alias = "gst_video_orientation_get_vcenter")]
+    #[doc(alias = "get_vcenter")]
     fn vcenter(&self) -> Option<i32>;
 
     #[doc(alias = "gst_video_orientation_get_vflip")]
+    #[doc(alias = "get_vflip")]
     fn vflip(&self) -> Option<bool>;
 
     #[doc(alias = "gst_video_orientation_set_hcenter")]

@@ -17,11 +17,13 @@ glib::wrapper! {
 
 impl StreamCollection {
     #[doc(alias = "gst_stream_collection_get_size")]
+    #[doc(alias = "get_size")]
     pub fn size(&self) -> u32 {
         unsafe { ffi::gst_stream_collection_get_size(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_stream_collection_get_stream")]
+    #[doc(alias = "get_stream")]
     pub fn stream(&self, index: u32) -> Option<Stream> {
         unsafe {
             from_glib_none(ffi::gst_stream_collection_get_stream(
@@ -32,6 +34,7 @@ impl StreamCollection {
     }
 
     #[doc(alias = "gst_stream_collection_get_upstream_id")]
+    #[doc(alias = "get_upstream_id")]
     pub fn upstream_id(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_stream_collection_get_upstream_id(
@@ -40,6 +43,7 @@ impl StreamCollection {
         }
     }
 
+    //#[doc(alias = "stream-notify")]
     //pub fn connect_stream_notify<Unsupported or ignored types>(&self, detail: Option<&str>, f: F) -> SignalHandlerId {
     //    Ignored p0: GObject.ParamSpec
     //}

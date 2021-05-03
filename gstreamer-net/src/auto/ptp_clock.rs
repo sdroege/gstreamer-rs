@@ -20,7 +20,6 @@ glib::wrapper! {
 }
 
 impl PtpClock {
-    #[doc(alias = "get_property_domain")]
     pub fn domain(&self) -> u32 {
         unsafe {
             let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
@@ -35,7 +34,7 @@ impl PtpClock {
         }
     }
 
-    #[doc(alias = "get_property_grandmaster_clock_id")]
+    #[doc(alias = "grandmaster-clock-id")]
     pub fn grandmaster_clock_id(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
@@ -50,7 +49,7 @@ impl PtpClock {
         }
     }
 
-    #[doc(alias = "get_property_internal_clock")]
+    #[doc(alias = "internal-clock")]
     pub fn internal_clock(&self) -> Option<gst::Clock> {
         unsafe {
             let mut value = glib::Value::from_type(<gst::Clock as StaticType>::static_type());
@@ -65,7 +64,7 @@ impl PtpClock {
         }
     }
 
-    #[doc(alias = "get_property_master_clock_id")]
+    #[doc(alias = "master-clock-id")]
     pub fn master_clock_id(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
@@ -80,9 +79,8 @@ impl PtpClock {
         }
     }
 
-    pub fn connect_property_grandmaster_clock_id_notify<
-        F: Fn(&PtpClock) + Send + Sync + 'static,
-    >(
+    #[doc(alias = "grandmaster-clock-id")]
+    pub fn connect_grandmaster_clock_id_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -109,7 +107,8 @@ impl PtpClock {
         }
     }
 
-    pub fn connect_property_internal_clock_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(
+    #[doc(alias = "internal-clock")]
+    pub fn connect_internal_clock_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -136,7 +135,8 @@ impl PtpClock {
         }
     }
 
-    pub fn connect_property_master_clock_id_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(
+    #[doc(alias = "master-clock-id")]
+    pub fn connect_master_clock_id_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

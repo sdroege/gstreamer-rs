@@ -30,36 +30,47 @@ pub trait AudioEncoderExt: 'static {
     fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError>;
 
     #[doc(alias = "gst_audio_encoder_get_audio_info")]
+    #[doc(alias = "get_audio_info")]
     fn audio_info(&self) -> Option<AudioInfo>;
 
     #[doc(alias = "gst_audio_encoder_get_drainable")]
+    #[doc(alias = "get_drainable")]
     fn is_drainable(&self) -> bool;
 
     #[doc(alias = "gst_audio_encoder_get_frame_max")]
+    #[doc(alias = "get_frame_max")]
     fn frame_max(&self) -> i32;
 
     #[doc(alias = "gst_audio_encoder_get_frame_samples_max")]
+    #[doc(alias = "get_frame_samples_max")]
     fn frame_samples_max(&self) -> i32;
 
     #[doc(alias = "gst_audio_encoder_get_frame_samples_min")]
+    #[doc(alias = "get_frame_samples_min")]
     fn frame_samples_min(&self) -> i32;
 
     #[doc(alias = "gst_audio_encoder_get_hard_min")]
+    #[doc(alias = "get_hard_min")]
     fn is_hard_min(&self) -> bool;
 
     #[doc(alias = "gst_audio_encoder_get_hard_resync")]
+    #[doc(alias = "get_hard_resync")]
     fn is_hard_resync(&self) -> bool;
 
     #[doc(alias = "gst_audio_encoder_get_lookahead")]
+    #[doc(alias = "get_lookahead")]
     fn lookahead(&self) -> i32;
 
     #[doc(alias = "gst_audio_encoder_get_mark_granule")]
+    #[doc(alias = "get_mark_granule")]
     fn is_mark_granule(&self) -> bool;
 
     #[doc(alias = "gst_audio_encoder_get_perfect_timestamp")]
+    #[doc(alias = "get_perfect_timestamp")]
     fn is_perfect_timestamp(&self) -> bool;
 
     #[doc(alias = "gst_audio_encoder_get_tolerance")]
+    #[doc(alias = "get_tolerance")]
     fn tolerance(&self) -> gst::ClockTime;
 
     #[doc(alias = "gst_audio_encoder_merge_tags")]
@@ -109,22 +120,26 @@ pub trait AudioEncoderExt: 'static {
     #[doc(alias = "gst_audio_encoder_set_tolerance")]
     fn set_tolerance(&self, tolerance: gst::ClockTime);
 
-    fn connect_property_hard_resync_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "hard-resync")]
+    fn connect_hard_resync_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_mark_granule_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "mark-granule")]
+    fn connect_mark_granule_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_perfect_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "perfect-timestamp")]
+    fn connect_perfect_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "tolerance")]
+    fn connect_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -341,7 +356,8 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         }
     }
 
-    fn connect_property_hard_resync_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "hard-resync")]
+    fn connect_hard_resync_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -368,7 +384,8 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         }
     }
 
-    fn connect_property_mark_granule_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "mark-granule")]
+    fn connect_mark_granule_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -395,7 +412,8 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         }
     }
 
-    fn connect_property_perfect_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "perfect-timestamp")]
+    fn connect_perfect_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -425,7 +443,8 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         }
     }
 
-    fn connect_property_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "tolerance")]
+    fn connect_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

@@ -63,16 +63,16 @@ unsafe impl Sync for DirectControlBinding {}
 pub const NONE_DIRECT_CONTROL_BINDING: Option<&DirectControlBinding> = None;
 
 pub trait DirectControlBindingExt: 'static {
-    #[doc(alias = "get_property_absolute")]
     fn is_absolute(&self) -> bool;
 
-    #[doc(alias = "get_property_control_source")]
+    #[doc(alias = "control-source")]
     fn control_source(&self) -> Option<gst::ControlSource>;
 
-    #[doc(alias = "set_property_control_source")]
+    #[doc(alias = "control-source")]
     fn set_control_source<P: IsA<gst::ControlSource>>(&self, control_source: Option<&P>);
 
-    fn connect_property_control_source_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "control-source")]
+    fn connect_control_source_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -118,7 +118,8 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
         }
     }
 
-    fn connect_property_control_source_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "control-source")]
+    fn connect_control_source_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

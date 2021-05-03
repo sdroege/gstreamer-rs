@@ -73,24 +73,31 @@ pub trait GstObjectExt: 'static {
     fn default_error(&self, error: &glib::Error, debug: Option<&str>);
 
     #[doc(alias = "gst_object_get_control_binding")]
+    #[doc(alias = "get_control_binding")]
     fn control_binding(&self, property_name: &str) -> Option<ControlBinding>;
 
     #[doc(alias = "gst_object_get_control_rate")]
+    #[doc(alias = "get_control_rate")]
     fn control_rate(&self) -> ClockTime;
 
     #[doc(alias = "gst_object_get_name")]
+    #[doc(alias = "get_name")]
     fn name(&self) -> glib::GString;
 
     #[doc(alias = "gst_object_get_parent")]
+    #[doc(alias = "get_parent")]
     fn parent(&self) -> Option<Object>;
 
     #[doc(alias = "gst_object_get_path_string")]
+    #[doc(alias = "get_path_string")]
     fn path_string(&self) -> glib::GString;
 
     #[doc(alias = "gst_object_get_value")]
+    #[doc(alias = "get_value")]
     fn value(&self, property_name: &str, timestamp: ClockTime) -> Option<glib::Value>;
 
     //#[doc(alias = "gst_object_get_value_array")]
+    //#[doc(alias = "get_value_array")]
     //fn is_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool;
 
     #[doc(alias = "gst_object_has_active_control_bindings")]
@@ -129,12 +136,11 @@ pub trait GstObjectExt: 'static {
     #[doc(alias = "gst_object_unparent")]
     fn unparent(&self);
 
+    //#[doc(alias = "deep-notify")]
     //fn connect_deep_notify<Unsupported or ignored types>(&self, detail: Option<&str>, f: F) -> SignalHandlerId;
 
-    fn connect_property_parent_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "parent")]
+    fn connect_parent_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Object>> GstObjectExt for O {
@@ -317,14 +323,13 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
+    //#[doc(alias = "deep-notify")]
     //fn connect_deep_notify<Unsupported or ignored types>(&self, detail: Option<&str>, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec
     //}
 
-    fn connect_property_parent_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "parent")]
+    fn connect_parent_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_parent_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstObject,
             _param_spec: glib::ffi::gpointer,

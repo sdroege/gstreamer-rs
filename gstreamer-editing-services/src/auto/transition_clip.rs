@@ -36,6 +36,7 @@ impl TransitionClip {
     }
 
     #[doc(alias = "ges_transition_clip_new_for_nick")]
+    #[doc(alias = "new_for_nick")]
     pub fn for_nick(nick: &str) -> Option<TransitionClip> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_transition_clip_new_for_nick(nick.to_glib_none().0)) }
@@ -45,13 +46,12 @@ impl TransitionClip {
 pub const NONE_TRANSITION_CLIP: Option<&TransitionClip> = None;
 
 pub trait TransitionClipExt: 'static {
-    #[doc(alias = "get_property_vtype")]
     fn vtype(&self) -> VideoStandardTransitionType;
 
-    #[doc(alias = "set_property_vtype")]
     fn set_vtype(&self, vtype: VideoStandardTransitionType);
 
-    fn connect_property_vtype_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "vtype")]
+    fn connect_vtype_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<TransitionClip>> TransitionClipExt for O {
@@ -80,7 +80,8 @@ impl<O: IsA<TransitionClip>> TransitionClipExt for O {
         }
     }
 
-    fn connect_property_vtype_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "vtype")]
+    fn connect_vtype_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_vtype_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTransitionClip,
             _param_spec: glib::ffi::gpointer,

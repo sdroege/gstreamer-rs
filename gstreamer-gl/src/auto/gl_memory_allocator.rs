@@ -18,6 +18,7 @@ glib::wrapper! {
 
 impl GLMemoryAllocator {
     #[doc(alias = "gst_gl_memory_allocator_get_default")]
+    #[doc(alias = "get_default")]
     pub fn default<P: IsA<GLContext>>(context: &P) -> Option<GLMemoryAllocator> {
         skip_assert_initialized!();
         unsafe {

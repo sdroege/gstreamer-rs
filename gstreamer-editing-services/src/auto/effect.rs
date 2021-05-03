@@ -33,7 +33,7 @@ impl Effect {
 pub const NONE_EFFECT: Option<&Effect> = None;
 
 pub trait EffectExt: 'static {
-    #[doc(alias = "get_property_bin_description")]
+    #[doc(alias = "bin-description")]
     fn bin_description(&self) -> Option<glib::GString>;
 }
 

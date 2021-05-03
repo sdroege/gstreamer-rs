@@ -75,6 +75,7 @@ impl ElementFactory {
     }
 
     #[doc(alias = "gst_element_factory_get_element_type")]
+    #[doc(alias = "get_element_type")]
     pub fn element_type(&self) -> glib::types::Type {
         unsafe {
             from_glib(ffi::gst_element_factory_get_element_type(
@@ -84,6 +85,7 @@ impl ElementFactory {
     }
 
     #[doc(alias = "gst_element_factory_get_metadata")]
+    #[doc(alias = "get_metadata")]
     pub fn metadata(&self, key: &str) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_element_factory_get_metadata(
@@ -94,6 +96,7 @@ impl ElementFactory {
     }
 
     #[doc(alias = "gst_element_factory_get_metadata_keys")]
+    #[doc(alias = "get_metadata_keys")]
     pub fn metadata_keys(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_element_factory_get_metadata_keys(
@@ -103,11 +106,13 @@ impl ElementFactory {
     }
 
     #[doc(alias = "gst_element_factory_get_num_pad_templates")]
+    #[doc(alias = "get_num_pad_templates")]
     pub fn num_pad_templates(&self) -> u32 {
         unsafe { ffi::gst_element_factory_get_num_pad_templates(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_element_factory_get_static_pad_templates")]
+    #[doc(alias = "get_static_pad_templates")]
     pub fn static_pad_templates(&self) -> Vec<StaticPadTemplate> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_element_factory_get_static_pad_templates(
@@ -117,6 +122,7 @@ impl ElementFactory {
     }
 
     #[doc(alias = "gst_element_factory_get_uri_protocols")]
+    #[doc(alias = "get_uri_protocols")]
     pub fn uri_protocols(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_element_factory_get_uri_protocols(
@@ -126,6 +132,7 @@ impl ElementFactory {
     }
 
     #[doc(alias = "gst_element_factory_get_uri_type")]
+    #[doc(alias = "get_uri_type")]
     pub fn uri_type(&self) -> URIType {
         unsafe { from_glib(ffi::gst_element_factory_get_uri_type(self.to_glib_none().0)) }
     }

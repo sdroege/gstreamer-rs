@@ -28,6 +28,7 @@ impl GLAPI {
     }
 
     #[doc(alias = "gst_gl_api_to_string")]
+    #[doc(alias = "to_string")]
     pub fn to_str(self) -> glib::GString {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_gl_api_to_string(self.into_glib())) }
@@ -179,6 +180,7 @@ impl GLPlatform {
     }
 
     #[doc(alias = "gst_gl_platform_to_string")]
+    #[doc(alias = "to_string")]
     pub fn to_str(self) -> glib::GString {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_gl_platform_to_string(self.into_glib())) }
@@ -258,6 +260,7 @@ impl GLSLProfile {
     }
 
     #[doc(alias = "gst_glsl_profile_to_string")]
+    #[doc(alias = "to_string")]
     pub fn to_str(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_glsl_profile_to_string(self.into_glib())) }

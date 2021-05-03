@@ -62,7 +62,6 @@ impl WebRTCICETransport {
         }
     }
 
-    #[doc(alias = "get_property_component")]
     pub fn component(&self) -> WebRTCICEComponent {
         unsafe {
             let mut value =
@@ -78,7 +77,7 @@ impl WebRTCICETransport {
         }
     }
 
-    #[doc(alias = "get_property_gathering_state")]
+    #[doc(alias = "gathering-state")]
     pub fn gathering_state(&self) -> WebRTCICEGatheringState {
         unsafe {
             let mut value =
@@ -94,7 +93,6 @@ impl WebRTCICETransport {
         }
     }
 
-    #[doc(alias = "get_property_state")]
     pub fn state(&self) -> WebRTCICEConnectionState {
         unsafe {
             let mut value =
@@ -110,6 +108,7 @@ impl WebRTCICETransport {
         }
     }
 
+    #[doc(alias = "on-new-candidate")]
     pub fn connect_on_new_candidate<F: Fn(&WebRTCICETransport, &str) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -140,6 +139,7 @@ impl WebRTCICETransport {
         }
     }
 
+    #[doc(alias = "on-selected-candidate-pair-change")]
     pub fn connect_on_selected_candidate_pair_change<
         F: Fn(&WebRTCICETransport) + Send + Sync + 'static,
     >(
@@ -168,9 +168,8 @@ impl WebRTCICETransport {
         }
     }
 
-    pub fn connect_property_gathering_state_notify<
-        F: Fn(&WebRTCICETransport) + Send + Sync + 'static,
-    >(
+    #[doc(alias = "gathering-state")]
+    pub fn connect_gathering_state_notify<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -197,7 +196,8 @@ impl WebRTCICETransport {
         }
     }
 
-    pub fn connect_property_state_notify<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(
+    #[doc(alias = "state")]
+    pub fn connect_state_notify<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

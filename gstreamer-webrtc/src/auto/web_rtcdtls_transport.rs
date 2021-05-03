@@ -44,7 +44,6 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    #[doc(alias = "get_property_certificate")]
     pub fn certificate(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
@@ -59,7 +58,6 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    #[doc(alias = "set_property_certificate")]
     pub fn set_certificate(&self, certificate: Option<&str>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -70,7 +68,6 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    #[doc(alias = "get_property_client")]
     pub fn is_client(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
@@ -85,7 +82,6 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    #[doc(alias = "set_property_client")]
     pub fn set_client(&self, client: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -96,7 +92,7 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    #[doc(alias = "get_property_remote_certificate")]
+    #[doc(alias = "remote-certificate")]
     pub fn remote_certificate(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
@@ -111,7 +107,6 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    #[doc(alias = "get_property_rtcp")]
     pub fn is_rtcp(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
@@ -126,7 +121,7 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    #[doc(alias = "get_property_session_id")]
+    #[doc(alias = "session-id")]
     pub fn session_id(&self) -> u32 {
         unsafe {
             let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
@@ -141,7 +136,6 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    #[doc(alias = "get_property_state")]
     pub fn state(&self) -> WebRTCDTLSTransportState {
         unsafe {
             let mut value =
@@ -157,7 +151,6 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    #[doc(alias = "get_property_transport")]
     pub fn transport(&self) -> Option<WebRTCICETransport> {
         unsafe {
             let mut value =
@@ -173,9 +166,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn connect_property_certificate_notify<
-        F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static,
-    >(
+    #[doc(alias = "certificate")]
+    pub fn connect_certificate_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -202,7 +194,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn connect_property_client_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(
+    #[doc(alias = "client")]
+    pub fn connect_client_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -229,7 +222,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn connect_property_remote_certificate_notify<
+    #[doc(alias = "remote-certificate")]
+    pub fn connect_remote_certificate_notify<
         F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static,
     >(
         &self,
@@ -258,7 +252,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn connect_property_state_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(
+    #[doc(alias = "state")]
+    pub fn connect_state_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -285,9 +280,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn connect_property_transport_notify<
-        F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static,
-    >(
+    #[doc(alias = "transport")]
+    pub fn connect_transport_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

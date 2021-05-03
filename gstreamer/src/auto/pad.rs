@@ -69,51 +69,65 @@ pub trait PadExt: 'static {
     fn forward<P: FnMut(&Pad) -> bool>(&self, forward: P) -> bool;
 
     #[doc(alias = "gst_pad_get_allowed_caps")]
+    #[doc(alias = "get_allowed_caps")]
     fn allowed_caps(&self) -> Option<Caps>;
 
     #[doc(alias = "gst_pad_get_current_caps")]
+    #[doc(alias = "get_current_caps")]
     fn current_caps(&self) -> Option<Caps>;
 
     #[doc(alias = "gst_pad_get_direction")]
+    #[doc(alias = "get_direction")]
     fn direction(&self) -> PadDirection;
 
     //#[doc(alias = "gst_pad_get_element_private")]
+    //#[doc(alias = "get_element_private")]
     //fn element_private(&self) -> /*Unimplemented*/Option<Fundamental: Pointer>;
 
     #[doc(alias = "gst_pad_get_offset")]
+    #[doc(alias = "get_offset")]
     fn offset(&self) -> i64;
 
     #[doc(alias = "gst_pad_get_pad_template")]
+    #[doc(alias = "get_pad_template")]
     fn pad_template(&self) -> Option<PadTemplate>;
 
     #[doc(alias = "gst_pad_get_pad_template_caps")]
+    #[doc(alias = "get_pad_template_caps")]
     fn pad_template_caps(&self) -> Caps;
 
     #[doc(alias = "gst_pad_get_parent_element")]
+    #[doc(alias = "get_parent_element")]
     fn parent_element(&self) -> Option<Element>;
 
     #[doc(alias = "gst_pad_get_peer")]
+    #[doc(alias = "get_peer")]
     fn peer(&self) -> Option<Pad>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_pad_get_single_internal_link")]
+    #[doc(alias = "get_single_internal_link")]
     fn single_internal_link(&self) -> Option<Pad>;
 
     #[doc(alias = "gst_pad_get_sticky_event")]
+    #[doc(alias = "get_sticky_event")]
     fn sticky_event(&self, event_type: EventType, idx: u32) -> Option<Event>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_pad_get_stream")]
+    #[doc(alias = "get_stream")]
     fn stream(&self) -> Option<Stream>;
 
     #[doc(alias = "gst_pad_get_stream_id")]
+    #[doc(alias = "get_stream_id")]
     fn stream_id(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_pad_get_task_state")]
+    #[doc(alias = "get_task_state")]
     fn task_state(&self) -> TaskState;
 
     #[doc(alias = "gst_pad_has_current_caps")]
@@ -190,23 +204,20 @@ pub trait PadExt: 'static {
     #[doc(alias = "gst_pad_use_fixed_caps")]
     fn use_fixed_caps(&self);
 
-    #[doc(alias = "get_property_caps")]
     fn caps(&self) -> Option<Caps>;
 
+    #[doc(alias = "linked")]
     fn connect_linked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[doc(alias = "unlinked")]
     fn connect_unlinked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F)
         -> SignalHandlerId;
 
-    fn connect_property_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "caps")]
+    fn connect_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "offset")]
+    fn connect_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Pad>> PadExt for O {
@@ -560,6 +571,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "linked")]
     fn connect_linked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn linked_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(
             this: *mut ffi::GstPad,
@@ -587,6 +599,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "unlinked")]
     fn connect_unlinked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -617,10 +630,8 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn connect_property_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "caps")]
+    fn connect_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_caps_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstPad,
             _param_spec: glib::ffi::gpointer,
@@ -644,10 +655,8 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn connect_property_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "offset")]
+    fn connect_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_offset_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstPad,
             _param_spec: glib::ffi::gpointer,

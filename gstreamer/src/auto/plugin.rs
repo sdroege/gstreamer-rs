@@ -56,31 +56,37 @@ impl Plugin {
     }
 
     #[doc(alias = "gst_plugin_get_description")]
+    #[doc(alias = "get_description")]
     pub fn description(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_description(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_plugin_get_filename")]
+    #[doc(alias = "get_filename")]
     pub fn filename(&self) -> Option<std::path::PathBuf> {
         unsafe { from_glib_none(ffi::gst_plugin_get_filename(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_plugin_get_license")]
+    #[doc(alias = "get_license")]
     pub fn license(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_license(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_plugin_get_origin")]
+    #[doc(alias = "get_origin")]
     pub fn origin(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_origin(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_plugin_get_package")]
+    #[doc(alias = "get_package")]
     pub fn package(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_package(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_plugin_get_release_date_string")]
+    #[doc(alias = "get_release_date_string")]
     pub fn release_date_string(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_release_date_string(
@@ -90,11 +96,13 @@ impl Plugin {
     }
 
     #[doc(alias = "gst_plugin_get_source")]
+    #[doc(alias = "get_source")]
     pub fn source(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_source(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_plugin_get_version")]
+    #[doc(alias = "get_version")]
     pub fn version(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_version(self.to_glib_none().0)) }
     }

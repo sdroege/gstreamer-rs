@@ -35,9 +35,11 @@ pub const NONE_STREAM_VOLUME: Option<&StreamVolume> = None;
 
 pub trait StreamVolumeExt: 'static {
     #[doc(alias = "gst_stream_volume_get_mute")]
+    #[doc(alias = "get_mute")]
     fn is_muted(&self) -> bool;
 
     #[doc(alias = "gst_stream_volume_get_volume")]
+    #[doc(alias = "get_volume")]
     fn volume(&self, format: StreamVolumeFormat) -> f64;
 
     #[doc(alias = "gst_stream_volume_set_mute")]
@@ -46,15 +48,11 @@ pub trait StreamVolumeExt: 'static {
     #[doc(alias = "gst_stream_volume_set_volume")]
     fn set_volume(&self, format: StreamVolumeFormat, val: f64);
 
-    fn connect_property_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "mute")]
+    fn connect_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "volume")]
+    fn connect_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
@@ -88,10 +86,8 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
         }
     }
 
-    fn connect_property_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "mute")]
+    fn connect_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mute_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstStreamVolume,
             _param_spec: glib::ffi::gpointer,
@@ -115,10 +111,8 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
         }
     }
 
-    fn connect_property_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "volume")]
+    fn connect_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_volume_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
             this: *mut ffi::GstStreamVolume,
             _param_spec: glib::ffi::gpointer,

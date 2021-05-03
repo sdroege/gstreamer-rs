@@ -16,6 +16,7 @@ glib::wrapper! {
 
 impl DiscovererContainerInfo {
     #[doc(alias = "gst_discoverer_container_info_get_streams")]
+    #[doc(alias = "get_streams")]
     pub fn streams(&self) -> Vec<DiscovererStreamInfo> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_container_info_get_streams(

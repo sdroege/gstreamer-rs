@@ -42,12 +42,15 @@ pub const NONE_PIPELINE: Option<&Pipeline> = None;
 
 pub trait GESPipelineExt: 'static {
     #[doc(alias = "ges_pipeline_get_mode")]
+    #[doc(alias = "get_mode")]
     fn mode(&self) -> PipelineFlags;
 
     #[doc(alias = "ges_pipeline_get_thumbnail")]
+    #[doc(alias = "get_thumbnail")]
     fn thumbnail(&self, caps: &gst::Caps) -> Option<gst::Sample>;
 
     #[doc(alias = "ges_pipeline_get_thumbnail_rgb24")]
+    #[doc(alias = "get_thumbnail_rgb24")]
     fn thumbnail_rgb24(&self, width: i32, height: i32) -> Option<gst::Sample>;
 
     #[doc(alias = "ges_pipeline_preview_get_audio_sink")]
@@ -84,46 +87,49 @@ pub trait GESPipelineExt: 'static {
     #[doc(alias = "ges_pipeline_set_timeline")]
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError>;
 
-    #[doc(alias = "get_property_audio_filter")]
+    #[doc(alias = "audio-filter")]
     fn audio_filter(&self) -> Option<gst::Element>;
 
-    #[doc(alias = "set_property_audio_filter")]
+    #[doc(alias = "audio-filter")]
     fn set_audio_filter<P: IsA<gst::Element>>(&self, audio_filter: Option<&P>);
 
-    #[doc(alias = "get_property_audio_sink")]
+    #[doc(alias = "audio-sink")]
     fn audio_sink(&self) -> Option<gst::Element>;
 
-    #[doc(alias = "set_property_audio_sink")]
+    #[doc(alias = "audio-sink")]
     fn set_audio_sink<P: IsA<gst::Element>>(&self, audio_sink: Option<&P>);
 
-    #[doc(alias = "get_property_timeline")]
     fn timeline(&self) -> Option<Timeline>;
 
-    #[doc(alias = "get_property_video_filter")]
+    #[doc(alias = "video-filter")]
     fn video_filter(&self) -> Option<gst::Element>;
 
-    #[doc(alias = "set_property_video_filter")]
+    #[doc(alias = "video-filter")]
     fn set_video_filter<P: IsA<gst::Element>>(&self, video_filter: Option<&P>);
 
-    #[doc(alias = "get_property_video_sink")]
+    #[doc(alias = "video-sink")]
     fn video_sink(&self) -> Option<gst::Element>;
 
-    #[doc(alias = "set_property_video_sink")]
+    #[doc(alias = "video-sink")]
     fn set_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>);
 
-    fn connect_property_audio_filter_notify<F: Fn(&Self) + 'static>(&self, f: F)
-        -> SignalHandlerId;
+    #[doc(alias = "audio-filter")]
+    fn connect_audio_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_audio_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "audio-sink")]
+    fn connect_audio_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "mode")]
+    fn connect_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "timeline")]
+    fn connect_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_video_filter_notify<F: Fn(&Self) + 'static>(&self, f: F)
-        -> SignalHandlerId;
+    #[doc(alias = "video-filter")]
+    fn connect_video_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_video_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "video-sink")]
+    fn connect_video_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Pipeline>> GESPipelineExt for O {
@@ -357,10 +363,8 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn connect_property_audio_filter_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "audio-filter")]
+    fn connect_audio_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_audio_filter_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESPipeline,
             _param_spec: glib::ffi::gpointer,
@@ -384,7 +388,8 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn connect_property_audio_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "audio-sink")]
+    fn connect_audio_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_audio_sink_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESPipeline,
             _param_spec: glib::ffi::gpointer,
@@ -408,7 +413,8 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn connect_property_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "mode")]
+    fn connect_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mode_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESPipeline,
             _param_spec: glib::ffi::gpointer,
@@ -432,7 +438,8 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn connect_property_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "timeline")]
+    fn connect_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_timeline_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESPipeline,
             _param_spec: glib::ffi::gpointer,
@@ -456,10 +463,8 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn connect_property_video_filter_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "video-filter")]
+    fn connect_video_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_video_filter_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESPipeline,
             _param_spec: glib::ffi::gpointer,
@@ -483,7 +488,8 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn connect_property_video_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "video-sink")]
+    fn connect_video_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_video_sink_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESPipeline,
             _param_spec: glib::ffi::gpointer,

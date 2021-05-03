@@ -28,15 +28,19 @@ pub const NONE_BASE_SRC: Option<&BaseSrc> = None;
 
 pub trait BaseSrcExt: 'static {
     //#[doc(alias = "gst_base_src_get_allocator")]
+    //#[doc(alias = "get_allocator")]
     //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
 
     #[doc(alias = "gst_base_src_get_blocksize")]
+    #[doc(alias = "get_blocksize")]
     fn blocksize(&self) -> u32;
 
     #[doc(alias = "gst_base_src_get_buffer_pool")]
+    #[doc(alias = "get_buffer_pool")]
     fn buffer_pool(&self) -> Option<gst::BufferPool>;
 
     #[doc(alias = "gst_base_src_get_do_timestamp")]
+    #[doc(alias = "get_do_timestamp")]
     fn does_timestamp(&self) -> bool;
 
     #[doc(alias = "gst_base_src_is_async")]
@@ -78,34 +82,36 @@ pub trait BaseSrcExt: 'static {
     #[doc(alias = "gst_base_src_set_live")]
     fn set_live(&self, live: bool);
 
-    #[doc(alias = "get_property_num_buffers")]
+    #[doc(alias = "num-buffers")]
     fn num_buffers(&self) -> i32;
 
-    #[doc(alias = "set_property_num_buffers")]
+    #[doc(alias = "num-buffers")]
     fn set_num_buffers(&self, num_buffers: i32);
 
-    #[doc(alias = "get_property_typefind")]
     fn is_typefind(&self) -> bool;
 
-    #[doc(alias = "set_property_typefind")]
     fn set_typefind(&self, typefind: bool);
 
-    fn connect_property_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "blocksize")]
+    fn connect_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_do_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "do-timestamp")]
+    fn connect_do_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_num_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "num-buffers")]
+    fn connect_num_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_property_typefind_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "typefind")]
+    fn connect_typefind_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -266,7 +272,8 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    fn connect_property_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "blocksize")]
+    fn connect_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -293,7 +300,8 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    fn connect_property_do_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "do-timestamp")]
+    fn connect_do_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -320,7 +328,8 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    fn connect_property_num_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "num-buffers")]
+    fn connect_num_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -347,7 +356,8 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    fn connect_property_typefind_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "typefind")]
+    fn connect_typefind_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

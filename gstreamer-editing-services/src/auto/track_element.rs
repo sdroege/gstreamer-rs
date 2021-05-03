@@ -54,29 +54,37 @@ pub trait TrackElementExt: 'static {
     ) -> Result<(), glib::error::BoolError>;
 
     //#[doc(alias = "ges_track_element_get_all_control_bindings")]
+    //#[doc(alias = "get_all_control_bindings")]
     //fn all_control_bindings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 83 };
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_element_get_auto_clamp_control_sources")]
+    #[doc(alias = "get_auto_clamp_control_sources")]
     fn is_auto_clamp_control_sources(&self) -> bool;
 
     //#[doc(alias = "ges_track_element_get_control_binding")]
+    //#[doc(alias = "get_control_binding")]
     //fn control_binding(&self, property_name: &str) -> /*Ignored*/Option<gst::ControlBinding>;
 
     #[doc(alias = "ges_track_element_get_element")]
+    #[doc(alias = "get_element")]
     fn element(&self) -> Option<gst::Element>;
 
     #[doc(alias = "ges_track_element_get_gnlobject")]
+    #[doc(alias = "get_gnlobject")]
     fn gnlobject(&self) -> Option<gst::Element>;
 
     #[doc(alias = "ges_track_element_get_nleobject")]
+    #[doc(alias = "get_nleobject")]
     fn nleobject(&self) -> Option<gst::Element>;
 
     #[doc(alias = "ges_track_element_get_track")]
+    #[doc(alias = "get_track")]
     fn track(&self) -> Option<Track>;
 
     #[doc(alias = "ges_track_element_get_track_type")]
+    #[doc(alias = "get_track_type")]
     fn track_type(&self) -> TrackType;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -117,29 +125,33 @@ pub trait TrackElementExt: 'static {
     #[doc(alias = "ges_track_element_set_track_type")]
     fn set_track_type(&self, type_: TrackType);
 
+    //#[doc(alias = "control-binding-added")]
     //fn connect_control_binding_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
+    //#[doc(alias = "control-binding-removed")]
     //fn connect_control_binding_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "active")]
+    fn connect_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_auto_clamp_control_sources_notify<F: Fn(&Self) + 'static>(
+    #[doc(alias = "auto-clamp-control-sources")]
+    fn connect_auto_clamp_control_sources_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_has_internal_source_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+    #[doc(alias = "has-internal-source")]
+    fn connect_has_internal_source_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_track_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "track")]
+    fn connect_track_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "track-type")]
+    fn connect_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<TrackElement>> TrackElementExt for O {
@@ -339,15 +351,18 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    //#[doc(alias = "control-binding-added")]
     //fn connect_control_binding_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored control_binding: Gst.ControlBinding
     //}
 
+    //#[doc(alias = "control-binding-removed")]
     //fn connect_control_binding_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored control_binding: Gst.ControlBinding
     //}
 
-    fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "active")]
+    fn connect_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_active_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrackElement,
             _param_spec: glib::ffi::gpointer,
@@ -373,7 +388,8 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_auto_clamp_control_sources_notify<F: Fn(&Self) + 'static>(
+    #[doc(alias = "auto-clamp-control-sources")]
+    fn connect_auto_clamp_control_sources_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -402,10 +418,8 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_property_has_internal_source_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "has-internal-source")]
+    fn connect_has_internal_source_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_has_internal_source_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrackElement,
             _param_spec: glib::ffi::gpointer,
@@ -429,7 +443,8 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    fn connect_property_track_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "track")]
+    fn connect_track_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_track_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrackElement,
             _param_spec: glib::ffi::gpointer,
@@ -453,7 +468,8 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    fn connect_property_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "track-type")]
+    fn connect_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_track_type_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrackElement,
             _param_spec: glib::ffi::gpointer,

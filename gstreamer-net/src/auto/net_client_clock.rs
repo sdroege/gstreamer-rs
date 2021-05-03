@@ -22,7 +22,6 @@ glib::wrapper! {
 }
 
 impl NetClientClock {
-    #[doc(alias = "get_property_address")]
     pub fn address(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
@@ -37,7 +36,6 @@ impl NetClientClock {
         }
     }
 
-    #[doc(alias = "set_property_address")]
     pub fn set_address(&self, address: Option<&str>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -48,7 +46,7 @@ impl NetClientClock {
         }
     }
 
-    #[doc(alias = "get_property_base_time")]
+    #[doc(alias = "base-time")]
     pub fn base_time(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
@@ -63,7 +61,6 @@ impl NetClientClock {
         }
     }
 
-    #[doc(alias = "get_property_bus")]
     pub fn bus(&self) -> Option<gst::Bus> {
         unsafe {
             let mut value = glib::Value::from_type(<gst::Bus as StaticType>::static_type());
@@ -76,7 +73,6 @@ impl NetClientClock {
         }
     }
 
-    #[doc(alias = "set_property_bus")]
     pub fn set_bus<P: IsA<gst::Bus>>(&self, bus: Option<&P>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -87,7 +83,7 @@ impl NetClientClock {
         }
     }
 
-    #[doc(alias = "get_property_internal_clock")]
+    #[doc(alias = "internal-clock")]
     pub fn internal_clock(&self) -> Option<gst::Clock> {
         unsafe {
             let mut value = glib::Value::from_type(<gst::Clock as StaticType>::static_type());
@@ -102,7 +98,7 @@ impl NetClientClock {
         }
     }
 
-    #[doc(alias = "get_property_minimum_update_interval")]
+    #[doc(alias = "minimum-update-interval")]
     pub fn minimum_update_interval(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
@@ -117,7 +113,7 @@ impl NetClientClock {
         }
     }
 
-    #[doc(alias = "set_property_minimum_update_interval")]
+    #[doc(alias = "minimum-update-interval")]
     pub fn set_minimum_update_interval(&self, minimum_update_interval: u64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -128,7 +124,6 @@ impl NetClientClock {
         }
     }
 
-    #[doc(alias = "get_property_port")]
     pub fn port(&self) -> i32 {
         unsafe {
             let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
@@ -143,7 +138,6 @@ impl NetClientClock {
         }
     }
 
-    #[doc(alias = "set_property_port")]
     pub fn set_port(&self, port: i32) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -154,7 +148,7 @@ impl NetClientClock {
         }
     }
 
-    #[doc(alias = "get_property_qos_dscp")]
+    #[doc(alias = "qos-dscp")]
     pub fn qos_dscp(&self) -> i32 {
         unsafe {
             let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
@@ -169,7 +163,7 @@ impl NetClientClock {
         }
     }
 
-    #[doc(alias = "set_property_qos_dscp")]
+    #[doc(alias = "qos-dscp")]
     pub fn set_qos_dscp(&self, qos_dscp: i32) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -180,7 +174,7 @@ impl NetClientClock {
         }
     }
 
-    #[doc(alias = "get_property_round_trip_limit")]
+    #[doc(alias = "round-trip-limit")]
     pub fn round_trip_limit(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
@@ -195,7 +189,7 @@ impl NetClientClock {
         }
     }
 
-    #[doc(alias = "set_property_round_trip_limit")]
+    #[doc(alias = "round-trip-limit")]
     pub fn set_round_trip_limit(&self, round_trip_limit: u64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -206,7 +200,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn connect_property_address_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
+    #[doc(alias = "address")]
+    pub fn connect_address_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -233,7 +228,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn connect_property_bus_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
+    #[doc(alias = "bus")]
+    pub fn connect_bus_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -260,9 +256,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn connect_property_internal_clock_notify<
-        F: Fn(&NetClientClock) + Send + Sync + 'static,
-    >(
+    #[doc(alias = "internal-clock")]
+    pub fn connect_internal_clock_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -289,7 +284,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn connect_property_minimum_update_interval_notify<
+    #[doc(alias = "minimum-update-interval")]
+    pub fn connect_minimum_update_interval_notify<
         F: Fn(&NetClientClock) + Send + Sync + 'static,
     >(
         &self,
@@ -318,7 +314,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn connect_property_port_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
+    #[doc(alias = "port")]
+    pub fn connect_port_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -345,7 +342,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn connect_property_qos_dscp_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
+    #[doc(alias = "qos-dscp")]
+    pub fn connect_qos_dscp_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -372,9 +370,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn connect_property_round_trip_limit_notify<
-        F: Fn(&NetClientClock) + Send + Sync + 'static,
-    >(
+    #[doc(alias = "round-trip-limit")]
+    pub fn connect_round_trip_limit_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

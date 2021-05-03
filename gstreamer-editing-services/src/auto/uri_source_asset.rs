@@ -20,12 +20,15 @@ pub const NONE_URI_SOURCE_ASSET: Option<&UriSourceAsset> = None;
 
 pub trait UriSourceAssetExt: 'static {
     #[doc(alias = "ges_uri_source_asset_get_filesource_asset")]
+    #[doc(alias = "get_filesource_asset")]
     fn filesource_asset(&self) -> Option<UriClipAsset>;
 
     #[doc(alias = "ges_uri_source_asset_get_stream_info")]
+    #[doc(alias = "get_stream_info")]
     fn stream_info(&self) -> Option<gst_pbutils::DiscovererStreamInfo>;
 
     #[doc(alias = "ges_uri_source_asset_get_stream_uri")]
+    #[doc(alias = "get_stream_uri")]
     fn stream_uri(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]

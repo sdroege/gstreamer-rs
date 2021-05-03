@@ -36,11 +36,13 @@ impl EncodingTarget {
     }
 
     #[doc(alias = "gst_encoding_target_get_category")]
+    #[doc(alias = "get_category")]
     pub fn category(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_encoding_target_get_category(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_encoding_target_get_description")]
+    #[doc(alias = "get_description")]
     pub fn description(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::gst_encoding_target_get_description(
@@ -50,6 +52,7 @@ impl EncodingTarget {
     }
 
     #[doc(alias = "gst_encoding_target_get_name")]
+    #[doc(alias = "get_name")]
     pub fn name(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_encoding_target_get_name(self.to_glib_none().0)) }
     }
@@ -57,11 +60,13 @@ impl EncodingTarget {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_encoding_target_get_path")]
+    #[doc(alias = "get_path")]
     pub fn path(&self) -> Option<glib::GString> {
         unsafe { from_glib_none(ffi::gst_encoding_target_get_path(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_encoding_target_get_profile")]
+    #[doc(alias = "get_profile")]
     pub fn profile(&self, name: &str) -> Option<EncodingProfile> {
         unsafe {
             from_glib_full(ffi::gst_encoding_target_get_profile(
@@ -72,6 +77,7 @@ impl EncodingTarget {
     }
 
     #[doc(alias = "gst_encoding_target_get_profiles")]
+    #[doc(alias = "get_profiles")]
     pub fn profiles(&self) -> Vec<EncodingProfile> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_encoding_target_get_profiles(

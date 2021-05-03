@@ -72,55 +72,71 @@ pub trait TimelineElementExt: 'static {
     ) -> Result<(), glib::Error>;
 
     //#[doc(alias = "ges_timeline_element_get_child_properties")]
+    //#[doc(alias = "get_child_properties")]
     //fn child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     //#[doc(alias = "ges_timeline_element_get_child_property")]
+    //#[doc(alias = "get_child_property")]
     //fn child_property(&self, property_name: &str, value: /*Ignored*/glib::Value) -> bool;
 
     //#[doc(alias = "ges_timeline_element_get_child_property_by_pspec")]
+    //#[doc(alias = "get_child_property_by_pspec")]
     //fn child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/glib::Value);
 
     //#[doc(alias = "ges_timeline_element_get_child_property_valist")]
+    //#[doc(alias = "get_child_property_valist")]
     //fn child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
     #[doc(alias = "ges_timeline_element_get_duration")]
+    #[doc(alias = "get_duration")]
     fn duration(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_element_get_inpoint")]
+    #[doc(alias = "get_inpoint")]
     fn inpoint(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "ges_timeline_element_get_layer_priority")]
+    #[doc(alias = "get_layer_priority")]
     fn layer_priority(&self) -> u32;
 
     #[doc(alias = "ges_timeline_element_get_max_duration")]
+    #[doc(alias = "get_max_duration")]
     fn max_duration(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_element_get_name")]
+    #[doc(alias = "get_name")]
     fn name(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_timeline_element_get_natural_framerate")]
+    #[doc(alias = "get_natural_framerate")]
     fn natural_framerate(&self) -> Option<(i32, i32)>;
 
     #[doc(alias = "ges_timeline_element_get_parent")]
+    #[doc(alias = "get_parent")]
     fn parent(&self) -> Option<TimelineElement>;
 
     #[doc(alias = "ges_timeline_element_get_priority")]
+    #[doc(alias = "get_priority")]
     fn priority(&self) -> u32;
 
     #[doc(alias = "ges_timeline_element_get_start")]
+    #[doc(alias = "get_start")]
     fn start(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_element_get_timeline")]
+    #[doc(alias = "get_timeline")]
     fn timeline(&self) -> Option<Timeline>;
 
     #[doc(alias = "ges_timeline_element_get_toplevel_parent")]
+    #[doc(alias = "get_toplevel_parent")]
     fn toplevel_parent(&self) -> Option<TimelineElement>;
 
     #[doc(alias = "ges_timeline_element_get_track_types")]
+    #[doc(alias = "get_track_types")]
     fn track_types(&self) -> TrackType;
 
     //#[doc(alias = "ges_timeline_element_list_children_properties")]
@@ -193,47 +209,56 @@ pub trait TimelineElementExt: 'static {
     #[doc(alias = "ges_timeline_element_trim")]
     fn trim(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError>;
 
-    #[doc(alias = "get_property_in_point")]
+    #[doc(alias = "in-point")]
     fn in_point(&self) -> u64;
 
-    #[doc(alias = "set_property_in_point")]
+    #[doc(alias = "in-point")]
     fn set_in_point(&self, in_point: u64);
 
-    #[doc(alias = "get_property_serialize")]
     fn is_serialize(&self) -> bool;
 
-    #[doc(alias = "set_property_serialize")]
     fn set_serialize(&self, serialize: bool);
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[doc(alias = "child-property-added")]
     //fn connect_child_property_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[doc(alias = "child-property-removed")]
     //fn connect_child_property_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
+    //#[doc(alias = "deep-notify")]
     //fn connect_deep_notify<Unsupported or ignored types>(&self, detail: Option<&str>, f: F) -> SignalHandlerId;
 
-    fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "duration")]
+    fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_in_point_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "in-point")]
+    fn connect_in_point_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_max_duration_notify<F: Fn(&Self) + 'static>(&self, f: F)
-        -> SignalHandlerId;
+    #[doc(alias = "max-duration")]
+    fn connect_max_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "name")]
+    fn connect_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "parent")]
+    fn connect_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg_attr(feature = "v1_10", deprecated = "Since 1.10")]
-    fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "priority")]
+    fn connect_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_serialize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "serialize")]
+    fn connect_serialize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "start")]
+    fn connect_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "timeline")]
+    fn connect_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<TimelineElement>> TimelineElementExt for O {
@@ -648,21 +673,25 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[doc(alias = "child-property-added")]
     //fn connect_child_property_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec
     //}
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[doc(alias = "child-property-removed")]
     //fn connect_child_property_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec
     //}
 
+    //#[doc(alias = "deep-notify")]
     //fn connect_deep_notify<Unsupported or ignored types>(&self, detail: Option<&str>, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec
     //}
 
-    fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "duration")]
+    fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimelineElement,
             _param_spec: glib::ffi::gpointer,
@@ -686,7 +715,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn connect_property_in_point_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "in-point")]
+    fn connect_in_point_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_in_point_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimelineElement,
             _param_spec: glib::ffi::gpointer,
@@ -710,10 +740,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn connect_property_max_duration_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    #[doc(alias = "max-duration")]
+    fn connect_max_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_max_duration_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimelineElement,
             _param_spec: glib::ffi::gpointer,
@@ -737,7 +765,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn connect_property_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "name")]
+    fn connect_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_name_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimelineElement,
             _param_spec: glib::ffi::gpointer,
@@ -761,7 +790,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn connect_property_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "parent")]
+    fn connect_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_parent_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimelineElement,
             _param_spec: glib::ffi::gpointer,
@@ -785,7 +815,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "priority")]
+    fn connect_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_priority_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimelineElement,
             _param_spec: glib::ffi::gpointer,
@@ -809,7 +840,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn connect_property_serialize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "serialize")]
+    fn connect_serialize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_serialize_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimelineElement,
             _param_spec: glib::ffi::gpointer,
@@ -833,7 +865,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn connect_property_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "start")]
+    fn connect_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_start_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimelineElement,
             _param_spec: glib::ffi::gpointer,
@@ -857,7 +890,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn connect_property_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    #[doc(alias = "timeline")]
+    fn connect_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_timeline_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimelineElement,
             _param_spec: glib::ffi::gpointer,

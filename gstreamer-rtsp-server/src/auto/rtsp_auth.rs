@@ -71,25 +71,31 @@ pub trait RTSPAuthExt: 'static {
     fn add_digest(&self, user: &str, pass: &str, token: &RTSPToken);
 
     #[doc(alias = "gst_rtsp_auth_get_default_token")]
+    #[doc(alias = "get_default_token")]
     fn default_token(&self) -> Option<RTSPToken>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_auth_get_realm")]
+    #[doc(alias = "get_realm")]
     fn realm(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_rtsp_auth_get_supported_methods")]
+    #[doc(alias = "get_supported_methods")]
     fn supported_methods(&self) -> gst_rtsp::RTSPAuthMethod;
 
     #[doc(alias = "gst_rtsp_auth_get_tls_authentication_mode")]
+    #[doc(alias = "get_tls_authentication_mode")]
     fn tls_authentication_mode(&self) -> gio::TlsAuthenticationMode;
 
     #[doc(alias = "gst_rtsp_auth_get_tls_certificate")]
+    #[doc(alias = "get_tls_certificate")]
     fn tls_certificate(&self) -> Option<gio::TlsCertificate>;
 
     #[doc(alias = "gst_rtsp_auth_get_tls_database")]
+    #[doc(alias = "get_tls_database")]
     fn tls_database(&self) -> Option<gio::TlsDatabase>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -124,6 +130,7 @@ pub trait RTSPAuthExt: 'static {
     #[doc(alias = "gst_rtsp_auth_set_tls_database")]
     fn set_tls_database<P: IsA<gio::TlsDatabase>>(&self, database: Option<&P>);
 
+    #[doc(alias = "accept-certificate")]
     fn connect_accept_certificate<
         F: Fn(&Self, &gio::TlsConnection, &gio::TlsCertificate, gio::TlsCertificateFlags) -> bool
             + Send
@@ -279,6 +286,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
+    #[doc(alias = "accept-certificate")]
     fn connect_accept_certificate<
         F: Fn(&Self, &gio::TlsConnection, &gio::TlsCertificate, gio::TlsCertificateFlags) -> bool
             + Send
