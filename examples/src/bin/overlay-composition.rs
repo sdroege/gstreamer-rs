@@ -181,11 +181,11 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 )
                 .unwrap();
 
-                let cr = cairo::Context::new(&surface);
+                let cr = cairo::Context::new(&surface).expect("Failed to create cairo context");
 
                     cr.save().expect("Failed to save state");
                     cr.set_operator(cairo::Operator::Clear);
-                    cr.paint();
+                    cr.paint().expect("Failed to clear background");
                     cr.restore().expect("Failed to restore state");
 
                 // The image we draw (the text) will be static, but we will change the
