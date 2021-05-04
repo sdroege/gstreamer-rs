@@ -247,6 +247,7 @@ pub fn init() -> Result<(), glib::Error> {
     }
 }
 
+// rustdoc-stripper-ignore-next
 /// Deinitialize GStreamer
 ///
 /// # Safety
