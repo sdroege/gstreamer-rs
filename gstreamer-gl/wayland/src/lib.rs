@@ -9,6 +9,7 @@
 #![cfg_attr(all(not(doctest), doc), feature(doc_cfg))]
 
 pub use ffi;
+pub use gst_gl;
 
 macro_rules! assert_initialized_main_thread {
     () => {
