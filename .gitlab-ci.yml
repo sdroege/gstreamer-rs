@@ -444,6 +444,16 @@ coverage:
     reports:
       cobertura: coverage.xml
 
+doc-stripping:
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+  extends: .img-nightly
+  stage: 'extras'
+  script:
+    - cargo install rustdoc-stripper
+    - PATH=~/.cargo/bin/:$PATH ./generator.py --strip-docs --no-fmt
+    - git diff --quiet || (echo 'Files changed after running `rustdoc-stripper -s`, make sure all documentation is protected with `// rustdoc-stripper-ignore-next`!'; git diff; false)
+
 docs:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
