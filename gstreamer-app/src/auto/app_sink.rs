@@ -210,13 +210,13 @@ impl AppSink {
 
     #[doc(alias = "new-preroll")]
     pub fn connect_new_preroll<
-        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
     >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn new_preroll_trampoline<
-            F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+            F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
         >(
             this: *mut ffi::GstAppSink,
             f: glib::ffi::gpointer,
@@ -239,13 +239,13 @@ impl AppSink {
 
     #[doc(alias = "new-sample")]
     pub fn connect_new_sample<
-        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
     >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn new_sample_trampoline<
-            F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+            F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
         >(
             this: *mut ffi::GstAppSink,
             f: glib::ffi::gpointer,

@@ -62,6 +62,14 @@ final_type = true
     ignore = true
 
     [[object.signal]]
+    name = "new-sample"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "new-preroll"
+    concurrency = "send"
+
+    [[object.signal]]
     name = "eos"
     concurrency = "send"
 
