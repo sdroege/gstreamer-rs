@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{from_glib, from_glib_full, FromGlibPtrFull, IntoGlib};
+use glib::translate::{from_glib, FromGlibPtrFull, IntoGlib};
 use std::fmt;
 use std::marker::PhantomData;
 use std::mem;
@@ -266,13 +266,11 @@ impl<'a, T> RTPBuffer<'a, T> {
     pub fn extension_bytes(&self) -> Option<(u16, glib::Bytes)> {
         unsafe {
             let mut bits: u16 = 0;
-            match from_glib_full(ffi::gst_rtp_buffer_get_extension_bytes(
+            Option::<glib::Bytes>::from_glib_full(ffi::gst_rtp_buffer_get_extension_bytes(
                 glib::translate::mut_override(&self.rtp_buffer),
                 &mut bits,
-            )) {
-                Some(bytes) => Some((bits, bytes)),
-                None => None,
-            }
+            ))
+            .map(|bytes| (bits, bytes))
         }
     }
 

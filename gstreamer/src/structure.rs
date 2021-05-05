@@ -756,11 +756,7 @@ impl<'a> DoubleEndedIterator for FieldIterator<'a> {
         }
 
         self.n_fields -= 1;
-        if let Some(field_name) = self.structure.nth_field_name(self.n_fields) {
-            Some(field_name)
-        } else {
-            None
-        }
+        self.structure.nth_field_name(self.n_fields)
     }
 }
 
