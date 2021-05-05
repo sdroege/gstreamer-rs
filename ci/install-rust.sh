@@ -27,8 +27,11 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
   cargo install --force cargo-outdated
 fi
 
-# coverage tools
 if [ "$RUST_VERSION" = "nightly" ]; then
+  # Coverage tools
   cargo install grcov
   rustup component add llvm-tools-preview
+
+  # Documentation tools
+  cargo install --force rustdoc-stripper
 fi

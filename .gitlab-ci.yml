@@ -1,7 +1,7 @@
 # We use https://gitlab.freedesktop.org/freedesktop/ci-templates
 # to build the images used by the ci.
 #
-# Here is how to properly update thoses images:
+# Here is how to properly update those images:
 # - new Rust stable version: update GST_RS_IMG_TAG and update Rust version
 # - add dependencies: update FDO_DISTRIBUTION_PACKAGES and update GST_RS_IMG_TAG
 # - update GStreamer version: update the tag in ci/install-gst.sh and update GST_RS_IMG_TAG
@@ -11,7 +11,7 @@
 # - setting it to the current date and the version suffix to 0
 # - incrementing the version suffix
 #
-# After each update commit your changes and push to your personnal repo.
+# After each update commit your changes and push to your personal repo.
 # After review and ci approval merge the branch as usual.
 #
 # Updating the nightly image should be done by simply running a scheduled ci
@@ -450,7 +450,6 @@ doc-stripping:
   extends: .img-nightly
   stage: 'extras'
   script:
-    - cargo install rustdoc-stripper
     - PATH=~/.cargo/bin/:$PATH ./generator.py --strip-docs --no-fmt
     - git diff --quiet || (echo 'Files changed after running `rustdoc-stripper -s`, make sure all documentation is protected with `// rustdoc-stripper-ignore-next`!'; git diff; false)
 
@@ -460,7 +459,6 @@ docs:
   extends: .img-nightly
   stage: 'extras'
   script:
-    - cargo install rustdoc-stripper
     - PATH=~/.cargo/bin/:$PATH ./generator.py --embed-docs --no-fmt
     - |
       crate_names=$(for manifest in gstreamer*/Cargo.toml; do echo -n " -p ${manifest%%/Cargo.toml}"; done)
