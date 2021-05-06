@@ -5,7 +5,7 @@ use glib::translate::*;
 pub trait GstParamSpecExt {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    fn array(
+    fn new_array(
         name: &str,
         nick: &str,
         blurb: &str,
@@ -13,7 +13,7 @@ pub trait GstParamSpecExt {
         flags: glib::ParamFlags,
     ) -> Self;
 
-    fn fraction(
+    fn new_fraction(
         name: &str,
         nick: &str,
         blurb: &str,
@@ -27,7 +27,7 @@ pub trait GstParamSpecExt {
 impl GstParamSpecExt for glib::ParamSpec {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    fn array(
+    fn new_array(
         name: &str,
         nick: &str,
         blurb: &str,
@@ -46,7 +46,7 @@ impl GstParamSpecExt for glib::ParamSpec {
         }
     }
 
-    fn fraction(
+    fn new_fraction(
         name: &str,
         nick: &str,
         blurb: &str,
@@ -81,7 +81,7 @@ mod tests {
     fn test_trait() {
         crate::init().unwrap();
 
-        let _pspec = glib::ParamSpec::fraction(
+        let _pspec = glib::ParamSpec::new_fraction(
             "foo",
             "Foo",
             "Foo Bar",
