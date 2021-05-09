@@ -643,18 +643,18 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 }
 
 impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
-    pub unsafe fn from_glib_borrow_mut(frame: *mut ffi::GstVideoFrame) -> Borrowed<Self> {
+    pub unsafe fn from_glib_borrow_mut(frame: *mut ffi::GstVideoFrame) -> Self {
         assert!(!frame.is_null());
 
         let frame = ptr::read(frame);
         let info = crate::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::BufferRef::from_mut_ptr(frame.buffer);
-        Borrowed::new(Self {
+        Self {
             frame,
             buffer: Some(buffer),
             info,
             unmap: false,
-        })
+        }
     }
 
     pub unsafe fn from_glib_full_mut(frame: ffi::GstVideoFrame) -> Self {
