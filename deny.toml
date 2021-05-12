@@ -37,4 +37,5 @@ unknown-registry = "deny"
 unknown-git = "deny"
 allow-git = [
   "https://github.com/gtk-rs/gtk-rs",
+  "https://github.com/gtk-rs/gtk-rs-core",
 ]

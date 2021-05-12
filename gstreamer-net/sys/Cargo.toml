@@ -5,10 +5,10 @@ system-deps = "3"
 libc = "0.2"
 
 [dependencies.gio-sys]
-git = "https://github.com/gtk-rs/gtk-rs"
+git = "https://github.com/gtk-rs/gtk-rs-core"
 
 [dependencies.glib-sys]
-git = "https://github.com/gtk-rs/gtk-rs"
+git = "https://github.com/gtk-rs/gtk-rs-core"
 
 [dependencies.gstreamer-sys]
 path = "../../gstreamer/sys"

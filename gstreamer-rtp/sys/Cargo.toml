@@ -5,7 +5,7 @@ system-deps = "3"
 libc = "0.2"
 
 [dependencies.glib-sys]
-git = "https://github.com/gtk-rs/gtk-rs"
+git = "https://github.com/gtk-rs/gtk-rs-core"
 
 [dependencies.gstreamer-base-sys]
 path = "../../gstreamer-base/sys"
