@@ -120,7 +120,7 @@ impl<T: VideoFilterImpl> VideoFilterImplExt for T {
             (*parent_class)
                 .transform_frame
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(
+                    try_from_glib(f(
                         element.unsafe_cast_ref::<VideoFilter>().to_glib_none().0,
                         mut_override(inframe.as_ptr()),
                         outframe.as_mut_ptr(),
@@ -167,7 +167,7 @@ impl<T: VideoFilterImpl> VideoFilterImplExt for T {
                 }
             });
 
-            gst::FlowSuccess::try_from_glib(f(
+            try_from_glib(f(
                 element.unsafe_cast_ref::<VideoFilter>().to_glib_none().0,
                 frame.as_mut_ptr(),
             ))
@@ -199,7 +199,7 @@ impl<T: VideoFilterImpl> VideoFilterImplExt for T {
                 }
             });
 
-            gst::FlowSuccess::try_from_glib(f(
+            try_from_glib(f(
                 element.unsafe_cast_ref::<VideoFilter>().to_glib_none().0,
                 mut_override(frame.as_ptr()),
             ))

@@ -170,7 +170,7 @@ impl<T: ElementImpl> ElementImplExt for T {
             let f = (*parent_class)
                 .change_state
                 .expect("Missing parent function `change_state`");
-            StateChangeSuccess::try_from_glib(f(
+            try_from_glib(f(
                 element.unsafe_cast_ref::<Element>().to_glib_none().0,
                 transition.into_glib(),
             ))

@@ -132,7 +132,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         size: u32,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_base_parse_finish_frame(
+            try_from_glib(ffi::gst_base_parse_finish_frame(
                 self.as_ref().to_glib_none().0,
                 frame.to_glib_none().0,
                 i32::try_from(size).expect("size higher than i32::MAX"),

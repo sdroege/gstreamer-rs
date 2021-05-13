@@ -288,7 +288,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
             (*parent_class)
                 .flush
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(aggregator
+                    try_from_glib(f(aggregator
                         .unsafe_cast_ref::<Aggregator>()
                         .to_glib_none()
                         .0))
@@ -328,7 +328,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
             let f = (*parent_class)
                 .finish_buffer
                 .expect("Missing parent function `finish_buffer`");
-            gst::FlowSuccess::try_from_glib(f(
+            try_from_glib(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 buffer.into_ptr(),
             ))
@@ -348,7 +348,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
             let f = (*parent_class)
                 .finish_buffer_list
                 .expect("Missing parent function `finish_buffer_list`");
-            gst::FlowSuccess::try_from_glib(f(
+            try_from_glib(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 buffer_list.into_ptr(),
             ))
@@ -389,7 +389,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
             let f = (*parent_class)
                 .sink_event_pre_queue
                 .expect("Missing parent function `sink_event_pre_queue`");
-            gst::FlowSuccess::try_from_glib(f(
+            try_from_glib(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 aggregator_pad.to_glib_none().0,
                 event.into_ptr(),
@@ -502,7 +502,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
             let f = (*parent_class)
                 .aggregate
                 .expect("Missing parent function `aggregate`");
-            gst::FlowSuccess::try_from_glib(f(
+            try_from_glib(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 timeout.into_glib(),
             ))

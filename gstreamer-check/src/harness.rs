@@ -301,12 +301,7 @@ impl Harness {
 
     #[doc(alias = "gst_harness_push")]
     pub fn push(&mut self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_harness_push(
-                self.0.as_ptr(),
-                buffer.into_ptr(),
-            ))
-        }
+        unsafe { try_from_glib(ffi::gst_harness_push(self.0.as_ptr(), buffer.into_ptr())) }
     }
 
     #[doc(alias = "gst_harness_push_and_pull")]
@@ -332,12 +327,12 @@ impl Harness {
 
     #[doc(alias = "gst_harness_push_from_src")]
     pub fn push_from_src(&mut self) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe { gst::FlowSuccess::try_from_glib(ffi::gst_harness_push_from_src(self.0.as_ptr())) }
+        unsafe { try_from_glib(ffi::gst_harness_push_from_src(self.0.as_ptr())) }
     }
 
     #[doc(alias = "gst_harness_push_to_sink")]
     pub fn push_to_sink(&mut self) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe { gst::FlowSuccess::try_from_glib(ffi::gst_harness_push_to_sink(self.0.as_ptr())) }
+        unsafe { try_from_glib(ffi::gst_harness_push_to_sink(self.0.as_ptr())) }
     }
 
     #[doc(alias = "gst_harness_push_upstream_event")]
@@ -457,7 +452,7 @@ impl Harness {
     #[doc(alias = "gst_harness_sink_push_many")]
     pub fn sink_push_many(&mut self, pushes: u32) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_harness_sink_push_many(
+            try_from_glib(ffi::gst_harness_sink_push_many(
                 self.0.as_ptr(),
                 pushes as i32,
             ))
@@ -471,7 +466,7 @@ impl Harness {
         pushes: u32,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_harness_src_crank_and_push_many(
+            try_from_glib(ffi::gst_harness_src_crank_and_push_many(
                 self.0.as_ptr(),
                 cranks as i32,
                 pushes as i32,

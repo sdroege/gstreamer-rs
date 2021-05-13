@@ -179,7 +179,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .render
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(
+                    try_from_glib(f(
                         element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         buffer.to_glib_none().0,
                     ))
@@ -199,7 +199,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .prepare
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(
+                    try_from_glib(f(
                         element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         buffer.to_glib_none().0,
                     ))
@@ -219,7 +219,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .render_list
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(
+                    try_from_glib(f(
                         element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         list.to_glib_none().0,
                     ))
@@ -244,7 +244,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .prepare_list
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(
+                    try_from_glib(f(
                         element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         list.to_glib_none().0,
                     ))

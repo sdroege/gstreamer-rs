@@ -54,7 +54,7 @@ impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
             (*parent_class)
                 .flush
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(
+                    try_from_glib(f(
                         aggregator_pad
                             .unsafe_cast_ref::<AggregatorPad>()
                             .to_glib_none()

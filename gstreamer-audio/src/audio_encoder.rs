@@ -36,7 +36,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
         frames: i32,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_audio_encoder_finish_frame(
+            try_from_glib(ffi::gst_audio_encoder_finish_frame(
                 self.as_ref().to_glib_none().0,
                 buffer.map(|b| b.into_ptr()).unwrap_or(ptr::null_mut()),
                 frames,

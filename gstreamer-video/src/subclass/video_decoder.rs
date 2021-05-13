@@ -269,7 +269,7 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
             (*parent_class)
                 .finish
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(element
+                    try_from_glib(f(element
                         .unsafe_cast_ref::<VideoDecoder>()
                         .to_glib_none()
                         .0))
@@ -285,7 +285,7 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
             (*parent_class)
                 .drain
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(element
+                    try_from_glib(f(element
                         .unsafe_cast_ref::<VideoDecoder>()
                         .to_glib_none()
                         .0))
@@ -331,7 +331,7 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
             (*parent_class)
                 .parse
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(
+                    try_from_glib(f(
                         element.unsafe_cast_ref::<VideoDecoder>().to_glib_none().0,
                         frame.to_glib_none().0,
                         adapter.to_glib_none().0,
@@ -353,7 +353,7 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
             (*parent_class)
                 .handle_frame
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(
+                    try_from_glib(f(
                         element.unsafe_cast_ref::<VideoDecoder>().to_glib_none().0,
                         frame.to_glib_none().0,
                     ))

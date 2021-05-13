@@ -37,7 +37,7 @@ impl<T: VideoSinkImpl> VideoSinkImplExt for T {
             (*parent_class)
                 .show_frame
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(
+                    try_from_glib(f(
                         element.unsafe_cast_ref::<VideoSink>().to_glib_none().0,
                         buffer.to_glib_none().0,
                     ))

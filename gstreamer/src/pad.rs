@@ -317,7 +317,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn chain(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError> {
         unsafe {
-            FlowSuccess::try_from_glib(ffi::gst_pad_chain(
+            try_from_glib(ffi::gst_pad_chain(
                 self.as_ref().to_glib_none().0,
                 buffer.into_ptr(),
             ))
@@ -326,7 +326,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn push(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError> {
         unsafe {
-            FlowSuccess::try_from_glib(ffi::gst_pad_push(
+            try_from_glib(ffi::gst_pad_push(
                 self.as_ref().to_glib_none().0,
                 buffer.into_ptr(),
             ))
@@ -335,7 +335,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn chain_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError> {
         unsafe {
-            FlowSuccess::try_from_glib(ffi::gst_pad_chain_list(
+            try_from_glib(ffi::gst_pad_chain_list(
                 self.as_ref().to_glib_none().0,
                 list.into_ptr(),
             ))
@@ -344,7 +344,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn push_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError> {
         unsafe {
-            FlowSuccess::try_from_glib(ffi::gst_pad_push_list(
+            try_from_glib(ffi::gst_pad_push_list(
                 self.as_ref().to_glib_none().0,
                 list.into_ptr(),
             ))
@@ -1035,7 +1035,7 @@ unsafe fn create_probe_info<'a>(
     info: *mut ffi::GstPadProbeInfo,
 ) -> (PadProbeInfo<'a>, Option<glib::Type>) {
     let mut data_type = None;
-    let flow_res = FlowSuccess::try_from_glib((*info).ABI.abi.flow_ret);
+    let flow_res = try_from_glib((*info).ABI.abi.flow_ret);
     let info = PadProbeInfo {
         mask: from_glib((*info).type_),
         id: Some(PadProbeId(NonZeroU64::new_unchecked((*info).id as u64))),

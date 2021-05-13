@@ -105,7 +105,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
 
     fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_aggregator_finish_buffer(
+            try_from_glib(ffi::gst_aggregator_finish_buffer(
                 self.as_ref().to_glib_none().0,
                 buffer.into_ptr(),
             ))
@@ -119,7 +119,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         bufferlist: gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_aggregator_finish_buffer_list(
+            try_from_glib(ffi::gst_aggregator_finish_buffer_list(
                 self.as_ref().to_glib_none().0,
                 bufferlist.into_ptr(),
             ))

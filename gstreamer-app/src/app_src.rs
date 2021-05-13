@@ -210,7 +210,7 @@ impl AppSrc {
     #[doc(alias = "gst_app_src_push_buffer")]
     pub fn push_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_app_src_push_buffer(
+            try_from_glib(ffi::gst_app_src_push_buffer(
                 self.to_glib_none().0,
                 buffer.into_ptr(),
             ))
@@ -225,7 +225,7 @@ impl AppSrc {
         list: gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_app_src_push_buffer_list(
+            try_from_glib(ffi::gst_app_src_push_buffer_list(
                 self.to_glib_none().0,
                 list.into_ptr(),
             ))

@@ -279,7 +279,7 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
             (*parent_class)
                 .handle_frame
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(
+                    try_from_glib(f(
                         element.unsafe_cast_ref::<AudioEncoder>().to_glib_none().0,
                         buffer
                             .map(|buffer| buffer.as_mut_ptr() as *mut *mut gst::ffi::GstBuffer)

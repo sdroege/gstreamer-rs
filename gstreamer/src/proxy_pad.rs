@@ -50,7 +50,7 @@ impl<O: IsA<ProxyPad>> ProxyPadExtManual for O {
     ) -> Result<FlowSuccess, FlowError> {
         skip_assert_initialized!();
         unsafe {
-            FlowSuccess::try_from_glib(ffi::gst_proxy_pad_chain_default(
+            try_from_glib(ffi::gst_proxy_pad_chain_default(
                 self.as_ptr() as *mut ffi::GstPad,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
                 buffer.into_ptr(),
@@ -65,7 +65,7 @@ impl<O: IsA<ProxyPad>> ProxyPadExtManual for O {
     ) -> Result<FlowSuccess, FlowError> {
         skip_assert_initialized!();
         unsafe {
-            FlowSuccess::try_from_glib(ffi::gst_proxy_pad_chain_list_default(
+            try_from_glib(ffi::gst_proxy_pad_chain_list_default(
                 self.as_ptr() as *mut ffi::GstPad,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
                 list.into_ptr(),

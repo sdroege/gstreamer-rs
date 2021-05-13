@@ -152,7 +152,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
             (*parent_class)
                 .handle_frame
                 .map(|f| {
-                    let res = gst::FlowSuccess::try_from_glib(f(
+                    let res = try_from_glib(f(
                         element.unsafe_cast_ref::<BaseParse>().to_glib_none().0,
                         frame.to_glib_none().0,
                         &mut skipsize,

@@ -51,7 +51,7 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
             (*parent_class)
                 .fill
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(
+                    try_from_glib(f(
                         element.unsafe_cast_ref::<PushSrc>().to_glib_none().0,
                         buffer.as_mut_ptr(),
                     ))

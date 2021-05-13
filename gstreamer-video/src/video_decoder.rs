@@ -102,13 +102,11 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let params_ptr = params.to_glib_none().0 as *mut _;
-            gst::FlowSuccess::try_from_glib(
-                ffi::gst_video_decoder_allocate_output_frame_with_params(
-                    self.as_ref().to_glib_none().0,
-                    frame.to_glib_none().0,
-                    params_ptr,
-                ),
-            )
+            try_from_glib(ffi::gst_video_decoder_allocate_output_frame_with_params(
+                self.as_ref().to_glib_none().0,
+                frame.to_glib_none().0,
+                params_ptr,
+            ))
         }
     }
 
@@ -129,7 +127,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
     #[doc(alias = "gst_video_decoder_finish_frame")]
     fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_video_decoder_finish_frame(
+            try_from_glib(ffi::gst_video_decoder_finish_frame(
                 self.as_ref().to_glib_none().0,
                 frame.into_ptr(),
             ))
@@ -146,7 +144,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
     #[doc(alias = "gst_video_decoder_drop_frame")]
     fn drop_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_video_decoder_drop_frame(
+            try_from_glib(ffi::gst_video_decoder_drop_frame(
                 self.as_ref().to_glib_none().0,
                 frame.into_ptr(),
             ))
@@ -330,7 +328,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         line: u32,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(_gst_video_decoder_error(
+            try_from_glib(_gst_video_decoder_error(
                 self.as_ref().to_glib_none().0,
                 weight,
                 T::domain().into_glib(),

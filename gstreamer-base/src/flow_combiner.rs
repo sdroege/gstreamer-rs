@@ -73,7 +73,7 @@ impl FlowCombiner {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         let fret: gst::FlowReturn = fret.into();
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_flow_combiner_update_flow(
+            try_from_glib(ffi::gst_flow_combiner_update_flow(
                 self.to_glib_none().0,
                 fret.into_glib(),
             ))
@@ -88,7 +88,7 @@ impl FlowCombiner {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         let fret: gst::FlowReturn = fret.into();
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_flow_combiner_update_pad_flow(
+            try_from_glib(ffi::gst_flow_combiner_update_pad_flow(
                 self.to_glib_none().0,
                 pad.as_ref().to_glib_none().0,
                 fret.into_glib(),

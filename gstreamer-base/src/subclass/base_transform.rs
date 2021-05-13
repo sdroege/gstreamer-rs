@@ -601,7 +601,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             (*parent_class)
                 .transform
                 .map(|f| {
-                    gst::FlowSuccess::try_from_glib(f(
+                    try_from_glib(f(
                         element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                         inbuf.to_glib_none().0,
                         outbuf.as_mut_ptr(),
@@ -642,7 +642,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 }
             });
 
-            gst::FlowSuccess::try_from_glib(f(
+            try_from_glib(f(
                 element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                 buf.as_mut_ptr() as *mut _,
             ))
@@ -673,7 +673,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
             // FIXME: Wrong signature in FFI
             let buf: *mut gst::ffi::GstBuffer = buf.to_glib_none().0;
-            gst::FlowSuccess::try_from_glib(f(
+            try_from_glib(f(
                 element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                 buf as *mut _,
             ))
@@ -755,7 +755,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .submit_input_buffer
                 .expect("Missing parent function `submit_input_buffer`");
 
-            gst::FlowSuccess::try_from_glib(f(
+            try_from_glib(f(
                 element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                 is_discont.into_glib(),
                 inbuf.into_ptr(),
