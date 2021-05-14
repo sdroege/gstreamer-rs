@@ -26,16 +26,10 @@ confidence-threshold = 0.8
 multiple-versions = "deny"
 wildcards = "allow"
 highlight = "all"
-skip-tree = [
-  # Winit introduces quite a few duplicate (outdated!) dependencies together
-  # with its direct dependant glutin.
-  { name = "winit", version = "0.24" }
-]
 
 [sources]
 unknown-registry = "deny"
 unknown-git = "deny"
 allow-git = [
-  "https://github.com/gtk-rs/gtk-rs",
   "https://github.com/gtk-rs/gtk-rs-core",
 ]
