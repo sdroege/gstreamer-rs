@@ -146,7 +146,9 @@ unsafe extern "C" fn uri_handler_set_uri<T: URIHandlerImpl>(
     ) {
         Ok(()) => true.into_glib(),
         Err(error) => {
-            *err = error.into_raw();
+            if !err.is_null() {
+                *err = error.into_raw();
+            }
             false.into_glib()
         }
     }
