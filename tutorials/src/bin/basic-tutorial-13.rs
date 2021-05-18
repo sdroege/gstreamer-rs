@@ -119,7 +119,7 @@ USAGE: Choose one of the following options, then press enter:
     let main_context = glib::MainContext::default();
     // ... and make it the main context by default so that we can then have a channel to send the
     // commands we received from the terminal.
-    let _guard = main_context.acquire();
+    let _guard = main_context.acquire().unwrap();
 
     // Build the channel to get the terminal inputs from a different thread.
     let (ready_tx, ready_rx) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
