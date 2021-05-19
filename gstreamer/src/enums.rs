@@ -60,9 +60,9 @@ macro_rules! impl_return_result_traits {
 
         impl TryFromGlib<ffi::$ffi_type> for $ok_type {
             type Error = $err_type;
-            fn try_from_glib(val: ffi::$ffi_type) -> Result<$ok_type, $err_type> {
+            unsafe fn try_from_glib(val: ffi::$ffi_type) -> Result<$ok_type, $err_type> {
                 skip_assert_initialized!();
-                unsafe { $ret_type::from_glib(val) }.into_result()
+                $ret_type::from_glib(val).into_result()
             }
         }
     };
