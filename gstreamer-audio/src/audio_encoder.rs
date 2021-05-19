@@ -7,20 +7,25 @@ use std::mem;
 use std::ptr;
 
 pub trait AudioEncoderExtManual: 'static {
+    #[doc(alias = "gst_audio_encoder_finish_frame")]
     fn finish_frame(
         &self,
         buffer: Option<gst::Buffer>,
         frames: i32,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
+    #[doc(alias = "gst_audio_encoder_negotiate")]
     fn negotiate(&self) -> Result<(), gst::FlowError>;
 
+    #[doc(alias = "gst_audio_encoder_set_output_format")]
     fn set_output_format(&self, caps: &gst::Caps) -> Result<(), gst::FlowError>;
 
     #[doc(alias = "get_allocator")]
+    #[doc(alias = "gst_audio_encoder_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
     #[doc(alias = "get_latency")]
+    #[doc(alias = "gst_audio_encoder_get_latency")]
     fn latency(&self) -> (gst::ClockTime, gst::ClockTime);
 }
 

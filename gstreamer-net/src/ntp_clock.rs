@@ -6,6 +6,7 @@ use glib::prelude::*;
 use glib::translate::*;
 
 impl NtpClock {
+    #[doc(alias = "gst_ntp_clock_new")]
     pub fn new(
         name: Option<&str>,
         remote_address: &str,

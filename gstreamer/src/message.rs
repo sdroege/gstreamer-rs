@@ -31,6 +31,7 @@ impl MessageRef {
     }
 
     #[doc(alias = "get_seqnum")]
+    #[doc(alias = "gst_message_get_seqnum")]
     pub fn seqnum(&self) -> Seqnum {
         unsafe {
             let seqnum = ffi::gst_message_get_seqnum(self.as_mut_ptr());
@@ -55,6 +56,7 @@ impl MessageRef {
     }
 
     #[doc(alias = "get_structure")]
+    #[doc(alias = "gst_message_get_structure")]
     pub fn structure(&self) -> Option<&StructureRef> {
         unsafe {
             let structure = ffi::gst_message_get_structure(self.as_mut_ptr());
@@ -252,6 +254,7 @@ impl<'a> Error<'a> {
     }
 
     #[doc(alias = "get_error")]
+    #[doc(alias = "gst_message_parse_error")]
     pub fn error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
@@ -276,6 +279,7 @@ impl<'a> Error<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_details")]
+    #[doc(alias = "gst_message_parse_error_details")]
     pub fn details(&self) -> Option<&StructureRef> {
         unsafe {
             let mut details = ptr::null();
@@ -329,6 +333,7 @@ impl<'a> Warning<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_details")]
+    #[doc(alias = "gst_message_parse_error_details")]
     pub fn details(&self) -> Option<&StructureRef> {
         unsafe {
             let mut details = ptr::null();
@@ -382,6 +387,7 @@ impl<'a> Info<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_details")]
+    #[doc(alias = "gst_message_parse_error_details")]
     pub fn details(&self) -> Option<&StructureRef> {
         unsafe {
             let mut details = ptr::null();
@@ -443,6 +449,7 @@ impl<'a> Buffering<'a> {
     }
 
     #[doc(alias = "get_buffering_stats")]
+    #[doc(alias = "gst_message_parse_buffering_stats")]
     pub fn buffering_stats(&self) -> (crate::BufferingMode, i32, i32, i64) {
         unsafe {
             let mut mode = mem::MaybeUninit::uninit();
@@ -652,6 +659,7 @@ impl<'a> ClockProvide<'a> {
     }
 
     #[doc(alias = "get_clock")]
+    #[doc(alias = "gst_message_parse_clock_provide")]
     pub fn clock(&self) -> Option<crate::Clock> {
         let mut clock = ptr::null_mut();
 
@@ -692,6 +700,7 @@ impl<'a> ClockLost<'a> {
     }
 
     #[doc(alias = "get_clock")]
+    #[doc(alias = "gst_message_parse_clock_lost")]
     pub fn clock(&self) -> Option<crate::Clock> {
         let mut clock = ptr::null_mut();
 
@@ -717,6 +726,7 @@ impl<'a> NewClock<'a> {
     }
 
     #[doc(alias = "get_clock")]
+    #[doc(alias = "gst_message_parse_new_clock")]
     pub fn clock(&self) -> Option<crate::Clock> {
         let mut clock = ptr::null_mut();
 
@@ -792,6 +802,7 @@ impl<'a> StreamStatus<'a> {
     }
 
     #[doc(alias = "get_stream_status_object")]
+    #[doc(alias = "gst_message_get_stream_status_object")]
     pub fn stream_status_object(&self) -> Option<glib::Value> {
         unsafe {
             let value = ffi::gst_message_get_stream_status_object(self.as_mut_ptr());
@@ -1100,6 +1111,7 @@ impl<'a> Qos<'a> {
     }
 
     #[doc(alias = "get_values")]
+    #[doc(alias = "gst_message_parse_qos_values")]
     pub fn values(&self) -> (i64, f64, i32) {
         unsafe {
             let mut jitter = mem::MaybeUninit::uninit();
@@ -1122,6 +1134,7 @@ impl<'a> Qos<'a> {
     }
 
     #[doc(alias = "get_stats")]
+    #[doc(alias = "gst_message_parse_qos_stats")]
     pub fn stats(&self) -> (GenericFormattedValue, GenericFormattedValue) {
         unsafe {
             let mut format = mem::MaybeUninit::uninit();
@@ -1203,6 +1216,7 @@ impl<'a> Toc<'a> {
     }
 
     #[doc(alias = "get_toc")]
+    #[doc(alias = "gst_message_parse_toc")]
     pub fn toc(&self) -> (crate::Toc, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
@@ -1252,6 +1266,7 @@ impl<'a> StreamStart<'a> {
     }
 
     #[doc(alias = "get_group_id")]
+    #[doc(alias = "gst_message_parse_group_id")]
     pub fn group_id(&self) -> Option<GroupId> {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
@@ -1287,6 +1302,7 @@ impl<'a> NeedContext<'a> {
     }
 
     #[doc(alias = "get_context_type")]
+    #[doc(alias = "gst_message_parse_context_type")]
     pub fn context_type(&self) -> &str {
         unsafe {
             let mut context_type = ptr::null();
@@ -1312,6 +1328,7 @@ impl<'a> HaveContext<'a> {
     }
 
     #[doc(alias = "get_context")]
+    #[doc(alias = "gst_message_parse_have_context")]
     pub fn context(&self) -> crate::Context {
         unsafe {
             let mut context = ptr::null_mut();
@@ -1335,6 +1352,7 @@ impl<'a> DeviceAdded<'a> {
     }
 
     #[doc(alias = "get_device")]
+    #[doc(alias = "gst_message_parse_device_added")]
     pub fn device(&self) -> crate::Device {
         unsafe {
             let mut device = ptr::null_mut();
@@ -1360,6 +1378,7 @@ impl<'a> DeviceRemoved<'a> {
     }
 
     #[doc(alias = "get_device")]
+    #[doc(alias = "gst_message_parse_device_removed")]
     pub fn device(&self) -> crate::Device {
         unsafe {
             let mut device = ptr::null_mut();
@@ -1436,6 +1455,7 @@ impl<'a> StreamCollection<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_stream_collection")]
+    #[doc(alias = "gst_message_parse_stream_collection")]
     pub fn stream_collection(&self) -> crate::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
@@ -1480,6 +1500,8 @@ impl<'a> StreamsSelected<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_streams")]
+    #[doc(alias = "gst_message_streams_selected_get_size")]
+    #[doc(alias = "gst_message_streams_selected_get_stream")]
     pub fn streams(&self) -> Vec<crate::Stream> {
         unsafe {
             let n = ffi::gst_message_streams_selected_get_size(self.as_mut_ptr());
@@ -1516,6 +1538,7 @@ impl<'a> Redirect<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_entries")]
+    #[doc(alias = "gst_message_get_num_redirect_entries")]
     pub fn entries(&self) -> Vec<(&str, Option<TagList>, Option<&StructureRef>)> {
         unsafe {
             let n = ffi::gst_message_get_num_redirect_entries(self.as_mut_ptr());
@@ -1574,6 +1597,7 @@ impl<'a> DeviceChanged<'a> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "get_device_changed")]
+    #[doc(alias = "gst_message_parse_device_changed")]
     pub fn device_changed(&self) -> (crate::Device, crate::Device) {
         unsafe {
             let mut device = ptr::null_mut();

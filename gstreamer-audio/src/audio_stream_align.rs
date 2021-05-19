@@ -8,6 +8,7 @@ use std::mem;
 impl AudioStreamAlign {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_audio_stream_align_process")]
     pub fn process(
         &mut self,
         discont: bool,

@@ -151,6 +151,7 @@ impl<'a, T: MetaAPI> MetaRef<'a, T> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "get_seqnum")]
+    #[doc(alias = "gst_meta_get_seqnum")]
     pub fn seqnum(&self) -> MetaSeqnum {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
@@ -189,6 +190,7 @@ impl<'a, T: MetaAPI, U> MetaRefMut<'a, T, U> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "get_seqnum")]
+    #[doc(alias = "gst_meta_get_seqnum")]
     pub fn seqnum(&self) -> u64 {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
@@ -206,6 +208,7 @@ impl<'a, T: MetaAPI, U> MetaRefMut<'a, T, U> {
 }
 
 impl<'a, T: MetaAPI> MetaRefMut<'a, T, Standalone> {
+    #[doc(alias = "gst_buffer_remove_meta")]
     pub fn remove(mut self) {
         unsafe {
             let res = ffi::gst_buffer_remove_meta(
@@ -264,6 +267,7 @@ unsafe impl Send for ParentBufferMeta {}
 unsafe impl Sync for ParentBufferMeta {}
 
 impl ParentBufferMeta {
+    #[doc(alias = "gst_buffer_add_parent_buffer_meta")]
     pub fn add<'a>(buffer: &'a mut BufferRef, parent: &Buffer) -> MetaRefMut<'a, Self, Standalone> {
         skip_assert_initialized!();
         unsafe {
@@ -290,6 +294,7 @@ impl ParentBufferMeta {
 unsafe impl MetaAPI for ParentBufferMeta {
     type GstType = ffi::GstParentBufferMeta;
 
+    #[doc(alias = "gst_parent_buffer_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_parent_buffer_meta_api_get_type()) }
     }
@@ -310,6 +315,7 @@ unsafe impl Send for ProtectionMeta {}
 unsafe impl Sync for ProtectionMeta {}
 
 impl ProtectionMeta {
+    #[doc(alias = "gst_buffer_add_protection_meta")]
     pub fn add(buffer: &mut BufferRef, info: crate::Structure) -> MetaRefMut<Self, Standalone> {
         skip_assert_initialized!();
         unsafe {
@@ -333,6 +339,7 @@ impl ProtectionMeta {
 unsafe impl MetaAPI for ProtectionMeta {
     type GstType = ffi::GstProtectionMeta;
 
+    #[doc(alias = "gst_protection_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_protection_meta_api_get_type()) }
     }
@@ -361,6 +368,7 @@ unsafe impl Sync for ReferenceTimestampMeta {}
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl ReferenceTimestampMeta {
+    #[doc(alias = "gst_buffer_add_reference_timestamp_meta")]
     pub fn add<'a>(
         buffer: &'a mut BufferRef,
         reference: &Caps,
@@ -406,6 +414,7 @@ impl ReferenceTimestampMeta {
 unsafe impl MetaAPI for ReferenceTimestampMeta {
     type GstType = ffi::GstReferenceTimestampMeta;
 
+    #[doc(alias = "gst_reference_timestamp_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_reference_timestamp_meta_api_get_type()) }
     }

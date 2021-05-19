@@ -7,6 +7,7 @@ use glib::prelude::*;
 use glib::translate::*;
 
 pub trait TagSetterExtManual: 'static {
+    #[doc(alias = "gst_tag_setter_add_tag_value")]
     fn add<'a, T: Tag<'a>>(&self, value: &T::TagType, mode: TagMergeMode);
 }
 

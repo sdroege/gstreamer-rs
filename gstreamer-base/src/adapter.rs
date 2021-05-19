@@ -7,6 +7,7 @@ use std::mem;
 use std::ops;
 
 impl Adapter {
+    #[doc(alias = "gst_adapter_copy")]
     pub fn copy(&self, offset: usize, dest: &mut [u8]) -> Result<(), glib::BoolError> {
         assert!(
             offset
@@ -32,6 +33,7 @@ impl Adapter {
         Ok(())
     }
 
+    #[doc(alias = "gst_adapter_copy_bytes")]
     pub fn copy_bytes(&self, offset: usize, size: usize) -> Result<glib::Bytes, glib::BoolError> {
         assert!(offset.checked_add(size).map(|end| end <= self.available()) == Some(true));
 
@@ -48,6 +50,7 @@ impl Adapter {
         }
     }
 
+    #[doc(alias = "gst_adapter_flush")]
     pub fn flush(&self, flush: usize) {
         assert!(flush <= self.available());
 
@@ -61,6 +64,7 @@ impl Adapter {
     }
 
     #[doc(alias = "get_buffer")]
+    #[doc(alias = "gst_adapter_get_buffer")]
     pub fn buffer(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         assert!(nbytes <= self.available());
         assert!(nbytes != 0);
@@ -72,6 +76,7 @@ impl Adapter {
     }
 
     #[doc(alias = "get_buffer_fast")]
+    #[doc(alias = "gst_adapter_get_buffer_fast")]
     pub fn buffer_fast(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         assert!(nbytes <= self.available());
         assert!(nbytes != 0);
@@ -86,6 +91,7 @@ impl Adapter {
     }
 
     #[doc(alias = "get_buffer_list")]
+    #[doc(alias = "gst_adapter_get_buffer_list")]
     pub fn buffer_list(&self, nbytes: usize) -> Result<gst::BufferList, glib::BoolError> {
         assert!(nbytes <= self.available());
         assert!(nbytes != 0);
@@ -100,6 +106,7 @@ impl Adapter {
     }
 
     #[doc(alias = "get_list")]
+    #[doc(alias = "gst_adapter_get_list")]
     pub fn list(&self, nbytes: usize) -> Result<Vec<gst::Buffer>, glib::BoolError> {
         assert!(nbytes <= self.available());
         assert!(nbytes != 0);
@@ -111,6 +118,7 @@ impl Adapter {
         }
     }
 
+    #[doc(alias = "gst_adapter_masked_scan_uint32")]
     pub fn masked_scan_uint32(
         &self,
         mask: u32,
@@ -139,6 +147,7 @@ impl Adapter {
         }
     }
 
+    #[doc(alias = "gst_adapter_masked_scan_uint32_peek")]
     pub fn masked_scan_uint32_peek(
         &self,
         mask: u32,
@@ -171,6 +180,7 @@ impl Adapter {
         }
     }
 
+    #[doc(alias = "gst_adapter_take_buffer")]
     pub fn take_buffer(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         assert!(nbytes <= self.available());
         assert!(nbytes != 0);
@@ -181,6 +191,7 @@ impl Adapter {
         }
     }
 
+    #[doc(alias = "gst_adapter_take_buffer_fast")]
     pub fn take_buffer_fast(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         assert!(nbytes <= self.available());
         assert!(nbytes != 0);
@@ -194,6 +205,7 @@ impl Adapter {
         }
     }
 
+    #[doc(alias = "gst_adapter_take_buffer_list")]
     pub fn take_buffer_list(&self, nbytes: usize) -> Result<gst::BufferList, glib::BoolError> {
         assert!(nbytes <= self.available());
         assert!(nbytes != 0);
@@ -207,6 +219,7 @@ impl Adapter {
         }
     }
 
+    #[doc(alias = "gst_adapter_take_list")]
     pub fn take_list(&self, nbytes: usize) -> Result<Vec<gst::Buffer>, glib::BoolError> {
         assert!(nbytes <= self.available());
         assert!(nbytes != 0);
@@ -218,6 +231,7 @@ impl Adapter {
         }
     }
 
+    #[doc(alias = "gst_adapter_push")]
     pub fn push(&self, buf: gst::Buffer) {
         unsafe {
             ffi::gst_adapter_push(self.to_glib_none().0, buf.into_ptr());
@@ -394,6 +408,7 @@ impl UniqueAdapter {
         self.0.push(buf);
     }
 
+    #[doc(alias = "gst_adapter_map")]
     pub fn map(&mut self, nbytes: usize) -> Result<UniqueAdapterMap, glib::error::BoolError> {
         assert!(nbytes <= self.available());
         assert!(nbytes != 0);

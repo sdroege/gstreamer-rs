@@ -65,6 +65,7 @@ impl<'a> ExactSizeIterator for Iter<'a> {}
 pub struct StreamCollectionBuilder(StreamCollection);
 
 impl StreamCollectionBuilder {
+    #[doc(alias = "gst_stream_collection_add_stream")]
     pub fn stream(self, stream: &Stream) -> Self {
         unsafe {
             ffi::gst_stream_collection_add_stream((self.0).to_glib_none().0, stream.to_glib_full());

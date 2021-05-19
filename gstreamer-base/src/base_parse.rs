@@ -14,9 +14,12 @@ pub trait BaseParseExtManual: 'static {
     #[doc(alias = "get_src_pad")]
     fn src_pad(&self) -> gst::Pad;
 
+    #[doc(alias = "gst_base_parse_set_duration")]
     fn set_duration<V: Into<gst::GenericFormattedValue>>(&self, duration: V, interval: u32);
+    #[doc(alias = "gst_base_parse_set_frame_rate")]
     fn set_frame_rate(&self, fps: gst::Fraction, lead_in: u32, lead_out: u32);
 
+    #[doc(alias = "gst_base_parse_convert_default")]
     fn convert_default<V: Into<gst::GenericFormattedValue>, U: gst::SpecificFormattedValue>(
         &self,
         src_val: V,
@@ -27,6 +30,7 @@ pub trait BaseParseExtManual: 'static {
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue>;
 
+    #[doc(alias = "gst_base_parse_finish_frame")]
     fn finish_frame(
         &self,
         frame: BaseParseFrame,

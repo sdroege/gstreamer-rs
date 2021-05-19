@@ -144,6 +144,7 @@ impl DownstreamForceKeyUnitEvent {
         DownstreamForceKeyUnitEventBuilder::new()
     }
 
+    #[doc(alias = "gst_video_event_parse_downstream_force_key_unit")]
     pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
         skip_assert_initialized!();
         unsafe {
@@ -237,6 +238,7 @@ impl UpstreamForceKeyUnitEvent {
         UpstreamForceKeyUnitEventBuilder::new()
     }
 
+    #[doc(alias = "gst_video_event_parse_upstream_force_key_unit")]
     pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
         skip_assert_initialized!();
         unsafe {
@@ -270,6 +272,7 @@ pub enum ForceKeyUnitEvent {
 }
 
 impl ForceKeyUnitEvent {
+    #[doc(alias = "gst_video_event_is_force_key_unit")]
     pub fn is(event: &gst::EventRef) -> bool {
         skip_assert_initialized!();
         unsafe { from_glib(ffi::gst_video_event_is_force_key_unit(event.as_mut_ptr())) }
@@ -319,6 +322,7 @@ impl StillFrameEvent {
         StillFrameEventBuilder::new(in_still)
     }
 
+    #[doc(alias = "gst_video_event_parse_still_frame")]
     pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
         skip_assert_initialized!();
         unsafe {

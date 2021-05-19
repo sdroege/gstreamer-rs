@@ -341,6 +341,7 @@ mini_object_wrapper!(TagList, TagListRef, ffi::GstTagList, || {
 });
 
 impl TagList {
+    #[doc(alias = "gst_tag_list_new_empty")]
     pub fn new() -> Self {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_tag_list_new_empty()) }
@@ -383,6 +384,7 @@ impl TagListRef {
         self.add_value(tag_name, &v, mode)
     }
 
+    #[doc(alias = "gst_tag_list_add_value")]
     pub fn add_value(
         &mut self,
         tag_name: &str,
@@ -452,10 +454,12 @@ impl TagListRef {
         }
     }
 
+    #[doc(alias = "gst_tag_list_n_tags")]
     pub fn n_tags(&self) -> i32 {
         unsafe { ffi::gst_tag_list_n_tags(self.as_ptr()) }
     }
 
+    #[doc(alias = "gst_tag_list_nth_tag_name")]
     pub fn nth_tag_name(&self, idx: u32) -> &str {
         unsafe {
             CStr::from_ptr(ffi::gst_tag_list_nth_tag_name(self.as_ptr(), idx))
@@ -518,10 +522,12 @@ impl TagListRef {
         Iter::new(self)
     }
 
+    #[doc(alias = "gst_tag_list_insert")]
     pub fn insert(&mut self, other: &TagListRef, mode: TagMergeMode) {
         unsafe { ffi::gst_tag_list_insert(self.as_mut_ptr(), other.as_ptr(), mode.into_glib()) }
     }
 
+    #[doc(alias = "gst_tag_list_merge")]
     pub fn merge(&self, other: &TagListRef, mode: TagMergeMode) -> TagList {
         unsafe {
             from_glib_full(ffi::gst_tag_list_merge(
@@ -533,10 +539,12 @@ impl TagListRef {
     }
 
     #[doc(alias = "get_scope")]
+    #[doc(alias = "gst_tag_list_get_scope")]
     pub fn scope(&self) -> TagScope {
         unsafe { from_glib(ffi::gst_tag_list_get_scope(self.as_ptr())) }
     }
 
+    #[doc(alias = "gst_tag_list_set_scope")]
     pub fn set_scope(&mut self, scope: TagScope) {
         unsafe { ffi::gst_tag_list_set_scope(self.as_mut_ptr(), scope.into_glib()) }
     }
@@ -577,6 +585,7 @@ impl fmt::Display for TagListRef {
 }
 
 impl PartialEq for TagListRef {
+    #[doc(alias = "gst_tag_list_is_equal")]
     fn eq(&self, other: &TagListRef) -> bool {
         unsafe { from_glib(ffi::gst_tag_list_is_equal(self.as_ptr(), other.as_ptr())) }
     }
@@ -831,16 +840,19 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 
 impl<'a> ExactSizeIterator for Iter<'a> {}
 
+#[doc(alias = "gst_tag_exists")]
 pub fn tag_exists(name: &str) -> bool {
     skip_assert_initialized!();
     unsafe { from_glib(ffi::gst_tag_exists(name.to_glib_none().0)) }
 }
 
+#[doc(alias = "gst_tag_get_type")]
 pub fn tag_get_type(name: &str) -> glib::Type {
     skip_assert_initialized!();
     unsafe { from_glib(ffi::gst_tag_get_type(name.to_glib_none().0)) }
 }
 
+#[doc(alias = "gst_tag_get_nick")]
 pub fn tag_get_nick<'b>(name: &str) -> Option<&'b str> {
     skip_assert_initialized!();
     unsafe {
@@ -854,6 +866,7 @@ pub fn tag_get_nick<'b>(name: &str) -> Option<&'b str> {
     }
 }
 
+#[doc(alias = "gst_tag_get_description")]
 pub fn tag_get_description<'b>(name: &str) -> Option<&'b str> {
     skip_assert_initialized!();
     unsafe {
@@ -867,6 +880,7 @@ pub fn tag_get_description<'b>(name: &str) -> Option<&'b str> {
     }
 }
 
+#[doc(alias = "gst_tag_get_flag")]
 pub fn tag_get_flag(name: &str) -> crate::TagFlag {
     skip_assert_initialized!();
     unsafe { from_glib(ffi::gst_tag_get_flag(name.to_glib_none().0)) }
@@ -883,6 +897,7 @@ pub trait CustomTag<'a>: Tag<'a> {
     }
 }
 
+#[doc(alias = "gst_tag_register")]
 pub fn register<T: for<'a> CustomTag<'a>>() {
     assert!(!tag_exists(T::tag_name()));
 
@@ -905,6 +920,7 @@ pub fn register<T: for<'a> CustomTag<'a>>() {
     }
 }
 
+#[doc(alias = "gst_tag_merge_use_first")]
 pub fn merge_use_first(src: &Value) -> Value {
     skip_assert_initialized!();
     assert_eq!(src.type_(), crate::List::static_type());
@@ -918,6 +934,7 @@ pub fn merge_use_first(src: &Value) -> Value {
     }
 }
 
+#[doc(alias = "gst_tag_merge_strings_with_comma")]
 pub fn merge_strings_with_comma(src: &Value) -> Value {
     skip_assert_initialized!();
     assert_eq!(src.type_(), crate::List::static_type());

@@ -105,6 +105,7 @@ pub trait VideoBufferPoolConfig {
 }
 
 impl VideoBufferPoolConfig for gst::BufferPoolConfig {
+    #[doc(alias = "gst_buffer_pool_config_get_video_alignment")]
     fn video_alignment(&self) -> Option<VideoAlignment> {
         unsafe {
             let mut alignment = mem::MaybeUninit::zeroed();
@@ -120,6 +121,7 @@ impl VideoBufferPoolConfig for gst::BufferPoolConfig {
         }
     }
 
+    #[doc(alias = "gst_buffer_pool_config_set_video_alignment")]
     fn set_video_alignment(&mut self, align: &VideoAlignment) {
         unsafe {
             ffi::gst_buffer_pool_config_set_video_alignment(

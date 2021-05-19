@@ -232,6 +232,7 @@ pub use crate::functions::*;
 
 use std::ptr;
 
+#[doc(alias = "gst_init_check")]
 pub fn init() -> Result<(), glib::Error> {
     unsafe {
         let mut error = ptr::null_mut();

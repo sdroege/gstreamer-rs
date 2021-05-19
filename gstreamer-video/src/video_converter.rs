@@ -21,6 +21,7 @@ unsafe impl Send for VideoConverter {}
 unsafe impl Sync for VideoConverter {}
 
 impl VideoConverter {
+    #[doc(alias = "gst_video_converter_new")]
     pub fn new(
         in_info: &crate::VideoInfo,
         out_info: &crate::VideoInfo,
@@ -50,6 +51,7 @@ impl VideoConverter {
     }
 
     #[doc(alias = "get_config")]
+    #[doc(alias = "gst_video_converter_get_config")]
     pub fn config(&self) -> VideoConverterConfig {
         unsafe {
             VideoConverterConfig(
@@ -61,12 +63,14 @@ impl VideoConverter {
         }
     }
 
+    #[doc(alias = "gst_video_converter_set_config")]
     pub fn set_config(&mut self, config: VideoConverterConfig) {
         unsafe {
             ffi::gst_video_converter_set_config(self.0.as_ptr(), config.0.into_ptr());
         }
     }
 
+    #[doc(alias = "gst_video_converter_frame")]
     pub fn frame<T>(
         &self,
         src: &crate::VideoFrame<T>,

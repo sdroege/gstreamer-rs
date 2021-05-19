@@ -7,6 +7,7 @@ use std::i32;
 use std::mem;
 use std::ptr;
 
+#[doc(alias = "gst_video_convert_sample")]
 pub fn convert_sample(
     sample: &gst::Sample,
     caps: &gst::Caps,
@@ -132,6 +133,7 @@ pub fn convert_sample_future(
     Box::pin(future)
 }
 
+#[doc(alias = "gst_video_calculate_display_ratio")]
 pub fn calculate_display_ratio(
     video_width: u32,
     video_height: u32,
@@ -165,6 +167,7 @@ pub fn calculate_display_ratio(
     }
 }
 
+#[doc(alias = "gst_video_guess_framerate")]
 pub fn guess_framerate(duration: gst::ClockTime) -> Option<gst::Fraction> {
     skip_assert_initialized!();
 

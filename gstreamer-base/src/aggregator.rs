@@ -20,12 +20,15 @@ use std::ptr;
 
 pub trait AggregatorExtManual: 'static {
     #[doc(alias = "get_allocator")]
+    #[doc(alias = "gst_aggregator_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
+    #[doc(alias = "gst_aggregator_finish_buffer")]
     fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_aggregator_finish_buffer_list")]
     fn finish_buffer_list(
         &self,
         bufferlist: gst::BufferList,
@@ -51,10 +54,12 @@ pub trait AggregatorExtManual: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_aggregator_update_segment")]
     fn update_segment<F: gst::FormattedValue>(&self, segment: &gst::FormattedSegment<F>);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_aggregator_selected_samples")]
     fn selected_samples(
         &self,
         pts: gst::ClockTime,

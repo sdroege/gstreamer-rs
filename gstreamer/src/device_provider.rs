@@ -10,6 +10,7 @@ use glib::translate::*;
 use std::ffi::CStr;
 
 impl DeviceProvider {
+    #[doc(alias = "gst_device_provider_register")]
     pub fn register(
         plugin: Option<&Plugin>,
         name: &str,
@@ -33,6 +34,7 @@ impl DeviceProvider {
 
 pub trait DeviceProviderExtManual: 'static {
     #[doc(alias = "get_metadata")]
+    #[doc(alias = "gst_device_provider_class_get_metadata")]
     fn metadata<'a>(&self, key: &str) -> Option<&'a str>;
 }
 

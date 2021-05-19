@@ -4,6 +4,7 @@ use crate::PlayerGMainContextSignalDispatcher;
 use glib::translate::*;
 
 impl PlayerGMainContextSignalDispatcher {
+    #[doc(alias = "gst_player_g_main_context_signal_dispatcher_new")]
     pub fn new(
         application_context: Option<&glib::MainContext>,
     ) -> PlayerGMainContextSignalDispatcher {

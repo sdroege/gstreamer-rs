@@ -61,6 +61,7 @@ impl Element {
         }
     }
 
+    #[doc(alias = "gst_element_register")]
     pub fn register(
         plugin: Option<&Plugin>,
         name: &str,
@@ -118,8 +119,10 @@ pub trait ElementExtManual: 'static {
     #[doc(alias = "get_pending_state")]
     fn pending_state(&self) -> State;
 
+    #[doc(alias = "gst_element_query")]
     fn query(&self, query: &mut QueryRef) -> bool;
 
+    #[doc(alias = "gst_element_send_event")]
     fn send_event(&self, event: Event) -> bool;
 
     #[doc(alias = "get_metadata")]
@@ -131,6 +134,7 @@ pub trait ElementExtManual: 'static {
     fn pad_template_list(&self) -> Vec<PadTemplate>;
 
     #[allow(clippy::too_many_arguments)]
+    #[doc(alias = "gst_element_message_full")]
     fn message_full<T: crate::MessageErrorDomain>(
         &self,
         type_: ElementMessageType,
@@ -152,6 +156,7 @@ pub trait ElementExtManual: 'static {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::too_many_arguments)]
+    #[doc(alias = "gst_element_message_full_with_details")]
     fn message_full_with_details<T: crate::MessageErrorDomain>(
         &self,
         type_: ElementMessageType,
@@ -164,11 +169,15 @@ pub trait ElementExtManual: 'static {
         structure: crate::Structure,
     );
 
+    #[doc(alias = "gst_element_post_message")]
     fn post_message(&self, message: crate::Message) -> Result<(), glib::error::BoolError>;
     fn post_error_message(&self, msg: crate::ErrorMessage);
 
+    #[doc(alias = "gst_element_iterate_pads")]
     fn iterate_pads(&self) -> crate::Iterator<Pad>;
+    #[doc(alias = "gst_element_iterate_sink_pads")]
     fn iterate_sink_pads(&self) -> crate::Iterator<Pad>;
+    #[doc(alias = "gst_element_iterate_src_pads")]
     fn iterate_src_pads(&self) -> crate::Iterator<Pad>;
 
     #[doc(alias = "get_pads")]
@@ -184,6 +193,7 @@ pub trait ElementExtManual: 'static {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_element_add_property_deep_notify_watch")]
     fn add_property_deep_notify_watch(
         &self,
         property_name: Option<&str>,
@@ -192,6 +202,7 @@ pub trait ElementExtManual: 'static {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_element_add_property_notify_watch")]
     fn add_property_notify_watch(
         &self,
         property_name: Option<&str>,
@@ -200,8 +211,10 @@ pub trait ElementExtManual: 'static {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_element_remove_property_notify_watch")]
     fn remove_property_notify_watch(&self, watch_id: NotifyWatchId);
 
+    #[doc(alias = "gst_element_query_convert")]
     fn query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
         &self,
         src_val: V,
@@ -212,12 +225,15 @@ pub trait ElementExtManual: 'static {
         dest_format: Format,
     ) -> Option<GenericFormattedValue>;
 
+    #[doc(alias = "gst_element_query_duration")]
     fn query_duration<T: SpecificFormattedValue>(&self) -> Option<T>;
     fn query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
+    #[doc(alias = "gst_element_query_position")]
     fn query_position<T: SpecificFormattedValue>(&self) -> Option<T>;
     fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
+    #[doc(alias = "gst_element_seek")]
     fn seek<V: Into<GenericFormattedValue>>(
         &self,
         rate: f64,
@@ -227,6 +243,7 @@ pub trait ElementExtManual: 'static {
         stop_type: crate::SeekType,
         stop: V,
     ) -> Result<(), glib::error::BoolError>;
+    #[doc(alias = "gst_element_seek_simple")]
     fn seek_simple<V: Into<GenericFormattedValue>>(
         &self,
         seek_flags: crate::SeekFlags,
@@ -235,6 +252,7 @@ pub trait ElementExtManual: 'static {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_element_call_async")]
     fn call_async<F>(&self, func: F)
     where
         F: FnOnce(&Self) + Send + 'static;
@@ -773,6 +791,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
 pub unsafe trait ElementClassExt {
     #[doc(alias = "get_metadata")]
+    #[doc(alias = "gst_element_class_get_metadata")]
     fn metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
             let klass = self as *const _ as *const ffi::GstElementClass;
@@ -788,6 +807,7 @@ pub unsafe trait ElementClassExt {
     }
 
     #[doc(alias = "get_pad_template")]
+    #[doc(alias = "gst_element_class_get_pad_template")]
     fn pad_template(&self, name: &str) -> Option<PadTemplate> {
         unsafe {
             let klass = self as *const _ as *const ffi::GstElementClass;
@@ -800,6 +820,7 @@ pub unsafe trait ElementClassExt {
     }
 
     #[doc(alias = "get_pad_template_list")]
+    #[doc(alias = "gst_element_class_get_pad_template_list")]
     fn pad_template_list(&self) -> Vec<PadTemplate> {
         unsafe {
             let klass = self as *const _ as *const ffi::GstElementClass;

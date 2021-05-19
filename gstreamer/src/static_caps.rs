@@ -12,6 +12,7 @@ use std::ptr;
 pub struct StaticCaps(ptr::NonNull<ffi::GstStaticCaps>);
 
 impl StaticCaps {
+    #[doc(alias = "gst_static_caps_get")]
     pub fn get(&self) -> Caps {
         unsafe { from_glib_full(ffi::gst_static_caps_get(self.0.as_ptr())) }
     }

@@ -72,12 +72,14 @@ fn into_raw_sync<F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>(
 }
 
 impl Bus {
+    #[doc(alias = "gst_bus_add_signal_watch_full")]
     pub fn add_signal_watch_full(&self, priority: Priority) {
         unsafe {
             ffi::gst_bus_add_signal_watch_full(self.to_glib_none().0, priority.into_glib());
         }
     }
 
+    #[doc(alias = "gst_bus_create_watch")]
     pub fn create_watch<F>(&self, name: Option<&str>, priority: Priority, func: F) -> glib::Source
     where
         F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
@@ -104,6 +106,7 @@ impl Bus {
         }
     }
 
+    #[doc(alias = "gst_bus_add_watch_full")]
     pub fn add_watch<F>(&self, func: F) -> Result<SourceId, glib::BoolError>
     where
         F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
@@ -148,6 +151,7 @@ impl Bus {
         }
     }
 
+    #[doc(alias = "gst_bus_set_sync_handler")]
     pub fn set_sync_handler<F>(&self, func: F)
     where
         F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static,

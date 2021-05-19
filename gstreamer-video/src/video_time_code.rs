@@ -62,6 +62,7 @@ impl VideoTimeCode {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_video_time_code_init_from_date_time_full")]
     pub fn from_date_time(
         fps: gst::Fraction,
         dt: &glib::DateTime,
@@ -89,6 +90,7 @@ impl VideoTimeCode {
         }
     }
 
+    #[doc(alias = "gst_video_time_code_is_valid")]
     pub fn is_valid(&self) -> bool {
         unsafe { from_glib(ffi::gst_video_time_code_is_valid(self.to_glib_none().0)) }
     }
@@ -183,6 +185,7 @@ impl ValidVideoTimeCode {
     //        tc.and_then(|tc| tc.try_into().ok())
     //    }
 
+    #[doc(alias = "gst_video_time_code_add_frames")]
     pub fn add_frames(&mut self, frames: i64) {
         skip_assert_initialized!();
         unsafe {
@@ -192,6 +195,7 @@ impl ValidVideoTimeCode {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_video_time_code_add_interval")]
     pub fn add_interval(
         &self,
         tc_inter: &VideoTimeCodeInterval,
@@ -207,24 +211,29 @@ impl ValidVideoTimeCode {
         }
     }
 
+    #[doc(alias = "gst_video_time_code_compare")]
     fn compare(&self, tc2: &Self) -> i32 {
         unsafe { ffi::gst_video_time_code_compare(self.to_glib_none().0, tc2.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_video_time_code_frames_since_daily_jam")]
     pub fn frames_since_daily_jam(&self) -> u64 {
         unsafe { ffi::gst_video_time_code_frames_since_daily_jam(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_video_time_code_increment_frame")]
     pub fn increment_frame(&mut self) {
         unsafe {
             ffi::gst_video_time_code_increment_frame(self.to_glib_none_mut().0);
         }
     }
 
+    #[doc(alias = "gst_video_time_code_nsec_since_daily_jam")]
     pub fn nsec_since_daily_jam(&self) -> u64 {
         unsafe { ffi::gst_video_time_code_nsec_since_daily_jam(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_video_time_code_to_date_time")]
     pub fn to_date_time(&self) -> Result<glib::DateTime, glib::error::BoolError> {
         unsafe {
             match from_glib_full(ffi::gst_video_time_code_to_date_time(self.to_glib_none().0)) {
@@ -485,6 +494,7 @@ generic_impl!(ValidVideoTimeCode);
 impl str::FromStr for VideoTimeCode {
     type Err = glib::error::BoolError;
 
+    #[doc(alias = "gst_video_time_code_new_from_string")]
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
         unsafe {
@@ -537,6 +547,7 @@ unsafe impl Send for VideoTimeCodeMeta {}
 unsafe impl Sync for VideoTimeCodeMeta {}
 
 impl VideoTimeCodeMeta {
+    #[doc(alias = "gst_buffer_add_video_time_code_meta")]
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
         tc: &ValidVideoTimeCode,
@@ -573,6 +584,7 @@ impl VideoTimeCodeMeta {
 unsafe impl MetaAPI for VideoTimeCodeMeta {
     type GstType = ffi::GstVideoTimeCodeMeta;
 
+    #[doc(alias = "gst_video_time_code_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_time_code_meta_api_get_type()) }
     }

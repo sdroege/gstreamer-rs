@@ -127,6 +127,7 @@ impl Clone for VideoColorimetry {
 }
 
 impl PartialEq for VideoColorimetry {
+    #[doc(alias = "gst_video_colorimetry_is_equal")]
     fn eq(&self, other: &Self) -> bool {
         unsafe { from_glib(ffi::gst_video_colorimetry_is_equal(&self.0, &other.0)) }
     }
@@ -137,6 +138,7 @@ impl Eq for VideoColorimetry {}
 impl str::FromStr for crate::VideoColorimetry {
     type Err = glib::error::BoolError;
 
+    #[doc(alias = "gst_video_colorimetry_from_string")]
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
 
@@ -175,6 +177,8 @@ impl fmt::Display for crate::VideoColorimetry {
 }
 
 impl crate::VideoChromaSite {
+    #[doc(alias = "gst_video_chroma_site_to_string")]
+    #[doc(alias = "gst_video_chroma_to_string")]
     pub fn to_str(self) -> glib::GString {
         assert_initialized_main_thread!();
 
@@ -193,6 +197,7 @@ impl crate::VideoChromaSite {
 impl str::FromStr for crate::VideoChromaSite {
     type Err = glib::error::BoolError;
 
+    #[doc(alias = "gst_video_chroma_from_string")]
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         skip_assert_initialized!();
 
@@ -598,6 +603,7 @@ impl VideoInfo {
         !self.0.finfo.is_null() && self.0.width > 0 && self.0.height > 0 && self.0.size > 0
     }
 
+    #[doc(alias = "gst_video_info_from_caps")]
     pub fn from_caps(caps: &gst::CapsRef) -> Result<Self, glib::error::BoolError> {
         skip_assert_initialized!();
 
@@ -614,6 +620,7 @@ impl VideoInfo {
         }
     }
 
+    #[doc(alias = "gst_video_info_to_caps")]
     pub fn to_caps(&self) -> Result<gst::Caps, glib::error::BoolError> {
         unsafe {
             let result = from_glib_full(ffi::gst_video_info_to_caps(&self.0 as *const _ as *mut _));
@@ -745,6 +752,7 @@ impl VideoInfo {
         self.format_info().n_components()
     }
 
+    #[doc(alias = "gst_video_info_convert")]
     pub fn convert<V: Into<gst::GenericFormattedValue>, U: gst::SpecificFormattedValue>(
         &self,
         src_val: V,
@@ -795,6 +803,7 @@ impl VideoInfo {
         }
     }
 
+    #[doc(alias = "gst_video_info_align")]
     pub fn align(&mut self, align: &mut crate::VideoAlignment) -> Result<(), glib::BoolError> {
         cfg_if::cfg_if! {
             if #[cfg(feature = "v1_12")] {
@@ -825,6 +834,7 @@ impl VideoInfo {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_info_align_full")]
     pub fn align_full(
         &mut self,
         align: &mut crate::VideoAlignment,
@@ -854,6 +864,7 @@ impl Clone for VideoInfo {
 }
 
 impl PartialEq for VideoInfo {
+    #[doc(alias = "gst_video_info_is_equal")]
     fn eq(&self, other: &Self) -> bool {
         unsafe { from_glib(ffi::gst_video_info_is_equal(&self.0, &other.0)) }
     }
@@ -965,6 +976,7 @@ impl glib::translate::FromGlibPtrFull<*mut ffi::GstVideoInfo> for VideoInfo {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl crate::VideoFieldOrder {
+    #[doc(alias = "gst_video_field_order_to_string")]
     pub fn to_str<'a>(self) -> &'a str {
         use std::ffi::CStr;
 

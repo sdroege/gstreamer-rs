@@ -8,6 +8,7 @@ use glib::translate::*;
 use std::ptr;
 
 pub trait RTSPAddressPoolExtManual: 'static {
+    #[doc(alias = "gst_rtsp_address_pool_reserve_address")]
     fn reserve_address(
         &self,
         ip_address: &str,

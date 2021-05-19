@@ -158,6 +158,8 @@ impl AudioFormatInfo {
         }
     }
 
+    #[doc(alias = "gst_audio_format_info_fill_silence")]
+    #[doc(alias = "gst_audio_format_fill_silence")]
     pub fn fill_silence(&self, dest: &mut [u8]) {
         let self_width = self.width() as usize;
 

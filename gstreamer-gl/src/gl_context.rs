@@ -24,12 +24,14 @@ impl GLContext {
     }
 
     #[doc(alias = "get_current_gl_context")]
+    #[doc(alias = "gst_gl_context_get_current_gl_context")]
     pub fn current_gl_context(context_type: GLPlatform) -> uintptr_t {
         skip_assert_initialized!();
         unsafe { ffi::gst_gl_context_get_current_gl_context(context_type.into_glib()) as uintptr_t }
     }
 
     #[doc(alias = "get_proc_address_with_platform")]
+    #[doc(alias = "gst_gl_context_get_proc_address_with_platform")]
     pub fn proc_address_with_platform(
         context_type: GLPlatform,
         gl_api: GLAPI,
@@ -48,9 +50,11 @@ impl GLContext {
 
 pub trait GLContextExtManual: 'static {
     #[doc(alias = "get_gl_context")]
+    #[doc(alias = "gst_gl_context_get_gl_context")]
     fn gl_context(&self) -> uintptr_t;
 
     #[doc(alias = "get_proc_address")]
+    #[doc(alias = "gst_gl_context_get_proc_address")]
     fn proc_address(&self, name: &str) -> uintptr_t;
 }
 

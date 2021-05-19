@@ -36,6 +36,7 @@ impl AsMut<gst::StructureRef> for PlayerConfig {
 
 impl PlayerConfig {
     #[doc(alias = "get_position_update_interval")]
+    #[doc(alias = "gst_player_config_get_position_update_interval")]
     pub fn position_update_interval(&self) -> u32 {
         assert_initialized_main_thread!();
         unsafe { ffi::gst_player_config_get_position_update_interval(self.0.to_glib_none().0) }
@@ -52,6 +53,7 @@ impl PlayerConfig {
     }
 
     #[doc(alias = "get_user_agent")]
+    #[doc(alias = "gst_player_config_get_user_agent")]
     pub fn user_agent(&self) -> Option<String> {
         assert_initialized_main_thread!();
         unsafe {
@@ -61,6 +63,7 @@ impl PlayerConfig {
         }
     }
 
+    #[doc(alias = "gst_player_config_set_position_update_interval")]
     pub fn set_position_update_interval(&mut self, interval: u32) {
         assert_initialized_main_thread!();
         unsafe {
@@ -78,6 +81,7 @@ impl PlayerConfig {
         self.set("accurate-seek", &accurate);
     }
 
+    #[doc(alias = "gst_player_config_set_user_agent")]
     pub fn set_user_agent(&mut self, agent: &str) {
         assert_initialized_main_thread!();
         unsafe {

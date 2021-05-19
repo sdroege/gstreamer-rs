@@ -6,6 +6,7 @@ use glib::prelude::*;
 use glib::translate::*;
 
 impl PtpClock {
+    #[doc(alias = "gst_ptp_clock_new")]
     pub fn new(name: Option<&str>, domain: u32) -> PtpClock {
         assert_initialized_main_thread!();
         let name = name.to_glib_none();

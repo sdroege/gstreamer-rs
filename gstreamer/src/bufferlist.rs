@@ -12,11 +12,13 @@ mini_object_wrapper!(BufferList, BufferListRef, ffi::GstBufferList, || {
 });
 
 impl BufferList {
+    #[doc(alias = "gst_buffer_list_new")]
     pub fn new() -> Self {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_buffer_list_new()) }
     }
 
+    #[doc(alias = "gst_buffer_list_new_sized")]
     pub fn new_sized(size: usize) -> Self {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_buffer_list_new_sized(size as u32)) }
@@ -24,6 +26,7 @@ impl BufferList {
 }
 
 impl BufferListRef {
+    #[doc(alias = "gst_buffer_list_insert")]
     pub fn insert(&mut self, idx: i32, buffer: Buffer) {
         unsafe {
             ffi::gst_buffer_list_insert(self.as_mut_ptr(), idx, buffer.into_ptr());
@@ -34,14 +37,17 @@ impl BufferListRef {
         self.insert(-1, buffer);
     }
 
+    #[doc(alias = "gst_buffer_list_copy_deep")]
     pub fn copy_deep(&self) -> BufferList {
         unsafe { from_glib_full(ffi::gst_buffer_list_copy_deep(self.as_ptr())) }
     }
 
+    #[doc(alias = "gst_buffer_list_remove")]
     pub fn remove(&mut self, idx: u32, len: u32) {
         unsafe { ffi::gst_buffer_list_remove(self.as_mut_ptr(), idx, len) }
     }
 
+    #[doc(alias = "gst_buffer_list_get")]
     pub fn get(&self, idx: u32) -> Option<&BufferRef> {
         unsafe {
             let ptr = ffi::gst_buffer_list_get(self.as_mut_ptr(), idx);
@@ -75,12 +81,14 @@ impl BufferListRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_list_length")]
     pub fn len(&self) -> usize {
         unsafe { ffi::gst_buffer_list_length(self.as_mut_ptr()) as usize }
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_buffer_list_calculate_size")]
     pub fn calculate_size(&self) -> usize {
         unsafe { ffi::gst_buffer_list_calculate_size(self.as_mut_ptr()) as usize }
     }
@@ -97,6 +105,7 @@ impl BufferListRef {
         IterOwned::new(self)
     }
 
+    #[doc(alias = "gst_buffer_list_foreach")]
     pub fn foreach<F: FnMut(&BufferRef, u32) -> bool>(&self, func: F) -> bool {
         unsafe extern "C" fn trampoline<F: FnMut(&BufferRef, u32) -> bool>(
             buffer: *mut *mut ffi::GstBuffer,

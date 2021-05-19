@@ -15,6 +15,7 @@ use glib::translate::from_glib;
 
 static GES_INIT: Once = Once::new();
 
+#[doc(alias = "ges_init")]
 pub fn init() -> Result<(), glib::BoolError> {
     if gst::init().is_err() {
         return Err(glib::bool_error!("Could not initialize GStreamer."));

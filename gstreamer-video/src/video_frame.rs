@@ -50,6 +50,7 @@ impl<T> VideoFrame<T> {
         self.buffer.take().unwrap()
     }
 
+    #[doc(alias = "gst_video_frame_copy")]
     pub fn copy(&self, dest: &mut VideoFrame<Writable>) -> Result<(), glib::BoolError> {
         unsafe {
             let res: bool = from_glib(ffi::gst_video_frame_copy(&mut dest.frame, &self.frame));
@@ -61,6 +62,7 @@ impl<T> VideoFrame<T> {
         }
     }
 
+    #[doc(alias = "gst_video_frame_copy_plane")]
     pub fn copy_plane(
         &self,
         dest: &mut VideoFrame<Writable>,
@@ -421,6 +423,7 @@ impl<T> VideoFrameRef<T> {
         self.frame.id
     }
 
+    #[doc(alias = "gst_video_frame_copy")]
     pub fn copy(
         &self,
         dest: &mut VideoFrameRef<&mut gst::BufferRef>,
@@ -435,6 +438,7 @@ impl<T> VideoFrameRef<T> {
         }
     }
 
+    #[doc(alias = "gst_video_frame_copy_plane")]
     pub fn copy_plane(
         &self,
         dest: &mut VideoFrameRef<&mut gst::BufferRef>,

@@ -24,6 +24,7 @@ pub trait TypeFindImpl {
 }
 
 impl TypeFind {
+    #[doc(alias = "gst_type_find_register")]
     pub fn register<F>(
         plugin: Option<&Plugin>,
         name: &str,
@@ -55,6 +56,7 @@ impl TypeFind {
         }
     }
 
+    #[doc(alias = "gst_type_find_peek")]
     pub fn peek(&mut self, offset: i64, size: u32) -> Option<&[u8]> {
         unsafe {
             let data = ffi::gst_type_find_peek(&mut self.0, offset, size);
@@ -66,6 +68,7 @@ impl TypeFind {
         }
     }
 
+    #[doc(alias = "gst_type_find_suggest")]
     pub fn suggest(&mut self, probability: TypeFindProbability, caps: &Caps) {
         unsafe {
             ffi::gst_type_find_suggest(
@@ -77,6 +80,7 @@ impl TypeFind {
     }
 
     #[doc(alias = "get_length")]
+    #[doc(alias = "gst_type_find_get_length")]
     pub fn length(&mut self) -> Option<u64> {
         unsafe {
             let len = ffi::gst_type_find_get_length(&mut self.0);
@@ -90,6 +94,7 @@ impl TypeFind {
 }
 
 impl TypeFindFactory {
+    #[doc(alias = "gst_type_find_factory_call_function")]
     pub fn call_function(&self, find: &mut dyn TypeFindImpl) {
         unsafe {
             let find_ptr = &find as *const &mut dyn TypeFindImpl as glib::ffi::gpointer;

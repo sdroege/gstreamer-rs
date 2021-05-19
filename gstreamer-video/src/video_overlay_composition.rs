@@ -29,6 +29,7 @@ impl fmt::Debug for VideoOverlayRectangleRef {
 }
 
 impl VideoOverlayRectangle {
+    #[doc(alias = "gst_video_overlay_rectangle_new_raw")]
     pub fn new_raw(
         buffer: &gst::Buffer,
         render_x: i32,
@@ -54,6 +55,7 @@ impl VideoOverlayRectangle {
 
 impl VideoOverlayRectangleRef {
     #[doc(alias = "get_flags")]
+    #[doc(alias = "gst_video_overlay_rectangle_get_flags")]
     pub fn flags(&self) -> crate::VideoOverlayFormatFlags {
         unsafe {
             from_glib(ffi::gst_video_overlay_rectangle_get_flags(
@@ -63,20 +65,24 @@ impl VideoOverlayRectangleRef {
     }
 
     #[doc(alias = "get_global_alpha")]
+    #[doc(alias = "gst_video_overlay_rectangle_get_global_alpha")]
     pub fn global_alpha(&self) -> f32 {
         unsafe { ffi::gst_video_overlay_rectangle_get_global_alpha(self.as_mut_ptr()) }
     }
 
+    #[doc(alias = "gst_video_overlay_rectangle_set_global_alpha")]
     pub fn set_global_alpha(&mut self, alpha: f32) {
         unsafe { ffi::gst_video_overlay_rectangle_set_global_alpha(self.as_mut_ptr(), alpha) }
     }
 
     #[doc(alias = "get_seqnum")]
+    #[doc(alias = "gst_video_overlay_rectangle_get_seqnum")]
     pub fn seqnum(&self) -> u32 {
         unsafe { ffi::gst_video_overlay_rectangle_get_seqnum(self.as_mut_ptr()) }
     }
 
     #[doc(alias = "get_render_rectangle")]
+    #[doc(alias = "gst_video_overlay_rectangle_get_render_rectangle")]
     pub fn render_rectangle(&self) -> (i32, i32, u32, u32) {
         unsafe {
             let mut render_x = mem::MaybeUninit::uninit();
@@ -101,6 +107,7 @@ impl VideoOverlayRectangleRef {
         }
     }
 
+    #[doc(alias = "gst_video_overlay_rectangle_set_render_rectangle")]
     pub fn set_render_rectangle(
         &mut self,
         render_x: i32,
@@ -120,6 +127,7 @@ impl VideoOverlayRectangleRef {
     }
 
     #[doc(alias = "get_pixels_unscaled_raw")]
+    #[doc(alias = "gst_video_overlay_rectangle_get_pixels_unscaled_raw")]
     pub fn pixels_unscaled_raw(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_unscaled_raw(
@@ -130,6 +138,7 @@ impl VideoOverlayRectangleRef {
     }
 
     #[doc(alias = "get_pixels_unscaled_ayuv")]
+    #[doc(alias = "gst_video_overlay_rectangle_get_pixels_unscaled_ayuv")]
     pub fn pixels_unscaled_ayuv(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_unscaled_ayuv(
@@ -140,6 +149,7 @@ impl VideoOverlayRectangleRef {
     }
 
     #[doc(alias = "get_pixels_unscaled_argb")]
+    #[doc(alias = "gst_video_overlay_rectangle_get_pixels_unscaled_argb")]
     pub fn pixels_unscaled_argb(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_unscaled_argb(
@@ -150,6 +160,7 @@ impl VideoOverlayRectangleRef {
     }
 
     #[doc(alias = "get_pixels_raw")]
+    #[doc(alias = "gst_video_overlay_rectangle_get_pixels_raw")]
     pub fn pixels_raw(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_raw(
@@ -160,6 +171,7 @@ impl VideoOverlayRectangleRef {
     }
 
     #[doc(alias = "get_pixels_ayuv")]
+    #[doc(alias = "gst_video_overlay_rectangle_get_pixels_ayuv")]
     pub fn pixels_ayuv(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_ayuv(
@@ -170,6 +182,7 @@ impl VideoOverlayRectangleRef {
     }
 
     #[doc(alias = "get_pixels_argb")]
+    #[doc(alias = "gst_video_overlay_rectangle_get_pixels_argb")]
     pub fn pixels_argb(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_argb(
@@ -200,6 +213,7 @@ impl fmt::Debug for VideoOverlayCompositionRef {
 }
 
 impl VideoOverlayComposition {
+    #[doc(alias = "gst_video_overlay_composition_new")]
     pub fn new<'a, T: IntoIterator<Item = &'a VideoOverlayRectangle>>(
         rects: T,
     ) -> Result<Self, glib::error::BoolError> {
@@ -232,11 +246,13 @@ impl VideoOverlayComposition {
 }
 
 impl VideoOverlayCompositionRef {
+    #[doc(alias = "gst_video_overlay_composition_n_rectangles")]
     pub fn n_rectangles(&self) -> u32 {
         unsafe { ffi::gst_video_overlay_composition_n_rectangles(self.as_mut_ptr()) }
     }
 
     #[doc(alias = "get_rectangle")]
+    #[doc(alias = "gst_video_overlay_composition_get_rectangle")]
     pub fn rectangle(&self, idx: u32) -> Result<VideoOverlayRectangle, glib::error::BoolError> {
         if idx >= self.n_rectangles() {
             return Err(glib::bool_error!("Invalid index"));
@@ -254,10 +270,12 @@ impl VideoOverlayCompositionRef {
     }
 
     #[doc(alias = "get_seqnum")]
+    #[doc(alias = "gst_video_overlay_composition_get_seqnum")]
     pub fn seqnum(&self) -> u32 {
         unsafe { ffi::gst_video_overlay_composition_get_seqnum(self.as_mut_ptr()) }
     }
 
+    #[doc(alias = "gst_video_overlay_composition_blend")]
     pub fn blend(
         &self,
         frame: &mut crate::VideoFrameRef<&mut gst::BufferRef>,

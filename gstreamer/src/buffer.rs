@@ -39,6 +39,7 @@ pub struct MappedBuffer<T> {
 }
 
 impl Buffer {
+    #[doc(alias = "gst_buffer_new")]
     pub fn new() -> Self {
         assert_initialized_main_thread!();
 
@@ -155,6 +156,7 @@ impl Buffer {
         BufferCursor::new_writable(self)
     }
 
+    #[doc(alias = "gst_buffer_append")]
     pub fn append(&mut self, other: Self) {
         skip_assert_initialized!();
         unsafe {
@@ -208,6 +210,7 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_copy_region")]
     pub fn copy_region(
         &self,
         flags: crate::BufferCopyFlags,
@@ -226,6 +229,7 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_copy_into")]
     pub fn copy_into(
         &self,
         dest: &mut BufferRef,
@@ -289,6 +293,7 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_copy_deep")]
     pub fn copy_deep(&self) -> Result<Buffer, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_buffer_copy_deep(self.as_ptr()))
@@ -297,6 +302,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_size")]
+    #[doc(alias = "gst_buffer_get_size")]
     pub fn size(&self) -> usize {
         unsafe { ffi::gst_buffer_get_size(self.as_mut_ptr()) }
     }
@@ -317,6 +323,7 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_set_size")]
     pub fn set_size(&mut self, size: usize) {
         assert!(self.maxsize() >= size);
 
@@ -394,6 +401,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_meta")]
+    #[doc(alias = "gst_buffer_get_meta")]
     pub fn meta<T: MetaAPI>(&self) -> Option<MetaRef<T>> {
         unsafe {
             let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::meta_api().into_glib());
@@ -425,6 +433,7 @@ impl BufferRef {
         MetaIterMut::new(self)
     }
 
+    #[doc(alias = "gst_buffer_foreach_meta")]
     pub fn foreach_meta<F: FnMut(MetaRef<Meta>) -> bool>(&self, func: F) -> bool {
         unsafe extern "C" fn trampoline<F: FnMut(MetaRef<Meta>) -> bool>(
             buffer: *mut ffi::GstBuffer,
@@ -484,10 +493,12 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_append_memory")]
     pub fn append_memory(&mut self, mem: Memory) {
         unsafe { ffi::gst_buffer_append_memory(self.as_mut_ptr(), mem.into_ptr()) }
     }
 
+    #[doc(alias = "gst_buffer_find_memory")]
     pub fn find_memory(&self, offset: usize, size: Option<usize>) -> Option<(u32, u32, usize)> {
         unsafe {
             let mut idx = mem::MaybeUninit::uninit();
@@ -512,6 +523,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_all_memory")]
+    #[doc(alias = "gst_buffer_get_all_memory")]
     pub fn all_memory(&self) -> Option<Memory> {
         unsafe {
             let res = ffi::gst_buffer_get_all_memory(self.as_mut_ptr());
@@ -524,11 +536,13 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_max_memory")]
+    #[doc(alias = "gst_buffer_get_max_memory")]
     pub fn max_memory() -> u32 {
         unsafe { ffi::gst_buffer_get_max_memory() }
     }
 
     #[doc(alias = "get_memory")]
+    #[doc(alias = "gst_buffer_get_memory")]
     pub fn memory(&self, idx: u32) -> Option<Memory> {
         if idx >= self.n_memory() {
             None
@@ -545,6 +559,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_memory_range")]
+    #[doc(alias = "gst_buffer_get_memory_range")]
     pub fn memory_range(&self, idx: u32, length: Option<u32>) -> Option<Memory> {
         assert!(idx + length.unwrap_or(0) < self.n_memory());
         unsafe {
@@ -564,6 +579,7 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_insert_memory")]
     pub fn insert_memory(&mut self, idx: Option<u32>, mem: Memory) {
         unsafe {
             ffi::gst_buffer_insert_memory(
@@ -577,10 +593,12 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_is_all_memory_writable")]
     pub fn is_all_memory_writable(&self) -> bool {
         unsafe { from_glib(ffi::gst_buffer_is_all_memory_writable(self.as_mut_ptr())) }
     }
 
+    #[doc(alias = "gst_buffer_is_memory_range_writable")]
     pub fn is_memory_range_writable(&self, idx: u32, length: Option<u16>) -> bool {
         unsafe {
             from_glib(ffi::gst_buffer_is_memory_range_writable(
@@ -594,10 +612,12 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_n_memory")]
     pub fn n_memory(&self) -> u32 {
         unsafe { ffi::gst_buffer_n_memory(self.as_ptr() as *mut _) }
     }
 
+    #[doc(alias = "gst_buffer_peek_memory")]
     pub fn peek_memory(&self, idx: u32) -> &MemoryRef {
         assert!(idx < self.n_memory());
         unsafe { MemoryRef::from_ptr(ffi::gst_buffer_peek_memory(self.as_mut_ptr(), idx)) }
@@ -618,19 +638,23 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_prepend_memory")]
     pub fn prepend_memory(&mut self, mem: Memory) {
         unsafe { ffi::gst_buffer_prepend_memory(self.as_mut_ptr(), mem.into_ptr()) }
     }
 
+    #[doc(alias = "gst_buffer_remove_all_memory")]
     pub fn remove_all_memory(&mut self) {
         unsafe { ffi::gst_buffer_remove_all_memory(self.as_mut_ptr()) }
     }
 
+    #[doc(alias = "gst_buffer_remove_memory")]
     pub fn remove_memory(&mut self, idx: u32) {
         assert!(idx < self.n_memory());
         unsafe { ffi::gst_buffer_remove_memory(self.as_mut_ptr(), idx) }
     }
 
+    #[doc(alias = "gst_buffer_remove_memory_range")]
     pub fn remove_memory_range(&mut self, idx: u32, length: Option<u32>) {
         assert!(idx + length.unwrap_or(0) < self.n_memory());
         unsafe {
@@ -645,15 +669,18 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_replace_all_memory")]
     pub fn replace_all_memory(&mut self, mem: Memory) {
         unsafe { ffi::gst_buffer_replace_all_memory(self.as_mut_ptr(), mem.into_ptr()) }
     }
 
+    #[doc(alias = "gst_buffer_replace_memory")]
     pub fn replace_memory(&mut self, idx: u32, mem: Memory) {
         assert!(idx < self.n_memory());
         unsafe { ffi::gst_buffer_replace_memory(self.as_mut_ptr(), idx, mem.into_ptr()) }
     }
 
+    #[doc(alias = "gst_buffer_replace_memory_range")]
     pub fn replace_memory_range(&mut self, idx: u32, length: Option<u32>, mem: Memory) {
         assert!(idx + length.unwrap_or(0) < self.n_memory());
         unsafe {

@@ -9,15 +9,18 @@ use crate::BaseSrc;
 
 pub trait BaseSrcExtManual: 'static {
     #[doc(alias = "get_allocator")]
+    #[doc(alias = "gst_base_src_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
     #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment;
 
+    #[doc(alias = "gst_base_src_query_latency")]
     fn query_latency(&self) -> Result<(bool, gst::ClockTime, gst::ClockTime), glib::BoolError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_base_src_new_segment")]
     fn new_segment(&self, segment: &gst::Segment) -> Result<(), glib::BoolError>;
 }
 

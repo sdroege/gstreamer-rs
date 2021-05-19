@@ -8,8 +8,11 @@ use glib::translate::{from_glib, FromGlibPtrFull, IntoGlib, ToGlibPtr};
 
 pub trait PluginFeatureExtManual: Sized + 'static {
     #[doc(alias = "get_rank")]
+    #[doc(alias = "gst_plugin_feature_get_rank")]
     fn rank(&self) -> Rank;
+    #[doc(alias = "gst_plugin_feature_set_rank")]
     fn set_rank(&self, rank: Rank);
+    #[doc(alias = "gst_plugin_feature_load")]
     fn load(&self) -> Result<Self, glib::BoolError>;
 }
 

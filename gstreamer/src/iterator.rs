@@ -39,6 +39,7 @@ where
     }
 
     #[allow(clippy::should_implement_trait)]
+    #[doc(alias = "gst_iterator_next")]
     pub fn next(&mut self) -> Result<Option<T>, IteratorError> {
         unsafe {
             let mut value = Value::uninitialized();
@@ -57,12 +58,14 @@ where
         }
     }
 
+    #[doc(alias = "gst_iterator_resync")]
     pub fn resync(&mut self) {
         unsafe {
             ffi::gst_iterator_resync(self.to_glib_none_mut().0);
         }
     }
 
+    #[doc(alias = "gst_iterator_filter")]
     pub fn filter<F>(self, func: F) -> Self
     where
         F: Fn(T) -> bool + Send + Sync + 'static,
@@ -84,6 +87,7 @@ where
         }
     }
 
+    #[doc(alias = "gst_iterator_find_custom")]
     pub fn find<F>(&mut self, func: F) -> Option<T>
     where
         F: FnMut(T) -> bool,
@@ -108,6 +112,7 @@ where
         }
     }
 
+    #[doc(alias = "gst_iterator_foreach")]
     pub fn foreach<F>(&mut self, func: F) -> Result<(), IteratorError>
     where
         F: FnMut(T),
@@ -131,6 +136,7 @@ where
         }
     }
 
+    #[doc(alias = "gst_iterator_fold")]
     pub fn fold<F, U>(&mut self, init: U, func: F) -> Result<U, IteratorError>
     where
         F: FnMut(U, T) -> Result<U, U>,
@@ -167,6 +173,7 @@ impl<T> Iterator<T>
 where
     for<'a> T: FromValue<'a> + StaticType + ToValue + Send + 'static,
 {
+    #[doc(alias = "gst_iterator_new")]
     pub fn new<I: IteratorImpl<T>>(imp: I) -> Self {
         assert_initialized_main_thread!();
         static DUMMY_COOKIE: u32 = 0;

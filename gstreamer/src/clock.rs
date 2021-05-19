@@ -34,14 +34,17 @@ glib::wrapper! {
 
 impl ClockId {
     #[doc(alias = "get_time")]
+    #[doc(alias = "gst_clock_id_get_time")]
     pub fn time(&self) -> ClockTime {
         unsafe { from_glib(ffi::gst_clock_id_get_time(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_clock_id_unschedule")]
     pub fn unschedule(&self) {
         unsafe { ffi::gst_clock_id_unschedule(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_clock_id_wait")]
     pub fn wait(&self) -> (Result<ClockSuccess, ClockError>, ClockTimeDiff) {
         unsafe {
             let mut jitter = 0;
@@ -63,12 +66,14 @@ impl ClockId {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "get_clock")]
+    #[doc(alias = "gst_clock_id_get_clock")]
     pub fn clock(&self) -> Option<Clock> {
         unsafe { from_glib_full(ffi::gst_clock_id_get_clock(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_clock_id_uses_clock")]
     pub fn uses_clock<P: IsA<Clock>>(&self, clock: &P) -> bool {
         unsafe {
             from_glib(ffi::gst_clock_id_uses_clock(
@@ -130,6 +135,7 @@ impl SingleShotClockId {
         self.0.compare_by_time(&other.0)
     }
 
+    #[doc(alias = "gst_clock_id_wait_async")]
     pub fn wait_async<F>(&self, func: F) -> Result<ClockSuccess, ClockError>
     where
         F: FnOnce(&Clock, ClockTime, &ClockId) + Send + 'static,
@@ -239,6 +245,7 @@ impl PeriodicClockId {
         self.0.compare_by_time(&other.0)
     }
 
+    #[doc(alias = "gst_clock_id_wait_async")]
     pub fn wait_async<F>(&self, func: F) -> Result<ClockSuccess, ClockError>
     where
         F: Fn(&Clock, ClockTime, &ClockId) + Send + 'static,
@@ -337,6 +344,7 @@ unsafe impl Send for ClockId {}
 unsafe impl Sync for ClockId {}
 
 impl Clock {
+    #[doc(alias = "gst_clock_adjust_with_calibration")]
     pub fn adjust_with_calibration(
         internal_target: ClockTime,
         cinternal: ClockTime,
@@ -357,6 +365,7 @@ impl Clock {
         }
     }
 
+    #[doc(alias = "gst_clock_unadjust_with_calibration")]
     pub fn unadjust_with_calibration(
         external_target: ClockTime,
         cinternal: ClockTime,
@@ -379,8 +388,10 @@ impl Clock {
 }
 
 pub trait ClockExtManual: 'static {
+    #[doc(alias = "gst_clock_new_periodic_id")]
     fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> PeriodicClockId;
 
+    #[doc(alias = "gst_clock_periodic_id_reinit")]
     fn periodic_id_reinit(
         &self,
         id: &PeriodicClockId,
@@ -388,8 +399,10 @@ pub trait ClockExtManual: 'static {
         interval: ClockTime,
     ) -> Result<(), glib::BoolError>;
 
+    #[doc(alias = "gst_clock_new_single_shot_id")]
     fn new_single_shot_id(&self, time: ClockTime) -> SingleShotClockId;
 
+    #[doc(alias = "gst_clock_single_shot_id_reinit")]
     fn single_shot_id_reinit(
         &self,
         id: &SingleShotClockId,

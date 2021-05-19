@@ -6,6 +6,7 @@ use glib::prelude::*;
 use glib::translate::*;
 
 impl NetClientClock {
+    #[doc(alias = "gst_net_client_clock_new")]
     pub fn new(
         name: Option<&str>,
         remote_address: &str,

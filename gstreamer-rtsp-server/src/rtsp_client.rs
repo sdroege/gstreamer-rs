@@ -6,6 +6,7 @@ use glib::source::SourceId;
 use glib::translate::*;
 
 pub trait RTSPClientExtManual: 'static {
+    #[doc(alias = "gst_rtsp_client_attach")]
     fn attach(&self, context: Option<&glib::MainContext>) -> SourceId;
 }
 

@@ -112,6 +112,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_decoder_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();
@@ -125,6 +126,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_decoder_finish_frame")]
     fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             gst::FlowSuccess::try_from_glib(ffi::gst_video_decoder_finish_frame(
@@ -134,12 +136,14 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_decoder_release_frame")]
     fn release_frame(&self, frame: VideoCodecFrame) {
         unsafe {
             ffi::gst_video_decoder_release_frame(self.as_ref().to_glib_none().0, frame.into_ptr())
         }
     }
 
+    #[doc(alias = "gst_video_decoder_drop_frame")]
     fn drop_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             gst::FlowSuccess::try_from_glib(ffi::gst_video_decoder_drop_frame(
@@ -149,6 +153,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_decoder_get_latency")]
     fn latency(&self) -> (gst::ClockTime, gst::ClockTime) {
         let mut min_latency = gst::ffi::GST_CLOCK_TIME_NONE;
         let mut max_latency = gst::ffi::GST_CLOCK_TIME_NONE;
@@ -164,6 +169,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_decoder_set_latency")]
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime) {
         unsafe {
             ffi::gst_video_decoder_set_latency(
@@ -174,6 +180,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_decoder_get_frame")]
     fn frame(&self, frame_number: i32) -> Option<VideoCodecFrame> {
         let frame = unsafe {
             ffi::gst_video_decoder_get_frame(self.as_ref().to_glib_none().0, frame_number)
@@ -186,6 +193,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_decoder_get_frames")]
     fn frames(&self) -> Vec<VideoCodecFrame> {
         unsafe {
             let frames = ffi::gst_video_decoder_get_frames(self.as_ref().to_glib_none().0);
@@ -205,6 +213,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_decoder_get_oldest_frame")]
     fn oldest_frame(&self) -> Option<VideoCodecFrame> {
         let frame =
             unsafe { ffi::gst_video_decoder_get_oldest_frame(self.as_ref().to_glib_none().0) };
@@ -216,6 +225,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_decoder_get_output_state")]
     fn output_state(&self) -> Option<VideoCodecState<'static, Readable>> {
         let state =
             unsafe { ffi::gst_video_decoder_get_output_state(self.as_ref().to_glib_none().0) };
@@ -227,6 +237,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_decoder_set_output_state")]
     fn set_output_state(
         &self,
         fmt: VideoFormat,
@@ -257,6 +268,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_video_decoder_set_interlaced_output_state")]
     fn set_interlaced_output_state(
         &self,
         fmt: VideoFormat,
@@ -287,6 +299,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_decoder_negotiate")]
     fn negotiate<'a>(
         &'a self,
         output_state: VideoCodecState<'a, InNegotiation<'a>>,

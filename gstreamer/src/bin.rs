@@ -26,12 +26,19 @@ pub trait GstBinExtManual: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_bin_iterate_all_by_element_factory_name")]
     fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> crate::Iterator<Element>;
+    #[doc(alias = "gst_bin_iterate_all_by_interface")]
     fn iterate_all_by_interface(&self, iface: glib::types::Type) -> crate::Iterator<Element>;
+    #[doc(alias = "gst_bin_iterate_elements")]
     fn iterate_elements(&self) -> crate::Iterator<Element>;
+    #[doc(alias = "gst_bin_iterate_recurse")]
     fn iterate_recurse(&self) -> crate::Iterator<Element>;
+    #[doc(alias = "gst_bin_iterate_sinks")]
     fn iterate_sinks(&self) -> crate::Iterator<Element>;
+    #[doc(alias = "gst_bin_iterate_sorted")]
     fn iterate_sorted(&self) -> crate::Iterator<Element>;
+    #[doc(alias = "gst_bin_iterate_sources")]
     fn iterate_sources(&self) -> crate::Iterator<Element>;
     #[doc(alias = "get_children")]
     fn children(&self) -> Vec<Element>;

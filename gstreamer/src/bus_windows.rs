@@ -20,6 +20,7 @@ use super::Bus;
 
 pub trait WindowsBusExtManual: 'static {
     #[doc(alias = "get_pollfd")]
+    #[doc(alias = "gst_bus_get_pollfd")]
     fn pollfd(&self) -> windows::io::RawHandle;
 }
 

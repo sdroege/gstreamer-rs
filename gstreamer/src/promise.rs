@@ -28,11 +28,13 @@ pub enum PromiseError {
 }
 
 impl Promise {
+    #[doc(alias = "gst_promise_new")]
     pub fn new() -> Promise {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_promise_new()) }
     }
 
+    #[doc(alias = "gst_promise_new_with_change_func")]
     pub fn with_change_func<F>(func: F) -> Promise
     where
         F: FnOnce(Result<Option<&StructureRef>, PromiseError>) + Send + 'static,
@@ -93,12 +95,14 @@ impl Promise {
         (promise.clone(), PromiseFuture(promise, receiver))
     }
 
+    #[doc(alias = "gst_promise_expire")]
     pub fn expire(&self) {
         unsafe {
             ffi::gst_promise_expire(self.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_promise_get_reply")]
     pub fn get_reply(&self) -> Option<&StructureRef> {
         unsafe {
             let s = ffi::gst_promise_get_reply(self.to_glib_none().0);
@@ -110,12 +114,14 @@ impl Promise {
         }
     }
 
+    #[doc(alias = "gst_promise_interrupt")]
     pub fn interrupt(&self) {
         unsafe {
             ffi::gst_promise_interrupt(self.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_promise_reply")]
     pub fn reply(&self, s: Option<Structure>) {
         unsafe {
             ffi::gst_promise_reply(
@@ -125,6 +131,7 @@ impl Promise {
         }
     }
 
+    #[doc(alias = "gst_promise_wait")]
     pub fn wait(&self) -> PromiseResult {
         unsafe { from_glib(ffi::gst_promise_wait(self.to_glib_none().0)) }
     }

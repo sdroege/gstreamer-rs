@@ -8,6 +8,7 @@ use std::ptr;
 
 pub trait BaseTransformExtManual: 'static {
     #[doc(alias = "get_allocator")]
+    #[doc(alias = "gst_base_transform_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
     #[doc(alias = "get_segment")]

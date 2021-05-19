@@ -142,6 +142,7 @@ impl AudioInfo {
         !self.0.finfo.is_null() && self.0.channels > 0 && self.0.rate > 0 && self.0.bpf > 0
     }
 
+    #[doc(alias = "gst_audio_info_from_caps")]
     pub fn from_caps(caps: &gst::CapsRef) -> Result<Self, glib::error::BoolError> {
         skip_assert_initialized!();
 
@@ -160,6 +161,7 @@ impl AudioInfo {
         }
     }
 
+    #[doc(alias = "gst_audio_info_to_caps")]
     pub fn to_caps(&self) -> Result<gst::Caps, glib::error::BoolError> {
         unsafe {
             let result = from_glib_full(ffi::gst_audio_info_to_caps(&self.0));
@@ -170,6 +172,7 @@ impl AudioInfo {
         }
     }
 
+    #[doc(alias = "gst_audio_info_convert")]
     pub fn convert<V: Into<gst::GenericFormattedValue>, U: gst::SpecificFormattedValue>(
         &self,
         src_val: V,
@@ -308,6 +311,7 @@ impl Clone for AudioInfo {
 }
 
 impl PartialEq for AudioInfo {
+    #[doc(alias = "gst_audio_info_is_equal")]
     fn eq(&self, other: &Self) -> bool {
         unsafe { from_glib(ffi::gst_audio_info_is_equal(&self.0, &other.0)) }
     }

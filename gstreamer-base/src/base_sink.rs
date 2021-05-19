@@ -9,6 +9,7 @@ pub trait BaseSinkExtManual: 'static {
     #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment;
 
+    #[doc(alias = "gst_base_sink_query_latency")]
     fn query_latency(
         &self,
     ) -> Result<(bool, bool, gst::ClockTime, gst::ClockTime), glib::BoolError>;

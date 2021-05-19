@@ -29,6 +29,7 @@ impl PlayerVideoOverlayVideoRenderer {
         ) as *mut _)
     }
 
+    #[doc(alias = "gst_player_video_overlay_video_renderer_new_with_sink")]
     pub fn with_sink<P: IsA<gst::Element>>(video_sink: &P) -> PlayerVideoOverlayVideoRenderer {
         assert_initialized_main_thread!();
 

@@ -117,6 +117,7 @@ impl fmt::Display for VideoTimeCodeInterval {
 impl str::FromStr for VideoTimeCodeInterval {
     type Err = glib::error::BoolError;
 
+    #[doc(alias = "gst_video_time_code_interval_new_from_string")]
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
         unsafe {

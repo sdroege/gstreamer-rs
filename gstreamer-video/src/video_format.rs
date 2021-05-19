@@ -282,6 +282,7 @@ impl IntoGlib for VideoEndianness {
 }
 
 impl crate::VideoFormat {
+    #[doc(alias = "gst_video_format_from_masks")]
     pub fn from_masks(
         depth: u32,
         bpp: u32,
@@ -306,6 +307,7 @@ impl crate::VideoFormat {
         }
     }
 
+    #[doc(alias = "gst_video_format_to_string")]
     pub fn to_str<'a>(self) -> &'a str {
         if self == Self::Unknown {
             return "UNKNOWN";

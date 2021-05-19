@@ -9,6 +9,7 @@ use glib::translate::*;
 use std::num::NonZeroU32;
 
 impl DeviceMonitor {
+    #[doc(alias = "gst_device_monitor_new")]
     pub fn new() -> DeviceMonitor {
         assert_initialized_main_thread!();
         let (major, minor, _, _) = crate::version();
@@ -47,12 +48,14 @@ impl FromGlib<libc::c_uint> for DeviceMonitorFilterId {
 }
 
 pub trait DeviceMonitorExtManual: 'static {
+    #[doc(alias = "gst_device_monitor_add_filter")]
     fn add_filter(
         &self,
         classes: Option<&str>,
         caps: Option<&Caps>,
     ) -> Option<DeviceMonitorFilterId>;
 
+    #[doc(alias = "gst_device_monitor_remove_filter")]
     fn remove_filter(&self, filter_id: DeviceMonitorFilterId)
         -> Result<(), glib::error::BoolError>;
 }

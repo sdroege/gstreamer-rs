@@ -11,6 +11,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 impl Player {
+    #[doc(alias = "gst_player_new")]
     pub fn new(
         video_renderer: Option<&PlayerVideoRenderer>,
         signal_dispatcher: Option<&PlayerSignalDispatcher>,
@@ -30,10 +31,12 @@ impl Player {
     }
 
     #[doc(alias = "get_config")]
+    #[doc(alias = "gst_player_get_config")]
     pub fn config(&self) -> crate::PlayerConfig {
         unsafe { from_glib_full(ffi::gst_player_get_config(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_player_set_config")]
     pub fn set_config(&self, config: crate::PlayerConfig) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(

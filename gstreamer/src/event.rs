@@ -24,6 +24,7 @@ use crate::EventType;
 pub struct Seqnum(pub(crate) NonZeroU32);
 
 impl Seqnum {
+    #[doc(alias = "gst_util_seqnum_next")]
     pub fn next() -> Self {
         unsafe {
             let v = ffi::gst_util_seqnum_next();
@@ -63,6 +64,7 @@ impl cmp::Ord for Seqnum {
 pub struct GroupId(pub(crate) NonZeroU32);
 
 impl GroupId {
+    #[doc(alias = "gst_util_group_id_next")]
     pub fn next() -> Self {
         unsafe {
             let v = ffi::gst_util_group_id_next();
@@ -135,6 +137,7 @@ mini_object_wrapper!(Event, EventRef, ffi::GstEvent, || {
 
 impl EventRef {
     #[doc(alias = "get_seqnum")]
+    #[doc(alias = "gst_event_get_seqnum")]
     pub fn seqnum(&self) -> Seqnum {
         unsafe {
             let seqnum = ffi::gst_event_get_seqnum(self.as_mut_ptr());
@@ -144,15 +147,18 @@ impl EventRef {
     }
 
     #[doc(alias = "get_running_time_offset")]
+    #[doc(alias = "gst_event_get_running_time_offset")]
     pub fn running_time_offset(&self) -> i64 {
         unsafe { ffi::gst_event_get_running_time_offset(self.as_mut_ptr()) }
     }
 
+    #[doc(alias = "gst_event_set_running_time_offset")]
     pub fn set_running_time_offset(&mut self, offset: i64) {
         unsafe { ffi::gst_event_set_running_time_offset(self.as_mut_ptr(), offset) }
     }
 
     #[doc(alias = "get_structure")]
+    #[doc(alias = "gst_event_get_structure")]
     pub fn structure(&self) -> Option<&StructureRef> {
         unsafe {
             let structure = ffi::gst_event_get_structure(self.as_mut_ptr());
@@ -367,6 +373,7 @@ impl<'a> StreamStart<'a> {
     }
 
     #[doc(alias = "get_stream_flags")]
+    #[doc(alias = "gst_event_parse_stream_flags")]
     pub fn stream_flags(&self) -> crate::StreamFlags {
         unsafe {
             let mut stream_flags = mem::MaybeUninit::uninit();
@@ -378,6 +385,7 @@ impl<'a> StreamStart<'a> {
     }
 
     #[doc(alias = "get_group_id")]
+    #[doc(alias = "gst_event_parse_group_id")]
     pub fn group_id(&self) -> Option<GroupId> {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
@@ -396,6 +404,7 @@ impl<'a> StreamStart<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_stream")]
+    #[doc(alias = "gst_event_parse_stream")]
     pub fn stream(&self) -> Option<crate::Stream> {
         unsafe {
             let mut stream = ptr::null_mut();
@@ -419,6 +428,7 @@ impl<'a> Caps<'a> {
     }
 
     #[doc(alias = "get_caps")]
+    #[doc(alias = "gst_event_parse_caps")]
     pub fn caps(&self) -> &'a crate::CapsRef {
         unsafe {
             let mut caps = ptr::null_mut();
@@ -450,6 +460,7 @@ impl<'a> Segment<'a> {
     }
 
     #[doc(alias = "get_segment")]
+    #[doc(alias = "gst_event_parse_segment")]
     pub fn segment(&self) -> &'a crate::Segment {
         unsafe {
             let mut segment = ptr::null();
@@ -480,6 +491,7 @@ impl<'a> StreamCollection<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_stream_collection")]
+    #[doc(alias = "gst_event_parse_stream_collection")]
     pub fn stream_collection(&self) -> crate::StreamCollection {
         unsafe {
             let mut stream_collection = ptr::null_mut();
@@ -504,6 +516,7 @@ impl<'a> Tag<'a> {
     }
 
     #[doc(alias = "get_tag")]
+    #[doc(alias = "gst_event_parse_tag")]
     pub fn tag(&self) -> &'a crate::TagListRef {
         unsafe {
             let mut tags = ptr::null_mut();
@@ -577,6 +590,7 @@ impl<'a> SinkMessage<'a> {
     }
 
     #[doc(alias = "get_message")]
+    #[doc(alias = "gst_event_parse_sink_message")]
     pub fn message(&self) -> crate::Message {
         unsafe {
             let mut msg = ptr::null_mut();
@@ -650,6 +664,7 @@ impl<'a> Toc<'a> {
     }
 
     #[doc(alias = "get_toc")]
+    #[doc(alias = "gst_event_parse_toc")]
     pub fn toc(&self) -> (&'a crate::TocRef, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
@@ -903,6 +918,7 @@ impl<'a> Seek<'a> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "get_trickmode_interval")]
+    #[doc(alias = "gst_event_parse_seek_trickmode_interval")]
     pub fn trickmode_interval(&self) -> crate::ClockTime {
         unsafe {
             let mut trickmode_interval = mem::MaybeUninit::uninit();
@@ -945,6 +961,7 @@ impl<'a> Latency<'a> {
     }
 
     #[doc(alias = "get_latency")]
+    #[doc(alias = "gst_event_parse_latency")]
     pub fn latency(&self) -> crate::ClockTime {
         unsafe {
             let mut latency = mem::MaybeUninit::uninit();
@@ -1068,6 +1085,7 @@ impl<'a> SelectStreams<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_streams")]
+    #[doc(alias = "gst_event_parse_select_streams")]
     pub fn streams(&self) -> Vec<String> {
         unsafe {
             let mut streams = ptr::null_mut();

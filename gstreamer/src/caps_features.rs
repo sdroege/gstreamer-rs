@@ -40,6 +40,7 @@ impl CapsFeatures {
         f
     }
 
+    #[doc(alias = "gst_caps_features_new_empty")]
     pub fn new_empty() -> Self {
         assert_initialized_main_thread!();
         unsafe {
@@ -49,6 +50,7 @@ impl CapsFeatures {
         }
     }
 
+    #[doc(alias = "gst_caps_features_new_any")]
     pub fn new_any() -> Self {
         assert_initialized_main_thread!();
         unsafe { CapsFeatures(ptr::NonNull::new_unchecked(ffi::gst_caps_features_new_any())) }
@@ -121,6 +123,7 @@ impl fmt::Display for CapsFeatures {
 impl str::FromStr for CapsFeatures {
     type Err = glib::BoolError;
 
+    #[doc(alias = "gst_caps_features_from_string")]
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
         unsafe {
@@ -304,10 +307,12 @@ impl CapsFeaturesRef {
         self.size() == 0 && !self.is_any()
     }
 
+    #[doc(alias = "gst_caps_features_is_any")]
     pub fn is_any(&self) -> bool {
         unsafe { from_glib(ffi::gst_caps_features_is_any(self.as_ptr())) }
     }
 
+    #[doc(alias = "gst_caps_features_contains")]
     pub fn contains(&self, feature: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_caps_features_contains(
@@ -327,11 +332,13 @@ impl CapsFeaturesRef {
     }
 
     #[doc(alias = "get_size")]
+    #[doc(alias = "gst_caps_features_get_size")]
     pub fn size(&self) -> u32 {
         unsafe { ffi::gst_caps_features_get_size(self.as_ptr()) }
     }
 
     #[doc(alias = "get_nth")]
+    #[doc(alias = "gst_caps_features_get_nth")]
     pub fn nth(&self, idx: u32) -> Option<&str> {
         if idx >= self.size() {
             return None;
@@ -358,10 +365,12 @@ impl CapsFeaturesRef {
         }
     }
 
+    #[doc(alias = "gst_caps_features_add")]
     pub fn add(&mut self, feature: &str) {
         unsafe { ffi::gst_caps_features_add(self.as_mut_ptr(), feature.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_caps_features_remove")]
     pub fn remove(&mut self, feature: &str) {
         unsafe { ffi::gst_caps_features_remove(self.as_mut_ptr(), feature.to_glib_none().0) }
     }
@@ -379,6 +388,7 @@ impl CapsFeaturesRef {
     }
 
     // This is not an equivalence relation with regards to ANY. Everything is equal to ANY
+    #[doc(alias = "gst_caps_features_is_equal")]
     pub fn is_equal(&self, other: &CapsFeaturesRef) -> bool {
         unsafe {
             from_glib(ffi::gst_caps_features_is_equal(

@@ -12,6 +12,7 @@ unsafe impl Send for NetAddressMeta {}
 unsafe impl Sync for NetAddressMeta {}
 
 impl NetAddressMeta {
+    #[doc(alias = "gst_buffer_add_net_address_meta")]
     pub fn add<'a, A: IsA<gio::SocketAddress>>(
         buffer: &'a mut gst::BufferRef,
         addr: &A,
@@ -43,6 +44,7 @@ impl NetAddressMeta {
 unsafe impl MetaAPI for NetAddressMeta {
     type GstType = ffi::GstNetAddressMeta;
 
+    #[doc(alias = "gst_net_address_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_net_address_meta_api_get_type()) }
     }

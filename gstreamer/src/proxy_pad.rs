@@ -13,18 +13,21 @@ use glib::prelude::*;
 use glib::translate::*;
 
 pub trait ProxyPadExtManual: 'static {
+    #[doc(alias = "gst_proxy_pad_chain_default")]
     fn chain_default<P: IsA<Object>>(
         &self,
         parent: Option<&P>,
         buffer: Buffer,
     ) -> Result<FlowSuccess, FlowError>;
 
+    #[doc(alias = "gst_proxy_pad_chain_list_default")]
     fn chain_list_default<P: IsA<Object>>(
         &self,
         parent: Option<&P>,
         list: BufferList,
     ) -> Result<FlowSuccess, FlowError>;
 
+    #[doc(alias = "gst_proxy_pad_getrange_default")]
     fn getrange_default<P: IsA<Object>>(
         &self,
         parent: Option<&P>,
@@ -32,6 +35,7 @@ pub trait ProxyPadExtManual: 'static {
         size: u32,
     ) -> Result<Buffer, FlowError>;
 
+    #[doc(alias = "gst_proxy_pad_iterate_internal_links_default")]
     fn iterate_internal_links_default<P: IsA<Object>>(
         &self,
         parent: Option<&P>,

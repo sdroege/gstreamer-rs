@@ -8,7 +8,9 @@ use std::ptr;
 
 pub trait ContextGLExt {
     #[doc(alias = "get_gl_display")]
+    #[doc(alias = "gst_context_get_gl_display")]
     fn gl_display(&self) -> Option<GLDisplay>;
+    #[doc(alias = "gst_context_set_gl_display")]
     fn set_gl_display<T: IsA<GLDisplay>>(&self, display: &T);
 }
 

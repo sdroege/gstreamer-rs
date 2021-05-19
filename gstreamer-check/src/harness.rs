@@ -24,6 +24,7 @@ unsafe impl Send for Harness {}
 unsafe impl Sync for Harness {}
 
 impl Harness {
+    #[doc(alias = "gst_harness_add_element_full")]
     pub fn add_element_full<P: IsA<gst::Element>>(
         &mut self,
         element: &P,
@@ -46,6 +47,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_add_element_sink_pad")]
     pub fn add_element_sink_pad<P: IsA<gst::Pad>>(&mut self, sinkpad: &P) {
         unsafe {
             ffi::gst_harness_add_element_sink_pad(
@@ -55,12 +57,14 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_add_element_src_pad")]
     pub fn add_element_src_pad<P: IsA<gst::Pad>>(&mut self, srcpad: &P) {
         unsafe {
             ffi::gst_harness_add_element_src_pad(self.0.as_ptr(), srcpad.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_harness_add_parse")]
     pub fn add_parse(&mut self, launchline: &str) {
         unsafe {
             ffi::gst_harness_add_parse(self.0.as_ptr(), launchline.to_glib_none().0);
@@ -85,6 +89,7 @@ impl Harness {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_harness_add_propose_allocation_meta")]
     pub fn add_propose_allocation_meta(
         &mut self,
         api: glib::types::Type,
@@ -96,12 +101,14 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_add_sink")]
     pub fn add_sink(&mut self, sink_element_name: &str) {
         unsafe {
             ffi::gst_harness_add_sink(self.0.as_ptr(), sink_element_name.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_harness_add_sink_harness")]
     pub fn add_sink_harness(&mut self, sink_harness: Harness) {
         unsafe {
             let sink_harness = mem::ManuallyDrop::new(sink_harness);
@@ -109,12 +116,14 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_add_sink_parse")]
     pub fn add_sink_parse(&mut self, launchline: &str) {
         unsafe {
             ffi::gst_harness_add_sink_parse(self.0.as_ptr(), launchline.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_harness_add_src")]
     pub fn add_src(&mut self, src_element_name: &str, has_clock_wait: bool) {
         unsafe {
             ffi::gst_harness_add_src(
@@ -125,6 +134,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_add_src_harness")]
     pub fn add_src_harness(&mut self, src_harness: Harness, has_clock_wait: bool) {
         unsafe {
             let src_harness = mem::ManuallyDrop::new(src_harness);
@@ -136,6 +146,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_add_src_parse")]
     pub fn add_src_parse(&mut self, launchline: &str, has_clock_wait: bool) {
         unsafe {
             ffi::gst_harness_add_src_parse(
@@ -146,14 +157,17 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_buffers_in_queue")]
     pub fn buffers_in_queue(&self) -> u32 {
         unsafe { ffi::gst_harness_buffers_in_queue(self.0.as_ptr()) }
     }
 
+    #[doc(alias = "gst_harness_buffers_received")]
     pub fn buffers_received(&self) -> u32 {
         unsafe { ffi::gst_harness_buffers_received(self.0.as_ptr()) }
     }
 
+    #[doc(alias = "gst_harness_crank_multiple_clock_waits")]
     pub fn crank_multiple_clock_waits(&mut self, waits: u32) -> Result<(), glib::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -163,6 +177,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_crank_single_clock_wait")]
     pub fn crank_single_clock_wait(&mut self) -> Result<(), glib::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -172,6 +187,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_create_buffer")]
     pub fn create_buffer(&mut self, size: usize) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_create_buffer(self.0.as_ptr(), size))
@@ -179,6 +195,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_dump_to_file")]
     pub fn dump_to_file<P: AsRef<path::Path>>(&mut self, filename: P) {
         let filename = filename.as_ref();
         unsafe {
@@ -186,14 +203,17 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_events_in_queue")]
     pub fn events_in_queue(&self) -> u32 {
         unsafe { ffi::gst_harness_events_in_queue(self.0.as_ptr()) }
     }
 
+    #[doc(alias = "gst_harness_events_received")]
     pub fn events_received(&self) -> u32 {
         unsafe { ffi::gst_harness_events_received(self.0.as_ptr()) }
     }
 
+    #[doc(alias = "gst_harness_find_element")]
     pub fn find_element(&mut self, element_name: &str) -> Option<gst::Element> {
         unsafe {
             // Work around https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/31
@@ -221,21 +241,25 @@ impl Harness {
     //}
 
     #[doc(alias = "get_last_pushed_timestamp")]
+    #[doc(alias = "gst_harness_get_last_pushed_timestamp")]
     pub fn last_pushed_timestamp(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::gst_harness_get_last_pushed_timestamp(self.0.as_ptr())) }
     }
 
     #[doc(alias = "get_testclock")]
+    #[doc(alias = "gst_harness_get_testclock")]
     pub fn testclock(&self) -> Option<TestClock> {
         unsafe { from_glib_full(ffi::gst_harness_get_testclock(self.0.as_ptr())) }
     }
 
+    #[doc(alias = "gst_harness_play")]
     pub fn play(&mut self) {
         unsafe {
             ffi::gst_harness_play(self.0.as_ptr());
         }
     }
 
+    #[doc(alias = "gst_harness_pull")]
     pub fn pull(&mut self) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_pull(self.0.as_ptr()))
@@ -245,6 +269,7 @@ impl Harness {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_harness_pull_until_eos")]
     pub fn pull_until_eos(&mut self) -> Result<Option<gst::Buffer>, glib::BoolError> {
         unsafe {
             let mut buffer = ptr::null_mut();
@@ -257,6 +282,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_pull_event")]
     pub fn pull_event(&mut self) -> Result<gst::Event, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_pull_event(self.0.as_ptr()))
@@ -264,6 +290,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_pull_upstream_event")]
     pub fn pull_upstream_event(&mut self) -> Result<gst::Event, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_pull_upstream_event(self.0.as_ptr()))
@@ -271,6 +298,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_push")]
     pub fn push(&mut self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             gst::FlowSuccess::try_from_glib(ffi::gst_harness_push(
@@ -280,6 +308,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_push_and_pull")]
     pub fn push_and_pull(&mut self, buffer: gst::Buffer) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_push_and_pull(
@@ -290,6 +319,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_push_event")]
     pub fn push_event(&mut self, event: gst::Event) -> bool {
         unsafe {
             from_glib(ffi::gst_harness_push_event(
@@ -299,14 +329,17 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_push_from_src")]
     pub fn push_from_src(&mut self) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe { gst::FlowSuccess::try_from_glib(ffi::gst_harness_push_from_src(self.0.as_ptr())) }
     }
 
+    #[doc(alias = "gst_harness_push_to_sink")]
     pub fn push_to_sink(&mut self) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe { gst::FlowSuccess::try_from_glib(ffi::gst_harness_push_to_sink(self.0.as_ptr())) }
     }
 
+    #[doc(alias = "gst_harness_push_upstream_event")]
     pub fn push_upstream_event(&mut self, event: gst::Event) -> bool {
         unsafe {
             from_glib(ffi::gst_harness_push_upstream_event(
@@ -316,6 +349,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_query_latency")]
     pub fn query_latency(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::gst_harness_query_latency(self.0.as_ptr())) }
     }
@@ -324,18 +358,21 @@ impl Harness {
     //    unsafe { TODO: call ffi::gst_harness_set() }
     //}
 
+    #[doc(alias = "gst_harness_set_blocking_push_mode")]
     pub fn set_blocking_push_mode(&mut self) {
         unsafe {
             ffi::gst_harness_set_blocking_push_mode(self.0.as_ptr());
         }
     }
 
+    #[doc(alias = "gst_harness_set_caps")]
     pub fn set_caps(&mut self, in_: gst::Caps, out: gst::Caps) {
         unsafe {
             ffi::gst_harness_set_caps(self.0.as_ptr(), in_.into_ptr(), out.into_ptr());
         }
     }
 
+    #[doc(alias = "gst_harness_set_caps_str")]
     pub fn set_caps_str(&mut self, in_: &str, out: &str) {
         unsafe {
             ffi::gst_harness_set_caps_str(
@@ -346,12 +383,14 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_set_drop_buffers")]
     pub fn set_drop_buffers(&mut self, drop_buffers: bool) {
         unsafe {
             ffi::gst_harness_set_drop_buffers(self.0.as_ptr(), drop_buffers.into_glib());
         }
     }
 
+    #[doc(alias = "gst_harness_set_forwarding")]
     pub fn set_forwarding(&mut self, forwarding: bool) {
         unsafe {
             ffi::gst_harness_set_forwarding(self.0.as_ptr(), forwarding.into_glib());
@@ -362,30 +401,35 @@ impl Harness {
     //    unsafe { TODO: call ffi::gst_harness_set_propose_allocator() }
     //}
 
+    #[doc(alias = "gst_harness_set_sink_caps")]
     pub fn set_sink_caps(&mut self, caps: gst::Caps) {
         unsafe {
             ffi::gst_harness_set_sink_caps(self.0.as_ptr(), caps.into_ptr());
         }
     }
 
+    #[doc(alias = "gst_harness_set_sink_caps_str")]
     pub fn set_sink_caps_str(&mut self, str: &str) {
         unsafe {
             ffi::gst_harness_set_sink_caps_str(self.0.as_ptr(), str.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_harness_set_src_caps")]
     pub fn set_src_caps(&mut self, caps: gst::Caps) {
         unsafe {
             ffi::gst_harness_set_src_caps(self.0.as_ptr(), caps.into_ptr());
         }
     }
 
+    #[doc(alias = "gst_harness_set_src_caps_str")]
     pub fn set_src_caps_str(&mut self, str: &str) {
         unsafe {
             ffi::gst_harness_set_src_caps_str(self.0.as_ptr(), str.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_harness_set_time")]
     pub fn set_time(&mut self, time: gst::ClockTime) -> Result<(), glib::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -395,12 +439,14 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_set_upstream_latency")]
     pub fn set_upstream_latency(&mut self, latency: gst::ClockTime) {
         unsafe {
             ffi::gst_harness_set_upstream_latency(self.0.as_ptr(), latency.into_glib());
         }
     }
 
+    #[doc(alias = "gst_harness_sink_push_many")]
     pub fn sink_push_many(&mut self, pushes: u32) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             gst::FlowSuccess::try_from_glib(ffi::gst_harness_sink_push_many(
@@ -410,6 +456,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_src_crank_and_push_many")]
     pub fn src_crank_and_push_many(
         &mut self,
         cranks: u32,
@@ -424,6 +471,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_src_push_event")]
     pub fn src_push_event(&mut self) -> bool {
         unsafe { from_glib(ffi::gst_harness_src_push_event(self.0.as_ptr())) }
     }
@@ -470,6 +518,7 @@ impl Harness {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_harness_take_all_data_as_buffer")]
     pub fn take_all_data_as_buffer(&mut self) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_take_all_data_as_buffer(self.0.as_ptr()))
@@ -479,6 +528,7 @@ impl Harness {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_harness_take_all_data_as_bytes")]
     pub fn take_all_data_as_bytes(&mut self) -> Result<glib::Bytes, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_take_all_data_as_bytes(self.0.as_ptr()))
@@ -486,38 +536,46 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_try_pull")]
     pub fn try_pull(&mut self) -> Option<gst::Buffer> {
         unsafe { from_glib_full(ffi::gst_harness_try_pull(self.0.as_ptr())) }
     }
 
+    #[doc(alias = "gst_harness_try_pull_event")]
     pub fn try_pull_event(&mut self) -> Option<gst::Event> {
         unsafe { from_glib_full(ffi::gst_harness_try_pull_event(self.0.as_ptr())) }
     }
 
+    #[doc(alias = "gst_harness_try_pull_upstream_event")]
     pub fn try_pull_upstream_event(&mut self) -> Option<gst::Event> {
         unsafe { from_glib_full(ffi::gst_harness_try_pull_upstream_event(self.0.as_ptr())) }
     }
 
+    #[doc(alias = "gst_harness_upstream_events_in_queue")]
     pub fn upstream_events_in_queue(&self) -> u32 {
         unsafe { ffi::gst_harness_upstream_events_in_queue(self.0.as_ptr()) }
     }
 
+    #[doc(alias = "gst_harness_upstream_events_received")]
     pub fn upstream_events_received(&self) -> u32 {
         unsafe { ffi::gst_harness_upstream_events_received(self.0.as_ptr()) }
     }
 
+    #[doc(alias = "gst_harness_use_systemclock")]
     pub fn use_systemclock(&mut self) {
         unsafe {
             ffi::gst_harness_use_systemclock(self.0.as_ptr());
         }
     }
 
+    #[doc(alias = "gst_harness_use_testclock")]
     pub fn use_testclock(&mut self) {
         unsafe {
             ffi::gst_harness_use_testclock(self.0.as_ptr());
         }
     }
 
+    #[doc(alias = "gst_harness_wait_for_clock_id_waits")]
     pub fn wait_for_clock_id_waits(
         &mut self,
         waits: u32,
@@ -537,16 +595,19 @@ impl Harness {
         Harness(ptr::NonNull::new_unchecked(ptr))
     }
 
+    #[doc(alias = "gst_harness_new")]
     pub fn new(element_name: &str) -> Harness {
         assert_initialized_main_thread!();
         unsafe { Self::from_glib_full(ffi::gst_harness_new(element_name.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_harness_new_empty")]
     pub fn new_empty() -> Harness {
         assert_initialized_main_thread!();
         unsafe { Self::from_glib_full(ffi::gst_harness_new_empty()) }
     }
 
+    #[doc(alias = "gst_harness_new_full")]
     pub fn new_full<P: IsA<gst::Element>>(
         element: &P,
         hsrc: Option<&gst::StaticPadTemplate>,
@@ -568,11 +629,13 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_new_parse")]
     pub fn new_parse(launchline: &str) -> Harness {
         assert_initialized_main_thread!();
         unsafe { Self::from_glib_full(ffi::gst_harness_new_parse(launchline.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_harness_new_with_element")]
     pub fn with_element<P: IsA<gst::Element>>(
         element: &P,
         element_sinkpad_name: Option<&str>,
@@ -590,6 +653,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_new_with_padnames")]
     pub fn with_padnames(
         element_name: &str,
         element_sinkpad_name: Option<&str>,
@@ -607,6 +671,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_new_with_templates")]
     pub fn with_templates(
         element_name: &str,
         hsrc: Option<&gst::StaticPadTemplate>,

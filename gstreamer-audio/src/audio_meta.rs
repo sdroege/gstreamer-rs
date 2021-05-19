@@ -21,6 +21,7 @@ unsafe impl Send for AudioClippingMeta {}
 unsafe impl Sync for AudioClippingMeta {}
 
 impl AudioClippingMeta {
+    #[doc(alias = "gst_buffer_add_audio_clipping_meta")]
     pub fn add<V: Into<gst::GenericFormattedValue>>(
         buffer: &mut gst::BufferRef,
         start: V,
@@ -56,6 +57,7 @@ impl AudioClippingMeta {
 unsafe impl MetaAPI for AudioClippingMeta {
     type GstType = ffi::GstAudioClippingMeta;
 
+    #[doc(alias = "gst_audio_clipping_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_clipping_meta_api_get_type()) }
     }
@@ -85,6 +87,7 @@ unsafe impl Sync for AudioMeta {}
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl AudioMeta {
+    #[doc(alias = "gst_buffer_add_audio_meta")]
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
         info: &crate::AudioInfo,
@@ -196,6 +199,7 @@ impl AudioMeta {
 unsafe impl MetaAPI for AudioMeta {
     type GstType = ffi::GstAudioMeta;
 
+    #[doc(alias = "gst_audio_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_meta_api_get_type()) }
     }

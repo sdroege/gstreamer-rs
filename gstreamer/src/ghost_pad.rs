@@ -15,6 +15,7 @@ use crate::StaticPadTemplate;
 use glib::translate::*;
 
 impl GhostPad {
+    #[doc(alias = "gst_ghost_pad_activate_mode_default")]
     pub fn activate_mode_default<P: IsA<GhostPad>, Q: IsA<Object>>(
         pad: &P,
         parent: Option<&Q>,
@@ -35,6 +36,7 @@ impl GhostPad {
         }
     }
 
+    #[doc(alias = "gst_ghost_pad_internal_activate_mode_default")]
     pub fn internal_activate_mode_default<P: IsA<GhostPad>, Q: IsA<Object>>(
         pad: &P,
         parent: Option<&Q>,

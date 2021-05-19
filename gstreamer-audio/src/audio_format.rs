@@ -94,6 +94,7 @@ pub static AUDIO_FORMATS_ALL: Lazy<Box<[crate::AudioFormat]>> = Lazy::new(|| {
 });
 
 impl crate::AudioFormat {
+    #[doc(alias = "gst_audio_format_build_integer")]
     pub fn build_integer(
         sign: bool,
         endianness: crate::AudioEndianness,
@@ -112,6 +113,7 @@ impl crate::AudioFormat {
         }
     }
 
+    #[doc(alias = "gst_audio_format_to_string")]
     pub fn to_str<'a>(self) -> &'a str {
         if self == Self::Unknown {
             return "UNKNOWN";

@@ -31,6 +31,7 @@ glib::wrapper! {
 }
 
 impl SDPMedia {
+    #[doc(alias = "gst_sdp_media_new")]
     pub fn new() -> Self {
         assert_initialized_main_thread!();
         unsafe {
@@ -121,17 +122,20 @@ unsafe impl Send for SDPMediaRef {}
 unsafe impl Sync for SDPMediaRef {}
 
 impl SDPMediaRef {
+    #[doc(alias = "gst_sdp_media_add_attribute")]
     pub fn add_attribute(&mut self, key: &str, value: Option<&str>) {
         let value = value.to_glib_none();
         unsafe { ffi::gst_sdp_media_add_attribute(&mut self.0, key.to_glib_none().0, value.0) };
     }
 
+    #[doc(alias = "gst_sdp_media_add_bandwidth")]
     pub fn add_bandwidth(&mut self, bwtype: &str, bandwidth: u32) {
         unsafe {
             ffi::gst_sdp_media_add_bandwidth(&mut self.0, bwtype.to_glib_none().0, bandwidth)
         };
     }
 
+    #[doc(alias = "gst_sdp_media_add_connection")]
     pub fn add_connection(
         &mut self,
         nettype: &str,
@@ -152,10 +156,12 @@ impl SDPMediaRef {
         };
     }
 
+    #[doc(alias = "gst_sdp_media_add_format")]
     pub fn add_format(&mut self, format: &str) {
         unsafe { ffi::gst_sdp_media_add_format(&mut self.0, format.to_glib_none().0) };
     }
 
+    #[doc(alias = "gst_sdp_media_as_text")]
     pub fn as_text(&self) -> Result<String, glib::error::BoolError> {
         unsafe {
             match from_glib_full(ffi::gst_sdp_media_as_text(&self.0)) {
@@ -183,10 +189,12 @@ impl SDPMediaRef {
         ConnectionsIter::new(self)
     }
 
+    #[doc(alias = "gst_sdp_media_attributes_len")]
     pub fn attributes_len(&self) -> u32 {
         unsafe { ffi::gst_sdp_media_attributes_len(&self.0) }
     }
 
+    #[doc(alias = "gst_sdp_media_attributes_to_caps")]
     pub fn attributes_to_caps(&self, caps: &mut gst::CapsRef) -> Result<(), glib::BoolError> {
         let result = unsafe { ffi::gst_sdp_media_attributes_to_caps(&self.0, caps.as_mut_ptr()) };
         match result {
@@ -195,19 +203,23 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_media_bandwidths_len")]
     pub fn bandwidths_len(&self) -> u32 {
         unsafe { ffi::gst_sdp_media_bandwidths_len(&self.0) }
     }
 
+    #[doc(alias = "gst_sdp_media_connections_len")]
     pub fn connections_len(&self) -> u32 {
         unsafe { ffi::gst_sdp_media_connections_len(&self.0) }
     }
 
+    #[doc(alias = "gst_sdp_media_formats_len")]
     pub fn formats_len(&self) -> u32 {
         unsafe { ffi::gst_sdp_media_formats_len(&self.0) }
     }
 
     #[doc(alias = "get_attribute")]
+    #[doc(alias = "gst_sdp_media_get_attribute")]
     pub fn attribute(&self, idx: u32) -> Option<&SDPAttribute> {
         if idx >= self.attributes_len() {
             return None;
@@ -224,6 +236,7 @@ impl SDPMediaRef {
     }
 
     #[doc(alias = "get_attribute_val")]
+    #[doc(alias = "gst_sdp_media_get_attribute_val")]
     pub fn attribute_val(&self, key: &str) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_attribute_val(&self.0, key.to_glib_none().0);
@@ -236,6 +249,7 @@ impl SDPMediaRef {
     }
 
     #[doc(alias = "get_attribute_val_n")]
+    #[doc(alias = "gst_sdp_media_get_attribute_val_n")]
     pub fn attribute_val_n(&self, key: &str, nth: u32) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_attribute_val_n(&self.0, key.to_glib_none().0, nth);
@@ -248,6 +262,7 @@ impl SDPMediaRef {
     }
 
     #[doc(alias = "get_bandwidth")]
+    #[doc(alias = "gst_sdp_media_get_bandwidth")]
     pub fn bandwidth(&self, idx: u32) -> Option<&SDPBandwidth> {
         if idx >= self.bandwidths_len() {
             return None;
@@ -264,11 +279,13 @@ impl SDPMediaRef {
     }
 
     #[doc(alias = "get_caps_from_media")]
+    #[doc(alias = "gst_sdp_media_get_caps_from_media")]
     pub fn caps_from_media(&self, pt: i32) -> Option<gst::Caps> {
         unsafe { from_glib_full(ffi::gst_sdp_media_get_caps_from_media(&self.0, pt)) }
     }
 
     #[doc(alias = "get_connection")]
+    #[doc(alias = "gst_sdp_media_get_connection")]
     pub fn connection(&self, idx: u32) -> Option<&SDPConnection> {
         if idx >= self.connections_len() {
             return None;
@@ -285,6 +302,7 @@ impl SDPMediaRef {
     }
 
     #[doc(alias = "get_format")]
+    #[doc(alias = "gst_sdp_media_get_format")]
     pub fn format(&self, idx: u32) -> Option<&str> {
         if idx >= self.formats_len() {
             return None;
@@ -301,6 +319,7 @@ impl SDPMediaRef {
     }
 
     #[doc(alias = "get_information")]
+    #[doc(alias = "gst_sdp_media_get_information")]
     pub fn information(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_information(&self.0);
@@ -313,6 +332,7 @@ impl SDPMediaRef {
     }
 
     #[doc(alias = "get_key")]
+    #[doc(alias = "gst_sdp_media_get_key")]
     pub fn key(&self) -> Option<&SDPKey> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_key(&self.0);
@@ -325,6 +345,7 @@ impl SDPMediaRef {
     }
 
     #[doc(alias = "get_media")]
+    #[doc(alias = "gst_sdp_media_get_media")]
     pub fn media(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_media(&self.0);
@@ -337,16 +358,19 @@ impl SDPMediaRef {
     }
 
     #[doc(alias = "get_num_ports")]
+    #[doc(alias = "gst_sdp_media_get_num_ports")]
     pub fn num_ports(&self) -> u32 {
         unsafe { ffi::gst_sdp_media_get_num_ports(&self.0) }
     }
 
     #[doc(alias = "get_port")]
+    #[doc(alias = "gst_sdp_media_get_port")]
     pub fn port(&self) -> u32 {
         unsafe { ffi::gst_sdp_media_get_port(&self.0) }
     }
 
     #[doc(alias = "get_proto")]
+    #[doc(alias = "gst_sdp_media_get_proto")]
     pub fn proto(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_proto(&self.0);
@@ -358,6 +382,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_media_insert_attribute")]
     pub fn insert_attribute(
         &mut self,
         idx: Option<u32>,
@@ -378,6 +403,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_media_insert_bandwidth")]
     pub fn insert_bandwidth(
         &mut self,
         idx: Option<u32>,
@@ -398,6 +424,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_media_insert_connection")]
     pub fn insert_connection(
         &mut self,
         idx: Option<u32>,
@@ -418,6 +445,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_media_insert_format")]
     pub fn insert_format(&mut self, idx: Option<u32>, format: &str) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.formats_len() {
@@ -434,6 +462,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_media_remove_attribute")]
     pub fn remove_attribute(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.attributes_len() {
             return Err(glib::bool_error!("Failed to remove attribute"));
@@ -446,6 +475,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_media_remove_bandwidth")]
     pub fn remove_bandwidth(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.bandwidths_len() {
             return Err(glib::bool_error!("Failed to remove bandwidth"));
@@ -458,6 +488,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_media_remove_connection")]
     pub fn remove_connection(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.connections_len() {
             return Err(glib::bool_error!("Failed to remove connection"));
@@ -470,6 +501,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_media_remove_format")]
     pub fn remove_format(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.formats_len() {
             return Err(glib::bool_error!("Failed to remove format"));
@@ -482,6 +514,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_media_replace_attribute")]
     pub fn replace_attribute(
         &mut self,
         idx: u32,
@@ -499,6 +532,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_media_replace_bandwidth")]
     pub fn replace_bandwidth(&mut self, idx: u32, bw: SDPBandwidth) -> Result<(), glib::BoolError> {
         if idx >= self.bandwidths_len() {
             return Err(glib::bool_error!("Failed to replace bandwidth"));
@@ -512,6 +546,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_media_replace_connection")]
     pub fn replace_connection(
         &mut self,
         idx: u32,
@@ -530,6 +565,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_media_replace_format")]
     pub fn replace_format(&mut self, idx: u32, format: &str) -> Result<(), glib::BoolError> {
         if idx >= self.formats_len() {
             return Err(glib::bool_error!("Failed to replace format"));
@@ -543,28 +579,34 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_media_set_information")]
     pub fn set_information(&mut self, information: &str) {
         unsafe { ffi::gst_sdp_media_set_information(&mut self.0, information.to_glib_none().0) };
     }
 
+    #[doc(alias = "gst_sdp_media_set_key")]
     pub fn set_key(&mut self, type_: &str, data: &str) {
         unsafe {
             ffi::gst_sdp_media_set_key(&mut self.0, type_.to_glib_none().0, data.to_glib_none().0)
         };
     }
 
+    #[doc(alias = "gst_sdp_media_set_media")]
     pub fn set_media(&mut self, med: &str) {
         unsafe { ffi::gst_sdp_media_set_media(&mut self.0, med.to_glib_none().0) };
     }
 
+    #[doc(alias = "gst_sdp_media_set_port_info")]
     pub fn set_port_info(&mut self, port: u32, num_ports: u32) {
         unsafe { ffi::gst_sdp_media_set_port_info(&mut self.0, port, num_ports) };
     }
 
+    #[doc(alias = "gst_sdp_media_set_proto")]
     pub fn set_proto(&mut self, proto: &str) {
         unsafe { ffi::gst_sdp_media_set_proto(&mut self.0, proto.to_glib_none().0) };
     }
 
+    #[doc(alias = "gst_sdp_media_set_media_from_caps")]
     pub fn set_media_from_caps(
         caps: &gst::Caps,
         media: &mut SDPMedia,

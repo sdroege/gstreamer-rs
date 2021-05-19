@@ -24,6 +24,7 @@ impl fmt::Debug for DebugMessage {
 }
 
 impl DebugMessage {
+    #[doc(alias = "gst_debug_message_get")]
     pub fn get(&self) -> Option<Cow<str>> {
         unsafe {
             let message = ffi::gst_debug_message_get(self.0.as_ptr());
@@ -85,6 +86,7 @@ impl DebugCategory {
     }
 
     #[doc(alias = "get_threshold")]
+    #[doc(alias = "gst_debug_category_get_threshold")]
     pub fn threshold(self) -> crate::DebugLevel {
         match self.0 {
             Some(cat) => unsafe { from_glib(ffi::gst_debug_category_get_threshold(cat.as_ptr())) },
@@ -92,12 +94,14 @@ impl DebugCategory {
         }
     }
 
+    #[doc(alias = "gst_debug_category_set_threshold")]
     pub fn set_threshold(self, threshold: crate::DebugLevel) {
         if let Some(cat) = self.0 {
             unsafe { ffi::gst_debug_category_set_threshold(cat.as_ptr(), threshold.into_glib()) }
         }
     }
 
+    #[doc(alias = "gst_debug_category_reset_threshold")]
     pub fn reset_threshold(self) {
         if let Some(cat) = self.0 {
             unsafe { ffi::gst_debug_category_reset_threshold(cat.as_ptr()) }
@@ -105,6 +109,7 @@ impl DebugCategory {
     }
 
     #[doc(alias = "get_color")]
+    #[doc(alias = "gst_debug_category_get_color")]
     pub fn color(self) -> crate::DebugColorFlags {
         match self.0 {
             Some(cat) => unsafe { from_glib(ffi::gst_debug_category_get_color(cat.as_ptr())) },
@@ -113,6 +118,7 @@ impl DebugCategory {
     }
 
     #[doc(alias = "get_name")]
+    #[doc(alias = "gst_debug_category_get_name")]
     pub fn name<'a>(self) -> &'a str {
         match self.0 {
             Some(cat) => unsafe {
@@ -125,6 +131,7 @@ impl DebugCategory {
     }
 
     #[doc(alias = "get_description")]
+    #[doc(alias = "gst_debug_category_get_description")]
     pub fn description<'a>(self) -> Option<&'a str> {
         match self.0 {
             Some(cat) => unsafe {
@@ -141,6 +148,7 @@ impl DebugCategory {
     }
 
     #[inline]
+    #[doc(alias = "gst_debug_log")]
     pub fn log<O: IsA<glib::Object>>(
         self,
         obj: Option<&O>,
@@ -456,6 +464,7 @@ impl fmt::Display for LoggedObject {
     }
 }
 
+#[doc(alias = "gst_debug_add_log_function")]
 pub fn debug_add_log_function<T>(function: T) -> DebugLogFunction
 where
     T: Fn(DebugCategory, DebugLevel, &str, &str, u32, Option<&LoggedObject>, &DebugMessage)
@@ -483,6 +492,7 @@ pub fn debug_remove_default_log_function() {
     }
 }
 
+#[doc(alias = "gst_debug_remove_log_function_by_data")]
 pub fn debug_remove_log_function(log_fn: DebugLogFunction) {
     skip_assert_initialized!();
     unsafe {

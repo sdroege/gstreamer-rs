@@ -76,6 +76,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_audio_decoder_finish_subframe")]
     fn finish_subframe(
         &self,
         buffer: Option<gst::Buffer>,
@@ -88,6 +89,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_audio_decoder_negotiate")]
     fn negotiate(&self) -> Result<(), gst::FlowError> {
         unsafe {
             let ret = from_glib(ffi::gst_audio_decoder_negotiate(
@@ -103,6 +105,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_audio_decoder_set_output_caps")]
     fn set_output_caps(&self, caps: &gst::Caps) -> Result<(), gst::FlowError> {
         unsafe {
             let ret = from_glib(ffi::gst_audio_decoder_set_output_caps(
@@ -117,6 +120,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_audio_decoder_set_output_format")]
     fn set_output_format(&self, info: &AudioInfo) -> Result<(), gst::FlowError> {
         unsafe {
             let ret = from_glib(ffi::gst_audio_decoder_set_output_format(
@@ -131,6 +135,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_audio_decoder_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();

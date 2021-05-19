@@ -6,6 +6,7 @@ use glib::translate::*;
 use crate::RTSPMedia;
 
 pub trait RTSPMediaExtManual: 'static {
+    #[doc(alias = "gst_rtsp_media_take_pipeline")]
     fn take_pipeline<P: IsA<gst::Pipeline>>(&self, pipeline: &P);
 }
 

@@ -10,6 +10,7 @@ gst::mini_object_wrapper!(RTSPToken, RTSPTokenRef, ffi::GstRTSPToken, || {
 });
 
 impl RTSPToken {
+    #[doc(alias = "gst_rtsp_token_new_empty")]
     pub fn new_empty() -> Self {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_rtsp_token_new_empty()) }
@@ -34,6 +35,7 @@ impl RTSPToken {
 
 impl RTSPTokenRef {
     #[doc(alias = "get_string")]
+    #[doc(alias = "gst_rtsp_token_get_string")]
     pub fn string(&self, field: &str) -> Option<String> {
         unsafe {
             from_glib_none(ffi::gst_rtsp_token_get_string(
@@ -44,10 +46,12 @@ impl RTSPTokenRef {
     }
 
     #[doc(alias = "get_structure")]
+    #[doc(alias = "gst_rtsp_token_get_structure")]
     pub fn structure(&self) -> Option<gst::Structure> {
         unsafe { from_glib_none(ffi::gst_rtsp_token_get_structure(self.as_mut_ptr())) }
     }
 
+    #[doc(alias = "gst_rtsp_token_is_allowed")]
     pub fn is_allowed(&self, field: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_token_is_allowed(

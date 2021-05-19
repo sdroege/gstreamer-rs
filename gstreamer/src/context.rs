@@ -12,6 +12,7 @@ mini_object_wrapper!(Context, ContextRef, ffi::GstContext, || {
 });
 
 impl Context {
+    #[doc(alias = "gst_context_new")]
     pub fn new(context_type: &str, persistent: bool) -> Self {
         assert_initialized_main_thread!();
         unsafe {
@@ -25,6 +26,7 @@ impl Context {
 
 impl ContextRef {
     #[doc(alias = "get_context_type")]
+    #[doc(alias = "gst_context_get_context_type")]
     pub fn context_type(&self) -> &str {
         unsafe {
             let raw = ffi::gst_context_get_context_type(self.as_mut_ptr());
@@ -32,6 +34,7 @@ impl ContextRef {
         }
     }
 
+    #[doc(alias = "gst_context_has_context_type")]
     pub fn has_context_type(&self, context_type: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_context_has_context_type(
@@ -41,11 +44,13 @@ impl ContextRef {
         }
     }
 
+    #[doc(alias = "gst_context_is_persistent")]
     pub fn is_persistent(&self) -> bool {
         unsafe { from_glib(ffi::gst_context_is_persistent(self.as_mut_ptr())) }
     }
 
     #[doc(alias = "get_structure")]
+    #[doc(alias = "gst_context_get_structure")]
     pub fn structure(&self) -> &StructureRef {
         unsafe { StructureRef::from_glib_borrow(ffi::gst_context_get_structure(self.as_mut_ptr())) }
     }

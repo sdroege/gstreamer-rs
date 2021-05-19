@@ -7,6 +7,7 @@ use glib::translate::*;
 
 pub trait ControlBindingExtManual: 'static {
     #[doc(alias = "get_g_value_array")]
+    #[doc(alias = "gst_control_binding_get_g_value_array")]
     fn g_value_array(
         &self,
         timestamp: ClockTime,

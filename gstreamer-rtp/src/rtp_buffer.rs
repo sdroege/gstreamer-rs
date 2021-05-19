@@ -80,42 +80,50 @@ impl<'a> RTPBuffer<'a, Writable> {
         }
     }
 
+    #[doc(alias = "gst_rtp_buffer_set_seq")]
     pub fn set_seq(&mut self, seq: u16) {
         unsafe {
             ffi::gst_rtp_buffer_set_seq(&mut self.rtp_buffer, seq);
         }
     }
 
+    #[doc(alias = "gst_rtp_buffer_set_marker")]
     pub fn set_marker(&mut self, m: bool) {
         unsafe {
             ffi::gst_rtp_buffer_set_marker(&mut self.rtp_buffer, m.into_glib());
         }
     }
 
+    #[doc(alias = "gst_rtp_buffer_set_payload_type")]
     pub fn set_payload_type(&mut self, pt: u8) {
         unsafe {
             ffi::gst_rtp_buffer_set_payload_type(&mut self.rtp_buffer, pt);
         }
     }
 
+    #[doc(alias = "gst_rtp_buffer_set_ssrc")]
     pub fn set_ssrc(&mut self, ssrc: u32) {
         unsafe { ffi::gst_rtp_buffer_set_ssrc(&mut self.rtp_buffer, ssrc) }
     }
 
+    #[doc(alias = "gst_rtp_buffer_set_csrc")]
     pub fn set_csrc(&mut self, idx: u8, ssrc: u32) {
         unsafe { ffi::gst_rtp_buffer_set_csrc(&mut self.rtp_buffer, idx, ssrc) }
     }
 
+    #[doc(alias = "gst_rtp_buffer_set_timestamp")]
     pub fn set_timestamp(&mut self, rtptime: u32) {
         unsafe {
             ffi::gst_rtp_buffer_set_timestamp(&mut self.rtp_buffer, rtptime);
         }
     }
 
+    #[doc(alias = "gst_rtp_buffer_set_extension")]
     pub fn set_extension(&mut self, extension: bool) {
         unsafe { ffi::gst_rtp_buffer_set_extension(&mut self.rtp_buffer, extension.into_glib()) }
     }
 
+    #[doc(alias = "gst_rtp_buffer_add_extension_onebyte_header")]
     pub fn add_extension_onebyte_header(
         &mut self,
         id: u8,
@@ -144,6 +152,7 @@ impl<'a> RTPBuffer<'a, Writable> {
         }
     }
 
+    #[doc(alias = "gst_rtp_buffer_add_extension_twobytes_header")]
     pub fn add_extension_twobytes_header(
         &mut self,
         appbits: u8,
@@ -175,11 +184,13 @@ impl<'a> RTPBuffer<'a, Writable> {
 
 impl<'a, T> RTPBuffer<'a, T> {
     #[doc(alias = "get_seq")]
+    #[doc(alias = "gst_rtp_buffer_get_seq")]
     pub fn seq(&self) -> u16 {
         unsafe { ffi::gst_rtp_buffer_get_seq(glib::translate::mut_override(&self.rtp_buffer)) }
     }
 
     #[doc(alias = "get_payload_type")]
+    #[doc(alias = "gst_rtp_buffer_get_payload_type")]
     pub fn payload_type(&self) -> u8 {
         unsafe {
             ffi::gst_rtp_buffer_get_payload_type(glib::translate::mut_override(&self.rtp_buffer))
@@ -187,11 +198,13 @@ impl<'a, T> RTPBuffer<'a, T> {
     }
 
     #[doc(alias = "get_ssrc")]
+    #[doc(alias = "gst_rtp_buffer_get_ssrc")]
     pub fn ssrc(&self) -> u32 {
         unsafe { ffi::gst_rtp_buffer_get_ssrc(glib::translate::mut_override(&self.rtp_buffer)) }
     }
 
     #[doc(alias = "get_timestamp")]
+    #[doc(alias = "gst_rtp_buffer_get_timestamp")]
     pub fn timestamp(&self) -> u32 {
         unsafe {
             ffi::gst_rtp_buffer_get_timestamp(glib::translate::mut_override(&self.rtp_buffer))
@@ -199,6 +212,7 @@ impl<'a, T> RTPBuffer<'a, T> {
     }
 
     #[doc(alias = "get_csrc")]
+    #[doc(alias = "gst_rtp_buffer_get_csrc")]
     pub fn csrc(&self, idx: u8) -> Option<u32> {
         if idx < self.csrc_count() {
             unsafe {
@@ -213,6 +227,7 @@ impl<'a, T> RTPBuffer<'a, T> {
     }
 
     #[doc(alias = "get_csrc_count")]
+    #[doc(alias = "gst_rtp_buffer_get_csrc_count")]
     pub fn csrc_count(&self) -> u8 {
         unsafe {
             ffi::gst_rtp_buffer_get_csrc_count(glib::translate::mut_override(&self.rtp_buffer))
@@ -237,6 +252,7 @@ impl<'a, T> RTPBuffer<'a, T> {
     }
 
     #[doc(alias = "get_payload")]
+    #[doc(alias = "gst_rtp_buffer_get_payload")]
     pub fn payload(&self) -> Result<&[u8], glib::error::BoolError> {
         let size = self.payload_size();
         if size == 0 {
@@ -263,6 +279,7 @@ impl<'a, T> RTPBuffer<'a, T> {
     }
 
     #[doc(alias = "get_extension_bytes")]
+    #[doc(alias = "gst_rtp_buffer_get_extension_bytes")]
     pub fn extension_bytes(&self) -> Option<(u16, glib::Bytes)> {
         unsafe {
             let mut bits: u16 = 0;
@@ -275,6 +292,7 @@ impl<'a, T> RTPBuffer<'a, T> {
     }
 
     #[doc(alias = "get_extension_onebyte_header")]
+    #[doc(alias = "gst_rtp_buffer_get_extension_onebyte_header")]
     pub fn extension_onebyte_header(&self, id: u8, nth: u32) -> Option<&[u8]> {
         unsafe {
             let mut data = ptr::null_mut();
@@ -297,6 +315,7 @@ impl<'a, T> RTPBuffer<'a, T> {
     }
 
     #[doc(alias = "get_extension_twobytes_header")]
+    #[doc(alias = "gst_rtp_buffer_get_extension_twobytes_header")]
     pub fn extension_twobytes_header(&self, id: u8, nth: u32) -> Option<(u8, &[u8])> {
         unsafe {
             let mut data = ptr::null_mut();
@@ -358,6 +377,7 @@ impl RTPBufferExt for gst::Buffer {
     }
 }
 
+#[doc(alias = "gst_rtp_buffer_compare_seqnum")]
 pub fn compare_seqnum(seqnum1: u16, seqnum2: u16) -> i32 {
     skip_assert_initialized!();
     unsafe { ffi::gst_rtp_buffer_compare_seqnum(seqnum1, seqnum2) }

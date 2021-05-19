@@ -7,7 +7,9 @@ use std::ptr;
 
 pub trait TimelineElementExtManual: 'static {
     #[doc(alias = "get_child_property")]
+    #[doc(alias = "ges_timeline_element_get_child_property")]
     fn child_property(&self, name: &str) -> Option<glib::Value>;
+    #[doc(alias = "ges_timeline_element_set_child_property")]
     fn set_child_property(
         &self,
         name: &str,

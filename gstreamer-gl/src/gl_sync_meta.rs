@@ -14,6 +14,7 @@ unsafe impl Send for GLSyncMeta {}
 unsafe impl Sync for GLSyncMeta {}
 
 impl GLSyncMeta {
+    #[doc(alias = "gst_buffer_add_gl_sync_meta")]
     pub fn add<'a, C: IsA<GLContext>>(
         buffer: &'a mut gst::BufferRef,
         context: &C,
@@ -33,6 +34,7 @@ impl GLSyncMeta {
         unsafe { from_glib_none(self.0.context) }
     }
 
+    #[doc(alias = "gst_gl_sync_meta_set_sync_point")]
     pub fn set_sync_point<C: IsA<GLContext>>(&self, context: &C) {
         unsafe {
             ffi::gst_gl_sync_meta_set_sync_point(
@@ -42,6 +44,7 @@ impl GLSyncMeta {
         }
     }
 
+    #[doc(alias = "gst_gl_sync_meta_wait")]
     pub fn wait<C: IsA<GLContext>>(&self, context: &C) {
         unsafe {
             ffi::gst_gl_sync_meta_wait(
@@ -51,6 +54,7 @@ impl GLSyncMeta {
         }
     }
 
+    #[doc(alias = "gst_gl_sync_meta_wait_cpu")]
     pub fn wait_cpu<C: IsA<GLContext>>(&self, context: &C) {
         unsafe {
             ffi::gst_gl_sync_meta_wait_cpu(
@@ -64,6 +68,7 @@ impl GLSyncMeta {
 unsafe impl MetaAPI for GLSyncMeta {
     type GstType = ffi::GstGLSyncMeta;
 
+    #[doc(alias = "gst_gl_sync_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_sync_meta_api_get_type()) }
     }

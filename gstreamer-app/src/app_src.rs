@@ -207,6 +207,7 @@ unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
 }
 
 impl AppSrc {
+    #[doc(alias = "gst_app_src_push_buffer")]
     pub fn push_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             gst::FlowSuccess::try_from_glib(ffi::gst_app_src_push_buffer(
@@ -218,6 +219,7 @@ impl AppSrc {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_app_src_push_buffer_list")]
     pub fn push_buffer_list(
         &self,
         list: gst::BufferList,
@@ -230,6 +232,7 @@ impl AppSrc {
         }
     }
 
+    #[doc(alias = "gst_app_src_set_callbacks")]
     pub fn set_callbacks(&self, callbacks: AppSrcCallbacks) {
         use once_cell::sync::Lazy;
         static SET_ONCE_QUARK: Lazy<glib::Quark> =
@@ -262,6 +265,7 @@ impl AppSrc {
         }
     }
 
+    #[doc(alias = "gst_app_src_set_latency")]
     pub fn set_latency(&self, min: gst::ClockTime, max: gst::ClockTime) {
         unsafe {
             ffi::gst_app_src_set_latency(self.to_glib_none().0, min.into_glib(), max.into_glib());
@@ -269,6 +273,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "get_latency")]
+    #[doc(alias = "gst_app_src_get_latency")]
     pub fn latency(&self) -> (gst::ClockTime, gst::ClockTime) {
         unsafe {
             let mut min = mem::MaybeUninit::uninit();

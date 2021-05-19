@@ -6,6 +6,7 @@ use glib::translate::*;
 use std::mem;
 
 impl WebRTCSessionDescription {
+    #[doc(alias = "gst_webrtc_session_description_new")]
     pub fn new(type_: WebRTCSDPType, sdp: gst_sdp::SDPMessage) -> WebRTCSessionDescription {
         assert_initialized_main_thread!();
         unsafe {

@@ -810,19 +810,32 @@ impl<'a> glib::types::StaticType for List<'a> {
 }
 
 pub trait GstValueExt: Sized {
+    #[doc(alias = "gst_value_can_compare")]
     fn can_compare(&self, other: &Self) -> bool;
+    #[doc(alias = "gst_value_compare")]
     fn compare(&self, other: &Self) -> Option<cmp::Ordering>;
     fn eq(&self, other: &Self) -> bool;
+    #[doc(alias = "gst_value_can_intersect")]
     fn can_intersect(&self, other: &Self) -> bool;
+    #[doc(alias = "gst_value_intersect")]
     fn intersect(&self, other: &Self) -> Option<Self>;
+    #[doc(alias = "gst_value_can_subtract")]
     fn can_subtract(&self, other: &Self) -> bool;
+    #[doc(alias = "gst_value_subtract")]
     fn subtract(&self, other: &Self) -> Option<Self>;
+    #[doc(alias = "gst_value_can_union")]
     fn can_union(&self, other: &Self) -> bool;
+    #[doc(alias = "gst_value_union")]
     fn union(&self, other: &Self) -> Option<Self>;
+    #[doc(alias = "gst_value_fixate")]
     fn fixate(&self) -> Option<Self>;
+    #[doc(alias = "gst_value_is_fixed")]
     fn is_fixed(&self) -> bool;
+    #[doc(alias = "gst_value_is_subset")]
     fn is_subset(&self, superset: &Self) -> bool;
+    #[doc(alias = "gst_value_serialize")]
     fn serialize(&self) -> Result<glib::GString, glib::BoolError>;
+    #[doc(alias = "gst_value_deserialize")]
     fn deserialize<'a, T: Into<&'a str>>(s: T) -> Result<glib::Value, glib::BoolError>;
 }
 

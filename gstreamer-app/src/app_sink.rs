@@ -236,6 +236,7 @@ unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
 }
 
 impl AppSink {
+    #[doc(alias = "gst_app_sink_set_callbacks")]
     pub fn set_callbacks(&self, callbacks: AppSinkCallbacks) {
         use once_cell::sync::Lazy;
         static SET_ONCE_QUARK: Lazy<glib::Quark> =

@@ -25,11 +25,13 @@ unsafe impl Send for ParseContext {}
 unsafe impl Sync for ParseContext {}
 
 impl ParseContext {
+    #[doc(alias = "gst_parse_context_new")]
     pub fn new() -> Self {
         unsafe { from_glib_full(ffi::gst_parse_context_new()) }
     }
 
     #[doc(alias = "get_missing_elements")]
+    #[doc(alias = "gst_parse_context_get_missing_elements")]
     pub fn missing_elements(&self) -> Vec<String> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_parse_context_get_missing_elements(

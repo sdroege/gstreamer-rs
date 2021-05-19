@@ -6,6 +6,8 @@ use glib::translate::*;
 
 impl DiscovererVideoInfo {
     #[doc(alias = "get_framerate")]
+    #[doc(alias = "gst_discoverer_video_info_get_framerate_num")]
+    #[doc(alias = "gst_discoverer_video_info_get_framerate_denom")]
     pub fn framerate(&self) -> gst::Fraction {
         unsafe {
             gst::Fraction::new(
@@ -16,6 +18,8 @@ impl DiscovererVideoInfo {
     }
 
     #[doc(alias = "get_par")]
+    #[doc(alias = "gst_discoverer_video_info_get_par_num")]
+    #[doc(alias = "gst_discoverer_video_info_get_par_denom")]
     pub fn par(&self) -> gst::Fraction {
         unsafe {
             gst::Fraction::new(

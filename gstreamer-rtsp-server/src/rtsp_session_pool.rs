@@ -31,6 +31,7 @@ fn into_raw_watch<F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static>(func:
 }
 
 pub trait RTSPSessionPoolExtManual: 'static {
+    #[doc(alias = "gst_rtsp_session_pool_create_watch")]
     fn create_watch<F>(&self, name: Option<&str>, priority: Priority, func: F) -> glib::Source
     where
         F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static;

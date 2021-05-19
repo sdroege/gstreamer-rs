@@ -13,6 +13,7 @@ unsafe impl Send for VideoMeta {}
 unsafe impl Sync for VideoMeta {}
 
 impl VideoMeta {
+    #[doc(alias = "gst_buffer_add_video_meta")]
     pub fn add(
         buffer: &mut gst::BufferRef,
         flags: crate::VideoFrameFlags,
@@ -166,6 +167,7 @@ impl VideoMeta {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "get_plane_size")]
+    #[doc(alias = "gst_video_meta_get_plane_size")]
     pub fn plane_size(&self) -> Result<[usize; crate::VIDEO_MAX_PLANES], glib::BoolError> {
         let mut plane_size = [0; crate::VIDEO_MAX_PLANES];
 
@@ -185,6 +187,7 @@ impl VideoMeta {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "get_plane_height")]
+    #[doc(alias = "gst_video_meta_get_plane_height")]
     pub fn plane_height(&self) -> Result<[u32; crate::VIDEO_MAX_PLANES], glib::BoolError> {
         let mut plane_height = [0; crate::VIDEO_MAX_PLANES];
 
@@ -203,6 +206,7 @@ impl VideoMeta {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_meta_set_alignment")]
     pub fn set_alignment(
         &mut self,
         alignment: &crate::VideoAlignment,
@@ -219,6 +223,7 @@ impl VideoMeta {
 unsafe impl MetaAPI for VideoMeta {
     type GstType = ffi::GstVideoMeta;
 
+    #[doc(alias = "gst_video_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_meta_api_get_type()) }
     }
@@ -246,6 +251,7 @@ unsafe impl Send for VideoCropMeta {}
 unsafe impl Sync for VideoCropMeta {}
 
 impl VideoCropMeta {
+    #[doc(alias = "gst_buffer_add_meta")]
     pub fn add(
         buffer: &mut gst::BufferRef,
         rect: (u32, u32, u32, u32),
@@ -286,6 +292,7 @@ impl VideoCropMeta {
 unsafe impl MetaAPI for VideoCropMeta {
     type GstType = ffi::GstVideoCropMeta;
 
+    #[doc(alias = "gst_video_crop_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_crop_meta_api_get_type()) }
     }
@@ -306,6 +313,7 @@ unsafe impl Send for VideoRegionOfInterestMeta {}
 unsafe impl Sync for VideoRegionOfInterestMeta {}
 
 impl VideoRegionOfInterestMeta {
+    #[doc(alias = "gst_buffer_add_video_region_of_interest_meta")]
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
         roi_type: &str,
@@ -377,6 +385,7 @@ impl VideoRegionOfInterestMeta {
     }
 
     #[cfg(feature = "v1_14")]
+    #[doc(alias = "gst_video_region_of_interest_meta_add_param")]
     pub fn add_param(&mut self, s: gst::Structure) {
         unsafe {
             ffi::gst_video_region_of_interest_meta_add_param(&mut self.0, s.into_ptr());
@@ -414,6 +423,7 @@ impl<'a> Iterator for ParamsIter<'a> {
 unsafe impl MetaAPI for VideoRegionOfInterestMeta {
     type GstType = ffi::GstVideoRegionOfInterestMeta;
 
+    #[doc(alias = "gst_video_region_of_interest_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_region_of_interest_meta_api_get_type()) }
     }
@@ -444,6 +454,7 @@ unsafe impl Send for VideoAffineTransformationMeta {}
 unsafe impl Sync for VideoAffineTransformationMeta {}
 
 impl VideoAffineTransformationMeta {
+    #[doc(alias = "gst_buffer_add_meta")]
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
         matrix: Option<&[f32; 16]>,
@@ -474,6 +485,7 @@ impl VideoAffineTransformationMeta {
         self.0.matrix.copy_from_slice(matrix);
     }
 
+    #[doc(alias = "gst_video_affine_transformation_meta_apply_matrix")]
     pub fn apply_matrix(&mut self, matrix: &[f32; 16]) {
         unsafe {
             ffi::gst_video_affine_transformation_meta_apply_matrix(&mut self.0, matrix);
@@ -484,6 +496,7 @@ impl VideoAffineTransformationMeta {
 unsafe impl MetaAPI for VideoAffineTransformationMeta {
     type GstType = ffi::GstVideoAffineTransformationMeta;
 
+    #[doc(alias = "gst_video_affine_transformation_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_affine_transformation_meta_api_get_type()) }
     }
@@ -504,6 +517,7 @@ unsafe impl Send for VideoOverlayCompositionMeta {}
 unsafe impl Sync for VideoOverlayCompositionMeta {}
 
 impl VideoOverlayCompositionMeta {
+    #[doc(alias = "gst_buffer_add_video_overlay_composition_meta")]
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
         overlay: &crate::VideoOverlayComposition,
@@ -542,6 +556,7 @@ impl VideoOverlayCompositionMeta {
 unsafe impl MetaAPI for VideoOverlayCompositionMeta {
     type GstType = ffi::GstVideoOverlayCompositionMeta;
 
+    #[doc(alias = "gst_video_overlay_composition_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_overlay_composition_meta_api_get_type()) }
     }
@@ -570,6 +585,7 @@ unsafe impl Sync for VideoCaptionMeta {}
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl VideoCaptionMeta {
+    #[doc(alias = "gst_buffer_add_video_caption_meta")]
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
         caption_type: crate::VideoCaptionType,
@@ -609,6 +625,7 @@ impl VideoCaptionMeta {
 unsafe impl MetaAPI for VideoCaptionMeta {
     type GstType = ffi::GstVideoCaptionMeta;
 
+    #[doc(alias = "gst_video_caption_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_caption_meta_api_get_type()) }
     }
@@ -640,6 +657,7 @@ unsafe impl Sync for VideoAFDMeta {}
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl VideoAFDMeta {
+    #[doc(alias = "gst_buffer_add_video_afd_meta")]
     pub fn add(
         buffer: &mut gst::BufferRef,
         field: u8,
@@ -681,6 +699,7 @@ impl VideoAFDMeta {
 unsafe impl MetaAPI for VideoAFDMeta {
     type GstType = ffi::GstVideoAFDMeta;
 
+    #[doc(alias = "gst_video_afd_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_afd_meta_api_get_type()) }
     }
@@ -713,6 +732,7 @@ unsafe impl Sync for VideoBarMeta {}
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl VideoBarMeta {
+    #[doc(alias = "gst_buffer_add_video_bar_meta")]
     pub fn add(
         buffer: &mut gst::BufferRef,
         field: u8,
@@ -760,6 +780,7 @@ impl VideoBarMeta {
 unsafe impl MetaAPI for VideoBarMeta {
     type GstType = ffi::GstVideoBarMeta;
 
+    #[doc(alias = "gst_video_bar_meta_api_get_type")]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_bar_meta_api_get_type()) }
     }

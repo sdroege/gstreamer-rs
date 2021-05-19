@@ -85,6 +85,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
+    #[doc(alias = "gst_segment_clip")]
     pub fn clip<V: Into<T>>(&self, start: V, stop: V) -> Option<(T, T)> {
         let start = start.into();
         let stop = stop.into();
@@ -117,6 +118,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     }
 
     #[allow(clippy::too_many_arguments)]
+    #[doc(alias = "gst_segment_do_seek")]
     pub fn do_seek<V: Into<T>>(
         &mut self,
         rate: f64,
@@ -156,6 +158,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
+    #[doc(alias = "gst_segment_offset_running_time")]
     pub fn offset_running_time(&mut self, offset: i64) -> Result<(), glib::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -169,6 +172,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
+    #[doc(alias = "gst_segment_position_from_running_time")]
     pub fn position_from_running_time<V: Into<T>>(&self, running_time: V) -> T {
         let running_time = running_time.into();
 
@@ -188,6 +192,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
+    #[doc(alias = "gst_segment_position_from_running_time_full")]
     pub fn position_from_running_time_full<V: Into<T>>(&self, running_time: V) -> (i32, T) {
         let running_time = running_time.into();
 
@@ -210,6 +215,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
+    #[doc(alias = "gst_segment_position_from_stream_time")]
     pub fn position_from_stream_time<V: Into<T>>(&self, stream_time: V) -> T {
         let stream_time = stream_time.into();
 
@@ -229,6 +235,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
+    #[doc(alias = "gst_segment_position_from_stream_time_full")]
     pub fn position_from_stream_time_full<V: Into<T>>(&self, stream_time: V) -> (i32, T) {
         let stream_time = stream_time.into();
 
@@ -251,6 +258,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
+    #[doc(alias = "gst_segment_set_running_time")]
     pub fn set_running_time<V: Into<T>>(&mut self, running_time: V) -> Result<(), glib::BoolError> {
         let running_time = running_time.into();
 
@@ -270,6 +278,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
+    #[doc(alias = "gst_segment_to_running_time")]
     pub fn to_running_time<V: Into<T>>(&self, position: V) -> T {
         let position = position.into();
 
@@ -289,6 +298,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
+    #[doc(alias = "gst_segment_to_running_time_full")]
     pub fn to_running_time_full<V: Into<T>>(&self, position: V) -> (i32, T) {
         let position = position.into();
 
@@ -311,6 +321,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
+    #[doc(alias = "gst_segment_to_stream_time")]
     pub fn to_stream_time<V: Into<T>>(&self, position: V) -> T {
         let position = position.into();
 
@@ -330,6 +341,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
+    #[doc(alias = "gst_segment_to_stream_time_full")]
     pub fn to_stream_time_full<V: Into<T>>(&self, position: V) -> (i32, T) {
         let position = position.into();
 
@@ -496,6 +508,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
 
 impl<T: FormattedValue> PartialEq for FormattedSegment<T> {
     #[inline]
+    #[doc(alias = "gst_segment_is_equal")]
     fn eq(&self, other: &Self) -> bool {
         unsafe { from_glib(ffi::gst_segment_is_equal(&self.0, &other.0)) }
     }

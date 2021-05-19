@@ -16,6 +16,7 @@ impl AudioChannelPosition {
         1 << (pos as u32)
     }
 
+    #[doc(alias = "gst_audio_channel_positions_to_mask")]
     pub fn positions_to_mask(
         positions: &[Self],
         force_order: bool,
@@ -53,6 +54,7 @@ impl AudioChannelPosition {
         }
     }
 
+    #[doc(alias = "gst_audio_channel_positions_from_mask")]
     pub fn positions_from_mask(mask: u64, positions: &mut [Self]) -> Result<(), glib::BoolError> {
         assert_initialized_main_thread!();
 
@@ -83,6 +85,7 @@ impl AudioChannelPosition {
         }
     }
 
+    #[doc(alias = "gst_audio_channel_positions_to_valid_order")]
     pub fn positions_to_valid_order(positions: &mut [Self]) -> Result<(), glib::BoolError> {
         assert_initialized_main_thread!();
 
@@ -119,12 +122,14 @@ impl AudioChannelPosition {
     }
 
     #[doc(alias = "get_fallback_mask")]
+    #[doc(alias = "gst_audio_channel_get_fallback_mask")]
     pub fn fallback_mask(channels: u32) -> u64 {
         assert_initialized_main_thread!();
 
         unsafe { ffi::gst_audio_channel_get_fallback_mask(channels as i32) }
     }
 
+    #[doc(alias = "gst_audio_check_valid_channel_positions")]
     pub fn check_valid_channel_positions(positions: &[Self], force_order: bool) -> bool {
         assert_initialized_main_thread!();
 
@@ -151,6 +156,7 @@ impl AudioChannelPosition {
     }
 }
 
+#[doc(alias = "gst_audio_buffer_reorder_channels")]
 pub fn buffer_reorder_channels(
     buffer: &mut gst::BufferRef,
     format: crate::AudioFormat,
@@ -200,6 +206,7 @@ pub fn buffer_reorder_channels(
     }
 }
 
+#[doc(alias = "gst_audio_reorder_channels")]
 pub fn reorder_channels(
     data: &mut [u8],
     format: crate::AudioFormat,
@@ -251,6 +258,7 @@ pub fn reorder_channels(
 }
 
 #[doc(alias = "get_channel_reorder_map")]
+#[doc(alias = "gst_audio_get_channel_reorder_map")]
 pub fn channel_reorder_map(
     from: &[AudioChannelPosition],
     to: &[AudioChannelPosition],

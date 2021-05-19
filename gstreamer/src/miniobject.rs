@@ -69,6 +69,7 @@ macro_rules! mini_object_wrapper (
                 }
             }
 
+            #[doc(alias = "gst_mini_object_is_writable")]
             pub fn is_writable(&self) -> bool {
                 unsafe {
                     $crate::glib::translate::from_glib($crate::ffi::gst_mini_object_is_writable(
@@ -383,6 +384,7 @@ macro_rules! mini_object_wrapper (
                 &mut *(ptr as *mut Self)
             }
 
+            #[doc(alias = "gst_mini_object_copy")]
             pub fn copy(&self) -> $name {
                 unsafe {
                     $name::from_glib_full($crate::ffi::gst_mini_object_copy(

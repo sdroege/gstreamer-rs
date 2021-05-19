@@ -11,6 +11,7 @@ use glib::translate::*;
 impl PadTemplate {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_pad_template_new_from_static_pad_template_with_gtype")]
     pub fn from_static_pad_template_with_gtype(
         pad_template: &StaticPadTemplate,
         pad_type: glib::types::Type,

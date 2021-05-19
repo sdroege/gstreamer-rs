@@ -71,6 +71,7 @@ impl fmt::Display for SDPMessage {
 }
 
 impl SDPMessage {
+    #[doc(alias = "gst_sdp_message_new")]
     pub fn new() -> SDPMessage {
         assert_initialized_main_thread!();
         unsafe {
@@ -80,6 +81,7 @@ impl SDPMessage {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_parse_buffer")]
     pub fn parse_buffer(data: &[u8]) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -97,6 +99,7 @@ impl SDPMessage {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_parse_uri")]
     pub fn parse_uri(uri: &str) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -163,6 +166,7 @@ unsafe impl Send for SDPMessageRef {}
 unsafe impl Sync for SDPMessageRef {}
 
 impl SDPMessageRef {
+    #[doc(alias = "gst_sdp_message_add_attribute")]
     pub fn add_attribute(&mut self, key: &str, value: Option<&str>) {
         unsafe {
             ffi::gst_sdp_message_add_attribute(
@@ -173,10 +177,12 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_add_email")]
     pub fn add_email(&mut self, email: &str) {
         unsafe { ffi::gst_sdp_message_add_email(&mut self.0, email.to_glib_none().0) };
     }
 
+    #[doc(alias = "gst_sdp_message_add_media")]
     pub fn add_media(&mut self, media: SDPMedia) {
         unsafe {
             ffi::gst_sdp_message_add_media(
@@ -186,10 +192,12 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_add_phone")]
     pub fn add_phone(&mut self, phone: &str) {
         unsafe { ffi::gst_sdp_message_add_phone(&mut self.0, phone.to_glib_none().0) };
     }
 
+    #[doc(alias = "gst_sdp_message_add_time")]
     pub fn add_time(&mut self, start: &str, stop: &str, repeat: &[&str]) {
         unsafe {
             ffi::gst_sdp_message_add_time(
@@ -201,6 +209,7 @@ impl SDPMessageRef {
         };
     }
 
+    #[doc(alias = "gst_sdp_message_add_zone")]
     pub fn add_zone(&mut self, adj_time: &str, typed_time: &str) {
         unsafe {
             ffi::gst_sdp_message_add_zone(
@@ -211,6 +220,7 @@ impl SDPMessageRef {
         };
     }
 
+    #[doc(alias = "gst_sdp_message_as_text")]
     pub fn as_text(&self) -> Result<String, glib::error::BoolError> {
         unsafe {
             match from_glib_full(ffi::gst_sdp_message_as_text(&self.0)) {
@@ -222,10 +232,12 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_attributes_len")]
     pub fn attributes_len(&self) -> u32 {
         unsafe { ffi::gst_sdp_message_attributes_len(&self.0) }
     }
 
+    #[doc(alias = "gst_sdp_message_attributes_to_caps")]
     pub fn attributes_to_caps(&self, caps: &mut gst::CapsRef) -> Result<(), glib::BoolError> {
         let result = unsafe { ffi::gst_sdp_message_attributes_to_caps(&self.0, caps.as_mut_ptr()) };
         match result {
@@ -234,19 +246,23 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_bandwidths_len")]
     pub fn bandwidths_len(&self) -> u32 {
         unsafe { ffi::gst_sdp_message_bandwidths_len(&self.0) }
     }
 
+    #[doc(alias = "gst_sdp_message_dump")]
     pub fn dump(&self) {
         unsafe { ffi::gst_sdp_message_dump(&self.0) };
     }
 
+    #[doc(alias = "gst_sdp_message_emails_len")]
     pub fn emails_len(&self) -> u32 {
         unsafe { ffi::gst_sdp_message_emails_len(&self.0) }
     }
 
     #[doc(alias = "get_attribute")]
+    #[doc(alias = "gst_sdp_message_get_attribute")]
     pub fn attribute(&self, idx: u32) -> Option<&SDPAttribute> {
         if idx >= self.attributes_len() {
             return None;
@@ -263,6 +279,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_attribute_val")]
+    #[doc(alias = "gst_sdp_message_get_attribute_val")]
     pub fn attribute_val(&self, key: &str) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_attribute_val(&self.0, key.to_glib_none().0);
@@ -275,6 +292,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_attribute_val_n")]
+    #[doc(alias = "gst_sdp_message_get_attribute_val_n")]
     pub fn attribute_val_n(&self, key: &str, nth: u32) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_attribute_val_n(&self.0, key.to_glib_none().0, nth);
@@ -287,6 +305,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_bandwidth")]
+    #[doc(alias = "gst_sdp_message_get_bandwidth")]
     pub fn bandwidth(&self, idx: u32) -> Option<&SDPBandwidth> {
         if idx >= self.bandwidths_len() {
             return None;
@@ -303,6 +322,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_connection")]
+    #[doc(alias = "gst_sdp_message_get_connection")]
     pub fn connection(&self) -> Option<&SDPConnection> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_connection(&self.0);
@@ -315,6 +335,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_email")]
+    #[doc(alias = "gst_sdp_message_get_email")]
     pub fn email(&self, idx: u32) -> Option<&str> {
         if idx >= self.emails_len() {
             return None;
@@ -331,6 +352,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_information")]
+    #[doc(alias = "gst_sdp_message_get_information")]
     pub fn information(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_information(&self.0);
@@ -343,6 +365,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_key")]
+    #[doc(alias = "gst_sdp_message_get_key")]
     pub fn key(&self) -> Option<&SDPKey> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_key(&self.0);
@@ -355,6 +378,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_media")]
+    #[doc(alias = "gst_sdp_message_get_media")]
     pub fn media(&self, idx: u32) -> Option<&SDPMediaRef> {
         if idx >= self.medias_len() {
             return None;
@@ -387,6 +411,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_origin")]
+    #[doc(alias = "gst_sdp_message_get_origin")]
     pub fn origin(&self) -> Option<&SDPOrigin> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_origin(&self.0);
@@ -399,6 +424,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_phone")]
+    #[doc(alias = "gst_sdp_message_get_phone")]
     pub fn phone(&self, idx: u32) -> Option<&str> {
         if idx >= self.phones_len() {
             return None;
@@ -415,6 +441,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_session_name")]
+    #[doc(alias = "gst_sdp_message_get_session_name")]
     pub fn session_name(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_session_name(&self.0);
@@ -427,6 +454,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_time")]
+    #[doc(alias = "gst_sdp_message_get_time")]
     pub fn time(&self, idx: u32) -> Option<&SDPTime> {
         if idx >= self.times_len() {
             return None;
@@ -443,6 +471,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_uri")]
+    #[doc(alias = "gst_sdp_message_get_uri")]
     pub fn uri(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_uri(&self.0);
@@ -455,6 +484,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_version")]
+    #[doc(alias = "gst_sdp_message_get_version")]
     pub fn version(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_version(&self.0);
@@ -467,6 +497,7 @@ impl SDPMessageRef {
     }
 
     #[doc(alias = "get_zone")]
+    #[doc(alias = "gst_sdp_message_get_zone")]
     pub fn zone(&self, idx: u32) -> Option<&SDPZone> {
         if idx >= self.zones_len() {
             return None;
@@ -482,6 +513,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_insert_attribute")]
     pub fn insert_attribute(
         &mut self,
         idx: Option<u32>,
@@ -503,6 +535,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_insert_bandwidth")]
     pub fn insert_bandwidth(
         &mut self,
         idx: Option<u32>,
@@ -523,6 +556,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_insert_email")]
     pub fn insert_email(&mut self, idx: Option<u32>, email: &str) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.emails_len() {
@@ -539,6 +573,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_insert_phone")]
     pub fn insert_phone(&mut self, idx: Option<u32>, phone: &str) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.phones_len() {
@@ -555,6 +590,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_insert_time")]
     pub fn insert_time(&mut self, idx: Option<u32>, time: SDPTime) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.times_len() {
@@ -571,6 +607,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_insert_zone")]
     pub fn insert_zone(&mut self, idx: Option<u32>, zone: SDPZone) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.zones_len() {
@@ -587,14 +624,17 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_medias_len")]
     pub fn medias_len(&self) -> u32 {
         unsafe { ffi::gst_sdp_message_medias_len(&self.0) }
     }
 
+    #[doc(alias = "gst_sdp_message_phones_len")]
     pub fn phones_len(&self) -> u32 {
         unsafe { ffi::gst_sdp_message_phones_len(&self.0) }
     }
 
+    #[doc(alias = "gst_sdp_message_remove_attribute")]
     pub fn remove_attribute(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.attributes_len() {
             return Err(glib::bool_error!("Failed to remove attribute"));
@@ -607,6 +647,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_remove_bandwidth")]
     pub fn remove_bandwidth(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.bandwidths_len() {
             return Err(glib::bool_error!("Failed to remove bandwidth"));
@@ -619,6 +660,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_remove_email")]
     pub fn remove_email(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.emails_len() {
             return Err(glib::bool_error!("Failed to remove email"));
@@ -631,6 +673,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_remove_phone")]
     pub fn remove_phone(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.phones_len() {
             return Err(glib::bool_error!("Failed to remove phone"));
@@ -643,6 +686,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_remove_time")]
     pub fn remove_time(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.times_len() {
             return Err(glib::bool_error!("Failed to remove time"));
@@ -655,6 +699,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_remove_zone")]
     pub fn remove_zone(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.zones_len() {
             return Err(glib::bool_error!("Failed to remove zone"));
@@ -667,6 +712,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_replace_attribute")]
     pub fn replace_attribute(
         &mut self,
         idx: u32,
@@ -685,6 +731,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_replace_bandwidth")]
     pub fn replace_bandwidth(&mut self, idx: u32, bw: SDPBandwidth) -> Result<(), glib::BoolError> {
         if idx >= self.bandwidths_len() {
             return Err(glib::bool_error!("Failed to replace bandwidth"));
@@ -698,6 +745,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_replace_email")]
     pub fn replace_email(&mut self, idx: u32, email: &str) -> Result<(), glib::BoolError> {
         if idx >= self.emails_len() {
             return Err(glib::bool_error!("Failed to replace email"));
@@ -711,6 +759,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_replace_phone")]
     pub fn replace_phone(&mut self, idx: u32, phone: &str) -> Result<(), glib::BoolError> {
         if idx >= self.phones_len() {
             return Err(glib::bool_error!("Failed to replace phone"));
@@ -724,6 +773,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_replace_time")]
     pub fn replace_time(&mut self, idx: u32, time: SDPTime) -> Result<(), glib::BoolError> {
         if idx >= self.times_len() {
             return Err(glib::bool_error!("Failed to replace time"));
@@ -737,6 +787,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_replace_zone")]
     pub fn replace_zone(&mut self, idx: u32, zone: SDPZone) -> Result<(), glib::BoolError> {
         if idx >= self.zones_len() {
             return Err(glib::bool_error!("Failed to replace zone"));
@@ -750,6 +801,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "gst_sdp_message_set_connection")]
     pub fn set_connection(
         &mut self,
         nettype: &str,
@@ -770,16 +822,19 @@ impl SDPMessageRef {
         };
     }
 
+    #[doc(alias = "gst_sdp_message_set_information")]
     pub fn set_information(&mut self, information: &str) {
         unsafe { ffi::gst_sdp_message_set_information(&mut self.0, information.to_glib_none().0) };
     }
 
+    #[doc(alias = "gst_sdp_message_set_key")]
     pub fn set_key(&mut self, type_: &str, data: &str) {
         unsafe {
             ffi::gst_sdp_message_set_key(&mut self.0, type_.to_glib_none().0, data.to_glib_none().0)
         };
     }
 
+    #[doc(alias = "gst_sdp_message_set_origin")]
     pub fn set_origin(
         &mut self,
         username: &str,
@@ -802,28 +857,34 @@ impl SDPMessageRef {
         };
     }
 
+    #[doc(alias = "gst_sdp_message_set_session_name")]
     pub fn set_session_name(&mut self, session_name: &str) {
         unsafe {
             ffi::gst_sdp_message_set_session_name(&mut self.0, session_name.to_glib_none().0)
         };
     }
 
+    #[doc(alias = "gst_sdp_message_set_uri")]
     pub fn set_uri(&mut self, uri: &str) {
         unsafe { ffi::gst_sdp_message_set_uri(&mut self.0, uri.to_glib_none().0) };
     }
 
+    #[doc(alias = "gst_sdp_message_set_version")]
     pub fn set_version(&mut self, version: &str) {
         unsafe { ffi::gst_sdp_message_set_version(&mut self.0, version.to_glib_none().0) };
     }
 
+    #[doc(alias = "gst_sdp_message_times_len")]
     pub fn times_len(&self) -> u32 {
         unsafe { ffi::gst_sdp_message_times_len(&self.0) }
     }
 
+    #[doc(alias = "gst_sdp_message_zones_len")]
     pub fn zones_len(&self) -> u32 {
         unsafe { ffi::gst_sdp_message_zones_len(&self.0) }
     }
 
+    #[doc(alias = "gst_sdp_message_as_uri")]
     pub fn as_uri(&self, scheme: &str) -> Result<String, glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {

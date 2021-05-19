@@ -12,6 +12,7 @@ use crate::RTSPAuth;
 use crate::RTSPToken;
 
 pub trait RTSPAuthExtManual: 'static {
+    #[doc(alias = "gst_rtsp_auth_set_default_token")]
     fn set_default_token(&self, token: Option<&mut RTSPToken>);
 
     fn connect_accept_certificate<

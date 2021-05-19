@@ -72,6 +72,7 @@ impl Structure {
         Builder::new(name)
     }
 
+    #[doc(alias = "gst_structure_new_empty")]
     pub fn new_empty(name: &str) -> Structure {
         assert_initialized_main_thread!();
         unsafe {
@@ -187,6 +188,7 @@ impl Eq for Structure {}
 impl str::FromStr for Structure {
     type Err = glib::BoolError;
 
+    #[doc(alias = "gst_structure_from_string")]
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
         unsafe {
@@ -460,6 +462,7 @@ impl StructureRef {
     }
 
     #[doc(alias = "get_name")]
+    #[doc(alias = "gst_structure_get_name")]
     pub fn name<'a>(&self) -> &'a str {
         unsafe {
             CStr::from_ptr(ffi::gst_structure_get_name(&self.0))
@@ -472,10 +475,12 @@ impl StructureRef {
         unsafe { from_glib(ffi::gst_structure_get_name_id(&self.0)) }
     }
 
+    #[doc(alias = "gst_structure_set_name")]
     pub fn set_name(&mut self, name: &str) {
         unsafe { ffi::gst_structure_set_name(&mut self.0, name.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_structure_has_field")]
     pub fn has_field(&self, field: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_structure_has_field(
@@ -509,6 +514,7 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_remove_field")]
     pub fn remove_field(&mut self, field: &str) {
         unsafe {
             ffi::gst_structure_remove_field(&mut self.0, field.to_glib_none().0);
@@ -521,6 +527,7 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_remove_all_fields")]
     pub fn remove_all_fields(&mut self) {
         unsafe {
             ffi::gst_structure_remove_all_fields(&mut self.0);
@@ -536,6 +543,7 @@ impl StructureRef {
     }
 
     #[doc(alias = "get_nth_field_name")]
+    #[doc(alias = "gst_structure_nth_field_name")]
     pub fn nth_field_name<'a>(&self, idx: u32) -> Option<&'a str> {
         unsafe {
             let field_name = ffi::gst_structure_nth_field_name(&self.0, idx);
@@ -547,26 +555,32 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_n_fields")]
     pub fn n_fields(&self) -> u32 {
         unsafe { ffi::gst_structure_n_fields(&self.0) as u32 }
     }
 
+    #[doc(alias = "gst_structure_can_intersect")]
     pub fn can_intersect(&self, other: &StructureRef) -> bool {
         unsafe { from_glib(ffi::gst_structure_can_intersect(&self.0, &other.0)) }
     }
 
+    #[doc(alias = "gst_structure_intersect")]
     pub fn intersect(&self, other: &StructureRef) -> Option<Structure> {
         unsafe { from_glib_full(ffi::gst_structure_intersect(&self.0, &other.0)) }
     }
 
+    #[doc(alias = "gst_structure_is_subset")]
     pub fn is_subset(&self, superset: &StructureRef) -> bool {
         unsafe { from_glib(ffi::gst_structure_is_subset(&self.0, &superset.0)) }
     }
 
+    #[doc(alias = "gst_structure_fixate")]
     pub fn fixate(&mut self) {
         unsafe { ffi::gst_structure_fixate(&mut self.0) }
     }
 
+    #[doc(alias = "gst_structure_fixate_field")]
     pub fn fixate_field(&mut self, name: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_structure_fixate_field(
@@ -576,6 +590,7 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_fixate_field_boolean")]
     pub fn fixate_field_bool(&mut self, name: &str, target: bool) -> bool {
         unsafe {
             from_glib(ffi::gst_structure_fixate_field_boolean(
@@ -586,6 +601,7 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_fixate_field_string")]
     pub fn fixate_field_str(&mut self, name: &str, target: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_structure_fixate_field_string(
@@ -596,6 +612,7 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_fixate_field_nearest_double")]
     pub fn fixate_field_nearest_double(&mut self, name: &str, target: f64) -> bool {
         unsafe {
             from_glib(ffi::gst_structure_fixate_field_nearest_double(
@@ -606,6 +623,7 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_fixate_field_nearest_fraction")]
     pub fn fixate_field_nearest_fraction<T: Into<Fraction>>(
         &mut self,
         name: &str,
@@ -624,6 +642,7 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_fixate_field_nearest_int")]
     pub fn fixate_field_nearest_int(&mut self, name: &str, target: i32) -> bool {
         unsafe {
             from_glib(ffi::gst_structure_fixate_field_nearest_int(
@@ -649,6 +668,7 @@ impl fmt::Debug for StructureRef {
 }
 
 impl PartialEq for StructureRef {
+    #[doc(alias = "gst_structure_is_equal")]
     fn eq(&self, other: &StructureRef) -> bool {
         unsafe { from_glib(ffi::gst_structure_is_equal(&self.0, &other.0)) }
     }

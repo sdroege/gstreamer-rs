@@ -10,6 +10,7 @@ use glib::translate::*;
 
 impl Plugin {
     #[doc(alias = "get_cache_data")]
+    #[doc(alias = "gst_plugin_get_cache_data")]
     pub fn cache_data(&self) -> Option<&StructureRef> {
         unsafe {
             let cache_data = ffi::gst_plugin_get_cache_data(self.to_glib_none().0);
@@ -21,6 +22,7 @@ impl Plugin {
         }
     }
 
+    #[doc(alias = "gst_plugin_set_cache_data")]
     pub fn set_cache_data(&self, cache_data: Structure) {
         unsafe {
             ffi::gst_plugin_set_cache_data(self.to_glib_none().0, cache_data.into_ptr());

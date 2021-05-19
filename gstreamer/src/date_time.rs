@@ -108,6 +108,7 @@ fn validate(
 }
 
 impl DateTime {
+    #[doc(alias = "gst_date_time_new")]
     pub fn new<
         TZ: Into<Option<f32>>,
         Y: Into<i32>,
@@ -151,6 +152,7 @@ impl DateTime {
         }
     }
 
+    #[doc(alias = "gst_date_time_new_local_time")]
     pub fn new_local_time<
         Y: Into<i32>,
         MO: Into<Option<i32>>,
@@ -190,6 +192,7 @@ impl DateTime {
         }
     }
 
+    #[doc(alias = "gst_date_time_new_y")]
     pub fn new_y(year: i32) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
 
@@ -201,6 +204,7 @@ impl DateTime {
         }
     }
 
+    #[doc(alias = "gst_date_time_new_ym")]
     pub fn new_ym(year: i32, month: i32) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
 
@@ -212,6 +216,7 @@ impl DateTime {
         }
     }
 
+    #[doc(alias = "gst_date_time_new_ymd")]
     pub fn new_ymd(year: i32, month: i32, day: i32) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
 
@@ -224,6 +229,7 @@ impl DateTime {
     }
 
     #[doc(alias = "get_day")]
+    #[doc(alias = "gst_date_time_get_day")]
     pub fn day(&self) -> Option<i32> {
         if !self.has_day() {
             return None;
@@ -233,6 +239,7 @@ impl DateTime {
     }
 
     #[doc(alias = "get_hour")]
+    #[doc(alias = "gst_date_time_get_hour")]
     pub fn hour(&self) -> Option<i32> {
         if !self.has_time() {
             return None;
@@ -242,6 +249,7 @@ impl DateTime {
     }
 
     #[doc(alias = "get_microsecond")]
+    #[doc(alias = "gst_date_time_get_microsecond")]
     pub fn microsecond(&self) -> Option<i32> {
         if !self.has_second() {
             return None;
@@ -251,6 +259,7 @@ impl DateTime {
     }
 
     #[doc(alias = "get_minute")]
+    #[doc(alias = "gst_date_time_get_minute")]
     pub fn minute(&self) -> Option<i32> {
         if !self.has_time() {
             return None;
@@ -260,6 +269,7 @@ impl DateTime {
     }
 
     #[doc(alias = "get_month")]
+    #[doc(alias = "gst_date_time_get_month")]
     pub fn month(&self) -> Option<i32> {
         if !self.has_month() {
             return None;
@@ -269,6 +279,7 @@ impl DateTime {
     }
 
     #[doc(alias = "get_second")]
+    #[doc(alias = "gst_date_time_get_second")]
     pub fn second(&self) -> Option<i32> {
         if !self.has_second() {
             return None;
@@ -278,6 +289,7 @@ impl DateTime {
     }
 
     #[doc(alias = "get_time_zone_offset")]
+    #[doc(alias = "gst_date_time_get_time_zone_offset")]
     pub fn time_zone_offset(&self) -> Option<f32> {
         if !self.has_time() {
             return None;

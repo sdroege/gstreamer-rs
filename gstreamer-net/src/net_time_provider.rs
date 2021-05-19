@@ -6,6 +6,7 @@ use glib::prelude::*;
 use glib::translate::*;
 
 impl NetTimeProvider {
+    #[doc(alias = "gst_net_time_provider_new")]
     pub fn new<P: IsA<gst::Clock>>(clock: &P, address: Option<&str>, port: i32) -> NetTimeProvider {
         assert_initialized_main_thread!();
         let address = address.to_glib_none();

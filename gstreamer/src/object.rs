@@ -22,6 +22,7 @@ pub trait GstObjectExtManual: 'static {
     fn object_flags(&self) -> ObjectFlags;
 
     #[doc(alias = "get_g_value_array")]
+    #[doc(alias = "gst_object_get_g_value_array")]
     fn g_value_array(
         &self,
         property_name: &str,

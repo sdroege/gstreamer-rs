@@ -8,6 +8,7 @@ use glib::translate::*;
 use std::fmt;
 
 impl Stream {
+    #[doc(alias = "gst_stream_new")]
     pub fn new(
         stream_id: Option<&str>,
         caps: Option<&Caps>,

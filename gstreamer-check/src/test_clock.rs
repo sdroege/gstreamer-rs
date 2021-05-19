@@ -5,6 +5,7 @@ use glib::translate::*;
 use std::ptr;
 
 impl TestClock {
+    #[doc(alias = "gst_test_clock_has_id")]
     pub fn has_id(&self, id: &gst::ClockId) -> bool {
         unsafe {
             from_glib(ffi::gst_test_clock_has_id(
@@ -14,6 +15,7 @@ impl TestClock {
         }
     }
 
+    #[doc(alias = "gst_test_clock_peek_next_pending_id")]
     pub fn peek_next_pending_id(&self) -> Option<gst::ClockId> {
         unsafe {
             let mut id = ptr::null_mut();
@@ -31,6 +33,7 @@ impl TestClock {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_test_clock_process_id")]
     pub fn process_id(&self, pending_id: &gst::ClockId) -> bool {
         unsafe {
             from_glib(ffi::gst_test_clock_process_id(
@@ -40,6 +43,7 @@ impl TestClock {
         }
     }
 
+    #[doc(alias = "gst_test_clock_process_id_list")]
     pub fn process_id_list(&self, pending_list: &[&gst::ClockId]) -> u32 {
         unsafe {
             ffi::gst_test_clock_process_id_list(
@@ -49,6 +53,7 @@ impl TestClock {
         }
     }
 
+    #[doc(alias = "gst_test_clock_process_next_clock_id")]
     pub fn process_next_clock_id(&self) -> Option<gst::ClockId> {
         unsafe {
             from_glib_full(ffi::gst_test_clock_process_next_clock_id(
@@ -57,6 +62,7 @@ impl TestClock {
         }
     }
 
+    #[doc(alias = "gst_test_clock_wait_for_multiple_pending_ids")]
     pub fn wait_for_multiple_pending_ids(&self, count: u32) -> Vec<gst::ClockId> {
         unsafe {
             let mut pending_list = ptr::null_mut();
@@ -69,6 +75,7 @@ impl TestClock {
         }
     }
 
+    #[doc(alias = "gst_test_clock_wait_for_next_pending_id")]
     pub fn wait_for_next_pending_id(&self) -> gst::ClockId {
         unsafe {
             let mut id = ptr::null_mut();
@@ -79,6 +86,7 @@ impl TestClock {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_test_clock_timed_wait_for_multiple_pending_ids")]
     pub fn timed_wait_for_multiple_pending_ids(
         &self,
         count: u32,

@@ -27,6 +27,7 @@ pub fn parse_bin_from_description_with_name(
     Ok(bin)
 }
 
+#[doc(alias = "gst_parse_bin_from_description_full")]
 pub fn parse_bin_from_description_full(
     bin_description: &str,
     ghost_unlinked_pads: bool,
@@ -70,6 +71,7 @@ pub fn parse_bin_from_description_with_name_full(
     Ok(bin)
 }
 
+#[doc(alias = "gst_parse_launch_full")]
 pub fn parse_launch_full(
     pipeline_description: &str,
     mut context: Option<&mut ParseContext>,
@@ -92,6 +94,7 @@ pub fn parse_launch_full(
     }
 }
 
+#[doc(alias = "gst_parse_launchv_full")]
 pub fn parse_launchv_full(
     argv: &[&str],
     mut context: Option<&mut ParseContext>,
@@ -116,6 +119,7 @@ pub fn parse_launchv_full(
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+#[doc(alias = "gst_calculate_linear_regression")]
 pub fn calculate_linear_regression(
     xy: &[(u64, u64)],
     temp: Option<&mut [(u64, u64)]>,
@@ -166,6 +170,7 @@ pub fn calculate_linear_regression(
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[doc(alias = "gst_type_is_plugin_api")]
 pub fn type_is_plugin_api(type_: glib::types::Type) -> Option<crate::PluginAPIFlags> {
     assert_initialized_main_thread!();
     unsafe {

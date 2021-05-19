@@ -42,6 +42,7 @@ impl AsMut<crate::StructureRef> for BufferPoolConfig {
 }
 
 impl BufferPoolConfig {
+    #[doc(alias = "gst_buffer_pool_config_add_option")]
     pub fn add_option(&mut self, option: &str) {
         unsafe {
             ffi::gst_buffer_pool_config_add_option(
@@ -51,6 +52,7 @@ impl BufferPoolConfig {
         }
     }
 
+    #[doc(alias = "gst_buffer_pool_config_has_option")]
     pub fn has_option(&self, option: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_buffer_pool_config_has_option(
@@ -61,6 +63,7 @@ impl BufferPoolConfig {
     }
 
     #[doc(alias = "get_options")]
+    #[doc(alias = "gst_buffer_pool_config_n_options")]
     pub fn options(&self) -> Vec<String> {
         unsafe {
             let n = ffi::gst_buffer_pool_config_n_options(self.0.to_glib_none().0) as usize;
@@ -77,6 +80,7 @@ impl BufferPoolConfig {
         }
     }
 
+    #[doc(alias = "gst_buffer_pool_config_set_params")]
     pub fn set_params(
         &mut self,
         caps: Option<&crate::Caps>,
@@ -96,6 +100,7 @@ impl BufferPoolConfig {
     }
 
     #[doc(alias = "get_params")]
+    #[doc(alias = "gst_buffer_pool_config_get_params")]
     pub fn params(&self) -> Option<(Option<crate::Caps>, u32, u32, u32)> {
         unsafe {
             let mut caps = ptr::null_mut();
@@ -123,6 +128,7 @@ impl BufferPoolConfig {
         }
     }
 
+    #[doc(alias = "gst_buffer_pool_config_validate_params")]
     pub fn validate_params(
         &self,
         caps: Option<&crate::Caps>,
@@ -145,6 +151,7 @@ impl BufferPoolConfig {
     }
 
     #[doc(alias = "get_allocator")]
+    #[doc(alias = "gst_buffer_pool_config_get_allocator")]
     pub fn allocator(&self) -> Option<(Option<Allocator>, AllocationParams)> {
         unsafe {
             let mut allocator = ptr::null_mut();
@@ -162,6 +169,7 @@ impl BufferPoolConfig {
         }
     }
 
+    #[doc(alias = "gst_buffer_pool_config_set_allocator")]
     pub fn set_allocator(&self, allocator: Option<&Allocator>, params: Option<&AllocationParams>) {
         assert!(allocator.is_some() || params.is_some());
         unsafe {
@@ -263,6 +271,7 @@ impl<'a> ToGlibPtrMut<'a, *mut ffi::GstBufferPoolAcquireParams> for BufferPoolAc
 }
 
 impl BufferPool {
+    #[doc(alias = "gst_buffer_pool_new")]
     pub fn new() -> BufferPool {
         assert_initialized_main_thread!();
         let (major, minor, _, _) = crate::version();
@@ -283,15 +292,19 @@ impl Default for BufferPool {
 
 pub trait BufferPoolExtManual: 'static {
     #[doc(alias = "get_config")]
+    #[doc(alias = "gst_buffer_pool_get_config")]
     fn config(&self) -> BufferPoolConfig;
+    #[doc(alias = "gst_buffer_pool_set_config")]
     fn set_config(&self, config: BufferPoolConfig) -> Result<(), glib::error::BoolError>;
 
     fn is_flushing(&self) -> bool;
 
+    #[doc(alias = "gst_buffer_pool_acquire_buffer")]
     fn acquire_buffer(
         &self,
         params: Option<&BufferPoolAcquireParams>,
     ) -> Result<crate::Buffer, crate::FlowError>;
+    #[doc(alias = "gst_buffer_pool_release_buffer")]
     fn release_buffer(&self, buffer: crate::Buffer);
 }
 

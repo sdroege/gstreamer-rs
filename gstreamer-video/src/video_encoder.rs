@@ -12,6 +12,7 @@ use std::ptr;
 pub trait VideoEncoderExtManual: 'static {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_video_encoder_allocate_output_frame")]
     fn allocate_output_frame(
         &self,
         frame: &mut VideoCodecFrame,
@@ -19,15 +20,20 @@ pub trait VideoEncoderExtManual: 'static {
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[doc(alias = "get_frame")]
+    #[doc(alias = "gst_video_encoder_get_frame")]
     fn frame(&self, frame_number: i32) -> Option<VideoCodecFrame>;
     #[doc(alias = "get_frames")]
+    #[doc(alias = "gst_video_encoder_get_frames")]
     fn frames(&self) -> Vec<VideoCodecFrame>;
     #[doc(alias = "get_oldest_frame")]
+    #[doc(alias = "gst_video_encoder_get_oldest_frame")]
     fn oldest_frame(&self) -> Option<VideoCodecFrame>;
 
     #[doc(alias = "get_allocator")]
+    #[doc(alias = "gst_video_encoder_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
+    #[doc(alias = "gst_video_encoder_finish_frame")]
     fn finish_frame(
         &self,
         frame: Option<VideoCodecFrame>,
@@ -35,20 +41,26 @@ pub trait VideoEncoderExtManual: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_encoder_finish_subframe")]
     fn finish_subframe(&self, frame: &VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[doc(alias = "get_latency")]
+    #[doc(alias = "gst_video_encoder_get_latency")]
     fn latency(&self) -> (gst::ClockTime, gst::ClockTime);
+    #[doc(alias = "gst_video_encoder_set_latency")]
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime);
 
     #[doc(alias = "get_output_state")]
+    #[doc(alias = "gst_video_encoder_get_output_state")]
     fn output_state(&self) -> Option<VideoCodecState<'static, Readable>>;
+    #[doc(alias = "gst_video_encoder_set_output_state")]
     fn set_output_state(
         &self,
         caps: gst::Caps,
         reference: Option<&VideoCodecState<Readable>>,
     ) -> Result<VideoCodecState<InNegotiation>, gst::FlowError>;
 
+    #[doc(alias = "gst_video_encoder_negotiate")]
     fn negotiate<'a>(
         &'a self,
         output_state: VideoCodecState<'a, InNegotiation<'a>>,

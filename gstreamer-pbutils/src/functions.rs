@@ -29,6 +29,7 @@ pub fn pb_utils_add_codec_description_to_tag_list_for_tag<'a, T: CodecTag<'a>>(
     }
 }
 
+#[doc(alias = "gst_pb_utils_add_codec_description_to_tag_list")]
 pub fn pb_utils_add_codec_description_to_tag_list(
     taglist: &mut gst::TagListRef,
     caps: &gst::CapsRef,
@@ -46,6 +47,7 @@ pub fn pb_utils_add_codec_description_to_tag_list(
     }
 }
 
+#[doc(alias = "gst_pb_utils_get_encoder_description")]
 pub fn pb_utils_get_encoder_description(
     caps: &gst::CapsRef,
 ) -> Result<glib::GString, glib::error::BoolError> {
@@ -58,6 +60,7 @@ pub fn pb_utils_get_encoder_description(
     }
 }
 
+#[doc(alias = "gst_pb_utils_get_decoder_description")]
 pub fn pb_utils_get_decoder_description(
     caps: &gst::CapsRef,
 ) -> Result<glib::GString, glib::error::BoolError> {
@@ -70,6 +73,7 @@ pub fn pb_utils_get_decoder_description(
     }
 }
 
+#[doc(alias = "gst_pb_utils_get_codec_description")]
 pub fn pb_utils_get_codec_description(
     caps: &gst::CapsRef,
 ) -> Result<glib::GString, glib::error::BoolError> {

@@ -89,17 +89,24 @@ pub enum PadGetRangeSuccess {
 }
 
 pub trait PadExtManual: 'static {
+    #[doc(alias = "gst_pad_add_probe")]
     fn add_probe<F>(&self, mask: PadProbeType, func: F) -> Option<PadProbeId>
     where
         F: Fn(&Self, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static;
+    #[doc(alias = "gst_pad_remove_probe")]
     fn remove_probe(&self, id: PadProbeId);
 
+    #[doc(alias = "gst_pad_chain")]
     fn chain(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError>;
+    #[doc(alias = "gst_pad_push")]
     fn push(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError>;
 
+    #[doc(alias = "gst_pad_chain_list")]
     fn chain_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError>;
+    #[doc(alias = "gst_pad_push_list")]
     fn push_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError>;
 
+    #[doc(alias = "gst_pad_pull_range")]
     fn pull_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError>;
     fn pull_range_fill(
         &self,
@@ -108,6 +115,7 @@ pub trait PadExtManual: 'static {
         size: u32,
     ) -> Result<(), FlowError>;
     #[doc(alias = "get_range")]
+    #[doc(alias = "gst_pad_get_range")]
     fn range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError>;
     #[doc(alias = "get_range_fill")]
     fn range_fill(
@@ -117,21 +125,30 @@ pub trait PadExtManual: 'static {
         size: u32,
     ) -> Result<(), FlowError>;
 
+    #[doc(alias = "gst_pad_peer_query")]
     fn peer_query(&self, query: &mut QueryRef) -> bool;
+    #[doc(alias = "gst_pad_query")]
     fn query(&self, query: &mut QueryRef) -> bool;
+    #[doc(alias = "gst_pad_query_default")]
     fn query_default<P: IsA<crate::Object>>(
         &self,
         parent: Option<&P>,
         query: &mut QueryRef,
     ) -> bool;
     fn proxy_query_caps(&self, query: &mut QueryRef) -> bool;
+    #[doc(alias = "gst_pad_proxy_query_accept_caps")]
     fn proxy_query_accept_caps(&self, query: &mut QueryRef) -> bool;
 
+    #[doc(alias = "gst_pad_event_default")]
     fn event_default<P: IsA<crate::Object>>(&self, parent: Option<&P>, event: Event) -> bool;
+    #[doc(alias = "gst_pad_push_event")]
     fn push_event(&self, event: Event) -> bool;
+    #[doc(alias = "gst_pad_send_event")]
     fn send_event(&self, event: Event) -> bool;
 
+    #[doc(alias = "gst_pad_iterate_internal_links")]
     fn iterate_internal_links(&self) -> crate::Iterator<Pad>;
+    #[doc(alias = "gst_pad_iterate_internal_links_default")]
     fn iterate_internal_links_default<P: IsA<crate::Object>>(
         &self,
         parent: Option<&P>,
@@ -211,8 +228,10 @@ pub trait PadExtManual: 'static {
     where
         F: Fn(&Self, Option<&crate::Object>) + Send + Sync + 'static;
 
+    #[doc(alias = "gst_pad_start_task")]
     fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> Result<(), glib::BoolError>;
 
+    #[doc(alias = "gst_pad_peer_query_convert")]
     fn peer_query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
         &self,
         src_val: V,
@@ -223,12 +242,15 @@ pub trait PadExtManual: 'static {
         dest_format: Format,
     ) -> Option<GenericFormattedValue>;
 
+    #[doc(alias = "gst_pad_peer_query_duration")]
     fn peer_query_duration<T: SpecificFormattedValue>(&self) -> Option<T>;
     fn peer_query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
+    #[doc(alias = "gst_pad_peer_query_position")]
     fn peer_query_position<T: SpecificFormattedValue>(&self) -> Option<T>;
     fn peer_query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
+    #[doc(alias = "gst_pad_query_convert")]
     fn query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
         &self,
         src_val: V,
@@ -239,15 +261,18 @@ pub trait PadExtManual: 'static {
         dest_format: Format,
     ) -> Option<GenericFormattedValue>;
 
+    #[doc(alias = "gst_pad_query_duration")]
     fn query_duration<T: SpecificFormattedValue>(&self) -> Option<T>;
     fn query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
+    #[doc(alias = "gst_pad_query_position")]
     fn query_position<T: SpecificFormattedValue>(&self) -> Option<T>;
     fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "get_mode")]
     fn mode(&self) -> crate::PadMode;
 
+    #[doc(alias = "gst_pad_sticky_events_foreach")]
     fn sticky_events_foreach<F: FnMut(Event) -> Result<Option<Event>, Option<Event>>>(
         &self,
         func: F,

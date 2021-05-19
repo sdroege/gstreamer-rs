@@ -225,6 +225,7 @@ impl MemoryRef {
         }
     }
 
+    #[doc(alias = "gst_memory_is_span")]
     pub fn is_span(&self, mem2: &MemoryRef) -> Option<usize> {
         unsafe {
             let mut offset = mem::MaybeUninit::uninit();
@@ -241,6 +242,7 @@ impl MemoryRef {
         }
     }
 
+    #[doc(alias = "gst_memory_is_type")]
     pub fn is_type(&self, mem_type: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_memory_is_type(
@@ -287,6 +289,7 @@ impl MemoryRef {
         }
     }
 
+    #[doc(alias = "gst_memory_share")]
     pub fn share(&self, offset: isize, size: Option<usize>) -> Memory {
         let pos_sz = match size {
             Some(val) => val as isize,
@@ -305,6 +308,7 @@ impl MemoryRef {
         }
     }
 
+    #[doc(alias = "gst_memory_resize")]
     pub fn resize(&mut self, offset: isize, size: usize) {
         assert!(offset + (size as isize) < (self.maxsize() as isize));
         unsafe { ffi::gst_memory_resize(self.as_mut_ptr(), offset, size) }
