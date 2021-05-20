@@ -383,28 +383,16 @@ gir-checks:
     - cd checker && echo '[workspace]' >> Cargo.toml
     - cargo build --locked --color=always --release
     - |
-      cargo run --color=always --release -- \
-        ../gstreamer/ \
-        ../gstreamer-app \
-        ../gstreamer-audio/ \
-        ../gstreamer-base \
-        ../gstreamer-check/ \
-        ../gstreamer-controller/ \
-        ../gstreamer-editing-services/ \
-        ../gstreamer-gl/ \
-        ../gstreamer-gl/egl \
-        ../gstreamer-gl/wayland \
-        ../gstreamer-gl/x11 \
-        ../gstreamer-net/ \
-        ../gstreamer-pbutils/ \
-        ../gstreamer-player/ \
-        ../gstreamer-rtp/ \
-        ../gstreamer-rtsp-server/ \
-        ../gstreamer-rtsp/ \
-        ../gstreamer-sdp/ \
-        ../gstreamer-video/ \
-        ../gstreamer-webrtc/
+      cargo run --color=always --release -- ../gstreamer* ../gstreamer-gl/{egl,wayland,x11}
+    # Check doc aliases
+    - |
+      for crate in ../gstreamer* ../gstreamer-gl/{egl,wayland,x11}; do
+        echo '--> Checking doc aliases in ' $crate
+        python3 doc_aliases.py $crate
+      done
     - cd ..
+    # To ensure that there was no missing #[doc(alias = "...")]
+    - git diff --exit-code
     - |
       for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
         echo '-->' $crate
