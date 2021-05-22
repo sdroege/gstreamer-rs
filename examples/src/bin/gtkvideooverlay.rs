@@ -262,8 +262,15 @@ fn main() {
     gst::init().unwrap();
     gtk::init().unwrap();
 
-    let app = gtk::Application::new(None, gio::ApplicationFlags::FLAGS_NONE);
+    {
+        let app = gtk::Application::new(None, gio::ApplicationFlags::FLAGS_NONE);
 
-    app.connect_activate(create_ui);
-    app.run();
+        app.connect_activate(create_ui);
+        app.run();
+    }
+
+    // Optional, can be used to detect leaks using the leaks tracer
+    unsafe {
+        gst::deinit();
+    }
 }
