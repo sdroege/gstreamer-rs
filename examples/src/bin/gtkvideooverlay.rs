@@ -219,7 +219,7 @@ fn create_ui(app: &gtk::Application) {
         };
 
         match msg.view() {
-            MessageView::Eos(..) => gtk::main_quit(),
+            MessageView::Eos(..) => app.quit(),
             MessageView::Error(err) => {
                 println!(
                     "Error from {:?}: {} ({:?})",
