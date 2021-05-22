@@ -427,44 +427,83 @@ pub enum TagError {
 // enum instead
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 pub enum MessageType {
+    #[doc(alias = "GST_MESSAGE_UNKNOWN")]
     Unknown,
+    #[doc(alias = "GST_MESSAGE_EOS")]
     Eos,
+    #[doc(alias = "GST_MESSAGE_ERROR")]
     Error,
+    #[doc(alias = "GST_MESSAGE_WARNING")]
     Warning,
+    #[doc(alias = "GST_MESSAGE_INFO")]
     Info,
+    #[doc(alias = "GST_MESSAGE_TAG")]
     Tag,
+    #[doc(alias = "GST_MESSAGE_BUFFERING")]
     Buffering,
+    #[doc(alias = "GST_MESSAGE_STATE_CHANGED")]
     StateChanged,
+    #[doc(alias = "GST_MESSAGE_STATE_DIRTY")]
     StateDirty,
+    #[doc(alias = "GST_MESSAGE_STEP_DONE")]
     StepDone,
+    #[doc(alias = "GST_MESSAGE_CLOCK_PROVIDE")]
     ClockProvide,
+    #[doc(alias = "GST_MESSAGE_CLOCK_LOST")]
     ClockLost,
+    #[doc(alias = "GST_MESSAGE_NEW_CLOCK")]
     NewClock,
+    #[doc(alias = "GST_MESSAGE_STRUCTURE_CHANGE")]
     StructureChange,
+    #[doc(alias = "GST_MESSAGE_STREAM_STATUS")]
     StreamStatus,
+    #[doc(alias = "GST_MESSAGE_APPLICATION")]
     Application,
+    #[doc(alias = "GST_MESSAGE_ELEMENT")]
     Element,
+    #[doc(alias = "GST_MESSAGE_SEGMENT_START")]
     SegmentStart,
+    #[doc(alias = "GST_MESSAGE_SEGMENT_DONE")]
     SegmentDone,
+    #[doc(alias = "GST_MESSAGE_DURATION_CHANGED")]
     DurationChanged,
+    #[doc(alias = "GST_MESSAGE_LATENCY")]
     Latency,
+    #[doc(alias = "GST_MESSAGE_ASYNC_START")]
     AsyncStart,
+    #[doc(alias = "GST_MESSAGE_ASYNC_DONE")]
     AsyncDone,
+    #[doc(alias = "GST_MESSAGE_REQUEST_STATE")]
     RequestState,
+    #[doc(alias = "GST_MESSAGE_STEP_START")]
     StepStart,
+    #[doc(alias = "GST_MESSAGE_QOS")]
     Qos,
+    #[doc(alias = "GST_MESSAGE_PROGRESS")]
     Progress,
+    #[doc(alias = "GST_MESSAGE_TOC")]
     Toc,
+    #[doc(alias = "GST_MESSAGE_RESET_TIME")]
     ResetTime,
+    #[doc(alias = "GST_MESSAGE_STREAM_START")]
     StreamStart,
+    #[doc(alias = "GST_MESSAGE_NEED_CONTEXT")]
     NeedContext,
+    #[doc(alias = "GST_MESSAGE_HAVE_CONTEXT")]
     HaveContext,
+    #[doc(alias = "GST_MESSAGE_EXTENDED")]
     Extended,
+    #[doc(alias = "GST_MESSAGE_DEVICE_ADDED")]
     DeviceAdded,
+    #[doc(alias = "GST_MESSAGE_DEVICE_REMOVED")]
     DeviceRemoved,
+    #[doc(alias = "GST_MESSAGE_PROPERTY_NOTIFY")]
     PropertyNotify,
+    #[doc(alias = "GST_MESSAGE_STREAM_COLLECTION")]
     StreamCollection,
+    #[doc(alias = "GST_MESSAGE_STREAMS_SELECTED")]
     StreamsSelected,
+    #[doc(alias = "GST_MESSAGE_REDIRECT")]
     Redirect,
     #[doc(hidden)]
     __Unknown(i32),
