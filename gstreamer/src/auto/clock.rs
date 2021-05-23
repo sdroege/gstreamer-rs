@@ -61,7 +61,7 @@ impl Clock {
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //#[doc(alias = "gst_clock_id_uses_clock")]
-    //pub fn id_uses_clock<P: IsA<Clock>>(id: /*Unimplemented*/ClockID, clock: &P) -> bool {
+    //pub fn id_uses_clock(id: /*Unimplemented*/ClockID, clock: &impl IsA<Clock>) -> bool {
     //    unsafe { TODO: call ffi:gst_clock_id_uses_clock() }
     //}
 
@@ -132,7 +132,7 @@ pub trait ClockExt: 'static {
     );
 
     #[doc(alias = "gst_clock_set_master")]
-    fn set_master<P: IsA<Clock>>(&self, master: Option<&P>) -> Result<(), glib::error::BoolError>;
+    fn set_master(&self, master: Option<&impl IsA<Clock>>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_clock_set_resolution")]
     fn set_resolution(&self, resolution: ClockTime) -> ClockTime;
@@ -330,7 +330,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn set_master<P: IsA<Clock>>(&self, master: Option<&P>) -> Result<(), glib::error::BoolError> {
+    fn set_master(&self, master: Option<&impl IsA<Clock>>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_clock_set_master(

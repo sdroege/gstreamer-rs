@@ -28,7 +28,7 @@ pub trait ExtractableExt: 'static {
     fn id(&self) -> Option<glib::GString>;
 
     #[doc(alias = "ges_extractable_set_asset")]
-    fn set_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError>;
+    fn set_asset(&self, asset: &impl IsA<Asset>) -> Result<(), glib::error::BoolError>;
 }
 
 impl<O: IsA<Extractable>> ExtractableExt for O {
@@ -44,7 +44,7 @@ impl<O: IsA<Extractable>> ExtractableExt for O {
         unsafe { from_glib_full(ffi::ges_extractable_get_id(self.as_ref().to_glib_none().0)) }
     }
 
-    fn set_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError> {
+    fn set_asset(&self, asset: &impl IsA<Asset>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_extractable_set_asset(

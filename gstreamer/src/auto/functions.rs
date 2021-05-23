@@ -33,7 +33,7 @@ pub fn debug_add_ring_buffer_logger(max_size_per_thread: u32, thread_timeout: u3
 }
 
 #[doc(alias = "gst_debug_bin_to_dot_data")]
-pub fn debug_bin_to_dot_data<P: IsA<Bin>>(bin: &P, details: DebugGraphDetails) -> glib::GString {
+pub fn debug_bin_to_dot_data(bin: &impl IsA<Bin>, details: DebugGraphDetails) -> glib::GString {
     skip_assert_initialized!();
     unsafe {
         from_glib_full(ffi::gst_debug_bin_to_dot_data(
@@ -44,10 +44,10 @@ pub fn debug_bin_to_dot_data<P: IsA<Bin>>(bin: &P, details: DebugGraphDetails) -
 }
 
 #[doc(alias = "gst_debug_bin_to_dot_file")]
-pub fn debug_bin_to_dot_file<P: IsA<Bin>, Q: AsRef<std::path::Path>>(
-    bin: &P,
+pub fn debug_bin_to_dot_file(
+    bin: &impl IsA<Bin>,
     details: DebugGraphDetails,
-    file_name: Q,
+    file_name: impl AsRef<std::path::Path>,
 ) {
     skip_assert_initialized!();
     unsafe {
@@ -60,10 +60,10 @@ pub fn debug_bin_to_dot_file<P: IsA<Bin>, Q: AsRef<std::path::Path>>(
 }
 
 #[doc(alias = "gst_debug_bin_to_dot_file_with_ts")]
-pub fn debug_bin_to_dot_file_with_ts<P: IsA<Bin>, Q: AsRef<std::path::Path>>(
-    bin: &P,
+pub fn debug_bin_to_dot_file_with_ts(
+    bin: &impl IsA<Bin>,
     details: DebugGraphDetails,
-    file_name: Q,
+    file_name: impl AsRef<std::path::Path>,
 ) {
     skip_assert_initialized!();
     unsafe {

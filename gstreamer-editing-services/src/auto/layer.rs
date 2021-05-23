@@ -49,9 +49,9 @@ pub const NONE_LAYER: Option<&Layer> = None;
 
 pub trait LayerExt: 'static {
     #[doc(alias = "ges_layer_add_asset")]
-    fn add_asset<P: IsA<Asset>>(
+    fn add_asset(
         &self,
-        asset: &P,
+        asset: &impl IsA<Asset>,
         start: impl Into<Option<gst::ClockTime>>,
         inpoint: impl Into<Option<gst::ClockTime>>,
         duration: impl Into<Option<gst::ClockTime>>,
@@ -61,9 +61,9 @@ pub trait LayerExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_layer_add_asset_full")]
-    fn add_asset_full<P: IsA<Asset>>(
+    fn add_asset_full(
         &self,
-        asset: &P,
+        asset: &impl IsA<Asset>,
         start: impl Into<Option<gst::ClockTime>>,
         inpoint: impl Into<Option<gst::ClockTime>>,
         duration: impl Into<Option<gst::ClockTime>>,
@@ -71,18 +71,18 @@ pub trait LayerExt: 'static {
     ) -> Result<Clip, glib::Error>;
 
     #[doc(alias = "ges_layer_add_clip")]
-    fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError>;
+    fn add_clip(&self, clip: &impl IsA<Clip>) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_layer_add_clip_full")]
-    fn add_clip_full<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::Error>;
+    fn add_clip_full(&self, clip: &impl IsA<Clip>) -> Result<(), glib::Error>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_layer_get_active_for_track")]
     #[doc(alias = "get_active_for_track")]
-    fn is_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool;
+    fn is_active_for_track(&self, track: &impl IsA<Track>) -> bool;
 
     #[doc(alias = "ges_layer_get_auto_transition")]
     #[doc(alias = "get_auto_transition")]
@@ -116,7 +116,7 @@ pub trait LayerExt: 'static {
     fn is_empty(&self) -> bool;
 
     #[doc(alias = "ges_layer_remove_clip")]
-    fn remove_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError>;
+    fn remove_clip(&self, clip: &impl IsA<Clip>) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -131,7 +131,7 @@ pub trait LayerExt: 'static {
     fn set_priority(&self, priority: u32);
 
     #[doc(alias = "ges_layer_set_timeline")]
-    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P);
+    fn set_timeline(&self, timeline: &impl IsA<Timeline>);
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -153,9 +153,9 @@ pub trait LayerExt: 'static {
 }
 
 impl<O: IsA<Layer>> LayerExt for O {
-    fn add_asset<P: IsA<Asset>>(
+    fn add_asset(
         &self,
-        asset: &P,
+        asset: &impl IsA<Asset>,
         start: impl Into<Option<gst::ClockTime>>,
         inpoint: impl Into<Option<gst::ClockTime>>,
         duration: impl Into<Option<gst::ClockTime>>,
@@ -176,9 +176,9 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn add_asset_full<P: IsA<Asset>>(
+    fn add_asset_full(
         &self,
-        asset: &P,
+        asset: &impl IsA<Asset>,
         start: impl Into<Option<gst::ClockTime>>,
         inpoint: impl Into<Option<gst::ClockTime>>,
         duration: impl Into<Option<gst::ClockTime>>,
@@ -203,7 +203,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError> {
+    fn add_clip(&self, clip: &impl IsA<Clip>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_layer_add_clip(
@@ -217,7 +217,7 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn add_clip_full<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::Error> {
+    fn add_clip_full(&self, clip: &impl IsA<Clip>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ffi::ges_layer_add_clip_full(
@@ -235,7 +235,7 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn is_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool {
+    fn is_active_for_track(&self, track: &impl IsA<Track>) -> bool {
         unsafe {
             from_glib(ffi::ges_layer_get_active_for_track(
                 self.as_ref().to_glib_none().0,
@@ -293,7 +293,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         unsafe { from_glib(ffi::ges_layer_is_empty(self.as_ref().to_glib_none().0)) }
     }
 
-    fn remove_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError> {
+    fn remove_clip(&self, clip: &impl IsA<Clip>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_layer_remove_clip(
@@ -332,7 +332,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) {
+    fn set_timeline(&self, timeline: &impl IsA<Timeline>) {
         unsafe {
             ffi::ges_layer_set_timeline(
                 self.as_ref().to_glib_none().0,

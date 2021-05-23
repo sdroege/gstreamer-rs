@@ -20,7 +20,7 @@ glib::wrapper! {
 
 impl GLFramebuffer {
     #[doc(alias = "gst_gl_framebuffer_new")]
-    pub fn new<P: IsA<GLContext>>(context: &P) -> GLFramebuffer {
+    pub fn new(context: &impl IsA<GLContext>) -> GLFramebuffer {
         skip_assert_initialized!();
         unsafe {
             from_glib_full(ffi::gst_gl_framebuffer_new(
@@ -31,8 +31,8 @@ impl GLFramebuffer {
 
     #[doc(alias = "gst_gl_framebuffer_new_with_default_depth")]
     #[doc(alias = "new_with_default_depth")]
-    pub fn with_default_depth<P: IsA<GLContext>>(
-        context: &P,
+    pub fn with_default_depth(
+        context: &impl IsA<GLContext>,
         width: u32,
         height: u32,
     ) -> GLFramebuffer {

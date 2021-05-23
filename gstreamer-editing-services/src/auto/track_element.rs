@@ -31,9 +31,9 @@ pub const NONE_TRACK_ELEMENT: Option<&TrackElement> = None;
 
 pub trait TrackElementExt: 'static {
     #[doc(alias = "ges_track_element_add_children_props")]
-    fn add_children_props<P: IsA<gst::Element>>(
+    fn add_children_props(
         &self,
-        element: &P,
+        element: &impl IsA<gst::Element>,
         wanted_categories: &[&str],
         blacklist: &[&str],
         whitelist: &[&str],
@@ -116,9 +116,9 @@ pub trait TrackElementExt: 'static {
     fn set_auto_clamp_control_sources(&self, auto_clamp: bool);
 
     #[doc(alias = "ges_track_element_set_control_source")]
-    fn set_control_source<P: IsA<gst::ControlSource>>(
+    fn set_control_source(
         &self,
-        source: &P,
+        source: &impl IsA<gst::ControlSource>,
         property_name: &str,
         binding_type: &str,
     ) -> bool;
@@ -167,9 +167,9 @@ pub trait TrackElementExt: 'static {
 }
 
 impl<O: IsA<TrackElement>> TrackElementExt for O {
-    fn add_children_props<P: IsA<gst::Element>>(
+    fn add_children_props(
         &self,
-        element: &P,
+        element: &impl IsA<gst::Element>,
         wanted_categories: &[&str],
         blacklist: &[&str],
         whitelist: &[&str],
@@ -344,9 +344,9 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    fn set_control_source<P: IsA<gst::ControlSource>>(
+    fn set_control_source(
         &self,
-        source: &P,
+        source: &impl IsA<gst::ControlSource>,
         property_name: &str,
         binding_type: &str,
     ) -> bool {

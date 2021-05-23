@@ -28,10 +28,10 @@ glib::wrapper! {
 
 impl RTSPStream {
     #[doc(alias = "gst_rtsp_stream_new")]
-    pub fn new<P: IsA<gst::Element>, Q: IsA<gst::Pad>>(
+    pub fn new(
         idx: u32,
-        payloader: &P,
-        pad: &Q,
+        payloader: &impl IsA<gst::Element>,
+        pad: &impl IsA<gst::Pad>,
     ) -> RTSPStream {
         assert_initialized_main_thread!();
         unsafe {
@@ -62,9 +62,9 @@ pub trait RTSPStreamExt: 'static {
     ) -> bool;
 
     #[doc(alias = "gst_rtsp_stream_add_transport")]
-    fn add_transport<P: IsA<RTSPStreamTransport>>(
+    fn add_transport(
         &self,
-        trans: &P,
+        trans: &impl IsA<RTSPStreamTransport>,
     ) -> Result<(), glib::error::BoolError>;
 
     //#[doc(alias = "gst_rtsp_stream_allocate_udp_sockets")]
@@ -267,18 +267,18 @@ pub trait RTSPStreamExt: 'static {
     //fn is_transport_supported(&self, transport: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> bool;
 
     #[doc(alias = "gst_rtsp_stream_join_bin")]
-    fn join_bin<P: IsA<gst::Bin>, Q: IsA<gst::Element>>(
+    fn join_bin(
         &self,
-        bin: &P,
-        rtpbin: &Q,
+        bin: &impl IsA<gst::Bin>,
+        rtpbin: &impl IsA<gst::Element>,
         state: gst::State,
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_rtsp_stream_leave_bin")]
-    fn leave_bin<P: IsA<gst::Bin>, Q: IsA<gst::Element>>(
+    fn leave_bin(
         &self,
-        bin: &P,
-        rtpbin: &Q,
+        bin: &impl IsA<gst::Bin>,
+        rtpbin: &impl IsA<gst::Element>,
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_rtsp_stream_recv_rtcp")]
@@ -288,9 +288,9 @@ pub trait RTSPStreamExt: 'static {
     fn recv_rtp(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[doc(alias = "gst_rtsp_stream_remove_transport")]
-    fn remove_transport<P: IsA<RTSPStreamTransport>>(
+    fn remove_transport(
         &self,
-        trans: &P,
+        trans: &impl IsA<RTSPStreamTransport>,
     ) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -304,9 +304,9 @@ pub trait RTSPStreamExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_stream_request_ulpfec_decoder")]
-    fn request_ulpfec_decoder<P: IsA<gst::Element>>(
+    fn request_ulpfec_decoder(
         &self,
-        rtpbin: &P,
+        rtpbin: &impl IsA<gst::Element>,
         sessid: u32,
     ) -> Option<gst::Element>;
 
@@ -330,7 +330,7 @@ pub trait RTSPStreamExt: 'static {
     fn seekable(&self) -> bool;
 
     #[doc(alias = "gst_rtsp_stream_set_address_pool")]
-    fn set_address_pool<P: IsA<RTSPAddressPool>>(&self, pool: Option<&P>);
+    fn set_address_pool(&self, pool: Option<&impl IsA<RTSPAddressPool>>);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -476,9 +476,9 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn add_transport<P: IsA<RTSPStreamTransport>>(
+    fn add_transport(
         &self,
-        trans: &P,
+        trans: &impl IsA<RTSPStreamTransport>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -865,10 +865,10 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_is_transport_supported() }
     //}
 
-    fn join_bin<P: IsA<gst::Bin>, Q: IsA<gst::Element>>(
+    fn join_bin(
         &self,
-        bin: &P,
-        rtpbin: &Q,
+        bin: &impl IsA<gst::Bin>,
+        rtpbin: &impl IsA<gst::Element>,
         state: gst::State,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
@@ -884,10 +884,10 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn leave_bin<P: IsA<gst::Bin>, Q: IsA<gst::Element>>(
+    fn leave_bin(
         &self,
-        bin: &P,
-        rtpbin: &Q,
+        bin: &impl IsA<gst::Bin>,
+        rtpbin: &impl IsA<gst::Element>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -919,9 +919,9 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn remove_transport<P: IsA<RTSPStreamTransport>>(
+    fn remove_transport(
         &self,
-        trans: &P,
+        trans: &impl IsA<RTSPStreamTransport>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -956,9 +956,9 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn request_ulpfec_decoder<P: IsA<gst::Element>>(
+    fn request_ulpfec_decoder(
         &self,
-        rtpbin: &P,
+        rtpbin: &impl IsA<gst::Element>,
         sessid: u32,
     ) -> Option<gst::Element> {
         unsafe {
@@ -1009,7 +1009,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn set_address_pool<P: IsA<RTSPAddressPool>>(&self, pool: Option<&P>) {
+    fn set_address_pool(&self, pool: Option<&impl IsA<RTSPAddressPool>>) {
         unsafe {
             ffi::gst_rtsp_stream_set_address_pool(
                 self.as_ref().to_glib_none().0,

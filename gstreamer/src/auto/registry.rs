@@ -25,9 +25,9 @@ glib::wrapper! {
 
 impl Registry {
     #[doc(alias = "gst_registry_add_feature")]
-    pub fn add_feature<P: IsA<PluginFeature>>(
+    pub fn add_feature(
         &self,
-        feature: &P,
+        feature: &impl IsA<PluginFeature>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -201,7 +201,7 @@ impl Registry {
     }
 
     #[doc(alias = "gst_registry_remove_feature")]
-    pub fn remove_feature<P: IsA<PluginFeature>>(&self, feature: &P) {
+    pub fn remove_feature(&self, feature: &impl IsA<PluginFeature>) {
         unsafe {
             ffi::gst_registry_remove_feature(
                 self.to_glib_none().0,
@@ -218,7 +218,7 @@ impl Registry {
     }
 
     #[doc(alias = "gst_registry_scan_path")]
-    pub fn scan_path<P: AsRef<std::path::Path>>(&self, path: P) -> bool {
+    pub fn scan_path(&self, path: impl AsRef<std::path::Path>) -> bool {
         unsafe {
             from_glib(ffi::gst_registry_scan_path(
                 self.to_glib_none().0,

@@ -67,7 +67,7 @@ impl GLViewConvert {
     }
 
     #[doc(alias = "gst_gl_view_convert_set_context")]
-    pub fn set_context<P: IsA<GLContext>>(&self, context: &P) {
+    pub fn set_context(&self, context: &impl IsA<GLContext>) {
         unsafe {
             ffi::gst_gl_view_convert_set_context(
                 self.to_glib_none().0,

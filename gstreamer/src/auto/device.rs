@@ -56,9 +56,9 @@ pub trait DeviceExt: 'static {
     fn has_classesv(&self, classes: &[&str]) -> bool;
 
     #[doc(alias = "gst_device_reconfigure_element")]
-    fn reconfigure_element<P: IsA<Element>>(
+    fn reconfigure_element(
         &self,
-        element: &P,
+        element: &impl IsA<Element>,
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "removed")]
@@ -122,9 +122,9 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
-    fn reconfigure_element<P: IsA<Element>>(
+    fn reconfigure_element(
         &self,
-        element: &P,
+        element: &impl IsA<Element>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(

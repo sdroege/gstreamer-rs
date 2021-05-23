@@ -37,10 +37,10 @@ impl RTSPServer {
     }
 
     #[doc(alias = "gst_rtsp_server_io_func")]
-    pub fn io_func<P: IsA<gio::Socket>, Q: IsA<RTSPServer>>(
-        socket: &P,
+    pub fn io_func(
+        socket: &impl IsA<gio::Socket>,
         condition: glib::IOCondition,
-        server: &Q,
+        server: &impl IsA<RTSPServer>,
     ) -> Result<(), glib::error::BoolError> {
         skip_assert_initialized!();
         unsafe {
@@ -75,15 +75,15 @@ pub trait RTSPServerExt: 'static {
     ) -> Vec<RTSPClient>;
 
     #[doc(alias = "gst_rtsp_server_create_socket")]
-    fn create_socket<P: IsA<gio::Cancellable>>(
+    fn create_socket(
         &self,
-        cancellable: Option<&P>,
+        cancellable: Option<&impl IsA<gio::Cancellable>>,
     ) -> Result<gio::Socket, glib::Error>;
 
     #[doc(alias = "gst_rtsp_server_create_source")]
-    fn create_source<P: IsA<gio::Cancellable>>(
+    fn create_source(
         &self,
-        cancellable: Option<&P>,
+        cancellable: Option<&impl IsA<gio::Cancellable>>,
     ) -> Result<glib::Source, glib::Error>;
 
     #[doc(alias = "gst_rtsp_server_get_address")]
@@ -128,7 +128,7 @@ pub trait RTSPServerExt: 'static {
     fn set_address(&self, address: &str);
 
     #[doc(alias = "gst_rtsp_server_set_auth")]
-    fn set_auth<P: IsA<RTSPAuth>>(&self, auth: Option<&P>);
+    fn set_auth(&self, auth: Option<&impl IsA<RTSPAuth>>);
 
     #[doc(alias = "gst_rtsp_server_set_backlog")]
     fn set_backlog(&self, backlog: i32);
@@ -139,21 +139,21 @@ pub trait RTSPServerExt: 'static {
     fn set_content_length_limit(&self, limit: u32);
 
     #[doc(alias = "gst_rtsp_server_set_mount_points")]
-    fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>);
+    fn set_mount_points(&self, mounts: Option<&impl IsA<RTSPMountPoints>>);
 
     #[doc(alias = "gst_rtsp_server_set_service")]
     fn set_service(&self, service: &str);
 
     #[doc(alias = "gst_rtsp_server_set_session_pool")]
-    fn set_session_pool<P: IsA<RTSPSessionPool>>(&self, pool: Option<&P>);
+    fn set_session_pool(&self, pool: Option<&impl IsA<RTSPSessionPool>>);
 
     #[doc(alias = "gst_rtsp_server_set_thread_pool")]
-    fn set_thread_pool<P: IsA<RTSPThreadPool>>(&self, pool: Option<&P>);
+    fn set_thread_pool(&self, pool: Option<&impl IsA<RTSPThreadPool>>);
 
     #[doc(alias = "gst_rtsp_server_transfer_connection")]
-    fn transfer_connection<P: IsA<gio::Socket>>(
+    fn transfer_connection(
         &self,
-        socket: &P,
+        socket: &impl IsA<gio::Socket>,
         ip: &str,
         port: i32,
         initial_buffer: Option<&str>,
@@ -250,9 +250,9 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn create_socket<P: IsA<gio::Cancellable>>(
+    fn create_socket(
         &self,
-        cancellable: Option<&P>,
+        cancellable: Option<&impl IsA<gio::Cancellable>>,
     ) -> Result<gio::Socket, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -269,9 +269,9 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn create_source<P: IsA<gio::Cancellable>>(
+    fn create_source(
         &self,
-        cancellable: Option<&P>,
+        cancellable: Option<&impl IsA<gio::Cancellable>>,
     ) -> Result<glib::Source, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -359,7 +359,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn set_auth<P: IsA<RTSPAuth>>(&self, auth: Option<&P>) {
+    fn set_auth(&self, auth: Option<&impl IsA<RTSPAuth>>) {
         unsafe {
             ffi::gst_rtsp_server_set_auth(
                 self.as_ref().to_glib_none().0,
@@ -382,7 +382,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>) {
+    fn set_mount_points(&self, mounts: Option<&impl IsA<RTSPMountPoints>>) {
         unsafe {
             ffi::gst_rtsp_server_set_mount_points(
                 self.as_ref().to_glib_none().0,
@@ -400,7 +400,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn set_session_pool<P: IsA<RTSPSessionPool>>(&self, pool: Option<&P>) {
+    fn set_session_pool(&self, pool: Option<&impl IsA<RTSPSessionPool>>) {
         unsafe {
             ffi::gst_rtsp_server_set_session_pool(
                 self.as_ref().to_glib_none().0,
@@ -409,7 +409,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn set_thread_pool<P: IsA<RTSPThreadPool>>(&self, pool: Option<&P>) {
+    fn set_thread_pool(&self, pool: Option<&impl IsA<RTSPThreadPool>>) {
         unsafe {
             ffi::gst_rtsp_server_set_thread_pool(
                 self.as_ref().to_glib_none().0,
@@ -418,9 +418,9 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn transfer_connection<P: IsA<gio::Socket>>(
+    fn transfer_connection(
         &self,
-        socket: &P,
+        socket: &impl IsA<gio::Socket>,
         ip: &str,
         port: i32,
         initial_buffer: Option<&str>,

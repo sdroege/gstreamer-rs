@@ -39,9 +39,9 @@ pub trait ControlBindingExt: 'static {
     fn set_disabled(&self, disabled: bool);
 
     #[doc(alias = "gst_control_binding_sync_values")]
-    fn sync_values<P: IsA<Object>>(
+    fn sync_values(
         &self,
-        object: &P,
+        object: &impl IsA<Object>,
         timestamp: ClockTime,
         last_sync: impl Into<Option<ClockTime>>,
     ) -> bool;
@@ -80,9 +80,9 @@ impl<O: IsA<ControlBinding>> ControlBindingExt for O {
         }
     }
 
-    fn sync_values<P: IsA<Object>>(
+    fn sync_values(
         &self,
-        object: &P,
+        object: &impl IsA<Object>,
         timestamp: ClockTime,
         last_sync: impl Into<Option<ClockTime>>,
     ) -> bool {

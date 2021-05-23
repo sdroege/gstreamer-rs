@@ -89,7 +89,7 @@ impl PadTemplate {
     }
 
     #[doc(alias = "gst_pad_template_pad_created")]
-    pub fn pad_created<P: IsA<Pad>>(&self, pad: &P) {
+    pub fn pad_created(&self, pad: &impl IsA<Pad>) {
         unsafe {
             ffi::gst_pad_template_pad_created(self.to_glib_none().0, pad.as_ref().to_glib_none().0);
         }

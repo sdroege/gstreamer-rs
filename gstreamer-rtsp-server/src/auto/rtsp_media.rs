@@ -35,7 +35,7 @@ glib::wrapper! {
 
 impl RTSPMedia {
     #[doc(alias = "gst_rtsp_media_new")]
-    pub fn new<P: IsA<gst::Element>>(element: &P) -> RTSPMedia {
+    pub fn new(element: &impl IsA<gst::Element>) -> RTSPMedia {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_rtsp_media_new(element.as_ref().to_glib_full())) }
     }
@@ -56,10 +56,10 @@ pub trait RTSPMediaExt: 'static {
     //fn complete_pipeline(&self, transports: /*Ignored*/&[&gst_rtsp::RTSPTransport]) -> bool;
 
     #[doc(alias = "gst_rtsp_media_create_stream")]
-    fn create_stream<P: IsA<gst::Element>, Q: IsA<gst::Pad>>(
+    fn create_stream(
         &self,
-        payloader: &P,
-        pad: &Q,
+        payloader: &impl IsA<gst::Element>,
+        pad: &impl IsA<gst::Pad>,
     ) -> Option<RTSPStream>;
 
     #[doc(alias = "gst_rtsp_media_find_stream")]
@@ -230,7 +230,7 @@ pub trait RTSPMediaExt: 'static {
     //fn seekable(&self) -> /*Ignored*/gst::ClockTimeDiff;
 
     #[doc(alias = "gst_rtsp_media_set_address_pool")]
-    fn set_address_pool<P: IsA<RTSPAddressPool>>(&self, pool: Option<&P>);
+    fn set_address_pool(&self, pool: Option<&impl IsA<RTSPAddressPool>>);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -241,7 +241,7 @@ pub trait RTSPMediaExt: 'static {
     fn set_buffer_size(&self, size: u32);
 
     #[doc(alias = "gst_rtsp_media_set_clock")]
-    fn set_clock<P: IsA<gst::Clock>>(&self, clock: Option<&P>);
+    fn set_clock(&self, clock: Option<&impl IsA<gst::Clock>>);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -473,10 +473,10 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_media_complete_pipeline() }
     //}
 
-    fn create_stream<P: IsA<gst::Element>, Q: IsA<gst::Pad>>(
+    fn create_stream(
         &self,
-        payloader: &P,
-        pad: &Q,
+        payloader: &impl IsA<gst::Element>,
+        pad: &impl IsA<gst::Pad>,
     ) -> Option<RTSPStream> {
         unsafe {
             from_glib_none(ffi::gst_rtsp_media_create_stream(
@@ -803,7 +803,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_media_seekable() }
     //}
 
-    fn set_address_pool<P: IsA<RTSPAddressPool>>(&self, pool: Option<&P>) {
+    fn set_address_pool(&self, pool: Option<&impl IsA<RTSPAddressPool>>) {
         unsafe {
             ffi::gst_rtsp_media_set_address_pool(
                 self.as_ref().to_glib_none().0,
@@ -829,7 +829,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    fn set_clock<P: IsA<gst::Clock>>(&self, clock: Option<&P>) {
+    fn set_clock(&self, clock: Option<&impl IsA<gst::Clock>>) {
         unsafe {
             ffi::gst_rtsp_media_set_clock(
                 self.as_ref().to_glib_none().0,

@@ -25,9 +25,7 @@ impl Preset {
     }
 
     #[doc(alias = "gst_preset_set_app_dir")]
-    pub fn set_app_dir<P: AsRef<std::path::Path>>(
-        app_dir: P,
-    ) -> Result<(), glib::error::BoolError> {
+    pub fn set_app_dir(app_dir: impl AsRef<std::path::Path>) -> Result<(), glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
             glib::result_from_gboolean!(

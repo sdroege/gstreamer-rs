@@ -39,7 +39,7 @@ glib::wrapper! {
 
 impl GLOverlayCompositor {
     #[doc(alias = "gst_gl_overlay_compositor_new")]
-    pub fn new<P: IsA<GLContext>>(context: &P) -> GLOverlayCompositor {
+    pub fn new(context: &impl IsA<GLContext>) -> GLOverlayCompositor {
         skip_assert_initialized!();
         unsafe {
             from_glib_none(ffi::gst_gl_overlay_compositor_new(

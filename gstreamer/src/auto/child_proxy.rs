@@ -27,10 +27,10 @@ pub const NONE_CHILD_PROXY: Option<&ChildProxy> = None;
 
 pub trait ChildProxyExt: 'static {
     #[doc(alias = "gst_child_proxy_child_added")]
-    fn child_added<P: IsA<glib::Object>>(&self, child: &P, name: &str);
+    fn child_added(&self, child: &impl IsA<glib::Object>, name: &str);
 
     #[doc(alias = "gst_child_proxy_child_removed")]
-    fn child_removed<P: IsA<glib::Object>>(&self, child: &P, name: &str);
+    fn child_removed(&self, child: &impl IsA<glib::Object>, name: &str);
 
     //#[doc(alias = "gst_child_proxy_get")]
     //fn get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
@@ -74,7 +74,7 @@ pub trait ChildProxyExt: 'static {
 }
 
 impl<O: IsA<ChildProxy>> ChildProxyExt for O {
-    fn child_added<P: IsA<glib::Object>>(&self, child: &P, name: &str) {
+    fn child_added(&self, child: &impl IsA<glib::Object>, name: &str) {
         unsafe {
             ffi::gst_child_proxy_child_added(
                 self.as_ref().to_glib_none().0,
@@ -84,7 +84,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         }
     }
 
-    fn child_removed<P: IsA<glib::Object>>(&self, child: &P, name: &str) {
+    fn child_removed(&self, child: &impl IsA<glib::Object>, name: &str) {
         unsafe {
             ffi::gst_child_proxy_child_removed(
                 self.as_ref().to_glib_none().0,

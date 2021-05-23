@@ -42,12 +42,12 @@ pub const NONE_TRACK: Option<&Track> = None;
 
 pub trait GESTrackExt: 'static {
     #[doc(alias = "ges_track_add_element")]
-    fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError>;
+    fn add_element(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_add_element_full")]
-    fn add_element_full<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::Error>;
+    fn add_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error>;
 
     #[doc(alias = "ges_track_commit")]
     fn commit(&self) -> bool;
@@ -75,15 +75,13 @@ pub trait GESTrackExt: 'static {
     fn timeline(&self) -> Option<Timeline>;
 
     #[doc(alias = "ges_track_remove_element")]
-    fn remove_element<P: IsA<TrackElement>>(
-        &self,
-        object: &P,
-    ) -> Result<(), glib::error::BoolError>;
+    fn remove_element(&self, object: &impl IsA<TrackElement>)
+        -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_remove_element_full")]
-    fn remove_element_full<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::Error>;
+    fn remove_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error>;
 
     //#[doc(alias = "ges_track_set_create_element_for_gap_func")]
     //fn set_create_element_for_gap_func<P: Fn(&Track) -> gst::Element + 'static>(&self, func: P);
@@ -95,7 +93,7 @@ pub trait GESTrackExt: 'static {
     fn set_restriction_caps(&self, caps: &gst::Caps);
 
     #[doc(alias = "ges_track_set_timeline")]
-    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P);
+    fn set_timeline(&self, timeline: &impl IsA<Timeline>);
 
     #[doc(alias = "ges_track_update_restriction_caps")]
     fn update_restriction_caps(&self, caps: &gst::Caps);
@@ -147,7 +145,7 @@ pub trait GESTrackExt: 'static {
 }
 
 impl<O: IsA<Track>> GESTrackExt for O {
-    fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError> {
+    fn add_element(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_track_add_element(
@@ -161,7 +159,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn add_element_full<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::Error> {
+    fn add_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ffi::ges_track_add_element_full(
@@ -211,9 +209,9 @@ impl<O: IsA<Track>> GESTrackExt for O {
         unsafe { from_glib_none(ffi::ges_track_get_timeline(self.as_ref().to_glib_none().0)) }
     }
 
-    fn remove_element<P: IsA<TrackElement>>(
+    fn remove_element(
         &self,
-        object: &P,
+        object: &impl IsA<TrackElement>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -228,7 +226,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn remove_element_full<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::Error> {
+    fn remove_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ffi::ges_track_remove_element_full(
@@ -263,7 +261,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) {
+    fn set_timeline(&self, timeline: &impl IsA<Timeline>) {
         unsafe {
             ffi::ges_track_set_timeline(
                 self.as_ref().to_glib_none().0,

@@ -28,7 +28,7 @@ impl GLAllocationParams {
     }
 
     //#[doc(alias = "gst_gl_allocation_params_init")]
-    //pub fn init<P: Fn(&GLAllocationParams, &GLAllocationParams) + Send + Sync + 'static, Q: IsA<GLContext>>(&mut self, struct_size: usize, alloc_flags: u32, copy: P, free: /*Unimplemented*/Fn(/*Unimplemented*/Option<Fundamental: Pointer>), context: &Q, alloc_size: usize, alloc_params: Option<&gst::AllocationParams>, wrapped_data: /*Unimplemented*/Option<Fundamental: Pointer>, gl_handle: /*Unimplemented*/Option<Fundamental: Pointer>, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
+    //pub fn init<P: Fn(&GLAllocationParams, &GLAllocationParams) + Send + Sync + 'static>(&mut self, struct_size: usize, alloc_flags: u32, copy: P, free: /*Unimplemented*/Fn(/*Unimplemented*/Option<Fundamental: Pointer>), context: &impl IsA<GLContext>, alloc_size: usize, alloc_params: Option<&gst::AllocationParams>, wrapped_data: /*Unimplemented*/Option<Fundamental: Pointer>, gl_handle: /*Unimplemented*/Option<Fundamental: Pointer>, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
     //    unsafe { TODO: call ffi:gst_gl_allocation_params_init() }
     //}
 }

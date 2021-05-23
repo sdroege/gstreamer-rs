@@ -73,7 +73,7 @@ pub trait ElementExt: 'static {
     fn abort_state(&self);
 
     #[doc(alias = "gst_element_add_pad")]
-    fn add_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError>;
+    fn add_pad(&self, pad: &impl IsA<Pad>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_element_change_state")]
     fn change_state(&self, transition: StateChange)
@@ -117,7 +117,7 @@ pub trait ElementExt: 'static {
 
     #[doc(alias = "gst_element_get_compatible_pad")]
     #[doc(alias = "get_compatible_pad")]
-    fn compatible_pad<P: IsA<Pad>>(&self, pad: &P, caps: Option<&Caps>) -> Option<Pad>;
+    fn compatible_pad(&self, pad: &impl IsA<Pad>, caps: Option<&Caps>) -> Option<Pad>;
 
     #[doc(alias = "gst_element_get_compatible_pad_template")]
     #[doc(alias = "get_compatible_pad_template")]
@@ -154,37 +154,37 @@ pub trait ElementExt: 'static {
     fn is_locked_state(&self) -> bool;
 
     #[doc(alias = "gst_element_link")]
-    fn link<P: IsA<Element>>(&self, dest: &P) -> Result<(), glib::error::BoolError>;
+    fn link(&self, dest: &impl IsA<Element>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_element_link_filtered")]
-    fn link_filtered<P: IsA<Element>>(
+    fn link_filtered(
         &self,
-        dest: &P,
+        dest: &impl IsA<Element>,
         filter: &Caps,
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_element_link_pads")]
-    fn link_pads<P: IsA<Element>>(
+    fn link_pads(
         &self,
         srcpadname: Option<&str>,
-        dest: &P,
+        dest: &impl IsA<Element>,
         destpadname: Option<&str>,
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_element_link_pads_filtered")]
-    fn link_pads_filtered<P: IsA<Element>>(
+    fn link_pads_filtered(
         &self,
         srcpadname: Option<&str>,
-        dest: &P,
+        dest: &impl IsA<Element>,
         destpadname: Option<&str>,
         filter: &Caps,
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_element_link_pads_full")]
-    fn link_pads_full<P: IsA<Element>>(
+    fn link_pads_full(
         &self,
         srcpadname: Option<&str>,
-        dest: &P,
+        dest: &impl IsA<Element>,
         destpadname: Option<&str>,
         flags: PadLinkCheck,
     ) -> Result<(), glib::error::BoolError>;
@@ -199,10 +199,10 @@ pub trait ElementExt: 'static {
     fn provide_clock(&self) -> Option<Clock>;
 
     #[doc(alias = "gst_element_release_request_pad")]
-    fn release_request_pad<P: IsA<Pad>>(&self, pad: &P);
+    fn release_request_pad(&self, pad: &impl IsA<Pad>);
 
     #[doc(alias = "gst_element_remove_pad")]
-    fn remove_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError>;
+    fn remove_pad(&self, pad: &impl IsA<Pad>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_element_request_pad")]
     fn request_pad(
@@ -224,7 +224,7 @@ pub trait ElementExt: 'static {
     fn set_bus(&self, bus: Option<&Bus>);
 
     #[doc(alias = "gst_element_set_clock")]
-    fn set_clock<P: IsA<Clock>>(&self, clock: Option<&P>) -> Result<(), glib::error::BoolError>;
+    fn set_clock(&self, clock: Option<&impl IsA<Clock>>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_element_set_context")]
     fn set_context(&self, context: &Context);
@@ -242,10 +242,10 @@ pub trait ElementExt: 'static {
     fn sync_state_with_parent(&self) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_element_unlink")]
-    fn unlink<P: IsA<Element>>(&self, dest: &P);
+    fn unlink(&self, dest: &impl IsA<Element>);
 
     #[doc(alias = "gst_element_unlink_pads")]
-    fn unlink_pads<P: IsA<Element>>(&self, srcpadname: &str, dest: &P, destpadname: &str);
+    fn unlink_pads(&self, srcpadname: &str, dest: &impl IsA<Element>, destpadname: &str);
 
     #[doc(alias = "no-more-pads")]
     fn connect_no_more_pads<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
@@ -270,7 +270,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn add_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError> {
+    fn add_pad(&self, pad: &impl IsA<Pad>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_element_add_pad(
@@ -406,7 +406,7 @@ impl<O: IsA<Element>> ElementExt for O {
         unsafe { from_glib_full(ffi::gst_element_get_clock(self.as_ref().to_glib_none().0)) }
     }
 
-    fn compatible_pad<P: IsA<Pad>>(&self, pad: &P, caps: Option<&Caps>) -> Option<Pad> {
+    fn compatible_pad(&self, pad: &impl IsA<Pad>, caps: Option<&Caps>) -> Option<Pad> {
         unsafe {
             from_glib_full(ffi::gst_element_get_compatible_pad(
                 self.as_ref().to_glib_none().0,
@@ -490,7 +490,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn link<P: IsA<Element>>(&self, dest: &P) -> Result<(), glib::error::BoolError> {
+    fn link(&self, dest: &impl IsA<Element>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_element_link(
@@ -502,9 +502,9 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn link_filtered<P: IsA<Element>>(
+    fn link_filtered(
         &self,
-        dest: &P,
+        dest: &impl IsA<Element>,
         filter: &Caps,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
@@ -519,10 +519,10 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn link_pads<P: IsA<Element>>(
+    fn link_pads(
         &self,
         srcpadname: Option<&str>,
-        dest: &P,
+        dest: &impl IsA<Element>,
         destpadname: Option<&str>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
@@ -538,10 +538,10 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn link_pads_filtered<P: IsA<Element>>(
+    fn link_pads_filtered(
         &self,
         srcpadname: Option<&str>,
-        dest: &P,
+        dest: &impl IsA<Element>,
         destpadname: Option<&str>,
         filter: &Caps,
     ) -> Result<(), glib::error::BoolError> {
@@ -559,10 +559,10 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn link_pads_full<P: IsA<Element>>(
+    fn link_pads_full(
         &self,
         srcpadname: Option<&str>,
-        dest: &P,
+        dest: &impl IsA<Element>,
         destpadname: Option<&str>,
         flags: PadLinkCheck,
     ) -> Result<(), glib::error::BoolError> {
@@ -600,7 +600,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn release_request_pad<P: IsA<Pad>>(&self, pad: &P) {
+    fn release_request_pad(&self, pad: &impl IsA<Pad>) {
         unsafe {
             ffi::gst_element_release_request_pad(
                 self.as_ref().to_glib_none().0,
@@ -609,7 +609,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn remove_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError> {
+    fn remove_pad(&self, pad: &impl IsA<Pad>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_element_remove_pad(
@@ -660,7 +660,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn set_clock<P: IsA<Clock>>(&self, clock: Option<&P>) -> Result<(), glib::error::BoolError> {
+    fn set_clock(&self, clock: Option<&impl IsA<Clock>>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_element_set_clock(
@@ -714,7 +714,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn unlink<P: IsA<Element>>(&self, dest: &P) {
+    fn unlink(&self, dest: &impl IsA<Element>) {
         unsafe {
             ffi::gst_element_unlink(
                 self.as_ref().to_glib_none().0,
@@ -723,7 +723,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn unlink_pads<P: IsA<Element>>(&self, srcpadname: &str, dest: &P, destpadname: &str) {
+    fn unlink_pads(&self, srcpadname: &str, dest: &impl IsA<Element>, destpadname: &str) {
         unsafe {
             ffi::gst_element_unlink_pads(
                 self.as_ref().to_glib_none().0,

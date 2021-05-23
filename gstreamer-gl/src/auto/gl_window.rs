@@ -25,7 +25,7 @@ glib::wrapper! {
 
 impl GLWindow {
     #[doc(alias = "gst_gl_window_new")]
-    pub fn new<P: IsA<GLDisplay>>(display: &P) -> GLWindow {
+    pub fn new(display: &impl IsA<GLDisplay>) -> GLWindow {
         skip_assert_initialized!();
         unsafe { from_glib_full(ffi::gst_gl_window_new(display.as_ref().to_glib_none().0)) }
     }

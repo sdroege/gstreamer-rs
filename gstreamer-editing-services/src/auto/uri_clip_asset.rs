@@ -36,7 +36,7 @@ impl UriClipAsset {
     //}
 
     //#[doc(alias = "ges_uri_clip_asset_new")]
-    //pub fn new<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + 'static>(uri: &str, cancellable: Option<&P>, callback: Q) {
+    //pub fn new<P: FnOnce(Result<(), glib::Error>) + 'static>(uri: &str, cancellable: Option<&impl IsA<gio::Cancellable>>, callback: P) {
     //    unsafe { TODO: call ffi:ges_uri_clip_asset_new() }
     //}
 

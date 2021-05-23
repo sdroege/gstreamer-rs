@@ -44,7 +44,7 @@ pub const NONE_TIMELINE_ELEMENT: Option<&TimelineElement> = None;
 
 pub trait TimelineElementExt: 'static {
     //#[doc(alias = "ges_timeline_element_add_child_property")]
-    //fn add_child_property<P: IsA<glib::Object>>(&self, pspec: /*Ignored*/&glib::ParamSpec, child: &P) -> bool;
+    //fn add_child_property(&self, pspec: /*Ignored*/&glib::ParamSpec, child: &impl IsA<glib::Object>) -> bool;
 
     #[doc(alias = "ges_timeline_element_copy")]
     fn copy(&self, deep: bool) -> Result<TimelineElement, glib::BoolError>;
@@ -202,8 +202,7 @@ pub trait TimelineElementExt: 'static {
     fn set_name(&self, name: Option<&str>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_timeline_element_set_parent")]
-    fn set_parent<P: IsA<TimelineElement>>(&self, parent: &P)
-        -> Result<(), glib::error::BoolError>;
+    fn set_parent(&self, parent: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError>;
 
     #[cfg_attr(feature = "v1_10", deprecated = "Since 1.10")]
     #[doc(alias = "ges_timeline_element_set_priority")]
@@ -213,7 +212,7 @@ pub trait TimelineElementExt: 'static {
     fn set_start(&self, start: gst::ClockTime) -> bool;
 
     #[doc(alias = "ges_timeline_element_set_timeline")]
-    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError>;
+    fn set_timeline(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_timeline_element_trim")]
     fn trim(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError>;
@@ -271,7 +270,7 @@ pub trait TimelineElementExt: 'static {
 }
 
 impl<O: IsA<TimelineElement>> TimelineElementExt for O {
-    //fn add_child_property<P: IsA<glib::Object>>(&self, pspec: /*Ignored*/&glib::ParamSpec, child: &P) -> bool {
+    //fn add_child_property(&self, pspec: /*Ignored*/&glib::ParamSpec, child: &impl IsA<glib::Object>) -> bool {
     //    unsafe { TODO: call ffi:ges_timeline_element_add_child_property() }
     //}
 
@@ -623,10 +622,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn set_parent<P: IsA<TimelineElement>>(
-        &self,
-        parent: &P,
-    ) -> Result<(), glib::error::BoolError> {
+    fn set_parent(&self, parent: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_timeline_element_set_parent(
@@ -656,7 +652,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError> {
+    fn set_timeline(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_timeline_element_set_timeline(

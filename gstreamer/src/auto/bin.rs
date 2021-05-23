@@ -45,7 +45,7 @@ pub const NONE_BIN: Option<&Bin> = None;
 
 pub trait GstBinExt: 'static {
     #[doc(alias = "gst_bin_add")]
-    fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError>;
+    fn add(&self, element: &impl IsA<Element>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_bin_find_unlinked_pad")]
     fn find_unlinked_pad(&self, direction: PadDirection) -> Option<Pad>;
@@ -72,7 +72,7 @@ pub trait GstBinExt: 'static {
     fn recalculate_latency(&self) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_bin_remove")]
-    fn remove<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError>;
+    fn remove(&self, element: &impl IsA<Element>) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
@@ -136,7 +136,7 @@ pub trait GstBinExt: 'static {
 }
 
 impl<O: IsA<Bin>> GstBinExt for O {
-    fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
+    fn add(&self, element: &impl IsA<Element>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_bin_add(
@@ -203,7 +203,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    fn remove<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
+    fn remove(&self, element: &impl IsA<Element>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_bin_remove(

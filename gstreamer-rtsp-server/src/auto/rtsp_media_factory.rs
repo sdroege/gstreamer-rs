@@ -150,7 +150,7 @@ pub trait RTSPMediaFactoryExt: 'static {
     fn is_stop_on_disonnect(&self) -> bool;
 
     #[doc(alias = "gst_rtsp_media_factory_set_address_pool")]
-    fn set_address_pool<P: IsA<RTSPAddressPool>>(&self, pool: Option<&P>);
+    fn set_address_pool(&self, pool: Option<&impl IsA<RTSPAddressPool>>);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -161,7 +161,7 @@ pub trait RTSPMediaFactoryExt: 'static {
     fn set_buffer_size(&self, size: u32);
 
     #[doc(alias = "gst_rtsp_media_factory_set_clock")]
-    fn set_clock<P: IsA<gst::Clock>>(&self, clock: Option<&P>);
+    fn set_clock(&self, clock: Option<&impl IsA<gst::Clock>>);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -531,7 +531,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn set_address_pool<P: IsA<RTSPAddressPool>>(&self, pool: Option<&P>) {
+    fn set_address_pool(&self, pool: Option<&impl IsA<RTSPAddressPool>>) {
         unsafe {
             ffi::gst_rtsp_media_factory_set_address_pool(
                 self.as_ref().to_glib_none().0,
@@ -557,7 +557,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn set_clock<P: IsA<gst::Clock>>(&self, clock: Option<&P>) {
+    fn set_clock(&self, clock: Option<&impl IsA<gst::Clock>>) {
         unsafe {
             ffi::gst_rtsp_media_factory_set_clock(
                 self.as_ref().to_glib_none().0,

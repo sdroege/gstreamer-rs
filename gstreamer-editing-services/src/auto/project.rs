@@ -35,12 +35,12 @@ pub const NONE_PROJECT: Option<&Project> = None;
 
 pub trait ProjectExt: 'static {
     #[doc(alias = "ges_project_add_asset")]
-    fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> bool;
+    fn add_asset(&self, asset: &impl IsA<Asset>) -> bool;
 
     #[doc(alias = "ges_project_add_encoding_profile")]
-    fn add_encoding_profile<P: IsA<gst_pbutils::EncodingProfile>>(
+    fn add_encoding_profile(
         &self,
-        profile: &P,
+        profile: &impl IsA<gst_pbutils::EncodingProfile>,
     ) -> Result<(), glib::error::BoolError>;
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -77,17 +77,17 @@ pub trait ProjectExt: 'static {
     fn list_encoding_profiles(&self) -> Vec<gst_pbutils::EncodingProfile>;
 
     #[doc(alias = "ges_project_load")]
-    fn load<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::Error>;
+    fn load(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::Error>;
 
     #[doc(alias = "ges_project_remove_asset")]
-    fn remove_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError>;
+    fn remove_asset(&self, asset: &impl IsA<Asset>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_project_save")]
-    fn save<P: IsA<Timeline>, Q: IsA<Asset>>(
+    fn save(
         &self,
-        timeline: &P,
+        timeline: &impl IsA<Timeline>,
         uri: &str,
-        formatter_asset: Option<&Q>,
+        formatter_asset: Option<&impl IsA<Asset>>,
         overwrite: bool,
     ) -> Result<(), glib::Error>;
 
@@ -130,7 +130,7 @@ pub trait ProjectExt: 'static {
 }
 
 impl<O: IsA<Project>> ProjectExt for O {
-    fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> bool {
+    fn add_asset(&self, asset: &impl IsA<Asset>) -> bool {
         unsafe {
             from_glib(ffi::ges_project_add_asset(
                 self.as_ref().to_glib_none().0,
@@ -139,9 +139,9 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    fn add_encoding_profile<P: IsA<gst_pbutils::EncodingProfile>>(
+    fn add_encoding_profile(
         &self,
-        profile: &P,
+        profile: &impl IsA<gst_pbutils::EncodingProfile>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -230,7 +230,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    fn load<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::Error> {
+    fn load(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ffi::ges_project_load(
@@ -246,7 +246,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    fn remove_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError> {
+    fn remove_asset(&self, asset: &impl IsA<Asset>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_project_remove_asset(
@@ -258,11 +258,11 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    fn save<P: IsA<Timeline>, Q: IsA<Asset>>(
+    fn save(
         &self,
-        timeline: &P,
+        timeline: &impl IsA<Timeline>,
         uri: &str,
-        formatter_asset: Option<&Q>,
+        formatter_asset: Option<&impl IsA<Asset>>,
         overwrite: bool,
     ) -> Result<(), glib::Error> {
         unsafe {

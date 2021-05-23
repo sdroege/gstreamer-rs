@@ -25,7 +25,7 @@ glib::wrapper! {
 
 impl GLContext {
     #[doc(alias = "gst_gl_context_new")]
-    pub fn new<P: IsA<GLDisplay>>(display: &P) -> GLContext {
+    pub fn new(display: &impl IsA<GLDisplay>) -> GLContext {
         skip_assert_initialized!();
         unsafe { from_glib_none(ffi::gst_gl_context_new(display.as_ref().to_glib_none().0)) }
     }
@@ -66,7 +66,7 @@ pub trait GLContextExt: 'static {
     fn activate(&self, activate: bool) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_gl_context_can_share")]
-    fn can_share<P: IsA<GLContext>>(&self, other_context: &P) -> bool;
+    fn can_share(&self, other_context: &impl IsA<GLContext>) -> bool;
 
     #[doc(alias = "gst_gl_context_check_feature")]
     fn check_feature(&self, feature: &str) -> bool;
@@ -84,7 +84,7 @@ pub trait GLContextExt: 'static {
     fn clear_shader(&self);
 
     #[doc(alias = "gst_gl_context_create")]
-    fn create<P: IsA<GLContext>>(&self, other_context: Option<&P>) -> Result<(), glib::Error>;
+    fn create(&self, other_context: Option<&impl IsA<GLContext>>) -> Result<(), glib::Error>;
 
     #[doc(alias = "gst_gl_context_destroy")]
     fn destroy(&self);
@@ -131,10 +131,10 @@ pub trait GLContextExt: 'static {
     fn request_config(&self, gl_config: Option<&gst::Structure>) -> bool;
 
     #[doc(alias = "gst_gl_context_set_shared_with")]
-    fn set_shared_with<P: IsA<GLContext>>(&self, share: &P);
+    fn set_shared_with(&self, share: &impl IsA<GLContext>);
 
     #[doc(alias = "gst_gl_context_set_window")]
-    fn set_window<P: IsA<GLWindow>>(&self, window: &P) -> Result<(), glib::error::BoolError>;
+    fn set_window(&self, window: &impl IsA<GLWindow>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_gl_context_supports_glsl_profile_version")]
     fn supports_glsl_profile_version(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
@@ -163,7 +163,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    fn can_share<P: IsA<GLContext>>(&self, other_context: &P) -> bool {
+    fn can_share(&self, other_context: &impl IsA<GLContext>) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_context_can_share(
                 self.as_ref().to_glib_none().0,
@@ -213,7 +213,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    fn create<P: IsA<GLContext>>(&self, other_context: Option<&P>) -> Result<(), glib::Error> {
+    fn create(&self, other_context: Option<&impl IsA<GLContext>>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ffi::gst_gl_context_create(
@@ -338,7 +338,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    fn set_shared_with<P: IsA<GLContext>>(&self, share: &P) {
+    fn set_shared_with(&self, share: &impl IsA<GLContext>) {
         unsafe {
             ffi::gst_gl_context_set_shared_with(
                 self.as_ref().to_glib_none().0,
@@ -347,7 +347,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    fn set_window<P: IsA<GLWindow>>(&self, window: &P) -> Result<(), glib::error::BoolError> {
+    fn set_window(&self, window: &impl IsA<GLWindow>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_gl_context_set_window(

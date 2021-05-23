@@ -29,7 +29,7 @@ impl GLDisplayEGL {
     //}
 
     #[doc(alias = "gst_gl_display_egl_from_gl_display")]
-    pub fn from_gl_display<P: IsA<gst_gl::GLDisplay>>(display: &P) -> Option<GLDisplayEGL> {
+    pub fn from_gl_display(display: &impl IsA<gst_gl::GLDisplay>) -> Option<GLDisplayEGL> {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_gl_display_egl_from_gl_display(

@@ -31,13 +31,13 @@ glib::wrapper! {
 
 impl GLShader {
     #[doc(alias = "gst_gl_shader_new")]
-    pub fn new<P: IsA<GLContext>>(context: &P) -> GLShader {
+    pub fn new(context: &impl IsA<GLContext>) -> GLShader {
         skip_assert_initialized!();
         unsafe { from_glib_full(ffi::gst_gl_shader_new(context.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_gl_shader_new_default")]
-    pub fn new_default<P: IsA<GLContext>>(context: &P) -> Result<GLShader, glib::Error> {
+    pub fn new_default(context: &impl IsA<GLContext>) -> Result<GLShader, glib::Error> {
         skip_assert_initialized!();
         unsafe {
             let mut error = ptr::null_mut();
@@ -51,13 +51,13 @@ impl GLShader {
     }
 
     //#[doc(alias = "gst_gl_shader_new_link_with_stages")]
-    //pub fn new_link_with_stages<P: IsA<GLContext>>(context: &P, error: &mut glib::Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
+    //pub fn new_link_with_stages(context: &impl IsA<GLContext>, error: &mut glib::Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
     //    unsafe { TODO: call ffi:gst_gl_shader_new_link_with_stages() }
     //}
 
     //#[doc(alias = "gst_gl_shader_new_with_stages")]
     //#[doc(alias = "new_with_stages")]
-    //pub fn with_stages<P: IsA<GLContext>>(context: &P, error: &mut glib::Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
+    //pub fn with_stages(context: &impl IsA<GLContext>, error: &mut glib::Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
     //    unsafe { TODO: call ffi:gst_gl_shader_new_with_stages() }
     //}
 
@@ -377,8 +377,8 @@ impl GLShader {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_shader_string_fragment_external_oes_get_default")]
-    pub fn string_fragment_external_oes_get_default<P: IsA<GLContext>>(
-        context: &P,
+    pub fn string_fragment_external_oes_get_default(
+        context: &impl IsA<GLContext>,
         version: GLSLVersion,
         profile: GLSLProfile,
     ) -> Option<glib::GString> {
@@ -395,8 +395,8 @@ impl GLShader {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_shader_string_fragment_get_default")]
-    pub fn string_fragment_get_default<P: IsA<GLContext>>(
-        context: &P,
+    pub fn string_fragment_get_default(
+        context: &impl IsA<GLContext>,
         version: GLSLVersion,
         profile: GLSLProfile,
     ) -> Option<glib::GString> {
@@ -413,8 +413,8 @@ impl GLShader {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_shader_string_get_highest_precision")]
-    pub fn string_get_highest_precision<P: IsA<GLContext>>(
-        context: &P,
+    pub fn string_get_highest_precision(
+        context: &impl IsA<GLContext>,
         version: GLSLVersion,
         profile: GLSLProfile,
     ) -> Option<glib::GString> {

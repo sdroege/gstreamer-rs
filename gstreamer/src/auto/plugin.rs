@@ -131,7 +131,7 @@ impl Plugin {
     }
 
     #[doc(alias = "gst_plugin_load_file")]
-    pub fn load_file<P: AsRef<std::path::Path>>(filename: P) -> Result<Plugin, glib::Error> {
+    pub fn load_file(filename: impl AsRef<std::path::Path>) -> Result<Plugin, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();

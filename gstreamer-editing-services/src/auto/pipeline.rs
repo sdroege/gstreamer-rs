@@ -61,10 +61,10 @@ pub trait GESPipelineExt: 'static {
     fn preview_get_video_sink(&self) -> Option<gst::Element>;
 
     #[doc(alias = "ges_pipeline_preview_set_audio_sink")]
-    fn preview_set_audio_sink<P: IsA<gst::Element>>(&self, sink: &P);
+    fn preview_set_audio_sink(&self, sink: &impl IsA<gst::Element>);
 
     #[doc(alias = "ges_pipeline_preview_set_video_sink")]
-    fn preview_set_video_sink<P: IsA<gst::Element>>(&self, sink: &P);
+    fn preview_set_video_sink(&self, sink: &impl IsA<gst::Element>);
 
     #[doc(alias = "ges_pipeline_save_thumbnail")]
     fn save_thumbnail(
@@ -79,14 +79,14 @@ pub trait GESPipelineExt: 'static {
     fn set_mode(&self, mode: PipelineFlags) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_pipeline_set_render_settings")]
-    fn set_render_settings<P: IsA<gst_pbutils::EncodingProfile>>(
+    fn set_render_settings(
         &self,
         output_uri: &str,
-        profile: &P,
+        profile: &impl IsA<gst_pbutils::EncodingProfile>,
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_pipeline_set_timeline")]
-    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError>;
+    fn set_timeline(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "audio-filter")]
     fn audio_filter(&self) -> Option<gst::Element>;
@@ -173,7 +173,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn preview_set_audio_sink<P: IsA<gst::Element>>(&self, sink: &P) {
+    fn preview_set_audio_sink(&self, sink: &impl IsA<gst::Element>) {
         unsafe {
             ffi::ges_pipeline_preview_set_audio_sink(
                 self.as_ref().to_glib_none().0,
@@ -182,7 +182,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn preview_set_video_sink<P: IsA<gst::Element>>(&self, sink: &P) {
+    fn preview_set_video_sink(&self, sink: &impl IsA<gst::Element>) {
         unsafe {
             ffi::ges_pipeline_preview_set_video_sink(
                 self.as_ref().to_glib_none().0,
@@ -225,10 +225,10 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn set_render_settings<P: IsA<gst_pbutils::EncodingProfile>>(
+    fn set_render_settings(
         &self,
         output_uri: &str,
-        profile: &P,
+        profile: &impl IsA<gst_pbutils::EncodingProfile>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -242,7 +242,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError> {
+    fn set_timeline(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_pipeline_set_timeline(

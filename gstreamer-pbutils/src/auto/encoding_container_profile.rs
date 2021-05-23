@@ -18,7 +18,7 @@ glib::wrapper! {
 
 impl EncodingContainerProfile {
     #[doc(alias = "gst_encoding_container_profile_contains_profile")]
-    pub fn contains_profile<P: IsA<EncodingProfile>>(&self, profile: &P) -> bool {
+    pub fn contains_profile(&self, profile: &impl IsA<EncodingProfile>) -> bool {
         unsafe {
             from_glib(ffi::gst_encoding_container_profile_contains_profile(
                 self.to_glib_none().0,

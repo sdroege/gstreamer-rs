@@ -91,7 +91,7 @@ pub trait RTSPClientExt: 'static {
     //fn handle_message(&self, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult;
 
     //#[doc(alias = "gst_rtsp_client_send_message")]
-    //fn send_message<P: IsA<RTSPSession>>(&self, session: Option<&P>, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult;
+    //fn send_message(&self, session: Option<&impl IsA<RTSPSession>>, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult;
 
     #[doc(alias = "gst_rtsp_client_session_filter")]
     fn session_filter(
@@ -100,7 +100,7 @@ pub trait RTSPClientExt: 'static {
     ) -> Vec<RTSPSession>;
 
     #[doc(alias = "gst_rtsp_client_set_auth")]
-    fn set_auth<P: IsA<RTSPAuth>>(&self, auth: Option<&P>);
+    fn set_auth(&self, auth: Option<&impl IsA<RTSPAuth>>);
 
     //#[doc(alias = "gst_rtsp_client_set_connection")]
     //fn set_connection(&self, conn: /*Ignored*/&mut gst_rtsp::RTSPConnection) -> bool;
@@ -111,7 +111,7 @@ pub trait RTSPClientExt: 'static {
     fn set_content_length_limit(&self, limit: u32);
 
     #[doc(alias = "gst_rtsp_client_set_mount_points")]
-    fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>);
+    fn set_mount_points(&self, mounts: Option<&impl IsA<RTSPMountPoints>>);
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -119,10 +119,10 @@ pub trait RTSPClientExt: 'static {
     //fn set_send_messages_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, u32, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
     #[doc(alias = "gst_rtsp_client_set_session_pool")]
-    fn set_session_pool<P: IsA<RTSPSessionPool>>(&self, pool: Option<&P>);
+    fn set_session_pool(&self, pool: Option<&impl IsA<RTSPSessionPool>>);
 
     #[doc(alias = "gst_rtsp_client_set_thread_pool")]
-    fn set_thread_pool<P: IsA<RTSPThreadPool>>(&self, pool: Option<&P>);
+    fn set_thread_pool(&self, pool: Option<&impl IsA<RTSPThreadPool>>);
 
     #[doc(alias = "drop-backlog")]
     fn is_drop_backlog(&self) -> bool;
@@ -406,7 +406,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_client_handle_message() }
     //}
 
-    //fn send_message<P: IsA<RTSPSession>>(&self, session: Option<&P>, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult {
+    //fn send_message(&self, session: Option<&impl IsA<RTSPSession>>, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult {
     //    unsafe { TODO: call ffi:gst_rtsp_client_send_message() }
     //}
 
@@ -451,7 +451,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    fn set_auth<P: IsA<RTSPAuth>>(&self, auth: Option<&P>) {
+    fn set_auth(&self, auth: Option<&impl IsA<RTSPAuth>>) {
         unsafe {
             ffi::gst_rtsp_client_set_auth(
                 self.as_ref().to_glib_none().0,
@@ -472,7 +472,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>) {
+    fn set_mount_points(&self, mounts: Option<&impl IsA<RTSPMountPoints>>) {
         unsafe {
             ffi::gst_rtsp_client_set_mount_points(
                 self.as_ref().to_glib_none().0,
@@ -487,7 +487,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_client_set_send_messages_func() }
     //}
 
-    fn set_session_pool<P: IsA<RTSPSessionPool>>(&self, pool: Option<&P>) {
+    fn set_session_pool(&self, pool: Option<&impl IsA<RTSPSessionPool>>) {
         unsafe {
             ffi::gst_rtsp_client_set_session_pool(
                 self.as_ref().to_glib_none().0,
@@ -496,7 +496,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    fn set_thread_pool<P: IsA<RTSPThreadPool>>(&self, pool: Option<&P>) {
+    fn set_thread_pool(&self, pool: Option<&impl IsA<RTSPThreadPool>>) {
         unsafe {
             ffi::gst_rtsp_client_set_thread_pool(
                 self.as_ref().to_glib_none().0,

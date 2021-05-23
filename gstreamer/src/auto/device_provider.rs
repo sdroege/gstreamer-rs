@@ -34,15 +34,15 @@ pub trait DeviceProviderExt: 'static {
     fn can_monitor(&self) -> bool;
 
     #[doc(alias = "gst_device_provider_device_add")]
-    fn device_add<P: IsA<Device>>(&self, device: &P);
+    fn device_add(&self, device: &impl IsA<Device>);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_device_provider_device_changed")]
-    fn device_changed<P: IsA<Device>, Q: IsA<Device>>(&self, device: &P, changed_device: &Q);
+    fn device_changed(&self, device: &impl IsA<Device>, changed_device: &impl IsA<Device>);
 
     #[doc(alias = "gst_device_provider_device_remove")]
-    fn device_remove<P: IsA<Device>>(&self, device: &P);
+    fn device_remove(&self, device: &impl IsA<Device>);
 
     #[doc(alias = "gst_device_provider_get_bus")]
     #[doc(alias = "get_bus")]
@@ -99,7 +99,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
-    fn device_add<P: IsA<Device>>(&self, device: &P) {
+    fn device_add(&self, device: &impl IsA<Device>) {
         unsafe {
             ffi::gst_device_provider_device_add(
                 self.as_ref().to_glib_none().0,
@@ -110,7 +110,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn device_changed<P: IsA<Device>, Q: IsA<Device>>(&self, device: &P, changed_device: &Q) {
+    fn device_changed(&self, device: &impl IsA<Device>, changed_device: &impl IsA<Device>) {
         unsafe {
             ffi::gst_device_provider_device_changed(
                 self.as_ref().to_glib_none().0,
@@ -120,7 +120,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
-    fn device_remove<P: IsA<Device>>(&self, device: &P) {
+    fn device_remove(&self, device: &impl IsA<Device>) {
         unsafe {
             ffi::gst_device_provider_device_remove(
                 self.as_ref().to_glib_none().0,

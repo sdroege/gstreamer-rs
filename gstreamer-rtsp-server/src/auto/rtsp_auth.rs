@@ -102,7 +102,7 @@ pub trait RTSPAuthExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_auth_parse_htdigest")]
-    fn parse_htdigest<P: AsRef<std::path::Path>>(&self, path: P, token: &RTSPToken) -> bool;
+    fn parse_htdigest(&self, path: impl AsRef<std::path::Path>, token: &RTSPToken) -> bool;
 
     #[doc(alias = "gst_rtsp_auth_remove_basic")]
     fn remove_basic(&self, basic: &str);
@@ -126,10 +126,10 @@ pub trait RTSPAuthExt: 'static {
     fn set_tls_authentication_mode(&self, mode: gio::TlsAuthenticationMode);
 
     #[doc(alias = "gst_rtsp_auth_set_tls_certificate")]
-    fn set_tls_certificate<P: IsA<gio::TlsCertificate>>(&self, cert: Option<&P>);
+    fn set_tls_certificate(&self, cert: Option<&impl IsA<gio::TlsCertificate>>);
 
     #[doc(alias = "gst_rtsp_auth_set_tls_database")]
-    fn set_tls_database<P: IsA<gio::TlsDatabase>>(&self, database: Option<&P>);
+    fn set_tls_database(&self, database: Option<&impl IsA<gio::TlsDatabase>>);
 
     #[doc(alias = "accept-certificate")]
     fn connect_accept_certificate<
@@ -217,7 +217,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn parse_htdigest<P: AsRef<std::path::Path>>(&self, path: P, token: &RTSPToken) -> bool {
+    fn parse_htdigest(&self, path: impl AsRef<std::path::Path>, token: &RTSPToken) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_auth_parse_htdigest(
                 self.as_ref().to_glib_none().0,
@@ -269,7 +269,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
-    fn set_tls_certificate<P: IsA<gio::TlsCertificate>>(&self, cert: Option<&P>) {
+    fn set_tls_certificate(&self, cert: Option<&impl IsA<gio::TlsCertificate>>) {
         unsafe {
             ffi::gst_rtsp_auth_set_tls_certificate(
                 self.as_ref().to_glib_none().0,
@@ -278,7 +278,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
-    fn set_tls_database<P: IsA<gio::TlsDatabase>>(&self, database: Option<&P>) {
+    fn set_tls_database(&self, database: Option<&impl IsA<gio::TlsDatabase>>) {
         unsafe {
             ffi::gst_rtsp_auth_set_tls_database(
                 self.as_ref().to_glib_none().0,

@@ -22,8 +22,8 @@ glib::wrapper! {
 
 impl GLVideoAllocationParams {
     #[doc(alias = "gst_gl_video_allocation_params_new")]
-    pub fn new<P: IsA<GLContext>>(
-        context: &P,
+    pub fn new(
+        context: &impl IsA<GLContext>,
         alloc_params: Option<&gst::AllocationParams>,
         v_info: &gst_video::VideoInfo,
         plane: u32,
@@ -46,17 +46,17 @@ impl GLVideoAllocationParams {
     }
 
     //#[doc(alias = "gst_gl_video_allocation_params_new_wrapped_data")]
-    //pub fn new_wrapped_data<P: IsA<GLContext>>(context: &P, alloc_params: Option<&gst::AllocationParams>, v_info: &gst_video::VideoInfo, plane: u32, valign: Option<&gst_video::VideoAlignment>, target: GLTextureTarget, tex_format: GLFormat, wrapped_data: /*Unimplemented*/Option<Fundamental: Pointer>, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLVideoAllocationParams {
+    //pub fn new_wrapped_data(context: &impl IsA<GLContext>, alloc_params: Option<&gst::AllocationParams>, v_info: &gst_video::VideoInfo, plane: u32, valign: Option<&gst_video::VideoAlignment>, target: GLTextureTarget, tex_format: GLFormat, wrapped_data: /*Unimplemented*/Option<Fundamental: Pointer>, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLVideoAllocationParams {
     //    unsafe { TODO: call ffi:gst_gl_video_allocation_params_new_wrapped_data() }
     //}
 
     //#[doc(alias = "gst_gl_video_allocation_params_new_wrapped_gl_handle")]
-    //pub fn new_wrapped_gl_handle<P: IsA<GLContext>>(context: &P, alloc_params: Option<&gst::AllocationParams>, v_info: &gst_video::VideoInfo, plane: u32, valign: Option<&gst_video::VideoAlignment>, target: GLTextureTarget, tex_format: GLFormat, gl_handle: /*Unimplemented*/Option<Fundamental: Pointer>, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLVideoAllocationParams {
+    //pub fn new_wrapped_gl_handle(context: &impl IsA<GLContext>, alloc_params: Option<&gst::AllocationParams>, v_info: &gst_video::VideoInfo, plane: u32, valign: Option<&gst_video::VideoAlignment>, target: GLTextureTarget, tex_format: GLFormat, gl_handle: /*Unimplemented*/Option<Fundamental: Pointer>, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLVideoAllocationParams {
     //    unsafe { TODO: call ffi:gst_gl_video_allocation_params_new_wrapped_gl_handle() }
     //}
 
     //#[doc(alias = "gst_gl_video_allocation_params_new_wrapped_texture")]
-    //pub fn new_wrapped_texture<P: IsA<GLContext>>(context: &P, alloc_params: Option<&gst::AllocationParams>, v_info: &gst_video::VideoInfo, plane: u32, valign: Option<&gst_video::VideoAlignment>, target: GLTextureTarget, tex_format: GLFormat, tex_id: u32, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLVideoAllocationParams {
+    //pub fn new_wrapped_texture(context: &impl IsA<GLContext>, alloc_params: Option<&gst::AllocationParams>, v_info: &gst_video::VideoInfo, plane: u32, valign: Option<&gst_video::VideoAlignment>, target: GLTextureTarget, tex_format: GLFormat, tex_id: u32, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLVideoAllocationParams {
     //    unsafe { TODO: call ffi:gst_gl_video_allocation_params_new_wrapped_texture() }
     //}
 
@@ -71,7 +71,7 @@ impl GLVideoAllocationParams {
     }
 
     //#[doc(alias = "gst_gl_video_allocation_params_init_full")]
-    //pub fn init_full<P: Fn(&GLAllocationParams, &GLAllocationParams) + Send + Sync + 'static, Q: IsA<GLContext>>(&mut self, struct_size: usize, alloc_flags: u32, copy: P, free: /*Unimplemented*/Fn(/*Unimplemented*/Option<Fundamental: Pointer>), context: &Q, alloc_params: Option<&gst::AllocationParams>, v_info: &gst_video::VideoInfo, plane: u32, valign: Option<&gst_video::VideoAlignment>, target: GLTextureTarget, tex_format: GLFormat, wrapped_data: /*Unimplemented*/Option<Fundamental: Pointer>, gl_handle: /*Unimplemented*/Option<Fundamental: Pointer>, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
+    //pub fn init_full<P: Fn(&GLAllocationParams, &GLAllocationParams) + Send + Sync + 'static>(&mut self, struct_size: usize, alloc_flags: u32, copy: P, free: /*Unimplemented*/Fn(/*Unimplemented*/Option<Fundamental: Pointer>), context: &impl IsA<GLContext>, alloc_params: Option<&gst::AllocationParams>, v_info: &gst_video::VideoInfo, plane: u32, valign: Option<&gst_video::VideoAlignment>, target: GLTextureTarget, tex_format: GLFormat, wrapped_data: /*Unimplemented*/Option<Fundamental: Pointer>, gl_handle: /*Unimplemented*/Option<Fundamental: Pointer>, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
     //    unsafe { TODO: call ffi:gst_gl_video_allocation_params_init_full() }
     //}
 }

@@ -72,10 +72,10 @@ pub trait RTSPSessionExt: 'static {
     fn is_expired_usec(&self, now: i64) -> bool;
 
     #[doc(alias = "gst_rtsp_session_manage_media")]
-    fn manage_media<P: IsA<RTSPMedia>>(
+    fn manage_media(
         &self,
         path: &str,
-        media: &P,
+        media: &impl IsA<RTSPMedia>,
     ) -> Result<RTSPSessionMedia, glib::BoolError>;
 
     //#[doc(alias = "gst_rtsp_session_next_timeout")]
@@ -88,7 +88,7 @@ pub trait RTSPSessionExt: 'static {
     fn prevent_expire(&self);
 
     #[doc(alias = "gst_rtsp_session_release_media")]
-    fn release_media<P: IsA<RTSPSessionMedia>>(&self, media: &P) -> bool;
+    fn release_media(&self, media: &impl IsA<RTSPSessionMedia>) -> bool;
 
     #[doc(alias = "gst_rtsp_session_set_timeout")]
     fn set_timeout(&self, timeout: u32);
@@ -222,10 +222,10 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn manage_media<P: IsA<RTSPMedia>>(
+    fn manage_media(
         &self,
         path: &str,
-        media: &P,
+        media: &impl IsA<RTSPMedia>,
     ) -> Result<RTSPSessionMedia, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_none(ffi::gst_rtsp_session_manage_media(
@@ -251,7 +251,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn release_media<P: IsA<RTSPSessionMedia>>(&self, media: &P) -> bool {
+    fn release_media(&self, media: &impl IsA<RTSPSessionMedia>) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_session_release_media(
                 self.as_ref().to_glib_none().0,

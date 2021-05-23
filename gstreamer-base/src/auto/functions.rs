@@ -7,10 +7,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 #[doc(alias = "gst_type_find_helper")]
-pub fn type_find_helper<P: IsA<gst::Pad>>(
-    src: &P,
-    size: u64,
-) -> Result<gst::Caps, glib::BoolError> {
+pub fn type_find_helper(src: &impl IsA<gst::Pad>, size: u64) -> Result<gst::Caps, glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
         Option::<_>::from_glib_full(ffi::gst_type_find_helper(
@@ -22,8 +19,8 @@ pub fn type_find_helper<P: IsA<gst::Pad>>(
 }
 
 #[doc(alias = "gst_type_find_helper_for_extension")]
-pub fn type_find_helper_for_extension<P: IsA<gst::Object>>(
-    obj: Option<&P>,
+pub fn type_find_helper_for_extension(
+    obj: Option<&impl IsA<gst::Object>>,
     extension: &str,
 ) -> Result<gst::Caps, glib::BoolError> {
     assert_initialized_main_thread!();
@@ -37,13 +34,13 @@ pub fn type_find_helper_for_extension<P: IsA<gst::Object>>(
 }
 
 //#[doc(alias = "gst_type_find_helper_get_range")]
-//pub fn type_find_helper_get_range<P: IsA<gst::Object>, Q: IsA<gst::Object>, R: FnMut(&gst::Object, Option<&gst::Object>, u64, u32, &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>>(obj: &P, parent: Option<&Q>, func: R, size: u64, extension: Option<&str>) -> (Option<gst::Caps>, gst::TypeFindProbability) {
+//pub fn type_find_helper_get_range<P: FnMut(&gst::Object, Option<&gst::Object>, u64, u32, &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>>(obj: &impl IsA<gst::Object>, parent: Option<&impl IsA<gst::Object>>, func: P, size: u64, extension: Option<&str>) -> (Option<gst::Caps>, gst::TypeFindProbability) {
 //    unsafe { TODO: call ffi:gst_type_find_helper_get_range() }
 //}
 
 //#[cfg(any(feature = "v1_14_3", feature = "dox"))]
 //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_3")))]
 //#[doc(alias = "gst_type_find_helper_get_range_full")]
-//pub fn type_find_helper_get_range_full<P: IsA<gst::Object>, Q: IsA<gst::Object>, R: FnMut(&gst::Object, Option<&gst::Object>, u64, u32, &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>>(obj: &P, parent: Option<&Q>, func: R, size: u64, extension: Option<&str>) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::Caps, gst::TypeFindProbability) {
+//pub fn type_find_helper_get_range_full<P: FnMut(&gst::Object, Option<&gst::Object>, u64, u32, &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>>(obj: &impl IsA<gst::Object>, parent: Option<&impl IsA<gst::Object>>, func: P, size: u64, extension: Option<&str>) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::Caps, gst::TypeFindProbability) {
 //    unsafe { TODO: call ffi:gst_type_find_helper_get_range_full() }
 //}

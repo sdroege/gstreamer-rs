@@ -19,7 +19,7 @@ glib::wrapper! {
 
 impl GLUpload {
     #[doc(alias = "gst_gl_upload_new")]
-    pub fn new<P: IsA<GLContext>>(context: &P) -> GLUpload {
+    pub fn new(context: &impl IsA<GLContext>) -> GLUpload {
         skip_assert_initialized!();
         unsafe { from_glib_full(ffi::gst_gl_upload_new(context.as_ref().to_glib_none().0)) }
     }
@@ -54,7 +54,7 @@ impl GLUpload {
     }
 
     #[doc(alias = "gst_gl_upload_set_context")]
-    pub fn set_context<P: IsA<GLContext>>(&self, context: &P) {
+    pub fn set_context(&self, context: &impl IsA<GLContext>) {
         unsafe {
             ffi::gst_gl_upload_set_context(
                 self.to_glib_none().0,
@@ -64,9 +64,9 @@ impl GLUpload {
     }
 
     #[doc(alias = "gst_gl_upload_transform_caps")]
-    pub fn transform_caps<P: IsA<GLContext>>(
+    pub fn transform_caps(
         &self,
-        context: &P,
+        context: &impl IsA<GLContext>,
         direction: gst::PadDirection,
         caps: &gst::Caps,
         filter: &gst::Caps,

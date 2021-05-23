@@ -24,10 +24,10 @@ glib::wrapper! {
 
 impl DirectControlBinding {
     #[doc(alias = "gst_direct_control_binding_new")]
-    pub fn new<P: IsA<gst::Object>, Q: IsA<gst::ControlSource>>(
-        object: &P,
+    pub fn new(
+        object: &impl IsA<gst::Object>,
         property_name: &str,
-        cs: &Q,
+        cs: &impl IsA<gst::ControlSource>,
     ) -> DirectControlBinding {
         assert_initialized_main_thread!();
         unsafe {
@@ -41,10 +41,10 @@ impl DirectControlBinding {
     }
 
     #[doc(alias = "gst_direct_control_binding_new_absolute")]
-    pub fn new_absolute<P: IsA<gst::Object>, Q: IsA<gst::ControlSource>>(
-        object: &P,
+    pub fn new_absolute(
+        object: &impl IsA<gst::Object>,
         property_name: &str,
-        cs: &Q,
+        cs: &impl IsA<gst::ControlSource>,
     ) -> DirectControlBinding {
         assert_initialized_main_thread!();
         unsafe {

@@ -26,7 +26,7 @@ impl Allocator {
     }
 
     #[doc(alias = "gst_allocator_register")]
-    pub fn register<P: IsA<Allocator>>(name: &str, allocator: &P) {
+    pub fn register(name: &str, allocator: &impl IsA<Allocator>) {
         skip_assert_initialized!();
         unsafe {
             ffi::gst_allocator_register(name.to_glib_none().0, allocator.as_ref().to_glib_full());

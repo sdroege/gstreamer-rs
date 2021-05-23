@@ -50,23 +50,23 @@ pub trait PadExt: 'static {
     fn activate_mode(&self, mode: PadMode, active: bool) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_pad_can_link")]
-    fn can_link<P: IsA<Pad>>(&self, sinkpad: &P) -> bool;
+    fn can_link(&self, sinkpad: &impl IsA<Pad>) -> bool;
 
     #[doc(alias = "gst_pad_check_reconfigure")]
     fn check_reconfigure(&self) -> bool;
 
     #[doc(alias = "gst_pad_create_stream_id")]
-    fn create_stream_id<P: IsA<Element>>(
+    fn create_stream_id(
         &self,
-        parent: &P,
+        parent: &impl IsA<Element>,
         stream_id: Option<&str>,
     ) -> glib::GString;
 
     //#[doc(alias = "gst_pad_create_stream_id_printf")]
-    //fn create_stream_id_printf<P: IsA<Element>>(&self, parent: &P, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> glib::GString;
+    //fn create_stream_id_printf(&self, parent: &impl IsA<Element>, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> glib::GString;
 
     //#[doc(alias = "gst_pad_create_stream_id_printf_valist")]
-    //fn create_stream_id_printf_valist<P: IsA<Element>>(&self, parent: &P, stream_id: Option<&str>, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> glib::GString;
+    //fn create_stream_id_printf_valist(&self, parent: &impl IsA<Element>, stream_id: Option<&str>, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> glib::GString;
 
     #[doc(alias = "gst_pad_forward")]
     fn forward<P: FnMut(&Pad) -> bool>(&self, forward: P) -> bool;
@@ -156,29 +156,29 @@ pub trait PadExt: 'static {
     //fn iterate_internal_links(&self) -> /*Ignored*/Option<Iterator>;
 
     //#[doc(alias = "gst_pad_iterate_internal_links_default")]
-    //fn iterate_internal_links_default<P: IsA<Object>>(&self, parent: Option<&P>) -> /*Ignored*/Option<Iterator>;
+    //fn iterate_internal_links_default(&self, parent: Option<&impl IsA<Object>>) -> /*Ignored*/Option<Iterator>;
 
     #[doc(alias = "gst_pad_link")]
-    fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<PadLinkSuccess, PadLinkError>;
+    fn link(&self, sinkpad: &impl IsA<Pad>) -> Result<PadLinkSuccess, PadLinkError>;
 
     #[doc(alias = "gst_pad_link_full")]
-    fn link_full<P: IsA<Pad>>(
+    fn link_full(
         &self,
-        sinkpad: &P,
+        sinkpad: &impl IsA<Pad>,
         flags: PadLinkCheck,
     ) -> Result<PadLinkSuccess, PadLinkError>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_pad_link_maybe_ghosting")]
-    fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> Result<(), glib::error::BoolError>;
+    fn link_maybe_ghosting(&self, sink: &impl IsA<Pad>) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_pad_link_maybe_ghosting_full")]
-    fn link_maybe_ghosting_full<P: IsA<Pad>>(
+    fn link_maybe_ghosting_full(
         &self,
-        sink: &P,
+        sink: &impl IsA<Pad>,
         flags: PadLinkCheck,
     ) -> Result<(), glib::error::BoolError>;
 
@@ -219,7 +219,7 @@ pub trait PadExt: 'static {
     fn store_sticky_event(&self, event: &Event) -> Result<FlowSuccess, FlowError>;
 
     #[doc(alias = "gst_pad_unlink")]
-    fn unlink<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<(), glib::error::BoolError>;
+    fn unlink(&self, sinkpad: &impl IsA<Pad>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_pad_use_fixed_caps")]
     fn use_fixed_caps(&self);
@@ -254,7 +254,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn can_link<P: IsA<Pad>>(&self, sinkpad: &P) -> bool {
+    fn can_link(&self, sinkpad: &impl IsA<Pad>) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_can_link(
                 self.as_ref().to_glib_none().0,
@@ -271,9 +271,9 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn create_stream_id<P: IsA<Element>>(
+    fn create_stream_id(
         &self,
-        parent: &P,
+        parent: &impl IsA<Element>,
         stream_id: Option<&str>,
     ) -> glib::GString {
         unsafe {
@@ -285,11 +285,11 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    //fn create_stream_id_printf<P: IsA<Element>>(&self, parent: &P, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> glib::GString {
+    //fn create_stream_id_printf(&self, parent: &impl IsA<Element>, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> glib::GString {
     //    unsafe { TODO: call ffi:gst_pad_create_stream_id_printf() }
     //}
 
-    //fn create_stream_id_printf_valist<P: IsA<Element>>(&self, parent: &P, stream_id: Option<&str>, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> glib::GString {
+    //fn create_stream_id_printf_valist(&self, parent: &impl IsA<Element>, stream_id: Option<&str>, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> glib::GString {
     //    unsafe { TODO: call ffi:gst_pad_create_stream_id_printf_valist() }
     //}
 
@@ -443,11 +443,11 @@ impl<O: IsA<Pad>> PadExt for O {
     //    unsafe { TODO: call ffi:gst_pad_iterate_internal_links() }
     //}
 
-    //fn iterate_internal_links_default<P: IsA<Object>>(&self, parent: Option<&P>) -> /*Ignored*/Option<Iterator> {
+    //fn iterate_internal_links_default(&self, parent: Option<&impl IsA<Object>>) -> /*Ignored*/Option<Iterator> {
     //    unsafe { TODO: call ffi:gst_pad_iterate_internal_links_default() }
     //}
 
-    fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<PadLinkSuccess, PadLinkError> {
+    fn link(&self, sinkpad: &impl IsA<Pad>) -> Result<PadLinkSuccess, PadLinkError> {
         unsafe {
             try_from_glib(ffi::gst_pad_link(
                 self.as_ref().to_glib_none().0,
@@ -456,9 +456,9 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn link_full<P: IsA<Pad>>(
+    fn link_full(
         &self,
-        sinkpad: &P,
+        sinkpad: &impl IsA<Pad>,
         flags: PadLinkCheck,
     ) -> Result<PadLinkSuccess, PadLinkError> {
         unsafe {
@@ -472,7 +472,7 @@ impl<O: IsA<Pad>> PadExt for O {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> Result<(), glib::error::BoolError> {
+    fn link_maybe_ghosting(&self, sink: &impl IsA<Pad>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_pad_link_maybe_ghosting(
@@ -486,9 +486,9 @@ impl<O: IsA<Pad>> PadExt for O {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    fn link_maybe_ghosting_full<P: IsA<Pad>>(
+    fn link_maybe_ghosting_full(
         &self,
-        sink: &P,
+        sink: &impl IsA<Pad>,
         flags: PadLinkCheck,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
@@ -599,7 +599,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn unlink<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<(), glib::error::BoolError> {
+    fn unlink(&self, sinkpad: &impl IsA<Pad>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_pad_unlink(

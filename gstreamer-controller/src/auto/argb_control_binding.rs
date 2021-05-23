@@ -24,19 +24,13 @@ glib::wrapper! {
 
 impl ARGBControlBinding {
     #[doc(alias = "gst_argb_control_binding_new")]
-    pub fn new<
-        P: IsA<gst::Object>,
-        Q: IsA<gst::ControlSource>,
-        R: IsA<gst::ControlSource>,
-        S: IsA<gst::ControlSource>,
-        T: IsA<gst::ControlSource>,
-    >(
-        object: &P,
+    pub fn new(
+        object: &impl IsA<gst::Object>,
         property_name: &str,
-        cs_a: &Q,
-        cs_r: &R,
-        cs_g: &S,
-        cs_b: &T,
+        cs_a: &impl IsA<gst::ControlSource>,
+        cs_r: &impl IsA<gst::ControlSource>,
+        cs_g: &impl IsA<gst::ControlSource>,
+        cs_b: &impl IsA<gst::ControlSource>,
     ) -> ARGBControlBinding {
         assert_initialized_main_thread!();
         unsafe {

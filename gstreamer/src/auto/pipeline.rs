@@ -71,7 +71,7 @@ pub trait PipelineExt: 'static {
     fn set_latency(&self, latency: impl Into<Option<ClockTime>>);
 
     #[doc(alias = "gst_pipeline_use_clock")]
-    fn use_clock<P: IsA<Clock>>(&self, clock: Option<&P>);
+    fn use_clock(&self, clock: Option<&impl IsA<Clock>>);
 
     #[doc(alias = "auto-flush-bus")]
     fn connect_auto_flush_bus_notify<F: Fn(&Self) + Send + Sync + 'static>(
@@ -149,7 +149,7 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
-    fn use_clock<P: IsA<Clock>>(&self, clock: Option<&P>) {
+    fn use_clock(&self, clock: Option<&impl IsA<Clock>>) {
         unsafe {
             ffi::gst_pipeline_use_clock(
                 self.as_ref().to_glib_none().0,

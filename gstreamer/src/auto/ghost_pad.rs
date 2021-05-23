@@ -29,7 +29,7 @@ pub trait GhostPadExt: 'static {
     fn target(&self) -> Option<Pad>;
 
     #[doc(alias = "gst_ghost_pad_set_target")]
-    fn set_target<P: IsA<Pad>>(&self, newtarget: Option<&P>) -> Result<(), glib::error::BoolError>;
+    fn set_target(&self, newtarget: Option<&impl IsA<Pad>>) -> Result<(), glib::error::BoolError>;
 }
 
 impl<O: IsA<GhostPad>> GhostPadExt for O {
@@ -41,7 +41,7 @@ impl<O: IsA<GhostPad>> GhostPadExt for O {
         }
     }
 
-    fn set_target<P: IsA<Pad>>(&self, newtarget: Option<&P>) -> Result<(), glib::error::BoolError> {
+    fn set_target(&self, newtarget: Option<&impl IsA<Pad>>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_ghost_pad_set_target(

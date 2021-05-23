@@ -20,7 +20,7 @@ glib::wrapper! {
 
 impl RTSPSessionMedia {
     #[doc(alias = "gst_rtsp_session_media_new")]
-    pub fn new<P: IsA<RTSPMedia>>(path: &str, media: &P) -> RTSPSessionMedia {
+    pub fn new(path: &str, media: &impl IsA<RTSPMedia>) -> RTSPSessionMedia {
         skip_assert_initialized!();
         unsafe {
             from_glib_full(ffi::gst_rtsp_session_media_new(
@@ -76,7 +76,7 @@ pub trait RTSPSessionMediaExt: 'static {
     fn set_state(&self, state: gst::State) -> Result<(), glib::error::BoolError>;
 
     //#[doc(alias = "gst_rtsp_session_media_set_transport")]
-    //fn set_transport<P: IsA<RTSPStream>>(&self, stream: &P, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> Option<RTSPStreamTransport>;
+    //fn set_transport(&self, stream: &impl IsA<RTSPStream>, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> Option<RTSPStreamTransport>;
 }
 
 impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
@@ -164,7 +164,7 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
         }
     }
 
-    //fn set_transport<P: IsA<RTSPStream>>(&self, stream: &P, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> Option<RTSPStreamTransport> {
+    //fn set_transport(&self, stream: &impl IsA<RTSPStream>, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> Option<RTSPStreamTransport> {
     //    unsafe { TODO: call ffi:gst_rtsp_session_media_set_transport() }
     //}
 }

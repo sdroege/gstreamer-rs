@@ -19,7 +19,7 @@ glib::wrapper! {
 
 impl ProxyPad {
     //#[doc(alias = "gst_proxy_pad_iterate_internal_links_default")]
-    //pub fn iterate_internal_links_default<P: IsA<Pad>, Q: IsA<Object>>(pad: &P, parent: Option<&Q>) -> /*Ignored*/Option<Iterator> {
+    //pub fn iterate_internal_links_default(pad: &impl IsA<Pad>, parent: Option<&impl IsA<Object>>) -> /*Ignored*/Option<Iterator> {
     //    unsafe { TODO: call ffi:gst_proxy_pad_iterate_internal_links_default() }
     //}
 }

@@ -50,7 +50,7 @@ pub trait AggregatorExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_aggregator_peek_next_sample")]
-    fn peek_next_sample<P: IsA<AggregatorPad>>(&self, pad: &P) -> Option<gst::Sample>;
+    fn peek_next_sample(&self, pad: &impl IsA<AggregatorPad>) -> Option<gst::Sample>;
 
     #[doc(alias = "gst_aggregator_set_latency")]
     fn set_latency(
@@ -151,7 +151,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn peek_next_sample<P: IsA<AggregatorPad>>(&self, pad: &P) -> Option<gst::Sample> {
+    fn peek_next_sample(&self, pad: &impl IsA<AggregatorPad>) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::gst_aggregator_peek_next_sample(
                 self.as_ref().to_glib_none().0,

@@ -39,34 +39,33 @@ pub const NONE_CLIP: Option<&Clip> = None;
 
 pub trait ClipExt: 'static {
     #[doc(alias = "ges_clip_add_asset")]
-    fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<TrackElement, glib::BoolError>;
+    fn add_asset(&self, asset: &impl IsA<Asset>) -> Result<TrackElement, glib::BoolError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_add_child_to_track")]
-    fn add_child_to_track<P: IsA<TrackElement>, Q: IsA<Track>>(
+    fn add_child_to_track(
         &self,
-        child: &P,
-        track: &Q,
+        child: &impl IsA<TrackElement>,
+        track: &impl IsA<Track>,
     ) -> Result<TrackElement, glib::Error>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_add_top_effect")]
-    fn add_top_effect<P: IsA<BaseEffect>>(&self, effect: &P, index: i32)
-        -> Result<(), glib::Error>;
+    fn add_top_effect(&self, effect: &impl IsA<BaseEffect>, index: i32) -> Result<(), glib::Error>;
 
     #[doc(alias = "ges_clip_find_track_element")]
-    fn find_track_element<P: IsA<Track>>(
+    fn find_track_element(
         &self,
-        track: Option<&P>,
+        track: Option<&impl IsA<Track>>,
         type_: glib::types::Type,
     ) -> Option<TrackElement>;
 
     #[doc(alias = "ges_clip_find_track_elements")]
-    fn find_track_elements<P: IsA<Track>>(
+    fn find_track_elements(
         &self,
-        track: Option<&P>,
+        track: Option<&impl IsA<Track>>,
         track_type: TrackType,
         type_: glib::types::Type,
     ) -> Vec<TrackElement>;
@@ -81,9 +80,9 @@ pub trait ClipExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_get_internal_time_from_timeline_time")]
     #[doc(alias = "get_internal_time_from_timeline_time")]
-    fn internal_time_from_timeline_time<P: IsA<TrackElement>>(
+    fn internal_time_from_timeline_time(
         &self,
-        child: &P,
+        child: &impl IsA<TrackElement>,
         timeline_time: impl Into<Option<gst::ClockTime>>,
     ) -> Result<Option<gst::ClockTime>, glib::Error>;
 
@@ -99,9 +98,9 @@ pub trait ClipExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_get_timeline_time_from_internal_time")]
     #[doc(alias = "get_timeline_time_from_internal_time")]
-    fn timeline_time_from_internal_time<P: IsA<TrackElement>>(
+    fn timeline_time_from_internal_time(
         &self,
-        child: &P,
+        child: &impl IsA<TrackElement>,
         internal_time: impl Into<Option<gst::ClockTime>>,
     ) -> Result<Option<gst::ClockTime>, glib::Error>;
 
@@ -116,52 +115,52 @@ pub trait ClipExt: 'static {
 
     #[doc(alias = "ges_clip_get_top_effect_index")]
     #[doc(alias = "get_top_effect_index")]
-    fn top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P) -> i32;
+    fn top_effect_index(&self, effect: &impl IsA<BaseEffect>) -> i32;
 
     #[doc(alias = "ges_clip_get_top_effect_position")]
     #[doc(alias = "get_top_effect_position")]
-    fn top_effect_position<P: IsA<BaseEffect>>(&self, effect: &P) -> i32;
+    fn top_effect_position(&self, effect: &impl IsA<BaseEffect>) -> i32;
 
     #[doc(alias = "ges_clip_get_top_effects")]
     #[doc(alias = "get_top_effects")]
     fn top_effects(&self) -> Vec<TrackElement>;
 
     #[doc(alias = "ges_clip_move_to_layer")]
-    fn move_to_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError>;
+    fn move_to_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_move_to_layer_full")]
-    fn move_to_layer_full<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::Error>;
+    fn move_to_layer_full(&self, layer: &impl IsA<Layer>) -> Result<(), glib::Error>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_remove_top_effect")]
-    fn remove_top_effect<P: IsA<BaseEffect>>(&self, effect: &P) -> Result<(), glib::Error>;
+    fn remove_top_effect(&self, effect: &impl IsA<BaseEffect>) -> Result<(), glib::Error>;
 
     #[doc(alias = "ges_clip_set_supported_formats")]
     fn set_supported_formats(&self, supportedformats: TrackType);
 
     #[doc(alias = "ges_clip_set_top_effect_index")]
-    fn set_top_effect_index<P: IsA<BaseEffect>>(
+    fn set_top_effect_index(
         &self,
-        effect: &P,
+        effect: &impl IsA<BaseEffect>,
         newindex: u32,
     ) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_set_top_effect_index_full")]
-    fn set_top_effect_index_full<P: IsA<BaseEffect>>(
+    fn set_top_effect_index_full(
         &self,
-        effect: &P,
+        effect: &impl IsA<BaseEffect>,
         newindex: u32,
     ) -> Result<(), glib::Error>;
 
     #[doc(alias = "ges_clip_set_top_effect_priority")]
-    fn set_top_effect_priority<P: IsA<BaseEffect>>(
+    fn set_top_effect_priority(
         &self,
-        effect: &P,
+        effect: &impl IsA<BaseEffect>,
         newpriority: u32,
     ) -> Result<(), glib::error::BoolError>;
 
@@ -186,7 +185,7 @@ pub trait ClipExt: 'static {
 }
 
 impl<O: IsA<Clip>> ClipExt for O {
-    fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<TrackElement, glib::BoolError> {
+    fn add_asset(&self, asset: &impl IsA<Asset>) -> Result<TrackElement, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_none(ffi::ges_clip_add_asset(
                 self.as_ref().to_glib_none().0,
@@ -198,10 +197,10 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn add_child_to_track<P: IsA<TrackElement>, Q: IsA<Track>>(
+    fn add_child_to_track(
         &self,
-        child: &P,
-        track: &Q,
+        child: &impl IsA<TrackElement>,
+        track: &impl IsA<Track>,
     ) -> Result<TrackElement, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -221,11 +220,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn add_top_effect<P: IsA<BaseEffect>>(
-        &self,
-        effect: &P,
-        index: i32,
-    ) -> Result<(), glib::Error> {
+    fn add_top_effect(&self, effect: &impl IsA<BaseEffect>, index: i32) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ffi::ges_clip_add_top_effect(
@@ -242,9 +237,9 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn find_track_element<P: IsA<Track>>(
+    fn find_track_element(
         &self,
-        track: Option<&P>,
+        track: Option<&impl IsA<Track>>,
         type_: glib::types::Type,
     ) -> Option<TrackElement> {
         unsafe {
@@ -256,9 +251,9 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn find_track_elements<P: IsA<Track>>(
+    fn find_track_elements(
         &self,
-        track: Option<&P>,
+        track: Option<&impl IsA<Track>>,
         track_type: TrackType,
         type_: glib::types::Type,
     ) -> Vec<TrackElement> {
@@ -285,9 +280,9 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn internal_time_from_timeline_time<P: IsA<TrackElement>>(
+    fn internal_time_from_timeline_time(
         &self,
-        child: &P,
+        child: &impl IsA<TrackElement>,
         timeline_time: impl Into<Option<gst::ClockTime>>,
     ) -> Result<Option<gst::ClockTime>, glib::Error> {
         unsafe {
@@ -320,9 +315,9 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn timeline_time_from_internal_time<P: IsA<TrackElement>>(
+    fn timeline_time_from_internal_time(
         &self,
-        child: &P,
+        child: &impl IsA<TrackElement>,
         internal_time: impl Into<Option<gst::ClockTime>>,
     ) -> Result<Option<gst::ClockTime>, glib::Error> {
         unsafe {
@@ -362,7 +357,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P) -> i32 {
+    fn top_effect_index(&self, effect: &impl IsA<BaseEffect>) -> i32 {
         unsafe {
             ffi::ges_clip_get_top_effect_index(
                 self.as_ref().to_glib_none().0,
@@ -371,7 +366,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn top_effect_position<P: IsA<BaseEffect>>(&self, effect: &P) -> i32 {
+    fn top_effect_position(&self, effect: &impl IsA<BaseEffect>) -> i32 {
         unsafe {
             ffi::ges_clip_get_top_effect_position(
                 self.as_ref().to_glib_none().0,
@@ -388,7 +383,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn move_to_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError> {
+    fn move_to_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_clip_move_to_layer(
@@ -402,7 +397,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn move_to_layer_full<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::Error> {
+    fn move_to_layer_full(&self, layer: &impl IsA<Layer>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ffi::ges_clip_move_to_layer_full(
@@ -420,7 +415,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn remove_top_effect<P: IsA<BaseEffect>>(&self, effect: &P) -> Result<(), glib::Error> {
+    fn remove_top_effect(&self, effect: &impl IsA<BaseEffect>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ffi::ges_clip_remove_top_effect(
@@ -445,9 +440,9 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn set_top_effect_index<P: IsA<BaseEffect>>(
+    fn set_top_effect_index(
         &self,
-        effect: &P,
+        effect: &impl IsA<BaseEffect>,
         newindex: u32,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
@@ -464,9 +459,9 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn set_top_effect_index_full<P: IsA<BaseEffect>>(
+    fn set_top_effect_index_full(
         &self,
-        effect: &P,
+        effect: &impl IsA<BaseEffect>,
         newindex: u32,
     ) -> Result<(), glib::Error> {
         unsafe {
@@ -485,9 +480,9 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn set_top_effect_priority<P: IsA<BaseEffect>>(
+    fn set_top_effect_priority(
         &self,
-        effect: &P,
+        effect: &impl IsA<BaseEffect>,
         newpriority: u32,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {

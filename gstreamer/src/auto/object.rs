@@ -36,12 +36,12 @@ impl Object {
     }
 
     //#[doc(alias = "gst_object_default_deep_notify")]
-    //pub fn default_deep_notify<P: IsA<glib::Object>, Q: IsA<Object>>(object: &P, orig: &Q, pspec: /*Ignored*/&glib::ParamSpec, excluded_props: &[&str]) {
+    //pub fn default_deep_notify(object: &impl IsA<glib::Object>, orig: &impl IsA<Object>, pspec: /*Ignored*/&glib::ParamSpec, excluded_props: &[&str]) {
     //    unsafe { TODO: call ffi:gst_object_default_deep_notify() }
     //}
 
     //#[doc(alias = "gst_object_replace")]
-    //pub fn replace<P: IsA<Object>, Q: IsA<Object>>(oldobj: Option<P>, newobj: Option<&Q>) -> bool {
+    //pub fn replace(oldobj: Option<impl IsA<Object>>, newobj: Option<&impl IsA<Object>>) -> bool {
     //    unsafe { TODO: call ffi:gst_object_replace() }
     //}
 }
@@ -60,9 +60,9 @@ pub const NONE_OBJECT: Option<&Object> = None;
 
 pub trait GstObjectExt: 'static {
     #[doc(alias = "gst_object_add_control_binding")]
-    fn add_control_binding<P: IsA<ControlBinding>>(
+    fn add_control_binding(
         &self,
-        binding: &P,
+        binding: &impl IsA<ControlBinding>,
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_object_default_error")]
@@ -104,16 +104,16 @@ pub trait GstObjectExt: 'static {
     fn has_active_control_bindings(&self) -> bool;
 
     #[doc(alias = "gst_object_has_ancestor")]
-    fn has_ancestor<P: IsA<Object>>(&self, ancestor: &P) -> bool;
+    fn has_ancestor(&self, ancestor: &impl IsA<Object>) -> bool;
 
     #[doc(alias = "gst_object_has_as_ancestor")]
-    fn has_as_ancestor<P: IsA<Object>>(&self, ancestor: &P) -> bool;
+    fn has_as_ancestor(&self, ancestor: &impl IsA<Object>) -> bool;
 
     #[doc(alias = "gst_object_has_as_parent")]
-    fn has_as_parent<P: IsA<Object>>(&self, parent: &P) -> bool;
+    fn has_as_parent(&self, parent: &impl IsA<Object>) -> bool;
 
     #[doc(alias = "gst_object_remove_control_binding")]
-    fn remove_control_binding<P: IsA<ControlBinding>>(&self, binding: &P) -> bool;
+    fn remove_control_binding(&self, binding: &impl IsA<ControlBinding>) -> bool;
 
     #[doc(alias = "gst_object_set_control_binding_disabled")]
     fn set_control_binding_disabled(&self, property_name: &str, disabled: bool);
@@ -125,7 +125,7 @@ pub trait GstObjectExt: 'static {
     fn set_control_rate(&self, control_rate: impl Into<Option<ClockTime>>);
 
     #[doc(alias = "gst_object_set_parent")]
-    fn set_parent<P: IsA<Object>>(&self, parent: &P) -> Result<(), glib::error::BoolError>;
+    fn set_parent(&self, parent: &impl IsA<Object>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_object_suggest_next_sync")]
     fn suggest_next_sync(&self) -> Option<ClockTime>;
@@ -144,9 +144,9 @@ pub trait GstObjectExt: 'static {
 }
 
 impl<O: IsA<Object>> GstObjectExt for O {
-    fn add_control_binding<P: IsA<ControlBinding>>(
+    fn add_control_binding(
         &self,
-        binding: &P,
+        binding: &impl IsA<ControlBinding>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -228,7 +228,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn has_ancestor<P: IsA<Object>>(&self, ancestor: &P) -> bool {
+    fn has_ancestor(&self, ancestor: &impl IsA<Object>) -> bool {
         unsafe {
             from_glib(ffi::gst_object_has_ancestor(
                 self.as_ref().to_glib_none().0,
@@ -237,7 +237,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn has_as_ancestor<P: IsA<Object>>(&self, ancestor: &P) -> bool {
+    fn has_as_ancestor(&self, ancestor: &impl IsA<Object>) -> bool {
         unsafe {
             from_glib(ffi::gst_object_has_as_ancestor(
                 self.as_ref().to_glib_none().0,
@@ -246,7 +246,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn has_as_parent<P: IsA<Object>>(&self, parent: &P) -> bool {
+    fn has_as_parent(&self, parent: &impl IsA<Object>) -> bool {
         unsafe {
             from_glib(ffi::gst_object_has_as_parent(
                 self.as_ref().to_glib_none().0,
@@ -255,7 +255,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn remove_control_binding<P: IsA<ControlBinding>>(&self, binding: &P) -> bool {
+    fn remove_control_binding(&self, binding: &impl IsA<ControlBinding>) -> bool {
         unsafe {
             from_glib(ffi::gst_object_remove_control_binding(
                 self.as_ref().to_glib_none().0,
@@ -292,7 +292,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn set_parent<P: IsA<Object>>(&self, parent: &P) -> Result<(), glib::error::BoolError> {
+    fn set_parent(&self, parent: &impl IsA<Object>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_object_set_parent(

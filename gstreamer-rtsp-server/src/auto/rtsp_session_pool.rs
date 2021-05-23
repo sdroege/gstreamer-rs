@@ -66,7 +66,7 @@ pub trait RTSPSessionPoolExt: 'static {
     fn n_sessions(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_session_pool_remove")]
-    fn remove<P: IsA<RTSPSession>>(&self, sess: &P) -> Result<(), glib::error::BoolError>;
+    fn remove(&self, sess: &impl IsA<RTSPSession>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_rtsp_session_pool_set_max_sessions")]
     fn set_max_sessions(&self, max: u32);
@@ -159,7 +159,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
         unsafe { ffi::gst_rtsp_session_pool_get_n_sessions(self.as_ref().to_glib_none().0) }
     }
 
-    fn remove<P: IsA<RTSPSession>>(&self, sess: &P) -> Result<(), glib::error::BoolError> {
+    fn remove(&self, sess: &impl IsA<RTSPSession>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_rtsp_session_pool_remove(

@@ -57,19 +57,16 @@ impl Asset {
     }
 
     #[doc(alias = "ges_asset_request_async")]
-    pub fn request_async<
-        P: IsA<gio::Cancellable>,
-        Q: FnOnce(Result<Asset, glib::Error>) + Send + 'static,
-    >(
+    pub fn request_async<P: FnOnce(Result<Asset, glib::Error>) + Send + 'static>(
         extractable_type: glib::types::Type,
         id: Option<&str>,
-        cancellable: Option<&P>,
-        callback: Q,
+        cancellable: Option<&impl IsA<gio::Cancellable>>,
+        callback: P,
     ) {
         assert_initialized_main_thread!();
-        let user_data: Box_<Q> = Box_::new(callback);
+        let user_data: Box_<P> = Box_::new(callback);
         unsafe extern "C" fn request_async_trampoline<
-            Q: FnOnce(Result<Asset, glib::Error>) + Send + 'static,
+            P: FnOnce(Result<Asset, glib::Error>) + Send + 'static,
         >(
             _source_object: *mut glib::gobject_ffi::GObject,
             res: *mut gio::ffi::GAsyncResult,
@@ -82,10 +79,10 @@ impl Asset {
             } else {
                 Err(from_glib_full(error))
             };
-            let callback: Box_<Q> = Box_::from_raw(user_data as *mut _);
+            let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
             callback(result);
         }
-        let callback = request_async_trampoline::<Q>;
+        let callback = request_async_trampoline::<P>;
         unsafe {
             ffi::ges_asset_request_async(
                 extractable_type.into_glib(),
@@ -146,10 +143,10 @@ pub trait AssetExt: 'static {
     fn list_proxies(&self) -> Vec<Asset>;
 
     #[doc(alias = "ges_asset_set_proxy")]
-    fn set_proxy<P: IsA<Asset>>(&self, proxy: Option<&P>) -> Result<(), glib::error::BoolError>;
+    fn set_proxy(&self, proxy: Option<&impl IsA<Asset>>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_asset_unproxy")]
-    fn unproxy<P: IsA<Asset>>(&self, proxy: &P) -> Result<(), glib::error::BoolError>;
+    fn unproxy(&self, proxy: &impl IsA<Asset>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "proxy")]
     fn connect_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -207,7 +204,7 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
-    fn set_proxy<P: IsA<Asset>>(&self, proxy: Option<&P>) -> Result<(), glib::error::BoolError> {
+    fn set_proxy(&self, proxy: Option<&impl IsA<Asset>>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_asset_set_proxy(
@@ -219,7 +216,7 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
-    fn unproxy<P: IsA<Asset>>(&self, proxy: &P) -> Result<(), glib::error::BoolError> {
+    fn unproxy(&self, proxy: &impl IsA<Asset>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_asset_unproxy(

@@ -101,7 +101,7 @@ impl EncodingTarget {
     }
 
     #[doc(alias = "gst_encoding_target_save_to_file")]
-    pub fn save_to_file<P: AsRef<std::path::Path>>(&self, filepath: P) -> Result<(), glib::Error> {
+    pub fn save_to_file(&self, filepath: impl AsRef<std::path::Path>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ffi::gst_encoding_target_save_to_file(
@@ -136,8 +136,8 @@ impl EncodingTarget {
     }
 
     #[doc(alias = "gst_encoding_target_load_from_file")]
-    pub fn load_from_file<P: AsRef<std::path::Path>>(
-        filepath: P,
+    pub fn load_from_file(
+        filepath: impl AsRef<std::path::Path>,
     ) -> Result<EncodingTarget, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {

@@ -19,7 +19,7 @@ glib::wrapper! {
 
 impl RTSPStreamTransport {
     //#[doc(alias = "gst_rtsp_stream_transport_new")]
-    //pub fn new<P: IsA<RTSPStream>>(stream: &P, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> RTSPStreamTransport {
+    //pub fn new(stream: &impl IsA<RTSPStream>, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> RTSPStreamTransport {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_transport_new() }
     //}
 }

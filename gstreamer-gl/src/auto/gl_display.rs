@@ -55,13 +55,11 @@ pub const NONE_GL_DISPLAY: Option<&GLDisplay> = None;
 
 pub trait GLDisplayExt: 'static {
     #[doc(alias = "gst_gl_display_add_context")]
-    fn add_context<P: IsA<GLContext>>(&self, context: &P) -> Result<(), glib::error::BoolError>;
+    fn add_context(&self, context: &impl IsA<GLContext>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_gl_display_create_context")]
-    fn create_context<P: IsA<GLContext>>(
-        &self,
-        other_context: &P,
-    ) -> Result<GLContext, glib::Error>;
+    fn create_context(&self, other_context: &impl IsA<GLContext>)
+        -> Result<GLContext, glib::Error>;
 
     #[doc(alias = "gst_gl_display_create_window")]
     fn create_window(&self) -> Result<GLWindow, glib::BoolError>;
@@ -84,10 +82,10 @@ pub trait GLDisplayExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_gl_display_remove_context")]
-    fn remove_context<P: IsA<GLContext>>(&self, context: &P);
+    fn remove_context(&self, context: &impl IsA<GLContext>);
 
     #[doc(alias = "gst_gl_display_remove_window")]
-    fn remove_window<P: IsA<GLWindow>>(&self, window: &P) -> Result<(), glib::error::BoolError>;
+    fn remove_window(&self, window: &impl IsA<GLWindow>) -> Result<(), glib::error::BoolError>;
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -102,7 +100,7 @@ pub trait GLDisplayExt: 'static {
 }
 
 impl<O: IsA<GLDisplay>> GLDisplayExt for O {
-    fn add_context<P: IsA<GLContext>>(&self, context: &P) -> Result<(), glib::error::BoolError> {
+    fn add_context(&self, context: &impl IsA<GLContext>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_gl_display_add_context(
@@ -114,9 +112,9 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 
-    fn create_context<P: IsA<GLContext>>(
+    fn create_context(
         &self,
-        other_context: &P,
+        other_context: &impl IsA<GLContext>,
     ) -> Result<GLContext, glib::Error> {
         unsafe {
             let mut p_context = ptr::null_mut();
@@ -176,7 +174,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn remove_context<P: IsA<GLContext>>(&self, context: &P) {
+    fn remove_context(&self, context: &impl IsA<GLContext>) {
         unsafe {
             ffi::gst_gl_display_remove_context(
                 self.as_ref().to_glib_none().0,
@@ -185,7 +183,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 
-    fn remove_window<P: IsA<GLWindow>>(&self, window: &P) -> Result<(), glib::error::BoolError> {
+    fn remove_window(&self, window: &impl IsA<GLWindow>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_gl_display_remove_window(

@@ -129,7 +129,7 @@ pub trait EncodingProfileExt: 'static {
     fn is_enabled(&self) -> bool;
 
     #[doc(alias = "gst_encoding_profile_is_equal")]
-    fn is_equal<P: IsA<EncodingProfile>>(&self, b: &P) -> bool;
+    fn is_equal(&self, b: &impl IsA<EncodingProfile>) -> bool;
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
@@ -255,7 +255,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn is_equal<P: IsA<EncodingProfile>>(&self, b: &P) -> bool {
+    fn is_equal(&self, b: &impl IsA<EncodingProfile>) -> bool {
         unsafe {
             from_glib(ffi::gst_encoding_profile_is_equal(
                 self.as_ref().to_glib_none().0,

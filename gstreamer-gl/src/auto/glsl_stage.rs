@@ -21,7 +21,7 @@ glib::wrapper! {
 
 impl GLSLStage {
     #[doc(alias = "gst_glsl_stage_new")]
-    pub fn new<P: IsA<GLContext>>(context: &P, type_: u32) -> GLSLStage {
+    pub fn new(context: &impl IsA<GLContext>, type_: u32) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
             from_glib_none(ffi::gst_glsl_stage_new(
@@ -32,7 +32,7 @@ impl GLSLStage {
     }
 
     #[doc(alias = "gst_glsl_stage_new_default_fragment")]
-    pub fn new_default_fragment<P: IsA<GLContext>>(context: &P) -> GLSLStage {
+    pub fn new_default_fragment(context: &impl IsA<GLContext>) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
             from_glib_none(ffi::gst_glsl_stage_new_default_fragment(
@@ -42,7 +42,7 @@ impl GLSLStage {
     }
 
     #[doc(alias = "gst_glsl_stage_new_default_vertex")]
-    pub fn new_default_vertex<P: IsA<GLContext>>(context: &P) -> GLSLStage {
+    pub fn new_default_vertex(context: &impl IsA<GLContext>) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
             from_glib_none(ffi::gst_glsl_stage_new_default_vertex(
@@ -53,8 +53,8 @@ impl GLSLStage {
 
     #[doc(alias = "gst_glsl_stage_new_with_string")]
     #[doc(alias = "new_with_string")]
-    pub fn with_string<P: IsA<GLContext>>(
-        context: &P,
+    pub fn with_string(
+        context: &impl IsA<GLContext>,
         type_: u32,
         version: GLSLVersion,
         profile: GLSLProfile,
@@ -74,8 +74,8 @@ impl GLSLStage {
 
     #[doc(alias = "gst_glsl_stage_new_with_strings")]
     #[doc(alias = "new_with_strings")]
-    pub fn with_strings<P: IsA<GLContext>>(
-        context: &P,
+    pub fn with_strings(
+        context: &impl IsA<GLContext>,
         type_: u32,
         version: GLSLVersion,
         profile: GLSLProfile,

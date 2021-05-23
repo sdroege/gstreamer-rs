@@ -74,10 +74,10 @@ pub const NONE_TIMELINE: Option<&Timeline> = None;
 pub trait TimelineExt: 'static {
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[doc(alias = "ges_timeline_add_layer")]
-    fn add_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError>;
+    fn add_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_timeline_add_track")]
-    fn add_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError>;
+    fn add_track(&self, track: &impl IsA<Track>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_timeline_append_layer")]
     fn append_layer(&self) -> Layer;
@@ -131,7 +131,7 @@ pub trait TimelineExt: 'static {
 
     #[doc(alias = "ges_timeline_get_pad_for_track")]
     #[doc(alias = "get_pad_for_track")]
-    fn pad_for_track<P: IsA<Track>>(&self, track: &P) -> Option<gst::Pad>;
+    fn pad_for_track(&self, track: &impl IsA<Track>) -> Option<gst::Pad>;
 
     #[doc(alias = "ges_timeline_get_snapping_distance")]
     #[doc(alias = "get_snapping_distance")]
@@ -139,7 +139,7 @@ pub trait TimelineExt: 'static {
 
     #[doc(alias = "ges_timeline_get_track_for_pad")]
     #[doc(alias = "get_track_for_pad")]
-    fn track_for_pad<P: IsA<gst::Pad>>(&self, pad: &P) -> Option<Track>;
+    fn track_for_pad(&self, pad: &impl IsA<gst::Pad>) -> Option<Track>;
 
     #[doc(alias = "ges_timeline_get_tracks")]
     #[doc(alias = "get_tracks")]
@@ -154,31 +154,31 @@ pub trait TimelineExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "ges_timeline_move_layer")]
-    fn move_layer<P: IsA<Layer>>(
+    fn move_layer(
         &self,
-        layer: &P,
+        layer: &impl IsA<Layer>,
         new_layer_priority: u32,
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_timeline_paste_element")]
-    fn paste_element<P: IsA<TimelineElement>>(
+    fn paste_element(
         &self,
-        element: &P,
+        element: &impl IsA<TimelineElement>,
         position: gst::ClockTime,
         layer_priority: i32,
     ) -> Option<TimelineElement>;
 
     #[doc(alias = "ges_timeline_remove_layer")]
-    fn remove_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError>;
+    fn remove_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_timeline_remove_track")]
-    fn remove_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError>;
+    fn remove_track(&self, track: &impl IsA<Track>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_timeline_save_to_uri")]
-    fn save_to_uri<P: IsA<Asset>>(
+    fn save_to_uri(
         &self,
         uri: &str,
-        formatter_asset: Option<&P>,
+        formatter_asset: Option<&impl IsA<Asset>>,
         overwrite: bool,
     ) -> Result<(), glib::Error>;
 
@@ -248,7 +248,7 @@ pub trait TimelineExt: 'static {
 }
 
 impl<O: IsA<Timeline>> TimelineExt for O {
-    fn add_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError> {
+    fn add_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_timeline_add_layer(
@@ -260,7 +260,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn add_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError> {
+    fn add_track(&self, track: &impl IsA<Track>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_timeline_add_track(
@@ -370,7 +370,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn pad_for_track<P: IsA<Track>>(&self, track: &P) -> Option<gst::Pad> {
+    fn pad_for_track(&self, track: &impl IsA<Track>) -> Option<gst::Pad> {
         unsafe {
             from_glib_none(ffi::ges_timeline_get_pad_for_track(
                 self.as_ref().to_glib_none().0,
@@ -387,7 +387,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn track_for_pad<P: IsA<gst::Pad>>(&self, pad: &P) -> Option<Track> {
+    fn track_for_pad(&self, pad: &impl IsA<gst::Pad>) -> Option<Track> {
         unsafe {
             from_glib_none(ffi::ges_timeline_get_track_for_pad(
                 self.as_ref().to_glib_none().0,
@@ -426,9 +426,9 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn move_layer<P: IsA<Layer>>(
+    fn move_layer(
         &self,
-        layer: &P,
+        layer: &impl IsA<Layer>,
         new_layer_priority: u32,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
@@ -443,9 +443,9 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn paste_element<P: IsA<TimelineElement>>(
+    fn paste_element(
         &self,
-        element: &P,
+        element: &impl IsA<TimelineElement>,
         position: gst::ClockTime,
         layer_priority: i32,
     ) -> Option<TimelineElement> {
@@ -459,7 +459,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn remove_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError> {
+    fn remove_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_timeline_remove_layer(
@@ -471,7 +471,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn remove_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError> {
+    fn remove_track(&self, track: &impl IsA<Track>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_timeline_remove_track(
@@ -483,10 +483,10 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn save_to_uri<P: IsA<Asset>>(
+    fn save_to_uri(
         &self,
         uri: &str,
-        formatter_asset: Option<&P>,
+        formatter_asset: Option<&impl IsA<Asset>>,
         overwrite: bool,
     ) -> Result<(), glib::Error> {
         unsafe {

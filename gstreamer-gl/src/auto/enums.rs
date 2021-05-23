@@ -273,8 +273,8 @@ pub enum GLFormat {
 
 impl GLFormat {
     #[doc(alias = "gst_gl_format_from_video_info")]
-    pub fn from_video_info<P: IsA<GLContext>>(
-        context: &P,
+    pub fn from_video_info(
+        context: &impl IsA<GLContext>,
         vinfo: &gst_video::VideoInfo,
         plane: u32,
     ) -> GLFormat {
@@ -291,7 +291,7 @@ impl GLFormat {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_format_is_supported")]
-    pub fn is_supported<P: IsA<GLContext>>(context: &P, format: GLFormat) -> bool {
+    pub fn is_supported(context: &impl IsA<GLContext>, format: GLFormat) -> bool {
         skip_assert_initialized!();
         unsafe {
             from_glib(ffi::gst_gl_format_is_supported(

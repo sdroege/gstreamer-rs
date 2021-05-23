@@ -33,7 +33,7 @@ impl SystemClock {
     }
 
     #[doc(alias = "gst_system_clock_set_default")]
-    pub fn set_default<P: IsA<Clock>>(new_clock: Option<&P>) {
+    pub fn set_default(new_clock: Option<&impl IsA<Clock>>) {
         assert_initialized_main_thread!();
         unsafe {
             ffi::gst_system_clock_set_default(new_clock.map(|p| p.as_ref()).to_glib_none().0);

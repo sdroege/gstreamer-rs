@@ -18,10 +18,10 @@ glib::wrapper! {
 
 impl ProxyControlBinding {
     #[doc(alias = "gst_proxy_control_binding_new")]
-    pub fn new<P: IsA<gst::Object>, Q: IsA<gst::Object>>(
-        object: &P,
+    pub fn new(
+        object: &impl IsA<gst::Object>,
         property_name: &str,
-        ref_object: &Q,
+        ref_object: &impl IsA<gst::Object>,
         ref_property_name: &str,
     ) -> ProxyControlBinding {
         assert_initialized_main_thread!();

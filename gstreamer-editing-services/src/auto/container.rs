@@ -38,7 +38,7 @@ pub const NONE_CONTAINER: Option<&Container> = None;
 
 pub trait GESContainerExt: 'static {
     #[doc(alias = "ges_container_add")]
-    fn add<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError>;
+    fn add(&self, child: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError>;
 
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[doc(alias = "ges_container_edit")]
@@ -56,7 +56,7 @@ pub trait GESContainerExt: 'static {
     fn children(&self, recursive: bool) -> Vec<TimelineElement>;
 
     #[doc(alias = "ges_container_remove")]
-    fn remove<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError>;
+    fn remove(&self, child: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_container_ungroup")]
     fn ungroup(&self, recursive: bool) -> Vec<Container>;
@@ -80,7 +80,7 @@ pub trait GESContainerExt: 'static {
 }
 
 impl<O: IsA<Container>> GESContainerExt for O {
-    fn add<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError> {
+    fn add(&self, child: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_container_add(
@@ -124,7 +124,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
-    fn remove<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError> {
+    fn remove(&self, child: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::ges_container_remove(

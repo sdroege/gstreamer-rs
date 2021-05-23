@@ -38,7 +38,7 @@ pub const NONE_RTSP_MOUNT_POINTS: Option<&RTSPMountPoints> = None;
 
 pub trait RTSPMountPointsExt: 'static {
     #[doc(alias = "gst_rtsp_mount_points_add_factory")]
-    fn add_factory<P: IsA<RTSPMediaFactory>>(&self, path: &str, factory: &P);
+    fn add_factory(&self, path: &str, factory: &impl IsA<RTSPMediaFactory>);
 
     #[doc(alias = "gst_rtsp_mount_points_make_path")]
     fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Result<glib::GString, glib::BoolError>;
@@ -52,7 +52,7 @@ pub trait RTSPMountPointsExt: 'static {
 }
 
 impl<O: IsA<RTSPMountPoints>> RTSPMountPointsExt for O {
-    fn add_factory<P: IsA<RTSPMediaFactory>>(&self, path: &str, factory: &P) {
+    fn add_factory(&self, path: &str, factory: &impl IsA<RTSPMediaFactory>) {
         unsafe {
             ffi::gst_rtsp_mount_points_add_factory(
                 self.as_ref().to_glib_none().0,

@@ -18,7 +18,7 @@ glib::wrapper! {
 
 impl GLColorConvert {
     #[doc(alias = "gst_gl_color_convert_new")]
-    pub fn new<P: IsA<GLContext>>(context: &P) -> GLColorConvert {
+    pub fn new(context: &impl IsA<GLContext>) -> GLColorConvert {
         skip_assert_initialized!();
         unsafe {
             from_glib_full(ffi::gst_gl_color_convert_new(
@@ -46,8 +46,8 @@ impl GLColorConvert {
     }
 
     #[doc(alias = "gst_gl_color_convert_transform_caps")]
-    pub fn transform_caps<P: IsA<GLContext>>(
-        context: &P,
+    pub fn transform_caps(
+        context: &impl IsA<GLContext>,
         direction: gst::PadDirection,
         caps: &gst::Caps,
         filter: &gst::Caps,
