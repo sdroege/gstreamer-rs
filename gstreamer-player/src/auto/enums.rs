@@ -60,10 +60,10 @@ impl FromGlib<ffi::GstPlayerColorBalanceType> for PlayerColorBalanceType {
     unsafe fn from_glib(value: ffi::GstPlayerColorBalanceType) -> Self {
         skip_assert_initialized!();
         match value {
-            3 => Self::Hue,
-            0 => Self::Brightness,
-            2 => Self::Saturation,
-            1 => Self::Contrast,
+            ffi::GST_PLAYER_COLOR_BALANCE_HUE => Self::Hue,
+            ffi::GST_PLAYER_COLOR_BALANCE_BRIGHTNESS => Self::Brightness,
+            ffi::GST_PLAYER_COLOR_BALANCE_SATURATION => Self::Saturation,
+            ffi::GST_PLAYER_COLOR_BALANCE_CONTRAST => Self::Contrast,
             value => Self::__Unknown(value),
         }
     }
@@ -138,7 +138,7 @@ impl FromGlib<ffi::GstPlayerError> for PlayerError {
     unsafe fn from_glib(value: ffi::GstPlayerError) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Failed,
+            ffi::GST_PLAYER_ERROR_FAILED => Self::Failed,
             value => Self::__Unknown(value),
         }
     }
@@ -158,7 +158,7 @@ impl ErrorDomain for PlayerError {
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
         match code {
-            0 => Some(Self::Failed),
+            ffi::GST_PLAYER_ERROR_FAILED => Some(Self::Failed),
             _ => Some(Self::Failed),
         }
     }
@@ -236,11 +236,11 @@ impl FromGlib<ffi::GstPlayerSnapshotFormat> for PlayerSnapshotFormat {
     unsafe fn from_glib(value: ffi::GstPlayerSnapshotFormat) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::RawNative,
-            1 => Self::RawXrgb,
-            2 => Self::RawBgrx,
-            3 => Self::Jpg,
-            4 => Self::Png,
+            ffi::GST_PLAYER_THUMBNAIL_RAW_NATIVE => Self::RawNative,
+            ffi::GST_PLAYER_THUMBNAIL_RAW_xRGB => Self::RawXrgb,
+            ffi::GST_PLAYER_THUMBNAIL_RAW_BGRx => Self::RawBgrx,
+            ffi::GST_PLAYER_THUMBNAIL_JPG => Self::Jpg,
+            ffi::GST_PLAYER_THUMBNAIL_PNG => Self::Png,
             value => Self::__Unknown(value),
         }
     }
@@ -291,10 +291,10 @@ impl FromGlib<ffi::GstPlayerState> for PlayerState {
     unsafe fn from_glib(value: ffi::GstPlayerState) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Stopped,
-            1 => Self::Buffering,
-            2 => Self::Paused,
-            3 => Self::Playing,
+            ffi::GST_PLAYER_STATE_STOPPED => Self::Stopped,
+            ffi::GST_PLAYER_STATE_BUFFERING => Self::Buffering,
+            ffi::GST_PLAYER_STATE_PAUSED => Self::Paused,
+            ffi::GST_PLAYER_STATE_PLAYING => Self::Playing,
             value => Self::__Unknown(value),
         }
     }

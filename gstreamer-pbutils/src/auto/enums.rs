@@ -51,12 +51,12 @@ impl FromGlib<ffi::GstDiscovererResult> for DiscovererResult {
     unsafe fn from_glib(value: ffi::GstDiscovererResult) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Ok,
-            1 => Self::UriInvalid,
-            2 => Self::Error,
-            3 => Self::Timeout,
-            4 => Self::Busy,
-            5 => Self::MissingPlugins,
+            ffi::GST_DISCOVERER_OK => Self::Ok,
+            ffi::GST_DISCOVERER_URI_INVALID => Self::UriInvalid,
+            ffi::GST_DISCOVERER_ERROR => Self::Error,
+            ffi::GST_DISCOVERER_TIMEOUT => Self::Timeout,
+            ffi::GST_DISCOVERER_BUSY => Self::Busy,
+            ffi::GST_DISCOVERER_MISSING_PLUGINS => Self::MissingPlugins,
             value => Self::__Unknown(value),
         }
     }

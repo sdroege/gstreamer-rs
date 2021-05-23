@@ -42,9 +42,9 @@ impl FromGlib<ffi::GstAppStreamType> for AppStreamType {
     unsafe fn from_glib(value: ffi::GstAppStreamType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Stream,
-            1 => Self::Seekable,
-            2 => Self::RandomAccess,
+            ffi::GST_APP_STREAM_TYPE_STREAM => Self::Stream,
+            ffi::GST_APP_STREAM_TYPE_SEEKABLE => Self::Seekable,
+            ffi::GST_APP_STREAM_TYPE_RANDOM_ACCESS => Self::RandomAccess,
             value => Self::__Unknown(value),
         }
     }

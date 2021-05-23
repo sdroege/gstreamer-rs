@@ -436,7 +436,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     ) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::ClockTimeDiff) {
         unsafe {
             let mut jitter = mem::MaybeUninit::uninit();
-            let ret = gst::FlowSuccess::try_from_glib(ffi::gst_base_sink_wait(
+            let ret = try_from_glib(ffi::gst_base_sink_wait(
                 self.as_ref().to_glib_none().0,
                 time.into_glib(),
                 jitter.as_mut_ptr(),
@@ -455,7 +455,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     ) {
         unsafe {
             let mut jitter = mem::MaybeUninit::uninit();
-            let ret = gst::ClockSuccess::try_from_glib(ffi::gst_base_sink_wait_clock(
+            let ret = try_from_glib(ffi::gst_base_sink_wait_clock(
                 self.as_ref().to_glib_none().0,
                 time.into_glib(),
                 jitter.as_mut_ptr(),
@@ -467,7 +467,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn wait_preroll(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_base_sink_wait_preroll(
+            try_from_glib(ffi::gst_base_sink_wait_preroll(
                 self.as_ref().to_glib_none().0,
             ))
         }

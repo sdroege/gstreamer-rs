@@ -57,12 +57,12 @@ impl FromGlib<ffi::GstGLContextError> for GLContextError {
     unsafe fn from_glib(value: ffi::GstGLContextError) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Failed,
-            1 => Self::WrongConfig,
-            2 => Self::WrongApi,
-            3 => Self::OldLibs,
-            4 => Self::CreateContext,
-            5 => Self::ResourceUnavailable,
+            ffi::GST_GL_CONTEXT_ERROR_FAILED => Self::Failed,
+            ffi::GST_GL_CONTEXT_ERROR_WRONG_CONFIG => Self::WrongConfig,
+            ffi::GST_GL_CONTEXT_ERROR_WRONG_API => Self::WrongApi,
+            ffi::GST_GL_CONTEXT_ERROR_OLD_LIBS => Self::OldLibs,
+            ffi::GST_GL_CONTEXT_ERROR_CREATE_CONTEXT => Self::CreateContext,
+            ffi::GST_GL_CONTEXT_ERROR_RESOURCE_UNAVAILABLE => Self::ResourceUnavailable,
             value => Self::__Unknown(value),
         }
     }
@@ -82,12 +82,12 @@ impl ErrorDomain for GLContextError {
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
         match code {
-            0 => Some(Self::Failed),
-            1 => Some(Self::WrongConfig),
-            2 => Some(Self::WrongApi),
-            3 => Some(Self::OldLibs),
-            4 => Some(Self::CreateContext),
-            5 => Some(Self::ResourceUnavailable),
+            ffi::GST_GL_CONTEXT_ERROR_FAILED => Some(Self::Failed),
+            ffi::GST_GL_CONTEXT_ERROR_WRONG_CONFIG => Some(Self::WrongConfig),
+            ffi::GST_GL_CONTEXT_ERROR_WRONG_API => Some(Self::WrongApi),
+            ffi::GST_GL_CONTEXT_ERROR_OLD_LIBS => Some(Self::OldLibs),
+            ffi::GST_GL_CONTEXT_ERROR_CREATE_CONTEXT => Some(Self::CreateContext),
+            ffi::GST_GL_CONTEXT_ERROR_RESOURCE_UNAVAILABLE => Some(Self::ResourceUnavailable),
             _ => Some(Self::Failed),
         }
     }
@@ -263,25 +263,25 @@ impl FromGlib<ffi::GstGLFormat> for GLFormat {
     unsafe fn from_glib(value: ffi::GstGLFormat) -> Self {
         skip_assert_initialized!();
         match value {
-            6409 => Self::Luminance,
-            6406 => Self::Alpha,
-            6410 => Self::LuminanceAlpha,
-            6403 => Self::Red,
-            33321 => Self::R8,
-            33319 => Self::Rg,
-            33323 => Self::Rg8,
-            6407 => Self::Rgb,
-            32849 => Self::Rgb8,
-            36194 => Self::Rgb565,
-            32852 => Self::Rgb16,
-            6408 => Self::Rgba,
-            32856 => Self::Rgba8,
-            32859 => Self::Rgba16,
-            33189 => Self::DepthComponent16,
-            35056 => Self::Depth24Stencil8,
-            32857 => Self::Rgb10A2,
-            33322 => Self::R16,
-            33324 => Self::Rg16,
+            ffi::GST_GL_LUMINANCE => Self::Luminance,
+            ffi::GST_GL_ALPHA => Self::Alpha,
+            ffi::GST_GL_LUMINANCE_ALPHA => Self::LuminanceAlpha,
+            ffi::GST_GL_RED => Self::Red,
+            ffi::GST_GL_R8 => Self::R8,
+            ffi::GST_GL_RG => Self::Rg,
+            ffi::GST_GL_RG8 => Self::Rg8,
+            ffi::GST_GL_RGB => Self::Rgb,
+            ffi::GST_GL_RGB8 => Self::Rgb8,
+            ffi::GST_GL_RGB565 => Self::Rgb565,
+            ffi::GST_GL_RGB16 => Self::Rgb16,
+            ffi::GST_GL_RGBA => Self::Rgba,
+            ffi::GST_GL_RGBA8 => Self::Rgba8,
+            ffi::GST_GL_RGBA16 => Self::Rgba16,
+            ffi::GST_GL_DEPTH_COMPONENT16 => Self::DepthComponent16,
+            ffi::GST_GL_DEPTH24_STENCIL8 => Self::Depth24Stencil8,
+            ffi::GST_GL_RGB10_A2 => Self::Rgb10A2,
+            ffi::GST_GL_R16 => Self::R16,
+            ffi::GST_GL_RG16 => Self::Rg16,
             value => Self::__Unknown(value),
         }
     }
@@ -353,9 +353,9 @@ impl FromGlib<ffi::GstGLQueryType> for GLQueryType {
     unsafe fn from_glib(value: ffi::GstGLQueryType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::TimeElapsed,
-            2 => Self::Timestamp,
+            ffi::GST_GL_QUERY_NONE => Self::None,
+            ffi::GST_GL_QUERY_TIME_ELAPSED => Self::TimeElapsed,
+            ffi::GST_GL_QUERY_TIMESTAMP => Self::Timestamp,
             value => Self::__Unknown(value),
         }
     }
@@ -427,9 +427,9 @@ impl FromGlib<ffi::GstGLSLError> for GLSLError {
     unsafe fn from_glib(value: ffi::GstGLSLError) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Compile,
-            1 => Self::Link,
-            2 => Self::Program,
+            ffi::GST_GLSL_ERROR_COMPILE => Self::Compile,
+            ffi::GST_GLSL_ERROR_LINK => Self::Link,
+            ffi::GST_GLSL_ERROR_PROGRAM => Self::Program,
             value => Self::__Unknown(value),
         }
     }
@@ -449,9 +449,9 @@ impl ErrorDomain for GLSLError {
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
         match code {
-            0 => Some(Self::Compile),
-            1 => Some(Self::Link),
-            2 => Some(Self::Program),
+            ffi::GST_GLSL_ERROR_COMPILE => Some(Self::Compile),
+            ffi::GST_GLSL_ERROR_LINK => Some(Self::Link),
+            ffi::GST_GLSL_ERROR_PROGRAM => Some(Self::Program),
             value => Some(Self::__Unknown(value)),
         }
     }
@@ -612,23 +612,23 @@ impl FromGlib<ffi::GstGLSLVersion> for GLSLVersion {
     unsafe fn from_glib(value: ffi::GstGLSLVersion) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            100 => Self::_100,
-            110 => Self::_110,
-            120 => Self::_120,
-            130 => Self::_130,
-            140 => Self::_140,
-            150 => Self::_150,
-            300 => Self::_300,
-            310 => Self::_310,
-            320 => Self::_320,
-            330 => Self::_330,
-            400 => Self::_400,
-            410 => Self::_410,
-            420 => Self::_420,
-            430 => Self::_430,
-            440 => Self::_440,
-            450 => Self::_450,
+            ffi::GST_GLSL_VERSION_NONE => Self::None,
+            ffi::GST_GLSL_VERSION_100 => Self::_100,
+            ffi::GST_GLSL_VERSION_110 => Self::_110,
+            ffi::GST_GLSL_VERSION_120 => Self::_120,
+            ffi::GST_GLSL_VERSION_130 => Self::_130,
+            ffi::GST_GLSL_VERSION_140 => Self::_140,
+            ffi::GST_GLSL_VERSION_150 => Self::_150,
+            ffi::GST_GLSL_VERSION_300 => Self::_300,
+            ffi::GST_GLSL_VERSION_310 => Self::_310,
+            ffi::GST_GLSL_VERSION_320 => Self::_320,
+            ffi::GST_GLSL_VERSION_330 => Self::_330,
+            ffi::GST_GLSL_VERSION_400 => Self::_400,
+            ffi::GST_GLSL_VERSION_410 => Self::_410,
+            ffi::GST_GLSL_VERSION_420 => Self::_420,
+            ffi::GST_GLSL_VERSION_430 => Self::_430,
+            ffi::GST_GLSL_VERSION_440 => Self::_440,
+            ffi::GST_GLSL_VERSION_450 => Self::_450,
             value => Self::__Unknown(value),
         }
     }
@@ -700,9 +700,9 @@ impl FromGlib<ffi::GstGLStereoDownmix> for GLStereoDownmix {
     unsafe fn from_glib(value: ffi::GstGLStereoDownmix) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::GreenMagentaDubois,
-            1 => Self::RedCyanDubois,
-            2 => Self::AmberBlueDubois,
+            ffi::GST_GL_STEREO_DOWNMIX_ANAGLYPH_GREEN_MAGENTA_DUBOIS => Self::GreenMagentaDubois,
+            ffi::GST_GL_STEREO_DOWNMIX_ANAGLYPH_RED_CYAN_DUBOIS => Self::RedCyanDubois,
+            ffi::GST_GL_STEREO_DOWNMIX_ANAGLYPH_AMBER_BLUE_DUBOIS => Self::AmberBlueDubois,
             value => Self::__Unknown(value),
         }
     }
@@ -814,10 +814,10 @@ impl FromGlib<ffi::GstGLTextureTarget> for GLTextureTarget {
     unsafe fn from_glib(value: ffi::GstGLTextureTarget) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::_2d,
-            2 => Self::Rectangle,
-            3 => Self::ExternalOes,
+            ffi::GST_GL_TEXTURE_TARGET_NONE => Self::None,
+            ffi::GST_GL_TEXTURE_TARGET_2D => Self::_2d,
+            ffi::GST_GL_TEXTURE_TARGET_RECTANGLE => Self::Rectangle,
+            ffi::GST_GL_TEXTURE_TARGET_EXTERNAL_OES => Self::ExternalOes,
             value => Self::__Unknown(value),
         }
     }
@@ -895,11 +895,11 @@ impl FromGlib<ffi::GstGLUploadReturn> for GLUploadReturn {
     unsafe fn from_glib(value: ffi::GstGLUploadReturn) -> Self {
         skip_assert_initialized!();
         match value {
-            1 => Self::Done,
-            -1 => Self::Error,
-            -2 => Self::Unsupported,
-            -3 => Self::Reconfigure,
-            -100 => Self::UnsharedGlContext,
+            ffi::GST_GL_UPLOAD_DONE => Self::Done,
+            ffi::GST_GL_UPLOAD_ERROR => Self::Error,
+            ffi::GST_GL_UPLOAD_UNSUPPORTED => Self::Unsupported,
+            ffi::GST_GL_UPLOAD_RECONFIGURE => Self::Reconfigure,
+            ffi::GST_GL_UPLOAD_UNSHARED_GL_CONTEXT => Self::UnsharedGlContext,
             value => Self::__Unknown(value),
         }
     }
@@ -971,9 +971,9 @@ impl FromGlib<ffi::GstGLWindowError> for GLWindowError {
     unsafe fn from_glib(value: ffi::GstGLWindowError) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Failed,
-            1 => Self::OldLibs,
-            2 => Self::ResourceUnavailable,
+            ffi::GST_GL_WINDOW_ERROR_FAILED => Self::Failed,
+            ffi::GST_GL_WINDOW_ERROR_OLD_LIBS => Self::OldLibs,
+            ffi::GST_GL_WINDOW_ERROR_RESOURCE_UNAVAILABLE => Self::ResourceUnavailable,
             value => Self::__Unknown(value),
         }
     }
@@ -993,9 +993,9 @@ impl ErrorDomain for GLWindowError {
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
         match code {
-            0 => Some(Self::Failed),
-            1 => Some(Self::OldLibs),
-            2 => Some(Self::ResourceUnavailable),
+            ffi::GST_GL_WINDOW_ERROR_FAILED => Some(Self::Failed),
+            ffi::GST_GL_WINDOW_ERROR_OLD_LIBS => Some(Self::OldLibs),
+            ffi::GST_GL_WINDOW_ERROR_RESOURCE_UNAVAILABLE => Some(Self::ResourceUnavailable),
             _ => Some(Self::Failed),
         }
     }

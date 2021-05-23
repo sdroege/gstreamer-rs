@@ -53,10 +53,10 @@ impl FromGlib<ffi::GstWebRTCBundlePolicy> for WebRTCBundlePolicy {
     unsafe fn from_glib(value: ffi::GstWebRTCBundlePolicy) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::Balanced,
-            2 => Self::MaxCompat,
-            3 => Self::MaxBundle,
+            ffi::GST_WEBRTC_BUNDLE_POLICY_NONE => Self::None,
+            ffi::GST_WEBRTC_BUNDLE_POLICY_BALANCED => Self::Balanced,
+            ffi::GST_WEBRTC_BUNDLE_POLICY_MAX_COMPAT => Self::MaxCompat,
+            ffi::GST_WEBRTC_BUNDLE_POLICY_MAX_BUNDLE => Self::MaxBundle,
             value => Self::__Unknown(value),
         }
     }
@@ -139,10 +139,10 @@ impl FromGlib<ffi::GstWebRTCDTLSSetup> for WebRTCDTLSSetup {
     unsafe fn from_glib(value: ffi::GstWebRTCDTLSSetup) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::Actpass,
-            2 => Self::Active,
-            3 => Self::Passive,
+            ffi::GST_WEBRTC_DTLS_SETUP_NONE => Self::None,
+            ffi::GST_WEBRTC_DTLS_SETUP_ACTPASS => Self::Actpass,
+            ffi::GST_WEBRTC_DTLS_SETUP_ACTIVE => Self::Active,
+            ffi::GST_WEBRTC_DTLS_SETUP_PASSIVE => Self::Passive,
             value => Self::__Unknown(value),
         }
     }
@@ -220,11 +220,11 @@ impl FromGlib<ffi::GstWebRTCDTLSTransportState> for WebRTCDTLSTransportState {
     unsafe fn from_glib(value: ffi::GstWebRTCDTLSTransportState) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::New,
-            1 => Self::Closed,
-            2 => Self::Failed,
-            3 => Self::Connecting,
-            4 => Self::Connected,
+            ffi::GST_WEBRTC_DTLS_TRANSPORT_STATE_NEW => Self::New,
+            ffi::GST_WEBRTC_DTLS_TRANSPORT_STATE_CLOSED => Self::Closed,
+            ffi::GST_WEBRTC_DTLS_TRANSPORT_STATE_FAILED => Self::Failed,
+            ffi::GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTING => Self::Connecting,
+            ffi::GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTED => Self::Connected,
             value => Self::__Unknown(value),
         }
     }
@@ -308,11 +308,11 @@ impl FromGlib<ffi::GstWebRTCDataChannelState> for WebRTCDataChannelState {
     unsafe fn from_glib(value: ffi::GstWebRTCDataChannelState) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::New,
-            1 => Self::Connecting,
-            2 => Self::Open,
-            3 => Self::Closing,
-            4 => Self::Closed,
+            ffi::GST_WEBRTC_DATA_CHANNEL_STATE_NEW => Self::New,
+            ffi::GST_WEBRTC_DATA_CHANNEL_STATE_CONNECTING => Self::Connecting,
+            ffi::GST_WEBRTC_DATA_CHANNEL_STATE_OPEN => Self::Open,
+            ffi::GST_WEBRTC_DATA_CHANNEL_STATE_CLOSING => Self::Closing,
+            ffi::GST_WEBRTC_DATA_CHANNEL_STATE_CLOSED => Self::Closed,
             value => Self::__Unknown(value),
         }
     }
@@ -395,8 +395,8 @@ impl FromGlib<ffi::GstWebRTCFECType> for WebRTCFECType {
     unsafe fn from_glib(value: ffi::GstWebRTCFECType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::UlpRed,
+            ffi::GST_WEBRTC_FEC_TYPE_NONE => Self::None,
+            ffi::GST_WEBRTC_FEC_TYPE_ULP_RED => Self::UlpRed,
             value => Self::__Unknown(value),
         }
     }
@@ -473,8 +473,8 @@ impl FromGlib<ffi::GstWebRTCICEComponent> for WebRTCICEComponent {
     unsafe fn from_glib(value: ffi::GstWebRTCICEComponent) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Rtp,
-            1 => Self::Rtcp,
+            ffi::GST_WEBRTC_ICE_COMPONENT_RTP => Self::Rtp,
+            ffi::GST_WEBRTC_ICE_COMPONENT_RTCP => Self::Rtcp,
             value => Self::__Unknown(value),
         }
     }
@@ -558,13 +558,13 @@ impl FromGlib<ffi::GstWebRTCICEConnectionState> for WebRTCICEConnectionState {
     unsafe fn from_glib(value: ffi::GstWebRTCICEConnectionState) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::New,
-            1 => Self::Checking,
-            2 => Self::Connected,
-            3 => Self::Completed,
-            4 => Self::Failed,
-            5 => Self::Disconnected,
-            6 => Self::Closed,
+            ffi::GST_WEBRTC_ICE_CONNECTION_STATE_NEW => Self::New,
+            ffi::GST_WEBRTC_ICE_CONNECTION_STATE_CHECKING => Self::Checking,
+            ffi::GST_WEBRTC_ICE_CONNECTION_STATE_CONNECTED => Self::Connected,
+            ffi::GST_WEBRTC_ICE_CONNECTION_STATE_COMPLETED => Self::Completed,
+            ffi::GST_WEBRTC_ICE_CONNECTION_STATE_FAILED => Self::Failed,
+            ffi::GST_WEBRTC_ICE_CONNECTION_STATE_DISCONNECTED => Self::Disconnected,
+            ffi::GST_WEBRTC_ICE_CONNECTION_STATE_CLOSED => Self::Closed,
             value => Self::__Unknown(value),
         }
     }
@@ -636,9 +636,9 @@ impl FromGlib<ffi::GstWebRTCICEGatheringState> for WebRTCICEGatheringState {
     unsafe fn from_glib(value: ffi::GstWebRTCICEGatheringState) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::New,
-            1 => Self::Gathering,
-            2 => Self::Complete,
+            ffi::GST_WEBRTC_ICE_GATHERING_STATE_NEW => Self::New,
+            ffi::GST_WEBRTC_ICE_GATHERING_STATE_GATHERING => Self::Gathering,
+            ffi::GST_WEBRTC_ICE_GATHERING_STATE_COMPLETE => Self::Complete,
             value => Self::__Unknown(value),
         }
     }
@@ -707,8 +707,8 @@ impl FromGlib<ffi::GstWebRTCICERole> for WebRTCICERole {
     unsafe fn from_glib(value: ffi::GstWebRTCICERole) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Controlled,
-            1 => Self::Controlling,
+            ffi::GST_WEBRTC_ICE_ROLE_CONTROLLED => Self::Controlled,
+            ffi::GST_WEBRTC_ICE_ROLE_CONTROLLING => Self::Controlling,
             value => Self::__Unknown(value),
         }
     }
@@ -783,8 +783,8 @@ impl FromGlib<ffi::GstWebRTCICETransportPolicy> for WebRTCICETransportPolicy {
     unsafe fn from_glib(value: ffi::GstWebRTCICETransportPolicy) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::All,
-            1 => Self::Relay,
+            ffi::GST_WEBRTC_ICE_TRANSPORT_POLICY_ALL => Self::All,
+            ffi::GST_WEBRTC_ICE_TRANSPORT_POLICY_RELAY => Self::Relay,
             value => Self::__Unknown(value),
         }
     }
@@ -873,12 +873,12 @@ impl FromGlib<ffi::GstWebRTCPeerConnectionState> for WebRTCPeerConnectionState {
     unsafe fn from_glib(value: ffi::GstWebRTCPeerConnectionState) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::New,
-            1 => Self::Connecting,
-            2 => Self::Connected,
-            3 => Self::Disconnected,
-            4 => Self::Failed,
-            5 => Self::Closed,
+            ffi::GST_WEBRTC_PEER_CONNECTION_STATE_NEW => Self::New,
+            ffi::GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTING => Self::Connecting,
+            ffi::GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTED => Self::Connected,
+            ffi::GST_WEBRTC_PEER_CONNECTION_STATE_DISCONNECTED => Self::Disconnected,
+            ffi::GST_WEBRTC_PEER_CONNECTION_STATE_FAILED => Self::Failed,
+            ffi::GST_WEBRTC_PEER_CONNECTION_STATE_CLOSED => Self::Closed,
             value => Self::__Unknown(value),
         }
     }
@@ -959,10 +959,10 @@ impl FromGlib<ffi::GstWebRTCPriorityType> for WebRTCPriorityType {
     unsafe fn from_glib(value: ffi::GstWebRTCPriorityType) -> Self {
         skip_assert_initialized!();
         match value {
-            1 => Self::VeryLow,
-            2 => Self::Low,
-            3 => Self::Medium,
-            4 => Self::High,
+            ffi::GST_WEBRTC_PRIORITY_TYPE_VERY_LOW => Self::VeryLow,
+            ffi::GST_WEBRTC_PRIORITY_TYPE_LOW => Self::Low,
+            ffi::GST_WEBRTC_PRIORITY_TYPE_MEDIUM => Self::Medium,
+            ffi::GST_WEBRTC_PRIORITY_TYPE_HIGH => Self::High,
             value => Self::__Unknown(value),
         }
     }
@@ -1048,11 +1048,11 @@ impl FromGlib<ffi::GstWebRTCRTPTransceiverDirection> for WebRTCRTPTransceiverDir
     unsafe fn from_glib(value: ffi::GstWebRTCRTPTransceiverDirection) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::Inactive,
-            2 => Self::Sendonly,
-            3 => Self::Recvonly,
-            4 => Self::Sendrecv,
+            ffi::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_NONE => Self::None,
+            ffi::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_INACTIVE => Self::Inactive,
+            ffi::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY => Self::Sendonly,
+            ffi::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_RECVONLY => Self::Recvonly,
+            ffi::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDRECV => Self::Sendrecv,
             value => Self::__Unknown(value),
         }
     }
@@ -1133,10 +1133,10 @@ impl FromGlib<ffi::GstWebRTCSCTPTransportState> for WebRTCSCTPTransportState {
     unsafe fn from_glib(value: ffi::GstWebRTCSCTPTransportState) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::New,
-            1 => Self::Connecting,
-            2 => Self::Connected,
-            3 => Self::Closed,
+            ffi::GST_WEBRTC_SCTP_TRANSPORT_STATE_NEW => Self::New,
+            ffi::GST_WEBRTC_SCTP_TRANSPORT_STATE_CONNECTING => Self::Connecting,
+            ffi::GST_WEBRTC_SCTP_TRANSPORT_STATE_CONNECTED => Self::Connected,
+            ffi::GST_WEBRTC_SCTP_TRANSPORT_STATE_CLOSED => Self::Closed,
             value => Self::__Unknown(value),
         }
     }
@@ -1240,10 +1240,10 @@ impl FromGlib<ffi::GstWebRTCSDPType> for WebRTCSDPType {
     unsafe fn from_glib(value: ffi::GstWebRTCSDPType) -> Self {
         skip_assert_initialized!();
         match value {
-            1 => Self::Offer,
-            2 => Self::Pranswer,
-            3 => Self::Answer,
-            4 => Self::Rollback,
+            ffi::GST_WEBRTC_SDP_TYPE_OFFER => Self::Offer,
+            ffi::GST_WEBRTC_SDP_TYPE_PRANSWER => Self::Pranswer,
+            ffi::GST_WEBRTC_SDP_TYPE_ANSWER => Self::Answer,
+            ffi::GST_WEBRTC_SDP_TYPE_ROLLBACK => Self::Rollback,
             value => Self::__Unknown(value),
         }
     }
@@ -1324,12 +1324,12 @@ impl FromGlib<ffi::GstWebRTCSignalingState> for WebRTCSignalingState {
     unsafe fn from_glib(value: ffi::GstWebRTCSignalingState) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Stable,
-            1 => Self::Closed,
-            2 => Self::HaveLocalOffer,
-            3 => Self::HaveRemoteOffer,
-            4 => Self::HaveLocalPranswer,
-            5 => Self::HaveRemotePranswer,
+            ffi::GST_WEBRTC_SIGNALING_STATE_STABLE => Self::Stable,
+            ffi::GST_WEBRTC_SIGNALING_STATE_CLOSED => Self::Closed,
+            ffi::GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_OFFER => Self::HaveLocalOffer,
+            ffi::GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_OFFER => Self::HaveRemoteOffer,
+            ffi::GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_PRANSWER => Self::HaveLocalPranswer,
+            ffi::GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_PRANSWER => Self::HaveRemotePranswer,
             value => Self::__Unknown(value),
         }
     }
@@ -1434,20 +1434,20 @@ impl FromGlib<ffi::GstWebRTCStatsType> for WebRTCStatsType {
     unsafe fn from_glib(value: ffi::GstWebRTCStatsType) -> Self {
         skip_assert_initialized!();
         match value {
-            1 => Self::Codec,
-            2 => Self::InboundRtp,
-            3 => Self::OutboundRtp,
-            4 => Self::RemoteInboundRtp,
-            5 => Self::RemoteOutboundRtp,
-            6 => Self::Csrc,
-            7 => Self::PeerConnection,
-            8 => Self::DataChannel,
-            9 => Self::Stream,
-            10 => Self::Transport,
-            11 => Self::CandidatePair,
-            12 => Self::LocalCandidate,
-            13 => Self::RemoteCandidate,
-            14 => Self::Certificate,
+            ffi::GST_WEBRTC_STATS_CODEC => Self::Codec,
+            ffi::GST_WEBRTC_STATS_INBOUND_RTP => Self::InboundRtp,
+            ffi::GST_WEBRTC_STATS_OUTBOUND_RTP => Self::OutboundRtp,
+            ffi::GST_WEBRTC_STATS_REMOTE_INBOUND_RTP => Self::RemoteInboundRtp,
+            ffi::GST_WEBRTC_STATS_REMOTE_OUTBOUND_RTP => Self::RemoteOutboundRtp,
+            ffi::GST_WEBRTC_STATS_CSRC => Self::Csrc,
+            ffi::GST_WEBRTC_STATS_PEER_CONNECTION => Self::PeerConnection,
+            ffi::GST_WEBRTC_STATS_DATA_CHANNEL => Self::DataChannel,
+            ffi::GST_WEBRTC_STATS_STREAM => Self::Stream,
+            ffi::GST_WEBRTC_STATS_TRANSPORT => Self::Transport,
+            ffi::GST_WEBRTC_STATS_CANDIDATE_PAIR => Self::CandidatePair,
+            ffi::GST_WEBRTC_STATS_LOCAL_CANDIDATE => Self::LocalCandidate,
+            ffi::GST_WEBRTC_STATS_REMOTE_CANDIDATE => Self::RemoteCandidate,
+            ffi::GST_WEBRTC_STATS_CERTIFICATE => Self::Certificate,
             value => Self::__Unknown(value),
         }
     }

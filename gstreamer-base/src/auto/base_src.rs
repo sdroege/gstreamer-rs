@@ -243,16 +243,12 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     }
 
     fn start_wait(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_base_src_start_wait(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { try_from_glib(ffi::gst_base_src_start_wait(self.as_ref().to_glib_none().0)) }
     }
 
     fn wait_playing(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_base_src_wait_playing(
+            try_from_glib(ffi::gst_base_src_wait_playing(
                 self.as_ref().to_glib_none().0,
             ))
         }

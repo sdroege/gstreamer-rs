@@ -50,9 +50,9 @@ impl FromGlib<ffi::GstVideoAFDSpec> for VideoAFDSpec {
     unsafe fn from_glib(value: ffi::GstVideoAFDSpec) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::DvbEtsi,
-            1 => Self::AtscA53,
-            2 => Self::SmpteSt20161,
+            ffi::GST_VIDEO_AFD_SPEC_DVB_ETSI => Self::DvbEtsi,
+            ffi::GST_VIDEO_AFD_SPEC_ATSC_A53 => Self::AtscA53,
+            ffi::GST_VIDEO_AFD_SPEC_SMPTE_ST2016_1 => Self::SmpteSt20161,
             value => Self::__Unknown(value),
         }
     }
@@ -162,17 +162,17 @@ impl FromGlib<ffi::GstVideoAFDValue> for VideoAFDValue {
     unsafe fn from_glib(value: ffi::GstVideoAFDValue) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Unavailable,
-            2 => Self::_169TopAligned,
-            3 => Self::_149TopAligned,
-            4 => Self::GreaterThan169,
-            8 => Self::_43Full169Full,
-            9 => Self::_43Full43Pillar,
-            10 => Self::_169Letter169Full,
-            11 => Self::_149Letter149Pillar,
-            13 => Self::_43Full149Center,
-            14 => Self::_169Letter149Center,
-            15 => Self::_169Letter43Center,
+            ffi::GST_VIDEO_AFD_UNAVAILABLE => Self::Unavailable,
+            ffi::GST_VIDEO_AFD_16_9_TOP_ALIGNED => Self::_169TopAligned,
+            ffi::GST_VIDEO_AFD_14_9_TOP_ALIGNED => Self::_149TopAligned,
+            ffi::GST_VIDEO_AFD_GREATER_THAN_16_9 => Self::GreaterThan169,
+            ffi::GST_VIDEO_AFD_4_3_FULL_16_9_FULL => Self::_43Full169Full,
+            ffi::GST_VIDEO_AFD_4_3_FULL_4_3_PILLAR => Self::_43Full43Pillar,
+            ffi::GST_VIDEO_AFD_16_9_LETTER_16_9_FULL => Self::_169Letter169Full,
+            ffi::GST_VIDEO_AFD_14_9_LETTER_14_9_PILLAR => Self::_149Letter149Pillar,
+            ffi::GST_VIDEO_AFD_4_3_FULL_14_9_CENTER => Self::_43Full149Center,
+            ffi::GST_VIDEO_AFD_16_9_LETTER_14_9_CENTER => Self::_169Letter149Center,
+            ffi::GST_VIDEO_AFD_16_9_LETTER_4_3_CENTER => Self::_169Letter43Center,
             value => Self::__Unknown(value),
         }
     }
@@ -252,9 +252,9 @@ impl FromGlib<ffi::GstVideoAlphaMode> for VideoAlphaMode {
     unsafe fn from_glib(value: ffi::GstVideoAlphaMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Copy,
-            1 => Self::Set,
-            2 => Self::Mult,
+            ffi::GST_VIDEO_ALPHA_MODE_COPY => Self::Copy,
+            ffi::GST_VIDEO_ALPHA_MODE_SET => Self::Set,
+            ffi::GST_VIDEO_ALPHA_MODE_MULT => Self::Mult,
             value => Self::__Unknown(value),
         }
     }
@@ -354,11 +354,11 @@ impl FromGlib<ffi::GstVideoCaptionType> for VideoCaptionType {
     unsafe fn from_glib(value: ffi::GstVideoCaptionType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Unknown,
-            1 => Self::Cea608Raw,
-            2 => Self::Cea608S3341a,
-            3 => Self::Cea708Raw,
-            4 => Self::Cea708Cdp,
+            ffi::GST_VIDEO_CAPTION_TYPE_UNKNOWN => Self::Unknown,
+            ffi::GST_VIDEO_CAPTION_TYPE_CEA608_RAW => Self::Cea608Raw,
+            ffi::GST_VIDEO_CAPTION_TYPE_CEA608_S334_1A => Self::Cea608S3341a,
+            ffi::GST_VIDEO_CAPTION_TYPE_CEA708_RAW => Self::Cea708Raw,
+            ffi::GST_VIDEO_CAPTION_TYPE_CEA708_CDP => Self::Cea708Cdp,
             value => Self::__Unknown(value),
         }
     }
@@ -441,10 +441,10 @@ impl FromGlib<ffi::GstVideoChromaMode> for VideoChromaMode {
     unsafe fn from_glib(value: ffi::GstVideoChromaMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Full,
-            1 => Self::UpsampleOnly,
-            2 => Self::DownsampleOnly,
-            3 => Self::None,
+            ffi::GST_VIDEO_CHROMA_MODE_FULL => Self::Full,
+            ffi::GST_VIDEO_CHROMA_MODE_UPSAMPLE_ONLY => Self::UpsampleOnly,
+            ffi::GST_VIDEO_CHROMA_MODE_DOWNSAMPLE_ONLY => Self::DownsampleOnly,
+            ffi::GST_VIDEO_CHROMA_MODE_NONE => Self::None,
             value => Self::__Unknown(value),
         }
     }
@@ -546,13 +546,13 @@ impl FromGlib<ffi::GstVideoColorMatrix> for VideoColorMatrix {
     unsafe fn from_glib(value: ffi::GstVideoColorMatrix) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Unknown,
-            1 => Self::Rgb,
-            2 => Self::Fcc,
-            3 => Self::Bt709,
-            4 => Self::Bt601,
-            5 => Self::Smpte240m,
-            6 => Self::Bt2020,
+            ffi::GST_VIDEO_COLOR_MATRIX_UNKNOWN => Self::Unknown,
+            ffi::GST_VIDEO_COLOR_MATRIX_RGB => Self::Rgb,
+            ffi::GST_VIDEO_COLOR_MATRIX_FCC => Self::Fcc,
+            ffi::GST_VIDEO_COLOR_MATRIX_BT709 => Self::Bt709,
+            ffi::GST_VIDEO_COLOR_MATRIX_BT601 => Self::Bt601,
+            ffi::GST_VIDEO_COLOR_MATRIX_SMPTE240M => Self::Smpte240m,
+            ffi::GST_VIDEO_COLOR_MATRIX_BT2020 => Self::Bt2020,
             value => Self::__Unknown(value),
         }
     }
@@ -690,23 +690,23 @@ impl FromGlib<ffi::GstVideoColorPrimaries> for VideoColorPrimaries {
     unsafe fn from_glib(value: ffi::GstVideoColorPrimaries) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Unknown,
-            1 => Self::Bt709,
-            2 => Self::Bt470m,
-            3 => Self::Bt470bg,
-            4 => Self::Smpte170m,
-            5 => Self::Smpte240m,
-            6 => Self::Film,
-            7 => Self::Bt2020,
-            8 => Self::Adobergb,
+            ffi::GST_VIDEO_COLOR_PRIMARIES_UNKNOWN => Self::Unknown,
+            ffi::GST_VIDEO_COLOR_PRIMARIES_BT709 => Self::Bt709,
+            ffi::GST_VIDEO_COLOR_PRIMARIES_BT470M => Self::Bt470m,
+            ffi::GST_VIDEO_COLOR_PRIMARIES_BT470BG => Self::Bt470bg,
+            ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTE170M => Self::Smpte170m,
+            ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTE240M => Self::Smpte240m,
+            ffi::GST_VIDEO_COLOR_PRIMARIES_FILM => Self::Film,
+            ffi::GST_VIDEO_COLOR_PRIMARIES_BT2020 => Self::Bt2020,
+            ffi::GST_VIDEO_COLOR_PRIMARIES_ADOBERGB => Self::Adobergb,
             #[cfg(any(feature = "v1_16", feature = "dox"))]
-            9 => Self::Smptest428,
+            ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTEST428 => Self::Smptest428,
             #[cfg(any(feature = "v1_16", feature = "dox"))]
-            10 => Self::Smpterp431,
+            ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTERP431 => Self::Smpterp431,
             #[cfg(any(feature = "v1_16", feature = "dox"))]
-            11 => Self::Smpteeg432,
+            ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTEEG432 => Self::Smpteeg432,
             #[cfg(any(feature = "v1_16", feature = "dox"))]
-            12 => Self::Ebu3213,
+            ffi::GST_VIDEO_COLOR_PRIMARIES_EBU3213 => Self::Ebu3213,
             value => Self::__Unknown(value),
         }
     }
@@ -784,11 +784,11 @@ impl FromGlib<ffi::GstVideoDitherMethod> for VideoDitherMethod {
     unsafe fn from_glib(value: ffi::GstVideoDitherMethod) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::Verterr,
-            2 => Self::FloydSteinberg,
-            3 => Self::SierraLite,
-            4 => Self::Bayer,
+            ffi::GST_VIDEO_DITHER_NONE => Self::None,
+            ffi::GST_VIDEO_DITHER_VERTERR => Self::Verterr,
+            ffi::GST_VIDEO_DITHER_FLOYD_STEINBERG => Self::FloydSteinberg,
+            ffi::GST_VIDEO_DITHER_SIERRA_LITE => Self::SierraLite,
+            ffi::GST_VIDEO_DITHER_BAYER => Self::Bayer,
             value => Self::__Unknown(value),
         }
     }
@@ -889,9 +889,9 @@ impl FromGlib<ffi::GstVideoFieldOrder> for VideoFieldOrder {
     unsafe fn from_glib(value: ffi::GstVideoFieldOrder) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Unknown,
-            1 => Self::TopFieldFirst,
-            2 => Self::BottomFieldFirst,
+            ffi::GST_VIDEO_FIELD_ORDER_UNKNOWN => Self::Unknown,
+            ffi::GST_VIDEO_FIELD_ORDER_TOP_FIELD_FIRST => Self::TopFieldFirst,
+            ffi::GST_VIDEO_FIELD_ORDER_BOTTOM_FIELD_FIRST => Self::BottomFieldFirst,
             value => Self::__Unknown(value),
         }
     }
@@ -1406,143 +1406,143 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
     unsafe fn from_glib(value: ffi::GstVideoFormat) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Unknown,
-            1 => Self::Encoded,
-            2 => Self::I420,
-            3 => Self::Yv12,
-            4 => Self::Yuy2,
-            5 => Self::Uyvy,
-            6 => Self::Ayuv,
-            7 => Self::Rgbx,
-            8 => Self::Bgrx,
-            9 => Self::Xrgb,
-            10 => Self::Xbgr,
-            11 => Self::Rgba,
-            12 => Self::Bgra,
-            13 => Self::Argb,
-            14 => Self::Abgr,
-            15 => Self::Rgb,
-            16 => Self::Bgr,
-            17 => Self::Y41b,
-            18 => Self::Y42b,
-            19 => Self::Yvyu,
-            20 => Self::Y444,
-            21 => Self::V210,
-            22 => Self::V216,
-            23 => Self::Nv12,
-            24 => Self::Nv21,
-            25 => Self::Gray8,
-            26 => Self::Gray16Be,
-            27 => Self::Gray16Le,
-            28 => Self::V308,
-            29 => Self::Rgb16,
-            30 => Self::Bgr16,
-            31 => Self::Rgb15,
-            32 => Self::Bgr15,
-            33 => Self::Uyvp,
-            34 => Self::A420,
-            35 => Self::Rgb8p,
-            36 => Self::Yuv9,
-            37 => Self::Yvu9,
-            38 => Self::Iyu1,
-            39 => Self::Argb64,
-            40 => Self::Ayuv64,
-            41 => Self::R210,
-            42 => Self::I42010be,
-            43 => Self::I42010le,
-            44 => Self::I42210be,
-            45 => Self::I42210le,
-            46 => Self::Y44410be,
-            47 => Self::Y44410le,
-            48 => Self::Gbr,
-            49 => Self::Gbr10be,
-            50 => Self::Gbr10le,
-            51 => Self::Nv16,
-            52 => Self::Nv24,
-            53 => Self::Nv1264z32,
-            54 => Self::A42010be,
-            55 => Self::A42010le,
-            56 => Self::A42210be,
-            57 => Self::A42210le,
-            58 => Self::A44410be,
-            59 => Self::A44410le,
-            60 => Self::Nv61,
+            ffi::GST_VIDEO_FORMAT_UNKNOWN => Self::Unknown,
+            ffi::GST_VIDEO_FORMAT_ENCODED => Self::Encoded,
+            ffi::GST_VIDEO_FORMAT_I420 => Self::I420,
+            ffi::GST_VIDEO_FORMAT_YV12 => Self::Yv12,
+            ffi::GST_VIDEO_FORMAT_YUY2 => Self::Yuy2,
+            ffi::GST_VIDEO_FORMAT_UYVY => Self::Uyvy,
+            ffi::GST_VIDEO_FORMAT_AYUV => Self::Ayuv,
+            ffi::GST_VIDEO_FORMAT_RGBx => Self::Rgbx,
+            ffi::GST_VIDEO_FORMAT_BGRx => Self::Bgrx,
+            ffi::GST_VIDEO_FORMAT_xRGB => Self::Xrgb,
+            ffi::GST_VIDEO_FORMAT_xBGR => Self::Xbgr,
+            ffi::GST_VIDEO_FORMAT_RGBA => Self::Rgba,
+            ffi::GST_VIDEO_FORMAT_BGRA => Self::Bgra,
+            ffi::GST_VIDEO_FORMAT_ARGB => Self::Argb,
+            ffi::GST_VIDEO_FORMAT_ABGR => Self::Abgr,
+            ffi::GST_VIDEO_FORMAT_RGB => Self::Rgb,
+            ffi::GST_VIDEO_FORMAT_BGR => Self::Bgr,
+            ffi::GST_VIDEO_FORMAT_Y41B => Self::Y41b,
+            ffi::GST_VIDEO_FORMAT_Y42B => Self::Y42b,
+            ffi::GST_VIDEO_FORMAT_YVYU => Self::Yvyu,
+            ffi::GST_VIDEO_FORMAT_Y444 => Self::Y444,
+            ffi::GST_VIDEO_FORMAT_v210 => Self::V210,
+            ffi::GST_VIDEO_FORMAT_v216 => Self::V216,
+            ffi::GST_VIDEO_FORMAT_NV12 => Self::Nv12,
+            ffi::GST_VIDEO_FORMAT_NV21 => Self::Nv21,
+            ffi::GST_VIDEO_FORMAT_GRAY8 => Self::Gray8,
+            ffi::GST_VIDEO_FORMAT_GRAY16_BE => Self::Gray16Be,
+            ffi::GST_VIDEO_FORMAT_GRAY16_LE => Self::Gray16Le,
+            ffi::GST_VIDEO_FORMAT_v308 => Self::V308,
+            ffi::GST_VIDEO_FORMAT_RGB16 => Self::Rgb16,
+            ffi::GST_VIDEO_FORMAT_BGR16 => Self::Bgr16,
+            ffi::GST_VIDEO_FORMAT_RGB15 => Self::Rgb15,
+            ffi::GST_VIDEO_FORMAT_BGR15 => Self::Bgr15,
+            ffi::GST_VIDEO_FORMAT_UYVP => Self::Uyvp,
+            ffi::GST_VIDEO_FORMAT_A420 => Self::A420,
+            ffi::GST_VIDEO_FORMAT_RGB8P => Self::Rgb8p,
+            ffi::GST_VIDEO_FORMAT_YUV9 => Self::Yuv9,
+            ffi::GST_VIDEO_FORMAT_YVU9 => Self::Yvu9,
+            ffi::GST_VIDEO_FORMAT_IYU1 => Self::Iyu1,
+            ffi::GST_VIDEO_FORMAT_ARGB64 => Self::Argb64,
+            ffi::GST_VIDEO_FORMAT_AYUV64 => Self::Ayuv64,
+            ffi::GST_VIDEO_FORMAT_r210 => Self::R210,
+            ffi::GST_VIDEO_FORMAT_I420_10BE => Self::I42010be,
+            ffi::GST_VIDEO_FORMAT_I420_10LE => Self::I42010le,
+            ffi::GST_VIDEO_FORMAT_I422_10BE => Self::I42210be,
+            ffi::GST_VIDEO_FORMAT_I422_10LE => Self::I42210le,
+            ffi::GST_VIDEO_FORMAT_Y444_10BE => Self::Y44410be,
+            ffi::GST_VIDEO_FORMAT_Y444_10LE => Self::Y44410le,
+            ffi::GST_VIDEO_FORMAT_GBR => Self::Gbr,
+            ffi::GST_VIDEO_FORMAT_GBR_10BE => Self::Gbr10be,
+            ffi::GST_VIDEO_FORMAT_GBR_10LE => Self::Gbr10le,
+            ffi::GST_VIDEO_FORMAT_NV16 => Self::Nv16,
+            ffi::GST_VIDEO_FORMAT_NV24 => Self::Nv24,
+            ffi::GST_VIDEO_FORMAT_NV12_64Z32 => Self::Nv1264z32,
+            ffi::GST_VIDEO_FORMAT_A420_10BE => Self::A42010be,
+            ffi::GST_VIDEO_FORMAT_A420_10LE => Self::A42010le,
+            ffi::GST_VIDEO_FORMAT_A422_10BE => Self::A42210be,
+            ffi::GST_VIDEO_FORMAT_A422_10LE => Self::A42210le,
+            ffi::GST_VIDEO_FORMAT_A444_10BE => Self::A44410be,
+            ffi::GST_VIDEO_FORMAT_A444_10LE => Self::A44410le,
+            ffi::GST_VIDEO_FORMAT_NV61 => Self::Nv61,
             #[cfg(any(feature = "v1_10", feature = "dox"))]
-            61 => Self::P01010be,
+            ffi::GST_VIDEO_FORMAT_P010_10BE => Self::P01010be,
             #[cfg(any(feature = "v1_10", feature = "dox"))]
-            62 => Self::P01010le,
+            ffi::GST_VIDEO_FORMAT_P010_10LE => Self::P01010le,
             #[cfg(any(feature = "v1_10", feature = "dox"))]
-            63 => Self::Iyu2,
+            ffi::GST_VIDEO_FORMAT_IYU2 => Self::Iyu2,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            64 => Self::Vyuy,
+            ffi::GST_VIDEO_FORMAT_VYUY => Self::Vyuy,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            65 => Self::Gbra,
+            ffi::GST_VIDEO_FORMAT_GBRA => Self::Gbra,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            66 => Self::Gbra10be,
+            ffi::GST_VIDEO_FORMAT_GBRA_10BE => Self::Gbra10be,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            67 => Self::Gbra10le,
+            ffi::GST_VIDEO_FORMAT_GBRA_10LE => Self::Gbra10le,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            68 => Self::Gbr12be,
+            ffi::GST_VIDEO_FORMAT_GBR_12BE => Self::Gbr12be,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            69 => Self::Gbr12le,
+            ffi::GST_VIDEO_FORMAT_GBR_12LE => Self::Gbr12le,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            70 => Self::Gbra12be,
+            ffi::GST_VIDEO_FORMAT_GBRA_12BE => Self::Gbra12be,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            71 => Self::Gbra12le,
+            ffi::GST_VIDEO_FORMAT_GBRA_12LE => Self::Gbra12le,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            72 => Self::I42012be,
+            ffi::GST_VIDEO_FORMAT_I420_12BE => Self::I42012be,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            73 => Self::I42012le,
+            ffi::GST_VIDEO_FORMAT_I420_12LE => Self::I42012le,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            74 => Self::I42212be,
+            ffi::GST_VIDEO_FORMAT_I422_12BE => Self::I42212be,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            75 => Self::I42212le,
+            ffi::GST_VIDEO_FORMAT_I422_12LE => Self::I42212le,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            76 => Self::Y44412be,
+            ffi::GST_VIDEO_FORMAT_Y444_12BE => Self::Y44412be,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            77 => Self::Y44412le,
+            ffi::GST_VIDEO_FORMAT_Y444_12LE => Self::Y44412le,
             #[cfg(any(feature = "v1_14", feature = "dox"))]
-            78 => Self::Gray10Le32,
+            ffi::GST_VIDEO_FORMAT_GRAY10_LE32 => Self::Gray10Le32,
             #[cfg(any(feature = "v1_14", feature = "dox"))]
-            79 => Self::Nv1210le32,
+            ffi::GST_VIDEO_FORMAT_NV12_10LE32 => Self::Nv1210le32,
             #[cfg(any(feature = "v1_14", feature = "dox"))]
-            80 => Self::Nv1610le32,
+            ffi::GST_VIDEO_FORMAT_NV16_10LE32 => Self::Nv1610le32,
             #[cfg(any(feature = "v1_16", feature = "dox"))]
-            81 => Self::Nv1210le40,
+            ffi::GST_VIDEO_FORMAT_NV12_10LE40 => Self::Nv1210le40,
             #[cfg(any(feature = "v1_16", feature = "dox"))]
-            82 => Self::Y210,
+            ffi::GST_VIDEO_FORMAT_Y210 => Self::Y210,
             #[cfg(any(feature = "v1_16", feature = "dox"))]
-            83 => Self::Y410,
+            ffi::GST_VIDEO_FORMAT_Y410 => Self::Y410,
             #[cfg(any(feature = "v1_16", feature = "dox"))]
-            84 => Self::Vuya,
+            ffi::GST_VIDEO_FORMAT_VUYA => Self::Vuya,
             #[cfg(any(feature = "v1_16", feature = "dox"))]
-            85 => Self::Bgr10a2Le,
+            ffi::GST_VIDEO_FORMAT_BGR10A2_LE => Self::Bgr10a2Le,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            86 => Self::Rgb10a2Le,
+            ffi::GST_VIDEO_FORMAT_RGB10A2_LE => Self::Rgb10a2Le,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            87 => Self::Y44416be,
+            ffi::GST_VIDEO_FORMAT_Y444_16BE => Self::Y44416be,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            88 => Self::Y44416le,
+            ffi::GST_VIDEO_FORMAT_Y444_16LE => Self::Y44416le,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            89 => Self::P016Be,
+            ffi::GST_VIDEO_FORMAT_P016_BE => Self::P016Be,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            90 => Self::P016Le,
+            ffi::GST_VIDEO_FORMAT_P016_LE => Self::P016Le,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            91 => Self::P012Be,
+            ffi::GST_VIDEO_FORMAT_P012_BE => Self::P012Be,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            92 => Self::P012Le,
+            ffi::GST_VIDEO_FORMAT_P012_LE => Self::P012Le,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            93 => Self::Y212Be,
+            ffi::GST_VIDEO_FORMAT_Y212_BE => Self::Y212Be,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            94 => Self::Y212Le,
+            ffi::GST_VIDEO_FORMAT_Y212_LE => Self::Y212Le,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            95 => Self::Y412Be,
+            ffi::GST_VIDEO_FORMAT_Y412_BE => Self::Y412Be,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            96 => Self::Y412Le,
+            ffi::GST_VIDEO_FORMAT_Y412_LE => Self::Y412Le,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            97 => Self::Nv124l4,
+            ffi::GST_VIDEO_FORMAT_NV12_4L4 => Self::Nv124l4,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            98 => Self::Nv1232l32,
+            ffi::GST_VIDEO_FORMAT_NV12_32L32 => Self::Nv1232l32,
             value => Self::__Unknown(value),
         }
     }
@@ -1611,8 +1611,8 @@ impl FromGlib<ffi::GstVideoGammaMode> for VideoGammaMode {
     unsafe fn from_glib(value: ffi::GstVideoGammaMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::Remap,
+            ffi::GST_VIDEO_GAMMA_MODE_NONE => Self::None,
+            ffi::GST_VIDEO_GAMMA_MODE_REMAP => Self::Remap,
             value => Self::__Unknown(value),
         }
     }
@@ -1724,12 +1724,12 @@ impl FromGlib<ffi::GstVideoInterlaceMode> for VideoInterlaceMode {
     unsafe fn from_glib(value: ffi::GstVideoInterlaceMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Progressive,
-            1 => Self::Interleaved,
-            2 => Self::Mixed,
-            3 => Self::Fields,
+            ffi::GST_VIDEO_INTERLACE_MODE_PROGRESSIVE => Self::Progressive,
+            ffi::GST_VIDEO_INTERLACE_MODE_INTERLEAVED => Self::Interleaved,
+            ffi::GST_VIDEO_INTERLACE_MODE_MIXED => Self::Mixed,
+            ffi::GST_VIDEO_INTERLACE_MODE_FIELDS => Self::Fields,
             #[cfg(any(feature = "v1_16", feature = "dox"))]
-            4 => Self::Alternate,
+            ffi::GST_VIDEO_INTERLACE_MODE_ALTERNATE => Self::Alternate,
             value => Self::__Unknown(value),
         }
     }
@@ -1804,10 +1804,10 @@ impl FromGlib<ffi::GstVideoMatrixMode> for VideoMatrixMode {
     unsafe fn from_glib(value: ffi::GstVideoMatrixMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Full,
-            1 => Self::InputOnly,
-            2 => Self::OutputOnly,
-            3 => Self::None,
+            ffi::GST_VIDEO_MATRIX_MODE_FULL => Self::Full,
+            ffi::GST_VIDEO_MATRIX_MODE_INPUT_ONLY => Self::InputOnly,
+            ffi::GST_VIDEO_MATRIX_MODE_OUTPUT_ONLY => Self::OutputOnly,
+            ffi::GST_VIDEO_MATRIX_MODE_NONE => Self::None,
             value => Self::__Unknown(value),
         }
     }
@@ -1902,16 +1902,18 @@ impl FromGlib<ffi::GstVideoMultiviewFramePacking> for VideoMultiviewFramePacking
     unsafe fn from_glib(value: ffi::GstVideoMultiviewFramePacking) -> Self {
         skip_assert_initialized!();
         match value {
-            -1 => Self::None,
-            0 => Self::Mono,
-            1 => Self::Left,
-            2 => Self::Right,
-            3 => Self::SideBySide,
-            4 => Self::SideBySideQuincunx,
-            5 => Self::ColumnInterleaved,
-            6 => Self::RowInterleaved,
-            7 => Self::TopBottom,
-            8 => Self::Checkerboard,
+            ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_NONE => Self::None,
+            ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_MONO => Self::Mono,
+            ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_LEFT => Self::Left,
+            ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_RIGHT => Self::Right,
+            ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_SIDE_BY_SIDE => Self::SideBySide,
+            ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_SIDE_BY_SIDE_QUINCUNX => {
+                Self::SideBySideQuincunx
+            }
+            ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_COLUMN_INTERLEAVED => Self::ColumnInterleaved,
+            ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_ROW_INTERLEAVED => Self::RowInterleaved,
+            ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_TOP_BOTTOM => Self::TopBottom,
+            ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_CHECKERBOARD => Self::Checkerboard,
             value => Self::__Unknown(value),
         }
     }
@@ -2035,19 +2037,19 @@ impl FromGlib<ffi::GstVideoMultiviewMode> for VideoMultiviewMode {
     unsafe fn from_glib(value: ffi::GstVideoMultiviewMode) -> Self {
         skip_assert_initialized!();
         match value {
-            -1 => Self::None,
-            0 => Self::Mono,
-            1 => Self::Left,
-            2 => Self::Right,
-            3 => Self::SideBySide,
-            4 => Self::SideBySideQuincunx,
-            5 => Self::ColumnInterleaved,
-            6 => Self::RowInterleaved,
-            7 => Self::TopBottom,
-            8 => Self::Checkerboard,
-            32 => Self::FrameByFrame,
-            33 => Self::MultiviewFrameByFrame,
-            34 => Self::Separated,
+            ffi::GST_VIDEO_MULTIVIEW_MODE_NONE => Self::None,
+            ffi::GST_VIDEO_MULTIVIEW_MODE_MONO => Self::Mono,
+            ffi::GST_VIDEO_MULTIVIEW_MODE_LEFT => Self::Left,
+            ffi::GST_VIDEO_MULTIVIEW_MODE_RIGHT => Self::Right,
+            ffi::GST_VIDEO_MULTIVIEW_MODE_SIDE_BY_SIDE => Self::SideBySide,
+            ffi::GST_VIDEO_MULTIVIEW_MODE_SIDE_BY_SIDE_QUINCUNX => Self::SideBySideQuincunx,
+            ffi::GST_VIDEO_MULTIVIEW_MODE_COLUMN_INTERLEAVED => Self::ColumnInterleaved,
+            ffi::GST_VIDEO_MULTIVIEW_MODE_ROW_INTERLEAVED => Self::RowInterleaved,
+            ffi::GST_VIDEO_MULTIVIEW_MODE_TOP_BOTTOM => Self::TopBottom,
+            ffi::GST_VIDEO_MULTIVIEW_MODE_CHECKERBOARD => Self::Checkerboard,
+            ffi::GST_VIDEO_MULTIVIEW_MODE_FRAME_BY_FRAME => Self::FrameByFrame,
+            ffi::GST_VIDEO_MULTIVIEW_MODE_MULTIVIEW_FRAME_BY_FRAME => Self::MultiviewFrameByFrame,
+            ffi::GST_VIDEO_MULTIVIEW_MODE_SEPARATED => Self::Separated,
             value => Self::__Unknown(value),
         }
     }
@@ -2146,16 +2148,16 @@ impl FromGlib<ffi::GstVideoOrientationMethod> for VideoOrientationMethod {
     unsafe fn from_glib(value: ffi::GstVideoOrientationMethod) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Identity,
-            1 => Self::_90r,
-            2 => Self::_180,
-            3 => Self::_90l,
-            4 => Self::Horiz,
-            5 => Self::Vert,
-            6 => Self::UlLr,
-            7 => Self::UrLl,
-            8 => Self::Auto,
-            9 => Self::Custom,
+            ffi::GST_VIDEO_ORIENTATION_IDENTITY => Self::Identity,
+            ffi::GST_VIDEO_ORIENTATION_90R => Self::_90r,
+            ffi::GST_VIDEO_ORIENTATION_180 => Self::_180,
+            ffi::GST_VIDEO_ORIENTATION_90L => Self::_90l,
+            ffi::GST_VIDEO_ORIENTATION_HORIZ => Self::Horiz,
+            ffi::GST_VIDEO_ORIENTATION_VERT => Self::Vert,
+            ffi::GST_VIDEO_ORIENTATION_UL_LR => Self::UlLr,
+            ffi::GST_VIDEO_ORIENTATION_UR_LL => Self::UrLl,
+            ffi::GST_VIDEO_ORIENTATION_AUTO => Self::Auto,
+            ffi::GST_VIDEO_ORIENTATION_CUSTOM => Self::Custom,
             value => Self::__Unknown(value),
         }
     }
@@ -2235,9 +2237,9 @@ impl FromGlib<ffi::GstVideoPrimariesMode> for VideoPrimariesMode {
     unsafe fn from_glib(value: ffi::GstVideoPrimariesMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::MergeOnly,
-            2 => Self::Fast,
+            ffi::GST_VIDEO_PRIMARIES_MODE_NONE => Self::None,
+            ffi::GST_VIDEO_PRIMARIES_MODE_MERGE_ONLY => Self::MergeOnly,
+            ffi::GST_VIDEO_PRIMARIES_MODE_FAST => Self::Fast,
             value => Self::__Unknown(value),
         }
     }
@@ -2315,11 +2317,11 @@ impl FromGlib<ffi::GstVideoResamplerMethod> for VideoResamplerMethod {
     unsafe fn from_glib(value: ffi::GstVideoResamplerMethod) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Nearest,
-            1 => Self::Linear,
-            2 => Self::Cubic,
-            3 => Self::Sinc,
-            4 => Self::Lanczos,
+            ffi::GST_VIDEO_RESAMPLER_METHOD_NEAREST => Self::Nearest,
+            ffi::GST_VIDEO_RESAMPLER_METHOD_LINEAR => Self::Linear,
+            ffi::GST_VIDEO_RESAMPLER_METHOD_CUBIC => Self::Cubic,
+            ffi::GST_VIDEO_RESAMPLER_METHOD_SINC => Self::Sinc,
+            ffi::GST_VIDEO_RESAMPLER_METHOD_LANCZOS => Self::Lanczos,
             value => Self::__Unknown(value),
         }
     }
@@ -2394,10 +2396,10 @@ impl FromGlib<ffi::GstVideoTileMode> for VideoTileMode {
     unsafe fn from_glib(value: ffi::GstVideoTileMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Unknown,
-            65536 => Self::Zflipz2x2,
+            ffi::GST_VIDEO_TILE_MODE_UNKNOWN => Self::Unknown,
+            ffi::GST_VIDEO_TILE_MODE_ZFLIPZ_2X2 => Self::Zflipz2x2,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            131072 => Self::Linear,
+            ffi::GST_VIDEO_TILE_MODE_LINEAR => Self::Linear,
             value => Self::__Unknown(value),
         }
     }
@@ -2556,27 +2558,27 @@ impl FromGlib<ffi::GstVideoTransferFunction> for VideoTransferFunction {
     unsafe fn from_glib(value: ffi::GstVideoTransferFunction) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Unknown,
-            1 => Self::Gamma10,
-            2 => Self::Gamma18,
-            3 => Self::Gamma20,
-            4 => Self::Gamma22,
-            5 => Self::Bt709,
-            6 => Self::Smpte240m,
-            7 => Self::Srgb,
-            8 => Self::Gamma28,
-            9 => Self::Log100,
-            10 => Self::Log316,
-            11 => Self::Bt202012,
-            12 => Self::Adobergb,
+            ffi::GST_VIDEO_TRANSFER_UNKNOWN => Self::Unknown,
+            ffi::GST_VIDEO_TRANSFER_GAMMA10 => Self::Gamma10,
+            ffi::GST_VIDEO_TRANSFER_GAMMA18 => Self::Gamma18,
+            ffi::GST_VIDEO_TRANSFER_GAMMA20 => Self::Gamma20,
+            ffi::GST_VIDEO_TRANSFER_GAMMA22 => Self::Gamma22,
+            ffi::GST_VIDEO_TRANSFER_BT709 => Self::Bt709,
+            ffi::GST_VIDEO_TRANSFER_SMPTE240M => Self::Smpte240m,
+            ffi::GST_VIDEO_TRANSFER_SRGB => Self::Srgb,
+            ffi::GST_VIDEO_TRANSFER_GAMMA28 => Self::Gamma28,
+            ffi::GST_VIDEO_TRANSFER_LOG100 => Self::Log100,
+            ffi::GST_VIDEO_TRANSFER_LOG316 => Self::Log316,
+            ffi::GST_VIDEO_TRANSFER_BT2020_12 => Self::Bt202012,
+            ffi::GST_VIDEO_TRANSFER_ADOBERGB => Self::Adobergb,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            13 => Self::Bt202010,
+            ffi::GST_VIDEO_TRANSFER_BT2020_10 => Self::Bt202010,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            14 => Self::Smpte2084,
+            ffi::GST_VIDEO_TRANSFER_SMPTE2084 => Self::Smpte2084,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            15 => Self::AribStdB67,
+            ffi::GST_VIDEO_TRANSFER_ARIB_STD_B67 => Self::AribStdB67,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            16 => Self::Bt601,
+            ffi::GST_VIDEO_TRANSFER_BT601 => Self::Bt601,
             value => Self::__Unknown(value),
         }
     }

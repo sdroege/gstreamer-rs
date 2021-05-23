@@ -45,10 +45,10 @@ impl FromGlib<ffi::GstInterpolationMode> for InterpolationMode {
     unsafe fn from_glib(value: ffi::GstInterpolationMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::Linear,
-            2 => Self::Cubic,
-            3 => Self::CubicMonotonic,
+            ffi::GST_INTERPOLATION_MODE_NONE => Self::None,
+            ffi::GST_INTERPOLATION_MODE_LINEAR => Self::Linear,
+            ffi::GST_INTERPOLATION_MODE_CUBIC => Self::Cubic,
+            ffi::GST_INTERPOLATION_MODE_CUBIC_MONOTONIC => Self::CubicMonotonic,
             value => Self::__Unknown(value),
         }
     }
@@ -126,11 +126,11 @@ impl FromGlib<ffi::GstLFOWaveform> for LFOWaveform {
     unsafe fn from_glib(value: ffi::GstLFOWaveform) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Sine,
-            1 => Self::Square,
-            2 => Self::Saw,
-            3 => Self::ReverseSaw,
-            4 => Self::Triangle,
+            ffi::GST_LFO_WAVEFORM_SINE => Self::Sine,
+            ffi::GST_LFO_WAVEFORM_SQUARE => Self::Square,
+            ffi::GST_LFO_WAVEFORM_SAW => Self::Saw,
+            ffi::GST_LFO_WAVEFORM_REVERSE_SAW => Self::ReverseSaw,
+            ffi::GST_LFO_WAVEFORM_TRIANGLE => Self::Triangle,
             value => Self::__Unknown(value),
         }
     }

@@ -48,11 +48,11 @@ impl FromGlib<ffi::GstRTSPAddressPoolResult> for RTSPAddressPoolResult {
     unsafe fn from_glib(value: ffi::GstRTSPAddressPoolResult) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Ok,
-            -1 => Self::Einval,
-            -2 => Self::Ereserved,
-            -3 => Self::Erange,
-            -4 => Self::Elast,
+            ffi::GST_RTSP_ADDRESS_POOL_OK => Self::Ok,
+            ffi::GST_RTSP_ADDRESS_POOL_EINVAL => Self::Einval,
+            ffi::GST_RTSP_ADDRESS_POOL_ERESERVED => Self::Ereserved,
+            ffi::GST_RTSP_ADDRESS_POOL_ERANGE => Self::Erange,
+            ffi::GST_RTSP_ADDRESS_POOL_ELAST => Self::Elast,
             value => Self::__Unknown(value),
         }
     }
@@ -91,9 +91,9 @@ impl FromGlib<ffi::GstRTSPFilterResult> for RTSPFilterResult {
     unsafe fn from_glib(value: ffi::GstRTSPFilterResult) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Remove,
-            1 => Self::Keep,
-            2 => Self::Ref,
+            ffi::GST_RTSP_FILTER_REMOVE => Self::Remove,
+            ffi::GST_RTSP_FILTER_KEEP => Self::Keep,
+            ffi::GST_RTSP_FILTER_REF => Self::Ref,
             value => Self::__Unknown(value),
         }
     }
@@ -141,12 +141,12 @@ impl FromGlib<ffi::GstRTSPMediaStatus> for RTSPMediaStatus {
     unsafe fn from_glib(value: ffi::GstRTSPMediaStatus) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Unprepared,
-            1 => Self::Unpreparing,
-            2 => Self::Preparing,
-            3 => Self::Prepared,
-            4 => Self::Suspended,
-            5 => Self::Error,
+            ffi::GST_RTSP_MEDIA_STATUS_UNPREPARED => Self::Unprepared,
+            ffi::GST_RTSP_MEDIA_STATUS_UNPREPARING => Self::Unpreparing,
+            ffi::GST_RTSP_MEDIA_STATUS_PREPARING => Self::Preparing,
+            ffi::GST_RTSP_MEDIA_STATUS_PREPARED => Self::Prepared,
+            ffi::GST_RTSP_MEDIA_STATUS_SUSPENDED => Self::Suspended,
+            ffi::GST_RTSP_MEDIA_STATUS_ERROR => Self::Error,
             value => Self::__Unknown(value),
         }
     }
@@ -185,9 +185,9 @@ impl FromGlib<ffi::GstRTSPPublishClockMode> for RTSPPublishClockMode {
     unsafe fn from_glib(value: ffi::GstRTSPPublishClockMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::Clock,
-            2 => Self::ClockAndOffset,
+            ffi::GST_RTSP_PUBLISH_CLOCK_MODE_NONE => Self::None,
+            ffi::GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK => Self::Clock,
+            ffi::GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK_AND_OFFSET => Self::ClockAndOffset,
             value => Self::__Unknown(value),
         }
     }
@@ -259,9 +259,9 @@ impl FromGlib<ffi::GstRTSPSuspendMode> for RTSPSuspendMode {
     unsafe fn from_glib(value: ffi::GstRTSPSuspendMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::Pause,
-            2 => Self::Reset,
+            ffi::GST_RTSP_SUSPEND_MODE_NONE => Self::None,
+            ffi::GST_RTSP_SUSPEND_MODE_PAUSE => Self::Pause,
+            ffi::GST_RTSP_SUSPEND_MODE_RESET => Self::Reset,
             value => Self::__Unknown(value),
         }
     }
@@ -330,8 +330,8 @@ impl FromGlib<ffi::GstRTSPThreadType> for RTSPThreadType {
     unsafe fn from_glib(value: ffi::GstRTSPThreadType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Client,
-            1 => Self::Media,
+            ffi::GST_RTSP_THREAD_TYPE_CLIENT => Self::Client,
+            ffi::GST_RTSP_THREAD_TYPE_MEDIA => Self::Media,
             value => Self::__Unknown(value),
         }
     }

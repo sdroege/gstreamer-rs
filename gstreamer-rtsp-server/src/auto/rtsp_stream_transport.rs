@@ -166,7 +166,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         buffer: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_rtsp_stream_transport_recv_data(
+            try_from_glib(ffi::gst_rtsp_stream_transport_recv_data(
                 self.as_ref().to_glib_none().0,
                 channel,
                 buffer.to_glib_full(),

@@ -24,9 +24,7 @@ glib::wrapper! {
 impl AppSrc {
     #[doc(alias = "gst_app_src_end_of_stream")]
     pub fn end_of_stream(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_app_src_end_of_stream(self.to_glib_none().0))
-        }
+        unsafe { try_from_glib(ffi::gst_app_src_end_of_stream(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_src_get_caps")]
@@ -76,7 +74,7 @@ impl AppSrc {
     #[doc(alias = "gst_app_src_push_sample")]
     pub fn push_sample(&self, sample: &gst::Sample) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowSuccess::try_from_glib(ffi::gst_app_src_push_sample(
+            try_from_glib(ffi::gst_app_src_push_sample(
                 self.to_glib_none().0,
                 sample.to_glib_none().0,
             ))

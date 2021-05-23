@@ -340,7 +340,7 @@ impl<O: IsA<Pad>> PadExt for O {
 
     fn last_flow_result(&self) -> Result<FlowSuccess, FlowError> {
         unsafe {
-            FlowSuccess::try_from_glib(ffi::gst_pad_get_last_flow_return(
+            try_from_glib(ffi::gst_pad_get_last_flow_return(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -448,7 +448,7 @@ impl<O: IsA<Pad>> PadExt for O {
 
     fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<PadLinkSuccess, PadLinkError> {
         unsafe {
-            PadLinkSuccess::try_from_glib(ffi::gst_pad_link(
+            try_from_glib(ffi::gst_pad_link(
                 self.as_ref().to_glib_none().0,
                 sinkpad.as_ref().to_glib_none().0,
             ))
@@ -461,7 +461,7 @@ impl<O: IsA<Pad>> PadExt for O {
         flags: PadLinkCheck,
     ) -> Result<PadLinkSuccess, PadLinkError> {
         unsafe {
-            PadLinkSuccess::try_from_glib(ffi::gst_pad_link_full(
+            try_from_glib(ffi::gst_pad_link_full(
                 self.as_ref().to_glib_none().0,
                 sinkpad.as_ref().to_glib_none().0,
                 flags.into_glib(),
@@ -591,7 +591,7 @@ impl<O: IsA<Pad>> PadExt for O {
 
     fn store_sticky_event(&self, event: &Event) -> Result<FlowSuccess, FlowError> {
         unsafe {
-            FlowSuccess::try_from_glib(ffi::gst_pad_store_sticky_event(
+            try_from_glib(ffi::gst_pad_store_sticky_event(
                 self.as_ref().to_glib_none().0,
                 event.to_glib_none().0,
             ))

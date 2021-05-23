@@ -50,10 +50,10 @@ impl FromGlib<ffi::GstBufferingMode> for BufferingMode {
     unsafe fn from_glib(value: ffi::GstBufferingMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Stream,
-            1 => Self::Download,
-            2 => Self::Timeshift,
-            3 => Self::Live,
+            ffi::GST_BUFFERING_STREAM => Self::Stream,
+            ffi::GST_BUFFERING_DOWNLOAD => Self::Download,
+            ffi::GST_BUFFERING_TIMESHIFT => Self::Timeshift,
+            ffi::GST_BUFFERING_LIVE => Self::Live,
             value => Self::__Unknown(value),
         }
     }
@@ -125,9 +125,9 @@ impl FromGlib<ffi::GstBusSyncReply> for BusSyncReply {
     unsafe fn from_glib(value: ffi::GstBusSyncReply) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Drop,
-            1 => Self::Pass,
-            2 => Self::Async,
+            ffi::GST_BUS_DROP => Self::Drop,
+            ffi::GST_BUS_PASS => Self::Pass,
+            ffi::GST_BUS_ASYNC => Self::Async,
             value => Self::__Unknown(value),
         }
     }
@@ -196,8 +196,8 @@ impl FromGlib<ffi::GstCapsIntersectMode> for CapsIntersectMode {
     unsafe fn from_glib(value: ffi::GstCapsIntersectMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::ZigZag,
-            1 => Self::First,
+            ffi::GST_CAPS_INTERSECT_ZIG_ZAG => Self::ZigZag,
+            ffi::GST_CAPS_INTERSECT_FIRST => Self::First,
             value => Self::__Unknown(value),
         }
     }
@@ -266,8 +266,8 @@ impl FromGlib<ffi::GstClockEntryType> for ClockEntryType {
     unsafe fn from_glib(value: ffi::GstClockEntryType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Single,
-            1 => Self::Periodic,
+            ffi::GST_CLOCK_ENTRY_SINGLE => Self::Single,
+            ffi::GST_CLOCK_ENTRY_PERIODIC => Self::Periodic,
             value => Self::__Unknown(value),
         }
     }
@@ -355,14 +355,14 @@ impl FromGlib<ffi::GstClockReturn> for ClockReturn {
     unsafe fn from_glib(value: ffi::GstClockReturn) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Ok,
-            1 => Self::Early,
-            2 => Self::Unscheduled,
-            3 => Self::Busy,
-            4 => Self::Badtime,
-            5 => Self::Error,
-            6 => Self::Unsupported,
-            7 => Self::Done,
+            ffi::GST_CLOCK_OK => Self::Ok,
+            ffi::GST_CLOCK_EARLY => Self::Early,
+            ffi::GST_CLOCK_UNSCHEDULED => Self::Unscheduled,
+            ffi::GST_CLOCK_BUSY => Self::Busy,
+            ffi::GST_CLOCK_BADTIME => Self::Badtime,
+            ffi::GST_CLOCK_ERROR => Self::Error,
+            ffi::GST_CLOCK_UNSUPPORTED => Self::Unsupported,
+            ffi::GST_CLOCK_DONE => Self::Done,
             value => Self::__Unknown(value),
         }
     }
@@ -440,11 +440,11 @@ impl FromGlib<ffi::GstClockType> for ClockType {
     unsafe fn from_glib(value: ffi::GstClockType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Realtime,
-            1 => Self::Monotonic,
-            2 => Self::Other,
+            ffi::GST_CLOCK_TYPE_REALTIME => Self::Realtime,
+            ffi::GST_CLOCK_TYPE_MONOTONIC => Self::Monotonic,
+            ffi::GST_CLOCK_TYPE_OTHER => Self::Other,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            3 => Self::Tai,
+            ffi::GST_CLOCK_TYPE_TAI => Self::Tai,
             value => Self::__Unknown(value),
         }
     }
@@ -552,21 +552,21 @@ impl FromGlib<ffi::GstCoreError> for CoreError {
     unsafe fn from_glib(value: ffi::GstCoreError) -> Self {
         skip_assert_initialized!();
         match value {
-            1 => Self::Failed,
-            2 => Self::TooLazy,
-            3 => Self::NotImplemented,
-            4 => Self::StateChange,
-            5 => Self::Pad,
-            6 => Self::Thread,
-            7 => Self::Negotiation,
-            8 => Self::Event,
-            9 => Self::Seek,
-            10 => Self::Caps,
-            11 => Self::Tag,
-            12 => Self::MissingPlugin,
-            13 => Self::Clock,
-            14 => Self::Disabled,
-            15 => Self::NumErrors,
+            ffi::GST_CORE_ERROR_FAILED => Self::Failed,
+            ffi::GST_CORE_ERROR_TOO_LAZY => Self::TooLazy,
+            ffi::GST_CORE_ERROR_NOT_IMPLEMENTED => Self::NotImplemented,
+            ffi::GST_CORE_ERROR_STATE_CHANGE => Self::StateChange,
+            ffi::GST_CORE_ERROR_PAD => Self::Pad,
+            ffi::GST_CORE_ERROR_THREAD => Self::Thread,
+            ffi::GST_CORE_ERROR_NEGOTIATION => Self::Negotiation,
+            ffi::GST_CORE_ERROR_EVENT => Self::Event,
+            ffi::GST_CORE_ERROR_SEEK => Self::Seek,
+            ffi::GST_CORE_ERROR_CAPS => Self::Caps,
+            ffi::GST_CORE_ERROR_TAG => Self::Tag,
+            ffi::GST_CORE_ERROR_MISSING_PLUGIN => Self::MissingPlugin,
+            ffi::GST_CORE_ERROR_CLOCK => Self::Clock,
+            ffi::GST_CORE_ERROR_DISABLED => Self::Disabled,
+            ffi::GST_CORE_ERROR_NUM_ERRORS => Self::NumErrors,
             value => Self::__Unknown(value),
         }
     }
@@ -586,21 +586,21 @@ impl ErrorDomain for CoreError {
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
         match code {
-            1 => Some(Self::Failed),
-            2 => Some(Self::TooLazy),
-            3 => Some(Self::NotImplemented),
-            4 => Some(Self::StateChange),
-            5 => Some(Self::Pad),
-            6 => Some(Self::Thread),
-            7 => Some(Self::Negotiation),
-            8 => Some(Self::Event),
-            9 => Some(Self::Seek),
-            10 => Some(Self::Caps),
-            11 => Some(Self::Tag),
-            12 => Some(Self::MissingPlugin),
-            13 => Some(Self::Clock),
-            14 => Some(Self::Disabled),
-            15 => Some(Self::NumErrors),
+            ffi::GST_CORE_ERROR_FAILED => Some(Self::Failed),
+            ffi::GST_CORE_ERROR_TOO_LAZY => Some(Self::TooLazy),
+            ffi::GST_CORE_ERROR_NOT_IMPLEMENTED => Some(Self::NotImplemented),
+            ffi::GST_CORE_ERROR_STATE_CHANGE => Some(Self::StateChange),
+            ffi::GST_CORE_ERROR_PAD => Some(Self::Pad),
+            ffi::GST_CORE_ERROR_THREAD => Some(Self::Thread),
+            ffi::GST_CORE_ERROR_NEGOTIATION => Some(Self::Negotiation),
+            ffi::GST_CORE_ERROR_EVENT => Some(Self::Event),
+            ffi::GST_CORE_ERROR_SEEK => Some(Self::Seek),
+            ffi::GST_CORE_ERROR_CAPS => Some(Self::Caps),
+            ffi::GST_CORE_ERROR_TAG => Some(Self::Tag),
+            ffi::GST_CORE_ERROR_MISSING_PLUGIN => Some(Self::MissingPlugin),
+            ffi::GST_CORE_ERROR_CLOCK => Some(Self::Clock),
+            ffi::GST_CORE_ERROR_DISABLED => Some(Self::Disabled),
+            ffi::GST_CORE_ERROR_NUM_ERRORS => Some(Self::NumErrors),
             _ => Some(Self::Failed),
         }
     }
@@ -714,16 +714,16 @@ impl FromGlib<ffi::GstDebugLevel> for DebugLevel {
     unsafe fn from_glib(value: ffi::GstDebugLevel) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::Error,
-            2 => Self::Warning,
-            3 => Self::Fixme,
-            4 => Self::Info,
-            5 => Self::Debug,
-            6 => Self::Log,
-            7 => Self::Trace,
-            9 => Self::Memdump,
-            10 => Self::Count,
+            ffi::GST_LEVEL_NONE => Self::None,
+            ffi::GST_LEVEL_ERROR => Self::Error,
+            ffi::GST_LEVEL_WARNING => Self::Warning,
+            ffi::GST_LEVEL_FIXME => Self::Fixme,
+            ffi::GST_LEVEL_INFO => Self::Info,
+            ffi::GST_LEVEL_DEBUG => Self::Debug,
+            ffi::GST_LEVEL_LOG => Self::Log,
+            ffi::GST_LEVEL_TRACE => Self::Trace,
+            ffi::GST_LEVEL_MEMDUMP => Self::Memdump,
+            ffi::GST_LEVEL_COUNT => Self::Count,
             value => Self::__Unknown(value),
         }
     }
@@ -928,42 +928,42 @@ impl FromGlib<ffi::GstEventType> for EventType {
     unsafe fn from_glib(value: ffi::GstEventType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Unknown,
-            2563 => Self::FlushStart,
-            5127 => Self::FlushStop,
-            10254 => Self::StreamStart,
-            12814 => Self::Caps,
-            17934 => Self::Segment,
-            19230 => Self::StreamCollection,
-            20510 => Self::Tag,
-            23054 => Self::Buffersize,
-            25630 => Self::SinkMessage,
+            ffi::GST_EVENT_UNKNOWN => Self::Unknown,
+            ffi::GST_EVENT_FLUSH_START => Self::FlushStart,
+            ffi::GST_EVENT_FLUSH_STOP => Self::FlushStop,
+            ffi::GST_EVENT_STREAM_START => Self::StreamStart,
+            ffi::GST_EVENT_CAPS => Self::Caps,
+            ffi::GST_EVENT_SEGMENT => Self::Segment,
+            ffi::GST_EVENT_STREAM_COLLECTION => Self::StreamCollection,
+            ffi::GST_EVENT_TAG => Self::Tag,
+            ffi::GST_EVENT_BUFFERSIZE => Self::Buffersize,
+            ffi::GST_EVENT_SINK_MESSAGE => Self::SinkMessage,
             #[cfg(any(feature = "v1_10", feature = "dox"))]
-            26894 => Self::StreamGroupDone,
-            28174 => Self::Eos,
-            30750 => Self::Toc,
-            33310 => Self::Protection,
-            38406 => Self::SegmentDone,
-            40966 => Self::Gap,
+            ffi::GST_EVENT_STREAM_GROUP_DONE => Self::StreamGroupDone,
+            ffi::GST_EVENT_EOS => Self::Eos,
+            ffi::GST_EVENT_TOC => Self::Toc,
+            ffi::GST_EVENT_PROTECTION => Self::Protection,
+            ffi::GST_EVENT_SEGMENT_DONE => Self::SegmentDone,
+            ffi::GST_EVENT_GAP => Self::Gap,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            46090 => Self::InstantRateChange,
-            48641 => Self::Qos,
-            51201 => Self::Seek,
-            53761 => Self::Navigation,
-            56321 => Self::Latency,
-            58881 => Self::Step,
-            61441 => Self::Reconfigure,
-            64001 => Self::TocSelect,
+            ffi::GST_EVENT_INSTANT_RATE_CHANGE => Self::InstantRateChange,
+            ffi::GST_EVENT_QOS => Self::Qos,
+            ffi::GST_EVENT_SEEK => Self::Seek,
+            ffi::GST_EVENT_NAVIGATION => Self::Navigation,
+            ffi::GST_EVENT_LATENCY => Self::Latency,
+            ffi::GST_EVENT_STEP => Self::Step,
+            ffi::GST_EVENT_RECONFIGURE => Self::Reconfigure,
+            ffi::GST_EVENT_TOC_SELECT => Self::TocSelect,
             #[cfg(any(feature = "v1_10", feature = "dox"))]
-            66561 => Self::SelectStreams,
+            ffi::GST_EVENT_SELECT_STREAMS => Self::SelectStreams,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
-            66817 => Self::InstantRateSyncTime,
-            69121 => Self::CustomUpstream,
-            71686 => Self::CustomDownstream,
-            74242 => Self::CustomDownstreamOob,
-            76830 => Self::CustomDownstreamSticky,
-            79367 => Self::CustomBoth,
-            81923 => Self::CustomBothOob,
+            ffi::GST_EVENT_INSTANT_RATE_SYNC_TIME => Self::InstantRateSyncTime,
+            ffi::GST_EVENT_CUSTOM_UPSTREAM => Self::CustomUpstream,
+            ffi::GST_EVENT_CUSTOM_DOWNSTREAM => Self::CustomDownstream,
+            ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB => Self::CustomDownstreamOob,
+            ffi::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY => Self::CustomDownstreamSticky,
+            ffi::GST_EVENT_CUSTOM_BOTH => Self::CustomBoth,
+            ffi::GST_EVENT_CUSTOM_BOTH_OOB => Self::CustomBothOob,
             value => Self::__Unknown(value),
         }
     }
@@ -1066,19 +1066,19 @@ impl FromGlib<ffi::GstFlowReturn> for FlowReturn {
     unsafe fn from_glib(value: ffi::GstFlowReturn) -> Self {
         skip_assert_initialized!();
         match value {
-            102 => Self::CustomSuccess2,
-            101 => Self::CustomSuccess1,
-            100 => Self::CustomSuccess,
-            0 => Self::Ok,
-            -1 => Self::NotLinked,
-            -2 => Self::Flushing,
-            -3 => Self::Eos,
-            -4 => Self::NotNegotiated,
-            -5 => Self::Error,
-            -6 => Self::NotSupported,
-            -100 => Self::CustomError,
-            -101 => Self::CustomError1,
-            -102 => Self::CustomError2,
+            ffi::GST_FLOW_CUSTOM_SUCCESS_2 => Self::CustomSuccess2,
+            ffi::GST_FLOW_CUSTOM_SUCCESS_1 => Self::CustomSuccess1,
+            ffi::GST_FLOW_CUSTOM_SUCCESS => Self::CustomSuccess,
+            ffi::GST_FLOW_OK => Self::Ok,
+            ffi::GST_FLOW_NOT_LINKED => Self::NotLinked,
+            ffi::GST_FLOW_FLUSHING => Self::Flushing,
+            ffi::GST_FLOW_EOS => Self::Eos,
+            ffi::GST_FLOW_NOT_NEGOTIATED => Self::NotNegotiated,
+            ffi::GST_FLOW_ERROR => Self::Error,
+            ffi::GST_FLOW_NOT_SUPPORTED => Self::NotSupported,
+            ffi::GST_FLOW_CUSTOM_ERROR => Self::CustomError,
+            ffi::GST_FLOW_CUSTOM_ERROR_1 => Self::CustomError1,
+            ffi::GST_FLOW_CUSTOM_ERROR_2 => Self::CustomError2,
             value => Self::__Unknown(value),
         }
     }
@@ -1193,12 +1193,12 @@ impl FromGlib<ffi::GstFormat> for Format {
     unsafe fn from_glib(value: ffi::GstFormat) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Undefined,
-            1 => Self::Default,
-            2 => Self::Bytes,
-            3 => Self::Time,
-            4 => Self::Buffers,
-            5 => Self::Percent,
+            ffi::GST_FORMAT_UNDEFINED => Self::Undefined,
+            ffi::GST_FORMAT_DEFAULT => Self::Default,
+            ffi::GST_FORMAT_BYTES => Self::Bytes,
+            ffi::GST_FORMAT_TIME => Self::Time,
+            ffi::GST_FORMAT_BUFFERS => Self::Buffers,
+            ffi::GST_FORMAT_PERCENT => Self::Percent,
             value => Self::__Unknown(value),
         }
     }
@@ -1282,13 +1282,13 @@ impl FromGlib<ffi::GstLibraryError> for LibraryError {
     unsafe fn from_glib(value: ffi::GstLibraryError) -> Self {
         skip_assert_initialized!();
         match value {
-            1 => Self::Failed,
-            2 => Self::TooLazy,
-            3 => Self::Init,
-            4 => Self::Shutdown,
-            5 => Self::Settings,
-            6 => Self::Encode,
-            7 => Self::NumErrors,
+            ffi::GST_LIBRARY_ERROR_FAILED => Self::Failed,
+            ffi::GST_LIBRARY_ERROR_TOO_LAZY => Self::TooLazy,
+            ffi::GST_LIBRARY_ERROR_INIT => Self::Init,
+            ffi::GST_LIBRARY_ERROR_SHUTDOWN => Self::Shutdown,
+            ffi::GST_LIBRARY_ERROR_SETTINGS => Self::Settings,
+            ffi::GST_LIBRARY_ERROR_ENCODE => Self::Encode,
+            ffi::GST_LIBRARY_ERROR_NUM_ERRORS => Self::NumErrors,
             value => Self::__Unknown(value),
         }
     }
@@ -1308,13 +1308,13 @@ impl ErrorDomain for LibraryError {
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
         match code {
-            1 => Some(Self::Failed),
-            2 => Some(Self::TooLazy),
-            3 => Some(Self::Init),
-            4 => Some(Self::Shutdown),
-            5 => Some(Self::Settings),
-            6 => Some(Self::Encode),
-            7 => Some(Self::NumErrors),
+            ffi::GST_LIBRARY_ERROR_FAILED => Some(Self::Failed),
+            ffi::GST_LIBRARY_ERROR_TOO_LAZY => Some(Self::TooLazy),
+            ffi::GST_LIBRARY_ERROR_INIT => Some(Self::Init),
+            ffi::GST_LIBRARY_ERROR_SHUTDOWN => Some(Self::Shutdown),
+            ffi::GST_LIBRARY_ERROR_SETTINGS => Some(Self::Settings),
+            ffi::GST_LIBRARY_ERROR_ENCODE => Some(Self::Encode),
+            ffi::GST_LIBRARY_ERROR_NUM_ERRORS => Some(Self::NumErrors),
             _ => Some(Self::Failed),
         }
     }
@@ -1386,9 +1386,9 @@ impl FromGlib<ffi::GstPadDirection> for PadDirection {
     unsafe fn from_glib(value: ffi::GstPadDirection) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Unknown,
-            1 => Self::Src,
-            2 => Self::Sink,
+            ffi::GST_PAD_UNKNOWN => Self::Unknown,
+            ffi::GST_PAD_SRC => Self::Src,
+            ffi::GST_PAD_SINK => Self::Sink,
             value => Self::__Unknown(value),
         }
     }
@@ -1473,13 +1473,13 @@ impl FromGlib<ffi::GstPadLinkReturn> for PadLinkReturn {
     unsafe fn from_glib(value: ffi::GstPadLinkReturn) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Ok,
-            -1 => Self::WrongHierarchy,
-            -2 => Self::WasLinked,
-            -3 => Self::WrongDirection,
-            -4 => Self::Noformat,
-            -5 => Self::Nosched,
-            -6 => Self::Refused,
+            ffi::GST_PAD_LINK_OK => Self::Ok,
+            ffi::GST_PAD_LINK_WRONG_HIERARCHY => Self::WrongHierarchy,
+            ffi::GST_PAD_LINK_WAS_LINKED => Self::WasLinked,
+            ffi::GST_PAD_LINK_WRONG_DIRECTION => Self::WrongDirection,
+            ffi::GST_PAD_LINK_NOFORMAT => Self::Noformat,
+            ffi::GST_PAD_LINK_NOSCHED => Self::Nosched,
+            ffi::GST_PAD_LINK_REFUSED => Self::Refused,
             value => Self::__Unknown(value),
         }
     }
@@ -1572,9 +1572,9 @@ impl FromGlib<ffi::GstPadMode> for PadMode {
     unsafe fn from_glib(value: ffi::GstPadMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::Push,
-            2 => Self::Pull,
+            ffi::GST_PAD_MODE_NONE => Self::None,
+            ffi::GST_PAD_MODE_PUSH => Self::Push,
+            ffi::GST_PAD_MODE_PULL => Self::Pull,
             value => Self::__Unknown(value),
         }
     }
@@ -1646,9 +1646,9 @@ impl FromGlib<ffi::GstPadPresence> for PadPresence {
     unsafe fn from_glib(value: ffi::GstPadPresence) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Always,
-            1 => Self::Sometimes,
-            2 => Self::Request,
+            ffi::GST_PAD_ALWAYS => Self::Always,
+            ffi::GST_PAD_SOMETIMES => Self::Sometimes,
+            ffi::GST_PAD_REQUEST => Self::Request,
             value => Self::__Unknown(value),
         }
     }
@@ -1726,11 +1726,11 @@ impl FromGlib<ffi::GstPadProbeReturn> for PadProbeReturn {
     unsafe fn from_glib(value: ffi::GstPadProbeReturn) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Drop,
-            1 => Self::Ok,
-            2 => Self::Remove,
-            3 => Self::Pass,
-            4 => Self::Handled,
+            ffi::GST_PAD_PROBE_DROP => Self::Drop,
+            ffi::GST_PAD_PROBE_OK => Self::Ok,
+            ffi::GST_PAD_PROBE_REMOVE => Self::Remove,
+            ffi::GST_PAD_PROBE_PASS => Self::Pass,
+            ffi::GST_PAD_PROBE_HANDLED => Self::Handled,
             value => Self::__Unknown(value),
         }
     }
@@ -1817,14 +1817,14 @@ impl FromGlib<ffi::GstParseError> for ParseError {
     unsafe fn from_glib(value: ffi::GstParseError) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Syntax,
-            1 => Self::NoSuchElement,
-            2 => Self::NoSuchProperty,
-            3 => Self::Link,
-            4 => Self::CouldNotSetProperty,
-            5 => Self::EmptyBin,
-            6 => Self::Empty,
-            7 => Self::DelayedLink,
+            ffi::GST_PARSE_ERROR_SYNTAX => Self::Syntax,
+            ffi::GST_PARSE_ERROR_NO_SUCH_ELEMENT => Self::NoSuchElement,
+            ffi::GST_PARSE_ERROR_NO_SUCH_PROPERTY => Self::NoSuchProperty,
+            ffi::GST_PARSE_ERROR_LINK => Self::Link,
+            ffi::GST_PARSE_ERROR_COULD_NOT_SET_PROPERTY => Self::CouldNotSetProperty,
+            ffi::GST_PARSE_ERROR_EMPTY_BIN => Self::EmptyBin,
+            ffi::GST_PARSE_ERROR_EMPTY => Self::Empty,
+            ffi::GST_PARSE_ERROR_DELAYED_LINK => Self::DelayedLink,
             value => Self::__Unknown(value),
         }
     }
@@ -1844,14 +1844,14 @@ impl ErrorDomain for ParseError {
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
         match code {
-            0 => Some(Self::Syntax),
-            1 => Some(Self::NoSuchElement),
-            2 => Some(Self::NoSuchProperty),
-            3 => Some(Self::Link),
-            4 => Some(Self::CouldNotSetProperty),
-            5 => Some(Self::EmptyBin),
-            6 => Some(Self::Empty),
-            7 => Some(Self::DelayedLink),
+            ffi::GST_PARSE_ERROR_SYNTAX => Some(Self::Syntax),
+            ffi::GST_PARSE_ERROR_NO_SUCH_ELEMENT => Some(Self::NoSuchElement),
+            ffi::GST_PARSE_ERROR_NO_SUCH_PROPERTY => Some(Self::NoSuchProperty),
+            ffi::GST_PARSE_ERROR_LINK => Some(Self::Link),
+            ffi::GST_PARSE_ERROR_COULD_NOT_SET_PROPERTY => Some(Self::CouldNotSetProperty),
+            ffi::GST_PARSE_ERROR_EMPTY_BIN => Some(Self::EmptyBin),
+            ffi::GST_PARSE_ERROR_EMPTY => Some(Self::Empty),
+            ffi::GST_PARSE_ERROR_DELAYED_LINK => Some(Self::DelayedLink),
             value => Some(Self::__Unknown(value)),
         }
     }
@@ -1923,9 +1923,9 @@ impl FromGlib<ffi::GstPluginError> for PluginError {
     unsafe fn from_glib(value: ffi::GstPluginError) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Module,
-            1 => Self::Dependencies,
-            2 => Self::NameMismatch,
+            ffi::GST_PLUGIN_ERROR_MODULE => Self::Module,
+            ffi::GST_PLUGIN_ERROR_DEPENDENCIES => Self::Dependencies,
+            ffi::GST_PLUGIN_ERROR_NAME_MISMATCH => Self::NameMismatch,
             value => Self::__Unknown(value),
         }
     }
@@ -1945,9 +1945,9 @@ impl ErrorDomain for PluginError {
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
         match code {
-            0 => Some(Self::Module),
-            1 => Some(Self::Dependencies),
-            2 => Some(Self::NameMismatch),
+            ffi::GST_PLUGIN_ERROR_MODULE => Some(Self::Module),
+            ffi::GST_PLUGIN_ERROR_DEPENDENCIES => Some(Self::Dependencies),
+            ffi::GST_PLUGIN_ERROR_NAME_MISMATCH => Some(Self::NameMismatch),
             value => Some(Self::__Unknown(value)),
         }
     }
@@ -2025,11 +2025,11 @@ impl FromGlib<ffi::GstProgressType> for ProgressType {
     unsafe fn from_glib(value: ffi::GstProgressType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Start,
-            1 => Self::Continue,
-            2 => Self::Complete,
-            3 => Self::Canceled,
-            4 => Self::Error,
+            ffi::GST_PROGRESS_TYPE_START => Self::Start,
+            ffi::GST_PROGRESS_TYPE_CONTINUE => Self::Continue,
+            ffi::GST_PROGRESS_TYPE_COMPLETE => Self::Complete,
+            ffi::GST_PROGRESS_TYPE_CANCELED => Self::Canceled,
+            ffi::GST_PROGRESS_TYPE_ERROR => Self::Error,
             value => Self::__Unknown(value),
         }
     }
@@ -2110,10 +2110,10 @@ impl FromGlib<ffi::GstPromiseResult> for PromiseResult {
     unsafe fn from_glib(value: ffi::GstPromiseResult) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Pending,
-            1 => Self::Interrupted,
-            2 => Self::Replied,
-            3 => Self::Expired,
+            ffi::GST_PROMISE_RESULT_PENDING => Self::Pending,
+            ffi::GST_PROMISE_RESULT_INTERRUPTED => Self::Interrupted,
+            ffi::GST_PROMISE_RESULT_REPLIED => Self::Replied,
+            ffi::GST_PROMISE_RESULT_EXPIRED => Self::Expired,
             value => Self::__Unknown(value),
         }
     }
@@ -2193,9 +2193,9 @@ impl FromGlib<ffi::GstQOSType> for QOSType {
     unsafe fn from_glib(value: ffi::GstQOSType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Overflow,
-            1 => Self::Underflow,
-            2 => Self::Throttle,
+            ffi::GST_QOS_TYPE_OVERFLOW => Self::Overflow,
+            ffi::GST_QOS_TYPE_UNDERFLOW => Self::Underflow,
+            ffi::GST_QOS_TYPE_THROTTLE => Self::Throttle,
             value => Self::__Unknown(value),
         }
     }
@@ -2270,10 +2270,10 @@ impl FromGlib<ffi::GstRank> for Rank {
     unsafe fn from_glib(value: ffi::GstRank) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            64 => Self::Marginal,
-            128 => Self::Secondary,
-            256 => Self::Primary,
+            ffi::GST_RANK_NONE => Self::None,
+            ffi::GST_RANK_MARGINAL => Self::Marginal,
+            ffi::GST_RANK_SECONDARY => Self::Secondary,
+            ffi::GST_RANK_PRIMARY => Self::Primary,
             value => Self::__Unknown(value),
         }
     }
@@ -2384,22 +2384,22 @@ impl FromGlib<ffi::GstResourceError> for ResourceError {
     unsafe fn from_glib(value: ffi::GstResourceError) -> Self {
         skip_assert_initialized!();
         match value {
-            1 => Self::Failed,
-            2 => Self::TooLazy,
-            3 => Self::NotFound,
-            4 => Self::Busy,
-            5 => Self::OpenRead,
-            6 => Self::OpenWrite,
-            7 => Self::OpenReadWrite,
-            8 => Self::Close,
-            9 => Self::Read,
-            10 => Self::Write,
-            11 => Self::Seek,
-            12 => Self::Sync,
-            13 => Self::Settings,
-            14 => Self::NoSpaceLeft,
-            15 => Self::NotAuthorized,
-            16 => Self::NumErrors,
+            ffi::GST_RESOURCE_ERROR_FAILED => Self::Failed,
+            ffi::GST_RESOURCE_ERROR_TOO_LAZY => Self::TooLazy,
+            ffi::GST_RESOURCE_ERROR_NOT_FOUND => Self::NotFound,
+            ffi::GST_RESOURCE_ERROR_BUSY => Self::Busy,
+            ffi::GST_RESOURCE_ERROR_OPEN_READ => Self::OpenRead,
+            ffi::GST_RESOURCE_ERROR_OPEN_WRITE => Self::OpenWrite,
+            ffi::GST_RESOURCE_ERROR_OPEN_READ_WRITE => Self::OpenReadWrite,
+            ffi::GST_RESOURCE_ERROR_CLOSE => Self::Close,
+            ffi::GST_RESOURCE_ERROR_READ => Self::Read,
+            ffi::GST_RESOURCE_ERROR_WRITE => Self::Write,
+            ffi::GST_RESOURCE_ERROR_SEEK => Self::Seek,
+            ffi::GST_RESOURCE_ERROR_SYNC => Self::Sync,
+            ffi::GST_RESOURCE_ERROR_SETTINGS => Self::Settings,
+            ffi::GST_RESOURCE_ERROR_NO_SPACE_LEFT => Self::NoSpaceLeft,
+            ffi::GST_RESOURCE_ERROR_NOT_AUTHORIZED => Self::NotAuthorized,
+            ffi::GST_RESOURCE_ERROR_NUM_ERRORS => Self::NumErrors,
             value => Self::__Unknown(value),
         }
     }
@@ -2419,22 +2419,22 @@ impl ErrorDomain for ResourceError {
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
         match code {
-            1 => Some(Self::Failed),
-            2 => Some(Self::TooLazy),
-            3 => Some(Self::NotFound),
-            4 => Some(Self::Busy),
-            5 => Some(Self::OpenRead),
-            6 => Some(Self::OpenWrite),
-            7 => Some(Self::OpenReadWrite),
-            8 => Some(Self::Close),
-            9 => Some(Self::Read),
-            10 => Some(Self::Write),
-            11 => Some(Self::Seek),
-            12 => Some(Self::Sync),
-            13 => Some(Self::Settings),
-            14 => Some(Self::NoSpaceLeft),
-            15 => Some(Self::NotAuthorized),
-            16 => Some(Self::NumErrors),
+            ffi::GST_RESOURCE_ERROR_FAILED => Some(Self::Failed),
+            ffi::GST_RESOURCE_ERROR_TOO_LAZY => Some(Self::TooLazy),
+            ffi::GST_RESOURCE_ERROR_NOT_FOUND => Some(Self::NotFound),
+            ffi::GST_RESOURCE_ERROR_BUSY => Some(Self::Busy),
+            ffi::GST_RESOURCE_ERROR_OPEN_READ => Some(Self::OpenRead),
+            ffi::GST_RESOURCE_ERROR_OPEN_WRITE => Some(Self::OpenWrite),
+            ffi::GST_RESOURCE_ERROR_OPEN_READ_WRITE => Some(Self::OpenReadWrite),
+            ffi::GST_RESOURCE_ERROR_CLOSE => Some(Self::Close),
+            ffi::GST_RESOURCE_ERROR_READ => Some(Self::Read),
+            ffi::GST_RESOURCE_ERROR_WRITE => Some(Self::Write),
+            ffi::GST_RESOURCE_ERROR_SEEK => Some(Self::Seek),
+            ffi::GST_RESOURCE_ERROR_SYNC => Some(Self::Sync),
+            ffi::GST_RESOURCE_ERROR_SETTINGS => Some(Self::Settings),
+            ffi::GST_RESOURCE_ERROR_NO_SPACE_LEFT => Some(Self::NoSpaceLeft),
+            ffi::GST_RESOURCE_ERROR_NOT_AUTHORIZED => Some(Self::NotAuthorized),
+            ffi::GST_RESOURCE_ERROR_NUM_ERRORS => Some(Self::NumErrors),
             _ => Some(Self::Failed),
         }
     }
@@ -2506,9 +2506,9 @@ impl FromGlib<ffi::GstSeekType> for SeekType {
     unsafe fn from_glib(value: ffi::GstSeekType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::Set,
-            2 => Self::End,
+            ffi::GST_SEEK_TYPE_NONE => Self::None,
+            ffi::GST_SEEK_TYPE_SET => Self::Set,
+            ffi::GST_SEEK_TYPE_END => Self::End,
             value => Self::__Unknown(value),
         }
     }
@@ -2586,11 +2586,11 @@ impl FromGlib<ffi::GstState> for State {
     unsafe fn from_glib(value: ffi::GstState) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::VoidPending,
-            1 => Self::Null,
-            2 => Self::Ready,
-            3 => Self::Paused,
-            4 => Self::Playing,
+            ffi::GST_STATE_VOID_PENDING => Self::VoidPending,
+            ffi::GST_STATE_NULL => Self::Null,
+            ffi::GST_STATE_READY => Self::Ready,
+            ffi::GST_STATE_PAUSED => Self::Paused,
+            ffi::GST_STATE_PLAYING => Self::Playing,
             value => Self::__Unknown(value),
         }
     }
@@ -2690,16 +2690,16 @@ impl FromGlib<ffi::GstStateChange> for StateChange {
     unsafe fn from_glib(value: ffi::GstStateChange) -> Self {
         skip_assert_initialized!();
         match value {
-            10 => Self::NullToReady,
-            19 => Self::ReadyToPaused,
-            28 => Self::PausedToPlaying,
-            35 => Self::PlayingToPaused,
-            26 => Self::PausedToReady,
-            17 => Self::ReadyToNull,
-            9 => Self::NullToNull,
-            18 => Self::ReadyToReady,
-            27 => Self::PausedToPaused,
-            36 => Self::PlayingToPlaying,
+            ffi::GST_STATE_CHANGE_NULL_TO_READY => Self::NullToReady,
+            ffi::GST_STATE_CHANGE_READY_TO_PAUSED => Self::ReadyToPaused,
+            ffi::GST_STATE_CHANGE_PAUSED_TO_PLAYING => Self::PausedToPlaying,
+            ffi::GST_STATE_CHANGE_PLAYING_TO_PAUSED => Self::PlayingToPaused,
+            ffi::GST_STATE_CHANGE_PAUSED_TO_READY => Self::PausedToReady,
+            ffi::GST_STATE_CHANGE_READY_TO_NULL => Self::ReadyToNull,
+            ffi::GST_STATE_CHANGE_NULL_TO_NULL => Self::NullToNull,
+            ffi::GST_STATE_CHANGE_READY_TO_READY => Self::ReadyToReady,
+            ffi::GST_STATE_CHANGE_PAUSED_TO_PAUSED => Self::PausedToPaused,
+            ffi::GST_STATE_CHANGE_PLAYING_TO_PLAYING => Self::PlayingToPlaying,
             value => Self::__Unknown(value),
         }
     }
@@ -2775,10 +2775,10 @@ impl FromGlib<ffi::GstStateChangeReturn> for StateChangeReturn {
     unsafe fn from_glib(value: ffi::GstStateChangeReturn) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Failure,
-            1 => Self::Success,
-            2 => Self::Async,
-            3 => Self::NoPreroll,
+            ffi::GST_STATE_CHANGE_FAILURE => Self::Failure,
+            ffi::GST_STATE_CHANGE_SUCCESS => Self::Success,
+            ffi::GST_STATE_CHANGE_ASYNC => Self::Async,
+            ffi::GST_STATE_CHANGE_NO_PREROLL => Self::NoPreroll,
             value => Self::__Unknown(value),
         }
     }
@@ -2883,20 +2883,20 @@ impl FromGlib<ffi::GstStreamError> for StreamError {
     unsafe fn from_glib(value: ffi::GstStreamError) -> Self {
         skip_assert_initialized!();
         match value {
-            1 => Self::Failed,
-            2 => Self::TooLazy,
-            3 => Self::NotImplemented,
-            4 => Self::TypeNotFound,
-            5 => Self::WrongType,
-            6 => Self::CodecNotFound,
-            7 => Self::Decode,
-            8 => Self::Encode,
-            9 => Self::Demux,
-            10 => Self::Mux,
-            11 => Self::Format,
-            12 => Self::Decrypt,
-            13 => Self::DecryptNokey,
-            14 => Self::NumErrors,
+            ffi::GST_STREAM_ERROR_FAILED => Self::Failed,
+            ffi::GST_STREAM_ERROR_TOO_LAZY => Self::TooLazy,
+            ffi::GST_STREAM_ERROR_NOT_IMPLEMENTED => Self::NotImplemented,
+            ffi::GST_STREAM_ERROR_TYPE_NOT_FOUND => Self::TypeNotFound,
+            ffi::GST_STREAM_ERROR_WRONG_TYPE => Self::WrongType,
+            ffi::GST_STREAM_ERROR_CODEC_NOT_FOUND => Self::CodecNotFound,
+            ffi::GST_STREAM_ERROR_DECODE => Self::Decode,
+            ffi::GST_STREAM_ERROR_ENCODE => Self::Encode,
+            ffi::GST_STREAM_ERROR_DEMUX => Self::Demux,
+            ffi::GST_STREAM_ERROR_MUX => Self::Mux,
+            ffi::GST_STREAM_ERROR_FORMAT => Self::Format,
+            ffi::GST_STREAM_ERROR_DECRYPT => Self::Decrypt,
+            ffi::GST_STREAM_ERROR_DECRYPT_NOKEY => Self::DecryptNokey,
+            ffi::GST_STREAM_ERROR_NUM_ERRORS => Self::NumErrors,
             value => Self::__Unknown(value),
         }
     }
@@ -2916,20 +2916,20 @@ impl ErrorDomain for StreamError {
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
         match code {
-            1 => Some(Self::Failed),
-            2 => Some(Self::TooLazy),
-            3 => Some(Self::NotImplemented),
-            4 => Some(Self::TypeNotFound),
-            5 => Some(Self::WrongType),
-            6 => Some(Self::CodecNotFound),
-            7 => Some(Self::Decode),
-            8 => Some(Self::Encode),
-            9 => Some(Self::Demux),
-            10 => Some(Self::Mux),
-            11 => Some(Self::Format),
-            12 => Some(Self::Decrypt),
-            13 => Some(Self::DecryptNokey),
-            14 => Some(Self::NumErrors),
+            ffi::GST_STREAM_ERROR_FAILED => Some(Self::Failed),
+            ffi::GST_STREAM_ERROR_TOO_LAZY => Some(Self::TooLazy),
+            ffi::GST_STREAM_ERROR_NOT_IMPLEMENTED => Some(Self::NotImplemented),
+            ffi::GST_STREAM_ERROR_TYPE_NOT_FOUND => Some(Self::TypeNotFound),
+            ffi::GST_STREAM_ERROR_WRONG_TYPE => Some(Self::WrongType),
+            ffi::GST_STREAM_ERROR_CODEC_NOT_FOUND => Some(Self::CodecNotFound),
+            ffi::GST_STREAM_ERROR_DECODE => Some(Self::Decode),
+            ffi::GST_STREAM_ERROR_ENCODE => Some(Self::Encode),
+            ffi::GST_STREAM_ERROR_DEMUX => Some(Self::Demux),
+            ffi::GST_STREAM_ERROR_MUX => Some(Self::Mux),
+            ffi::GST_STREAM_ERROR_FORMAT => Some(Self::Format),
+            ffi::GST_STREAM_ERROR_DECRYPT => Some(Self::Decrypt),
+            ffi::GST_STREAM_ERROR_DECRYPT_NOKEY => Some(Self::DecryptNokey),
+            ffi::GST_STREAM_ERROR_NUM_ERRORS => Some(Self::NumErrors),
             _ => Some(Self::Failed),
         }
     }
@@ -3013,13 +3013,13 @@ impl FromGlib<ffi::GstStreamStatusType> for StreamStatusType {
     unsafe fn from_glib(value: ffi::GstStreamStatusType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Create,
-            1 => Self::Enter,
-            2 => Self::Leave,
-            3 => Self::Destroy,
-            8 => Self::Start,
-            9 => Self::Pause,
-            10 => Self::Stop,
+            ffi::GST_STREAM_STATUS_TYPE_CREATE => Self::Create,
+            ffi::GST_STREAM_STATUS_TYPE_ENTER => Self::Enter,
+            ffi::GST_STREAM_STATUS_TYPE_LEAVE => Self::Leave,
+            ffi::GST_STREAM_STATUS_TYPE_DESTROY => Self::Destroy,
+            ffi::GST_STREAM_STATUS_TYPE_START => Self::Start,
+            ffi::GST_STREAM_STATUS_TYPE_PAUSE => Self::Pause,
+            ffi::GST_STREAM_STATUS_TYPE_STOP => Self::Stop,
             value => Self::__Unknown(value),
         }
     }
@@ -3088,8 +3088,8 @@ impl FromGlib<ffi::GstStructureChangeType> for StructureChangeType {
     unsafe fn from_glib(value: ffi::GstStructureChangeType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Link,
-            1 => Self::Unlink,
+            ffi::GST_STRUCTURE_CHANGE_TYPE_PAD_LINK => Self::Link,
+            ffi::GST_STRUCTURE_CHANGE_TYPE_PAD_UNLINK => Self::Unlink,
             value => Self::__Unknown(value),
         }
     }
@@ -3167,11 +3167,11 @@ impl FromGlib<ffi::GstTagFlag> for TagFlag {
     unsafe fn from_glib(value: ffi::GstTagFlag) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Undefined,
-            1 => Self::Meta,
-            2 => Self::Encoded,
-            3 => Self::Decoded,
-            4 => Self::Count,
+            ffi::GST_TAG_FLAG_UNDEFINED => Self::Undefined,
+            ffi::GST_TAG_FLAG_META => Self::Meta,
+            ffi::GST_TAG_FLAG_ENCODED => Self::Encoded,
+            ffi::GST_TAG_FLAG_DECODED => Self::Decoded,
+            ffi::GST_TAG_FLAG_COUNT => Self::Count,
             value => Self::__Unknown(value),
         }
     }
@@ -3258,14 +3258,14 @@ impl FromGlib<ffi::GstTagMergeMode> for TagMergeMode {
     unsafe fn from_glib(value: ffi::GstTagMergeMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Undefined,
-            1 => Self::ReplaceAll,
-            2 => Self::Replace,
-            3 => Self::Append,
-            4 => Self::Prepend,
-            5 => Self::Keep,
-            6 => Self::KeepAll,
-            7 => Self::Count,
+            ffi::GST_TAG_MERGE_UNDEFINED => Self::Undefined,
+            ffi::GST_TAG_MERGE_REPLACE_ALL => Self::ReplaceAll,
+            ffi::GST_TAG_MERGE_REPLACE => Self::Replace,
+            ffi::GST_TAG_MERGE_APPEND => Self::Append,
+            ffi::GST_TAG_MERGE_PREPEND => Self::Prepend,
+            ffi::GST_TAG_MERGE_KEEP => Self::Keep,
+            ffi::GST_TAG_MERGE_KEEP_ALL => Self::KeepAll,
+            ffi::GST_TAG_MERGE_COUNT => Self::Count,
             value => Self::__Unknown(value),
         }
     }
@@ -3335,8 +3335,8 @@ impl FromGlib<ffi::GstTagScope> for TagScope {
     unsafe fn from_glib(value: ffi::GstTagScope) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Stream,
-            1 => Self::Global,
+            ffi::GST_TAG_SCOPE_STREAM => Self::Stream,
+            ffi::GST_TAG_SCOPE_GLOBAL => Self::Global,
             value => Self::__Unknown(value),
         }
     }
@@ -3408,9 +3408,9 @@ impl FromGlib<ffi::GstTaskState> for TaskState {
     unsafe fn from_glib(value: ffi::GstTaskState) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Started,
-            1 => Self::Stopped,
-            2 => Self::Paused,
+            ffi::GST_TASK_STARTED => Self::Started,
+            ffi::GST_TASK_STOPPED => Self::Stopped,
+            ffi::GST_TASK_PAUSED => Self::Paused,
             value => Self::__Unknown(value),
         }
     }
@@ -3509,13 +3509,13 @@ impl FromGlib<ffi::GstTocEntryType> for TocEntryType {
     unsafe fn from_glib(value: ffi::GstTocEntryType) -> Self {
         skip_assert_initialized!();
         match value {
-            -3 => Self::Angle,
-            -2 => Self::Version,
-            -1 => Self::Edition,
-            0 => Self::Invalid,
-            1 => Self::Title,
-            2 => Self::Track,
-            3 => Self::Chapter,
+            ffi::GST_TOC_ENTRY_TYPE_ANGLE => Self::Angle,
+            ffi::GST_TOC_ENTRY_TYPE_VERSION => Self::Version,
+            ffi::GST_TOC_ENTRY_TYPE_EDITION => Self::Edition,
+            ffi::GST_TOC_ENTRY_TYPE_INVALID => Self::Invalid,
+            ffi::GST_TOC_ENTRY_TYPE_TITLE => Self::Title,
+            ffi::GST_TOC_ENTRY_TYPE_TRACK => Self::Track,
+            ffi::GST_TOC_ENTRY_TYPE_CHAPTER => Self::Chapter,
             value => Self::__Unknown(value),
         }
     }
@@ -3591,10 +3591,10 @@ impl FromGlib<ffi::GstTocLoopType> for TocLoopType {
     unsafe fn from_glib(value: ffi::GstTocLoopType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::Forward,
-            2 => Self::Reverse,
-            3 => Self::PingPong,
+            ffi::GST_TOC_LOOP_NONE => Self::None,
+            ffi::GST_TOC_LOOP_FORWARD => Self::Forward,
+            ffi::GST_TOC_LOOP_REVERSE => Self::Reverse,
+            ffi::GST_TOC_LOOP_PING_PONG => Self::PingPong,
             value => Self::__Unknown(value),
         }
     }
@@ -3664,8 +3664,8 @@ impl FromGlib<ffi::GstTocScope> for TocScope {
     unsafe fn from_glib(value: ffi::GstTocScope) -> Self {
         skip_assert_initialized!();
         match value {
-            1 => Self::Global,
-            2 => Self::Current,
+            ffi::GST_TOC_SCOPE_GLOBAL => Self::Global,
+            ffi::GST_TOC_SCOPE_CURRENT => Self::Current,
             value => Self::__Unknown(value),
         }
     }
@@ -3746,12 +3746,12 @@ impl FromGlib<ffi::GstTypeFindProbability> for TypeFindProbability {
     unsafe fn from_glib(value: ffi::GstTypeFindProbability) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::Minimum,
-            50 => Self::Possible,
-            80 => Self::Likely,
-            99 => Self::NearlyCertain,
-            100 => Self::Maximum,
+            ffi::GST_TYPE_FIND_NONE => Self::None,
+            ffi::GST_TYPE_FIND_MINIMUM => Self::Minimum,
+            ffi::GST_TYPE_FIND_POSSIBLE => Self::Possible,
+            ffi::GST_TYPE_FIND_LIKELY => Self::Likely,
+            ffi::GST_TYPE_FIND_NEARLY_CERTAIN => Self::NearlyCertain,
+            ffi::GST_TYPE_FIND_MAXIMUM => Self::Maximum,
             value => Self::__Unknown(value),
         }
     }
@@ -3826,10 +3826,10 @@ impl FromGlib<ffi::GstURIError> for URIError {
     unsafe fn from_glib(value: ffi::GstURIError) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::UnsupportedProtocol,
-            1 => Self::BadUri,
-            2 => Self::BadState,
-            3 => Self::BadReference,
+            ffi::GST_URI_ERROR_UNSUPPORTED_PROTOCOL => Self::UnsupportedProtocol,
+            ffi::GST_URI_ERROR_BAD_URI => Self::BadUri,
+            ffi::GST_URI_ERROR_BAD_STATE => Self::BadState,
+            ffi::GST_URI_ERROR_BAD_REFERENCE => Self::BadReference,
             value => Self::__Unknown(value),
         }
     }
@@ -3849,10 +3849,10 @@ impl ErrorDomain for URIError {
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
         match code {
-            0 => Some(Self::UnsupportedProtocol),
-            1 => Some(Self::BadUri),
-            2 => Some(Self::BadState),
-            3 => Some(Self::BadReference),
+            ffi::GST_URI_ERROR_UNSUPPORTED_PROTOCOL => Some(Self::UnsupportedProtocol),
+            ffi::GST_URI_ERROR_BAD_URI => Some(Self::BadUri),
+            ffi::GST_URI_ERROR_BAD_STATE => Some(Self::BadState),
+            ffi::GST_URI_ERROR_BAD_REFERENCE => Some(Self::BadReference),
             value => Some(Self::__Unknown(value)),
         }
     }
@@ -3924,9 +3924,9 @@ impl FromGlib<ffi::GstURIType> for URIType {
     unsafe fn from_glib(value: ffi::GstURIType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Unknown,
-            1 => Self::Sink,
-            2 => Self::Src,
+            ffi::GST_URI_UNKNOWN => Self::Unknown,
+            ffi::GST_URI_SINK => Self::Sink,
+            ffi::GST_URI_SRC => Self::Src,
             value => Self::__Unknown(value),
         }
     }

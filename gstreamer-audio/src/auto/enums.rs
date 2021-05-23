@@ -127,37 +127,37 @@ impl FromGlib<ffi::GstAudioChannelPosition> for AudioChannelPosition {
     unsafe fn from_glib(value: ffi::GstAudioChannelPosition) -> Self {
         skip_assert_initialized!();
         match value {
-            -3 => Self::None,
-            -2 => Self::Mono,
-            -1 => Self::Invalid,
-            0 => Self::FrontLeft,
-            1 => Self::FrontRight,
-            2 => Self::FrontCenter,
-            3 => Self::Lfe1,
-            4 => Self::RearLeft,
-            5 => Self::RearRight,
-            6 => Self::FrontLeftOfCenter,
-            7 => Self::FrontRightOfCenter,
-            8 => Self::RearCenter,
-            9 => Self::Lfe2,
-            10 => Self::SideLeft,
-            11 => Self::SideRight,
-            12 => Self::TopFrontLeft,
-            13 => Self::TopFrontRight,
-            14 => Self::TopFrontCenter,
-            15 => Self::TopCenter,
-            16 => Self::TopRearLeft,
-            17 => Self::TopRearRight,
-            18 => Self::TopSideLeft,
-            19 => Self::TopSideRight,
-            20 => Self::TopRearCenter,
-            21 => Self::BottomFrontCenter,
-            22 => Self::BottomFrontLeft,
-            23 => Self::BottomFrontRight,
-            24 => Self::WideLeft,
-            25 => Self::WideRight,
-            26 => Self::SurroundLeft,
-            27 => Self::SurroundRight,
+            ffi::GST_AUDIO_CHANNEL_POSITION_NONE => Self::None,
+            ffi::GST_AUDIO_CHANNEL_POSITION_MONO => Self::Mono,
+            ffi::GST_AUDIO_CHANNEL_POSITION_INVALID => Self::Invalid,
+            ffi::GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT => Self::FrontLeft,
+            ffi::GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT => Self::FrontRight,
+            ffi::GST_AUDIO_CHANNEL_POSITION_FRONT_CENTER => Self::FrontCenter,
+            ffi::GST_AUDIO_CHANNEL_POSITION_LFE1 => Self::Lfe1,
+            ffi::GST_AUDIO_CHANNEL_POSITION_REAR_LEFT => Self::RearLeft,
+            ffi::GST_AUDIO_CHANNEL_POSITION_REAR_RIGHT => Self::RearRight,
+            ffi::GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT_OF_CENTER => Self::FrontLeftOfCenter,
+            ffi::GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT_OF_CENTER => Self::FrontRightOfCenter,
+            ffi::GST_AUDIO_CHANNEL_POSITION_REAR_CENTER => Self::RearCenter,
+            ffi::GST_AUDIO_CHANNEL_POSITION_LFE2 => Self::Lfe2,
+            ffi::GST_AUDIO_CHANNEL_POSITION_SIDE_LEFT => Self::SideLeft,
+            ffi::GST_AUDIO_CHANNEL_POSITION_SIDE_RIGHT => Self::SideRight,
+            ffi::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_LEFT => Self::TopFrontLeft,
+            ffi::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_RIGHT => Self::TopFrontRight,
+            ffi::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_CENTER => Self::TopFrontCenter,
+            ffi::GST_AUDIO_CHANNEL_POSITION_TOP_CENTER => Self::TopCenter,
+            ffi::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_LEFT => Self::TopRearLeft,
+            ffi::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_RIGHT => Self::TopRearRight,
+            ffi::GST_AUDIO_CHANNEL_POSITION_TOP_SIDE_LEFT => Self::TopSideLeft,
+            ffi::GST_AUDIO_CHANNEL_POSITION_TOP_SIDE_RIGHT => Self::TopSideRight,
+            ffi::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_CENTER => Self::TopRearCenter,
+            ffi::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_CENTER => Self::BottomFrontCenter,
+            ffi::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_LEFT => Self::BottomFrontLeft,
+            ffi::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_RIGHT => Self::BottomFrontRight,
+            ffi::GST_AUDIO_CHANNEL_POSITION_WIDE_LEFT => Self::WideLeft,
+            ffi::GST_AUDIO_CHANNEL_POSITION_WIDE_RIGHT => Self::WideRight,
+            ffi::GST_AUDIO_CHANNEL_POSITION_SURROUND_LEFT => Self::SurroundLeft,
+            ffi::GST_AUDIO_CHANNEL_POSITION_SURROUND_RIGHT => Self::SurroundRight,
             value => Self::__Unknown(value),
         }
     }
@@ -232,10 +232,10 @@ impl FromGlib<ffi::GstAudioDitherMethod> for AudioDitherMethod {
     unsafe fn from_glib(value: ffi::GstAudioDitherMethod) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::Rpdf,
-            2 => Self::Tpdf,
-            3 => Self::TpdfHf,
+            ffi::GST_AUDIO_DITHER_NONE => Self::None,
+            ffi::GST_AUDIO_DITHER_RPDF => Self::Rpdf,
+            ffi::GST_AUDIO_DITHER_TPDF => Self::Tpdf,
+            ffi::GST_AUDIO_DITHER_TPDF_HF => Self::TpdfHf,
             value => Self::__Unknown(value),
         }
     }
@@ -409,38 +409,38 @@ impl FromGlib<ffi::GstAudioFormat> for AudioFormat {
     unsafe fn from_glib(value: ffi::GstAudioFormat) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Unknown,
-            1 => Self::Encoded,
-            2 => Self::S8,
-            3 => Self::U8,
-            4 => Self::S16le,
-            5 => Self::S16be,
-            6 => Self::U16le,
-            7 => Self::U16be,
-            8 => Self::S2432le,
-            9 => Self::S2432be,
-            10 => Self::U2432le,
-            11 => Self::U2432be,
-            12 => Self::S32le,
-            13 => Self::S32be,
-            14 => Self::U32le,
-            15 => Self::U32be,
-            16 => Self::S24le,
-            17 => Self::S24be,
-            18 => Self::U24le,
-            19 => Self::U24be,
-            20 => Self::S20le,
-            21 => Self::S20be,
-            22 => Self::U20le,
-            23 => Self::U20be,
-            24 => Self::S18le,
-            25 => Self::S18be,
-            26 => Self::U18le,
-            27 => Self::U18be,
-            28 => Self::F32le,
-            29 => Self::F32be,
-            30 => Self::F64le,
-            31 => Self::F64be,
+            ffi::GST_AUDIO_FORMAT_UNKNOWN => Self::Unknown,
+            ffi::GST_AUDIO_FORMAT_ENCODED => Self::Encoded,
+            ffi::GST_AUDIO_FORMAT_S8 => Self::S8,
+            ffi::GST_AUDIO_FORMAT_U8 => Self::U8,
+            ffi::GST_AUDIO_FORMAT_S16LE => Self::S16le,
+            ffi::GST_AUDIO_FORMAT_S16BE => Self::S16be,
+            ffi::GST_AUDIO_FORMAT_U16LE => Self::U16le,
+            ffi::GST_AUDIO_FORMAT_U16BE => Self::U16be,
+            ffi::GST_AUDIO_FORMAT_S24_32LE => Self::S2432le,
+            ffi::GST_AUDIO_FORMAT_S24_32BE => Self::S2432be,
+            ffi::GST_AUDIO_FORMAT_U24_32LE => Self::U2432le,
+            ffi::GST_AUDIO_FORMAT_U24_32BE => Self::U2432be,
+            ffi::GST_AUDIO_FORMAT_S32LE => Self::S32le,
+            ffi::GST_AUDIO_FORMAT_S32BE => Self::S32be,
+            ffi::GST_AUDIO_FORMAT_U32LE => Self::U32le,
+            ffi::GST_AUDIO_FORMAT_U32BE => Self::U32be,
+            ffi::GST_AUDIO_FORMAT_S24LE => Self::S24le,
+            ffi::GST_AUDIO_FORMAT_S24BE => Self::S24be,
+            ffi::GST_AUDIO_FORMAT_U24LE => Self::U24le,
+            ffi::GST_AUDIO_FORMAT_U24BE => Self::U24be,
+            ffi::GST_AUDIO_FORMAT_S20LE => Self::S20le,
+            ffi::GST_AUDIO_FORMAT_S20BE => Self::S20be,
+            ffi::GST_AUDIO_FORMAT_U20LE => Self::U20le,
+            ffi::GST_AUDIO_FORMAT_U20BE => Self::U20be,
+            ffi::GST_AUDIO_FORMAT_S18LE => Self::S18le,
+            ffi::GST_AUDIO_FORMAT_S18BE => Self::S18be,
+            ffi::GST_AUDIO_FORMAT_U18LE => Self::U18le,
+            ffi::GST_AUDIO_FORMAT_U18BE => Self::U18be,
+            ffi::GST_AUDIO_FORMAT_F32LE => Self::F32le,
+            ffi::GST_AUDIO_FORMAT_F32BE => Self::F32be,
+            ffi::GST_AUDIO_FORMAT_F64LE => Self::F64le,
+            ffi::GST_AUDIO_FORMAT_F64BE => Self::F64be,
             value => Self::__Unknown(value),
         }
     }
@@ -509,8 +509,8 @@ impl FromGlib<ffi::GstAudioLayout> for AudioLayout {
     unsafe fn from_glib(value: ffi::GstAudioLayout) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Interleaved,
-            1 => Self::NonInterleaved,
+            ffi::GST_AUDIO_LAYOUT_INTERLEAVED => Self::Interleaved,
+            ffi::GST_AUDIO_LAYOUT_NON_INTERLEAVED => Self::NonInterleaved,
             value => Self::__Unknown(value),
         }
     }
@@ -588,11 +588,11 @@ impl FromGlib<ffi::GstAudioNoiseShapingMethod> for AudioNoiseShapingMethod {
     unsafe fn from_glib(value: ffi::GstAudioNoiseShapingMethod) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::None,
-            1 => Self::ErrorFeedback,
-            2 => Self::Simple,
-            3 => Self::Medium,
-            4 => Self::High,
+            ffi::GST_AUDIO_NOISE_SHAPING_NONE => Self::None,
+            ffi::GST_AUDIO_NOISE_SHAPING_ERROR_FEEDBACK => Self::ErrorFeedback,
+            ffi::GST_AUDIO_NOISE_SHAPING_SIMPLE => Self::Simple,
+            ffi::GST_AUDIO_NOISE_SHAPING_MEDIUM => Self::Medium,
+            ffi::GST_AUDIO_NOISE_SHAPING_HIGH => Self::High,
             value => Self::__Unknown(value),
         }
     }
@@ -676,11 +676,11 @@ impl FromGlib<ffi::GstAudioResamplerMethod> for AudioResamplerMethod {
     unsafe fn from_glib(value: ffi::GstAudioResamplerMethod) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Nearest,
-            1 => Self::Linear,
-            2 => Self::Cubic,
-            3 => Self::BlackmanNuttall,
-            4 => Self::Kaiser,
+            ffi::GST_AUDIO_RESAMPLER_METHOD_NEAREST => Self::Nearest,
+            ffi::GST_AUDIO_RESAMPLER_METHOD_LINEAR => Self::Linear,
+            ffi::GST_AUDIO_RESAMPLER_METHOD_CUBIC => Self::Cubic,
+            ffi::GST_AUDIO_RESAMPLER_METHOD_BLACKMAN_NUTTALL => Self::BlackmanNuttall,
+            ffi::GST_AUDIO_RESAMPLER_METHOD_KAISER => Self::Kaiser,
             value => Self::__Unknown(value),
         }
     }
@@ -805,24 +805,24 @@ impl FromGlib<ffi::GstAudioRingBufferFormatType> for AudioRingBufferFormatType {
     unsafe fn from_glib(value: ffi::GstAudioRingBufferFormatType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Raw,
-            1 => Self::MuLaw,
-            2 => Self::ALaw,
-            3 => Self::ImaAdpcm,
-            4 => Self::Mpeg,
-            5 => Self::Gsm,
-            6 => Self::Iec958,
-            7 => Self::Ac3,
-            8 => Self::Eac3,
-            9 => Self::Dts,
-            10 => Self::Mpeg2Aac,
-            11 => Self::Mpeg4Aac,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_RAW => Self::Raw,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MU_LAW => Self::MuLaw,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_A_LAW => Self::ALaw,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_IMA_ADPCM => Self::ImaAdpcm,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG => Self::Mpeg,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_GSM => Self::Gsm,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_IEC958 => Self::Iec958,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_AC3 => Self::Ac3,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_EAC3 => Self::Eac3,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DTS => Self::Dts,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC => Self::Mpeg2Aac,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC => Self::Mpeg4Aac,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            12 => Self::Mpeg2AacRaw,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC_RAW => Self::Mpeg2AacRaw,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            13 => Self::Mpeg4AacRaw,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC_RAW => Self::Mpeg4AacRaw,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            14 => Self::Flac,
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC => Self::Flac,
             value => Self::__Unknown(value),
         }
     }
@@ -894,9 +894,9 @@ impl FromGlib<ffi::GstStreamVolumeFormat> for StreamVolumeFormat {
     unsafe fn from_glib(value: ffi::GstStreamVolumeFormat) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Linear,
-            1 => Self::Cubic,
-            2 => Self::Db,
+            ffi::GST_STREAM_VOLUME_FORMAT_LINEAR => Self::Linear,
+            ffi::GST_STREAM_VOLUME_FORMAT_CUBIC => Self::Cubic,
+            ffi::GST_STREAM_VOLUME_FORMAT_DB => Self::Db,
             value => Self::__Unknown(value),
         }
     }

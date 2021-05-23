@@ -308,7 +308,7 @@ impl<O: IsA<Element>> ElementExt for O {
         transition: StateChange,
     ) -> Result<StateChangeSuccess, StateChangeError> {
         unsafe {
-            StateChangeSuccess::try_from_glib(ffi::gst_element_change_state(
+            try_from_glib(ffi::gst_element_change_state(
                 self.as_ref().to_glib_none().0,
                 transition.into_glib(),
             ))
@@ -320,7 +320,7 @@ impl<O: IsA<Element>> ElementExt for O {
         ret: impl Into<StateChangeReturn>,
     ) -> Result<StateChangeSuccess, StateChangeError> {
         unsafe {
-            StateChangeSuccess::try_from_glib(ffi::gst_element_continue_state(
+            try_from_glib(ffi::gst_element_continue_state(
                 self.as_ref().to_glib_none().0,
                 ret.into().into_glib(),
             ))
@@ -491,7 +491,7 @@ impl<O: IsA<Element>> ElementExt for O {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
             let mut pending = mem::MaybeUninit::uninit();
-            let ret = StateChangeSuccess::try_from_glib(ffi::gst_element_get_state(
+            let ret = try_from_glib(ffi::gst_element_get_state(
                 self.as_ref().to_glib_none().0,
                 state.as_mut_ptr(),
                 pending.as_mut_ptr(),
@@ -740,7 +740,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn set_state(&self, state: State) -> Result<StateChangeSuccess, StateChangeError> {
         unsafe {
-            StateChangeSuccess::try_from_glib(ffi::gst_element_set_state(
+            try_from_glib(ffi::gst_element_set_state(
                 self.as_ref().to_glib_none().0,
                 state.into_glib(),
             ))

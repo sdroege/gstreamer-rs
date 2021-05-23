@@ -60,15 +60,15 @@ impl FromGlib<ffi::GstRTCPFBType> for RTCPFBType {
     unsafe fn from_glib(value: ffi::GstRTCPFBType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::FbTypeInvalid,
-            1 => Self::RtpfbTypeNack,
-            3 => Self::RtpfbTypeTmmbr,
-            4 => Self::RtpfbTypeTmmbn,
-            5 => Self::RtpfbTypeRtcpSrReq,
-            15 => Self::RtpfbTypeTwcc,
-            2 => Self::PsfbTypeSli,
-            6 => Self::PsfbTypeTstn,
-            7 => Self::PsfbTypeVbcn,
+            ffi::GST_RTCP_FB_TYPE_INVALID => Self::FbTypeInvalid,
+            ffi::GST_RTCP_RTPFB_TYPE_NACK => Self::RtpfbTypeNack,
+            ffi::GST_RTCP_RTPFB_TYPE_TMMBR => Self::RtpfbTypeTmmbr,
+            ffi::GST_RTCP_RTPFB_TYPE_TMMBN => Self::RtpfbTypeTmmbn,
+            ffi::GST_RTCP_RTPFB_TYPE_RTCP_SR_REQ => Self::RtpfbTypeRtcpSrReq,
+            ffi::GST_RTCP_RTPFB_TYPE_TWCC => Self::RtpfbTypeTwcc,
+            ffi::GST_RTCP_PSFB_TYPE_SLI => Self::PsfbTypeSli,
+            ffi::GST_RTCP_PSFB_TYPE_TSTN => Self::PsfbTypeTstn,
+            ffi::GST_RTCP_PSFB_TYPE_VBCN => Self::PsfbTypeVbcn,
             value => Self::__Unknown(value),
         }
     }
@@ -161,16 +161,16 @@ impl FromGlib<ffi::GstRTCPSDESType> for RTCPSDESType {
     unsafe fn from_glib(value: ffi::GstRTCPSDESType) -> Self {
         skip_assert_initialized!();
         match value {
-            -1 => Self::Invalid,
-            0 => Self::End,
-            1 => Self::Cname,
-            2 => Self::Name,
-            3 => Self::Email,
-            4 => Self::Phone,
-            5 => Self::Loc,
-            6 => Self::Tool,
-            7 => Self::Note,
-            8 => Self::Priv,
+            ffi::GST_RTCP_SDES_INVALID => Self::Invalid,
+            ffi::GST_RTCP_SDES_END => Self::End,
+            ffi::GST_RTCP_SDES_CNAME => Self::Cname,
+            ffi::GST_RTCP_SDES_NAME => Self::Name,
+            ffi::GST_RTCP_SDES_EMAIL => Self::Email,
+            ffi::GST_RTCP_SDES_PHONE => Self::Phone,
+            ffi::GST_RTCP_SDES_LOC => Self::Loc,
+            ffi::GST_RTCP_SDES_TOOL => Self::Tool,
+            ffi::GST_RTCP_SDES_NOTE => Self::Note,
+            ffi::GST_RTCP_SDES_PRIV => Self::Priv,
             value => Self::__Unknown(value),
         }
     }
@@ -260,15 +260,15 @@ impl FromGlib<ffi::GstRTCPType> for RTCPType {
     unsafe fn from_glib(value: ffi::GstRTCPType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Invalid,
-            200 => Self::Sr,
-            201 => Self::Rr,
-            202 => Self::Sdes,
-            203 => Self::Bye,
-            204 => Self::App,
-            205 => Self::Rtpfb,
-            206 => Self::Psfb,
-            207 => Self::Xr,
+            ffi::GST_RTCP_TYPE_INVALID => Self::Invalid,
+            ffi::GST_RTCP_TYPE_SR => Self::Sr,
+            ffi::GST_RTCP_TYPE_RR => Self::Rr,
+            ffi::GST_RTCP_TYPE_SDES => Self::Sdes,
+            ffi::GST_RTCP_TYPE_BYE => Self::Bye,
+            ffi::GST_RTCP_TYPE_APP => Self::App,
+            ffi::GST_RTCP_TYPE_RTPFB => Self::Rtpfb,
+            ffi::GST_RTCP_TYPE_PSFB => Self::Psfb,
+            ffi::GST_RTCP_TYPE_XR => Self::Xr,
             value => Self::__Unknown(value),
         }
     }
@@ -361,14 +361,14 @@ impl FromGlib<ffi::GstRTCPXRType> for RTCPXRType {
     unsafe fn from_glib(value: ffi::GstRTCPXRType) -> Self {
         skip_assert_initialized!();
         match value {
-            -1 => Self::Invalid,
-            1 => Self::Lrle,
-            2 => Self::Drle,
-            3 => Self::Prt,
-            4 => Self::Rrt,
-            5 => Self::Dlrr,
-            6 => Self::Ssumm,
-            7 => Self::VoipMetrics,
+            ffi::GST_RTCP_XR_TYPE_INVALID => Self::Invalid,
+            ffi::GST_RTCP_XR_TYPE_LRLE => Self::Lrle,
+            ffi::GST_RTCP_XR_TYPE_DRLE => Self::Drle,
+            ffi::GST_RTCP_XR_TYPE_PRT => Self::Prt,
+            ffi::GST_RTCP_XR_TYPE_RRT => Self::Rrt,
+            ffi::GST_RTCP_XR_TYPE_DLRR => Self::Dlrr,
+            ffi::GST_RTCP_XR_TYPE_SSUMM => Self::Ssumm,
+            ffi::GST_RTCP_XR_TYPE_VOIP_METRICS => Self::VoipMetrics,
             value => Self::__Unknown(value),
         }
     }
@@ -517,32 +517,32 @@ impl FromGlib<ffi::GstRTPPayload> for RTPPayload {
     unsafe fn from_glib(value: ffi::GstRTPPayload) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Pcmu,
-            1 => Self::_1016,
-            2 => Self::G721,
-            3 => Self::Gsm,
-            4 => Self::G723,
-            5 => Self::Dvi48000,
-            6 => Self::Dvi416000,
-            7 => Self::Lpc,
-            8 => Self::Pcma,
-            9 => Self::G722,
-            10 => Self::L16Stereo,
-            11 => Self::L16Mono,
-            12 => Self::Qcelp,
-            13 => Self::Cn,
-            14 => Self::Mpa,
-            15 => Self::G728,
-            16 => Self::Dvi411025,
-            17 => Self::Dvi422050,
-            18 => Self::G729,
-            25 => Self::Cellb,
-            26 => Self::Jpeg,
-            28 => Self::Nv,
-            31 => Self::H261,
-            32 => Self::Mpv,
-            33 => Self::Mp2t,
-            34 => Self::H263,
+            ffi::GST_RTP_PAYLOAD_PCMU => Self::Pcmu,
+            ffi::GST_RTP_PAYLOAD_1016 => Self::_1016,
+            ffi::GST_RTP_PAYLOAD_G721 => Self::G721,
+            ffi::GST_RTP_PAYLOAD_GSM => Self::Gsm,
+            ffi::GST_RTP_PAYLOAD_G723 => Self::G723,
+            ffi::GST_RTP_PAYLOAD_DVI4_8000 => Self::Dvi48000,
+            ffi::GST_RTP_PAYLOAD_DVI4_16000 => Self::Dvi416000,
+            ffi::GST_RTP_PAYLOAD_LPC => Self::Lpc,
+            ffi::GST_RTP_PAYLOAD_PCMA => Self::Pcma,
+            ffi::GST_RTP_PAYLOAD_G722 => Self::G722,
+            ffi::GST_RTP_PAYLOAD_L16_STEREO => Self::L16Stereo,
+            ffi::GST_RTP_PAYLOAD_L16_MONO => Self::L16Mono,
+            ffi::GST_RTP_PAYLOAD_QCELP => Self::Qcelp,
+            ffi::GST_RTP_PAYLOAD_CN => Self::Cn,
+            ffi::GST_RTP_PAYLOAD_MPA => Self::Mpa,
+            ffi::GST_RTP_PAYLOAD_G728 => Self::G728,
+            ffi::GST_RTP_PAYLOAD_DVI4_11025 => Self::Dvi411025,
+            ffi::GST_RTP_PAYLOAD_DVI4_22050 => Self::Dvi422050,
+            ffi::GST_RTP_PAYLOAD_G729 => Self::G729,
+            ffi::GST_RTP_PAYLOAD_CELLB => Self::Cellb,
+            ffi::GST_RTP_PAYLOAD_JPEG => Self::Jpeg,
+            ffi::GST_RTP_PAYLOAD_NV => Self::Nv,
+            ffi::GST_RTP_PAYLOAD_H261 => Self::H261,
+            ffi::GST_RTP_PAYLOAD_MPV => Self::Mpv,
+            ffi::GST_RTP_PAYLOAD_MP2T => Self::Mp2t,
+            ffi::GST_RTP_PAYLOAD_H263 => Self::H263,
             value => Self::__Unknown(value),
         }
     }
@@ -620,11 +620,11 @@ impl FromGlib<ffi::GstRTPProfile> for RTPProfile {
     unsafe fn from_glib(value: ffi::GstRTPProfile) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Self::Unknown,
-            1 => Self::Avp,
-            2 => Self::Savp,
-            3 => Self::Avpf,
-            4 => Self::Savpf,
+            ffi::GST_RTP_PROFILE_UNKNOWN => Self::Unknown,
+            ffi::GST_RTP_PROFILE_AVP => Self::Avp,
+            ffi::GST_RTP_PROFILE_SAVP => Self::Savp,
+            ffi::GST_RTP_PROFILE_AVPF => Self::Avpf,
+            ffi::GST_RTP_PROFILE_SAVPF => Self::Savpf,
             value => Self::__Unknown(value),
         }
     }
