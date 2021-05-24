@@ -219,12 +219,79 @@ impl fmt::Debug for AudioMeta {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[repr(transparent)]
+#[doc(alias = "GstAudioLevelMeta")]
+pub struct AudioLevelMeta(ffi::GstAudioLevelMeta);
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl Send for AudioLevelMeta {}
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl Sync for AudioLevelMeta {}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl AudioLevelMeta {
+    #[doc(alias = "gst_buffer_add_audio_level_meta")]
+    pub fn add(
+        buffer: &mut gst::BufferRef,
+        level: u8,
+        voice_activity: bool,
+    ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
+        unsafe {
+            let meta = ffi::gst_buffer_add_audio_level_meta(
+                buffer.as_mut_ptr(),
+                level,
+                voice_activity.into_glib(),
+            );
+
+            Self::from_mut_ptr(buffer, meta)
+        }
+    }
+
+    #[doc(alias = "get_level")]
+    pub fn level(&self) -> u8 {
+        self.0.level
+    }
+
+    #[doc(alias = "get_voice_activity")]
+    pub fn voice_activity(&self) -> bool {
+        unsafe { from_glib(self.0.voice_activity) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl MetaAPI for AudioLevelMeta {
+    type GstType = ffi::GstAudioLevelMeta;
+
+    #[doc(alias = "gst_audio_level_meta_api_get_type")]
+    fn meta_api() -> glib::Type {
+        unsafe { from_glib(ffi::gst_audio_level_meta_api_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl fmt::Debug for AudioLevelMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("AudioLevelMeta")
+            .field("level", &self.level())
+            .field("voice_activity", &self.voice_activity())
+            .finish()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn test_add_get_meta() {
+    fn test_add_get_audio_clipping_meta() {
         use std::convert::TryInto;
 
         gst::init().unwrap();
@@ -245,6 +312,26 @@ mod tests {
             let cmeta = buffer.meta::<AudioClippingMeta>().unwrap();
             assert_eq!(cmeta.start().try_into(), Ok(gst::format::Default(Some(1))));
             assert_eq!(cmeta.end().try_into(), Ok(gst::format::Default(Some(2))));
+        }
+    }
+
+    #[cfg(feature = "v1_20")]
+    #[test]
+    fn test_add_get_audio_level_meta() {
+        gst::init().unwrap();
+
+        let mut buffer = gst::Buffer::with_size(1024).unwrap();
+
+        {
+            let cmeta = AudioLevelMeta::add(buffer.get_mut().unwrap(), 10, true);
+            assert_eq!(cmeta.level(), 10);
+            assert_eq!(cmeta.voice_activity(), true);
+        }
+
+        {
+            let cmeta = buffer.meta::<AudioLevelMeta>().unwrap();
+            assert_eq!(cmeta.level(), 10);
+            assert_eq!(cmeta.voice_activity(), true);
         }
     }
 }

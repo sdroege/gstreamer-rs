@@ -45,6 +45,7 @@ manual = [
     "GstAudio.AudioClippingMeta",
     "GstAudio.AudioFormatInfo",
     "GstAudio.AudioInfo",
+    "GstAudio.AudioLevelMeta",
     "GstAudio.AudioMeta",
     "GstAudio.AudioRingBufferSpec",
 ]
