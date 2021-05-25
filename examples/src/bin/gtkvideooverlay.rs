@@ -239,12 +239,19 @@ fn create_ui(app: &gtk::Application) {
     // Pipeline reference is owned by the closure below, so will be
     // destroyed once the app is destroyed
     let timeout_id = RefCell::new(Some(timeout_id));
+    let pipeline = RefCell::new(Some(pipeline));
     app.connect_shutdown(move |_| {
-        pipeline
-            .set_state(gst::State::Null)
-            .expect("Unable to set the pipeline to the `Null` state");
+        // GTK will keep the Application alive for the whole process lifetime.
+        // Wrapping the pipeline in a RefCell<Option<_>> and removing it from it here
+        // ensures the pipeline is actually destroyed when shutting down, allowing us
+        // to use the leaks tracer for example.
+        if let Some(pipeline) = pipeline.borrow_mut().take() {
+            pipeline
+                .set_state(gst::State::Null)
+                .expect("Unable to set the pipeline to the `Null` state");
+            pipeline.bus().unwrap().remove_watch().unwrap();
+        }
 
-        bus.remove_watch().unwrap();
         if let Some(timeout_id) = timeout_id.borrow_mut().take() {
             glib::source_remove(timeout_id);
         }
