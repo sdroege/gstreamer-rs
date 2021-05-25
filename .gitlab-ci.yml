@@ -337,18 +337,22 @@ outdated:
   script:
     - cargo outdated --root-deps-only --exit-code 1 -v
 
-pages:
-  extends: .img-stable
+docs:
+  extends: .img-nightly
   stage: 'deploy'
   script:
+    - curl --proto '=https' --tlsv1.2 -sSf -o gir-docs.py
+        https://gitlab.gnome.org/World/Rust/gir-docs/-/raw/main/gir-docs.py
+    - chmod +x gir-docs.py
     - |
+      eval $(./gir-docs.py pre-docs)
       for crate in gstreamer*; do
         cd $crate
-        cargo doc --features --features=dox,embed-lgpl-docs
+        cargo doc --features --features=dox,embed-lgpl-docs --no-deps
         cd ..
       done
-    - mv target/doc public/
-  when: 'manual'
+    - rm -rf docs/
+    - mv target/doc docs/
   artifacts:
     paths:
-      - 'public'
+      - 'docs'
