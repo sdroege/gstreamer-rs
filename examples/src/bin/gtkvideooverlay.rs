@@ -241,6 +241,13 @@ fn create_ui(app: &gtk::Application) {
     let timeout_id = RefCell::new(Some(timeout_id));
     let pipeline = RefCell::new(Some(pipeline));
     app.connect_shutdown(move |_| {
+        // Optional, by manually destroying the window here we ensure that
+        // the gst element is destroyed when shutting down instead of having to wait
+        // for the process to terminate, allowing us to use the leaks tracer.
+        unsafe {
+            window.destroy();
+        }
+
         // GTK will keep the Application alive for the whole process lifetime.
         // Wrapping the pipeline in a RefCell<Option<_>> and removing it from it here
         // ensures the pipeline is actually destroyed when shutting down, allowing us
