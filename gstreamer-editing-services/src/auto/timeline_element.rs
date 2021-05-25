@@ -75,13 +75,13 @@ pub trait TimelineElementExt: 'static {
     //#[doc(alias = "get_child_properties")]
     //fn child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    //#[doc(alias = "ges_timeline_element_get_child_property")]
-    //#[doc(alias = "get_child_property")]
-    //fn child_property(&self, property_name: &str, value: /*Ignored*/glib::Value) -> bool;
+    #[doc(alias = "ges_timeline_element_get_child_property")]
+    #[doc(alias = "get_child_property")]
+    fn child_property(&self, property_name: &str) -> Option<glib::Value>;
 
     //#[doc(alias = "ges_timeline_element_get_child_property_by_pspec")]
     //#[doc(alias = "get_child_property_by_pspec")]
-    //fn child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/glib::Value);
+    //fn child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec) -> glib::Value;
 
     //#[doc(alias = "ges_timeline_element_get_child_property_valist")]
     //#[doc(alias = "get_child_property_valist")]
@@ -166,16 +166,24 @@ pub trait TimelineElementExt: 'static {
     //#[doc(alias = "ges_timeline_element_set_child_properties")]
     //fn set_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    //#[doc(alias = "ges_timeline_element_set_child_property")]
-    //fn set_child_property(&self, property_name: &str, value: /*Ignored*/&glib::Value) -> bool;
+    #[doc(alias = "ges_timeline_element_set_child_property")]
+    fn set_child_property(
+        &self,
+        property_name: &str,
+        value: &glib::Value,
+    ) -> Result<(), glib::error::BoolError>;
 
     //#[doc(alias = "ges_timeline_element_set_child_property_by_pspec")]
-    //fn set_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/&glib::Value);
+    //fn set_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: &glib::Value);
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //#[doc(alias = "ges_timeline_element_set_child_property_full")]
-    //fn set_child_property_full(&self, property_name: &str, value: /*Ignored*/&glib::Value) -> Result<(), glib::Error>;
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_timeline_element_set_child_property_full")]
+    fn set_child_property_full(
+        &self,
+        property_name: &str,
+        value: &glib::Value,
+    ) -> Result<(), glib::Error>;
 
     //#[doc(alias = "ges_timeline_element_set_child_property_valist")]
     //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
@@ -329,11 +337,23 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     //    unsafe { TODO: call ffi:ges_timeline_element_get_child_properties() }
     //}
 
-    //fn child_property(&self, property_name: &str, value: /*Ignored*/glib::Value) -> bool {
-    //    unsafe { TODO: call ffi:ges_timeline_element_get_child_property() }
-    //}
+    fn child_property(&self, property_name: &str) -> Option<glib::Value> {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            let ret = from_glib(ffi::ges_timeline_element_get_child_property(
+                self.as_ref().to_glib_none().0,
+                property_name.to_glib_none().0,
+                value.to_glib_none_mut().0,
+            ));
+            if ret {
+                Some(value)
+            } else {
+                None
+            }
+        }
+    }
 
-    //fn child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/glib::Value) {
+    //fn child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec) -> glib::Value {
     //    unsafe { TODO: call ffi:ges_timeline_element_get_child_property_by_pspec() }
     //}
 
@@ -512,19 +532,49 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     //    unsafe { TODO: call ffi:ges_timeline_element_set_child_properties() }
     //}
 
-    //fn set_child_property(&self, property_name: &str, value: /*Ignored*/&glib::Value) -> bool {
-    //    unsafe { TODO: call ffi:ges_timeline_element_set_child_property() }
-    //}
+    fn set_child_property(
+        &self,
+        property_name: &str,
+        value: &glib::Value,
+    ) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::ges_timeline_element_set_child_property(
+                    self.as_ref().to_glib_none().0,
+                    property_name.to_glib_none().0,
+                    value.to_glib_none().0
+                ),
+                "Failed to set child property"
+            )
+        }
+    }
 
-    //fn set_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/&glib::Value) {
+    //fn set_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: &glib::Value) {
     //    unsafe { TODO: call ffi:ges_timeline_element_set_child_property_by_pspec() }
     //}
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //fn set_child_property_full(&self, property_name: &str, value: /*Ignored*/&glib::Value) -> Result<(), glib::Error> {
-    //    unsafe { TODO: call ffi:ges_timeline_element_set_child_property_full() }
-    //}
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    fn set_child_property_full(
+        &self,
+        property_name: &str,
+        value: &glib::Value,
+    ) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let _ = ffi::ges_timeline_element_set_child_property_full(
+                self.as_ref().to_glib_none().0,
+                property_name.to_glib_none().0,
+                value.to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
 
     //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi:ges_timeline_element_set_child_property_valist() }

@@ -158,9 +158,9 @@ pub trait RTSPMediaExt: 'static {
     #[doc(alias = "get_suspend_mode")]
     fn suspend_mode(&self) -> RTSPSuspendMode;
 
-    //#[doc(alias = "gst_rtsp_media_get_time_provider")]
-    //#[doc(alias = "get_time_provider")]
-    //fn time_provider(&self, address: Option<&str>, port: u16) -> /*Ignored*/Option<gst_net::NetTimeProvider>;
+    #[doc(alias = "gst_rtsp_media_get_time_provider")]
+    #[doc(alias = "get_time_provider")]
+    fn time_provider(&self, address: Option<&str>, port: u16) -> Option<gst_net::NetTimeProvider>;
 
     #[doc(alias = "gst_rtsp_media_get_transport_mode")]
     #[doc(alias = "get_transport_mode")]
@@ -667,9 +667,15 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    //fn time_provider(&self, address: Option<&str>, port: u16) -> /*Ignored*/Option<gst_net::NetTimeProvider> {
-    //    unsafe { TODO: call ffi:gst_rtsp_media_get_time_provider() }
-    //}
+    fn time_provider(&self, address: Option<&str>, port: u16) -> Option<gst_net::NetTimeProvider> {
+        unsafe {
+            from_glib_full(ffi::gst_rtsp_media_get_time_provider(
+                self.as_ref().to_glib_none().0,
+                address.to_glib_none().0,
+                port,
+            ))
+        }
+    }
 
     fn transport_mode(&self) -> RTSPTransportMode {
         unsafe {

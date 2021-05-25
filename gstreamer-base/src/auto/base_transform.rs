@@ -27,10 +27,6 @@ unsafe impl Sync for BaseTransform {}
 pub const NONE_BASE_TRANSFORM: Option<&BaseTransform> = None;
 
 pub trait BaseTransformExt: 'static {
-    //#[doc(alias = "gst_base_transform_get_allocator")]
-    //#[doc(alias = "get_allocator")]
-    //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
-
     #[doc(alias = "gst_base_transform_get_buffer_pool")]
     #[doc(alias = "get_buffer_pool")]
     fn buffer_pool(&self) -> Option<gst::BufferPool>;
@@ -79,10 +75,6 @@ pub trait BaseTransformExt: 'static {
 }
 
 impl<O: IsA<BaseTransform>> BaseTransformExt for O {
-    //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams) {
-    //    unsafe { TODO: call ffi:gst_base_transform_get_allocator() }
-    //}
-
     fn buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
             from_glib_full(ffi::gst_base_transform_get_buffer_pool(

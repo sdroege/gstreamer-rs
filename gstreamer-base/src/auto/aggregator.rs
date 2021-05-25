@@ -33,10 +33,6 @@ unsafe impl Sync for Aggregator {}
 pub const NONE_AGGREGATOR: Option<&Aggregator> = None;
 
 pub trait AggregatorExt: 'static {
-    //#[doc(alias = "gst_aggregator_get_allocator")]
-    //#[doc(alias = "get_allocator")]
-    //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
-
     #[doc(alias = "gst_aggregator_get_buffer_pool")]
     #[doc(alias = "get_buffer_pool")]
     fn buffer_pool(&self) -> Option<gst::BufferPool>;
@@ -66,11 +62,6 @@ pub trait AggregatorExt: 'static {
     #[doc(alias = "gst_aggregator_simple_get_next_time")]
     fn simple_get_next_time(&self) -> gst::ClockTime;
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //#[doc(alias = "gst_aggregator_update_segment")]
-    //fn update_segment(&self, segment: /*Ignored*/&gst::Segment);
-
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "emit-signals")]
@@ -96,11 +87,6 @@ pub trait AggregatorExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "start-time-selection")]
     fn set_start_time_selection(&self, start_time_selection: AggregatorStartTimeSelection);
-
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //#[doc(alias = "samples-selected")]
-    //fn connect_samples_selected<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -132,10 +118,6 @@ pub trait AggregatorExt: 'static {
 }
 
 impl<O: IsA<Aggregator>> AggregatorExt for O {
-    //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams) {
-    //    unsafe { TODO: call ffi:gst_aggregator_get_allocator() }
-    //}
-
     fn buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
             from_glib_full(ffi::gst_aggregator_get_buffer_pool(
@@ -198,12 +180,6 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
             ))
         }
     }
-
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //fn update_segment(&self, segment: /*Ignored*/&gst::Segment) {
-    //    unsafe { TODO: call ffi:gst_aggregator_update_segment() }
-    //}
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -285,13 +261,6 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
             );
         }
     }
-
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //#[doc(alias = "samples-selected")]
-    //fn connect_samples_selected<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored segment: Gst.Segment
-    //}
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]

@@ -112,9 +112,6 @@ pub trait RTSPClientExt: 'static {
     #[doc(alias = "gst_rtsp_client_set_mount_points")]
     fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>);
 
-    //#[doc(alias = "gst_rtsp_client_set_send_func")]
-    //fn set_send_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
-
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //#[doc(alias = "gst_rtsp_client_set_send_messages_func")]
@@ -482,10 +479,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             );
         }
     }
-
-    //fn set_send_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
-    //    unsafe { TODO: call ffi:gst_rtsp_client_set_send_func() }
-    //}
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]

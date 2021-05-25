@@ -31,11 +31,6 @@ pub trait BaseEffectExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_base_effect_register_time_property")]
     fn register_time_property(&self, child_property_name: &str) -> bool;
-
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //#[doc(alias = "ges_base_effect_set_time_translation_funcs")]
-    //fn set_time_translation_funcs(&self, source_to_sink_func: /*Unimplemented*/Fn(&BaseEffect, gst::ClockTime, /*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 3, id: 11 }) -> gst::ClockTime, sink_to_source_func: /*Unimplemented*/Fn(&BaseEffect, gst::ClockTime, /*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 3, id: 11 }) -> gst::ClockTime, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool;
 }
 
 impl<O: IsA<BaseEffect>> BaseEffectExt for O {
@@ -59,10 +54,4 @@ impl<O: IsA<BaseEffect>> BaseEffectExt for O {
             ))
         }
     }
-
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //fn set_time_translation_funcs(&self, source_to_sink_func: /*Unimplemented*/Fn(&BaseEffect, gst::ClockTime, /*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 3, id: 11 }) -> gst::ClockTime, sink_to_source_func: /*Unimplemented*/Fn(&BaseEffect, gst::ClockTime, /*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 3, id: 11 }) -> gst::ClockTime, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
-    //    unsafe { TODO: call ffi:ges_base_effect_set_time_translation_funcs() }
-    //}
 }

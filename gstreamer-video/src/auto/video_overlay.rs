@@ -21,13 +21,6 @@ impl VideoOverlay {
     //pub fn install_properties(oclass: /*Ignored*/&mut glib::ObjectClass, last_prop_id: i32) {
     //    unsafe { TODO: call ffi:gst_video_overlay_install_properties() }
     //}
-
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    //#[doc(alias = "gst_video_overlay_set_property")]
-    //pub fn set_property<P: IsA<glib::Object>>(object: &P, last_prop_id: i32, property_id: u32, value: /*Ignored*/&glib::Value) -> bool {
-    //    unsafe { TODO: call ffi:gst_video_overlay_set_property() }
-    //}
 }
 
 unsafe impl Send for VideoOverlay {}
@@ -56,9 +49,6 @@ pub trait VideoOverlayExt: 'static {
         width: i32,
         height: i32,
     ) -> Result<(), glib::error::BoolError>;
-
-    //#[doc(alias = "gst_video_overlay_set_window_handle")]
-    //fn set_window_handle(&self, handle: /*Unimplemented*/Fundamental: UIntPtr);
 }
 
 impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
@@ -107,8 +97,4 @@ impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
             )
         }
     }
-
-    //fn set_window_handle(&self, handle: /*Unimplemented*/Fundamental: UIntPtr) {
-    //    unsafe { TODO: call ffi:gst_video_overlay_set_window_handle() }
-    //}
 }

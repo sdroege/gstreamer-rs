@@ -39,11 +39,6 @@ impl Object {
     //    unsafe { TODO: call ffi:gst_object_default_deep_notify() }
     //}
 
-    //#[doc(alias = "gst_object_ref_sink")]
-    //pub fn ref_sink(object: /*Unimplemented*/Option<Fundamental: Pointer>) -> /*Unimplemented*/Option<Fundamental: Pointer> {
-    //    unsafe { TODO: call ffi:gst_object_ref_sink() }
-    //}
-
     //#[doc(alias = "gst_object_replace")]
     //pub fn replace<P: IsA<Object>, Q: IsA<Object>>(oldobj: Option<P>, newobj: Option<&Q>) -> bool {
     //    unsafe { TODO: call ffi:gst_object_replace() }

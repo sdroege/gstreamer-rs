@@ -156,15 +156,6 @@ pub trait ElementExt: 'static {
     #[doc(alias = "gst_element_is_locked_state")]
     fn is_locked_state(&self) -> bool;
 
-    //#[doc(alias = "gst_element_iterate_pads")]
-    //fn iterate_pads(&self) -> /*Ignored*/Iterator;
-
-    //#[doc(alias = "gst_element_iterate_sink_pads")]
-    //fn iterate_sink_pads(&self) -> /*Ignored*/Iterator;
-
-    //#[doc(alias = "gst_element_iterate_src_pads")]
-    //fn iterate_src_pads(&self) -> /*Ignored*/Iterator;
-
     #[doc(alias = "gst_element_link")]
     fn link<P: IsA<Element>>(&self, dest: &P) -> Result<(), glib::error::BoolError>;
 
@@ -174,9 +165,6 @@ pub trait ElementExt: 'static {
         dest: &P,
         filter: &Caps,
     ) -> Result<(), glib::error::BoolError>;
-
-    //#[doc(alias = "gst_element_link_many")]
-    //fn link_many<P: IsA<Element>>(&self, element_2: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> bool;
 
     #[doc(alias = "gst_element_link_pads")]
     fn link_pads<P: IsA<Element>>(
@@ -206,14 +194,6 @@ pub trait ElementExt: 'static {
 
     #[doc(alias = "gst_element_lost_state")]
     fn lost_state(&self);
-
-    //#[doc(alias = "gst_element_message_full")]
-    //fn message_full(&self, type_: /*Ignored*/MessageType, domain: glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32);
-
-    //#[cfg(any(feature = "v1_10", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    //#[doc(alias = "gst_element_message_full_with_details")]
-    //fn message_full_with_details(&self, type_: /*Ignored*/MessageType, domain: glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32, structure: &mut Structure);
 
     #[doc(alias = "gst_element_no_more_pads")]
     fn no_more_pads(&self);
@@ -261,9 +241,6 @@ pub trait ElementExt: 'static {
 
     #[doc(alias = "gst_element_unlink")]
     fn unlink<P: IsA<Element>>(&self, dest: &P);
-
-    //#[doc(alias = "gst_element_unlink_many")]
-    //fn unlink_many<P: IsA<Element>>(&self, element_2: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     #[doc(alias = "gst_element_unlink_pads")]
     fn unlink_pads<P: IsA<Element>>(&self, srcpadname: &str, dest: &P, destpadname: &str);
@@ -520,18 +497,6 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    //fn iterate_pads(&self) -> /*Ignored*/Iterator {
-    //    unsafe { TODO: call ffi:gst_element_iterate_pads() }
-    //}
-
-    //fn iterate_sink_pads(&self) -> /*Ignored*/Iterator {
-    //    unsafe { TODO: call ffi:gst_element_iterate_sink_pads() }
-    //}
-
-    //fn iterate_src_pads(&self) -> /*Ignored*/Iterator {
-    //    unsafe { TODO: call ffi:gst_element_iterate_src_pads() }
-    //}
-
     fn link<P: IsA<Element>>(&self, dest: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -560,10 +525,6 @@ impl<O: IsA<Element>> ElementExt for O {
             )
         }
     }
-
-    //fn link_many<P: IsA<Element>>(&self, element_2: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> bool {
-    //    unsafe { TODO: call ffi:gst_element_link_many() }
-    //}
 
     fn link_pads<P: IsA<Element>>(
         &self,
@@ -631,16 +592,6 @@ impl<O: IsA<Element>> ElementExt for O {
             ffi::gst_element_lost_state(self.as_ref().to_glib_none().0);
         }
     }
-
-    //fn message_full(&self, type_: /*Ignored*/MessageType, domain: glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32) {
-    //    unsafe { TODO: call ffi:gst_element_message_full() }
-    //}
-
-    //#[cfg(any(feature = "v1_10", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    //fn message_full_with_details(&self, type_: /*Ignored*/MessageType, domain: glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32, structure: &mut Structure) {
-    //    unsafe { TODO: call ffi:gst_element_message_full_with_details() }
-    //}
 
     fn no_more_pads(&self) {
         unsafe {
@@ -764,10 +715,6 @@ impl<O: IsA<Element>> ElementExt for O {
             );
         }
     }
-
-    //fn unlink_many<P: IsA<Element>>(&self, element_2: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
-    //    unsafe { TODO: call ffi:gst_element_unlink_many() }
-    //}
 
     fn unlink_pads<P: IsA<Element>>(&self, srcpadname: &str, dest: &P, destpadname: &str) {
         unsafe {

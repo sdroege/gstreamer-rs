@@ -27,10 +27,6 @@ unsafe impl Sync for BaseSrc {}
 pub const NONE_BASE_SRC: Option<&BaseSrc> = None;
 
 pub trait BaseSrcExt: 'static {
-    //#[doc(alias = "gst_base_src_get_allocator")]
-    //#[doc(alias = "get_allocator")]
-    //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
-
     #[doc(alias = "gst_base_src_get_blocksize")]
     #[doc(alias = "get_blocksize")]
     fn blocksize(&self) -> u32;
@@ -127,10 +123,6 @@ pub trait BaseSrcExt: 'static {
 }
 
 impl<O: IsA<BaseSrc>> BaseSrcExt for O {
-    //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams) {
-    //    unsafe { TODO: call ffi:gst_base_src_get_allocator() }
-    //}
-
     fn blocksize(&self) -> u32 {
         unsafe { ffi::gst_base_src_get_blocksize(self.as_ref().to_glib_none().0) }
     }

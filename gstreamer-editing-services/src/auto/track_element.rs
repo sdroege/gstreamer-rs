@@ -63,9 +63,9 @@ pub trait TrackElementExt: 'static {
     #[doc(alias = "get_auto_clamp_control_sources")]
     fn is_auto_clamp_control_sources(&self) -> bool;
 
-    //#[doc(alias = "ges_track_element_get_control_binding")]
-    //#[doc(alias = "get_control_binding")]
-    //fn control_binding(&self, property_name: &str) -> /*Ignored*/Option<gst::ControlBinding>;
+    #[doc(alias = "ges_track_element_get_control_binding")]
+    #[doc(alias = "get_control_binding")]
+    fn control_binding(&self, property_name: &str) -> Option<gst::ControlBinding>;
 
     #[doc(alias = "ges_track_element_get_element")]
     #[doc(alias = "get_element")]
@@ -114,8 +114,13 @@ pub trait TrackElementExt: 'static {
     #[doc(alias = "ges_track_element_set_auto_clamp_control_sources")]
     fn set_auto_clamp_control_sources(&self, auto_clamp: bool);
 
-    //#[doc(alias = "ges_track_element_set_control_source")]
-    //fn set_control_source(&self, source: /*Ignored*/&gst::ControlSource, property_name: &str, binding_type: &str) -> bool;
+    #[doc(alias = "ges_track_element_set_control_source")]
+    fn set_control_source<P: IsA<gst::ControlSource>>(
+        &self,
+        source: &P,
+        property_name: &str,
+        binding_type: &str,
+    ) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -125,11 +130,17 @@ pub trait TrackElementExt: 'static {
     #[doc(alias = "ges_track_element_set_track_type")]
     fn set_track_type(&self, type_: TrackType);
 
-    //#[doc(alias = "control-binding-added")]
-    //fn connect_control_binding_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "control-binding-added")]
+    fn connect_control_binding_added<F: Fn(&Self, &gst::ControlBinding) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    //#[doc(alias = "control-binding-removed")]
-    //fn connect_control_binding_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "control-binding-removed")]
+    fn connect_control_binding_removed<F: Fn(&Self, &gst::ControlBinding) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[doc(alias = "active")]
     fn connect_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -219,9 +230,14 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    //fn control_binding(&self, property_name: &str) -> /*Ignored*/Option<gst::ControlBinding> {
-    //    unsafe { TODO: call ffi:ges_track_element_get_control_binding() }
-    //}
+    fn control_binding(&self, property_name: &str) -> Option<gst::ControlBinding> {
+        unsafe {
+            from_glib_none(ffi::ges_track_element_get_control_binding(
+                self.as_ref().to_glib_none().0,
+                property_name.to_glib_none().0,
+            ))
+        }
+    }
 
     fn element(&self) -> Option<gst::Element> {
         unsafe {
@@ -327,9 +343,21 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    //fn set_control_source(&self, source: /*Ignored*/&gst::ControlSource, property_name: &str, binding_type: &str) -> bool {
-    //    unsafe { TODO: call ffi:ges_track_element_set_control_source() }
-    //}
+    fn set_control_source<P: IsA<gst::ControlSource>>(
+        &self,
+        source: &P,
+        property_name: &str,
+        binding_type: &str,
+    ) -> bool {
+        unsafe {
+            from_glib(ffi::ges_track_element_set_control_source(
+                self.as_ref().to_glib_none().0,
+                source.as_ref().to_glib_none().0,
+                property_name.to_glib_none().0,
+                binding_type.to_glib_none().0,
+            ))
+        }
+    }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -351,15 +379,69 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    //#[doc(alias = "control-binding-added")]
-    //fn connect_control_binding_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored control_binding: Gst.ControlBinding
-    //}
+    #[doc(alias = "control-binding-added")]
+    fn connect_control_binding_added<F: Fn(&Self, &gst::ControlBinding) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn control_binding_added_trampoline<
+            P: IsA<TrackElement>,
+            F: Fn(&P, &gst::ControlBinding) + 'static,
+        >(
+            this: *mut ffi::GESTrackElement,
+            control_binding: *mut gst::ffi::GstControlBinding,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(
+                &TrackElement::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(control_binding),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"control-binding-added\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    control_binding_added_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 
-    //#[doc(alias = "control-binding-removed")]
-    //fn connect_control_binding_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored control_binding: Gst.ControlBinding
-    //}
+    #[doc(alias = "control-binding-removed")]
+    fn connect_control_binding_removed<F: Fn(&Self, &gst::ControlBinding) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn control_binding_removed_trampoline<
+            P: IsA<TrackElement>,
+            F: Fn(&P, &gst::ControlBinding) + 'static,
+        >(
+            this: *mut ffi::GESTrackElement,
+            control_binding: *mut gst::ffi::GstControlBinding,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(
+                &TrackElement::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(control_binding),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"control-binding-removed\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    control_binding_removed_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 
     #[doc(alias = "active")]
     fn connect_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

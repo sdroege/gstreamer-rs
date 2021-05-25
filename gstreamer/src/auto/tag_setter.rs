@@ -33,9 +33,6 @@ pub trait TagSetterExt: 'static {
     //#[doc(alias = "gst_tag_setter_add_tag_values")]
     //fn add_tag_values(&self, mode: TagMergeMode, tag: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    //#[doc(alias = "gst_tag_setter_add_tags")]
-    //fn add_tags(&self, mode: TagMergeMode, tag: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
-
     #[doc(alias = "gst_tag_setter_get_tag_list")]
     #[doc(alias = "get_tag_list")]
     fn tag_list(&self) -> Option<TagList>;
@@ -65,10 +62,6 @@ impl<O: IsA<TagSetter>> TagSetterExt for O {
 
     //fn add_tag_values(&self, mode: TagMergeMode, tag: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call ffi:gst_tag_setter_add_tag_values() }
-    //}
-
-    //fn add_tags(&self, mode: TagMergeMode, tag: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
-    //    unsafe { TODO: call ffi:gst_tag_setter_add_tags() }
     //}
 
     fn tag_list(&self) -> Option<TagList> {

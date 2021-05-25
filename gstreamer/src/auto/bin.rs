@@ -46,9 +46,6 @@ pub trait GstBinExt: 'static {
     #[doc(alias = "gst_bin_add")]
     fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError>;
 
-    //#[doc(alias = "gst_bin_add_many")]
-    //fn add_many<P: IsA<Element>>(&self, element_1: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
-
     #[doc(alias = "gst_bin_find_unlinked_pad")]
     fn find_unlinked_pad(&self, direction: PadDirection) -> Option<Pad>;
 
@@ -70,37 +67,11 @@ pub trait GstBinExt: 'static {
     #[doc(alias = "get_suppressed_flags")]
     fn suppressed_flags(&self) -> ElementFlags;
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //#[doc(alias = "gst_bin_iterate_all_by_element_factory_name")]
-    //fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> /*Ignored*/Option<Iterator>;
-
-    //#[doc(alias = "gst_bin_iterate_all_by_interface")]
-    //fn iterate_all_by_interface(&self, iface: glib::types::Type) -> /*Ignored*/Option<Iterator>;
-
-    //#[doc(alias = "gst_bin_iterate_elements")]
-    //fn iterate_elements(&self) -> /*Ignored*/Option<Iterator>;
-
-    //#[doc(alias = "gst_bin_iterate_recurse")]
-    //fn iterate_recurse(&self) -> /*Ignored*/Option<Iterator>;
-
-    //#[doc(alias = "gst_bin_iterate_sinks")]
-    //fn iterate_sinks(&self) -> /*Ignored*/Option<Iterator>;
-
-    //#[doc(alias = "gst_bin_iterate_sorted")]
-    //fn iterate_sorted(&self) -> /*Ignored*/Option<Iterator>;
-
-    //#[doc(alias = "gst_bin_iterate_sources")]
-    //fn iterate_sources(&self) -> /*Ignored*/Option<Iterator>;
-
     #[doc(alias = "gst_bin_recalculate_latency")]
     fn recalculate_latency(&self) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_bin_remove")]
     fn remove<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError>;
-
-    //#[doc(alias = "gst_bin_remove_many")]
-    //fn remove_many<P: IsA<Element>>(&self, element_1: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
@@ -176,10 +147,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    //fn add_many<P: IsA<Element>>(&self, element_1: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
-    //    unsafe { TODO: call ffi:gst_bin_add_many() }
-    //}
-
     fn find_unlinked_pad(&self, direction: PadDirection) -> Option<Pad> {
         unsafe {
             from_glib_full(ffi::gst_bin_find_unlinked_pad(
@@ -226,36 +193,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call ffi:gst_bin_iterate_all_by_element_factory_name() }
-    //}
-
-    //fn iterate_all_by_interface(&self, iface: glib::types::Type) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call ffi:gst_bin_iterate_all_by_interface() }
-    //}
-
-    //fn iterate_elements(&self) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call ffi:gst_bin_iterate_elements() }
-    //}
-
-    //fn iterate_recurse(&self) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call ffi:gst_bin_iterate_recurse() }
-    //}
-
-    //fn iterate_sinks(&self) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call ffi:gst_bin_iterate_sinks() }
-    //}
-
-    //fn iterate_sorted(&self) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call ffi:gst_bin_iterate_sorted() }
-    //}
-
-    //fn iterate_sources(&self) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call ffi:gst_bin_iterate_sources() }
-    //}
-
     fn recalculate_latency(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -276,10 +213,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
             )
         }
     }
-
-    //fn remove_many<P: IsA<Element>>(&self, element_1: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
-    //    unsafe { TODO: call ffi:gst_bin_remove_many() }
-    //}
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]

@@ -17,11 +17,6 @@ glib::wrapper! {
 }
 
 impl TypeFindFactory {
-    //#[doc(alias = "gst_type_find_factory_call_function")]
-    //pub fn call_function(&self, find: /*Ignored*/&mut TypeFind) {
-    //    unsafe { TODO: call ffi:gst_type_find_factory_call_function() }
-    //}
-
     #[doc(alias = "gst_type_find_factory_get_caps")]
     #[doc(alias = "get_caps")]
     pub fn caps(&self) -> Option<Caps> {

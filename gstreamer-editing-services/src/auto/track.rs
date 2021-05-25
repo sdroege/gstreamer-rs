@@ -22,7 +22,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
-    pub struct Track(Object<ffi::GESTrack, ffi::GESTrackClass>) @extends gst::Element, gst::Object;
+    pub struct Track(Object<ffi::GESTrack, ffi::GESTrackClass>) @extends gst::Bin, gst::Element, gst::Object;
 
     match fn {
         type_ => || ffi::ges_track_get_type(),

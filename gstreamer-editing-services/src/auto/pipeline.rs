@@ -17,7 +17,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
-    pub struct Pipeline(Object<ffi::GESPipeline, ffi::GESPipelineClass>) @extends gst::Pipeline, gst::Element, gst::Object;
+    pub struct Pipeline(Object<ffi::GESPipeline, ffi::GESPipelineClass>) @extends gst::Pipeline, gst::Bin, gst::Element, gst::Object;
 
     match fn {
         type_ => || ffi::ges_pipeline_get_type(),

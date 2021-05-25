@@ -121,15 +121,6 @@ pub trait ClockExt: 'static {
     #[doc(alias = "gst_clock_is_synced")]
     fn is_synced(&self) -> bool;
 
-    //#[doc(alias = "gst_clock_new_periodic_id")]
-    //fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> /*Unimplemented*/ClockID;
-
-    //#[doc(alias = "gst_clock_new_single_shot_id")]
-    //fn new_single_shot_id(&self, time: ClockTime) -> /*Unimplemented*/ClockID;
-
-    //#[doc(alias = "gst_clock_periodic_id_reinit")]
-    //fn periodic_id_reinit(&self, id: /*Unimplemented*/ClockID, start_time: ClockTime, interval: ClockTime) -> bool;
-
     #[doc(alias = "gst_clock_set_calibration")]
     fn set_calibration(
         &self,
@@ -150,9 +141,6 @@ pub trait ClockExt: 'static {
 
     #[doc(alias = "gst_clock_set_timeout")]
     fn set_timeout(&self, timeout: ClockTime);
-
-    //#[doc(alias = "gst_clock_single_shot_id_reinit")]
-    //fn single_shot_id_reinit(&self, id: /*Unimplemented*/ClockID, time: ClockTime) -> bool;
 
     #[doc(alias = "gst_clock_unadjust_unlocked")]
     fn unadjust_unlocked(&self, external: ClockTime) -> ClockTime;
@@ -318,18 +306,6 @@ impl<O: IsA<Clock>> ClockExt for O {
         unsafe { from_glib(ffi::gst_clock_is_synced(self.as_ref().to_glib_none().0)) }
     }
 
-    //fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> /*Unimplemented*/ClockID {
-    //    unsafe { TODO: call ffi:gst_clock_new_periodic_id() }
-    //}
-
-    //fn new_single_shot_id(&self, time: ClockTime) -> /*Unimplemented*/ClockID {
-    //    unsafe { TODO: call ffi:gst_clock_new_single_shot_id() }
-    //}
-
-    //fn periodic_id_reinit(&self, id: /*Unimplemented*/ClockID, start_time: ClockTime, interval: ClockTime) -> bool {
-    //    unsafe { TODO: call ffi:gst_clock_periodic_id_reinit() }
-    //}
-
     fn set_calibration(
         &self,
         internal: ClockTime,
@@ -380,10 +356,6 @@ impl<O: IsA<Clock>> ClockExt for O {
             ffi::gst_clock_set_timeout(self.as_ref().to_glib_none().0, timeout.into_glib());
         }
     }
-
-    //fn single_shot_id_reinit(&self, id: /*Unimplemented*/ClockID, time: ClockTime) -> bool {
-    //    unsafe { TODO: call ffi:gst_clock_single_shot_id_reinit() }
-    //}
 
     fn unadjust_unlocked(&self, external: ClockTime) -> ClockTime {
         unsafe {

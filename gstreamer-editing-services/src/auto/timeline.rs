@@ -26,7 +26,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
-    pub struct Timeline(Object<ffi::GESTimeline, ffi::GESTimelineClass>) @extends gst::Element, gst::Object, @implements Extractable;
+    pub struct Timeline(Object<ffi::GESTimeline, ffi::GESTimelineClass>) @extends gst::Bin, gst::Element, gst::Object, @implements Extractable;
 
     match fn {
         type_ => || ffi::ges_timeline_get_type(),

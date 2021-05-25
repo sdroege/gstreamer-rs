@@ -54,12 +54,6 @@ impl PlayerVideoOverlayVideoRenderer {
         }
     }
 
-    //#[doc(alias = "gst_player_video_overlay_video_renderer_get_window_handle")]
-    //#[doc(alias = "get_window_handle")]
-    //pub fn window_handle(&self) -> /*Unimplemented*/Option<Fundamental: Pointer> {
-    //    unsafe { TODO: call ffi:gst_player_video_overlay_video_renderer_get_window_handle() }
-    //}
-
     #[doc(alias = "gst_player_video_overlay_video_renderer_set_render_rectangle")]
     pub fn set_render_rectangle(&self, x: i32, y: i32, width: i32, height: i32) {
         unsafe {
@@ -72,11 +66,6 @@ impl PlayerVideoOverlayVideoRenderer {
             );
         }
     }
-
-    //#[doc(alias = "gst_player_video_overlay_video_renderer_set_window_handle")]
-    //pub fn set_window_handle(&self, window_handle: /*Unimplemented*/Option<Fundamental: Pointer>) {
-    //    unsafe { TODO: call ffi:gst_player_video_overlay_video_renderer_set_window_handle() }
-    //}
 
     #[doc(alias = "video-sink")]
     pub fn video_sink(&self) -> Option<gst::Element> {
@@ -103,16 +92,6 @@ impl PlayerVideoOverlayVideoRenderer {
             );
         }
     }
-
-    //#[doc(alias = "gst_player_video_overlay_video_renderer_new")]
-    //pub fn new(window_handle: /*Unimplemented*/Option<Fundamental: Pointer>) -> Option<PlayerVideoRenderer> {
-    //    unsafe { TODO: call ffi:gst_player_video_overlay_video_renderer_new() }
-    //}
-
-    //#[doc(alias = "gst_player_video_overlay_video_renderer_new_with_sink")]
-    //pub fn new_with_sink<P: IsA<gst::Element>>(window_handle: /*Unimplemented*/Option<Fundamental: Pointer>, video_sink: &P) -> Option<PlayerVideoRenderer> {
-    //    unsafe { TODO: call ffi:gst_player_video_overlay_video_renderer_new_with_sink() }
-    //}
 
     #[doc(alias = "video-sink")]
     pub fn connect_video_sink_notify<F: Fn(&Self) + Send + Sync + 'static>(
