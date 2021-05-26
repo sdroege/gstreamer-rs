@@ -268,6 +268,12 @@ pub trait ElementExtManual: 'static {
     fn current_running_time(&self) -> crate::ClockTime;
     #[doc(alias = "get_current_clock_time")]
     fn current_clock_time(&self) -> crate::ClockTime;
+
+    #[cfg(not(feature = "v1_20"))]
+    #[cfg_attr(feature = "dox", doc(cfg(not(feature = "v1_20"))))]
+    #[doc(alias = "gst_element_get_request_pad")]
+    #[doc(alias = "get_request_pad")]
+    fn request_pad_simple(&self, name: &str) -> Option<Pad>;
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
@@ -785,6 +791,16 @@ impl<O: IsA<Element>> ElementExtManual for O {
             clock.time()
         } else {
             crate::CLOCK_TIME_NONE
+        }
+    }
+
+    #[cfg(not(feature = "v1_20"))]
+    fn request_pad_simple(&self, name: &str) -> Option<Pad> {
+        unsafe {
+            from_glib_full(ffi::gst_element_get_request_pad(
+                self.as_ref().to_glib_none().0,
+                name.to_glib_none().0,
+            ))
         }
     }
 }
