@@ -467,7 +467,7 @@ mod tests {
     }
 
     #[test]
-    #[should_panic]
+    #[should_panic(expected = "gst_video_format_to_string returned NULL")]
     fn enum_to_string_panics() {
         assert_eq!(&format!("{}", crate::VideoFormat::__Unknown(-1)), "UNKNOWN");
         assert_eq!(crate::VideoFormat::__Unknown(-1).to_str(), "UNKNOWN");
