@@ -363,13 +363,11 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     #[doc(alias = "active")]
     fn connect_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_active_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_active_trampoline<P: IsA<TrackElement>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrackElement,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<TrackElement>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&TrackElement::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -393,13 +391,14 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_auto_clamp_control_sources_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_auto_clamp_control_sources_trampoline<
+            P: IsA<TrackElement>,
+            F: Fn(&P) + 'static,
+        >(
             this: *mut ffi::GESTrackElement,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<TrackElement>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&TrackElement::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -420,13 +419,14 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "has-internal-source")]
     fn connect_has_internal_source_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_has_internal_source_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_has_internal_source_trampoline<
+            P: IsA<TrackElement>,
+            F: Fn(&P) + 'static,
+        >(
             this: *mut ffi::GESTrackElement,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<TrackElement>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&TrackElement::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -445,13 +445,11 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     #[doc(alias = "track")]
     fn connect_track_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_track_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_track_trampoline<P: IsA<TrackElement>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrackElement,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<TrackElement>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&TrackElement::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -470,13 +468,14 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     #[doc(alias = "track-type")]
     fn connect_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_track_type_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_track_type_trampoline<
+            P: IsA<TrackElement>,
+            F: Fn(&P) + 'static,
+        >(
             this: *mut ffi::GESTrackElement,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<TrackElement>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&TrackElement::from_glib_borrow(this).unsafe_cast_ref())
         }

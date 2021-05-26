@@ -163,13 +163,14 @@ impl<O: IsA<Container>> GESContainerExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn child_added_trampoline<P, F: Fn(&P, &TimelineElement) + 'static>(
+        unsafe extern "C" fn child_added_trampoline<
+            P: IsA<Container>,
+            F: Fn(&P, &TimelineElement) + 'static,
+        >(
             this: *mut ffi::GESContainer,
             element: *mut ffi::GESTimelineElement,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Container>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Container::from_glib_borrow(this).unsafe_cast_ref(),
@@ -194,13 +195,14 @@ impl<O: IsA<Container>> GESContainerExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn child_removed_trampoline<P, F: Fn(&P, &TimelineElement) + 'static>(
+        unsafe extern "C" fn child_removed_trampoline<
+            P: IsA<Container>,
+            F: Fn(&P, &TimelineElement) + 'static,
+        >(
             this: *mut ffi::GESContainer,
             element: *mut ffi::GESTimelineElement,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Container>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Container::from_glib_borrow(this).unsafe_cast_ref(),
@@ -222,13 +224,11 @@ impl<O: IsA<Container>> GESContainerExt for O {
 
     #[doc(alias = "height")]
     fn connect_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_height_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_height_trampoline<P: IsA<Container>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESContainer,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Container>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Container::from_glib_borrow(this).unsafe_cast_ref())
         }

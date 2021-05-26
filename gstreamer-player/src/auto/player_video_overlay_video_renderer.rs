@@ -115,9 +115,7 @@ impl PlayerVideoOverlayVideoRenderer {
     //}
 
     #[doc(alias = "video-sink")]
-    pub fn connect_video_sink_notify<
-        F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static,
-    >(
+    pub fn connect_video_sink_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -145,9 +143,7 @@ impl PlayerVideoOverlayVideoRenderer {
     }
 
     #[doc(alias = "window-handle")]
-    pub fn connect_window_handle_notify<
-        F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static,
-    >(
+    pub fn connect_window_handle_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

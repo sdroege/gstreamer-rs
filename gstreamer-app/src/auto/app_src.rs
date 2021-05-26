@@ -313,7 +313,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "enough-data")]
-    pub fn connect_enough_data<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_enough_data<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -338,7 +338,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "need-data")]
-    pub fn connect_need_data<F: Fn(&AppSrc, u32) + Send + Sync + 'static>(
+    pub fn connect_need_data<F: Fn(&Self, u32) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -364,7 +364,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "seek-data")]
-    pub fn connect_seek_data<F: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>(
+    pub fn connect_seek_data<F: Fn(&Self, u64) -> bool + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -392,7 +392,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "block")]
-    pub fn connect_block_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_block_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -418,7 +418,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "caps")]
-    pub fn connect_caps_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -444,7 +444,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "current-level-bytes")]
-    pub fn connect_current_level_bytes_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_current_level_bytes_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -474,7 +474,7 @@ impl AppSrc {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "duration")]
-    pub fn connect_duration_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_duration_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -500,7 +500,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "emit-signals")]
-    pub fn connect_emit_signals_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -528,7 +528,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "format")]
-    pub fn connect_format_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_format_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -556,7 +556,7 @@ impl AppSrc {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "handle-segment-change")]
-    pub fn connect_handle_segment_change_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_handle_segment_change_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -584,7 +584,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "is-live")]
-    pub fn connect_is_live_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_is_live_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -610,7 +610,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "max-bytes")]
-    pub fn connect_max_bytes_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_max_bytes_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -636,7 +636,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "max-latency")]
-    pub fn connect_max_latency_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_max_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -664,7 +664,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "min-latency")]
-    pub fn connect_min_latency_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_min_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -692,7 +692,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "min-percent")]
-    pub fn connect_min_percent_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_min_percent_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -720,7 +720,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "size")]
-    pub fn connect_size_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -746,7 +746,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "stream-type")]
-    pub fn connect_stream_type_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+    pub fn connect_stream_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

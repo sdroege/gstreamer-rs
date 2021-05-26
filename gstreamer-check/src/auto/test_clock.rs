@@ -172,7 +172,7 @@ impl TestClock {
     //}
 
     #[doc(alias = "clock-type")]
-    pub fn connect_clock_type_notify<F: Fn(&TestClock) + Send + Sync + 'static>(
+    pub fn connect_clock_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

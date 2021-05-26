@@ -365,13 +365,14 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
 
     #[doc(alias = "audio-filter")]
     fn connect_audio_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_audio_filter_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_audio_filter_trampoline<
+            P: IsA<Pipeline>,
+            F: Fn(&P) + 'static,
+        >(
             this: *mut ffi::GESPipeline,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Pipeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Pipeline::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -390,13 +391,11 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
 
     #[doc(alias = "audio-sink")]
     fn connect_audio_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_audio_sink_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_audio_sink_trampoline<P: IsA<Pipeline>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESPipeline,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Pipeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Pipeline::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -415,13 +414,11 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
 
     #[doc(alias = "mode")]
     fn connect_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_mode_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_mode_trampoline<P: IsA<Pipeline>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESPipeline,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Pipeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Pipeline::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -440,13 +437,11 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
 
     #[doc(alias = "timeline")]
     fn connect_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_timeline_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_timeline_trampoline<P: IsA<Pipeline>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESPipeline,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Pipeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Pipeline::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -465,13 +460,14 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
 
     #[doc(alias = "video-filter")]
     fn connect_video_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_video_filter_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_video_filter_trampoline<
+            P: IsA<Pipeline>,
+            F: Fn(&P) + 'static,
+        >(
             this: *mut ffi::GESPipeline,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Pipeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Pipeline::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -490,13 +486,11 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
 
     #[doc(alias = "video-sink")]
     fn connect_video_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_video_sink_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_video_sink_trampoline<P: IsA<Pipeline>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESPipeline,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Pipeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Pipeline::from_glib_borrow(this).unsafe_cast_ref())
         }

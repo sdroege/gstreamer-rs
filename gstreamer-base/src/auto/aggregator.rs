@@ -300,13 +300,14 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_emit_signals_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_emit_signals_trampoline<
+            P: IsA<Aggregator>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstAggregator,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Aggregator>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Aggregator::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -330,13 +331,14 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_latency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_latency_trampoline<
+            P: IsA<Aggregator>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstAggregator,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Aggregator>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Aggregator::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -358,13 +360,14 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_start_time_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_start_time_trampoline<
+            P: IsA<Aggregator>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstAggregator,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Aggregator>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Aggregator::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -389,15 +392,13 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_start_time_selection_trampoline<
-            P,
+            P: IsA<Aggregator>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstAggregator,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Aggregator>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Aggregator::from_glib_borrow(this).unsafe_cast_ref())
         }

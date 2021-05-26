@@ -350,12 +350,10 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
     #[doc(alias = "commited")]
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn commited_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn commited_trampoline<P: IsA<Track>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrack,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Track>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Track::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -377,13 +375,14 @@ impl<O: IsA<Track>> GESTrackExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn track_element_added_trampoline<P, F: Fn(&P, &TrackElement) + 'static>(
+        unsafe extern "C" fn track_element_added_trampoline<
+            P: IsA<Track>,
+            F: Fn(&P, &TrackElement) + 'static,
+        >(
             this: *mut ffi::GESTrack,
             effect: *mut ffi::GESTrackElement,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Track>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Track::from_glib_borrow(this).unsafe_cast_ref(),
@@ -409,15 +408,13 @@ impl<O: IsA<Track>> GESTrackExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn track_element_removed_trampoline<
-            P,
+            P: IsA<Track>,
             F: Fn(&P, &TrackElement) + 'static,
         >(
             this: *mut ffi::GESTrack,
             effect: *mut ffi::GESTrackElement,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Track>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Track::from_glib_borrow(this).unsafe_cast_ref(),
@@ -439,13 +436,11 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
     #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_duration_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_duration_trampoline<P: IsA<Track>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrack,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Track>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Track::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -466,13 +461,11 @@ impl<O: IsA<Track>> GESTrackExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "id")]
     fn connect_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_id_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_id_trampoline<P: IsA<Track>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrack,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Track>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Track::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -491,13 +484,11 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
     #[doc(alias = "mixing")]
     fn connect_mixing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_mixing_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_mixing_trampoline<P: IsA<Track>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrack,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Track>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Track::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -516,13 +507,14 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
     #[doc(alias = "restriction-caps")]
     fn connect_restriction_caps_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_restriction_caps_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_restriction_caps_trampoline<
+            P: IsA<Track>,
+            F: Fn(&P) + 'static,
+        >(
             this: *mut ffi::GESTrack,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Track>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Track::from_glib_borrow(this).unsafe_cast_ref())
         }

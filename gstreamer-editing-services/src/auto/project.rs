@@ -284,13 +284,14 @@ impl<O: IsA<Project>> ProjectExt for O {
 
     #[doc(alias = "asset-added")]
     fn connect_asset_added<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn asset_added_trampoline<P, F: Fn(&P, &Asset) + 'static>(
+        unsafe extern "C" fn asset_added_trampoline<
+            P: IsA<Project>,
+            F: Fn(&P, &Asset) + 'static,
+        >(
             this: *mut ffi::GESProject,
             asset: *mut ffi::GESAsset,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Project>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Project::from_glib_borrow(this).unsafe_cast_ref(),
@@ -312,13 +313,14 @@ impl<O: IsA<Project>> ProjectExt for O {
 
     #[doc(alias = "asset-loading")]
     fn connect_asset_loading<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn asset_loading_trampoline<P, F: Fn(&P, &Asset) + 'static>(
+        unsafe extern "C" fn asset_loading_trampoline<
+            P: IsA<Project>,
+            F: Fn(&P, &Asset) + 'static,
+        >(
             this: *mut ffi::GESProject,
             asset: *mut ffi::GESAsset,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Project>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Project::from_glib_borrow(this).unsafe_cast_ref(),
@@ -340,13 +342,14 @@ impl<O: IsA<Project>> ProjectExt for O {
 
     #[doc(alias = "asset-removed")]
     fn connect_asset_removed<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn asset_removed_trampoline<P, F: Fn(&P, &Asset) + 'static>(
+        unsafe extern "C" fn asset_removed_trampoline<
+            P: IsA<Project>,
+            F: Fn(&P, &Asset) + 'static,
+        >(
             this: *mut ffi::GESProject,
             asset: *mut ffi::GESAsset,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Project>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Project::from_glib_borrow(this).unsafe_cast_ref(),
@@ -374,16 +377,14 @@ impl<O: IsA<Project>> ProjectExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn error_loading_trampoline<
-            P,
+            P: IsA<Project>,
             F: Fn(&P, &Timeline, &glib::Error) + 'static,
         >(
             this: *mut ffi::GESProject,
             timeline: *mut ffi::GESTimeline,
             error: *mut glib::ffi::GError,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Project>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Project::from_glib_borrow(this).unsafe_cast_ref(),
@@ -412,7 +413,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn error_loading_asset_trampoline<
-            P,
+            P: IsA<Project>,
             F: Fn(&P, &glib::Error, &str, glib::types::Type) + 'static,
         >(
             this: *mut ffi::GESProject,
@@ -420,9 +421,7 @@ impl<O: IsA<Project>> ProjectExt for O {
             id: *mut libc::c_char,
             extractable_type: glib::ffi::GType,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Project>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Project::from_glib_borrow(this).unsafe_cast_ref(),
@@ -446,13 +445,11 @@ impl<O: IsA<Project>> ProjectExt for O {
 
     #[doc(alias = "loaded")]
     fn connect_loaded<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn loaded_trampoline<P, F: Fn(&P, &Timeline) + 'static>(
+        unsafe extern "C" fn loaded_trampoline<P: IsA<Project>, F: Fn(&P, &Timeline) + 'static>(
             this: *mut ffi::GESProject,
             timeline: *mut ffi::GESTimeline,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Project>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Project::from_glib_borrow(this).unsafe_cast_ref(),
@@ -476,13 +473,11 @@ impl<O: IsA<Project>> ProjectExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "loading")]
     fn connect_loading<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn loading_trampoline<P, F: Fn(&P, &Timeline) + 'static>(
+        unsafe extern "C" fn loading_trampoline<P: IsA<Project>, F: Fn(&P, &Timeline) + 'static>(
             this: *mut ffi::GESProject,
             timeline: *mut ffi::GESTimeline,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Project>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Project::from_glib_borrow(this).unsafe_cast_ref(),
@@ -510,17 +505,14 @@ impl<O: IsA<Project>> ProjectExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn missing_uri_trampoline<
-            P,
+            P: IsA<Project>,
             F: Fn(&P, &glib::Error, &Asset) -> Option<glib::GString> + 'static,
         >(
             this: *mut ffi::GESProject,
             error: *mut glib::ffi::GError,
             wrong_asset: *mut ffi::GESAsset,
             f: glib::ffi::gpointer,
-        ) -> *mut libc::c_char
-        where
-            P: IsA<Project>,
-        {
+        ) -> *mut libc::c_char {
             let f: &F = &*(f as *const F);
             f(
                 &Project::from_glib_borrow(this).unsafe_cast_ref(),

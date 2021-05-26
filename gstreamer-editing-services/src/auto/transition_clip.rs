@@ -82,13 +82,14 @@ impl<O: IsA<TransitionClip>> TransitionClipExt for O {
 
     #[doc(alias = "vtype")]
     fn connect_vtype_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_vtype_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_vtype_trampoline<
+            P: IsA<TransitionClip>,
+            F: Fn(&P) + 'static,
+        >(
             this: *mut ffi::GESTransitionClip,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<TransitionClip>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&TransitionClip::from_glib_borrow(this).unsafe_cast_ref())
         }

@@ -167,7 +167,7 @@ impl WebRTCDTLSTransport {
     }
 
     #[doc(alias = "certificate")]
-    pub fn connect_certificate_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(
+    pub fn connect_certificate_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -195,7 +195,7 @@ impl WebRTCDTLSTransport {
     }
 
     #[doc(alias = "client")]
-    pub fn connect_client_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(
+    pub fn connect_client_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -223,9 +223,7 @@ impl WebRTCDTLSTransport {
     }
 
     #[doc(alias = "remote-certificate")]
-    pub fn connect_remote_certificate_notify<
-        F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static,
-    >(
+    pub fn connect_remote_certificate_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -253,7 +251,7 @@ impl WebRTCDTLSTransport {
     }
 
     #[doc(alias = "state")]
-    pub fn connect_state_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(
+    pub fn connect_state_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -281,7 +279,7 @@ impl WebRTCDTLSTransport {
     }
 
     #[doc(alias = "transport")]
-    pub fn connect_transport_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(
+    pub fn connect_transport_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

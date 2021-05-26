@@ -632,13 +632,14 @@ impl<O: IsA<Pad>> PadExt for O {
 
     #[doc(alias = "linked")]
     fn connect_linked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn linked_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(
+        unsafe extern "C" fn linked_trampoline<
+            P: IsA<Pad>,
+            F: Fn(&P, &Pad) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstPad,
             peer: *mut ffi::GstPad,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Pad>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Pad::from_glib_borrow(this).unsafe_cast_ref(),
@@ -663,13 +664,14 @@ impl<O: IsA<Pad>> PadExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn unlinked_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(
+        unsafe extern "C" fn unlinked_trampoline<
+            P: IsA<Pad>,
+            F: Fn(&P, &Pad) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstPad,
             peer: *mut ffi::GstPad,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Pad>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Pad::from_glib_borrow(this).unsafe_cast_ref(),
@@ -691,13 +693,14 @@ impl<O: IsA<Pad>> PadExt for O {
 
     #[doc(alias = "caps")]
     fn connect_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_caps_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_caps_trampoline<
+            P: IsA<Pad>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstPad,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Pad>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Pad::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -716,13 +719,14 @@ impl<O: IsA<Pad>> PadExt for O {
 
     #[doc(alias = "offset")]
     fn connect_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_offset_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_offset_trampoline<
+            P: IsA<Pad>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstPad,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Pad>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Pad::from_glib_borrow(this).unsafe_cast_ref())
         }

@@ -114,7 +114,7 @@ impl Discoverer {
 
     #[doc(alias = "discovered")]
     pub fn connect_discovered<
-        F: Fn(&Discoverer, &DiscovererInfo, Option<&glib::Error>) + Send + Sync + 'static,
+        F: Fn(&Self, &DiscovererInfo, Option<&glib::Error>) + Send + Sync + 'static,
     >(
         &self,
         f: F,
@@ -150,10 +150,7 @@ impl Discoverer {
     }
 
     #[doc(alias = "finished")]
-    pub fn connect_finished<F: Fn(&Discoverer) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    pub fn connect_finished<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn finished_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(
             this: *mut ffi::GstDiscoverer,
             f: glib::ffi::gpointer,
@@ -175,7 +172,7 @@ impl Discoverer {
     }
 
     #[doc(alias = "source-setup")]
-    pub fn connect_source_setup<F: Fn(&Discoverer, &gst::Element) + Send + Sync + 'static>(
+    pub fn connect_source_setup<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -203,10 +200,7 @@ impl Discoverer {
     }
 
     #[doc(alias = "starting")]
-    pub fn connect_starting<F: Fn(&Discoverer) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    pub fn connect_starting<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn starting_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(
             this: *mut ffi::GstDiscoverer,
             f: glib::ffi::gpointer,
@@ -230,7 +224,7 @@ impl Discoverer {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "use-cache")]
-    pub fn connect_use_cache_notify<F: Fn(&Discoverer) + Send + Sync + 'static>(
+    pub fn connect_use_cache_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

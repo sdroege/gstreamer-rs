@@ -80,7 +80,7 @@ impl PtpClock {
     }
 
     #[doc(alias = "grandmaster-clock-id")]
-    pub fn connect_grandmaster_clock_id_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(
+    pub fn connect_grandmaster_clock_id_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -108,7 +108,7 @@ impl PtpClock {
     }
 
     #[doc(alias = "internal-clock")]
-    pub fn connect_internal_clock_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(
+    pub fn connect_internal_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -136,7 +136,7 @@ impl PtpClock {
     }
 
     #[doc(alias = "master-clock-id")]
-    pub fn connect_master_clock_id_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(
+    pub fn connect_master_clock_id_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

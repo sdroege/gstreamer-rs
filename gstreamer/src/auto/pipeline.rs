@@ -157,15 +157,13 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_auto_flush_bus_trampoline<
-            P,
+            P: IsA<Pipeline>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstPipeline,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Pipeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Pipeline::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -184,13 +182,14 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
 
     #[doc(alias = "delay")]
     fn connect_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_delay_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_delay_trampoline<
+            P: IsA<Pipeline>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstPipeline,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Pipeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Pipeline::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -212,13 +211,14 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_latency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_latency_trampoline<
+            P: IsA<Pipeline>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstPipeline,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Pipeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Pipeline::from_glib_borrow(this).unsafe_cast_ref())
         }

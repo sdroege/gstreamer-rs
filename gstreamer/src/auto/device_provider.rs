@@ -194,15 +194,13 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn provider_hidden_trampoline<
-            P,
+            P: IsA<DeviceProvider>,
             F: Fn(&P, &str) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstDeviceProvider,
             object: *mut libc::c_char,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<DeviceProvider>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &DeviceProvider::from_glib_borrow(this).unsafe_cast_ref(),
@@ -228,15 +226,13 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn provider_unhidden_trampoline<
-            P,
+            P: IsA<DeviceProvider>,
             F: Fn(&P, &str) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstDeviceProvider,
             object: *mut libc::c_char,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<DeviceProvider>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &DeviceProvider::from_glib_borrow(this).unsafe_cast_ref(),

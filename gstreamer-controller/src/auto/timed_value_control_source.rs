@@ -116,15 +116,13 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn value_added_trampoline<
-            P,
+            P: IsA<TimedValueControlSource>,
             F: Fn(&P, &ControlPoint) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstTimedValueControlSource,
             timed_value: *mut ffi::GstControlPoint,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<TimedValueControlSource>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &TimedValueControlSource::from_glib_borrow(this).unsafe_cast_ref(),
@@ -150,15 +148,13 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn value_changed_trampoline<
-            P,
+            P: IsA<TimedValueControlSource>,
             F: Fn(&P, &ControlPoint) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstTimedValueControlSource,
             timed_value: *mut ffi::GstControlPoint,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<TimedValueControlSource>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &TimedValueControlSource::from_glib_borrow(this).unsafe_cast_ref(),
@@ -184,15 +180,13 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn value_removed_trampoline<
-            P,
+            P: IsA<TimedValueControlSource>,
             F: Fn(&P, &ControlPoint) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstTimedValueControlSource,
             timed_value: *mut ffi::GstControlPoint,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<TimedValueControlSource>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &TimedValueControlSource::from_glib_borrow(this).unsafe_cast_ref(),

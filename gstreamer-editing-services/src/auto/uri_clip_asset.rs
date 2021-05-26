@@ -169,13 +169,14 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
 
     #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_duration_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_duration_trampoline<
+            P: IsA<UriClipAsset>,
+            F: Fn(&P) + 'static,
+        >(
             this: *mut ffi::GESUriClipAsset,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<UriClipAsset>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&UriClipAsset::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -196,13 +197,14 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "is-nested-timeline")]
     fn connect_is_nested_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_is_nested_timeline_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_is_nested_timeline_trampoline<
+            P: IsA<UriClipAsset>,
+            F: Fn(&P) + 'static,
+        >(
             this: *mut ffi::GESUriClipAsset,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<UriClipAsset>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&UriClipAsset::from_glib_borrow(this).unsafe_cast_ref())
         }

@@ -88,13 +88,14 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
 
     #[doc(alias = "mute")]
     fn connect_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_mute_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_mute_trampoline<
+            P: IsA<StreamVolume>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstStreamVolume,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<StreamVolume>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&StreamVolume::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -113,13 +114,14 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
 
     #[doc(alias = "volume")]
     fn connect_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_volume_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_volume_trampoline<
+            P: IsA<StreamVolume>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstStreamVolume,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<StreamVolume>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&StreamVolume::from_glib_borrow(this).unsafe_cast_ref())
         }

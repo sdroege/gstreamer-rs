@@ -467,7 +467,7 @@ impl Player {
     }
 
     #[doc(alias = "buffering")]
-    pub fn connect_buffering<F: Fn(&Player, i32) + Send + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_buffering<F: Fn(&Self, i32) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn buffering_trampoline<F: Fn(&Player, i32) + Send + 'static>(
             this: *mut ffi::GstPlayer,
             object: libc::c_int,
@@ -490,7 +490,7 @@ impl Player {
     }
 
     #[doc(alias = "end-of-stream")]
-    pub fn connect_end_of_stream<F: Fn(&Player) + Send + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_end_of_stream<F: Fn(&Self) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn end_of_stream_trampoline<F: Fn(&Player) + Send + 'static>(
             this: *mut ffi::GstPlayer,
             f: glib::ffi::gpointer,
@@ -512,7 +512,7 @@ impl Player {
     }
 
     #[doc(alias = "error")]
-    pub fn connect_error<F: Fn(&Player, &glib::Error) + Send + 'static>(
+    pub fn connect_error<F: Fn(&Self, &glib::Error) + Send + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -538,7 +538,7 @@ impl Player {
     }
 
     #[doc(alias = "media-info-updated")]
-    pub fn connect_media_info_updated<F: Fn(&Player, &PlayerMediaInfo) + Send + 'static>(
+    pub fn connect_media_info_updated<F: Fn(&Self, &PlayerMediaInfo) + Send + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -566,7 +566,7 @@ impl Player {
     }
 
     #[doc(alias = "mute-changed")]
-    pub fn connect_mute_changed<F: Fn(&Player) + Send + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_mute_changed<F: Fn(&Self) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn mute_changed_trampoline<F: Fn(&Player) + Send + 'static>(
             this: *mut ffi::GstPlayer,
             f: glib::ffi::gpointer,
@@ -588,7 +588,7 @@ impl Player {
     }
 
     #[doc(alias = "state-changed")]
-    pub fn connect_state_changed<F: Fn(&Player, PlayerState) + Send + 'static>(
+    pub fn connect_state_changed<F: Fn(&Self, PlayerState) + Send + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -616,10 +616,7 @@ impl Player {
     }
 
     #[doc(alias = "uri-loaded")]
-    pub fn connect_uri_loaded<F: Fn(&Player, &str) + Send + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    pub fn connect_uri_loaded<F: Fn(&Self, &str) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn uri_loaded_trampoline<F: Fn(&Player, &str) + Send + 'static>(
             this: *mut ffi::GstPlayer,
             object: *mut libc::c_char,
@@ -645,7 +642,7 @@ impl Player {
     }
 
     #[doc(alias = "video-dimensions-changed")]
-    pub fn connect_video_dimensions_changed<F: Fn(&Player, i32, i32) + Send + 'static>(
+    pub fn connect_video_dimensions_changed<F: Fn(&Self, i32, i32) + Send + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -674,7 +671,7 @@ impl Player {
     }
 
     #[doc(alias = "volume-changed")]
-    pub fn connect_volume_changed<F: Fn(&Player) + Send + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_volume_changed<F: Fn(&Self) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn volume_changed_trampoline<F: Fn(&Player) + Send + 'static>(
             this: *mut ffi::GstPlayer,
             f: glib::ffi::gpointer,
@@ -696,7 +693,7 @@ impl Player {
     }
 
     #[doc(alias = "warning")]
-    pub fn connect_warning<F: Fn(&Player, &glib::Error) + Send + 'static>(
+    pub fn connect_warning<F: Fn(&Self, &glib::Error) + Send + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -722,7 +719,7 @@ impl Player {
     }
 
     #[doc(alias = "audio-video-offset")]
-    pub fn connect_audio_video_offset_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_audio_video_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -750,7 +747,7 @@ impl Player {
     }
 
     #[doc(alias = "current-audio-track")]
-    pub fn connect_current_audio_track_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_current_audio_track_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -778,7 +775,7 @@ impl Player {
     }
 
     #[doc(alias = "current-subtitle-track")]
-    pub fn connect_current_subtitle_track_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_current_subtitle_track_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -806,7 +803,7 @@ impl Player {
     }
 
     #[doc(alias = "current-video-track")]
-    pub fn connect_current_video_track_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_current_video_track_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -834,7 +831,7 @@ impl Player {
     }
 
     #[doc(alias = "duration")]
-    pub fn connect_duration_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_duration_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -860,7 +857,7 @@ impl Player {
     }
 
     #[doc(alias = "media-info")]
-    pub fn connect_media_info_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_media_info_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -888,7 +885,7 @@ impl Player {
     }
 
     #[doc(alias = "mute")]
-    pub fn connect_mute_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -914,7 +911,7 @@ impl Player {
     }
 
     #[doc(alias = "pipeline")]
-    pub fn connect_pipeline_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_pipeline_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -940,7 +937,7 @@ impl Player {
     }
 
     #[doc(alias = "position")]
-    pub fn connect_position_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_position_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -966,7 +963,7 @@ impl Player {
     }
 
     #[doc(alias = "rate")]
-    pub fn connect_rate_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_rate_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -994,7 +991,7 @@ impl Player {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "subtitle-video-offset")]
-    pub fn connect_subtitle_video_offset_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_subtitle_video_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1022,7 +1019,7 @@ impl Player {
     }
 
     #[doc(alias = "suburi")]
-    pub fn connect_suburi_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_suburi_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1048,7 +1045,7 @@ impl Player {
     }
 
     #[doc(alias = "uri")]
-    pub fn connect_uri_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_uri_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1074,7 +1071,7 @@ impl Player {
     }
 
     #[doc(alias = "video-multiview-flags")]
-    pub fn connect_video_multiview_flags_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_video_multiview_flags_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1102,7 +1099,7 @@ impl Player {
     }
 
     #[doc(alias = "video-multiview-mode")]
-    pub fn connect_video_multiview_mode_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_video_multiview_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -1130,7 +1127,7 @@ impl Player {
     }
 
     #[doc(alias = "volume")]
-    pub fn connect_volume_notify<F: Fn(&Player) + Send + Sync + 'static>(
+    pub fn connect_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

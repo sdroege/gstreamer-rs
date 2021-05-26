@@ -71,15 +71,13 @@ impl<O: IsA<GLBaseSrc>> GLBaseSrcExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_timestamp_offset_trampoline<
-            P,
+            P: IsA<GLBaseSrc>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstGLBaseSrc,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<GLBaseSrc>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&GLBaseSrc::from_glib_borrow(this).unsafe_cast_ref())
         }

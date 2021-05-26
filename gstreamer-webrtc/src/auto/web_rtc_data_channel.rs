@@ -257,10 +257,7 @@ impl WebRTCDataChannel {
     }
 
     #[doc(alias = "close")]
-    pub fn connect_close<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    pub fn connect_close<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn close_trampoline<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
             this: *mut ffi::GstWebRTCDataChannel,
             f: glib::ffi::gpointer,
@@ -290,7 +287,7 @@ impl WebRTCDataChannel {
     }
 
     #[doc(alias = "on-buffered-amount-low")]
-    pub fn connect_on_buffered_amount_low<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
+    pub fn connect_on_buffered_amount_low<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -317,10 +314,7 @@ impl WebRTCDataChannel {
     }
 
     #[doc(alias = "on-close")]
-    pub fn connect_on_close<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    pub fn connect_on_close<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn on_close_trampoline<
             F: Fn(&WebRTCDataChannel) + Send + Sync + 'static,
         >(
@@ -344,7 +338,7 @@ impl WebRTCDataChannel {
     }
 
     #[doc(alias = "on-error")]
-    pub fn connect_on_error<F: Fn(&WebRTCDataChannel, &glib::Error) + Send + Sync + 'static>(
+    pub fn connect_on_error<F: Fn(&Self, &glib::Error) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -372,9 +366,7 @@ impl WebRTCDataChannel {
     }
 
     #[doc(alias = "on-message-data")]
-    pub fn connect_on_message_data<
-        F: Fn(&WebRTCDataChannel, Option<&glib::Bytes>) + Send + Sync + 'static,
-    >(
+    pub fn connect_on_message_data<F: Fn(&Self, Option<&glib::Bytes>) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -407,9 +399,7 @@ impl WebRTCDataChannel {
     }
 
     #[doc(alias = "on-message-string")]
-    pub fn connect_on_message_string<
-        F: Fn(&WebRTCDataChannel, Option<&str>) + Send + Sync + 'static,
-    >(
+    pub fn connect_on_message_string<F: Fn(&Self, Option<&str>) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -442,10 +432,7 @@ impl WebRTCDataChannel {
     }
 
     #[doc(alias = "on-open")]
-    pub fn connect_on_open<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
+    pub fn connect_on_open<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn on_open_trampoline<
             F: Fn(&WebRTCDataChannel) + Send + Sync + 'static,
         >(
@@ -469,9 +456,7 @@ impl WebRTCDataChannel {
     }
 
     #[doc(alias = "send-data")]
-    pub fn connect_send_data<
-        F: Fn(&WebRTCDataChannel, Option<&glib::Bytes>) + Send + Sync + 'static,
-    >(
+    pub fn connect_send_data<F: Fn(&Self, Option<&glib::Bytes>) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -512,7 +497,7 @@ impl WebRTCDataChannel {
     }
 
     #[doc(alias = "send-string")]
-    pub fn connect_send_string<F: Fn(&WebRTCDataChannel, Option<&str>) + Send + Sync + 'static>(
+    pub fn connect_send_string<F: Fn(&Self, Option<&str>) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -553,7 +538,7 @@ impl WebRTCDataChannel {
     }
 
     #[doc(alias = "buffered-amount")]
-    pub fn connect_buffered_amount_notify<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
+    pub fn connect_buffered_amount_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -581,9 +566,7 @@ impl WebRTCDataChannel {
     }
 
     #[doc(alias = "buffered-amount-low-threshold")]
-    pub fn connect_buffered_amount_low_threshold_notify<
-        F: Fn(&WebRTCDataChannel) + Send + Sync + 'static,
-    >(
+    pub fn connect_buffered_amount_low_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -611,7 +594,7 @@ impl WebRTCDataChannel {
     }
 
     #[doc(alias = "ready-state")]
-    pub fn connect_ready_state_notify<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
+    pub fn connect_ready_state_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

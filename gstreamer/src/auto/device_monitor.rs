@@ -154,13 +154,14 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_show_all_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_show_all_trampoline<
+            P: IsA<DeviceMonitor>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstDeviceMonitor,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<DeviceMonitor>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&DeviceMonitor::from_glib_borrow(this).unsafe_cast_ref())
         }

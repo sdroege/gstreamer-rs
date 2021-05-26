@@ -124,15 +124,13 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_control_source_trampoline<
-            P,
+            P: IsA<DirectControlBinding>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstDirectControlBinding,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<DirectControlBinding>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&DirectControlBinding::from_glib_borrow(this).unsafe_cast_ref())
         }

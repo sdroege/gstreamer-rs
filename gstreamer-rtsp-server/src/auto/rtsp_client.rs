@@ -565,15 +565,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn announce_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -600,12 +598,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     #[doc(alias = "closed")]
     fn connect_closed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn closed_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn closed_trampoline<
+            P: IsA<RTSPClient>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPClient,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -628,15 +627,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn describe_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -662,15 +659,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn get_parameter_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -696,15 +691,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn handle_response_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -730,15 +723,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn new_session_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPSession) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             object: *mut ffi::GstRTSPSession,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -764,15 +755,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn options_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -798,15 +787,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn pause_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -832,15 +819,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn play_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -870,16 +855,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn pre_announce_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) -> gst_rtsp::ffi::GstRTSPStatusCode
-        where
-            P: IsA<RTSPClient>,
-        {
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -910,16 +892,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn pre_describe_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) -> gst_rtsp::ffi::GstRTSPStatusCode
-        where
-            P: IsA<RTSPClient>,
-        {
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -950,16 +929,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn pre_get_parameter_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) -> gst_rtsp::ffi::GstRTSPStatusCode
-        where
-            P: IsA<RTSPClient>,
-        {
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -990,16 +966,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn pre_options_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) -> gst_rtsp::ffi::GstRTSPStatusCode
-        where
-            P: IsA<RTSPClient>,
-        {
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -1030,16 +1003,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn pre_pause_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) -> gst_rtsp::ffi::GstRTSPStatusCode
-        where
-            P: IsA<RTSPClient>,
-        {
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -1070,16 +1040,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn pre_play_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) -> gst_rtsp::ffi::GstRTSPStatusCode
-        where
-            P: IsA<RTSPClient>,
-        {
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -1110,16 +1077,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn pre_record_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) -> gst_rtsp::ffi::GstRTSPStatusCode
-        where
-            P: IsA<RTSPClient>,
-        {
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -1150,16 +1114,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn pre_set_parameter_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) -> gst_rtsp::ffi::GstRTSPStatusCode
-        where
-            P: IsA<RTSPClient>,
-        {
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -1190,16 +1151,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn pre_setup_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) -> gst_rtsp::ffi::GstRTSPStatusCode
-        where
-            P: IsA<RTSPClient>,
-        {
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -1230,16 +1188,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn pre_teardown_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) -> gst_rtsp::ffi::GstRTSPStatusCode
-        where
-            P: IsA<RTSPClient>,
-        {
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -1266,15 +1221,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn record_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -1305,15 +1258,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn set_parameter_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -1339,15 +1290,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn setup_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -1373,15 +1322,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn teardown_request_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
@@ -1406,13 +1353,14 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_drop_backlog_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_drop_backlog_trampoline<
+            P: IsA<RTSPClient>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPClient,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -1434,13 +1382,14 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_mount_points_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_mount_points_trampoline<
+            P: IsA<RTSPClient>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPClient,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -1463,15 +1412,13 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_post_session_timeout_trampoline<
-            P,
+            P: IsA<RTSPClient>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPClient,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -1493,13 +1440,14 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_session_pool_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_session_pool_trampoline<
+            P: IsA<RTSPClient>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPClient,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPClient>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
         }

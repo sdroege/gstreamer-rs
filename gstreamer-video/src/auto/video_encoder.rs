@@ -217,15 +217,13 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_min_force_key_unit_interval_trampoline<
-            P,
+            P: IsA<VideoEncoder>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstVideoEncoder,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<VideoEncoder>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&VideoEncoder::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -244,13 +242,14 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
 
     #[doc(alias = "qos")]
     fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_qos_trampoline<
+            P: IsA<VideoEncoder>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstVideoEncoder,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<VideoEncoder>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&VideoEncoder::from_glib_borrow(this).unsafe_cast_ref())
         }

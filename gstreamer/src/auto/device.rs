@@ -138,12 +138,13 @@ impl<O: IsA<Device>> DeviceExt for O {
 
     #[doc(alias = "removed")]
     fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn removed_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn removed_trampoline<
+            P: IsA<Device>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstDevice,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Device>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Device::from_glib_borrow(this).unsafe_cast_ref())
         }

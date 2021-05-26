@@ -102,7 +102,7 @@ impl GLOverlayCompositor {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "yinvert")]
-    pub fn connect_yinvert_notify<F: Fn(&GLOverlayCompositor) + Send + Sync + 'static>(
+    pub fn connect_yinvert_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

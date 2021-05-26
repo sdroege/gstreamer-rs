@@ -112,7 +112,7 @@ impl WebRTCRTPTransceiver {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "direction")]
-    pub fn connect_direction_notify<F: Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static>(
+    pub fn connect_direction_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

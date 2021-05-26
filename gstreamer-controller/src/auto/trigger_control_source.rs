@@ -85,13 +85,14 @@ impl<O: IsA<TriggerControlSource>> TriggerControlSourceExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_tolerance_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_tolerance_trampoline<
+            P: IsA<TriggerControlSource>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstTriggerControlSource,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<TriggerControlSource>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&TriggerControlSource::from_glib_borrow(this).unsafe_cast_ref())
         }

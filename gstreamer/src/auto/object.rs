@@ -330,13 +330,14 @@ impl<O: IsA<Object>> GstObjectExt for O {
 
     #[doc(alias = "parent")]
     fn connect_parent_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_parent_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_parent_trampoline<
+            P: IsA<Object>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstObject,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Object>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Object::from_glib_borrow(this).unsafe_cast_ref())
         }

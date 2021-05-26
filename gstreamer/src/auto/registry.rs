@@ -233,7 +233,7 @@ impl Registry {
     }
 
     #[doc(alias = "feature-added")]
-    pub fn connect_feature_added<F: Fn(&Registry, &PluginFeature) + Send + Sync + 'static>(
+    pub fn connect_feature_added<F: Fn(&Self, &PluginFeature) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -261,7 +261,7 @@ impl Registry {
     }
 
     #[doc(alias = "plugin-added")]
-    pub fn connect_plugin_added<F: Fn(&Registry, &Plugin) + Send + Sync + 'static>(
+    pub fn connect_plugin_added<F: Fn(&Self, &Plugin) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

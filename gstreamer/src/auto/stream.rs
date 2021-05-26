@@ -85,7 +85,7 @@ impl Stream {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "caps")]
-    pub fn connect_caps_notify<F: Fn(&Stream) + Send + Sync + 'static>(
+    pub fn connect_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -113,7 +113,7 @@ impl Stream {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "stream-flags")]
-    pub fn connect_stream_flags_notify<F: Fn(&Stream) + Send + Sync + 'static>(
+    pub fn connect_stream_flags_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -143,7 +143,7 @@ impl Stream {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "stream-type")]
-    pub fn connect_stream_type_notify<F: Fn(&Stream) + Send + Sync + 'static>(
+    pub fn connect_stream_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -173,7 +173,7 @@ impl Stream {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "tags")]
-    pub fn connect_tags_notify<F: Fn(&Stream) + Send + Sync + 'static>(
+    pub fn connect_tags_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

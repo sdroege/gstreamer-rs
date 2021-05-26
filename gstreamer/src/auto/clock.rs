@@ -453,13 +453,14 @@ impl<O: IsA<Clock>> ClockExt for O {
 
     #[doc(alias = "synced")]
     fn connect_synced<F: Fn(&Self, bool) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn synced_trampoline<P, F: Fn(&P, bool) + Send + Sync + 'static>(
+        unsafe extern "C" fn synced_trampoline<
+            P: IsA<Clock>,
+            F: Fn(&P, bool) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstClock,
             synced: glib::ffi::gboolean,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Clock>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Clock::from_glib_borrow(this).unsafe_cast_ref(),
@@ -484,13 +485,14 @@ impl<O: IsA<Clock>> ClockExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_timeout_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_timeout_trampoline<
+            P: IsA<Clock>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstClock,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Clock>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Clock::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -512,13 +514,14 @@ impl<O: IsA<Clock>> ClockExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_window_size_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_window_size_trampoline<
+            P: IsA<Clock>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstClock,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Clock>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Clock::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -541,15 +544,13 @@ impl<O: IsA<Clock>> ClockExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_window_threshold_trampoline<
-            P,
+            P: IsA<Clock>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstClock,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Clock>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Clock::from_glib_borrow(this).unsafe_cast_ref())
         }

@@ -365,13 +365,14 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_max_errors_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_max_errors_trampoline<
+            P: IsA<AudioDecoder>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstAudioDecoder,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<AudioDecoder>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&AudioDecoder::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -393,13 +394,14 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_min_latency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_min_latency_trampoline<
+            P: IsA<AudioDecoder>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstAudioDecoder,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<AudioDecoder>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&AudioDecoder::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -418,13 +420,14 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     #[doc(alias = "plc")]
     fn connect_plc_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_plc_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_plc_trampoline<
+            P: IsA<AudioDecoder>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstAudioDecoder,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<AudioDecoder>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&AudioDecoder::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -446,13 +449,14 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_tolerance_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_tolerance_trampoline<
+            P: IsA<AudioDecoder>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstAudioDecoder,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<AudioDecoder>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&AudioDecoder::from_glib_borrow(this).unsafe_cast_ref())
         }

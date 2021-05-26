@@ -201,7 +201,7 @@ impl NetClientClock {
     }
 
     #[doc(alias = "address")]
-    pub fn connect_address_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
+    pub fn connect_address_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -229,7 +229,7 @@ impl NetClientClock {
     }
 
     #[doc(alias = "bus")]
-    pub fn connect_bus_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
+    pub fn connect_bus_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -257,7 +257,7 @@ impl NetClientClock {
     }
 
     #[doc(alias = "internal-clock")]
-    pub fn connect_internal_clock_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
+    pub fn connect_internal_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -285,9 +285,7 @@ impl NetClientClock {
     }
 
     #[doc(alias = "minimum-update-interval")]
-    pub fn connect_minimum_update_interval_notify<
-        F: Fn(&NetClientClock) + Send + Sync + 'static,
-    >(
+    pub fn connect_minimum_update_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -315,7 +313,7 @@ impl NetClientClock {
     }
 
     #[doc(alias = "port")]
-    pub fn connect_port_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
+    pub fn connect_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -343,7 +341,7 @@ impl NetClientClock {
     }
 
     #[doc(alias = "qos-dscp")]
-    pub fn connect_qos_dscp_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
+    pub fn connect_qos_dscp_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -371,7 +369,7 @@ impl NetClientClock {
     }
 
     #[doc(alias = "round-trip-limit")]
-    pub fn connect_round_trip_limit_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(
+    pub fn connect_round_trip_limit_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

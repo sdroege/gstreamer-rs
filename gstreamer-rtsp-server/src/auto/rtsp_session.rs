@@ -324,13 +324,14 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_extra_timeout_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_extra_timeout_trampoline<
+            P: IsA<RTSPSession>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPSession,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPSession>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPSession::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -352,13 +353,14 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_timeout_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_timeout_trampoline<
+            P: IsA<RTSPSession>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPSession,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPSession>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPSession::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -381,15 +383,13 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_timeout_always_visible_trampoline<
-            P,
+            P: IsA<RTSPSession>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPSession,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPSession>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPSession::from_glib_borrow(this).unsafe_cast_ref())
         }

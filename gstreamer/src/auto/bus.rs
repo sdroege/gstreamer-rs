@@ -127,7 +127,7 @@ impl Bus {
     }
 
     #[doc(alias = "message")]
-    pub fn connect_message<F: Fn(&Bus, &Message) + Send + 'static>(
+    pub fn connect_message<F: Fn(&Self, &Message) + Send + 'static>(
         &self,
         detail: Option<&str>,
         f: F,
@@ -158,7 +158,7 @@ impl Bus {
     }
 
     #[doc(alias = "sync-message")]
-    pub fn connect_sync_message<F: Fn(&Bus, &Message) + Send + Sync + 'static>(
+    pub fn connect_sync_message<F: Fn(&Self, &Message) + Send + Sync + 'static>(
         &self,
         detail: Option<&str>,
         f: F,

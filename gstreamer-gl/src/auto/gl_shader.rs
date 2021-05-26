@@ -428,7 +428,7 @@ impl GLShader {
     }
 
     #[doc(alias = "linked")]
-    pub fn connect_linked_notify<F: Fn(&GLShader) + Send + Sync + 'static>(
+    pub fn connect_linked_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

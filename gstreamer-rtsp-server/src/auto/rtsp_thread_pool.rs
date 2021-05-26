@@ -94,13 +94,14 @@ impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_max_threads_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_max_threads_trampoline<
+            P: IsA<RTSPThreadPool>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPThreadPool,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPThreadPool>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPThreadPool::from_glib_borrow(this).unsafe_cast_ref())
         }

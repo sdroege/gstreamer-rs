@@ -782,12 +782,13 @@ impl<O: IsA<Element>> ElementExt for O {
 
     #[doc(alias = "no-more-pads")]
     fn connect_no_more_pads<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn no_more_pads_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn no_more_pads_trampoline<
+            P: IsA<Element>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstElement,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Element>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Element::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -809,13 +810,14 @@ impl<O: IsA<Element>> ElementExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn pad_added_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(
+        unsafe extern "C" fn pad_added_trampoline<
+            P: IsA<Element>,
+            F: Fn(&P, &Pad) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstElement,
             new_pad: *mut ffi::GstPad,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Element>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Element::from_glib_borrow(this).unsafe_cast_ref(),
@@ -840,13 +842,14 @@ impl<O: IsA<Element>> ElementExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn pad_removed_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(
+        unsafe extern "C" fn pad_removed_trampoline<
+            P: IsA<Element>,
+            F: Fn(&P, &Pad) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstElement,
             old_pad: *mut ffi::GstPad,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Element>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Element::from_glib_borrow(this).unsafe_cast_ref(),

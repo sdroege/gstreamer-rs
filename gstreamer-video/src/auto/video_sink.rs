@@ -71,15 +71,13 @@ impl<O: IsA<VideoSink>> VideoSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_show_preroll_frame_trampoline<
-            P,
+            P: IsA<VideoSink>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstVideoSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<VideoSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&VideoSink::from_glib_borrow(this).unsafe_cast_ref())
         }

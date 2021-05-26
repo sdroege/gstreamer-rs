@@ -85,13 +85,14 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_context_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_context_trampoline<
+            P: IsA<GLBaseFilter>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstGLBaseFilter,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<GLBaseFilter>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&GLBaseFilter::from_glib_borrow(this).unsafe_cast_ref())
         }

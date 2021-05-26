@@ -109,7 +109,7 @@ impl WebRTCICETransport {
     }
 
     #[doc(alias = "on-new-candidate")]
-    pub fn connect_on_new_candidate<F: Fn(&WebRTCICETransport, &str) + Send + Sync + 'static>(
+    pub fn connect_on_new_candidate<F: Fn(&Self, &str) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -140,9 +140,7 @@ impl WebRTCICETransport {
     }
 
     #[doc(alias = "on-selected-candidate-pair-change")]
-    pub fn connect_on_selected_candidate_pair_change<
-        F: Fn(&WebRTCICETransport) + Send + Sync + 'static,
-    >(
+    pub fn connect_on_selected_candidate_pair_change<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -169,7 +167,7 @@ impl WebRTCICETransport {
     }
 
     #[doc(alias = "gathering-state")]
-    pub fn connect_gathering_state_notify<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(
+    pub fn connect_gathering_state_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -197,7 +195,7 @@ impl WebRTCICETransport {
     }
 
     #[doc(alias = "state")]
-    pub fn connect_state_notify<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(
+    pub fn connect_state_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

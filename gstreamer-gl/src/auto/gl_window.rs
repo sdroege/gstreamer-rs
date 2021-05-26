@@ -277,16 +277,14 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn key_event_trampoline<
-            P,
+            P: IsA<GLWindow>,
             F: Fn(&P, &str, &str) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstGLWindow,
             id: *mut libc::c_char,
             key: *mut libc::c_char,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<GLWindow>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &GLWindow::from_glib_borrow(this).unsafe_cast_ref(),
@@ -313,7 +311,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn mouse_event_trampoline<
-            P,
+            P: IsA<GLWindow>,
             F: Fn(&P, &str, i32, f64, f64) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstGLWindow,
@@ -322,9 +320,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
             x: libc::c_double,
             y: libc::c_double,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<GLWindow>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &GLWindow::from_glib_borrow(this).unsafe_cast_ref(),
@@ -355,7 +351,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn scroll_event_trampoline<
-            P,
+            P: IsA<GLWindow>,
             F: Fn(&P, f64, f64, f64, f64) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstGLWindow,
@@ -364,9 +360,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
             delta_x: libc::c_double,
             delta_y: libc::c_double,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<GLWindow>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &GLWindow::from_glib_borrow(this).unsafe_cast_ref(),

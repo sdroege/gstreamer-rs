@@ -235,13 +235,11 @@ impl<O: IsA<Asset>> AssetExt for O {
 
     #[doc(alias = "proxy")]
     fn connect_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_proxy_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_proxy_trampoline<P: IsA<Asset>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESAsset,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Asset>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Asset::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -260,13 +258,11 @@ impl<O: IsA<Asset>> AssetExt for O {
 
     #[doc(alias = "proxy-target")]
     fn connect_proxy_target_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_proxy_target_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_proxy_target_trampoline<P: IsA<Asset>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESAsset,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Asset>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Asset::from_glib_borrow(this).unsafe_cast_ref())
         }

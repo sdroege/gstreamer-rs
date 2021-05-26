@@ -214,15 +214,13 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_control_source_a_trampoline<
-            P,
+            P: IsA<ARGBControlBinding>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstARGBControlBinding,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<ARGBControlBinding>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&ARGBControlBinding::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -245,15 +243,13 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_control_source_b_trampoline<
-            P,
+            P: IsA<ARGBControlBinding>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstARGBControlBinding,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<ARGBControlBinding>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&ARGBControlBinding::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -276,15 +272,13 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_control_source_g_trampoline<
-            P,
+            P: IsA<ARGBControlBinding>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstARGBControlBinding,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<ARGBControlBinding>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&ARGBControlBinding::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -307,15 +301,13 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_control_source_r_trampoline<
-            P,
+            P: IsA<ARGBControlBinding>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstARGBControlBinding,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<ARGBControlBinding>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&ARGBControlBinding::from_glib_borrow(this).unsafe_cast_ref())
         }

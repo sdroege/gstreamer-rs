@@ -307,13 +307,14 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_blocksize_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_blocksize_trampoline<
+            P: IsA<BaseSrc>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSrc,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSrc>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSrc::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -335,13 +336,14 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_do_timestamp_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_do_timestamp_trampoline<
+            P: IsA<BaseSrc>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSrc,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSrc>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSrc::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -363,13 +365,14 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_num_buffers_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_num_buffers_trampoline<
+            P: IsA<BaseSrc>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSrc,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSrc>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSrc::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -391,13 +394,14 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_typefind_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_typefind_trampoline<
+            P: IsA<BaseSrc>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSrc,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSrc>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSrc::from_glib_borrow(this).unsafe_cast_ref())
         }

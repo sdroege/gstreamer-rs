@@ -182,15 +182,13 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn session_removed_trampoline<
-            P,
+            P: IsA<RTSPSessionPool>,
             F: Fn(&P, &RTSPSession) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPSessionPool,
             object: *mut ffi::GstRTSPSession,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPSessionPool>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPSessionPool::from_glib_borrow(this).unsafe_cast_ref(),
@@ -215,13 +213,14 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_max_sessions_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_max_sessions_trampoline<
+            P: IsA<RTSPSessionPool>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPSessionPool,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPSessionPool>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPSessionPool::from_glib_borrow(this).unsafe_cast_ref())
         }

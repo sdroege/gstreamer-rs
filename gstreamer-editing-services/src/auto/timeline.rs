@@ -506,12 +506,10 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[doc(alias = "commited")]
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn commited_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn commited_trampoline<P: IsA<Timeline>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimeline,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Timeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Timeline::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -530,13 +528,14 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[doc(alias = "group-added")]
     fn connect_group_added<F: Fn(&Self, &Group) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn group_added_trampoline<P, F: Fn(&P, &Group) + 'static>(
+        unsafe extern "C" fn group_added_trampoline<
+            P: IsA<Timeline>,
+            F: Fn(&P, &Group) + 'static,
+        >(
             this: *mut ffi::GESTimeline,
             group: *mut ffi::GESGroup,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Timeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
@@ -563,13 +562,14 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[doc(alias = "layer-added")]
     fn connect_layer_added<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn layer_added_trampoline<P, F: Fn(&P, &Layer) + 'static>(
+        unsafe extern "C" fn layer_added_trampoline<
+            P: IsA<Timeline>,
+            F: Fn(&P, &Layer) + 'static,
+        >(
             this: *mut ffi::GESTimeline,
             layer: *mut ffi::GESLayer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Timeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
@@ -591,13 +591,14 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[doc(alias = "layer-removed")]
     fn connect_layer_removed<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn layer_removed_trampoline<P, F: Fn(&P, &Layer) + 'static>(
+        unsafe extern "C" fn layer_removed_trampoline<
+            P: IsA<Timeline>,
+            F: Fn(&P, &Layer) + 'static,
+        >(
             this: *mut ffi::GESTimeline,
             layer: *mut ffi::GESLayer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Timeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
@@ -625,17 +626,14 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn select_element_track_trampoline<
-            P,
+            P: IsA<Timeline>,
             F: Fn(&P, &Clip, &TrackElement) -> Track + 'static,
         >(
             this: *mut ffi::GESTimeline,
             clip: *mut ffi::GESClip,
             track_element: *mut ffi::GESTrackElement,
             f: glib::ffi::gpointer,
-        ) -> *mut ffi::GESTrack
-        where
-            P: IsA<Timeline>,
-        {
+        ) -> *mut ffi::GESTrack {
             let f: &F = &*(f as *const F);
             f(
                 &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
@@ -668,7 +666,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn snapping_ended_trampoline<
-            P,
+            P: IsA<Timeline>,
             F: Fn(&P, &TrackElement, &TrackElement, u64) + 'static,
         >(
             this: *mut ffi::GESTimeline,
@@ -676,9 +674,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             obj2: *mut ffi::GESTrackElement,
             position: u64,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Timeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
@@ -706,7 +702,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn snapping_started_trampoline<
-            P,
+            P: IsA<Timeline>,
             F: Fn(&P, &TrackElement, &TrackElement, u64) + 'static,
         >(
             this: *mut ffi::GESTimeline,
@@ -714,9 +710,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             obj2: *mut ffi::GESTrackElement,
             position: u64,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Timeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
@@ -740,13 +734,14 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[doc(alias = "track-added")]
     fn connect_track_added<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn track_added_trampoline<P, F: Fn(&P, &Track) + 'static>(
+        unsafe extern "C" fn track_added_trampoline<
+            P: IsA<Timeline>,
+            F: Fn(&P, &Track) + 'static,
+        >(
             this: *mut ffi::GESTimeline,
             track: *mut ffi::GESTrack,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Timeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
@@ -768,13 +763,14 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[doc(alias = "track-removed")]
     fn connect_track_removed<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn track_removed_trampoline<P, F: Fn(&P, &Track) + 'static>(
+        unsafe extern "C" fn track_removed_trampoline<
+            P: IsA<Timeline>,
+            F: Fn(&P, &Track) + 'static,
+        >(
             this: *mut ffi::GESTimeline,
             track: *mut ffi::GESTrack,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Timeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
@@ -796,13 +792,14 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[doc(alias = "auto-transition")]
     fn connect_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_auto_transition_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_auto_transition_trampoline<
+            P: IsA<Timeline>,
+            F: Fn(&P) + 'static,
+        >(
             this: *mut ffi::GESTimeline,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Timeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Timeline::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -821,13 +818,11 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_duration_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_duration_trampoline<P: IsA<Timeline>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimeline,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Timeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Timeline::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -846,13 +841,14 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[doc(alias = "snapping-distance")]
     fn connect_snapping_distance_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_snapping_distance_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_snapping_distance_trampoline<
+            P: IsA<Timeline>,
+            F: Fn(&P) + 'static,
+        >(
             this: *mut ffi::GESTimeline,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Timeline>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Timeline::from_glib_borrow(this).unsafe_cast_ref())
         }

@@ -338,13 +338,11 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     #[doc(alias = "clip-added")]
     fn connect_clip_added<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn clip_added_trampoline<P, F: Fn(&P, &Clip) + 'static>(
+        unsafe extern "C" fn clip_added_trampoline<P: IsA<Layer>, F: Fn(&P, &Clip) + 'static>(
             this: *mut ffi::GESLayer,
             clip: *mut ffi::GESClip,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Layer>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Layer::from_glib_borrow(this).unsafe_cast_ref(),
@@ -366,13 +364,11 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     #[doc(alias = "clip-removed")]
     fn connect_clip_removed<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn clip_removed_trampoline<P, F: Fn(&P, &Clip) + 'static>(
+        unsafe extern "C" fn clip_removed_trampoline<P: IsA<Layer>, F: Fn(&P, &Clip) + 'static>(
             this: *mut ffi::GESLayer,
             clip: *mut ffi::GESClip,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Layer>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Layer::from_glib_borrow(this).unsafe_cast_ref(),
@@ -394,13 +390,14 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     #[doc(alias = "auto-transition")]
     fn connect_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_auto_transition_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_auto_transition_trampoline<
+            P: IsA<Layer>,
+            F: Fn(&P) + 'static,
+        >(
             this: *mut ffi::GESLayer,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Layer>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Layer::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -419,13 +416,11 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     #[doc(alias = "priority")]
     fn connect_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_priority_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_priority_trampoline<P: IsA<Layer>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESLayer,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Layer>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Layer::from_glib_borrow(this).unsafe_cast_ref())
         }

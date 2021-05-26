@@ -294,13 +294,14 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_max_errors_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_max_errors_trampoline<
+            P: IsA<VideoDecoder>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstVideoDecoder,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<VideoDecoder>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&VideoDecoder::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -321,13 +322,14 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "qos")]
     fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_qos_trampoline<
+            P: IsA<VideoDecoder>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstVideoDecoder,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<VideoDecoder>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&VideoDecoder::from_glib_borrow(this).unsafe_cast_ref())
         }

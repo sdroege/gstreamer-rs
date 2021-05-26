@@ -90,13 +90,11 @@ impl<O: IsA<UriClip>> UriClipExt for O {
 
     #[doc(alias = "is-image")]
     fn connect_is_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_is_image_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_is_image_trampoline<P: IsA<UriClip>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESUriClip,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<UriClip>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&UriClip::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -115,13 +113,11 @@ impl<O: IsA<UriClip>> UriClipExt for O {
 
     #[doc(alias = "mute")]
     fn connect_mute_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_mute_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_mute_trampoline<P: IsA<UriClip>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESUriClip,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<UriClip>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&UriClip::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -140,13 +136,14 @@ impl<O: IsA<UriClip>> UriClipExt for O {
 
     #[doc(alias = "supported-formats")]
     fn connect_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_supported_formats_trampoline<P, F: Fn(&P) + 'static>(
+        unsafe extern "C" fn notify_supported_formats_trampoline<
+            P: IsA<UriClip>,
+            F: Fn(&P) + 'static,
+        >(
             this: *mut ffi::GESUriClip,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<UriClip>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&UriClip::from_glib_borrow(this).unsafe_cast_ref())
         }

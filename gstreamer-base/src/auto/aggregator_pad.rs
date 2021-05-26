@@ -150,15 +150,13 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn buffer_consumed_trampoline<
-            P,
+            P: IsA<AggregatorPad>,
             F: Fn(&P, &gst::Buffer) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstAggregatorPad,
             object: *mut gst::ffi::GstBuffer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<AggregatorPad>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &AggregatorPad::from_glib_borrow(this).unsafe_cast_ref(),
@@ -185,13 +183,14 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_emit_signals_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_emit_signals_trampoline<
+            P: IsA<AggregatorPad>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstAggregatorPad,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<AggregatorPad>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&AggregatorPad::from_glib_borrow(this).unsafe_cast_ref())
         }

@@ -297,7 +297,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn accept_certificate_trampoline<
-            P,
+            P: IsA<RTSPAuth>,
             F: Fn(&P, &gio::TlsConnection, &gio::TlsCertificate, gio::TlsCertificateFlags) -> bool
                 + Send
                 + Sync
@@ -308,10 +308,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
             peer_cert: *mut gio::ffi::GTlsCertificate,
             errors: gio::ffi::GTlsCertificateFlags,
             f: glib::ffi::gpointer,
-        ) -> glib::ffi::gboolean
-        where
-            P: IsA<RTSPAuth>,
-        {
+        ) -> glib::ffi::gboolean {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPAuth::from_glib_borrow(this).unsafe_cast_ref(),

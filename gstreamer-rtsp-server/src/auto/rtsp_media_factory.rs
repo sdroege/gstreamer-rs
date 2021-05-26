@@ -777,15 +777,13 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn media_configure_trampoline<
-            P,
+            P: IsA<RTSPMediaFactory>,
             F: Fn(&P, &RTSPMedia) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPMediaFactory,
             object: *mut ffi::GstRTSPMedia,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref(),
@@ -811,15 +809,13 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn media_constructed_trampoline<
-            P,
+            P: IsA<RTSPMediaFactory>,
             F: Fn(&P, &RTSPMedia) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPMediaFactory,
             object: *mut ffi::GstRTSPMedia,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref(),
@@ -845,15 +841,13 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_bind_mcast_address_trampoline<
-            P,
+            P: IsA<RTSPMediaFactory>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -875,13 +869,14 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_buffer_size_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_buffer_size_trampoline<
+            P: IsA<RTSPMediaFactory>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -900,13 +895,14 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
 
     #[doc(alias = "clock")]
     fn connect_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_clock_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_clock_trampoline<
+            P: IsA<RTSPMediaFactory>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -928,13 +924,14 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_dscp_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_dscp_qos_trampoline<
+            P: IsA<RTSPMediaFactory>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -956,13 +953,14 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_eos_shutdown_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_eos_shutdown_trampoline<
+            P: IsA<RTSPMediaFactory>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -984,13 +982,14 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_latency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_latency_trampoline<
+            P: IsA<RTSPMediaFactory>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -1009,13 +1008,14 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
 
     #[doc(alias = "launch")]
     fn connect_launch_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_launch_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_launch_trampoline<
+            P: IsA<RTSPMediaFactory>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -1037,13 +1037,14 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_max_mcast_ttl_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_max_mcast_ttl_trampoline<
+            P: IsA<RTSPMediaFactory>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -1065,13 +1066,14 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_profiles_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_profiles_trampoline<
+            P: IsA<RTSPMediaFactory>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -1093,13 +1095,14 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_protocols_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_protocols_trampoline<
+            P: IsA<RTSPMediaFactory>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -1118,13 +1121,14 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
 
     #[doc(alias = "shared")]
     fn connect_shared_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_shared_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_shared_trampoline<
+            P: IsA<RTSPMediaFactory>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -1147,15 +1151,13 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_stop_on_disconnect_trampoline<
-            P,
+            P: IsA<RTSPMediaFactory>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -1177,13 +1179,14 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_suspend_mode_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_suspend_mode_trampoline<
+            P: IsA<RTSPMediaFactory>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -1206,15 +1209,13 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_transport_mode_trampoline<
-            P,
+            P: IsA<RTSPMediaFactory>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPMediaFactory,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactory>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
         }

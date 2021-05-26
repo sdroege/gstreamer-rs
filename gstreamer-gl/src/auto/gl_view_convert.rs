@@ -231,7 +231,7 @@ impl GLViewConvert {
     }
 
     #[doc(alias = "downmix-mode")]
-    pub fn connect_downmix_mode_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(
+    pub fn connect_downmix_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -259,7 +259,7 @@ impl GLViewConvert {
     }
 
     #[doc(alias = "input-flags-override")]
-    pub fn connect_input_flags_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(
+    pub fn connect_input_flags_override_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -287,7 +287,7 @@ impl GLViewConvert {
     }
 
     #[doc(alias = "input-mode-override")]
-    pub fn connect_input_mode_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(
+    pub fn connect_input_mode_override_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -315,7 +315,7 @@ impl GLViewConvert {
     }
 
     #[doc(alias = "output-flags-override")]
-    pub fn connect_output_flags_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(
+    pub fn connect_output_flags_override_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -343,7 +343,7 @@ impl GLViewConvert {
     }
 
     #[doc(alias = "output-mode-override")]
-    pub fn connect_output_mode_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(
+    pub fn connect_output_mode_override_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

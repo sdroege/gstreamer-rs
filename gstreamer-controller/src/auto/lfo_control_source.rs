@@ -218,13 +218,14 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_amplitude_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_amplitude_trampoline<
+            P: IsA<LFOControlSource>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstLFOControlSource,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<LFOControlSource>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&LFOControlSource::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -246,13 +247,14 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_frequency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_frequency_trampoline<
+            P: IsA<LFOControlSource>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstLFOControlSource,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<LFOControlSource>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&LFOControlSource::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -271,13 +273,14 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
 
     #[doc(alias = "offset")]
     fn connect_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_offset_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_offset_trampoline<
+            P: IsA<LFOControlSource>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstLFOControlSource,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<LFOControlSource>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&LFOControlSource::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -299,13 +302,14 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_timeshift_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_timeshift_trampoline<
+            P: IsA<LFOControlSource>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstLFOControlSource,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<LFOControlSource>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&LFOControlSource::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -327,13 +331,14 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_waveform_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_waveform_trampoline<
+            P: IsA<LFOControlSource>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstLFOControlSource,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<LFOControlSource>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&LFOControlSource::from_glib_borrow(this).unsafe_cast_ref())
         }

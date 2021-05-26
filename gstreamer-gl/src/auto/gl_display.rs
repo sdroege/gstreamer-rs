@@ -199,16 +199,13 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn create_context_trampoline<
-            P,
+            P: IsA<GLDisplay>,
             F: Fn(&P, &GLContext) -> GLContext + Send + Sync + 'static,
         >(
             this: *mut ffi::GstGLDisplay,
             context: *mut ffi::GstGLContext,
             f: glib::ffi::gpointer,
-        ) -> *mut ffi::GstGLContext
-        where
-            P: IsA<GLDisplay>,
-        {
+        ) -> *mut ffi::GstGLContext {
             let f: &F = &*(f as *const F);
             f(
                 &GLDisplay::from_glib_borrow(this).unsafe_cast_ref(),

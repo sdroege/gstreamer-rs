@@ -167,7 +167,7 @@ impl PadTemplate {
     }
 
     #[doc(alias = "pad-created")]
-    pub fn connect_pad_created<F: Fn(&PadTemplate, &Pad) + Send + Sync + 'static>(
+    pub fn connect_pad_created<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

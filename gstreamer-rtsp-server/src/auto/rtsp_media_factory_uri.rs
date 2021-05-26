@@ -109,13 +109,14 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
 
     #[doc(alias = "uri")]
     fn connect_uri_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_uri_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_uri_trampoline<
+            P: IsA<RTSPMediaFactoryURI>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPMediaFactoryURI,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactoryURI>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactoryURI::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -137,13 +138,14 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_use_gstpay_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_use_gstpay_trampoline<
+            P: IsA<RTSPMediaFactoryURI>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstRTSPMediaFactoryURI,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<RTSPMediaFactoryURI>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&RTSPMediaFactoryURI::from_glib_borrow(this).unsafe_cast_ref())
         }

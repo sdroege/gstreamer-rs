@@ -354,16 +354,14 @@ impl<O: IsA<Bin>> GstBinExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn deep_element_added_trampoline<
-            P,
+            P: IsA<Bin>,
             F: Fn(&P, &Bin, &Element) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstBin,
             sub_bin: *mut ffi::GstBin,
             element: *mut ffi::GstElement,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Bin>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Bin::from_glib_borrow(this).unsafe_cast_ref(),
@@ -392,16 +390,14 @@ impl<O: IsA<Bin>> GstBinExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn deep_element_removed_trampoline<
-            P,
+            P: IsA<Bin>,
             F: Fn(&P, &Bin, &Element) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstBin,
             sub_bin: *mut ffi::GstBin,
             element: *mut ffi::GstElement,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Bin>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Bin::from_glib_borrow(this).unsafe_cast_ref(),
@@ -428,15 +424,13 @@ impl<O: IsA<Bin>> GstBinExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn element_added_trampoline<
-            P,
+            P: IsA<Bin>,
             F: Fn(&P, &Element) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstBin,
             element: *mut ffi::GstElement,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Bin>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Bin::from_glib_borrow(this).unsafe_cast_ref(),
@@ -462,15 +456,13 @@ impl<O: IsA<Bin>> GstBinExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn element_removed_trampoline<
-            P,
+            P: IsA<Bin>,
             F: Fn(&P, &Element) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstBin,
             element: *mut ffi::GstElement,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Bin>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &Bin::from_glib_borrow(this).unsafe_cast_ref(),
@@ -496,15 +488,13 @@ impl<O: IsA<Bin>> GstBinExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_async_handling_trampoline<
-            P,
+            P: IsA<Bin>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstBin,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Bin>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Bin::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -527,15 +517,13 @@ impl<O: IsA<Bin>> GstBinExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_message_forward_trampoline<
-            P,
+            P: IsA<Bin>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstBin,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<Bin>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&Bin::from_glib_borrow(this).unsafe_cast_ref())
         }

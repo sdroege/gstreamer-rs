@@ -303,15 +303,13 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_alignment_threshold_trampoline<
-            P,
+            P: IsA<AudioBaseSink>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstAudioBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<AudioBaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -333,13 +331,14 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_buffer_time_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_buffer_time_trampoline<
+            P: IsA<AudioBaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstAudioBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<AudioBaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -362,15 +361,13 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_can_activate_pull_trampoline<
-            P,
+            P: IsA<AudioBaseSink>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstAudioBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<AudioBaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -392,13 +389,14 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_discont_wait_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_discont_wait_trampoline<
+            P: IsA<AudioBaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstAudioBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<AudioBaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -421,15 +419,13 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_drift_tolerance_trampoline<
-            P,
+            P: IsA<AudioBaseSink>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstAudioBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<AudioBaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -451,13 +447,14 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_latency_time_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_latency_time_trampoline<
+            P: IsA<AudioBaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstAudioBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<AudioBaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -479,13 +476,14 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_provide_clock_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_provide_clock_trampoline<
+            P: IsA<AudioBaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstAudioBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<AudioBaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -507,13 +505,14 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_slave_method_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_slave_method_trampoline<
+            P: IsA<AudioBaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstAudioBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<AudioBaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }

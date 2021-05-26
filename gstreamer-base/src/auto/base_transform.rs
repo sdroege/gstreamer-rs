@@ -235,13 +235,14 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
 
     #[doc(alias = "qos")]
     fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_qos_trampoline<
+            P: IsA<BaseTransform>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseTransform,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseTransform>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseTransform::from_glib_borrow(this).unsafe_cast_ref())
         }

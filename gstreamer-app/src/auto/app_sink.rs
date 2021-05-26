@@ -187,7 +187,7 @@ impl AppSink {
     }
 
     #[doc(alias = "eos")]
-    pub fn connect_eos<F: Fn(&AppSink) + Send + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_eos<F: Fn(&Self) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn eos_trampoline<F: Fn(&AppSink) + Send + 'static>(
             this: *mut ffi::GstAppSink,
             f: glib::ffi::gpointer,
@@ -210,7 +210,7 @@ impl AppSink {
 
     #[doc(alias = "new-preroll")]
     pub fn connect_new_preroll<
-        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
+        F: Fn(&Self) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
     >(
         &self,
         f: F,
@@ -239,7 +239,7 @@ impl AppSink {
 
     #[doc(alias = "new-sample")]
     pub fn connect_new_sample<
-        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
+        F: Fn(&Self) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
     >(
         &self,
         f: F,
@@ -267,7 +267,7 @@ impl AppSink {
     }
 
     #[doc(alias = "buffer-list")]
-    pub fn connect_buffer_list_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+    pub fn connect_buffer_list_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -295,7 +295,7 @@ impl AppSink {
     }
 
     #[doc(alias = "caps")]
-    pub fn connect_caps_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+    pub fn connect_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -321,7 +321,7 @@ impl AppSink {
     }
 
     #[doc(alias = "drop")]
-    pub fn connect_drop_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+    pub fn connect_drop_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -347,7 +347,7 @@ impl AppSink {
     }
 
     #[doc(alias = "emit-signals")]
-    pub fn connect_emit_signals_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+    pub fn connect_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -375,7 +375,7 @@ impl AppSink {
     }
 
     #[doc(alias = "eos")]
-    pub fn connect_eos_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+    pub fn connect_eos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -401,7 +401,7 @@ impl AppSink {
     }
 
     #[doc(alias = "max-buffers")]
-    pub fn connect_max_buffers_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+    pub fn connect_max_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -429,7 +429,7 @@ impl AppSink {
     }
 
     #[doc(alias = "wait-on-eos")]
-    pub fn connect_wait_on_eos_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+    pub fn connect_wait_on_eos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

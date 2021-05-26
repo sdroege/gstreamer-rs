@@ -206,15 +206,13 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_disable_passthrough_trampoline<
-            P,
+            P: IsA<BaseParse>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstBaseParse,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseParse>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseParse::from_glib_borrow(this).unsafe_cast_ref())
         }

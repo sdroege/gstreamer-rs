@@ -545,13 +545,14 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     #[doc(alias = "async")]
     fn connect_async_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_async_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_async_trampoline<
+            P: IsA<BaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -573,13 +574,14 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_blocksize_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_blocksize_trampoline<
+            P: IsA<BaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -602,15 +604,13 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_last_sample_trampoline<
-            P,
+            P: IsA<BaseSink>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -632,13 +632,14 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_last_sample_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_last_sample_trampoline<
+            P: IsA<BaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -660,13 +661,14 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_max_bitrate_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_max_bitrate_trampoline<
+            P: IsA<BaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -688,13 +690,14 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_max_lateness_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_max_lateness_trampoline<
+            P: IsA<BaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -719,15 +722,13 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_processing_deadline_trampoline<
-            P,
+            P: IsA<BaseSink>,
             F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -746,13 +747,14 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     #[doc(alias = "qos")]
     fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_qos_trampoline<
+            P: IsA<BaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -774,13 +776,14 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_render_delay_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_render_delay_trampoline<
+            P: IsA<BaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -801,13 +804,14 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "stats")]
     fn connect_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_stats_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_stats_trampoline<
+            P: IsA<BaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -826,13 +830,14 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     #[doc(alias = "sync")]
     fn connect_sync_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_sync_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_sync_trampoline<
+            P: IsA<BaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -854,13 +859,14 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_throttle_time_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_throttle_time_trampoline<
+            P: IsA<BaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
@@ -882,13 +888,14 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_ts_offset_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+        unsafe extern "C" fn notify_ts_offset_trampoline<
+            P: IsA<BaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstBaseSink,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<BaseSink>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(&BaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }

@@ -141,16 +141,14 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn child_added_trampoline<
-            P,
+            P: IsA<ChildProxy>,
             F: Fn(&P, &glib::Object, &str) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstChildProxy,
             object: *mut glib::gobject_ffi::GObject,
             name: *mut libc::c_char,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<ChildProxy>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &ChildProxy::from_glib_borrow(this).unsafe_cast_ref(),
@@ -177,16 +175,14 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn child_removed_trampoline<
-            P,
+            P: IsA<ChildProxy>,
             F: Fn(&P, &glib::Object, &str) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstChildProxy,
             object: *mut glib::gobject_ffi::GObject,
             name: *mut libc::c_char,
             f: glib::ffi::gpointer,
-        ) where
-            P: IsA<ChildProxy>,
-        {
+        ) {
             let f: &F = &*(f as *const F);
             f(
                 &ChildProxy::from_glib_borrow(this).unsafe_cast_ref(),
