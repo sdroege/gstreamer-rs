@@ -384,11 +384,16 @@ gir-checks:
   extends: .img-stable
   stage: 'extras'
   script:
+    - git diff --exit-code
     - git clone --depth 1 https://github.com/gtk-rs/checker
+    - git diff --exit-code
     - cd checker && echo '[workspace]' >> Cargo.toml
+    - cd .. && git diff --exit-code && cd checker
     - cargo build --locked --color=always --release
+    - cd .. && git diff --exit-code && cd checker
     - |
       cargo run --color=always --release -- ../gstreamer* ../gstreamer-gl/{egl,wayland,x11}
+    - cd .. && git diff --exit-code && cd checker
     # Check doc aliases
     - |
       for crate in ../gstreamer* ../gstreamer-gl/{egl,wayland,x11}; do
@@ -403,6 +408,7 @@ gir-checks:
         echo '-->' $crate
         ./checker/check_init_asserts $crate
       done
+    - git diff --exit-code
 
 outdated:
   extends: .img-stable
