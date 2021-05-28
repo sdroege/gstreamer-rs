@@ -70,7 +70,7 @@ manual = [
 [[object]]
 name = "Gst.Structure"
 status = "manual"
-ref_mode = "ref-mut"
+ref_mode = "ref"
 
 [[object]]
 name = "Gst.Buffer"
