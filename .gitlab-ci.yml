@@ -381,6 +381,8 @@ deny:
     - cargo deny --color=always check
 
 gir-checks:
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   extends: .img-stable
   stage: 'extras'
   script:
