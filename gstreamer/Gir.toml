@@ -575,21 +575,6 @@ manual_traits = ["ElementExtManual"]
         bool_return_is_error = "Failed to link pads"
 
     [[object.function]]
-    name = "post_message"
-        [object.function.return]
-        bool_return_is_error = "Failed to post message"
-
-    [[object.function]]
-    name = "seek"
-        [object.function.return]
-        bool_return_is_error = "Failed to seek"
-
-    [[object.function]]
-    name = "seek_simple"
-        [object.function.return]
-        bool_return_is_error = "Failed to seek"
-
-    [[object.function]]
     name = "set_clock"
         [object.function.return]
         bool_return_is_error = "Failed to set clock"
@@ -1514,6 +1499,8 @@ status = "generate"
 
     [[object.function]]
     name = "debug_get_stack_trace"
+    # can be called before gst_init()
+    assertion = "skip"
         [object.function.return]
         nullable_return_is_error = "Failed to get stack trace"
 
@@ -1544,11 +1531,6 @@ status = "generate"
 
     [[object.function]]
     name = "debug_unset_threshold_for_name"
-    # can be called before gst_init()
-    assertion = "skip"
-
-    [[object.function]]
-    name = "debug_get_stack_trace"
     # can be called before gst_init()
     assertion = "skip"
 
@@ -1679,16 +1661,22 @@ status = "generate"
     name = "new_y"
     # Needs manual checking of invariants
     manual = true
+        [object.function.return]
+        nullable = true
 
     [[object.function]]
     name = "new_ym"
     # Needs manual checking of invariants
     manual = true
+        [object.function.return]
+        nullable = true
 
     [[object.function]]
     name = "new_ymd"
     # Needs manual checking of invariants
     manual = true
+        [object.function.return]
+        nullable = true
 
     [[object.function]]
     name = "get_month"
@@ -1724,24 +1712,6 @@ status = "generate"
     name = "get_time_zone_offset"
     # Needs manual checking of invariants
     manual = true
-
-    [[object.function]]
-    name = "new_y"
-        [object.function.return]
-        nullable = true
-        nullable_return_is_error = "Can't create DateTime"
-
-    [[object.function]]
-    name = "new_ym"
-        [object.function.return]
-        nullable = true
-        nullable_return_is_error = "Can't create DateTime"
-
-    [[object.function]]
-    name = "new_ymd"
-        [object.function.return]
-        nullable = true
-        nullable_return_is_error = "Can't create DateTime"
 
     [[object.function]]
     name = "new_from_g_date_time"
