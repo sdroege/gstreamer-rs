@@ -2,7 +2,7 @@
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 build = "build.rs"
 description = "FFI bindings to libgstgl-1.0 (Wayland support)"
-documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/gstreamer_gl_wayland_sys/"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_gl_wayland_sys/"
 homepage = "https://gstreamer.freedesktop.org"
 keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
 license = "MIT"

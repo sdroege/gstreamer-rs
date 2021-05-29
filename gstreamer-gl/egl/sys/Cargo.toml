@@ -2,7 +2,7 @@
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 build = "build.rs"
 description = "FFI bindings to libgstgl-1.0 (EGL support)"
-documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/gstreamer_gl_egl_sys/"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_gl_egl_sys/"
 homepage = "https://gstreamer.freedesktop.org"
 keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
 license = "MIT"
