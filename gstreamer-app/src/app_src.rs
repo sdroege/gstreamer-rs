@@ -283,6 +283,55 @@ impl AppSrc {
         }
     }
 
+    #[doc(alias = "do-timestamp")]
+    #[doc(alias = "gst_base_src_set_do_timestamp")]
+    pub fn set_do_timestamp(&self, timestamp: bool) {
+        unsafe {
+            gst_base::ffi::gst_base_src_set_do_timestamp(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSrc,
+                timestamp.into_glib(),
+            );
+        }
+    }
+
+    #[doc(alias = "do-timestamp")]
+    #[doc(alias = "gst_base_src_get_do_timestamp")]
+    pub fn do_timestamp(&self) -> bool {
+        unsafe {
+            from_glib(gst_base::ffi::gst_base_src_get_do_timestamp(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSrc
+            ))
+        }
+    }
+
+    #[doc(alias = "do-timestamp")]
+    pub fn connect_do_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        unsafe extern "C" fn notify_do_timestamp_trampoline<
+            F: Fn(&AppSrc) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&AppSrc::from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box<F> = Box::new(f);
+            glib::signal::connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::do-timestamp\0".as_ptr() as *const _,
+                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_do_timestamp_trampoline::<F> as *const (),
+                )),
+                Box::into_raw(f),
+            )
+        }
+    }
+
     pub fn sink(&self) -> AppSrcSink {
         AppSrcSink::new(self)
     }

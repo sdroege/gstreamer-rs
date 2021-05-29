@@ -2,8 +2,10 @@
 
 use crate::AppSink;
 use glib::ffi::gpointer;
+use glib::prelude::*;
 use glib::translate::*;
 use std::cell::RefCell;
+use std::mem;
 use std::panic;
 use std::ptr;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -11,7 +13,6 @@ use std::sync::atomic::{AtomicBool, Ordering};
 #[cfg(any(feature = "v1_10"))]
 use {
     futures_core::Stream,
-    glib::prelude::*,
     std::{
         pin::Pin,
         sync::{Arc, Mutex},
@@ -270,6 +271,612 @@ impl AppSink {
                 Box::into_raw(Box::new(callbacks)) as *mut _,
                 Some(destroy_callbacks),
             );
+        }
+    }
+
+    #[doc(alias = "drop-out-of-segment")]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    pub fn drops_out_of_segment(&self) -> bool {
+        unsafe {
+            from_glib(gst_base::ffi::gst_base_sink_get_drop_out_of_segment(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
+            ))
+        }
+    }
+
+    #[doc(alias = "max-bitrate")]
+    #[doc(alias = "gst_base_sink_get_max_bitrate")]
+    pub fn max_bitrate(&self) -> u64 {
+        unsafe {
+            gst_base::ffi::gst_base_sink_get_max_bitrate(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink
+            )
+        }
+    }
+
+    #[doc(alias = "max-lateness")]
+    #[doc(alias = "gst_base_sink_get_max_lateness")]
+    pub fn max_lateness(&self) -> i64 {
+        unsafe {
+            gst_base::ffi::gst_base_sink_get_max_lateness(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink
+            )
+        }
+    }
+
+    #[doc(alias = "processing-deadline")]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_base_sink_get_processing_deadline")]
+    pub fn processing_deadline(&self) -> gst::ClockTime {
+        unsafe {
+            from_glib(gst_base::ffi::gst_base_sink_get_processing_deadline(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
+            ))
+        }
+    }
+
+    #[doc(alias = "render-delay")]
+    #[doc(alias = "gst_base_sink_get_render_delay")]
+    pub fn render_delay(&self) -> gst::ClockTime {
+        unsafe {
+            from_glib(gst_base::ffi::gst_base_sink_get_render_delay(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_base_sink_get_stats")]
+    pub fn stats(&self) -> gst::Structure {
+        unsafe {
+            from_glib_full(gst_base::ffi::gst_base_sink_get_stats(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink
+            ))
+        }
+    }
+
+    #[doc(alias = "sync")]
+    pub fn is_sync(&self) -> bool {
+        unsafe {
+            from_glib(gst_base::ffi::gst_base_sink_get_sync(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink
+            ))
+        }
+    }
+
+    #[doc(alias = "throttle-time")]
+    #[doc(alias = "gst_base_sink_get_throttle_time")]
+    pub fn throttle_time(&self) -> u64 {
+        unsafe {
+            gst_base::ffi::gst_base_sink_get_throttle_time(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink
+            )
+        }
+    }
+
+    #[doc(alias = "ts-offset")]
+    #[doc(alias = "gst_base_sink_get_ts_offset")]
+    pub fn ts_offset(&self) -> gst::ClockTimeDiff {
+        unsafe {
+            gst_base::ffi::gst_base_sink_get_ts_offset(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink
+            )
+        }
+    }
+
+    #[doc(alias = "async")]
+    #[doc(alias = "gst_base_sink_is_async_enabled")]
+    pub fn is_async(&self) -> bool {
+        unsafe {
+            from_glib(gst_base::ffi::gst_base_sink_is_async_enabled(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink
+            ))
+        }
+    }
+
+    #[doc(alias = "last-sample")]
+    pub fn enables_last_sample(&self) -> bool {
+        unsafe {
+            from_glib(gst_base::ffi::gst_base_sink_is_last_sample_enabled(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
+            ))
+        }
+    }
+
+    #[doc(alias = "qos")]
+    #[doc(alias = "gst_base_sink_is_qos_enabled")]
+    pub fn is_qos(&self) -> bool {
+        unsafe {
+            from_glib(gst_base::ffi::gst_base_sink_is_qos_enabled(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink
+            ))
+        }
+    }
+
+    #[doc(alias = "async")]
+    #[doc(alias = "gst_base_sink_set_async_enabled")]
+    pub fn set_async(&self, enabled: bool) {
+        unsafe {
+            gst_base::ffi::gst_base_sink_set_async_enabled(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
+                enabled.into_glib(),
+            );
+        }
+    }
+
+    #[doc(alias = "drop-out-of-segment")]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_base_sink_set_drop_out_of_segment")]
+    pub fn set_drop_out_of_segment(&self, drop_out_of_segment: bool) {
+        unsafe {
+            gst_base::ffi::gst_base_sink_set_drop_out_of_segment(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
+                drop_out_of_segment.into_glib(),
+            );
+        }
+    }
+
+    #[doc(alias = "last-sample")]
+    pub fn set_enable_last_sample(&self, enabled: bool) {
+        unsafe {
+            gst_base::ffi::gst_base_sink_set_last_sample_enabled(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
+                enabled.into_glib(),
+            );
+        }
+    }
+
+    #[doc(alias = "max-bitrate")]
+    #[doc(alias = "gst_base_sink_set_max_bitrate")]
+    pub fn set_max_bitrate(&self, max_bitrate: u64) {
+        unsafe {
+            gst_base::ffi::gst_base_sink_set_max_bitrate(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
+                max_bitrate,
+            );
+        }
+    }
+
+    #[doc(alias = "max-lateness")]
+    #[doc(alias = "gst_base_sink_set_max_lateness")]
+    pub fn set_max_lateness(&self, max_lateness: i64) {
+        unsafe {
+            gst_base::ffi::gst_base_sink_set_max_lateness(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
+                max_lateness,
+            );
+        }
+    }
+
+    #[doc(alias = "processing-deadline")]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_base_sink_set_processing_deadline")]
+    pub fn set_processing_deadline(&self, processing_deadline: gst::ClockTime) {
+        unsafe {
+            gst_base::ffi::gst_base_sink_set_processing_deadline(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
+                processing_deadline.into_glib(),
+            );
+        }
+    }
+
+    #[doc(alias = "qos")]
+    #[doc(alias = "gst_base_sink_set_qos_enabled")]
+    pub fn set_qos(&self, enabled: bool) {
+        unsafe {
+            gst_base::ffi::gst_base_sink_set_qos_enabled(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
+                enabled.into_glib(),
+            );
+        }
+    }
+
+    #[doc(alias = "render-delay")]
+    #[doc(alias = "gst_base_sink_set_render_delay")]
+    pub fn set_render_delay(&self, delay: gst::ClockTime) {
+        unsafe {
+            gst_base::ffi::gst_base_sink_set_render_delay(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
+                delay.into_glib(),
+            );
+        }
+    }
+
+    #[doc(alias = "sync")]
+    #[doc(alias = "gst_base_sink_set_sync")]
+    pub fn set_sync(&self, sync: bool) {
+        unsafe {
+            gst_base::ffi::gst_base_sink_set_sync(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
+                sync.into_glib(),
+            );
+        }
+    }
+
+    #[doc(alias = "throttle-time")]
+    #[doc(alias = "gst_base_sink_set_throttle_time")]
+    pub fn set_throttle_time(&self, throttle: u64) {
+        unsafe {
+            gst_base::ffi::gst_base_sink_set_throttle_time(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
+                throttle,
+            );
+        }
+    }
+
+    #[doc(alias = "ts-offset")]
+    #[doc(alias = "gst_base_sink_set_ts_offset")]
+    pub fn set_ts_offset(&self, offset: gst::ClockTimeDiff) {
+        unsafe {
+            gst_base::ffi::gst_base_sink_set_ts_offset(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
+                offset,
+            );
+        }
+    }
+
+    #[doc(alias = "async")]
+    pub fn connect_async_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        unsafe extern "C" fn notify_async_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box<F> = Box::new(f);
+            glib::signal::connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::async\0".as_ptr() as *const _,
+                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_async_trampoline::<F> as *const (),
+                )),
+                Box::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "blocksize")]
+    pub fn connect_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        unsafe extern "C" fn notify_blocksize_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box<F> = Box::new(f);
+            glib::signal::connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::blocksize\0".as_ptr() as *const _,
+                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_blocksize_trampoline::<F> as *const (),
+                )),
+                Box::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "enable-last-sample")]
+    pub fn connect_enable_last_sample_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        unsafe extern "C" fn notify_enable_last_sample_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box<F> = Box::new(f);
+            glib::signal::connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::enable-last-sample\0".as_ptr() as *const _,
+                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_last_sample_trampoline::<F> as *const (),
+                )),
+                Box::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "last-sample")]
+    pub fn connect_last_sample_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        unsafe extern "C" fn notify_last_sample_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box<F> = Box::new(f);
+            glib::signal::connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::last-sample\0".as_ptr() as *const _,
+                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_last_sample_trampoline::<F> as *const (),
+                )),
+                Box::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "max-bitrate")]
+    pub fn connect_max_bitrate_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        unsafe extern "C" fn notify_max_bitrate_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box<F> = Box::new(f);
+            glib::signal::connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::max-bitrate\0".as_ptr() as *const _,
+                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_bitrate_trampoline::<F> as *const (),
+                )),
+                Box::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "max-lateness")]
+    pub fn connect_max_lateness_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        unsafe extern "C" fn notify_max_lateness_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box<F> = Box::new(f);
+            glib::signal::connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::max-lateness\0".as_ptr() as *const _,
+                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_lateness_trampoline::<F> as *const (),
+                )),
+                Box::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "processing-deadline")]
+    pub fn connect_processing_deadline_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        unsafe extern "C" fn notify_processing_deadline_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box<F> = Box::new(f);
+            glib::signal::connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::processing-deadline\0".as_ptr() as *const _,
+                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_processing_deadline_trampoline::<F> as *const (),
+                )),
+                Box::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "qos")]
+    pub fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        unsafe extern "C" fn notify_qos_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box<F> = Box::new(f);
+            glib::signal::connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::qos\0".as_ptr() as *const _,
+                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_qos_trampoline::<F> as *const (),
+                )),
+                Box::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "render-delay")]
+    pub fn connect_render_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        unsafe extern "C" fn notify_render_delay_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box<F> = Box::new(f);
+            glib::signal::connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::render-delay\0".as_ptr() as *const _,
+                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_render_delay_trampoline::<F> as *const (),
+                )),
+                Box::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "stats")]
+    pub fn connect_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        unsafe extern "C" fn notify_stats_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box<F> = Box::new(f);
+            glib::signal::connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::stats\0".as_ptr() as *const _,
+                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_stats_trampoline::<F> as *const (),
+                )),
+                Box::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "sync")]
+    pub fn connect_sync_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        unsafe extern "C" fn notify_sync_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box<F> = Box::new(f);
+            glib::signal::connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::sync\0".as_ptr() as *const _,
+                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_sync_trampoline::<F> as *const (),
+                )),
+                Box::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "throttle-time")]
+    pub fn connect_throttle_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        unsafe extern "C" fn notify_throttle_time_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box<F> = Box::new(f);
+            glib::signal::connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::throttle-time\0".as_ptr() as *const _,
+                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_throttle_time_trampoline::<F> as *const (),
+                )),
+                Box::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "ts-offset")]
+    pub fn connect_ts_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        unsafe extern "C" fn notify_ts_offset_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box<F> = Box::new(f);
+            glib::signal::connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::ts-offset\0".as_ptr() as *const _,
+                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_ts_offset_trampoline::<F> as *const (),
+                )),
+                Box::into_raw(f),
+            )
         }
     }
 
