@@ -101,6 +101,10 @@ name = "GES.BaseEffect"
 status = "generate"
 # Actually available since 1.2 even if all functions are new in 1.18
 version = "1.2"
+    [[object.function]]
+    name = "set_time_translation_funcs"
+    # Pointers and HashTables
+    ignore = true
 
 [[object]]
 name = "GES.Effect"
@@ -337,6 +341,11 @@ manual_traits = ["TimelineElementExtManual"]
     name = "set_name"
         [object.function.return]
         bool_return_is_error = "Failed to set name"
+
+    [[object.function]]
+    name = "set_child_property"
+        [object.function.return]
+        bool_return_is_error = "Failed to set child property"
 
     [[object.function]]
     name = "set_parent"
