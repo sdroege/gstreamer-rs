@@ -20,13 +20,44 @@ generate = [
 ]
 
 manual = [
+    "GLib.Bytes",
     "GObject.Object",
-    "Gst.Object",
-    "Gst.Clock",
+    "GObject.Value",
+    "Gst.AllocationParams",
+    "Gst.Allocator",
+    "Gst.Bin",
+    "Gst.Buffer",
+    "Gst.BufferPool",
+    "Gst.Caps",
+    "Gst.ClockID",
     "Gst.ClockTimeDiff",
     "Gst.ClockType",
+    "Gst.Element",
+    "Gst.ElementFactory",
+    "Gst.ElementFlags",
+    "Gst.Event",
+    "Gst.EventType",
+    "Gst.FlowReturn",
+    "Gst.Harness",
+    "Gst.Object",
+    "Gst.Pad",
+    "Gst.PadProbeType",
+    "Gst.QueryType",
+    "Gst.Segment",
+    "Gst.State",
+    "Gst.StaticPadTemplate",
+    "Gst.SystemClock",
     "GstCheck.Harness",
 ]
+
+[[object]]
+name = "Gst.Clock"
+status = "manual"
+    # id_ functions are wrongly listed on Clock in .gir,
+    # but should be associated to the `GstClockID` alias.
+    [[object.function]]
+    pattern = "id_.*"
+    ignore = true
 
 [[object]]
 name = "Gst.ClockTime"

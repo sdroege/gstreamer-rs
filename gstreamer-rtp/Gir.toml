@@ -24,6 +24,11 @@ generate = [
     "GstRtp.RTPProfile",
 ]
 
+manual = [
+    "Gst.Caps",
+    "Gst.Structure",
+]
+
 [[object]]
 name = "Gst.Buffer"
 status = "manual"

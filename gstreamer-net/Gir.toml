@@ -22,9 +22,11 @@ generate = [
 
 manual = [
     "GObject.Object",
-    "Gst.Object",
-    "Gst.Clock",
     "Gst.Bus",
+    "Gst.Clock",
+    "Gst.Object",
+    "Gst.Pipeline",
+    "Gst.Structure",
 ]
 
 [[object]]

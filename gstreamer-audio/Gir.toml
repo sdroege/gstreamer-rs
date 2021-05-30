@@ -33,9 +33,11 @@ generate = [
 
 manual = [
     "GObject.Object",
-    "Gst.Element",
-    "Gst.Allocator",
     "Gst.AllocationParams",
+    "Gst.Allocator",
+    "Gst.ClockTimeDiff",
+    "Gst.Element",
+    "Gst.Format",
     "Gst.TagList",
     "Gst.TagMergeMode",
     "GstBase.BaseSink",

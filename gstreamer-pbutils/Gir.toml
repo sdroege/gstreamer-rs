@@ -20,13 +20,17 @@ generate = [
 ]
 
 manual = [
-    "GLib.Error",
-    "GLib.Source",
     "GLib.DateTime",
+    "GLib.Error",
+    "GLib.MainContext",
+    "GLib.MainLoop",
+    "GLib.Source",
+    "GLib.Type",
     "GLib.Variant",
     "GObject.Object",
-    "Gst.Object",
     "Gst.Element",
+    "Gst.Object",
+    "Gst.Preset",
 ]
 
 [[object]]

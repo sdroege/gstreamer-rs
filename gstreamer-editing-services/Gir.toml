@@ -17,21 +17,30 @@ external_libraries = [
 ]
 
 manual = [
+    "GLib.DateTime",
     "GLib.Error",
     "GLib.Source",
-    "GLib.DateTime",
+    "GLib.Type",
     "Gio.Cancellable",
     "Gio.AsyncReadyCallback",
     "GObject.Object",
+    "GObject.Value",
+    "Gst.ControlBinding",
+    "Gst.ControlSource",
+    "Gst.CoreError",
+    "Gst.Element",
+    "Gst.ElementFactory",
+    "Gst.EventType",
+    "Gst.Bin",
+    "Gst.Pad",
+    "Gst.Pipeline",
     "Gst.Segment",
+    "Gst.State",
     "Gst.StaticCaps",
     "Gst.StaticPadTemplate",
     "GstPbutils.EncodingProfile",
     "GstPbutils.DiscovererInfo",
     "GstPbutils.DiscovererStreamInfo",
-    "Gst.Element",
-    "Gst.Pad",
-    "Gst.Pipeline",
 ]
 
 generate = [
@@ -76,6 +85,11 @@ ref_mode = "ref"
 name = "Gst.Sample"
 status = "manual"
 ref_mode = "ref"
+
+    [[object.function]]
+    name = "get_caps"
+    # Function moved to SampleRef
+    ignore = true
 
 [[object]]
 name = "Gst.ClockTime"

@@ -22,16 +22,24 @@ generate = [
 ]
 
 manual = [
-    "GObject.Object",
     "GLib.Bytes",
-    "Gst.Object",
-    "Gst.Element",
+    "GObject.Object",
+    "Gst.AllocationParams",
+    "Gst.Allocator",
+    "Gst.BufferFlags",
     "Gst.BufferPool",
     "Gst.ClockTimeDiff",
+    "Gst.Element",
+    "Gst.EventType",
     "Gst.Format",
+    "Gst.Memory",
+    "Gst.Object",
     "Gst.Pad",
-    "Gst.TypeFindProbability",
+    "Gst.Segment",
+    "Gst.State",
+    "Gst.StateChangeReturn",
     "Gst.TagMergeMode",
+    "Gst.TypeFindProbability",
     "GstBase.BaseParseFrame",
 ]
 

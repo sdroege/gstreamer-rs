@@ -32,12 +32,12 @@ generate = [
 ]
 
 manual = [
-    "GLib.MainContext",
-    "GLib.IOCondition",
-    "GLib.Source",
-    "GLib.MainLoop",
-    "GLib.ThreadPool",
     "GLib.Error",
+    "GLib.IOCondition",
+    "GLib.MainContext",
+    "GLib.MainLoop",
+    "GLib.Source",
+    "GLib.ThreadPool",
     "GObject.Object",
     "Gio.TlsCertificateFlags",
     "Gio.TlsCertificate",
@@ -53,6 +53,7 @@ manual = [
     "Gst.Pipeline",
     "Gst.Pad",
     "Gst.Bin",
+    "GstNet.NetTimeProvider",
     "GstRtsp.RTSPAuthMethod",
     "GstRtsp.RTSPUrl",
     "GstRtsp.RTSPResult",

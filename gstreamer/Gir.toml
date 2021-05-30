@@ -59,8 +59,10 @@ generate = [
 manual = [
     "GLib.DateTime",
     "GLib.Error",
+    "GLib.MainContext",
     "GLib.Quark",
     "GLib.Source",
+    "GLib.Type",
     "GObject.Object",
     "GObject.Value",
     "Gst.AllocationParams",
