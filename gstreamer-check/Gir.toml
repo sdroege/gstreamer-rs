@@ -42,12 +42,10 @@ manual = [
     "Gst.Object",
     "Gst.Pad",
     "Gst.PadProbeType",
-    "Gst.QueryType",
     "Gst.Segment",
     "Gst.State",
     "Gst.StaticPadTemplate",
     "Gst.SystemClock",
-    "GstCheck.Harness",
 ]
 
 [[object]]
@@ -68,3 +66,39 @@ conversion_type = "scalar"
 name = "GstCheck.TestClock"
 status = "generate"
 final_type = true
+    [[object.function]]
+    name = "has_id"
+    manual = true
+    [[object.function]]
+    name = "peek_next_pending_id"
+    manual = true
+    [[object.function]]
+    name = "process_id"
+    manual = true
+    [[object.function]]
+    name = "process_id_list"
+    manual = true
+    [[object.function]]
+    name = "process_next_clock_id"
+    manual = true
+    [[object.function]]
+    name = "wait_for_multiple_pending_ids"
+    manual = true
+    [[object.function]]
+    name = "wait_for_next_pending_id"
+    manual = true
+    [[object.function]]
+    name = "timed_wait_for_multiple_pending_ids"
+    manual = true
+
+[[object]]
+name = "GstCheck.Harness"
+status = "manual"
+
+    [[object.function]]
+    name = "new_with_element"
+    rename = "with_element"
+
+    [[object.function]]
+    name = "new_with_padnames"
+    rename = "with_padnames"
