@@ -145,6 +145,10 @@ manual_traits = ["BaseSinkExtManual"]
     # Same as the enable-last-sample property
     ignore = true
 
+    [[object.function]]
+    name = "get_drop_out_of_segment"
+    rename = "drops_out_of_segment"
+
 [[object]]
 name = "GstBase.BaseSrc"
 status = "generate"

@@ -39,7 +39,7 @@ pub trait BaseSinkExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_base_sink_get_drop_out_of_segment")]
     #[doc(alias = "get_drop_out_of_segment")]
-    fn is_drop_out_of_segment(&self) -> bool;
+    fn drops_out_of_segment(&self) -> bool;
 
     #[doc(alias = "gst_base_sink_get_last_sample")]
     #[doc(alias = "get_last_sample")]
@@ -232,7 +232,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    fn is_drop_out_of_segment(&self) -> bool {
+    fn drops_out_of_segment(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_base_sink_get_drop_out_of_segment(
                 self.as_ref().to_glib_none().0,
