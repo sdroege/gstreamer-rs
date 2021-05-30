@@ -58,13 +58,13 @@ manual = [
     "Gst.TagMergeMode",
     "GstBase.BaseSink",
     "GstBase.BaseTransform",
-    "GstVideo.VideoCodecState",
     "GstVideo.VideoCodecFrame",
-    "GstVideo.VideoInfo",
-    "GstVideo.VideoFormatInfo",
-    "GstVideo.VideoColorimetry",
+    "GstVideo.VideoCodecState",
     "GstVideo.VideoColorRange",
-    "GstVideo.VideoFrame",
+    "GstVideo.VideoColorimetry",
+    "GstVideo.VideoFormatInfo",
+    "GstVideo.VideoInfo",
+    "GstVideo.VideoMeta",
     "GstVideo.VideoTimeCode",
     "GstVideo.VideoTimeCodeInterval",
 ]
@@ -78,6 +78,15 @@ conversion_type = "scalar"
 name = "Gst.Caps"
 status = "manual"
 ref_mode = "ref"
+
+[[object]]
+name = "GstVideo.VideoFrame"
+status = "manual"
+
+    [[object.function]]
+    name = "map"
+    # Readable and writable variant dealing with mutability
+    rename = "from_buffer_readable"
 
 [[object]]
 name = "GstVideo.VideoOrientation"
@@ -103,6 +112,16 @@ status = "generate"
 name = "GstVideo.VideoOverlay"
 status = "generate"
 manual_traits = ["VideoOverlayExtManual"]
+
+    [[object.function]]
+    name = "set_property"
+    # Only for implementors of GstVideoOverlay
+    ignore = true
+
+    [[object.function]]
+    name = "set_window_handle"
+    # Pointer argument
+    manual = true
 
     [[object.function]]
     name = "set_render_rectangle"
