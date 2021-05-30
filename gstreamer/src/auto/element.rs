@@ -172,7 +172,7 @@ pub trait ElementExt: 'static {
     fn link_filtered<P: IsA<Element>>(
         &self,
         dest: &P,
-        filter: Option<&Caps>,
+        filter: &Caps,
     ) -> Result<(), glib::error::BoolError>;
 
     //#[doc(alias = "gst_element_link_many")]
@@ -192,7 +192,7 @@ pub trait ElementExt: 'static {
         srcpadname: Option<&str>,
         dest: &P,
         destpadname: Option<&str>,
-        filter: Option<&Caps>,
+        filter: &Caps,
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_element_link_pads_full")]
@@ -547,7 +547,7 @@ impl<O: IsA<Element>> ElementExt for O {
     fn link_filtered<P: IsA<Element>>(
         &self,
         dest: &P,
-        filter: Option<&Caps>,
+        filter: &Caps,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -589,7 +589,7 @@ impl<O: IsA<Element>> ElementExt for O {
         srcpadname: Option<&str>,
         dest: &P,
         destpadname: Option<&str>,
-        filter: Option<&Caps>,
+        filter: &Caps,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(

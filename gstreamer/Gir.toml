@@ -556,6 +556,10 @@ manual_traits = ["ElementExtManual"]
 
     [[object.function]]
     name = "link_filtered"
+        [[object.function.parameter]]
+        name = "filter"
+        # Can use `link` instead
+        nullable = false
         [object.function.return]
         bool_return_is_error = "Failed to link elements"
 
@@ -566,6 +570,10 @@ manual_traits = ["ElementExtManual"]
 
     [[object.function]]
     name = "link_pads_filtered"
+        [[object.function.parameter]]
+        name = "filter"
+        # Can use `link` instead
+        nullable = false
         [object.function.return]
         bool_return_is_error = "Failed to link pads"
 
