@@ -341,11 +341,11 @@ docs:
   extends: .img-nightly
   stage: 'deploy'
   script:
-    - curl --proto '=https' --tlsv1.2 -sSf -o gir-docs.py
-        https://gitlab.gnome.org/World/Rust/gir-docs/-/raw/main/gir-docs.py
-    - chmod +x gir-docs.py
+    - curl --proto '=https' --tlsv1.2 -sSf -o gir-rustdoc.py
+        https://gitlab.gnome.org/World/Rust/gir-rustdoc/-/raw/main/gir-rustdoc.py
+    - chmod +x gir-rustdoc.py
     - |
-      eval $(./gir-docs.py pre-docs)
+      eval $(./gir-rustdoc.py pre-docs)
       for crate in gstreamer*; do
         cd $crate
         cargo doc --features --features=dox,embed-lgpl-docs --no-deps
