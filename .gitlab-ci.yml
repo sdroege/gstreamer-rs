@@ -460,13 +460,13 @@ docs:
   extends: .img-nightly
   stage: 'extras'
   script:
-    - curl --proto '=https' --tlsv1.2 -sSf -o gir-docs.py
-        https://gitlab.gnome.org/World/Rust/gir-docs/-/raw/main/gir-docs.py
-    - chmod +x gir-docs.py
+    - curl --proto '=https' --tlsv1.2 -sSf -o gir-rustdoc.py
+        https://gitlab.gnome.org/World/Rust/gir-rustdoc/-/raw/main/gir-rustdoc.py
+    - chmod +x gir-rustdoc.py
     - PATH=~/.cargo/bin/:$PATH ./generator.py --embed-docs --no-fmt
     - |
       RUSTDOCFLAGS="$RUST_DOCS_FLAGS"
-      eval $(./gir-docs.py pre-docs)
+      eval $(./gir-rustdoc.py pre-docs)
       cargo +nightly doc --workspace --exclude examples --exclude tutorials --color=always --features=dox --no-deps
     - mv target/doc docs
   artifacts:
@@ -483,15 +483,15 @@ pages:
   dependencies:
     - docs
   script:
-    - curl --proto '=https' --tlsv1.2 -sSf -o gir-docs.py
-        https://gitlab.gnome.org/World/Rust/gir-docs/-/raw/main/gir-docs.py
-    - chmod +x gir-docs.py
-    - ./gir-docs.py html-index
+    - curl --proto '=https' --tlsv1.2 -sSf -o gir-rustdoc.py
+        https://gitlab.gnome.org/World/Rust/gir-rustdoc/-/raw/main/gir-rustdoc.py
+    - chmod +x gir-rustdoc.py
+    - ./gir-rustdoc.py html-index
     # development docs
     - mkdir public/git
     - mv docs public/git/docs
     # stable docs
-    - ./gir-docs.py docs-from-artifacts
+    - ./gir-rustdoc.py docs-from-artifacts
     - ls public/
   artifacts:
     paths:
