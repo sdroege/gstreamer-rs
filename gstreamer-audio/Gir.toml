@@ -42,8 +42,11 @@ manual = [
     "Gst.TagMergeMode",
     "GstBase.BaseSink",
     "GstBase.BaseSrc",
-    "GstAudio.AudioInfo",
+    "GstAudio.AudioClippingMeta",
     "GstAudio.AudioFormatInfo",
+    "GstAudio.AudioInfo",
+    "GstAudio.AudioMeta",
+    "GstAudio.AudioRingBufferSpec",
 ]
 
 [[object]]
@@ -66,6 +69,15 @@ ref_mode = "ref"
 name = "Gst.ClockTime"
 status = "manual"
 conversion_type = "scalar"
+
+[[object]]
+name = "GstAudio.AudioBuffer"
+status = "manual"
+
+    [[object.function]]
+    name = "map"
+    # Readable and writable variant dealing with mutability
+    rename = "from_buffer_readable"
 
 [[object]]
 name = "GstAudio.AudioFormat"
