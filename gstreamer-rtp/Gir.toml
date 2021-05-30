@@ -53,6 +53,14 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "GstRtp.RTPBuffer"
+status = "manual"
+    [[object.function]]
+    name = "map"
+    # Readable and writable variant dealing with mutability
+    rename = "from_buffer_readable"
+
+[[object]]
 name = "GstRtp.RTPBufferFlags"
 status = "generate"
     [[object.member]]
