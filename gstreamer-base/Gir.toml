@@ -68,7 +68,7 @@ final_type = true
 concurrency = "send-unique"
     [[object.function]]
     name = "map"
-    # Unsafe
+    # Unsafe, implemented on `UniqueAdapter`
     ignore = true
 
     [[object.function]]
@@ -163,6 +163,10 @@ status = "generate"
 manual_traits = ["BaseSrcExtManual"]
 
     [[object.function]]
+    name = "get_allocator"
+    manual = true
+
+    [[object.function]]
     name = "set_caps"
         [object.function.return]
         bool_return_is_error = "Failed to set caps"
@@ -188,6 +192,10 @@ status = "generate"
 manual_traits = ["BaseTransformExtManual"]
 
     [[object.function]]
+    name = "get_allocator"
+    manual = true
+
+    [[object.function]]
     name = "update_src_caps"
         [object.function.return]
         bool_return_is_error = "Failed to update src caps"
@@ -206,6 +214,15 @@ manual_traits = ["BaseTransformExtManual"]
 name = "GstBase.Aggregator"
 status = "generate"
 manual_traits = ["AggregatorExtManual"]
+
+    [[object.function]]
+    name = "update_segment"
+    # Takes FormattedValue as argument
+    manual = true
+
+    [[object.function]]
+    name = "get_allocator"
+    manual = true
 
     [[object.function]]
     name = "finish_buffer"
@@ -233,6 +250,11 @@ manual_traits = ["AggregatorExtManual"]
     [[object.property]]
     name = "min-upstream-latency"
     # clock time instead of u64
+    manual = true
+
+    [[object.signal]]
+    name = "samples-selected"
+    # StructureRef instead of Structure
     manual = true
 
 [[object]]
