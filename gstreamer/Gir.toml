@@ -66,10 +66,11 @@ manual = [
     "GObject.Object",
     "GObject.Value",
     "Gst.AllocationParams",
-    "Gst.Memory",
+    "Gst.CapsFeatures",
     "Gst.Segment",
     "Gst.StaticCaps",
     "Gst.StaticPadTemplate",
+    "Gst.TypeFind",
 ]
 
 [[object]]
@@ -91,6 +92,37 @@ trait_name = "GstBinExt"
     [[object.signal]]
     name = "do-latency"
     # Use Result<(), glib::BoolError>
+    manual = true
+
+    [[object.function]]
+    name = "add_many"
+    # Implemented by repeatedly calling add()
+    manual = true
+    [[object.function]]
+    name = "remove_many"
+    # Implemented by repeatedly calling remove()
+    manual = true
+
+    [[object.function]]
+    name = "iterate_all_by_element_factory_name"
+    manual = true
+    [[object.function]]
+    name = "iterate_all_by_interface"
+    manual = true
+    [[object.function]]
+    name = "iterate_elements"
+    manual = true
+    [[object.function]]
+    name = "iterate_recurse"
+    manual = true
+    [[object.function]]
+    name = "iterate_sinks"
+    manual = true
+    [[object.function]]
+    name = "iterate_sorted"
+    manual = true
+    [[object.function]]
+    name = "iterate_sources"
     manual = true
 
     [[object.function]]
@@ -216,9 +248,11 @@ status = "generate"
 manual_traits = ["ChildProxyExtManual"]
     [[object.function]]
     name = "get_property"
+    rename = "child_property"
     manual = true
     [[object.function]]
     name = "set_property"
+    rename = "set_child_property"
     manual = true
 
 [[object]]
@@ -249,6 +283,20 @@ status = "generate"
     [[object.function]]
     name = "register"
     # Needs manual work
+    ignore = true
+
+[[object]]
+name = "Gst.Memory"
+status = "manual"
+
+    [[object.function]]
+    name = "map"
+    # Readable and writable variant dealing with mutability
+    # Non-into variants available under MemoryRef
+    rename = "into_mapped_memory_readable"
+
+    [[object.function]]
+    name = "unmap"
     ignore = true
 
 [[object]]
@@ -298,6 +346,11 @@ manual_traits = ["TagSetterExtManual"]
     [[object.function]]
     name = "add_tag_value"
     manual = true
+
+    [[object.function]]
+    name = "add_tags"
+    # Takes a raw pointer
+    ignore = true
 
 [[object]]
 name = "Gst.TocScope"
@@ -363,6 +416,108 @@ status = "generate"
 name = "Gst.Structure"
 status = "manual"
 ref_mode = "ref-mut"
+    # Functions moved to `StructureRef`
+    [[object.function]]
+    name = "set"
+    ignore = true
+    [[object.function]]
+    name = "set_value"
+    ignore = true
+    [[object.function]]
+    name = "get_value"
+    ignore = true
+
+    [[object.function]]
+    name = "id_get_value"
+    rename = "value_by_quark"
+    ignore = true
+    [[object.function]]
+    name = "take_value"
+    rename = "set_value"
+    ignore = true
+    [[object.function]]
+    name = "id_take_value"
+    rename = "set_value_by_quark"
+    ignore = true
+    [[object.function]]
+    name = "get_name"
+    rename = "name"
+    ignore = true
+    [[object.function]]
+    name = "get_name_id"
+    rename = "name_quark"
+    ignore = true
+    [[object.function]]
+    name = "set_name"
+    ignore = true
+
+    [[object.function]]
+    name = "has_field"
+    ignore = true
+    [[object.function]]
+    name = "has_field_with_typed"
+    rename = "has_field_with_type"
+    ignore = true
+    [[object.function]]
+    name = "id_has_field"
+    rename = "has_field_by_quark"
+    ignore = true
+    [[object.function]]
+    name = "id_has_field_typed"
+    rename = "has_field_with_type_by_quark"
+    ignore = true
+    [[object.function]]
+    name = "remove_field"
+    ignore = true
+    [[object.function]]
+    name = "remove_fields"
+    # Repeatedly call remove_field()
+    ignore = true
+    [[object.function]]
+    name = "remove_all_fields"
+    ignore = true
+    [[object.function]]
+    name = "get_nth_field_name"
+    ignore = true
+    [[object.function]]
+    name = "n_fields"
+    ignore = true
+    [[object.function]]
+    name = "can_intersect"
+    ignore = true
+    [[object.function]]
+    name = "intersect"
+    ignore = true
+    [[object.function]]
+    name = "is_subset"
+    ignore = true
+
+    [[object.function]]
+    name = "fixate"
+    ignore=true
+    [[object.function]]
+    name = "fixate_field"
+    ignore=true
+    [[object.function]]
+    name = "fixate_field_boolean"
+    ignore=true
+    [[object.function]]
+    name = "fixate_field_string"
+    ignore=true
+    [[object.function]]
+    name = "fixate_field_nearest_double"
+    ignore=true
+    [[object.function]]
+    name = "fixate_field_nearest_fraction"
+    ignore=true
+    [[object.function]]
+    name = "fixate_field_nearest_int"
+    ignore=true
+
+    # Not implemented
+    [[object.function]]
+    name = "set_parent_refcount"
+    ignore = true
 
 [[object]]
 name = "Gst.ParseContext"
@@ -403,6 +558,16 @@ name = "Gst.Buffer"
 status = "manual"
 ref_mode = "ref"
 
+    [[object.function]]
+    name = "map"
+    # Readable and writable variant dealing with mutability
+    # Non-into variants available under BufferRef
+    rename = "into_mapped_buffer_readable"
+
+    [[object.function]]
+    name = "unmap"
+    ignore = true
+
 [[object]]
 name = "Gst.BufferList"
 status = "manual"
@@ -422,6 +587,31 @@ ref_mode = "ref"
 name = "Gst.Event"
 status = "manual"
 ref_mode = "ref"
+
+    [[object.function]]
+    name = "new_caps"
+    # Moved to CapsBuilder::new()
+    ignore = true
+
+    [[object.function]]
+    name = "new_qos"
+    # Moved to QosBuilder::new()
+    ignore = true
+
+    [[object.function]]
+    name = "new_seek"
+    # Moved to SeekBuilder::new()
+    ignore = true
+
+    [[object.function]]
+    name = "parse_stream"
+    # Moved to StreamStart::stream()
+    ignore = true
+
+    [[object.function]]
+    name = "parse_stream_start"
+    # Moved to StreamStart::stream_id()
+    ignore = true
 
 [[object]]
 name = "Gst.TagList"
@@ -467,9 +657,39 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "Gst.ClockID"
+status = "manual"
+
+    [[object.function]]
+    name = "compare_func"
+    rename = "compare_by_time"
+
+[[object]]
 name = "Gst.Clock"
 status = "generate"
 manual_traits = ["ClockExtManual"]
+    [[object.function]]
+    name = "adjust_with_calibration"
+    # Associated function
+    manual = true
+    [[object.function]]
+    name = "unadjust_with_calibration"
+    # Associated function
+    manual = true
+
+    [[object.function]]
+    name = "new_periodic_id"
+    manual = true
+    [[object.function]]
+    name = "periodic_id_reinit"
+    manual = true
+    [[object.function]]
+    name = "new_single_shot_id"
+    manual = true
+    [[object.function]]
+    name = "single_shot_id_reinit"
+    manual = true
+
     [[object.function]]
     name = "set_master"
         [object.function.return]
@@ -479,16 +699,6 @@ manual_traits = ["ClockExtManual"]
     name = "wait_for_sync"
         [object.function.return]
         bool_return_is_error = "Timed out waiting for sync"
-
-    [[object.function]]
-    name = "adjust_with_calibration"
-    # Useless clock parameter
-    ignore = true
-
-    [[object.function]]
-    name = "unadjust_with_calibration"
-    # Useless clock parameter
-    ignore = true
 
 [[object]]
 name = "Gst.ClockType"
@@ -515,6 +725,18 @@ status = "generate"
 name = "Gst.Element"
 status = "generate"
 manual_traits = ["ElementExtManual"]
+
+    # Manual implementation provides associated functions on `Element`,
+    # but gir considers these methods on `ElementExtManual` in the docs.
+    [[object.function]]
+    name = "link_many"
+    ignore = true
+    [[object.function]]
+    name = "unlink_many"
+    ignore = true
+    [[object.function]]
+    name = "register"
+    ignore = true
 
     [[object.function]]
     name = "call_async"
@@ -674,8 +896,24 @@ manual_traits = ["ElementExtManual"]
     # better manual function
     manual = true
 
+    # Limited subset of `MessageType`,
+    # see `ElementMessageType`.
     [[object.function]]
-    name = "register"
+    name = "message_full"
+    manual = true
+    [[object.function]]
+    name = "message_full_with_details"
+    manual = true
+
+    # Return iterators
+    [[object.function]]
+    name = "iterate_pads"
+    manual = true
+    [[object.function]]
+    name = "iterate_sink_pads"
+    manual = true
+    [[object.function]]
+    name = "iterate_src_pads"
     manual = true
 
 [[object]]
@@ -696,6 +934,11 @@ final_type = true
 name = "Gst.TypeFindFactory"
 status = "generate"
 final_type = true
+
+    [[object.function]]
+    name = "call_function"
+    # Set up native functions in `TypeFind`, calling into trait argument
+    manual = true
 
 [[object]]
 name = "Gst.DeviceProviderFactory"
@@ -770,6 +1013,11 @@ trait_name = "GstObjectExt"
     [[object.property]]
     name = "name"
     # There are accessor functions for this
+    ignore = true
+
+    [[object.function]]
+    name = "ref_sink"
+    # Takes a raw pointer
     ignore = true
 
     [[object.function]]
@@ -950,17 +1198,19 @@ manual_traits = ["PadExtManual"]
 
     [[object.function]]
     name = "new"
-    # Builder
+    # Also has builder()
     manual = true
 
     [[object.function]]
     name = "new_from_template"
-    # Builder
+    # Also has builder_with_template()
+    rename = "from_template"
     manual = true
 
     [[object.function]]
     name = "new_from_static_template"
-    # Builder
+    # Also has builder_with_static_template()
+    rename = "from_static_template"
     manual = true
 
     [[object.function]]
@@ -1052,18 +1302,22 @@ status = "generate"
 
     [[object.function]]
     name = "new"
-    manual = true
-
-    [[object.function]]
-    name = "new_from_template"
+    rename = "with_target"
     manual = true
 
     [[object.function]]
     name = "new_no_target"
+    rename = "new"
+    manual = true
+
+    [[object.function]]
+    name = "new_from_template"
+    rename = "from_template_with_target"
     manual = true
 
     [[object.function]]
     name = "new_no_target_from_template"
+    rename = "from_template"
     manual = true
 
     [[object.function]]
