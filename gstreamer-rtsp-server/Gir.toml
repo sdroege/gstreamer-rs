@@ -55,12 +55,12 @@ manual = [
     "Gst.Bin",
     "GstNet.NetTimeProvider",
     "GstRtsp.RTSPAuthMethod",
-    "GstRtsp.RTSPUrl",
+    "GstRtsp.RTSPLowerTrans",
+    "GstRtsp.RTSPProfile",
+    "GstRtsp.RTSPRangeUnit",
     "GstRtsp.RTSPResult",
     "GstRtsp.RTSPStatusCode",
-    "GstRtsp.RTSPRangeUnit",
-    "GstRtsp.RTSPProfile",
-    "GstRtsp.RTSPLowerTrans"
+    "GstRtsp.RTSPUrl",
 ]
 
 [[object]]
@@ -113,6 +113,11 @@ name = "GstRtspServer.RTSPThread"
 status = "manual"
 ref_mode = "ref"
 
+    [[object.function]]
+    name = "stop"
+    # Moved to RTSPThreadRef
+    ignore = true
+
 [[object]]
 name = "Gst.ClockTime"
 status = "manual"
@@ -145,6 +150,11 @@ manual_traits = ["RTSPClientExtManual"]
     [[object.function]]
     name = "attach"
     manual = true
+
+    [[object.function]]
+    name = "set_send_func"
+    # user_data takes raw pointer
+    ignore = true
 
 [[object]]
 name = "GstRtspServer.RTSPStream"
