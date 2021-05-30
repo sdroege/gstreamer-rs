@@ -136,105 +136,111 @@ fn main() {
     let data: Arc<Mutex<CustomData>> = Arc::new(Mutex::new(CustomData::new(&appsrc, &appsink)));
 
     let data_weak = Arc::downgrade(&data);
-    appsrc.connect_need_data(move |_, _size| {
-        let data = match data_weak.upgrade() {
-            Some(data) => data,
-            None => return,
-        };
-        let mut d = data.lock().unwrap();
-
-        if d.source_id.is_none() {
-            println!("start feeding");
-
-            let data_weak = Arc::downgrade(&data);
-            d.source_id = Some(glib::source::idle_add(move || {
+    let data_weak2 = Arc::downgrade(&data);
+    appsrc.set_callbacks(
+        gst_app::AppSrcCallbacks::builder()
+            .need_data(move |_, _size| {
                 let data = match data_weak.upgrade() {
                     Some(data) => data,
-                    None => return glib::Continue(false),
+                    None => return,
                 };
+                let mut d = data.lock().unwrap();
 
-                let (appsrc, buffer) = {
-                    let mut data = data.lock().unwrap();
-                    let mut buffer = gst::Buffer::with_size(CHUNK_SIZE).unwrap();
-                    let num_samples = CHUNK_SIZE / 2; /* Each sample is 16 bits */
-                    let pts = gst::SECOND
-                        .mul_div_floor(data.num_samples, u64::from(SAMPLE_RATE))
-                        .expect("u64 overflow");
-                    let duration = gst::SECOND
-                        .mul_div_floor(num_samples as u64, u64::from(SAMPLE_RATE))
-                        .expect("u64 overflow");
+                if d.source_id.is_none() {
+                    println!("start feeding");
 
-                    {
-                        let buffer = buffer.get_mut().unwrap();
-                        {
-                            let mut samples = buffer.map_writable().unwrap();
-                            let samples = samples.as_mut_slice_of::<i16>().unwrap();
+                    let data_weak = Arc::downgrade(&data);
+                    d.source_id = Some(glib::source::idle_add(move || {
+                        let data = match data_weak.upgrade() {
+                            Some(data) => data,
+                            None => return glib::Continue(false),
+                        };
 
-                            // Generate some psychodelic waveforms
-                            data.c += data.d;
-                            data.d -= data.c / 1000.0;
-                            let freq = 1100.0 + 1000.0 * data.d;
+                        let (appsrc, buffer) = {
+                            let mut data = data.lock().unwrap();
+                            let mut buffer = gst::Buffer::with_size(CHUNK_SIZE).unwrap();
+                            let num_samples = CHUNK_SIZE / 2; /* Each sample is 16 bits */
+                            let pts = gst::SECOND
+                                .mul_div_floor(data.num_samples, u64::from(SAMPLE_RATE))
+                                .expect("u64 overflow");
+                            let duration = gst::SECOND
+                                .mul_div_floor(num_samples as u64, u64::from(SAMPLE_RATE))
+                                .expect("u64 overflow");
 
-                            for sample in samples.iter_mut() {
-                                data.a += data.b;
-                                data.b -= data.a / freq;
-                                *sample = 500 * (data.a as i16);
+                            {
+                                let buffer = buffer.get_mut().unwrap();
+                                {
+                                    let mut samples = buffer.map_writable().unwrap();
+                                    let samples = samples.as_mut_slice_of::<i16>().unwrap();
+
+                                    // Generate some psychodelic waveforms
+                                    data.c += data.d;
+                                    data.d -= data.c / 1000.0;
+                                    let freq = 1100.0 + 1000.0 * data.d;
+
+                                    for sample in samples.iter_mut() {
+                                        data.a += data.b;
+                                        data.b -= data.a / freq;
+                                        *sample = 500 * (data.a as i16);
+                                    }
+
+                                    data.num_samples += num_samples as u64;
+                                }
+
+                                buffer.set_pts(pts);
+                                buffer.set_duration(duration);
                             }
 
-                            data.num_samples += num_samples as u64;
-                        }
+                            (data.appsrc.clone(), buffer)
+                        };
 
-                        buffer.set_pts(pts);
-                        buffer.set_duration(duration);
-                    }
-
-                    (data.appsrc.clone(), buffer)
+                        glib::Continue(appsrc.push_buffer(buffer).is_ok())
+                    }));
+                }
+            })
+            .enough_data(move |_| {
+                let data = match data_weak2.upgrade() {
+                    Some(data) => data,
+                    None => return,
                 };
 
-                glib::Continue(appsrc.push_buffer(buffer).is_ok())
-            }));
-        }
-    });
-
-    let data_weak = Arc::downgrade(&data);
-    appsrc.connect_enough_data(move |_| {
-        let data = match data_weak.upgrade() {
-            Some(data) => data,
-            None => return,
-        };
-
-        let mut data = data.lock().unwrap();
-        if let Some(source) = data.source_id.take() {
-            println!("stop feeding");
-            glib::source::source_remove(source);
-        }
-    });
+                let mut data = data.lock().unwrap();
+                if let Some(source) = data.source_id.take() {
+                    println!("stop feeding");
+                    glib::source::source_remove(source);
+                }
+            })
+            .build(),
+    );
 
     // configure appsink
-    appsink.set_emit_signals(true);
     appsink.set_caps(Some(&audio_caps));
 
     let data_weak = Arc::downgrade(&data);
-    appsink.connect_new_sample(move |_| {
-        let data = match data_weak.upgrade() {
-            Some(data) => data,
-            None => return Ok(gst::FlowSuccess::Ok),
-        };
+    appsink.set_callbacks(
+        gst_app::AppSinkCallbacks::builder()
+            .new_sample(move |_| {
+                let data = match data_weak.upgrade() {
+                    Some(data) => data,
+                    None => return Ok(gst::FlowSuccess::Ok),
+                };
 
-        let appsink = {
-            let data = data.lock().unwrap();
-            data.appsink.clone()
-        };
+                let appsink = {
+                    let data = data.lock().unwrap();
+                    data.appsink.clone()
+                };
 
-        if let Ok(_sample) = appsink.pull_sample() {
-            use std::io::{self, Write};
-            // The only thing we do in this example is print a * to indicate a received buffer
-            print!("*");
-            let _ = io::stdout().flush();
-        }
+                if let Ok(_sample) = appsink.pull_sample() {
+                    use std::io::{self, Write};
+                    // The only thing we do in this example is print a * to indicate a received buffer
+                    print!("*");
+                    let _ = io::stdout().flush();
+                }
 
-        Ok(gst::FlowSuccess::Ok)
-    });
+                Ok(gst::FlowSuccess::Ok)
+            })
+            .build(),
+    );
 
     let main_loop = glib::MainLoop::new(None, false);
     let main_loop_clone = main_loop.clone();

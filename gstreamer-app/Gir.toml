@@ -61,17 +61,35 @@ final_type = true
     # Action signal
     ignore = true
 
+    [[object.property]]
+    name = "emit-signals"
+    # Use callbacks instead
+    ignore = true
+
+    [[object.function]]
+    name = "get_emit_signals"
+    # Use callbacks instead
+    ignore = true
+
+    [[object.function]]
+    name = "set_emit_signals"
+    # Use callbacks instead
+    ignore = true
+
     [[object.signal]]
     name = "new-sample"
-    concurrency = "send"
+    # Use callbacks instead
+    ignore = true
 
     [[object.signal]]
     name = "new-preroll"
-    concurrency = "send"
+    # Use callbacks instead
+    ignore = true
 
     [[object.signal]]
     name = "eos"
-    concurrency = "send"
+    # Use callbacks instead
+    ignore = true
 
     [[object.function]]
     name = "set_caps"
@@ -122,6 +140,36 @@ final_type = true
     [[object.signal]]
     name = "push-sample"
     # Action signal
+    ignore = true
+
+    [[object.property]]
+    name = "emit-signals"
+    # Use callbacks instead
+    ignore = true
+
+    [[object.function]]
+    name = "get_emit_signals"
+    # Use callbacks instead
+    ignore = true
+
+    [[object.function]]
+    name = "set_emit_signals"
+    # Use callbacks instead
+    ignore = true
+
+    [[object.signal]]
+    name = "enough-data"
+    # Use callbacks instead
+    ignore = true
+
+    [[object.signal]]
+    name = "need-data"
+    # Use callbacks instead
+    ignore = true
+
+    [[object.signal]]
+    name = "seek-data"
+    # Use callbacks instead
     ignore = true
 
     [[object.function]]

@@ -47,12 +47,6 @@ impl AppSrc {
         unsafe { from_glib(ffi::gst_app_src_get_duration(self.to_glib_none().0)) }
     }
 
-    #[doc(alias = "gst_app_src_get_emit_signals")]
-    #[doc(alias = "get_emit_signals")]
-    pub fn emits_signals(&self) -> bool {
-        unsafe { from_glib(ffi::gst_app_src_get_emit_signals(self.to_glib_none().0)) }
-    }
-
     #[doc(alias = "gst_app_src_get_max_bytes")]
     #[doc(alias = "get_max_bytes")]
     pub fn max_bytes(&self) -> u64 {
@@ -99,13 +93,6 @@ impl AppSrc {
     pub fn set_duration(&self, duration: gst::ClockTime) {
         unsafe {
             ffi::gst_app_src_set_duration(self.to_glib_none().0, duration.into_glib());
-        }
-    }
-
-    #[doc(alias = "gst_app_src_set_emit_signals")]
-    pub fn set_emit_signals(&self, emit: bool) {
-        unsafe {
-            ffi::gst_app_src_set_emit_signals(self.to_glib_none().0, emit.into_glib());
         }
     }
 
@@ -312,85 +299,6 @@ impl AppSrc {
         }
     }
 
-    #[doc(alias = "enough-data")]
-    pub fn connect_enough_data<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
-        unsafe extern "C" fn enough_data_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(
-            this: *mut ffi::GstAppSrc,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this))
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"enough-data\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    enough_data_trampoline::<F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    #[doc(alias = "need-data")]
-    pub fn connect_need_data<F: Fn(&Self, u32) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
-        unsafe extern "C" fn need_data_trampoline<F: Fn(&AppSrc, u32) + Send + Sync + 'static>(
-            this: *mut ffi::GstAppSrc,
-            length: libc::c_uint,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), length)
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"need-data\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    need_data_trampoline::<F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    #[doc(alias = "seek-data")]
-    pub fn connect_seek_data<F: Fn(&Self, u64) -> bool + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
-        unsafe extern "C" fn seek_data_trampoline<
-            F: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static,
-        >(
-            this: *mut ffi::GstAppSrc,
-            offset: u64,
-            f: glib::ffi::gpointer,
-        ) -> glib::ffi::gboolean {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), offset).into_glib()
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"seek-data\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    seek_data_trampoline::<F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
     #[doc(alias = "block")]
     pub fn connect_block_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -493,34 +401,6 @@ impl AppSrc {
                 b"notify::duration\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_duration_trampoline::<F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    #[doc(alias = "emit-signals")]
-    pub fn connect_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_emit_signals_trampoline<
-            F: Fn(&AppSrc) + Send + Sync + 'static,
-        >(
-            this: *mut ffi::GstAppSrc,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this))
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::emit-signals\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_emit_signals_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
