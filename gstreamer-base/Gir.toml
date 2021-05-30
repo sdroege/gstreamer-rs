@@ -115,6 +115,36 @@ manual_traits = ["BaseSinkExtManual"]
     # Use Result
     manual = true
 
+    [[object.function]]
+    name = "is_qos_enabled"
+    # Same as the qos property
+    ignore = true
+
+    [[object.function]]
+    name = "set_qos_enabled"
+    # Same as the qos property
+    ignore = true
+
+    [[object.function]]
+    name = "is_async_enabled"
+    # Same as the async property
+    ignore = true
+
+    [[object.function]]
+    name = "set_async_enabled"
+    # Same as the async property
+    ignore = true
+
+    [[object.function]]
+    name = "is_last_sample_enabled"
+    # Same as the enable-last-sample property
+    ignore = true
+
+    [[object.function]]
+    name = "set_last_sample_enabled"
+    # Same as the enable-last-sample property
+    ignore = true
+
 [[object]]
 name = "GstBase.BaseSrc"
 status = "generate"
@@ -150,6 +180,15 @@ manual_traits = ["BaseTransformExtManual"]
         [object.function.return]
         bool_return_is_error = "Failed to update src caps"
 
+    [[object.function]]
+    name = "is_qos_enabled"
+    # Same as the qos property
+    ignore = true
+
+    [[object.function]]
+    name = "set_qos_enabled"
+    # Same as the qos property
+    ignore = true
 
 [[object]]
 name = "GstBase.Aggregator"

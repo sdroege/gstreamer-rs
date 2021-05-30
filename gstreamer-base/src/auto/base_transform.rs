@@ -41,9 +41,6 @@ pub trait BaseTransformExt: 'static {
     #[doc(alias = "gst_base_transform_is_passthrough")]
     fn is_passthrough(&self) -> bool;
 
-    #[doc(alias = "gst_base_transform_is_qos_enabled")]
-    fn is_qos_enabled(&self) -> bool;
-
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_base_transform_reconfigure")]
@@ -66,9 +63,6 @@ pub trait BaseTransformExt: 'static {
 
     #[doc(alias = "gst_base_transform_set_prefer_passthrough")]
     fn set_prefer_passthrough(&self, prefer_passthrough: bool);
-
-    #[doc(alias = "gst_base_transform_set_qos_enabled")]
-    fn set_qos_enabled(&self, enabled: bool);
 
     #[doc(alias = "gst_base_transform_update_qos")]
     fn update_qos(&self, proportion: f64, diff: gst::ClockTimeDiff, timestamp: gst::ClockTime);
@@ -108,14 +102,6 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
     fn is_passthrough(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_base_transform_is_passthrough(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn is_qos_enabled(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gst_base_transform_is_qos_enabled(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -175,15 +161,6 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
             ffi::gst_base_transform_set_prefer_passthrough(
                 self.as_ref().to_glib_none().0,
                 prefer_passthrough.into_glib(),
-            );
-        }
-    }
-
-    fn set_qos_enabled(&self, enabled: bool) {
-        unsafe {
-            ffi::gst_base_transform_set_qos_enabled(
-                self.as_ref().to_glib_none().0,
-                enabled.into_glib(),
             );
         }
     }

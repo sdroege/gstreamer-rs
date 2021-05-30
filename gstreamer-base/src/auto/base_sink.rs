@@ -85,18 +85,6 @@ pub trait BaseSinkExt: 'static {
     #[doc(alias = "get_ts_offset")]
     fn ts_offset(&self) -> gst::ClockTimeDiff;
 
-    #[doc(alias = "gst_base_sink_is_async_enabled")]
-    fn is_async_enabled(&self) -> bool;
-
-    #[doc(alias = "gst_base_sink_is_last_sample_enabled")]
-    fn is_last_sample_enabled(&self) -> bool;
-
-    #[doc(alias = "gst_base_sink_is_qos_enabled")]
-    fn is_qos_enabled(&self) -> bool;
-
-    #[doc(alias = "gst_base_sink_set_async_enabled")]
-    fn set_async_enabled(&self, enabled: bool);
-
     #[doc(alias = "gst_base_sink_set_blocksize")]
     fn set_blocksize(&self, blocksize: u32);
 
@@ -104,9 +92,6 @@ pub trait BaseSinkExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_base_sink_set_drop_out_of_segment")]
     fn set_drop_out_of_segment(&self, drop_out_of_segment: bool);
-
-    #[doc(alias = "gst_base_sink_set_last_sample_enabled")]
-    fn set_last_sample_enabled(&self, enabled: bool);
 
     #[doc(alias = "gst_base_sink_set_max_bitrate")]
     fn set_max_bitrate(&self, max_bitrate: u64);
@@ -118,9 +103,6 @@ pub trait BaseSinkExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_base_sink_set_processing_deadline")]
     fn set_processing_deadline(&self, processing_deadline: gst::ClockTime);
-
-    #[doc(alias = "gst_base_sink_set_qos_enabled")]
-    fn set_qos_enabled(&self, enabled: bool);
 
     #[doc(alias = "gst_base_sink_set_render_delay")]
     fn set_render_delay(&self, delay: gst::ClockTime);
@@ -318,39 +300,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         unsafe { ffi::gst_base_sink_get_ts_offset(self.as_ref().to_glib_none().0) }
     }
 
-    fn is_async_enabled(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gst_base_sink_is_async_enabled(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn is_last_sample_enabled(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gst_base_sink_is_last_sample_enabled(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn is_qos_enabled(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gst_base_sink_is_qos_enabled(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn set_async_enabled(&self, enabled: bool) {
-        unsafe {
-            ffi::gst_base_sink_set_async_enabled(
-                self.as_ref().to_glib_none().0,
-                enabled.into_glib(),
-            );
-        }
-    }
-
     fn set_blocksize(&self, blocksize: u32) {
         unsafe {
             ffi::gst_base_sink_set_blocksize(self.as_ref().to_glib_none().0, blocksize);
@@ -364,15 +313,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             ffi::gst_base_sink_set_drop_out_of_segment(
                 self.as_ref().to_glib_none().0,
                 drop_out_of_segment.into_glib(),
-            );
-        }
-    }
-
-    fn set_last_sample_enabled(&self, enabled: bool) {
-        unsafe {
-            ffi::gst_base_sink_set_last_sample_enabled(
-                self.as_ref().to_glib_none().0,
-                enabled.into_glib(),
             );
         }
     }
@@ -397,12 +337,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
                 self.as_ref().to_glib_none().0,
                 processing_deadline.into_glib(),
             );
-        }
-    }
-
-    fn set_qos_enabled(&self, enabled: bool) {
-        unsafe {
-            ffi::gst_base_sink_set_qos_enabled(self.as_ref().to_glib_none().0, enabled.into_glib());
         }
     }
 
