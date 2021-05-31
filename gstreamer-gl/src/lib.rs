@@ -3,6 +3,7 @@
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
 pub use ffi;
+pub use glib;
 pub use gst;
 pub use gst_base;
 pub use gst_video;
