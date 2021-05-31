@@ -56,8 +56,6 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use crate::auto::*;
 
-mod timeline_element;
-
 // Re-export all the traits in a prelude module, so that applications
 // can always "use ges::prelude::*" without getting conflicts
 pub mod prelude {
@@ -67,8 +65,6 @@ pub mod prelude {
     pub use gst_base::prelude::*;
     #[doc(hidden)]
     pub use gst_pbutils::prelude::*;
-
-    pub use crate::timeline_element::TimelineElementExtManual;
 
     pub use crate::auto::traits::*;
 }
