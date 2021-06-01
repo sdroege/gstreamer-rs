@@ -225,6 +225,24 @@ name = "GstPlayer.PlayerVideoOverlayVideoRenderer"
 status = "generate"
 final_type = true
 
+    [[object.function]]
+    name = "new"
+    manual = true
+
+    [[object.function]]
+    name = "new_with_sink"
+    # with_handle_and_sink() also calls this.
+    rename = "with_sink"
+    manual = true
+
+    [[object.function]]
+    name = "get_window_handle"
+    manual = true
+
+    [[object.function]]
+    name = "set_window_handle"
+    manual = true
+
 [[object]]
 name = "GstPlayer.PlayerGMainContextSignalDispatcher"
 status = "generate"
