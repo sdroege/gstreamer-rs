@@ -4,6 +4,7 @@ use std::ffi::CStr;
 use std::fmt;
 
 #[repr(transparent)]
+#[doc(alias = "GstSDPOrigin")]
 pub struct SDPOrigin(pub(crate) ffi::GstSDPOrigin);
 
 unsafe impl Send for SDPOrigin {}

@@ -9,6 +9,7 @@ use std::ptr;
 use std::str;
 
 #[derive(Clone)]
+#[doc(alias = "GstVideoTimeCodeInterval")]
 pub struct VideoTimeCodeInterval(ffi::GstVideoTimeCodeInterval);
 
 impl VideoTimeCodeInterval {

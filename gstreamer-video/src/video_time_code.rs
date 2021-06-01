@@ -16,7 +16,9 @@ use crate::VideoTimeCodeFlags;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use crate::VideoTimeCodeInterval;
 
+#[doc(alias = "GstVideoTimeCode")]
 pub struct VideoTimeCode(ffi::GstVideoTimeCode);
+#[doc(alias = "GstVideoTimeCode")]
 pub struct ValidVideoTimeCode(ffi::GstVideoTimeCode);
 
 impl VideoTimeCode {
@@ -541,6 +543,7 @@ impl From<ValidVideoTimeCode> for VideoTimeCode {
 }
 
 #[repr(transparent)]
+#[doc(alias = "GstVideoTimeCodeMeta")]
 pub struct VideoTimeCodeMeta(ffi::GstVideoTimeCodeMeta);
 
 unsafe impl Send for VideoTimeCodeMeta {}

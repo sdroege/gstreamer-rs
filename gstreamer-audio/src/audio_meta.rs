@@ -15,6 +15,7 @@ use glib::translate::{from_glib_none, ToGlibPtr};
 use gst::prelude::*;
 
 #[repr(transparent)]
+#[doc(alias = "GstAudioClippingMeta")]
 pub struct AudioClippingMeta(ffi::GstAudioClippingMeta);
 
 unsafe impl Send for AudioClippingMeta {}
@@ -75,6 +76,7 @@ impl fmt::Debug for AudioClippingMeta {
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[repr(transparent)]
+#[doc(alias = "GstAudioMeta")]
 pub struct AudioMeta(ffi::GstAudioMeta);
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]

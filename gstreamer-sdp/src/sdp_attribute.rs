@@ -7,6 +7,7 @@ use std::mem;
 use glib::translate::*;
 
 #[repr(transparent)]
+#[doc(alias = "GstSDPAttribute")]
 pub struct SDPAttribute(pub(crate) ffi::GstSDPAttribute);
 
 unsafe impl Send for SDPAttribute {}

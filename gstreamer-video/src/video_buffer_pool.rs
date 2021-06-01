@@ -31,6 +31,7 @@ pub static BUFFER_POOL_OPTION_VIDEO_META: Lazy<&'static str> = Lazy::new(|| unsa
 });
 
 #[derive(Debug, Clone)]
+#[doc(alias = "GstVideoAlignment")]
 pub struct VideoAlignment(pub(crate) ffi::GstVideoAlignment);
 
 impl VideoAlignment {

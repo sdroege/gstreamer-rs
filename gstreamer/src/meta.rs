@@ -234,6 +234,7 @@ impl<'a, U> MetaRefMut<'a, Meta, U> {
 }
 
 #[repr(transparent)]
+#[doc(alias = "GstMeta")]
 pub struct Meta(ffi::GstMeta);
 
 unsafe impl Send for Meta {}
@@ -261,6 +262,7 @@ impl fmt::Debug for Meta {
 }
 
 #[repr(transparent)]
+#[doc(alias = "GstParentBufferMeta")]
 pub struct ParentBufferMeta(ffi::GstParentBufferMeta);
 
 unsafe impl Send for ParentBufferMeta {}
@@ -309,6 +311,7 @@ impl fmt::Debug for ParentBufferMeta {
 }
 
 #[repr(transparent)]
+#[doc(alias = "GstProtectionMeta")]
 pub struct ProtectionMeta(ffi::GstProtectionMeta);
 
 unsafe impl Send for ProtectionMeta {}
@@ -356,6 +359,7 @@ impl fmt::Debug for ProtectionMeta {
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[repr(transparent)]
+#[doc(alias = "GstReferenceTimestampMeta")]
 pub struct ReferenceTimestampMeta(ffi::GstReferenceTimestampMeta);
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]

@@ -7,6 +7,7 @@ use glib::translate::*;
 use crate::MemoryFlags;
 
 #[derive(Debug, Clone)]
+#[doc(alias = "GstAllocationParams")]
 pub struct AllocationParams(ffi::GstAllocationParams);
 
 unsafe impl Send for AllocationParams {}

@@ -22,6 +22,7 @@ use crate::sdp_zone::SDPZone;
 
 glib::wrapper! {
     #[derive(PartialEq, Eq, PartialOrd, Ord, Hash)]
+    #[doc(alias = "GstSDPMessage")]
     pub struct SDPMessage(Boxed<ffi::GstSDPMessage>);
 
     match fn {
@@ -118,6 +119,7 @@ impl SDPMessage {
 }
 
 #[repr(transparent)]
+#[doc(alias = "GstSDPMessage")]
 pub struct SDPMessageRef(ffi::GstSDPMessage);
 
 impl fmt::Debug for SDPMessageRef {

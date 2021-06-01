@@ -10,6 +10,7 @@ use std::ffi::CStr;
 use std::fmt;
 use std::ptr;
 
+#[doc(alias = "GstStaticPadTemplate")]
 pub struct StaticPadTemplate(ptr::NonNull<ffi::GstStaticPadTemplate>);
 
 impl StaticPadTemplate {

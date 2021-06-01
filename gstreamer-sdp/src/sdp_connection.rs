@@ -7,6 +7,7 @@ use std::mem;
 use glib::translate::*;
 
 #[repr(transparent)]
+#[doc(alias = "GstSDPConnection")]
 pub struct SDPConnection(pub(crate) ffi::GstSDPConnection);
 
 unsafe impl Send for SDPConnection {}

@@ -7,6 +7,7 @@ use std::ops;
 use std::ptr;
 
 #[derive(Debug)]
+#[doc(alias = "GstVideoConverter")]
 pub struct VideoConverter(ptr::NonNull<ffi::GstVideoConverter>);
 
 impl Drop for VideoConverter {

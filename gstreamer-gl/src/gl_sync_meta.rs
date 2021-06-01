@@ -8,6 +8,7 @@ use gst::prelude::*;
 use crate::GLContext;
 
 #[repr(transparent)]
+#[doc(alias = "GstGLSyncMeta")]
 pub struct GLSyncMeta(ffi::GstGLSyncMeta);
 
 unsafe impl Send for GLSyncMeta {}

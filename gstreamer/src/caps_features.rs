@@ -13,6 +13,7 @@ use once_cell::sync::Lazy;
 use glib::translate::*;
 use glib::StaticType;
 
+#[doc(alias = "GstCapsFeatures")]
 pub struct CapsFeatures(ptr::NonNull<ffi::GstCapsFeatures>);
 unsafe impl Send for CapsFeatures {}
 unsafe impl Sync for CapsFeatures {}
@@ -278,6 +279,7 @@ impl GlibPtrDefault for CapsFeatures {
 }
 
 #[repr(transparent)]
+#[doc(alias = "GstCapsFeatures")]
 pub struct CapsFeaturesRef(ffi::GstCapsFeatures);
 
 impl CapsFeaturesRef {

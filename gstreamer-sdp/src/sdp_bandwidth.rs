@@ -7,6 +7,7 @@ use std::mem;
 use glib::translate::*;
 
 #[repr(transparent)]
+#[doc(alias = "GstSDPBandwidth")]
 pub struct SDPBandwidth(pub(crate) ffi::GstSDPBandwidth);
 
 unsafe impl Send for SDPBandwidth {}

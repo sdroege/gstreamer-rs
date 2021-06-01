@@ -7,6 +7,7 @@ use std::mem;
 use glib::translate::*;
 
 #[repr(transparent)]
+#[doc(alias = "GstSDPZone")]
 pub struct SDPZone(pub(crate) ffi::GstSDPZone);
 
 unsafe impl Send for SDPZone {}

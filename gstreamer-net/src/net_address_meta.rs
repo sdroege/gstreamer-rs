@@ -6,6 +6,7 @@ use glib::translate::*;
 use gst::prelude::*;
 
 #[repr(transparent)]
+#[doc(alias = "GstNetAddressMeta")]
 pub struct NetAddressMeta(ffi::GstNetAddressMeta);
 
 unsafe impl Send for NetAddressMeta {}

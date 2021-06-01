@@ -7,6 +7,7 @@ use glib::translate::{from_glib, from_glib_none, FromGlib, IntoGlib, ToGlibPtr};
 use gst::prelude::*;
 
 #[repr(transparent)]
+#[doc(alias = "GstVideoMeta")]
 pub struct VideoMeta(ffi::GstVideoMeta);
 
 unsafe impl Send for VideoMeta {}
@@ -245,6 +246,7 @@ impl fmt::Debug for VideoMeta {
 }
 
 #[repr(transparent)]
+#[doc(alias = "GstVideoCropMeta")]
 pub struct VideoCropMeta(ffi::GstVideoCropMeta);
 
 unsafe impl Send for VideoCropMeta {}
@@ -307,6 +309,7 @@ impl fmt::Debug for VideoCropMeta {
 }
 
 #[repr(transparent)]
+#[doc(alias = "GstVideoRegionOfInterestMeta")]
 pub struct VideoRegionOfInterestMeta(ffi::GstVideoRegionOfInterestMeta);
 
 unsafe impl Send for VideoRegionOfInterestMeta {}
@@ -448,6 +451,7 @@ impl fmt::Debug for VideoRegionOfInterestMeta {
 }
 
 #[repr(transparent)]
+#[doc(alias = "GstVideoAffineTransformationMeta")]
 pub struct VideoAffineTransformationMeta(ffi::GstVideoAffineTransformationMeta);
 
 unsafe impl Send for VideoAffineTransformationMeta {}
@@ -511,6 +515,7 @@ impl fmt::Debug for VideoAffineTransformationMeta {
 }
 
 #[repr(transparent)]
+#[doc(alias = "GstVideoOverlayCompositionMeta")]
 pub struct VideoOverlayCompositionMeta(ffi::GstVideoOverlayCompositionMeta);
 
 unsafe impl Send for VideoOverlayCompositionMeta {}
@@ -573,6 +578,7 @@ impl fmt::Debug for VideoOverlayCompositionMeta {
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[repr(transparent)]
+#[doc(alias = "GstVideoCaptionMeta")]
 pub struct VideoCaptionMeta(ffi::GstVideoCaptionMeta);
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -645,6 +651,7 @@ impl fmt::Debug for VideoCaptionMeta {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[repr(transparent)]
+#[doc(alias = "GstVideoAFDMeta")]
 pub struct VideoAFDMeta(ffi::GstVideoAFDMeta);
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -720,6 +727,7 @@ impl fmt::Debug for VideoAFDMeta {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[repr(transparent)]
+#[doc(alias = "GstVideoBarMeta")]
 pub struct VideoBarMeta(ffi::GstVideoBarMeta);
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]

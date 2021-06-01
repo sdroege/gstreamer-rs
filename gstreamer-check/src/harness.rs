@@ -10,6 +10,7 @@ use std::path;
 use std::ptr;
 
 #[derive(Debug)]
+#[doc(alias = "GstHarness")]
 pub struct Harness(ptr::NonNull<ffi::GstHarness>);
 
 impl Drop for Harness {

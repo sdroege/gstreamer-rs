@@ -4,6 +4,7 @@ use glib::translate::*;
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+    #[doc(alias = "GstParseContext")]
     pub struct ParseContext(Boxed<ffi::GstParseContext>);
 
     match fn {

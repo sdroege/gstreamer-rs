@@ -9,6 +9,7 @@ use std::ffi::CStr;
 use std::fmt;
 use std::ptr;
 
+#[doc(alias = "GstStaticCaps")]
 pub struct StaticCaps(ptr::NonNull<ffi::GstStaticCaps>);
 
 impl StaticCaps {

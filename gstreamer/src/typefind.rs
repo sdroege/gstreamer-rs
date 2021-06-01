@@ -12,6 +12,7 @@ use std::slice;
 
 #[repr(transparent)]
 #[derive(Debug)]
+#[doc(alias = "GstTypeFind")]
 pub struct TypeFind(ffi::GstTypeFind);
 
 pub trait TypeFindImpl {

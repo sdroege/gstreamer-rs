@@ -9,6 +9,7 @@ use std::fmt;
 use std::mem;
 use std::ptr;
 
+#[doc(alias = "GstAudioInfo")]
 pub struct AudioInfo(ffi::GstAudioInfo, [crate::AudioChannelPosition; 64]);
 
 impl fmt::Debug for AudioInfo {

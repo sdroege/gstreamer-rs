@@ -40,6 +40,7 @@ impl IntoGlib for AudioEndianness {
     }
 }
 
+#[doc(alias = "GstAudioFormatInfo")]
 pub struct AudioFormatInfo(&'static ffi::GstAudioFormatInfo);
 
 impl AudioFormatInfo {

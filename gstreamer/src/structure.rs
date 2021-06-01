@@ -62,6 +62,7 @@ impl GlibValueError for glib::value::ValueTypeMismatchOrNoneError {
     }
 }
 
+#[doc(alias = "GstStructure")]
 pub struct Structure(ptr::NonNull<ffi::GstStructure>);
 unsafe impl Send for Structure {}
 unsafe impl Sync for Structure {}
@@ -354,6 +355,7 @@ impl GlibPtrDefault for Structure {
 }
 
 #[repr(transparent)]
+#[doc(alias = "GstStructure")]
 pub struct StructureRef(ffi::GstStructure);
 
 unsafe impl Send for StructureRef {}

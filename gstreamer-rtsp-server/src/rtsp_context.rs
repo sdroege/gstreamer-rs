@@ -4,6 +4,7 @@ use glib::translate::*;
 use std::ptr;
 
 #[derive(Debug, PartialEq, Eq)]
+#[doc(alias = "GstRTSPContext")]
 pub struct RTSPContext(ptr::NonNull<ffi::GstRTSPContext>);
 
 impl RTSPContext {

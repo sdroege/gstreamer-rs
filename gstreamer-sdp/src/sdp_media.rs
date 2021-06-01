@@ -16,6 +16,7 @@ use crate::sdp_key::SDPKey;
 
 glib::wrapper! {
     #[derive(PartialEq, Eq, PartialOrd, Ord, Hash)]
+    #[doc(alias = "GstSDPMedia")]
     pub struct SDPMedia(Boxed<ffi::GstSDPMedia>);
 
     match fn {
@@ -78,6 +79,7 @@ impl fmt::Display for SDPMedia {
 }
 
 #[repr(transparent)]
+#[doc(alias = "GstSDPMedia")]
 pub struct SDPMediaRef(ffi::GstSDPMedia);
 
 impl fmt::Debug for SDPMediaRef {

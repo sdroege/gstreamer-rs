@@ -82,6 +82,7 @@ impl ToValue for VideoColorRange {
     }
 }
 
+#[doc(alias = "GstVideoColorimetry")]
 pub struct VideoColorimetry(ffi::GstVideoColorimetry);
 
 impl VideoColorimetry {
@@ -248,6 +249,7 @@ impl std::convert::TryFrom<crate::VideoMultiviewMode> for crate::VideoMultiviewF
     }
 }
 
+#[doc(alias = "GstVideoInfo")]
 pub struct VideoInfo(pub(crate) ffi::GstVideoInfo);
 
 impl fmt::Debug for VideoInfo {

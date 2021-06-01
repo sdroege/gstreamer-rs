@@ -11,6 +11,7 @@ use std::{ops::Deref, pin::Pin};
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+    #[doc(alias = "GstPromise")]
     pub struct Promise(Shared<ffi::GstPromise>);
 
     match fn {

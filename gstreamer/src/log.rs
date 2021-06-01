@@ -15,6 +15,7 @@ use glib::prelude::*;
 use glib::translate::*;
 
 #[derive(PartialEq, Eq)]
+#[doc(alias = "GstDebugMessage")]
 pub struct DebugMessage(ptr::NonNull<ffi::GstDebugMessage>);
 
 impl fmt::Debug for DebugMessage {
@@ -39,6 +40,7 @@ impl DebugMessage {
 }
 
 #[derive(PartialEq, Eq, Clone, Copy)]
+#[doc(alias = "GstDebugCategory")]
 pub struct DebugCategory(Option<ptr::NonNull<ffi::GstDebugCategory>>);
 
 impl DebugCategory {
@@ -389,6 +391,7 @@ unsafe impl Send for DebugLogFunction {}
 unsafe impl Sync for DebugLogFunction {}
 
 #[derive(Debug)]
+#[doc(alias = "GObject")]
 pub struct LoggedObject(ptr::NonNull<glib::gobject_ffi::GObject>);
 
 impl LoggedObject {

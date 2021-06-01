@@ -14,6 +14,7 @@ use std::ptr;
 
 pub type Segment = FormattedSegment<GenericFormattedValue>;
 #[repr(transparent)]
+#[doc(alias = "GstSegment")]
 pub struct FormattedSegment<T: FormattedValue>(ffi::GstSegment, PhantomData<T>);
 
 impl Segment {

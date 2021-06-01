@@ -187,6 +187,7 @@ impl BufferPoolConfig {
 }
 
 #[derive(Debug)]
+#[doc(alias = "GstBufferPoolAcquireParams")]
 pub struct BufferPoolAcquireParams(ffi::GstBufferPoolAcquireParams);
 
 unsafe impl Send for BufferPoolAcquireParams {}

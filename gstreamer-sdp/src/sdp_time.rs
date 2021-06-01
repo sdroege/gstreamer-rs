@@ -9,6 +9,7 @@ use std::ptr;
 use glib::translate::*;
 
 #[repr(transparent)]
+#[doc(alias = "GstSDPTime")]
 pub struct SDPTime(pub(crate) ffi::GstSDPTime);
 
 unsafe impl Send for SDPTime {}
