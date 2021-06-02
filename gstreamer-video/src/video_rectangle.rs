@@ -3,6 +3,7 @@
 use glib::translate::IntoGlib;
 use std::mem;
 
+#[repr(C)]
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct VideoRectangle {
     pub x: i32,
