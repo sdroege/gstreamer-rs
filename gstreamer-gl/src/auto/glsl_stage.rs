@@ -11,6 +11,7 @@ use glib::translate::*;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GstGLSLStage")]
     pub struct GLSLStage(Object<ffi::GstGLSLStage, ffi::GstGLSLStageClass>) @extends gst::Object;
 
     match fn {

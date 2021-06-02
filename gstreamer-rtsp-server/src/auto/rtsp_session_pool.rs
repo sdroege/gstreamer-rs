@@ -14,6 +14,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstRTSPSessionPool")]
     pub struct RTSPSessionPool(Object<ffi::GstRTSPSessionPool, ffi::GstRTSPSessionPoolClass>);
 
     match fn {

@@ -9,6 +9,7 @@ use glib::translate::*;
 use glib::StaticType;
 
 glib::wrapper! {
+    #[doc(alias = "GstPlayerGMainContextSignalDispatcher")]
     pub struct PlayerGMainContextSignalDispatcher(Object<ffi::GstPlayerGMainContextSignalDispatcher, ffi::GstPlayerGMainContextSignalDispatcherClass>) @implements PlayerSignalDispatcher;
 
     match fn {

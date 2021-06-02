@@ -21,6 +21,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GstRTSPServer")]
     pub struct RTSPServer(Object<ffi::GstRTSPServer, ffi::GstRTSPServerClass>);
 
     match fn {

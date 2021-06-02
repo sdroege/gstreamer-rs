@@ -7,6 +7,7 @@ use crate::EncodingProfile;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstEncodingVideoProfile")]
     pub struct EncodingVideoProfile(Object<ffi::GstEncodingVideoProfile, ffi::GstEncodingVideoProfileClass>) @extends EncodingProfile;
 
     match fn {

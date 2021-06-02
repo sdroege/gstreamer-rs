@@ -7,6 +7,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstPlayerStreamInfo")]
     pub struct PlayerStreamInfo(Object<ffi::GstPlayerStreamInfo, ffi::GstPlayerStreamInfoClass>);
 
     match fn {

@@ -20,6 +20,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstAggregator")]
     pub struct Aggregator(Object<ffi::GstAggregator, ffi::GstAggregatorClass>) @extends gst::Element, gst::Object;
 
     match fn {

@@ -17,6 +17,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstSystemClock")]
     pub struct SystemClock(Object<ffi::GstSystemClock, ffi::GstSystemClockClass>) @extends Clock, Object;
 
     match fn {

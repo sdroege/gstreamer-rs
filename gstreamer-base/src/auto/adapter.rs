@@ -8,6 +8,7 @@ use glib::ObjectExt;
 use std::mem;
 
 glib::wrapper! {
+    #[doc(alias = "GstAdapter")]
     pub struct Adapter(Object<ffi::GstAdapter, ffi::GstAdapterClass>);
 
     match fn {

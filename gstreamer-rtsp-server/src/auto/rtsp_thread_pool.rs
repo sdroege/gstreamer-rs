@@ -15,6 +15,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstRTSPThreadPool")]
     pub struct RTSPThreadPool(Object<ffi::GstRTSPThreadPool, ffi::GstRTSPThreadPoolClass>);
 
     match fn {

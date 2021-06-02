@@ -26,6 +26,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GESTimeline")]
     pub struct Timeline(Object<ffi::GESTimeline, ffi::GESTimelineClass>) @extends gst::Bin, gst::Element, gst::Object, @implements Extractable;
 
     match fn {

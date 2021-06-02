@@ -6,6 +6,7 @@
 use glib::object::IsA;
 
 glib::wrapper! {
+    #[doc(alias = "GstPlayerVideoRenderer")]
     pub struct PlayerVideoRenderer(Interface<ffi::GstPlayerVideoRenderer, ffi::GstPlayerVideoRendererInterface>);
 
     match fn {

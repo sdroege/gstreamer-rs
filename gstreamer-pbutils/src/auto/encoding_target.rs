@@ -9,6 +9,7 @@ use std::fmt;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GstEncodingTarget")]
     pub struct EncodingTarget(Object<ffi::GstEncodingTarget>);
 
     match fn {

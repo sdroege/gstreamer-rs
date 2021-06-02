@@ -8,6 +8,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstGLColorConvert")]
     pub struct GLColorConvert(Object<ffi::GstGLColorConvert, ffi::GstGLColorConvertClass>) @extends gst::Object;
 
     match fn {

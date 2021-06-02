@@ -15,6 +15,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstTriggerControlSource")]
     pub struct TriggerControlSource(Object<ffi::GstTriggerControlSource, ffi::GstTriggerControlSourceClass>) @extends TimedValueControlSource, gst::ControlSource, gst::Object;
 
     match fn {

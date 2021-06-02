@@ -13,12 +13,18 @@ use std::ffi::CStr;
 use std::fmt;
 
 bitflags! {
+    #[doc(alias = "GESPipelineFlags")]
     pub struct PipelineFlags: u32 {
-        const AUDIO_PREVIEW = 1;
-        const VIDEO_PREVIEW = 2;
-        const FULL_PREVIEW = 3;
-        const RENDER = 4;
-        const SMART_RENDER = 8;
+        #[doc(alias = "GES_PIPELINE_MODE_PREVIEW_AUDIO")]
+        const AUDIO_PREVIEW = ffi::GES_PIPELINE_MODE_PREVIEW_AUDIO as u32;
+        #[doc(alias = "GES_PIPELINE_MODE_PREVIEW_VIDEO")]
+        const VIDEO_PREVIEW = ffi::GES_PIPELINE_MODE_PREVIEW_VIDEO as u32;
+        #[doc(alias = "GES_PIPELINE_MODE_PREVIEW")]
+        const FULL_PREVIEW = ffi::GES_PIPELINE_MODE_PREVIEW as u32;
+        #[doc(alias = "GES_PIPELINE_MODE_RENDER")]
+        const RENDER = ffi::GES_PIPELINE_MODE_RENDER as u32;
+        #[doc(alias = "GES_PIPELINE_MODE_SMART_RENDER")]
+        const SMART_RENDER = ffi::GES_PIPELINE_MODE_SMART_RENDER as u32;
     }
 }
 
@@ -73,12 +79,18 @@ impl ToValue for PipelineFlags {
 }
 
 bitflags! {
+    #[doc(alias = "GESTrackType")]
     pub struct TrackType: u32 {
-        const UNKNOWN = 1;
-        const AUDIO = 2;
-        const VIDEO = 4;
-        const TEXT = 8;
-        const CUSTOM = 16;
+        #[doc(alias = "GES_TRACK_TYPE_UNKNOWN")]
+        const UNKNOWN = ffi::GES_TRACK_TYPE_UNKNOWN as u32;
+        #[doc(alias = "GES_TRACK_TYPE_AUDIO")]
+        const AUDIO = ffi::GES_TRACK_TYPE_AUDIO as u32;
+        #[doc(alias = "GES_TRACK_TYPE_VIDEO")]
+        const VIDEO = ffi::GES_TRACK_TYPE_VIDEO as u32;
+        #[doc(alias = "GES_TRACK_TYPE_TEXT")]
+        const TEXT = ffi::GES_TRACK_TYPE_TEXT as u32;
+        #[doc(alias = "GES_TRACK_TYPE_CUSTOM")]
+        const CUSTOM = ffi::GES_TRACK_TYPE_CUSTOM as u32;
     }
 }
 

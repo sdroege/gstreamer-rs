@@ -6,6 +6,7 @@
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstGLDisplayWayland")]
     pub struct GLDisplayWayland(Object<ffi::GstGLDisplayWayland, ffi::GstGLDisplayWaylandClass>) @extends gst_gl::GLDisplay, gst::Object;
 
     match fn {

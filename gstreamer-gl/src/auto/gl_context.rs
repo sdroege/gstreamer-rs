@@ -15,6 +15,7 @@ use std::mem;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GstGLContext")]
     pub struct GLContext(Object<ffi::GstGLContext, ffi::GstGLContextClass>) @extends gst::Object;
 
     match fn {

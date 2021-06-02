@@ -13,6 +13,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstAppSink")]
     pub struct AppSink(Object<ffi::GstAppSink, ffi::GstAppSinkClass>) @extends gst::Element, gst::Object, @implements gst::URIHandler;
 
     match fn {

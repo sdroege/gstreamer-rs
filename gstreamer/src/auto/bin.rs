@@ -22,6 +22,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstBin")]
     pub struct Bin(Object<ffi::GstBin, ffi::GstBinClass>) @extends Element, Object, @implements ChildProxy;
 
     match fn {

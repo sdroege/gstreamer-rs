@@ -19,6 +19,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GstDiscoverer")]
     pub struct Discoverer(Object<ffi::GstDiscoverer, ffi::GstDiscovererClass>);
 
     match fn {

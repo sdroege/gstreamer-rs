@@ -16,6 +16,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GESUriClip")]
     pub struct UriClip(Object<ffi::GESUriClip, ffi::GESUriClipClass>) @extends Clip, Container, TimelineElement, @implements Extractable;
 
     match fn {

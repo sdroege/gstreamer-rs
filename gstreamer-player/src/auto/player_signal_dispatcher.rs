@@ -6,6 +6,7 @@
 use glib::object::IsA;
 
 glib::wrapper! {
+    #[doc(alias = "GstPlayerSignalDispatcher")]
     pub struct PlayerSignalDispatcher(Interface<ffi::GstPlayerSignalDispatcher, ffi::GstPlayerSignalDispatcherInterface>);
 
     match fn {

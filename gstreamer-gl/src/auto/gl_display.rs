@@ -17,6 +17,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GstGLDisplay")]
     pub struct GLDisplay(Object<ffi::GstGLDisplay, ffi::GstGLDisplayClass>) @extends gst::Object;
 
     match fn {

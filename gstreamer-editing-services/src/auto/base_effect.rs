@@ -12,6 +12,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GESBaseEffect")]
     pub struct BaseEffect(Object<ffi::GESBaseEffect, ffi::GESBaseEffectClass>) @extends TrackElement, TimelineElement, @implements Extractable;
 
     match fn {

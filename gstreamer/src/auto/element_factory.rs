@@ -15,6 +15,7 @@ use crate::URIType;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstElementFactory")]
     pub struct ElementFactory(Object<ffi::GstElementFactory, ffi::GstElementFactoryClass>) @extends PluginFeature, Object;
 
     match fn {

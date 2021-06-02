@@ -15,6 +15,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstWebRTCDTLSTransport")]
     pub struct WebRTCDTLSTransport(Object<ffi::GstWebRTCDTLSTransport, ffi::GstWebRTCDTLSTransportClass>);
 
     match fn {

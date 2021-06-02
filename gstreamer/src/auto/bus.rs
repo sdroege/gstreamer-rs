@@ -14,6 +14,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstBus")]
     pub struct Bus(Object<ffi::GstBus, ffi::GstBusClass>) @extends Object;
 
     match fn {

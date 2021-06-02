@@ -9,6 +9,7 @@ use glib::translate::*;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GstGLUpload")]
     pub struct GLUpload(Object<ffi::GstGLUpload, ffi::GstGLUploadClass>) @extends gst::Object;
 
     match fn {

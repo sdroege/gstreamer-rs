@@ -7,12 +7,18 @@ use bitflags::bitflags;
 use glib::translate::*;
 
 bitflags! {
+    #[doc(alias = "GstBaseParseFrameFlags")]
     pub struct BaseParseFrameFlags: u32 {
-        const NEW_FRAME = 1;
-        const NO_FRAME = 2;
-        const CLIP = 4;
-        const DROP = 8;
-        const QUEUE = 16;
+        #[doc(alias = "GST_BASE_PARSE_FRAME_FLAG_NEW_FRAME")]
+        const NEW_FRAME = ffi::GST_BASE_PARSE_FRAME_FLAG_NEW_FRAME as u32;
+        #[doc(alias = "GST_BASE_PARSE_FRAME_FLAG_NO_FRAME")]
+        const NO_FRAME = ffi::GST_BASE_PARSE_FRAME_FLAG_NO_FRAME as u32;
+        #[doc(alias = "GST_BASE_PARSE_FRAME_FLAG_CLIP")]
+        const CLIP = ffi::GST_BASE_PARSE_FRAME_FLAG_CLIP as u32;
+        #[doc(alias = "GST_BASE_PARSE_FRAME_FLAG_DROP")]
+        const DROP = ffi::GST_BASE_PARSE_FRAME_FLAG_DROP as u32;
+        #[doc(alias = "GST_BASE_PARSE_FRAME_FLAG_QUEUE")]
+        const QUEUE = ffi::GST_BASE_PARSE_FRAME_FLAG_QUEUE as u32;
     }
 }
 

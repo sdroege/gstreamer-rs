@@ -13,6 +13,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstRTSPAuth")]
     pub struct RTSPAuth(Object<ffi::GstRTSPAuth, ffi::GstRTSPAuthClass>);
 
     match fn {

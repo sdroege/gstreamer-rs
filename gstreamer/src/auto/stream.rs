@@ -16,6 +16,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstStream")]
     pub struct Stream(Object<ffi::GstStream, ffi::GstStreamClass>) @extends Object;
 
     match fn {

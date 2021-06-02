@@ -10,6 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstAllocator")]
     pub struct Allocator(Object<ffi::GstAllocator, ffi::GstAllocatorClass>) @extends Object;
 
     match fn {

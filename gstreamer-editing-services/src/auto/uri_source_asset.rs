@@ -9,6 +9,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GESUriSourceAsset")]
     pub struct UriSourceAsset(Object<ffi::GESUriSourceAsset, ffi::GESUriSourceAssetClass>) @extends Asset;
 
     match fn {

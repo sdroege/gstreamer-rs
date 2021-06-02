@@ -15,6 +15,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstObject")]
     pub struct Object(Object<ffi::GstObject, ffi::GstObjectClass>);
 
     match fn {

@@ -16,6 +16,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstPlayerVideoOverlayVideoRenderer")]
     pub struct PlayerVideoOverlayVideoRenderer(Object<ffi::GstPlayerVideoOverlayVideoRenderer, ffi::GstPlayerVideoOverlayVideoRendererClass>) @implements PlayerVideoRenderer;
 
     match fn {

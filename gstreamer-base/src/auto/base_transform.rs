@@ -14,6 +14,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstBaseTransform")]
     pub struct BaseTransform(Object<ffi::GstBaseTransform, ffi::GstBaseTransformClass>) @extends gst::Element, gst::Object;
 
     match fn {

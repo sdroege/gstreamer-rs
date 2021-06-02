@@ -24,6 +24,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstRTSPClient")]
     pub struct RTSPClient(Object<ffi::GstRTSPClient, ffi::GstRTSPClientClass>);
 
     match fn {

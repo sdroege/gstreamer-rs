@@ -9,6 +9,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstRTSPAddressPool")]
     pub struct RTSPAddressPool(Object<ffi::GstRTSPAddressPool, ffi::GstRTSPAddressPoolClass>);
 
     match fn {

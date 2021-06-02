@@ -10,6 +10,7 @@ use crate::OperationClip;
 use crate::TimelineElement;
 
 glib::wrapper! {
+    #[doc(alias = "GESBaseTransitionClip")]
     pub struct BaseTransitionClip(Object<ffi::GESBaseTransitionClip, ffi::GESBaseTransitionClipClass>) @extends OperationClip, Clip, Container, TimelineElement, @implements Extractable;
 
     match fn {

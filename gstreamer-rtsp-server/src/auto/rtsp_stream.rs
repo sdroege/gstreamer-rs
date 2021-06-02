@@ -18,6 +18,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstRTSPStream")]
     pub struct RTSPStream(Object<ffi::GstRTSPStream, ffi::GstRTSPStreamClass>);
 
     match fn {

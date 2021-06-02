@@ -9,6 +9,7 @@ use glib::translate::*;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GstPlugin")]
     pub struct Plugin(Object<ffi::GstPlugin, ffi::GstPluginClass>) @extends Object;
 
     match fn {

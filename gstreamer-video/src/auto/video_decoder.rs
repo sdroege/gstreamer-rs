@@ -29,6 +29,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstVideoDecoder")]
     pub struct VideoDecoder(Object<ffi::GstVideoDecoder, ffi::GstVideoDecoderClass>) @extends gst::Element, gst::Object;
 
     match fn {

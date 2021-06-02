@@ -15,6 +15,7 @@ use std::pin::Pin;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GESAsset")]
     pub struct Asset(Object<ffi::GESAsset, ffi::GESAssetClass>);
 
     match fn {

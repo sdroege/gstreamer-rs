@@ -8,6 +8,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstBufferPool")]
     pub struct BufferPool(Object<ffi::GstBufferPool, ffi::GstBufferPoolClass>) @extends Object;
 
     match fn {

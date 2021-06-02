@@ -8,6 +8,7 @@ use glib::translate::*;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GstPreset")]
     pub struct Preset(Interface<ffi::GstPreset, ffi::GstPresetInterface>);
 
     match fn {

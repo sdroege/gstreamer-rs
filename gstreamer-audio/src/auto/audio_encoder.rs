@@ -13,6 +13,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstAudioEncoder")]
     pub struct AudioEncoder(Object<ffi::GstAudioEncoder, ffi::GstAudioEncoderClass>) @extends gst::Element, gst::Object;
 
     match fn {

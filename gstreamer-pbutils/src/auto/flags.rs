@@ -11,10 +11,14 @@ use glib::StaticType;
 use glib::Type;
 
 bitflags! {
+    #[doc(alias = "GstDiscovererSerializeFlags")]
     pub struct DiscovererSerializeFlags: u32 {
-        const CAPS = 1;
-        const TAGS = 2;
-        const MISC = 4;
+        #[doc(alias = "GST_DISCOVERER_SERIALIZE_CAPS")]
+        const CAPS = ffi::GST_DISCOVERER_SERIALIZE_CAPS as u32;
+        #[doc(alias = "GST_DISCOVERER_SERIALIZE_TAGS")]
+        const TAGS = ffi::GST_DISCOVERER_SERIALIZE_TAGS as u32;
+        #[doc(alias = "GST_DISCOVERER_SERIALIZE_MISC")]
+        const MISC = ffi::GST_DISCOVERER_SERIALIZE_MISC as u32;
     }
 }
 

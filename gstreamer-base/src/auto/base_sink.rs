@@ -15,6 +15,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstBaseSink")]
     pub struct BaseSink(Object<ffi::GstBaseSink, ffi::GstBaseSinkClass>) @extends gst::Element, gst::Object;
 
     match fn {

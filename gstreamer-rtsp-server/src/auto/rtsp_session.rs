@@ -18,6 +18,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstRTSPSession")]
     pub struct RTSPSession(Object<ffi::GstRTSPSession, ffi::GstRTSPSessionClass>);
 
     match fn {

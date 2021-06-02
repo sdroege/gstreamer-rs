@@ -30,6 +30,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GstElement")]
     pub struct Element(Object<ffi::GstElement, ffi::GstElementClass>) @extends Object;
 
     match fn {

@@ -10,6 +10,7 @@ use glib::translate::*;
 use std::mem;
 
 glib::wrapper! {
+    #[doc(alias = "GstControlSource")]
     pub struct ControlSource(Object<ffi::GstControlSource, ffi::GstControlSourceClass>) @extends Object;
 
     match fn {

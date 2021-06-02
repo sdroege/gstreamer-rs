@@ -6,6 +6,7 @@
 use crate::EncodingProfile;
 
 glib::wrapper! {
+    #[doc(alias = "GstEncodingAudioProfile")]
     pub struct EncodingAudioProfile(Object<ffi::GstEncodingAudioProfile, ffi::GstEncodingAudioProfileClass>) @extends EncodingProfile;
 
     match fn {

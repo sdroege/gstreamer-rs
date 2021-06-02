@@ -13,6 +13,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstStreamVolume")]
     pub struct StreamVolume(Interface<ffi::GstStreamVolume, ffi::GstStreamVolumeInterface>);
 
     match fn {

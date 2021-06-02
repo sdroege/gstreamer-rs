@@ -15,6 +15,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GESProject")]
     pub struct Project(Object<ffi::GESProject, ffi::GESProjectClass>) @extends Asset;
 
     match fn {

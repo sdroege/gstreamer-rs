@@ -12,6 +12,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstChildProxy")]
     pub struct ChildProxy(Interface<ffi::GstChildProxy, ffi::GstChildProxyInterface>);
 
     match fn {

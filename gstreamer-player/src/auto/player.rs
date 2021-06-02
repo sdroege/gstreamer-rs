@@ -21,6 +21,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstPlayer")]
     pub struct Player(Object<ffi::GstPlayer, ffi::GstPlayerClass>) @extends gst::Object;
 
     match fn {

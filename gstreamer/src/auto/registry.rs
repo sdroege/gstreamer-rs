@@ -15,6 +15,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstRegistry")]
     pub struct Registry(Object<ffi::GstRegistry, ffi::GstRegistryClass>) @extends Object;
 
     match fn {

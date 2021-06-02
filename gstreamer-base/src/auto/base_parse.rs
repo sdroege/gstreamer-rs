@@ -14,6 +14,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstBaseParse")]
     pub struct BaseParse(Object<ffi::GstBaseParse, ffi::GstBaseParseClass>) @extends gst::Element, gst::Object;
 
     match fn {

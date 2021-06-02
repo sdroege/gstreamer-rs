@@ -9,6 +9,7 @@ use glib::translate::*;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GstURIHandler")]
     pub struct URIHandler(Interface<ffi::GstURIHandler, ffi::GstURIHandlerInterface>);
 
     match fn {

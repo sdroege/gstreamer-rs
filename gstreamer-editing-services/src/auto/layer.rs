@@ -23,6 +23,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GESLayer")]
     pub struct Layer(Object<ffi::GESLayer, ffi::GESLayerClass>) @implements Extractable;
 
     match fn {

@@ -11,9 +11,12 @@ use glib::StaticType;
 use glib::Type;
 
 bitflags! {
+    #[doc(alias = "GstRTSPEvent")]
     pub struct RTSPEvent: u32 {
-        const READ = 1;
-        const WRITE = 2;
+        #[doc(alias = "GST_RTSP_EV_READ")]
+        const READ = ffi::GST_RTSP_EV_READ as u32;
+        #[doc(alias = "GST_RTSP_EV_WRITE")]
+        const WRITE = ffi::GST_RTSP_EV_WRITE as u32;
     }
 }
 
@@ -68,12 +71,18 @@ impl ToValue for RTSPEvent {
 }
 
 bitflags! {
+    #[doc(alias = "GstRTSPLowerTrans")]
     pub struct RTSPLowerTrans: u32 {
-        const UDP = 1;
-        const UDP_MCAST = 2;
-        const TCP = 4;
-        const HTTP = 16;
-        const TLS = 32;
+        #[doc(alias = "GST_RTSP_LOWER_TRANS_UDP")]
+        const UDP = ffi::GST_RTSP_LOWER_TRANS_UDP as u32;
+        #[doc(alias = "GST_RTSP_LOWER_TRANS_UDP_MCAST")]
+        const UDP_MCAST = ffi::GST_RTSP_LOWER_TRANS_UDP_MCAST as u32;
+        #[doc(alias = "GST_RTSP_LOWER_TRANS_TCP")]
+        const TCP = ffi::GST_RTSP_LOWER_TRANS_TCP as u32;
+        #[doc(alias = "GST_RTSP_LOWER_TRANS_HTTP")]
+        const HTTP = ffi::GST_RTSP_LOWER_TRANS_HTTP as u32;
+        #[doc(alias = "GST_RTSP_LOWER_TRANS_TLS")]
+        const TLS = ffi::GST_RTSP_LOWER_TRANS_TLS as u32;
     }
 }
 
@@ -128,20 +137,34 @@ impl ToValue for RTSPLowerTrans {
 }
 
 bitflags! {
+    #[doc(alias = "GstRTSPMethod")]
     pub struct RTSPMethod: u32 {
-        const DESCRIBE = 1;
-        const ANNOUNCE = 2;
-        const GET_PARAMETER = 4;
-        const OPTIONS = 8;
-        const PAUSE = 16;
-        const PLAY = 32;
-        const RECORD = 64;
-        const REDIRECT = 128;
-        const SETUP = 256;
-        const SET_PARAMETER = 512;
-        const TEARDOWN = 1024;
-        const GET = 2048;
-        const POST = 4096;
+        #[doc(alias = "GST_RTSP_DESCRIBE")]
+        const DESCRIBE = ffi::GST_RTSP_DESCRIBE as u32;
+        #[doc(alias = "GST_RTSP_ANNOUNCE")]
+        const ANNOUNCE = ffi::GST_RTSP_ANNOUNCE as u32;
+        #[doc(alias = "GST_RTSP_GET_PARAMETER")]
+        const GET_PARAMETER = ffi::GST_RTSP_GET_PARAMETER as u32;
+        #[doc(alias = "GST_RTSP_OPTIONS")]
+        const OPTIONS = ffi::GST_RTSP_OPTIONS as u32;
+        #[doc(alias = "GST_RTSP_PAUSE")]
+        const PAUSE = ffi::GST_RTSP_PAUSE as u32;
+        #[doc(alias = "GST_RTSP_PLAY")]
+        const PLAY = ffi::GST_RTSP_PLAY as u32;
+        #[doc(alias = "GST_RTSP_RECORD")]
+        const RECORD = ffi::GST_RTSP_RECORD as u32;
+        #[doc(alias = "GST_RTSP_REDIRECT")]
+        const REDIRECT = ffi::GST_RTSP_REDIRECT as u32;
+        #[doc(alias = "GST_RTSP_SETUP")]
+        const SETUP = ffi::GST_RTSP_SETUP as u32;
+        #[doc(alias = "GST_RTSP_SET_PARAMETER")]
+        const SET_PARAMETER = ffi::GST_RTSP_SET_PARAMETER as u32;
+        #[doc(alias = "GST_RTSP_TEARDOWN")]
+        const TEARDOWN = ffi::GST_RTSP_TEARDOWN as u32;
+        #[doc(alias = "GST_RTSP_GET")]
+        const GET = ffi::GST_RTSP_GET as u32;
+        #[doc(alias = "GST_RTSP_POST")]
+        const POST = ffi::GST_RTSP_POST as u32;
     }
 }
 
@@ -204,11 +227,16 @@ impl ToValue for RTSPMethod {
 }
 
 bitflags! {
+    #[doc(alias = "GstRTSPProfile")]
     pub struct RTSPProfile: u32 {
-        const AVP = 1;
-        const SAVP = 2;
-        const AVPF = 4;
-        const SAVPF = 8;
+        #[doc(alias = "GST_RTSP_PROFILE_AVP")]
+        const AVP = ffi::GST_RTSP_PROFILE_AVP as u32;
+        #[doc(alias = "GST_RTSP_PROFILE_SAVP")]
+        const SAVP = ffi::GST_RTSP_PROFILE_SAVP as u32;
+        #[doc(alias = "GST_RTSP_PROFILE_AVPF")]
+        const AVPF = ffi::GST_RTSP_PROFILE_AVPF as u32;
+        #[doc(alias = "GST_RTSP_PROFILE_SAVPF")]
+        const SAVPF = ffi::GST_RTSP_PROFILE_SAVPF as u32;
     }
 }
 
@@ -263,9 +291,12 @@ impl ToValue for RTSPProfile {
 }
 
 bitflags! {
+    #[doc(alias = "GstRTSPTransMode")]
     pub struct RTSPTransMode: u32 {
-        const RTP = 1;
-        const RDT = 2;
+        #[doc(alias = "GST_RTSP_TRANS_RTP")]
+        const RTP = ffi::GST_RTSP_TRANS_RTP as u32;
+        #[doc(alias = "GST_RTSP_TRANS_RDT")]
+        const RDT = ffi::GST_RTSP_TRANS_RDT as u32;
     }
 }
 

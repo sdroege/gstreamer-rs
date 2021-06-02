@@ -6,6 +6,7 @@
 use crate::BaseSrc;
 
 glib::wrapper! {
+    #[doc(alias = "GstPushSrc")]
     pub struct PushSrc(Object<ffi::GstPushSrc, ffi::GstPushSrcClass>) @extends BaseSrc, gst::Element, gst::Object;
 
     match fn {

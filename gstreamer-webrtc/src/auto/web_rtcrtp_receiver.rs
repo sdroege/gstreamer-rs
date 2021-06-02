@@ -7,6 +7,7 @@ use crate::WebRTCDTLSTransport;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstWebRTCRTPReceiver")]
     pub struct WebRTCRTPReceiver(Object<ffi::GstWebRTCRTPReceiver, ffi::GstWebRTCRTPReceiverClass>);
 
     match fn {

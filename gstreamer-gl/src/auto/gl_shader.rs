@@ -21,6 +21,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
+    #[doc(alias = "GstGLShader")]
     pub struct GLShader(Object<ffi::GstGLShader, ffi::GstGLShaderClass>) @extends gst::Object;
 
     match fn {

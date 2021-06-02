@@ -15,6 +15,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstLFOControlSource")]
     pub struct LFOControlSource(Object<ffi::GstLFOControlSource, ffi::GstLFOControlSourceClass>) @extends gst::ControlSource, gst::Object;
 
     match fn {

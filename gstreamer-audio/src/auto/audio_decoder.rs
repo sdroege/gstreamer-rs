@@ -14,6 +14,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstAudioDecoder")]
     pub struct AudioDecoder(Object<ffi::GstAudioDecoder, ffi::GstAudioDecoderClass>) @extends gst::Element, gst::Object;
 
     match fn {

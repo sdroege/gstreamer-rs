@@ -9,6 +9,7 @@ use glib::translate::*;
 use std::mem;
 
 glib::wrapper! {
+    #[doc(alias = "GstRTSPMountPoints")]
     pub struct RTSPMountPoints(Object<ffi::GstRTSPMountPoints, ffi::GstRTSPMountPointsClass>);
 
     match fn {

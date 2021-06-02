@@ -18,6 +18,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstPipeline")]
     pub struct Pipeline(Object<ffi::GstPipeline, ffi::GstPipelineClass>) @extends Bin, Element, Object, @implements ChildProxy;
 
     match fn {

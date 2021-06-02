@@ -15,6 +15,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstGLWindow")]
     pub struct GLWindow(Object<ffi::GstGLWindow, ffi::GstGLWindowClass>) @extends gst::Object;
 
     match fn {

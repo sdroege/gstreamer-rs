@@ -14,6 +14,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstGLBaseSrc")]
     pub struct GLBaseSrc(Object<ffi::GstGLBaseSrc, ffi::GstGLBaseSrcClass>) @extends gst_base::PushSrc, gst_base::BaseSrc, gst::Element, gst::Object;
 
     match fn {

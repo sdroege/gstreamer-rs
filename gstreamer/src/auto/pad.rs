@@ -32,6 +32,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstPad")]
     pub struct Pad(Object<ffi::GstPad, ffi::GstPadClass>) @extends Object;
 
     match fn {

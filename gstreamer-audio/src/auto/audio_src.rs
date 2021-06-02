@@ -6,6 +6,7 @@
 use crate::AudioBaseSrc;
 
 glib::wrapper! {
+    #[doc(alias = "GstAudioSrc")]
     pub struct AudioSrc(Object<ffi::GstAudioSrc, ffi::GstAudioSrcClass>) @extends AudioBaseSrc, gst_base::BaseSrc, gst::Element, gst::Object;
 
     match fn {

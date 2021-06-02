@@ -7,6 +7,7 @@ use crate::DiscovererStreamInfo;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstDiscovererContainerInfo")]
     pub struct DiscovererContainerInfo(Object<ffi::GstDiscovererContainerInfo>) @extends DiscovererStreamInfo;
 
     match fn {

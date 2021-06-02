@@ -17,6 +17,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GESGroup")]
     pub struct Group(Object<ffi::GESGroup, ffi::GESGroupClass>) @extends Container, TimelineElement, @implements Extractable;
 
     match fn {

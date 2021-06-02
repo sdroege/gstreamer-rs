@@ -10,6 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstGhostPad")]
     pub struct GhostPad(Object<ffi::GstGhostPad, ffi::GstGhostPadClass>) @extends ProxyPad, Pad, Object;
 
     match fn {

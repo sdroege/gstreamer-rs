@@ -11,8 +11,10 @@ use glib::StaticType;
 use glib::Type;
 
 bitflags! {
+    #[doc(alias = "GstAudioFlags")]
     pub struct AudioFlags: u32 {
-        const UNPOSITIONED = 1;
+        #[doc(alias = "GST_AUDIO_FLAG_UNPOSITIONED")]
+        const UNPOSITIONED = ffi::GST_AUDIO_FLAG_UNPOSITIONED as u32;
     }
 }
 
@@ -67,12 +69,18 @@ impl ToValue for AudioFlags {
 }
 
 bitflags! {
+    #[doc(alias = "GstAudioFormatFlags")]
     pub struct AudioFormatFlags: u32 {
-        const INTEGER = 1;
-        const FLOAT = 2;
-        const SIGNED = 4;
-        const COMPLEX = 16;
-        const UNPACK = 32;
+        #[doc(alias = "GST_AUDIO_FORMAT_FLAG_INTEGER")]
+        const INTEGER = ffi::GST_AUDIO_FORMAT_FLAG_INTEGER as u32;
+        #[doc(alias = "GST_AUDIO_FORMAT_FLAG_FLOAT")]
+        const FLOAT = ffi::GST_AUDIO_FORMAT_FLAG_FLOAT as u32;
+        #[doc(alias = "GST_AUDIO_FORMAT_FLAG_SIGNED")]
+        const SIGNED = ffi::GST_AUDIO_FORMAT_FLAG_SIGNED as u32;
+        #[doc(alias = "GST_AUDIO_FORMAT_FLAG_COMPLEX")]
+        const COMPLEX = ffi::GST_AUDIO_FORMAT_FLAG_COMPLEX as u32;
+        #[doc(alias = "GST_AUDIO_FORMAT_FLAG_UNPACK")]
+        const UNPACK = ffi::GST_AUDIO_FORMAT_FLAG_UNPACK as u32;
     }
 }
 
@@ -127,8 +135,10 @@ impl ToValue for AudioFormatFlags {
 }
 
 bitflags! {
+    #[doc(alias = "GstAudioPackFlags")]
     pub struct AudioPackFlags: u32 {
-        const TRUNCATE_RANGE = 1;
+        #[doc(alias = "GST_AUDIO_PACK_FLAG_TRUNCATE_RANGE")]
+        const TRUNCATE_RANGE = ffi::GST_AUDIO_PACK_FLAG_TRUNCATE_RANGE as u32;
     }
 }
 

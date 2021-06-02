@@ -4,6 +4,7 @@
 // DO NOT EDIT
 
 glib::wrapper! {
+    #[doc(alias = "GstGLBaseMemoryAllocator")]
     pub struct GLBaseMemoryAllocator(Object<ffi::GstGLBaseMemoryAllocator, ffi::GstGLBaseMemoryAllocatorClass>) @extends gst::Allocator, gst::Object;
 
     match fn {

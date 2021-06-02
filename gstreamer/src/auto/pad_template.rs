@@ -18,6 +18,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstPadTemplate")]
     pub struct PadTemplate(Object<ffi::GstPadTemplate, ffi::GstPadTemplateClass>) @extends Object;
 
     match fn {

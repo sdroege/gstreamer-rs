@@ -9,6 +9,7 @@ use crate::Extractable;
 use crate::TimelineElement;
 
 glib::wrapper! {
+    #[doc(alias = "GESOperationClip")]
     pub struct OperationClip(Object<ffi::GESOperationClip, ffi::GESOperationClipClass>) @extends Clip, Container, TimelineElement, @implements Extractable;
 
     match fn {

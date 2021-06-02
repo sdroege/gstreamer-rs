@@ -7,6 +7,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstDiscovererStreamInfo")]
     pub struct DiscovererStreamInfo(Object<ffi::GstDiscovererStreamInfo>);
 
     match fn {

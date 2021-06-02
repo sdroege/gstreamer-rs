@@ -10,6 +10,7 @@ use glib::translate::*;
 use std::mem;
 
 glib::wrapper! {
+    #[doc(alias = "GstRTSPSessionMedia")]
     pub struct RTSPSessionMedia(Object<ffi::GstRTSPSessionMedia, ffi::GstRTSPSessionMediaClass>);
 
     match fn {

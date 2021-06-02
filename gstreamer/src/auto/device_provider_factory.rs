@@ -10,6 +10,7 @@ use crate::Rank;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstDeviceProviderFactory")]
     pub struct DeviceProviderFactory(Object<ffi::GstDeviceProviderFactory, ffi::GstDeviceProviderFactoryClass>) @extends PluginFeature, Object;
 
     match fn {

@@ -9,6 +9,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstProxyPad")]
     pub struct ProxyPad(Object<ffi::GstProxyPad, ffi::GstProxyPadClass>) @extends Pad, Object;
 
     match fn {

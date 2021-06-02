@@ -14,6 +14,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstDirectControlBinding")]
     pub struct DirectControlBinding(Object<ffi::GstDirectControlBinding, ffi::GstDirectControlBindingClass>) @extends gst::ControlBinding, gst::Object;
 
     match fn {

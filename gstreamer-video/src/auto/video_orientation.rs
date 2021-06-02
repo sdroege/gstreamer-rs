@@ -8,6 +8,7 @@ use glib::translate::*;
 use std::mem;
 
 glib::wrapper! {
+    #[doc(alias = "GstVideoOrientation")]
     pub struct VideoOrientation(Interface<ffi::GstVideoOrientation, ffi::GstVideoOrientationInterface>);
 
     match fn {

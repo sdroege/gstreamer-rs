@@ -8,6 +8,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GESExtractable")]
     pub struct Extractable(Interface<ffi::GESExtractable, ffi::GESExtractableInterface>);
 
     match fn {

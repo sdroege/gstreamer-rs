@@ -6,6 +6,7 @@
 use crate::NetClientClock;
 
 glib::wrapper! {
+    #[doc(alias = "GstNtpClock")]
     pub struct NtpClock(Object<ffi::GstNtpClock, ffi::GstNtpClockClass>) @extends NetClientClock, gst::Clock, gst::Object;
 
     match fn {

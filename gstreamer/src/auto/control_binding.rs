@@ -10,6 +10,7 @@ use glib::translate::*;
 use glib::StaticType;
 
 glib::wrapper! {
+    #[doc(alias = "GstControlBinding")]
     pub struct ControlBinding(Object<ffi::GstControlBinding, ffi::GstControlBindingClass>) @extends Object;
 
     match fn {

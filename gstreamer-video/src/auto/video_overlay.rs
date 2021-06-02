@@ -7,6 +7,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstVideoOverlay")]
     pub struct VideoOverlay(Interface<ffi::GstVideoOverlay, ffi::GstVideoOverlayInterface>);
 
     match fn {

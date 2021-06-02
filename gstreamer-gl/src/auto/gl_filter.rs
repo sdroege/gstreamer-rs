@@ -10,6 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstGLFilter")]
     pub struct GLFilter(Object<ffi::GstGLFilter, ffi::GstGLFilterClass>) @extends GLBaseFilter, gst_base::BaseTransform, gst::Element, gst::Object;
 
     match fn {

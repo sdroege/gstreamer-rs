@@ -11,6 +11,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstTagSetter")]
     pub struct TagSetter(Interface<ffi::GstTagSetter, ffi::GstTagSetterInterface>) @requires Element, Object;
 
     match fn {

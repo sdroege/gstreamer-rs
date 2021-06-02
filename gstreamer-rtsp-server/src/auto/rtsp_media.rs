@@ -25,6 +25,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstRTSPMedia")]
     pub struct RTSPMedia(Object<ffi::GstRTSPMedia, ffi::GstRTSPMediaClass>);
 
     match fn {

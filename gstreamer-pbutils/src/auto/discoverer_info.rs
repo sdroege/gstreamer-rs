@@ -9,6 +9,7 @@ use crate::DiscovererStreamInfo;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstDiscovererInfo")]
     pub struct DiscovererInfo(Object<ffi::GstDiscovererInfo>);
 
     match fn {

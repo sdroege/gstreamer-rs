@@ -13,6 +13,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstTimedValueControlSource")]
     pub struct TimedValueControlSource(Object<ffi::GstTimedValueControlSource, ffi::GstTimedValueControlSourceClass>) @extends gst::ControlSource, gst::Object;
 
     match fn {

@@ -8,6 +8,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstProxyControlBinding")]
     pub struct ProxyControlBinding(Object<ffi::GstProxyControlBinding, ffi::GstProxyControlBindingClass>) @extends gst::ControlBinding, gst::Object;
 
     match fn {

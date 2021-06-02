@@ -14,6 +14,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstTestClock")]
     pub struct TestClock(Object<ffi::GstTestClock, ffi::GstTestClockClass>) @extends gst::Clock, gst::Object;
 
     match fn {

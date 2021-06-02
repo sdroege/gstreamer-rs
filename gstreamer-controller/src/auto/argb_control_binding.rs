@@ -14,6 +14,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstARGBControlBinding")]
     pub struct ARGBControlBinding(Object<ffi::GstARGBControlBinding, ffi::GstARGBControlBindingClass>) @extends gst::ControlBinding, gst::Object;
 
     match fn {

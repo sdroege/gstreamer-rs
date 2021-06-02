@@ -14,6 +14,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstVideoSink")]
     pub struct VideoSink(Object<ffi::GstVideoSink, ffi::GstVideoSinkClass>) @extends gst_base::BaseSink, gst::Element, gst::Object;
 
     match fn {

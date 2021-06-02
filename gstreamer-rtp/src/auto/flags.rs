@@ -13,9 +13,12 @@ use glib::Type;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 bitflags! {
+    #[doc(alias = "GstRTPBufferFlags")]
     pub struct RTPBufferFlags: u32 {
-        const RETRANSMISSION = 1048576;
-        const REDUNDANT = 2097152;
+        #[doc(alias = "GST_RTP_BUFFER_FLAG_RETRANSMISSION")]
+        const RETRANSMISSION = ffi::GST_RTP_BUFFER_FLAG_RETRANSMISSION as u32;
+        #[doc(alias = "GST_RTP_BUFFER_FLAG_REDUNDANT")]
+        const REDUNDANT = ffi::GST_RTP_BUFFER_FLAG_REDUNDANT as u32;
     }
 }
 
@@ -82,8 +85,10 @@ impl ToValue for RTPBufferFlags {
 }
 
 bitflags! {
+    #[doc(alias = "GstRTPBufferMapFlags")]
     pub struct RTPBufferMapFlags: u32 {
-        const SKIP_PADDING = 65536;
+        #[doc(alias = "GST_RTP_BUFFER_MAP_FLAG_SKIP_PADDING")]
+        const SKIP_PADDING = ffi::GST_RTP_BUFFER_MAP_FLAG_SKIP_PADDING as u32;
     }
 }
 

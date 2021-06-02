@@ -10,6 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstTocSetter")]
     pub struct TocSetter(Interface<ffi::GstTocSetter, ffi::GstTocSetterInterface>) @requires Element, Object;
 
     match fn {

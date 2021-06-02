@@ -12,11 +12,16 @@ use glib::Type;
 use std::fmt;
 
 bitflags! {
+    #[doc(alias = "GstGLAPI")]
     pub struct GLAPI: u32 {
-        const OPENGL = 1;
-        const OPENGL3 = 2;
-        const GLES1 = 32768;
-        const GLES2 = 65536;
+        #[doc(alias = "GST_GL_API_OPENGL")]
+        const OPENGL = ffi::GST_GL_API_OPENGL as u32;
+        #[doc(alias = "GST_GL_API_OPENGL3")]
+        const OPENGL3 = ffi::GST_GL_API_OPENGL3 as u32;
+        #[doc(alias = "GST_GL_API_GLES1")]
+        const GLES1 = ffi::GST_GL_API_GLES1 as u32;
+        #[doc(alias = "GST_GL_API_GLES2")]
+        const GLES2 = ffi::GST_GL_API_GLES2 as u32;
     }
 }
 
@@ -93,18 +98,28 @@ impl ToValue for GLAPI {
 }
 
 bitflags! {
+    #[doc(alias = "GstGLDisplayType")]
     pub struct GLDisplayType: u32 {
-        const X11 = 1;
-        const WAYLAND = 2;
-        const COCOA = 4;
-        const WIN32 = 8;
-        const DISPMANX = 16;
-        const EGL = 32;
-        const VIV_FB = 64;
-        const GBM = 128;
+        #[doc(alias = "GST_GL_DISPLAY_TYPE_X11")]
+        const X11 = ffi::GST_GL_DISPLAY_TYPE_X11 as u32;
+        #[doc(alias = "GST_GL_DISPLAY_TYPE_WAYLAND")]
+        const WAYLAND = ffi::GST_GL_DISPLAY_TYPE_WAYLAND as u32;
+        #[doc(alias = "GST_GL_DISPLAY_TYPE_COCOA")]
+        const COCOA = ffi::GST_GL_DISPLAY_TYPE_COCOA as u32;
+        #[doc(alias = "GST_GL_DISPLAY_TYPE_WIN32")]
+        const WIN32 = ffi::GST_GL_DISPLAY_TYPE_WIN32 as u32;
+        #[doc(alias = "GST_GL_DISPLAY_TYPE_DISPMANX")]
+        const DISPMANX = ffi::GST_GL_DISPLAY_TYPE_DISPMANX as u32;
+        #[doc(alias = "GST_GL_DISPLAY_TYPE_EGL")]
+        const EGL = ffi::GST_GL_DISPLAY_TYPE_EGL as u32;
+        #[doc(alias = "GST_GL_DISPLAY_TYPE_VIV_FB")]
+        const VIV_FB = ffi::GST_GL_DISPLAY_TYPE_VIV_FB as u32;
+        #[doc(alias = "GST_GL_DISPLAY_TYPE_GBM")]
+        const GBM = ffi::GST_GL_DISPLAY_TYPE_GBM as u32;
         #[cfg(any(feature = "v1_18", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-        const EGL_DEVICE = 256;
+        #[doc(alias = "GST_GL_DISPLAY_TYPE_EGL_DEVICE")]
+        const EGL_DEVICE = ffi::GST_GL_DISPLAY_TYPE_EGL_DEVICE as u32;
     }
 }
 
@@ -159,12 +174,18 @@ impl ToValue for GLDisplayType {
 }
 
 bitflags! {
+    #[doc(alias = "GstGLPlatform")]
     pub struct GLPlatform: u32 {
-        const EGL = 1;
-        const GLX = 2;
-        const WGL = 4;
-        const CGL = 8;
-        const EAGL = 16;
+        #[doc(alias = "GST_GL_PLATFORM_EGL")]
+        const EGL = ffi::GST_GL_PLATFORM_EGL as u32;
+        #[doc(alias = "GST_GL_PLATFORM_GLX")]
+        const GLX = ffi::GST_GL_PLATFORM_GLX as u32;
+        #[doc(alias = "GST_GL_PLATFORM_WGL")]
+        const WGL = ffi::GST_GL_PLATFORM_WGL as u32;
+        #[doc(alias = "GST_GL_PLATFORM_CGL")]
+        const CGL = ffi::GST_GL_PLATFORM_CGL as u32;
+        #[doc(alias = "GST_GL_PLATFORM_EAGL")]
+        const EAGL = ffi::GST_GL_PLATFORM_EAGL as u32;
     }
 }
 
@@ -245,10 +266,14 @@ impl ToValue for GLPlatform {
 }
 
 bitflags! {
+    #[doc(alias = "GstGLSLProfile")]
     pub struct GLSLProfile: u32 {
-        const ES = 1;
-        const CORE = 2;
-        const COMPATIBILITY = 4;
+        #[doc(alias = "GST_GLSL_PROFILE_ES")]
+        const ES = ffi::GST_GLSL_PROFILE_ES as u32;
+        #[doc(alias = "GST_GLSL_PROFILE_CORE")]
+        const CORE = ffi::GST_GLSL_PROFILE_CORE as u32;
+        #[doc(alias = "GST_GLSL_PROFILE_COMPATIBILITY")]
+        const COMPATIBILITY = ffi::GST_GLSL_PROFILE_COMPATIBILITY as u32;
     }
 }
 

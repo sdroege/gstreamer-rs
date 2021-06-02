@@ -21,6 +21,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GESTransitionClip")]
     pub struct TransitionClip(Object<ffi::GESTransitionClip, ffi::GESTransitionClipClass>) @extends BaseTransitionClip, OperationClip, Clip, Container, TimelineElement, @implements Extractable;
 
     match fn {

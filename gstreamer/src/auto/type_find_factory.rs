@@ -9,6 +9,7 @@ use crate::PluginFeature;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstTypeFindFactory")]
     pub struct TypeFindFactory(Object<ffi::GstTypeFindFactory, ffi::GstTypeFindFactoryClass>) @extends PluginFeature, Object;
 
     match fn {

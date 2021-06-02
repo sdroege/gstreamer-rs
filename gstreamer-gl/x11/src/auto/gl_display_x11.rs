@@ -6,6 +6,7 @@
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstGLDisplayX11")]
     pub struct GLDisplayX11(Object<ffi::GstGLDisplayX11, ffi::GstGLDisplayX11Class>) @extends gst_gl::GLDisplay, gst::Object;
 
     match fn {

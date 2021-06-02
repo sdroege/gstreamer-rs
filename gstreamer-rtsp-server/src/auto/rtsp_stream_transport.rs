@@ -9,6 +9,7 @@ use glib::translate::*;
 use std::boxed::Box as Box_;
 
 glib::wrapper! {
+    #[doc(alias = "GstRTSPStreamTransport")]
     pub struct RTSPStreamTransport(Object<ffi::GstRTSPStreamTransport, ffi::GstRTSPStreamTransportClass>);
 
     match fn {

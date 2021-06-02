@@ -10,6 +10,7 @@ use crate::PlayerVideoInfo;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstPlayerMediaInfo")]
     pub struct PlayerMediaInfo(Object<ffi::GstPlayerMediaInfo, ffi::GstPlayerMediaInfoClass>);
 
     match fn {

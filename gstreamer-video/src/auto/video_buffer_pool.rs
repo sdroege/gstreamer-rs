@@ -7,6 +7,7 @@ use glib::object::Cast;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstVideoBufferPool")]
     pub struct VideoBufferPool(Object<ffi::GstVideoBufferPool, ffi::GstVideoBufferPoolClass>) @extends gst::BufferPool, gst::Object;
 
     match fn {

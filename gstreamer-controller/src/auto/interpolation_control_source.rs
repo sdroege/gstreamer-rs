@@ -16,6 +16,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstInterpolationControlSource")]
     pub struct InterpolationControlSource(Object<ffi::GstInterpolationControlSource, ffi::GstInterpolationControlSourceClass>) @extends TimedValueControlSource, gst::ControlSource, gst::Object;
 
     match fn {

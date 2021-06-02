@@ -9,6 +9,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstPluginFeature")]
     pub struct PluginFeature(Object<ffi::GstPluginFeature, ffi::GstPluginFeatureClass>) @extends Object;
 
     match fn {

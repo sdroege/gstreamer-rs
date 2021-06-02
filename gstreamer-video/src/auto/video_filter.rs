@@ -4,6 +4,7 @@
 // DO NOT EDIT
 
 glib::wrapper! {
+    #[doc(alias = "GstVideoFilter")]
     pub struct VideoFilter(Object<ffi::GstVideoFilter, ffi::GstVideoFilterClass>) @extends gst_base::BaseTransform, gst::Element, gst::Object;
 
     match fn {

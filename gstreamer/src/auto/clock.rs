@@ -17,6 +17,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstClock")]
     pub struct Clock(Object<ffi::GstClock, ffi::GstClockClass>) @extends Object;
 
     match fn {

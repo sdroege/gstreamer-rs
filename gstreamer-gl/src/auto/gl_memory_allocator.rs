@@ -9,6 +9,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
+    #[doc(alias = "GstGLMemoryAllocator")]
     pub struct GLMemoryAllocator(Object<ffi::GstGLMemoryAllocator, ffi::GstGLMemoryAllocatorClass>) @extends GLBaseMemoryAllocator, gst::Allocator, gst::Object;
 
     match fn {

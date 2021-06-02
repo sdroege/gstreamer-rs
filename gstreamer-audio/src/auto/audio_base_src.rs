@@ -14,6 +14,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
+    #[doc(alias = "GstAudioBaseSrc")]
     pub struct AudioBaseSrc(Object<ffi::GstAudioBaseSrc, ffi::GstAudioBaseSrcClass>) @extends gst_base::BaseSrc, gst::Element, gst::Object;
 
     match fn {
