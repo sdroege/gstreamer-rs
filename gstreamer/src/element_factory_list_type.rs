@@ -4,6 +4,7 @@ use bitflags::bitflags;
 use glib::translate::*;
 
 bitflags! {
+    #[doc(alias = "GstElementFactoryListType")]
     pub struct ElementFactoryListType: u64 {
         const DECODER          = 0b_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0001;
         const ENCODER          = 0b_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0010;

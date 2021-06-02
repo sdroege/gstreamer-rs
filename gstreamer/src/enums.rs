@@ -426,6 +426,7 @@ pub enum TagError {
 // This cannot be done automatically because in GStreamer it's exposed as a bitflag but works as an
 // enum instead
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[doc(alias = "GstMessageType")]
 pub enum MessageType {
     #[doc(alias = "GST_MESSAGE_UNKNOWN")]
     Unknown,
