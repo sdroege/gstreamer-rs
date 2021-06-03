@@ -17,23 +17,24 @@ external_libraries = [
 ]
 
 generate = [
-    "GstVideo.VideoCodecFrameFlags",
-    "GstVideo.VideoFormatFlags",
-    "GstVideo.VideoMultiviewMode",
-    "GstVideo.VideoMultiviewFramePacking",
-    "GstVideo.VideoFilter",
-    "GstVideo.VideoCaptionType",
-    "GstVideo.VideoBufferPool",
+    "GstVideo.VideoAFDSpec",
+    "GstVideo.VideoAFDValue",
     "GstVideo.VideoAlphaMode",
+    "GstVideo.VideoBufferPool",
+    "GstVideo.VideoCaptionType",
     "GstVideo.VideoChromaMode",
-    "GstVideo.VideoMatrixMode",
-    "GstVideo.VideoOrientationMethod",
+    "GstVideo.VideoCodecFrameFlags",
+    "GstVideo.VideoDitherMethod",
+    "GstVideo.VideoFilter",
+    "GstVideo.VideoFormatFlags",
     "GstVideo.VideoGammaMode",
+    "GstVideo.VideoMatrixMode",
+    "GstVideo.VideoMultiviewFramePacking",
+    "GstVideo.VideoMultiviewMode",
+    "GstVideo.VideoOrientationMethod",
     "GstVideo.VideoPrimariesMode",
     "GstVideo.VideoResamplerMethod",
-    "GstVideo.VideoDitherMethod",
-    "GstVideo.VideoAFDValue",
-    "GstVideo.VideoAFDSpec",
+    "GstVideo.VideoTileMode",
 ]
 
 manual = [
@@ -421,14 +422,6 @@ status = "generate"
     name = "y412_le"
     version = "1.18"
 
-    [[object.member]]
-    name = "nv12_4l4"
-    version = "1.18"
-
-    [[object.member]]
-    name = "nv12_32l32"
-    version = "1.18"
-
     [[object.function]]
     name = "to_string"
     # This has an Unknown field that may return NULL or "UNKNOWN"
@@ -571,9 +564,6 @@ status = "generate"
     [[object.member]]
     name = "arib_std_b67"
     version = "1.18"
-    [[object.member]]
-    name = "bt601"
-    version = "1.18"
 
 [[object]]
 name = "GstVideo.VideoColorPrimaries"
@@ -590,13 +580,6 @@ status = "generate"
     [[object.member]]
     name = "ebu3213"
     version = "1.16"
-
-[[object]]
-name = "GstVideo.VideoTileMode"
-status = "generate"
-    [[object.member]]
-    name = "linear"
-    version = "1.18"
 
 [[object]]
 name = "GstVideo.VideoFieldOrder"
