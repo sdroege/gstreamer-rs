@@ -16,6 +16,7 @@ external_libraries = [
 ]
 
 generate = [
+    "GstApp.AppLeakyType",
     "GstApp.AppStreamType",
 ]
 
