@@ -19,6 +19,7 @@ external_libraries = [
 generate = [
     "GstVideo.VideoAFDSpec",
     "GstVideo.VideoAFDValue",
+    "GstVideo.VideoAggregatorParallelConvertPad",
     "GstVideo.VideoAlphaMode",
     "GstVideo.VideoBufferPool",
     "GstVideo.VideoCaptionType",
