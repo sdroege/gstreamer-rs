@@ -398,6 +398,13 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "gst_harness_set_live")]
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub fn set_live(&mut self, is_live: bool) {
+        unsafe { ffi::gst_harness_set_live(self.0.as_ptr(), is_live.into_glib()) }
+    }
+
     //pub fn set_propose_allocator<P: IsA<gst::Allocator>>(&mut self, allocator: Option<&P>, params: Option<&gst::AllocationParams>) {
     //    unsafe { TODO: call ffi::gst_harness_set_propose_allocator() }
     //}
