@@ -33,12 +33,14 @@ generate = [
     "GstWebRTC.WebRTCPriorityType",
     "GstWebRTC.WebRTCSCTPTransportState",
     "GstWebRTC.WebRTCFECType",
+    "GstWebRTC.WebRTCKind",
 ]
 
 manual = [
     "GLib.Bytes",
     "GLib.Error",
     "GObject.Object",
+    "Gst.Caps",
     "Gst.Structure",
     "GstSdp.SDPMessage",
 ]
