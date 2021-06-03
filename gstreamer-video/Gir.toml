@@ -24,6 +24,7 @@ generate = [
     "GstVideo.VideoCaptionType",
     "GstVideo.VideoChromaMode",
     "GstVideo.VideoCodecFrameFlags",
+    "GstVideo.VideoDecoderRequestSyncPointFlags",
     "GstVideo.VideoDitherMethod",
     "GstVideo.VideoFilter",
     "GstVideo.VideoFormatFlags",
