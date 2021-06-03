@@ -151,9 +151,6 @@ status = "generate"
     [[object.member]]
     name = "last"
     ignore = true
-    [[object.member]]
-    name = "streams_aware"
-    version = "1.10"
 
 [[object]]
 name = "Gst.Bus"
@@ -218,9 +215,6 @@ status = "generate"
     name = "serde::Serialize, serde::Deserialize"
     cfg_condition = "feature = \"ser_de\""
 
-    [[object.member]]
-    name = "non_droppable"
-    version = "1.14"
     [[object.member]]
     name = "last"
     ignore = true

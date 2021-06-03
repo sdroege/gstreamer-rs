@@ -429,9 +429,6 @@ status = "generate"
     [[object.member]]
     name = "any"
     ignore = true
-    [[object.member]]
-    name = "egl_device"
-    version = "1.18"
 
 [[object]]
 name = "GstGL.GLAPI"
