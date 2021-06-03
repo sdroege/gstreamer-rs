@@ -26,6 +26,7 @@ generate = [
 
 manual = [
     "Gst.Caps",
+    "Gst.ElementFactory",
     "Gst.Structure",
 ]
 
