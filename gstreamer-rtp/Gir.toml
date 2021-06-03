@@ -20,6 +20,7 @@ generate = [
     "GstRtp.RTCPSDESType",
     "GstRtp.RTCPType",
     "GstRtp.RTCPXRType",
+    "GstRtp.RTPHeaderExtensionFlags",
     "GstRtp.RTPPayload",
     "GstRtp.RTPProfile",
 ]
@@ -60,6 +61,15 @@ status = "manual"
     name = "map"
     # Readable and writable variant dealing with mutability
     rename = "from_buffer_readable"
+
+[[object]]
+name = "GstRtp.RTPHeaderExtension"
+status = "generate"
+    [[object.function]]
+    pattern = "read|write"
+    # Until 1.19.2: `data` field lacks`array size` annotation:
+    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/merge_requests/1190
+    ignore = true
 
 [[object]]
 name = "GstRtp.RTPBufferFlags"
