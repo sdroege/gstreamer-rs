@@ -71,6 +71,11 @@ status = "generate"
     # https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/merge_requests/1190
     ignore = true
 
+    [[object.function]]
+    name = "get_sdp_caps_field_name"
+        [object.function.return]
+        nullable = false
+
 [[object]]
 name = "GstRtp.RTPBufferFlags"
 status = "generate"
