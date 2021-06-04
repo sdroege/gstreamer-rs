@@ -231,8 +231,11 @@ impl ValidVideoTimeCode {
     }
 
     #[doc(alias = "gst_video_time_code_nsec_since_daily_jam")]
-    pub fn nsec_since_daily_jam(&self) -> u64 {
-        unsafe { ffi::gst_video_time_code_nsec_since_daily_jam(self.to_glib_none().0) }
+    #[doc(alias = "nsec_since_daily_jam")]
+    pub fn time_since_daily_jam(&self) -> gst::ClockTime {
+        gst::ClockTime::from_nseconds(unsafe {
+            ffi::gst_video_time_code_nsec_since_daily_jam(self.to_glib_none().0)
+        })
     }
 
     #[doc(alias = "gst_video_time_code_to_date_time")]
