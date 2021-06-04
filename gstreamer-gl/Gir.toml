@@ -19,12 +19,15 @@ external_libraries = [
 
 generate = [
     # Enums
+    "GstGL.GLConfigCaveat",
     "GstGL.GLFormat",
     "GstGL.GLQueryType",
     "GstGL.GLSLVersion",
     "GstGL.GLStereoDownmix",
     "GstGL.GLTextureTarget",
     "GstGL.GLUploadReturn",
+    # Flags
+    "GstGL.GLConfigSurfaceType",
     # Enums Errors
     #"GstGL.GLBaseMemoryError",
     "GstGL.GLContextError",
