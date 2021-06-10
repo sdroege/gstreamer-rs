@@ -103,18 +103,15 @@ impl Asset {
     ) -> Pin<Box_<dyn std::future::Future<Output = Result<Asset, glib::Error>> + 'static>> {
         skip_assert_initialized!();
         let id = id.map(ToOwned::to_owned);
-        Box_::pin(gio::GioFuture::new(&(), move |_obj, send| {
-            let cancellable = gio::Cancellable::new();
+        Box_::pin(gio::GioFuture::new(&(), move |_obj, cancellable, send| {
             Self::request_async(
                 extractable_type,
                 id.as_ref().map(::std::borrow::Borrow::borrow),
-                Some(&cancellable),
+                Some(cancellable),
                 move |res| {
                     send.resolve(res);
                 },
             );
-
-            cancellable
         }))
     }
 }
