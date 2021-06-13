@@ -158,7 +158,6 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
-    #[doc(alias = "auto-flush-bus")]
     fn connect_auto_flush_bus_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -187,7 +186,6 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
-    #[doc(alias = "delay")]
     fn connect_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_delay_trampoline<
             P: IsA<Pipeline>,
@@ -213,7 +211,6 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
-    #[doc(alias = "latency")]
     fn connect_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

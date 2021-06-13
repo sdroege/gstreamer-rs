@@ -295,7 +295,6 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    #[doc(alias = "blocksize")]
     fn connect_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -324,7 +323,6 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    #[doc(alias = "do-timestamp")]
     fn connect_do_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -353,7 +351,6 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    #[doc(alias = "num-buffers")]
     fn connect_num_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -382,7 +379,6 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    #[doc(alias = "typefind")]
     fn connect_typefind_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

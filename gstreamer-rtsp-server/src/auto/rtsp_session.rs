@@ -320,7 +320,6 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    #[doc(alias = "extra-timeout")]
     fn connect_extra_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -349,7 +348,6 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    #[doc(alias = "timeout")]
     fn connect_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -378,7 +376,6 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    #[doc(alias = "timeout-always-visible")]
     fn connect_timeout_always_visible_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

@@ -366,7 +366,6 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "max-errors")]
     fn connect_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -395,7 +394,6 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    #[doc(alias = "min-latency")]
     fn connect_min_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -424,7 +422,6 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    #[doc(alias = "plc")]
     fn connect_plc_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_plc_trampoline<
             P: IsA<AudioDecoder>,
@@ -450,7 +447,6 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    #[doc(alias = "tolerance")]
     fn connect_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

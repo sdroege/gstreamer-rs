@@ -436,7 +436,6 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    #[doc(alias = "synced")]
     fn connect_synced<F: Fn(&Self, bool) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn synced_trampoline<
             P: IsA<Clock>,
@@ -465,7 +464,6 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    #[doc(alias = "timeout")]
     fn connect_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -494,7 +492,6 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    #[doc(alias = "window-size")]
     fn connect_window_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -523,7 +520,6 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    #[doc(alias = "window-threshold")]
     fn connect_window_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

@@ -463,7 +463,6 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    #[doc(alias = "client-connected")]
     fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -495,7 +494,6 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    #[doc(alias = "address")]
     fn connect_address_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -524,7 +522,6 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    #[doc(alias = "backlog")]
     fn connect_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -553,7 +550,6 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    #[doc(alias = "bound-port")]
     fn connect_bound_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -582,7 +578,6 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    #[doc(alias = "content-length-limit")]
     fn connect_content_length_limit_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -611,7 +606,6 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    #[doc(alias = "mount-points")]
     fn connect_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -640,7 +634,6 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    #[doc(alias = "service")]
     fn connect_service_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -669,7 +662,6 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    #[doc(alias = "session-pool")]
     fn connect_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

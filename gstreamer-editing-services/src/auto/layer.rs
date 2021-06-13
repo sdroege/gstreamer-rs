@@ -343,12 +343,10 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //#[doc(alias = "active-changed")]
     //fn connect_active_changed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Empty ctype tracks: *.PtrArray TypeId { ns_id: 1, id: 17 }
     //}
 
-    #[doc(alias = "clip-added")]
     fn connect_clip_added<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn clip_added_trampoline<P: IsA<Layer>, F: Fn(&P, &Clip) + 'static>(
             this: *mut ffi::GESLayer,
@@ -374,7 +372,6 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    #[doc(alias = "clip-removed")]
     fn connect_clip_removed<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn clip_removed_trampoline<P: IsA<Layer>, F: Fn(&P, &Clip) + 'static>(
             this: *mut ffi::GESLayer,
@@ -400,7 +397,6 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    #[doc(alias = "auto-transition")]
     fn connect_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_auto_transition_trampoline<
             P: IsA<Layer>,
@@ -426,7 +422,6 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    #[doc(alias = "priority")]
     fn connect_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_priority_trampoline<P: IsA<Layer>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESLayer,

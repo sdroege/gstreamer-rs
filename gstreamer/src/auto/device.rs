@@ -137,7 +137,6 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
-    #[doc(alias = "removed")]
     fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn removed_trampoline<
             P: IsA<Device>,

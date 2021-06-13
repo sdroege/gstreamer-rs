@@ -119,7 +119,6 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
         }
     }
 
-    #[doc(alias = "control-source")]
     fn connect_control_source_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

@@ -506,7 +506,6 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[doc(alias = "commited")]
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn commited_trampoline<P: IsA<Timeline>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimeline,
@@ -528,7 +527,6 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[doc(alias = "group-added")]
     fn connect_group_added<F: Fn(&Self, &Group) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn group_added_trampoline<
             P: IsA<Timeline>,
@@ -557,12 +555,10 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    //#[doc(alias = "group-removed")]
     //fn connect_group_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Empty ctype children: *.PtrArray TypeId { ns_id: 1, id: 54 }
     //}
 
-    #[doc(alias = "layer-added")]
     fn connect_layer_added<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn layer_added_trampoline<
             P: IsA<Timeline>,
@@ -591,7 +587,6 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[doc(alias = "layer-removed")]
     fn connect_layer_removed<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn layer_removed_trampoline<
             P: IsA<Timeline>,
@@ -622,7 +617,6 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "select-element-track")]
     fn connect_select_element_track<F: Fn(&Self, &Clip, &TrackElement) -> Track + 'static>(
         &self,
         f: F,
@@ -657,12 +651,10 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    //#[doc(alias = "select-tracks-for-object")]
     //fn connect_select_tracks_for_object<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Empty ctype return value *.PtrArray TypeId { ns_id: 1, id: 17 }
     //}
 
-    #[doc(alias = "snapping-ended")]
     fn connect_snapping_ended<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(
         &self,
         f: F,
@@ -698,7 +690,6 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[doc(alias = "snapping-started")]
     fn connect_snapping_started<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(
         &self,
         f: F,
@@ -734,7 +725,6 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[doc(alias = "track-added")]
     fn connect_track_added<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn track_added_trampoline<
             P: IsA<Timeline>,
@@ -763,7 +753,6 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[doc(alias = "track-removed")]
     fn connect_track_removed<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn track_removed_trampoline<
             P: IsA<Timeline>,
@@ -792,7 +781,6 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[doc(alias = "auto-transition")]
     fn connect_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_auto_transition_trampoline<
             P: IsA<Timeline>,
@@ -818,7 +806,6 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_trampoline<P: IsA<Timeline>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimeline,
@@ -841,7 +828,6 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[doc(alias = "snapping-distance")]
     fn connect_snapping_distance_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_snapping_distance_trampoline<
             P: IsA<Timeline>,

@@ -287,7 +287,6 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
-    #[doc(alias = "accept-certificate")]
     fn connect_accept_certificate<
         F: Fn(&Self, &gio::TlsConnection, &gio::TlsCertificate, gio::TlsCertificateFlags) -> bool
             + Send

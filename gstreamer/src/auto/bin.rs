@@ -282,7 +282,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    #[doc(alias = "deep-element-added")]
     fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -318,7 +317,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    #[doc(alias = "deep-element-removed")]
     fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -352,7 +350,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    #[doc(alias = "element-added")]
     fn connect_element_added<F: Fn(&Self, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -384,7 +381,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    #[doc(alias = "element-removed")]
     fn connect_element_removed<F: Fn(&Self, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -416,7 +412,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    #[doc(alias = "async-handling")]
     fn connect_async_handling_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -445,7 +440,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    #[doc(alias = "message-forward")]
     fn connect_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

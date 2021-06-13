@@ -145,7 +145,6 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
         }
     }
 
-    #[doc(alias = "buffer-consumed")]
     fn connect_buffer_consumed<F: Fn(&Self, &gst::Buffer) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -179,7 +178,6 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "emit-signals")]
     fn connect_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

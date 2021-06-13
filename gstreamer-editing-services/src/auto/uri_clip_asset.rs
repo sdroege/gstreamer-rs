@@ -168,7 +168,6 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
-    #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_trampoline<
             P: IsA<UriClipAsset>,
@@ -196,7 +195,6 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "is-nested-timeline")]
     fn connect_is_nested_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_is_nested_timeline_trampoline<
             P: IsA<UriClipAsset>,

@@ -177,7 +177,6 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
         }
     }
 
-    #[doc(alias = "session-removed")]
     fn connect_session_removed<F: Fn(&Self, &RTSPSession) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -209,7 +208,6 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
         }
     }
 
-    #[doc(alias = "max-sessions")]
     fn connect_max_sessions_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

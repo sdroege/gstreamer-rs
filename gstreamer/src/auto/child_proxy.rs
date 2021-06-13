@@ -136,7 +136,6 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
     //    unsafe { TODO: call ffi:gst_child_proxy_set_valist() }
     //}
 
-    #[doc(alias = "child-added")]
     fn connect_child_added<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -170,7 +169,6 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         }
     }
 
-    #[doc(alias = "child-removed")]
     fn connect_child_removed<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(
         &self,
         f: F,

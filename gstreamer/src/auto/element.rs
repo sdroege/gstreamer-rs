@@ -734,7 +734,6 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    #[doc(alias = "no-more-pads")]
     fn connect_no_more_pads<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn no_more_pads_trampoline<
             P: IsA<Element>,
@@ -759,7 +758,6 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    #[doc(alias = "pad-added")]
     fn connect_pad_added<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -791,7 +789,6 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    #[doc(alias = "pad-removed")]
     fn connect_pad_removed<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
         &self,
         f: F,

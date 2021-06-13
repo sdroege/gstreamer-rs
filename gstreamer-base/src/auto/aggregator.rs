@@ -273,7 +273,6 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "emit-signals")]
     fn connect_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -304,7 +303,6 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    #[doc(alias = "latency")]
     fn connect_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -333,7 +331,6 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[doc(alias = "start-time")]
     fn connect_start_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -364,7 +361,6 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "start-time-selection")]
     fn connect_start_time_selection_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

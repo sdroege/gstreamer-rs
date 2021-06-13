@@ -380,7 +380,6 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    #[doc(alias = "control-binding-added")]
     fn connect_control_binding_added<F: Fn(&Self, &gst::ControlBinding) + 'static>(
         &self,
         f: F,
@@ -412,7 +411,6 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    #[doc(alias = "control-binding-removed")]
     fn connect_control_binding_removed<F: Fn(&Self, &gst::ControlBinding) + 'static>(
         &self,
         f: F,
@@ -444,7 +442,6 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    #[doc(alias = "active")]
     fn connect_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_active_trampoline<P: IsA<TrackElement>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrackElement,
@@ -469,7 +466,6 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "auto-clamp-control-sources")]
     fn connect_auto_clamp_control_sources_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -500,7 +496,6 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "has-internal-source")]
     fn connect_has_internal_source_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_has_internal_source_trampoline<
             P: IsA<TrackElement>,
@@ -526,7 +521,6 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    #[doc(alias = "track")]
     fn connect_track_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_track_trampoline<P: IsA<TrackElement>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrackElement,
@@ -549,7 +543,6 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    #[doc(alias = "track-type")]
     fn connect_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_track_type_trampoline<
             P: IsA<TrackElement>,

@@ -438,7 +438,6 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "discard-corrupted-frames")]
     fn connect_discard_corrupted_frames_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -469,7 +468,6 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "max-errors")]
     fn connect_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -500,7 +498,6 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "min-force-key-unit-interval")]
     fn connect_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -531,7 +528,6 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "qos")]
     fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_qos_trampoline<
             P: IsA<VideoDecoder>,

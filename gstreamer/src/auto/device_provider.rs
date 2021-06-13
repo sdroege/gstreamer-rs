@@ -204,7 +204,6 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
-    #[doc(alias = "provider-hidden")]
     fn connect_provider_hidden<F: Fn(&Self, &str) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -236,7 +235,6 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
-    #[doc(alias = "provider-unhidden")]
     fn connect_provider_unhidden<F: Fn(&Self, &str) + Send + Sync + 'static>(
         &self,
         f: F,

@@ -90,7 +90,6 @@ impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
         }
     }
 
-    #[doc(alias = "max-threads")]
     fn connect_max_threads_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

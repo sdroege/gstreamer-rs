@@ -81,7 +81,6 @@ impl<O: IsA<TransitionClip>> TransitionClipExt for O {
         }
     }
 
-    #[doc(alias = "vtype")]
     fn connect_vtype_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_vtype_trampoline<
             P: IsA<TransitionClip>,

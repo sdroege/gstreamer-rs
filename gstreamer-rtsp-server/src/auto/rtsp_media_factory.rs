@@ -811,7 +811,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "media-configure")]
     fn connect_media_configure<F: Fn(&Self, &RTSPMedia) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -843,7 +842,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "media-constructed")]
     fn connect_media_constructed<F: Fn(&Self, &RTSPMedia) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -875,7 +873,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "bind-mcast-address")]
     fn connect_bind_mcast_address_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -904,7 +901,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "buffer-size")]
     fn connect_buffer_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -933,7 +929,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "clock")]
     fn connect_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_clock_trampoline<
             P: IsA<RTSPMediaFactory>,
@@ -959,7 +954,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "dscp-qos")]
     fn connect_dscp_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -990,7 +984,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "enable-rtcp")]
     fn connect_enable_rtcp_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1019,7 +1012,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "eos-shutdown")]
     fn connect_eos_shutdown_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1048,7 +1040,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "latency")]
     fn connect_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1077,7 +1068,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "launch")]
     fn connect_launch_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_launch_trampoline<
             P: IsA<RTSPMediaFactory>,
@@ -1103,7 +1093,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "max-mcast-ttl")]
     fn connect_max_mcast_ttl_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1132,7 +1121,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "profiles")]
     fn connect_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1161,7 +1149,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "protocols")]
     fn connect_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1190,7 +1177,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "shared")]
     fn connect_shared_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_shared_trampoline<
             P: IsA<RTSPMediaFactory>,
@@ -1216,7 +1202,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "stop-on-disconnect")]
     fn connect_stop_on_disconnect_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1245,7 +1230,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "suspend-mode")]
     fn connect_suspend_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1274,7 +1258,6 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[doc(alias = "transport-mode")]
     fn connect_transport_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

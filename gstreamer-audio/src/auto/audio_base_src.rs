@@ -206,7 +206,6 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         }
     }
 
-    #[doc(alias = "actual-buffer-time")]
     fn connect_actual_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -235,7 +234,6 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         }
     }
 
-    #[doc(alias = "actual-latency-time")]
     fn connect_actual_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -264,7 +262,6 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         }
     }
 
-    #[doc(alias = "buffer-time")]
     fn connect_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -293,7 +290,6 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         }
     }
 
-    #[doc(alias = "latency-time")]
     fn connect_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -322,7 +318,6 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         }
     }
 
-    #[doc(alias = "provide-clock")]
     fn connect_provide_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -351,7 +346,6 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         }
     }
 
-    #[doc(alias = "slave-method")]
     fn connect_slave_method_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

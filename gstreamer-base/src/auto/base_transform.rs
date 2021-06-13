@@ -203,7 +203,6 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
         }
     }
 
-    #[doc(alias = "qos")]
     fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_qos_trampoline<
             P: IsA<BaseTransform>,

@@ -725,24 +725,20 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //#[doc(alias = "child-property-added")]
     //fn connect_child_property_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec
     //}
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //#[doc(alias = "child-property-removed")]
     //fn connect_child_property_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec
     //}
 
-    //#[doc(alias = "deep-notify")]
     //fn connect_deep_notify<Unsupported or ignored types>(&self, detail: Option<&str>, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec
     //}
 
-    #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_trampoline<
             P: IsA<TimelineElement>,
@@ -768,7 +764,6 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[doc(alias = "in-point")]
     fn connect_in_point_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_in_point_trampoline<
             P: IsA<TimelineElement>,
@@ -794,7 +789,6 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[doc(alias = "max-duration")]
     fn connect_max_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_max_duration_trampoline<
             P: IsA<TimelineElement>,
@@ -820,7 +814,6 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[doc(alias = "name")]
     fn connect_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_name_trampoline<
             P: IsA<TimelineElement>,
@@ -846,7 +839,6 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[doc(alias = "parent")]
     fn connect_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_parent_trampoline<
             P: IsA<TimelineElement>,
@@ -872,7 +864,6 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[doc(alias = "priority")]
     fn connect_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_priority_trampoline<
             P: IsA<TimelineElement>,
@@ -898,7 +889,6 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[doc(alias = "serialize")]
     fn connect_serialize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_serialize_trampoline<
             P: IsA<TimelineElement>,
@@ -924,7 +914,6 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[doc(alias = "start")]
     fn connect_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_start_trampoline<
             P: IsA<TimelineElement>,
@@ -950,7 +939,6 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[doc(alias = "timeline")]
     fn connect_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_timeline_trampoline<
             P: IsA<TimelineElement>,

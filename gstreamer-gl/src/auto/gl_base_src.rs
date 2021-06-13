@@ -66,7 +66,6 @@ impl<O: IsA<GLBaseSrc>> GLBaseSrcExt for O {
         }
     }
 
-    #[doc(alias = "timestamp-offset")]
     fn connect_timestamp_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

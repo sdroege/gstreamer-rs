@@ -266,7 +266,6 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "element-properties")]
     fn connect_element_properties_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

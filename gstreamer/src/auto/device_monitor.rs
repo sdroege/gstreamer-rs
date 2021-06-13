@@ -150,7 +150,6 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 
-    #[doc(alias = "show-all")]
     fn connect_show_all_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

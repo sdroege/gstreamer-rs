@@ -89,7 +89,6 @@ impl<O: IsA<UriClip>> UriClipExt for O {
         }
     }
 
-    #[doc(alias = "is-image")]
     fn connect_is_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_is_image_trampoline<P: IsA<UriClip>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESUriClip,
@@ -112,7 +111,6 @@ impl<O: IsA<UriClip>> UriClipExt for O {
         }
     }
 
-    #[doc(alias = "mute")]
     fn connect_mute_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mute_trampoline<P: IsA<UriClip>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESUriClip,
@@ -135,7 +133,6 @@ impl<O: IsA<UriClip>> UriClipExt for O {
         }
     }
 
-    #[doc(alias = "supported-formats")]
     fn connect_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_supported_formats_trampoline<
             P: IsA<UriClip>,

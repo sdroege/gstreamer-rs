@@ -1260,7 +1260,6 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    #[doc(alias = "new-rtcp-encoder")]
     fn connect_new_rtcp_encoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1292,7 +1291,6 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    #[doc(alias = "new-rtp-encoder")]
     fn connect_new_rtp_encoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1324,7 +1322,6 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    #[doc(alias = "new-rtp-rtcp-decoder")]
     fn connect_new_rtp_rtcp_decoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1356,7 +1353,6 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    #[doc(alias = "control")]
     fn connect_control_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1385,7 +1381,6 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    #[doc(alias = "profiles")]
     fn connect_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1414,7 +1409,6 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    #[doc(alias = "protocols")]
     fn connect_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

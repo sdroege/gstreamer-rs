@@ -159,7 +159,6 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
-    #[doc(alias = "child-added")]
     fn connect_child_added<F: Fn(&Self, &TimelineElement) + 'static>(
         &self,
         f: F,
@@ -191,7 +190,6 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
-    #[doc(alias = "child-removed")]
     fn connect_child_removed<F: Fn(&Self, &TimelineElement) + 'static>(
         &self,
         f: F,
@@ -223,7 +221,6 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
-    #[doc(alias = "height")]
     fn connect_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_height_trampoline<P: IsA<Container>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESContainer,

@@ -81,7 +81,6 @@ impl<O: IsA<InterpolationControlSource>> InterpolationControlSourceExt for O {
         }
     }
 
-    #[doc(alias = "mode")]
     fn connect_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mode_trampoline<
             P: IsA<InterpolationControlSource>,

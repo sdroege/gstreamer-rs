@@ -111,7 +111,6 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
         }
     }
 
-    #[doc(alias = "value-added")]
     fn connect_value_added<F: Fn(&Self, &ControlPoint) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -143,7 +142,6 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
         }
     }
 
-    #[doc(alias = "value-changed")]
     fn connect_value_changed<F: Fn(&Self, &ControlPoint) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -175,7 +173,6 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
         }
     }
 
-    #[doc(alias = "value-removed")]
     fn connect_value_removed<F: Fn(&Self, &ControlPoint) + Send + Sync + 'static>(
         &self,
         f: F,

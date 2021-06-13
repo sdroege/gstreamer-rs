@@ -203,7 +203,6 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_trampoline<P: IsA<Group>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESGroup,
@@ -226,7 +225,6 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    #[doc(alias = "in-point")]
     fn connect_in_point_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_in_point_trampoline<P: IsA<Group>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESGroup,
@@ -249,7 +247,6 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    #[doc(alias = "max-duration")]
     fn connect_max_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_max_duration_trampoline<P: IsA<Group>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESGroup,
@@ -272,7 +269,6 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    #[doc(alias = "priority")]
     fn connect_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_priority_trampoline<P: IsA<Group>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESGroup,
@@ -295,7 +291,6 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    #[doc(alias = "start")]
     fn connect_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_start_trampoline<P: IsA<Group>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESGroup,

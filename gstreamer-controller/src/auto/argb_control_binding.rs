@@ -209,7 +209,6 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    #[doc(alias = "control-source-a")]
     fn connect_control_source_a_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -238,7 +237,6 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    #[doc(alias = "control-source-b")]
     fn connect_control_source_b_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -267,7 +265,6 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    #[doc(alias = "control-source-g")]
     fn connect_control_source_g_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -296,7 +293,6 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    #[doc(alias = "control-source-r")]
     fn connect_control_source_r_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

@@ -203,7 +203,6 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
     //    unsafe { TODO: call ffi:gst_gl_display_retrieve_window() }
     //}
 
-    #[doc(alias = "create-context")]
     fn connect_create_context<F: Fn(&Self, &GLContext) -> GLContext + Send + Sync + 'static>(
         &self,
         f: F,

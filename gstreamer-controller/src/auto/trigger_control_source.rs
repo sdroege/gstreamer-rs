@@ -81,7 +81,6 @@ impl<O: IsA<TriggerControlSource>> TriggerControlSourceExt for O {
         }
     }
 
-    #[doc(alias = "tolerance")]
     fn connect_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

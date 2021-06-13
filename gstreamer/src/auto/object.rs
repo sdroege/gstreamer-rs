@@ -327,12 +327,10 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    //#[doc(alias = "deep-notify")]
     //fn connect_deep_notify<Unsupported or ignored types>(&self, detail: Option<&str>, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec
     //}
 
-    #[doc(alias = "parent")]
     fn connect_parent_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_parent_trampoline<
             P: IsA<Object>,

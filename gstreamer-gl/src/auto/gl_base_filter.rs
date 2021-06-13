@@ -81,7 +81,6 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
         }
     }
 
-    #[doc(alias = "context")]
     fn connect_context_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

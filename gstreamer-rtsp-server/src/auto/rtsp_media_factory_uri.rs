@@ -108,7 +108,6 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
         }
     }
 
-    #[doc(alias = "uri")]
     fn connect_uri_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_uri_trampoline<
             P: IsA<RTSPMediaFactoryURI>,
@@ -134,7 +133,6 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
         }
     }
 
-    #[doc(alias = "use-gstpay")]
     fn connect_use_gstpay_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

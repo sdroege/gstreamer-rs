@@ -349,7 +349,6 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    #[doc(alias = "commited")]
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn commited_trampoline<P: IsA<Track>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrack,
@@ -371,7 +370,6 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    #[doc(alias = "track-element-added")]
     fn connect_track_element_added<F: Fn(&Self, &TrackElement) + 'static>(
         &self,
         f: F,
@@ -403,7 +401,6 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    #[doc(alias = "track-element-removed")]
     fn connect_track_element_removed<F: Fn(&Self, &TrackElement) + 'static>(
         &self,
         f: F,
@@ -435,7 +432,6 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_trampoline<P: IsA<Track>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrack,
@@ -460,7 +456,6 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "id")]
     fn connect_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_id_trampoline<P: IsA<Track>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrack,
@@ -483,7 +478,6 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    #[doc(alias = "mixing")]
     fn connect_mixing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mixing_trampoline<P: IsA<Track>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrack,
@@ -506,7 +500,6 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    #[doc(alias = "restriction-caps")]
     fn connect_restriction_caps_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_restriction_caps_trampoline<
             P: IsA<Track>,

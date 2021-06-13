@@ -66,7 +66,6 @@ impl<O: IsA<VideoSink>> VideoSinkExt for O {
         }
     }
 
-    #[doc(alias = "show-preroll-frame")]
     fn connect_show_preroll_frame_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

@@ -481,7 +481,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[doc(alias = "async")]
     fn connect_async_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_async_trampoline<
             P: IsA<BaseSink>,
@@ -507,7 +506,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[doc(alias = "blocksize")]
     fn connect_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -536,7 +534,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[doc(alias = "enable-last-sample")]
     fn connect_enable_last_sample_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -565,7 +562,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[doc(alias = "last-sample")]
     fn connect_last_sample_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -594,7 +590,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[doc(alias = "max-bitrate")]
     fn connect_max_bitrate_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -623,7 +618,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[doc(alias = "max-lateness")]
     fn connect_max_lateness_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -654,7 +648,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "processing-deadline")]
     fn connect_processing_deadline_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -683,7 +676,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[doc(alias = "qos")]
     fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_qos_trampoline<
             P: IsA<BaseSink>,
@@ -709,7 +701,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[doc(alias = "render-delay")]
     fn connect_render_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -740,7 +731,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "stats")]
     fn connect_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_stats_trampoline<
             P: IsA<BaseSink>,
@@ -766,7 +756,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[doc(alias = "sync")]
     fn connect_sync_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_sync_trampoline<
             P: IsA<BaseSink>,
@@ -792,7 +781,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[doc(alias = "throttle-time")]
     fn connect_throttle_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -821,7 +809,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[doc(alias = "ts-offset")]
     fn connect_ts_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

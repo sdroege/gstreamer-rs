@@ -381,7 +381,6 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         }
     }
 
-    #[doc(alias = "hard-resync")]
     fn connect_hard_resync_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -410,7 +409,6 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         }
     }
 
-    #[doc(alias = "mark-granule")]
     fn connect_mark_granule_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -439,7 +437,6 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         }
     }
 
-    #[doc(alias = "perfect-timestamp")]
     fn connect_perfect_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -468,7 +465,6 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         }
     }
 
-    #[doc(alias = "tolerance")]
     fn connect_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

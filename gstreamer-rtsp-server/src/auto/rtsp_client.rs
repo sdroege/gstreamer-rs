@@ -553,7 +553,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "announce-request")]
     fn connect_announce_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -585,12 +584,10 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    //#[doc(alias = "check-requirements")]
     //fn connect_check_requirements<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Empty ctype arr: *.CArray TypeId { ns_id: 0, id: 28 }
     //}
 
-    #[doc(alias = "closed")]
     fn connect_closed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn closed_trampoline<
             P: IsA<RTSPClient>,
@@ -615,7 +612,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "describe-request")]
     fn connect_describe_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -647,7 +643,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "get-parameter-request")]
     fn connect_get_parameter_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -679,7 +674,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "handle-response")]
     fn connect_handle_response<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -711,7 +705,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "new-session")]
     fn connect_new_session<F: Fn(&Self, &RTSPSession) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -743,7 +736,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "options-request")]
     fn connect_options_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -775,7 +767,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "pause-request")]
     fn connect_pause_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -807,7 +798,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "play-request")]
     fn connect_play_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -841,7 +831,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    #[doc(alias = "pre-announce-request")]
     fn connect_pre_announce_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -878,7 +867,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    #[doc(alias = "pre-describe-request")]
     fn connect_pre_describe_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -915,7 +903,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    #[doc(alias = "pre-get-parameter-request")]
     fn connect_pre_get_parameter_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -952,7 +939,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    #[doc(alias = "pre-options-request")]
     fn connect_pre_options_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -989,7 +975,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    #[doc(alias = "pre-pause-request")]
     fn connect_pre_pause_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -1026,7 +1011,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    #[doc(alias = "pre-play-request")]
     fn connect_pre_play_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -1063,7 +1047,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    #[doc(alias = "pre-record-request")]
     fn connect_pre_record_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -1100,7 +1083,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    #[doc(alias = "pre-set-parameter-request")]
     fn connect_pre_set_parameter_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -1137,7 +1119,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    #[doc(alias = "pre-setup-request")]
     fn connect_pre_setup_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -1174,7 +1155,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    #[doc(alias = "pre-teardown-request")]
     fn connect_pre_teardown_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -1209,7 +1189,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "record-request")]
     fn connect_record_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1241,12 +1220,10 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    //#[doc(alias = "send-message")]
     //fn connect_send_message<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored message: GstRtsp.RTSPMessage
     //}
 
-    #[doc(alias = "set-parameter-request")]
     fn connect_set_parameter_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1278,7 +1255,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "setup-request")]
     fn connect_setup_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1310,7 +1286,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "teardown-request")]
     fn connect_teardown_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1342,7 +1317,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "drop-backlog")]
     fn connect_drop_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1371,7 +1345,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "mount-points")]
     fn connect_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1400,7 +1373,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "post-session-timeout")]
     fn connect_post_session_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1429,7 +1401,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[doc(alias = "session-pool")]
     fn connect_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

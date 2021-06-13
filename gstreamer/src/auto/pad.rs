@@ -631,7 +631,6 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    #[doc(alias = "linked")]
     fn connect_linked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn linked_trampoline<
             P: IsA<Pad>,
@@ -660,7 +659,6 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    #[doc(alias = "unlinked")]
     fn connect_unlinked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -692,7 +690,6 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    #[doc(alias = "caps")]
     fn connect_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_caps_trampoline<
             P: IsA<Pad>,
@@ -718,7 +715,6 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    #[doc(alias = "offset")]
     fn connect_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_offset_trampoline<
             P: IsA<Pad>,

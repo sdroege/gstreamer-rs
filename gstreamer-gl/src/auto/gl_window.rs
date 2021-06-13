@@ -272,7 +272,6 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
-    #[doc(alias = "key-event")]
     fn connect_key_event<F: Fn(&Self, &str, &str) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -306,7 +305,6 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
-    #[doc(alias = "mouse-event")]
     fn connect_mouse_event<F: Fn(&Self, &str, i32, f64, f64) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -346,7 +344,6 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "scroll-event")]
     fn connect_scroll_event<F: Fn(&Self, f64, f64, f64, f64) + Send + Sync + 'static>(
         &self,
         f: F,

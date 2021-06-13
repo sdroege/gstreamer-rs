@@ -209,7 +209,6 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 
-    #[doc(alias = "disable-passthrough")]
     fn connect_disable_passthrough_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
