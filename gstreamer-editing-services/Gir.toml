@@ -177,6 +177,12 @@ status = "generate"
         [object.function.return]
         bool_return_is_error = "Failed to remove track"
 
+    [[object.function]]
+    name = "set_snapping_distance"
+        [[object.function.parameter]]
+        name = "snapping_distance"
+        mandatory = true
+
 [[object]]
 name = "GES.Container"
 status = "generate"
@@ -350,6 +356,16 @@ manual_traits = ["TimelineElementExtManual"]
         mandatory = true
 
     [[object.function]]
+    name = "get_inpoint"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "get_start"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
     name = "paste"
         [[object.function.parameter]]
         name = "paste_position"
@@ -409,6 +425,12 @@ manual_traits = ["TimelineElementExtManual"]
     name = "set_parent"
         [object.function.return]
         bool_return_is_error = "`TimelineElement` already had a parent or its parent was the same as specified"
+
+    [[object.function]]
+    name = "set_start"
+        [[object.function.parameter]]
+        name = "start"
+        mandatory = true
 
     [[object.function]]
     name = "set_timeline"
