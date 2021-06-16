@@ -181,7 +181,7 @@ pub trait TimelineExt: 'static {
     fn set_auto_transition(&self, auto_transition: bool);
 
     #[doc(alias = "ges_timeline_set_snapping_distance")]
-    fn set_snapping_distance(&self, snapping_distance: impl Into<Option<gst::ClockTime>>);
+    fn set_snapping_distance(&self, snapping_distance: gst::ClockTime);
 
     #[doc(alias = "commited")]
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -497,11 +497,11 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn set_snapping_distance(&self, snapping_distance: impl Into<Option<gst::ClockTime>>) {
+    fn set_snapping_distance(&self, snapping_distance: gst::ClockTime) {
         unsafe {
             ffi::ges_timeline_set_snapping_distance(
                 self.as_ref().to_glib_none().0,
-                snapping_distance.into().into_glib(),
+                snapping_distance.into_glib(),
             );
         }
     }

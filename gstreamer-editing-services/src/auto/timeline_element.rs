@@ -94,7 +94,7 @@ pub trait TimelineElementExt: 'static {
 
     #[doc(alias = "ges_timeline_element_get_inpoint")]
     #[doc(alias = "get_inpoint")]
-    fn inpoint(&self) -> Option<gst::ClockTime>;
+    fn inpoint(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -126,7 +126,7 @@ pub trait TimelineElementExt: 'static {
 
     #[doc(alias = "ges_timeline_element_get_start")]
     #[doc(alias = "get_start")]
-    fn start(&self) -> Option<gst::ClockTime>;
+    fn start(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_element_get_timeline")]
     #[doc(alias = "get_timeline")]
@@ -210,7 +210,7 @@ pub trait TimelineElementExt: 'static {
     fn set_priority(&self, priority: u32) -> bool;
 
     #[doc(alias = "ges_timeline_element_set_start")]
-    fn set_start(&self, start: impl Into<Option<gst::ClockTime>>) -> bool;
+    fn set_start(&self, start: gst::ClockTime) -> bool;
 
     #[doc(alias = "ges_timeline_element_set_timeline")]
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError>;
@@ -371,11 +371,12 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn inpoint(&self) -> Option<gst::ClockTime> {
+    fn inpoint(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::ges_timeline_element_get_inpoint(
+            try_from_glib(ffi::ges_timeline_element_get_inpoint(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -434,11 +435,12 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         unsafe { ffi::ges_timeline_element_get_priority(self.as_ref().to_glib_none().0) }
     }
 
-    fn start(&self) -> Option<gst::ClockTime> {
+    fn start(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::ges_timeline_element_get_start(
+            try_from_glib(ffi::ges_timeline_element_get_start(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -645,11 +647,11 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn set_start(&self, start: impl Into<Option<gst::ClockTime>>) -> bool {
+    fn set_start(&self, start: gst::ClockTime) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_start(
                 self.as_ref().to_glib_none().0,
-                start.into().into_glib(),
+                start.into_glib(),
             ))
         }
     }
