@@ -425,7 +425,7 @@ mod tests {
         assert!(rtp_buffer.csrc(2).is_none());
 
         rtp_buffer.set_extension(true);
-        assert_eq!(rtp_buffer.is_extension(), true);
+        assert!(rtp_buffer.is_extension());
 
         assert_eq!(rtp_buffer.extension_bytes(), None);
     }

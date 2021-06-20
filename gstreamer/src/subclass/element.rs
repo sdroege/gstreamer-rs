@@ -804,6 +804,6 @@ mod tests {
 
         let imp = imp::TestElement::from_instance(&element);
         assert_eq!(imp.n_buffers.load(atomic::Ordering::SeqCst), 100);
-        assert_eq!(imp.reached_playing.load(atomic::Ordering::SeqCst), true);
+        assert!(imp.reached_playing.load(atomic::Ordering::SeqCst));
     }
 }

@@ -2021,7 +2021,7 @@ mod tests {
             .build();
         match flush_stop_evt.view() {
             EventView::FlushStop(flush_stop_evt) => {
-                assert_eq!(flush_stop_evt.resets_time(), true);
+                assert!(flush_stop_evt.resets_time());
                 assert!(flush_stop_evt.structure().is_some());
                 if let Some(other_fields) = flush_stop_evt.structure() {
                     assert!(other_fields.has_field("extra-field"));

@@ -345,7 +345,7 @@ clippy:
   extends: .img-stable
   stage: 'extras'
   variables:
-    CLIPPY_LINTS: -A clippy::missing_safety_doc -A clippy::manual_range_contains -A clippy::upper_case_acronyms -D warnings
+    CLIPPY_LINTS: -A clippy::missing_safety_doc -A clippy::manual_range_contains -A clippy::upper_case_acronyms -A clippy::wrong_self_convention -D warnings
   script:
     - cargo clippy --version
       # Keep features in sync with above

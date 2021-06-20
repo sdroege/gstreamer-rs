@@ -325,13 +325,13 @@ mod tests {
         {
             let cmeta = AudioLevelMeta::add(buffer.get_mut().unwrap(), 10, true);
             assert_eq!(cmeta.level(), 10);
-            assert_eq!(cmeta.voice_activity(), true);
+            assert!(cmeta.voice_activity());
         }
 
         {
             let cmeta = buffer.meta::<AudioLevelMeta>().unwrap();
             assert_eq!(cmeta.level(), 10);
-            assert_eq!(cmeta.voice_activity(), true);
+            assert!(cmeta.voice_activity());
         }
     }
 }

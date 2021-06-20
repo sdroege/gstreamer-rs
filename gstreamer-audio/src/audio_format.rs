@@ -363,9 +363,7 @@ mod tests {
         assert_eq!(count, crate::AudioFormat::iter_raw().len());
 
         assert!(crate::AudioFormat::iter_raw().any(|f| f == crate::AudioFormat::F64be));
-        assert!(crate::AudioFormat::iter_raw()
-            .find(|f| *f == crate::AudioFormat::Encoded)
-            .is_none());
+        assert!(!crate::AudioFormat::iter_raw().any(|f| f == crate::AudioFormat::Encoded));
 
         let caps = crate::AudioFormat::iter_raw().into_audio_caps(crate::AudioLayout::Interleaved);
         assert!(caps.is_some());

@@ -506,9 +506,7 @@ mod tests {
         assert_eq!(count, crate::VideoFormat::iter_raw().len());
 
         assert!(crate::VideoFormat::iter_raw().any(|f| f == crate::VideoFormat::Nv12));
-        assert!(crate::VideoFormat::iter_raw()
-            .find(|f| *f == crate::VideoFormat::Encoded)
-            .is_none());
+        assert!(!crate::VideoFormat::iter_raw().any(|f| f == crate::VideoFormat::Encoded));
 
         let caps = crate::VideoFormat::iter_raw().into_video_caps();
         assert!(caps.is_some());

@@ -556,11 +556,11 @@ mod tests {
         assert!(ct_3 > ct_0);
         assert!(Some(ct_3) > Some(ct_0));
 
-        assert_eq!(opt_ct_none < None, false);
-        assert_eq!(opt_ct_none > None, false);
+        assert!(!(opt_ct_none < None));
+        assert!(!(opt_ct_none > None));
         // This doesn't work due to the `PartialOrd` impl on `Option<T>`
         //assert_eq!(Some(ct_0) > opt_ct_none, false);
-        assert_eq!(Some(ct_0) < opt_ct_none, false);
+        assert!(!(Some(ct_0) < opt_ct_none));
     }
 
     #[test]
