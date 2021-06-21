@@ -228,7 +228,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&VideoEncoder::from_glib_borrow(this).unsafe_cast_ref())
+            f(VideoEncoder::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -253,7 +253,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&VideoEncoder::from_glib_borrow(this).unsafe_cast_ref())
+            f(VideoEncoder::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

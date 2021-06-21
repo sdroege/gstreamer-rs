@@ -222,7 +222,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&ARGBControlBinding::from_glib_borrow(this).unsafe_cast_ref())
+            f(ARGBControlBinding::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -250,7 +250,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&ARGBControlBinding::from_glib_borrow(this).unsafe_cast_ref())
+            f(ARGBControlBinding::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -278,7 +278,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&ARGBControlBinding::from_glib_borrow(this).unsafe_cast_ref())
+            f(ARGBControlBinding::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -306,7 +306,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&ARGBControlBinding::from_glib_borrow(this).unsafe_cast_ref())
+            f(ARGBControlBinding::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

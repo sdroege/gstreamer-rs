@@ -1138,7 +1138,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref(), object)
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref(), object)
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1167,7 +1167,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPMedia::from_glib_borrow(this).unsafe_cast_ref(),
+                RTSPMedia::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(object),
             )
         }
@@ -1193,7 +1193,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1222,7 +1222,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPMedia::from_glib_borrow(this).unsafe_cast_ref(),
+                RTSPMedia::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(object),
             )
         }
@@ -1252,7 +1252,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref(), object)
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref(), object)
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1276,7 +1276,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1304,7 +1304,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1332,7 +1332,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1357,7 +1357,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1385,7 +1385,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1413,7 +1413,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1441,7 +1441,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1469,7 +1469,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1497,7 +1497,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1525,7 +1525,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1553,7 +1553,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1578,7 +1578,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1606,7 +1606,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1634,7 +1634,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1662,7 +1662,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1690,7 +1690,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
+            f(RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

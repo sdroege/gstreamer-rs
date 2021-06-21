@@ -294,7 +294,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Project::from_glib_borrow(this).unsafe_cast_ref(),
+                Project::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(asset),
             )
         }
@@ -322,7 +322,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Project::from_glib_borrow(this).unsafe_cast_ref(),
+                Project::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(asset),
             )
         }
@@ -350,7 +350,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Project::from_glib_borrow(this).unsafe_cast_ref(),
+                Project::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(asset),
             )
         }
@@ -384,7 +384,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Project::from_glib_borrow(this).unsafe_cast_ref(),
+                Project::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(timeline),
                 &from_glib_borrow(error),
             )
@@ -420,7 +420,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Project::from_glib_borrow(this).unsafe_cast_ref(),
+                Project::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(error),
                 &glib::GString::from_glib_borrow(id),
                 from_glib(extractable_type),
@@ -447,7 +447,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Project::from_glib_borrow(this).unsafe_cast_ref(),
+                Project::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(timeline),
             )
         }
@@ -474,7 +474,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Project::from_glib_borrow(this).unsafe_cast_ref(),
+                Project::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(timeline),
             )
         }
@@ -508,7 +508,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         ) -> *mut libc::c_char {
             let f: &F = &*(f as *const F);
             f(
-                &Project::from_glib_borrow(this).unsafe_cast_ref(),
+                Project::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(error),
                 &from_glib_borrow(wrong_asset),
             )

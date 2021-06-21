@@ -743,7 +743,7 @@ impl<O: IsA<Element>> ElementExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&Element::from_glib_borrow(this).unsafe_cast_ref())
+            f(Element::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -772,7 +772,7 @@ impl<O: IsA<Element>> ElementExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Element::from_glib_borrow(this).unsafe_cast_ref(),
+                Element::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(new_pad),
             )
         }
@@ -803,7 +803,7 @@ impl<O: IsA<Element>> ElementExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Element::from_glib_borrow(this).unsafe_cast_ref(),
+                Element::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(old_pad),
             )
         }

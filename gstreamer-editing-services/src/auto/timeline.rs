@@ -512,7 +512,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&Timeline::from_glib_borrow(this).unsafe_cast_ref())
+            f(Timeline::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -538,7 +538,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
+                Timeline::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(group),
             )
         }
@@ -570,7 +570,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
+                Timeline::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(layer),
             )
         }
@@ -598,7 +598,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
+                Timeline::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(layer),
             )
         }
@@ -632,7 +632,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         ) -> *mut ffi::GESTrack {
             let f: &F = &*(f as *const F);
             f(
-                &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
+                Timeline::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(clip),
                 &from_glib_borrow(track_element),
             )
@@ -671,7 +671,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
+                Timeline::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(obj1),
                 &from_glib_borrow(obj2),
                 position,
@@ -706,7 +706,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
+                Timeline::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(obj1),
                 &from_glib_borrow(obj2),
                 position,
@@ -736,7 +736,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
+                Timeline::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(track),
             )
         }
@@ -764,7 +764,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
+                Timeline::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(track),
             )
         }
@@ -791,7 +791,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&Timeline::from_glib_borrow(this).unsafe_cast_ref())
+            f(Timeline::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -813,7 +813,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&Timeline::from_glib_borrow(this).unsafe_cast_ref())
+            f(Timeline::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -838,7 +838,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&Timeline::from_glib_borrow(this).unsafe_cast_ref())
+            f(Timeline::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

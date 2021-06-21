@@ -355,7 +355,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Layer::from_glib_borrow(this).unsafe_cast_ref(),
+                Layer::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(clip),
             )
         }
@@ -380,7 +380,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         ) {
             let f: &F = &*(f as *const F);
             f(
-                &Layer::from_glib_borrow(this).unsafe_cast_ref(),
+                Layer::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(clip),
             )
         }
@@ -407,7 +407,7 @@ impl<O: IsA<Layer>> LayerExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&Layer::from_glib_borrow(this).unsafe_cast_ref())
+            f(Layer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -429,7 +429,7 @@ impl<O: IsA<Layer>> LayerExt for O {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&Layer::from_glib_borrow(this).unsafe_cast_ref())
+            f(Layer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
