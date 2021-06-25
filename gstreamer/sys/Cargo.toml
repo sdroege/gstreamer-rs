@@ -5,10 +5,10 @@ system-deps = "3"
 libc = "0.2"
 
 [dependencies.glib-sys]
-git = "https://github.com/gtk-rs/gtk-rs-core"
+version = "0.14"
 
 [dependencies.gobject-sys]
-git = "https://github.com/gtk-rs/gtk-rs-core"
+version = "0.14"
 
 [dev-dependencies]
 shell-words = "1.0.0"

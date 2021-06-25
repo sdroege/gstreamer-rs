@@ -5,18 +5,21 @@ system-deps = "3"
 libc = "0.2"
 
 [dependencies.glib-sys]
-git = "https://github.com/gtk-rs/gtk-rs-core"
+version = "0.14"
 
 [dependencies.gobject-sys]
-git = "https://github.com/gtk-rs/gtk-rs-core"
+version = "0.14"
 
 [dependencies.gstreamer-audio-sys]
+version = "0.17"
 path = "../../gstreamer-audio/sys"
 
 [dependencies.gstreamer-sys]
+version = "0.17"
 path = "../../gstreamer/sys"
 
 [dependencies.gstreamer-video-sys]
+version = "0.17"
 path = "../../gstreamer-video/sys"
 
 [dev-dependencies]
