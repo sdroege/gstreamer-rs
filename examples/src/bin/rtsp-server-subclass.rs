@@ -26,6 +26,10 @@ struct UsageError(#[error(not(source))] String);
 fn main_loop() -> Result<(), Error> {
     let main_loop = glib::MainLoop::new(None, false);
     let server = server::Server::default();
+
+    let mounts = mount_points::MountPoints::default();
+    server.set_mount_points(Some(&mounts));
+
     // Much like HTTP servers, RTSP servers have multiple endpoints that
     // provide different streams. Here, we ask our server to give
     // us a reference to his list of endpoints, so we can add our
@@ -325,6 +329,58 @@ mod client {
         // Creates a new instance of our factory
         fn default() -> Client {
             glib::Object::new(&[]).expect("Failed to create client")
+        }
+    }
+}
+
+mod mount_points {
+    use gst_rtsp_server::subclass::prelude::*;
+
+    mod imp {
+        use super::*;
+
+        // This is the private data of our mount points
+        #[derive(Default)]
+        pub struct MountPoints {}
+
+        // This trait registers our type with the GObject object system and
+        // provides the entry points for creating a new instance and setting
+        // up the class data
+        #[glib::object_subclass]
+        impl ObjectSubclass for MountPoints {
+            const NAME: &'static str = "RsRTSPMountPoints";
+            type Type = super::MountPoints;
+            type ParentType = gst_rtsp_server::RTSPMountPoints;
+        }
+
+        // Implementation of glib::Object virtual methods
+        impl ObjectImpl for MountPoints {}
+
+        // Implementation of gst_rtsp_server::RTSPClient virtual methods
+        impl RTSPMountPointsImpl for MountPoints {
+            fn make_path(
+                &self,
+                mount_points: &Self::Type,
+                url: &gst_rtsp::RTSPUrl,
+            ) -> Option<glib::GString> {
+                println!("Make path called for {:?} ", url);
+                self.parent_make_path(mount_points, url)
+            }
+        }
+    }
+
+    glib::wrapper! {
+        pub struct MountPoints(ObjectSubclass<imp::MountPoints>) @extends gst_rtsp_server::RTSPMountPoints;
+    }
+
+    // MountPoints must be Send+Sync, and ours is
+    unsafe impl Send for MountPoints {}
+    unsafe impl Sync for MountPoints {}
+
+    impl Default for MountPoints {
+        // Creates a new instance of our factory
+        fn default() -> Self {
+            glib::Object::new(&[]).expect("Failed to create mount points")
         }
     }
 }
