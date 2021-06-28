@@ -5,6 +5,97 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.17.0] - 2021-06-28
+
+### Fixed
+- Use `#[repr(transparent)]` where it is more correct and remove unneeded
+  `#[repr(C)]` annotations.
+- Don't provide direct access to the logged object in logging functions as the
+  object might currently be finalized and might be unsafe to access.
+- Moved X11/EGL/Wayland-specific GL APIs into their own crates instead of
+  having them inside gstreamer-gl and behind feature flags. This simplifies
+  conditional usage of them in applications.
+- Various nullability issues: parameters and return values that should've been
+  or shouldn't have been nullable were fixed.
+- Print source object correctly in `gst::Message` `Debug` impl.
+- `gst_rtsp_server::RTSPServer::attach()` is fallible.
+- `gst::ElementFactoryListType` is a proper bitflags type now instead of
+  generic `u64`.
+- `gst::PluginFeature::load()` returns the same type as the one passed in.
+- Value returned by `gst::PromiseFuture` can no longer be freed while still
+  in scope.
+- Only assign to `GError**`s in subclassing code if they're not `NULL`.
+
+### Added
+- Bindings for the GStreamer Controller library and the corresponding core API.
+- Subclassing support for `gst_player::PlayerVideoRenderer`.
+- `gst::PARAM_FLAG_CONTROLLABLE` and related bindings.
+- `gst_video::VideoOrientation` and `VideoOrientationMethod` bindings.
+- Support for removing pad probes from inside the pad probe callback.
+- `gst_check::Harness::pull_until_eos()` bindings.
+- `ges::TransitionClip` and `OperationClip`.
+- Bindings for `gst_gl::GLMemory` and related APIs.
+- Subclassing support for `gst_gl::GLFilter` and `gst_gl::BaseSrc`.
+- `gst::TagList::remove()`.
+- `gst::CapsFeatures` and `gst::Structure` API based on `glib::Quark`s instead
+  of strings.
+- Subclassing support for `gst_video::VideoFilter`.
+- Bindings for various new 1.20 APIs: `gst_app::LeakyType`,
+  `gst_video::VideoDecoderRequestSyncPointFlags`,
+  `gst_rtp::RTPHeaderExtension`, `gst_audio::AudioLevelMeta`,
+  `gst_webrtc::WebRTCKind` and various other new flags/enum types.
+- Subclassing support for `gst_rtsp_server::RTSPMountPoints`.
+
+### Removed
+- Deprecated APIs in 0.16.
+- Don't declare that `gst_app::AppSink` and `AppSrc` inherit from
+  `gst_base::BaseSink` and `BaseSrc` to avoid exposing API that is meant for
+  subclasses to applications.
+- `gst_app::AppSrc` and `AppSink` signals that are also covered by the
+  callbacks. The callbacks are more flexible and have lower overhead.
+- Duplicated getters/setters for `gst_base::BaseSink` and `BaseTransform`
+  properties.
+
+### Changed
+- Compatible with the 0.14 gtk-rs release.
+- Updated to the new GStreamer 1.20 APIs while still supporting up to GStreamer
+  1.8. Any new 1.20 APIs might still change until the stable 1.20 release.
+- FFI and safe high-level bindings are in the same repository now and use the
+  same version numbers.
+- The .gir files are shared with gtk-rs and the GStreamer-specific ones are in
+  a separate git submodule.
+- Update all code to the Rust 2018 edition. As part of this, most macros lost
+  their `gst_` prefix.
+- Re-export dependency crates from the different preludes.
+- Getter functions don't have a `get_` prefix anymore and GObject property
+  accessors don't include the `_property_` part in the middle of their
+  function names anymore.
+- Lots of changes to the subclassing API. Check the various elements in
+  [gst-plugins-rs](https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs)
+  for examples.
+- Major improvements to the documentation infrastructure and generated
+  documentation.
+- `gst::ClockID` bindings are refactored to use different types for
+  single-shot and periodic clock ids, which makes misuse harder.
+- `gst::ProxyPad` extension trait uses trait functions instead of associated
+  functions now for usability reasons.
+- Use `Result<gst::FlowSuccess, gst::FlowError>` for overriding flow returns
+  from pad probes.
+- `gst_video::VideoInfo::align()` returns a `Result` instead of a `bool`.
+- Use actual error types instead of `()` in `gst_sdp` APIs.
+- `Display` impl for `gst::ClockTime` provides better human-readable strings.
+- `gst::Element::link_filtered()` and `link_pads_filtered()` takes a
+  non-optional caps now. That's easier to use and for not providing caps the
+  non-filtered variants of the functions exist.
+- Replace various manual bindings with auto-generated ones.
+- `gst::Element::get_request_pad()` is replaced by `request_pad_simple()` as a
+  simpler version of `request_pad()` and in accordance with the deprecation in
+  GStreamer 1.20.
+- `gst::ClockTime` and APIs working on it were changed to make possibility of
+  using `GST_CLOCK_TIME_NONE` expressed in the type system.
+  `Option<gst::ClockTime>` can be `None` while `gst::ClockTime` is always a
+  valid time.
+
 ## [0.16.7] - 2021-02-13
 ### Fixed
 - Usage of the logging system with a GStreamer library with the logging system
@@ -935,7 +1026,9 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.6...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.17.0...HEAD
+[0.17.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.7...0.17.0
+[0.16.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.6...0.16.7
 [0.16.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.5...0.16.6
 [0.16.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.4...0.16.5
 [0.16.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.3...0.16.4
