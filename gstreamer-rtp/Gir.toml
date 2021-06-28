@@ -65,11 +65,11 @@ status = "manual"
 [[object]]
 name = "GstRtp.RTPHeaderExtension"
 status = "generate"
+manual_traits = ["RTPHeaderExtensionExtManual"]
     [[object.function]]
     pattern = "read|write"
-    # Until 1.19.2: `data` field lacks`array size` annotation:
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/merge_requests/1190
-    ignore = true
+    # Mutability of BufferRef
+    manual = true
 
     [[object.function]]
     name = "get_sdp_caps_field_name"

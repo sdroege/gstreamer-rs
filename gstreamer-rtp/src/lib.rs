@@ -28,6 +28,9 @@ pub use crate::auto::*;
 
 pub mod rtp_buffer;
 pub use crate::rtp_buffer::{compare_seqnum, RTPBuffer};
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub mod rtp_header_extension;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_rtp::prelude::*" without getting conflicts
@@ -38,4 +41,7 @@ pub mod prelude {
     pub use crate::auto::traits::*;
 
     pub use crate::rtp_buffer::RTPBufferExt;
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub use crate::rtp_header_extension::RTPHeaderExtensionExtManual;
 }
