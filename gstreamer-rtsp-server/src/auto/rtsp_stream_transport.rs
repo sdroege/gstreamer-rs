@@ -67,7 +67,7 @@ pub trait RTSPStreamTransportExt: 'static {
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //#[doc(alias = "gst_rtsp_stream_transport_send_rtcp_list")]
-    //fn send_rtcp_list(&self, buffer_list: /*Ignored*/&mut gst::BufferList) -> bool;
+    //fn send_rtcp_list(&self, buffer_list: /*Ignored*/&gst::BufferList) -> bool;
 
     #[doc(alias = "gst_rtsp_stream_transport_send_rtp")]
     fn send_rtp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError>;
@@ -75,7 +75,7 @@ pub trait RTSPStreamTransportExt: 'static {
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //#[doc(alias = "gst_rtsp_stream_transport_send_rtp_list")]
-    //fn send_rtp_list(&self, buffer_list: /*Ignored*/&mut gst::BufferList) -> bool;
+    //fn send_rtp_list(&self, buffer_list: /*Ignored*/&gst::BufferList) -> bool;
 
     #[doc(alias = "gst_rtsp_stream_transport_set_active")]
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError>;
@@ -189,7 +189,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    //fn send_rtcp_list(&self, buffer_list: /*Ignored*/&mut gst::BufferList) -> bool {
+    //fn send_rtcp_list(&self, buffer_list: /*Ignored*/&gst::BufferList) -> bool {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_transport_send_rtcp_list() }
     //}
 
@@ -207,7 +207,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    //fn send_rtp_list(&self, buffer_list: /*Ignored*/&mut gst::BufferList) -> bool {
+    //fn send_rtp_list(&self, buffer_list: /*Ignored*/&gst::BufferList) -> bool {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_transport_send_rtp_list() }
     //}
 

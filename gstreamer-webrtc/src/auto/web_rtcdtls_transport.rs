@@ -24,24 +24,6 @@ glib::wrapper! {
 }
 
 impl WebRTCDTLSTransport {
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_webrtc_dtls_transport_new")]
-    pub fn new(session_id: u32) -> WebRTCDTLSTransport {
-        assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_webrtc_dtls_transport_new(session_id)) }
-    }
-
-    #[doc(alias = "gst_webrtc_dtls_transport_set_transport")]
-    pub fn set_transport(&self, ice: &WebRTCICETransport) {
-        unsafe {
-            ffi::gst_webrtc_dtls_transport_set_transport(
-                self.to_glib_none().0,
-                ice.to_glib_none().0,
-            );
-        }
-    }
-
     pub fn certificate(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());

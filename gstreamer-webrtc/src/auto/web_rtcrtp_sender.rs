@@ -18,6 +18,8 @@ use glib::signal::connect_raw;
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 use glib::signal::SignalHandlerId;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 use glib::translate::*;
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
@@ -39,12 +41,6 @@ glib::wrapper! {
 }
 
 impl WebRTCRTPSender {
-    #[doc(alias = "gst_webrtc_rtp_sender_new")]
-    pub fn new() -> WebRTCRTPSender {
-        assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_webrtc_rtp_sender_new()) }
-    }
-
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_webrtc_rtp_sender_set_priority")]
@@ -146,14 +142,6 @@ impl WebRTCRTPSender {
                 Box_::into_raw(f),
             )
         }
-    }
-}
-
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-impl Default for WebRTCRTPSender {
-    fn default() -> Self {
-        Self::new()
     }
 }
 
