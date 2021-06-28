@@ -80,13 +80,13 @@ fn handle_keyboard(ready_tx: glib::Sender<Command>) {
     loop {
         if let Some(Ok(input)) = stdin.next() {
             let command = match input {
-                Key::Char('p') | Key::Char('P') => Command::PlayPause,
+                Key::Char('p' | 'P') => Command::PlayPause,
                 Key::Char('s') => Command::DataRateDown,
                 Key::Char('S') => Command::DataRateUp,
-                Key::Char('d') | Key::Char('D') => Command::ReverseRate,
-                Key::Char('n') | Key::Char('N') => Command::NextFrame,
-                Key::Char('q') | Key::Char('Q') => Command::Quit,
-                Key::Ctrl('c') | Key::Ctrl('C') => Command::Quit,
+                Key::Char('d' | 'D') => Command::ReverseRate,
+                Key::Char('n' | 'N') => Command::NextFrame,
+                Key::Char('q' | 'Q') => Command::Quit,
+                Key::Ctrl('c' | 'C') => Command::Quit,
                 _ => continue,
             };
             ready_tx
