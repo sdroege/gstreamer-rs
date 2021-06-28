@@ -61,10 +61,10 @@ pub trait RTPHeaderExtensionExt: 'static {
     fn set_attributes_from_caps_simple_sdp(&self, caps: &gst::Caps) -> bool;
 
     #[doc(alias = "gst_rtp_header_extension_set_caps_from_attributes")]
-    fn set_caps_from_attributes(&self, caps: &mut gst::Caps) -> bool;
+    fn set_caps_from_attributes(&self, caps: &gst::Caps) -> bool;
 
     #[doc(alias = "gst_rtp_header_extension_set_caps_from_attributes_simple_sdp")]
-    fn set_caps_from_attributes_simple_sdp(&self, caps: &mut gst::Caps) -> bool;
+    fn set_caps_from_attributes_simple_sdp(&self, caps: &gst::Caps) -> bool;
 
     #[doc(alias = "gst_rtp_header_extension_set_id")]
     fn set_id(&self, ext_id: u32);
@@ -76,7 +76,7 @@ pub trait RTPHeaderExtensionExt: 'static {
     fn set_wants_update_non_rtp_src_caps(&self, state: bool);
 
     #[doc(alias = "gst_rtp_header_extension_update_non_rtp_src_caps")]
-    fn update_non_rtp_src_caps(&self, caps: &mut gst::Caps) -> bool;
+    fn update_non_rtp_src_caps(&self, caps: &gst::Caps) -> bool;
 
     #[doc(alias = "gst_rtp_header_extension_wants_update_non_rtp_src_caps")]
     fn wants_update_non_rtp_src_caps(&self) -> bool;
@@ -140,21 +140,21 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 
-    fn set_caps_from_attributes(&self, caps: &mut gst::Caps) -> bool {
+    fn set_caps_from_attributes(&self, caps: &gst::Caps) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_header_extension_set_caps_from_attributes(
                 self.as_ref().to_glib_none().0,
-                caps.to_glib_none_mut().0,
+                caps.to_glib_none().0,
             ))
         }
     }
 
-    fn set_caps_from_attributes_simple_sdp(&self, caps: &mut gst::Caps) -> bool {
+    fn set_caps_from_attributes_simple_sdp(&self, caps: &gst::Caps) -> bool {
         unsafe {
             from_glib(
                 ffi::gst_rtp_header_extension_set_caps_from_attributes_simple_sdp(
                     self.as_ref().to_glib_none().0,
-                    caps.to_glib_none_mut().0,
+                    caps.to_glib_none().0,
                 ),
             )
         }
@@ -184,11 +184,11 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 
-    fn update_non_rtp_src_caps(&self, caps: &mut gst::Caps) -> bool {
+    fn update_non_rtp_src_caps(&self, caps: &gst::Caps) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_header_extension_update_non_rtp_src_caps(
                 self.as_ref().to_glib_none().0,
-                caps.to_glib_none_mut().0,
+                caps.to_glib_none().0,
             ))
         }
     }
