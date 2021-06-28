@@ -7,15 +7,8 @@ libc = "0.2"
 [dependencies.glib-sys]
 git = "https://github.com/gtk-rs/gtk-rs-core"
 
-[dependencies.gobject-sys]
-git = "https://github.com/gtk-rs/gtk-rs-core"
-
 [dependencies.gstreamer-sdp-sys]
 path = "../../gstreamer-sdp/sys"
-features = ["v1_14"]
-
-[dependencies.gstreamer-sys]
-path = "../../gstreamer/sys"
 features = ["v1_14"]
 
 [dev-dependencies]
