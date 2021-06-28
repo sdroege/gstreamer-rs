@@ -7,6 +7,7 @@ work_mode = "sys"
 
 extra_versions = [
     "1.20",
+    "1.18.3",
     "1.18",
     "1.16",
     "1.14",
@@ -43,29 +44,35 @@ name = "Gst.Buffer"
 status = "generate"
     [[object.function]]
     name = "ref"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "unref"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "replace"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "copy"
-    version = "1.18"
+    version = "1.18.3"
 
 [[object]]
 name = "Gst.BufferList"
 status = "generate"
     [[object.function]]
     name = "ref"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "unref"
-    version = "1.18"
+    version = "1.18.3"
+    [[object.function]]
+    name = "replace"
+    version = "1.18.3"
     [[object.function]]
     name = "copy"
-    version = "1.18"
+    version = "1.18.3"
+    [[object.function]]
+    name = "take"
+    version = "1.18.3"
 
 [[object]]
 name = "Gst.ParamArray"
@@ -80,6 +87,30 @@ status = "generate"
     [[object.function]]
     name = "reference_timestamp_meta_api_get_type"
     version = "1.14"
+    [[object.function]]
+    name = "clear_buffer"
+    version = "1.18.3"
+    [[object.function]]
+    name = "clear_buffer_list"
+    version = "1.18.3"
+    [[object.function]]
+    name = "clear_caps"
+    version = "1.18.3"
+    [[object.function]]
+    name = "clear_event"
+    version = "1.18.3"
+    [[object.function]]
+    name = "clear_message"
+    version = "1.18.3"
+    [[object.function]]
+    name = "clear_query"
+    version = "1.18.3"
+    [[object.function]]
+    name = "clear_tag_list"
+    version = "1.18.3"
+    [[object.function]]
+    name = "clear_uri"
+    version = "1.18.3"
 
 [[object]]
 name = "Gst.Caps"
@@ -89,106 +120,144 @@ status = "generate"
     version = "1.16"
     [[object.function]]
     name = "ref"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "unref"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "replace"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "take"
-    version = "1.18"
+    version = "1.18.3"
+
+[[object]]
+name = "Gst.Context"
+status = "generate"
+    [[object.function]]
+    name = "ref"
+    version = "1.18.3"
+    [[object.function]]
+    name = "unref"
+    version = "1.18.3"
+    [[object.function]]
+    name = "copy"
+    version = "1.18.3"
+    [[object.function]]
+    name = "replace"
+    version = "1.18.3"
 
 [[object]]
 name = "Gst.Event"
 status = "generate"
     [[object.function]]
     name = "copy"
-    version = "1.16"
+    version = "1.18.3"
     [[object.function]]
     name = "ref"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "unref"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "replace"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "take"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "steal"
-    version = "1.18"
+    version = "1.18.3"
 
 [[object]]
 name = "Gst.Memory"
 status = "generate"
     [[object.function]]
     name = "ref"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "unref"
-    version = "1.18"
+    version = "1.18.3"
 
 [[object]]
 name = "Gst.Message"
 status = "generate"
     [[object.function]]
     name = "copy"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "ref"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "unref"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "replace"
-    version = "1.18"
+    version = "1.18.3"
+    [[object.function]]
+    name = "take"
+    version = "1.18.3"
+
+[[object]]
+name = "Gst.Promise"
+status = "generate"
+    [[object.function]]
+    name = "ref"
+    version = "1.18.3"
+    [[object.function]]
+    name = "unref"
+    version = "1.18.3"
 
 [[object]]
 name = "Gst.Query"
 status = "generate"
     [[object.function]]
     name = "copy"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "ref"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "unref"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "replace"
-    version = "1.18"
+    version = "1.18.3"
+    [[object.function]]
+    name = "take"
+    version = "1.18.3"
 
 [[object]]
 name = "Gst.Sample"
 status = "generate"
     [[object.function]]
     name = "copy"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "ref"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "unref"
-    version = "1.18"
+    version = "1.18.3"
 
 [[object]]
 name = "Gst.TagList"
 status = "generate"
     [[object.function]]
     name = "copy"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "ref"
-    version = "1.18"
+    version = "1.18.3"
     [[object.function]]
     name = "unref"
-    version = "1.18"
+    version = "1.18.3"
+    [[object.function]]
+    name = "replace"
+    version = "1.18.3"
+    [[object.function]]
+    name = "take"
+    version = "1.18.3"
 
 [[object]]
 name = "Gst.Tracer"
@@ -196,3 +265,16 @@ status = "generate"
     [[object.function]]
     name = "register"
     version = "1.18"
+
+[[object]]
+name = "Gst.Uri"
+status = "generate"
+    [[object.function]]
+    name = "ref"
+    version = "1.18.3"
+    [[object.function]]
+    name = "unref"
+    version = "1.18.3"
+    [[object.function]]
+    name = "copy"
+    version = "1.18.3"
