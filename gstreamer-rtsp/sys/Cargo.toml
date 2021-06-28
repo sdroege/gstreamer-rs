@@ -52,7 +52,7 @@ links = "gstrtsp-1.0"
 name = "gstreamer-rtsp-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
-version = "0.17.0"
+version = "0.18.0"
 edition = "2018"
 [package.metadata.docs.rs]
 features = ["dox"]
