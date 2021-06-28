@@ -13,9 +13,7 @@ extra_versions = [
 
 external_libraries = [
     "GLib",
-    "GObject",
 ]
 
 [external_libraries]
-gstreamer="Gst"
 gstreamer_sdp="GstSdp"

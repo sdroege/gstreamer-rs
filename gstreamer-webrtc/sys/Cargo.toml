@@ -7,17 +7,9 @@ libc = "0.2"
 [dependencies.glib-sys]
 version = "0.14"
 
-[dependencies.gobject-sys]
-version = "0.14"
-
 [dependencies.gstreamer-sdp-sys]
 version = "0.17"
 path = "../../gstreamer-sdp/sys"
-features = ["v1_14"]
-
-[dependencies.gstreamer-sys]
-version = "0.17"
-path = "../../gstreamer/sys"
 features = ["v1_14"]
 
 [dev-dependencies]
