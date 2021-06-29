@@ -69,7 +69,12 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
 - Re-export dependency crates from the different preludes.
 - Getter functions don't have a `get_` prefix anymore and GObject property
   accessors don't include the `_property_` part in the middle of their
-  function names anymore.
+  function names anymore. Applications developers should use
+  [`fix-getters-calls`](https://crates.io/crates/fix-getters-calls) to ease
+  migration of their applications.
+  Use [`fix-getters-def`](https://crates.io/crates/fix-getters-def) if you also
+  want your `get` functions definition to comply with the API standards applied
+  in this release.
 - Lots of changes to the subclassing API. Check the various elements in
   [gst-plugins-rs](https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs)
   for examples.
