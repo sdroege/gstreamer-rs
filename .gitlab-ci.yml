@@ -33,7 +33,7 @@ variables:
   # the name is used in the URL
   # latest release must be at the top
   # (only relevant on master branch)
-  NAMESPACE: gstreamer
+  NAMESPACE: GStreamer
   RELEASES:
     0.17=0.17
     0.16=0.16
