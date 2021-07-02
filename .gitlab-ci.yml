@@ -33,7 +33,7 @@ variables:
   # the name is used in the URL
   # latest release must be at the top
   # (only relevant on master branch)
-  NAMESPACE: GStreamer
+  NAMESPACE: 'GStreamer'
   RELEASES:
     0.17=0.17
     0.16=0.16
@@ -499,5 +499,5 @@ pages:
     paths:
       - 'public'
   rules:
-    - if: $CI_DEFAULT_BRANCH == $CI_COMMIT_BRANCH && $CI_PROJECT_NAMESPACE == $NAMESPACE
+    - if: ($CI_DEFAULT_BRANCH == $CI_COMMIT_BRANCH) && ($CI_PROJECT_NAMESPACE == $NAMESPACE)
       when: 'manual'
