@@ -29,11 +29,11 @@ include:
 variables:
   FDO_UPSTREAM_REPO: gstreamer/gstreamer-rs
   RUST_DOCS_FLAGS: "--extern-html-root-url=muldiv=https://docs.rs/muldiv/1.0.0/muldiv/ -Z unstable-options"
+  NAMESPACE: gstreamer
   # format is <branch>=<name>
   # the name is used in the URL
   # latest release must be at the top
   # (only relevant on master branch)
-  NAMESPACE: 'GStreamer'
   RELEASES:
     0.17=0.17
     0.16=0.16
