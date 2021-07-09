@@ -654,6 +654,13 @@ impl StructureRef {
             ))
         }
     }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_structure_serialize")]
+    pub fn serialize(&self, flags: crate::SerializeFlags) -> glib::GString {
+        unsafe { from_glib_full(ffi::gst_structure_serialize(&self.0, flags.into_glib())) }
+    }
 }
 
 impl fmt::Display for StructureRef {
