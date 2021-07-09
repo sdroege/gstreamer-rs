@@ -798,6 +798,17 @@ impl<'a> Gap<'a> {
             )
         }
     }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_event_parse_gap_flags")]
+    pub fn gap_flags(&self) -> crate::GapFlags {
+        unsafe {
+            let mut flags = mem::MaybeUninit::uninit();
+            ffi::gst_event_parse_gap_flags(self.as_mut_ptr(), flags.as_mut_ptr());
+            from_glib(flags.assume_init())
+        }
+    }
 }
 
 declare_concrete_event!(Qos);
@@ -1619,6 +1630,8 @@ pub struct GapBuilder<'a> {
     builder: EventBuilder<'a>,
     timestamp: crate::ClockTime,
     duration: Option<crate::ClockTime>,
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    gap_flags: Option<crate::GapFlags>,
 }
 
 impl<'a> GapBuilder<'a> {
@@ -1628,7 +1641,16 @@ impl<'a> GapBuilder<'a> {
             builder: EventBuilder::new(),
             timestamp,
             duration: None,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            gap_flags: None,
         }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub fn gap_flags(mut self, flags: crate::GapFlags) -> Self {
+        self.gap_flags = Some(flags);
+        self
     }
 
     pub fn duration(mut self, duration: impl Into<Option<crate::ClockTime>>) -> Self {
@@ -1636,10 +1658,17 @@ impl<'a> GapBuilder<'a> {
         self
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_gap(
-        s.timestamp.into_glib(),
-        s.duration.into_glib()
-    ));
+    event_builder_generic_impl!(|s: &Self| {
+        #[allow(clippy::let_and_return)]
+        let ev = ffi::gst_event_new_gap(s.timestamp.into_glib(), s.duration.into_glib());
+
+        #[cfg(any(feature = "v1_20", feature = "dox"))]
+        if let Some(ref flags) = s.gap_flags {
+            ffi::gst_event_set_gap_flags(ev, flags.into_glib());
+        }
+
+        ev
+    });
 }
 
 pub struct QosBuilder<'a> {
