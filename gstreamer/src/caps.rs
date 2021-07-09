@@ -425,6 +425,13 @@ impl CapsRef {
             ))
         }
     }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_caps_serialize")]
+    pub fn serialize(&self, flags: crate::SerializeFlags) -> glib::GString {
+        unsafe { from_glib_full(ffi::gst_caps_serialize(&self.0, flags.into_glib())) }
+    }
 }
 
 macro_rules! define_iter(

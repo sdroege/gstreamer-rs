@@ -94,7 +94,7 @@ impl Serialize for CapsRef {
 
 impl Serialize for Caps {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        self.as_ref().serialize(serializer)
+        <CapsRef as Serialize>::serialize(self.as_ref(), serializer)
     }
 }
 

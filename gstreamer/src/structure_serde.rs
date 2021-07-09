@@ -62,7 +62,7 @@ impl Serialize for StructureRef {
 
 impl Serialize for Structure {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        self.as_ref().serialize(serializer)
+        <StructureRef as Serialize>::serialize(self.as_ref(), serializer)
     }
 }
 
