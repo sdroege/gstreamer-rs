@@ -18,6 +18,9 @@ byte-slice-cast = "1"
 anyhow = "1"
 termion = { version = "1.5", optional = true }
 
+[target.'cfg(target_os = "macos")'.dependencies]
+cocoa = "0.24"
+
 [features]
 tutorial5 = ["gtk", "gdk", "gst-video"]
 tutorial5-x11 = ["tutorial5"]
