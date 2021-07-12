@@ -162,8 +162,15 @@ impl SampleRef {
 
     #[doc(alias = "get_segment")]
     #[doc(alias = "gst_sample_get_segment")]
-    pub fn segment(&self) -> Option<Segment> {
-        unsafe { from_glib_none(ffi::gst_sample_get_segment(self.as_mut_ptr())) }
+    pub fn segment(&self) -> Option<&Segment> {
+        unsafe {
+            let ptr = ffi::gst_sample_get_segment(self.as_mut_ptr());
+            if ptr.is_null() {
+                None
+            } else {
+                Some(&*(ptr as *const crate::Segment))
+            }
+        }
     }
 
     #[doc(alias = "get_info")]
