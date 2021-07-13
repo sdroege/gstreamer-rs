@@ -46,7 +46,7 @@ links = "gstplayer-1.0"
 name = "gstreamer-player-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
-version = "0.17.0"
+version = "0.17.1"
 edition = "2018"
 [package.metadata.docs.rs]
 features = ["dox"]
