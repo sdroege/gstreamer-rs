@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.17.1] - 2021-07-13
+
+### Fixed
+- Store 1.19 as plugin version when building plugins with `v1_20`. Otherwise
+  plugins fail to load with GStreamer versions below 1.20.0.
+- Fix documentation for `gst::Element::request_pad_simple()` to actually show
+  up.
+
 ## [0.17.0] - 2021-06-28
 
 ### Fixed
