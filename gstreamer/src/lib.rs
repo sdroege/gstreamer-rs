@@ -2,6 +2,7 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 #![recursion_limit = "256"]
+#![doc = include_str!("../README.md")]
 
 // Re-exported for the subclass gst_plugin_define! macro
 pub use ffi;
