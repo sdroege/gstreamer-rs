@@ -2,6 +2,8 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 #![recursion_limit = "256"]
+#![allow(clippy::missing_safety_doc)]
+#![allow(clippy::manual_range_contains)]
 #![doc = include_str!("../README.md")]
 
 // Re-exported for the subclass gst_plugin_define! macro

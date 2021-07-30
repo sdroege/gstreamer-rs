@@ -1,5 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+#![allow(clippy::upper_case_acronyms)]
+
 use glib::{Date, ToValue};
 
 use serde::de;

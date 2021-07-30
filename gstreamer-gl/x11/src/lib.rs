@@ -7,6 +7,7 @@
 // except according to those terms.
 
 #![cfg_attr(all(not(doctest), doc), feature(doc_cfg))]
+#![allow(clippy::missing_safety_doc)]
 
 pub use ffi;
 pub use gst_gl;
