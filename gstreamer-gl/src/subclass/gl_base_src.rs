@@ -113,7 +113,7 @@ unsafe extern "C" fn gl_start<T: GLBaseSrcImpl>(ptr: *mut GstGLBaseSrc) -> glib:
     let imp = instance.impl_();
     let wrap: Borrowed<GLBaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.gl_start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -130,7 +130,7 @@ unsafe extern "C" fn gl_stop<T: GLBaseSrcImpl>(ptr: *mut GstGLBaseSrc) {
     let imp = instance.impl_();
     let wrap: Borrowed<GLBaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), (), {
+    gst::panic_to_error!(&wrap, imp.panicked(), (), {
         imp.gl_stop(wrap.unsafe_cast_ref())
     })
 }
@@ -143,7 +143,7 @@ unsafe extern "C" fn fill_gl_memory<T: GLBaseSrcImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<GLBaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.fill_gl_memory(wrap.unsafe_cast_ref(), &from_glib_borrow(memory)) {
             Ok(()) => true,
             Err(err) => {

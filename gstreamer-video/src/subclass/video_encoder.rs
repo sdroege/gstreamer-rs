@@ -496,7 +496,7 @@ unsafe extern "C" fn video_encoder_open<T: VideoEncoderImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.open(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -515,7 +515,7 @@ unsafe extern "C" fn video_encoder_close<T: VideoEncoderImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.close(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -534,7 +534,7 @@ unsafe extern "C" fn video_encoder_start<T: VideoEncoderImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -553,7 +553,7 @@ unsafe extern "C" fn video_encoder_stop<T: VideoEncoderImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -572,7 +572,7 @@ unsafe extern "C" fn video_encoder_finish<T: VideoEncoderImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
         imp.finish(wrap.unsafe_cast_ref()).into()
     })
     .into_glib()
@@ -588,7 +588,7 @@ unsafe extern "C" fn video_encoder_set_format<T: VideoEncoderImpl>(
     ffi::gst_video_codec_state_ref(state);
     let wrap_state = VideoCodecState::<Readable>::new(state);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.set_format(wrap.unsafe_cast_ref(), &wrap_state) {
             Ok(()) => true,
             Err(err) => {
@@ -609,7 +609,7 @@ unsafe extern "C" fn video_encoder_handle_frame<T: VideoEncoderImpl>(
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
     let wrap_frame = VideoCodecFrame::new(frame, &*wrap);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
         imp.handle_frame(wrap.unsafe_cast_ref(), wrap_frame).into()
     })
     .into_glib()
@@ -622,7 +622,7 @@ unsafe extern "C" fn video_encoder_flush<T: VideoEncoderImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         VideoEncoderImpl::flush(imp, wrap.unsafe_cast_ref())
     })
     .into_glib()
@@ -635,7 +635,7 @@ unsafe extern "C" fn video_encoder_negotiate<T: VideoEncoderImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.negotiate(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -655,7 +655,7 @@ unsafe extern "C" fn video_encoder_getcaps<T: VideoEncoderImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), gst::Caps::new_empty(), {
+    gst::panic_to_error!(&wrap, imp.panicked(), gst::Caps::new_empty(), {
         VideoEncoderImpl::caps(
             imp,
             wrap.unsafe_cast_ref(),
@@ -675,7 +675,7 @@ unsafe extern "C" fn video_encoder_sink_event<T: VideoEncoderImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         imp.sink_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .into_glib()
@@ -689,7 +689,7 @@ unsafe extern "C" fn video_encoder_sink_query<T: VideoEncoderImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         imp.sink_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
     .into_glib()
@@ -703,7 +703,7 @@ unsafe extern "C" fn video_encoder_src_event<T: VideoEncoderImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         imp.src_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .into_glib()
@@ -717,7 +717,7 @@ unsafe extern "C" fn video_encoder_src_query<T: VideoEncoderImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         imp.src_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
     .into_glib()
@@ -732,7 +732,7 @@ unsafe extern "C" fn video_encoder_propose_allocation<T: VideoEncoderImpl>(
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.propose_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {
@@ -753,7 +753,7 @@ unsafe extern "C" fn video_encoder_decide_allocation<T: VideoEncoderImpl>(
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.decide_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {

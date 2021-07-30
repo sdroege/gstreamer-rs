@@ -134,11 +134,11 @@ impl AppSinkCallbacksBuilder {
 fn post_panic_error_message(element: &AppSink, err: &dyn std::any::Any) {
     skip_assert_initialized!();
     if let Some(cause) = err.downcast_ref::<&str>() {
-        gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
+        gst::element_error!(element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
     } else if let Some(cause) = err.downcast_ref::<String>() {
-        gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
+        gst::element_error!(element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
     } else {
-        gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
     }
 }
 
@@ -148,7 +148,7 @@ unsafe extern "C" fn trampoline_eos(appsink: *mut ffi::GstAppSink, callbacks: gp
 
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
         return;
     }
 
@@ -175,7 +175,7 @@ unsafe extern "C" fn trampoline_new_preroll(
 
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
         return gst::FlowReturn::Error.into_glib();
     }
 
@@ -208,7 +208,7 @@ unsafe extern "C" fn trampoline_new_sample(
 
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
         return gst::FlowReturn::Error.into_glib();
     }
 
@@ -533,7 +533,7 @@ impl AppSink {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -561,7 +561,7 @@ impl AppSink {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -589,7 +589,7 @@ impl AppSink {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -617,7 +617,7 @@ impl AppSink {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -645,7 +645,7 @@ impl AppSink {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -673,7 +673,7 @@ impl AppSink {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -703,7 +703,7 @@ impl AppSink {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -729,7 +729,7 @@ impl AppSink {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -757,7 +757,7 @@ impl AppSink {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -785,7 +785,7 @@ impl AppSink {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -811,7 +811,7 @@ impl AppSink {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -839,7 +839,7 @@ impl AppSink {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -867,7 +867,7 @@ impl AppSink {
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box<F> = Box::new(f);

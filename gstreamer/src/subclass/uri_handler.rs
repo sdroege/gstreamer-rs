@@ -128,7 +128,7 @@ unsafe extern "C" fn uri_handler_get_uri<T: URIHandlerImpl>(
     let instance = &*(uri_handler as *mut T::Instance);
     let imp = instance.impl_();
 
-    imp.uri(&from_glib_borrow::<_, URIHandler>(uri_handler).unsafe_cast_ref())
+    imp.uri(from_glib_borrow::<_, URIHandler>(uri_handler).unsafe_cast_ref())
         .to_glib_full()
 }
 
@@ -141,7 +141,7 @@ unsafe extern "C" fn uri_handler_set_uri<T: URIHandlerImpl>(
     let imp = instance.impl_();
 
     match imp.set_uri(
-        &from_glib_borrow::<_, URIHandler>(uri_handler).unsafe_cast_ref(),
+        from_glib_borrow::<_, URIHandler>(uri_handler).unsafe_cast_ref(),
         glib::GString::from_glib_borrow(uri).as_str(),
     ) {
         Ok(()) => true.into_glib(),

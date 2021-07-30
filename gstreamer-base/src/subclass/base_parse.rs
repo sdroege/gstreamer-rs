@@ -220,7 +220,7 @@ unsafe extern "C" fn base_parse_start<T: BaseParseImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -239,7 +239,7 @@ unsafe extern "C" fn base_parse_stop<T: BaseParseImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -260,7 +260,7 @@ unsafe extern "C" fn base_parse_set_sink_caps<T: BaseParseImpl>(
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let caps: Borrowed<gst::Caps> = from_glib_borrow(caps);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.set_sink_caps(wrap.unsafe_cast_ref(), &caps) {
             Ok(()) => true,
             Err(err) => {
@@ -282,8 +282,8 @@ unsafe extern "C" fn base_parse_handle_frame<T: BaseParseImpl>(
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let wrap_frame = BaseParseFrame::new(frame, &wrap);
 
-    let res = gst::panic_to_error!(&wrap, &imp.panicked(), Err(gst::FlowError::Error), {
-        imp.handle_frame(&wrap.unsafe_cast_ref(), wrap_frame)
+    let res = gst::panic_to_error!(&wrap, imp.panicked(), Err(gst::FlowError::Error), {
+        imp.handle_frame(wrap.unsafe_cast_ref(), wrap_frame)
     });
 
     match res {
@@ -308,7 +308,7 @@ unsafe extern "C" fn base_parse_convert<T: BaseParseImpl>(
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let source = gst::GenericFormattedValue::new(from_glib(source_format), source_value);
 
-    let res = gst::panic_to_error!(&wrap, &imp.panicked(), None, {
+    let res = gst::panic_to_error!(&wrap, imp.panicked(), None, {
         imp.convert(wrap.unsafe_cast_ref(), source, from_glib(dest_format))
     });
 

@@ -61,5 +61,5 @@ unsafe extern "C" fn notify_timeout_trampoline<P, F: Fn(&P) + Send + Sync + 'sta
     P: IsA<Discoverer>,
 {
     let f: &F = &*(f as *const F);
-    f(&Discoverer::from_glib_borrow(this).unsafe_cast_ref())
+    f(Discoverer::from_glib_borrow(this).unsafe_cast_ref())
 }

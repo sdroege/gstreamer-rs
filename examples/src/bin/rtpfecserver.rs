@@ -63,7 +63,7 @@ fn request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pa
 }
 
 fn connect_decodebin_pad(src_pad: &gst::Pad, sink: &gst::Element) -> Result<(), Error> {
-    let sinkpad = static_pad(&sink, "sink")?;
+    let sinkpad = static_pad(sink, "sink")?;
     src_pad.link(&sinkpad)?;
 
     Ok(())
@@ -136,7 +136,7 @@ fn example_main() -> Result<(), Error> {
     srcpad.link(&sinkpad)?;
 
     src.connect_pad_added(
-        move |decodebin, src_pad| match connect_decodebin_pad(&src_pad, &conv) {
+        move |decodebin, src_pad| match connect_decodebin_pad(src_pad, &conv) {
             Ok(_) => (),
             Err(err) => {
                 element_error!(

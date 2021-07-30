@@ -332,7 +332,7 @@ impl<T: ElementImpl> ElementImplExt for T {
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.impl_();
 
-            panic_to_error!(element, &imp.panicked(), fallback(), { f(&imp) })
+            panic_to_error!(element, imp.panicked(), fallback(), { f(imp) })
         }
     }
 
@@ -348,8 +348,8 @@ impl<T: ElementImpl> ElementImplExt for T {
             let instance = &*(ptr as *mut Self::Instance);
             let imp = instance.impl_();
 
-            panic_to_error!(wrap, &imp.panicked(), fallback(), {
-                f(&imp, wrap.unsafe_cast_ref())
+            panic_to_error!(wrap, imp.panicked(), fallback(), {
+                f(imp, wrap.unsafe_cast_ref())
             })
         }
     }
@@ -420,7 +420,7 @@ unsafe extern "C" fn element_change_state<T: ElementImpl>(
         _ => StateChangeReturn::Failure,
     };
 
-    panic_to_error!(&wrap, &imp.panicked(), fallback, {
+    panic_to_error!(&wrap, imp.panicked(), fallback, {
         imp.change_state(wrap.unsafe_cast_ref(), transition).into()
     })
     .into_glib()
@@ -440,7 +440,7 @@ unsafe extern "C" fn element_request_new_pad<T: ElementImpl>(
 
     // XXX: This is effectively unsafe but the best we can do
     // See https://bugzilla.gnome.org/show_bug.cgi?id=791193
-    let pad = panic_to_error!(&wrap, &imp.panicked(), None, {
+    let pad = panic_to_error!(&wrap, imp.panicked(), None, {
         imp.request_new_pad(
             wrap.unsafe_cast_ref(),
             &from_glib_borrow(templ),
@@ -478,7 +478,7 @@ unsafe extern "C" fn element_release_pad<T: ElementImpl>(
         return;
     }
 
-    panic_to_error!(&wrap, &imp.panicked(), (), {
+    panic_to_error!(&wrap, imp.panicked(), (), {
         imp.release_pad(wrap.unsafe_cast_ref(), &from_glib_none(pad))
     })
 }
@@ -491,7 +491,7 @@ unsafe extern "C" fn element_send_event<T: ElementImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
-    panic_to_error!(&wrap, &imp.panicked(), false, {
+    panic_to_error!(&wrap, imp.panicked(), false, {
         imp.send_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .into_glib()
@@ -506,7 +506,7 @@ unsafe extern "C" fn element_query<T: ElementImpl>(
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
     let query = QueryRef::from_mut_ptr(query);
 
-    panic_to_error!(&wrap, &imp.panicked(), false, {
+    panic_to_error!(&wrap, imp.panicked(), false, {
         imp.query(wrap.unsafe_cast_ref(), query)
     })
     .into_glib()
@@ -520,7 +520,7 @@ unsafe extern "C" fn element_set_context<T: ElementImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
-    panic_to_error!(&wrap, &imp.panicked(), (), {
+    panic_to_error!(&wrap, imp.panicked(), (), {
         imp.set_context(wrap.unsafe_cast_ref(), &from_glib_borrow(context))
     })
 }
@@ -535,7 +535,7 @@ unsafe extern "C" fn element_set_clock<T: ElementImpl>(
 
     let clock = Option::<crate::Clock>::from_glib_borrow(clock);
 
-    panic_to_error!(&wrap, &imp.panicked(), false, {
+    panic_to_error!(&wrap, imp.panicked(), false, {
         imp.set_clock(wrap.unsafe_cast_ref(), clock.as_ref().as_ref())
     })
     .into_glib()
@@ -548,7 +548,7 @@ unsafe extern "C" fn element_provide_clock<T: ElementImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
-    panic_to_error!(&wrap, &imp.panicked(), None, {
+    panic_to_error!(&wrap, imp.panicked(), None, {
         imp.provide_clock(wrap.unsafe_cast_ref())
     })
     .to_glib_full()
@@ -790,9 +790,9 @@ mod tests {
         src.set_property("num-buffers", &100i32).unwrap();
 
         pipeline
-            .add_many(&[&src, &element.upcast_ref(), &sink])
+            .add_many(&[&src, element.upcast_ref(), &sink])
             .unwrap();
-        Element::link_many(&[&src, &element.upcast_ref(), &sink]).unwrap();
+        Element::link_many(&[&src, element.upcast_ref(), &sink]).unwrap();
 
         pipeline.set_state(crate::State::Playing).unwrap();
         let bus = pipeline.bus().unwrap();

@@ -120,7 +120,7 @@ unsafe extern "C" fn bin_add_element<T: BinImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
-    panic_to_error!(&wrap, &imp.panicked(), false, {
+    panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.add_element(wrap.unsafe_cast_ref(), &from_glib_none(element)) {
             Ok(()) => true,
             Err(err) => {
@@ -149,7 +149,7 @@ unsafe extern "C" fn bin_remove_element<T: BinImpl>(
         return glib::ffi::GFALSE;
     }
 
-    panic_to_error!(&wrap, &imp.panicked(), false, {
+    panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.remove_element(wrap.unsafe_cast_ref(), &from_glib_none(element)) {
             Ok(()) => true,
             Err(err) => {
@@ -169,7 +169,7 @@ unsafe extern "C" fn bin_handle_message<T: BinImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
-    panic_to_error!(&wrap, &imp.panicked(), (), {
+    panic_to_error!(&wrap, imp.panicked(), (), {
         imp.handle_message(wrap.unsafe_cast_ref(), from_glib_full(message))
     });
 }

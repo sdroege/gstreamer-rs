@@ -249,7 +249,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Aggregator::from_glib_borrow(this).unsafe_cast_ref(),
+                Aggregator::from_glib_borrow(this).unsafe_cast_ref(),
                 &gst::Segment::from_glib_borrow(segment),
                 from_glib(pts),
                 from_glib(dts),
@@ -286,5 +286,5 @@ unsafe extern "C" fn notify_min_upstream_latency_trampoline<P, F: Fn(&P) + Send 
     P: IsA<Aggregator>,
 {
     let f: &F = &*(f as *const F);
-    f(&Aggregator::from_glib_borrow(this).unsafe_cast_ref())
+    f(Aggregator::from_glib_borrow(this).unsafe_cast_ref())
 }

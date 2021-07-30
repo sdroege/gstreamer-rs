@@ -328,9 +328,9 @@ impl Ord for VideoFormatInfo {
     fn cmp(&self, other: &Self) -> Ordering {
         self.n_components()
             .cmp(&other.n_components())
-            .then_with(|| self.depth().cmp(&other.depth()))
-            .then_with(|| self.w_sub().cmp(&other.w_sub()).reverse())
-            .then_with(|| self.h_sub().cmp(&other.h_sub()).reverse())
+            .then_with(|| self.depth().cmp(other.depth()))
+            .then_with(|| self.w_sub().cmp(other.w_sub()).reverse())
+            .then_with(|| self.h_sub().cmp(other.h_sub()).reverse())
             .then_with(|| self.n_planes().cmp(&other.n_planes()))
             .then_with(|| {
                 // Format using native endianess is considered as bigger
@@ -363,8 +363,8 @@ impl Ord for VideoFormatInfo {
                     _ => Ordering::Equal,
                 }
             })
-            .then_with(|| self.pixel_stride().cmp(&other.pixel_stride()))
-            .then_with(|| self.poffset().cmp(&other.poffset()))
+            .then_with(|| self.pixel_stride().cmp(other.pixel_stride()))
+            .then_with(|| self.poffset().cmp(other.poffset()))
             .then_with(|| {
                 // Prefer non-complex formats
                 match (
@@ -401,7 +401,7 @@ impl Ord for VideoFormatInfo {
             })
             .then_with(|| {
                 // tie, sort by name
-                self.name().cmp(&other.name())
+                self.name().cmp(other.name())
             })
     }
 }

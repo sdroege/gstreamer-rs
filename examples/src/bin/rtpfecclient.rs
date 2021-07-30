@@ -216,7 +216,7 @@ fn example_main() -> Result<(), Error> {
             None => return,
         };
 
-        match connect_rtpbin_srcpad(&src_pad, &depay) {
+        match connect_rtpbin_srcpad(src_pad, &depay) {
             Ok(_) => (),
             Err(err) => {
                 element_error!(
