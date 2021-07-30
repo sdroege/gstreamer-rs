@@ -21,9 +21,9 @@ glib::wrapper! {
         unref => |ptr| {
             cfg_if::cfg_if! {
                 if #[cfg(feature = "v1_12_1")] {
-                    ffi::gst_flow_combiner_unref(ptr)
+                    ffi::gst_flow_combiner_unref(ptr);
                 } else {
-                    glib::gobject_ffi::g_boxed_free(ffi::gst_flow_combiner_get_type(), ptr as *mut _)
+                    glib::gobject_ffi::g_boxed_free(ffi::gst_flow_combiner_get_type(), ptr as *mut _);
                 }
             }
         },
