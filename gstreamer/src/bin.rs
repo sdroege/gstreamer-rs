@@ -218,7 +218,7 @@ where
     P: IsA<Bin>,
 {
     let f: &F = &*(f as *const F);
-    match f(&Bin::from_glib_borrow(this).unsafe_cast_ref()) {
+    match f(Bin::from_glib_borrow(this).unsafe_cast_ref()) {
         Ok(()) => true,
         Err(err) => {
             err.log_with_object(&*Bin::from_glib_borrow(this));

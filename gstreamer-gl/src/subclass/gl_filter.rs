@@ -262,7 +262,7 @@ unsafe extern "C" fn filter<T: GLFilterImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<GLFilter> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.filter(
             wrap.unsafe_cast_ref(),
             &from_glib_borrow(input),
@@ -287,7 +287,7 @@ unsafe extern "C" fn filter_texture<T: GLFilterImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<GLFilter> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.filter_texture(
             wrap.unsafe_cast_ref(),
             &from_glib_borrow(input),
@@ -308,7 +308,7 @@ unsafe extern "C" fn init_fbo<T: GLFilterImpl>(ptr: *mut GstGLFilter) -> glib::f
     let imp = instance.impl_();
     let wrap: Borrowed<GLFilter> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.init_fbo(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -329,7 +329,7 @@ unsafe extern "C" fn set_caps<T: GLFilterImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<GLFilter> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match GLFilterImpl::set_caps(
             imp,
             wrap.unsafe_cast_ref(),
@@ -356,7 +356,7 @@ unsafe extern "C" fn transform_internal_caps<T: GLFilterImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<GLFilter> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), None, {
+    gst::panic_to_error!(&wrap, imp.panicked(), None, {
         let filter_caps: Borrowed<Option<Caps>> = from_glib_borrow(filter_caps);
 
         imp.transform_internal_caps(

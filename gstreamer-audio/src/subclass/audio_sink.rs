@@ -207,7 +207,7 @@ unsafe extern "C" fn audiosink_close<T: AudioSinkImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.close(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -224,7 +224,7 @@ unsafe extern "C" fn audiosink_delay<T: AudioSinkImpl>(ptr: *mut ffi::GstAudioSi
     let imp = instance.impl_();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), 0, {
+    gst::panic_to_error!(&wrap, imp.panicked(), 0, {
         imp.delay(wrap.unsafe_cast_ref())
     })
 }
@@ -236,7 +236,7 @@ unsafe extern "C" fn audiosink_open<T: AudioSinkImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.open(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -258,7 +258,7 @@ unsafe extern "C" fn audiosink_prepare<T: AudioSinkImpl>(
 
     let spec = &mut *(spec as *mut AudioRingBufferSpec);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match AudioSinkImpl::prepare(imp, wrap.unsafe_cast_ref(), spec) {
             Ok(()) => true,
             Err(err) => {
@@ -277,7 +277,7 @@ unsafe extern "C" fn audiosink_unprepare<T: AudioSinkImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.unprepare(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -299,7 +299,7 @@ unsafe extern "C" fn audiosink_write<T: AudioSinkImpl>(
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
     let data_slice = std::slice::from_raw_parts(data as *const u8, length as usize);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), -1, {
+    gst::panic_to_error!(&wrap, imp.panicked(), -1, {
         imp.write(wrap.unsafe_cast_ref(), data_slice).unwrap_or(-1)
     })
 }
@@ -309,7 +309,7 @@ unsafe extern "C" fn audiosink_reset<T: AudioSinkImpl>(ptr: *mut ffi::GstAudioSi
     let imp = instance.impl_();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), (), {
+    gst::panic_to_error!(&wrap, imp.panicked(), (), {
         imp.reset(wrap.unsafe_cast_ref());
     });
 }

@@ -606,7 +606,7 @@ unsafe extern "C" fn base_src_start<T: BaseSrcImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -625,7 +625,7 @@ unsafe extern "C" fn base_src_stop<T: BaseSrcImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -644,7 +644,7 @@ unsafe extern "C" fn base_src_is_seekable<T: BaseSrcImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         imp.is_seekable(wrap.unsafe_cast_ref())
     })
     .into_glib()
@@ -658,7 +658,7 @@ unsafe extern "C" fn base_src_get_size<T: BaseSrcImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.size(wrap.unsafe_cast_ref()) {
             Some(s) => {
                 *size = s;
@@ -684,7 +684,7 @@ unsafe extern "C" fn base_src_get_times<T: BaseSrcImpl>(
     *start = gst::ffi::GST_CLOCK_TIME_NONE;
     *stop = gst::ffi::GST_CLOCK_TIME_NONE;
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), (), {
+    gst::panic_to_error!(&wrap, imp.panicked(), (), {
         let (start_, stop_) = imp.times(wrap.unsafe_cast_ref(), buffer);
         *start = start_.into_glib();
         *stop = stop_.into_glib();
@@ -702,7 +702,7 @@ unsafe extern "C" fn base_src_fill<T: BaseSrcImpl>(
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let buffer = gst::BufferRef::from_mut_ptr(buffer);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
         imp.fill(wrap.unsafe_cast_ref(), offset, length, buffer)
             .into()
     })
@@ -722,7 +722,7 @@ unsafe extern "C" fn base_src_alloc<T: BaseSrcImpl>(
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
     let buffer_ptr = buffer_ptr as *mut *mut gst::ffi::GstBuffer;
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
         match imp.alloc(wrap.unsafe_cast_ref(), offset, length) {
             Ok(buffer) => {
                 *buffer_ptr = buffer.into_ptr();
@@ -753,7 +753,7 @@ unsafe extern "C" fn base_src_create<T: BaseSrcImpl>(
         Some(gst::BufferRef::from_mut_ptr(*buffer_ptr))
     };
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
         match imp.create(
             wrap.unsafe_cast_ref(),
             offset,
@@ -828,7 +828,7 @@ unsafe extern "C" fn base_src_do_seek<T: BaseSrcImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         let mut s = from_glib_none(segment);
         let res = imp.do_seek(wrap.unsafe_cast_ref(), &mut s);
         ptr::write(segment, *(s.to_glib_none().0));
@@ -847,7 +847,7 @@ unsafe extern "C" fn base_src_query<T: BaseSrcImpl>(
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query_ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         BaseSrcImpl::query(imp, wrap.unsafe_cast_ref(), query)
     })
     .into_glib()
@@ -861,7 +861,7 @@ unsafe extern "C" fn base_src_event<T: BaseSrcImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         imp.event(wrap.unsafe_cast_ref(), &from_glib_borrow(event_ptr))
     })
     .into_glib()
@@ -876,7 +876,7 @@ unsafe extern "C" fn base_src_get_caps<T: BaseSrcImpl>(
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let filter = Option::<gst::Caps>::from_glib_borrow(filter);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), None, {
+    gst::panic_to_error!(&wrap, imp.panicked(), None, {
         imp.caps(wrap.unsafe_cast_ref(), filter.as_ref().as_ref())
     })
     .map(|caps| caps.into_ptr())
@@ -890,7 +890,7 @@ unsafe extern "C" fn base_src_negotiate<T: BaseSrcImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.negotiate(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -911,7 +911,7 @@ unsafe extern "C" fn base_src_set_caps<T: BaseSrcImpl>(
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let caps = from_glib_borrow(caps);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.set_caps(wrap.unsafe_cast_ref(), &caps) {
             Ok(()) => true,
             Err(err) => {
@@ -932,7 +932,7 @@ unsafe extern "C" fn base_src_fixate<T: BaseSrcImpl>(
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let caps = from_glib_full(caps);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), gst::Caps::new_empty(), {
+    gst::panic_to_error!(&wrap, imp.panicked(), gst::Caps::new_empty(), {
         imp.fixate(wrap.unsafe_cast_ref(), caps)
     })
     .into_ptr()
@@ -945,7 +945,7 @@ unsafe extern "C" fn base_src_unlock<T: BaseSrcImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.unlock(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -964,7 +964,7 @@ unsafe extern "C" fn base_src_unlock_stop<T: BaseSrcImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.unlock_stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {

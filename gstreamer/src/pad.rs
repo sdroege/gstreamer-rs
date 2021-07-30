@@ -1157,7 +1157,7 @@ where
     let (mut probe_info, data_type) = create_probe_info(info);
 
     let ret = func(
-        &Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
         &mut probe_info,
     );
 
@@ -1179,7 +1179,7 @@ where
     let func: &F = &*((*pad).activatedata as *const F);
 
     match func(
-        &Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
         Option::<crate::Object>::from_glib_borrow(parent)
             .as_ref()
             .as_ref(),
@@ -1211,7 +1211,7 @@ where
     let func: &F = &*((*pad).activatemodedata as *const F);
 
     match func(
-        &&Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
         Option::<crate::Object>::from_glib_borrow(parent)
             .as_ref()
             .as_ref(),
@@ -1244,7 +1244,7 @@ where
     let func: &F = &*((*pad).chaindata as *const F);
 
     let res: FlowReturn = func(
-        &Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
         Option::<crate::Object>::from_glib_borrow(parent)
             .as_ref()
             .as_ref(),
@@ -1271,7 +1271,7 @@ where
     let func: &F = &*((*pad).chainlistdata as *const F);
 
     let res: FlowReturn = func(
-        &Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
         Option::<crate::Object>::from_glib_borrow(parent)
             .as_ref()
             .as_ref(),
@@ -1295,7 +1295,7 @@ where
     let func: &F = &*((*pad).eventdata as *const F);
 
     func(
-        &Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
         Option::<crate::Object>::from_glib_borrow(parent)
             .as_ref()
             .as_ref(),
@@ -1321,7 +1321,7 @@ where
     let func: &F = &*((*pad).eventdata as *const F);
 
     let res: FlowReturn = func(
-        &Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
         Option::<crate::Object>::from_glib_borrow(parent)
             .as_ref()
             .as_ref(),
@@ -1366,7 +1366,7 @@ where
     };
 
     match func(
-        &pad,
+        pad,
         Option::<crate::Object>::from_glib_borrow(parent)
             .as_ref()
             .as_ref(),
@@ -1440,7 +1440,7 @@ where
 
     // Steal the iterator and return it
     let ret = func(
-        &Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
         Option::<crate::Object>::from_glib_borrow(parent)
             .as_ref()
             .as_ref(),
@@ -1470,7 +1470,7 @@ where
     let func: &F = &*((*pad).linkdata as *const F);
 
     let res: crate::PadLinkReturn = func(
-        &Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
         Option::<crate::Object>::from_glib_borrow(parent)
             .as_ref()
             .as_ref(),
@@ -1494,7 +1494,7 @@ where
     let func: &F = &*((*pad).querydata as *const F);
 
     func(
-        &Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
         Option::<crate::Object>::from_glib_borrow(parent)
             .as_ref()
             .as_ref(),
@@ -1515,7 +1515,7 @@ unsafe extern "C" fn trampoline_unlink_function<
     let func: &F = &*((*pad).unlinkdata as *const F);
 
     func(
-        &Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
         Option::<crate::Object>::from_glib_borrow(parent)
             .as_ref()
             .as_ref(),

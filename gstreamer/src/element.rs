@@ -743,7 +743,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let user_data: &mut Option<F> = &mut *(user_data as *mut _);
             let callback = user_data.take().unwrap();
 
-            callback(&Element::from_glib_borrow(element).unsafe_cast_ref());
+            callback(Element::from_glib_borrow(element).unsafe_cast_ref());
         }
 
         unsafe extern "C" fn free_user_data<O: IsA<Element>, F: FnOnce(&O) + Send + 'static>(
