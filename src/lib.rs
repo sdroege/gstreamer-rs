@@ -183,7 +183,7 @@ fn log_callback(
 /// This function can be executed at any time and will process events that occur after its
 /// execution.
 ///
-/// Calling this function multiple times may produce duplicate events to be produced.
+/// Calling this function multiple times may cause duplicate events to be produced.
 pub fn integrate() {
     sys::gst::debug_add_log_function(log_callback);
 }
