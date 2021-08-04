@@ -300,6 +300,8 @@ fn test_formatting() {
     );
 }
 
+// NB: we aren't using the test harness here to allow us for the necessary gstreamer setup more
+// straightforwardly.
 pub(crate) fn run() {
     g::debug_remove_default_log_function();
     g::init().expect("gst init");
