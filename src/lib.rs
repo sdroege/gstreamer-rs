@@ -1,22 +1,4 @@
-//! This crate provides a bridge between gstreamer and the tracing ecosystem.
-//!
-//! The goal is to allow Rust applications utilizing GStreamer to integrate into application that
-//! otherwise uses the [`tracing`] crate better.
-//!
-//! # Example
-//!
-//! To integrate [`gstreamer`] with [`tracing`], call the [`integrate`] function before you call
-//! [`gstreamer::init`]:
-//!
-//! ```
-//! // Set up the tracing subscriber.
-//! //
-//! // e.g. tracing_subscriber::fmt::init();
-//!
-//! tracing_gstreamer::integrate();
-//! gstreamer::debug_remove_default_log_function();
-//! gstreamer::init();
-//! ```
+#![doc = include_str!("../README.mkd")]
 
 // This crate interacts directly with the C API of glib, gobject and gstreamer libraries. As a
 // result implementation of this crate uses unsafe code quite liberally.

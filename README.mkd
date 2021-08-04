@@ -1,0 +1,29 @@
+This crate provides a bridge between gstreamer and the tracing ecosystem.
+
+The goal is to allow Rust applications utilizing GStreamer to integrate into application that
+otherwise uses the [`tracing`] crate better.
+
+# Example
+
+To integrate [`gstreamer`] with [`tracing`], call the [`integrate`] function before you call
+[`gstreamer::init`]:
+
+```
+// Set up the tracing subscriber.
+//
+// e.g. tracing_subscriber::fmt::init();
+
+tracing_gstreamer::integrate();
+gstreamer::debug_remove_default_log_function();
+gstreamer::init();
+```
+
+You can `integrate` after `gst::init` too, but some events might be missed that way.  Finally, keep
+in mind that both `GST_DEBUG` and tracing filters are in effect. The `gstreamer` side of filters
+can be relaxed from code via:
+
+```
+gstreamer::debug_set_default_threshold(gstreamer::DebugLevel::Count);
+```
+
+or similar.
