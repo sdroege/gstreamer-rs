@@ -114,8 +114,8 @@ impl tracing::Subscriber for MockSubscriber {
                     panic!(
                         "[{}] event with level {} received, but expected {}",
                         self.name,
-                        meta.target(),
-                        expected.target,
+                        meta.level(),
+                        expected.level,
                     );
                 }
                 e.record(&mut expected);
@@ -251,18 +251,66 @@ fn test_with_upcast_object() {
     );
 }
 
+fn test_disintegration() {
+    MockSubscriber::with_expected(
+        |m| m.target() == "disintegration",
+        "test_disintegration",
+        move || {
+            let cat =
+                g::DebugCategory::new("disintegration", g::DebugColorFlags::empty(), None);
+            g::gst_error!(cat, "apple");
+            disintegrate();
+            g::gst_error!(cat, "banana");
+            integrate();
+            g::gst_error!(cat, "chaenomeles");
+        },
+        vec![
+            Expect::GstEvent(GstEvent {
+                message: "apple",
+                gobject: None,
+                level: Level::ERROR,
+                target: "disintegration",
+            }),
+            Expect::GstEvent(GstEvent {
+                message: "chaenomeles",
+                gobject: None,
+                level: Level::ERROR,
+                target: "disintegration",
+            }),
+        ],
+    );
+}
+
+fn test_formatting() {
+    MockSubscriber::with_expected(
+        |_| true,
+        "test_formatting",
+        || {
+            let cat = g::DebugCategory::new("ANSWERS", g::DebugColorFlags::empty(), None);
+            g::gst_warning!(cat, "the answer is believed to be {}.", 42);
+        },
+        vec![
+            Expect::GstEvent(GstEvent {
+                message: "the answer is believed to be 42.",
+                gobject: None,
+                level: Level::WARN,
+                target: "ANSWERS",
+            }),
+        ],
+    );
+}
+
 pub(crate) fn run() {
     g::debug_remove_default_log_function();
     g::init().expect("gst init");
     g::debug_set_default_threshold(g::DebugLevel::Count);
     integrate();
-
     test_simple_error();
     test_simple_warning();
     test_simple_events();
     test_with_object();
     test_with_upcast_object();
-
+    test_disintegration();
+    test_formatting();
     disintegrate();
-    // g::gst_error!(cat, r"/!\ this should NOT be printed /!\");
 }
