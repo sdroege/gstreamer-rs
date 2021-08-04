@@ -1,5 +1,4 @@
 #![doc = include_str!("../README.mkd")]
-
 // This crate interacts directly with the C API of glib, gobject and gstreamer libraries. As a
 // result implementation of this crate uses unsafe code quite liberally.
 //
@@ -14,7 +13,8 @@
 #![deny(unsafe_op_in_unsafe_fn)]
 
 use once_cell::sync::OnceCell;
-use std::ffi::CStr;
+use sys::{gobject::Object, gst::{DebugCategory, DebugLevel, DebugMessage}};
+use std::{ffi::CStr, sync::PoisonError};
 use tracing_core::{
     field::{FieldSet, Value},
     identify_callsite,
@@ -30,7 +30,7 @@ mod sys;
 /// The value of this constant is not guaranteed to be stable.
 ///
 /// See [`tracing::Metadata`] for further information.
-pub const NAME: &'static str = "gstreamer";
+pub const NAME: &str = "gstreamer";
 
 /// A map of metadata allocations we've made throughout the lifetime of the process.
 ///
@@ -76,12 +76,12 @@ impl MetadataAllocations {
         if let Some(metadata) = self
             .data
             .read()
-            .unwrap_or_else(|p| p.into_inner())
+            .unwrap_or_else(PoisonError::into_inner)
             .get(&key)
         {
             return metadata;
         }
-        let mut lock = self.data.write().unwrap_or_else(|p| p.into_inner());
+        let mut lock = self.data.write().unwrap_or_else(PoisonError::into_inner);
         let key = (
             level,
             line,
@@ -125,24 +125,20 @@ impl<V: Value> UnsizeValue for Option<V> {
 }
 
 fn log_callback(
-    category: sys::gst::DebugCategory,
-    level: sys::gst::DebugLevel,
+    category: DebugCategory,
+    level: DebugLevel,
     file: &CStr,
     module: &CStr,
     line: u32,
-    object: Option<sys::gobject::Object>,
-    message: sys::gst::DebugMessage,
+    object: Option<Object>,
+    message: DebugMessage,
 ) {
     let level = match level {
         sys::GST_LEVEL_ERROR => Level::ERROR,
-        sys::GST_LEVEL_WARNING => Level::WARN,
-        sys::GST_LEVEL_FIXME => Level::WARN,
+        sys::GST_LEVEL_WARNING | sys::GST_LEVEL_FIXME => Level::WARN,
         sys::GST_LEVEL_INFO => Level::INFO,
-        sys::GST_LEVEL_DEBUG => Level::DEBUG,
-        sys::GST_LEVEL_LOG => Level::DEBUG,
-        sys::GST_LEVEL_TRACE => Level::TRACE,
-        sys::GST_LEVEL_MEMDUMP => Level::TRACE,
-        sys::GST_LEVEL_COUNT => Level::TRACE,
+        sys::GST_LEVEL_DEBUG | sys::GST_LEVEL_LOG => Level::DEBUG,
+        sys::GST_LEVEL_TRACE | sys::GST_LEVEL_MEMDUMP | sys::GST_LEVEL_COUNT => Level::TRACE,
         _ => return,
     };
     let file = file.to_string_lossy();
@@ -157,17 +153,26 @@ fn log_callback(
     );
     let fields = meta.fields();
     let mut field_iter = fields.iter();
-    let message_value = message.message().map(|m| m.to_string_lossy());
+    let message_value = message.message().map(CStr::to_string_lossy);
     let message_value = message_value.as_deref();
-    let gobject_addr_value = object.as_ref().map(|o| o.address());
-    let gobject_type_value = object.as_ref().map(|o| o.type_name());
+    let gobject_addr_value = object.as_ref().map(Object::address);
+    let gobject_type_value = object.as_ref().map(Object::type_name);
     let values = [
-        (&field_iter.next().expect("message field"), message_value.unsize_value()),
-        (&field_iter.next().expect("object address field"), gobject_addr_value.unsize_value()),
-        (&field_iter.next().expect("object type field"), gobject_type_value.unsize_value()),
+        (
+            &field_iter.next().expect("message field"),
+            message_value.unsize_value(),
+        ),
+        (
+            &field_iter.next().expect("object address field"),
+            gobject_addr_value.unsize_value(),
+        ),
+        (
+            &field_iter.next().expect("object type field"),
+            gobject_type_value.unsize_value(),
+        ),
     ];
     let valueset = fields.value_set(&values);
-    Event::dispatch(meta, &valueset)
+    Event::dispatch(meta, &valueset);
 }
 
 /// Enable the integration between GStreamer and the `tracing` library.

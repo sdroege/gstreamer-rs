@@ -161,7 +161,7 @@ pub(crate) mod gst {
                 // SAFETY: We pass in a `LogFn` as the callback in `debug_add_log_function` which
                 // is the only way this code can be reached. This below extracts the originally
                 // passed in value.
-                *((&actual_cb) as *const *mut c_void as *const LogFn)
+                *(&actual_cb as *const *mut c_void).cast::<LogFn>()
             };
             let file = unsafe {
                 // SAFETY: Users of the GStreamer `gst_debug_log` API are required to pass in a
@@ -183,7 +183,7 @@ pub(crate) mod gst {
                 line,
                 gobject,
                 DebugMessage(message),
-            )
+            );
         })
         .unwrap_or_else(|_e| std::process::abort());
     }
