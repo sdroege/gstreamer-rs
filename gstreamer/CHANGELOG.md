@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.17.2] - 2021-08-05
+
+### Fixed
+- Various new clippy warnings.
+- Compilation of `gstreamer-audio` on big-endian platforms.
+
+### Added
+- Support for 1.20 `Gap` event `GapFlags`.
+- Support for 1.20 `Structure::serialize()` / `Caps::serialize()`.
+
 ## [0.17.1] - 2021-07-13
 
 ### Fixed
