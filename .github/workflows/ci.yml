@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        rust_toolchain: [1.54.0, ""]
+        test_flags: ["", "--no-default-features", "--all-features"]
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust_toolchain }}
+          profile: minimal
+          default: true
+      - uses: actions-rs/cargo@v1
+        with:
+          toolchain: ${{ matrix.rust_toolchain }}
+          command: test
+          args: ${{ matrix.test_flags }}
+        env:
+          RUSTFLAGS: -Cdebuginfo=0
+
+  format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          components: rustfmt
+          default: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: -- --check
+
+  clippy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          components: clippy
+          default: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -Dclippy::all
+
+  documentation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          default: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: doc
+        env:
+          RUSTDOCFLAGS: '-Drustdoc::broken_intra_doc_links --cfg feature="tracing-gstreamer-docs"'
