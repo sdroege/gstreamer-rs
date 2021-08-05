@@ -13,8 +13,11 @@
 #![deny(unsafe_op_in_unsafe_fn)]
 
 use once_cell::sync::OnceCell;
-use sys::{gobject::Object, gst::{DebugCategory, DebugLevel, DebugMessage}};
 use std::{ffi::CStr, sync::PoisonError};
+use sys::{
+    gobject::Object,
+    gst::{DebugCategory, DebugLevel, DebugMessage},
+};
 use tracing_core::{
     field::{FieldSet, Value},
     identify_callsite,

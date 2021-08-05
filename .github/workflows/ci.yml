@@ -16,6 +16,7 @@ jobs:
         test_flags: ["", "--no-default-features", "--all-features"]
     timeout-minutes: 5
     steps:
+      - run: 'sudo apt-get install libgstreamer1.0-dev'
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
@@ -49,6 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - run: 'sudo apt-get install libgstreamer1.0-dev'
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
@@ -74,3 +76,4 @@ jobs:
           command: doc
         env:
           RUSTDOCFLAGS: '-Drustdoc::broken_intra_doc_links --cfg feature="tracing-gstreamer-docs"'
+          RUSTFLAGS: '--cfg feature="tracing-gstreamer-docs"'

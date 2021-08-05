@@ -256,8 +256,7 @@ fn test_disintegration() {
         |m| m.target() == "disintegration",
         "test_disintegration",
         move || {
-            let cat =
-                g::DebugCategory::new("disintegration", g::DebugColorFlags::empty(), None);
+            let cat = g::DebugCategory::new("disintegration", g::DebugColorFlags::empty(), None);
             g::gst_error!(cat, "apple");
             disintegrate();
             g::gst_error!(cat, "banana");
@@ -289,14 +288,12 @@ fn test_formatting() {
             let cat = g::DebugCategory::new("ANSWERS", g::DebugColorFlags::empty(), None);
             g::gst_warning!(cat, "the answer is believed to be {}.", 42);
         },
-        vec![
-            Expect::GstEvent(GstEvent {
-                message: "the answer is believed to be 42.",
-                gobject: None,
-                level: Level::WARN,
-                target: "ANSWERS",
-            }),
-        ],
+        vec![Expect::GstEvent(GstEvent {
+            message: "the answer is believed to be 42.",
+            gobject: None,
+            level: Level::WARN,
+            target: "ANSWERS",
+        })],
     );
 }
 
