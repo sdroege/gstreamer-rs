@@ -1,8 +1,6 @@
 use libc::{c_char, c_int, c_uint, c_void};
 
-pub(crate) type GstDebugMessage = *mut c_void;
-pub(crate) type GstDebugLevel = c_int;
-pub(crate) type GstLogFunction = Option<
+type GstLogFunction = Option<
     unsafe extern "C" fn(
         *mut GstDebugCategory,
         GstDebugLevel,
@@ -15,41 +13,48 @@ pub(crate) type GstLogFunction = Option<
     ),
 >;
 
-pub(crate) const GST_LEVEL_ERROR: GstDebugLevel = 1;
-pub(crate) const GST_LEVEL_WARNING: GstDebugLevel = 2;
-pub(crate) const GST_LEVEL_FIXME: GstDebugLevel = 3;
-pub(crate) const GST_LEVEL_INFO: GstDebugLevel = 4;
-pub(crate) const GST_LEVEL_DEBUG: GstDebugLevel = 5;
-pub(crate) const GST_LEVEL_LOG: GstDebugLevel = 6;
-pub(crate) const GST_LEVEL_TRACE: GstDebugLevel = 7;
-pub(crate) const GST_LEVEL_MEMDUMP: GstDebugLevel = 9;
-pub(crate) const GST_LEVEL_COUNT: GstDebugLevel = 10;
+#[repr(transparent)]
+struct GstDebugMessage(c_void);
+
+#[repr(transparent)]
+struct GstDebugCategory(c_void);
+
+#[repr(transparent)]
+#[derive(PartialEq, Eq)]
+pub(crate) struct GstDebugLevel(c_int);
 
 #[repr(C)]
-pub(crate) struct GstDebugCategory(c_void);
-
-#[repr(C)]
-pub struct GTypeInstance {
-    pub g_class: *mut c_void,
+struct GTypeInstance {
+    g_class: *mut c_void,
 }
 
 #[repr(C)]
-pub struct GObject {
-    pub g_type_instance: GTypeInstance,
-    pub ref_count: c_uint,
-    pub qdata: *mut c_void,
+struct GObject {
+    g_type_instance: GTypeInstance,
+    ref_count: c_uint,
+    qdata: *mut c_void,
 }
+
+pub(crate) const GST_LEVEL_ERROR: GstDebugLevel = GstDebugLevel(1);
+pub(crate) const GST_LEVEL_WARNING: GstDebugLevel = GstDebugLevel(2);
+pub(crate) const GST_LEVEL_FIXME: GstDebugLevel = GstDebugLevel(3);
+pub(crate) const GST_LEVEL_INFO: GstDebugLevel = GstDebugLevel(4);
+pub(crate) const GST_LEVEL_DEBUG: GstDebugLevel = GstDebugLevel(5);
+pub(crate) const GST_LEVEL_LOG: GstDebugLevel = GstDebugLevel(6);
+pub(crate) const GST_LEVEL_TRACE: GstDebugLevel = GstDebugLevel(7);
+pub(crate) const GST_LEVEL_MEMDUMP: GstDebugLevel = GstDebugLevel(9);
+pub(crate) const GST_LEVEL_COUNT: GstDebugLevel = GstDebugLevel(10);
 
 #[link(name = "gstreamer-1.0")]
 extern "C" {
     fn gst_debug_category_get_name(category: *mut GstDebugCategory) -> *const c_char;
     fn gst_debug_message_get(message: *mut GstDebugMessage) -> *const c_char;
     fn gst_debug_add_log_function(
-        func: GstLogFunction,
+        callback: GstLogFunction,
         user_data: *mut c_void,
-        notify: Option<unsafe extern "C" fn(*mut c_void)>,
+        destroy_user_data: Option<unsafe extern "C" fn(*mut c_void)>,
     );
-    fn gst_debug_remove_log_function_by_data(data: *mut c_void) -> c_uint;
+    fn gst_debug_remove_log_function_by_data(user_data: *mut c_void) -> c_uint;
 }
 
 #[link(name = "gobject-2.0")]
@@ -96,6 +101,7 @@ pub(crate) mod gst {
     use std::{convert::TryFrom, ffi::CStr};
 
     pub(crate) type DebugLevel = super::GstDebugLevel;
+
     type LogFn = fn(
         DebugCategory,
         DebugLevel,

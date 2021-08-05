@@ -1,4 +1,5 @@
 #![doc = include_str!("../README.mkd")]
+#![deny(unreachable_pub)]
 // This crate interacts directly with the C API of glib, gobject and gstreamer libraries. As a
 // result implementation of this crate uses unsafe code quite liberally.
 //
