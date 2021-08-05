@@ -104,7 +104,7 @@ impl<'a> Serialize for TagsSer<'a> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let mut tup = serializer.serialize_tuple(2)?;
         tup.serialize_element(self.0)?;
-        tup.serialize_element(&TagValuesSer::from(&self))?;
+        tup.serialize_element(&TagValuesSer::from(self))?;
         tup.end()
     }
 }

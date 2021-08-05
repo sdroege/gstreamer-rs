@@ -79,7 +79,7 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
                 })?;
 
                 let caps = sample.caps().expect("Sample without caps");
-                let info = gst_video::VideoInfo::from_caps(&caps).expect("Failed to parse caps");
+                let info = gst_video::VideoInfo::from_caps(caps).expect("Failed to parse caps");
 
                 // Make sure that we only get a single buffer
                 if got_snapshot {

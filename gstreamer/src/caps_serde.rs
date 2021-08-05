@@ -27,9 +27,9 @@ const CAPS_VARIANT_SOME_ID: u32 = 2;
 const CAPS_VARIANT_SOME_STR: &str = "Some";
 
 const CAPS_VARIANT_NAMES: &[&str] = &[
-    &CAPS_VARIANT_ANY_STR,
-    &CAPS_VARIANT_EMPTY_STR,
-    &CAPS_VARIANT_SOME_STR,
+    CAPS_VARIANT_ANY_STR,
+    CAPS_VARIANT_EMPTY_STR,
+    CAPS_VARIANT_SOME_STR,
 ];
 
 struct CapsItemSe<'a>(&'a StructureRef, Option<&'a CapsFeaturesRef>);
@@ -86,7 +86,7 @@ impl Serialize for CapsRef {
                 stringify!(Caps),
                 CAPS_VARIANT_SOME_ID,
                 CAPS_VARIANT_SOME_STR,
-                &CapsForIterSe(&self),
+                &CapsForIterSe(self),
             )
         }
     }

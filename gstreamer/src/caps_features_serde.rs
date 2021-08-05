@@ -20,8 +20,8 @@ const CAPS_FEATURES_VARIANT_SOME_ID: u32 = 1;
 const CAPS_FEATURES_VARIANT_SOME_STR: &str = "Some";
 
 const CAPS_FEATURES_VARIANT_NAMES: &[&str] = &[
-    &CAPS_FEATURES_VARIANT_ANY_STR,
-    &CAPS_FEATURES_VARIANT_SOME_STR,
+    CAPS_FEATURES_VARIANT_ANY_STR,
+    CAPS_FEATURES_VARIANT_SOME_STR,
 ];
 
 struct CapsFeaturesForIterSe<'a>(&'a CapsFeaturesRef);
@@ -55,7 +55,7 @@ impl Serialize for CapsFeaturesRef {
                 stringify!(CapsFeatures),
                 CAPS_FEATURES_VARIANT_SOME_ID,
                 CAPS_FEATURES_VARIANT_SOME_STR,
-                &CapsFeaturesForIterSe(&self),
+                &CapsFeaturesForIterSe(self),
             )
         }
     }
