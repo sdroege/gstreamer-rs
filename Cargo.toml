@@ -20,3 +20,6 @@ pkg-config = "0.3"
 gstreamer = "0.17"
 glib = "0.14"
 tracing = "0.1"
+
+[package.metadata.docs.rs]
+features = ["tracing-gstreamer-docs"]

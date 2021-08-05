@@ -29,7 +29,7 @@ mod sys;
 ///
 /// The value of this constant is not guaranteed to be stable.
 ///
-/// See [`tracing::Metadata`] for further information.
+/// See [`tracing::Metadata`][tracing_core::Metadata] for further information.
 pub const NAME: &str = "gstreamer";
 
 /// A map of metadata allocations we've made throughout the lifetime of the process.
@@ -177,8 +177,8 @@ fn log_callback(
 
 /// Enable the integration between GStreamer and the `tracing` library.
 ///
-/// Once enabled the default [`tracing::Subscriber`] will receive an event for each of the
-/// GStreamer debug log messages.
+/// Once enabled the default [`tracing::Subscriber`][tracing_core::subscriber::Subscriber] will
+/// receive an event for each of the GStreamer debug log messages.
 ///
 /// This function can be executed at any time and will process events that occur after its
 /// execution.
