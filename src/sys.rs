@@ -26,15 +26,9 @@ pub(crate) const GST_LEVEL_MEMDUMP: GstDebugLevel = 9;
 pub(crate) const GST_LEVEL_COUNT: GstDebugLevel = 10;
 
 #[repr(C)]
-pub(crate) struct GstDebugCategory {
-    pub threshold: c_int,
-    pub color: c_uint,
-    pub name: *const c_char,
-    pub description: *const c_char,
-}
+pub(crate) struct GstDebugCategory(c_void);
 
 #[repr(C)]
-#[derive(Copy, Clone)]
 pub struct GTypeInstance {
     pub g_class: *mut c_void,
 }
@@ -46,24 +40,21 @@ pub struct GObject {
     pub qdata: *mut c_void,
 }
 
-// gstreamer
 #[link(name = "gstreamer-1.0")]
 extern "C" {
-    pub(crate) fn gst_debug_category_get_name(category: *mut GstDebugCategory) -> *const c_char;
-    pub(crate) fn gst_debug_message_get(message: *mut GstDebugMessage) -> *const c_char;
-    pub(crate) fn gst_debug_add_log_function(
+    fn gst_debug_category_get_name(category: *mut GstDebugCategory) -> *const c_char;
+    fn gst_debug_message_get(message: *mut GstDebugMessage) -> *const c_char;
+    fn gst_debug_add_log_function(
         func: GstLogFunction,
         user_data: *mut c_void,
         notify: Option<unsafe extern "C" fn(*mut c_void)>,
     );
-    pub(crate) fn gst_debug_remove_log_function_by_data(data: *mut c_void) -> c_uint;
+    fn gst_debug_remove_log_function_by_data(data: *mut c_void) -> c_uint;
 }
 
-// gobject
 #[link(name = "gobject-2.0")]
-#[link(name = "glib-2.0")]
 extern "C" {
-    pub(crate) fn g_type_name_from_instance(instance: *mut GTypeInstance) -> *const c_char;
+    fn g_type_name_from_instance(instance: *mut GTypeInstance) -> *const c_char;
 }
 
 pub(crate) mod gobject {

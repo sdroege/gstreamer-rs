@@ -13,6 +13,9 @@ libc = "0.2"
 once_cell = "1.8"
 tracing-core = "0.1"
 
+[build-dependencies]
+pkg-config = "0.3"
+
 [dev-dependencies]
 gstreamer = "0.17"
 glib = "0.14"
