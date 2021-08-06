@@ -75,5 +75,5 @@ jobs:
         with:
           command: doc
         env:
-          RUSTDOCFLAGS: '-Drustdoc::broken_intra_doc_links --cfg feature="tracing-gstreamer-docs"'
-          RUSTFLAGS: '--cfg feature="tracing-gstreamer-docs"'
+          RUSTDOCFLAGS: '-Drustdoc::broken_intra_doc_links --cfg tracing_gstreamer_docs'
+          RUSTFLAGS: '--cfg tracing_gstreamer_docs'
