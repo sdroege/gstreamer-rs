@@ -1,12 +1,16 @@
 use crate::*;
 use glib::{translate::ToGlibPtr, Cast, ObjectType};
 use gstreamer as g;
-use std::{collections::VecDeque, sync::Mutex};
+use std::{
+    collections::VecDeque,
+    sync::{Arc, Mutex},
+};
 use tracing::{
     field::Visit,
     span::{Attributes, Record},
-    Id,
+    Id, Subscriber,
 };
+use tracing_subscriber::layer::{Context, Layer, SubscriberExt};
 
 struct GstEvent {
     message: &'static str,
@@ -62,12 +66,21 @@ enum Expect {
 }
 
 struct MockSubscriber {
-    expected: Mutex<VecDeque<Expect>>,
+    expected: Arc<Mutex<VecDeque<Expect>>>,
     filter: fn(&Metadata<'_>) -> bool,
     name: &'static str,
 }
 
 impl MockSubscriber {
+    fn new(filter: fn(&Metadata<'_>) -> bool, name: &'static str, expected: Vec<Expect>) -> Self {
+        let expected = Arc::new(Mutex::new(expected.into()));
+        MockSubscriber {
+            expected: expected.clone(),
+            name,
+            filter,
+        }
+    }
+
     fn with_expected<F>(
         filter: fn(&Metadata<'_>) -> bool,
         name: &'static str,
@@ -76,26 +89,23 @@ impl MockSubscriber {
     ) where
         F: FnOnce(),
     {
-        let subscriber = MockSubscriber {
-            expected: Mutex::new(expected.into()),
-            name,
-            filter,
-        };
+        let subscriber = Self::new(filter, name, expected);
+        let expected = subscriber.expected.clone();
         let dispatch = tracing::Dispatch::new(subscriber);
         tracing::dispatcher::with_default(&dispatch, cb);
+        assert!(
+            expected.lock().expect("mutex lock").is_empty(),
+            "all of the expected messages should be present!"
+        );
     }
 }
 
-impl tracing::Subscriber for MockSubscriber {
+impl Subscriber for MockSubscriber {
     fn enabled(&self, meta: &tracing_core::Metadata<'_>) -> bool {
         meta.name() == crate::NAME && (self.filter)(meta)
     }
     fn event(&self, e: &tracing_core::Event<'_>) {
-        if !(self.filter)(e.metadata()) {
-            return;
-        }
         println!("[{}] event: {:?}", self.name, e);
-
         match self.expected.lock().expect("mutex lock").pop_front() {
             None => {
                 panic!("[{}] unexpected extra event received", self.name)
@@ -136,6 +146,16 @@ impl tracing::Subscriber for MockSubscriber {
     }
     fn new_span(&self, _: &Attributes<'_>) -> Id {
         todo!()
+    }
+}
+
+impl<S: Subscriber> Layer<S> for MockSubscriber {
+    fn enabled(&self, meta: &tracing_core::Metadata<'_>, _: Context<'_, S>) -> bool {
+        Subscriber::enabled(self, meta)
+    }
+
+    fn on_event(&self, event: &tracing_core::Event<'_>, _: Context<'_, S>) {
+        Subscriber::event(self, event)
     }
 }
 
@@ -297,6 +317,44 @@ fn test_formatting() {
     );
 }
 
+fn test_interests() {
+    let mock_subscriber = MockSubscriber::new(
+        |_| true,
+        "test_interests",
+        vec![
+            Expect::GstEvent(GstEvent {
+                message: "warnings should be visible",
+                gobject: None,
+                level: Level::WARN,
+                target: "INTERESTS",
+            }),
+            Expect::GstEvent(GstEvent {
+                message: "errors should be visible",
+                gobject: None,
+                level: Level::ERROR,
+                target: "INTERESTS",
+            }),
+        ],
+    );
+    let expected = mock_subscriber.expected.clone();
+    let subscriber = tracing_subscriber::registry().with(mock_subscriber).with(
+        tracing_subscriber::filter::LevelFilter::from(tracing::Level::WARN),
+    );
+    let dispatch = tracing::Dispatch::new(subscriber);
+    tracing::dispatcher::with_default(&dispatch, move || {
+        let cat = g::DebugCategory::new("INTERESTS", g::DebugColorFlags::empty(), None);
+        g::gst_warning!(cat, "warnings should be visible");
+        g::gst_error!(cat, "errors should be visible");
+        g::gst_info!(cat, "infos should NOT be visible");
+        g::gst_debug!(cat, "debugs should NOT be visible");
+        g::gst_trace!(cat, "traces should NOT be visible");
+    });
+    assert!(
+        expected.lock().expect("mutex lock").is_empty(),
+        "all of the expected messages should be present!"
+    );
+}
+
 // NB: we aren't using the test harness here to allow us for the necessary gstreamer setup more
 // straightforwardly.
 pub(crate) fn run() {
@@ -311,5 +369,6 @@ pub(crate) fn run() {
     test_with_upcast_object();
     test_disintegration();
     test_formatting();
+    test_interests();
     disintegrate();
 }

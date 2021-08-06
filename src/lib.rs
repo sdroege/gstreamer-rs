@@ -23,7 +23,7 @@ use tracing_core::{
     field::{FieldSet, Value},
     identify_callsite,
     metadata::Kind,
-    Event, Level, Metadata,
+    Callsite, Event, Level, Metadata,
 };
 
 mod callsite;
@@ -43,11 +43,11 @@ pub const NAME: &str = "gstreamer";
 ///
 /// In order to facilitate this, we maintain a static map which allows us to allocate the necessary
 /// data on the heap (and with the required `'static` lifetime we effectively leak)
-struct MetadataAllocations {
+struct DynamicCallsites {
     data: std::sync::RwLock<Map>,
 }
 
-type Map = std::collections::BTreeMap<Key, &'static Metadata<'static>>;
+type Map = std::collections::BTreeMap<Key, &'static callsite::GstCallsite>;
 type Key = (
     Level,
     u32,
@@ -60,30 +60,30 @@ fn leak_str(s: &str) -> &'static str {
     Box::leak(s.to_string().into_boxed_str())
 }
 
-impl MetadataAllocations {
+impl DynamicCallsites {
     fn get() -> &'static Self {
-        static MAP: OnceCell<MetadataAllocations> = OnceCell::new();
-        MAP.get_or_init(|| MetadataAllocations {
+        static MAP: OnceCell<DynamicCallsites> = OnceCell::new();
+        MAP.get_or_init(|| DynamicCallsites {
             data: std::sync::RwLock::new(Map::new()),
         })
     }
 
-    fn metadata_for(
+    fn callsite_for(
         &self,
         level: Level,
         category: &str,
         file: Option<&str>,
         module: Option<&str>,
         line: u32,
-    ) -> &'static Metadata<'static> {
+    ) -> &callsite::GstCallsite {
         let key = (level, line, module, file, category);
-        if let Some(metadata) = self
+        if let Some(callsite) = self
             .data
             .read()
             .unwrap_or_else(PoisonError::into_inner)
             .get(&key)
         {
-            return metadata;
+            return callsite;
         }
         let mut lock = self.data.write().unwrap_or_else(PoisonError::into_inner);
         let key = (
@@ -110,7 +110,7 @@ impl MetadataAllocations {
                 Kind::EVENT,
             )));
             callsite.set_metadata(metadata);
-            metadata
+            callsite
         })
     }
 }
@@ -148,35 +148,46 @@ fn log_callback(
     let file = file.to_string_lossy();
     let module = module.to_string_lossy();
     let category_name = category.name().to_string_lossy();
-    let meta = MetadataAllocations::get().metadata_for(
+    let callsite = DynamicCallsites::get().callsite_for(
         level,
         &category_name,
         Some(&file),
         Some(&module),
         line as u32,
     );
-    let fields = meta.fields();
-    let mut field_iter = fields.iter();
-    let message_value = message.message().map(CStr::to_string_lossy);
-    let message_value = message_value.as_deref();
-    let gobject_addr_value = object.as_ref().map(Object::address);
-    let gobject_type_value = object.as_ref().map(Object::type_name);
-    let values = [
-        (
-            &field_iter.next().expect("message field"),
-            message_value.unsize_value(),
-        ),
-        (
-            &field_iter.next().expect("object address field"),
-            gobject_addr_value.unsize_value(),
-        ),
-        (
-            &field_iter.next().expect("object type field"),
-            gobject_type_value.unsize_value(),
-        ),
-    ];
-    let valueset = fields.value_set(&values);
-    Event::dispatch(meta, &valueset);
+    let interest = callsite.interest();
+    if interest.is_never() {
+        return;
+    }
+    let meta = callsite.metadata();
+    tracing_core::dispatcher::get_default(move |dispatcher| {
+        if !dispatcher.enabled(meta) {
+            return;
+        }
+        let fields = meta.fields();
+        let mut field_iter = fields.iter();
+        let message_value = message.message().map(CStr::to_string_lossy);
+        let message_value = message_value.as_deref();
+        let gobject_addr_value = object.as_ref().map(Object::address);
+        let gobject_type_value = object.as_ref().map(Object::type_name);
+        let values = [
+            (
+                &field_iter.next().expect("message field"),
+                message_value.unsize_value(),
+            ),
+            (
+                &field_iter.next().expect("object address field"),
+                gobject_addr_value.unsize_value(),
+            ),
+            (
+                &field_iter.next().expect("object type field"),
+                gobject_type_value.unsize_value(),
+            ),
+        ];
+        let valueset = fields.value_set(&values);
+        let event = Event::new(meta, &valueset);
+        dispatcher.event(&event);
+    });
 }
 
 /// Enable the integration between GStreamer and the `tracing` library.
