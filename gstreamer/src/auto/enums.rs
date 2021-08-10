@@ -1353,7 +1353,8 @@ impl ToValue for LibraryError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstPadDirection")]
 pub enum PadDirection {
@@ -1613,7 +1614,8 @@ impl ToValue for PadMode {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstPadPresence")]
 pub enum PadPresence {
@@ -2234,6 +2236,7 @@ impl ToValue for QOSType {
     }
 }
 
+#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstRank")]
@@ -2547,7 +2550,8 @@ impl ToValue for SeekType {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstState")]
 pub enum State {
@@ -3891,7 +3895,8 @@ impl ToValue for URIError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstURIType")]
 pub enum URIType {
