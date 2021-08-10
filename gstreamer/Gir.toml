@@ -28,9 +28,7 @@ generate = [
     "Gst.EventTypeFlags",
     "Gst.GapFlags",
     "Gst.LibraryError",
-    "Gst.PadDirection",
     "Gst.PadMode",
-    "Gst.PadPresence",
     "Gst.PadProbeReturn",
     "Gst.ParseError",
     "Gst.PluginAPIFlags",
@@ -43,7 +41,6 @@ generate = [
     "Gst.SchedulingFlags",
     "Gst.SeekType",
     "Gst.SerializeFlags",
-    "Gst.State",
     "Gst.StreamError",
     "Gst.StreamStatusType",
     "Gst.StreamType",
@@ -55,7 +52,6 @@ generate = [
     "Gst.TocSetter",
     "Gst.URIError",
     "Gst.URIHandler",
-    "Gst.URIType",
 ]
 
 manual = [
@@ -296,6 +292,24 @@ status = "manual"
     ignore = true
 
 [[object]]
+name = "Gst.PadDirection"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+
+[[object]]
+name = "Gst.PadPresence"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+
+[[object]]
 name = "Gst.SeekFlags"
 status = "generate"
     [[object.member]]
@@ -378,6 +392,9 @@ status = "generate"
 [[object]]
 name = "Gst.Rank"
 status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
     [[object.derive]]
     name = "Debug"
 
@@ -1981,6 +1998,15 @@ status = "generate"
     manual = true
 
 [[object]]
+name = "Gst.State"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+
+[[object]]
 name = "Gst.StateChange"
 status = "generate"
     [[object.function]]
@@ -2191,3 +2217,13 @@ status = "generate"
 [[object]]
 name = "Gst.TracerFactory"
 status = "generate"
+
+[[object]]
+name = "Gst.URIType"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+
