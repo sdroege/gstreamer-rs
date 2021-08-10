@@ -13,25 +13,26 @@ use crate::StateChangeError;
 use crate::StateChangeReturn;
 use crate::StateChangeSuccess;
 
+use std::borrow::Cow;
 use std::sync::atomic;
 
 #[derive(Debug, Clone)]
 pub struct ElementMetadata {
-    long_name: String,
-    classification: String,
-    description: String,
-    author: String,
-    additional: Vec<(String, String)>,
+    long_name: Cow<'static, str>,
+    classification: Cow<'static, str>,
+    description: Cow<'static, str>,
+    author: Cow<'static, str>,
+    additional: Cow<'static, [(Cow<'static, str>, Cow<'static, str>)]>,
 }
 
 impl ElementMetadata {
     pub fn new(long_name: &str, classification: &str, description: &str, author: &str) -> Self {
         Self {
-            long_name: long_name.into(),
-            classification: classification.into(),
-            description: description.into(),
-            author: author.into(),
-            additional: vec![],
+            long_name: Cow::Owned(long_name.into()),
+            classification: Cow::Owned(classification.into()),
+            description: Cow::Owned(description.into()),
+            author: Cow::Owned(author.into()),
+            additional: Cow::Borrowed(&[]),
         }
     }
 
@@ -43,15 +44,31 @@ impl ElementMetadata {
         additional: &[(&str, &str)],
     ) -> Self {
         Self {
-            long_name: long_name.into(),
-            classification: classification.into(),
-            description: description.into(),
-            author: author.into(),
+            long_name: Cow::Owned(long_name.into()),
+            classification: Cow::Owned(classification.into()),
+            description: Cow::Owned(description.into()),
+            author: Cow::Owned(author.into()),
             additional: additional
                 .iter()
                 .copied()
-                .map(|(key, value)| (key.into(), value.into()))
+                .map(|(key, value)| (Cow::Owned(key.into()), Cow::Owned(value.into())))
                 .collect(),
+        }
+    }
+
+    pub const fn with_cow(
+        long_name: Cow<'static, str>,
+        classification: Cow<'static, str>,
+        description: Cow<'static, str>,
+        author: Cow<'static, str>,
+        additional: Cow<'static, [(Cow<'static, str>, Cow<'static, str>)]>,
+    ) -> Self {
+        Self {
+            long_name,
+            classification,
+            description,
+            author,
+            additional,
         }
     }
 }
@@ -384,7 +401,7 @@ unsafe impl<T: ElementImpl> IsSubclassable<T> for Element {
                     metadata.author.to_glib_none().0,
                 );
 
-                for (key, value) in &metadata.additional {
+                for (key, value) in &metadata.additional[..] {
                     ffi::gst_element_class_add_metadata(
                         klass,
                         key.to_glib_none().0,
