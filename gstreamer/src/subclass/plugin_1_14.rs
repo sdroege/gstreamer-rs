@@ -18,7 +18,7 @@ cfg_if::cfg_if! {
 macro_rules! plugin_define(
     ($name:ident, $description:expr, $plugin_init:ident,
      $version:expr, $license:expr, $source:expr,
-     $package:expr, $origin:expr, $release_datetime:expr) => {
+     $package:expr, $origin:expr $(, $release_datetime:expr)?) => {
         pub mod plugin_desc {
             #[repr(transparent)]
             pub struct GstPluginDesc($crate::ffi::GstPluginDesc);
@@ -36,7 +36,29 @@ macro_rules! plugin_define(
                 source: concat!($source, "\0") as *const str as *const _,
                 package: concat!($package, "\0") as *const str as *const _,
                 origin: concat!($origin, "\0") as *const str as *const _,
-                release_datetime: concat!($release_datetime, "\0") as *const str as *const _,
+                release_datetime: {
+                    // NB: if this looks a lot like `Option`, it is not a coincidence. Alas,
+                    // Option::or is not `const` and neither is `unwrap_or` so we have to roll our
+                    // own oli-obk-ified enum instead.
+                    enum OptionalPtr<T>{
+                        Null,
+                        Some(*const T),
+                    }
+                    impl<T: Sized> OptionalPtr<T> {
+                        const fn with(self, value: *const T) -> Self {
+                            Self::Some(value)
+                        }
+                        const fn ptr(self) -> *const T {
+                            match self {
+                                Self::Null => std::ptr::null(),
+                                Self::Some(ptr) => ptr
+                            }
+                        }
+                    }
+                    OptionalPtr::Null
+                      $(.with(concat!($release_datetime, "\0").as_ptr() as _))?
+                        .ptr()
+                },
                 _gst_reserved: [0 as $crate::glib::ffi::gpointer; 4],
             });
 
