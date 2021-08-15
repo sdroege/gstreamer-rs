@@ -136,6 +136,8 @@ pub use self::allocation_params::AllocationParams;
 mod element_factory_list_type;
 pub use element_factory_list_type::*;
 
+mod tracer;
+
 // OS dependent Bus extensions (also import the other plateform mod for doc)
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]

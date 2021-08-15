@@ -21,6 +21,7 @@ mod element;
 mod ghost_pad;
 mod pad;
 mod pipeline;
+mod tracer;
 
 mod device;
 mod device_provider;
@@ -54,5 +55,6 @@ pub mod prelude {
     pub use super::preset::PresetImpl;
     pub use super::system_clock::SystemClockImpl;
     pub use super::tag_setter::TagSetterImpl;
+    pub use super::tracer::{TracerHook, TracerImpl, TracerImplExt};
     pub use super::uri_handler::{URIHandlerImpl, URIHandlerImplExt};
 }

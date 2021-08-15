@@ -260,13 +260,6 @@ status = "generate"
     version = "1.18.3"
 
 [[object]]
-name = "Gst.Tracer"
-status = "generate"
-    [[object.function]]
-    name = "register"
-    version = "1.18"
-
-[[object]]
 name = "Gst.Uri"
 status = "generate"
     [[object.function]]

@@ -8542,8 +8542,6 @@ extern "C" {
     // GstTracer
     //=========================================================================
     pub fn gst_tracer_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn gst_tracer_register(
         plugin: *mut GstPlugin,
         name: *const c_char,
