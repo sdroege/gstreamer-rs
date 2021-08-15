@@ -1975,6 +1975,11 @@ status = "generate"
     # confusing return type
     ignore = true
 
+    [[object.function]]
+    name = "tracing_register_hook"
+    # implemented as part of Tracer subclassing
+    manual = true
+
 [[object]]
 name = "Gst.StateChange"
 status = "generate"
@@ -2174,3 +2179,15 @@ generate_builder = true
         [[object.function.parameter]]
         name = "timestamp"
         mandatory = true
+
+[[object]]
+name = "Gst.Tracer"
+status = "generate"
+    [[object.function]]
+    name = "register"
+    # Manual implementation as inherent to the type.
+    ignore = true
+
+[[object]]
+name = "Gst.TracerFactory"
+status = "generate"

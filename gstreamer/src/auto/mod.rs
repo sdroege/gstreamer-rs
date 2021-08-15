@@ -98,6 +98,12 @@ pub use self::tag_setter::{TagSetter, NONE_TAG_SETTER};
 mod toc_setter;
 pub use self::toc_setter::{TocSetter, NONE_TOC_SETTER};
 
+mod tracer;
+pub use self::tracer::{Tracer, NONE_TRACER};
+
+mod tracer_factory;
+pub use self::tracer_factory::TracerFactory;
+
 mod type_find_factory;
 pub use self::type_find_factory::TypeFindFactory;
 
@@ -219,5 +225,6 @@ pub mod traits {
     pub use super::system_clock::SystemClockExt;
     pub use super::tag_setter::TagSetterExt;
     pub use super::toc_setter::TocSetterExt;
+    pub use super::tracer::TracerExt;
     pub use super::uri_handler::URIHandlerExt;
 }

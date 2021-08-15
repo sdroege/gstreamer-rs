@@ -14,6 +14,9 @@ use crate::PluginAPIFlags;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use crate::StackTraceFlags;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+use crate::Tracer;
 use glib::object::IsA;
 use glib::translate::*;
 use std::mem;
@@ -236,17 +239,13 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
     }
 }
 
-//#[cfg(any(feature = "v1_18", feature = "dox"))]
-//#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-//#[doc(alias = "gst_tracing_get_active_tracers")]
-//pub fn tracing_get_active_tracers() -> /*Ignored*/Vec<Tracer> {
-//    unsafe { TODO: call ffi:gst_tracing_get_active_tracers() }
-//}
-
-//#[doc(alias = "gst_tracing_register_hook")]
-//pub fn tracing_register_hook<P: FnOnce() + Send + Sync + 'static>(tracer: /*Ignored*/&Tracer, detail: &str, func: P) {
-//    unsafe { TODO: call ffi:gst_tracing_register_hook() }
-//}
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[doc(alias = "gst_tracing_get_active_tracers")]
+pub fn tracing_get_active_tracers() -> Vec<Tracer> {
+    assert_initialized_main_thread!();
+    unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_tracing_get_active_tracers()) }
+}
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
