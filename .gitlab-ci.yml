@@ -17,7 +17,7 @@
 # Updating the nightly image should be done by simply running a scheduled ci
 # pipeline on the upstream repo with the $UPDATE_NIGHTLY variable defined.
 
-.templates_sha: &templates_sha 322bf2b8f29b6491caeb13861201e96969ddc169
+.templates_sha: &templates_sha 567700e483aabed992d0a4fea84994a0472deff6
 
 include:
   - project: 'freedesktop/ci-templates'
@@ -47,9 +47,9 @@ stages:
   - "deploy"
 
 
-.debian:10:
+.debian:11:
   variables:
-    FDO_DISTRIBUTION_VERSION: 10
+    FDO_DISTRIBUTION_VERSION: 'bullseye-slim'
   before_script:
     - source ./ci/env.sh
     - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config
@@ -61,26 +61,26 @@ stages:
         cargo update --color=always
       fi
 
-.debian:10-base:
-  extends: .debian:10
+.debian:11-base:
+  extends: .debian:11
   variables:
     FDO_DISTRIBUTION_TAG: 'base-$GST_RS_IMG_TAG'
 
-.debian:10-stable:
-  extends: .debian:10
+.debian:11-stable:
+  extends: .debian:11
   variables:
     RUST_IMAGE_FULL: "1"
     FDO_DISTRIBUTION_TAG: '$GST_RS_STABLE-$GST_RS_IMG_TAG'
     FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh $GST_RS_STABLE $RUST_IMAGE_FULL'
 
-.debian:10-msrv:
-  extends: .debian:10
+.debian:11-msrv:
+  extends: .debian:11
   variables:
     FDO_DISTRIBUTION_TAG: '$GST_RS_MSRV-$GST_RS_IMG_TAG'
     FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh $GST_RS_MSRV $RUST_IMAGE_FULL'
 
-.debian:10-nightly:
-  extends: .debian:10
+.debian:11-nightly:
+  extends: .debian:11
   variables:
     FDO_DISTRIBUTION_TAG: 'nightly-$GST_RS_IMG_TAG'
     FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh nightly $RUST_IMAGE_FULL'
@@ -90,7 +90,7 @@ stages:
   - .fdo.container-build@debian
   stage: container-base
   variables:
-    FDO_DISTRIBUTION_PACKAGES: "build-essential curl python3-setuptools liborc-0.4-dev libglib2.0-dev libxml2-dev libgtk-3-dev libegl1-mesa libgles2-mesa libgl1-mesa-dri libgl1-mesa-glx libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates ninja-build python3-pip flex bison libglib2.0-dev"
+    FDO_DISTRIBUTION_PACKAGES: "build-essential curl python3-setuptools liborc-0.4-dev libglib2.0-dev libxml2-dev libgtk-3-dev libegl1-mesa libgles2-mesa libgl1-mesa-dri libgl1-mesa-glx libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates ninja-build python3-pip flex bison libglib2.0-dev libx11-dev libx11-xcb-dev"
     FDO_DISTRIBUTION_EXEC: 'bash ci/install-gst.sh && pip3 install git+http://gitlab.freedesktop.org/freedesktop/ci-templates'
 
 .build-final-image:
@@ -98,27 +98,27 @@ stages:
   - .fdo.container-build@debian
   stage: container-final
   variables:
-    FDO_BASE_IMAGE: '$CI_REGISTRY_IMAGE/debian/10:base-$GST_RS_IMG_TAG'
+    FDO_BASE_IMAGE: '$CI_REGISTRY_IMAGE/debian/bullseye-slim:base-$GST_RS_IMG_TAG'
 
 build-base:
   extends:
     - .build-base-image
-    - .debian:10-base
+    - .debian:11-base
 
 build-stable:
   extends:
     - .build-final-image
-    - .debian:10-stable
+    - .debian:11-stable
 
 build-msrv:
   extends:
     - .build-final-image
-    - .debian:10-msrv
+    - .debian:11-msrv
 
 build-nightly:
   extends:
     - .build-final-image
-    - .debian:10-nightly
+    - .debian:11-nightly
 
 update-nightly:
   extends: build-nightly
@@ -136,17 +136,17 @@ update-nightly:
 
 .img-stable:
   extends:
-    - .debian:10-stable
+    - .debian:11-stable
     - .dist-debian-container
 
 .img-msrv:
   extends:
-    - .debian:10-msrv
+    - .debian:11-msrv
     - .dist-debian-container
 
 .img-nightly:
   extends:
-    - .debian:10-nightly
+    - .debian:11-nightly
     - .dist-debian-container
 
 # GST_PLUGINS_RS_TOKEN is a variable of type 'Var' defined in gstreamer-rs CI
@@ -180,7 +180,7 @@ plugins-update-stable:
   extends:
     - .plugins-update
     - .img-stable
-  image: registry.freedesktop.org/freedesktop/ci-templates/buildah:2020-03-04
+  image: quay.io/freedesktop.org/ci-templates:container-build-base-2021-07-29.0
   variables:
     UPDATE_IMG: "stable"
 
@@ -188,7 +188,7 @@ plugins-update-msrv:
   extends:
     - .plugins-update
     - .img-msrv
-  image: registry.freedesktop.org/freedesktop/ci-templates/buildah:2020-03-04
+  image: quay.io/freedesktop.org/ci-templates:container-build-base-2021-07-29.0
   variables:
     UPDATE_IMG: "msrv"
 
@@ -196,7 +196,7 @@ plugins-update-nightly:
   extends:
     - .plugins-update
     - .img-nightly
-  image: registry.freedesktop.org/freedesktop/ci-templates/buildah:2020-03-04
+  image: quay.io/freedesktop.org/ci-templates:container-build-base-2021-07-29.0
   variables:
     UPDATE_IMG: "nightly"
 
