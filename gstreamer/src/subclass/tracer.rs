@@ -30,6 +30,7 @@ pub trait TracerImpl: TracerImplExt + ObjectImpl + Send + Sync {
     fn element_query_pre(&self, ts: u64, element: &Element, query: &Query) {}
     fn element_remove_pad(&self, ts: u64, element: &Element, pad: &Pad) {}
     fn object_created(&self, ts: u64, object: &Object) {}
+    // rustdoc-stripper-ignore-next
     /// Hook to be called after the GstObject has been finalized.
     fn object_destroyed(&self, ts: u64, object: std::ptr::NonNull<ffi::GstObject>) {}
     fn object_reffed(&self, ts: u64, object: &Object, new_refcount: i32) {}
@@ -61,6 +62,7 @@ unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
 }
 
 pub trait TracerImplExt: ObjectSubclass {
+    // rustdoc-stripper-ignore-next
     /// Register a corresponding hook to be called for this tracer when certain events occur.
     ///
     /// Upon an event a corresponding method in `TracerImpl` will be called.
