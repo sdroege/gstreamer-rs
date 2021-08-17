@@ -840,6 +840,13 @@ pub trait GstValueExt: Sized {
         s: T,
         type_: glib::Type,
     ) -> Result<glib::Value, glib::BoolError>;
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_value_deserialize_with_pspec")]
+    fn deserialize_with_pspec<'a, T: Into<&'a str>>(
+        s: T,
+        pspec: &glib::ParamSpec,
+    ) -> Result<glib::Value, glib::BoolError>;
 }
 
 impl GstValueExt for glib::Value {
@@ -992,6 +999,31 @@ impl GstValueExt for glib::Value {
             let ret: bool = from_glib(ffi::gst_value_deserialize(
                 value.to_glib_none_mut().0,
                 s.to_glib_none().0,
+            ));
+            if ret {
+                Ok(value)
+            } else {
+                Err(glib::bool_error!("Failed to deserialize value"))
+            }
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn deserialize_with_pspec<'a, T: Into<&'a str>>(
+        s: T,
+        pspec: &glib::ParamSpec,
+    ) -> Result<glib::Value, glib::BoolError> {
+        assert_initialized_main_thread!();
+
+        let s = s.into();
+
+        unsafe {
+            let mut value = glib::Value::from_type(pspec.value_type());
+            let ret: bool = from_glib(ffi::gst_value_deserialize_with_pspec(
+                value.to_glib_none_mut().0,
+                s.to_glib_none().0,
+                pspec.to_glib_none().0,
             ));
             if ret {
                 Ok(value)
