@@ -273,7 +273,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     filter.link(&conv)?;
     conv.link(&sink)?;
 
-    src.set_property_from_str("wave", "white-noise");
+    src.set_property_from_str("wave", "white-noise").unwrap();
 
     // Create a windowed sinc lowpass filter at 1/64 sample rate,
     // i.e. 689Hz for 44.1kHz sample rate
