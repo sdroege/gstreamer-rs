@@ -1,66 +1,15 @@
-use libc::{c_char, c_int, c_uint, c_void};
-
-type GstLogFunction = Option<
-    unsafe extern "C" fn(
-        *mut GstDebugCategory,
-        GstDebugLevel,
-        *const c_char,
-        *const c_char,
-        c_int,
-        *mut GObject,
-        *mut GstDebugMessage,
-        *mut c_void,
-    ),
->;
-
-#[repr(transparent)]
-struct GstDebugMessage(c_void);
-
-#[repr(transparent)]
-struct GstDebugCategory(c_void);
-
-#[repr(transparent)]
-#[derive(PartialEq, Eq)]
-pub(crate) struct GstDebugLevel(c_int);
-
-#[repr(C)]
-struct GTypeInstance {
-    g_class: *mut c_void,
-}
-
-#[repr(C)]
-struct GObject {
-    g_type_instance: GTypeInstance,
-    ref_count: c_uint,
-    qdata: *mut c_void,
-}
-
-pub(crate) const GST_LEVEL_ERROR: GstDebugLevel = GstDebugLevel(1);
-pub(crate) const GST_LEVEL_WARNING: GstDebugLevel = GstDebugLevel(2);
-pub(crate) const GST_LEVEL_FIXME: GstDebugLevel = GstDebugLevel(3);
-pub(crate) const GST_LEVEL_INFO: GstDebugLevel = GstDebugLevel(4);
-pub(crate) const GST_LEVEL_DEBUG: GstDebugLevel = GstDebugLevel(5);
-pub(crate) const GST_LEVEL_LOG: GstDebugLevel = GstDebugLevel(6);
-pub(crate) const GST_LEVEL_TRACE: GstDebugLevel = GstDebugLevel(7);
-pub(crate) const GST_LEVEL_MEMDUMP: GstDebugLevel = GstDebugLevel(9);
-pub(crate) const GST_LEVEL_COUNT: GstDebugLevel = GstDebugLevel(10);
-
-#[link(name = "gstreamer-1.0")]
-extern "C" {
-    fn gst_debug_category_get_name(category: *mut GstDebugCategory) -> *const c_char;
-    fn gst_debug_message_get(message: *mut GstDebugMessage) -> *const c_char;
-    fn gst_debug_add_log_function(
-        callback: GstLogFunction,
-        user_data: *mut c_void,
-        destroy_user_data: Option<unsafe extern "C" fn(*mut c_void)>,
-    );
-    fn gst_debug_remove_log_function_by_data(user_data: *mut c_void) -> c_uint;
-}
-
-#[link(name = "gobject-2.0")]
-extern "C" {
-    fn g_type_name_from_instance(instance: *mut GTypeInstance) -> *const c_char;
-}
+use gstreamer::ffi::{
+    gst_debug_category_get_name,
+    gst_debug_message_get,
+    gst_debug_add_log_function,
+    gst_debug_remove_log_function_by_data,
+    GstDebugLevel, GstDebugCategory, GstDebugMessage,
+};
+pub(crate) use gstreamer::ffi::{
+    GST_LEVEL_COUNT, GST_LEVEL_DEBUG, GST_LEVEL_ERROR, GST_LEVEL_FIXME,
+    GST_LEVEL_INFO, GST_LEVEL_LOG, GST_LEVEL_MEMDUMP, GST_LEVEL_TRACE, GST_LEVEL_WARNING
+};
+use gstreamer::glib::gobject_ffi::{GObject, g_type_name_from_instance};
 
 pub(crate) mod gobject {
     use std::ffi::CStr;
@@ -143,17 +92,21 @@ pub(crate) mod gst {
     }
 
     unsafe extern "C" fn log_callback(
-        category: *mut super::GstDebugCategory,
-        level: super::GstDebugLevel,
+        category: *mut gstreamer::ffi::GstDebugCategory,
+        level: gstreamer::ffi::GstDebugLevel,
         file: *const c_char,
         module: *const c_char,
         line: c_int,
-        gobject: *mut super::GObject,
-        message: *mut super::GstDebugMessage,
+        gobject: *mut gstreamer::glib::gobject_ffi::GObject,
+        message: *mut gstreamer::ffi::GstDebugMessage,
         actual_cb: *mut c_void,
     ) {
         // SAFETY: unwinding back into C land is UB. We abort if there was a panic inside.
         std::panic::catch_unwind(move || {
+            // Take extra care to make sure nothing sketchy is going on.
+            if category.is_null() || message.is_null() {
+                return;
+            }
             let actual_cb = unsafe {
                 // SAFETY: We pass in a `LogFn` as the callback in `debug_add_log_function` which
                 // is the only way this code can be reached. This below extracts the originally

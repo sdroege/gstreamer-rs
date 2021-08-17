@@ -3,117 +3,39 @@
 // This crate interacts directly with the C API of glib, gobject and gstreamer libraries. As a
 // result implementation of this crate uses unsafe code quite liberally.
 //
-// There are a couple motivations for doing so:
+// Originally the motivation to introduce the unsafe code was to reduce the build times and avoid
+// the fairly heavy dependencies introduced by the `gstreamer` crate. However, since then we
+// introduced `gstreamer` back in order to implement some `GstElement`s to generate spans from
+// wrapped elements.
 //
-// * This crate exposes tracing in its public API, and therefore wants to be versioned alongside
-// `tracing`. If the `glib`, `gobject` and `gstreamer` crates were used, it'd be difficult for the
-// consumers of this crate to match the version of this specific crate that depends on the same
-// versions of `glib`, `gobject` and `gstreamer`;
-// * Duplicating the crates seems very suboptimal as build times of `glib`, `gobject` and
-// `gstreamer` are quite significant due to the dependencies that they pull in.
+// We continue to use the unsafe code for hooking into the log subsystem however, for it avoids a
+// non-free layer of abstraction (allocations for the closure, for instance).
+//
+// Additionally, it makes it easier to cross-check for soundness issues in the upstream library,
+// such as https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/-/issues/352
 #![deny(unsafe_op_in_unsafe_fn)]
 
-use once_cell::sync::OnceCell;
-use std::{ffi::CStr, sync::PoisonError};
+
+use std::ffi::CStr;
 use sys::{
     gobject::Object,
     gst::{DebugCategory, DebugLevel, DebugMessage},
 };
-use tracing_core::{
-    field::{FieldSet, Value},
-    identify_callsite,
-    metadata::Kind,
-    Callsite, Event, Level, Metadata,
-};
+use tracing_core::{Kind, Callsite, Level, field::Value, Event};
 
 mod callsite;
+// mod span;
 mod sys;
+mod tracer;
 
-/// The name of the events dispatched to `tracing` by this library.
+/// The top-level target component of the events and spans dispatched to `tracing` by this library.
 ///
-/// The value of this constant is not guaranteed to be stable.
+/// You can use this to filter events with e.g. `RUST_LOG` environment variable when using the fmt
+/// subscriber. The value of this constant is not guaranteed to be stable.
 ///
 /// See [`tracing::Metadata`][tracing_core::Metadata] for further information.
-pub const NAME: &str = "gstreamer";
+pub const TARGET: &str = "gstreamer";
 
-/// A map of metadata allocations we've made throughout the lifetime of the process.
-///
-/// [`tracing`] requires the metadata to have a lifetime of `'static` for them to be usable. This
-/// is required for a number of reasons, one of which is performance of filtering the messages.
-///
-/// In order to facilitate this, we maintain a static map which allows us to allocate the necessary
-/// data on the heap (and with the required `'static` lifetime we effectively leak)
-struct DynamicCallsites {
-    data: std::sync::RwLock<Map>,
-}
-
-type Map = std::collections::BTreeMap<Key, &'static callsite::GstCallsite>;
-type Key = (
-    Level,
-    u32,
-    Option<&'static str>,
-    Option<&'static str>,
-    &'static str,
-);
-
-fn leak_str(s: &str) -> &'static str {
-    Box::leak(s.to_string().into_boxed_str())
-}
-
-impl DynamicCallsites {
-    fn get() -> &'static Self {
-        static MAP: OnceCell<DynamicCallsites> = OnceCell::new();
-        MAP.get_or_init(|| DynamicCallsites {
-            data: std::sync::RwLock::new(Map::new()),
-        })
-    }
-
-    fn callsite_for(
-        &self,
-        level: Level,
-        category: &str,
-        file: Option<&str>,
-        module: Option<&str>,
-        line: u32,
-    ) -> &callsite::GstCallsite {
-        let key = (level, line, module, file, category);
-        if let Some(callsite) = self
-            .data
-            .read()
-            .unwrap_or_else(PoisonError::into_inner)
-            .get(&key)
-        {
-            return callsite;
-        }
-        let mut lock = self.data.write().unwrap_or_else(PoisonError::into_inner);
-        let key = (
-            level,
-            line,
-            module.map(leak_str),
-            file.map(leak_str),
-            leak_str(category),
-        );
-        lock.entry(key).or_insert_with_key(|k| {
-            let callsite = callsite::GstCallsite::make_static();
-            let fields = FieldSet::new(
-                &["message", "gobject_address", "gobject_type"],
-                identify_callsite!(callsite),
-            );
-            let metadata = Box::leak(Box::new(Metadata::new(
-                "gstreamer",
-                k.4,
-                k.0,
-                k.3,
-                Some(k.1),
-                k.2,
-                fields,
-                Kind::EVENT,
-            )));
-            callsite.set_metadata(metadata);
-            callsite
-        })
-    }
-}
 
 trait UnsizeValue {
     fn unsize_value(&self) -> Option<&dyn Value>;
@@ -148,12 +70,15 @@ fn log_callback(
     let file = file.to_string_lossy();
     let module = module.to_string_lossy();
     let category_name = category.name().to_string_lossy();
-    let callsite = DynamicCallsites::get().callsite_for(
+    let callsite = callsite::DynamicCallsites::get().callsite_for(
         level,
+        "",
         &category_name,
         Some(&file),
         Some(&module),
-        line as u32,
+        Some(line as u32),
+        Kind::EVENT,
+        &["message", "gobject.address", "gobject.type"]
     );
     let interest = callsite.interest();
     if interest.is_never() {
@@ -190,27 +115,73 @@ fn log_callback(
     });
 }
 
-/// Enable the integration between GStreamer and the `tracing` library.
+/// Enable the integration between GStreamer logging system and the `tracing` library.
 ///
 /// Once enabled the default [`tracing::Subscriber`][tracing_core::subscriber::Subscriber] will
 /// receive an event for each of the GStreamer debug log messages.
+///
+/// The events produced this way will specify the “current” span as the event's parent. Doing
+/// nothing else, there won't be any span to act as the parent. Consider also using the
+/// integrations for producing spans.
 ///
 /// This function can be executed at any time and will process events that occur after its
 /// execution.
 ///
 /// Calling this function multiple times may cause duplicate events to be produced.
-pub fn integrate() {
+pub fn integrate_events() {
     sys::gst::debug_add_log_function(log_callback);
 }
 
-/// Disable the integration between GStreamer and the `tracing` library.
+/// Enable the integration between GStreamer tracing system and the `tracing` library.
+///
+/// Once enabled the default [`tracing::Subscriber`][tracing_core::subscriber::Subscriber] will
+/// have spans entered for certain GStreamer events such as data being pushed to a pad.
+///
+/// This will provide some meaningful context to the events produced by integrating those.
+///
+/// This function may only be called after `gstreamer::init`.
+pub fn integrate_spans() {
+    gstreamer::glib::Object::new::<tracer::TracingTracer>(&[]).expect("create the tracer");
+}
+
+/// Disable the integration between GStreamer logging system and the `tracing` library.
 ///
 /// As an implementation detail, this will _not_ release certain resources that have been allocated
-/// during the period when this integration was enabled. Some of the resources are required to live
-/// for `'static` and therefore cannot be soundly released by any other way except by terminating
-/// the program.
-pub fn disintegrate() {
+/// during the period of event integration. Some of the resources are required to live for
+/// `'static` and therefore cannot be soundly released by any other way except by terminating the
+/// program.
+pub fn disintegrate_events() {
     sys::gst::debug_remove_log_function(log_callback);
+}
+
+/// Register the `gstreamer::Object`s exposed by this library with GStreamer.
+///
+/// This is only necessary to call if you would like to reference the types exposed by this
+/// library by their name through various factories.
+pub fn register(p: Option<&gstreamer::Plugin>) -> Result<(), gstreamer::glib::BoolError> {
+    gstreamer::Tracer::register(
+        p,
+        "rusttracing",
+        <tracer::TracingTracer as gstreamer::glib::StaticType>::static_type(),
+    )?;
+    Ok(())
+}
+
+mod gst_plugin {
+    fn plugin_init(plugin: &gstreamer::Plugin) -> Result<(), gstreamer::glib::BoolError> {
+        crate::register(Some(plugin))
+    }
+
+    gstreamer::plugin_define!(
+        tracing_gstreamer,
+        env!("CARGO_PKG_DESCRIPTION"),
+        plugin_init,
+        env!("CARGO_PKG_VERSION"),
+        "unknown", // https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/864
+        "https://github.com/standard-ai/tracing-gstreamer",
+        "tracing_gstreamer",
+        "https://github.com/standard-ai/tracing-gstreamer"
+    );
 }
 
 #[cfg(test)]

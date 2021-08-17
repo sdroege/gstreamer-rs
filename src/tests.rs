@@ -1,5 +1,5 @@
 use crate::*;
-use glib::{translate::ToGlibPtr, Cast, ObjectType};
+use gstreamer::glib::{translate::ToGlibPtr, Cast, ObjectType};
 use gstreamer as g;
 use std::{
     collections::VecDeque,
@@ -253,7 +253,7 @@ fn test_with_object() {
 }
 
 fn test_with_upcast_object() {
-    let obj: glib::Object = g::Bin::new(None).upcast();
+    let obj: gstreamer::glib::Object = g::Bin::new(None).upcast();
     let obj_addr = obj.as_object_ref().to_glib_none().0 as usize;
     MockSubscriber::with_expected(
         |m| m.target() == "test_object_cat",
@@ -278,9 +278,9 @@ fn test_disintegration() {
         move || {
             let cat = g::DebugCategory::new("disintegration", g::DebugColorFlags::empty(), None);
             g::gst_error!(cat, "apple");
-            disintegrate();
+            disintegrate_events();
             g::gst_error!(cat, "banana");
-            integrate();
+            integrate_events();
             g::gst_error!(cat, "chaenomeles");
         },
         vec![
@@ -361,7 +361,7 @@ pub(crate) fn run() {
     g::debug_remove_default_log_function();
     g::init().expect("gst init");
     g::debug_set_default_threshold(g::DebugLevel::Count);
-    integrate();
+    integrate_events();
     test_simple_error();
     test_simple_warning();
     test_simple_events();
@@ -370,5 +370,5 @@ pub(crate) fn run() {
     test_disintegration();
     test_formatting();
     test_interests();
-    disintegrate();
+    disintegrate_events();
 }
