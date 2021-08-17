@@ -836,7 +836,10 @@ pub trait GstValueExt: Sized {
     #[doc(alias = "gst_value_serialize")]
     fn serialize(&self) -> Result<glib::GString, glib::BoolError>;
     #[doc(alias = "gst_value_deserialize")]
-    fn deserialize<'a, T: Into<&'a str>>(s: T) -> Result<glib::Value, glib::BoolError>;
+    fn deserialize<'a, T: Into<&'a str>>(
+        s: T,
+        type_: glib::Type,
+    ) -> Result<glib::Value, glib::BoolError>;
 }
 
 impl GstValueExt for glib::Value {
@@ -976,13 +979,16 @@ impl GstValueExt for glib::Value {
         }
     }
 
-    fn deserialize<'a, T: Into<&'a str>>(s: T) -> Result<glib::Value, glib::BoolError> {
+    fn deserialize<'a, T: Into<&'a str>>(
+        s: T,
+        type_: glib::Type,
+    ) -> Result<glib::Value, glib::BoolError> {
         assert_initialized_main_thread!();
 
         let s = s.into();
 
         unsafe {
-            let mut value = glib::Value::uninitialized();
+            let mut value = glib::Value::from_type(type_);
             let ret: bool = from_glib(ffi::gst_value_deserialize(
                 value.to_glib_none_mut().0,
                 s.to_glib_none().0,
@@ -998,6 +1004,8 @@ impl GstValueExt for glib::Value {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
     fn test_fraction() {
         crate::init().unwrap();
@@ -1010,5 +1018,13 @@ mod tests {
         f3 *= f4;
 
         assert_eq!(f3, crate::Fraction::new(2, 27));
+    }
+
+    #[test]
+    fn test_deserialize() {
+        crate::init().unwrap();
+
+        let v = glib::Value::deserialize("123", i32::static_type()).unwrap();
+        assert_eq!(v.get::<i32>(), Ok(123));
     }
 }
