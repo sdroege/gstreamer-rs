@@ -15,10 +15,7 @@
 // such as https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/-/issues/352
 #![deny(unsafe_op_in_unsafe_fn)]
 
-use gstreamer::prelude::{ObjectExt, ObjectType};
-use std::ffi::CStr;
-use log::{DebugCategory, DebugLevel, DebugMessage, LoggedObject};
-use tracing_core::{field::Value, Callsite, Event, Kind, Level};
+use tracing_core::field::Value;
 
 mod callsite;
 mod log;
@@ -45,78 +42,6 @@ impl<V: Value> UnsizeValue for Option<V> {
     }
 }
 
-fn log_callback(
-    category: DebugCategory,
-    level: DebugLevel,
-    file: &CStr,
-    module: &CStr,
-    line: u32,
-    object: log::LoggedObject<'_>,
-    message: DebugMessage,
-) {
-    let level = match level {
-        log::GST_LEVEL_ERROR => Level::ERROR,
-        log::GST_LEVEL_WARNING | log::GST_LEVEL_FIXME => Level::WARN,
-        log::GST_LEVEL_INFO => Level::INFO,
-        log::GST_LEVEL_DEBUG | log::GST_LEVEL_LOG => Level::DEBUG,
-        log::GST_LEVEL_TRACE | log::GST_LEVEL_MEMDUMP | log::GST_LEVEL_COUNT => Level::TRACE,
-        _ => return,
-    };
-    let file = file.to_string_lossy();
-    let module = module.to_string_lossy();
-    let category_name = category.name().to_string_lossy();
-    let callsite = callsite::DynamicCallsites::get().callsite_for(
-        level,
-        "",
-        &category_name,
-        Some(&file),
-        Some(&module),
-        Some(line as u32),
-        Kind::EVENT,
-        &["message", "gobject.address", "gobject.type"],
-    );
-    let interest = callsite.interest();
-    if interest.is_never() {
-        return;
-    }
-    let meta = callsite.metadata();
-    tracing_core::dispatcher::get_default(move |dispatcher| {
-        if !dispatcher.enabled(meta) {
-            return;
-        }
-        let fields = meta.fields();
-        let mut field_iter = fields.iter();
-        let message_value = message.message().map(CStr::to_string_lossy);
-        let message_value = message_value.as_deref();
-        let gobject_addr_value = match object {
-            LoggedObject::Valid(o) => Some(o.as_ptr() as usize),
-            LoggedObject::ZeroRef(p) => Some(p as usize),
-            LoggedObject::Null => None,
-        };
-        let gobject_type_value = match object {
-            LoggedObject::Valid(o) => Some(o.type_().name()),
-            _ => None,
-        };
-        let values = [
-            (
-                &field_iter.next().expect("message field"),
-                message_value.unsize_value(),
-            ),
-            (
-                &field_iter.next().expect("object address field"),
-                gobject_addr_value.unsize_value(),
-            ),
-            (
-                &field_iter.next().expect("object type field"),
-                gobject_type_value.unsize_value(),
-            ),
-        ];
-        let valueset = fields.value_set(&values);
-        let event = Event::new(meta, &valueset);
-        dispatcher.event(&event);
-    });
-}
-
 /// Enable the integration between GStreamer logging system and the `tracing` library.
 ///
 /// Once enabled the default [`tracing::Subscriber`][tracing_core::subscriber::Subscriber] will
@@ -131,7 +56,7 @@ fn log_callback(
 ///
 /// Calling this function multiple times may cause duplicate events to be produced.
 pub fn integrate_events() {
-    log::debug_add_log_function(log_callback);
+    log::debug_add_log_function(log::default_log_callback);
 }
 
 /// Enable the integration between GStreamer tracing system and the `tracing` library.
@@ -153,7 +78,7 @@ pub fn integrate_spans() {
 /// `'static` and therefore cannot be soundly released by any other way except by terminating the
 /// program.
 pub fn disintegrate_events() {
-    log::debug_remove_log_function(log_callback);
+    log::debug_remove_log_function(log::default_log_callback);
 }
 
 /// Register the `gstreamer::Object`s exposed by this library with GStreamer.

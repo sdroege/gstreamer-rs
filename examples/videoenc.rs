@@ -1,10 +1,5 @@
 //! This example prepares a vp9 encoding pipeline, instrumented via tracing.
-use gstreamer::{
-    traits::ElementExt,
-    ClockTime,
-    MessageView::*,
-    State,
-};
+use gstreamer::{traits::ElementExt, ClockTime, MessageView::*, State};
 
 fn main() {
     tracing_subscriber::fmt::init();

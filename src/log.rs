@@ -1,18 +1,19 @@
-use gstreamer::ffi::{
-    gst_debug_add_log_function, gst_debug_category_get_name, gst_debug_message_get,
-    gst_debug_remove_log_function_by_data, GstDebugCategory, GstDebugLevel, GstDebugMessage,
+use crate::UnsizeValue;
+use gstreamer::{
+    ffi::{
+        gst_debug_add_log_function, gst_debug_category_get_name, gst_debug_message_get,
+        gst_debug_remove_log_function_by_data, GstDebugCategory, GstDebugLevel, GstDebugMessage,
+        GST_LEVEL_COUNT, GST_LEVEL_DEBUG, GST_LEVEL_ERROR, GST_LEVEL_FIXME, GST_LEVEL_INFO,
+        GST_LEVEL_LOG, GST_LEVEL_MEMDUMP, GST_LEVEL_TRACE, GST_LEVEL_WARNING,
+    },
+    glib::translate::FromGlibPtrBorrow,
+    prelude::{ObjectExt, ObjectType},
 };
-pub(crate) use gstreamer::ffi::{
-    GST_LEVEL_COUNT, GST_LEVEL_DEBUG, GST_LEVEL_ERROR, GST_LEVEL_FIXME, GST_LEVEL_INFO,
-    GST_LEVEL_LOG, GST_LEVEL_MEMDUMP, GST_LEVEL_TRACE, GST_LEVEL_WARNING,
-};
-use gstreamer::glib::translate::FromGlibPtrBorrow;
 use libc::{c_char, c_int, c_void};
 use std::{convert::TryFrom, ffi::CStr};
+use tracing_core::{Callsite, Event, Kind, Level};
 
-pub(crate) type DebugLevel = GstDebugLevel;
-
-type LogFn = fn(DebugCategory, DebugLevel, &CStr, &CStr, u32, LoggedObject<'_>, DebugMessage);
+type LogFn = fn(DebugCategory, GstDebugLevel, &CStr, &CStr, u32, LoggedObject<'_>, DebugMessage);
 
 pub(crate) enum LoggedObject<'a> {
     Valid(&'a gstreamer::glib::Object),
@@ -50,7 +51,7 @@ impl DebugMessage {
     }
 }
 
-unsafe extern "C" fn log_callback(
+unsafe extern "C" fn log_callback_trampoline(
     category: *mut gstreamer::ffi::GstDebugCategory,
     level: gstreamer::ffi::GstDebugLevel,
     file: *const c_char,
@@ -115,7 +116,7 @@ unsafe extern "C" fn log_callback(
 pub(crate) fn debug_add_log_function(callback: LogFn) {
     unsafe {
         // SAFETY: this function has no soundness invariants.
-        gst_debug_add_log_function(Some(log_callback), callback as *mut _, None);
+        gst_debug_add_log_function(Some(log_callback_trampoline), callback as *mut _, None);
     }
 }
 
@@ -124,4 +125,76 @@ pub(crate) fn debug_remove_log_function(callback: LogFn) {
         // SAFETY: this function has no soundness invariants.
         gst_debug_remove_log_function_by_data(callback as *mut _);
     }
+}
+
+pub(crate) fn default_log_callback(
+    category: DebugCategory,
+    level: GstDebugLevel,
+    file: &CStr,
+    module: &CStr,
+    line: u32,
+    object: LoggedObject<'_>,
+    message: DebugMessage,
+) {
+    let level = match level {
+        GST_LEVEL_ERROR => Level::ERROR,
+        GST_LEVEL_WARNING | GST_LEVEL_FIXME => Level::WARN,
+        GST_LEVEL_INFO => Level::INFO,
+        GST_LEVEL_DEBUG | GST_LEVEL_LOG => Level::DEBUG,
+        GST_LEVEL_TRACE | GST_LEVEL_MEMDUMP | GST_LEVEL_COUNT => Level::TRACE,
+        _ => return,
+    };
+    let file = file.to_string_lossy();
+    let module = module.to_string_lossy();
+    let category_name = category.name().to_string_lossy();
+    let callsite = crate::callsite::DynamicCallsites::get().callsite_for(
+        level,
+        "",
+        &category_name,
+        Some(&file),
+        Some(&module),
+        Some(line as u32),
+        Kind::EVENT,
+        &["message", "gobject.address", "gobject.type"],
+    );
+    let interest = callsite.interest();
+    if interest.is_never() {
+        return;
+    }
+    let meta = callsite.metadata();
+    tracing_core::dispatcher::get_default(move |dispatcher| {
+        if !dispatcher.enabled(meta) {
+            return;
+        }
+        let fields = meta.fields();
+        let mut field_iter = fields.iter();
+        let message_value = message.message().map(CStr::to_string_lossy);
+        let message_value = message_value.as_deref();
+        let gobject_addr_value = match object {
+            LoggedObject::Valid(o) => Some(o.as_ptr() as usize),
+            LoggedObject::ZeroRef(p) => Some(p as usize),
+            LoggedObject::Null => None,
+        };
+        let gobject_type_value = match object {
+            LoggedObject::Valid(o) => Some(o.type_().name()),
+            _ => None,
+        };
+        let values = [
+            (
+                &field_iter.next().expect("message field"),
+                message_value.unsize_value(),
+            ),
+            (
+                &field_iter.next().expect("object address field"),
+                gobject_addr_value.unsize_value(),
+            ),
+            (
+                &field_iter.next().expect("object type field"),
+                gobject_type_value.unsize_value(),
+            ),
+        ];
+        let valueset = fields.value_set(&values);
+        let event = Event::new(meta, &valueset);
+        dispatcher.event(&event);
+    });
 }
