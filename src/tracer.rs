@@ -77,7 +77,7 @@ impl TracerImpl for TracingTracerPriv {
         let callsite = crate::callsite::DynamicCallsites::get().callsite_for(
             tracing::Level::ERROR,
             "pad_push",
-            "PAD_PUSH",
+            "pad_push",
             None,
             None,
             None,

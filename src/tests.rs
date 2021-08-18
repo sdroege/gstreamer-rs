@@ -1,6 +1,6 @@
 use crate::*;
-use gstreamer::glib::{translate::ToGlibPtr, Cast, ObjectType};
 use gstreamer as g;
+use gstreamer::glib::{translate::ToGlibPtr, Cast, ObjectType};
 use std::{
     collections::VecDeque,
     sync::{Arc, Mutex},

@@ -1,18 +1,13 @@
 //! This example prepares a vp9 encoding pipeline, instrumented via tracing.
 use gstreamer::{
-    prelude::{GstBinExtManual, ObjectExt},
     traits::ElementExt,
     ClockTime,
     MessageView::*,
     State,
 };
-use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
 
 fn main() {
     tracing_subscriber::fmt::init();
-    // tracing::subscriber::set_global_default(
-    //     tracing_subscriber::registry().with(tracing_tracy::TracyLayer::new())
-    // ).unwrap();
     tracing_gstreamer::integrate_events();
     gstreamer::debug_remove_default_log_function();
     gstreamer::debug_set_default_threshold(gstreamer::DebugLevel::Count);
@@ -41,10 +36,6 @@ fn main() {
             None => break,
             Some(msg) => msg,
         };
-
-        // pipeline.clone().downcast::<gstreamer::Pipeline>()
-        //     .expect("pipeline is a pipeline")
-        //     .debug_to_dot_file_with_ts(gstreamer::DebugGraphDetails::ALL, &"videoenc");
         tracing::info!(message = "bus message", bus_message = ?msg);
         match msg.view() {
             Eos(_) => break,
