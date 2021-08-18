@@ -40,11 +40,11 @@ package manager, or build them from source.
 
 On Debian/Ubuntu they can be installed with
 
-```
+```shell
 $ apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
       gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
       gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
-      gstreamer1.0-libav libgstrtspserver-1.0-dev
+      gstreamer1.0-libav libgstrtspserver-1.0-dev libges-1.0-dev
 ```
 
 The minimum required version of the above libraries is >= 1.14. See
@@ -66,7 +66,7 @@ provided by the GStreamer project.
 Homebrew only installs various plugins if explicitly enabled, so some extra
 `--with-*` flags may be required.
 
-```
+```shell
 $ brew install gstreamer gst-plugins-base gst-plugins-good \
       gst-plugins-bad gst-plugins-ugly gst-libav gst-rtsp-server \
       gst-editing-services --with-orc --with-libogg --with-opus \
@@ -85,7 +85,7 @@ install them, e.g. `gstreamer-1.0-1.14.4-x86_64.pkg` and
 After installation, you also need to install `pkg-config` (e.g. via Homebrew)
 and set the `PKG_CONFIG_PATH` environment variable
 
-```
+```shell
 $ export PKG_CONFIG_PATH="/Library/Frameworks/GStreamer.framework/Versions/Current/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 ```
 
@@ -100,14 +100,20 @@ the GStreamer project.
 
 #### MSYS2 / pacman
 
-```
-$ pacman -S pkg-config mingw-w64-x86_64-gstreamer mingw-w64-x86_64-gst-plugins-base \
+```shell
+$ pacman -S glib2-devel pkg-config \
+      mingw-w64-x86_64-gstreamer mingw-w64-x86_64-gst-plugins-base \
       mingw-w64-x86_64-gst-plugins-good mingw-w64-x86_64-gst-plugins-bad \
       mingw-w64-x86_64-gst-plugins-ugly mingw-w64-x86_64-gst-libav \
       mingw-w64-x86_64-gst-rtsp-server
 ```
 
 Please, make sure the version of these libraries is >= 1.14.
+
+Note that the version of `pkg-config` included in `MSYS2` is
+[known to have problems](https://github.com/rust-lang/pkg-config-rs/issues/51#issuecomment-346300858)
+compiling GStreamer, so you may need to install another version. One option
+would be [`pkg-config-lite`](https://sourceforge.net/projects/pkgconfiglite/).
 
 #### GStreamer Binaries
 
@@ -119,7 +125,7 @@ After installation, you also need to install `pkg-config` (e.g. via MSYS2 or
 from [here](https://sourceforge.net/projects/pkgconfiglite/))
 and set the `PKG_CONFIG_PATH` environment variable
 
-```
+```shell
 $ export PKG_CONFIG_PATH="c:\\gstreamer\\1.0\\x86_64\\lib\\pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 ```
 
