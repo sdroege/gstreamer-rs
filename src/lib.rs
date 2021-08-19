@@ -17,6 +17,8 @@
 
 use tracing_core::field::Value;
 
+#[macro_use]
+mod macros;
 mod callsite;
 mod log;
 mod tracer;
@@ -42,6 +44,53 @@ impl<V: Value> UnsizeValue for Option<V> {
     }
 }
 
+struct PadFlags(u32);
+impl std::fmt::Display for PadFlags {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        use gstreamer::ffi as gffi;
+        f.write_str("{")?;
+        let mut sep = false;
+        let flags = [
+            (gffi::GST_PAD_FLAG_ACCEPT_INTERSECT, "ACCEPT_INTERSECT"),
+            (gffi::GST_PAD_FLAG_ACCEPT_TEMPLATE, "ACCEPT_TEMPLATE"),
+            (gffi::GST_PAD_FLAG_BLOCKED, "BLOCKED"),
+            (gffi::GST_PAD_FLAG_BLOCKING, "BLOCKING"),
+            (gffi::GST_PAD_FLAG_EOS, "EOS"),
+            (gffi::GST_PAD_FLAG_FIXED_CAPS, "FIXED_CAPS"),
+            (gffi::GST_PAD_FLAG_FLUSHING, "FLUSHING"),
+            (gffi::GST_PAD_FLAG_NEED_PARENT, "NEED_PARENT"),
+            (gffi::GST_PAD_FLAG_NEED_RECONFIGURE, "NEED_RECONFIGURE"),
+            (gffi::GST_PAD_FLAG_PENDING_EVENTS, "PENDING_EVENTS"),
+            (gffi::GST_PAD_FLAG_PROXY_ALLOCATION, "PROXY_ALLOCATION"),
+            (gffi::GST_PAD_FLAG_PROXY_CAPS, "PROXY_CAPS"),
+            (gffi::GST_PAD_FLAG_PROXY_SCHEDULING, "PROXY_SCHEDULING"),
+        ];
+        for (flag, name) in flags {
+            if self.0 & flag != 0 {
+                if sep {
+                    f.write_str(", ")?;
+                }
+                f.write_str(name)?;
+                sep = true;
+            }
+        }
+        f.write_str("}")?;
+        Ok(())
+    }
+}
+
+fn state_desc(state: gstreamer::ffi::GstState) -> &'static str {
+    use gstreamer::ffi as gffi;
+    match state {
+        gffi::GST_STATE_NULL => "null",
+        gffi::GST_STATE_PAUSED => "paused",
+        gffi::GST_STATE_PLAYING => "playing",
+        gffi::GST_STATE_READY => "ready",
+        gffi::GST_STATE_VOID_PENDING => "void-pending",
+        _ => "unknown",
+    }
+}
+
 /// Enable the integration between GStreamer logging system and the `tracing` library.
 ///
 /// Once enabled the default [`tracing::Subscriber`][tracing_core::subscriber::Subscriber] will
@@ -56,7 +105,7 @@ impl<V: Value> UnsizeValue for Option<V> {
 ///
 /// Calling this function multiple times may cause duplicate events to be produced.
 pub fn integrate_events() {
-    log::debug_add_log_function(log::default_log_callback);
+    log::debug_add_log_function();
 }
 
 /// Enable the integration between GStreamer tracing system and the `tracing` library.
@@ -78,7 +127,7 @@ pub fn integrate_spans() {
 /// `'static` and therefore cannot be soundly released by any other way except by terminating the
 /// program.
 pub fn disintegrate_events() {
-    log::debug_remove_log_function(log::default_log_callback);
+    log::debug_remove_log_function();
 }
 
 /// Register the `gstreamer::Object`s exposed by this library with GStreamer.

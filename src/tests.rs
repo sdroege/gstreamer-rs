@@ -10,6 +10,7 @@ use tracing::{
     span::{Attributes, Record},
     Id, Subscriber,
 };
+use tracing::{Level, Metadata};
 use tracing_subscriber::layer::{Context, Layer, SubscriberExt};
 
 struct GstEvent {
@@ -102,7 +103,7 @@ impl MockSubscriber {
 
 impl Subscriber for MockSubscriber {
     fn enabled(&self, meta: &tracing_core::Metadata<'_>) -> bool {
-        meta.name() == crate::NAME && (self.filter)(meta)
+        meta.target().starts_with(crate::TARGET) && (self.filter)(meta)
     }
     fn event(&self, e: &tracing_core::Event<'_>) {
         println!("[{}] event: {:?}", self.name, e);
