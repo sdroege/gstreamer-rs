@@ -1,4 +1,5 @@
 use crate::*;
+use g::traits::ElementExt;
 use gstreamer as g;
 use gstreamer::glib::{translate::ToGlibPtr, Cast, ObjectType};
 use std::{
@@ -13,9 +14,23 @@ use tracing::{
 use tracing::{Level, Metadata};
 use tracing_subscriber::layer::{Context, Layer, SubscriberExt};
 
+#[derive(Default, Debug)]
+struct KV {
+    gobject_address: Option<usize>,
+    gobject_type: Option<&'static str>,
+    gstobject_name: Option<&'static str>,
+    gstelement_state: Option<&'static str>,
+    gstelement_pending_state: Option<&'static str>,
+    gstpad_state: Option<&'static str>,
+    gstpad_parent_name: Option<&'static str>,
+    gstpad_parent_state: Option<&'static str>,
+    gstpad_parent_pending_state: Option<&'static str>,
+}
+
+#[derive(Debug)]
 struct GstEvent {
     message: &'static str,
-    gobject: Option<(usize, &'static str)>,
+    kvs: KV,
     level: Level,
     target: &'static str,
 }
@@ -26,10 +41,12 @@ impl Visit for GstEvent {
     }
 
     fn record_u64(&mut self, field: &tracing_core::Field, value: u64) {
-        if field.name() == "gobject_address" {
+        if field.name() == "gobject.address" {
             assert_eq!(
                 value,
-                self.gobject.expect("gobject present but not expected").0 as u64
+                self.kvs
+                    .gobject_address
+                    .expect("gobject.address present but not expected") as u64
             );
         } else {
             panic!("unexpected u64 field: {}", field.name());
@@ -41,27 +58,61 @@ impl Visit for GstEvent {
     }
 
     fn record_str(&mut self, field: &tracing_core::Field, value: &str) {
-        match field.name() {
-            "message" => assert_eq!(value, self.message),
-            "gobject_type" => {
-                assert_eq!(
-                    value,
-                    self.gobject.expect("gobject present but not expected").1
-                );
-            }
+        let expected = match field.name() {
+            "message" => self.message,
+            "gobject.type" => self
+                .kvs
+                .gobject_type
+                .expect("gobject.type present but not expected"),
+            "gstobject.name" => self
+                .kvs
+                .gstobject_name
+                .expect("gstobject.name present but not expected"),
+            "gstelement.state" => self
+                .kvs
+                .gstelement_state
+                .expect("gstelement.state present but not expected"),
+            "gstelement.pending_state" => self
+                .kvs
+                .gstelement_pending_state
+                .expect("gstelement.pending_state present but not expected"),
+            "gstpad.parent.name" => self
+                .kvs
+                .gstpad_parent_name
+                .expect("gstpad.parent.name present but not expected"),
+            "gstpad.parent.state" => self
+                .kvs
+                .gstpad_parent_state
+                .expect("gstpad.parent.state present but not expected"),
+            "gstpad.parent.pending_state" => self
+                .kvs
+                .gstpad_parent_pending_state
+                .expect("gstpad.parent.pending_state present but not expected"),
             _ => panic!("unexpected string field: {}", field.name()),
-        }
+        };
+        assert_eq!(value, expected);
     }
 
     fn record_error(&mut self, field: &tracing_core::Field, _: &(dyn std::error::Error + 'static)) {
         panic!("unexpected error field: {}", field.name());
     }
 
-    fn record_debug(&mut self, field: &tracing_core::Field, _: &dyn std::fmt::Debug) {
-        panic!("unexpected debug field: {}", field.name());
+    fn record_debug(&mut self, field: &tracing_core::Field, d: &dyn std::fmt::Debug) {
+        if field.name() == "gstpad.state" {
+            let value = format!("{:?}", d);
+            assert_eq!(
+                value,
+                self.kvs
+                    .gstpad_state
+                    .expect("gstpad.state present but not expected")
+            )
+        } else {
+            panic!("unexpected debug field: {}", field.name());
+        }
     }
 }
 
+#[derive(Debug)]
 enum Expect {
     GstEvent(GstEvent),
 }
@@ -94,9 +145,11 @@ impl MockSubscriber {
         let expected = subscriber.expected.clone();
         let dispatch = tracing::Dispatch::new(subscriber);
         tracing::dispatcher::with_default(&dispatch, cb);
+        let guard = expected.lock().expect("mutex lock");
         assert!(
-            expected.lock().expect("mutex lock").is_empty(),
-            "all of the expected messages should be present!"
+            guard.is_empty(),
+            "all of the expected messages should be present, these were not found: {:?}!",
+            *guard
         );
     }
 }
@@ -113,7 +166,7 @@ impl Subscriber for MockSubscriber {
             }
             Some(Expect::GstEvent(mut expected @ GstEvent { .. })) => {
                 let meta = e.metadata();
-                if meta.target() != expected.target {
+                if meta.target() != format!("gstreamer::{}", expected.target) {
                     panic!(
                         "[{}] event with target {} received, but expected {}",
                         self.name,
@@ -170,7 +223,7 @@ fn test_simple_error() {
         },
         vec![Expect::GstEvent(GstEvent {
             message: "simple error",
-            gobject: None,
+            kvs: Default::default(),
             level: Level::ERROR,
             target: "test_error_cat",
         })],
@@ -187,7 +240,7 @@ fn test_simple_warning() {
         },
         vec![Expect::GstEvent(GstEvent {
             message: "simple warning",
-            gobject: None,
+            kvs: Default::default(),
             level: Level::WARN,
             target: "test_simple_cat",
         })],
@@ -208,25 +261,25 @@ fn test_simple_events() {
         vec![
             Expect::GstEvent(GstEvent {
                 message: "simple fixme",
-                gobject: None,
+                kvs: Default::default(),
                 level: Level::WARN,
                 target: "test_simple_cat",
             }),
             Expect::GstEvent(GstEvent {
                 message: "simple info",
-                gobject: None,
+                kvs: Default::default(),
                 level: Level::INFO,
                 target: "test_simple_cat",
             }),
             Expect::GstEvent(GstEvent {
                 message: "simple memdump",
-                gobject: None,
+                kvs: Default::default(),
                 level: Level::TRACE,
                 target: "test_simple_cat",
             }),
             Expect::GstEvent(GstEvent {
                 message: "simple trace",
-                gobject: None,
+                kvs: Default::default(),
                 level: Level::TRACE,
                 target: "test_simple_cat",
             }),
@@ -238,7 +291,7 @@ fn test_with_object() {
     let p = g::Pipeline::new(None);
     let p_addr = p.as_object_ref().to_glib_none().0 as usize;
     MockSubscriber::with_expected(
-        |m| m.target() == "test_object_cat",
+        |m| m.target() == "gstreamer::test_object_cat",
         "test_with_object",
         move || {
             let cat = g::DebugCategory::new("test_object_cat", g::DebugColorFlags::empty(), None);
@@ -246,7 +299,14 @@ fn test_with_object() {
         },
         vec![Expect::GstEvent(GstEvent {
             message: "with object",
-            gobject: Some((p_addr, "GstPipeline")),
+            kvs: KV {
+                gobject_address: Some(p_addr),
+                gobject_type: Some("GstPipeline"),
+                gstobject_name: Some("pipeline0"),
+                gstelement_state: Some("null"),
+                gstelement_pending_state: Some("void-pending"),
+                ..Default::default()
+            },
             level: Level::ERROR,
             target: "test_object_cat",
         })],
@@ -257,7 +317,7 @@ fn test_with_upcast_object() {
     let obj: gstreamer::glib::Object = g::Bin::new(None).upcast();
     let obj_addr = obj.as_object_ref().to_glib_none().0 as usize;
     MockSubscriber::with_expected(
-        |m| m.target() == "test_object_cat",
+        |m| m.target() == "gstreamer::test_object_cat",
         "test_with_upcast_object",
         move || {
             let cat = g::DebugCategory::new("test_object_cat", g::DebugColorFlags::empty(), None);
@@ -265,16 +325,53 @@ fn test_with_upcast_object() {
         },
         vec![Expect::GstEvent(GstEvent {
             message: "with upcast object",
-            gobject: Some((obj_addr, "GstBin")),
+            kvs: KV {
+                gobject_address: Some(obj_addr),
+                gobject_type: Some("GstBin"),
+                gstobject_name: Some("bin0"),
+                gstelement_state: Some("null"),
+                gstelement_pending_state: Some("void-pending"),
+                ..Default::default()
+            },
             level: Level::ERROR,
             target: "test_object_cat",
         })],
     );
 }
 
+fn test_with_pad() {
+    let pad = g::Pad::new(Some("custom_pad_name"), gstreamer::PadDirection::Sink);
+    let parent = g::Bin::new(Some("custom_bin_name"));
+    parent.add_pad(&pad).expect("add pad");
+    let pad_addr = pad.as_object_ref().to_glib_none().0 as usize;
+    MockSubscriber::with_expected(
+        |m| m.target() == "gstreamer::test_pad_cat",
+        "test_with_pad",
+        move || {
+            let cat = g::DebugCategory::new("test_pad_cat", g::DebugColorFlags::empty(), None);
+            g::gst_error!(cat, obj: &pad, "with pad object");
+        },
+        vec![Expect::GstEvent(GstEvent {
+            message: "with pad object",
+            kvs: KV {
+                gobject_address: Some(pad_addr),
+                gobject_type: Some("GstPad"),
+                gstobject_name: Some("custom_pad_name"),
+                gstpad_state: Some("{FLUSHING, NEED_PARENT}"),
+                gstpad_parent_name: Some("custom_bin_name"),
+                gstpad_parent_state: Some("null"),
+                gstpad_parent_pending_state: Some("void-pending"),
+                ..Default::default()
+            },
+            level: Level::ERROR,
+            target: "test_pad_cat",
+        })],
+    );
+}
+
 fn test_disintegration() {
     MockSubscriber::with_expected(
-        |m| m.target() == "disintegration",
+        |m| m.target() == "gstreamer::disintegration",
         "test_disintegration",
         move || {
             let cat = g::DebugCategory::new("disintegration", g::DebugColorFlags::empty(), None);
@@ -287,13 +384,13 @@ fn test_disintegration() {
         vec![
             Expect::GstEvent(GstEvent {
                 message: "apple",
-                gobject: None,
+                kvs: Default::default(),
                 level: Level::ERROR,
                 target: "disintegration",
             }),
             Expect::GstEvent(GstEvent {
                 message: "chaenomeles",
-                gobject: None,
+                kvs: Default::default(),
                 level: Level::ERROR,
                 target: "disintegration",
             }),
@@ -311,7 +408,7 @@ fn test_formatting() {
         },
         vec![Expect::GstEvent(GstEvent {
             message: "the answer is believed to be 42.",
-            gobject: None,
+            kvs: Default::default(),
             level: Level::WARN,
             target: "ANSWERS",
         })],
@@ -325,13 +422,13 @@ fn test_interests() {
         vec![
             Expect::GstEvent(GstEvent {
                 message: "warnings should be visible",
-                gobject: None,
+                kvs: Default::default(),
                 level: Level::WARN,
                 target: "INTERESTS",
             }),
             Expect::GstEvent(GstEvent {
                 message: "errors should be visible",
-                gobject: None,
+                kvs: Default::default(),
                 level: Level::ERROR,
                 target: "INTERESTS",
             }),
@@ -350,9 +447,11 @@ fn test_interests() {
         g::gst_debug!(cat, "debugs should NOT be visible");
         g::gst_trace!(cat, "traces should NOT be visible");
     });
+    let guard = expected.lock().expect("mutex lock");
     assert!(
-        expected.lock().expect("mutex lock").is_empty(),
-        "all of the expected messages should be present!"
+        guard.is_empty(),
+        "all of the expected messages should be present, these were not found: {:?}!",
+        *guard
     );
 }
 
@@ -368,6 +467,7 @@ pub(crate) fn run() {
     test_simple_events();
     test_with_object();
     test_with_upcast_object();
+    test_with_pad();
     test_disintegration();
     test_formatting();
     test_interests();
