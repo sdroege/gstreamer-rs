@@ -7,11 +7,11 @@ that otherwise use the [`tracing`] crate for their observability needs.
 
 ## Events
 
-To output `gstreamer` log messages as [`tracing`] events, call the [`integrate`]
+To output `gstreamer` log messages as [`tracing`] events, call the [`integrate_events`]
 function. Calling it before the call to any other `gstreamer` call (especially before the
 `gstreamer::init`) is most likely to correctly forward all of the messages:
 
-```
+```rust
 // Set up the tracing subscriber.
 //
 // e.g. tracing_subscriber::fmt::init();
@@ -32,5 +32,17 @@ Similarly you can use `tracing` APIs to adjust the filters on the `tracing` side
 
 ## Spans
 
+To provide `tracing` with more contextual information for some of the events, you can also enable
+support for generating spans via `gstreamer`'s own [tracing infrastructure][gsttracing].
 
+This functionality can be enabled by calling the [`integrate_spans`] function. It must be called
+after `gstreamer::init`.
+
+```rust
+gstreamer::init();
+tracing_gstreamer::integrate_spans();
+```
+
+
+[gsttracing]: https://gstreamer.freedesktop.org/documentation/additional/design/tracing.html
 [`tracing`]: tracing_core

@@ -108,7 +108,7 @@ unsafe extern "C" fn log_callback(
                 // SAFETY: we check for null pointer before we dereference it. While the object
                 // contents might not otherwise be super defined while ref_count is 0, reading the
                 // ref_count itself here should be good, still.
-                if gobject.is_null() || (*gobject).ref_count <= 0 {
+                if gobject.is_null() || (*gobject).ref_count == 0 {
                     None
                 } else {
                     Some(gobject)
@@ -168,7 +168,7 @@ unsafe extern "C" fn log_callback(
             let gstpad_parent = gstpad.and_then(|p| unsafe {
                 // SAFETY: `p` is a valid pointer.
                 let parent = (*p).object.parent;
-                if parent.is_null() || (*parent).object.ref_count <= 0 {
+                if parent.is_null() || (*parent).object.ref_count == 0 {
                     None
                 } else {
                     Some(parent)
