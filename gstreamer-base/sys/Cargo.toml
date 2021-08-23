@@ -45,7 +45,6 @@ documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/lat
 homepage = "https://gstreamer.freedesktop.org"
 keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
 license = "MIT"
-links = "gstbase-1.0"
 name = "gstreamer-base-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"

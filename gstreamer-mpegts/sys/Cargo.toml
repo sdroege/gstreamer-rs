@@ -41,7 +41,6 @@ description = "FFI bindings to libgstmpegts-1.0"
 homepage = "https://gstreamer.freedesktop.org"
 keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
 license = "MIT"
-links = "gstmpegts-1.0"
 name = "gstreamer-mpegts-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
