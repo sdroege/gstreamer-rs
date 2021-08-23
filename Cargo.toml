@@ -20,7 +20,7 @@ libc = "0.2"
 once_cell = "1.8"
 tracing = "0.1"
 tracing-core = "0.1"
-gstreamer = { git = "https://github.com/sdroege/gstreamer-rs.git", rev = "2ded2837bacecd6f31d3ff373a154a81bbc001a0" }
+gstreamer = "0.17.3"
 thread_local = "1"
 
 [dev-dependencies]
