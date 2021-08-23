@@ -5,6 +5,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.17.3] - 2021-08-23
+### Fixed
+- `gst::Value::deserialize()` takes the target type as parameter now. This is
+  technically an API change but the function would've never worked previously.
+
+### Added
+- The release date-time parameter to `gst::plugin_define!` is optional now
+  like in the C version of the macro.
+- Bindings to `gst::Tracer` and `gst::TracerFactory` for allowing to implement
+  custom tracers in Rust.
+- Bindings for the new `gst::Value::deserialize_with_psec()` function from
+  GStreamer 1.20.
+- serde `Serialize`/`Deserialize` impls for `gst::PadDirection`,
+  `gst::PadPresence`, `gst::URIType` and `gst::Rank`.
+
 ## [0.17.2] - 2021-08-05
 
 ### Fixed
