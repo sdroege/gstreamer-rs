@@ -226,7 +226,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
 }
 unsafe impl<T: RTSPMediaFactoryImpl> IsSubclassable<T> for RTSPMediaFactory {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <glib::Object as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.gen_key = Some(factory_gen_key::<T>);
         klass.create_element = Some(factory_create_element::<T>);
@@ -235,10 +235,6 @@ unsafe impl<T: RTSPMediaFactoryImpl> IsSubclassable<T> for RTSPMediaFactory {
         klass.configure = Some(factory_configure::<T>);
         klass.media_constructed = Some(factory_media_constructed::<T>);
         klass.media_configure = Some(factory_media_configure::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <glib::Object as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

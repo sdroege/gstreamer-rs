@@ -102,15 +102,11 @@ impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {
 
 unsafe impl<T: GLBaseFilterImpl> IsSubclassable<T> for GLBaseFilter {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <gst_base::BaseTransform as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.gl_set_caps = Some(gl_set_caps::<T>);
         klass.gl_start = Some(gl_start::<T>);
         klass.gl_stop = Some(gl_stop::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst_base::BaseTransform as IsSubclassable<T>>::instance_init(instance)
     }
 }
 

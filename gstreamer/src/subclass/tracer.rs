@@ -59,15 +59,7 @@ pub trait TracerImpl: TracerImplExt + ObjectImpl + Send + Sync {
     fn pad_unlink_pre(&self, ts: u64, src: &Pad, sink: &Pad) {}
 }
 
-unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
-    fn class_init(klass: &mut glib::Class<Self>) {
-        <glib::Object as IsSubclassable<T>>::class_init(klass);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <glib::Object as IsSubclassable<T>>::instance_init(instance);
-    }
-}
+unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {}
 
 pub trait TracerImplExt: ObjectSubclass {
     // rustdoc-stripper-ignore-next

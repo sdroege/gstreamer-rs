@@ -7,14 +7,4 @@ use crate::SystemClock;
 
 pub trait SystemClockImpl: ClockImpl {}
 
-unsafe impl<T: SystemClockImpl> IsSubclassable<T> for SystemClock {
-    fn class_init(klass: &mut glib::Class<Self>) {
-        <crate::Clock as IsSubclassable<T>>::class_init(klass);
-        let _klass = klass.as_mut();
-        // Nothing to do here
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <crate::Clock as IsSubclassable<T>>::instance_init(instance);
-    }
-}
+unsafe impl<T: SystemClockImpl> IsSubclassable<T> for SystemClock {}

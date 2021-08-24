@@ -472,7 +472,7 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
 
 unsafe impl<T: AudioEncoderImpl> IsSubclassable<T> for AudioEncoder {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <gst::Element as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.open = Some(audio_encoder_open::<T>);
         klass.close = Some(audio_encoder_close::<T>);
@@ -490,10 +490,6 @@ unsafe impl<T: AudioEncoderImpl> IsSubclassable<T> for AudioEncoder {
         klass.src_query = Some(audio_encoder_src_query::<T>);
         klass.propose_allocation = Some(audio_encoder_propose_allocation::<T>);
         klass.decide_allocation = Some(audio_encoder_decide_allocation::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst::Element as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

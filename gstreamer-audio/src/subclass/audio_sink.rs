@@ -184,7 +184,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
 
 unsafe impl<T: AudioSinkImpl> IsSubclassable<T> for AudioSink {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <gst_base::BaseSink as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.close = Some(audiosink_close::<T>);
         klass.delay = Some(audiosink_delay::<T>);
@@ -193,10 +193,6 @@ unsafe impl<T: AudioSinkImpl> IsSubclassable<T> for AudioSink {
         klass.unprepare = Some(audiosink_unprepare::<T>);
         klass.write = Some(audiosink_write::<T>);
         klass.reset = Some(audiosink_reset::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst_base::BaseSink as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

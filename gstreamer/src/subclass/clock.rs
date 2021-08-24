@@ -233,7 +233,7 @@ impl<T: ClockImpl> ClockImplExt for T {
 
 unsafe impl<T: ClockImpl> IsSubclassable<T> for Clock {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <glib::Object as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.change_resolution = Some(clock_change_resolution::<T>);
         klass.get_resolution = Some(clock_get_resolution::<T>);
@@ -241,10 +241,6 @@ unsafe impl<T: ClockImpl> IsSubclassable<T> for Clock {
         klass.wait = Some(clock_wait::<T>);
         klass.wait_async = Some(clock_wait_async::<T>);
         klass.unschedule = Some(clock_unschedule::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <glib::Object as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

@@ -464,7 +464,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
 unsafe impl<T: VideoEncoderImpl> IsSubclassable<T> for VideoEncoder {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <gst::Element as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.open = Some(video_encoder_open::<T>);
         klass.close = Some(video_encoder_close::<T>);
@@ -482,10 +482,6 @@ unsafe impl<T: VideoEncoderImpl> IsSubclassable<T> for VideoEncoder {
         klass.src_query = Some(video_encoder_src_query::<T>);
         klass.propose_allocation = Some(video_encoder_propose_allocation::<T>);
         klass.decide_allocation = Some(video_encoder_decide_allocation::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst::Element as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

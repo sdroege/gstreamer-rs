@@ -199,17 +199,13 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
 
 unsafe impl<T: BaseParseImpl> IsSubclassable<T> for BaseParse {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <gst::Element as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.start = Some(base_parse_start::<T>);
         klass.stop = Some(base_parse_stop::<T>);
         klass.set_sink_caps = Some(base_parse_set_sink_caps::<T>);
         klass.handle_frame = Some(base_parse_handle_frame::<T>);
         klass.convert = Some(base_parse_convert::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst::Element as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

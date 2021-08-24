@@ -572,7 +572,7 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
 
 unsafe impl<T: VideoDecoderImpl> IsSubclassable<T> for VideoDecoder {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <gst::Element as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.open = Some(video_decoder_open::<T>);
         klass.close = Some(video_decoder_close::<T>);
@@ -596,10 +596,6 @@ unsafe impl<T: VideoDecoderImpl> IsSubclassable<T> for VideoDecoder {
         {
             klass.handle_missing_data = Some(video_decoder_handle_missing_data::<T>);
         }
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst::Element as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

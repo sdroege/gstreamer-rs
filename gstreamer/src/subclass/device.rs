@@ -101,14 +101,10 @@ impl<T: DeviceImpl> DeviceImplExt for T {
 
 unsafe impl<T: DeviceImpl> IsSubclassable<T> for Device {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <glib::Object as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.create_element = Some(device_create_element::<T>);
         klass.reconfigure_element = Some(device_reconfigure_element::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <glib::Object as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

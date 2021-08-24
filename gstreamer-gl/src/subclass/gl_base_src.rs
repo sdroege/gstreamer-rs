@@ -95,16 +95,12 @@ impl<T: GLBaseSrcImpl> GLBaseSrcImplExt for T {
 
 unsafe impl<T: GLBaseSrcImpl> IsSubclassable<T> for GLBaseSrc {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <gst_base::PushSrc as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.supported_gl_api = T::SUPPORTED_GL_API.into_glib();
         klass.gl_start = Some(gl_start::<T>);
         klass.gl_stop = Some(gl_stop::<T>);
         klass.fill_gl_memory = Some(fill_gl_memory::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst_base::PushSrc as IsSubclassable<T>>::instance_init(instance)
     }
 }
 

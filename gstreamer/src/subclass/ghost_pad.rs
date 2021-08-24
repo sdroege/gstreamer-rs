@@ -7,14 +7,4 @@ use crate::GhostPad;
 
 pub trait GhostPadImpl: PadImpl {}
 
-unsafe impl<T: GhostPadImpl> IsSubclassable<T> for GhostPad {
-    fn class_init(klass: &mut glib::Class<Self>) {
-        <crate::Pad as IsSubclassable<T>>::class_init(klass);
-        let _klass = klass.as_mut();
-        // Nothing to do here
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <crate::Pad as IsSubclassable<T>>::instance_init(instance);
-    }
-}
+unsafe impl<T: GhostPadImpl> IsSubclassable<T> for GhostPad {}

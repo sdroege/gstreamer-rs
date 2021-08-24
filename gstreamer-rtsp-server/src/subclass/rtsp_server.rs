@@ -49,14 +49,10 @@ impl<T: RTSPServerImpl> RTSPServerImplExt for T {
 }
 unsafe impl<T: RTSPServerImpl> IsSubclassable<T> for RTSPServer {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <glib::Object as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.create_client = Some(server_create_client::<T>);
         klass.client_connected = Some(server_client_connected::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <glib::Object as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

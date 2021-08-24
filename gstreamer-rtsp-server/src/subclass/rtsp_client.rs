@@ -855,7 +855,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 }
 unsafe impl<T: RTSPClientImpl> IsSubclassable<T> for RTSPClient {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <glib::Object as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.create_sdp = Some(client_create_sdp::<T>);
         klass.configure_client_media = Some(client_configure_client_media::<T>);
@@ -887,10 +887,6 @@ unsafe impl<T: RTSPClientImpl> IsSubclassable<T> for RTSPClient {
         klass.pre_get_parameter_request = Some(client_pre_get_parameter_request::<T>);
         klass.pre_announce_request = Some(client_pre_announce_request::<T>);
         klass.pre_record_request = Some(client_pre_record_request::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <glib::Object as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

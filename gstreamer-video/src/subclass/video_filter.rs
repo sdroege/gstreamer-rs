@@ -211,7 +211,8 @@ unsafe impl<T: VideoFilterImpl> IsSubclassable<T> for VideoFilter {
     fn class_init(klass: &mut glib::Class<Self>) {
         use gst_base::subclass::base_transform::BaseTransformMode;
 
-        <gst_base::BaseTransform as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
+
         let klass = klass.as_mut();
         klass.set_info = Some(video_filter_set_info::<T>);
 
@@ -229,10 +230,6 @@ unsafe impl<T: VideoFilterImpl> IsSubclassable<T> for VideoFilter {
                 klass.transform_frame_ip = Some(video_filter_transform_frame_ip::<T>);
             }
         }
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst_base::BaseTransform as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

@@ -60,14 +60,10 @@ impl<T: PadImpl> PadImplExt for T {
 
 unsafe impl<T: PadImpl> IsSubclassable<T> for Pad {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <glib::Object as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.linked = Some(pad_linked::<T>);
         klass.unlinked = Some(pad_unlinked::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <glib::Object as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

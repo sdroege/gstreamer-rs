@@ -430,7 +430,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
 
 unsafe impl<T: BaseSinkImpl> IsSubclassable<T> for BaseSink {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <gst::Element as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.start = Some(base_sink_start::<T>);
         klass.stop = Some(base_sink_stop::<T>);
@@ -446,10 +446,6 @@ unsafe impl<T: BaseSinkImpl> IsSubclassable<T> for BaseSink {
         klass.unlock = Some(base_sink_unlock::<T>);
         klass.unlock_stop = Some(base_sink_unlock_stop::<T>);
         klass.propose_allocation = Some(base_sink_propose_allocation::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst::Element as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

@@ -374,8 +374,7 @@ impl<T: ElementImpl> ElementImplExt for T {
 
 unsafe impl<T: ElementImpl> IsSubclassable<T> for Element {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <glib::Object as IsSubclassable<T>>::class_init(klass);
-
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.change_state = Some(element_change_state::<T>);
         klass.request_new_pad = Some(element_request_new_pad::<T>);
@@ -413,7 +412,7 @@ unsafe impl<T: ElementImpl> IsSubclassable<T> for Element {
     }
 
     fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <glib::Object as IsSubclassable<T>>::instance_init(instance);
+        Self::parent_instance_init::<T>(instance);
 
         instance.set_instance_data(Self::static_type(), atomic::AtomicBool::new(false));
     }

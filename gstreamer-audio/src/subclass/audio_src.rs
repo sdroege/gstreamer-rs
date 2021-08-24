@@ -200,7 +200,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
 
 unsafe impl<T: AudioSrcImpl> IsSubclassable<T> for AudioSrc {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <gst_base::BaseSrc as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.close = Some(audiosrc_close::<T>);
         klass.delay = Some(audiosrc_delay::<T>);
@@ -209,10 +209,6 @@ unsafe impl<T: AudioSrcImpl> IsSubclassable<T> for AudioSrc {
         klass.unprepare = Some(audiosrc_unprepare::<T>);
         klass.read = Some(audiosrc_read::<T>);
         klass.reset = Some(audiosrc_reset::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst_base::BaseSrc as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

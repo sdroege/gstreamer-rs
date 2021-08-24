@@ -920,7 +920,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
 unsafe impl<T: BaseTransformImpl> IsSubclassable<T> for BaseTransform {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <gst::Element as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.start = Some(base_transform_start::<T>);
         klass.stop = Some(base_transform_stop::<T>);
@@ -959,10 +959,6 @@ unsafe impl<T: BaseTransformImpl> IsSubclassable<T> for BaseTransform {
                 klass.transform_ip = Some(base_transform_transform_ip::<T>);
             }
         }
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst::Element as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

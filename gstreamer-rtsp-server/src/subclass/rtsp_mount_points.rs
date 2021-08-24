@@ -50,13 +50,9 @@ impl<T: RTSPMountPointsImpl> RTSPMountPointsImplExt for T {
 
 unsafe impl<T: RTSPMountPointsImpl> IsSubclassable<T> for RTSPMountPoints {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <glib::Object as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.make_path = Some(mount_points_make_path::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <glib::Object as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

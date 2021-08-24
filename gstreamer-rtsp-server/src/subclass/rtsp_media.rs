@@ -452,7 +452,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
 }
 unsafe impl<T: RTSPMediaImpl> IsSubclassable<T> for RTSPMedia {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <glib::Object as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.handle_message = Some(media_handle_message::<T>);
         klass.prepare = Some(media_prepare::<T>);
@@ -471,10 +471,6 @@ unsafe impl<T: RTSPMediaImpl> IsSubclassable<T> for RTSPMedia {
         klass.target_state = Some(media_target_state::<T>);
         klass.new_state = Some(media_new_state::<T>);
         klass.handle_sdp = Some(media_handle_sdp::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <glib::Object as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

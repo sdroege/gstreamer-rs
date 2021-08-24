@@ -100,15 +100,11 @@ impl<T: BinImpl> BinImplExt for T {
 
 unsafe impl<T: BinImpl> IsSubclassable<T> for Bin {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <crate::Element as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.add_element = Some(bin_add_element::<T>);
         klass.remove_element = Some(bin_remove_element::<T>);
         klass.handle_message = Some(bin_handle_message::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <crate::Element as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

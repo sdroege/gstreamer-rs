@@ -792,7 +792,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
 
 unsafe impl<T: AggregatorImpl> IsSubclassable<T> for Aggregator {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <gst::Element as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.flush = Some(aggregator_flush::<T>);
         klass.clip = Some(aggregator_clip::<T>);
@@ -820,10 +820,6 @@ unsafe impl<T: AggregatorImpl> IsSubclassable<T> for Aggregator {
             klass.peek_next_sample = Some(aggregator_peek_next_sample::<T>);
             klass.finish_buffer_list = Some(aggregator_finish_buffer_list::<T>);
         }
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst::Element as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

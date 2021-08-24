@@ -93,14 +93,10 @@ impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
 }
 unsafe impl<T: AggregatorPadImpl> IsSubclassable<T> for AggregatorPad {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <gst::Pad as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.flush = Some(aggregator_pad_flush::<T>);
         klass.skip_buffer = Some(aggregator_pad_skip_buffer::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst::Pad as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

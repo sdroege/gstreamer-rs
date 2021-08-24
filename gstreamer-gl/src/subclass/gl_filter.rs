@@ -226,7 +226,7 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
 
 unsafe impl<T: GLFilterImpl> IsSubclassable<T> for GLFilter {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <GLBaseFilter as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.set_caps = Some(set_caps::<T>);
         klass.init_fbo = Some(init_fbo::<T>);
@@ -246,10 +246,6 @@ unsafe impl<T: GLFilterImpl> IsSubclassable<T> for GLFilter {
         if <T as GLFilterImpl>::ADD_RGBA_PAD_TEMPLATES {
             unsafe { ffi::gst_gl_filter_add_rgba_pad_templates(klass) }
         }
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <GLBaseFilter as IsSubclassable<T>>::instance_init(instance)
     }
 }
 

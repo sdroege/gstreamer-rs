@@ -176,15 +176,11 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
 
 unsafe impl<T: PushSrcImpl> IsSubclassable<T> for PushSrc {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <crate::BaseSrc as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.fill = Some(push_src_fill::<T>);
         klass.alloc = Some(push_src_alloc::<T>);
         klass.create = Some(push_src_create::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <crate::BaseSrc as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

@@ -49,13 +49,9 @@ impl<T: VideoSinkImpl> VideoSinkImplExt for T {
 
 unsafe impl<T: VideoSinkImpl> IsSubclassable<T> for VideoSink {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <gst_base::BaseSink as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.show_frame = Some(video_sink_show_frame::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst_base::BaseSink as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

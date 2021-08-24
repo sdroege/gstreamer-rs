@@ -143,7 +143,7 @@ impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {
 
 unsafe impl<T: DeviceProviderImpl> IsSubclassable<T> for DeviceProvider {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <glib::Object as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.probe = Some(device_provider_probe::<T>);
         klass.start = Some(device_provider_start::<T>);
@@ -168,10 +168,6 @@ unsafe impl<T: DeviceProviderImpl> IsSubclassable<T> for DeviceProvider {
                 }
             }
         }
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <glib::Object as IsSubclassable<T>>::instance_init(instance);
     }
 }
 

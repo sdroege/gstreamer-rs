@@ -614,7 +614,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
 unsafe impl<T: BaseSrcImpl> IsSubclassable<T> for BaseSrc {
     fn class_init(klass: &mut glib::Class<Self>) {
-        <gst::Element as IsSubclassable<T>>::class_init(klass);
+        Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
         klass.start = Some(base_src_start::<T>);
         klass.stop = Some(base_src_stop::<T>);
@@ -634,10 +634,6 @@ unsafe impl<T: BaseSrcImpl> IsSubclassable<T> for BaseSrc {
         klass.unlock = Some(base_src_unlock::<T>);
         klass.unlock_stop = Some(base_src_unlock_stop::<T>);
         klass.decide_allocation = Some(base_src_decide_allocation::<T>);
-    }
-
-    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
-        <gst::Element as IsSubclassable<T>>::instance_init(instance);
     }
 }
 
