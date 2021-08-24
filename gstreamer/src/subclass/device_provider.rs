@@ -1,5 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use super::prelude::*;
 use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
@@ -67,7 +68,7 @@ impl DeviceProviderMetadata {
     }
 }
 
-pub trait DeviceProviderImpl: DeviceProviderImplExt + ObjectImpl + Send + Sync {
+pub trait DeviceProviderImpl: DeviceProviderImplExt + GstObjectImpl + Send + Sync {
     fn metadata() -> Option<&'static DeviceProviderMetadata> {
         None
     }

@@ -8,7 +8,6 @@ use glib::translate::*;
 
 use gst::{result_from_gboolean, Buffer, Caps, LoggableError, PadDirection, CAT_RUST};
 
-use crate::GLBaseFilter;
 use crate::GLFilter;
 use crate::GLMemory;
 

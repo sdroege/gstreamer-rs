@@ -1,5 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use super::prelude::*;
 use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
@@ -10,7 +11,7 @@ use crate::LoggableError;
 
 use std::ptr;
 
-pub trait DeviceImpl: DeviceImplExt + ObjectImpl + Send + Sync {
+pub trait DeviceImpl: DeviceImplExt + GstObjectImpl + Send + Sync {
     fn create_element(
         &self,
         device: &Self::Type,

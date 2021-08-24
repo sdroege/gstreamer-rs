@@ -1,5 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use super::prelude::*;
 use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
@@ -12,7 +13,7 @@ use crate::ClockSuccess;
 use crate::ClockTime;
 use crate::ClockTimeDiff;
 
-pub trait ClockImpl: ClockImplExt + ObjectImpl + Send + Sync {
+pub trait ClockImpl: ClockImplExt + GstObjectImpl + Send + Sync {
     fn change_resolution(
         &self,
         clock: &Self::Type,

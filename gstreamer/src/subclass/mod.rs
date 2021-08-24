@@ -19,8 +19,10 @@ mod bin;
 mod child_proxy;
 mod element;
 mod ghost_pad;
+mod object;
 mod pad;
 mod pipeline;
+mod proxy_pad;
 mod tracer;
 
 mod device;
@@ -50,9 +52,11 @@ pub mod prelude {
     pub use super::device_provider::{DeviceProviderImpl, DeviceProviderImplExt};
     pub use super::element::{ElementImpl, ElementImplExt};
     pub use super::ghost_pad::GhostPadImpl;
+    pub use super::object::GstObjectImpl;
     pub use super::pad::{PadImpl, PadImplExt};
     pub use super::pipeline::PipelineImpl;
     pub use super::preset::PresetImpl;
+    pub use super::proxy_pad::ProxyPadImpl;
     pub use super::system_clock::SystemClockImpl;
     pub use super::tag_setter::TagSetterImpl;
     pub use super::tracer::{TracerHook, TracerImpl, TracerImplExt};

@@ -5,13 +5,14 @@ use std::mem;
 use glib::prelude::*;
 use glib::translate::*;
 
+use super::prelude::*;
 use gst::LoggableError;
 use gst_base::subclass::prelude::*;
 
 use crate::AudioRingBufferSpec;
 use crate::AudioSrc;
 
-pub trait AudioSrcImpl: AudioSrcImplExt + BaseSrcImpl {
+pub trait AudioSrcImpl: AudioSrcImplExt + AudioBaseSrcImpl {
     fn close(&self, src: &Self::Type) -> Result<(), LoggableError> {
         self.parent_close(src)
     }

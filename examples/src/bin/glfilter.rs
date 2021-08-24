@@ -117,6 +117,7 @@ mod mirror {
         }
 
         impl ElementImpl for GLMirrorFilter {}
+        impl GstObjectImpl for GLMirrorFilter {}
         impl ObjectImpl for GLMirrorFilter {}
         impl BaseTransformImpl for GLMirrorFilter {
             const MODE: BaseTransformMode = BaseTransformMode::NeverInPlace;

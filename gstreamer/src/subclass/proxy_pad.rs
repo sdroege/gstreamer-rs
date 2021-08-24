@@ -3,8 +3,8 @@
 use super::prelude::*;
 use glib::subclass::prelude::*;
 
-use crate::GhostPad;
+use crate::ProxyPad;
 
-pub trait GhostPadImpl: ProxyPadImpl {}
+pub trait ProxyPadImpl: PadImpl {}
 
-unsafe impl<T: GhostPadImpl> IsSubclassable<T> for GhostPad {}
+unsafe impl<T: ProxyPadImpl> IsSubclassable<T> for ProxyPad {}

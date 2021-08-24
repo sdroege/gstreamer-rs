@@ -1,5 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use super::prelude::*;
 use crate::ffi;
 use crate::{
     Bin, Buffer, BufferList, Element, Event, FlowReturn, Message, MiniObject, Object, Pad,
@@ -8,7 +9,7 @@ use crate::{
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 #[allow(unused_variables)]
-pub trait TracerImpl: TracerImplExt + ObjectImpl + Send + Sync {
+pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
     fn bin_add_post(&self, ts: u64, bin: &Bin, element: &Element, success: bool) {}
     fn bin_add_pre(&self, ts: u64, bin: &Bin, element: &Element) {}
     fn bin_remove_post(&self, ts: u64, bin: &Bin, success: bool) {}

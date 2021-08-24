@@ -1,12 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use super::prelude::*;
 use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
 use crate::Pad;
 
-pub trait PadImpl: PadImplExt + ObjectImpl + Send + Sync {
+pub trait PadImpl: PadImplExt + GstObjectImpl + Send + Sync {
     fn linked(&self, pad: &Self::Type, peer: &Pad) {
         self.parent_linked(pad, peer)
     }
@@ -108,6 +109,8 @@ mod tests {
         }
 
         impl ObjectImpl for TestPad {}
+
+        impl GstObjectImpl for TestPad {}
 
         impl PadImpl for TestPad {
             fn linked(&self, pad: &Self::Type, peer: &Pad) {

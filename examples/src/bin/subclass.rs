@@ -61,6 +61,8 @@ mod fir_filter {
         // Implementation of glib::Object virtual methods
         impl ObjectImpl for FirFilter {}
 
+        impl GstObjectImpl for FirFilter {}
+
         // Implementation of gst::Element virtual methods
         impl ElementImpl for FirFilter {
             // The element specific metadata. This information is what is visible from

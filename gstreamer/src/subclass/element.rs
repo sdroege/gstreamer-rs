@@ -1,5 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use super::prelude::*;
 use crate::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
@@ -73,7 +74,7 @@ impl ElementMetadata {
     }
 }
 
-pub trait ElementImpl: ElementImplExt + ObjectImpl + Send + Sync {
+pub trait ElementImpl: ElementImplExt + GstObjectImpl + Send + Sync {
     fn metadata() -> Option<&'static ElementMetadata> {
         None
     }
@@ -716,6 +717,8 @@ mod tests {
                 element.add_pad(&self.srcpad).unwrap();
             }
         }
+
+        impl GstObjectImpl for TestElement {}
 
         impl ElementImpl for TestElement {
             fn metadata() -> Option<&'static ElementMetadata> {
