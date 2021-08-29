@@ -141,20 +141,13 @@ pub use element_factory_list_type::*;
 
 mod tracer;
 
-// OS dependent Bus extensions (also import the other plateform mod for doc)
-#[cfg(any(feature = "v1_14", feature = "dox"))]
+// OS dependent Bus extensions (also import the other platform mod for doc)
+#[cfg(any(all(unix, feature = "v1_14"), feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-cfg_if::cfg_if! {
-    if #[cfg(unix)] {
-        mod bus_unix;
-        #[cfg(feature = "dox")]
-        mod bus_windows;
-    } else {
-        mod bus_windows;
-        #[cfg(feature = "dox")]
-        mod bus_unix;
-    }
-}
+mod bus_unix;
+#[cfg(any(all(windows, feature = "v1_14"), feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+mod bus_windows;
 
 mod child_proxy;
 #[macro_use]
@@ -290,19 +283,12 @@ pub mod prelude {
     pub use crate::meta::MetaAPI;
 
     // OS dependent Bus extensions (also import the other platform trait for doc)
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg(any(all(unix, feature = "v1_14"), feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    cfg_if::cfg_if! {
-        if #[cfg(unix)] {
-            pub use crate::bus_unix::UnixBusExtManual;
-            #[cfg(feature = "dox")]
-            pub use crate::bus_windows::WindowsBusExtManual;
-        } else {
-            pub use crate::bus_windows::WindowsBusExtManual;
-            #[cfg(feature = "dox")]
-            pub use crate::bus_unix::UnixBusExtManual;
-        }
-    }
+    pub use crate::bus_unix::UnixBusExtManual;
+    #[cfg(any(all(windows, feature = "v1_14"), feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    pub use crate::bus_windows::WindowsBusExtManual;
 
     pub use crate::bin::GstBinExtManual;
     pub use crate::buffer_pool::BufferPoolExtManual;
