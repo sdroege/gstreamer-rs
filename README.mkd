@@ -95,7 +95,7 @@ instrumentation points and `tracing-tracy` is the bridge between the two. The fo
 demonstrates the `videoenc` example from this repository adapted to utilize the `tracing-tracy`
 subscriber.
 
-<!-- TODO: video here -->
+<video src="https://user-images.githubusercontent.com/679122/131253926-63761e43-a804-44f4-ad8a-8b87cd274cf8.mp4" controls></video>
 
 In this video there are a couple of highlights
 
