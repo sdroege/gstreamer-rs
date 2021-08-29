@@ -43,6 +43,70 @@ gstreamer::init();
 tracing_gstreamer::integrate_spans();
 ```
 
+## Subscriber showcase
+
+This section demonstrates the results obtained with different kinds of subscribers.
+
+### `tracing_subscriber::fmt`
+
+This subscriber is a great replacement for the built-in gstreamer log handler. Here's an example of
+what the output might look like when using this subscriber:
+
+```text
+$ env RUST_LOG=info cargo run --example videoenc
+    Finished dev [unoptimized + debuginfo] target(s) in 0.04s
+     Running `target/debug/examples/videoenc`
+Jan 01 00:00:00.000  INFO gstreamer::GST_INIT: Initializing GStreamer Core Library version 1.18.4
+<snip>
+Jan 01 00:00:00.000  INFO gstreamer::GST_INIT: initialized GStreamer successfully
+Jan 01 00:00:00.000  INFO gstreamer::GST_PIPELINE: parsing pipeline description '
+        videotestsrc num-buffers=120
+        ! vp9enc
+        ! webmmux name=mux
+        ! fakesink sync=false
+
+        audiotestsrc num-buffers=120
+        ! opusenc
+        ! mux.
+    '
+```
+
+Certain messages may also provide more information than the built-in logger. While builtin logger
+does present you with the type and address of the object being logged, `tracing-gstreamer` may
+provide more readily useful information such as the element name:
+
+```
+Jan 01 00:00:00.000  INFO gstreamer::GST_STATES: completed state change to READY gobject.address=94331150660528 gobject.type="GstAudioTestSrc" gstobject.name="audiotestsrc0" gstelement.state="ready" gstelement.pending_state="void-pending"
+```
+
+or provide additional context via spans, which may help to figure out which element is logging the
+message when there is no other way to tell this otherwise, such as in this example:
+
+```
+Jan 01 00:00:00.000  INFO pad_push{gstpad.state={NEED_PARENT} gstpad.parent.name="audiotestsrc0"}: gstreamer::structure: Expected field 'channel-mask' in structure: audio/x-raw, rate=(int)48000, channels=(int)1, format=(string)S16LE, layout=(string)interleaved;
+```
+
+### `tracing-tracy`
+
+Tracy is a profiler focused primarily on game development workloads, but works fairly well for
+general purpose code as well. Tracy features a sampling profiler, but works best with applications
+that have manually instrumented points of interest.  `tracing` is a great source of such manual
+instrumentation points and `tracing-tracy` is the bridge between the two. The following video
+demonstrates the `videoenc` example from this repository adapted to utilize the `tracing-tracy`
+subscriber.
+
+<!-- TODO: video here -->
+
+In this video there are a couple of highlights
+
+* We can quickly see the amount of concurrency our pipeline enables (2 threads; perhaps adding some
+  `queue`s would help?)
+* Overall thread utilization (low for the audio portion and high for the video portion);
+* Investigate the performance of the specific elements and quickly find out why some of them are
+  slow. For example the `opusenc0` element sometimes takes an unusually long time because the
+  downstream muxer already has a buffer queued at the time.
+
+Similar results can be achieved with some other subscribers as well.
 
 [gsttracing]: https://gstreamer.freedesktop.org/documentation/additional/design/tracing.html
 [`tracing`]: tracing_core
