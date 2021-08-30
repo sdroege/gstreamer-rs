@@ -216,8 +216,8 @@ impl FromGlib<ffi::GstVideoCodecFrameFlags> for VideoCodecFrameFlags {
 }
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 bitflags! {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstVideoDecoderRequestSyncPointFlags")]
     pub struct VideoDecoderRequestSyncPointFlags: u32 {
         #[doc(alias = "GST_VIDEO_DECODER_REQUEST_SYNC_POINT_DISCARD_INPUT")]
@@ -653,8 +653,8 @@ impl ToValue for VideoPackFlags {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 bitflags! {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "GstVideoTimeCodeFlags")]
     pub struct VideoTimeCodeFlags: u32 {
         #[doc(alias = "GST_VIDEO_TIME_CODE_FLAGS_DROP_FRAME")]

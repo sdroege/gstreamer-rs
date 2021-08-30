@@ -660,8 +660,8 @@ impl ToValue for EventTypeFlags {
 }
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 bitflags! {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstGapFlags")]
     pub struct GapFlags: u32 {
         #[doc(alias = "GST_GAP_FLAG_MISSING_DATA")]
@@ -1228,8 +1228,8 @@ impl ToValue for PipelineFlags {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 bitflags! {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GstPluginAPIFlags")]
     pub struct PluginAPIFlags: u32 {
         #[doc(alias = "GST_PLUGIN_API_FLAG_IGNORE_ENUM_MEMBERS")]
@@ -1647,8 +1647,8 @@ impl ToValue for SegmentFlags {
 }
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 bitflags! {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstSerializeFlags")]
     pub struct SerializeFlags: u32 {
         #[doc(alias = "GST_SERIALIZE_FLAG_NONE")]
@@ -1721,8 +1721,8 @@ impl ToValue for SerializeFlags {
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 bitflags! {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GstStackTraceFlags")]
     pub struct StackTraceFlags: u32 {
         #[doc(alias = "GST_STACK_TRACE_SHOW_FULL")]
@@ -1855,8 +1855,8 @@ impl ToValue for StreamFlags {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 bitflags! {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "GstStreamType")]
     pub struct StreamType: u32 {
         #[doc(alias = "GST_STREAM_TYPE_UNKNOWN")]

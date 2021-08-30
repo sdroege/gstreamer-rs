@@ -11,8 +11,8 @@ use glib::StaticType;
 use glib::Type;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 bitflags! {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "GstRTPBufferFlags")]
     pub struct RTPBufferFlags: u32 {
         #[doc(alias = "GST_RTP_BUFFER_FLAG_RETRANSMISSION")]
@@ -143,8 +143,8 @@ impl ToValue for RTPBufferMapFlags {
 }
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 bitflags! {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstRTPHeaderExtensionFlags")]
     pub struct RTPHeaderExtensionFlags: u32 {
         #[doc(alias = "GST_RTP_HEADER_EXTENSION_ONE_BYTE")]

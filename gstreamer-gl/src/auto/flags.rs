@@ -98,8 +98,8 @@ impl ToValue for GLAPI {
 }
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 bitflags! {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstGLConfigSurfaceType")]
     pub struct GLConfigSurfaceType: u32 {
         #[doc(alias = "GST_GL_CONFIG_SURFACE_TYPE_NONE")]
