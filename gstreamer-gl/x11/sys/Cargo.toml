@@ -40,7 +40,7 @@ git = "https://github.com/gtk-rs/gtk-rs-core"
 path = "../../sys"
 
 [build-dependencies]
-system-deps = "3"
+system-deps = "4"
 
 [dev-dependencies]
 shell-words = "1.0.0"
