@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{from_glib, FromGlibPtrFull, IntoGlib};
+use glib::translate::{from_glib, mut_override, FromGlibPtrFull, IntoGlib};
 use std::fmt;
 use std::marker::PhantomData;
 use std::mem;
@@ -12,8 +12,7 @@ pub enum Writable {}
 
 pub struct RTPBuffer<'a, T> {
     rtp_buffer: ffi::GstRTPBuffer,
-    buffer: &'a gst::Buffer,
-    phantom: PhantomData<T>,
+    phantom: PhantomData<&'a T>,
 }
 
 unsafe impl<'a, T> Send for RTPBuffer<'a, T> {}
@@ -23,21 +22,19 @@ impl<'a, T> fmt::Debug for RTPBuffer<'a, T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("RTPBuffer")
             .field("rtp_buffer", &self.rtp_buffer)
-            .field("buffer", &self.buffer)
-            .field("phantom", &self.phantom)
             .finish()
     }
 }
 
 impl<'a> RTPBuffer<'a, Readable> {
     pub fn from_buffer_readable(
-        buffer: &gst::Buffer,
+        buffer: &'a gst::BufferRef,
     ) -> Result<RTPBuffer<Readable>, glib::BoolError> {
         skip_assert_initialized!();
         unsafe {
             let mut rtp_buffer = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(ffi::gst_rtp_buffer_map(
-                buffer.as_mut_ptr(),
+                mut_override(buffer.as_ptr()),
                 gst::ffi::GST_MAP_READ,
                 rtp_buffer.as_mut_ptr(),
             ));
@@ -45,7 +42,6 @@ impl<'a> RTPBuffer<'a, Readable> {
             if res {
                 Ok(RTPBuffer {
                     rtp_buffer: rtp_buffer.assume_init(),
-                    buffer,
                     phantom: PhantomData,
                 })
             } else {
@@ -57,7 +53,7 @@ impl<'a> RTPBuffer<'a, Readable> {
 
 impl<'a> RTPBuffer<'a, Writable> {
     pub fn from_buffer_writable(
-        buffer: &mut gst::Buffer,
+        buffer: &'a mut gst::BufferRef,
     ) -> Result<RTPBuffer<Writable>, glib::BoolError> {
         skip_assert_initialized!();
         unsafe {
@@ -71,7 +67,6 @@ impl<'a> RTPBuffer<'a, Writable> {
             if res {
                 Ok(RTPBuffer {
                     rtp_buffer: rtp_buffer.assume_init(),
-                    buffer,
                     phantom: PhantomData,
                 })
             } else {
@@ -394,40 +389,43 @@ mod tests {
         let csrc_count = 2;
         let payload_size = 16;
         let mut buffer = gst::Buffer::new_rtp_with_sizes(payload_size, 4, csrc_count).unwrap();
-        let mut rtp_buffer = RTPBuffer::from_buffer_writable(&mut buffer).unwrap();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            let mut rtp_buffer = RTPBuffer::from_buffer_writable(buffer).unwrap();
 
-        rtp_buffer.set_seq(42);
-        assert_eq!(rtp_buffer.seq(), 42);
+            rtp_buffer.set_seq(42);
+            assert_eq!(rtp_buffer.seq(), 42);
 
-        rtp_buffer.set_marker(true);
-        assert!(rtp_buffer.is_marker());
+            rtp_buffer.set_marker(true);
+            assert!(rtp_buffer.is_marker());
 
-        rtp_buffer.set_payload_type(43);
-        assert_eq!(rtp_buffer.payload_type(), 43);
+            rtp_buffer.set_payload_type(43);
+            assert_eq!(rtp_buffer.payload_type(), 43);
 
-        rtp_buffer.set_timestamp(44);
-        assert_eq!(rtp_buffer.timestamp(), 44);
+            rtp_buffer.set_timestamp(44);
+            assert_eq!(rtp_buffer.timestamp(), 44);
 
-        rtp_buffer.set_ssrc(45);
-        assert_eq!(rtp_buffer.ssrc(), 45);
+            rtp_buffer.set_ssrc(45);
+            assert_eq!(rtp_buffer.ssrc(), 45);
 
-        assert_eq!(rtp_buffer.payload_size(), payload_size);
-        let payload = rtp_buffer.payload();
-        assert!(payload.is_ok());
-        let payload = payload.unwrap();
-        assert_eq!(payload.len(), payload_size as usize);
+            assert_eq!(rtp_buffer.payload_size(), payload_size);
+            let payload = rtp_buffer.payload();
+            assert!(payload.is_ok());
+            let payload = payload.unwrap();
+            assert_eq!(payload.len(), payload_size as usize);
 
-        assert_eq!(rtp_buffer.csrc_count(), csrc_count);
-        rtp_buffer.set_csrc(0, 12);
-        rtp_buffer.set_csrc(1, 15);
-        assert_eq!(rtp_buffer.csrc(0).unwrap(), 12);
-        assert_eq!(rtp_buffer.csrc(1).unwrap(), 15);
-        assert!(rtp_buffer.csrc(2).is_none());
+            assert_eq!(rtp_buffer.csrc_count(), csrc_count);
+            rtp_buffer.set_csrc(0, 12);
+            rtp_buffer.set_csrc(1, 15);
+            assert_eq!(rtp_buffer.csrc(0).unwrap(), 12);
+            assert_eq!(rtp_buffer.csrc(1).unwrap(), 15);
+            assert!(rtp_buffer.csrc(2).is_none());
 
-        rtp_buffer.set_extension(true);
-        assert!(rtp_buffer.is_extension());
+            rtp_buffer.set_extension(true);
+            assert!(rtp_buffer.is_extension());
 
-        assert_eq!(rtp_buffer.extension_bytes(), None);
+            assert_eq!(rtp_buffer.extension_bytes(), None);
+        }
     }
 
     #[test]
@@ -449,15 +447,19 @@ mod tests {
     fn test_extension_header_onebyte() {
         gst::init().unwrap();
 
-        let mut buffer = gst::Buffer::new_rtp_with_sizes(16, 4, 0).unwrap();
-        let mut rtp_buffer = RTPBuffer::from_buffer_writable(&mut buffer).unwrap();
-
-        assert_eq!(rtp_buffer.extension_bytes(), None);
-
         let extension_data: [u8; 4] = [100, 101, 102, 103];
-        let result = rtp_buffer.add_extension_onebyte_header(1, &extension_data);
-        assert!(result.is_ok());
+        let mut buffer = gst::Buffer::new_rtp_with_sizes(16, 4, 0).unwrap();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            let mut rtp_buffer = RTPBuffer::from_buffer_writable(buffer).unwrap();
 
+            assert_eq!(rtp_buffer.extension_bytes(), None);
+
+            let result = rtp_buffer.add_extension_onebyte_header(1, &extension_data);
+            assert!(result.is_ok());
+        }
+
+        let rtp_buffer = RTPBuffer::from_buffer_readable(&buffer).unwrap();
         let bytes_option = rtp_buffer.extension_bytes();
         assert!(bytes_option.is_some());
         let (bits, bytes) = bytes_option.unwrap();
@@ -487,16 +489,22 @@ mod tests {
     fn test_extension_header_twobytes() {
         gst::init().unwrap();
 
-        let mut buffer = gst::Buffer::new_rtp_with_sizes(16, 4, 0).unwrap();
-        let mut rtp_buffer = RTPBuffer::from_buffer_writable(&mut buffer).unwrap();
-
-        assert_eq!(rtp_buffer.extension_bytes(), None);
-
         let extension_data: [u8; 4] = [100, 101, 102, 103];
         let appbits = 5;
         let id = 1;
-        let result = rtp_buffer.add_extension_twobytes_header(appbits, id, &extension_data);
-        assert!(result.is_ok());
+
+        let mut buffer = gst::Buffer::new_rtp_with_sizes(16, 4, 0).unwrap();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            let mut rtp_buffer = RTPBuffer::from_buffer_writable(buffer).unwrap();
+
+            assert_eq!(rtp_buffer.extension_bytes(), None);
+
+            let result = rtp_buffer.add_extension_twobytes_header(appbits, id, &extension_data);
+            assert!(result.is_ok());
+        }
+
+        let rtp_buffer = RTPBuffer::from_buffer_readable(&buffer).unwrap();
 
         let bytes_option = rtp_buffer.extension_bytes();
         assert!(bytes_option.is_some());
