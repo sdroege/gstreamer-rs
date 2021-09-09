@@ -45,7 +45,39 @@ use std::env;
 #[path = "../examples-common.rs"]
 mod examples_common;
 
-fn main_loop(uri: &str) -> Result<(), glib::BoolError> {
+fn configure_pipeline(pipeline: &ges::Pipeline, output_name: &str) {
+    // Every audiostream piped into the encodebin should be encoded using opus.
+    let audio_profile = gst_pbutils::EncodingAudioProfileBuilder::new()
+        .format(&gst::Caps::new_simple("audio/x-opus", &[]))
+        .build()
+        .expect("Failed to create audio profile");
+
+    // Every videostream piped into the encodebin should be encoded using vp8.
+    let video_profile = gst_pbutils::EncodingVideoProfileBuilder::new()
+        .format(&gst::Caps::new_simple("video/x-vp8", &[]))
+        .build()
+        .expect("Failed to create video profile");
+
+    // All streams are then finally combined into a webm container.
+    let container_profile = gst_pbutils::EncodingContainerProfileBuilder::new()
+        .name("container")
+        .format(&gst::Caps::new_simple("video/webm", &[]))
+        .add_profile(&video_profile)
+        .add_profile(&audio_profile)
+        .build()
+        .expect("Failed to create container profile");
+
+    // Apply the EncodingProfile to the pipeline, and set it to render mode
+    let output_uri = format!("{}.webm", output_name);
+    pipeline
+        .set_render_settings(&output_uri, &container_profile)
+        .expect("Failed to set render settings");
+    pipeline
+        .set_mode(ges::PipelineFlags::RENDER)
+        .expect("Failed to set pipeline to render mode");
+}
+
+fn main_loop(uri: &str, output: Option<&String>) -> Result<(), glib::BoolError> {
     ges::init()?;
 
     // Begin by creating a timeline with audio and video tracks
@@ -54,6 +86,11 @@ fn main_loop(uri: &str) -> Result<(), glib::BoolError> {
     let layer = timeline.append_layer();
     let pipeline = ges::Pipeline::new();
     pipeline.set_timeline(&timeline)?;
+
+    // If requested, configure the pipeline so it renders to a file.
+    if let Some(output_name) = output {
+        configure_pipeline(&pipeline, output_name);
+    }
 
     // Load a clip from the given uri and add it to the layer.
     let clip = ges::UriClip::new(uri).expect("Failed to create clip");
@@ -126,14 +163,15 @@ fn main_loop(uri: &str) -> Result<(), glib::BoolError> {
 #[allow(unused_variables)]
 fn example_main() {
     let args: Vec<_> = env::args().collect();
-    let uri: &str = if args.len() == 2 {
-        args[1].as_ref()
-    } else {
-        println!("Usage: ges launch");
+    if args.len() < 2 || args.len() > 3 {
+        println!("Usage: ges input [output]");
         std::process::exit(-1)
-    };
+    }
 
-    match main_loop(uri) {
+    let input_uri: &str = args[1].as_ref();
+    let output = args.get(2);
+
+    match main_loop(input_uri, output) {
         Ok(r) => r,
         Err(e) => eprintln!("Error! {}", e),
     }
