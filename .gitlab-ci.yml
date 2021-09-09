@@ -26,6 +26,16 @@ include:
 
   - local: "ci/images_template.yml"
 
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
+    # don't create a pipeline if its a commit pipeline, on a branch and that branch has
+    # open merge requests (bc we will get a MR build instead)
+    - if: $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH
+
 variables:
   FDO_UPSTREAM_REPO: gstreamer/gstreamer-rs
   RUST_DOCS_FLAGS: "--extern-html-root-url=muldiv=https://docs.rs/muldiv/1.0.0/muldiv/ -Z unstable-options"
