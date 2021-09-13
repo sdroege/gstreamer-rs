@@ -17,6 +17,38 @@ pub struct DeviceProviderMetadata {
     additional: Vec<(String, String)>,
 }
 
+impl DeviceProviderMetadata {
+    pub fn new(long_name: &str, classification: &str, description: &str, author: &str) -> Self {
+        Self {
+            long_name: long_name.into(),
+            classification: classification.into(),
+            description: description.into(),
+            author: author.into(),
+            additional: vec![],
+        }
+    }
+
+    pub fn with_additional(
+        long_name: &str,
+        classification: &str,
+        description: &str,
+        author: &str,
+        additional: &[(&str, &str)],
+    ) -> Self {
+        Self {
+            long_name: long_name.into(),
+            classification: classification.into(),
+            description: description.into(),
+            author: author.into(),
+            additional: additional
+                .iter()
+                .copied()
+                .map(|(key, value)| (key.into(), value.into()))
+                .collect(),
+        }
+    }
+}
+
 pub trait DeviceProviderImpl: DeviceProviderImplExt + ObjectImpl + Send + Sync {
     fn metadata() -> Option<&'static DeviceProviderMetadata> {
         None
