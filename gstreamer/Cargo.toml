@@ -16,7 +16,7 @@ edition = "2018"
 bitflags = "1.0"
 cfg-if = "1.0"
 libc = "0.2"
-ffi = { package = "gstreamer-sys", version = "0.17.4", path = "sys", features = ["v1_8"] }
+ffi = { package = "gstreamer-sys", version = "0.17.3", path = "sys", features = ["v1_8"] }
 glib = { version = "0.14" }
 num-integer = { version = "0.1", default-features = false, features = [] }
 num-rational = { version = "0.4", default-features = false, features = [] }
