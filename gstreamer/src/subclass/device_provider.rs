@@ -4,17 +4,67 @@ use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
+use std::borrow::Cow;
+
 use crate::Device;
 use crate::DeviceProvider;
 use crate::LoggableError;
 
 #[derive(Debug, Clone)]
 pub struct DeviceProviderMetadata {
-    long_name: String,
-    classification: String,
-    description: String,
-    author: String,
-    additional: Vec<(String, String)>,
+    long_name: Cow<'static, str>,
+    classification: Cow<'static, str>,
+    description: Cow<'static, str>,
+    author: Cow<'static, str>,
+    additional: Cow<'static, [(Cow<'static, str>, Cow<'static, str>)]>,
+}
+
+impl DeviceProviderMetadata {
+    pub fn new(long_name: &str, classification: &str, description: &str, author: &str) -> Self {
+        Self {
+            long_name: Cow::Owned(long_name.into()),
+            classification: Cow::Owned(classification.into()),
+            description: Cow::Owned(description.into()),
+            author: Cow::Owned(author.into()),
+            additional: Cow::Borrowed(&[]),
+        }
+    }
+
+    pub fn with_additional(
+        long_name: &str,
+        classification: &str,
+        description: &str,
+        author: &str,
+        additional: &[(&str, &str)],
+    ) -> Self {
+        Self {
+            long_name: Cow::Owned(long_name.into()),
+            classification: Cow::Owned(classification.into()),
+            description: Cow::Owned(description.into()),
+            author: Cow::Owned(author.into()),
+            additional: additional
+                .iter()
+                .copied()
+                .map(|(key, value)| (Cow::Owned(key.into()), Cow::Owned(value.into())))
+                .collect(),
+        }
+    }
+
+    pub const fn with_cow(
+        long_name: Cow<'static, str>,
+        classification: Cow<'static, str>,
+        description: Cow<'static, str>,
+        author: Cow<'static, str>,
+        additional: Cow<'static, [(Cow<'static, str>, Cow<'static, str>)]>,
+    ) -> Self {
+        Self {
+            long_name,
+            classification,
+            description,
+            author,
+            additional,
+        }
+    }
 }
 
 pub trait DeviceProviderImpl: DeviceProviderImplExt + ObjectImpl + Send + Sync {
@@ -109,7 +159,7 @@ unsafe impl<T: DeviceProviderImpl> IsSubclassable<T> for DeviceProvider {
                     metadata.author.to_glib_none().0,
                 );
 
-                for (key, value) in &metadata.additional {
+                for (key, value) in metadata.additional.iter() {
                     ffi::gst_device_provider_class_add_metadata(
                         klass,
                         key.to_glib_none().0,
