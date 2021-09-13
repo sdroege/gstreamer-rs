@@ -49,7 +49,7 @@ links = "gstrtp-1.0"
 name = "gstreamer-rtp-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
-version = "0.17.3"
+version = "0.17.4"
 edition = "2018"
 [package.metadata.docs.rs]
 features = ["dox"]

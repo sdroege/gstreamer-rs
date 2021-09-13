@@ -9,7 +9,7 @@ license = "MIT"
 name = "gstreamer-gl-x11-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
-version = "0.17.3"
+version = "0.17.4"
 edition = "2018"
 [package.metadata.system-deps.gstreamer_gl_x11_1_0]
 name = "gstreamer-gl-1.0"
