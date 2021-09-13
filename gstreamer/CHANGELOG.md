@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.17.4] - 2021-09-13
+### Added
+- Add constructor for device provider metadata.
+
 ## [0.17.3] - 2021-08-23
 ### Fixed
 - `gst::Value::deserialize()` takes the target type as parameter now. This is
