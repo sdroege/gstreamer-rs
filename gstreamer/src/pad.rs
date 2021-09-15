@@ -28,7 +28,7 @@ use glib::ffi::gpointer;
 use glib::prelude::*;
 use glib::translate::*;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct PadProbeId(NonZeroU64);
 
 impl IntoGlib for PadProbeId {
