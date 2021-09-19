@@ -7,6 +7,7 @@ use crate::Edge;
 use crate::EditMode;
 use crate::Extractable;
 use crate::Layer;
+use crate::MetaContainer;
 use crate::TimelineElement;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -19,7 +20,7 @@ use std::mem::transmute;
 
 glib::wrapper! {
     #[doc(alias = "GESContainer")]
-    pub struct Container(Object<ffi::GESContainer, ffi::GESContainerClass>) @extends TimelineElement, @implements Extractable;
+    pub struct Container(Object<ffi::GESContainer, ffi::GESContainerClass>) @extends TimelineElement, @implements Extractable, MetaContainer;
 
     match fn {
         type_ => || ffi::ges_container_get_type(),

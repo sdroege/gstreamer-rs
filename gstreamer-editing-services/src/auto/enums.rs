@@ -17,6 +17,96 @@ use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GESAssetLoadingReturn")]
+pub enum AssetLoadingReturn {
+    #[doc(alias = "GES_ASSET_LOADING_ERROR")]
+    Error,
+    #[doc(alias = "GES_ASSET_LOADING_ASYNC")]
+    Async,
+    #[doc(alias = "GES_ASSET_LOADING_OK")]
+    Ok,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for AssetLoadingReturn {
+    type GlibType = ffi::GESAssetLoadingReturn;
+
+    fn into_glib(self) -> ffi::GESAssetLoadingReturn {
+        match self {
+            Self::Error => ffi::GES_ASSET_LOADING_ERROR,
+            Self::Async => ffi::GES_ASSET_LOADING_ASYNC,
+            Self::Ok => ffi::GES_ASSET_LOADING_OK,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GESAssetLoadingReturn> for AssetLoadingReturn {
+    unsafe fn from_glib(value: ffi::GESAssetLoadingReturn) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GES_ASSET_LOADING_ERROR => Self::Error,
+            ffi::GES_ASSET_LOADING_ASYNC => Self::Async,
+            ffi::GES_ASSET_LOADING_OK => Self::Ok,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GESChildrenControlMode")]
+pub enum ChildrenControlMode {
+    #[doc(alias = "GES_CHILDREN_UPDATE")]
+    Update,
+    #[doc(alias = "GES_CHILDREN_IGNORE_NOTIFIES")]
+    IgnoreNotifies,
+    #[doc(alias = "GES_CHILDREN_UPDATE_OFFSETS")]
+    UpdateOffsets,
+    #[doc(alias = "GES_CHILDREN_UPDATE_ALL_VALUES")]
+    UpdateAllValues,
+    #[doc(alias = "GES_CHILDREN_LAST")]
+    Last,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for ChildrenControlMode {
+    type GlibType = ffi::GESChildrenControlMode;
+
+    fn into_glib(self) -> ffi::GESChildrenControlMode {
+        match self {
+            Self::Update => ffi::GES_CHILDREN_UPDATE,
+            Self::IgnoreNotifies => ffi::GES_CHILDREN_IGNORE_NOTIFIES,
+            Self::UpdateOffsets => ffi::GES_CHILDREN_UPDATE_OFFSETS,
+            Self::UpdateAllValues => ffi::GES_CHILDREN_UPDATE_ALL_VALUES,
+            Self::Last => ffi::GES_CHILDREN_LAST,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GESChildrenControlMode> for ChildrenControlMode {
+    unsafe fn from_glib(value: ffi::GESChildrenControlMode) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GES_CHILDREN_UPDATE => Self::Update,
+            ffi::GES_CHILDREN_IGNORE_NOTIFIES => Self::IgnoreNotifies,
+            ffi::GES_CHILDREN_UPDATE_OFFSETS => Self::UpdateOffsets,
+            ffi::GES_CHILDREN_UPDATE_ALL_VALUES => Self::UpdateAllValues,
+            ffi::GES_CHILDREN_LAST => Self::Last,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 #[doc(alias = "GESEdge")]
 pub enum Edge {
     #[doc(alias = "GES_EDGE_START")]
@@ -208,6 +298,239 @@ unsafe impl<'a> FromValue<'a> for EditMode {
 }
 
 impl ToValue for EditMode {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GESError")]
+pub enum Error {
+    #[doc(alias = "GES_ERROR_ASSET_WRONG_ID")]
+    AssetWrongId,
+    #[doc(alias = "GES_ERROR_ASSET_LOADING")]
+    AssetLoading,
+    #[doc(alias = "GES_ERROR_FORMATTER_MALFORMED_INPUT_FILE")]
+    FormatterMalformedInputFile,
+    #[doc(alias = "GES_ERROR_INVALID_FRAME_NUMBER")]
+    InvalidFrameNumber,
+    #[doc(alias = "GES_ERROR_NEGATIVE_LAYER")]
+    NegativeLayer,
+    #[doc(alias = "GES_ERROR_NEGATIVE_TIME")]
+    NegativeTime,
+    #[doc(alias = "GES_ERROR_NOT_ENOUGH_INTERNAL_CONTENT")]
+    NotEnoughInternalContent,
+    #[doc(alias = "GES_ERROR_INVALID_OVERLAP_IN_TRACK")]
+    InvalidOverlapInTrack,
+    #[doc(alias = "GES_ERROR_INVALID_EFFECT_BIN_DESCRIPTION")]
+    InvalidEffectBinDescription,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for Error {
+    type GlibType = ffi::GESError;
+
+    fn into_glib(self) -> ffi::GESError {
+        match self {
+            Self::AssetWrongId => ffi::GES_ERROR_ASSET_WRONG_ID,
+            Self::AssetLoading => ffi::GES_ERROR_ASSET_LOADING,
+            Self::FormatterMalformedInputFile => ffi::GES_ERROR_FORMATTER_MALFORMED_INPUT_FILE,
+            Self::InvalidFrameNumber => ffi::GES_ERROR_INVALID_FRAME_NUMBER,
+            Self::NegativeLayer => ffi::GES_ERROR_NEGATIVE_LAYER,
+            Self::NegativeTime => ffi::GES_ERROR_NEGATIVE_TIME,
+            Self::NotEnoughInternalContent => ffi::GES_ERROR_NOT_ENOUGH_INTERNAL_CONTENT,
+            Self::InvalidOverlapInTrack => ffi::GES_ERROR_INVALID_OVERLAP_IN_TRACK,
+            Self::InvalidEffectBinDescription => ffi::GES_ERROR_INVALID_EFFECT_BIN_DESCRIPTION,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GESError> for Error {
+    unsafe fn from_glib(value: ffi::GESError) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GES_ERROR_ASSET_WRONG_ID => Self::AssetWrongId,
+            ffi::GES_ERROR_ASSET_LOADING => Self::AssetLoading,
+            ffi::GES_ERROR_FORMATTER_MALFORMED_INPUT_FILE => Self::FormatterMalformedInputFile,
+            ffi::GES_ERROR_INVALID_FRAME_NUMBER => Self::InvalidFrameNumber,
+            ffi::GES_ERROR_NEGATIVE_LAYER => Self::NegativeLayer,
+            ffi::GES_ERROR_NEGATIVE_TIME => Self::NegativeTime,
+            ffi::GES_ERROR_NOT_ENOUGH_INTERNAL_CONTENT => Self::NotEnoughInternalContent,
+            ffi::GES_ERROR_INVALID_OVERLAP_IN_TRACK => Self::InvalidOverlapInTrack,
+            ffi::GES_ERROR_INVALID_EFFECT_BIN_DESCRIPTION => Self::InvalidEffectBinDescription,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GESTextHAlign")]
+pub enum TextHAlign {
+    #[doc(alias = "GES_TEXT_HALIGN_LEFT")]
+    Left,
+    #[doc(alias = "GES_TEXT_HALIGN_CENTER")]
+    Center,
+    #[doc(alias = "GES_TEXT_HALIGN_RIGHT")]
+    Right,
+    #[doc(alias = "GES_TEXT_HALIGN_POSITION")]
+    Position,
+    #[doc(alias = "GES_TEXT_HALIGN_ABSOLUTE")]
+    Absolute,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for TextHAlign {
+    type GlibType = ffi::GESTextHAlign;
+
+    fn into_glib(self) -> ffi::GESTextHAlign {
+        match self {
+            Self::Left => ffi::GES_TEXT_HALIGN_LEFT,
+            Self::Center => ffi::GES_TEXT_HALIGN_CENTER,
+            Self::Right => ffi::GES_TEXT_HALIGN_RIGHT,
+            Self::Position => ffi::GES_TEXT_HALIGN_POSITION,
+            Self::Absolute => ffi::GES_TEXT_HALIGN_ABSOLUTE,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GESTextHAlign> for TextHAlign {
+    unsafe fn from_glib(value: ffi::GESTextHAlign) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GES_TEXT_HALIGN_LEFT => Self::Left,
+            ffi::GES_TEXT_HALIGN_CENTER => Self::Center,
+            ffi::GES_TEXT_HALIGN_RIGHT => Self::Right,
+            ffi::GES_TEXT_HALIGN_POSITION => Self::Position,
+            ffi::GES_TEXT_HALIGN_ABSOLUTE => Self::Absolute,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for TextHAlign {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::ges_text_halign_get_type()) }
+    }
+}
+
+impl glib::value::ValueType for TextHAlign {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for TextHAlign {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for TextHAlign {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GESTextVAlign")]
+pub enum TextVAlign {
+    #[doc(alias = "GES_TEXT_VALIGN_BASELINE")]
+    Baseline,
+    #[doc(alias = "GES_TEXT_VALIGN_BOTTOM")]
+    Bottom,
+    #[doc(alias = "GES_TEXT_VALIGN_TOP")]
+    Top,
+    #[doc(alias = "GES_TEXT_VALIGN_POSITION")]
+    Position,
+    #[doc(alias = "GES_TEXT_VALIGN_CENTER")]
+    Center,
+    #[doc(alias = "GES_TEXT_VALIGN_ABSOLUTE")]
+    Absolute,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for TextVAlign {
+    type GlibType = ffi::GESTextVAlign;
+
+    fn into_glib(self) -> ffi::GESTextVAlign {
+        match self {
+            Self::Baseline => ffi::GES_TEXT_VALIGN_BASELINE,
+            Self::Bottom => ffi::GES_TEXT_VALIGN_BOTTOM,
+            Self::Top => ffi::GES_TEXT_VALIGN_TOP,
+            Self::Position => ffi::GES_TEXT_VALIGN_POSITION,
+            Self::Center => ffi::GES_TEXT_VALIGN_CENTER,
+            Self::Absolute => ffi::GES_TEXT_VALIGN_ABSOLUTE,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GESTextVAlign> for TextVAlign {
+    unsafe fn from_glib(value: ffi::GESTextVAlign) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GES_TEXT_VALIGN_BASELINE => Self::Baseline,
+            ffi::GES_TEXT_VALIGN_BOTTOM => Self::Bottom,
+            ffi::GES_TEXT_VALIGN_TOP => Self::Top,
+            ffi::GES_TEXT_VALIGN_POSITION => Self::Position,
+            ffi::GES_TEXT_VALIGN_CENTER => Self::Center,
+            ffi::GES_TEXT_VALIGN_ABSOLUTE => Self::Absolute,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for TextVAlign {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::ges_text_valign_get_type()) }
+    }
+}
+
+impl glib::value::ValueType for TextVAlign {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for TextVAlign {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for TextVAlign {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -558,6 +881,140 @@ unsafe impl<'a> FromValue<'a> for VideoStandardTransitionType {
 }
 
 impl ToValue for VideoStandardTransitionType {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GESVideoTestPattern")]
+pub enum VideoTestPattern {
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_SMPTE")]
+    Smpte,
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_SNOW")]
+    Snow,
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_BLACK")]
+    Black,
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_WHITE")]
+    White,
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_RED")]
+    Red,
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_GREEN")]
+    Green,
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_BLUE")]
+    Blue,
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_CHECKERS1")]
+    Checkers1,
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_CHECKERS2")]
+    Checkers2,
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_CHECKERS4")]
+    Checkers4,
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_CHECKERS8")]
+    Checkers8,
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_CIRCULAR")]
+    Circular,
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_BLINK")]
+    Blink,
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_SMPTE75")]
+    Smpte75,
+    #[doc(alias = "GES_VIDEO_TEST_ZONE_PLATE")]
+    ZonePlate,
+    #[doc(alias = "GES_VIDEO_TEST_GAMUT")]
+    Gamut,
+    #[doc(alias = "GES_VIDEO_TEST_CHROMA_ZONE_PLATE")]
+    ChromaZonePlate,
+    #[doc(alias = "GES_VIDEO_TEST_PATTERN_SOLID")]
+    SolidColor,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for VideoTestPattern {
+    type GlibType = ffi::GESVideoTestPattern;
+
+    fn into_glib(self) -> ffi::GESVideoTestPattern {
+        match self {
+            Self::Smpte => ffi::GES_VIDEO_TEST_PATTERN_SMPTE,
+            Self::Snow => ffi::GES_VIDEO_TEST_PATTERN_SNOW,
+            Self::Black => ffi::GES_VIDEO_TEST_PATTERN_BLACK,
+            Self::White => ffi::GES_VIDEO_TEST_PATTERN_WHITE,
+            Self::Red => ffi::GES_VIDEO_TEST_PATTERN_RED,
+            Self::Green => ffi::GES_VIDEO_TEST_PATTERN_GREEN,
+            Self::Blue => ffi::GES_VIDEO_TEST_PATTERN_BLUE,
+            Self::Checkers1 => ffi::GES_VIDEO_TEST_PATTERN_CHECKERS1,
+            Self::Checkers2 => ffi::GES_VIDEO_TEST_PATTERN_CHECKERS2,
+            Self::Checkers4 => ffi::GES_VIDEO_TEST_PATTERN_CHECKERS4,
+            Self::Checkers8 => ffi::GES_VIDEO_TEST_PATTERN_CHECKERS8,
+            Self::Circular => ffi::GES_VIDEO_TEST_PATTERN_CIRCULAR,
+            Self::Blink => ffi::GES_VIDEO_TEST_PATTERN_BLINK,
+            Self::Smpte75 => ffi::GES_VIDEO_TEST_PATTERN_SMPTE75,
+            Self::ZonePlate => ffi::GES_VIDEO_TEST_ZONE_PLATE,
+            Self::Gamut => ffi::GES_VIDEO_TEST_GAMUT,
+            Self::ChromaZonePlate => ffi::GES_VIDEO_TEST_CHROMA_ZONE_PLATE,
+            Self::SolidColor => ffi::GES_VIDEO_TEST_PATTERN_SOLID,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GESVideoTestPattern> for VideoTestPattern {
+    unsafe fn from_glib(value: ffi::GESVideoTestPattern) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GES_VIDEO_TEST_PATTERN_SMPTE => Self::Smpte,
+            ffi::GES_VIDEO_TEST_PATTERN_SNOW => Self::Snow,
+            ffi::GES_VIDEO_TEST_PATTERN_BLACK => Self::Black,
+            ffi::GES_VIDEO_TEST_PATTERN_WHITE => Self::White,
+            ffi::GES_VIDEO_TEST_PATTERN_RED => Self::Red,
+            ffi::GES_VIDEO_TEST_PATTERN_GREEN => Self::Green,
+            ffi::GES_VIDEO_TEST_PATTERN_BLUE => Self::Blue,
+            ffi::GES_VIDEO_TEST_PATTERN_CHECKERS1 => Self::Checkers1,
+            ffi::GES_VIDEO_TEST_PATTERN_CHECKERS2 => Self::Checkers2,
+            ffi::GES_VIDEO_TEST_PATTERN_CHECKERS4 => Self::Checkers4,
+            ffi::GES_VIDEO_TEST_PATTERN_CHECKERS8 => Self::Checkers8,
+            ffi::GES_VIDEO_TEST_PATTERN_CIRCULAR => Self::Circular,
+            ffi::GES_VIDEO_TEST_PATTERN_BLINK => Self::Blink,
+            ffi::GES_VIDEO_TEST_PATTERN_SMPTE75 => Self::Smpte75,
+            ffi::GES_VIDEO_TEST_ZONE_PLATE => Self::ZonePlate,
+            ffi::GES_VIDEO_TEST_GAMUT => Self::Gamut,
+            ffi::GES_VIDEO_TEST_CHROMA_ZONE_PLATE => Self::ChromaZonePlate,
+            ffi::GES_VIDEO_TEST_PATTERN_SOLID => Self::SolidColor,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoTestPattern {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::ges_video_test_pattern_get_type()) }
+    }
+}
+
+impl glib::value::ValueType for VideoTestPattern {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for VideoTestPattern {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for VideoTestPattern {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {

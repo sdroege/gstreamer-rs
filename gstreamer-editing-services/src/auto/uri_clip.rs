@@ -6,6 +6,8 @@
 use crate::Clip;
 use crate::Container;
 use crate::Extractable;
+use crate::MetaContainer;
+use crate::SourceClip;
 use crate::TimelineElement;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -17,7 +19,7 @@ use std::mem::transmute;
 
 glib::wrapper! {
     #[doc(alias = "GESUriClip")]
-    pub struct UriClip(Object<ffi::GESUriClip, ffi::GESUriClipClass>) @extends Clip, Container, TimelineElement, @implements Extractable;
+    pub struct UriClip(Object<ffi::GESUriClip, ffi::GESUriClipClass>) @extends SourceClip, Clip, Container, TimelineElement, @implements Extractable, MetaContainer;
 
     match fn {
         type_ => || ffi::ges_uri_clip_get_type(),

@@ -6,14 +6,41 @@
 mod asset;
 pub use self::asset::{Asset, NONE_ASSET};
 
+mod audio_source;
+pub use self::audio_source::{AudioSource, NONE_AUDIO_SOURCE};
+
+mod audio_test_source;
+pub use self::audio_test_source::{AudioTestSource, NONE_AUDIO_TEST_SOURCE};
+
+mod audio_track;
+pub use self::audio_track::{AudioTrack, NONE_AUDIO_TRACK};
+
+mod audio_transition;
+pub use self::audio_transition::{AudioTransition, NONE_AUDIO_TRANSITION};
+
+mod audio_uri_source;
+pub use self::audio_uri_source::{AudioUriSource, NONE_AUDIO_URI_SOURCE};
+
 mod base_effect;
 pub use self::base_effect::{BaseEffect, NONE_BASE_EFFECT};
+
+mod base_effect_clip;
+pub use self::base_effect_clip::{BaseEffectClip, NONE_BASE_EFFECT_CLIP};
 
 mod base_transition_clip;
 pub use self::base_transition_clip::{BaseTransitionClip, NONE_BASE_TRANSITION_CLIP};
 
+mod base_xml_formatter;
+pub use self::base_xml_formatter::{BaseXmlFormatter, NONE_BASE_XML_FORMATTER};
+
 mod clip;
 pub use self::clip::{Clip, NONE_CLIP};
+
+mod clip_asset;
+pub use self::clip_asset::{ClipAsset, NONE_CLIP_ASSET};
+
+mod command_line_formatter;
+pub use self::command_line_formatter::{CommandLineFormatter, NONE_COMMAND_LINE_FORMATTER};
 
 mod container;
 pub use self::container::{Container, NONE_CONTAINER};
@@ -21,17 +48,59 @@ pub use self::container::{Container, NONE_CONTAINER};
 mod effect;
 pub use self::effect::{Effect, NONE_EFFECT};
 
+mod effect_asset;
+pub use self::effect_asset::{EffectAsset, NONE_EFFECT_ASSET};
+
+mod effect_clip;
+pub use self::effect_clip::{EffectClip, NONE_EFFECT_CLIP};
+
 mod extractable;
 pub use self::extractable::{Extractable, NONE_EXTRACTABLE};
+
+mod formatter;
+pub use self::formatter::{Formatter, NONE_FORMATTER};
 
 mod group;
 pub use self::group::{Group, NONE_GROUP};
 
+#[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
+mod image_source;
+#[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
+pub use self::image_source::{ImageSource, NONE_IMAGE_SOURCE};
+
 mod layer;
 pub use self::layer::{Layer, NONE_LAYER};
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+mod marker;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+pub use self::marker::Marker;
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+mod marker_list;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+pub use self::marker_list::MarkerList;
+
+mod meta_container;
+pub use self::meta_container::{MetaContainer, NONE_META_CONTAINER};
+
+#[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
+mod multi_file_source;
+#[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
+pub use self::multi_file_source::{MultiFileSource, NONE_MULTI_FILE_SOURCE};
+
+mod operation;
+pub use self::operation::{Operation, NONE_OPERATION};
+
 mod operation_clip;
 pub use self::operation_clip::{OperationClip, NONE_OPERATION_CLIP};
+
+mod overlay_clip;
+pub use self::overlay_clip::{OverlayClip, NONE_OVERLAY_CLIP};
 
 mod pipeline;
 pub use self::pipeline::{Pipeline, NONE_PIPELINE};
@@ -39,17 +108,51 @@ pub use self::pipeline::{Pipeline, NONE_PIPELINE};
 mod project;
 pub use self::project::{Project, NONE_PROJECT};
 
+mod source;
+pub use self::source::{Source, NONE_SOURCE};
+
+mod source_clip;
+pub use self::source_clip::{SourceClip, NONE_SOURCE_CLIP};
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+mod source_clip_asset;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+pub use self::source_clip_asset::{SourceClipAsset, NONE_SOURCE_CLIP_ASSET};
+
+mod test_clip;
+pub use self::test_clip::{TestClip, NONE_TEST_CLIP};
+
+mod text_overlay;
+pub use self::text_overlay::{TextOverlay, NONE_TEXT_OVERLAY};
+
+mod text_overlay_clip;
+pub use self::text_overlay_clip::{TextOverlayClip, NONE_TEXT_OVERLAY_CLIP};
+
 mod timeline;
 pub use self::timeline::{Timeline, NONE_TIMELINE};
 
 mod timeline_element;
 pub use self::timeline_element::{TimelineElement, NONE_TIMELINE_ELEMENT};
 
+mod title_clip;
+pub use self::title_clip::{TitleClip, NONE_TITLE_CLIP};
+
+mod title_source;
+pub use self::title_source::{TitleSource, NONE_TITLE_SOURCE};
+
 mod track;
 pub use self::track::{Track, NONE_TRACK};
 
 mod track_element;
 pub use self::track_element::{TrackElement, NONE_TRACK_ELEMENT};
+
+mod track_element_asset;
+pub use self::track_element_asset::{TrackElementAsset, NONE_TRACK_ELEMENT_ASSET};
+
+mod transition;
+pub use self::transition::{Transition, NONE_TRANSITION};
 
 mod transition_clip;
 pub use self::transition_clip::{TransitionClip, NONE_TRANSITION_CLIP};
@@ -63,12 +166,40 @@ pub use self::uri_clip_asset::{UriClipAsset, NONE_URI_CLIP_ASSET};
 mod uri_source_asset;
 pub use self::uri_source_asset::{UriSourceAsset, NONE_URI_SOURCE_ASSET};
 
+mod video_source;
+pub use self::video_source::{VideoSource, NONE_VIDEO_SOURCE};
+
+mod video_test_source;
+pub use self::video_test_source::{VideoTestSource, NONE_VIDEO_TEST_SOURCE};
+
+mod video_track;
+pub use self::video_track::{VideoTrack, NONE_VIDEO_TRACK};
+
+mod video_transition;
+pub use self::video_transition::{VideoTransition, NONE_VIDEO_TRANSITION};
+
+mod video_uri_source;
+pub use self::video_uri_source::{VideoUriSource, NONE_VIDEO_URI_SOURCE};
+
+mod xml_formatter;
+pub use self::xml_formatter::{XmlFormatter, NONE_XML_FORMATTER};
+
 mod enums;
+pub use self::enums::AssetLoadingReturn;
+pub use self::enums::ChildrenControlMode;
 pub use self::enums::Edge;
 pub use self::enums::EditMode;
+pub use self::enums::Error;
+pub use self::enums::TextHAlign;
+pub use self::enums::TextVAlign;
 pub use self::enums::VideoStandardTransitionType;
+pub use self::enums::VideoTestPattern;
 
 mod flags;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::flags::MarkerFlags;
+pub use self::flags::MetaFlag;
 pub use self::flags::PipelineFlags;
 pub use self::flags::TrackType;
 
@@ -78,21 +209,41 @@ pub use self::alias::FrameNumber;
 #[doc(hidden)]
 pub mod traits {
     pub use super::asset::AssetExt;
+    pub use super::audio_test_source::AudioTestSourceExt;
+    pub use super::audio_uri_source::AudioUriSourceExt;
     pub use super::base_effect::BaseEffectExt;
     pub use super::clip::ClipExt;
+    pub use super::clip_asset::ClipAssetExt;
     pub use super::container::GESContainerExt;
     pub use super::effect::EffectExt;
+    pub use super::effect_clip::EffectClipExt;
     pub use super::extractable::ExtractableExt;
+    pub use super::formatter::FormatterExt;
     pub use super::group::GroupExt;
+    #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
+    pub use super::image_source::ImageSourceExt;
     pub use super::layer::LayerExt;
+    pub use super::meta_container::MetaContainerExt;
+    #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
+    pub use super::multi_file_source::MultiFileSourceExt;
     pub use super::pipeline::GESPipelineExt;
     pub use super::project::ProjectExt;
+    pub use super::test_clip::TestClipExt;
+    pub use super::text_overlay::TextOverlayExt;
+    pub use super::text_overlay_clip::TextOverlayClipExt;
     pub use super::timeline::TimelineExt;
     pub use super::timeline_element::TimelineElementExt;
+    pub use super::title_clip::TitleClipExt;
+    pub use super::title_source::TitleSourceExt;
     pub use super::track::GESTrackExt;
     pub use super::track_element::TrackElementExt;
+    pub use super::track_element_asset::TrackElementAssetExt;
     pub use super::transition_clip::TransitionClipExt;
     pub use super::uri_clip::UriClipExt;
     pub use super::uri_clip_asset::UriClipAssetExt;
     pub use super::uri_source_asset::UriSourceAssetExt;
+    pub use super::video_source::VideoSourceExt;
+    pub use super::video_test_source::VideoTestSourceExt;
+    pub use super::video_transition::VideoTransitionExt;
+    pub use super::video_uri_source::VideoUriSourceExt;
 }

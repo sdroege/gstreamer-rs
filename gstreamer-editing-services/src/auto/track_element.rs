@@ -7,6 +7,7 @@ use crate::Edge;
 use crate::EditMode;
 use crate::Extractable;
 use crate::Layer;
+use crate::MetaContainer;
 use crate::TimelineElement;
 use crate::Track;
 use crate::TrackType;
@@ -20,7 +21,7 @@ use std::mem::transmute;
 
 glib::wrapper! {
     #[doc(alias = "GESTrackElement")]
-    pub struct TrackElement(Object<ffi::GESTrackElement, ffi::GESTrackElementClass>) @extends TimelineElement, @implements Extractable;
+    pub struct TrackElement(Object<ffi::GESTrackElement, ffi::GESTrackElementClass>) @extends TimelineElement, @implements Extractable, MetaContainer;
 
     match fn {
         type_ => || ffi::ges_track_element_get_type(),

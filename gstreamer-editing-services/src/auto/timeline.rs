@@ -13,6 +13,7 @@ use crate::Extractable;
 use crate::FrameNumber;
 use crate::Group;
 use crate::Layer;
+use crate::MetaContainer;
 use crate::TimelineElement;
 use crate::Track;
 use crate::TrackElement;
@@ -27,7 +28,7 @@ use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GESTimeline")]
-    pub struct Timeline(Object<ffi::GESTimeline, ffi::GESTimelineClass>) @extends gst::Bin, gst::Element, gst::Object, @implements Extractable;
+    pub struct Timeline(Object<ffi::GESTimeline, ffi::GESTimelineClass>) @extends gst::Bin, gst::Element, gst::Object, @implements gst::ChildProxy, Extractable, MetaContainer;
 
     match fn {
         type_ => || ffi::ges_timeline_get_type(),

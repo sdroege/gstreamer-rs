@@ -7,17 +7,18 @@ use crate::Clip;
 use crate::Container;
 use crate::Extractable;
 use crate::MetaContainer;
+use crate::OperationClip;
 use crate::TimelineElement;
 
 glib::wrapper! {
-    #[doc(alias = "GESOperationClip")]
-    pub struct OperationClip(Object<ffi::GESOperationClip, ffi::GESOperationClipClass>) @extends Clip, Container, TimelineElement, @implements Extractable, MetaContainer;
+    #[doc(alias = "GESOverlayClip")]
+    pub struct OverlayClip(Object<ffi::GESOverlayClip, ffi::GESOverlayClipClass>) @extends OperationClip, Clip, Container, TimelineElement, @implements Extractable, MetaContainer;
 
     match fn {
-        type_ => || ffi::ges_operation_clip_get_type(),
+        type_ => || ffi::ges_overlay_clip_get_type(),
     }
 }
 
-impl OperationClip {}
+impl OverlayClip {}
 
-pub const NONE_OPERATION_CLIP: Option<&OperationClip> = None;
+pub const NONE_OVERLAY_CLIP: Option<&OverlayClip> = None;

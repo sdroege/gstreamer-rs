@@ -4,13 +4,15 @@
 // DO NOT EDIT
 
 use crate::Asset;
+use crate::MetaContainer;
+use crate::TrackElementAsset;
 use crate::UriClipAsset;
 use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
     #[doc(alias = "GESUriSourceAsset")]
-    pub struct UriSourceAsset(Object<ffi::GESUriSourceAsset, ffi::GESUriSourceAssetClass>) @extends Asset;
+    pub struct UriSourceAsset(Object<ffi::GESUriSourceAsset, ffi::GESUriSourceAssetClass>) @extends TrackElementAsset, Asset, @implements MetaContainer;
 
     match fn {
         type_ => || ffi::ges_uri_source_asset_get_type(),

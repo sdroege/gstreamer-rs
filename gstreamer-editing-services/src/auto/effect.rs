@@ -5,6 +5,8 @@
 
 use crate::BaseEffect;
 use crate::Extractable;
+use crate::MetaContainer;
+use crate::Operation;
 use crate::TimelineElement;
 use crate::TrackElement;
 use glib::object::IsA;
@@ -13,7 +15,7 @@ use glib::StaticType;
 
 glib::wrapper! {
     #[doc(alias = "GESEffect")]
-    pub struct Effect(Object<ffi::GESEffect, ffi::GESEffectClass>) @extends BaseEffect, TrackElement, TimelineElement, @implements Extractable;
+    pub struct Effect(Object<ffi::GESEffect, ffi::GESEffectClass>) @extends BaseEffect, Operation, TrackElement, TimelineElement, @implements Extractable, MetaContainer;
 
     match fn {
         type_ => || ffi::ges_effect_get_type(),

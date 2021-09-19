@@ -4,6 +4,8 @@
 // DO NOT EDIT
 
 use crate::Extractable;
+use crate::MetaContainer;
+use crate::Operation;
 use crate::TimelineElement;
 use crate::TrackElement;
 use glib::object::IsA;
@@ -13,7 +15,7 @@ use glib::translate::*;
 
 glib::wrapper! {
     #[doc(alias = "GESBaseEffect")]
-    pub struct BaseEffect(Object<ffi::GESBaseEffect, ffi::GESBaseEffectClass>) @extends TrackElement, TimelineElement, @implements Extractable;
+    pub struct BaseEffect(Object<ffi::GESBaseEffect, ffi::GESBaseEffectClass>) @extends Operation, TrackElement, TimelineElement, @implements Extractable, MetaContainer;
 
     match fn {
         type_ => || ffi::ges_base_effect_get_type(),

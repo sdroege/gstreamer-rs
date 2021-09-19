@@ -4,6 +4,7 @@
 // DO NOT EDIT
 
 use crate::Extractable;
+use crate::MetaContainer;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -16,7 +17,7 @@ use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GESAsset")]
-    pub struct Asset(Object<ffi::GESAsset, ffi::GESAssetClass>);
+    pub struct Asset(Object<ffi::GESAsset, ffi::GESAssetClass>) @implements MetaContainer;
 
     match fn {
         type_ => || ffi::ges_asset_get_type(),

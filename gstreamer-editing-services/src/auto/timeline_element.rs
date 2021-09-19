@@ -13,6 +13,7 @@ use crate::Extractable;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use crate::Layer;
+use crate::MetaContainer;
 use crate::Timeline;
 use crate::TrackType;
 use glib::object::Cast;
@@ -33,7 +34,7 @@ use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GESTimelineElement")]
-    pub struct TimelineElement(Object<ffi::GESTimelineElement, ffi::GESTimelineElementClass>) @implements Extractable;
+    pub struct TimelineElement(Object<ffi::GESTimelineElement, ffi::GESTimelineElementClass>) @implements Extractable, MetaContainer;
 
     match fn {
         type_ => || ffi::ges_timeline_element_get_type(),

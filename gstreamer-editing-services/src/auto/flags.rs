@@ -12,6 +12,142 @@ use glib::Type;
 use std::ffi::CStr;
 use std::fmt;
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+bitflags! {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "GESMarkerFlags")]
+    pub struct MarkerFlags: u32 {
+        #[doc(alias = "GES_MARKER_FLAG_NONE")]
+        const NONE = ffi::GES_MARKER_FLAG_NONE as u32;
+        #[doc(alias = "GES_MARKER_FLAG_SNAPPABLE")]
+        const SNAPPABLE = ffi::GES_MARKER_FLAG_SNAPPABLE as u32;
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl IntoGlib for MarkerFlags {
+    type GlibType = ffi::GESMarkerFlags;
+
+    fn into_glib(self) -> ffi::GESMarkerFlags {
+        self.bits()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GESMarkerFlags> for MarkerFlags {
+    unsafe fn from_glib(value: ffi::GESMarkerFlags) -> Self {
+        skip_assert_initialized!();
+        Self::from_bits_truncate(value)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl StaticType for MarkerFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::ges_marker_flags_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::value::ValueType for MarkerFlags {
+    type Type = Self;
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl<'a> FromValue<'a> for MarkerFlags {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl ToValue for MarkerFlags {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+bitflags! {
+    #[doc(alias = "GESMetaFlag")]
+    pub struct MetaFlag: u32 {
+        #[doc(alias = "GES_META_READABLE")]
+        const READABLE = ffi::GES_META_READABLE as u32;
+        #[doc(alias = "GES_META_WRITABLE")]
+        const WRITABLE = ffi::GES_META_WRITABLE as u32;
+        #[doc(alias = "GES_META_READ_WRITE")]
+        const READWRITE = ffi::GES_META_READ_WRITE as u32;
+    }
+}
+
+#[doc(hidden)]
+impl IntoGlib for MetaFlag {
+    type GlibType = ffi::GESMetaFlag;
+
+    fn into_glib(self) -> ffi::GESMetaFlag {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GESMetaFlag> for MetaFlag {
+    unsafe fn from_glib(value: ffi::GESMetaFlag) -> Self {
+        skip_assert_initialized!();
+        Self::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for MetaFlag {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::ges_meta_flag_get_type()) }
+    }
+}
+
+impl glib::value::ValueType for MetaFlag {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for MetaFlag {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for MetaFlag {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
 bitflags! {
     #[doc(alias = "GESPipelineFlags")]
     pub struct PipelineFlags: u32 {

@@ -18,7 +18,7 @@ use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GESPipeline")]
-    pub struct Pipeline(Object<ffi::GESPipeline, ffi::GESPipelineClass>) @extends gst::Pipeline, gst::Bin, gst::Element, gst::Object;
+    pub struct Pipeline(Object<ffi::GESPipeline, ffi::GESPipelineClass>) @extends gst::Pipeline, gst::Bin, gst::Element, gst::Object, @implements gst::ChildProxy;
 
     match fn {
         type_ => || ffi::ges_pipeline_get_type(),

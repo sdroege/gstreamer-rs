@@ -11,6 +11,7 @@ use crate::Extractable;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use crate::FrameNumber;
 use crate::Layer;
+use crate::MetaContainer;
 use crate::TimelineElement;
 use crate::Track;
 use crate::TrackElement;
@@ -28,7 +29,7 @@ use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GESClip")]
-    pub struct Clip(Object<ffi::GESClip, ffi::GESClipClass>) @extends Container, TimelineElement, @implements Extractable;
+    pub struct Clip(Object<ffi::GESClip, ffi::GESClipClass>) @extends Container, TimelineElement, @implements Extractable, MetaContainer;
 
     match fn {
         type_ => || ffi::ges_clip_get_type(),

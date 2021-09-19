@@ -4,6 +4,10 @@
 // DO NOT EDIT
 
 use crate::Asset;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+use crate::Formatter;
+use crate::MetaContainer;
 use crate::Timeline;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -16,7 +20,7 @@ use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GESProject")]
-    pub struct Project(Object<ffi::GESProject, ffi::GESProjectClass>) @extends Asset;
+    pub struct Project(Object<ffi::GESProject, ffi::GESProjectClass>) @extends Asset, @implements MetaContainer;
 
     match fn {
         type_ => || ffi::ges_project_get_type(),
@@ -43,10 +47,10 @@ pub trait ProjectExt: 'static {
         profile: &impl IsA<gst_pbutils::EncodingProfile>,
     ) -> Result<(), glib::error::BoolError>;
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //#[doc(alias = "ges_project_add_formatter")]
-    //fn add_formatter(&self, formatter: /*Ignored*/&Formatter);
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_project_add_formatter")]
+    fn add_formatter(&self, formatter: &impl IsA<Formatter>);
 
     #[doc(alias = "ges_project_create_asset")]
     fn create_asset(&self, id: Option<&str>, extractable_type: glib::types::Type) -> bool;
@@ -154,11 +158,16 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //fn add_formatter(&self, formatter: /*Ignored*/&Formatter) {
-    //    unsafe { TODO: call ffi:ges_project_add_formatter() }
-    //}
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    fn add_formatter(&self, formatter: &impl IsA<Formatter>) {
+        unsafe {
+            ffi::ges_project_add_formatter(
+                self.as_ref().to_glib_none().0,
+                formatter.as_ref().to_glib_none().0,
+            );
+        }
+    }
 
     fn create_asset(&self, id: Option<&str>, extractable_type: glib::types::Type) -> bool {
         unsafe {

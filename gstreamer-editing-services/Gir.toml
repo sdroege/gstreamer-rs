@@ -17,6 +17,7 @@ external_libraries = [
 ]
 
 manual = [
+    "GLib.Date",
     "GLib.DateTime",
     "GLib.Error",
     "GLib.Source",
@@ -25,6 +26,8 @@ manual = [
     "Gio.AsyncReadyCallback",
     "GObject.Object",
     "GObject.Value",
+    "Gst.DateTime",
+    "Gst.ChildProxy",
     "Gst.ControlBinding",
     "Gst.ControlSource",
     "Gst.CoreError",
@@ -53,6 +56,49 @@ generate = [
     "GES.TransitionClip",
     "GES.BaseTransitionClip",
     "GES.VideoStandardTransitionType",
+    "GES.Source",
+    "GES.AudioSource",
+    "GES.AudioTestSource",
+    "GES.AudioTrack",
+    "GES.AudioTransition",
+    "GES.Operation",
+    "GES.Transition",
+    "GES.AudioUriSource",
+    "GES.BaseEffectClip",
+    "GES.Formatter",
+    "GES.BaseXmlFormatter",
+    "GES.ChildrenControlMode",
+    "GES.ClipAsset",
+    "GES.TrackElementAsset",
+    "GES.EffectAsset",
+    "GES.EffectClip",
+    "GES.ExtractableCheckId",
+    "GES.VideoUriSource",
+    "GES.VideoSource",
+    "GES.ImageSource",
+    "GES.MultiFileSource",
+    "GES.OverlayClip",
+    "GES.MetaContainer",
+    "GES.MetaFlag",
+    "GES.Marker",
+    "GES.MarkerList",
+    "GES.MarkerFlags",
+    "GES.SourceClip",
+    "GES.SourceClipAsset",
+    "GES.TestClip",
+    "GES.VideoTestPattern",
+    "GES.VideoTestSource",
+    "GES.VideoTrack",
+    "GES.VideoTransition",
+    "GES.XmlFormatter",
+    "GES.TextHAlign",
+    "GES.TextVAlign",
+    "GES.TextOverlay",
+    "GES.TextOverlayClip",
+    "GES.TitleClip",
+    "GES.TitleSource",
+    "GES.AssetLoadingReturn",
+    "GES.Error",
 ]
 
 [[object]]
@@ -119,6 +165,18 @@ status = "generate"
     name = "new"
         [object.function.return]
         nullable_return_is_error = "Failed to create Uri clip from Uri"
+
+[[object]]
+name = "GES.CommandLineFormatter"
+status = "generate"
+    [[object.function]]
+    name = "get_help"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "get_timeline_uri"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "GES.Timeline"

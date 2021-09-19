@@ -3,6 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::MetaContainer;
 use crate::Timeline;
 use crate::TrackElement;
 use crate::TrackType;
@@ -23,7 +24,7 @@ use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GESTrack")]
-    pub struct Track(Object<ffi::GESTrack, ffi::GESTrackClass>) @extends gst::Bin, gst::Element, gst::Object;
+    pub struct Track(Object<ffi::GESTrack, ffi::GESTrackClass>) @extends gst::Bin, gst::Element, gst::Object, @implements gst::ChildProxy, MetaContainer;
 
     match fn {
         type_ => || ffi::ges_track_get_type(),

@@ -7,6 +7,7 @@ use crate::BaseTransitionClip;
 use crate::Clip;
 use crate::Container;
 use crate::Extractable;
+use crate::MetaContainer;
 use crate::OperationClip;
 use crate::TimelineElement;
 use crate::VideoStandardTransitionType;
@@ -22,7 +23,7 @@ use std::mem::transmute;
 
 glib::wrapper! {
     #[doc(alias = "GESTransitionClip")]
-    pub struct TransitionClip(Object<ffi::GESTransitionClip, ffi::GESTransitionClipClass>) @extends BaseTransitionClip, OperationClip, Clip, Container, TimelineElement, @implements Extractable;
+    pub struct TransitionClip(Object<ffi::GESTransitionClip, ffi::GESTransitionClipClass>) @extends BaseTransitionClip, OperationClip, Clip, Container, TimelineElement, @implements Extractable, MetaContainer;
 
     match fn {
         type_ => || ffi::ges_transition_clip_get_type(),

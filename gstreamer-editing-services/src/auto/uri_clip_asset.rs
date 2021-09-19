@@ -4,6 +4,11 @@
 // DO NOT EDIT
 
 use crate::Asset;
+use crate::ClipAsset;
+use crate::MetaContainer;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+use crate::SourceClipAsset;
 use crate::UriSourceAsset;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -18,9 +23,21 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 glib::wrapper! {
     #[doc(alias = "GESUriClipAsset")]
-    pub struct UriClipAsset(Object<ffi::GESUriClipAsset, ffi::GESUriClipAssetClass>) @extends Asset;
+    pub struct UriClipAsset(Object<ffi::GESUriClipAsset, ffi::GESUriClipAssetClass>) @extends SourceClipAsset, ClipAsset, Asset, @implements MetaContainer;
+
+    match fn {
+        type_ => || ffi::ges_uri_clip_asset_get_type(),
+    }
+}
+
+#[cfg(not(any(feature = "v1_18", feature = "dox")))]
+glib::wrapper! {
+    #[doc(alias = "GESUriClipAsset")]
+    pub struct UriClipAsset(Object<ffi::GESUriClipAsset, ffi::GESUriClipAssetClass>) @extends ClipAsset, Asset, @implements MetaContainer;
 
     match fn {
         type_ => || ffi::ges_uri_clip_asset_get_type(),

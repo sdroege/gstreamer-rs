@@ -5,6 +5,7 @@
 
 use crate::Container;
 use crate::Extractable;
+use crate::MetaContainer;
 use crate::TimelineElement;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -18,7 +19,7 @@ use std::mem::transmute;
 
 glib::wrapper! {
     #[doc(alias = "GESGroup")]
-    pub struct Group(Object<ffi::GESGroup, ffi::GESGroupClass>) @extends Container, TimelineElement, @implements Extractable;
+    pub struct Group(Object<ffi::GESGroup, ffi::GESGroupClass>) @extends Container, TimelineElement, @implements Extractable, MetaContainer;
 
     match fn {
         type_ => || ffi::ges_group_get_type(),

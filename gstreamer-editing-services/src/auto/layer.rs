@@ -6,6 +6,7 @@
 use crate::Asset;
 use crate::Clip;
 use crate::Extractable;
+use crate::MetaContainer;
 use crate::Timeline;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -24,7 +25,7 @@ use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GESLayer")]
-    pub struct Layer(Object<ffi::GESLayer, ffi::GESLayerClass>) @implements Extractable;
+    pub struct Layer(Object<ffi::GESLayer, ffi::GESLayerClass>) @implements Extractable, MetaContainer;
 
     match fn {
         type_ => || ffi::ges_layer_get_type(),

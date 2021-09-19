@@ -11,14 +11,14 @@ use crate::OperationClip;
 use crate::TimelineElement;
 
 glib::wrapper! {
-    #[doc(alias = "GESBaseTransitionClip")]
-    pub struct BaseTransitionClip(Object<ffi::GESBaseTransitionClip, ffi::GESBaseTransitionClipClass>) @extends OperationClip, Clip, Container, TimelineElement, @implements Extractable, MetaContainer;
+    #[doc(alias = "GESBaseEffectClip")]
+    pub struct BaseEffectClip(Object<ffi::GESBaseEffectClip, ffi::GESBaseEffectClipClass>) @extends OperationClip, Clip, Container, TimelineElement, @implements Extractable, MetaContainer;
 
     match fn {
-        type_ => || ffi::ges_base_transition_clip_get_type(),
+        type_ => || ffi::ges_base_effect_clip_get_type(),
     }
 }
 
-impl BaseTransitionClip {}
+impl BaseEffectClip {}
 
-pub const NONE_BASE_TRANSITION_CLIP: Option<&BaseTransitionClip> = None;
+pub const NONE_BASE_EFFECT_CLIP: Option<&BaseEffectClip> = None;
