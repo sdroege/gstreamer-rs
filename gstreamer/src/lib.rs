@@ -45,6 +45,7 @@ pub use crate::error::*;
 
 #[macro_use]
 pub mod miniobject;
+pub use miniobject::{MiniObject, MiniObjectRef};
 pub mod message;
 pub use crate::message::{Message, MessageErrorDomain, MessageRef, MessageView};
 
@@ -309,6 +310,8 @@ pub mod prelude {
     pub use crate::tag_setter::TagSetterExtManual;
     pub use crate::typefind::TypeFindImpl;
     pub use crate::value::GstValueExt;
+
+    pub use crate::miniobject::IsMiniObject;
 
     pub use crate::tags::{CustomTag, Tag};
 

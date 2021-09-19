@@ -170,6 +170,13 @@ status = "generate"
     version = "1.18.3"
 
 [[object]]
+name = "Gst.MiniObject"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.20"
+
+[[object]]
 name = "Gst.Memory"
 status = "generate"
     [[object.function]]

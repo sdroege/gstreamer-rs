@@ -5728,6 +5728,8 @@ extern "C" {
     //=========================================================================
     // GstMiniObject
     //=========================================================================
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn gst_mini_object_get_type() -> GType;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]

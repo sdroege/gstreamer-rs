@@ -2,8 +2,8 @@
 
 use crate::ffi;
 use crate::{
-    Bin, Buffer, BufferList, Element, Event, FlowReturn, Message, Object, Pad, PadLinkReturn,
-    Query, StateChange, StateChangeReturn, Tracer,
+    Bin, Buffer, BufferList, Element, Event, FlowReturn, Message, MiniObject, Object, Pad,
+    PadLinkReturn, Query, StateChange, StateChangeReturn, Tracer,
 };
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
@@ -29,6 +29,14 @@ pub trait TracerImpl: TracerImplExt + ObjectImpl + Send + Sync {
     fn element_query_post(&self, ts: u64, element: &Element, query: &Query, success: bool) {}
     fn element_query_pre(&self, ts: u64, element: &Element, query: &Query) {}
     fn element_remove_pad(&self, ts: u64, element: &Element, pad: &Pad) {}
+    // rustdoc-stripper-ignore-next
+    /// Hook to be called before the GstMiniObject has been fully initialized.
+    fn mini_object_created(&self, ts: u64, object: std::ptr::NonNull<ffi::GstMiniObject>) {}
+    // rustdoc-stripper-ignore-next
+    /// Hook to be called after the GstMiniObject has been finalized.
+    fn mini_object_destroyed(&self, ts: u64, object: std::ptr::NonNull<ffi::GstMiniObject>) {}
+    fn mini_object_reffed(&self, ts: u64, object: &MiniObject, new_refcount: i32) {}
+    fn mini_object_unreffed(&self, ts: u64, object: &MiniObject, new_refcount: i32) {}
     fn object_created(&self, ts: u64, object: &Object) {}
     // rustdoc-stripper-ignore-next
     /// Hook to be called after the GstObject has been finalized.
@@ -169,11 +177,22 @@ define_tracer_hooks! {
         let p = Pad::from_glib_borrow(p);
         this.element_remove_pad(ts, &e, &p)
     };
-    // TODO(#353): Missing bindings to `GstMiniObject`.
-    // MiniObjectCreated,
-    // MiniObjectDestroyed,
-    // MiniObjectReffed,
-    // MiniObjectUnreffed,
+    // TODO: unclear what to do here as the `GstMiniObject` here is not fully initialized yet…
+    MiniObjectCreated("mini-object-created") = |this, ts, o: *mut ffi::GstMiniObject| {
+        this.mini_object_created(ts, std::ptr::NonNull::new_unchecked(o))
+    };
+    // TODO: unclear what to do here as the `GstMiniObject` here is no longer valid…
+    MiniObjectDestroyed("mini-object-destroyed") = |this, ts, o: *mut ffi::GstMiniObject| {
+        this.mini_object_destroyed(ts, std::ptr::NonNull::new_unchecked(o))
+    };
+    MiniObjectReffed("mini-object-reffed") = |this, ts, o: *mut ffi::GstMiniObject, rc: libc::c_int| {
+        let o = MiniObject::from_glib_borrow(o);
+        this.mini_object_reffed(ts, &o, rc as i32)
+    };
+    MiniObjectUnreffed("mini-object-unreffed") = |this, ts, o: *mut ffi::GstMiniObject, rc: libc::c_int| {
+        let o = MiniObject::from_glib_borrow(o);
+        this.mini_object_unreffed(ts, &o, rc as i32)
+    };
     ObjectCreated("object-created") = |this, ts, o: *mut ffi::GstObject| {
         let o = Object::from_glib_borrow(o);
         this.object_created(ts, &o)

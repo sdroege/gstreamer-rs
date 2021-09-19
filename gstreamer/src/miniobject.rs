@@ -1,5 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use glib::translate::*;
+
+pub trait IsMiniObject:
+    AsRef<Self::RefType> + FromGlibPtrFull<*mut Self::FfiType> + Send + Sync + 'static
+{
+    type RefType;
+    type FfiType;
+}
+
 #[macro_export]
 macro_rules! mini_object_wrapper (
     ($name:ident, $ref_name:ident, $ffi_name:path) => {
@@ -9,6 +18,11 @@ macro_rules! mini_object_wrapper (
 
         #[repr(transparent)]
         pub struct $ref_name($ffi_name);
+
+        impl $crate::miniobject::IsMiniObject for $name {
+            type RefType = $ref_name;
+            type FfiType = $ffi_name;
+        }
 
         impl $name {
             pub unsafe fn from_glib_none(ptr: *const $ffi_name) -> Self {
@@ -75,6 +89,12 @@ macro_rules! mini_object_wrapper (
                     $crate::glib::translate::from_glib($crate::ffi::gst_mini_object_is_writable(
                         self.as_ptr() as *const $crate::ffi::GstMiniObject
                     ))
+                }
+            }
+
+            pub fn upcast(self) -> $crate::miniobject::MiniObject {
+                unsafe {
+                    from_glib_full(self.into_ptr() as *mut $crate::ffi::GstMiniObject)
                 }
             }
 
@@ -392,6 +412,18 @@ macro_rules! mini_object_wrapper (
                     ) as *const $ffi_name)
                 }
             }
+
+            pub fn upcast_ref(&self) -> &$crate::miniobject::MiniObjectRef {
+                unsafe {
+                    &*(self.as_ptr() as *const $crate::miniobject::MiniObjectRef)
+                }
+            }
+
+            pub fn upcast_mut(&mut self) -> &mut $crate::miniobject::MiniObjectRef {
+                unsafe {
+                    &mut *(self.as_mut_ptr() as *mut $crate::miniobject::MiniObjectRef)
+                }
+            }
         }
 
         impl $crate::glib::translate::GlibPtrDefault for $ref_name {
@@ -485,3 +517,43 @@ macro_rules! mini_object_wrapper (
         // immutable references from a mutable reference without borrowing via the value
     };
 );
+
+#[cfg(not(any(feature = "v1_20", feature = "dox")))]
+mini_object_wrapper!(MiniObject, MiniObjectRef, ffi::GstMiniObject);
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+mini_object_wrapper!(MiniObject, MiniObjectRef, ffi::GstMiniObject, || {
+    ffi::gst_mini_object_get_type()
+});
+
+impl MiniObject {
+    pub fn downcast<T: IsMiniObject + glib::StaticType>(self) -> Result<T, Self> {
+        if self.type_().is_a(T::static_type()) {
+            unsafe { Ok(from_glib_full(self.into_ptr() as *mut T::FfiType)) }
+        } else {
+            Err(self)
+        }
+    }
+}
+
+impl MiniObjectRef {
+    pub fn type_(&self) -> glib::Type {
+        unsafe { from_glib((*self.as_ptr()).type_) }
+    }
+
+    pub fn downcast_ref<T: IsMiniObject + glib::StaticType>(&self) -> Option<&T> {
+        if self.type_().is_a(T::static_type()) {
+            unsafe { Some(&*(self as *const Self as *const T)) }
+        } else {
+            None
+        }
+    }
+
+    pub fn downcast_mut<T: IsMiniObject + glib::StaticType>(&mut self) -> Option<&mut T> {
+        if self.type_().is_a(T::static_type()) {
+            unsafe { Some(&mut *(self as *mut Self as *mut T)) }
+        } else {
+            None
+        }
+    }
+}
