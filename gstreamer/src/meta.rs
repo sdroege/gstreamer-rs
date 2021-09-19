@@ -175,6 +175,18 @@ impl<'a> MetaRef<'a, Meta> {
             None
         }
     }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub fn try_as_custom_meta(&self) -> Option<&MetaRef<'a, CustomMeta>> {
+        unsafe {
+            if ffi::gst_meta_info_is_custom(&*self.0.info) == glib::ffi::GFALSE {
+                return None;
+            }
+
+            Some(&*(self as *const MetaRef<'a, Meta> as *const MetaRef<'a, CustomMeta>))
+        }
+    }
 }
 
 impl<'a, T, U> MetaRefMut<'a, T, U> {
@@ -248,6 +260,30 @@ impl<'a, U> MetaRefMut<'a, Meta, U> {
             })
         } else {
             None
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub fn try_as_custom_meta(&self) -> Option<&MetaRefMut<'a, CustomMeta, U>> {
+        unsafe {
+            if ffi::gst_meta_info_is_custom(&*self.0.info) == glib::ffi::GFALSE {
+                return None;
+            }
+
+            Some(&*(self as *const MetaRefMut<'a, Meta, U> as *const MetaRefMut<'a, CustomMeta, U>))
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub fn try_as_mut_custom_meta(&mut self) -> Option<&mut MetaRefMut<'a, CustomMeta, U>> {
+        unsafe {
+            if ffi::gst_meta_info_is_custom(&*self.0.info) == glib::ffi::GFALSE {
+                return None;
+            }
+
+            Some(&mut *(self as *mut MetaRefMut<'a, Meta, U> as *mut MetaRefMut<'a, CustomMeta, U>))
         }
     }
 }
@@ -454,6 +490,159 @@ impl fmt::Debug for ReferenceTimestampMeta {
             .field("timestamp", &self.timestamp().display().to_string())
             .field("duration", &self.duration().display().to_string())
             .finish()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[repr(transparent)]
+#[doc(alias = "GstCustomMeta")]
+pub struct CustomMeta(ffi::GstCustomMeta);
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl Send for CustomMeta {}
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl Sync for CustomMeta {}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl CustomMeta {
+    #[doc(alias = "gst_meta_register_custom")]
+    pub fn register<
+        F: Fn(&mut BufferRef, &CustomMeta, &BufferRef, glib::Quark) -> bool + Send + Sync + 'static,
+    >(
+        name: &str,
+        tags: &[&str],
+        transform_func: F,
+    ) {
+        unsafe extern "C" fn transform_func_trampoline<
+            F: Fn(&mut BufferRef, &CustomMeta, &BufferRef, glib::Quark) -> bool
+                + Send
+                + Sync
+                + 'static,
+        >(
+            dest: *mut ffi::GstBuffer,
+            meta: *mut ffi::GstCustomMeta,
+            src: *mut ffi::GstBuffer,
+            type_: glib::ffi::GQuark,
+            _data: glib::ffi::gpointer,
+            user_data: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean {
+            let func = &*(user_data as *const F);
+            let res = func(
+                BufferRef::from_mut_ptr(dest),
+                &*(meta as *const CustomMeta),
+                BufferRef::from_ptr(src),
+                from_glib(type_),
+            );
+            res.into_glib()
+        }
+
+        unsafe extern "C" fn transform_func_free<F>(ptr: glib::ffi::gpointer) {
+            let _ = Box::from_raw(ptr as *mut F);
+        }
+
+        unsafe {
+            ffi::gst_meta_register_custom(
+                name.to_glib_none().0,
+                tags.to_glib_none().0,
+                Some(transform_func_trampoline::<F>),
+                Box::into_raw(Box::new(transform_func)) as glib::ffi::gpointer,
+                Some(transform_func_free::<F>),
+            );
+        }
+    }
+
+    #[doc(alias = "gst_buffer_add_custom_meta")]
+    pub fn add<'a>(
+        buffer: &'a mut BufferRef,
+        name: &str,
+    ) -> Result<MetaRefMut<'a, Self, Standalone>, glib::BoolError> {
+        skip_assert_initialized!();
+        unsafe {
+            let meta = ffi::gst_buffer_add_custom_meta(buffer.as_mut_ptr(), name.to_glib_none().0);
+
+            if meta.is_null() {
+                return Err(glib::bool_error!("Failed to add custom meta"));
+            }
+
+            Ok(MetaRefMut {
+                meta: &mut *(meta as *mut Self),
+                buffer,
+                mode: PhantomData,
+            })
+        }
+    }
+
+    #[doc(alias = "gst_buffer_get_custom_meta")]
+    pub fn from_buffer<'a>(
+        buffer: &'a BufferRef,
+        name: &str,
+    ) -> Result<MetaRef<'a, Self>, glib::BoolError> {
+        skip_assert_initialized!();
+        unsafe {
+            let meta = ffi::gst_buffer_get_custom_meta(buffer.as_mut_ptr(), name.to_glib_none().0);
+
+            if meta.is_null() {
+                return Err(glib::bool_error!("Failed to get custom meta"));
+            }
+
+            Ok(MetaRef {
+                meta: &*(meta as *const Self),
+                buffer,
+            })
+        }
+    }
+
+    #[doc(alias = "gst_buffer_get_custom_meta")]
+    pub fn from_mut_buffer<'a>(
+        buffer: &'a mut BufferRef,
+        name: &str,
+    ) -> Result<MetaRefMut<'a, Self, Standalone>, glib::BoolError> {
+        skip_assert_initialized!();
+        unsafe {
+            let meta = ffi::gst_buffer_get_custom_meta(buffer.as_mut_ptr(), name.to_glib_none().0);
+
+            if meta.is_null() {
+                return Err(glib::bool_error!("Failed to get custom meta"));
+            }
+
+            Ok(MetaRefMut {
+                meta: &mut *(meta as *mut Self),
+                buffer,
+                mode: PhantomData,
+            })
+        }
+    }
+
+    #[doc(alias = "gst_custom_meta_get_structure")]
+    pub fn structure(&self) -> &crate::StructureRef {
+        unsafe {
+            crate::StructureRef::from_glib_borrow(ffi::gst_custom_meta_get_structure(mut_override(
+                &self.0,
+            )))
+        }
+    }
+
+    #[doc(alias = "gst_custom_meta_get_structure")]
+    pub fn mut_structure(&mut self) -> &mut crate::StructureRef {
+        unsafe {
+            crate::StructureRef::from_glib_borrow_mut(ffi::gst_custom_meta_get_structure(
+                &mut self.0,
+            ))
+        }
+    }
+
+    #[doc(alias = "gst_custom_meta_has_name")]
+    pub fn has_name(&self, name: &str) -> bool {
+        unsafe {
+            from_glib(ffi::gst_custom_meta_has_name(
+                mut_override(&self.0),
+                name.to_glib_none().0,
+            ))
+        }
     }
 }
 
