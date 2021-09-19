@@ -16,10 +16,7 @@ use crate::CapsRef;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use crate::ClockTime;
 
-use glib::translate::{from_glib, from_glib_none, FromGlib, ToGlibPtr};
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-use glib::translate::{try_from_glib, IntoGlib};
+use glib::translate::*;
 
 pub unsafe trait MetaAPI: Sync + Send + Sized {
     type GstType;
@@ -71,7 +68,7 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
 #[derive(Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq)]
 pub struct MetaSeqnum(u64);
 
-pub struct MetaRef<'a, T: MetaAPI + 'a> {
+pub struct MetaRef<'a, T: 'a> {
     meta: &'a T,
     buffer: &'a BufferRef,
 }
@@ -79,13 +76,13 @@ pub struct MetaRef<'a, T: MetaAPI + 'a> {
 pub enum Standalone {}
 pub enum Iterated {}
 
-pub struct MetaRefMut<'a, T: MetaAPI + 'a, U> {
+pub struct MetaRefMut<'a, T: 'a, U> {
     meta: &'a mut T,
     buffer: &'a mut BufferRef,
     mode: PhantomData<U>,
 }
 
-impl<'a, T: MetaAPI + fmt::Debug + 'a> fmt::Debug for MetaRef<'a, T> {
+impl<'a, T: fmt::Debug + 'a> fmt::Debug for MetaRef<'a, T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("MetaRef")
             .field("meta", &self.meta)
@@ -94,7 +91,7 @@ impl<'a, T: MetaAPI + fmt::Debug + 'a> fmt::Debug for MetaRef<'a, T> {
     }
 }
 
-impl<'a, T: MetaAPI + fmt::Debug + 'a, U> fmt::Debug for MetaRefMut<'a, T, U> {
+impl<'a, T: fmt::Debug + 'a, U> fmt::Debug for MetaRefMut<'a, T, U> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("MetaRef")
             .field("meta", &self.meta)
@@ -104,7 +101,7 @@ impl<'a, T: MetaAPI + fmt::Debug + 'a, U> fmt::Debug for MetaRefMut<'a, T, U> {
     }
 }
 
-impl<'a, T: MetaAPI> ops::Deref for MetaRef<'a, T> {
+impl<'a, T> ops::Deref for MetaRef<'a, T> {
     type Target = T;
 
     fn deref(&self) -> &T {
@@ -112,13 +109,13 @@ impl<'a, T: MetaAPI> ops::Deref for MetaRef<'a, T> {
     }
 }
 
-impl<'a, T: MetaAPI> AsRef<MetaRef<'a, T>> for MetaRef<'a, T> {
+impl<'a, T> AsRef<MetaRef<'a, T>> for MetaRef<'a, T> {
     fn as_ref(&self) -> &MetaRef<'a, T> {
         self
     }
 }
 
-impl<'a, T: MetaAPI, U> ops::Deref for MetaRefMut<'a, T, U> {
+impl<'a, T, U> ops::Deref for MetaRefMut<'a, T, U> {
     type Target = T;
 
     fn deref(&self) -> &T {
@@ -126,19 +123,19 @@ impl<'a, T: MetaAPI, U> ops::Deref for MetaRefMut<'a, T, U> {
     }
 }
 
-impl<'a, T: MetaAPI, U> ops::DerefMut for MetaRefMut<'a, T, U> {
+impl<'a, T, U> ops::DerefMut for MetaRefMut<'a, T, U> {
     fn deref_mut(&mut self) -> &mut T {
         self.meta
     }
 }
 
-impl<'a, T: MetaAPI, U> AsRef<MetaRef<'a, T>> for MetaRefMut<'a, T, U> {
+impl<'a, T, U> AsRef<MetaRef<'a, T>> for MetaRefMut<'a, T, U> {
     fn as_ref(&self) -> &MetaRef<'a, T> {
         unsafe { &*(self as *const MetaRefMut<'a, T, U> as *const MetaRef<'a, T>) }
     }
 }
 
-impl<'a, T: MetaAPI> MetaRef<'a, T> {
+impl<'a, T> MetaRef<'a, T> {
     #[doc(alias = "get_api")]
     pub fn api(&self) -> glib::Type {
         unsafe {
@@ -159,7 +156,10 @@ impl<'a, T: MetaAPI> MetaRef<'a, T> {
         }
     }
 
-    pub fn as_ptr(&self) -> *const T::GstType {
+    pub fn as_ptr(&self) -> *const T::GstType
+    where
+        T: MetaAPI,
+    {
         self.meta as *const _ as *const <T as MetaAPI>::GstType
     }
 }
@@ -177,7 +177,7 @@ impl<'a> MetaRef<'a, Meta> {
     }
 }
 
-impl<'a, T: MetaAPI, U> MetaRefMut<'a, T, U> {
+impl<'a, T, U> MetaRefMut<'a, T, U> {
     #[doc(alias = "get_api")]
     pub fn api(&self) -> glib::Type {
         unsafe {
@@ -198,22 +198,28 @@ impl<'a, T: MetaAPI, U> MetaRefMut<'a, T, U> {
         }
     }
 
-    pub fn as_ptr(&self) -> *const T::GstType {
+    pub fn as_ptr(&self) -> *const T::GstType
+    where
+        T: MetaAPI,
+    {
         self.meta as *const _ as *const <T as MetaAPI>::GstType
     }
 
-    pub fn as_mut_ptr(&mut self) -> *mut T::GstType {
+    pub fn as_mut_ptr(&mut self) -> *mut T::GstType
+    where
+        T: MetaAPI,
+    {
         self.meta as *mut _ as *mut <T as MetaAPI>::GstType
     }
 }
 
-impl<'a, T: MetaAPI> MetaRefMut<'a, T, Standalone> {
+impl<'a, T> MetaRefMut<'a, T, Standalone> {
     #[doc(alias = "gst_buffer_remove_meta")]
-    pub fn remove(mut self) {
+    pub fn remove(self) {
         unsafe {
             let res = ffi::gst_buffer_remove_meta(
                 self.buffer.as_mut_ptr(),
-                self.as_mut_ptr() as *mut ffi::GstMeta,
+                self.meta as *mut T as *mut ffi::GstMeta,
             );
             assert_ne!(res, glib::ffi::GFALSE);
         }
@@ -227,6 +233,19 @@ impl<'a, U> MetaRefMut<'a, Meta, U> {
 
         if type_ == glib::Type::INVALID || target_type == type_ {
             Some(unsafe { &*(self as *mut MetaRefMut<'a, Meta, U> as *const MetaRefMut<'a, T, U>) })
+        } else {
+            None
+        }
+    }
+
+    pub fn downcast_mut<T: MetaAPI>(&mut self) -> Option<&mut MetaRefMut<'a, T, U>> {
+        let target_type = T::meta_api();
+        let type_ = self.api();
+
+        if type_ == glib::Type::INVALID || target_type == type_ {
+            Some(unsafe {
+                &mut *(self as *mut MetaRefMut<'a, Meta, U> as *mut MetaRefMut<'a, T, U>)
+            })
         } else {
             None
         }
