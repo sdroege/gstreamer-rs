@@ -118,6 +118,14 @@ pub trait GLWindowExt: 'static {
         &self,
         f: F,
     ) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "window-handle-changed")]
+    fn connect_window_handle_changed<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<GLWindow>> GLWindowExt for O {
@@ -375,6 +383,35 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
                 b"scroll-event\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     scroll_event_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn connect_window_handle_changed<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn window_handle_changed_trampoline<
+            P: IsA<GLWindow>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstGLWindow,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(GLWindow::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"window-handle-changed\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    window_handle_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

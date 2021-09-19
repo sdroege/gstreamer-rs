@@ -23,6 +23,13 @@ pub fn encoding_list_available_categories() -> Vec<glib::GString> {
     unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_encoding_list_available_categories()) }
 }
 
+//#[cfg(any(feature = "v1_20", feature = "dox"))]
+//#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+//#[doc(alias = "gst_pb_utils_get_caps_description_flags")]
+//pub fn pb_utils_get_caps_description_flags(caps: &gst::Caps) -> /*Ignored*/PbUtilsCapsDescriptionFlags {
+//    unsafe { TODO: call ffi:gst_pb_utils_get_caps_description_flags() }
+//}
+
 #[doc(alias = "gst_pb_utils_get_element_description")]
 pub fn pb_utils_get_element_description(
     factory_name: &str,
@@ -33,6 +40,18 @@ pub fn pb_utils_get_element_description(
             factory_name.to_glib_none().0,
         ))
         .ok_or_else(|| glib::bool_error!("Failed to get element description"))
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(alias = "gst_pb_utils_get_file_extension_from_caps")]
+pub fn pb_utils_get_file_extension_from_caps(caps: &gst::Caps) -> Option<glib::GString> {
+    assert_initialized_main_thread!();
+    unsafe {
+        from_glib_full(ffi::gst_pb_utils_get_file_extension_from_caps(
+            caps.to_glib_none().0,
+        ))
     }
 }
 

@@ -463,7 +463,7 @@ doc-stripping:
   extends: .img-nightly
   stage: 'extras'
   script:
-    - PATH=~/.cargo/bin/:$PATH ./generator.py --strip-docs --no-fmt
+    - PATH=~/.cargo/bin/:$PATH ./generator.py --gir-files-directories gir-files gst-gir-files --strip-docs --no-fmt
     - git diff --quiet || (echo 'Files changed after running `rustdoc-stripper -s`, make sure all documentation is protected with `// rustdoc-stripper-ignore-next`!'; git diff; false)
 
 docs:
@@ -475,7 +475,7 @@ docs:
     - curl --proto '=https' --tlsv1.2 -sSf -o gir-rustdoc.py
         https://gitlab.gnome.org/World/Rust/gir-rustdoc/-/raw/main/gir-rustdoc.py
     - chmod +x gir-rustdoc.py
-    - PATH=~/.cargo/bin/:$PATH ./generator.py --embed-docs --no-fmt
+    - PATH=~/.cargo/bin/:$PATH ./generator.py --gir-files-directories gir-files gst-gir-files --embed-docs --no-fmt
     - |
       RUSTDOCFLAGS="$RUST_DOCS_FLAGS"
       eval $(./gir-rustdoc.py pre-docs)

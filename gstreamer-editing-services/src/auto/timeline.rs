@@ -88,6 +88,11 @@ pub trait TimelineExt: 'static {
     #[doc(alias = "ges_timeline_commit_sync")]
     fn commit_sync(&self) -> bool;
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "ges_timeline_freeze_commit")]
+    fn freeze_commit(&self);
+
     #[doc(alias = "ges_timeline_get_auto_transition")]
     #[doc(alias = "get_auto_transition")]
     fn is_auto_transition(&self) -> bool;
@@ -182,6 +187,11 @@ pub trait TimelineExt: 'static {
 
     #[doc(alias = "ges_timeline_set_snapping_distance")]
     fn set_snapping_distance(&self, snapping_distance: gst::ClockTime);
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "ges_timeline_thaw_commit")]
+    fn thaw_commit(&self);
 
     #[doc(alias = "commited")]
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -279,6 +289,14 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             from_glib(ffi::ges_timeline_commit_sync(
                 self.as_ref().to_glib_none().0,
             ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn freeze_commit(&self) {
+        unsafe {
+            ffi::ges_timeline_freeze_commit(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -503,6 +521,14 @@ impl<O: IsA<Timeline>> TimelineExt for O {
                 self.as_ref().to_glib_none().0,
                 snapping_distance.into_glib(),
             );
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn thaw_commit(&self) {
+        unsafe {
+            ffi::ges_timeline_thaw_commit(self.as_ref().to_glib_none().0);
         }
     }
 

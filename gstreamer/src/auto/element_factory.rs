@@ -75,6 +75,39 @@ impl ElementFactory {
         }
     }
 
+    //#[cfg(any(feature = "v1_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    //#[doc(alias = "gst_element_factory_create_full")]
+    //pub fn create_full(&self, first: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<Element> {
+    //    unsafe { TODO: call ffi:gst_element_factory_create_full() }
+    //}
+
+    //#[cfg(any(feature = "v1_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    //#[doc(alias = "gst_element_factory_create_valist")]
+    //pub fn create_valist(&self, first: Option<&str>, properties: /*Unknown conversion*//*Unimplemented*/Unsupported) -> Option<Element> {
+    //    unsafe { TODO: call ffi:gst_element_factory_create_valist() }
+    //}
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_element_factory_create_with_properties")]
+    pub fn create_with_properties(
+        &self,
+        n: u32,
+        names: Option<&str>,
+        values: Option<&glib::Value>,
+    ) -> Option<Element> {
+        unsafe {
+            from_glib_none(ffi::gst_element_factory_create_with_properties(
+                self.to_glib_none().0,
+                n,
+                names.to_glib_none().0,
+                values.to_glib_none().0,
+            ))
+        }
+    }
+
     #[doc(alias = "gst_element_factory_get_element_type")]
     #[doc(alias = "get_element_type")]
     pub fn element_type(&self) -> glib::types::Type {
@@ -202,6 +235,40 @@ impl ElementFactory {
                 name.to_glib_none().0,
             ))
             .ok_or_else(|| glib::bool_error!("Failed to create element from factory name"))
+        }
+    }
+
+    //#[cfg(any(feature = "v1_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    //#[doc(alias = "gst_element_factory_make_full")]
+    //pub fn make_full(factoryname: &str, first: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<Element> {
+    //    unsafe { TODO: call ffi:gst_element_factory_make_full() }
+    //}
+
+    //#[cfg(any(feature = "v1_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    //#[doc(alias = "gst_element_factory_make_valist")]
+    //pub fn make_valist(factoryname: &str, first: Option<&str>, properties: /*Unknown conversion*//*Unimplemented*/Unsupported) -> Option<Element> {
+    //    unsafe { TODO: call ffi:gst_element_factory_make_valist() }
+    //}
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_element_factory_make_with_properties")]
+    pub fn make_with_properties(
+        factoryname: &str,
+        n: u32,
+        names: Option<&str>,
+        values: Option<&glib::Value>,
+    ) -> Option<Element> {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_element_factory_make_with_properties(
+                factoryname.to_glib_none().0,
+                n,
+                names.to_glib_none().0,
+                values.to_glib_none().0,
+            ))
         }
     }
 }
