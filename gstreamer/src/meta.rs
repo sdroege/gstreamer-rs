@@ -145,6 +145,14 @@ impl<'a, T> MetaRef<'a, T> {
         }
     }
 
+    pub fn type_(&self) -> glib::Type {
+        unsafe {
+            let meta = self.meta as *const _ as *const ffi::GstMeta;
+            let info = (*meta).info;
+            glib::Type::from_glib((*info).type_)
+        }
+    }
+
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "get_seqnum")]
@@ -196,6 +204,14 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
             let info = (*meta).info;
             glib::Type::from_glib((*info).api)
+        }
+    }
+
+    pub fn type_(&self) -> glib::Type {
+        unsafe {
+            let meta = self.meta as *const _ as *const ffi::GstMeta;
+            let info = (*meta).info;
+            glib::Type::from_glib((*info).type_)
         }
     }
 
