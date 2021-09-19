@@ -807,6 +807,68 @@ impl fmt::Debug for VideoBarMeta {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[repr(transparent)]
+#[doc(alias = "GstVideoCodecAlphaMeta")]
+pub struct VideoCodecAlphaMeta(ffi::GstVideoCodecAlphaMeta);
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl Send for VideoCodecAlphaMeta {}
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl Sync for VideoCodecAlphaMeta {}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl VideoCodecAlphaMeta {
+    #[doc(alias = "gst_buffer_add_video_codec_alpha_meta")]
+    pub fn add(
+        buffer: &mut gst::BufferRef,
+        alpha_buffer: gst::Buffer,
+    ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
+        unsafe {
+            let meta = ffi::gst_buffer_add_video_codec_alpha_meta(
+                buffer.as_mut_ptr(),
+                alpha_buffer.to_glib_none().0,
+            );
+
+            Self::from_mut_ptr(buffer, meta)
+        }
+    }
+
+    pub fn alpha_buffer(&self) -> &gst::BufferRef {
+        unsafe { gst::BufferRef::from_ptr(self.0.buffer) }
+    }
+
+    pub fn alpha_buffer_owned(&self) -> gst::Buffer {
+        unsafe { from_glib_none(self.0.buffer) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl MetaAPI for VideoCodecAlphaMeta {
+    type GstType = ffi::GstVideoCodecAlphaMeta;
+
+    #[doc(alias = "gst_video_codec_alpha_meta_api_get_type")]
+    fn meta_api() -> glib::Type {
+        unsafe { from_glib(ffi::gst_video_codec_alpha_meta_api_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl fmt::Debug for VideoCodecAlphaMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("VideoCodecAlphaMeta")
+            .field("buffer", &self.alpha_buffer())
+            .finish()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
