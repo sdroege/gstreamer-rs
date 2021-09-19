@@ -3,9 +3,6 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-use glib::object::ObjectExt;
 use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
@@ -66,12 +63,15 @@ impl AppSink {
         unsafe { from_glib(ffi::gst_app_sink_is_eos(self.to_glib_none().0)) }
     }
 
-    //#[cfg(any(feature = "v1_20", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    //#[doc(alias = "gst_app_sink_pull_object")]
-    //pub fn pull_object(&self) -> /*Ignored*/Option<gst::MiniObject> {
-    //    unsafe { TODO: call ffi:gst_app_sink_pull_object() }
-    //}
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_app_sink_pull_object")]
+    pub fn pull_object(&self) -> Result<gst::MiniObject, glib::BoolError> {
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_app_sink_pull_object(self.to_glib_none().0))
+                .ok_or_else(|| glib::bool_error!("Failed to pull object"))
+        }
+    }
 
     #[doc(alias = "gst_app_sink_pull_preroll")]
     pub fn pull_preroll(&self) -> Result<gst::Sample, glib::BoolError> {
@@ -134,12 +134,20 @@ impl AppSink {
         }
     }
 
-    //#[cfg(any(feature = "v1_20", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    //#[doc(alias = "gst_app_sink_try_pull_object")]
-    //pub fn try_pull_object(&self, timeout: impl Into<Option<gst::ClockTime>>) -> /*Ignored*/Option<gst::MiniObject> {
-    //    unsafe { TODO: call ffi:gst_app_sink_try_pull_object() }
-    //}
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_app_sink_try_pull_object")]
+    pub fn try_pull_object(
+        &self,
+        timeout: impl Into<Option<gst::ClockTime>>,
+    ) -> Option<gst::MiniObject> {
+        unsafe {
+            from_glib_full(ffi::gst_app_sink_try_pull_object(
+                self.to_glib_none().0,
+                timeout.into().into_glib(),
+            ))
+        }
+    }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
@@ -196,42 +204,6 @@ impl AppSink {
             );
         }
     }
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "new-serialized-event")]
-    pub fn connect_new_serialized_event<F: Fn(&Self) -> bool + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
-        unsafe extern "C" fn new_serialized_event_trampoline<
-            F: Fn(&AppSink) -> bool + Send + Sync + 'static,
-        >(
-            this: *mut ffi::GstAppSink,
-            f: glib::ffi::gpointer,
-        ) -> glib::ffi::gboolean {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this)).into_glib()
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"new-serialized-event\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    new_serialized_event_trampoline::<F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    //#[cfg(any(feature = "v1_20", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    //#[doc(alias = "try-pull-object")]
-    //pub fn connect_try_pull_object<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored return value Gst.MiniObject
-    //}
 
     #[doc(alias = "buffer-list")]
     pub fn connect_buffer_list_notify<F: Fn(&Self) + Send + Sync + 'static>(

@@ -17,3 +17,10 @@ external_libraries = [
 
 [external_libraries]
 gstreamer_sdp="GstSdp"
+
+[[object]]
+name = "GstWebRTC.WebRTCSCTPTransport"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.20"

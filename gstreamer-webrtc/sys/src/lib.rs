@@ -443,6 +443,8 @@ extern "C" {
     //=========================================================================
     // GstWebRTCSCTPTransport
     //=========================================================================
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn gst_webrtc_sctp_transport_get_type() -> GType;
 
 }

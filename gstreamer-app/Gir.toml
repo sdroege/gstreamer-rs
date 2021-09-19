@@ -26,6 +26,7 @@ manual = [
     "Gst.Element",
     "Gst.URIHandler",
     "Gst.Format",
+    "Gst.MiniObject",
 ]
 
 [[object]]
@@ -53,12 +54,22 @@ final_type = true
     ignore = true
 
     [[object.signal]]
+    name = "pull-object"
+    # Action signal
+    ignore = true
+
+    [[object.signal]]
     name = "try-pull-sample"
     # Action signal
     ignore = true
 
     [[object.signal]]
     name = "try-pull-preroll"
+    # Action signal
+    ignore = true
+
+    [[object.signal]]
+    name = "try-pull-object"
     # Action signal
     ignore = true
 
@@ -92,6 +103,11 @@ final_type = true
     # Use callbacks instead
     ignore = true
 
+    [[object.signal]]
+    name = "new-serialized-event"
+    # Use callbacks instead
+    ignore = true
+
     [[object.function]]
     name = "set_caps"
         [[object.function.parameter]]
@@ -107,6 +123,11 @@ final_type = true
     name = "pull_sample"
         [object.function.return]
         nullable_return_is_error = "Failed to pull sample"
+
+    [[object.function]]
+    name = "pull_object"
+        [object.function.return]
+        nullable_return_is_error = "Failed to pull object"
 
 [[object]]
 name = "GstApp.AppSrc"

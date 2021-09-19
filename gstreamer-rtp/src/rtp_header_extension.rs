@@ -19,7 +19,7 @@ pub trait RTPHeaderExtensionExtManual: 'static {
         write_flags: RTPHeaderExtensionFlags,
         output: &mut gst::BufferRef,
         data: &mut [u8],
-    ) -> usize;
+    ) -> Result<usize, glib::BoolError>;
 }
 
 impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExtManual for O {
@@ -47,17 +47,23 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExtManual for O {
         write_flags: RTPHeaderExtensionFlags,
         output: &mut gst::BufferRef,
         data: &mut [u8],
-    ) -> usize {
+    ) -> Result<usize, glib::BoolError> {
         let size = data.len() as usize;
         unsafe {
-            ffi::gst_rtp_header_extension_write(
+            let res = ffi::gst_rtp_header_extension_write(
                 self.as_ref().to_glib_none().0,
                 input_meta.to_glib_none().0,
                 write_flags.into_glib(),
                 output.as_mut_ptr(),
                 data.to_glib_none().0,
                 size,
-            )
+            );
+
+            if res < 0 {
+                Err(glib::bool_error!("Failed to write header extension"))
+            } else {
+                Ok(res as usize)
+            }
         }
     }
 }

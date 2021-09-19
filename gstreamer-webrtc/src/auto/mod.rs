@@ -25,6 +25,13 @@ pub use self::web_rtcrtp_sender::WebRTCRTPSender;
 mod web_rtcrtp_transceiver;
 pub use self::web_rtcrtp_transceiver::WebRTCRTPTransceiver;
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+mod web_rtcsctp_transport;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::web_rtcsctp_transport::WebRTCSCTPTransport;
+
 mod web_rtc_session_description;
 pub use self::web_rtc_session_description::WebRTCSessionDescription;
 

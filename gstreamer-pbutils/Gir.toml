@@ -17,6 +17,7 @@ external_libraries = [
 
 generate = [
     "GstPbutils.DiscovererResult",
+    "GstPbutils.PbUtilsCapsDescriptionFlags",
 ]
 
 manual = [

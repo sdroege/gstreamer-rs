@@ -4,6 +4,9 @@
 // DO NOT EDIT
 
 use crate::EncodingTarget;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use crate::PbUtilsCapsDescriptionFlags;
 use glib::translate::*;
 use std::mem;
 
@@ -23,12 +26,17 @@ pub fn encoding_list_available_categories() -> Vec<glib::GString> {
     unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_encoding_list_available_categories()) }
 }
 
-//#[cfg(any(feature = "v1_20", feature = "dox"))]
-//#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-//#[doc(alias = "gst_pb_utils_get_caps_description_flags")]
-//pub fn pb_utils_get_caps_description_flags(caps: &gst::Caps) -> /*Ignored*/PbUtilsCapsDescriptionFlags {
-//    unsafe { TODO: call ffi:gst_pb_utils_get_caps_description_flags() }
-//}
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(alias = "gst_pb_utils_get_caps_description_flags")]
+pub fn pb_utils_get_caps_description_flags(caps: &gst::Caps) -> PbUtilsCapsDescriptionFlags {
+    assert_initialized_main_thread!();
+    unsafe {
+        from_glib(ffi::gst_pb_utils_get_caps_description_flags(
+            caps.to_glib_none().0,
+        ))
+    }
+}
 
 #[doc(alias = "gst_pb_utils_get_element_description")]
 pub fn pb_utils_get_element_description(

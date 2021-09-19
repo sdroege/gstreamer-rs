@@ -22,7 +22,7 @@ impl<'a> ::glib::translate::ToGlibPtr<'a, *mut ffi::GstVideoCodecFrame> for Vide
     }
 
     fn to_glib_full(&self) -> *mut ffi::GstVideoCodecFrame {
-        unimplemented!()
+        unsafe { ffi::gst_video_codec_frame_ref(self.frame) }
     }
 }
 
@@ -190,6 +190,20 @@ impl<'a> VideoCodecFrame<'a> {
     #[doc(alias = "get_deadline")]
     pub fn deadline(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib((*self.to_glib_none().0).deadline) }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_video_decoder_get_processed_subframe_index")]
+    pub fn subframes_processed(&self) -> u32 {
+        unsafe { (*self.to_glib_none().0).abidata.ABI.subframes_processed }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_video_decoder_get_input_subframe_index")]
+    pub fn num_subframes(&self) -> u32 {
+        unsafe { (*self.to_glib_none().0).abidata.ABI.num_subframes }
     }
 
     #[doc(hidden)]

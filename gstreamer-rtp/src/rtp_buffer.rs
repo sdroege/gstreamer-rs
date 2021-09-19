@@ -175,6 +175,15 @@ impl<'a> RTPBuffer<'a, Writable> {
             }
         }
     }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_rtp_buffer_remove_extension_data")]
+    pub fn remove_extension_data(&mut self) {
+        unsafe {
+            ffi::gst_rtp_buffer_remove_extension_data(&mut self.rtp_buffer);
+        }
+    }
 }
 
 impl<'a, T> RTPBuffer<'a, T> {

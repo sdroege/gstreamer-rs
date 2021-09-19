@@ -33,6 +33,7 @@ pub struct AppSinkCallbacks {
             Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
         >,
     >,
+    new_event: Option<RefCell<Box<dyn FnMut(&AppSink) -> bool + Send + 'static>>>,
     panicked: AtomicBool,
     callbacks: ffi::GstAppSinkCallbacks,
 }
@@ -47,6 +48,7 @@ impl AppSinkCallbacks {
             eos: None,
             new_preroll: None,
             new_sample: None,
+            new_event: None,
         }
     }
 }
@@ -64,6 +66,7 @@ pub struct AppSinkCallbacksBuilder {
             Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
         >,
     >,
+    new_event: Option<RefCell<Box<dyn FnMut(&AppSink) -> bool + Send + 'static>>>,
 }
 
 impl AppSinkCallbacksBuilder {
@@ -98,15 +101,26 @@ impl AppSinkCallbacksBuilder {
         }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub fn new_event<F: FnMut(&AppSink) -> bool + Send + 'static>(self, new_event: F) -> Self {
+        Self {
+            new_event: Some(RefCell::new(Box::new(new_event))),
+            ..self
+        }
+    }
+
     pub fn build(self) -> AppSinkCallbacks {
         let have_eos = self.eos.is_some();
         let have_new_preroll = self.new_preroll.is_some();
         let have_new_sample = self.new_sample.is_some();
+        let have_new_event = self.new_event.is_some();
 
         AppSinkCallbacks {
             eos: self.eos,
             new_preroll: self.new_preroll,
             new_sample: self.new_sample,
+            new_event: self.new_event,
             panicked: AtomicBool::new(false),
             callbacks: ffi::GstAppSinkCallbacks {
                 eos: if have_eos { Some(trampoline_eos) } else { None },
@@ -120,12 +134,12 @@ impl AppSinkCallbacksBuilder {
                 } else {
                     None
                 },
-                _gst_reserved: [
-                    ptr::null_mut(),
-                    ptr::null_mut(),
-                    ptr::null_mut(),
-                    ptr::null_mut(),
-                ],
+                new_event: if have_new_event {
+                    Some(trampoline_new_event)
+                } else {
+                    None
+                },
+                _gst_reserved: [ptr::null_mut(), ptr::null_mut(), ptr::null_mut()],
             },
         }
     }
@@ -227,6 +241,39 @@ unsafe extern "C" fn trampoline_new_sample(
         }
     } else {
         gst::FlowReturn::Error
+    };
+
+    ret.into_glib()
+}
+
+unsafe extern "C" fn trampoline_new_event(
+    appsink: *mut ffi::GstAppSink,
+    callbacks: gpointer,
+) -> glib::ffi::gboolean {
+    let callbacks = &*(callbacks as *const AppSinkCallbacks);
+    let element: Borrowed<AppSink> = from_glib_borrow(appsink);
+
+    if callbacks.panicked.load(Ordering::Relaxed) {
+        let element: Borrowed<AppSink> = from_glib_borrow(appsink);
+        gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
+        return false.into_glib();
+    }
+
+    let ret = if let Some(ref new_event) = callbacks.new_event {
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
+            (&mut *new_event.borrow_mut())(&element)
+        }));
+        match result {
+            Ok(result) => result,
+            Err(err) => {
+                callbacks.panicked.store(true, Ordering::Relaxed);
+                post_panic_error_message(&element, &err);
+
+                false
+            }
+        }
+    } else {
+        false
     };
 
     ret.into_glib()

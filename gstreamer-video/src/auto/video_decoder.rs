@@ -52,16 +52,6 @@ pub trait VideoDecoderExt: 'static {
     #[doc(alias = "gst_video_decoder_allocate_output_buffer")]
     fn allocate_output_buffer(&self) -> Result<gst::Buffer, glib::BoolError>;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_video_decoder_drop_subframe")]
-    fn drop_subframe(&self, frame: &VideoCodecFrame) -> gst::FlowReturn;
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_video_decoder_finish_subframe")]
-    fn finish_subframe(&self, frame: &VideoCodecFrame) -> gst::FlowReturn;
-
     #[doc(alias = "gst_video_decoder_get_buffer_pool")]
     #[doc(alias = "get_buffer_pool")]
     fn buffer_pool(&self) -> Option<gst::BufferPool>;
@@ -69,12 +59,6 @@ pub trait VideoDecoderExt: 'static {
     #[doc(alias = "gst_video_decoder_get_estimate_rate")]
     #[doc(alias = "get_estimate_rate")]
     fn estimate_rate(&self) -> i32;
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_video_decoder_get_input_subframe_index")]
-    #[doc(alias = "get_input_subframe_index")]
-    fn input_subframe_index(&self, frame: &VideoCodecFrame) -> u32;
 
     #[doc(alias = "gst_video_decoder_get_max_decode_time")]
     #[doc(alias = "get_max_decode_time")]
@@ -102,12 +86,6 @@ pub trait VideoDecoderExt: 'static {
     #[doc(alias = "get_pending_frame_size")]
     fn pending_frame_size(&self) -> usize;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_video_decoder_get_processed_subframe_index")]
-    #[doc(alias = "get_processed_subframe_index")]
-    fn processed_subframe_index(&self, frame: &VideoCodecFrame) -> u32;
-
     #[doc(alias = "gst_video_decoder_get_qos_proportion")]
     #[doc(alias = "get_qos_proportion")]
     fn qos_proportion(&self) -> f64;
@@ -120,11 +98,6 @@ pub trait VideoDecoderExt: 'static {
 
     #[doc(alias = "gst_video_decoder_have_frame")]
     fn have_frame(&self) -> gst::FlowReturn;
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_video_decoder_have_last_subframe")]
-    fn have_last_subframe(&self, frame: &VideoCodecFrame) -> gst::FlowReturn;
 
     #[doc(alias = "gst_video_decoder_merge_tags")]
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
@@ -236,28 +209,6 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    fn drop_subframe(&self, frame: &VideoCodecFrame) -> gst::FlowReturn {
-        unsafe {
-            from_glib(ffi::gst_video_decoder_drop_subframe(
-                self.as_ref().to_glib_none().0,
-                frame.to_glib_full(),
-            ))
-        }
-    }
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    fn finish_subframe(&self, frame: &VideoCodecFrame) -> gst::FlowReturn {
-        unsafe {
-            from_glib(ffi::gst_video_decoder_finish_subframe(
-                self.as_ref().to_glib_none().0,
-                frame.to_glib_full(),
-            ))
-        }
-    }
-
     fn buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
             from_glib_full(ffi::gst_video_decoder_get_buffer_pool(
@@ -268,17 +219,6 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     fn estimate_rate(&self) -> i32 {
         unsafe { ffi::gst_video_decoder_get_estimate_rate(self.as_ref().to_glib_none().0) }
-    }
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    fn input_subframe_index(&self, frame: &VideoCodecFrame) -> u32 {
-        unsafe {
-            ffi::gst_video_decoder_get_input_subframe_index(
-                self.as_ref().to_glib_none().0,
-                frame.to_glib_none().0,
-            )
-        }
     }
 
     fn max_decode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff {
@@ -324,17 +264,6 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         unsafe { ffi::gst_video_decoder_get_pending_frame_size(self.as_ref().to_glib_none().0) }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    fn processed_subframe_index(&self, frame: &VideoCodecFrame) -> u32 {
-        unsafe {
-            ffi::gst_video_decoder_get_processed_subframe_index(
-                self.as_ref().to_glib_none().0,
-                frame.to_glib_none().0,
-            )
-        }
-    }
-
     fn qos_proportion(&self) -> f64 {
         unsafe { ffi::gst_video_decoder_get_qos_proportion(self.as_ref().to_glib_none().0) }
     }
@@ -353,17 +282,6 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         unsafe {
             from_glib(ffi::gst_video_decoder_have_frame(
                 self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    fn have_last_subframe(&self, frame: &VideoCodecFrame) -> gst::FlowReturn {
-        unsafe {
-            from_glib(ffi::gst_video_decoder_have_last_subframe(
-                self.as_ref().to_glib_none().0,
-                frame.to_glib_none().0,
             ))
         }
     }

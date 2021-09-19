@@ -157,6 +157,26 @@ manual_traits = ["VideoDecoderExtManual"]
     manual = true
 
     [[object.function]]
+    name = "finish_subframe"
+    manual = true
+
+    [[object.function]]
+    name = "drop_subframe"
+    manual = true
+
+    [[object.function]]
+    name = "have_last_subframe"
+    manual = true
+
+    [[object.function]]
+    name = "get_processed_subframe_index"
+    manual = true
+
+    [[object.function]]
+    name = "get_input_subframe_index"
+    manual = true
+
+    [[object.function]]
     name = "set_latency"
     manual = true
 

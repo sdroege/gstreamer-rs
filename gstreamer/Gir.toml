@@ -1052,6 +1052,36 @@ final_type = true
         [object.function.return]
         nullable_return_is_error = "Failed to create element from factory name"
 
+    [[object.function]]
+    name = "create_full"
+    # varargs
+    ignore = true
+
+    [[object.function]]
+    name = "create_valist"
+    # varargs
+    ignore = true
+
+    [[object.function]]
+    name = "create_with_properties"
+    # separate name/value arrays need to be merged
+    manual = true
+
+    [[object.function]]
+    name = "make_full"
+    # varargs
+    ignore = true
+
+    [[object.function]]
+    name = "make_valist"
+    # varargs
+    ignore = true
+
+    [[object.function]]
+    name = "make_with_properties"
+    # separate name/value arrays need to be merged
+    manual = true
+
 [[object]]
 name = "Gst.TypeFindFactory"
 status = "generate"

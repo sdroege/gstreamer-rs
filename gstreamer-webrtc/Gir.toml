@@ -99,3 +99,8 @@ status = "generate"
     name = "to_string"
         [object.function.return]
         nullable = false
+
+[[object]]
+name = "GstWebRTC.WebRTCSCTPTransport"
+status = "generate"
+version = "1.20"
