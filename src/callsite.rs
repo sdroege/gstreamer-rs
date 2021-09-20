@@ -1,43 +1,83 @@
 use once_cell::sync::OnceCell;
-use std::sync::{
-    atomic::{AtomicPtr, AtomicUsize, Ordering},
-    PoisonError,
+use std::{
+    alloc::GlobalAlloc,
+    ptr::addr_of_mut,
+    sync::{
+        atomic::{AtomicUsize, Ordering},
+        PoisonError,
+    },
 };
 use tracing::{field::FieldSet, Level};
 use tracing_core::{identify_callsite, Callsite, Interest, Kind, Metadata};
 
 pub(crate) struct GstCallsite {
     interest: AtomicUsize,
-    metadata: AtomicPtr<Metadata<'static>>,
+    metadata: Metadata<'static>,
+    pub(crate) unprefixed_target: &'static str,
 }
 
+const CALLSITE_INTEREST_NEVER: usize = 1;
+const CALLSITE_INTEREST_SOMETIMES: usize = 2;
+const CALLSITE_INTEREST_ALWAYS: usize = 3;
+
 impl GstCallsite {
-    fn make_static() -> &'static Self {
-        #[allow(unused_unsafe)]
+    fn make_static<'a>(key: &Key<'a>) -> &'static Self {
+        let module = key.module.unwrap_or("");
+        let file = key.file.unwrap_or("");
+        let prefixed_target_len = crate::TARGET.len() + 2 + key.target.len();
         unsafe {
-            // SAFETY: for `metadata` to be sound this must initialize with a null pointer.
-            Box::leak(Box::new(GstCallsite {
-                interest: AtomicUsize::new(0),
-                metadata: AtomicPtr::new(std::ptr::null_mut()),
-            }))
+            // Super unsafe, nasty, ugly stuff here. All in order to enable just 1 allocation for
+            // each callsite only. We draw inspiration from a pattern oft used in C, where a single
+            // allocation is split into two parts, one to store a specific structure (`GstCallsite`
+            // in our case) and the second one to store a dynamically sized tail of values, inline.
+            // In this dynamic area we store various strings that `Metadata` then refers back to.
+            let callsite_layout = std::alloc::Layout::new::<GstCallsite>();
+            let string_length = module.len() + file.len() + prefixed_target_len;
+            let string_layout =
+                std::alloc::Layout::array::<u8>(string_length).expect("layout calculation");
+            let (callsite_layout, string_offset) = callsite_layout
+                .extend(string_layout)
+                .expect("layout calculation");
+            let alloc = std::alloc::System.alloc(callsite_layout);
+            let string = std::slice::from_raw_parts_mut(alloc.add(string_offset), string_length);
+            let callsite = alloc as *mut GstCallsite;
+
+            let (module_alloc, rest) = string.split_at_mut(module.len());
+            module_alloc.copy_from_slice(module.as_bytes());
+            let (file_alloc, rest) = rest.split_at_mut(file.len());
+            file_alloc.copy_from_slice(file.as_bytes());
+            let (target_prefix_alloc, rest) = rest.split_at_mut(crate::TARGET.len());
+            target_prefix_alloc.copy_from_slice(crate::TARGET.as_bytes());
+            let (separator_alloc, rest) = rest.split_at_mut(2);
+            separator_alloc.copy_from_slice("::".as_bytes());
+            let (target_alloc, _) = rest.split_at_mut(key.target.len());
+            target_alloc.copy_from_slice(key.target.as_bytes());
+            let file_start = module.len();
+            let prefixed_target_start = file_start + file.len();
+            let unprefixed_target_start = prefixed_target_start + crate::TARGET.len() + 2;
+            let string = std::str::from_utf8_unchecked(string);
+            let fieldset = FieldSet::new(key.fields, identify_callsite!(&*callsite));
+            *addr_of_mut!((*callsite).metadata) = Metadata::new(
+                key.name,
+                &string[prefixed_target_start..],
+                key.level,
+                key.file.map(|_| &string[file_start..prefixed_target_start]),
+                key.line,
+                key.module.map(|_| &string[..module.len()]),
+                fieldset,
+                key.kind.clone(),
+            );
+            *addr_of_mut!((*callsite).interest) = AtomicUsize::new(0);
+            *addr_of_mut!((*callsite).unprefixed_target) = &string[unprefixed_target_start..];
+            &*callsite
         }
     }
-    fn set_metadata(&'static self, meta: &'static Metadata<'static>) {
-        self.metadata
-            .compare_exchange(
-                std::ptr::null_mut(),
-                meta as *const _ as _,
-                Ordering::Release,
-                Ordering::Relaxed,
-            )
-            .expect("set_metadata should only be called once");
-        tracing_core::callsite::register(self);
-    }
+
     pub(crate) fn interest(&self) -> Interest {
         match self.interest.load(Ordering::Acquire) {
-            1 => Interest::never(),
-            2 => Interest::sometimes(),
-            3 => Interest::always(),
+            CALLSITE_INTEREST_NEVER => Interest::never(),
+            CALLSITE_INTEREST_SOMETIMES => Interest::sometimes(),
+            CALLSITE_INTEREST_ALWAYS => Interest::always(),
             _ => panic!("attempting to obtain callsite's interest before its been set"),
         }
     }
@@ -45,26 +85,15 @@ impl GstCallsite {
 
 impl Callsite for GstCallsite {
     fn set_interest(&self, interest: Interest) {
-        self.interest.store(
-            match () {
-                _ if interest.is_never() => 1,
-                _ if interest.is_always() => 3,
-                _ => 2,
-            },
-            Ordering::Release,
-        );
+        self.interest.store(match () {
+            _ if interest.is_never() => CALLSITE_INTEREST_NEVER,
+            _ if interest.is_always() => CALLSITE_INTEREST_ALWAYS,
+            _ => CALLSITE_INTEREST_SOMETIMES,
+        }, Ordering::Release);
     }
 
     fn metadata(&self) -> &Metadata<'_> {
-        unsafe {
-            // SAFETY: this type always contains nullptr (and `as_ref` will return `None`) until it
-            // is initialized in the `set_metadata` function. `set_metadata` will always set a
-            // valid pointer by definition of storing the address of a `&'static` reference.
-            self.metadata
-                .load(Ordering::Acquire)
-                .as_ref()
-                .expect("metadata must have been initialized already!")
-        }
+        &self.metadata
     }
 }
 
@@ -81,7 +110,7 @@ pub(crate) struct DynamicCallsites {
 
 type Map = std::collections::BTreeMap<Key<'static>, &'static GstCallsite>;
 
-#[derive(PartialEq, Eq)]
+#[derive(Eq)]
 struct Key<'a> {
     level: Level,
     line: Option<u32>,
@@ -91,6 +120,12 @@ struct Key<'a> {
     name: &'static str,
     fields: &'static [&'static str],
     kind: Kind,
+}
+
+impl PartialEq for Key<'_> {
+    fn eq(&self, other: &Self) -> bool {
+        self.cmp(other) == std::cmp::Ordering::Equal
+    }
 }
 
 impl PartialOrd for Key<'_> {
@@ -121,25 +156,6 @@ impl Ord for Key<'_> {
     }
 }
 
-impl<'a> Key<'a> {
-    fn leak(&self) -> Key<'static> {
-        Key::<'static> {
-            level: self.level,
-            line: self.line,
-            kind: self.kind.clone(),
-            fields: self.fields,
-            module: self.module.map(leak_str),
-            file: self.file.map(leak_str),
-            name: self.name,
-            target: leak_str(self.target),
-        }
-    }
-}
-
-fn leak_str(s: &str) -> &'static str {
-    Box::leak(s.to_string().into_boxed_str())
-}
-
 impl DynamicCallsites {
     pub(crate) fn get() -> &'static Self {
         static MAP: OnceCell<DynamicCallsites> = OnceCell::new();
@@ -168,38 +184,36 @@ impl DynamicCallsites {
             file,
             module,
             line,
-            kind,
+            kind: kind.clone(),
             fields,
         };
         if let Some(callsite) = guard.get(&lookup_key) {
             return callsite;
         }
-        let callsite = GstCallsite::make_static();
-        let key = lookup_key.leak();
-        let target: &'static str =
-            Box::leak(format!("{}::{}", crate::TARGET, key.target).into_boxed_str());
-        let metadata = Box::leak(Box::new(Metadata::new(
-            key.name,
-            target,
-            key.level,
-            key.file,
-            key.line,
-            key.module,
-            FieldSet::new(key.fields, identify_callsite!(callsite)),
-            key.kind.clone(),
-        )));
+        let callsite = GstCallsite::make_static(&lookup_key);
+        let metadata = callsite.metadata();
+        let key = Key::<'static> {
+            level,
+            name,
+            line,
+            kind,
+            fields,
+            file: metadata.file(),
+            module: metadata.module_path(),
+            target: callsite.unprefixed_target,
+        };
         tracing::debug!(message = "allocated a new callsite",
             current_callsites = guard.len(),
-            name = key.name,
+            name = lookup_key.name,
             target = target,
-            kind = ?key.kind,
-            file = ?key.file,
-            line = ?key.line,
-            module = ?key.module,
-            fieldset = ?key.fields,
+            kind = ?lookup_key.kind,
+            file = ?lookup_key.file,
+            line = ?lookup_key.line,
+            module = ?lookup_key.module,
+            fieldset = ?lookup_key.fields,
         );
         guard.insert(key, callsite);
-        callsite.set_metadata(metadata);
+        tracing_core::callsite::register(callsite);
         callsite
     }
 }
