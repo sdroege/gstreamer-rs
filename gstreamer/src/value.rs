@@ -634,7 +634,7 @@ impl<'a> Array<'a> {
         Array(values.iter().map(|v| v.to_send_value()).collect())
     }
 
-    pub fn from_borrowed<T: AsRef<[glib::SendValue]>>(values: &'a T) -> Self {
+    pub fn from_borrowed(values: &'a impl AsRef<[glib::SendValue]>) -> Self {
         assert_initialized_main_thread!();
 
         Array(Cow::Borrowed(values.as_ref()))
@@ -728,7 +728,7 @@ impl<'a> List<'a> {
         List(values.iter().map(|v| v.to_send_value()).collect())
     }
 
-    pub fn from_borrowed<T: AsRef<[glib::SendValue]>>(values: &'a T) -> Self {
+    pub fn from_borrowed(values: &'a impl AsRef<[glib::SendValue]>) -> Self {
         assert_initialized_main_thread!();
 
         List(Cow::Borrowed(values.as_ref()))

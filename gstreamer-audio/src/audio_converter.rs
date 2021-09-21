@@ -126,7 +126,7 @@ impl AudioConverterConfig {
             .unwrap_or(crate::AudioResamplerMethod::BlackmanNuttall)
     }
 
-    pub fn set_mix_matrix<T: AsRef<[f32]>>(&mut self, v: &[T]) {
+    pub fn set_mix_matrix(&mut self, v: &[impl AsRef<[f32]>]) {
         let length = v.get(0).map(|v| v.as_ref().len()).unwrap_or(0);
         let array = gst::Array::from_owned(
             v.iter()

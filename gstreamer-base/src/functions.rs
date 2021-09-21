@@ -5,9 +5,9 @@ use glib::translate::*;
 use std::mem;
 
 #[doc(alias = "gst_type_find_helper_for_data")]
-pub fn type_find_helper_for_data<P: IsA<gst::Object>, R: AsRef<[u8]>>(
-    obj: Option<&P>,
-    data: R,
+pub fn type_find_helper_for_data(
+    obj: Option<&impl IsA<gst::Object>>,
+    data: impl AsRef<[u8]>,
 ) -> Result<(gst::Caps, gst::TypeFindProbability), glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
@@ -31,9 +31,9 @@ pub fn type_find_helper_for_data<P: IsA<gst::Object>, R: AsRef<[u8]>>(
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(alias = "gst_type_find_helper_for_data_with_extension")]
-pub fn type_find_helper_for_data_with_extension<P: IsA<gst::Object>, R: AsRef<[u8]>>(
-    obj: Option<&P>,
-    data: R,
+pub fn type_find_helper_for_data_with_extension(
+    obj: Option<&impl IsA<gst::Object>>,
+    data: impl AsRef<[u8]>,
     extension: Option<&str>,
 ) -> Result<(gst::Caps, gst::TypeFindProbability), glib::error::BoolError> {
     assert_initialized_main_thread!();

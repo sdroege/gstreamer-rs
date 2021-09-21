@@ -197,7 +197,7 @@ impl Harness {
     }
 
     #[doc(alias = "gst_harness_dump_to_file")]
-    pub fn dump_to_file<P: AsRef<path::Path>>(&mut self, filename: P) {
+    pub fn dump_to_file(&mut self, filename: impl AsRef<path::Path>) {
         let filename = filename.as_ref();
         unsafe {
             ffi::gst_harness_dump_to_file(self.0.as_ptr(), filename.to_glib_none().0);

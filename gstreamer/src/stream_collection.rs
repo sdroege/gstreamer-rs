@@ -74,7 +74,7 @@ impl StreamCollectionBuilder {
         self
     }
 
-    pub fn streams<S: AsRef<Stream>>(self, streams: &[S]) -> Self {
+    pub fn streams(self, streams: &[impl AsRef<Stream>]) -> Self {
         for stream in streams {
             unsafe {
                 ffi::gst_stream_collection_add_stream(

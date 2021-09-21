@@ -44,15 +44,15 @@ pub trait GstBinExtManual: 'static {
     fn children(&self) -> Vec<Element>;
 
     fn debug_to_dot_data(&self, details: crate::DebugGraphDetails) -> GString;
-    fn debug_to_dot_file<Q: AsRef<path::Path>>(
+    fn debug_to_dot_file(
         &self,
         details: crate::DebugGraphDetails,
-        file_name: Q,
+        file_name: impl AsRef<path::Path>,
     );
-    fn debug_to_dot_file_with_ts<Q: AsRef<path::Path>>(
+    fn debug_to_dot_file_with_ts(
         &self,
         details: crate::DebugGraphDetails,
-        file_name: Q,
+        file_name: impl AsRef<path::Path>,
     );
 
     fn set_bin_flags(&self, flags: BinFlags);
@@ -166,18 +166,18 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         crate::debug_bin_to_dot_data(self, details)
     }
 
-    fn debug_to_dot_file<Q: AsRef<path::Path>>(
+    fn debug_to_dot_file(
         &self,
         details: crate::DebugGraphDetails,
-        file_name: Q,
+        file_name: impl AsRef<path::Path>,
     ) {
         crate::debug_bin_to_dot_file(self, details, file_name)
     }
 
-    fn debug_to_dot_file_with_ts<Q: AsRef<path::Path>>(
+    fn debug_to_dot_file_with_ts(
         &self,
         details: crate::DebugGraphDetails,
-        file_name: Q,
+        file_name: impl AsRef<path::Path>,
     ) {
         crate::debug_bin_to_dot_file_with_ts(self, details, file_name)
     }
