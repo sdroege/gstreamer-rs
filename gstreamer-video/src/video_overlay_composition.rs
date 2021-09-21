@@ -214,8 +214,8 @@ impl fmt::Debug for VideoOverlayCompositionRef {
 
 impl VideoOverlayComposition {
     #[doc(alias = "gst_video_overlay_composition_new")]
-    pub fn new<'a, T: IntoIterator<Item = &'a VideoOverlayRectangle>>(
-        rects: T,
+    pub fn new<'a>(
+        rects: impl IntoIterator<Item = &'a VideoOverlayRectangle>,
     ) -> Result<Self, glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {

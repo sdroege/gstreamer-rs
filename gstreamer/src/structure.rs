@@ -100,10 +100,10 @@ impl Structure {
     }
 
     #[allow(clippy::should_implement_trait)]
-    pub fn from_iter<'a, 'b, I>(name: &str, iter: I) -> Structure
-    where
-        I: IntoIterator<Item = (&'a str, &'b SendValue)>,
-    {
+    pub fn from_iter<'a, 'b>(
+        name: &str,
+        iter: impl IntoIterator<Item = (&'a str, &'b SendValue)>,
+    ) -> Structure {
         assert_initialized_main_thread!();
         let mut structure = Structure::new_empty(name);
 

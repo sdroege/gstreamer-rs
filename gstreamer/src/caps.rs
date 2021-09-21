@@ -58,10 +58,7 @@ impl Caps {
     }
 
     #[allow(clippy::should_implement_trait)]
-    pub fn from_iter<'a, I>(iter: I) -> Self
-    where
-        I: IntoIterator<Item = &'a StructureRef>,
-    {
+    pub fn from_iter<'a>(iter: impl IntoIterator<Item = &'a StructureRef>) -> Self {
         assert_initialized_main_thread!();
         let mut caps = Caps::new_empty();
 
@@ -71,10 +68,9 @@ impl Caps {
         caps
     }
 
-    pub fn from_iter_with_features<'a, 'b, I>(iter: I) -> Self
-    where
-        I: IntoIterator<Item = (&'a StructureRef, &'b CapsFeaturesRef)>,
-    {
+    pub fn from_iter_with_features<'a, 'b>(
+        iter: impl IntoIterator<Item = (&'a StructureRef, &'b CapsFeaturesRef)>,
+    ) -> Self {
         assert_initialized_main_thread!();
         let mut caps = Caps::new_empty();
 

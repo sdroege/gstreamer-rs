@@ -109,22 +109,14 @@ fn validate(
 
 impl DateTime {
     #[doc(alias = "gst_date_time_new")]
-    pub fn new<
-        TZ: Into<Option<f32>>,
-        Y: Into<i32>,
-        MO: Into<Option<i32>>,
-        D: Into<Option<i32>>,
-        H: Into<Option<i32>>,
-        MI: Into<Option<i32>>,
-        S: Into<Option<f64>>,
-    >(
-        tzoffset: TZ,
-        year: Y,
-        month: MO,
-        day: D,
-        hour: H,
-        minute: MI,
-        seconds: S,
+    pub fn new(
+        tzoffset: impl Into<Option<f32>>,
+        year: impl Into<i32>,
+        month: impl Into<Option<i32>>,
+        day: impl Into<Option<i32>>,
+        hour: impl Into<Option<i32>>,
+        minute: impl Into<Option<i32>>,
+        seconds: impl Into<Option<f64>>,
     ) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
 
@@ -153,20 +145,13 @@ impl DateTime {
     }
 
     #[doc(alias = "gst_date_time_new_local_time")]
-    pub fn new_local_time<
-        Y: Into<i32>,
-        MO: Into<Option<i32>>,
-        D: Into<Option<i32>>,
-        H: Into<Option<i32>>,
-        MI: Into<Option<i32>>,
-        S: Into<Option<f64>>,
-    >(
-        year: Y,
-        month: MO,
-        day: D,
-        hour: H,
-        minute: MI,
-        seconds: S,
+    pub fn new_local_time(
+        year: impl Into<i32>,
+        month: impl Into<Option<i32>>,
+        day: impl Into<Option<i32>>,
+        hour: impl Into<Option<i32>>,
+        minute: impl Into<Option<i32>>,
+        seconds: impl Into<Option<f64>>,
     ) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
 
