@@ -8,44 +8,39 @@ use gstreamer::{
     traits::{GstObjectExt, PadExt},
     Buffer, FlowReturn, Object, Pad, Query, Tracer,
 };
-use tracing::{Callsite, Id};
+use tracing::{dispatcher, span::Attributes, Callsite, Dispatch, Id};
 use tracing_core::Kind;
 
+struct EnteredSpan {
+    id: Id,
+    dispatch: Dispatch,
+}
+
 pub struct TracingTracerPriv {
-    span_stack: thread_local::ThreadLocal<RefCell<Vec<Id>>>,
+    span_stack: thread_local::ThreadLocal<RefCell<Vec<EnteredSpan>>>,
 }
 
 impl TracingTracerPriv {
-    fn push_span(&self, id: Id) {
+    fn push_span(&self, dispatch: Dispatch, attributes: Attributes) {
+        let span_id = dispatch.new_span(&attributes);
+        dispatch.enter(&span_id);
         self.span_stack
             .get_or(|| RefCell::new(Vec::new()))
             .borrow_mut()
-            .push(id)
+            .push(EnteredSpan {
+                id: span_id,
+                dispatch,
+            })
     }
-    fn pop_span(&self) -> Option<Id> {
+    fn pop_span(&self) -> Option<()> {
         self.span_stack
             .get_or(|| RefCell::new(Vec::new()))
             .borrow_mut()
             .pop()
-    }
-    fn current(&self) -> Option<Id> {
-        self.span_stack
-            .get_or(|| RefCell::new(Vec::new()))
-            .borrow_mut()
-            .last()
-            .cloned()
-    }
-
-    fn post(&self) {
-        if let Some(id) = self.pop_span() {
-            tracing::dispatcher::get_default(|dispatch| {
-                dispatch.exit(&id);
-                dispatch.try_close(id.clone());
-                if let Some(current) = self.current() {
-                    dispatch.enter(&current);
-                }
+            .map(|span| {
+                span.dispatch.exit(&span.id);
+                span.dispatch.try_close(span.id);
             })
-        }
     }
 
     fn pad_pre(&self, name: &'static str, pad: &Pad) {
@@ -64,33 +59,26 @@ impl TracingTracerPriv {
             return;
         }
         let meta = callsite.metadata();
-        tracing_core::dispatcher::get_default(move |dispatch| {
-            if !dispatch.enabled(meta) {
-                return;
-            }
-            let gstpad_flags_value = Some(tracing_core::field::display(crate::PadFlags(
-                pad.pad_flags().bits(),
-            )));
-            let gstpad_parent = pad.parent_element();
-            let gstpad_parent_name_value = gstpad_parent.map(|p| p.name());
-            let gstpad_parent_name_value = gstpad_parent_name_value.as_ref().map(|n| n.as_str());
-            let fields = meta.fields();
-            let mut fields_iter = fields.into_iter();
-            let values = field_values![fields_iter =>
-                // /!\ /!\ /!\ Must be in the same order as the field list above /!\ /!\ /!\
-                "gstpad.flags" = gstpad_flags_value;
-                "gstpad.parent.name" = gstpad_parent_name_value;
-            ];
-            let valueset = fields.value_set(&values);
-            let attrs = tracing::span::Attributes::new(meta, &valueset);
-            let span_id = dispatch.new_span(&attrs);
-            if let Some(current) = self.current() {
-                dispatch.record_follows_from(&span_id, &current);
-                dispatch.exit(&current);
-            }
-            dispatch.enter(&span_id);
-            self.push_span(span_id);
-        });
+        let dispatch = tracing_core::dispatcher::get_default(move |dispatch| dispatch.clone());
+        if !dispatch.enabled(meta) {
+            return;
+        }
+        let gstpad_flags_value = Some(tracing_core::field::display(crate::PadFlags(
+            pad.pad_flags().bits(),
+        )));
+        let gstpad_parent = pad.parent_element();
+        let gstpad_parent_name_value = gstpad_parent.map(|p| p.name());
+        let gstpad_parent_name_value = gstpad_parent_name_value.as_ref().map(|n| n.as_str());
+        let fields = meta.fields();
+        let mut fields_iter = fields.into_iter();
+        let values = field_values![fields_iter =>
+            // /!\ /!\ /!\ Must be in the same order as the field list above /!\ /!\ /!\
+            "gstpad.flags" = gstpad_flags_value;
+            "gstpad.parent.name" = gstpad_parent_name_value;
+        ];
+        let valueset = fields.value_set(&values);
+        let attrs = tracing::span::Attributes::new_root(meta, &valueset);
+        self.push_span(dispatch, attrs);
     }
 }
 
@@ -153,22 +141,22 @@ impl TracerImpl for TracingTracerPriv {
     }
 
     fn pad_pull_range_post(&self, _: u64, _: &Pad, _: &Buffer, _: FlowReturn) {
-        self.post()
+        self.pop_span();
     }
 
     fn pad_push_event_post(&self, _: u64, _: &Pad, _: bool) {
-        self.post()
+        self.pop_span();
     }
 
     fn pad_push_list_post(&self, _: u64, _: &Pad, _: FlowReturn) {
-        self.post()
+        self.pop_span();
     }
 
     fn pad_push_post(&self, _: u64, _: &Pad, _: FlowReturn) {
-        self.post()
+        self.pop_span();
     }
 
     fn pad_query_post(&self, _: u64, _: &Pad, _: &Query, _: bool) {
-        self.post()
+        self.pop_span();
     }
 }
