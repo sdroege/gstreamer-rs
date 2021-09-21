@@ -28,7 +28,7 @@ fn main_loop(uri: &str) -> Result<(), Error> {
     );
 
     // Tell the player what uri to play.
-    player.set_uri(uri);
+    player.set_uri(Some(uri));
 
     let error = Arc::new(Mutex::new(Ok(())));
 
