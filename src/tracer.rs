@@ -8,7 +8,7 @@ use gstreamer::{
     traits::{GstObjectExt, PadExt},
     Buffer, FlowReturn, Object, Pad, Query, Tracer,
 };
-use tracing::{dispatcher, span::Attributes, Callsite, Dispatch, Id};
+use tracing::{span::Attributes, Callsite, Dispatch, Id};
 use tracing_core::Kind;
 
 struct EnteredSpan {

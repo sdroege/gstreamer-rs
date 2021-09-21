@@ -1,7 +1,6 @@
 use once_cell::sync::OnceCell;
 use std::{
     alloc::GlobalAlloc,
-    ptr::addr_of_mut,
     sync::{
         atomic::{AtomicUsize, Ordering},
         PoisonError,
@@ -57,18 +56,20 @@ impl GstCallsite {
             let unprefixed_target_start = prefixed_target_start + crate::TARGET.len() + 2;
             let string = std::str::from_utf8_unchecked(string);
             let fieldset = FieldSet::new(key.fields, identify_callsite!(&*callsite));
-            *addr_of_mut!((*callsite).metadata) = Metadata::new(
-                key.name,
-                &string[prefixed_target_start..],
-                key.level,
-                key.file.map(|_| &string[file_start..prefixed_target_start]),
-                key.line,
-                key.module.map(|_| &string[..module.len()]),
-                fieldset,
-                key.kind.clone(),
-            );
-            *addr_of_mut!((*callsite).interest) = AtomicUsize::new(0);
-            *addr_of_mut!((*callsite).unprefixed_target) = &string[unprefixed_target_start..];
+            callsite.write(GstCallsite {
+                interest: AtomicUsize::new(0),
+                unprefixed_target: &string[unprefixed_target_start..],
+                metadata: Metadata::new(
+                    key.name,
+                    &string[prefixed_target_start..],
+                    key.level,
+                    key.file.map(|_| &string[file_start..prefixed_target_start]),
+                    key.line,
+                    key.module.map(|_| &string[..module.len()]),
+                    fieldset,
+                    key.kind.clone(),
+                ),
+            });
             &*callsite
         }
     }
@@ -85,11 +86,14 @@ impl GstCallsite {
 
 impl Callsite for GstCallsite {
     fn set_interest(&self, interest: Interest) {
-        self.interest.store(match () {
-            _ if interest.is_never() => CALLSITE_INTEREST_NEVER,
-            _ if interest.is_always() => CALLSITE_INTEREST_ALWAYS,
-            _ => CALLSITE_INTEREST_SOMETIMES,
-        }, Ordering::Release);
+        self.interest.store(
+            match () {
+                _ if interest.is_never() => CALLSITE_INTEREST_NEVER,
+                _ if interest.is_always() => CALLSITE_INTEREST_ALWAYS,
+                _ => CALLSITE_INTEREST_SOMETIMES,
+            },
+            Ordering::Release,
+        );
     }
 
     fn metadata(&self) -> &Metadata<'_> {
