@@ -75,14 +75,14 @@ Certain messages may also provide more information than the built-in logger. Whi
 does present you with the type and address of the object being logged, `tracing-gstreamer` may
 provide more readily useful information such as the element name:
 
-```
+```text
 Jan 01 00:00:00.000  INFO gstreamer::GST_STATES: completed state change to READY gobject.address=94331150660528 gobject.type="GstAudioTestSrc" gstobject.name="audiotestsrc0" gstelement.state="ready" gstelement.pending_state="void-pending"
 ```
 
 or provide additional context via spans, which may help to figure out which element is logging the
 message when there is no other way to tell this otherwise, such as in this example:
 
-```
+```text
 Jan 01 00:00:00.000  INFO pad_push{gstpad.state={NEED_PARENT} gstpad.parent.name="audiotestsrc0"}: gstreamer::structure: Expected field 'channel-mask' in structure: audio/x-raw, rate=(int)48000, channels=(int)1, format=(string)S16LE, layout=(string)interleaved;
 ```
 
