@@ -503,8 +503,8 @@ impl fmt::Debug for ReferenceTimestampMeta {
 
         f.debug_struct("ReferenceTimestampMeta")
             .field("reference", &self.reference())
-            .field("timestamp", &self.timestamp().display().to_string())
-            .field("duration", &self.duration().display().to_string())
+            .field("timestamp", &self.timestamp().display())
+            .field("duration", &self.duration().display())
             .finish()
     }
 }

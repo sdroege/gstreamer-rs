@@ -591,16 +591,16 @@ impl<T: FormattedValueIntrinsic> fmt::Debug for FormattedSegment<T> {
                 let segment = segment.downcast_ref::<crate::ClockTime>().unwrap();
                 f.debug_struct("Segment")
                     .field("format", &Format::Time)
-                    .field("start", &segment.start().display().to_string())
-                    .field("offset", &segment.offset().display().to_string())
-                    .field("stop", &segment.stop().display().to_string())
+                    .field("start", &segment.start().display())
+                    .field("offset", &segment.offset().display())
+                    .field("stop", &segment.stop().display())
                     .field("rate", &segment.rate())
                     .field("applied_rate", &segment.applied_rate())
                     .field("flags", &segment.flags())
-                    .field("time", &segment.time().display().to_string())
-                    .field("base", &segment.base().display().to_string())
-                    .field("position", &segment.position().display().to_string())
-                    .field("duration", &segment.duration().display().to_string())
+                    .field("time", &segment.time().display())
+                    .field("base", &segment.base().display())
+                    .field("position", &segment.position().display())
+                    .field("duration", &segment.duration().display())
                     .finish()
             }
             _ => f

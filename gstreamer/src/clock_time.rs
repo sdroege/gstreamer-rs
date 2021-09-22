@@ -7,7 +7,7 @@ use std::io::{self, prelude::*};
 use std::time::Duration;
 use std::{cmp, convert, fmt, str};
 
-#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Default)]
 pub struct ClockTime(pub(crate) u64);
 
 impl ClockTime {
@@ -419,12 +419,23 @@ impl fmt::Display for ClockTime {
     }
 }
 
-#[derive(Debug)]
+impl fmt::Debug for ClockTime {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(self, f)
+    }
+}
+
 pub struct DisplayableOptClockTime(Option<ClockTime>);
 
 impl fmt::Display for DisplayableOptClockTime {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt_opt_clock_time(self.0, f)
+    }
+}
+
+impl fmt::Debug for DisplayableOptClockTime {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(self, f)
     }
 }
 

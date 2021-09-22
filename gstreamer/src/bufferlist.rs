@@ -197,8 +197,8 @@ impl fmt::Debug for BufferListRef {
         f.debug_struct("BufferList")
             .field("ptr", unsafe { &self.as_ptr() })
             .field("buffers", &self.len())
-            .field("pts", &pts.display().to_string())
-            .field("dts", &dts.display().to_string())
+            .field("pts", &pts.display())
+            .field("dts", &dts.display())
             .field("size", &size)
             .finish()
     }

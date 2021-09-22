@@ -941,9 +941,9 @@ impl fmt::Debug for BufferRef {
 
         f.debug_struct("Buffer")
             .field("ptr", unsafe { &self.as_ptr() })
-            .field("pts", &self.pts().display().to_string())
-            .field("dts", &self.dts().display().to_string())
-            .field("duration", &self.duration().display().to_string())
+            .field("pts", &self.pts().display())
+            .field("dts", &self.dts().display())
+            .field("duration", &self.duration().display())
             .field("size", &self.size())
             .field("offset", &self.offset())
             .field("offset_end", &self.offset_end())
