@@ -461,7 +461,7 @@ impl VideoAffineTransformationMeta {
     #[doc(alias = "gst_buffer_add_meta")]
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
-        matrix: Option<&[f32; 16]>,
+        matrix: Option<&[[f32; 4]; 4]>,
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
         unsafe {
@@ -473,7 +473,9 @@ impl VideoAffineTransformationMeta {
 
             if let Some(matrix) = matrix {
                 let meta = &mut *meta;
-                meta.matrix.copy_from_slice(matrix);
+                for (i, o) in Iterator::zip(matrix.iter().flatten(), meta.matrix.iter_mut()) {
+                    *o = *i;
+                }
             }
 
             Self::from_mut_ptr(buffer, meta)
@@ -481,18 +483,23 @@ impl VideoAffineTransformationMeta {
     }
 
     #[doc(alias = "get_matrix")]
-    pub fn matrix(&self) -> &[f32; 16] {
-        &self.0.matrix
+    pub fn matrix(&self) -> &[[f32; 4]; 4] {
+        unsafe { &*(&self.0.matrix as *const [f32; 16] as *const [[f32; 4]; 4]) }
     }
 
-    pub fn set_matrix(&mut self, matrix: &[f32; 16]) {
-        self.0.matrix.copy_from_slice(matrix);
+    pub fn set_matrix(&mut self, matrix: &[[f32; 4]; 4]) {
+        for (i, o) in Iterator::zip(matrix.iter().flatten(), self.0.matrix.iter_mut()) {
+            *o = *i;
+        }
     }
 
     #[doc(alias = "gst_video_affine_transformation_meta_apply_matrix")]
-    pub fn apply_matrix(&mut self, matrix: &[f32; 16]) {
+    pub fn apply_matrix(&mut self, matrix: &[[f32; 4]; 4]) {
         unsafe {
-            ffi::gst_video_affine_transformation_meta_apply_matrix(&mut self.0, matrix);
+            ffi::gst_video_affine_transformation_meta_apply_matrix(
+                &mut self.0,
+                matrix as *const [[f32; 4]; 4] as *const [f32; 16],
+            );
         }
     }
 }
