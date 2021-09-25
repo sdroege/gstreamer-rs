@@ -8,6 +8,7 @@ use std::str;
 use glib::translate::{from_glib, IntoGlib, ToGlibPtr};
 
 #[doc(alias = "GstVideoFormatInfo")]
+#[derive(Copy, Clone)]
 pub struct VideoFormatInfo(&'static ffi::GstVideoFormatInfo);
 
 impl VideoFormatInfo {

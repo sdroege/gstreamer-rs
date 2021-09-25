@@ -83,6 +83,7 @@ impl ToValue for VideoColorRange {
 }
 
 #[doc(alias = "GstVideoColorimetry")]
+#[derive(Copy, Clone)]
 pub struct VideoColorimetry(ffi::GstVideoColorimetry);
 
 impl VideoColorimetry {
@@ -118,12 +119,6 @@ impl VideoColorimetry {
 
     pub fn primaries(&self) -> crate::VideoColorPrimaries {
         unsafe { from_glib(self.0.primaries) }
-    }
-}
-
-impl Clone for VideoColorimetry {
-    fn clone(&self) -> Self {
-        unsafe { Self(ptr::read(&self.0)) }
     }
 }
 
@@ -244,6 +239,7 @@ impl std::convert::TryFrom<crate::VideoMultiviewMode> for crate::VideoMultiviewF
 }
 
 #[doc(alias = "GstVideoInfo")]
+#[derive(Clone)]
 pub struct VideoInfo(pub(crate) ffi::GstVideoInfo);
 
 impl fmt::Debug for VideoInfo {
@@ -850,12 +846,6 @@ impl VideoInfo {
     #[doc(alias = "gst_video_color_range_offsets")]
     pub fn range_offsets(&self, range: crate::VideoColorRange) -> ([i32; 4], [i32; 4]) {
         self.format_info().range_offsets(range)
-    }
-}
-
-impl Clone for VideoInfo {
-    fn clone(&self) -> Self {
-        unsafe { Self(ptr::read(&self.0)) }
     }
 }
 
