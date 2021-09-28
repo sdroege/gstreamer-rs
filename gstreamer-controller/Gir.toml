@@ -20,7 +20,6 @@ generate = [
     "GstController.DirectControlBinding",
     "GstController.InterpolationControlSource",
     "GstController.LFOControlSource",
-    "GstController.ProxyControlBinding",
     "GstController.TriggerControlSource",
     "GstController.DirectControlBindingConvertValue",
     "GstController.DirectControlBindingConvertGValue",
@@ -56,3 +55,8 @@ status = "generate"
         [[object.function.parameter]]
         name = "timestamp"
         mandatory = true
+
+[[object]]
+name = "GstController.ProxyControlBinding"
+status = "generate"
+version = "1.12"

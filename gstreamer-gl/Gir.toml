@@ -37,6 +37,7 @@ generate = [
     #"GstGL.GLRenderbufferAllocationParams",
     # Objects
     #"GstGL.GLBufferPool",
+    "GstGL.GLBaseFilter",
     "GstGL.GLBaseMemoryAllocator",
     "GstGL.GLBaseSrc",
     "GstGL.GLMemoryAllocator",
@@ -89,11 +90,6 @@ ref_mode = "ref"
 name = "Gst.Query"
 status = "manual"
 ref_mode = "ref"
-
-[[object]]
-name = "GstGL.GLBaseFilter"
-status = "generate"
-version = "1.14"
 
 [[object]]
 name = "GstGL.GLBuffer"
