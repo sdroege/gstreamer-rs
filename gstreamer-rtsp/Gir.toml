@@ -45,8 +45,7 @@ concurrency = "send"
 [[object]]
 name = "GstRtsp.RTSPAuthParam"
 status = "generate"
-concurrency="send"
-version = "1.12"
+concurrency = "send"
 
 [[object]]
 name = "Gst.ClockTime"

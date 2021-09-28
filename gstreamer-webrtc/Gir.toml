@@ -17,23 +17,23 @@ external_libraries = [
 ]
 
 generate = [
-    "GstWebRTC.WebRTCDTLSTransportState",
-    "GstWebRTC.WebRTCICEGatheringState",
-    "GstWebRTC.WebRTCICEConnectionState",
-    "GstWebRTC.WebRTCICERole",
-    "GstWebRTC.WebRTCICEComponent",
-    "GstWebRTC.WebRTCDTLSSetup",
-    "GstWebRTC.WebRTCPeerConnectionState",
-    "GstWebRTC.WebRTCRTPTransceiverDirection",
-    "GstWebRTC.WebRTCSignalingState",
-    "GstWebRTC.WebRTCStatsType",
     "GstWebRTC.WebRTCBundlePolicy",
     "GstWebRTC.WebRTCDataChannelState",
-    "GstWebRTC.WebRTCICETransportPolicy",
-    "GstWebRTC.WebRTCPriorityType",
-    "GstWebRTC.WebRTCSCTPTransportState",
+    "GstWebRTC.WebRTCDTLSSetup",
+    "GstWebRTC.WebRTCDTLSTransportState",
     "GstWebRTC.WebRTCFECType",
+    "GstWebRTC.WebRTCICEComponent",
+    "GstWebRTC.WebRTCICEConnectionState",
+    "GstWebRTC.WebRTCICEGatheringState",
+    "GstWebRTC.WebRTCICERole",
+    "GstWebRTC.WebRTCICETransportPolicy",
     "GstWebRTC.WebRTCKind",
+    "GstWebRTC.WebRTCPeerConnectionState",
+    "GstWebRTC.WebRTCPriorityType",
+    "GstWebRTC.WebRTCRTPTransceiverDirection",
+    "GstWebRTC.WebRTCSCTPTransportState",
+    "GstWebRTC.WebRTCSignalingState",
+    "GstWebRTC.WebRTCStatsType",
 ]
 
 manual = [
@@ -64,7 +64,6 @@ final_type = true
 name = "GstWebRTC.WebRTCRTPSender"
 status = "generate"
 final_type = true
-version = "1.14"
 
 [[object]]
 name = "GstWebRTC.WebRTCRTPTransceiver"

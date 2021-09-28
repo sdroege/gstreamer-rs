@@ -99,8 +99,6 @@ conversion_type = "Option"
 [[object]]
 name = "GES.BaseEffect"
 status = "generate"
-# Actually available since 1.2 even if all functions are new in 1.18
-version = "1.2"
     [[object.function]]
     name = "set_time_translation_funcs"
     # Pointers and HashTables
