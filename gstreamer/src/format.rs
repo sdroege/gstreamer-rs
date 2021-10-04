@@ -27,9 +27,15 @@ pub struct Undefined(pub i64);
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Default(pub u64);
+impl Default {
+    pub const MAX: Self = Self(u64::MAX - 1);
+}
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Bytes(pub u64);
+impl Bytes {
+    pub const MAX: Self = Self(u64::MAX - 1);
+}
 
 pub type Time = ClockTime;
 
@@ -37,12 +43,13 @@ pub type Time = ClockTime;
 pub struct Buffers(pub u64);
 impl Buffers {
     pub const OFFSET_NONE: u64 = ffi::GST_BUFFER_OFFSET_NONE;
+    pub const MAX: Self = Self(Self::OFFSET_NONE - 1);
 }
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Percent(pub u32);
 impl Percent {
-    pub const MAX: u32 = ffi::GST_FORMAT_PERCENT_MAX as u32;
+    pub const MAX: Self = Self(ffi::GST_FORMAT_PERCENT_MAX as u32);
     pub const SCALE: u32 = ffi::GST_FORMAT_PERCENT_SCALE as u32;
 }
 
@@ -542,6 +549,14 @@ impl From<Percent> for GenericFormattedValue {
     fn from(v: Percent) -> Self {
         skip_assert_initialized!();
         GenericFormattedValue::Percent(Some(v))
+    }
+}
+impl TryFrom<u64> for Percent {
+    type Error = GlibNoneError;
+
+    fn try_from(v: u64) -> Result<Percent, GlibNoneError> {
+        skip_assert_initialized!();
+        unsafe { Self::try_from_glib(v as i64) }
     }
 }
 

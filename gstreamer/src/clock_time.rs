@@ -3,9 +3,10 @@
 use glib::translate::*;
 use glib::StaticType;
 use num_integer::div_rem;
+use std::convert::{From, TryFrom};
 use std::io::{self, prelude::*};
 use std::time::Duration;
-use std::{cmp, convert, fmt, str};
+use std::{cmp, fmt, str};
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Default)]
 pub struct ClockTime(pub(crate) u64);
@@ -15,6 +16,7 @@ impl ClockTime {
     pub const MSECOND: ClockTime = ClockTime(1_000_000);
     pub const USECOND: ClockTime = ClockTime(1_000);
     pub const NSECOND: ClockTime = ClockTime(1);
+    pub const MAX: ClockTime = ClockTime(ffi::GST_CLOCK_TIME_NONE - 1);
 
     pub const fn hours(self) -> u64 {
         self.0 / Self::SECOND.0 / 60 / 60
@@ -176,7 +178,7 @@ impl fmt::Display for DurationError {
 
 impl std::error::Error for DurationError {}
 
-impl convert::TryFrom<Duration> for ClockTime {
+impl TryFrom<Duration> for ClockTime {
     type Error = DurationError;
 
     fn try_from(d: Duration) -> Result<Self, Self::Error> {
@@ -193,7 +195,7 @@ impl convert::TryFrom<Duration> for ClockTime {
     }
 }
 
-impl convert::From<ClockTime> for Duration {
+impl From<ClockTime> for Duration {
     fn from(t: ClockTime) -> Self {
         skip_assert_initialized!();
 
@@ -213,25 +215,41 @@ macro_rules! impl_common_ops_for_newtype_u64(
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
             #[inline]
-            // FIXME Can't use `map` in a `const fn` as of rustc 1.53.0-beta.2
-            #[allow(clippy::manual_map)]
             pub const fn checked_add(self, rhs: Self) -> Option<Self> {
                 match self.0.checked_add(rhs.0) {
-                    Some(res) => Some(Self(res)),
-                    None => None,
+                    Some(res) if res <= Self::MAX.0 => Some(Self(res)),
+                    _ => None,
                 }
             }
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
             #[inline]
             pub const fn saturating_add(self, rhs: Self) -> Self {
-                Self(self.0.saturating_add(rhs.0))
+                let res = self.0.saturating_add(rhs.0);
+                if res <= Self::MAX.0 {
+                    Self(res)
+                } else {
+                    Self::MAX
+                }
             }
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
             #[inline]
-            pub const fn wrapping_add(self, rhs: Self) -> Self {
-                Self(self.0.wrapping_add(rhs.0))
+            pub fn overflowing_add(self, rhs: Self) -> (Self, bool) {
+                let self_u128 = self.0 as u128;
+                let rhs_128 = rhs.0 as u128;
+                let res_u128 = self_u128 + rhs_128;
+                if res_u128 <= Self::MAX.0 as u128 {
+                    (TryFrom::try_from(res_u128 as u64).unwrap(), false)
+                } else {
+                    (TryFrom::try_from((res_u128 - Self::MAX.0 as u128 - 1) as u64).unwrap(), true)
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub fn wrapping_add(self, rhs: Self) -> Self {
+                self.overflowing_add(rhs).0
             }
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
@@ -253,8 +271,18 @@ macro_rules! impl_common_ops_for_newtype_u64(
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
             #[inline]
+            pub const fn overflowing_sub(self, rhs: Self) -> (Self, bool) {
+                if self.0 >= rhs.0 {
+                    (Self(self.0 - rhs.0), false)
+                } else {
+                    (Self(Self::MAX.0 - rhs.0 + self.0 + 1), true)
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub const fn wrapping_sub(self, rhs: Self) -> Self {
-                Self(self.0.wrapping_sub(rhs.0))
+                self.overflowing_sub(rhs).0
             }
         }
     };
@@ -466,119 +494,111 @@ impl std::iter::Sum for ClockTime {
 mod tests {
     use super::*;
 
+    const CT_1: ClockTime = ClockTime::from_nseconds(1);
+    const CT_2: ClockTime = ClockTime::from_nseconds(2);
+    const CT_3: ClockTime = ClockTime::from_nseconds(3);
+    const CT_10: ClockTime = ClockTime::from_nseconds(10);
+    const CT_20: ClockTime = ClockTime::from_nseconds(20);
+    const CT_30: ClockTime = ClockTime::from_nseconds(30);
+
     #[test]
     fn opt_time_clock() {
-        let ct_1 = ClockTime(1);
-        let opt_ct_none: Option<ClockTime> = None;
-
-        assert_eq!(ct_1.into_glib(), 1);
-        assert_eq!(Some(ct_1).into_glib(), 1);
-        assert_eq!(opt_ct_none.into_glib(), ffi::GST_CLOCK_TIME_NONE);
+        assert_eq!(CT_1.into_glib(), 1);
+        assert_eq!(Some(CT_1).into_glib(), 1);
+        assert_eq!(ClockTime::NONE.into_glib(), ffi::GST_CLOCK_TIME_NONE);
 
         let ct_1_from: ClockTime = unsafe { try_from_glib(1u64) }.unwrap();
-        assert_eq!(ct_1_from, ct_1);
+        assert_eq!(ct_1_from, CT_1);
 
         let opt_ct_some: Option<ClockTime> = unsafe { from_glib(1u64) };
-        assert_eq!(opt_ct_some, Some(ct_1));
+        assert_eq!(opt_ct_some, Some(CT_1));
 
-        let opt_ct_none: Option<ClockTime> = unsafe { from_glib(ffi::GST_CLOCK_TIME_NONE) };
-        assert_eq!(opt_ct_none, None);
+        let ct_none: Option<ClockTime> = unsafe { from_glib(ffi::GST_CLOCK_TIME_NONE) };
+        assert_eq!(ct_none, None);
     }
 
     #[test]
     #[allow(clippy::eq_op, clippy::op_ref)]
     fn ops() {
-        let ct_10 = 10 * ClockTime::MSECOND;
-        let ct_20 = 20 * ClockTime::MSECOND;
-        let ct_30 = 30 * ClockTime::MSECOND;
-
-        assert_eq!(ct_10 + ct_20, ct_30);
-        assert_eq!(ct_10 + &ct_20, ct_30);
-        assert_eq!(&ct_10 + &ct_20, ct_30);
-        assert_eq!(ct_30 - ct_20, ct_10);
-        assert_eq!(ct_30 - ct_30, ClockTime::ZERO);
-        assert_eq!(ct_10 * 3, ct_30);
-        assert_eq!(3 * ct_10, ct_30);
-        assert_eq!(3 * &ct_10, ct_30);
-        assert_eq!(ct_30.nseconds(), 30_000_000);
+        assert_eq!(CT_10 + CT_20, CT_30);
+        assert_eq!(CT_10 + &CT_20, CT_30);
+        assert_eq!(&CT_10 + &CT_20, CT_30);
+        assert_eq!(CT_30 - CT_20, CT_10);
+        assert_eq!(CT_30 - CT_30, ClockTime::ZERO);
+        assert_eq!(CT_10 * 3, CT_30);
+        assert_eq!(3 * CT_10, CT_30);
+        assert_eq!(3 * &CT_10, CT_30);
+        assert_eq!(CT_30.nseconds(), 30);
     }
 
     #[test]
     fn checked_ops() {
-        let ct_1 = ClockTime::from_nseconds(1);
-        let ct_2 = ClockTime::from_nseconds(2);
+        assert_eq!(CT_1.checked_add(CT_1), Some(CT_2));
+        assert_eq!(CT_1.checked_add(CT_1), Some(CT_2));
+        assert!(ClockTime::MAX.checked_add(CT_1).is_none());
 
-        let ct_max = ClockTime::from_nseconds(std::u64::MAX);
+        assert_eq!(CT_2.checked_sub(CT_1), Some(CT_1));
+        assert_eq!(CT_2.checked_sub(CT_1), Some(CT_1));
+        assert!(CT_1.checked_sub(CT_2).is_none());
+    }
 
-        assert_eq!(ct_1.checked_add(ct_1), Some(ct_2));
-        assert_eq!(ct_1.checked_add(ct_1), Some(ct_2));
-        assert!(ct_max.checked_add(ct_1).is_none());
+    #[test]
+    fn overflowing_ops() {
+        assert_eq!(CT_1.overflowing_add(CT_2), (CT_3, false));
+        assert_eq!(CT_1.overflowing_add(CT_2), (CT_3, false));
+        assert_eq!(
+            ClockTime::MAX.overflowing_add(CT_1),
+            (ClockTime::ZERO, true)
+        );
 
-        assert_eq!(ct_2.checked_sub(ct_1), Some(ct_1));
-        assert_eq!(ct_2.checked_sub(ct_1), Some(ct_1));
-        assert!(ct_1.checked_sub(ct_2).is_none());
+        assert_eq!(CT_3.overflowing_sub(CT_2), (CT_1, false));
+        assert_eq!(CT_3.overflowing_sub(CT_2), (CT_1, false));
+        assert_eq!(CT_1.overflowing_sub(CT_2), (ClockTime::MAX, true));
     }
 
     #[test]
     fn saturating_ops() {
-        let ct_1 = ClockTime::from_nseconds(1);
-        let ct_2 = ClockTime::from_nseconds(2);
-        let ct_3 = ClockTime::from_nseconds(3);
+        assert_eq!(CT_1.saturating_add(CT_2), CT_3);
+        assert_eq!(CT_1.saturating_add(CT_2), CT_3);
+        assert_eq!(ClockTime::MAX.saturating_add(CT_1), ClockTime::MAX);
 
-        let ct_max = ClockTime::from_nseconds(std::u64::MAX);
-
-        assert_eq!(ct_1.saturating_add(ct_2), ct_3);
-        assert_eq!(ct_1.saturating_add(ct_2), ct_3);
-        assert_eq!(ct_max.saturating_add(ct_1), ct_max);
-
-        assert_eq!(ct_3.saturating_sub(ct_2), ct_1);
-        assert_eq!(ct_3.saturating_sub(ct_2), ct_1);
-        assert!(ct_1.saturating_sub(ct_2).is_zero());
+        assert_eq!(CT_3.saturating_sub(CT_2), CT_1);
+        assert_eq!(CT_3.saturating_sub(CT_2), CT_1);
+        assert!(CT_1.saturating_sub(CT_2).is_zero());
     }
 
     #[test]
     fn wrapping_ops() {
-        let ct_1 = ClockTime::NSECOND;
-        let ct_2 = 2 * ClockTime::NSECOND;
-        let ct_3 = 3 * ClockTime::NSECOND;
+        assert_eq!(CT_1.wrapping_add(CT_2), CT_3);
+        assert_eq!(CT_1.wrapping_add(CT_2), CT_3);
+        assert_eq!(ClockTime::MAX.wrapping_add(CT_1), ClockTime::ZERO);
 
-        let ct_max = ClockTime::from_nseconds(std::u64::MAX);
-
-        assert_eq!(ct_1.wrapping_add(ct_2), ct_3);
-        assert_eq!(ct_1.wrapping_add(ct_2), ct_3);
-        assert_eq!(ct_max.wrapping_add(ct_1), ClockTime::ZERO);
-
-        assert_eq!(ct_3.wrapping_sub(ct_2), ct_1);
-        assert_eq!(ct_3.wrapping_sub(ct_2), ct_1);
-        assert_eq!(ct_1.wrapping_sub(ct_2), ct_max);
+        assert_eq!(CT_3.wrapping_sub(CT_2), CT_1);
+        assert_eq!(CT_3.wrapping_sub(CT_2), CT_1);
+        assert_eq!(CT_1.wrapping_sub(CT_2), ClockTime::MAX);
     }
 
     #[test]
     fn comp() {
-        let ct_0 = ClockTime::ZERO;
-        let ct_2 = 2 * ClockTime::NSECOND;
-        let ct_3 = 3 * ClockTime::NSECOND;
-        let opt_ct_none: Option<ClockTime> = None;
+        assert!(ClockTime::ZERO < CT_2);
+        assert!(Some(ClockTime::ZERO) < Some(CT_2));
+        assert!(CT_2 < CT_3);
+        assert!(Some(CT_2) < Some(CT_3));
+        assert!(ClockTime::ZERO < CT_3);
+        assert!(Some(ClockTime::ZERO) < Some(CT_3));
 
-        assert!(ct_0 < ct_2);
-        assert!(Some(ct_0) < Some(ct_2));
-        assert!(ct_2 < ct_3);
-        assert!(Some(ct_2) < Some(ct_3));
-        assert!(ct_0 < ct_3);
-        assert!(Some(ct_0) < Some(ct_3));
+        assert!(CT_3 > CT_2);
+        assert!(Some(CT_3) > Some(CT_2));
+        assert!(CT_2 > ClockTime::ZERO);
+        assert!(Some(CT_2) > Some(ClockTime::ZERO));
+        assert!(CT_3 > ClockTime::ZERO);
+        assert!(Some(CT_3) > Some(ClockTime::ZERO));
 
-        assert!(ct_3 > ct_2);
-        assert!(Some(ct_3) > Some(ct_2));
-        assert!(ct_2 > ct_0);
-        assert!(Some(ct_2) > Some(ct_0));
-        assert!(ct_3 > ct_0);
-        assert!(Some(ct_3) > Some(ct_0));
-
-        assert!(!(opt_ct_none < None));
-        assert!(!(opt_ct_none > None));
+        assert!(!(ClockTime::NONE < None));
+        assert!(!(ClockTime::NONE > None));
         // This doesn't work due to the `PartialOrd` impl on `Option<T>`
-        //assert_eq!(Some(ct_0) > opt_ct_none, false);
-        assert!(!(Some(ct_0) < opt_ct_none));
+        //assert_eq!(Some(ClockTime::ZERO) > ClockTime::ZERO, false);
+        assert!(!(Some(ClockTime::ZERO) < ClockTime::NONE));
     }
 
     #[test]
