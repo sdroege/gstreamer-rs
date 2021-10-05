@@ -3,6 +3,7 @@
 use glib::translate::*;
 use glib::StaticType;
 use num_integer::div_rem;
+use opt_ops::prelude::*;
 use std::convert::{From, TryFrom};
 use std::io::{self, prelude::*};
 use std::time::Duration;
@@ -226,7 +227,7 @@ macro_rules! impl_common_ops_for_newtype_u64(
             #[inline]
             pub const fn saturating_add(self, rhs: Self) -> Self {
                 let res = self.0.saturating_add(rhs.0);
-                if res <= Self::MAX.0 {
+                if res < Self::MAX.0 {
                     Self(res)
                 } else {
                     Self::MAX
@@ -245,6 +246,8 @@ macro_rules! impl_common_ops_for_newtype_u64(
                     (TryFrom::try_from((res_u128 - Self::MAX.0 as u128 - 1) as u64).unwrap(), true)
                 }
             }
+
+            // FIXME add overflowing_add
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
             #[inline]
@@ -283,6 +286,77 @@ macro_rules! impl_common_ops_for_newtype_u64(
             #[inline]
             pub const fn wrapping_sub(self, rhs: Self) -> Self {
                 self.overflowing_sub(rhs).0
+            }
+        }
+
+        impl OptionOperations for $name {}
+
+        impl OptionCheckedAdd for $name {
+            type Output = Self;
+
+            fn opt_checked_add(
+                self,
+                rhs: Self,
+            ) -> Result<Option<Self::Output>, opt_ops::CheckedError> {
+                self.checked_add(rhs)
+                    .ok_or(opt_ops::CheckedError::Overflow)
+                    .map(Some)
+            }
+        }
+
+        impl OptionSaturatingAdd for $name {
+            type Output = Self;
+            fn opt_saturating_add(self, rhs: Self) -> Option<Self::Output> {
+                Some(self.saturating_add(rhs))
+            }
+        }
+
+        impl OptionOverflowingAdd for $name {
+            type Output = Self;
+            fn opt_overflowing_add(self, rhs: Self) -> Option<(Self::Output, bool)> {
+                let res = self.overflowing_add(rhs);
+                Some((res.0, res.1))
+            }
+        }
+
+        impl OptionWrappingAdd for $name {
+            type Output = Self;
+            fn opt_wrapping_add(self, rhs: Self) -> Option<Self::Output> {
+                Some(self.wrapping_add(rhs))
+            }
+        }
+
+        impl OptionCheckedSub for $name {
+            type Output = Self;
+            fn opt_checked_sub(
+                self,
+                rhs: Self,
+            ) -> Result<Option<Self::Output>, opt_ops::CheckedError> {
+                self.checked_sub(rhs)
+                    .ok_or(opt_ops::CheckedError::Overflow)
+                    .map(Some)
+            }
+        }
+
+        impl OptionSaturatingSub for $name {
+            type Output = Self;
+            fn opt_saturating_sub(self, rhs: Self) -> Option<Self::Output> {
+                Some(self.saturating_sub(rhs))
+            }
+        }
+
+        impl OptionOverflowingSub for $name {
+            type Output = Self;
+            fn opt_overflowing_sub(self, rhs: Self) -> Option<(Self::Output, bool)> {
+                let res = self.overflowing_sub(rhs);
+                Some((res.0, res.1))
+            }
+        }
+
+        impl OptionWrappingSub for $name {
+            type Output = Self;
+            fn opt_wrapping_sub(self, rhs: Self) -> Option<Self::Output> {
+                Some(self.wrapping_sub(rhs))
             }
         }
     };
@@ -533,49 +607,131 @@ mod tests {
 
     #[test]
     fn checked_ops() {
+        use opt_ops::CheckedError;
+
         assert_eq!(CT_1.checked_add(CT_1), Some(CT_2));
-        assert_eq!(CT_1.checked_add(CT_1), Some(CT_2));
+
+        assert_eq!(CT_1.opt_checked_add(CT_1), Ok(Some(CT_2)));
+        assert_eq!(CT_1.opt_checked_add(Some(CT_1)), Ok(Some(CT_2)));
+        assert_eq!(Some(CT_1).opt_checked_add(Some(CT_1)), Ok(Some(CT_2)));
+        assert_eq!(CT_1.opt_checked_add(None), Ok(None));
+        assert_eq!(Some(CT_1).opt_checked_add(None), Ok(None));
+
         assert!(ClockTime::MAX.checked_add(CT_1).is_none());
+        assert_eq!(
+            ClockTime::MAX.opt_checked_add(Some(CT_1)),
+            Err(CheckedError::Overflow)
+        );
 
         assert_eq!(CT_2.checked_sub(CT_1), Some(CT_1));
-        assert_eq!(CT_2.checked_sub(CT_1), Some(CT_1));
+
+        assert_eq!(CT_2.opt_checked_sub(CT_1), Ok(Some(CT_1)));
+        assert_eq!(CT_2.opt_checked_sub(Some(CT_1)), Ok(Some(CT_1)));
+        assert_eq!(Some(CT_2).opt_checked_sub(CT_1), Ok(Some(CT_1)));
+        assert_eq!(Some(CT_2).opt_checked_sub(Some(CT_1)), Ok(Some(CT_1)));
+        assert_eq!(CT_2.opt_checked_sub(None), Ok(None));
+        assert_eq!(Some(CT_2).opt_checked_sub(None), Ok(None));
+
         assert!(CT_1.checked_sub(CT_2).is_none());
+        assert_eq!(
+            Some(CT_1).opt_checked_sub(CT_2),
+            Err(CheckedError::Overflow)
+        );
     }
 
     #[test]
     fn overflowing_ops() {
         assert_eq!(CT_1.overflowing_add(CT_2), (CT_3, false));
-        assert_eq!(CT_1.overflowing_add(CT_2), (CT_3, false));
+        assert_eq!(CT_1.opt_overflowing_add(Some(CT_2)), Some((CT_3, false)));
+        assert_eq!(Some(CT_1).opt_overflowing_add(CT_2), Some((CT_3, false)));
+        assert_eq!(
+            Some(CT_1).opt_overflowing_add(Some(CT_2)),
+            Some((CT_3, false))
+        );
+        assert_eq!(ClockTime::NONE.opt_overflowing_add(CT_2), None);
+        assert_eq!(CT_1.opt_overflowing_add(ClockTime::NONE), None);
+
         assert_eq!(
             ClockTime::MAX.overflowing_add(CT_1),
             (ClockTime::ZERO, true)
         );
+        assert_eq!(
+            Some(ClockTime::MAX).opt_overflowing_add(Some(CT_1)),
+            Some((ClockTime::ZERO, true)),
+        );
 
         assert_eq!(CT_3.overflowing_sub(CT_2), (CT_1, false));
-        assert_eq!(CT_3.overflowing_sub(CT_2), (CT_1, false));
+        assert_eq!(CT_3.opt_overflowing_sub(Some(CT_2)), Some((CT_1, false)));
+        assert_eq!(Some(CT_3).opt_overflowing_sub(CT_2), Some((CT_1, false)));
+        assert_eq!(
+            Some(CT_3).opt_overflowing_sub(Some(CT_2)),
+            Some((CT_1, false))
+        );
+        assert_eq!(
+            Some(CT_3).opt_overflowing_sub(&Some(CT_2)),
+            Some((CT_1, false))
+        );
+        assert_eq!(ClockTime::NONE.opt_overflowing_sub(CT_2), None);
+        assert_eq!(CT_2.opt_overflowing_sub(ClockTime::NONE), None);
+
         assert_eq!(CT_1.overflowing_sub(CT_2), (ClockTime::MAX, true));
+        assert_eq!(
+            Some(CT_1).opt_overflowing_sub(CT_2),
+            Some((ClockTime::MAX, true))
+        );
     }
 
     #[test]
     fn saturating_ops() {
         assert_eq!(CT_1.saturating_add(CT_2), CT_3);
-        assert_eq!(CT_1.saturating_add(CT_2), CT_3);
+
+        assert_eq!(CT_1.opt_saturating_add(Some(CT_2)), Some(CT_3));
+        assert_eq!(Some(CT_1).opt_saturating_add(Some(CT_2)), Some(CT_3));
+        assert_eq!(Some(CT_1).opt_saturating_add(None), None);
+
         assert_eq!(ClockTime::MAX.saturating_add(CT_1), ClockTime::MAX);
+        assert_eq!(
+            Some(ClockTime::MAX).opt_saturating_add(Some(CT_1)),
+            Some(ClockTime::MAX)
+        );
 
         assert_eq!(CT_3.saturating_sub(CT_2), CT_1);
-        assert_eq!(CT_3.saturating_sub(CT_2), CT_1);
+        assert_eq!(CT_3.opt_saturating_sub(Some(CT_2)), Some(CT_1));
+        assert_eq!(Some(CT_3).opt_saturating_sub(Some(CT_2)), Some(CT_1));
+        assert_eq!(Some(CT_3).opt_saturating_sub(None), None);
+
         assert!(CT_1.saturating_sub(CT_2).is_zero());
+        assert_eq!(
+            Some(CT_1).opt_saturating_sub(Some(CT_2)),
+            Some(ClockTime::ZERO)
+        );
     }
 
     #[test]
     fn wrapping_ops() {
         assert_eq!(CT_1.wrapping_add(CT_2), CT_3);
-        assert_eq!(CT_1.wrapping_add(CT_2), CT_3);
+        assert_eq!(CT_1.opt_wrapping_add(CT_2), Some(CT_3));
+        assert_eq!(Some(CT_1).opt_wrapping_add(CT_2), Some(CT_3));
+        assert_eq!(Some(CT_1).opt_wrapping_add(Some(CT_2)), Some(CT_3));
+        assert_eq!(Some(CT_1).opt_wrapping_add(None), None);
+
         assert_eq!(ClockTime::MAX.wrapping_add(CT_1), ClockTime::ZERO);
+        assert_eq!(
+            Some(ClockTime::MAX).opt_wrapping_add(Some(CT_1)),
+            Some(ClockTime::ZERO)
+        );
 
         assert_eq!(CT_3.wrapping_sub(CT_2), CT_1);
-        assert_eq!(CT_3.wrapping_sub(CT_2), CT_1);
+        assert_eq!(CT_3.opt_wrapping_sub(CT_2), Some(CT_1));
+        assert_eq!(Some(CT_3).opt_wrapping_sub(CT_2), Some(CT_1));
+        assert_eq!(Some(CT_3).opt_wrapping_sub(Some(CT_2)), Some(CT_1));
+        assert_eq!(Some(CT_3).opt_wrapping_sub(None), None);
+
         assert_eq!(CT_1.wrapping_sub(CT_2), ClockTime::MAX);
+        assert_eq!(
+            Some(CT_1).opt_wrapping_sub(Some(CT_2)),
+            Some(ClockTime::MAX)
+        );
     }
 
     #[test]
@@ -587,6 +743,11 @@ mod tests {
         assert!(ClockTime::ZERO < CT_3);
         assert!(Some(ClockTime::ZERO) < Some(CT_3));
 
+        assert_eq!(Some(CT_2).opt_lt(Some(CT_3)), Some(true));
+        assert_eq!(Some(CT_3).opt_lt(CT_2), Some(false));
+        assert_eq!(Some(CT_2).opt_le(Some(CT_3)), Some(true));
+        assert_eq!(Some(CT_3).opt_le(CT_3), Some(true));
+
         assert!(CT_3 > CT_2);
         assert!(Some(CT_3) > Some(CT_2));
         assert!(CT_2 > ClockTime::ZERO);
@@ -594,11 +755,42 @@ mod tests {
         assert!(CT_3 > ClockTime::ZERO);
         assert!(Some(CT_3) > Some(ClockTime::ZERO));
 
-        assert!(!(ClockTime::NONE < None));
         assert!(!(ClockTime::NONE > None));
         // This doesn't work due to the `PartialOrd` impl on `Option<T>`
         //assert_eq!(Some(ClockTime::ZERO) > ClockTime::ZERO, false);
         assert!(!(Some(ClockTime::ZERO) < ClockTime::NONE));
+        assert_eq!(Some(CT_3).opt_gt(Some(CT_2)), Some(true));
+        assert_eq!(Some(CT_3).opt_ge(Some(CT_2)), Some(true));
+        assert_eq!(Some(CT_3).opt_ge(CT_3), Some(true));
+
+        assert!(!(ClockTime::NONE < None));
+        assert!(!(ClockTime::NONE > None));
+
+        // This doesn't work due to the `PartialOrd` impl on `Option<T>`
+        //assert!(Some(ClockTime::ZERO) > ClockTime::NONE, false);
+        // Use opt_gt instead.
+        assert_eq!(Some(ClockTime::ZERO).opt_gt(ClockTime::NONE), None);
+        assert_eq!(ClockTime::ZERO.opt_gt(ClockTime::NONE), None);
+        assert_eq!(ClockTime::ZERO.opt_ge(ClockTime::NONE), None);
+        assert_eq!(ClockTime::NONE.opt_gt(Some(ClockTime::ZERO)), None);
+        assert_eq!(ClockTime::NONE.opt_gt(ClockTime::ZERO), None);
+        assert_eq!(ClockTime::NONE.opt_ge(ClockTime::ZERO), None);
+
+        assert!(!(Some(ClockTime::ZERO) < ClockTime::NONE));
+        assert_eq!(Some(ClockTime::ZERO).opt_lt(ClockTime::NONE), None);
+        assert_eq!(Some(ClockTime::ZERO).opt_le(ClockTime::NONE), None);
+
+        assert_eq!(CT_3.opt_min(CT_2), Some(CT_2));
+        assert_eq!(CT_3.opt_min(Some(CT_2)), Some(CT_2));
+        assert_eq!(Some(CT_3).opt_min(Some(CT_2)), Some(CT_2));
+        assert_eq!(ClockTime::NONE.opt_min(Some(CT_2)), None);
+        assert_eq!(Some(CT_3).opt_min(ClockTime::NONE), None);
+
+        assert_eq!(CT_3.opt_max(CT_2), Some(CT_3));
+        assert_eq!(CT_3.opt_max(Some(CT_2)), Some(CT_3));
+        assert_eq!(Some(CT_3).opt_max(Some(CT_2)), Some(CT_3));
+        assert_eq!(ClockTime::NONE.opt_max(Some(CT_2)), None);
+        assert_eq!(Some(CT_3).opt_max(ClockTime::NONE), None);
     }
 
     #[test]

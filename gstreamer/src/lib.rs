@@ -279,6 +279,7 @@ pub const PARAM_FLAG_CONDITIONALLY_AVAILABLE: glib::ParamFlags = glib::ParamFlag
 pub mod prelude {
     #[doc(hidden)]
     pub use glib::prelude::*;
+    pub use opt_ops::prelude::*;
 
     pub use crate::auto::traits::*;
 

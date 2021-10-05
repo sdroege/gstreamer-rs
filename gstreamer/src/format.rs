@@ -4,6 +4,7 @@ use crate::ClockTime;
 use crate::Format;
 use glib::translate::{FromGlib, GlibNoneError, IntoGlib, OptionIntoGlib, TryFromGlib};
 use muldiv::MulDiv;
+use opt_ops::prelude::*;
 use std::borrow::Borrow;
 use std::convert::TryFrom;
 use std::fmt;

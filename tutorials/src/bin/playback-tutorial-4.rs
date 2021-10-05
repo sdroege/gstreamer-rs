@@ -133,12 +133,12 @@ fn tutorial_main() -> Result<(), Error> {
                     *start.unwrap()
                 } else {
                     0
-                } / gst::format::Percent::MAX;
+                } / *gst::format::Percent::MAX;
                 let stop = if let Percent(stop) = stop {
                     *stop.unwrap()
                 } else {
                     0
-                } / gst::format::Percent::MAX;
+                } / *gst::format::Percent::MAX;
                 if start == 0 && stop == 0 {
                     continue;
                 }
