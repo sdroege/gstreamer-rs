@@ -116,7 +116,7 @@ fn tutorial_main() -> Result<(), Error> {
 
     let pipeline_weak_ = pipeline.downgrade();
     let timeout_id = glib::timeout_add_seconds(1, move || {
-        use gst::GenericFormattedValue::Percent;
+        use gst::{format::Percent, GenericFormattedValue as GFV};
 
         let pipeline = match pipeline_weak_.upgrade() {
             Some(pipeline) => pipeline,
@@ -129,21 +129,21 @@ fn tutorial_main() -> Result<(), Error> {
             for range in &ranges {
                 let start = range.0;
                 let stop = range.1;
-                let start = if let Percent(start) = start {
-                    *start.unwrap()
+                let start = if let GFV::Percent(start) = start {
+                    start.unwrap()
                 } else {
-                    0
-                } / *gst::format::Percent::MAX;
-                let stop = if let Percent(stop) = stop {
-                    *stop.unwrap()
+                    Percent::ZERO
+                } / Percent::MAX;
+                let stop = if let GFV::Percent(stop) = stop {
+                    stop.unwrap()
                 } else {
-                    0
-                } / *gst::format::Percent::MAX;
-                if start == 0 && stop == 0 {
+                    Percent::ZERO
+                } / Percent::MAX;
+                if start.is_zero() && stop.is_zero() {
                     continue;
                 }
-                let start_ = (start * GRAPH_LENGTH as u32) / (stop - start);
-                let stop_ = (stop * GRAPH_LENGTH as u32) / (stop - start);
+                let start_ = *((start * GRAPH_LENGTH as u32) / (stop - start));
+                let stop_ = *((stop * GRAPH_LENGTH as u32) / (stop - start));
                 for j in start_..stop_ {
                     graph[j as usize] = b'-';
                 }
