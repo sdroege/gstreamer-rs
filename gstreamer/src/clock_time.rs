@@ -2,10 +2,13 @@
 
 use glib::translate::*;
 use glib::StaticType;
+use muldiv::MulDiv;
 use num_integer::div_rem;
 use opt_ops::prelude::*;
+use std::borrow::Borrow;
 use std::convert::{From, TryFrom};
 use std::io::{self, prelude::*};
+use std::ops;
 use std::time::Duration;
 use std::{cmp, fmt, str};
 
@@ -62,38 +65,6 @@ impl ClockTime {
         skip_assert_initialized!();
         ClockTime(nseconds * Self::NSECOND.0)
     }
-}
-
-macro_rules! option_glib_newtype_from_to {
-    ($type_:ident, $none_value:expr) => {
-        #[doc(hidden)]
-        impl IntoGlib for $type_ {
-            type GlibType = u64;
-
-            fn into_glib(self) -> u64 {
-                self.0
-            }
-        }
-
-        #[doc(hidden)]
-        impl OptionIntoGlib for $type_ {
-            const GLIB_NONE: u64 = $none_value;
-        }
-
-        #[doc(hidden)]
-        impl TryFromGlib<u64> for $type_ {
-            type Error = GlibNoneError;
-            #[inline]
-            unsafe fn try_from_glib(val: u64) -> Result<Self, GlibNoneError> {
-                skip_assert_initialized!();
-                if val == $none_value {
-                    return Err(GlibNoneError);
-                }
-
-                Ok($type_(val))
-            }
-        }
-    };
 }
 
 option_glib_newtype_from_to!(ClockTime, ffi::GST_CLOCK_TIME_NONE);
@@ -204,176 +175,22 @@ impl From<ClockTime> for Duration {
     }
 }
 
-macro_rules! impl_common_ops_for_newtype_u64(
-    ($name:ident) => {
-        impl $name {
-            pub const ZERO: Self = Self(0);
-            pub const NONE: Option<Self> = None;
+impl_common_ops_for_newtype_uint!(ClockTime, u64);
 
-            pub const fn is_zero(self) -> bool {
-                self.0 == Self::ZERO.0
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub const fn checked_add(self, rhs: Self) -> Option<Self> {
-                match self.0.checked_add(rhs.0) {
-                    Some(res) if res <= Self::MAX.0 => Some(Self(res)),
-                    _ => None,
-                }
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub const fn saturating_add(self, rhs: Self) -> Self {
-                let res = self.0.saturating_add(rhs.0);
-                if res < Self::MAX.0 {
-                    Self(res)
-                } else {
-                    Self::MAX
-                }
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub fn overflowing_add(self, rhs: Self) -> (Self, bool) {
-                let self_u128 = self.0 as u128;
-                let rhs_128 = rhs.0 as u128;
-                let res_u128 = self_u128 + rhs_128;
-                if res_u128 <= Self::MAX.0 as u128 {
-                    (TryFrom::try_from(res_u128 as u64).unwrap(), false)
-                } else {
-                    (TryFrom::try_from((res_u128 - Self::MAX.0 as u128 - 1) as u64).unwrap(), true)
-                }
-            }
-
-            // FIXME add overflowing_add
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub fn wrapping_add(self, rhs: Self) -> Self {
-                self.overflowing_add(rhs).0
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            // FIXME Can't use `map` in a `const fn` as of rustc 1.53.0-beta.2
-            #[allow(clippy::manual_map)]
-            pub const fn checked_sub(self, rhs: Self) -> Option<Self> {
-                match self.0.checked_sub(rhs.0) {
-                    Some(res) => Some(Self(res)),
-                    None => None,
-                }
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub const fn saturating_sub(self, rhs: Self) -> Self {
-                Self(self.0.saturating_sub(rhs.0))
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub const fn overflowing_sub(self, rhs: Self) -> (Self, bool) {
-                if self.0 >= rhs.0 {
-                    (Self(self.0 - rhs.0), false)
-                } else {
-                    (Self(Self::MAX.0 - rhs.0 + self.0 + 1), true)
-                }
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub const fn wrapping_sub(self, rhs: Self) -> Self {
-                self.overflowing_sub(rhs).0
-            }
-        }
-
-        impl OptionOperations for $name {}
-
-        impl OptionCheckedAdd for $name {
-            type Output = Self;
-
-            fn opt_checked_add(
-                self,
-                rhs: Self,
-            ) -> Result<Option<Self::Output>, opt_ops::CheckedError> {
-                self.checked_add(rhs)
-                    .ok_or(opt_ops::CheckedError::Overflow)
-                    .map(Some)
-            }
-        }
-
-        impl OptionSaturatingAdd for $name {
-            type Output = Self;
-            fn opt_saturating_add(self, rhs: Self) -> Option<Self::Output> {
-                Some(self.saturating_add(rhs))
-            }
-        }
-
-        impl OptionOverflowingAdd for $name {
-            type Output = Self;
-            fn opt_overflowing_add(self, rhs: Self) -> Option<(Self::Output, bool)> {
-                let res = self.overflowing_add(rhs);
-                Some((res.0, res.1))
-            }
-        }
-
-        impl OptionWrappingAdd for $name {
-            type Output = Self;
-            fn opt_wrapping_add(self, rhs: Self) -> Option<Self::Output> {
-                Some(self.wrapping_add(rhs))
-            }
-        }
-
-        impl OptionCheckedSub for $name {
-            type Output = Self;
-            fn opt_checked_sub(
-                self,
-                rhs: Self,
-            ) -> Result<Option<Self::Output>, opt_ops::CheckedError> {
-                self.checked_sub(rhs)
-                    .ok_or(opt_ops::CheckedError::Overflow)
-                    .map(Some)
-            }
-        }
-
-        impl OptionSaturatingSub for $name {
-            type Output = Self;
-            fn opt_saturating_sub(self, rhs: Self) -> Option<Self::Output> {
-                Some(self.saturating_sub(rhs))
-            }
-        }
-
-        impl OptionOverflowingSub for $name {
-            type Output = Self;
-            fn opt_overflowing_sub(self, rhs: Self) -> Option<(Self::Output, bool)> {
-                let res = self.overflowing_sub(rhs);
-                Some((res.0, res.1))
-            }
-        }
-
-        impl OptionWrappingSub for $name {
-            type Output = Self;
-            fn opt_wrapping_sub(self, rhs: Self) -> Option<Self::Output> {
-                Some(self.wrapping_sub(rhs))
-            }
-        }
-    };
-);
-
-impl_common_ops_for_newtype_u64!(ClockTime);
-
+// rustdoc-stripper-ignore-next
 /// Tell [`pad_clocktime`] what kind of time we're formatting
 enum Sign {
+    // rustdoc-stripper-ignore-next
     /// An undefined time (`None`)
     Undefined,
 
+    // rustdoc-stripper-ignore-next
     /// A non-negative time (zero or greater)
     NonNegative,
 
     // For a future ClockTimeDiff formatting
     #[allow(dead_code)]
+    // rustdoc-stripper-ignore-next
     /// A negative time (below zero)
     Negative,
 }
@@ -383,6 +200,7 @@ enum Sign {
 // TODO: Would be useful for formatting ClockTimeDiff
 // if it was a new type instead of an alias for i64
 //
+// rustdoc-stripper-ignore-next
 /// Performs the correct padding for a clock time which has already been
 /// emitted into a str, as by [`write_clocktime`]. The str should *not*
 /// contain the sign; that will be added by this method.
@@ -449,6 +267,7 @@ fn pad_clocktime(f: &mut fmt::Formatter<'_>, sign: Sign, buf: &str) -> fmt::Resu
     Ok(())
 }
 
+// rustdoc-stripper-ignore-next
 /// Writes an unpadded, signless clocktime string with the given precision
 fn write_clocktime<W: io::Write>(
     mut writer: W,

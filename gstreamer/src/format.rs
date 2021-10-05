@@ -172,245 +172,20 @@ impl FormattedValueIntrinsic for GenericFormattedValue {
     type FormattedValueType = GenericFormattedValue;
 }
 
-macro_rules! impl_op_same(
-    ($name:ident, $op:ident, $op_name:ident, $op_assign:ident, $op_assign_name:ident) => {
-        impl<RHS: Borrow<$name>> ops::$op<RHS> for $name {
-            type Output = Self;
-
-            fn $op_name(self, rhs: RHS) -> Self::Output {
-                Self(self.0.$op_name(rhs.borrow().0))
-            }
-        }
-
-        impl<RHS: Borrow<$name>> ops::$op<RHS> for &$name {
-            type Output = $name;
-
-            fn $op_name(self, rhs: RHS) -> Self::Output {
-                (*self).$op_name(rhs)
-            }
-        }
-
-        impl<RHS: Borrow<$name>> ops::$op_assign<RHS> for $name {
-            fn $op_assign_name(&mut self, rhs: RHS) {
-                self.0.$op_assign_name(rhs.borrow().0)
-            }
-        }
-    };
-);
-
-macro_rules! impl_op_u64(
-    ($name:ident, $op:ident, $op_name:ident, $op_assign:ident, $op_assign_name:ident) => {
-        impl ops::$op<u64> for $name {
-            type Output = $name;
-
-            fn $op_name(self, rhs: u64) -> Self::Output {
-                $name(self.0.$op_name(rhs))
-            }
-        }
-
-        impl ops::$op<u64> for &$name {
-            type Output = $name;
-
-            fn $op_name(self, rhs: u64) -> Self::Output {
-                (*self).$op_name(rhs)
-            }
-        }
-
-        impl ops::$op<$name> for u64 {
-            type Output = $name;
-
-            fn $op_name(self, rhs: $name) -> $name {
-                $name(self.$op_name(rhs.0))
-            }
-        }
-
-        impl ops::$op<&$name> for u64 {
-            type Output = $name;
-
-            fn $op_name(self, rhs: &$name) -> $name {
-                self.$op_name(*rhs)
-            }
-        }
-
-        impl ops::$op_assign<u64> for $name {
-            fn $op_assign_name(&mut self, rhs: u64) {
-                self.0.$op_assign_name(rhs)
-            }
-        }
-    };
-);
-
-macro_rules! impl_format_value_traits(
-    ($name:ident, $format:ident, $format_value:ident) => {
-        impl FormattedValue for Option<$name> {
-            fn default_format() -> Format {
-                Format::$format
-            }
-
-            fn format(&self) -> Format {
-                Format::$format
-            }
-
-            unsafe fn from_raw(format: Format, value: i64) -> Option<$name> {
-                debug_assert_eq!(format, Format::$format);
-                FromGlib::from_glib(value as u64)
-            }
-
-            unsafe fn into_raw_value(self) -> i64 {
-                IntoGlib::into_glib(self) as i64
-            }
-        }
-
-        impl From<Option<$name>> for GenericFormattedValue {
-            fn from(v: Option<$name>) -> Self {
-                skip_assert_initialized!();
-                Self::$format_value(v)
-            }
-        }
-
-        impl From<$name> for GenericFormattedValue {
-            fn from(v: $name) -> Self {
-                skip_assert_initialized!();
-                Self::$format_value(Some(v))
-            }
-        }
-
-        impl FormattedValueIntrinsic for $name {
-            type FormattedValueType = Option<$name>;
-        }
-
-        impl TryFrom<GenericFormattedValue> for Option<$name> {
-            type Error = TryFromGenericFormattedValueError;
-
-            fn try_from(v: GenericFormattedValue) -> Result<Option<$name>, Self::Error> {
-                skip_assert_initialized!();
-                if let GenericFormattedValue::$format_value(v) = v {
-                    Ok(v)
-                } else {
-                    Err(TryFromGenericFormattedValueError(()))
-                }
-            }
-        }
-
-        impl TryFrom<u64> for $name {
-            type Error = GlibNoneError;
-
-            fn try_from(v: u64) -> Result<$name, GlibNoneError> {
-                skip_assert_initialized!();
-                unsafe { Self::try_from_glib(v) }
-            }
-        }
-
-        impl TryFromGlib<i64> for $name {
-            type Error = GlibNoneError;
-            #[inline]
-            unsafe fn try_from_glib(val: i64) -> Result<Self, GlibNoneError> {
-                skip_assert_initialized!();
-                <$name as TryFromGlib<u64>>::try_from_glib(val as u64)
-            }
-        }
-
-        impl SpecificFormattedValue for Option<$name> {}
-        impl SpecificFormattedValueIntrinsic for $name {}
-
-        impl ops::Deref for $name {
-            type Target = u64;
-
-            fn deref(&self) -> &u64 {
-                &self.0
-            }
-        }
-
-        impl ops::DerefMut for $name {
-            fn deref_mut(&mut self) -> &mut u64 {
-                &mut self.0
-            }
-        }
-
-        impl AsRef<u64> for $name {
-            fn as_ref(&self) -> &u64 {
-                &self.0
-            }
-        }
-
-        impl AsMut<u64> for $name {
-            fn as_mut(&mut self) -> &mut u64 {
-                &mut self.0
-            }
-        }
-
-        impl_op_same!($name, Add, add, AddAssign, add_assign);
-        impl_op_same!($name, Sub, sub, SubAssign, sub_assign);
-        impl_op_same!($name, Mul, mul, MulAssign, mul_assign);
-        impl_op_same!($name, Div, div, DivAssign, div_assign);
-        impl_op_same!($name, Rem, rem, RemAssign, rem_assign);
-
-        impl_op_u64!($name, Mul, mul, MulAssign, mul_assign);
-        impl_op_u64!($name, Div, div, DivAssign, div_assign);
-        impl_op_u64!($name, Rem, rem, RemAssign, rem_assign);
-
-        impl<ND: Borrow<u64>> MulDiv<ND> for $name {
-            type Output = $name;
-
-            fn mul_div_floor(self, num: ND, denom: ND) -> Option<Self::Output> {
-                self.0
-                    .mul_div_floor(*num.borrow(), *denom.borrow())
-                    .map($name)
-            }
-
-            fn mul_div_round(self, num: ND, denom: ND) -> Option<Self::Output> {
-                self.0
-                    .mul_div_round(*num.borrow(), *denom.borrow())
-                    .map($name)
-            }
-
-            fn mul_div_ceil(self, num: ND, denom: ND) -> Option<Self::Output> {
-                self.0
-                    .mul_div_ceil(*num.borrow(), *denom.borrow())
-                    .map($name)
-            }
-        }
-    };
-);
-
-macro_rules! option_glib_newtype_display {
-    ($name:ident, $unit:expr) => {
-        impl crate::utils::Displayable for Option<$name> {
-            type DisplayImpl = String;
-
-            fn display(self) -> String {
-                if let Some(val) = self {
-                    val.display()
-                } else {
-                    format!("undef. {}", $unit)
-                }
-            }
-        }
-
-        impl crate::utils::Displayable for $name {
-            type DisplayImpl = String;
-
-            fn display(self) -> String {
-                format!("{} {}", self.0, $unit)
-            }
-        }
-    };
-}
-
-impl_common_ops_for_newtype_u64!(Default);
-impl_format_value_traits!(Default, Default, Default);
+impl_common_ops_for_newtype_uint!(Default, u64);
+impl_format_value_traits!(Default, Default, Default, u64);
 option_glib_newtype_from_to!(Default, u64::MAX);
 option_glib_newtype_display!(Default, "(Default)");
 
-impl_common_ops_for_newtype_u64!(Bytes);
-impl_format_value_traits!(Bytes, Bytes, Bytes);
+impl_common_ops_for_newtype_uint!(Bytes, u64);
+impl_format_value_traits!(Bytes, Bytes, Bytes, u64);
 option_glib_newtype_from_to!(Bytes, u64::MAX);
 option_glib_newtype_display!(Bytes, "bytes");
 
-impl_format_value_traits!(ClockTime, Time, Time);
+impl_format_value_traits!(ClockTime, Time, Time, u64);
 
-impl_common_ops_for_newtype_u64!(Buffers);
-impl_format_value_traits!(Buffers, Buffers, Buffers);
+impl_common_ops_for_newtype_uint!(Buffers, u64);
+impl_format_value_traits!(Buffers, Buffers, Buffers, u64);
 option_glib_newtype_from_to!(Buffers, Buffers::OFFSET_NONE);
 option_glib_newtype_display!(Buffers, "buffers");
 
@@ -517,7 +292,7 @@ impl crate::utils::Displayable for Undefined {
     }
 }
 
-impl_common_ops_for_newtype_u64!(Percent);
+impl_common_ops_for_newtype_uint!(Percent, u32);
 option_glib_newtype_display!(Percent, "%");
 
 impl FormattedValue for Option<Percent> {

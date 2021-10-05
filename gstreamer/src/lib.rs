@@ -36,6 +36,9 @@ pub use crate::auto::functions::*;
 pub use crate::auto::*;
 
 #[macro_use]
+mod macros;
+
+#[macro_use]
 mod log;
 pub use crate::log::*;
 
@@ -152,7 +155,6 @@ mod bus_unix;
 mod bus_windows;
 
 mod child_proxy;
-#[macro_use]
 mod clock_time;
 #[cfg(feature = "ser_de")]
 mod clock_time_serde;
