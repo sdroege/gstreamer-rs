@@ -105,7 +105,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
     fn prepare_output_buffer(
         &self,
         element: &Self::Type,
-        inbuf: &gst::BufferRef,
+        inbuf: InputBuffer,
     ) -> Result<PrepareOutputBufferSuccess, gst::FlowError> {
         self.parent_prepare_output_buffer(element, inbuf)
     }
@@ -235,7 +235,7 @@ pub trait BaseTransformImplExt: ObjectSubclass {
     fn parent_prepare_output_buffer(
         &self,
         element: &Self::Type,
-        inbuf: &gst::BufferRef,
+        inbuf: InputBuffer,
     ) -> Result<PrepareOutputBufferSuccess, gst::FlowError>;
 
     fn parent_transform(
@@ -562,11 +562,15 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
     fn parent_prepare_output_buffer(
         &self,
         element: &Self::Type,
-        inbuf: &gst::BufferRef,
+        inbuf: InputBuffer,
     ) -> Result<PrepareOutputBufferSuccess, gst::FlowError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
+            let buf = match inbuf {
+                InputBuffer::Readable(inbuf_r) => inbuf_r.as_ptr(),
+                InputBuffer::Writable(inbuf_w) => inbuf_w.as_mut_ptr(),
+            };
             (*parent_class)
                 .prepare_output_buffer
                 .map(|f| {
@@ -574,11 +578,11 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                     // FIXME: Wrong signature in FFI
                     gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
-                        inbuf.as_ptr() as *mut gst::ffi::GstBuffer,
+                        buf as *mut gst::ffi::GstBuffer,
                         (&mut outbuf) as *mut *mut gst::ffi::GstBuffer as *mut gst::ffi::GstBuffer,
                     ))
                     .map(|_| {
-                        if outbuf == inbuf.as_ptr() as *mut _ {
+                        if outbuf == buf as *mut _ {
                             PrepareOutputBufferSuccess::InputBuffer
                         } else {
                             PrepareOutputBufferSuccess::Buffer(from_glib_full(outbuf))
@@ -884,6 +888,12 @@ pub enum PrepareOutputBufferSuccess {
     InputBuffer,
 }
 
+#[derive(Debug)]
+pub enum InputBuffer<'a> {
+    Writable(&'a mut gst::BufferRef),
+    Readable(&'a gst::BufferRef),
+}
+
 unsafe extern "C" fn base_transform_start<T: BaseTransformImpl>(
     ptr: *mut ffi::GstBaseTransform,
 ) -> glib::ffi::gboolean {
@@ -1093,14 +1103,31 @@ unsafe extern "C" fn base_transform_prepare_output_buffer<T: BaseTransformImpl>(
 
     // FIXME: Wrong signature in FFI
     let outbuf = outbuf as *mut *mut gst::ffi::GstBuffer;
+    let is_passthrough: bool = from_glib(ffi::gst_base_transform_is_passthrough(ptr));
+    let is_in_place: bool = from_glib(ffi::gst_base_transform_is_in_place(ptr));
+    let writable = is_in_place
+        && !is_passthrough
+        && gst::ffi::gst_mini_object_is_writable(inbuf as *mut _) != glib::ffi::GFALSE;
+    let buffer = match writable {
+        false => InputBuffer::Readable(gst::BufferRef::from_ptr(inbuf)),
+        true => InputBuffer::Writable(gst::BufferRef::from_mut_ptr(inbuf)),
+    };
 
     gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
-        match imp.prepare_output_buffer(wrap.unsafe_cast_ref(), gst::BufferRef::from_ptr(inbuf)) {
+        match imp.prepare_output_buffer(wrap.unsafe_cast_ref(), buffer) {
             Ok(PrepareOutputBufferSuccess::InputBuffer) => {
+                assert!(
+                    is_passthrough || is_in_place,
+                    "Returning InputBuffer only allowed for passthrough or in-place mode"
+                );
                 *outbuf = inbuf;
                 gst::FlowReturn::Ok
             }
             Ok(PrepareOutputBufferSuccess::Buffer(buf)) => {
+                assert!(
+                    !is_passthrough,
+                    "Returning Buffer not allowed for passthrough mode"
+                );
                 *outbuf = buf.into_ptr();
                 gst::FlowReturn::Ok
             }
