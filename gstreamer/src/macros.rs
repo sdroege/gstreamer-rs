@@ -111,12 +111,67 @@ macro_rules! impl_common_ops_for_newtype_uint(
                 }
             }
 
-            // FIXME add overflowing_add
-
             #[must_use = "this returns the result of the operation, without modifying the original"]
             #[inline]
             pub fn wrapping_add(self, rhs: Self) -> Self {
                 self.overflowing_add(rhs).0
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub const fn checked_div(self, rhs: $inner_type) -> Option<Self> {
+                match self.0.checked_div(rhs) {
+                    Some(val) => Some(Self(val)),
+                    None => None,
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub const fn checked_mul(self, rhs: $inner_type) -> Option<Self> {
+                match self.0.checked_mul(rhs) {
+                    Some(res) if res <= Self::MAX.0 => Some(Self(res)),
+                    _ => None,
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub const fn saturating_mul(self, rhs: $inner_type) -> Self {
+                let res = self.0.saturating_mul(rhs);
+                if res < Self::MAX.0 {
+                    Self(res)
+                } else {
+                    Self::MAX
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub fn overflowing_mul(self, rhs: $inner_type) -> (Self, bool) {
+                let self_u128 = self.0 as u128;
+                let rhs_128 = rhs as u128;
+                let res_u128 = self_u128 * rhs_128;
+                if res_u128 <= Self::MAX.0 as u128 {
+                    (Self(<$inner_type>::try_from(res_u128).unwrap()), false)
+                } else {
+                    (Self(<$inner_type>::try_from((res_u128 - Self::MAX.0 as u128 - 1) as u64).unwrap()), true)
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub fn wrapping_mul(self, rhs: $inner_type) -> Self {
+                self.overflowing_mul(rhs).0
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub const fn checked_rem(self, rhs: $inner_type) -> Option<Self> {
+                match self.0.checked_rem(rhs) {
+                    Some(val) => Some(Self(val)),
+                    None => None,
+                }
             }
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
@@ -189,13 +244,12 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl OptionCheckedAdd for $name {
             type Output = Self;
-
             fn opt_checked_add(
                 self,
                 rhs: Self,
-            ) -> Result<Option<Self::Output>, opt_ops::CheckedError> {
+            ) -> Result<Option<Self::Output>, opt_ops::Error> {
                 self.checked_add(rhs)
-                    .ok_or(opt_ops::CheckedError::Overflow)
+                    .ok_or(opt_ops::Error::Overflow)
                     .map(Some)
             }
         }
@@ -222,14 +276,74 @@ macro_rules! impl_common_ops_for_newtype_uint(
             }
         }
 
+        impl OptionCheckedDiv<$inner_type> for $name {
+            type Output = Self;
+            fn opt_checked_div(self, rhs: $inner_type) -> Result<Option<Self::Output>, opt_ops::Error> {
+                if rhs == 0 {
+                    return Err(opt_ops::Error::DivisionByZero);
+                }
+                self.0
+                    .checked_div(rhs)
+                    .ok_or(opt_ops::Error::Overflow)
+                    .map(|val| Some(Self(val)))
+            }
+        }
+
+        impl OptionCheckedMul<$inner_type> for $name {
+            type Output = Self;
+            fn opt_checked_mul(
+                self,
+                rhs: $inner_type,
+            ) -> Result<Option<Self::Output>, opt_ops::Error> {
+                self.checked_mul(rhs)
+                    .ok_or(opt_ops::Error::Overflow)
+                    .map(Some)
+            }
+        }
+
+        impl OptionSaturatingMul<$inner_type> for $name {
+            type Output = Self;
+            fn opt_saturating_mul(self, rhs: $inner_type) -> Option<Self::Output> {
+                Some(self.saturating_mul(rhs))
+            }
+        }
+
+        impl OptionOverflowingMul<$inner_type> for $name {
+            type Output = Self;
+            fn opt_overflowing_mul(self, rhs: $inner_type) -> Option<(Self::Output, bool)> {
+                let res = self.overflowing_mul(rhs);
+                Some((res.0, res.1))
+            }
+        }
+
+        impl OptionWrappingMul<$inner_type> for $name {
+            type Output = Self;
+            fn opt_wrapping_mul(self, rhs: $inner_type) -> Option<Self::Output> {
+                Some(self.wrapping_mul(rhs))
+            }
+        }
+
+        impl OptionCheckedRem<$inner_type> for $name {
+            type Output = Self;
+            fn opt_checked_rem(self, rhs: $inner_type) -> Result<Option<Self::Output>, opt_ops::Error> {
+                if rhs == 0 {
+                    return Err(opt_ops::Error::DivisionByZero);
+                }
+                self.0
+                    .checked_rem(rhs)
+                    .ok_or(opt_ops::Error::Overflow)
+                    .map(|val| Some(Self(val)))
+            }
+        }
+
         impl OptionCheckedSub for $name {
             type Output = Self;
             fn opt_checked_sub(
                 self,
                 rhs: Self,
-            ) -> Result<Option<Self::Output>, opt_ops::CheckedError> {
+            ) -> Result<Option<Self::Output>, opt_ops::Error> {
                 self.checked_sub(rhs)
-                    .ok_or(opt_ops::CheckedError::Overflow)
+                    .ok_or(opt_ops::Error::Overflow)
                     .map(Some)
             }
         }

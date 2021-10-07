@@ -426,8 +426,6 @@ mod tests {
 
     #[test]
     fn checked_ops() {
-        use opt_ops::CheckedError;
-
         assert_eq!(CT_1.checked_add(CT_1), Some(CT_2));
 
         assert_eq!(CT_1.opt_checked_add(CT_1), Ok(Some(CT_2)));
@@ -439,7 +437,7 @@ mod tests {
         assert!(ClockTime::MAX.checked_add(CT_1).is_none());
         assert_eq!(
             ClockTime::MAX.opt_checked_add(Some(CT_1)),
-            Err(CheckedError::Overflow)
+            Err(opt_ops::Error::Overflow)
         );
 
         assert_eq!(CT_2.checked_sub(CT_1), Some(CT_1));
@@ -454,7 +452,7 @@ mod tests {
         assert!(CT_1.checked_sub(CT_2).is_none());
         assert_eq!(
             Some(CT_1).opt_checked_sub(CT_2),
-            Err(CheckedError::Overflow)
+            Err(opt_ops::Error::Overflow)
         );
     }
 
