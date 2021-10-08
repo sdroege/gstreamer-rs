@@ -103,6 +103,17 @@ pub trait VideoDecoderImpl: VideoDecoderImplExt + ElementImpl {
     ) -> Result<(), gst::ErrorMessage> {
         self.parent_decide_allocation(element, query)
     }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn handle_missing_data(
+        &self,
+        element: &Self::Type,
+        timestamp: gst::ClockTime,
+        duration: Option<gst::ClockTime>,
+    ) -> bool {
+        self.parent_handle_missing_data(element, timestamp, duration)
+    }
 }
 
 pub trait VideoDecoderImplExt: ObjectSubclass {
@@ -163,6 +174,15 @@ pub trait VideoDecoderImplExt: ObjectSubclass {
         element: &Self::Type,
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage>;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn parent_handle_missing_data(
+        &self,
+        element: &Self::Type,
+        timestamp: gst::ClockTime,
+        duration: Option<gst::ClockTime>,
+    ) -> bool;
 }
 
 impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
@@ -524,6 +544,30 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
                 .unwrap_or(Ok(()))
         }
     }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn parent_handle_missing_data(
+        &self,
+        element: &Self::Type,
+        timestamp: gst::ClockTime,
+        duration: Option<gst::ClockTime>,
+    ) -> bool {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoDecoderClass;
+            (*parent_class)
+                .handle_missing_data
+                .map(|f| {
+                    from_glib(f(
+                        element.unsafe_cast_ref::<VideoDecoder>().to_glib_none().0,
+                        timestamp.into_glib(),
+                        duration.into_glib(),
+                    ))
+                })
+                .unwrap_or(true)
+        }
+    }
 }
 
 unsafe impl<T: VideoDecoderImpl> IsSubclassable<T> for VideoDecoder {
@@ -548,6 +592,10 @@ unsafe impl<T: VideoDecoderImpl> IsSubclassable<T> for VideoDecoder {
         klass.src_query = Some(video_decoder_src_query::<T>);
         klass.propose_allocation = Some(video_decoder_propose_allocation::<T>);
         klass.decide_allocation = Some(video_decoder_decide_allocation::<T>);
+        #[cfg(any(feature = "v1_20", feature = "dox"))]
+        {
+            klass.handle_missing_data = Some(video_decoder_handle_missing_data::<T>);
+        }
     }
 
     fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
@@ -861,6 +909,26 @@ unsafe extern "C" fn video_decoder_decide_allocation<T: VideoDecoderImpl>(
                 false
             }
         }
+    })
+    .into_glib()
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+unsafe extern "C" fn video_decoder_handle_missing_data<T: VideoDecoderImpl>(
+    ptr: *mut ffi::GstVideoDecoder,
+    timestamp: gst::ffi::GstClockTime,
+    duration: gst::ffi::GstClockTime,
+) -> glib::ffi::gboolean {
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.impl_();
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
+
+    gst::panic_to_error!(&wrap, imp.panicked(), true, {
+        imp.handle_missing_data(
+            wrap.unsafe_cast_ref(),
+            Option::<gst::ClockTime>::from_glib(timestamp).unwrap(),
+            from_glib(duration),
+        )
     })
     .into_glib()
 }
