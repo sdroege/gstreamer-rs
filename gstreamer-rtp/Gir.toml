@@ -20,6 +20,7 @@ generate = [
     "GstRtp.RTCPSDESType",
     "GstRtp.RTCPType",
     "GstRtp.RTCPXRType",
+    "GstRtp.RTPHeaderExtensionDirection",
     "GstRtp.RTPHeaderExtensionFlags",
     "GstRtp.RTPPayload",
     "GstRtp.RTPProfile",

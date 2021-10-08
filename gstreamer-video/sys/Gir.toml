@@ -46,6 +46,27 @@ status = "generate"
     version = "1.18"
 
 [[object]]
+name = "GstVideo.VideoCodecFrameFlags"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.20"
+
+[[object]]
+name = "GstVideo.VideoGLTextureType"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.20"
+
+[[object]]
+name = "GstVideo.VideoGLTextureOrientation"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.20"
+
+[[object]]
 name = "GstVideo.*"
 status = "generate"
     [[object.function]]
