@@ -3,6 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::RTPHeaderExtensionDirection;
 use crate::RTPHeaderExtensionFlags;
 use glib::object::IsA;
 use glib::translate::*;
@@ -34,6 +35,10 @@ unsafe impl Sync for RTPHeaderExtension {}
 pub const NONE_RTP_HEADER_EXTENSION: Option<&RTPHeaderExtension> = None;
 
 pub trait RTPHeaderExtensionExt: 'static {
+    #[doc(alias = "gst_rtp_header_extension_get_direction")]
+    #[doc(alias = "get_direction")]
+    fn direction(&self) -> RTPHeaderExtensionDirection;
+
     #[doc(alias = "gst_rtp_header_extension_get_id")]
     #[doc(alias = "get_id")]
     fn id(&self) -> u32;
@@ -57,14 +62,14 @@ pub trait RTPHeaderExtensionExt: 'static {
     #[doc(alias = "gst_rtp_header_extension_set_attributes_from_caps")]
     fn set_attributes_from_caps(&self, caps: &gst::Caps) -> bool;
 
-    #[doc(alias = "gst_rtp_header_extension_set_attributes_from_caps_simple_sdp")]
-    fn set_attributes_from_caps_simple_sdp(&self, caps: &gst::Caps) -> bool;
-
     #[doc(alias = "gst_rtp_header_extension_set_caps_from_attributes")]
     fn set_caps_from_attributes(&self, caps: &gst::Caps) -> bool;
 
-    #[doc(alias = "gst_rtp_header_extension_set_caps_from_attributes_simple_sdp")]
-    fn set_caps_from_attributes_simple_sdp(&self, caps: &gst::Caps) -> bool;
+    #[doc(alias = "gst_rtp_header_extension_set_caps_from_attributes_helper")]
+    fn set_caps_from_attributes_helper(&self, caps: &gst::Caps, attributes: &str) -> bool;
+
+    #[doc(alias = "gst_rtp_header_extension_set_direction")]
+    fn set_direction(&self, direction: RTPHeaderExtensionDirection);
 
     #[doc(alias = "gst_rtp_header_extension_set_id")]
     fn set_id(&self, ext_id: u32);
@@ -83,6 +88,14 @@ pub trait RTPHeaderExtensionExt: 'static {
 }
 
 impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
+    fn direction(&self) -> RTPHeaderExtensionDirection {
+        unsafe {
+            from_glib(ffi::gst_rtp_header_extension_get_direction(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     fn id(&self) -> u32 {
         unsafe { ffi::gst_rtp_header_extension_get_id(self.as_ref().to_glib_none().0) }
     }
@@ -129,17 +142,6 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 
-    fn set_attributes_from_caps_simple_sdp(&self, caps: &gst::Caps) -> bool {
-        unsafe {
-            from_glib(
-                ffi::gst_rtp_header_extension_set_attributes_from_caps_simple_sdp(
-                    self.as_ref().to_glib_none().0,
-                    caps.to_glib_none().0,
-                ),
-            )
-        }
-    }
-
     fn set_caps_from_attributes(&self, caps: &gst::Caps) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_header_extension_set_caps_from_attributes(
@@ -149,14 +151,24 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 
-    fn set_caps_from_attributes_simple_sdp(&self, caps: &gst::Caps) -> bool {
+    fn set_caps_from_attributes_helper(&self, caps: &gst::Caps, attributes: &str) -> bool {
         unsafe {
             from_glib(
-                ffi::gst_rtp_header_extension_set_caps_from_attributes_simple_sdp(
+                ffi::gst_rtp_header_extension_set_caps_from_attributes_helper(
                     self.as_ref().to_glib_none().0,
                     caps.to_glib_none().0,
+                    attributes.to_glib_none().0,
                 ),
             )
+        }
+    }
+
+    fn set_direction(&self, direction: RTPHeaderExtensionDirection) {
+        unsafe {
+            ffi::gst_rtp_header_extension_set_direction(
+                self.as_ref().to_glib_none().0,
+                direction.into_glib(),
+            );
         }
     }
 

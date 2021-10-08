@@ -137,6 +137,29 @@ pub trait VideoDecoderExt: 'static {
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "automatic-request-sync-point-flags")]
+    fn automatic_request_sync_point_flags(&self) -> VideoDecoderRequestSyncPointFlags;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "automatic-request-sync-point-flags")]
+    fn set_automatic_request_sync_point_flags(
+        &self,
+        automatic_request_sync_point_flags: VideoDecoderRequestSyncPointFlags,
+    );
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "automatic-request-sync-points")]
+    fn is_automatic_request_sync_points(&self) -> bool;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "automatic-request-sync-points")]
+    fn set_automatic_request_sync_points(&self, automatic_request_sync_points: bool);
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "discard-corrupted-frames")]
     fn is_discard_corrupted_frames(&self) -> bool;
 
@@ -162,6 +185,22 @@ pub trait VideoDecoderExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_qos(&self, qos: bool);
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "automatic-request-sync-point-flags")]
+    fn connect_automatic_request_sync_point_flags_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "automatic-request-sync-points")]
+    fn connect_automatic_request_sync_points_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
@@ -388,6 +427,70 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn automatic_request_sync_point_flags(&self) -> VideoDecoderRequestSyncPointFlags {
+        unsafe {
+            let mut value = glib::Value::from_type(
+                <VideoDecoderRequestSyncPointFlags as StaticType>::static_type(),
+            );
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+                b"automatic-request-sync-point-flags\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `automatic-request-sync-point-flags` getter")
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn set_automatic_request_sync_point_flags(
+        &self,
+        automatic_request_sync_point_flags: VideoDecoderRequestSyncPointFlags,
+    ) {
+        unsafe {
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+                b"automatic-request-sync-point-flags\0".as_ptr() as *const _,
+                automatic_request_sync_point_flags
+                    .to_value()
+                    .to_glib_none()
+                    .0,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn is_automatic_request_sync_points(&self) -> bool {
+        unsafe {
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+                b"automatic-request-sync-points\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `automatic-request-sync-points` getter")
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn set_automatic_request_sync_points(&self, automatic_request_sync_points: bool) {
+        unsafe {
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+                b"automatic-request-sync-points\0".as_ptr() as *const _,
+                automatic_request_sync_points.to_value().to_glib_none().0,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     fn is_discard_corrupted_frames(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
@@ -465,6 +568,66 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
                 b"qos\0".as_ptr() as *const _,
                 qos.to_value().to_glib_none().0,
             );
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn connect_automatic_request_sync_point_flags_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_automatic_request_sync_point_flags_trampoline<
+            P: IsA<VideoDecoder>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstVideoDecoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(VideoDecoder::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::automatic-request-sync-point-flags\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_automatic_request_sync_point_flags_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn connect_automatic_request_sync_points_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_automatic_request_sync_points_trampoline<
+            P: IsA<VideoDecoder>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstVideoDecoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(VideoDecoder::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::automatic-request-sync-points\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_automatic_request_sync_points_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 

@@ -216,6 +216,47 @@ impl FromGlib<ffi::GstVideoCodecFrameFlags> for VideoCodecFrameFlags {
 }
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl StaticType for VideoCodecFrameFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_video_codec_frame_flags_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::value::ValueType for VideoCodecFrameFlags {
+    type Type = Self;
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl<'a> FromValue<'a> for VideoCodecFrameFlags {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl ToValue for VideoCodecFrameFlags {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
 bitflags! {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstVideoDecoderRequestSyncPointFlags")]
@@ -245,6 +286,47 @@ impl FromGlib<ffi::GstVideoDecoderRequestSyncPointFlags> for VideoDecoderRequest
     unsafe fn from_glib(value: ffi::GstVideoDecoderRequestSyncPointFlags) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl StaticType for VideoDecoderRequestSyncPointFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_video_decoder_request_sync_point_flags_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::value::ValueType for VideoDecoderRequestSyncPointFlags {
+    type Type = Self;
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl<'a> FromValue<'a> for VideoDecoderRequestSyncPointFlags {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl ToValue for VideoDecoderRequestSyncPointFlags {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 

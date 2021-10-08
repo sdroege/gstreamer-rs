@@ -27,6 +27,9 @@ pub use self::flags::RTPBufferFlags;
 pub use self::flags::RTPBufferMapFlags;
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::flags::RTPHeaderExtensionDirection;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 pub use self::flags::RTPHeaderExtensionFlags;
 
 pub mod functions;

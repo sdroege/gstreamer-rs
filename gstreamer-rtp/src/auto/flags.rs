@@ -145,6 +145,86 @@ impl ToValue for RTPBufferMapFlags {
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 bitflags! {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "GstRTPHeaderExtensionDirection")]
+    pub struct RTPHeaderExtensionDirection: u32 {
+        #[doc(alias = "GST_RTP_HEADER_EXTENSION_DIRECTION_INACTIVE")]
+        const INACTIVE = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_INACTIVE as u32;
+        #[doc(alias = "GST_RTP_HEADER_EXTENSION_DIRECTION_SENDONLY")]
+        const SENDONLY = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_SENDONLY as u32;
+        #[doc(alias = "GST_RTP_HEADER_EXTENSION_DIRECTION_RECVONLY")]
+        const RECVONLY = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_RECVONLY as u32;
+        #[doc(alias = "GST_RTP_HEADER_EXTENSION_DIRECTION_SENDRECV")]
+        const SENDRECV = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_SENDRECV as u32;
+        #[doc(alias = "GST_RTP_HEADER_EXTENSION_DIRECTION_INHERITED")]
+        const INHERITED = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_INHERITED as u32;
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl IntoGlib for RTPHeaderExtensionDirection {
+    type GlibType = ffi::GstRTPHeaderExtensionDirection;
+
+    fn into_glib(self) -> ffi::GstRTPHeaderExtensionDirection {
+        self.bits()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstRTPHeaderExtensionDirection> for RTPHeaderExtensionDirection {
+    unsafe fn from_glib(value: ffi::GstRTPHeaderExtensionDirection) -> Self {
+        skip_assert_initialized!();
+        Self::from_bits_truncate(value)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl StaticType for RTPHeaderExtensionDirection {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_rtp_header_extension_direction_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::value::ValueType for RTPHeaderExtensionDirection {
+    type Type = Self;
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl<'a> FromValue<'a> for RTPHeaderExtensionDirection {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl ToValue for RTPHeaderExtensionDirection {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+bitflags! {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstRTPHeaderExtensionFlags")]
     pub struct RTPHeaderExtensionFlags: u32 {
         #[doc(alias = "GST_RTP_HEADER_EXTENSION_ONE_BYTE")]
