@@ -20,6 +20,15 @@ pub trait RTPHeaderExtensionExtManual: 'static {
         output: &mut gst::BufferRef,
         data: &mut [u8],
     ) -> Result<usize, glib::BoolError>;
+
+    #[doc(alias = "gst_rtp_header_extension_set_caps_from_attributes")]
+    fn set_caps_from_attributes(&self, caps: &mut gst::CapsRef) -> bool;
+
+    #[doc(alias = "gst_rtp_header_extension_set_caps_from_attributes_helper")]
+    fn set_caps_from_attributes_helper(&self, caps: &mut gst::CapsRef, attributes: &str) -> bool;
+
+    #[doc(alias = "gst_rtp_header_extension_update_non_rtp_src_caps")]
+    fn update_non_rtp_src_caps(&self, caps: &mut gst::CapsRef) -> bool;
 }
 
 impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExtManual for O {
@@ -64,6 +73,36 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExtManual for O {
             } else {
                 Ok(res as usize)
             }
+        }
+    }
+
+    fn set_caps_from_attributes(&self, caps: &mut gst::CapsRef) -> bool {
+        unsafe {
+            from_glib(ffi::gst_rtp_header_extension_set_caps_from_attributes(
+                self.as_ref().to_glib_none().0,
+                caps.as_mut_ptr(),
+            ))
+        }
+    }
+
+    fn set_caps_from_attributes_helper(&self, caps: &mut gst::CapsRef, attributes: &str) -> bool {
+        unsafe {
+            from_glib(
+                ffi::gst_rtp_header_extension_set_caps_from_attributes_helper(
+                    self.as_ref().to_glib_none().0,
+                    caps.as_mut_ptr(),
+                    attributes.to_glib_none().0,
+                ),
+            )
+        }
+    }
+
+    fn update_non_rtp_src_caps(&self, caps: &mut gst::CapsRef) -> bool {
+        unsafe {
+            from_glib(ffi::gst_rtp_header_extension_update_non_rtp_src_caps(
+                self.as_ref().to_glib_none().0,
+                caps.as_mut_ptr(),
+            ))
         }
     }
 }

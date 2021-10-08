@@ -62,12 +62,6 @@ pub trait RTPHeaderExtensionExt: 'static {
     #[doc(alias = "gst_rtp_header_extension_set_attributes_from_caps")]
     fn set_attributes_from_caps(&self, caps: &gst::Caps) -> bool;
 
-    #[doc(alias = "gst_rtp_header_extension_set_caps_from_attributes")]
-    fn set_caps_from_attributes(&self, caps: &gst::Caps) -> bool;
-
-    #[doc(alias = "gst_rtp_header_extension_set_caps_from_attributes_helper")]
-    fn set_caps_from_attributes_helper(&self, caps: &gst::Caps, attributes: &str) -> bool;
-
     #[doc(alias = "gst_rtp_header_extension_set_direction")]
     fn set_direction(&self, direction: RTPHeaderExtensionDirection);
 
@@ -79,9 +73,6 @@ pub trait RTPHeaderExtensionExt: 'static {
 
     #[doc(alias = "gst_rtp_header_extension_set_wants_update_non_rtp_src_caps")]
     fn set_wants_update_non_rtp_src_caps(&self, state: bool);
-
-    #[doc(alias = "gst_rtp_header_extension_update_non_rtp_src_caps")]
-    fn update_non_rtp_src_caps(&self, caps: &gst::Caps) -> bool;
 
     #[doc(alias = "gst_rtp_header_extension_wants_update_non_rtp_src_caps")]
     fn wants_update_non_rtp_src_caps(&self) -> bool;
@@ -142,27 +133,6 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 
-    fn set_caps_from_attributes(&self, caps: &gst::Caps) -> bool {
-        unsafe {
-            from_glib(ffi::gst_rtp_header_extension_set_caps_from_attributes(
-                self.as_ref().to_glib_none().0,
-                caps.to_glib_none().0,
-            ))
-        }
-    }
-
-    fn set_caps_from_attributes_helper(&self, caps: &gst::Caps, attributes: &str) -> bool {
-        unsafe {
-            from_glib(
-                ffi::gst_rtp_header_extension_set_caps_from_attributes_helper(
-                    self.as_ref().to_glib_none().0,
-                    caps.to_glib_none().0,
-                    attributes.to_glib_none().0,
-                ),
-            )
-        }
-    }
-
     fn set_direction(&self, direction: RTPHeaderExtensionDirection) {
         unsafe {
             ffi::gst_rtp_header_extension_set_direction(
@@ -193,15 +163,6 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
                 self.as_ref().to_glib_none().0,
                 state.into_glib(),
             );
-        }
-    }
-
-    fn update_non_rtp_src_caps(&self, caps: &gst::Caps) -> bool {
-        unsafe {
-            from_glib(ffi::gst_rtp_header_extension_update_non_rtp_src_caps(
-                self.as_ref().to_glib_none().0,
-                caps.to_glib_none().0,
-            ))
         }
     }
 
