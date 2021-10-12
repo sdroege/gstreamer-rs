@@ -655,6 +655,14 @@ impl<'a> Array<'a> {
     }
 }
 
+impl<'a> ops::Deref for Array<'a> {
+    type Target = [glib::SendValue];
+
+    fn deref(&self) -> &[glib::SendValue] {
+        self.as_slice()
+    }
+}
+
 impl<'a> From<&'a [&'a (dyn ToSendValue + Sync)]> for Array<'a> {
     fn from(values: &'a [&'a (dyn ToSendValue + Sync)]) -> Self {
         skip_assert_initialized!();
@@ -746,6 +754,14 @@ impl<'a> List<'a> {
 
     pub fn as_slice(&self) -> &[glib::SendValue] {
         self.0.borrow()
+    }
+}
+
+impl<'a> ops::Deref for List<'a> {
+    type Target = [glib::SendValue];
+
+    fn deref(&self) -> &[glib::SendValue] {
+        self.as_slice()
     }
 }
 
