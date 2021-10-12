@@ -180,7 +180,7 @@ fn tutorial_main() -> Result<(), Error> {
     pipeline.set_state(gst::State::Null)?;
 
     bus.remove_watch()?;
-    glib::source_remove(timeout_id);
+    timeout_id.remove();
 
     Ok(())
 }

@@ -77,7 +77,7 @@ fn main_loop() -> Result<(), Error> {
     // our quality content to connecting clients.
     main_loop.run();
 
-    glib::source_remove(id);
+    id.remove();
 
     Ok(())
 }

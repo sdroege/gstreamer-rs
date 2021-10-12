@@ -207,7 +207,7 @@ fn main() {
                 let mut data = data.lock().unwrap();
                 if let Some(source) = data.source_id.take() {
                     println!("stop feeding");
-                    glib::source::source_remove(source);
+                    source.remove();
                 }
             })
             .build(),

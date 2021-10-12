@@ -124,7 +124,7 @@ fn example_main() {
         .expect("Unable to set the pipeline to the `Null` state");
 
     bus.remove_watch().unwrap();
-    glib::source_remove(timeout_id);
+    timeout_id.remove();
 }
 
 fn main() {

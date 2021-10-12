@@ -30,7 +30,7 @@ mod tutorial5 {
     impl Drop for AppWindow {
         fn drop(&mut self) {
             if let Some(source_id) = self.timeout_id.take() {
-                glib::source_remove(source_id);
+                source_id.remove();
             }
         }
     }

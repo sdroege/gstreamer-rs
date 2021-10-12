@@ -141,7 +141,7 @@ fn main_loop() -> Result<(), Error> {
     // incoming connections from clients.
     main_loop.run();
 
-    glib::source_remove(id);
+    id.remove();
 
     Ok(())
 }
