@@ -1049,7 +1049,7 @@ impl<T: AsMutPtr> Allocation<T> {
     #[doc(alias = "gst_query_add_allocation_pool")]
     pub fn add_allocation_pool(
         &mut self,
-        pool: Option<&crate::BufferPool>,
+        pool: Option<&impl IsA<crate::BufferPool>>,
         size: u32,
         min_buffers: u32,
         max_buffers: u32,
@@ -1057,7 +1057,7 @@ impl<T: AsMutPtr> Allocation<T> {
         unsafe {
             ffi::gst_query_add_allocation_pool(
                 self.0.as_mut_ptr(),
-                pool.to_glib_none().0,
+                pool.to_glib_none().0 as *mut ffi::GstBufferPool,
                 size,
                 min_buffers,
                 max_buffers,
@@ -1069,16 +1069,18 @@ impl<T: AsMutPtr> Allocation<T> {
     pub fn set_nth_allocation_pool(
         &mut self,
         idx: u32,
-        pool: Option<&crate::BufferPool>,
+        pool: Option<&impl IsA<crate::BufferPool>>,
         size: u32,
         min_buffers: u32,
         max_buffers: u32,
     ) {
         unsafe {
+            let n = ffi::gst_query_get_n_allocation_pools(self.0.as_ptr());
+            assert!(idx < n);
             ffi::gst_query_set_nth_allocation_pool(
                 self.0.as_mut_ptr(),
                 idx,
-                pool.to_glib_none().0,
+                pool.to_glib_none().0 as *mut ffi::GstBufferPool,
                 size,
                 min_buffers,
                 max_buffers,
@@ -1089,6 +1091,8 @@ impl<T: AsMutPtr> Allocation<T> {
     #[doc(alias = "gst_query_remove_nth_allocation_pool")]
     pub fn remove_nth_allocation_pool(&mut self, idx: u32) {
         unsafe {
+            let n = ffi::gst_query_get_n_allocation_pools(self.0.as_ptr());
+            assert!(idx < n);
             ffi::gst_query_remove_nth_allocation_pool(self.0.as_mut_ptr(), idx);
         }
     }
@@ -1157,6 +1161,8 @@ impl<T: AsMutPtr> Allocation<T> {
     #[doc(alias = "gst_query_remove_nth_allocation_meta")]
     pub fn remove_nth_allocation_meta(&mut self, idx: u32) {
         unsafe {
+            let n = ffi::gst_query_get_n_allocation_metas(self.0.as_ptr());
+            assert!(idx < n);
             ffi::gst_query_remove_nth_allocation_meta(self.0.as_mut_ptr(), idx);
         }
     }
