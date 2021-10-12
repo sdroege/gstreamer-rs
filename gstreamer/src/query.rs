@@ -9,6 +9,7 @@ use std::mem;
 use std::ops::{Deref, DerefMut};
 use std::ptr;
 
+use glib::object::IsA;
 use glib::translate::*;
 
 mini_object_wrapper!(Query, QueryRef, ffi::GstQuery, || {
@@ -947,6 +948,28 @@ impl<T: AsPtr> Allocation<T> {
         }
     }
 
+    #[doc(alias = "gst_allocation_params")]
+    #[doc(alias = "gst_query_get_n_allocation_params")]
+    pub fn allocation_params(&self) -> Vec<(Option<crate::Allocator>, crate::AllocationParams)> {
+        unsafe {
+            let n = ffi::gst_query_get_n_allocation_params(self.0.as_ptr());
+            let mut params = Vec::with_capacity(n as usize);
+            for i in 0..n {
+                let mut allocator = ptr::null_mut();
+                let mut p = mem::MaybeUninit::uninit();
+                ffi::gst_query_parse_nth_allocation_param(
+                    self.0.as_ptr(),
+                    i,
+                    &mut allocator,
+                    p.as_mut_ptr(),
+                );
+                params.push((from_glib_full(allocator), from_glib(p.assume_init())));
+            }
+
+            params
+        }
+    }
+
     #[doc(alias = "get_allocation_pools")]
     #[doc(alias = "gst_query_get_n_allocation_pools")]
     pub fn allocation_pools(&self) -> Vec<(Option<crate::BufferPool>, u32, u32, u32)> {
@@ -1067,6 +1090,49 @@ impl<T: AsMutPtr> Allocation<T> {
     pub fn remove_nth_allocation_pool(&mut self, idx: u32) {
         unsafe {
             ffi::gst_query_remove_nth_allocation_pool(self.0.as_mut_ptr(), idx);
+        }
+    }
+
+    #[doc(alias = "gst_query_add_allocation_param")]
+    pub fn add_allocation_param(
+        &mut self,
+        allocator: Option<&impl IsA<crate::Allocator>>,
+        params: crate::AllocationParams,
+    ) {
+        unsafe {
+            ffi::gst_query_add_allocation_param(
+                self.0.as_mut_ptr(),
+                allocator.to_glib_none().0 as *mut ffi::GstAllocator,
+                params.as_ptr(),
+            );
+        }
+    }
+
+    #[doc(alias = "gst_query_set_nth_allocation_param")]
+    pub fn set_nth_allocation_param(
+        &mut self,
+        idx: u32,
+        allocator: Option<&impl IsA<crate::Allocator>>,
+        params: crate::AllocationParams,
+    ) {
+        unsafe {
+            let n = ffi::gst_query_get_n_allocation_params(self.0.as_ptr());
+            assert!(idx < n);
+            ffi::gst_query_set_nth_allocation_param(
+                self.0.as_mut_ptr(),
+                idx,
+                allocator.to_glib_none().0 as *mut ffi::GstAllocator,
+                params.as_ptr(),
+            );
+        }
+    }
+
+    #[doc(alias = "gst_query_remove_nth_allocation_param")]
+    pub fn remove_nth_allocation_param(&mut self, idx: u32) {
+        unsafe {
+            let n = ffi::gst_query_get_n_allocation_params(self.0.as_ptr());
+            assert!(idx < n);
+            ffi::gst_query_remove_nth_allocation_param(self.0.as_mut_ptr(), idx);
         }
     }
 

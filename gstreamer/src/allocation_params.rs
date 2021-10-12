@@ -69,3 +69,11 @@ impl<'a> ToGlibPtr<'a, *const ffi::GstAllocationParams> for AllocationParams {
         Stash(&self.0, self)
     }
 }
+
+impl FromGlib<ffi::GstAllocationParams> for AllocationParams {
+    #[allow(unused_unsafe)]
+    unsafe fn from_glib(value: ffi::GstAllocationParams) -> Self {
+        assert_initialized_main_thread!();
+        AllocationParams(value)
+    }
+}
