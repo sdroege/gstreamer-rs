@@ -455,6 +455,13 @@ impl crate::utils::Displayable for ClockTime {
     }
 }
 
+impl std::iter::Sum for ClockTime {
+    fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
+        skip_assert_initialized!();
+        iter.fold(ClockTime::ZERO, |a, b| a + b)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -814,5 +821,13 @@ mod tests {
         assert_eq!(format!("{:+26}", lots), "  +5124095:34:33.709551614");
         assert_eq!(format!("{:026}", lots), "0005124095:34:33.709551614");
         assert_eq!(format!("{:+026}", lots), "+005124095:34:33.709551614");
+    }
+
+    #[test]
+    fn iter_sum() {
+        let s: ClockTime = vec![ClockTime::from_seconds(1), ClockTime::from_seconds(2)]
+            .into_iter()
+            .sum();
+        assert_eq!(s, ClockTime::from_seconds(3));
     }
 }
