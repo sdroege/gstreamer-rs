@@ -287,4 +287,68 @@ impl VideoOverlayCompositionRef {
             )
         }
     }
+
+    pub fn iter(&self) -> VideoOverlayCompositionIterator {
+        VideoOverlayCompositionIterator {
+            composition: self,
+            idx: 0,
+            len: self.n_rectangles(),
+        }
+    }
 }
+
+impl<'a> IntoIterator for &'a VideoOverlayComposition {
+    type IntoIter = VideoOverlayCompositionIterator<'a>;
+    type Item = VideoOverlayRectangle;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
+    }
+}
+
+pub struct VideoOverlayCompositionIterator<'a> {
+    composition: &'a VideoOverlayCompositionRef,
+    idx: u32,
+    len: u32,
+}
+
+impl<'a> Iterator for VideoOverlayCompositionIterator<'a> {
+    type Item = VideoOverlayRectangle;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.idx == self.len {
+            return None;
+        }
+
+        let rect = self.composition.rectangle(self.idx).unwrap();
+        self.idx += 1;
+
+        Some(rect)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        if self.idx == self.len {
+            return (0, Some(0));
+        }
+
+        let remaining = (self.len - self.idx) as usize;
+
+        (remaining, Some(remaining))
+    }
+}
+
+impl<'a> DoubleEndedIterator for VideoOverlayCompositionIterator<'a> {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        if self.idx == self.len {
+            return None;
+        }
+
+        self.len -= 1;
+
+        let rect = self.composition.rectangle(self.len).unwrap();
+
+        Some(rect)
+    }
+}
+
+impl<'a> ExactSizeIterator for VideoOverlayCompositionIterator<'a> {}
