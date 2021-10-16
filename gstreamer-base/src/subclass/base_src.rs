@@ -107,6 +107,14 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
     fn unlock_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_unlock_stop(element)
     }
+
+    fn decide_allocation(
+        &self,
+        element: &Self::Type,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage> {
+        self.parent_decide_allocation(element, query)
+    }
 }
 
 pub trait BaseSrcImplExt: ObjectSubclass {
@@ -168,6 +176,12 @@ pub trait BaseSrcImplExt: ObjectSubclass {
     fn parent_unlock(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
 
     fn parent_unlock_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_decide_allocation(
+        &self,
+        element: &Self::Type,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage>;
 }
 
 impl<T: BaseSrcImpl> BaseSrcImplExt for T {
@@ -569,6 +583,33 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                 .unwrap_or(Ok(()))
         }
     }
+
+    fn parent_decide_allocation(
+        &self,
+        element: &Self::Type,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
+            (*parent_class)
+                .decide_allocation
+                .map(|f| {
+                    if from_glib(f(
+                        element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
+                        query.as_mut_ptr(),
+                    )) {
+                        Ok(())
+                    } else {
+                        Err(gst::error_msg!(
+                            gst::CoreError::StateChange,
+                            ["Parent function `decide_allocation` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
 }
 
 unsafe impl<T: BaseSrcImpl> IsSubclassable<T> for BaseSrc {
@@ -592,6 +633,7 @@ unsafe impl<T: BaseSrcImpl> IsSubclassable<T> for BaseSrc {
         klass.fixate = Some(base_src_fixate::<T>);
         klass.unlock = Some(base_src_unlock::<T>);
         klass.unlock_stop = Some(base_src_unlock_stop::<T>);
+        klass.decide_allocation = Some(base_src_decide_allocation::<T>);
     }
 
     fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
@@ -966,6 +1008,27 @@ unsafe extern "C" fn base_src_unlock_stop<T: BaseSrcImpl>(
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.unlock_stop(wrap.unsafe_cast_ref()) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(err);
+                false
+            }
+        }
+    })
+    .into_glib()
+}
+
+unsafe extern "C" fn base_src_decide_allocation<T: BaseSrcImpl>(
+    ptr: *mut ffi::GstBaseSrc,
+    query: *mut gst::ffi::GstQuery,
+) -> glib::ffi::gboolean {
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.impl_();
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
+    let query = gst::QueryRef::from_mut_ptr(query);
+
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
+        match imp.decide_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);

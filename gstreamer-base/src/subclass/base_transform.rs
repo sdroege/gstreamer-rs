@@ -135,6 +135,23 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
         self.parent_transform_ip_passthrough(element, buf)
     }
 
+    fn propose_allocation(
+        &self,
+        element: &Self::Type,
+        decide_query: &gst::QueryRef,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage> {
+        self.parent_propose_allocation(element, decide_query, query)
+    }
+
+    fn decide_allocation(
+        &self,
+        element: &Self::Type,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage> {
+        self.parent_decide_allocation(element, query)
+    }
+
     fn copy_metadata(
         &self,
         element: &Self::Type,
@@ -256,6 +273,19 @@ pub trait BaseTransformImplExt: ObjectSubclass {
         element: &Self::Type,
         buf: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_propose_allocation(
+        &self,
+        element: &Self::Type,
+        decide_query: &gst::QueryRef,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_decide_allocation(
+        &self,
+        element: &Self::Type,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage>;
 
     fn parent_copy_metadata(
         &self,
@@ -684,6 +714,62 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         }
     }
 
+    fn parent_propose_allocation(
+        &self,
+        element: &Self::Type,
+        decide_query: &gst::QueryRef,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
+            (*parent_class)
+                .propose_allocation
+                .map(|f| {
+                    if from_glib(f(
+                        element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
+                        decide_query.as_mut_ptr(),
+                        query.as_mut_ptr(),
+                    )) {
+                        Ok(())
+                    } else {
+                        Err(gst::error_msg!(
+                            gst::CoreError::StateChange,
+                            ["Parent function `propose_allocation` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
+    fn parent_decide_allocation(
+        &self,
+        element: &Self::Type,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
+            (*parent_class)
+                .decide_allocation
+                .map(|f| {
+                    if from_glib(f(
+                        element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
+                        query.as_mut_ptr(),
+                    )) {
+                        Ok(())
+                    } else {
+                        Err(gst::error_msg!(
+                            gst::CoreError::StateChange,
+                            ["Parent function `decide_allocation` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
     fn parent_copy_metadata(
         &self,
         element: &Self::Type,
@@ -846,6 +932,8 @@ unsafe impl<T: BaseTransformImpl> IsSubclassable<T> for BaseTransform {
         klass.sink_event = Some(base_transform_sink_event::<T>);
         klass.src_event = Some(base_transform_src_event::<T>);
         klass.transform_meta = Some(base_transform_transform_meta::<T>);
+        klass.propose_allocation = Some(base_transform_propose_allocation::<T>);
+        klass.decide_allocation = Some(base_transform_decide_allocation::<T>);
         klass.copy_metadata = Some(base_transform_copy_metadata::<T>);
         klass.before_transform = Some(base_transform_before_transform::<T>);
         klass.submit_input_buffer = Some(base_transform_submit_input_buffer::<T>);
@@ -1227,6 +1315,50 @@ unsafe extern "C" fn base_transform_transform_meta<T: BaseTransformImpl>(
             gst::Meta::from_ptr(inbuf, meta),
             inbuf,
         )
+    })
+    .into_glib()
+}
+
+unsafe extern "C" fn base_transform_propose_allocation<T: BaseTransformImpl>(
+    ptr: *mut ffi::GstBaseTransform,
+    decide_query: *mut gst::ffi::GstQuery,
+    query: *mut gst::ffi::GstQuery,
+) -> glib::ffi::gboolean {
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.impl_();
+    let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
+    let decide_query = gst::QueryRef::from_ptr(decide_query);
+    let query = gst::QueryRef::from_mut_ptr(query);
+
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
+        match imp.propose_allocation(wrap.unsafe_cast_ref(), decide_query, query) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(err);
+                false
+            }
+        }
+    })
+    .into_glib()
+}
+
+unsafe extern "C" fn base_transform_decide_allocation<T: BaseTransformImpl>(
+    ptr: *mut ffi::GstBaseTransform,
+    query: *mut gst::ffi::GstQuery,
+) -> glib::ffi::gboolean {
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.impl_();
+    let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
+    let query = gst::QueryRef::from_mut_ptr(query);
+
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
+        match imp.decide_allocation(wrap.unsafe_cast_ref(), query) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(err);
+                false
+            }
+        }
     })
     .into_glib()
 }

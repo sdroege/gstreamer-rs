@@ -149,6 +149,24 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
         self.parent_negotiated_src_caps(aggregator, caps)
     }
 
+    fn propose_allocation(
+        &self,
+        element: &Self::Type,
+        pad: &AggregatorPad,
+        decide_query: &gst::QueryRef,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage> {
+        self.parent_propose_allocation(element, pad, decide_query, query)
+    }
+
+    fn decide_allocation(
+        &self,
+        element: &Self::Type,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage> {
+        self.parent_decide_allocation(element, query)
+    }
+
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn negotiate(&self, aggregator: &Self::Type) -> bool {
@@ -266,6 +284,20 @@ pub trait AggregatorImplExt: ObjectSubclass {
         aggregator: &Self::Type,
         caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError>;
+
+    fn parent_propose_allocation(
+        &self,
+        element: &Self::Type,
+        pad: &AggregatorPad,
+        decide_query: &gst::QueryRef,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_decide_allocation(
+        &self,
+        element: &Self::Type,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -656,6 +688,64 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         }
     }
 
+    fn parent_propose_allocation(
+        &self,
+        element: &Self::Type,
+        pad: &AggregatorPad,
+        decide_query: &gst::QueryRef,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
+            (*parent_class)
+                .propose_allocation
+                .map(|f| {
+                    if from_glib(f(
+                        element.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
+                        pad.to_glib_none().0,
+                        decide_query.as_mut_ptr(),
+                        query.as_mut_ptr(),
+                    )) {
+                        Ok(())
+                    } else {
+                        Err(gst::error_msg!(
+                            gst::CoreError::StateChange,
+                            ["Parent function `propose_allocation` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
+    fn parent_decide_allocation(
+        &self,
+        element: &Self::Type,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
+            (*parent_class)
+                .decide_allocation
+                .map(|f| {
+                    if from_glib(f(
+                        element.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
+                        query.as_mut_ptr(),
+                    )) {
+                        Ok(())
+                    } else {
+                        Err(gst::error_msg!(
+                            gst::CoreError::StateChange,
+                            ["Parent function `decide_allocation` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn parent_negotiate(&self, aggregator: &Self::Type) -> bool {
@@ -717,6 +807,8 @@ unsafe impl<T: AggregatorImpl> IsSubclassable<T> for Aggregator {
         klass.update_src_caps = Some(aggregator_update_src_caps::<T>);
         klass.fixate_src_caps = Some(aggregator_fixate_src_caps::<T>);
         klass.negotiated_src_caps = Some(aggregator_negotiated_src_caps::<T>);
+        klass.propose_allocation = Some(aggregator_propose_allocation::<T>);
+        klass.decide_allocation = Some(aggregator_decide_allocation::<T>);
         #[cfg(any(feature = "v1_18", feature = "dox"))]
         {
             klass.sink_event_pre_queue = Some(aggregator_sink_event_pre_queue::<T>);
@@ -1068,6 +1160,56 @@ unsafe extern "C" fn aggregator_negotiated_src_caps<T: AggregatorImpl>(
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&*wrap);
+                false
+            }
+        }
+    })
+    .into_glib()
+}
+
+unsafe extern "C" fn aggregator_propose_allocation<T: AggregatorImpl>(
+    ptr: *mut ffi::GstAggregator,
+    pad: *mut ffi::GstAggregatorPad,
+    decide_query: *mut gst::ffi::GstQuery,
+    query: *mut gst::ffi::GstQuery,
+) -> glib::ffi::gboolean {
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.impl_();
+    let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
+    let decide_query = gst::QueryRef::from_ptr(decide_query);
+    let query = gst::QueryRef::from_mut_ptr(query);
+
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
+        match imp.propose_allocation(
+            wrap.unsafe_cast_ref(),
+            &from_glib_borrow(pad),
+            decide_query,
+            query,
+        ) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(err);
+                false
+            }
+        }
+    })
+    .into_glib()
+}
+
+unsafe extern "C" fn aggregator_decide_allocation<T: AggregatorImpl>(
+    ptr: *mut ffi::GstAggregator,
+    query: *mut gst::ffi::GstQuery,
+) -> glib::ffi::gboolean {
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.impl_();
+    let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
+    let query = gst::QueryRef::from_mut_ptr(query);
+
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
+        match imp.decide_allocation(wrap.unsafe_cast_ref(), query) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(err);
                 false
             }
         }

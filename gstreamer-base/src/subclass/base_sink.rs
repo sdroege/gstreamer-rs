@@ -77,6 +77,14 @@ pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl {
     fn unlock_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_unlock_stop(element)
     }
+
+    fn propose_allocation(
+        &self,
+        element: &Self::Type,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage> {
+        self.parent_propose_allocation(element, query)
+    }
 }
 
 pub trait BaseSinkImplExt: ObjectSubclass {
@@ -125,6 +133,12 @@ pub trait BaseSinkImplExt: ObjectSubclass {
     fn parent_unlock(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
 
     fn parent_unlock_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_propose_allocation(
+        &self,
+        element: &Self::Type,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage>;
 }
 
 impl<T: BaseSinkImpl> BaseSinkImplExt for T {
@@ -385,6 +399,33 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .unwrap_or(Ok(()))
         }
     }
+
+    fn parent_propose_allocation(
+        &self,
+        element: &Self::Type,
+        query: &mut gst::QueryRef,
+    ) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
+            (*parent_class)
+                .propose_allocation
+                .map(|f| {
+                    if from_glib(f(
+                        element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
+                        query.as_mut_ptr(),
+                    )) {
+                        Ok(())
+                    } else {
+                        Err(gst::error_msg!(
+                            gst::CoreError::StateChange,
+                            ["Parent function `propose_allocation` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
 }
 
 unsafe impl<T: BaseSinkImpl> IsSubclassable<T> for BaseSink {
@@ -404,6 +445,7 @@ unsafe impl<T: BaseSinkImpl> IsSubclassable<T> for BaseSink {
         klass.fixate = Some(base_sink_fixate::<T>);
         klass.unlock = Some(base_sink_unlock::<T>);
         klass.unlock_stop = Some(base_sink_unlock_stop::<T>);
+        klass.propose_allocation = Some(base_sink_propose_allocation::<T>);
     }
 
     fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
@@ -618,6 +660,27 @@ unsafe extern "C" fn base_sink_unlock_stop<T: BaseSinkImpl>(
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.unlock_stop(wrap.unsafe_cast_ref()) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(err);
+                false
+            }
+        }
+    })
+    .into_glib()
+}
+
+unsafe extern "C" fn base_sink_propose_allocation<T: BaseSinkImpl>(
+    ptr: *mut ffi::GstBaseSink,
+    query: *mut gst::ffi::GstQuery,
+) -> glib::ffi::gboolean {
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.impl_();
+    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
+    let query = gst::QueryRef::from_mut_ptr(query);
+
+    gst::panic_to_error!(&wrap, imp.panicked(), false, {
+        match imp.propose_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
