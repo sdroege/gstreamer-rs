@@ -57,32 +57,6 @@ impl Caps {
         caps
     }
 
-    #[allow(clippy::should_implement_trait)]
-    pub fn from_iter<'a>(iter: impl IntoIterator<Item = &'a StructureRef>) -> Self {
-        assert_initialized_main_thread!();
-        let mut caps = Caps::new_empty();
-
-        iter.into_iter()
-            .for_each(|s| caps.get_mut().unwrap().append_structure(s.to_owned()));
-
-        caps
-    }
-
-    pub fn from_iter_with_features<'a, 'b>(
-        iter: impl IntoIterator<Item = (&'a StructureRef, &'b CapsFeaturesRef)>,
-    ) -> Self {
-        assert_initialized_main_thread!();
-        let mut caps = Caps::new_empty();
-
-        iter.into_iter().for_each(|(s, f)| {
-            caps.get_mut()
-                .unwrap()
-                .append_structure_full(s.to_owned(), Some(f.to_owned()))
-        });
-
-        caps
-    }
-
     #[doc(alias = "gst_caps_fixate")]
     pub fn fixate(&mut self) {
         skip_assert_initialized!();
@@ -167,6 +141,65 @@ impl str::FromStr for Caps {
             Option::<_>::from_glib_full(ffi::gst_caps_from_string(s.to_glib_none().0))
                 .ok_or_else(|| glib::bool_error!("Failed to parse caps from string"))
         }
+    }
+}
+
+impl<'a> std::iter::FromIterator<&'a StructureRef> for Caps {
+    fn from_iter<T: IntoIterator<Item = &'a StructureRef>>(iter: T) -> Self {
+        assert_initialized_main_thread!();
+        let mut caps = Caps::new_empty();
+
+        {
+            let caps = caps.get_mut().unwrap();
+            iter.into_iter()
+                .for_each(|s| caps.append_structure(s.to_owned()));
+        }
+
+        caps
+    }
+}
+
+impl std::iter::FromIterator<Structure> for Caps {
+    fn from_iter<T: IntoIterator<Item = Structure>>(iter: T) -> Self {
+        assert_initialized_main_thread!();
+        let mut caps = Caps::new_empty();
+
+        {
+            let caps = caps.get_mut().unwrap();
+            iter.into_iter().for_each(|s| caps.append_structure(s));
+        }
+
+        caps
+    }
+}
+
+impl<'a, 'b> std::iter::FromIterator<(&'a StructureRef, &'b CapsFeaturesRef)> for Caps {
+    fn from_iter<T: IntoIterator<Item = (&'a StructureRef, &'b CapsFeaturesRef)>>(iter: T) -> Self {
+        assert_initialized_main_thread!();
+        let mut caps = Caps::new_empty();
+
+        {
+            let caps = caps.get_mut().unwrap();
+            iter.into_iter()
+                .for_each(|(s, f)| caps.append_structure_full(s.to_owned(), Some(f.to_owned())));
+        }
+
+        caps
+    }
+}
+
+impl std::iter::FromIterator<(Structure, CapsFeatures)> for Caps {
+    fn from_iter<T: IntoIterator<Item = (Structure, CapsFeatures)>>(iter: T) -> Self {
+        assert_initialized_main_thread!();
+        let mut caps = Caps::new_empty();
+
+        {
+            let caps = caps.get_mut().unwrap();
+            iter.into_iter()
+                .for_each(|(s, f)| caps.append_structure_full(s, Some(f)));
+        }
+
+        caps
     }
 }
 
@@ -561,6 +594,24 @@ define_iter!(
     }
 );
 
+impl<'a> IntoIterator for &'a CapsRef {
+    type IntoIter = IterFeatures<'a>;
+    type Item = (&'a StructureRef, &'a CapsFeaturesRef);
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter_with_features()
+    }
+}
+
+impl<'a> IntoIterator for &'a mut CapsRef {
+    type IntoIter = IterFeaturesMut<'a>;
+    type Item = (&'a mut StructureRef, &'a mut CapsFeaturesRef);
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter_with_features_mut()
+    }
+}
+
 impl fmt::Debug for Caps {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         <CapsRef as fmt::Debug>::fmt(self, f)
@@ -927,13 +978,16 @@ mod tests {
             .structure(Structure::builder("video/x-raw").build())
             .build();
 
-        let audio = Caps::from_iter(caps.iter().filter(|s| s.name() == "audio/x-raw"));
+        let audio = caps
+            .iter()
+            .filter(|s| s.name() == "audio/x-raw")
+            .collect::<Caps>();
         assert_eq!(audio.to_string(), "audio/x-raw");
 
-        let audio = Caps::from_iter_with_features(
-            caps.iter_with_features()
-                .filter(|(s, _)| s.name() == "audio/x-raw"),
-        );
+        let audio = caps
+            .iter_with_features()
+            .filter(|(s, _)| s.name() == "audio/x-raw")
+            .collect::<Caps>();
         assert_eq!(audio.to_string(), "audio/x-raw(ANY)");
     }
 }

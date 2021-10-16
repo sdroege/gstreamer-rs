@@ -520,6 +520,27 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 
 impl<'a> ExactSizeIterator for Iter<'a> {}
 
+impl<'a> IntoIterator for &'a CapsFeaturesRef {
+    type IntoIter = Iter<'a>;
+    type Item = &'a str;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
+    }
+}
+
+impl<'a> std::iter::FromIterator<&'a str> for CapsFeatures {
+    fn from_iter<T: IntoIterator<Item = &'a str>>(iter: T) -> Self {
+        assert_initialized_main_thread!();
+
+        let mut features = CapsFeatures::new_empty();
+
+        iter.into_iter().for_each(|f| features.add(f));
+
+        features
+    }
+}
+
 impl fmt::Debug for CapsFeaturesRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_tuple("CapsFeatures")

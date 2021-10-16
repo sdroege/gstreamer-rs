@@ -835,6 +835,15 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 
 impl<'a> ExactSizeIterator for Iter<'a> {}
 
+impl<'a> IntoIterator for &'a StructureRef {
+    type IntoIter = Iter<'a>;
+    type Item = (&'static str, &'a SendValue);
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
+    }
+}
+
 #[derive(Debug)]
 pub struct Builder {
     s: Structure,

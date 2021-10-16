@@ -903,6 +903,15 @@ define_iter!(
     }
 );
 
+impl<'a> IntoIterator for &'a BufferRef {
+    type IntoIter = Iter<'a>;
+    type Item = &'a MemoryRef;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter_memories()
+    }
+}
+
 define_iter!(
     IterOwned,
     &'a BufferRef,

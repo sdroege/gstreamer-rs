@@ -124,6 +124,15 @@ impl StreamCollection {
     }
 }
 
+impl<'a> IntoIterator for &'a StreamCollection {
+    type IntoIter = Iter<'a>;
+    type Item = Stream;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
+    }
+}
+
 pub struct Debug<'a>(&'a StreamCollection);
 
 impl<'a> fmt::Debug for Debug<'a> {
