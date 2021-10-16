@@ -87,7 +87,7 @@ pub trait AudioDecoderImpl: AudioDecoderImplExt + ElementImpl {
     fn propose_allocation(
         &self,
         element: &Self::Type,
-        query: &mut gst::QueryRef,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage> {
         self.parent_propose_allocation(element, query)
     }
@@ -95,7 +95,7 @@ pub trait AudioDecoderImpl: AudioDecoderImplExt + ElementImpl {
     fn decide_allocation(
         &self,
         element: &Self::Type,
-        query: &mut gst::QueryRef,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage> {
         self.parent_decide_allocation(element, query)
     }
@@ -151,13 +151,13 @@ pub trait AudioDecoderImplExt: ObjectSubclass {
     fn parent_propose_allocation(
         &self,
         element: &Self::Type,
-        query: &mut gst::QueryRef,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage>;
 
     fn parent_decide_allocation(
         &self,
         element: &Self::Type,
-        query: &mut gst::QueryRef,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage>;
 }
 
@@ -468,7 +468,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_propose_allocation(
         &self,
         element: &Self::Type,
-        query: &mut gst::QueryRef,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
@@ -495,7 +495,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_decide_allocation(
         &self,
         element: &Self::Type,
-        query: &mut gst::QueryRef,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
@@ -830,7 +830,10 @@ unsafe extern "C" fn audio_decoder_propose_allocation<T: AudioDecoderImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.impl_();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
-    let query = gst::QueryRef::from_mut_ptr(query);
+    let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
+        gst::QueryView::Allocation(allocation) => allocation,
+        _ => unreachable!(),
+    };
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.propose_allocation(wrap.unsafe_cast_ref(), query) {
@@ -851,7 +854,10 @@ unsafe extern "C" fn audio_decoder_decide_allocation<T: AudioDecoderImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.impl_();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
-    let query = gst::QueryRef::from_mut_ptr(query);
+    let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
+        gst::QueryView::Allocation(allocation) => allocation,
+        _ => unreachable!(),
+    };
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.decide_allocation(wrap.unsafe_cast_ref(), query) {

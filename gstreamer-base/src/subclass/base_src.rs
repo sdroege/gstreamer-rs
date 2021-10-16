@@ -111,7 +111,7 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
     fn decide_allocation(
         &self,
         element: &Self::Type,
-        query: &mut gst::QueryRef,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage> {
         self.parent_decide_allocation(element, query)
     }
@@ -180,7 +180,7 @@ pub trait BaseSrcImplExt: ObjectSubclass {
     fn parent_decide_allocation(
         &self,
         element: &Self::Type,
-        query: &mut gst::QueryRef,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage>;
 }
 
@@ -587,7 +587,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
     fn parent_decide_allocation(
         &self,
         element: &Self::Type,
-        query: &mut gst::QueryRef,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
@@ -1025,7 +1025,10 @@ unsafe extern "C" fn base_src_decide_allocation<T: BaseSrcImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.impl_();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
-    let query = gst::QueryRef::from_mut_ptr(query);
+    let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
+        gst::QueryView::Allocation(allocation) => allocation,
+        _ => unreachable!(),
+    };
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.decide_allocation(wrap.unsafe_cast_ref(), query) {

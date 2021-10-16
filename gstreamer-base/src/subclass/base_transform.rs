@@ -138,8 +138,8 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
     fn propose_allocation(
         &self,
         element: &Self::Type,
-        decide_query: &gst::QueryRef,
-        query: &mut gst::QueryRef,
+        decide_query: gst::query::Allocation<&gst::QueryRef>,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage> {
         self.parent_propose_allocation(element, decide_query, query)
     }
@@ -147,7 +147,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
     fn decide_allocation(
         &self,
         element: &Self::Type,
-        query: &mut gst::QueryRef,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage> {
         self.parent_decide_allocation(element, query)
     }
@@ -277,14 +277,14 @@ pub trait BaseTransformImplExt: ObjectSubclass {
     fn parent_propose_allocation(
         &self,
         element: &Self::Type,
-        decide_query: &gst::QueryRef,
-        query: &mut gst::QueryRef,
+        decide_query: gst::query::Allocation<&gst::QueryRef>,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage>;
 
     fn parent_decide_allocation(
         &self,
         element: &Self::Type,
-        query: &mut gst::QueryRef,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage>;
 
     fn parent_copy_metadata(
@@ -717,8 +717,8 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
     fn parent_propose_allocation(
         &self,
         element: &Self::Type,
-        decide_query: &gst::QueryRef,
-        query: &mut gst::QueryRef,
+        decide_query: gst::query::Allocation<&gst::QueryRef>,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
@@ -746,7 +746,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
     fn parent_decide_allocation(
         &self,
         element: &Self::Type,
-        query: &mut gst::QueryRef,
+        query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
@@ -1327,8 +1327,14 @@ unsafe extern "C" fn base_transform_propose_allocation<T: BaseTransformImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.impl_();
     let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
-    let decide_query = gst::QueryRef::from_ptr(decide_query);
-    let query = gst::QueryRef::from_mut_ptr(query);
+    let decide_query = match gst::QueryRef::from_ptr(decide_query).view() {
+        gst::QueryView::Allocation(allocation) => allocation,
+        _ => unreachable!(),
+    };
+    let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
+        gst::QueryView::Allocation(allocation) => allocation,
+        _ => unreachable!(),
+    };
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.propose_allocation(wrap.unsafe_cast_ref(), decide_query, query) {
@@ -1349,7 +1355,10 @@ unsafe extern "C" fn base_transform_decide_allocation<T: BaseTransformImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.impl_();
     let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
-    let query = gst::QueryRef::from_mut_ptr(query);
+    let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
+        gst::QueryView::Allocation(allocation) => allocation,
+        _ => unreachable!(),
+    };
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.decide_allocation(wrap.unsafe_cast_ref(), query) {
