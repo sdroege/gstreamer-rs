@@ -153,7 +153,7 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
         &self,
         element: &Self::Type,
         pad: &AggregatorPad,
-        decide_query: gst::query::Allocation<&gst::QueryRef>,
+        decide_query: Option<gst::query::Allocation<&gst::QueryRef>>,
         query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage> {
         self.parent_propose_allocation(element, pad, decide_query, query)
@@ -289,7 +289,7 @@ pub trait AggregatorImplExt: ObjectSubclass {
         &self,
         element: &Self::Type,
         pad: &AggregatorPad,
-        decide_query: gst::query::Allocation<&gst::QueryRef>,
+        decide_query: Option<gst::query::Allocation<&gst::QueryRef>>,
         query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage>;
 
@@ -692,7 +692,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         &self,
         element: &Self::Type,
         pad: &AggregatorPad,
-        decide_query: gst::query::Allocation<&gst::QueryRef>,
+        decide_query: Option<gst::query::Allocation<&gst::QueryRef>>,
         query: gst::query::Allocation<&mut gst::QueryRef>,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
@@ -704,7 +704,10 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                     if from_glib(f(
                         element.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                         pad.to_glib_none().0,
-                        decide_query.as_mut_ptr(),
+                        decide_query
+                            .as_ref()
+                            .map(|q| q.as_mut_ptr())
+                            .unwrap_or(ptr::null_mut()),
                         query.as_mut_ptr(),
                     )) {
                         Ok(())
@@ -1176,9 +1179,13 @@ unsafe extern "C" fn aggregator_propose_allocation<T: AggregatorImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
-    let decide_query = match gst::QueryRef::from_ptr(decide_query).view() {
-        gst::QueryView::Allocation(allocation) => allocation,
-        _ => unreachable!(),
+    let decide_query = if decide_query.is_null() {
+        None
+    } else {
+        match gst::QueryRef::from_ptr(decide_query).view() {
+            gst::QueryView::Allocation(allocation) => Some(allocation),
+            _ => unreachable!(),
+        }
     };
     let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
         gst::QueryView::Allocation(allocation) => allocation,
