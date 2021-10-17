@@ -413,7 +413,7 @@ status = "generate"
     name = "select_streams"
     version = "1.10"
     [[object.member]]
-    name = "stream_selection"
+    name = "stream_collection"
     version = "1.10"
     [[object.member]]
     name = "stream_group_done"

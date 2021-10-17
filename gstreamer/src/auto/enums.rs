@@ -778,6 +778,8 @@ pub enum EventType {
     Caps,
     #[doc(alias = "GST_EVENT_SEGMENT")]
     Segment,
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "GST_EVENT_STREAM_COLLECTION")]
     StreamCollection,
     #[doc(alias = "GST_EVENT_TAG")]
@@ -888,6 +890,7 @@ impl IntoGlib for EventType {
             Self::StreamStart => ffi::GST_EVENT_STREAM_START,
             Self::Caps => ffi::GST_EVENT_CAPS,
             Self::Segment => ffi::GST_EVENT_SEGMENT,
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             Self::StreamCollection => ffi::GST_EVENT_STREAM_COLLECTION,
             Self::Tag => ffi::GST_EVENT_TAG,
             Self::Buffersize => ffi::GST_EVENT_BUFFERSIZE,
@@ -934,6 +937,7 @@ impl FromGlib<ffi::GstEventType> for EventType {
             ffi::GST_EVENT_STREAM_START => Self::StreamStart,
             ffi::GST_EVENT_CAPS => Self::Caps,
             ffi::GST_EVENT_SEGMENT => Self::Segment,
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_EVENT_STREAM_COLLECTION => Self::StreamCollection,
             ffi::GST_EVENT_TAG => Self::Tag,
             ffi::GST_EVENT_BUFFERSIZE => Self::Buffersize,

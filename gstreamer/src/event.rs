@@ -212,6 +212,7 @@ impl EventRef {
             ffi::GST_EVENT_STREAM_START => EventView::StreamStart(StreamStart(self)),
             ffi::GST_EVENT_CAPS => EventView::Caps(Caps(self)),
             ffi::GST_EVENT_SEGMENT => EventView::Segment(Segment(self)),
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_EVENT_STREAM_COLLECTION => EventView::StreamCollection(StreamCollection(self)),
             ffi::GST_EVENT_TAG => EventView::Tag(Tag(self)),
             ffi::GST_EVENT_BUFFERSIZE => EventView::Buffersize(Buffersize(self)),
@@ -230,6 +231,7 @@ impl EventRef {
             ffi::GST_EVENT_STEP => EventView::Step(Step(self)),
             ffi::GST_EVENT_RECONFIGURE => EventView::Reconfigure(Reconfigure(self)),
             ffi::GST_EVENT_TOC_SELECT => EventView::TocSelect(TocSelect(self)),
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_EVENT_SELECT_STREAMS => EventView::SelectStreams(SelectStreams(self)),
             ffi::GST_EVENT_CUSTOM_UPSTREAM => EventView::CustomUpstream(CustomUpstream(self)),
             ffi::GST_EVENT_CUSTOM_DOWNSTREAM => EventView::CustomDownstream(CustomDownstream(self)),
@@ -293,6 +295,8 @@ pub enum EventView<T> {
     StreamStart(StreamStart<T>),
     Caps(Caps<T>),
     Segment(Segment<T>),
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     StreamCollection(StreamCollection<T>),
     Tag(Tag<T>),
     Buffersize(Buffersize<T>),
@@ -312,6 +316,8 @@ pub enum EventView<T> {
     Step(Step<T>),
     Reconfigure(Reconfigure<T>),
     TocSelect(TocSelect<T>),
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     SelectStreams(SelectStreams<T>),
     CustomUpstream(CustomUpstream<T>),
     CustomDownstream(CustomDownstream<T>),
@@ -544,7 +550,11 @@ impl<T: AsPtr> Segment<T> {
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 declare_concrete_event!(@sticky StreamCollection, T);
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StreamCollection<Event> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
@@ -562,6 +572,8 @@ impl StreamCollection<Event> {
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<T: AsPtr> StreamCollection<T> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
@@ -1183,7 +1195,11 @@ impl<T: AsPtr> TocSelect<T> {
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 declare_concrete_event!(SelectStreams, T);
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl SelectStreams<Event> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
@@ -1201,6 +1217,8 @@ impl SelectStreams<Event> {
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<T: AsPtr> SelectStreams<T> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
