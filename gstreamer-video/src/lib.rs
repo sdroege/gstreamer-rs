@@ -61,8 +61,11 @@ mod functions;
 pub use crate::functions::*;
 mod video_rectangle;
 pub use crate::video_rectangle::*;
-mod video_overlay_composition;
-pub use crate::video_overlay_composition::*;
+pub mod video_overlay_composition;
+pub use crate::video_overlay_composition::{
+    VideoOverlayComposition, VideoOverlayCompositionRef, VideoOverlayRectangle,
+    VideoOverlayRectangleRef,
+};
 pub mod video_meta;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]

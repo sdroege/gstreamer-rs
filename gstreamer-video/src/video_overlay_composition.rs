@@ -288,8 +288,8 @@ impl VideoOverlayCompositionRef {
         }
     }
 
-    pub fn iter(&self) -> VideoOverlayCompositionIterator {
-        VideoOverlayCompositionIterator {
+    pub fn iter(&self) -> Iter {
+        Iter {
             composition: self,
             idx: 0,
             len: self.n_rectangles(),
@@ -298,7 +298,7 @@ impl VideoOverlayCompositionRef {
 }
 
 impl<'a> IntoIterator for &'a VideoOverlayComposition {
-    type IntoIter = VideoOverlayCompositionIterator<'a>;
+    type IntoIter = Iter<'a>;
     type Item = VideoOverlayRectangle;
 
     fn into_iter(self) -> Self::IntoIter {
@@ -306,13 +306,13 @@ impl<'a> IntoIterator for &'a VideoOverlayComposition {
     }
 }
 
-pub struct VideoOverlayCompositionIterator<'a> {
+pub struct Iter<'a> {
     composition: &'a VideoOverlayCompositionRef,
     idx: u32,
     len: u32,
 }
 
-impl<'a> Iterator for VideoOverlayCompositionIterator<'a> {
+impl<'a> Iterator for Iter<'a> {
     type Item = VideoOverlayRectangle;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -337,7 +337,7 @@ impl<'a> Iterator for VideoOverlayCompositionIterator<'a> {
     }
 }
 
-impl<'a> DoubleEndedIterator for VideoOverlayCompositionIterator<'a> {
+impl<'a> DoubleEndedIterator for Iter<'a> {
     fn next_back(&mut self) -> Option<Self::Item> {
         if self.idx == self.len {
             return None;
@@ -351,4 +351,4 @@ impl<'a> DoubleEndedIterator for VideoOverlayCompositionIterator<'a> {
     }
 }
 
-impl<'a> ExactSizeIterator for VideoOverlayCompositionIterator<'a> {}
+impl<'a> ExactSizeIterator for Iter<'a> {}
