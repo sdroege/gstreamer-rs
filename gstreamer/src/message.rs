@@ -109,13 +109,17 @@ impl MessageRef {
             ffi::GST_MESSAGE_HAVE_CONTEXT => MessageView::HaveContext(HaveContext(self)),
             ffi::GST_MESSAGE_DEVICE_ADDED => MessageView::DeviceAdded(DeviceAdded(self)),
             ffi::GST_MESSAGE_DEVICE_REMOVED => MessageView::DeviceRemoved(DeviceRemoved(self)),
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_MESSAGE_PROPERTY_NOTIFY => MessageView::PropertyNotify(PropertyNotify(self)),
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_MESSAGE_STREAM_COLLECTION => {
                 MessageView::StreamCollection(StreamCollection(self))
             }
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_MESSAGE_STREAMS_SELECTED => {
                 MessageView::StreamsSelected(StreamsSelected(self))
             }
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             ffi::GST_MESSAGE_DEVICE_CHANGED => MessageView::DeviceChanged(DeviceChanged(self)),
             _ => MessageView::Other,
         }
@@ -203,10 +207,20 @@ pub enum MessageView<'a> {
     HaveContext(HaveContext<'a>),
     DeviceAdded(DeviceAdded<'a>),
     DeviceRemoved(DeviceRemoved<'a>),
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     PropertyNotify(PropertyNotify<'a>),
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     StreamCollection(StreamCollection<'a>),
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     StreamsSelected(StreamsSelected<'a>),
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     Redirect(Redirect<'a>),
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     DeviceChanged(DeviceChanged<'a>),
     Other,
 }
@@ -1389,25 +1403,23 @@ impl<'a> DeviceRemoved<'a> {
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 declare_concrete_message!(PropertyNotify);
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> PropertyNotify<'a> {
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(property_name: &str) -> Message {
         skip_assert_initialized!();
         Self::builder(property_name).build()
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn builder(property_name: &str) -> PropertyNotifyBuilder {
         assert_initialized_main_thread!();
         PropertyNotifyBuilder::new(property_name)
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get(&self) -> (Object, &str, Option<&'a glib::Value>) {
         unsafe {
             let mut object = ptr::null_mut();
@@ -1434,25 +1446,23 @@ impl<'a> PropertyNotify<'a> {
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 declare_concrete_message!(StreamCollection);
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamCollection<'a> {
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(collection: &crate::StreamCollection) -> Message {
         skip_assert_initialized!();
         Self::builder(collection).build()
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn builder(collection: &crate::StreamCollection) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         StreamCollectionBuilder::new(collection)
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_stream_collection")]
     #[doc(alias = "gst_message_parse_stream_collection")]
     pub fn stream_collection(&self) -> crate::StreamCollection {
@@ -1466,25 +1476,23 @@ impl<'a> StreamCollection<'a> {
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 declare_concrete_message!(StreamsSelected);
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamsSelected<'a> {
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(collection: &crate::StreamCollection) -> Message {
         skip_assert_initialized!();
         Self::builder(collection).build()
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn builder(collection: &crate::StreamCollection) -> StreamsSelectedBuilder {
         assert_initialized_main_thread!();
         StreamsSelectedBuilder::new(collection)
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_stream_collection")]
     pub fn stream_collection(&self) -> crate::StreamCollection {
         unsafe {
@@ -1496,8 +1504,6 @@ impl<'a> StreamsSelected<'a> {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_streams")]
     #[doc(alias = "gst_message_streams_selected_get_size")]
     #[doc(alias = "gst_message_streams_selected_get_stream")]
@@ -1517,25 +1523,23 @@ impl<'a> StreamsSelected<'a> {
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 declare_concrete_message!(Redirect);
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> Redirect<'a> {
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(location: &str) -> Message {
         skip_assert_initialized!();
         Self::builder(location).build()
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn builder(location: &str) -> RedirectBuilder {
         assert_initialized_main_thread!();
         RedirectBuilder::new(location)
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_entries")]
     #[doc(alias = "gst_message_get_num_redirect_entries")]
     pub fn entries(&self) -> Vec<(&str, Option<TagList>, Option<&StructureRef>)> {
@@ -1573,18 +1577,18 @@ impl<'a> Redirect<'a> {
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 declare_concrete_message!(DeviceChanged);
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> DeviceChanged<'a> {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(device: &'a crate::Device, changed_device: &'a crate::Device) -> Message {
         skip_assert_initialized!();
         Self::builder(device, changed_device).build()
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn builder(
         device: &'a crate::Device,
         changed_device: &'a crate::Device,
@@ -1593,8 +1597,6 @@ impl<'a> DeviceChanged<'a> {
         DeviceChangedBuilder::new(device, changed_device)
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "get_device_changed")]
     #[doc(alias = "gst_message_parse_device_changed")]
     pub fn device_changed(&self) -> (crate::Device, crate::Device) {
