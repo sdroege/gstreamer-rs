@@ -1,6 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use crate::structure::*;
+use crate::ClockTime;
 use crate::GenericFormattedValue;
 
 use std::cmp;
@@ -224,6 +225,10 @@ impl EventRef {
             ffi::GST_EVENT_PROTECTION => EventView::Protection(Protection(self)),
             ffi::GST_EVENT_SEGMENT_DONE => EventView::SegmentDone(SegmentDone(self)),
             ffi::GST_EVENT_GAP => EventView::Gap(Gap(self)),
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            ffi::GST_EVENT_INSTANT_RATE_CHANGE => {
+                EventView::InstantRateChange(InstantRateChange(self))
+            }
             ffi::GST_EVENT_QOS => EventView::Qos(Qos(self)),
             ffi::GST_EVENT_SEEK => EventView::Seek(Seek(self)),
             ffi::GST_EVENT_NAVIGATION => EventView::Navigation(Navigation(self)),
@@ -233,6 +238,10 @@ impl EventRef {
             ffi::GST_EVENT_TOC_SELECT => EventView::TocSelect(TocSelect(self)),
             #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_EVENT_SELECT_STREAMS => EventView::SelectStreams(SelectStreams(self)),
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            ffi::GST_EVENT_INSTANT_RATE_SYNC_TIME => {
+                EventView::InstantRateSyncTime(InstantRateSyncTime(self))
+            }
             ffi::GST_EVENT_CUSTOM_UPSTREAM => EventView::CustomUpstream(CustomUpstream(self)),
             ffi::GST_EVENT_CUSTOM_DOWNSTREAM => EventView::CustomDownstream(CustomDownstream(self)),
             ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB => {
@@ -309,6 +318,9 @@ pub enum EventView<T> {
     Protection(Protection<T>),
     SegmentDone(SegmentDone<T>),
     Gap(Gap<T>),
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    InstantRateChange(InstantRateChange<T>),
     Qos(Qos<T>),
     Seek(Seek<T>),
     Navigation(Navigation<T>),
@@ -319,6 +331,9 @@ pub enum EventView<T> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     SelectStreams(SelectStreams<T>),
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    InstantRateSyncTime(InstantRateSyncTime<T>),
     CustomUpstream(CustomUpstream<T>),
     CustomDownstream(CustomDownstream<T>),
     CustomDownstreamOob(CustomDownstreamOob<T>),
@@ -873,22 +888,19 @@ impl<T: AsPtr> SegmentDone<T> {
 declare_concrete_event!(Gap, T);
 impl Gap<Event> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(
-        timestamp: crate::ClockTime,
-        duration: impl Into<Option<crate::ClockTime>>,
-    ) -> Event {
+    pub fn new(timestamp: ClockTime, duration: impl Into<Option<ClockTime>>) -> Event {
         skip_assert_initialized!();
         Self::builder(timestamp).duration(duration).build()
     }
 
-    pub fn builder<'a>(timestamp: crate::ClockTime) -> GapBuilder<'a> {
+    pub fn builder<'a>(timestamp: ClockTime) -> GapBuilder<'a> {
         assert_initialized_main_thread!();
         GapBuilder::new(timestamp)
     }
 }
 
 impl<T: AsPtr> Gap<T> {
-    pub fn get(&self) -> (crate::ClockTime, Option<crate::ClockTime>) {
+    pub fn get(&self) -> (ClockTime, Option<ClockTime>) {
         unsafe {
             let mut timestamp = mem::MaybeUninit::uninit();
             let mut duration = mem::MaybeUninit::uninit();
@@ -918,6 +930,46 @@ impl<T: AsPtr> Gap<T> {
     }
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+declare_concrete_event!(@sticky InstantRateChange, T);
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl InstantRateChange<Event> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(multiplier: f64, new_flags: crate::SegmentFlags) -> Event {
+        skip_assert_initialized!();
+        Self::builder(multiplier, new_flags).build()
+    }
+
+    pub fn builder<'a>(
+        multiplier: f64,
+        new_flags: crate::SegmentFlags,
+    ) -> InstantRateChangeBuilder<'a> {
+        assert_initialized_main_thread!();
+        InstantRateChangeBuilder::new(multiplier, new_flags)
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl<T: AsPtr> InstantRateChange<T> {
+    pub fn get(&self) -> (f64, crate::SegmentFlags) {
+        unsafe {
+            let mut multiplier = mem::MaybeUninit::uninit();
+            let mut new_flags = mem::MaybeUninit::uninit();
+
+            ffi::gst_event_parse_instant_rate_change(
+                self.0.as_ptr(),
+                multiplier.as_mut_ptr(),
+                new_flags.as_mut_ptr(),
+            );
+
+            (multiplier.assume_init(), from_glib(new_flags.assume_init()))
+        }
+    }
+}
+
 declare_concrete_event!(Qos, T);
 impl Qos<Event> {
     #[allow(clippy::new_ret_no_self)]
@@ -925,7 +977,7 @@ impl Qos<Event> {
         type_: crate::QOSType,
         proportion: f64,
         diff: i64,
-        timestamp: impl Into<Option<crate::ClockTime>>,
+        timestamp: impl Into<Option<ClockTime>>,
     ) -> Event {
         skip_assert_initialized!();
         Self::builder(type_, proportion, diff)
@@ -940,7 +992,7 @@ impl Qos<Event> {
 }
 
 impl<T: AsPtr> Qos<T> {
-    pub fn get(&self) -> (crate::QOSType, f64, i64, Option<crate::ClockTime>) {
+    pub fn get(&self) -> (crate::QOSType, f64, i64, Option<ClockTime>) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
             let mut proportion = mem::MaybeUninit::uninit();
@@ -1043,7 +1095,7 @@ impl<T: AsPtr> Seek<T> {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "get_trickmode_interval")]
     #[doc(alias = "gst_event_parse_seek_trickmode_interval")]
-    pub fn trickmode_interval(&self) -> Option<crate::ClockTime> {
+    pub fn trickmode_interval(&self) -> Option<ClockTime> {
         unsafe {
             let mut trickmode_interval = mem::MaybeUninit::uninit();
 
@@ -1074,12 +1126,12 @@ impl Navigation<Event> {
 declare_concrete_event!(Latency, T);
 impl Latency<Event> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(latency: crate::ClockTime) -> Event {
+    pub fn new(latency: ClockTime) -> Event {
         skip_assert_initialized!();
         Self::builder(latency).build()
     }
 
-    pub fn builder<'a>(latency: crate::ClockTime) -> LatencyBuilder<'a> {
+    pub fn builder<'a>(latency: ClockTime) -> LatencyBuilder<'a> {
         assert_initialized_main_thread!();
         LatencyBuilder::new(latency)
     }
@@ -1088,7 +1140,7 @@ impl Latency<Event> {
 impl<T: AsPtr> Latency<T> {
     #[doc(alias = "get_latency")]
     #[doc(alias = "gst_event_parse_latency")]
-    pub fn latency(&self) -> crate::ClockTime {
+    pub fn latency(&self) -> ClockTime {
         unsafe {
             let mut latency = mem::MaybeUninit::uninit();
 
@@ -1231,6 +1283,65 @@ impl<T: AsPtr> SelectStreams<T> {
             ffi::gst_event_parse_select_streams(self.0.as_ptr(), &mut streams);
 
             FromGlibPtrContainer::from_glib_full(streams)
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+declare_concrete_event!(InstantRateSyncTime, T);
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl InstantRateSyncTime<Event> {
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(
+        rate_multiplier: f64,
+        running_time: ClockTime,
+        upstream_running_time: ClockTime,
+    ) -> Event {
+        skip_assert_initialized!();
+        Self::builder(rate_multiplier, running_time, upstream_running_time).build()
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn builder<'a>(
+        rate_multiplier: f64,
+        running_time: ClockTime,
+        upstream_running_time: ClockTime,
+    ) -> InstantRateSyncTimeBuilder<'a> {
+        assert_initialized_main_thread!();
+        InstantRateSyncTimeBuilder::new(rate_multiplier, running_time, upstream_running_time)
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl<T: AsPtr> InstantRateSyncTime<T> {
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "parse_instant_rate_sync_time")]
+    #[doc(alias = "gst_event_parse_instant_rate_sync_time")]
+    pub fn get(&self) -> (f64, ClockTime, ClockTime) {
+        unsafe {
+            let mut rate_multiplier = mem::MaybeUninit::uninit();
+            let mut running_time = mem::MaybeUninit::uninit();
+            let mut upstream_running_time = mem::MaybeUninit::uninit();
+
+            ffi::gst_event_parse_instant_rate_sync_time(
+                self.0.as_ptr(),
+                rate_multiplier.as_mut_ptr(),
+                running_time.as_mut_ptr(),
+                upstream_running_time.as_mut_ptr(),
+            );
+
+            (
+                rate_multiplier.assume_init(),
+                try_from_glib(running_time.assume_init()).expect("undefined timestamp"),
+                try_from_glib(upstream_running_time.assume_init()).expect("undefined timestamp"),
+            )
         }
     }
 }
@@ -1577,6 +1688,41 @@ impl<'a> StreamCollectionBuilder<'a> {
     });
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+pub struct InstantRateSyncTimeBuilder<'a> {
+    builder: EventBuilder<'a>,
+    rate_multiplier: f64,
+    running_time: ClockTime,
+    upstream_running_time: ClockTime,
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl<'a> InstantRateSyncTimeBuilder<'a> {
+    fn new(
+        rate_multiplier: f64,
+        running_time: ClockTime,
+        upstream_running_time: ClockTime,
+    ) -> Self {
+        skip_assert_initialized!();
+        Self {
+            builder: EventBuilder::new(),
+            rate_multiplier,
+            running_time,
+            upstream_running_time,
+        }
+    }
+
+    event_builder_generic_impl!(|s: &Self| {
+        ffi::gst_event_new_instant_rate_sync_time(
+            s.rate_multiplier,
+            s.running_time.into_glib(),
+            s.upstream_running_time.into_glib(),
+        )
+    });
+}
+
 pub struct TagBuilder<'a> {
     builder: EventBuilder<'a>,
     tags: Option<crate::TagList>,
@@ -1761,14 +1907,14 @@ impl<'a> SegmentDoneBuilder<'a> {
 
 pub struct GapBuilder<'a> {
     builder: EventBuilder<'a>,
-    timestamp: crate::ClockTime,
-    duration: Option<crate::ClockTime>,
+    timestamp: ClockTime,
+    duration: Option<ClockTime>,
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     gap_flags: Option<crate::GapFlags>,
 }
 
 impl<'a> GapBuilder<'a> {
-    fn new(timestamp: crate::ClockTime) -> Self {
+    fn new(timestamp: ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
@@ -1786,7 +1932,7 @@ impl<'a> GapBuilder<'a> {
         self
     }
 
-    pub fn duration(mut self, duration: impl Into<Option<crate::ClockTime>>) -> Self {
+    pub fn duration(mut self, duration: impl Into<Option<ClockTime>>) -> Self {
         self.duration = duration.into();
         self
     }
@@ -1804,12 +1950,38 @@ impl<'a> GapBuilder<'a> {
     });
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+pub struct InstantRateChangeBuilder<'a> {
+    builder: EventBuilder<'a>,
+    multiplier: f64,
+    new_flags: crate::SegmentFlags,
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl<'a> InstantRateChangeBuilder<'a> {
+    fn new(multiplier: f64, new_flags: crate::SegmentFlags) -> Self {
+        skip_assert_initialized!();
+        Self {
+            builder: EventBuilder::new(),
+            multiplier,
+            new_flags,
+        }
+    }
+
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_instant_rate_change(
+        s.multiplier,
+        s.new_flags.into_glib()
+    ));
+}
+
 pub struct QosBuilder<'a> {
     builder: EventBuilder<'a>,
     type_: crate::QOSType,
     proportion: f64,
     diff: i64,
-    timestamp: Option<crate::ClockTime>,
+    timestamp: Option<ClockTime>,
 }
 
 impl<'a> QosBuilder<'a> {
@@ -1824,7 +1996,7 @@ impl<'a> QosBuilder<'a> {
         }
     }
 
-    pub fn timestamp(mut self, timestamp: impl Into<Option<crate::ClockTime>>) -> Self {
+    pub fn timestamp(mut self, timestamp: impl Into<Option<ClockTime>>) -> Self {
         self.timestamp = timestamp.into();
         self
     }
@@ -1846,7 +2018,7 @@ pub struct SeekBuilder<'a> {
     stop_type: crate::SeekType,
     stop: GenericFormattedValue,
     #[allow(unused)]
-    trickmode_interval: Option<crate::ClockTime>,
+    trickmode_interval: Option<ClockTime>,
 }
 
 impl<'a> SeekBuilder<'a> {
@@ -1871,10 +2043,7 @@ impl<'a> SeekBuilder<'a> {
         }
     }
 
-    pub fn trickmode_interval(
-        mut self,
-        trickmode_interval: impl Into<Option<crate::ClockTime>>,
-    ) -> Self {
+    pub fn trickmode_interval(mut self, trickmode_interval: impl Into<Option<ClockTime>>) -> Self {
         self.trickmode_interval = trickmode_interval.into();
         self
     }
@@ -1924,11 +2093,11 @@ impl<'a> NavigationBuilder<'a> {
 
 pub struct LatencyBuilder<'a> {
     builder: EventBuilder<'a>,
-    latency: crate::ClockTime,
+    latency: ClockTime,
 }
 
 impl<'a> LatencyBuilder<'a> {
-    fn new(latency: crate::ClockTime) -> Self {
+    fn new(latency: ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
