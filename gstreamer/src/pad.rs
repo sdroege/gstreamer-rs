@@ -140,11 +140,15 @@ pub trait PadExtManual: 'static {
     fn proxy_query_accept_caps(&self, query: &mut QueryRef) -> bool;
 
     #[doc(alias = "gst_pad_event_default")]
-    fn event_default<P: IsA<crate::Object>>(&self, parent: Option<&P>, event: Event) -> bool;
+    fn event_default<P: IsA<crate::Object>>(
+        &self,
+        parent: Option<&P>,
+        event: impl Into<Event>,
+    ) -> bool;
     #[doc(alias = "gst_pad_push_event")]
-    fn push_event(&self, event: Event) -> bool;
+    fn push_event(&self, event: impl Into<Event>) -> bool;
     #[doc(alias = "gst_pad_send_event")]
-    fn send_event(&self, event: Event) -> bool;
+    fn send_event(&self, event: impl Into<Event>) -> bool;
 
     #[doc(alias = "gst_pad_iterate_internal_links")]
     fn iterate_internal_links(&self) -> crate::Iterator<Pad>;
@@ -277,6 +281,10 @@ pub trait PadExtManual: 'static {
         &self,
         func: F,
     );
+
+    #[doc(alias = "gst_pad_get_sticky_event")]
+    #[doc(alias = "get_sticky_event")]
+    fn sticky_event<T: crate::event::StickyEventType>(&self, idx: u32) -> Option<T>;
 
     fn set_pad_flags(&self, flags: PadFlags);
 
@@ -482,31 +490,35 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn event_default<P: IsA<crate::Object>>(&self, parent: Option<&P>, event: Event) -> bool {
+    fn event_default<P: IsA<crate::Object>>(
+        &self,
+        parent: Option<&P>,
+        event: impl Into<Event>,
+    ) -> bool {
         skip_assert_initialized!();
         unsafe {
             from_glib(ffi::gst_pad_event_default(
                 self.as_ref().to_glib_none().0,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
-                event.into_ptr(),
+                event.into().into_ptr(),
             ))
         }
     }
 
-    fn push_event(&self, event: Event) -> bool {
+    fn push_event(&self, event: impl Into<Event>) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_push_event(
                 self.as_ref().to_glib_none().0,
-                event.into_ptr(),
+                event.into().into_ptr(),
             ))
         }
     }
 
-    fn send_event(&self, event: Event) -> bool {
+    fn send_event(&self, event: impl Into<Event>) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_send_event(
                 self.as_ref().to_glib_none().0,
-                event.into_ptr(),
+                event.into().into_ptr(),
             ))
         }
     }
@@ -1003,6 +1015,22 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 Some(trampoline),
                 func_ptr,
             );
+        }
+    }
+
+    fn sticky_event<T: crate::event::StickyEventType>(&self, idx: u32) -> Option<T> {
+        unsafe {
+            let ptr = ffi::gst_pad_get_sticky_event(
+                self.as_ref().to_glib_none().0,
+                T::TYPE.into_glib(),
+                idx,
+            );
+
+            if ptr.is_null() {
+                None
+            } else {
+                Some(T::from_event(from_glib_full(ptr)))
+            }
         }
     }
 

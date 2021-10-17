@@ -6,7 +6,6 @@
 use crate::Caps;
 use crate::Element;
 use crate::Event;
-use crate::EventType;
 use crate::FlowError;
 use crate::FlowSuccess;
 use crate::Object;
@@ -116,10 +115,6 @@ pub trait PadExt: 'static {
     #[doc(alias = "gst_pad_get_single_internal_link")]
     #[doc(alias = "get_single_internal_link")]
     fn single_internal_link(&self) -> Option<Pad>;
-
-    #[doc(alias = "gst_pad_get_sticky_event")]
-    #[doc(alias = "get_sticky_event")]
-    fn sticky_event(&self, event_type: EventType, idx: u32) -> Option<Event>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
@@ -385,16 +380,6 @@ impl<O: IsA<Pad>> PadExt for O {
         unsafe {
             from_glib_full(ffi::gst_pad_get_single_internal_link(
                 self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn sticky_event(&self, event_type: EventType, idx: u32) -> Option<Event> {
-        unsafe {
-            from_glib_full(ffi::gst_pad_get_sticky_event(
-                self.as_ref().to_glib_none().0,
-                event_type.into_glib(),
-                idx,
             ))
         }
     }

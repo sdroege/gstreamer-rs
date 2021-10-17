@@ -123,7 +123,7 @@ pub trait ElementExtManual: 'static {
     fn query(&self, query: &mut QueryRef) -> bool;
 
     #[doc(alias = "gst_element_send_event")]
-    fn send_event(&self, event: Event) -> bool;
+    fn send_event(&self, event: impl Into<Event>) -> bool;
 
     #[doc(alias = "get_metadata")]
     fn metadata<'a>(&self, key: &str) -> Option<&'a str>;
@@ -303,11 +303,11 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn send_event(&self, event: Event) -> bool {
+    fn send_event(&self, event: impl Into<Event>) -> bool {
         unsafe {
             from_glib(ffi::gst_element_send_event(
                 self.as_ref().to_glib_none().0,
-                event.into_ptr(),
+                event.into().into_ptr(),
             ))
         }
     }

@@ -203,7 +203,7 @@ impl EventRef {
         unsafe { from_glib((*self.as_ptr()).type_) }
     }
 
-    pub fn view(&self) -> EventView {
+    pub fn view(&self) -> EventView<&EventRef> {
         let type_ = unsafe { (*self.as_ptr()).type_ };
 
         match type_ {
@@ -214,8 +214,9 @@ impl EventRef {
             ffi::GST_EVENT_SEGMENT => EventView::Segment(Segment(self)),
             ffi::GST_EVENT_STREAM_COLLECTION => EventView::StreamCollection(StreamCollection(self)),
             ffi::GST_EVENT_TAG => EventView::Tag(Tag(self)),
-            ffi::GST_EVENT_BUFFERSIZE => EventView::BufferSize(BufferSize(self)),
+            ffi::GST_EVENT_BUFFERSIZE => EventView::Buffersize(Buffersize(self)),
             ffi::GST_EVENT_SINK_MESSAGE => EventView::SinkMessage(SinkMessage(self)),
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_EVENT_STREAM_GROUP_DONE => EventView::StreamGroupDone(StreamGroupDone(self)),
             ffi::GST_EVENT_EOS => EventView::Eos(Eos(self)),
             ffi::GST_EVENT_TOC => EventView::Toc(Toc(self)),
@@ -240,7 +241,7 @@ impl EventRef {
             }
             ffi::GST_EVENT_CUSTOM_BOTH => EventView::CustomBoth(CustomBoth(self)),
             ffi::GST_EVENT_CUSTOM_BOTH_OOB => EventView::CustomBothOob(CustomBothOob(self)),
-            _ => EventView::Other,
+            _ => EventView::Other(Other(self)),
         }
     }
 }
@@ -262,97 +263,161 @@ impl fmt::Debug for EventRef {
     }
 }
 
+pub unsafe trait AsPtr {
+    unsafe fn as_ptr(&self) -> *mut ffi::GstEvent;
+}
+
+unsafe impl AsPtr for Event {
+    unsafe fn as_ptr(&self) -> *mut ffi::GstEvent {
+        EventRef::as_ptr(self) as *mut ffi::GstEvent
+    }
+}
+
+unsafe impl<'a> AsPtr for &'a EventRef {
+    unsafe fn as_ptr(&self) -> *mut ffi::GstEvent {
+        EventRef::as_ptr(self) as *mut ffi::GstEvent
+    }
+}
+
+pub trait StickyEventType {
+    const TYPE: EventType;
+
+    unsafe fn from_event(event: Event) -> Self;
+}
+
 #[derive(Debug)]
-pub enum EventView<'a> {
-    FlushStart(FlushStart<'a>),
-    FlushStop(FlushStop<'a>),
-    StreamStart(StreamStart<'a>),
-    Caps(Caps<'a>),
-    Segment(Segment<'a>),
-    StreamCollection(StreamCollection<'a>),
-    Tag(Tag<'a>),
-    BufferSize(BufferSize<'a>),
-    SinkMessage(SinkMessage<'a>),
-    StreamGroupDone(StreamGroupDone<'a>),
-    Eos(Eos<'a>),
-    Toc(Toc<'a>),
-    Protection(Protection<'a>),
-    SegmentDone(SegmentDone<'a>),
-    Gap(Gap<'a>),
-    Qos(Qos<'a>),
-    Seek(Seek<'a>),
-    Navigation(Navigation<'a>),
-    Latency(Latency<'a>),
-    Step(Step<'a>),
-    Reconfigure(Reconfigure<'a>),
-    TocSelect(TocSelect<'a>),
-    SelectStreams(SelectStreams<'a>),
-    CustomUpstream(CustomUpstream<'a>),
-    CustomDownstream(CustomDownstream<'a>),
-    CustomDownstreamOob(CustomDownstreamOob<'a>),
-    CustomDownstreamSticky(CustomDownstreamSticky<'a>),
-    CustomBoth(CustomBoth<'a>),
-    CustomBothOob(CustomBothOob<'a>),
-    Other,
+pub enum EventView<T> {
+    FlushStart(FlushStart<T>),
+    FlushStop(FlushStop<T>),
+    StreamStart(StreamStart<T>),
+    Caps(Caps<T>),
+    Segment(Segment<T>),
+    StreamCollection(StreamCollection<T>),
+    Tag(Tag<T>),
+    Buffersize(Buffersize<T>),
+    SinkMessage(SinkMessage<T>),
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    StreamGroupDone(StreamGroupDone<T>),
+    Eos(Eos<T>),
+    Toc(Toc<T>),
+    Protection(Protection<T>),
+    SegmentDone(SegmentDone<T>),
+    Gap(Gap<T>),
+    Qos(Qos<T>),
+    Seek(Seek<T>),
+    Navigation(Navigation<T>),
+    Latency(Latency<T>),
+    Step(Step<T>),
+    Reconfigure(Reconfigure<T>),
+    TocSelect(TocSelect<T>),
+    SelectStreams(SelectStreams<T>),
+    CustomUpstream(CustomUpstream<T>),
+    CustomDownstream(CustomDownstream<T>),
+    CustomDownstreamOob(CustomDownstreamOob<T>),
+    CustomDownstreamSticky(CustomDownstreamSticky<T>),
+    CustomBoth(CustomBoth<T>),
+    CustomBothOob(CustomBothOob<T>),
+    Other(Other<T>),
     __NonExhaustive,
 }
 
-macro_rules! declare_concrete_event(
-    ($name:ident) => {
-        #[derive(Debug)]
-        pub struct $name<'a>(&'a EventRef);
+macro_rules! declare_concrete_event {
+    (@sticky $name:ident, $param:ident) => {
+        declare_concrete_event!($name, $param);
 
-        impl<'a> Deref for $name<'a> {
+        impl StickyEventType for $name<Event> {
+            const TYPE: EventType = EventType::$name;
+
+            unsafe fn from_event(event: Event) -> Self {
+                Self(event)
+            }
+        }
+    };
+    ($name:ident, $param:ident) => {
+        #[derive(Debug)]
+        pub struct $name<$param>($param);
+
+        impl<'a> $name<&'a EventRef> {
+            pub fn event(&self) -> &EventRef {
+                self.0
+            }
+        }
+
+        impl<'a> Deref for $name<&'a EventRef> {
             type Target = EventRef;
 
             fn deref(&self) -> &Self::Target {
                 self.0
             }
         }
-    }
-);
 
-declare_concrete_event!(FlushStart);
-impl<'a> FlushStart<'a> {
+        impl Deref for $name<Event> {
+            type Target = EventRef;
+
+            fn deref(&self) -> &Self::Target {
+                &self.0
+            }
+        }
+
+        impl $name<Event> {
+            pub fn get_mut(&mut self) -> Option<&mut EventRef> {
+                self.0.get_mut()
+            }
+        }
+
+        impl From<$name<Event>> for Event {
+            fn from(concrete: $name<Event>) -> Self {
+                skip_assert_initialized!();
+                concrete.0
+            }
+        }
+    };
+}
+
+declare_concrete_event!(FlushStart, T);
+impl FlushStart<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Event {
         skip_assert_initialized!();
         Self::builder().build()
     }
 
-    pub fn builder() -> FlushStartBuilder<'a> {
+    pub fn builder<'a>() -> FlushStartBuilder<'a> {
         assert_initialized_main_thread!();
         FlushStartBuilder::new()
     }
 }
 
-declare_concrete_event!(FlushStop);
-impl<'a> FlushStop<'a> {
+declare_concrete_event!(FlushStop, T);
+impl FlushStop<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(reset_time: bool) -> Event {
         skip_assert_initialized!();
         Self::builder(reset_time).build()
     }
 
-    pub fn builder(reset_time: bool) -> FlushStopBuilder<'a> {
+    pub fn builder<'a>(reset_time: bool) -> FlushStopBuilder<'a> {
         assert_initialized_main_thread!();
         FlushStopBuilder::new(reset_time)
     }
+}
 
+impl<T: AsPtr> FlushStop<T> {
     #[doc(alias = "get_reset_time")]
     pub fn resets_time(&self) -> bool {
         unsafe {
             let mut reset_time = mem::MaybeUninit::uninit();
 
-            ffi::gst_event_parse_flush_stop(self.as_mut_ptr(), reset_time.as_mut_ptr());
+            ffi::gst_event_parse_flush_stop(self.0.as_ptr(), reset_time.as_mut_ptr());
 
             from_glib(reset_time.assume_init())
         }
     }
 }
 
-declare_concrete_event!(StreamStart);
-impl<'a> StreamStart<'a> {
+declare_concrete_event!(@sticky StreamStart, T);
+impl StreamStart<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(stream_id: &str) -> Event {
         skip_assert_initialized!();
@@ -363,13 +428,15 @@ impl<'a> StreamStart<'a> {
         assert_initialized_main_thread!();
         StreamStartBuilder::new(stream_id)
     }
+}
 
+impl<T: AsPtr> StreamStart<T> {
     #[doc(alias = "get_stream_id")]
-    pub fn stream_id(&self) -> &'a str {
+    pub fn stream_id(&self) -> &str {
         unsafe {
             let mut stream_id = ptr::null();
 
-            ffi::gst_event_parse_stream_start(self.as_mut_ptr(), &mut stream_id);
+            ffi::gst_event_parse_stream_start(self.0.as_ptr(), &mut stream_id);
             CStr::from_ptr(stream_id).to_str().unwrap()
         }
     }
@@ -380,7 +447,7 @@ impl<'a> StreamStart<'a> {
         unsafe {
             let mut stream_flags = mem::MaybeUninit::uninit();
 
-            ffi::gst_event_parse_stream_flags(self.as_mut_ptr(), stream_flags.as_mut_ptr());
+            ffi::gst_event_parse_stream_flags(self.0.as_ptr(), stream_flags.as_mut_ptr());
 
             from_glib(stream_flags.assume_init())
         }
@@ -392,7 +459,7 @@ impl<'a> StreamStart<'a> {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
 
-            ffi::gst_event_parse_group_id(self.as_mut_ptr(), group_id.as_mut_ptr());
+            ffi::gst_event_parse_group_id(self.0.as_ptr(), group_id.as_mut_ptr());
 
             let group_id = group_id.assume_init();
             if group_id == 0 {
@@ -410,14 +477,14 @@ impl<'a> StreamStart<'a> {
     pub fn stream(&self) -> Option<crate::Stream> {
         unsafe {
             let mut stream = ptr::null_mut();
-            ffi::gst_event_parse_stream(self.as_mut_ptr(), &mut stream);
+            ffi::gst_event_parse_stream(self.0.as_ptr(), &mut stream);
             from_glib_full(stream)
         }
     }
 }
 
-declare_concrete_event!(Caps);
-impl<'a> Caps<'a> {
+declare_concrete_event!(@sticky Caps, T);
+impl Caps<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(caps: &crate::Caps) -> Event {
         skip_assert_initialized!();
@@ -428,14 +495,16 @@ impl<'a> Caps<'a> {
         assert_initialized_main_thread!();
         CapsBuilder::new(caps)
     }
+}
 
+impl<T: AsPtr> Caps<T> {
     #[doc(alias = "get_caps")]
     #[doc(alias = "gst_event_parse_caps")]
-    pub fn caps(&self) -> &'a crate::CapsRef {
+    pub fn caps(&self) -> &crate::CapsRef {
         unsafe {
             let mut caps = ptr::null_mut();
 
-            ffi::gst_event_parse_caps(self.as_mut_ptr(), &mut caps);
+            ffi::gst_event_parse_caps(self.0.as_ptr(), &mut caps);
             crate::CapsRef::from_ptr(caps)
         }
     }
@@ -446,8 +515,8 @@ impl<'a> Caps<'a> {
     }
 }
 
-declare_concrete_event!(Segment);
-impl<'a> Segment<'a> {
+declare_concrete_event!(@sticky Segment, T);
+impl Segment<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new<F: crate::FormattedValueIntrinsic>(segment: &crate::FormattedSegment<F>) -> Event {
         skip_assert_initialized!();
@@ -460,21 +529,23 @@ impl<'a> Segment<'a> {
         assert_initialized_main_thread!();
         SegmentBuilder::new(segment.as_ref())
     }
+}
 
+impl<T: AsPtr> Segment<T> {
     #[doc(alias = "get_segment")]
     #[doc(alias = "gst_event_parse_segment")]
-    pub fn segment(&self) -> &'a crate::Segment {
+    pub fn segment(&self) -> &crate::Segment {
         unsafe {
             let mut segment = ptr::null();
 
-            ffi::gst_event_parse_segment(self.as_mut_ptr(), &mut segment);
+            ffi::gst_event_parse_segment(self.0.as_ptr(), &mut segment);
             &*(segment as *mut ffi::GstSegment as *mut crate::Segment)
         }
     }
 }
 
-declare_concrete_event!(StreamCollection);
-impl<'a> StreamCollection<'a> {
+declare_concrete_event!(@sticky StreamCollection, T);
+impl StreamCollection<Event> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
@@ -489,7 +560,9 @@ impl<'a> StreamCollection<'a> {
         assert_initialized_main_thread!();
         StreamCollectionBuilder::new(stream_collection)
     }
+}
 
+impl<T: AsPtr> StreamCollection<T> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_stream_collection")]
@@ -498,32 +571,34 @@ impl<'a> StreamCollection<'a> {
         unsafe {
             let mut stream_collection = ptr::null_mut();
 
-            ffi::gst_event_parse_stream_collection(self.as_mut_ptr(), &mut stream_collection);
+            ffi::gst_event_parse_stream_collection(self.0.as_ptr(), &mut stream_collection);
             from_glib_full(stream_collection)
         }
     }
 }
 
-declare_concrete_event!(Tag);
-impl<'a> Tag<'a> {
+declare_concrete_event!(@sticky Tag, T);
+impl Tag<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(tags: crate::TagList) -> Event {
         skip_assert_initialized!();
         Self::builder(tags).build()
     }
 
-    pub fn builder(tags: crate::TagList) -> TagBuilder<'a> {
+    pub fn builder<'a>(tags: crate::TagList) -> TagBuilder<'a> {
         assert_initialized_main_thread!();
         TagBuilder::new(tags)
     }
+}
 
+impl<T: AsPtr> Tag<T> {
     #[doc(alias = "get_tag")]
     #[doc(alias = "gst_event_parse_tag")]
-    pub fn tag(&self) -> &'a crate::TagListRef {
+    pub fn tag(&self) -> &crate::TagListRef {
         unsafe {
             let mut tags = ptr::null_mut();
 
-            ffi::gst_event_parse_tag(self.as_mut_ptr(), &mut tags);
+            ffi::gst_event_parse_tag(self.0.as_ptr(), &mut tags);
             crate::TagListRef::from_ptr(tags)
         }
     }
@@ -534,27 +609,29 @@ impl<'a> Tag<'a> {
     }
 }
 
-declare_concrete_event!(BufferSize);
-impl<'a> BufferSize<'a> {
+declare_concrete_event!(@sticky Buffersize, T);
+impl Buffersize<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(minsize: V, maxsize: V, r#async: bool) -> Event {
         skip_assert_initialized!();
         Self::builder(minsize, maxsize, r#async).build()
     }
 
-    pub fn builder<V: Into<GenericFormattedValue>>(
+    pub fn builder<'a, V: Into<GenericFormattedValue>>(
         minsize: V,
         maxsize: V,
         r#async: bool,
-    ) -> BufferSizeBuilder<'a> {
+    ) -> BuffersizeBuilder<'a> {
         assert_initialized_main_thread!();
         let minsize = minsize.into();
         let maxsize = maxsize.into();
         assert_eq!(minsize.format(), maxsize.format());
 
-        BufferSizeBuilder::new(minsize, maxsize, r#async)
+        BuffersizeBuilder::new(minsize, maxsize, r#async)
     }
+}
 
+impl<T: AsPtr> Buffersize<T> {
     pub fn get(&self) -> (GenericFormattedValue, GenericFormattedValue, bool) {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -563,7 +640,7 @@ impl<'a> BufferSize<'a> {
             let mut async_ = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_buffer_size(
-                self.as_mut_ptr(),
+                self.0.as_ptr(),
                 fmt.as_mut_ptr(),
                 minsize.as_mut_ptr(),
                 maxsize.as_mut_ptr(),
@@ -578,33 +655,39 @@ impl<'a> BufferSize<'a> {
     }
 }
 
-declare_concrete_event!(SinkMessage);
-impl<'a> SinkMessage<'a> {
+declare_concrete_event!(@sticky SinkMessage, T);
+impl SinkMessage<Event> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(name: &'a str, msg: &'a crate::Message) -> Event {
+    pub fn new(name: &str, msg: &crate::Message) -> Event {
         skip_assert_initialized!();
         Self::builder(name, msg).build()
     }
 
-    pub fn builder(name: &'a str, msg: &'a crate::Message) -> SinkMessageBuilder<'a> {
+    pub fn builder<'a>(name: &'a str, msg: &'a crate::Message) -> SinkMessageBuilder<'a> {
         assert_initialized_main_thread!();
         SinkMessageBuilder::new(name, msg)
     }
+}
 
+impl<T: AsPtr> SinkMessage<T> {
     #[doc(alias = "get_message")]
     #[doc(alias = "gst_event_parse_sink_message")]
     pub fn message(&self) -> crate::Message {
         unsafe {
             let mut msg = ptr::null_mut();
 
-            ffi::gst_event_parse_sink_message(self.as_mut_ptr(), &mut msg);
+            ffi::gst_event_parse_sink_message(self.0.as_ptr(), &mut msg);
             from_glib_full(msg)
         }
     }
 }
 
-declare_concrete_event!(StreamGroupDone);
-impl<'a> StreamGroupDone<'a> {
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+declare_concrete_event!(@sticky StreamGroupDone, T);
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+impl StreamGroupDone<Event> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
@@ -615,11 +698,15 @@ impl<'a> StreamGroupDone<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn builder(group_id: GroupId) -> StreamGroupDoneBuilder<'a> {
+    pub fn builder<'a>(group_id: GroupId) -> StreamGroupDoneBuilder<'a> {
         assert_initialized_main_thread!();
         StreamGroupDoneBuilder::new(group_id)
     }
+}
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+impl<T: AsPtr> StreamGroupDone<T> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_group_id")]
@@ -627,7 +714,7 @@ impl<'a> StreamGroupDone<'a> {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
 
-            ffi::gst_event_parse_stream_group_done(self.as_mut_ptr(), group_id.as_mut_ptr());
+            ffi::gst_event_parse_stream_group_done(self.0.as_ptr(), group_id.as_mut_ptr());
 
             let group_id = group_id.assume_init();
             assert_ne!(group_id, 0);
@@ -636,22 +723,22 @@ impl<'a> StreamGroupDone<'a> {
     }
 }
 
-declare_concrete_event!(Eos);
-impl<'a> Eos<'a> {
+declare_concrete_event!(@sticky Eos, T);
+impl Eos<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Event {
         skip_assert_initialized!();
         Self::builder().build()
     }
 
-    pub fn builder() -> EosBuilder<'a> {
+    pub fn builder<'a>() -> EosBuilder<'a> {
         assert_initialized_main_thread!();
         EosBuilder::new()
     }
 }
 
-declare_concrete_event!(Toc);
-impl<'a> Toc<'a> {
+declare_concrete_event!(@sticky Toc, T);
+impl Toc<Event> {
     // FIXME could use false for updated as default
     // Even better: use an enum for updated so that it is more explicit than true / false
     #[allow(clippy::new_ret_no_self)]
@@ -664,15 +751,17 @@ impl<'a> Toc<'a> {
         assert_initialized_main_thread!();
         TocBuilder::new(toc, updated)
     }
+}
 
+impl<T: AsPtr> Toc<T> {
     #[doc(alias = "get_toc")]
     #[doc(alias = "gst_event_parse_toc")]
-    pub fn toc(&self) -> (&'a crate::TocRef, bool) {
+    pub fn toc(&self) -> (&crate::TocRef, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
             let mut updated = mem::MaybeUninit::uninit();
 
-            ffi::gst_event_parse_toc(self.as_mut_ptr(), &mut toc, updated.as_mut_ptr());
+            ffi::gst_event_parse_toc(self.0.as_ptr(), &mut toc, updated.as_mut_ptr());
             (
                 crate::TocRef::from_ptr(toc),
                 from_glib(updated.assume_init()),
@@ -689,27 +778,29 @@ impl<'a> Toc<'a> {
     }
 }
 
-declare_concrete_event!(Protection);
-impl<'a> Protection<'a> {
+declare_concrete_event!(@sticky Protection, T);
+impl Protection<Event> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(system_id: &'a str, data: &'a crate::Buffer) -> Event {
+    pub fn new(system_id: &str, data: &crate::Buffer) -> Event {
         skip_assert_initialized!();
         Self::builder(system_id, data).build()
     }
 
-    pub fn builder(system_id: &'a str, data: &'a crate::Buffer) -> ProtectionBuilder<'a> {
+    pub fn builder<'a>(system_id: &'a str, data: &'a crate::Buffer) -> ProtectionBuilder<'a> {
         assert_initialized_main_thread!();
         ProtectionBuilder::new(system_id, data)
     }
+}
 
-    pub fn get(&self) -> (&'a str, &'a crate::BufferRef, Option<&'a str>) {
+impl<T: AsPtr> Protection<T> {
+    pub fn get(&self) -> (&str, &crate::BufferRef, Option<&str>) {
         unsafe {
             let mut system_id = ptr::null();
             let mut buffer = ptr::null_mut();
             let mut origin = ptr::null();
 
             ffi::gst_event_parse_protection(
-                self.as_mut_ptr(),
+                self.0.as_ptr(),
                 &mut system_id,
                 &mut buffer,
                 &mut origin,
@@ -727,7 +818,7 @@ impl<'a> Protection<'a> {
         }
     }
 
-    pub fn get_owned(&self) -> (&'a str, crate::Buffer, Option<&'a str>) {
+    pub fn get_owned(&self) -> (&str, crate::Buffer, Option<&str>) {
         unsafe {
             let (system_id, buffer, origin) = self.get();
             (system_id, from_glib_none(buffer.as_ptr()), origin)
@@ -735,27 +826,29 @@ impl<'a> Protection<'a> {
     }
 }
 
-declare_concrete_event!(SegmentDone);
-impl<'a> SegmentDone<'a> {
+declare_concrete_event!(SegmentDone, T);
+impl SegmentDone<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(position: V) -> Event {
         skip_assert_initialized!();
         Self::builder(position).build()
     }
 
-    pub fn builder<V: Into<GenericFormattedValue>>(position: V) -> SegmentDoneBuilder<'a> {
+    pub fn builder<'a, V: Into<GenericFormattedValue>>(position: V) -> SegmentDoneBuilder<'a> {
         assert_initialized_main_thread!();
         let position = position.into();
         SegmentDoneBuilder::new(position)
     }
+}
 
+impl<T: AsPtr> SegmentDone<T> {
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
             let mut position = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_segment_done(
-                self.as_mut_ptr(),
+                self.0.as_ptr(),
                 fmt.as_mut_ptr(),
                 position.as_mut_ptr(),
             );
@@ -765,8 +858,8 @@ impl<'a> SegmentDone<'a> {
     }
 }
 
-declare_concrete_event!(Gap);
-impl<'a> Gap<'a> {
+declare_concrete_event!(Gap, T);
+impl Gap<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(
         timestamp: crate::ClockTime,
@@ -776,18 +869,20 @@ impl<'a> Gap<'a> {
         Self::builder(timestamp).duration(duration).build()
     }
 
-    pub fn builder(timestamp: crate::ClockTime) -> GapBuilder<'a> {
+    pub fn builder<'a>(timestamp: crate::ClockTime) -> GapBuilder<'a> {
         assert_initialized_main_thread!();
         GapBuilder::new(timestamp)
     }
+}
 
+impl<T: AsPtr> Gap<T> {
     pub fn get(&self) -> (crate::ClockTime, Option<crate::ClockTime>) {
         unsafe {
             let mut timestamp = mem::MaybeUninit::uninit();
             let mut duration = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_gap(
-                self.as_mut_ptr(),
+                self.0.as_ptr(),
                 timestamp.as_mut_ptr(),
                 duration.as_mut_ptr(),
             );
@@ -805,14 +900,14 @@ impl<'a> Gap<'a> {
     pub fn gap_flags(&self) -> crate::GapFlags {
         unsafe {
             let mut flags = mem::MaybeUninit::uninit();
-            ffi::gst_event_parse_gap_flags(self.as_mut_ptr(), flags.as_mut_ptr());
+            ffi::gst_event_parse_gap_flags(self.0.as_ptr(), flags.as_mut_ptr());
             from_glib(flags.assume_init())
         }
     }
 }
 
-declare_concrete_event!(Qos);
-impl<'a> Qos<'a> {
+declare_concrete_event!(Qos, T);
+impl Qos<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(
         type_: crate::QOSType,
@@ -826,11 +921,13 @@ impl<'a> Qos<'a> {
             .build()
     }
 
-    pub fn builder(type_: crate::QOSType, proportion: f64, diff: i64) -> QosBuilder<'a> {
+    pub fn builder<'a>(type_: crate::QOSType, proportion: f64, diff: i64) -> QosBuilder<'a> {
         assert_initialized_main_thread!();
         QosBuilder::new(type_, proportion, diff)
     }
+}
 
+impl<T: AsPtr> Qos<T> {
     pub fn get(&self) -> (crate::QOSType, f64, i64, Option<crate::ClockTime>) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
@@ -839,7 +936,7 @@ impl<'a> Qos<'a> {
             let mut timestamp = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_qos(
-                self.as_mut_ptr(),
+                self.0.as_ptr(),
                 type_.as_mut_ptr(),
                 proportion.as_mut_ptr(),
                 diff.as_mut_ptr(),
@@ -856,8 +953,8 @@ impl<'a> Qos<'a> {
     }
 }
 
-declare_concrete_event!(Seek);
-impl<'a> Seek<'a> {
+declare_concrete_event!(Seek, T);
+impl Seek<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(
         rate: f64,
@@ -871,7 +968,7 @@ impl<'a> Seek<'a> {
         Self::builder(rate, flags, start_type, start, stop_type, stop).build()
     }
 
-    pub fn builder<V: Into<GenericFormattedValue>>(
+    pub fn builder<'a, V: Into<GenericFormattedValue>>(
         rate: f64,
         flags: crate::SeekFlags,
         start_type: crate::SeekType,
@@ -886,7 +983,9 @@ impl<'a> Seek<'a> {
 
         SeekBuilder::new(rate, flags, start_type, start, stop_type, stop)
     }
+}
 
+impl<T: AsPtr> Seek<T> {
     pub fn get(
         &self,
     ) -> (
@@ -907,7 +1006,7 @@ impl<'a> Seek<'a> {
             let mut stop = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_seek(
-                self.as_mut_ptr(),
+                self.0.as_ptr(),
                 rate.as_mut_ptr(),
                 fmt.as_mut_ptr(),
                 flags.as_mut_ptr(),
@@ -937,7 +1036,7 @@ impl<'a> Seek<'a> {
             let mut trickmode_interval = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_seek_trickmode_interval(
-                self.as_mut_ptr(),
+                self.0.as_ptr(),
                 trickmode_interval.as_mut_ptr(),
             );
 
@@ -946,48 +1045,50 @@ impl<'a> Seek<'a> {
     }
 }
 
-declare_concrete_event!(Navigation);
-impl<'a> Navigation<'a> {
+declare_concrete_event!(Navigation, T);
+impl Navigation<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: crate::Structure) -> NavigationBuilder<'a> {
+    pub fn builder<'a>(structure: crate::Structure) -> NavigationBuilder<'a> {
         assert_initialized_main_thread!();
         NavigationBuilder::new(structure)
     }
 }
 
-declare_concrete_event!(Latency);
-impl<'a> Latency<'a> {
+declare_concrete_event!(Latency, T);
+impl Latency<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(latency: crate::ClockTime) -> Event {
         skip_assert_initialized!();
         Self::builder(latency).build()
     }
 
-    pub fn builder(latency: crate::ClockTime) -> LatencyBuilder<'a> {
+    pub fn builder<'a>(latency: crate::ClockTime) -> LatencyBuilder<'a> {
         assert_initialized_main_thread!();
         LatencyBuilder::new(latency)
     }
+}
 
+impl<T: AsPtr> Latency<T> {
     #[doc(alias = "get_latency")]
     #[doc(alias = "gst_event_parse_latency")]
     pub fn latency(&self) -> crate::ClockTime {
         unsafe {
             let mut latency = mem::MaybeUninit::uninit();
 
-            ffi::gst_event_parse_latency(self.as_mut_ptr(), latency.as_mut_ptr());
+            ffi::gst_event_parse_latency(self.0.as_ptr(), latency.as_mut_ptr());
 
             try_from_glib(latency.assume_init()).expect("undefined latency")
         }
     }
 }
 
-declare_concrete_event!(Step);
-impl<'a> Step<'a> {
+declare_concrete_event!(Step, T);
+impl Step<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(
         amount: V,
@@ -999,7 +1100,7 @@ impl<'a> Step<'a> {
         Self::builder(amount.into(), rate, flush, intermediate).build()
     }
 
-    pub fn builder<V: Into<GenericFormattedValue>>(
+    pub fn builder<'a, V: Into<GenericFormattedValue>>(
         amount: V,
         rate: f64,
         flush: bool,
@@ -1008,7 +1109,9 @@ impl<'a> Step<'a> {
         assert_initialized_main_thread!();
         StepBuilder::new(amount.into(), rate, flush, intermediate)
     }
+}
 
+impl<T: AsPtr> Step<T> {
     pub fn get(&self) -> (GenericFormattedValue, f64, bool, bool) {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -1018,7 +1121,7 @@ impl<'a> Step<'a> {
             let mut intermediate = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_step(
-                self.as_mut_ptr(),
+                self.0.as_ptr(),
                 fmt.as_mut_ptr(),
                 amount.as_mut_ptr(),
                 rate.as_mut_ptr(),
@@ -1039,22 +1142,22 @@ impl<'a> Step<'a> {
     }
 }
 
-declare_concrete_event!(Reconfigure);
-impl<'a> Reconfigure<'a> {
+declare_concrete_event!(Reconfigure, T);
+impl Reconfigure<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Event {
         skip_assert_initialized!();
         Self::builder().build()
     }
 
-    pub fn builder() -> ReconfigureBuilder<'a> {
+    pub fn builder<'a>() -> ReconfigureBuilder<'a> {
         assert_initialized_main_thread!();
         ReconfigureBuilder::new()
     }
 }
 
-declare_concrete_event!(TocSelect);
-impl<'a> TocSelect<'a> {
+declare_concrete_event!(TocSelect, T);
+impl TocSelect<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(uid: &str) -> Event {
         skip_assert_initialized!();
@@ -1065,36 +1168,40 @@ impl<'a> TocSelect<'a> {
         assert_initialized_main_thread!();
         TocSelectBuilder::new(uid)
     }
+}
 
+impl<T: AsPtr> TocSelect<T> {
     #[doc(alias = "get_uid")]
-    pub fn uid(&self) -> &'a str {
+    pub fn uid(&self) -> &str {
         unsafe {
             let mut uid = ptr::null_mut();
 
-            ffi::gst_event_parse_toc_select(self.as_mut_ptr(), &mut uid);
+            ffi::gst_event_parse_toc_select(self.0.as_ptr(), &mut uid);
 
             CStr::from_ptr(uid).to_str().unwrap()
         }
     }
 }
 
-declare_concrete_event!(SelectStreams);
-impl<'a> SelectStreams<'a> {
+declare_concrete_event!(SelectStreams, T);
+impl SelectStreams<Event> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(streams: &'a [&'a str]) -> Event {
+    pub fn new(streams: &[&str]) -> Event {
         skip_assert_initialized!();
         Self::builder(streams).build()
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn builder(streams: &'a [&'a str]) -> SelectStreamsBuilder {
+    pub fn builder<'a>(streams: &'a [&'a str]) -> SelectStreamsBuilder<'a> {
         assert_initialized_main_thread!();
         SelectStreamsBuilder::new(streams)
     }
+}
 
+impl<T: AsPtr> SelectStreams<T> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_streams")]
@@ -1103,96 +1210,98 @@ impl<'a> SelectStreams<'a> {
         unsafe {
             let mut streams = ptr::null_mut();
 
-            ffi::gst_event_parse_select_streams(self.as_mut_ptr(), &mut streams);
+            ffi::gst_event_parse_select_streams(self.0.as_ptr(), &mut streams);
 
             FromGlibPtrContainer::from_glib_full(streams)
         }
     }
 }
 
-declare_concrete_event!(CustomUpstream);
-impl<'a> CustomUpstream<'a> {
+declare_concrete_event!(CustomUpstream, T);
+impl CustomUpstream<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: crate::Structure) -> CustomUpstreamBuilder<'a> {
+    pub fn builder<'a>(structure: crate::Structure) -> CustomUpstreamBuilder<'a> {
         assert_initialized_main_thread!();
         CustomUpstreamBuilder::new(structure)
     }
 }
 
-declare_concrete_event!(CustomDownstream);
-impl<'a> CustomDownstream<'a> {
+declare_concrete_event!(CustomDownstream, T);
+impl CustomDownstream<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: crate::Structure) -> CustomDownstreamBuilder<'a> {
+    pub fn builder<'a>(structure: crate::Structure) -> CustomDownstreamBuilder<'a> {
         assert_initialized_main_thread!();
         CustomDownstreamBuilder::new(structure)
     }
 }
 
-declare_concrete_event!(CustomDownstreamOob);
-impl<'a> CustomDownstreamOob<'a> {
+declare_concrete_event!(CustomDownstreamOob, T);
+impl CustomDownstreamOob<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: crate::Structure) -> CustomDownstreamOobBuilder<'a> {
+    pub fn builder<'a>(structure: crate::Structure) -> CustomDownstreamOobBuilder<'a> {
         assert_initialized_main_thread!();
         CustomDownstreamOobBuilder::new(structure)
     }
 }
 
-declare_concrete_event!(CustomDownstreamSticky);
-impl<'a> CustomDownstreamSticky<'a> {
+declare_concrete_event!(@sticky CustomDownstreamSticky, T);
+impl CustomDownstreamSticky<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: crate::Structure) -> CustomDownstreamStickyBuilder<'a> {
+    pub fn builder<'a>(structure: crate::Structure) -> CustomDownstreamStickyBuilder<'a> {
         assert_initialized_main_thread!();
         CustomDownstreamStickyBuilder::new(structure)
     }
 }
 
-declare_concrete_event!(CustomBoth);
-impl<'a> CustomBoth<'a> {
+declare_concrete_event!(CustomBoth, T);
+impl CustomBoth<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: crate::Structure) -> CustomBothBuilder<'a> {
+    pub fn builder<'a>(structure: crate::Structure) -> CustomBothBuilder<'a> {
         assert_initialized_main_thread!();
         CustomBothBuilder::new(structure)
     }
 }
 
-declare_concrete_event!(CustomBothOob);
-impl<'a> CustomBothOob<'a> {
+declare_concrete_event!(CustomBothOob, T);
+impl CustomBothOob<Event> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: crate::Structure) -> CustomBothOobBuilder<'a> {
+    pub fn builder<'a>(structure: crate::Structure) -> CustomBothOobBuilder<'a> {
         assert_initialized_main_thread!();
         CustomBothOobBuilder::new(structure)
     }
 }
+
+declare_concrete_event!(Other, T);
 
 struct EventBuilder<'a> {
     seqnum: Option<Seqnum>,
@@ -1305,7 +1414,7 @@ impl<'a> FlushStartBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|_| ffi::gst_event_new_flush_start());
+    event_builder_generic_impl!(|_| { ffi::gst_event_new_flush_start() });
 }
 
 pub struct FlushStopBuilder<'a> {
@@ -1321,7 +1430,9 @@ impl<'a> FlushStopBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_flush_stop(s.reset_time.into_glib()));
+    event_builder_generic_impl!(|s: &Self| {
+        ffi::gst_event_new_flush_stop(s.reset_time.into_glib())
+    });
 }
 
 pub struct StreamStartBuilder<'a> {
@@ -1403,7 +1514,7 @@ impl<'a> CapsBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_caps(s.caps.as_mut_ptr()));
+    event_builder_generic_impl!(|s: &Self| { ffi::gst_event_new_caps(s.caps.as_mut_ptr()) });
 }
 
 pub struct SegmentBuilder<'a> {
@@ -1420,7 +1531,9 @@ impl<'a> SegmentBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_segment(s.segment.to_glib_none().0));
+    event_builder_generic_impl!(|s: &Self| {
+        ffi::gst_event_new_segment(s.segment.to_glib_none().0)
+    });
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1441,9 +1554,9 @@ impl<'a> StreamCollectionBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_stream_collection(
-        s.stream_collection.to_glib_none().0
-    ));
+    event_builder_generic_impl!(|s: &Self| {
+        ffi::gst_event_new_stream_collection(s.stream_collection.to_glib_none().0)
+    });
 }
 
 pub struct TagBuilder<'a> {
@@ -1466,14 +1579,14 @@ impl<'a> TagBuilder<'a> {
     });
 }
 
-pub struct BufferSizeBuilder<'a> {
+pub struct BuffersizeBuilder<'a> {
     builder: EventBuilder<'a>,
     minsize: GenericFormattedValue,
     maxsize: GenericFormattedValue,
     r#async: bool,
 }
 
-impl<'a> BufferSizeBuilder<'a> {
+impl<'a> BuffersizeBuilder<'a> {
     fn new(minsize: GenericFormattedValue, maxsize: GenericFormattedValue, r#async: bool) -> Self {
         skip_assert_initialized!();
         Self {
@@ -1484,12 +1597,14 @@ impl<'a> BufferSizeBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_buffer_size(
-        s.minsize.format().into_glib(),
-        s.minsize.value(),
-        s.maxsize.value(),
-        s.r#async.into_glib(),
-    ));
+    event_builder_generic_impl!(|s: &Self| {
+        ffi::gst_event_new_buffer_size(
+            s.minsize.format().into_glib(),
+            s.minsize.value(),
+            s.maxsize.value(),
+            s.r#async.into_glib(),
+        )
+    });
 }
 
 pub struct SinkMessageBuilder<'a> {
@@ -1508,10 +1623,9 @@ impl<'a> SinkMessageBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_sink_message(
-        s.name.to_glib_none().0,
-        s.msg.as_mut_ptr()
-    ));
+    event_builder_generic_impl!(|s: &Self| {
+        ffi::gst_event_new_sink_message(s.name.to_glib_none().0, s.msg.as_mut_ptr())
+    });
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1532,9 +1646,9 @@ impl<'a> StreamGroupDoneBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_stream_group_done(
-        s.group_id.0.get()
-    ));
+    event_builder_generic_impl!(|s: &Self| {
+        ffi::gst_event_new_stream_group_done(s.group_id.0.get())
+    });
 }
 
 pub struct EosBuilder<'a> {
@@ -1599,11 +1713,13 @@ impl<'a> ProtectionBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_protection(
-        s.system_id.to_glib_none().0,
-        s.data.as_mut_ptr(),
-        s.origin.to_glib_none().0,
-    ));
+    event_builder_generic_impl!(|s: &Self| {
+        ffi::gst_event_new_protection(
+            s.system_id.to_glib_none().0,
+            s.data.as_mut_ptr(),
+            s.origin.to_glib_none().0,
+        )
+    });
 }
 
 pub struct SegmentDoneBuilder<'a> {
@@ -1620,10 +1736,9 @@ impl<'a> SegmentDoneBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_segment_done(
-        s.position.format().into_glib(),
-        s.position.value()
-    ));
+    event_builder_generic_impl!(|s: &Self| {
+        ffi::gst_event_new_segment_done(s.position.format().into_glib(), s.position.value())
+    });
 }
 
 pub struct GapBuilder<'a> {
@@ -1803,7 +1918,7 @@ impl<'a> LatencyBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_latency(s.latency.into_glib()));
+    event_builder_generic_impl!(|s: &Self| { ffi::gst_event_new_latency(s.latency.into_glib()) });
 }
 
 pub struct StepBuilder<'a> {
@@ -1826,13 +1941,15 @@ impl<'a> StepBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_step(
-        s.amount.format().into_glib(),
-        s.amount.value() as u64,
-        s.rate,
-        s.flush.into_glib(),
-        s.intermediate.into_glib(),
-    ));
+    event_builder_generic_impl!(|s: &Self| {
+        ffi::gst_event_new_step(
+            s.amount.format().into_glib(),
+            s.amount.value() as u64,
+            s.rate,
+            s.flush.into_glib(),
+            s.intermediate.into_glib(),
+        )
+    });
 }
 
 pub struct ReconfigureBuilder<'a> {
@@ -1847,7 +1964,7 @@ impl<'a> ReconfigureBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|_| ffi::gst_event_new_reconfigure());
+    event_builder_generic_impl!(|_| { ffi::gst_event_new_reconfigure() });
 }
 
 pub struct TocSelectBuilder<'a> {
@@ -1864,7 +1981,9 @@ impl<'a> TocSelectBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_toc_select(s.uid.to_glib_none().0));
+    event_builder_generic_impl!(|s: &Self| {
+        ffi::gst_event_new_toc_select(s.uid.to_glib_none().0)
+    });
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1885,9 +2004,9 @@ impl<'a> SelectStreamsBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_select_streams(
-        s.streams.to_glib_full()
-    ));
+    event_builder_generic_impl!(|s: &Self| {
+        ffi::gst_event_new_select_streams(s.streams.to_glib_full())
+    });
 }
 
 pub struct CustomUpstreamBuilder<'a> {

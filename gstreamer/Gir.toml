@@ -1425,6 +1425,11 @@ manual_traits = ["PadExtManual"]
     manual = true
 
     [[object.function]]
+    name = "get_sticky_event"
+    # More convenient API
+    manual = true
+
+    [[object.function]]
     name = "add_probe"
     # Complex closure argument handling
     manual = true
