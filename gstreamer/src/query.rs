@@ -212,7 +212,7 @@ macro_rules! declare_concrete_query(
         impl From<$name<Query>> for Query {
             fn from(concrete: $name<Query>) -> Self {
                 skip_assert_initialized!();
-                unsafe { from_glib_none(concrete.0.as_mut_ptr()) }
+                concrete.0
             }
         }
     }
