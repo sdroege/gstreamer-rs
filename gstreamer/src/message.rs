@@ -121,6 +121,10 @@ impl MessageRef {
             }
             #[cfg(any(feature = "v1_16", feature = "dox"))]
             ffi::GST_MESSAGE_DEVICE_CHANGED => MessageView::DeviceChanged(DeviceChanged(self)),
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            ffi::GST_MESSAGE_INSTANT_RATE_REQUEST => {
+                MessageView::InstantRateRequest(InstantRateRequest(self))
+            }
             _ => MessageView::Other,
         }
     }
@@ -222,6 +226,9 @@ pub enum MessageView<'a> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     DeviceChanged(DeviceChanged<'a>),
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    InstantRateRequest(InstantRateRequest<'a>),
     Other,
 }
 
@@ -1615,6 +1622,39 @@ impl<'a> DeviceChanged<'a> {
     }
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+declare_concrete_message!(InstantRateRequest);
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl<'a> InstantRateRequest<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(rate_multiplier: f64) -> Message {
+        skip_assert_initialized!();
+        Self::builder(rate_multiplier).build()
+    }
+
+    pub fn builder(rate_multiplier: f64) -> InstantRateRequestBuilder<'a> {
+        assert_initialized_main_thread!();
+        InstantRateRequestBuilder::new(rate_multiplier)
+    }
+
+    #[doc(alias = "parse_instant_rate_request")]
+    #[doc(alias = "gst_message_parse_instant_rate_request")]
+    pub fn rate_multiplier(&self) -> f64 {
+        unsafe {
+            let mut rate_multiplier = mem::MaybeUninit::uninit();
+
+            ffi::gst_message_parse_instant_rate_request(
+                self.as_mut_ptr(),
+                rate_multiplier.as_mut_ptr(),
+            );
+
+            rate_multiplier.assume_init()
+        }
+    }
+}
+
 struct MessageBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<Seqnum>,
@@ -2910,6 +2950,29 @@ impl<'a> DeviceChangedBuilder<'a> {
         s.device.to_glib_none().0,
         s.changed_device.to_glib_none().0,
     ));
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+pub struct InstantRateRequestBuilder<'a> {
+    builder: MessageBuilder<'a>,
+    rate_multiplier: f64,
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl<'a> InstantRateRequestBuilder<'a> {
+    fn new(rate_multiplier: f64) -> Self {
+        skip_assert_initialized!();
+        Self {
+            builder: MessageBuilder::new(),
+            rate_multiplier,
+        }
+    }
+
+    message_builder_generic_impl!(
+        |s: &mut Self, src| ffi::gst_message_new_instant_rate_request(src, s.rate_multiplier,)
+    );
 }
 
 #[cfg(test)]
