@@ -281,22 +281,6 @@ impl<'a> IntoIterator for &'a BufferListRef {
     }
 }
 
-impl<'a> std::iter::FromIterator<&'a BufferRef> for BufferList {
-    fn from_iter<T: IntoIterator<Item = &'a BufferRef>>(iter: T) -> Self {
-        assert_initialized_main_thread!();
-        let iter = iter.into_iter();
-
-        let mut list = BufferList::new_sized(iter.size_hint().0);
-
-        {
-            let list = list.get_mut().unwrap();
-            iter.for_each(|b| list.add(b.to_owned()));
-        }
-
-        list
-    }
-}
-
 impl std::iter::FromIterator<Buffer> for BufferList {
     fn from_iter<T: IntoIterator<Item = Buffer>>(iter: T) -> Self {
         assert_initialized_main_thread!();

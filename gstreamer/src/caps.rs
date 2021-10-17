@@ -144,21 +144,6 @@ impl str::FromStr for Caps {
     }
 }
 
-impl<'a> std::iter::FromIterator<&'a StructureRef> for Caps {
-    fn from_iter<T: IntoIterator<Item = &'a StructureRef>>(iter: T) -> Self {
-        assert_initialized_main_thread!();
-        let mut caps = Caps::new_empty();
-
-        {
-            let caps = caps.get_mut().unwrap();
-            iter.into_iter()
-                .for_each(|s| caps.append_structure(s.to_owned()));
-        }
-
-        caps
-    }
-}
-
 impl std::iter::FromIterator<Structure> for Caps {
     fn from_iter<T: IntoIterator<Item = Structure>>(iter: T) -> Self {
         assert_initialized_main_thread!();
@@ -167,21 +152,6 @@ impl std::iter::FromIterator<Structure> for Caps {
         {
             let caps = caps.get_mut().unwrap();
             iter.into_iter().for_each(|s| caps.append_structure(s));
-        }
-
-        caps
-    }
-}
-
-impl<'a, 'b> std::iter::FromIterator<(&'a StructureRef, &'b CapsFeaturesRef)> for Caps {
-    fn from_iter<T: IntoIterator<Item = (&'a StructureRef, &'b CapsFeaturesRef)>>(iter: T) -> Self {
-        assert_initialized_main_thread!();
-        let mut caps = Caps::new_empty();
-
-        {
-            let caps = caps.get_mut().unwrap();
-            iter.into_iter()
-                .for_each(|(s, f)| caps.append_structure_full(s.to_owned(), Some(f.to_owned())));
         }
 
         caps
@@ -981,12 +951,14 @@ mod tests {
         let audio = caps
             .iter()
             .filter(|s| s.name() == "audio/x-raw")
+            .map(|s| s.to_owned())
             .collect::<Caps>();
         assert_eq!(audio.to_string(), "audio/x-raw");
 
         let audio = caps
             .iter_with_features()
             .filter(|(s, _)| s.name() == "audio/x-raw")
+            .map(|(s, c)| (s.to_owned(), c.to_owned()))
             .collect::<Caps>();
         assert_eq!(audio.to_string(), "audio/x-raw(ANY)");
     }
