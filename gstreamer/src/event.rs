@@ -286,6 +286,7 @@ pub trait StickyEventType {
 }
 
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum EventView<T> {
     FlushStart(FlushStart<T>),
     FlushStop(FlushStop<T>),
@@ -319,7 +320,6 @@ pub enum EventView<T> {
     CustomBoth(CustomBoth<T>),
     CustomBothOob(CustomBothOob<T>),
     Other(Other<T>),
-    __NonExhaustive,
 }
 
 macro_rules! declare_concrete_event {

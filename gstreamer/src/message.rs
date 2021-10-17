@@ -168,6 +168,7 @@ impl fmt::Debug for MessageRef {
 }
 
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum MessageView<'a> {
     Eos(Eos<'a>),
     Error(Error<'a>),
@@ -208,7 +209,6 @@ pub enum MessageView<'a> {
     Redirect(Redirect<'a>),
     DeviceChanged(DeviceChanged<'a>),
     Other,
-    __NonExhaustive,
 }
 
 macro_rules! declare_concrete_message(

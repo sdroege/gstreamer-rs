@@ -138,6 +138,7 @@ unsafe impl<'a> AsMutPtr for &'a mut QueryRef {
 }
 
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum QueryView<T> {
     Position(Position<T>),
     Duration(Duration<T>),
@@ -157,7 +158,6 @@ pub enum QueryView<T> {
     Context(Context<T>),
     Bitrate(Bitrate<T>),
     Other(Other<T>),
-    __NonExhaustive,
 }
 
 macro_rules! declare_concrete_query(
