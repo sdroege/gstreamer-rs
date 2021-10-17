@@ -213,6 +213,29 @@ impl fmt::Debug for VideoOverlayCompositionRef {
 }
 
 impl VideoOverlayComposition {
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[doc(alias = "gst_video_overlay_composition_new")]
+    pub fn new<'a>(rects: impl IntoIterator<Item = &'a VideoOverlayRectangle>) -> Self {
+        assert_initialized_main_thread!();
+
+        use std::ptr;
+
+        unsafe {
+            let composition =
+                Self::from_glib_full(ffi::gst_video_overlay_composition_new(ptr::null_mut()));
+
+            rects.into_iter().for_each(|rect| {
+                ffi::gst_video_overlay_composition_add_rectangle(
+                    composition.as_mut_ptr(),
+                    rect.as_mut_ptr(),
+                );
+            });
+
+            composition
+        }
+    }
+
+    #[cfg(not(any(feature = "v1_20", feature = "dox")))]
     #[doc(alias = "gst_video_overlay_composition_new")]
     pub fn new<'a>(
         rects: impl IntoIterator<Item = &'a VideoOverlayRectangle>,
@@ -303,6 +326,37 @@ impl<'a> IntoIterator for &'a VideoOverlayComposition {
 
     fn into_iter(self) -> Self::IntoIter {
         self.iter()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+impl std::iter::FromIterator<VideoOverlayRectangle> for VideoOverlayComposition {
+    fn from_iter<T: IntoIterator<Item = VideoOverlayRectangle>>(iter: T) -> Self {
+        assert_initialized_main_thread!();
+
+        use std::ptr;
+
+        unsafe {
+            let composition =
+                Self::from_glib_full(ffi::gst_video_overlay_composition_new(ptr::null_mut()));
+
+            iter.into_iter().for_each(|rect| {
+                ffi::gst_video_overlay_composition_add_rectangle(
+                    composition.as_mut_ptr(),
+                    rect.as_mut_ptr(),
+                );
+            });
+
+            composition
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+impl<'a> std::iter::FromIterator<&'a VideoOverlayRectangle> for VideoOverlayComposition {
+    fn from_iter<T: IntoIterator<Item = &'a VideoOverlayRectangle>>(iter: T) -> Self {
+        assert_initialized_main_thread!();
+        VideoOverlayComposition::new(iter.into_iter())
     }
 }
 
