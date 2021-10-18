@@ -100,17 +100,15 @@ impl Structure {
     }
 
     #[allow(clippy::should_implement_trait)]
-    pub fn from_iter<'a, 'b>(
+    pub fn from_iter<'a>(
         name: &str,
-        iter: impl IntoIterator<Item = (&'a str, &'b SendValue)>,
+        iter: impl IntoIterator<Item = (&'a str, SendValue)>,
     ) -> Structure {
         assert_initialized_main_thread!();
         let mut structure = Structure::new_empty(name);
 
-        iter.into_iter().for_each(|(f, v)| unsafe {
-            let mut value = v.clone().into_raw();
-            ffi::gst_structure_take_value(structure.0.as_mut(), f.to_glib_none().0, &mut value);
-        });
+        iter.into_iter()
+            .for_each(|(f, v)| structure.set_value(f, v));
 
         structure
     }
@@ -446,8 +444,11 @@ impl StructureRef {
 
     pub fn set_value(&mut self, name: &str, value: SendValue) {
         unsafe {
-            let mut value = value.into_raw();
-            ffi::gst_structure_take_value(&mut self.0, name.to_glib_none().0, &mut value);
+            ffi::gst_structure_take_value(
+                &mut self.0,
+                name.to_glib_none().0,
+                &mut value.into_raw(),
+            );
         }
     }
 
@@ -458,8 +459,7 @@ impl StructureRef {
 
     pub fn set_value_by_quark(&mut self, name: glib::Quark, value: SendValue) {
         unsafe {
-            let mut value = value.into_raw();
-            ffi::gst_structure_id_take_value(&mut self.0, name.into_glib(), &mut value);
+            ffi::gst_structure_id_take_value(&mut self.0, name.into_glib(), &mut value.into_raw());
         }
     }
 
@@ -979,7 +979,12 @@ mod tests {
             .field("f3", &123i32)
             .build();
 
-        let s2 = Structure::from_iter(s.name(), s.iter().filter(|(f, _)| *f == "f1"));
+        let s2 = Structure::from_iter(
+            s.name(),
+            s.iter()
+                .filter(|(f, _)| *f == "f1")
+                .map(|(f, v)| (f, v.clone())),
+        );
 
         assert_eq!(s2.name(), "test");
         assert_eq!(s2.get::<&str>("f1"), Ok("abc"));
