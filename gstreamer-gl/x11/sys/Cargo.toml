@@ -11,6 +11,7 @@ readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 version = "0.18.0"
 edition = "2018"
+rust-version = "1.54"
 [package.metadata.system-deps.gstreamer_gl_x11_1_0]
 name = "gstreamer-gl-1.0"
 version = "1.14"

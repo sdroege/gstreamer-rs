@@ -11,6 +11,7 @@ homepage = "https://gstreamer.freedesktop.org"
 documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer/"
 keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
 edition = "2018"
+rust-version = "1.54"
 
 [dependencies]
 bitflags = "1.0"
