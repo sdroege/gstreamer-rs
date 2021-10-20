@@ -407,6 +407,12 @@ impl glib::types::StaticType for CapsFeaturesRef {
     }
 }
 
+impl<'a> std::iter::Extend<&'a str> for CapsFeaturesRef {
+    fn extend<T: IntoIterator<Item = &'a str>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|f| self.add(f));
+    }
+}
+
 unsafe impl<'a> glib::value::FromValue<'a> for &'a CapsFeaturesRef {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 

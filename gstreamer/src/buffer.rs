@@ -912,6 +912,29 @@ impl<'a> IntoIterator for &'a BufferRef {
     }
 }
 
+impl std::iter::FromIterator<Memory> for Buffer {
+    fn from_iter<T: IntoIterator<Item = Memory>>(iter: T) -> Self {
+        assert_initialized_main_thread!();
+
+        let iter = iter.into_iter();
+
+        let mut buffer = Buffer::new();
+
+        {
+            let buffer = buffer.get_mut().unwrap();
+            iter.for_each(|m| buffer.append_memory(m));
+        }
+
+        buffer
+    }
+}
+
+impl std::iter::Extend<Memory> for BufferRef {
+    fn extend<T: IntoIterator<Item = Memory>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|m| self.append_memory(m));
+    }
+}
+
 define_iter!(
     IterOwned,
     &'a BufferRef,

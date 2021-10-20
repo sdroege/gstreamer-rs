@@ -173,6 +173,41 @@ impl std::iter::FromIterator<(Structure, CapsFeatures)> for Caps {
     }
 }
 
+impl std::iter::FromIterator<(Structure, Option<CapsFeatures>)> for Caps {
+    fn from_iter<T: IntoIterator<Item = (Structure, Option<CapsFeatures>)>>(iter: T) -> Self {
+        assert_initialized_main_thread!();
+        let mut caps = Caps::new_empty();
+
+        {
+            let caps = caps.get_mut().unwrap();
+            iter.into_iter()
+                .for_each(|(s, f)| caps.append_structure_full(s, f));
+        }
+
+        caps
+    }
+}
+
+impl std::iter::Extend<Structure> for CapsRef {
+    fn extend<T: IntoIterator<Item = Structure>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|s| self.append_structure(s));
+    }
+}
+
+impl std::iter::Extend<(Structure, CapsFeatures)> for CapsRef {
+    fn extend<T: IntoIterator<Item = (Structure, CapsFeatures)>>(&mut self, iter: T) {
+        iter.into_iter()
+            .for_each(|(s, f)| self.append_structure_full(s, Some(f)));
+    }
+}
+
+impl std::iter::Extend<(Structure, Option<CapsFeatures>)> for CapsRef {
+    fn extend<T: IntoIterator<Item = (Structure, Option<CapsFeatures>)>>(&mut self, iter: T) {
+        iter.into_iter()
+            .for_each(|(s, f)| self.append_structure_full(s, f));
+    }
+}
+
 impl CapsRef {
     pub fn set_simple(&mut self, values: &[(&str, &(dyn ToSendValue + Sync))]) {
         for &(name, value) in values {

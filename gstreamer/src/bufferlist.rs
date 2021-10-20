@@ -298,6 +298,12 @@ impl std::iter::FromIterator<Buffer> for BufferList {
     }
 }
 
+impl std::iter::Extend<Buffer> for BufferListRef {
+    fn extend<T: IntoIterator<Item = Buffer>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|b| self.add(b));
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

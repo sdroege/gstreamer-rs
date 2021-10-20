@@ -844,6 +844,12 @@ impl<'a> IntoIterator for &'a StructureRef {
     }
 }
 
+impl<'a> std::iter::Extend<(&'a str, SendValue)> for StructureRef {
+    fn extend<T: IntoIterator<Item = (&'a str, SendValue)>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|(f, v)| self.set_value(f, v));
+    }
+}
+
 #[derive(Debug)]
 pub struct Builder {
     s: Structure,
