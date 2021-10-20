@@ -413,6 +413,18 @@ impl<'a> std::iter::Extend<&'a str> for CapsFeaturesRef {
     }
 }
 
+impl std::iter::Extend<String> for CapsFeaturesRef {
+    fn extend<T: IntoIterator<Item = String>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|f| self.add(&f));
+    }
+}
+
+impl std::iter::Extend<glib::Quark> for CapsFeaturesRef {
+    fn extend<T: IntoIterator<Item = glib::Quark>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|f| self.add_from_quark(f));
+    }
+}
+
 unsafe impl<'a> glib::value::FromValue<'a> for &'a CapsFeaturesRef {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
@@ -542,6 +554,30 @@ impl<'a> std::iter::FromIterator<&'a str> for CapsFeatures {
         let mut features = CapsFeatures::new_empty();
 
         iter.into_iter().for_each(|f| features.add(f));
+
+        features
+    }
+}
+
+impl std::iter::FromIterator<String> for CapsFeatures {
+    fn from_iter<T: IntoIterator<Item = String>>(iter: T) -> Self {
+        assert_initialized_main_thread!();
+
+        let mut features = CapsFeatures::new_empty();
+
+        iter.into_iter().for_each(|f| features.add(&f));
+
+        features
+    }
+}
+
+impl std::iter::FromIterator<glib::Quark> for CapsFeatures {
+    fn from_iter<T: IntoIterator<Item = glib::Quark>>(iter: T) -> Self {
+        assert_initialized_main_thread!();
+
+        let mut features = CapsFeatures::new_empty();
+
+        iter.into_iter().for_each(|f| features.add_from_quark(f));
 
         features
     }

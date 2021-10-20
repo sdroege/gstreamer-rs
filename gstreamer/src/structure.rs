@@ -850,6 +850,19 @@ impl<'a> std::iter::Extend<(&'a str, SendValue)> for StructureRef {
     }
 }
 
+impl std::iter::Extend<(String, SendValue)> for StructureRef {
+    fn extend<T: IntoIterator<Item = (String, SendValue)>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|(f, v)| self.set_value(&f, v));
+    }
+}
+
+impl std::iter::Extend<(glib::Quark, SendValue)> for StructureRef {
+    fn extend<T: IntoIterator<Item = (glib::Quark, SendValue)>>(&mut self, iter: T) {
+        iter.into_iter()
+            .for_each(|(f, v)| self.set_value_by_quark(f, v));
+    }
+}
+
 #[derive(Debug)]
 pub struct Builder {
     s: Structure,
