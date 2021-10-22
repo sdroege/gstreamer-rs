@@ -2301,6 +2301,42 @@ manual_traits = ["TagSetterExtManual"]
     ignore = true
 
 [[object]]
+name = "Gst.Task"
+status = "generate"
+    # Need work
+    [[object.function]]
+    name = "new"
+    ignore = true
+    [[object.function]]
+    name = "set_enter_callback"
+    ignore = true
+    [[object.function]]
+    name = "set_leave_callback"
+    ignore = true
+    [[object.function]]
+    name = "set_lock"
+    ignore = true
+    [[object.function]]
+    name = "set_state"
+    ignore = true
+
+[[object]]
+name = "Gst.TaskPool"
+status = "generate"
+manual_traits = ["TaskPoolExtManual"]
+    [[object.function]]
+    name = "push"
+    manual = true
+
+    # Moved to TaskHandle
+    [[object.function]]
+    name = "join"
+    ignore = true
+    [[object.function]]
+    name = "dispose_handle"
+    ignore = true
+
+[[object]]
 name = "Gst.Toc"
 status = "manual"
 ref_mode = "ref"
