@@ -24,6 +24,7 @@ mod object;
 mod pad;
 mod pipeline;
 mod proxy_pad;
+mod task_pool;
 mod tracer;
 
 mod device;
@@ -61,6 +62,7 @@ pub mod prelude {
     pub use super::proxy_pad::ProxyPadImpl;
     pub use super::system_clock::SystemClockImpl;
     pub use super::tag_setter::TagSetterImpl;
+    pub use super::task_pool::TaskPoolImpl;
     pub use super::tracer::{TracerHook, TracerImpl, TracerImplExt};
     pub use super::uri_handler::{URIHandlerImpl, URIHandlerImplExt};
 }

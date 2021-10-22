@@ -182,11 +182,13 @@ mod control_source;
 mod parse_context;
 mod proxy_pad;
 mod tag_setter;
+mod task_pool;
 pub use crate::element::{ElementMessageType, NotifyWatchId};
 pub use crate::element::{
     ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,
     ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS, ELEMENT_METADATA_LONGNAME,
 };
+pub use crate::task_pool::{TaskHandle, TaskPoolTaskHandle};
 
 pub use self::iterator::{Iterator, IteratorError, IteratorImpl, StdIterator};
 pub use crate::clock_time::ClockTime;
@@ -321,6 +323,7 @@ pub mod prelude {
     pub use crate::plugin_feature::PluginFeatureExtManual;
     pub use crate::proxy_pad::ProxyPadExtManual;
     pub use crate::tag_setter::TagSetterExtManual;
+    pub use crate::task_pool::{TaskHandle, TaskPoolExtManual};
     pub use crate::typefind::TypeFindImpl;
     pub use crate::value::GstValueExt;
 

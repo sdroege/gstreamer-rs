@@ -95,6 +95,12 @@ pub use self::system_clock::SystemClock;
 mod tag_setter;
 pub use self::tag_setter::TagSetter;
 
+mod task;
+pub use self::task::Task;
+
+mod task_pool;
+pub use self::task_pool::TaskPool;
+
 mod toc_setter;
 pub use self::toc_setter::TocSetter;
 
@@ -225,6 +231,8 @@ pub mod traits {
     pub use super::proxy_pad::ProxyPadExt;
     pub use super::system_clock::SystemClockExt;
     pub use super::tag_setter::TagSetterExt;
+    pub use super::task::TaskExt;
+    pub use super::task_pool::TaskPoolExt;
     pub use super::toc_setter::TocSetterExt;
     pub use super::tracer::TracerExt;
     pub use super::uri_handler::URIHandlerExt;
