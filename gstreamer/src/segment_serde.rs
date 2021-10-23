@@ -132,7 +132,7 @@ mod tests {
         segment.set_position(GenericFormattedValue::from(ClockTime::from_nseconds(256)));
         segment.set_duration(GenericFormattedValue::from(ClockTime::NONE));
 
-        let pretty_config = ron::ser::PrettyConfig::new().with_new_line("".to_string());
+        let pretty_config = ron::ser::PrettyConfig::new().new_line("".to_string());
 
         let res = ron::ser::to_string_pretty(&segment, pretty_config);
         assert_eq!(

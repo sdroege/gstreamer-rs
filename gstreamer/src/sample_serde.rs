@@ -90,7 +90,7 @@ mod tests {
     fn test_serialize() {
         crate::init().unwrap();
 
-        let pretty_config = ron::ser::PrettyConfig::new().with_new_line("".to_string());
+        let pretty_config = ron::ser::PrettyConfig::new().new_line("".to_string());
 
         let sample = {
             let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);

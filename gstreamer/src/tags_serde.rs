@@ -352,7 +352,7 @@ mod tests {
             tags.add::<Image>(&sample, TagMergeMode::Append); // Sample
         }
 
-        let pretty_config = ron::ser::PrettyConfig::new().with_new_line("".to_string());
+        let pretty_config = ron::ser::PrettyConfig::new().new_line("".to_string());
 
         let res = ron::ser::to_string_pretty(&tags, pretty_config);
         assert_eq!(

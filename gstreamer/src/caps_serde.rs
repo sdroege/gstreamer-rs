@@ -240,7 +240,7 @@ mod tests {
             .field("array", Array::new(&[&1, &2]))
             .build();
 
-        let pretty_config = ron::ser::PrettyConfig::new().with_new_line("".to_string());
+        let pretty_config = ron::ser::PrettyConfig::new().new_line("".to_string());
 
         let res = ron::ser::to_string_pretty(&caps, pretty_config);
         assert_eq!(
@@ -271,7 +271,7 @@ mod tests {
             .features(&["foo:bar", "foo:baz"])
             .build();
 
-        let pretty_config = ron::ser::PrettyConfig::new().with_new_line("".to_string());
+        let pretty_config = ron::ser::PrettyConfig::new().new_line("".to_string());
 
         let res = ron::ser::to_string_pretty(&caps, pretty_config);
         assert_eq!(
@@ -305,7 +305,7 @@ mod tests {
             .any_features()
             .build();
 
-        let pretty_config = ron::ser::PrettyConfig::new().with_new_line("".to_string());
+        let pretty_config = ron::ser::PrettyConfig::new().new_line("".to_string());
 
         let res = ron::ser::to_string_pretty(&caps, pretty_config.clone());
         assert_eq!(

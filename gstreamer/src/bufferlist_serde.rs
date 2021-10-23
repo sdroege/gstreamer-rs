@@ -95,7 +95,7 @@ mod tests {
             buffer_list.add(buffer);
         }
 
-        let pretty_config = ron::ser::PrettyConfig::new().with_new_line("".to_string());
+        let pretty_config = ron::ser::PrettyConfig::new().new_line("".to_string());
 
         let res = ron::ser::to_string_pretty(&buffer_list, pretty_config);
         assert_eq!(

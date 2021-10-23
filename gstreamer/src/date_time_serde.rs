@@ -179,7 +179,7 @@ mod tests {
     fn test_serialize() {
         crate::init().unwrap();
 
-        let pretty_config = ron::ser::PrettyConfig::new().with_new_line("".to_string());
+        let pretty_config = ron::ser::PrettyConfig::new().new_line("".to_string());
 
         let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64).unwrap();
         let res = ron::ser::to_string_pretty(&datetime, pretty_config.clone());
