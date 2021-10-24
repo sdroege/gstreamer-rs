@@ -103,8 +103,8 @@ mod tests {
             }
 
             let caps = Caps::builder("sample/caps")
-                .field("int", &12)
-                .field("bool", &true)
+                .field("int", 12)
+                .field("bool", true)
                 .build();
 
             let mut segment = Segment::new();
@@ -121,7 +121,7 @@ mod tests {
             segment.set_duration(GenericFormattedValue::from(ClockTime::NONE));
 
             let info = Structure::builder("sample.info")
-                .field("f3", &123i32)
+                .field("f3", 123i32)
                 .build();
 
             Sample::builder()
@@ -333,8 +333,8 @@ mod tests {
             }
 
             let caps = Caps::builder("sample/caps")
-                .field("int", &12)
-                .field("bool", &true)
+                .field("int", 12)
+                .field("bool", true)
                 .build();
 
             let mut segment = Segment::new();
@@ -351,7 +351,7 @@ mod tests {
             segment.set_duration(GenericFormattedValue::from(ClockTime::NONE));
 
             let info = Structure::builder("sample.info")
-                .field("f3", &123i32)
+                .field("f3", 123i32)
                 .build();
 
             Sample::builder()

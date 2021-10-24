@@ -61,13 +61,13 @@ pub fn audio_make_raw_caps(
         .collect();
 
     let builder = gst::caps::Caps::builder("audio/x-raw")
-        .field("format", &gst::List::from_owned(formats))
-        .field("rate", &gst::IntRange::<i32>::new(1, i32::MAX))
-        .field("channels", &gst::IntRange::<i32>::new(1, i32::MAX));
+        .field("format", gst::List::from_owned(formats))
+        .field("rate", gst::IntRange::<i32>::new(1, i32::MAX))
+        .field("channels", gst::IntRange::<i32>::new(1, i32::MAX));
 
     match layout {
-        crate::AudioLayout::Interleaved => builder.field("layout", &"interleaved"),
-        crate::AudioLayout::NonInterleaved => builder.field("layout", &"non-interleaved"),
+        crate::AudioLayout::Interleaved => builder.field("layout", "interleaved"),
+        crate::AudioLayout::NonInterleaved => builder.field("layout", "non-interleaved"),
         crate::AudioLayout::__Unknown(_) => builder,
     }
 }
@@ -112,8 +112,8 @@ mod tests {
             &[crate::AudioFormat::S16be, crate::AudioFormat::S16le],
             crate::AudioLayout::NonInterleaved,
         )
-        .field("rate", &16000)
-        .field("channels", &2)
+        .field("rate", 16000)
+        .field("channels", 2)
         .build();
         assert_eq!(
             caps.to_string(),

@@ -29,7 +29,7 @@ fn example_main() {
 
     // Create a new playbin element, and tell it what uri to play back.
     let playbin = gst::ElementFactory::make("playbin", None).unwrap();
-    playbin.set_property("uri", &uri).unwrap();
+    playbin.set_property("uri", uri).unwrap();
 
     // For flags handling
     // With flags, one can configure playbin's behavior such as whether it

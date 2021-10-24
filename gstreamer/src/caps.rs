@@ -885,13 +885,13 @@ mod tests {
         );
 
         let caps = Caps::builder("foo/bar")
-            .field("int", &12)
+            .field("int", 12)
             .any_features()
             .build();
         assert_eq!(caps.to_string(), "foo/bar(ANY), int=(int)12");
 
         let caps = Caps::builder("foo/bar")
-            .field("int", &12)
+            .field("int", 12)
             .features(&["foo:bla", "foo:baz"])
             .build();
         assert_eq!(caps.to_string(), "foo/bar(foo:bla, foo:baz), int=(int)12");
@@ -918,7 +918,7 @@ mod tests {
         let caps = Caps::builder_full()
             .structure(
                 Structure::builder("audio/x-raw")
-                    .field("format", &"S16LE")
+                    .field("format", "S16LE")
                     .build(),
             )
             .structure(Structure::builder("video/x-raw").build())

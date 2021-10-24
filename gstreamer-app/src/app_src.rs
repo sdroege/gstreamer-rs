@@ -454,7 +454,7 @@ mod tests {
         let appsrc = gst::ElementFactory::make("appsrc", None).unwrap();
         let fakesink = gst::ElementFactory::make("fakesink", None).unwrap();
 
-        fakesink.set_property("signal-handoffs", &true).unwrap();
+        fakesink.set_property("signal-handoffs", true).unwrap();
 
         let pipeline = gst::Pipeline::new(None);
         pipeline.add(&appsrc).unwrap();

@@ -81,9 +81,9 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     // with images of the size 800x800, and framerate of 15 fps, since my laptop struggles
     // rendering it at the default 30 fps
     let caps = gst::Caps::builder("video/x-raw")
-        .field("width", &800i32)
-        .field("height", &800i32)
-        .field("framerate", &gst::Fraction::new(15, 1))
+        .field("width", 800i32)
+        .field("height", 800i32)
+        .field("framerate", gst::Fraction::new(15, 1))
         .build();
     capsfilter.set_property("caps", &caps).unwrap();
 

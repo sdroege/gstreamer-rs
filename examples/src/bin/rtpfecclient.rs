@@ -92,7 +92,7 @@ fn make_fec_decoder(rtpbin: &gst::Element, sess_id: u32) -> Result<gst::Element,
         .unwrap();
 
     fecdec.set_property("storage", &internal_storage)?;
-    fecdec.set_property("pt", &100u32)?;
+    fecdec.set_property("pt", 100u32)?;
 
     Ok(fecdec)
 }
@@ -134,7 +134,7 @@ fn example_main() -> Result<(), Error> {
 
             pipeline.add_many(&[&enc, &mux, &sink])?;
             gst::Element::link_many(&[&filter, &enc, &mux, &sink])?;
-            sink.set_property("location", &"out.mkv")?;
+            sink.set_property("location", "out.mkv")?;
             enc.set_property_from_str("tune", "zerolatency")?;
             eprintln!("Recording to out.mkv");
         }
@@ -147,7 +147,7 @@ fn example_main() -> Result<(), Error> {
         let storage = values[1]
             .get::<gst::Element>()
             .expect("rtpbin \"new-storage\" signal values[1]");
-        storage.set_property("size-time", &250_000_000u64).unwrap();
+        storage.set_property("size-time", 250_000_000u64).unwrap();
 
         None
     })?;
@@ -232,10 +232,10 @@ fn example_main() -> Result<(), Error> {
         .field("height", 1080i32)
         .build();
 
-    src.set_property("address", &"127.0.0.1")?;
+    src.set_property("address", "127.0.0.1")?;
     src.set_property("caps", &rtp_caps)?;
-    netsim.set_property("drop-probability", &drop_probability)?;
-    rtpbin.set_property("do-lost", &true)?;
+    netsim.set_property("drop-probability", drop_probability)?;
+    rtpbin.set_property("do-lost", true)?;
     filter.set_property("caps", &video_caps)?;
 
     let bus = pipeline

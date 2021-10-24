@@ -900,9 +900,9 @@ mod tests {
         let mut s = Structure::new_empty("test");
         assert_eq!(s.name(), "test");
 
-        s.set("f1", &"abc");
+        s.set("f1", "abc");
         s.set("f2", &String::from("bcd"));
-        s.set("f3", &123i32);
+        s.set("f3", 123i32);
 
         assert_eq!(s.get::<&str>("f1"), Ok("abc"));
         assert_eq!(s.get::<Option<&str>>("f2"), Ok(Some("bcd")));
@@ -952,9 +952,9 @@ mod tests {
         crate::init().unwrap();
 
         let s = Structure::builder("test")
-            .field("f1", &"abc")
+            .field("f1", "abc")
             .field("f2", &String::from("bcd"))
-            .field("f3", &123i32)
+            .field("f3", 123i32)
             .build();
 
         assert_eq!(s.name(), "test");
@@ -993,9 +993,9 @@ mod tests {
         crate::init().unwrap();
 
         let s = Structure::builder("test")
-            .field("f1", &"abc")
+            .field("f1", "abc")
             .field("f2", &String::from("bcd"))
-            .field("f3", &123i32)
+            .field("f3", 123i32)
             .build();
 
         let s2 = Structure::from_iter(

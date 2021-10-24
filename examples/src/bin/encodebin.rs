@@ -104,9 +104,9 @@ fn example_main() -> Result<(), Error> {
     let sink =
         gst::ElementFactory::make("filesink", None).map_err(|_| MissingElement("filesink"))?;
 
-    src.set_property("uri", &uri)
+    src.set_property("uri", uri)
         .expect("setting URI Property failed");
-    sink.set_property("location", &output_file)
+    sink.set_property("location", output_file)
         .expect("setting location property failed");
 
     // Configure the encodebin.

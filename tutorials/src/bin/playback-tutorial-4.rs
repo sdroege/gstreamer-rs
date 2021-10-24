@@ -20,7 +20,7 @@ fn tutorial_main() -> Result<(), Error> {
     let uri =
         "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
     let pipeline = gst::ElementFactory::make("playbin", None)?;
-    pipeline.set_property("uri", &uri).unwrap();
+    pipeline.set_property("uri", uri).unwrap();
 
     // Set the download flag
     let flags = pipeline.property("flags")?;
@@ -34,7 +34,7 @@ fn tutorial_main() -> Result<(), Error> {
     pipeline.set_property_from_value("flags", &flags).unwrap();
 
     // Uncomment this line to limit the amount of downloaded data.
-    // pipeline.set_property("ring-buffer-max-size", &4_000_000u64)?;
+    // pipeline.set_property("ring-buffer-max-size", 4_000_000u64)?;
 
     // Start playing
     let mut is_live = false;
@@ -110,7 +110,7 @@ fn tutorial_main() -> Result<(), Error> {
                 .unwrap()
         );
         // Uncomment this line to keep the temporary file after the program exists.
-        // download_buffer.set_property("temp-remove", &false).ok();
+        // download_buffer.set_property("temp-remove", false).ok();
         None
     })?;
 

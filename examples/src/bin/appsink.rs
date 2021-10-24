@@ -60,7 +60,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
         &gst::Caps::builder("audio/x-raw")
             .field("format", gst_audio::AUDIO_FORMAT_S16.to_str())
             .field("layout", "interleaved")
-            .field("channels", (1i32))
+            .field("channels", 1i32)
             .field("rate", gst::IntRange::<i32>::new(1, i32::MAX))
             .build(),
     ));

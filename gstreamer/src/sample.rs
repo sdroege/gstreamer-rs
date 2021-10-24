@@ -254,7 +254,7 @@ mod tests {
         crate::init().unwrap();
 
         let info = Structure::builder("sample.info")
-            .field("f3", &123i32)
+            .field("f3", 123i32)
             .build();
         let sample = Sample::builder().info(info).build();
 

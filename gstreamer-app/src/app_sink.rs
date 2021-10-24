@@ -1035,7 +1035,7 @@ mod tests {
         let videotestsrc = gst::ElementFactory::make("videotestsrc", None).unwrap();
         let appsink = gst::ElementFactory::make("appsink", None).unwrap();
 
-        videotestsrc.set_property("num-buffers", &5).unwrap();
+        videotestsrc.set_property("num-buffers", 5).unwrap();
 
         let pipeline = gst::Pipeline::new(None);
         pipeline.add(&videotestsrc).unwrap();

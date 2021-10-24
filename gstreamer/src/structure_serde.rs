@@ -176,16 +176,16 @@ mod tests {
         crate::init().unwrap();
 
         let s = Structure::builder("test")
-            .field("f1", &"abc")
+            .field("f1", "abc")
             .field("f2", &String::from("bcd"))
-            .field("f3", &123i32)
-            .field("fraction", &Fraction::new(1, 2))
-            .field("date", &Date::new_dmy(19, DateMonth::August, 2019).unwrap())
+            .field("f3", 123i32)
+            .field("fraction", Fraction::new(1, 2))
+            .field("date", Date::new_dmy(19, DateMonth::August, 2019).unwrap())
             .field(
                 "date_time",
-                &DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap(),
+                DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap(),
             )
-            .field("array", &Array::new(&[&1, &2]))
+            .field("array", Array::new(&[&1, &2]))
             .build();
 
         let pretty_config = ron::ser::PrettyConfig::new().new_line("".to_string());
@@ -252,16 +252,16 @@ mod tests {
         crate::init().unwrap();
 
         let s = Structure::builder("test")
-            .field("f1", &"abc")
-            .field("f2", &"bcd".to_owned())
-            .field("f3", &123i32)
-            .field("fraction", &Fraction::new(1, 2))
-            .field("date", &Date::new_dmy(19, DateMonth::August, 2019).unwrap())
+            .field("f1", "abc")
+            .field("f2", "bcd".to_owned())
+            .field("f3", 123i32)
+            .field("fraction", Fraction::new(1, 2))
+            .field("date", Date::new_dmy(19, DateMonth::August, 2019).unwrap())
             .field(
                 "date_time",
-                &DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap(),
+                DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap(),
             )
-            .field("array", &Array::new(&[&1, &2]))
+            .field("array", Array::new(&[&1, &2]))
             .build();
         let s_ser = ron::ser::to_string(&s).unwrap();
         let s_de: Structure = ron::de::from_str(s_ser.as_str()).unwrap();

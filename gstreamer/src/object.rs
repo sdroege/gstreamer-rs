@@ -145,7 +145,7 @@ mod tests {
             *notify_clone.lock().unwrap() = Some((id.clone(), prop.name()));
         });
 
-        identity.set_property("silent", &false).unwrap();
+        identity.set_property("silent", false).unwrap();
         assert_eq!(
             *notify.lock().unwrap(),
             Some((identity.upcast::<crate::Object>(), "silent"))

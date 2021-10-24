@@ -205,12 +205,12 @@ pub fn video_make_raw_caps(
         .collect();
 
     gst::caps::Caps::builder("video/x-raw")
-        .field("format", &gst::List::from_owned(formats))
-        .field("width", &gst::IntRange::<i32>::new(1, i32::MAX))
-        .field("height", &gst::IntRange::<i32>::new(1, i32::MAX))
+        .field("format", gst::List::from_owned(formats))
+        .field("width", gst::IntRange::<i32>::new(1, i32::MAX))
+        .field("height", gst::IntRange::<i32>::new(1, i32::MAX))
         .field(
             "framerate",
-            &gst::FractionRange::new(gst::Fraction::new(0, 1), gst::Fraction::new(i32::MAX, 1)),
+            gst::FractionRange::new(gst::Fraction::new(0, 1), gst::Fraction::new(i32::MAX, 1)),
         )
 }
 
@@ -302,9 +302,9 @@ mod tests {
         }
 
         let caps = video_make_raw_caps(&[crate::VideoFormat::Nv12, crate::VideoFormat::Nv16])
-            .field("width", &800)
-            .field("height", &600)
-            .field("framerate", &gst::Fraction::new(30, 1))
+            .field("width", 800)
+            .field("height", 600)
+            .field("framerate", gst::Fraction::new(30, 1))
             .build();
         assert_eq!(caps.to_string(), "video/x-raw, format=(string){ NV12, NV16 }, width=(int)800, height=(int)600, framerate=(fraction)30/1");
     }
