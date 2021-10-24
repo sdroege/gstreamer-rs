@@ -32,7 +32,6 @@ trait EncodingProfileBuilderCommon {
 }
 
 impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
-    #[doc(alias = "gst_encoding_profile_set_allow_dynamic_output")]
     fn set_allow_dynamic_output(&self, allow_dynamic_output: bool) {
         unsafe {
             ffi::gst_encoding_profile_set_allow_dynamic_output(
@@ -42,7 +41,6 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
-    #[doc(alias = "gst_encoding_profile_set_description")]
     fn set_description(&self, description: Option<&str>) {
         let description = description.to_glib_none();
         unsafe {
@@ -53,7 +51,6 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
-    #[doc(alias = "gst_encoding_profile_set_enabled")]
     fn set_enabled(&self, enabled: bool) {
         unsafe {
             ffi::gst_encoding_profile_set_enabled(
@@ -63,7 +60,6 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
-    #[doc(alias = "gst_encoding_profile_set_format")]
     fn set_format(&self, format: &gst::Caps) {
         unsafe {
             ffi::gst_encoding_profile_set_format(
@@ -73,7 +69,6 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
-    #[doc(alias = "gst_encoding_profile_set_name")]
     fn set_name(&self, name: Option<&str>) {
         let name = name.to_glib_none();
         unsafe {
@@ -81,14 +76,12 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
-    #[doc(alias = "gst_encoding_profile_set_presence")]
     fn set_presence(&self, presence: u32) {
         unsafe {
             ffi::gst_encoding_profile_set_presence(self.as_ref().to_glib_none().0, presence);
         }
     }
 
-    #[doc(alias = "gst_encoding_profile_set_preset")]
     fn set_preset(&self, preset: Option<&str>) {
         let preset = preset.to_glib_none();
         unsafe {
@@ -96,7 +89,6 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
-    #[doc(alias = "gst_encoding_profile_set_preset_name")]
     fn set_preset_name(&self, preset_name: Option<&str>) {
         let preset_name = preset_name.to_glib_none();
         unsafe {
@@ -125,13 +117,13 @@ trait EncodingProfileHasRestrictionSetter {
 
 pub trait EncodingProfileHasRestrictionGetter {
     #[doc(alias = "get_restriction")]
+    #[doc(alias = "gst_encoding_profile_get_restriction")]
     fn restriction(&self) -> Option<gst::Caps>;
 }
 
 macro_rules! declare_encoding_profile_has_restriction(
     ($name:ident) => {
         impl EncodingProfileHasRestrictionSetter for $name {
-            #[doc(alias = "gst_encoding_profile_set_restriction")]
             fn set_restriction(&self, restriction: Option<&gst::Caps>) {
                 let profile: &EncodingProfile = glib::object::Cast::upcast_ref(self);
 
@@ -150,7 +142,6 @@ macro_rules! declare_encoding_profile_has_restriction(
         }
 
         impl EncodingProfileHasRestrictionGetter for $name {
-            #[doc(alias = "gst_encoding_profile_get_restriction")]
             fn restriction(&self) -> Option<gst::Caps> {
                 let profile: &EncodingProfile = glib::object::Cast::upcast_ref(self);
 
@@ -165,7 +156,6 @@ macro_rules! declare_encoding_profile_has_restriction(
 );
 
 impl EncodingAudioProfile {
-    #[doc(alias = "gst_encoding_audio_profile_new")]
     fn new(
         format: &gst::Caps,
         preset: Option<&str>,
@@ -184,12 +174,16 @@ impl EncodingAudioProfile {
             ))
         }
     }
+
+    #[doc(alias = "gst_encoding_audio_profile_new")]
+    pub fn builder<'a>() -> EncodingAudioProfileBuilder<'a> {
+        EncodingAudioProfileBuilder::new()
+    }
 }
 
 declare_encoding_profile_has_restriction!(EncodingAudioProfile);
 
 impl EncodingVideoProfile {
-    #[doc(alias = "gst_encoding_video_profile_new")]
     fn new(
         format: &gst::Caps,
         preset: Option<&str>,
@@ -209,14 +203,17 @@ impl EncodingVideoProfile {
         }
     }
 
-    #[doc(alias = "gst_encoding_video_profile_set_pass")]
+    #[doc(alias = "gst_encoding_video_profile_new")]
+    pub fn builder<'a>() -> EncodingVideoProfileBuilder<'a> {
+        EncodingVideoProfileBuilder::new()
+    }
+
     fn set_pass(&self, pass: u32) {
         unsafe {
             ffi::gst_encoding_video_profile_set_pass(self.to_glib_none().0, pass);
         }
     }
 
-    #[doc(alias = "gst_encoding_video_profile_set_variableframerate")]
     fn set_variableframerate(&self, variableframerate: bool) {
         unsafe {
             ffi::gst_encoding_video_profile_set_variableframerate(
@@ -230,7 +227,6 @@ impl EncodingVideoProfile {
 declare_encoding_profile_has_restriction!(EncodingVideoProfile);
 
 impl EncodingContainerProfile {
-    #[doc(alias = "gst_encoding_container_profile_new")]
     fn new(
         name: Option<&str>,
         description: Option<&str>,
@@ -251,7 +247,11 @@ impl EncodingContainerProfile {
         }
     }
 
-    #[doc(alias = "gst_encoding_container_profile_add_profile")]
+    #[doc(alias = "gst_encoding_container_profile_new")]
+    pub fn builder<'a>() -> EncodingContainerProfileBuilder<'a> {
+        EncodingContainerProfileBuilder::new()
+    }
+
     fn add_profile<P: IsA<EncodingProfile>>(
         &self,
         profile: &P,
@@ -304,15 +304,24 @@ impl<'a> EncodingProfileBuilderCommonData<'a> {
 }
 
 pub trait EncodingProfileBuilder<'a>: Sized {
+    #[doc(alias = "gst_encoding_profile_set_name")]
     fn name(self, name: &'a str) -> Self;
+    #[doc(alias = "gst_encoding_profile_set_description")]
     fn description(self, description: &'a str) -> Self;
+    #[doc(alias = "gst_encoding_profile_set_format")]
     fn format(self, format: &'a gst::Caps) -> Self;
+    #[doc(alias = "gst_encoding_profile_set_preset")]
     fn preset(self, preset: &'a str) -> Self;
+    #[doc(alias = "gst_encoding_profile_set_preset_name")]
     fn preset_name(self, preset_name: &'a str) -> Self;
+    #[doc(alias = "gst_encoding_profile_set_presence")]
     fn presence(self, presence: u32) -> Self;
+    #[doc(alias = "gst_encoding_profile_set_allow_dynamic_output")]
     fn allow_dynamic_output(self, allow: bool) -> Self;
+    #[doc(alias = "gst_encoding_profile_set_enabled")]
     fn enabled(self, enabled: bool) -> Self;
     #[cfg(feature = "v1_18")]
+    #[doc(alias = "gst_encoding_profile_set_single_segment")]
     fn single_segment(self, single_segment: bool) -> Self;
 }
 
@@ -408,6 +417,7 @@ impl<'a> EncodingAudioProfileBuilder<'a> {
         }
     }
 
+    #[doc(alias = "gst_encoding_profile_set_restriction")]
     pub fn restriction(mut self, restriction: &'a gst::Caps) -> Self {
         self.restriction = Some(restriction);
         self
@@ -450,16 +460,19 @@ impl<'a> EncodingVideoProfileBuilder<'a> {
         }
     }
 
+    #[doc(alias = "gst_encoding_video_profile_set_pass")]
     pub fn pass(mut self, pass: u32) -> Self {
         self.pass = pass;
         self
     }
 
+    #[doc(alias = "gst_encoding_video_profile_set_variableframerate")]
     pub fn variable_framerate(mut self, variable_framerate: bool) -> Self {
         self.variable_framerate = variable_framerate;
         self
     }
 
+    #[doc(alias = "gst_encoding_profile_set_restriction")]
     pub fn restriction(mut self, restriction: &'a gst::Caps) -> Self {
         self.restriction = Some(restriction);
         self
@@ -523,6 +536,7 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
         Ok(container_profile)
     }
 
+    #[doc(alias = "gst_encoding_container_profile_add_profile")]
     pub fn add_profile<P: IsA<EncodingProfile>>(mut self, profile: &P) -> Self {
         self.profiles.push(profile.as_ref().clone());
         self
