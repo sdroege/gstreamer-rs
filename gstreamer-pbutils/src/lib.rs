@@ -44,8 +44,7 @@ pub mod discoverer_stream_info;
 mod discoverer_video_info;
 pub use crate::discoverer_video_info::*;
 
-mod encoding_profile;
-pub use crate::encoding_profile::*;
+pub mod encoding_profile;
 
 pub mod functions;
 pub use crate::functions::*;

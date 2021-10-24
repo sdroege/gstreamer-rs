@@ -410,7 +410,7 @@ pub struct EncodingAudioProfileBuilder<'a> {
 declare_encoding_profile_builder_common!(EncodingAudioProfileBuilder);
 
 impl<'a> EncodingAudioProfileBuilder<'a> {
-    pub fn new() -> Self {
+    fn new() -> Self {
         EncodingAudioProfileBuilder {
             base: EncodingProfileBuilderCommonData::new(),
             restriction: None,
@@ -451,7 +451,7 @@ pub struct EncodingVideoProfileBuilder<'a> {
 declare_encoding_profile_builder_common!(EncodingVideoProfileBuilder);
 
 impl<'a> EncodingVideoProfileBuilder<'a> {
-    pub fn new() -> Self {
+    fn new() -> Self {
         EncodingVideoProfileBuilder {
             base: EncodingProfileBuilderCommonData::new(),
             restriction: None,
@@ -507,7 +507,7 @@ pub struct EncodingContainerProfileBuilder<'a> {
 declare_encoding_profile_builder_common!(EncodingContainerProfileBuilder);
 
 impl<'a> EncodingContainerProfileBuilder<'a> {
-    pub fn new() -> Self {
+    fn new() -> Self {
         EncodingContainerProfileBuilder {
             base: EncodingProfileBuilderCommonData::new(),
             profiles: Vec::new(),
@@ -576,7 +576,7 @@ mod tests {
 
         let restriction = gst::Caps::new_simple("audio/x-raw", &[("format", &"S32LE")]);
 
-        let audio_profile = EncodingAudioProfileBuilder::new()
+        let audio_profile = EncodingAudioProfile::builder()
             .name(AUDIO_PROFILE_NAME)
             .description(AUDIO_PROFILE_DESCRIPTION)
             .format(&caps)
@@ -615,7 +615,7 @@ mod tests {
 
         let restriction = gst::Caps::new_simple("video/x-raw", &[("format", &"RGBA")]);
 
-        let video_profile = EncodingVideoProfileBuilder::new()
+        let video_profile = EncodingVideoProfile::builder()
             .name(VIDEO_PROFILE_NAME)
             .description(VIDEO_PROFILE_DESCRIPTION)
             .format(&caps)
@@ -661,20 +661,20 @@ mod tests {
         let video_caps = gst::Caps::new_simple("video/x-raw", &[]);
         let audio_caps = gst::Caps::new_simple("audio/x-raw", &[]);
 
-        let video_profile = EncodingVideoProfileBuilder::new()
+        let video_profile = EncodingVideoProfile::builder()
             .name(VIDEO_PROFILE_NAME)
             .description(VIDEO_PROFILE_DESCRIPTION)
             .format(&video_caps)
             .build()
             .unwrap();
-        let audio_profile = EncodingAudioProfileBuilder::new()
+        let audio_profile = EncodingAudioProfile::builder()
             .name(AUDIO_PROFILE_NAME)
             .description(AUDIO_PROFILE_DESCRIPTION)
             .format(&audio_caps)
             .build()
             .unwrap();
 
-        let profile = EncodingContainerProfileBuilder::new()
+        let profile = EncodingContainerProfile::builder()
             .name(CONTAINER_PROFILE_NAME)
             .description(CONTAINER_PROFILE_DESCRIPTION)
             .format(&container_caps)
