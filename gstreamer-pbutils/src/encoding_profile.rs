@@ -26,6 +26,9 @@ trait EncodingProfileBuilderCommon {
     fn set_preset(&self, preset: Option<&str>);
 
     fn set_preset_name(&self, preset_name: Option<&str>);
+
+    #[cfg(feature = "v1_18")]
+    fn set_single_segment(&self, single_segment: bool);
 }
 
 impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
@@ -100,6 +103,16 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
             ffi::gst_encoding_profile_set_preset_name(
                 self.as_ref().to_glib_none().0,
                 preset_name.0,
+            );
+        }
+    }
+
+    #[cfg(feature = "v1_18")]
+    fn set_single_segment(&self, single_segment: bool) {
+        unsafe {
+            ffi::gst_encoding_profile_set_single_segment(
+                self.as_ref().to_glib_none().0,
+                single_segment.into_glib(),
             );
         }
     }
@@ -269,6 +282,8 @@ struct EncodingProfileBuilderCommonData<'a> {
     presence: u32,
     allow_dynamic_output: bool,
     enabled: bool,
+    #[cfg(feature = "v1_18")]
+    single_segment: bool,
 }
 
 impl<'a> EncodingProfileBuilderCommonData<'a> {
@@ -282,6 +297,8 @@ impl<'a> EncodingProfileBuilderCommonData<'a> {
             presence: 0,
             allow_dynamic_output: true,
             enabled: true,
+            #[cfg(feature = "v1_18")]
+            single_segment: false,
         }
     }
 }
@@ -295,6 +312,8 @@ pub trait EncodingProfileBuilder<'a>: Sized {
     fn presence(self, presence: u32) -> Self;
     fn allow_dynamic_output(self, allow: bool) -> Self;
     fn enabled(self, enabled: bool) -> Self;
+    #[cfg(feature = "v1_18")]
+    fn single_segment(self, single_segment: bool) -> Self;
 }
 
 macro_rules! declare_encoding_profile_builder_common(
@@ -345,6 +364,12 @@ macro_rules! declare_encoding_profile_builder_common(
                 self.base.enabled = enabled;
                 self
             }
+
+            #[cfg(feature = "v1_18")]
+            fn single_segment(mut self, single_segment: bool) -> $name<'a> {
+                self.base.single_segment = single_segment;
+                self
+            }
         }
     }
 );
@@ -361,6 +386,10 @@ fn set_common_fields<T: EncodingProfileBuilderCommon>(
     profile.set_allow_dynamic_output(base_data.allow_dynamic_output);
     profile.set_enabled(base_data.enabled);
     profile.set_presence(base_data.presence);
+    #[cfg(feature = "v1_18")]
+    {
+        profile.set_single_segment(base_data.single_segment);
+    }
 }
 
 #[derive(Debug)]
