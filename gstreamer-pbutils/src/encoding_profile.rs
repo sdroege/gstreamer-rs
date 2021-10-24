@@ -172,7 +172,7 @@ impl EncodingAudioProfile {
         restriction: Option<&gst::Caps>,
         presence: u32,
     ) -> EncodingAudioProfile {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let preset = preset.to_glib_none();
         let restriction = restriction.to_glib_none();
         unsafe {
@@ -187,6 +187,7 @@ impl EncodingAudioProfile {
 
     #[doc(alias = "gst_encoding_audio_profile_new")]
     pub fn builder(format: &gst::Caps) -> EncodingAudioProfileBuilder {
+        assert_initialized_main_thread!();
         EncodingAudioProfileBuilder::new(format)
     }
 }
@@ -201,7 +202,7 @@ impl EncodingVideoProfile {
         restriction: Option<&gst::Caps>,
         presence: u32,
     ) -> EncodingVideoProfile {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let preset = preset.to_glib_none();
         let restriction = restriction.to_glib_none();
         unsafe {
@@ -216,6 +217,7 @@ impl EncodingVideoProfile {
 
     #[doc(alias = "gst_encoding_video_profile_new")]
     pub fn builder(format: &gst::Caps) -> EncodingVideoProfileBuilder {
+        assert_initialized_main_thread!();
         EncodingVideoProfileBuilder::new(format)
     }
 
@@ -247,7 +249,7 @@ impl EncodingContainerProfile {
         format: &gst::Caps,
         preset: Option<&str>,
     ) -> EncodingContainerProfile {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let name = name.to_glib_none();
         let description = description.to_glib_none();
         let preset = preset.to_glib_none();
@@ -263,6 +265,7 @@ impl EncodingContainerProfile {
 
     #[doc(alias = "gst_encoding_container_profile_new")]
     pub fn builder(format: &gst::Caps) -> EncodingContainerProfileBuilder {
+        assert_initialized_main_thread!();
         EncodingContainerProfileBuilder::new(format)
     }
 
@@ -295,6 +298,7 @@ struct EncodingProfileBuilderCommonData<'a> {
 
 impl<'a> EncodingProfileBuilderCommonData<'a> {
     fn new(format: &'a gst::Caps) -> EncodingProfileBuilderCommonData<'a> {
+        skip_assert_initialized!();
         EncodingProfileBuilderCommonData {
             name: None,
             description: None,
@@ -405,6 +409,7 @@ declare_encoding_profile_builder_common!(EncodingAudioProfileBuilder);
 
 impl<'a> EncodingAudioProfileBuilder<'a> {
     fn new(format: &'a gst::Caps) -> Self {
+        skip_assert_initialized!();
         EncodingAudioProfileBuilder {
             base: EncodingProfileBuilderCommonData::new(format),
             restriction: None,
@@ -443,6 +448,7 @@ declare_encoding_profile_builder_common!(EncodingVideoProfileBuilder);
 
 impl<'a> EncodingVideoProfileBuilder<'a> {
     fn new(format: &'a gst::Caps) -> Self {
+        skip_assert_initialized!();
         EncodingVideoProfileBuilder {
             base: EncodingProfileBuilderCommonData::new(format),
             restriction: None,
@@ -496,6 +502,7 @@ declare_encoding_profile_builder_common!(EncodingContainerProfileBuilder);
 
 impl<'a> EncodingContainerProfileBuilder<'a> {
     fn new(format: &'a gst::Caps) -> Self {
+        skip_assert_initialized!();
         EncodingContainerProfileBuilder {
             base: EncodingProfileBuilderCommonData::new(format),
             profiles: Vec::new(),
