@@ -1,7 +1,5 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use thiserror::Error;
-
 use glib::prelude::*;
 use glib::translate::*;
 
@@ -176,8 +174,8 @@ impl EncodingAudioProfile {
     }
 
     #[doc(alias = "gst_encoding_audio_profile_new")]
-    pub fn builder<'a>() -> EncodingAudioProfileBuilder<'a> {
-        EncodingAudioProfileBuilder::new()
+    pub fn builder<'a>(format: &'a gst::Caps) -> EncodingAudioProfileBuilder<'a> {
+        EncodingAudioProfileBuilder::new(format)
     }
 }
 
@@ -204,8 +202,8 @@ impl EncodingVideoProfile {
     }
 
     #[doc(alias = "gst_encoding_video_profile_new")]
-    pub fn builder<'a>() -> EncodingVideoProfileBuilder<'a> {
-        EncodingVideoProfileBuilder::new()
+    pub fn builder<'a>(format: &'a gst::Caps) -> EncodingVideoProfileBuilder<'a> {
+        EncodingVideoProfileBuilder::new(format)
     }
 
     fn set_pass(&self, pass: u32) {
@@ -248,35 +246,27 @@ impl EncodingContainerProfile {
     }
 
     #[doc(alias = "gst_encoding_container_profile_new")]
-    pub fn builder<'a>() -> EncodingContainerProfileBuilder<'a> {
-        EncodingContainerProfileBuilder::new()
+    pub fn builder<'a>(format: &'a gst::Caps) -> EncodingContainerProfileBuilder<'a> {
+        EncodingContainerProfileBuilder::new(format)
     }
 
-    fn add_profile<P: IsA<EncodingProfile>>(
-        &self,
-        profile: &P,
-    ) -> Result<(), glib::error::BoolError> {
+    fn add_profile<P: IsA<EncodingProfile>>(&self, profile: &P) {
         unsafe {
-            glib::result_from_gboolean!(
-                ffi::gst_encoding_container_profile_add_profile(
-                    self.to_glib_none().0,
-                    profile.as_ref().to_glib_full(),
-                ),
-                "Failed to add profile",
-            )
+            let res = ffi::gst_encoding_container_profile_add_profile(
+                self.to_glib_none().0,
+                profile.as_ref().to_glib_full(),
+            );
+            // Can't possibly fail unless we pass random pointers
+            assert_ne!(res, glib::ffi::GFALSE);
         }
     }
 }
 
-#[derive(Debug, Clone, Error)]
-#[error("failed to build encoding profile")]
-pub struct EncodingProfileBuilderError(());
-
 #[derive(Debug)]
 struct EncodingProfileBuilderCommonData<'a> {
+    format: &'a gst::Caps,
     name: Option<&'a str>,
     description: Option<&'a str>,
-    format: Option<&'a gst::Caps>,
     preset: Option<&'a str>,
     preset_name: Option<&'a str>,
     presence: u32,
@@ -287,11 +277,11 @@ struct EncodingProfileBuilderCommonData<'a> {
 }
 
 impl<'a> EncodingProfileBuilderCommonData<'a> {
-    fn new() -> EncodingProfileBuilderCommonData<'a> {
+    fn new(format: &'a gst::Caps) -> EncodingProfileBuilderCommonData<'a> {
         EncodingProfileBuilderCommonData {
             name: None,
             description: None,
-            format: None,
+            format,
             preset: None,
             preset_name: None,
             presence: 0,
@@ -308,8 +298,6 @@ pub trait EncodingProfileBuilder<'a>: Sized {
     fn name(self, name: &'a str) -> Self;
     #[doc(alias = "gst_encoding_profile_set_description")]
     fn description(self, description: &'a str) -> Self;
-    #[doc(alias = "gst_encoding_profile_set_format")]
-    fn format(self, format: &'a gst::Caps) -> Self;
     #[doc(alias = "gst_encoding_profile_set_preset")]
     fn preset(self, preset: &'a str) -> Self;
     #[doc(alias = "gst_encoding_profile_set_preset_name")]
@@ -327,12 +315,6 @@ pub trait EncodingProfileBuilder<'a>: Sized {
 
 macro_rules! declare_encoding_profile_builder_common(
     ($name:ident) => {
-        impl<'a> Default for $name<'a> {
-            fn default() -> Self {
-                Self::new()
-            }
-        }
-
         impl<'a> EncodingProfileBuilder<'a> for $name<'a> {
             fn name(mut self, name: &'a str) -> $name<'a> {
                 self.base.name = Some(name);
@@ -341,11 +323,6 @@ macro_rules! declare_encoding_profile_builder_common(
 
             fn description(mut self, description: &'a str) -> $name<'a> {
                 self.base.description = Some(description);
-                self
-            }
-
-            fn format(mut self, format: &'a gst::Caps) -> $name<'a> {
-                self.base.format = Some(format);
                 self
             }
 
@@ -410,9 +387,9 @@ pub struct EncodingAudioProfileBuilder<'a> {
 declare_encoding_profile_builder_common!(EncodingAudioProfileBuilder);
 
 impl<'a> EncodingAudioProfileBuilder<'a> {
-    fn new() -> Self {
+    fn new(format: &'a gst::Caps) -> Self {
         EncodingAudioProfileBuilder {
-            base: EncodingProfileBuilderCommonData::new(),
+            base: EncodingProfileBuilderCommonData::new(format),
             restriction: None,
         }
     }
@@ -423,20 +400,17 @@ impl<'a> EncodingAudioProfileBuilder<'a> {
         self
     }
 
-    pub fn build(self) -> Result<EncodingAudioProfile, EncodingProfileBuilderError> {
-        if self.base.format.is_none() {
-            return Err(EncodingProfileBuilderError(()));
-        }
-
+    pub fn build(self) -> EncodingAudioProfile {
         let profile = EncodingAudioProfile::new(
-            self.base.format.unwrap(),
+            self.base.format,
             self.base.preset,
             self.restriction,
             self.base.presence,
         );
 
         set_common_fields(&profile, &self.base);
-        Ok(profile)
+
+        profile
     }
 }
 
@@ -451,9 +425,9 @@ pub struct EncodingVideoProfileBuilder<'a> {
 declare_encoding_profile_builder_common!(EncodingVideoProfileBuilder);
 
 impl<'a> EncodingVideoProfileBuilder<'a> {
-    fn new() -> Self {
+    fn new(format: &'a gst::Caps) -> Self {
         EncodingVideoProfileBuilder {
-            base: EncodingProfileBuilderCommonData::new(),
+            base: EncodingProfileBuilderCommonData::new(format),
             restriction: None,
             pass: 0,
             variable_framerate: false,
@@ -478,13 +452,9 @@ impl<'a> EncodingVideoProfileBuilder<'a> {
         self
     }
 
-    pub fn build(self) -> Result<EncodingVideoProfile, EncodingProfileBuilderError> {
-        if self.base.format.is_none() {
-            return Err(EncodingProfileBuilderError(()));
-        }
-
+    pub fn build(self) -> EncodingVideoProfile {
         let video_profile = EncodingVideoProfile::new(
-            self.base.format.unwrap(),
+            self.base.format,
             self.base.preset,
             self.restriction,
             self.base.presence,
@@ -494,7 +464,8 @@ impl<'a> EncodingVideoProfileBuilder<'a> {
         video_profile.set_variableframerate(self.variable_framerate);
 
         set_common_fields(&video_profile, &self.base);
-        Ok(video_profile)
+
+        video_profile
     }
 }
 
@@ -507,33 +478,28 @@ pub struct EncodingContainerProfileBuilder<'a> {
 declare_encoding_profile_builder_common!(EncodingContainerProfileBuilder);
 
 impl<'a> EncodingContainerProfileBuilder<'a> {
-    fn new() -> Self {
+    fn new(format: &'a gst::Caps) -> Self {
         EncodingContainerProfileBuilder {
-            base: EncodingProfileBuilderCommonData::new(),
+            base: EncodingProfileBuilderCommonData::new(format),
             profiles: Vec::new(),
         }
     }
 
-    pub fn build(self) -> Result<EncodingContainerProfile, EncodingProfileBuilderError> {
-        if self.base.format.is_none() {
-            return Err(EncodingProfileBuilderError(()));
-        }
-
+    pub fn build(self) -> EncodingContainerProfile {
         let container_profile = EncodingContainerProfile::new(
             self.base.name,
             self.base.description,
-            self.base.format.unwrap(),
+            self.base.format,
             self.base.preset,
         );
 
         for profile in self.profiles {
-            container_profile
-                .add_profile(&profile)
-                .map_err(|_error| EncodingProfileBuilderError(()))?;
+            container_profile.add_profile(&profile);
         }
 
         set_common_fields(&container_profile, &self.base);
-        Ok(container_profile)
+
+        container_profile
     }
 
     #[doc(alias = "gst_encoding_container_profile_add_profile")]
@@ -576,18 +542,16 @@ mod tests {
 
         let restriction = gst::Caps::new_simple("audio/x-raw", &[("format", &"S32LE")]);
 
-        let audio_profile = EncodingAudioProfile::builder()
+        let audio_profile = EncodingAudioProfile::builder(&caps)
             .name(AUDIO_PROFILE_NAME)
             .description(AUDIO_PROFILE_DESCRIPTION)
-            .format(&caps)
             .preset(PRESET)
             .preset_name(PRESET_NAME)
             .restriction(&restriction)
             .presence(PRESENCE)
             .allow_dynamic_output(ALLOW_DYNAMIC_OUTPUT)
             .enabled(ENABLED)
-            .build()
-            .unwrap();
+            .build();
 
         assert_eq!(audio_profile.name().unwrap(), AUDIO_PROFILE_NAME);
         assert_eq!(
@@ -615,10 +579,9 @@ mod tests {
 
         let restriction = gst::Caps::new_simple("video/x-raw", &[("format", &"RGBA")]);
 
-        let video_profile = EncodingVideoProfile::builder()
+        let video_profile = EncodingVideoProfile::builder(&caps)
             .name(VIDEO_PROFILE_NAME)
             .description(VIDEO_PROFILE_DESCRIPTION)
-            .format(&caps)
             .preset(PRESET)
             .preset_name(PRESET_NAME)
             .restriction(&restriction)
@@ -627,8 +590,7 @@ mod tests {
             .enabled(ENABLED)
             .pass(PASS)
             .variable_framerate(VARIABLE_FRAMERATE)
-            .build()
-            .unwrap();
+            .build();
 
         assert_eq!(video_profile.name().unwrap(), VIDEO_PROFILE_NAME);
         assert_eq!(
@@ -661,23 +623,18 @@ mod tests {
         let video_caps = gst::Caps::new_simple("video/x-raw", &[]);
         let audio_caps = gst::Caps::new_simple("audio/x-raw", &[]);
 
-        let video_profile = EncodingVideoProfile::builder()
+        let video_profile = EncodingVideoProfile::builder(&video_caps)
             .name(VIDEO_PROFILE_NAME)
             .description(VIDEO_PROFILE_DESCRIPTION)
-            .format(&video_caps)
-            .build()
-            .unwrap();
-        let audio_profile = EncodingAudioProfile::builder()
+            .build();
+        let audio_profile = EncodingAudioProfile::builder(&audio_caps)
             .name(AUDIO_PROFILE_NAME)
             .description(AUDIO_PROFILE_DESCRIPTION)
-            .format(&audio_caps)
-            .build()
-            .unwrap();
+            .build();
 
-        let profile = EncodingContainerProfile::builder()
+        let profile = EncodingContainerProfile::builder(&container_caps)
             .name(CONTAINER_PROFILE_NAME)
             .description(CONTAINER_PROFILE_DESCRIPTION)
-            .format(&container_caps)
             .preset(PRESET)
             .preset_name(PRESET_NAME)
             .presence(PRESENCE)
@@ -685,8 +642,7 @@ mod tests {
             .enabled(ENABLED)
             .add_profile(&audio_profile)
             .add_profile(&video_profile)
-            .build()
-            .unwrap();
+            .build();
 
         assert_eq!(profile.name().unwrap(), CONTAINER_PROFILE_NAME);
         assert_eq!(
