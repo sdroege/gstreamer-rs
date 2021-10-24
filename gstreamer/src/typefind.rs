@@ -268,7 +268,7 @@ mod tests {
 
         assert_eq!(
             typefind.caps,
-            Some(Caps::new_simple("application/xml", &[]))
+            Some(Caps::builder("application/xml").build())
         );
         assert_eq!(typefind.probability, Some(TypeFindProbability::Minimum));
     }
@@ -282,7 +282,7 @@ mod tests {
             "test_typefind",
             crate::Rank::Primary,
             None,
-            Some(&Caps::new_simple("test/test", &[])),
+            Some(&Caps::builder("test/test").build()),
             |typefind| {
                 assert_eq!(typefind.length(), Some(8));
                 let mut found = false;
@@ -295,7 +295,7 @@ mod tests {
                 if found {
                     typefind.suggest(
                         TypeFindProbability::Likely,
-                        &Caps::new_simple("test/test", &[]),
+                        &Caps::builder("test/test").build(),
                     );
                 }
             },
@@ -306,7 +306,7 @@ mod tests {
         let data = &data[..];
         let (probability, caps) = SliceTypeFind::type_find(&data);
 
-        assert_eq!(caps, Some(Caps::new_simple("test/test", &[])));
+        assert_eq!(caps, Some(Caps::builder("test/test").build()));
         assert_eq!(probability, TypeFindProbability::Likely);
     }
 }

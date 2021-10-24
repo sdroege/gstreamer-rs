@@ -373,7 +373,7 @@ mod tests {
 
         let pool = crate::BufferPool::new();
         let mut config = pool.config();
-        config.set_params(Some(&crate::Caps::new_simple("foo/bar", &[])), 1024, 0, 2);
+        config.set_params(Some(&crate::Caps::builder("foo/bar").build()), 1024, 0, 2);
         pool.set_config(config).unwrap();
 
         pool.set_active(true).unwrap();

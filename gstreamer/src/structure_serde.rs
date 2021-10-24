@@ -231,22 +231,19 @@ mod tests {
         let s: Structure = ron::de::from_str(s_ron).unwrap();
         assert_eq!(
             s.as_ref(),
-            Structure::new(
-                "test",
-                &[
-                    ("f1", &"abc"),
-                    ("f2", &"bcd"),
-                    ("f3", &123),
-                    ("date", &Date::new_dmy(19, DateMonth::August, 2019).unwrap()),
-                    (
-                        "date_time",
-                        &DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap()
-                    ),
-                    ("fraction", &Fraction::new(1, 2)),
-                    ("array", &Array::new(&[&1, &2])),
-                ],
-            )
-            .as_ref()
+            Structure::builder("test")
+                .field("f1", "abc")
+                .field("f2", "bcd")
+                .field("f3", 123)
+                .field("date", Date::new_dmy(19, DateMonth::August, 2019).unwrap())
+                .field(
+                    "date_time",
+                    DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap()
+                )
+                .field("fraction", Fraction::new(1, 2))
+                .field("array", Array::new(&[&1, &2]))
+                .build()
+                .as_ref()
         );
     }
 

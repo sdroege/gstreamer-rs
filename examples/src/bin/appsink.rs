@@ -56,15 +56,14 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     // provide the format we request.
     // This can be set after linking the two objects, because format negotiation between
     // both elements will happen during pre-rolling of the pipeline.
-    appsink.set_caps(Some(&gst::Caps::new_simple(
-        "audio/x-raw",
-        &[
-            ("format", &gst_audio::AUDIO_FORMAT_S16.to_str()),
-            ("layout", &"interleaved"),
-            ("channels", &(1i32)),
-            ("rate", &gst::IntRange::<i32>::new(1, i32::MAX)),
-        ],
-    )));
+    appsink.set_caps(Some(
+        &gst::Caps::builder("audio/x-raw")
+            .field("format", gst_audio::AUDIO_FORMAT_S16.to_str())
+            .field("layout", "interleaved")
+            .field("channels", (1i32))
+            .field("rate", gst::IntRange::<i32>::new(1, i32::MAX))
+            .build(),
+    ));
 
     // Getting data out of the appsink is done by setting callbacks on it.
     // The appsink will then call those handlers, as soon as data is available.

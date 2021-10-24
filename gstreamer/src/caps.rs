@@ -901,7 +901,7 @@ mod tests {
     fn test_display() {
         crate::init().unwrap();
 
-        let caps = Caps::new_simple("foo/bar", &[]);
+        let caps = Caps::builder("foo/bar").build();
         format!("{}", caps);
     }
 

@@ -206,7 +206,7 @@ mod tests {
         });
 
         thread::spawn(move || {
-            promise.reply(Some(crate::Structure::new("foo/bar", &[])));
+            promise.reply(Some(crate::Structure::new_empty("foo/bar")));
         });
 
         let res = receiver.recv().unwrap();

@@ -470,16 +470,13 @@ mod tests {
     fn test_from_to_caps() {
         gst::init().unwrap();
 
-        let caps = gst::Caps::new_simple(
-            "audio/x-raw",
-            &[
-                ("format", &"S16LE"),
-                ("rate", &48000),
-                ("channels", &2),
-                ("layout", &"interleaved"),
-                ("channel-mask", &gst::Bitmask::new(0x3)),
-            ],
-        );
+        let caps = gst::Caps::builder("audio/x-raw")
+            .field("format", "S16LE")
+            .field("rate", 48000)
+            .field("channels", 2)
+            .field("layout", "interleaved")
+            .field("channel-mask", gst::Bitmask::new(0x3))
+            .build();
         let info = AudioInfo::from_caps(&caps).unwrap();
         assert_eq!(info.format(), crate::AudioFormat::S16le);
         assert_eq!(info.rate(), 48000);

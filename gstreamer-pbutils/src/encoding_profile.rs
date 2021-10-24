@@ -538,9 +538,11 @@ mod tests {
     fn test_encoding_audio_profile_builder() {
         gst::init().unwrap();
 
-        let caps = gst::Caps::new_simple("audio/x-raw", &[]);
+        let caps = gst::Caps::builder("audio/x-raw").build();
 
-        let restriction = gst::Caps::new_simple("audio/x-raw", &[("format", &"S32LE")]);
+        let restriction = gst::Caps::builder("audio/x-raw")
+            .field("format", "S32LE")
+            .build();
 
         let audio_profile = EncodingAudioProfile::builder(&caps)
             .name(AUDIO_PROFILE_NAME)
@@ -566,7 +568,9 @@ mod tests {
         assert_eq!(audio_profile.allows_dynamic_output(), ALLOW_DYNAMIC_OUTPUT);
         assert_eq!(audio_profile.is_enabled(), ENABLED);
 
-        let restriction = gst::Caps::new_simple("audio/x-raw", &[("format", &"S32BE")]);
+        let restriction = gst::Caps::builder("audio/x-raw")
+            .field("format", "S32BE")
+            .build();
         audio_profile.set_restriction(Some(&restriction));
         assert_eq!(audio_profile.restriction().unwrap(), restriction);
     }
@@ -575,9 +579,11 @@ mod tests {
     fn test_encoding_video_profile_builder() {
         gst::init().unwrap();
 
-        let caps = gst::Caps::new_simple("video/x-raw", &[]);
+        let caps = gst::Caps::builder("video/x-raw").build();
 
-        let restriction = gst::Caps::new_simple("video/x-raw", &[("format", &"RGBA")]);
+        let restriction = gst::Caps::builder("video/x-raw")
+            .field("format", "RGBA")
+            .build();
 
         let video_profile = EncodingVideoProfile::builder(&caps)
             .name(VIDEO_PROFILE_NAME)
@@ -610,7 +616,9 @@ mod tests {
         assert_eq!(video_profile.is_variableframerate(), VARIABLE_FRAMERATE);
         assert_eq!(video_profile.pass(), PASS);
 
-        let restriction = gst::Caps::new_simple("video/x-raw", &[("format", &"NV12")]);
+        let restriction = gst::Caps::builder("video/x-raw")
+            .field("format", "NV12")
+            .build();
         video_profile.set_restriction(Some(&restriction));
         assert_eq!(video_profile.restriction().unwrap(), restriction);
     }
@@ -619,9 +627,9 @@ mod tests {
     fn test_encoding_container_profile_builder() {
         gst::init().unwrap();
 
-        let container_caps = gst::Caps::new_simple("container/x-caps", &[]);
-        let video_caps = gst::Caps::new_simple("video/x-raw", &[]);
-        let audio_caps = gst::Caps::new_simple("audio/x-raw", &[]);
+        let container_caps = gst::Caps::builder("container/x-caps").build();
+        let video_caps = gst::Caps::builder("video/x-raw").build();
+        let audio_caps = gst::Caps::builder("audio/x-raw").build();
 
         let video_profile = EncodingVideoProfile::builder(&video_caps)
             .name(VIDEO_PROFILE_NAME)

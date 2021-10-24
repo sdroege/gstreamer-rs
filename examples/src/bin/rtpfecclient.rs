@@ -158,26 +158,20 @@ fn example_main() -> Result<(), Error> {
             .expect("rtpbin \"new-storage\" signal values[2]");
         match pt {
             100 => Some(
-                gst::Caps::new_simple(
-                    "application/x-rtp",
-                    &[
-                        ("media", &"video"),
-                        ("clock-rate", &90000i32),
-                        ("is-fec", &true),
-                    ],
-                )
-                .to_value(),
+                gst::Caps::builder("application/x-rtp")
+                    .field("media", "video")
+                    .field("clock-rate", 90000i32)
+                    .field("is-fec", true)
+                    .build()
+                    .to_value(),
             ),
             96 => Some(
-                gst::Caps::new_simple(
-                    "application/x-rtp",
-                    &[
-                        ("media", &"video"),
-                        ("clock-rate", &90000i32),
-                        ("encoding-name", &"VP8"),
-                    ],
-                )
-                .to_value(),
+                gst::Caps::builder("application/x-rtp")
+                    .field("media", "video")
+                    .field("clock-rate", 90000i32)
+                    .field("encoding-name", "VP8")
+                    .build()
+                    .to_value(),
             ),
             _ => None,
         }
@@ -229,10 +223,14 @@ fn example_main() -> Result<(), Error> {
         }
     });
 
-    let rtp_caps = gst::Caps::new_simple("application/x-rtp", &[("clock-rate", &90000i32)]);
+    let rtp_caps = gst::Caps::builder("application/x-rtp")
+        .field("clock-rate", 90000i32)
+        .build();
 
-    let video_caps =
-        gst::Caps::new_simple("video/x-raw", &[("width", &1920i32), ("height", &1080i32)]);
+    let video_caps = gst::Caps::builder("video/x-raw")
+        .field("width", 1920i32)
+        .field("height", 1080i32)
+        .build();
 
     src.set_property("address", &"127.0.0.1")?;
     src.set_property("caps", &rtp_caps)?;

@@ -149,7 +149,7 @@ fn example_main() -> Result<(), Error> {
         },
     );
 
-    let video_caps = gst::Caps::new_simple("video/x-raw", &[]);
+    let video_caps = gst::Caps::builder("video/x-raw").build();
 
     src.set_property_from_str("pattern", "ball")?;
     sink.set_property("host", &"127.0.0.1")?;

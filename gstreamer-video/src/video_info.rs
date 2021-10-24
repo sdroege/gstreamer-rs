@@ -1058,19 +1058,16 @@ mod tests {
     fn test_from_to_caps() {
         gst::init().unwrap();
 
-        let caps = gst::Caps::new_simple(
-            "video/x-raw",
-            &[
-                ("format", &"I420"),
-                ("width", &320),
-                ("height", &240),
-                ("framerate", &gst::Fraction::new(30, 1)),
-                ("pixel-aspect-ratio", &gst::Fraction::new(1, 1)),
-                ("interlace-mode", &"progressive"),
-                ("chroma-site", &"mpeg2"),
-                ("colorimetry", &"bt709"),
-            ],
-        );
+        let caps = gst::Caps::builder("video/x-raw")
+            .field("format", "I420")
+            .field("width", 320)
+            .field("height", 240)
+            .field("framerate", gst::Fraction::new(30, 1))
+            .field("pixel-aspect-ratio", gst::Fraction::new(1, 1))
+            .field("interlace-mode", "progressive")
+            .field("chroma-site", "mpeg2")
+            .field("colorimetry", "bt709")
+            .build();
         let info = VideoInfo::from_caps(&caps).unwrap();
         assert_eq!(info.format(), crate::VideoFormat::I420);
         assert_eq!(info.width(), 320);
