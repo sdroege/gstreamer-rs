@@ -30,6 +30,7 @@ trait EncodingProfileBuilderCommon {
 }
 
 impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
+    // checker-ignore-item
     fn set_allow_dynamic_output(&self, allow_dynamic_output: bool) {
         unsafe {
             ffi::gst_encoding_profile_set_allow_dynamic_output(
@@ -39,6 +40,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
+    // checker-ignore-item
     fn set_description(&self, description: Option<&str>) {
         let description = description.to_glib_none();
         unsafe {
@@ -49,6 +51,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
+    // checker-ignore-item
     fn set_enabled(&self, enabled: bool) {
         unsafe {
             ffi::gst_encoding_profile_set_enabled(
@@ -58,6 +61,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
+    // checker-ignore-item
     fn set_format(&self, format: &gst::Caps) {
         unsafe {
             ffi::gst_encoding_profile_set_format(
@@ -67,6 +71,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
+    // checker-ignore-item
     fn set_name(&self, name: Option<&str>) {
         let name = name.to_glib_none();
         unsafe {
@@ -74,12 +79,14 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
+    // checker-ignore-item
     fn set_presence(&self, presence: u32) {
         unsafe {
             ffi::gst_encoding_profile_set_presence(self.as_ref().to_glib_none().0, presence);
         }
     }
 
+    // checker-ignore-item
     fn set_preset(&self, preset: Option<&str>) {
         let preset = preset.to_glib_none();
         unsafe {
@@ -87,6 +94,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
+    // checker-ignore-item
     fn set_preset_name(&self, preset_name: Option<&str>) {
         let preset_name = preset_name.to_glib_none();
         unsafe {
@@ -97,6 +105,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
+    // checker-ignore-item
     #[cfg(feature = "v1_18")]
     fn set_single_segment(&self, single_segment: bool) {
         unsafe {
@@ -122,6 +131,7 @@ pub trait EncodingProfileHasRestrictionGetter {
 macro_rules! declare_encoding_profile_has_restriction(
     ($name:ident) => {
         impl EncodingProfileHasRestrictionSetter for $name {
+            // checker-ignore-item
             fn set_restriction(&self, restriction: Option<&gst::Caps>) {
                 let profile: &EncodingProfile = glib::object::Cast::upcast_ref(self);
 
@@ -140,6 +150,7 @@ macro_rules! declare_encoding_profile_has_restriction(
         }
 
         impl EncodingProfileHasRestrictionGetter for $name {
+            // checker-ignore-item
             fn restriction(&self) -> Option<gst::Caps> {
                 let profile: &EncodingProfile = glib::object::Cast::upcast_ref(self);
 
@@ -154,6 +165,7 @@ macro_rules! declare_encoding_profile_has_restriction(
 );
 
 impl EncodingAudioProfile {
+    // checker-ignore-item
     fn new(
         format: &gst::Caps,
         preset: Option<&str>,
@@ -182,6 +194,7 @@ impl EncodingAudioProfile {
 declare_encoding_profile_has_restriction!(EncodingAudioProfile);
 
 impl EncodingVideoProfile {
+    // checker-ignore-item
     fn new(
         format: &gst::Caps,
         preset: Option<&str>,
@@ -206,12 +219,14 @@ impl EncodingVideoProfile {
         EncodingVideoProfileBuilder::new(format)
     }
 
+    // checker-ignore-item
     fn set_pass(&self, pass: u32) {
         unsafe {
             ffi::gst_encoding_video_profile_set_pass(self.to_glib_none().0, pass);
         }
     }
 
+    // checker-ignore-item
     fn set_variableframerate(&self, variableframerate: bool) {
         unsafe {
             ffi::gst_encoding_video_profile_set_variableframerate(
@@ -225,6 +240,7 @@ impl EncodingVideoProfile {
 declare_encoding_profile_has_restriction!(EncodingVideoProfile);
 
 impl EncodingContainerProfile {
+    // checker-ignore-item
     fn new(
         name: Option<&str>,
         description: Option<&str>,
@@ -250,6 +266,7 @@ impl EncodingContainerProfile {
         EncodingContainerProfileBuilder::new(format)
     }
 
+    // checker-ignore-item
     fn add_profile<P: IsA<EncodingProfile>>(&self, profile: &P) {
         unsafe {
             let res = ffi::gst_encoding_container_profile_add_profile(
