@@ -174,7 +174,7 @@ impl EncodingAudioProfile {
     }
 
     #[doc(alias = "gst_encoding_audio_profile_new")]
-    pub fn builder<'a>(format: &'a gst::Caps) -> EncodingAudioProfileBuilder<'a> {
+    pub fn builder(format: &gst::Caps) -> EncodingAudioProfileBuilder {
         EncodingAudioProfileBuilder::new(format)
     }
 }
@@ -202,7 +202,7 @@ impl EncodingVideoProfile {
     }
 
     #[doc(alias = "gst_encoding_video_profile_new")]
-    pub fn builder<'a>(format: &'a gst::Caps) -> EncodingVideoProfileBuilder<'a> {
+    pub fn builder(format: &gst::Caps) -> EncodingVideoProfileBuilder {
         EncodingVideoProfileBuilder::new(format)
     }
 
@@ -246,7 +246,7 @@ impl EncodingContainerProfile {
     }
 
     #[doc(alias = "gst_encoding_container_profile_new")]
-    pub fn builder<'a>(format: &'a gst::Caps) -> EncodingContainerProfileBuilder<'a> {
+    pub fn builder(format: &gst::Caps) -> EncodingContainerProfileBuilder {
         EncodingContainerProfileBuilder::new(format)
     }
 
