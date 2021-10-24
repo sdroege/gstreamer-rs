@@ -48,38 +48,37 @@ struct ErrorMessage {
 #[gboxed(type_name = "ErrorValue")]
 struct ErrorValue(Arc<Mutex<Option<Error>>>);
 
-fn configure_encodebin(encodebin: &gst::Element) -> Result<(), Error> {
+fn configure_encodebin(encodebin: &gst::Element) {
     // To tell the encodebin what we want it to produce, we create an EncodingProfile
     // https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-base-libs/html/GstEncodingProfile.html
     // This profile consists of information about the contained audio and video formats
     // as well as the container format we want everything to be combined into.
 
     // Every audiostream piped into the encodebin should be encoded using vorbis.
-    let audio_profile = gst_pbutils::EncodingAudioProfileBuilder::new()
-        .format(&gst::Caps::new_simple("audio/x-vorbis", &[]))
-        .presence(0)
-        .build()?;
+    let audio_profile =
+        gst_pbutils::EncodingAudioProfile::builder(&gst::Caps::builder("audio/x-vorbis").build())
+            .presence(0)
+            .build();
 
     // Every videostream piped into the encodebin should be encoded using theora.
-    let video_profile = gst_pbutils::EncodingVideoProfileBuilder::new()
-        .format(&gst::Caps::new_simple("video/x-theora", &[]))
-        .presence(0)
-        .build()?;
+    let video_profile =
+        gst_pbutils::EncodingVideoProfile::builder(&gst::Caps::builder("video/x-theora").build())
+            .presence(0)
+            .build();
 
     // All streams are then finally combined into a matroska container.
-    let container_profile = gst_pbutils::EncodingContainerProfileBuilder::new()
-        .name("container")
-        .format(&gst::Caps::new_simple("video/x-matroska", &[]))
-        .add_profile(&(video_profile))
-        .add_profile(&(audio_profile))
-        .build()?;
+    let container_profile = gst_pbutils::EncodingContainerProfile::builder(
+        &gst::Caps::builder("video/x-matroska").build(),
+    )
+    .name("container")
+    .add_profile(&(video_profile))
+    .add_profile(&(audio_profile))
+    .build();
 
     // Finally, apply the EncodingProfile onto our encodebin element.
     encodebin
         .set_property("profile", &container_profile)
         .expect("set profile property failed");
-
-    Ok(())
 }
 
 fn example_main() -> Result<(), Error> {
@@ -112,7 +111,7 @@ fn example_main() -> Result<(), Error> {
 
     // Configure the encodebin.
     // Here we tell the bin what format we expect it to create at its output.
-    configure_encodebin(&encodebin)?;
+    configure_encodebin(&encodebin);
 
     pipeline
         .add_many(&[&src, &encodebin, &sink])

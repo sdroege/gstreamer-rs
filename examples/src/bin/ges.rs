@@ -47,25 +47,22 @@ mod examples_common;
 
 fn configure_pipeline(pipeline: &ges::Pipeline, output_name: &str) {
     // Every audiostream piped into the encodebin should be encoded using opus.
-    let audio_profile = gst_pbutils::EncodingAudioProfileBuilder::new()
-        .format(&gst::Caps::new_simple("audio/x-opus", &[]))
-        .build()
-        .expect("Failed to create audio profile");
+    let audio_profile =
+        gst_pbutils::EncodingAudioProfile::builder(&gst::Caps::builder("audio/x-opus").build())
+            .build();
 
     // Every videostream piped into the encodebin should be encoded using vp8.
-    let video_profile = gst_pbutils::EncodingVideoProfileBuilder::new()
-        .format(&gst::Caps::new_simple("video/x-vp8", &[]))
-        .build()
-        .expect("Failed to create video profile");
+    let video_profile =
+        gst_pbutils::EncodingVideoProfile::builder(&gst::Caps::builder("video/x-vp8").build())
+            .build();
 
     // All streams are then finally combined into a webm container.
-    let container_profile = gst_pbutils::EncodingContainerProfileBuilder::new()
-        .name("container")
-        .format(&gst::Caps::new_simple("video/webm", &[]))
-        .add_profile(&video_profile)
-        .add_profile(&audio_profile)
-        .build()
-        .expect("Failed to create container profile");
+    let container_profile =
+        gst_pbutils::EncodingContainerProfile::builder(&gst::Caps::builder("video/webm").build())
+            .name("container")
+            .add_profile(&video_profile)
+            .add_profile(&audio_profile)
+            .build();
 
     // Apply the EncodingProfile to the pipeline, and set it to render mode
     let output_uri = format!("{}.webm", output_name);
