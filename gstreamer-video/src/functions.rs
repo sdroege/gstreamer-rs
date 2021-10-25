@@ -49,12 +49,18 @@ pub fn convert_sample_async_local<F>(
     timeout: Option<gst::ClockTime>,
     func: F,
 ) where
-    F: FnOnce(Result<gst::Sample, glib::Error>) + Send + 'static,
+    F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
 {
     skip_assert_initialized!();
     unsafe {
-        assert!(glib::MainContext::ref_thread_default().is_owner());
-        convert_sample_async_unsafe(sample, caps, timeout, func)
+        let ctx = glib::MainContext::ref_thread_default();
+        let _acquire = ctx
+            .acquire()
+            .expect("thread default main context already acquired by another thread");
+
+        let func = fragile::Fragile::new(func);
+
+        convert_sample_async_unsafe(sample, caps, timeout, move |res| (func.into_inner())(res))
     }
 }
 

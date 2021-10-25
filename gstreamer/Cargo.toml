@@ -32,6 +32,7 @@ serde_bytes = { version = "0.11", optional = true }
 paste = "1.0"
 pretty-hex = "0.2"
 thiserror = "1"
+fragile = "1"
 
 [dev-dependencies]
 ron = "0.7"

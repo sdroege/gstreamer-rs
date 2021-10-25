@@ -13,12 +13,14 @@ use std::mem::transmute;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
+use fragile::Fragile;
+
 use crate::Bus;
 use crate::BusSyncReply;
 use crate::Message;
 use crate::MessageType;
 
-unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + 'static>(
+unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + Send + 'static>(
     bus: *mut ffi::GstBus,
     msg: *mut ffi::GstMessage,
     func: gpointer,
@@ -27,15 +29,39 @@ unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + 'st
     (&mut *func.borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib()
 }
 
-unsafe extern "C" fn destroy_closure_watch<F: FnMut(&Bus, &Message) -> Continue + 'static>(
+unsafe extern "C" fn destroy_closure_watch<
+    F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
+>(
     ptr: gpointer,
 ) {
     Box::<RefCell<F>>::from_raw(ptr as *mut _);
 }
 
-fn into_raw_watch<F: FnMut(&Bus, &Message) -> Continue + 'static>(func: F) -> gpointer {
+fn into_raw_watch<F: FnMut(&Bus, &Message) -> Continue + Send + 'static>(func: F) -> gpointer {
     #[allow(clippy::type_complexity)]
     let func: Box<RefCell<F>> = Box::new(RefCell::new(func));
+    Box::into_raw(func) as gpointer
+}
+
+unsafe extern "C" fn trampoline_watch_local<F: FnMut(&Bus, &Message) -> Continue + 'static>(
+    bus: *mut ffi::GstBus,
+    msg: *mut ffi::GstMessage,
+    func: gpointer,
+) -> gboolean {
+    let func: &Fragile<RefCell<F>> = &*(func as *const Fragile<RefCell<F>>);
+    (&mut *func.get().borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg))
+        .into_glib()
+}
+
+unsafe extern "C" fn destroy_closure_watch_local<F: FnMut(&Bus, &Message) -> Continue + 'static>(
+    ptr: gpointer,
+) {
+    Box::<Fragile<RefCell<F>>>::from_raw(ptr as *mut _);
+}
+
+fn into_raw_watch_local<F: FnMut(&Bus, &Message) -> Continue + 'static>(func: F) -> gpointer {
+    #[allow(clippy::type_complexity)]
+    let func: Box<Fragile<RefCell<F>>> = Box::new(Fragile::new(RefCell::new(func)));
     Box::into_raw(func) as gpointer
 }
 
@@ -133,14 +159,17 @@ impl Bus {
         F: FnMut(&Bus, &Message) -> Continue + 'static,
     {
         unsafe {
-            assert!(glib::MainContext::ref_thread_default().is_owner());
+            let ctx = glib::MainContext::ref_thread_default();
+            let _acquire = ctx
+                .acquire()
+                .expect("thread default main context already acquired by another thread");
 
             let res = ffi::gst_bus_add_watch_full(
                 self.to_glib_none().0,
                 glib::ffi::G_PRIORITY_DEFAULT,
-                Some(trampoline_watch::<F>),
-                into_raw_watch(func),
-                Some(destroy_closure_watch::<F>),
+                Some(trampoline_watch_local::<F>),
+                into_raw_watch_local(func),
+                Some(destroy_closure_watch_local::<F>),
             );
 
             if res == 0 {
