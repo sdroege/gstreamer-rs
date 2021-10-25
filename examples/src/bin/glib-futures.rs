@@ -35,7 +35,6 @@ fn example_main() {
     // Get the default main context and make it also the thread default, then create
     // a main loop for it
     let ctx = glib::MainContext::default();
-    ctx.push_thread_default();
     let loop_ = glib::MainLoop::new(Some(&ctx), false);
 
     // Read the pipeline to launch from the commandline, using the launch syntax.
@@ -61,8 +60,6 @@ fn example_main() {
     pipeline
         .set_state(gst::State::Null)
         .expect("Unable to set the pipeline to the `Null` state");
-
-    ctx.pop_thread_default();
 }
 
 fn main() {
