@@ -43,6 +43,11 @@ pub trait AggregatorPadExt: 'static {
     #[doc(alias = "gst_aggregator_pad_is_eos")]
     fn is_eos(&self) -> bool;
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_aggregator_pad_is_inactive")]
+    fn is_inactive(&self) -> bool;
+
     #[doc(alias = "gst_aggregator_pad_peek_buffer")]
     fn peek_buffer(&self) -> Option<gst::Buffer>;
 
@@ -96,6 +101,16 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
     fn is_eos(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_aggregator_pad_is_eos(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn is_inactive(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_aggregator_pad_is_inactive(
                 self.as_ref().to_glib_none().0,
             ))
         }

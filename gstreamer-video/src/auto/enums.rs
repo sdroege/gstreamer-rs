@@ -1228,6 +1228,38 @@ pub enum VideoFormat {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_VIDEO_FORMAT_AV12")]
     Av12,
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_ARGB64_LE")]
+    Argb64Le,
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_ARGB64_BE")]
+    Argb64Be,
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGBA64_LE")]
+    Rgba64Le,
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGBA64_BE")]
+    Rgba64Be,
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_BGRA64_LE")]
+    Bgra64Le,
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_BGRA64_BE")]
+    Bgra64Be,
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_ABGR64_LE")]
+    Abgr64Le,
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_ABGR64_BE")]
+    Abgr64Be,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -1414,6 +1446,22 @@ impl IntoGlib for VideoFormat {
             Self::Bgrp => ffi::GST_VIDEO_FORMAT_BGRP,
             #[cfg(any(feature = "v1_20", feature = "dox"))]
             Self::Av12 => ffi::GST_VIDEO_FORMAT_AV12,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            Self::Argb64Le => ffi::GST_VIDEO_FORMAT_ARGB64_LE,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            Self::Argb64Be => ffi::GST_VIDEO_FORMAT_ARGB64_BE,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            Self::Rgba64Le => ffi::GST_VIDEO_FORMAT_RGBA64_LE,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            Self::Rgba64Be => ffi::GST_VIDEO_FORMAT_RGBA64_BE,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            Self::Bgra64Le => ffi::GST_VIDEO_FORMAT_BGRA64_LE,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            Self::Bgra64Be => ffi::GST_VIDEO_FORMAT_BGRA64_BE,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            Self::Abgr64Le => ffi::GST_VIDEO_FORMAT_ABGR64_LE,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            Self::Abgr64Be => ffi::GST_VIDEO_FORMAT_ABGR64_BE,
             Self::__Unknown(value) => value,
         }
     }
@@ -1567,6 +1615,22 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
             ffi::GST_VIDEO_FORMAT_BGRP => Self::Bgrp,
             #[cfg(any(feature = "v1_20", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_AV12 => Self::Av12,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            ffi::GST_VIDEO_FORMAT_ARGB64_LE => Self::Argb64Le,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            ffi::GST_VIDEO_FORMAT_ARGB64_BE => Self::Argb64Be,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            ffi::GST_VIDEO_FORMAT_RGBA64_LE => Self::Rgba64Le,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            ffi::GST_VIDEO_FORMAT_RGBA64_BE => Self::Rgba64Be,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            ffi::GST_VIDEO_FORMAT_BGRA64_LE => Self::Bgra64Le,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            ffi::GST_VIDEO_FORMAT_BGRA64_BE => Self::Bgra64Be,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            ffi::GST_VIDEO_FORMAT_ABGR64_LE => Self::Abgr64Le,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            ffi::GST_VIDEO_FORMAT_ABGR64_BE => Self::Abgr64Be,
             value => Self::__Unknown(value),
         }
     }

@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use crate::VideoOrientationMethod;
 use glib::object::IsA;
 use glib::translate::*;
 use std::mem;
@@ -13,6 +16,28 @@ glib::wrapper! {
 
     match fn {
         type_ => || ffi::gst_video_orientation_get_type(),
+    }
+}
+
+impl VideoOrientation {
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_video_orientation_from_tag")]
+    pub fn from_tag(taglist: &gst::TagList) -> Option<VideoOrientationMethod> {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut method = mem::MaybeUninit::uninit();
+            let ret = from_glib(ffi::gst_video_orientation_from_tag(
+                taglist.to_glib_none().0,
+                method.as_mut_ptr(),
+            ));
+            let method = method.assume_init();
+            if ret {
+                Some(from_glib(method))
+            } else {
+                None
+            }
+        }
     }
 }
 

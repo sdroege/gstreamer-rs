@@ -38,6 +38,12 @@ pub trait AggregatorExt: 'static {
     #[doc(alias = "get_buffer_pool")]
     fn buffer_pool(&self) -> Option<gst::BufferPool>;
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_aggregator_get_ignore_inactive_pads")]
+    #[doc(alias = "get_ignore_inactive_pads")]
+    fn ignores_inactive_pads(&self) -> bool;
+
     #[doc(alias = "gst_aggregator_get_latency")]
     #[doc(alias = "get_latency")]
     fn latency(&self) -> Option<gst::ClockTime>;
@@ -51,6 +57,11 @@ pub trait AggregatorExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_aggregator_peek_next_sample")]
     fn peek_next_sample(&self, pad: &impl IsA<AggregatorPad>) -> Option<gst::Sample>;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_aggregator_set_ignore_inactive_pads")]
+    fn set_ignore_inactive_pads(&self, ignore: bool);
 
     #[doc(alias = "gst_aggregator_set_latency")]
     fn set_latency(
@@ -131,6 +142,16 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn ignores_inactive_pads(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_aggregator_get_ignore_inactive_pads(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     fn latency(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_aggregator_get_latency(
@@ -157,6 +178,17 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
                 self.as_ref().to_glib_none().0,
                 pad.as_ref().to_glib_none().0,
             ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn set_ignore_inactive_pads(&self, ignore: bool) {
+        unsafe {
+            ffi::gst_aggregator_set_ignore_inactive_pads(
+                self.as_ref().to_glib_none().0,
+                ignore.into_glib(),
+            );
         }
     }
 
