@@ -39,10 +39,9 @@ pub use crate::auto::*;
 mod discoverer;
 pub use crate::discoverer::*;
 
+mod discoverer_container_info;
 pub mod discoverer_stream_info;
-
 mod discoverer_video_info;
-pub use crate::discoverer_video_info::*;
 
 pub mod encoding_profile;
 
