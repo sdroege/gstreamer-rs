@@ -6,7 +6,6 @@ use glib::translate::{FromGlib, GlibNoneError, IntoGlib, OptionIntoGlib, TryFrom
 use muldiv::MulDiv;
 use opt_ops::prelude::*;
 use std::borrow::Borrow;
-use std::convert::TryFrom;
 use std::fmt;
 use std::ops;
 use thiserror::Error;

@@ -292,8 +292,6 @@ mod tests {
 
     #[test]
     fn test_add_get_audio_clipping_meta() {
-        use std::convert::TryInto;
-
         gst::init().unwrap();
 
         let mut buffer = gst::Buffer::with_size(1024).unwrap();

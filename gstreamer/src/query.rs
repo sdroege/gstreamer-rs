@@ -1506,7 +1506,6 @@ declare_concrete_query!(Other, T);
 mod tests {
     use super::*;
     use crate::ClockTime;
-    use std::convert::TryInto;
 
     #[test]
     fn test_writability() {

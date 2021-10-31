@@ -889,7 +889,6 @@ impl Builder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::str::FromStr;
 
     #[test]
     fn new_set_get() {
@@ -969,7 +968,7 @@ mod tests {
 
         let a = "Test, f1=(string)abc, f2=(uint)123;";
 
-        let s = Structure::from_str(a).unwrap();
+        let s = a.parse::<Structure>().unwrap();
         assert_eq!(s.get::<&str>("f1"), Ok("abc"));
         assert_eq!(s.get::<u32>("f2"), Ok(123));
 
@@ -984,7 +983,7 @@ mod tests {
 
         let a = None::<&Structure>.to_value();
         assert!(a.get::<Option<Structure>>().unwrap().is_none());
-        let b = Structure::from_str("foo").unwrap().to_value();
+        let b = "foo".parse::<Structure>().unwrap().to_value();
         assert!(b.get::<Option<Structure>>().unwrap().is_some());
     }
 

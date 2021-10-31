@@ -14,7 +14,6 @@
 
 use gst::prelude::*;
 
-use std::convert::TryInto;
 use std::env;
 
 #[path = "../examples-common.rs"]

@@ -61,7 +61,6 @@ mod tests {
     use crate::ClockTime;
     use crate::Format;
     use crate::GenericFormattedValue;
-    use std::convert::TryFrom;
 
     #[test]
     fn test_serialize() {

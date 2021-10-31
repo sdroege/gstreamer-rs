@@ -6,7 +6,6 @@ use muldiv::MulDiv;
 use num_integer::div_rem;
 use opt_ops::prelude::*;
 use std::borrow::Borrow;
-use std::convert::{From, TryFrom};
 use std::io::{self, prelude::*};
 use std::ops;
 use std::time::Duration;

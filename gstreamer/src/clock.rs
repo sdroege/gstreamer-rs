@@ -13,7 +13,6 @@ use glib::prelude::*;
 use glib::translate::*;
 use libc::c_void;
 use std::cmp;
-use std::convert;
 use std::ptr;
 
 use futures_core::{Future, Stream};
@@ -118,7 +117,7 @@ impl From<SingleShotClockId> for ClockId {
     }
 }
 
-impl convert::TryFrom<ClockId> for SingleShotClockId {
+impl TryFrom<ClockId> for SingleShotClockId {
     type Error = glib::BoolError;
 
     fn try_from(id: ClockId) -> Result<SingleShotClockId, glib::BoolError> {
@@ -228,7 +227,7 @@ impl From<PeriodicClockId> for ClockId {
     }
 }
 
-impl convert::TryFrom<ClockId> for PeriodicClockId {
+impl TryFrom<ClockId> for PeriodicClockId {
     type Error = glib::BoolError;
 
     fn try_from(id: ClockId) -> Result<PeriodicClockId, glib::BoolError> {

@@ -2,7 +2,6 @@
 
 use glib::translate::*;
 
-use std::convert::TryFrom;
 use std::fmt;
 use std::mem;
 use std::ptr;

@@ -3,7 +3,6 @@
 use glib::translate::*;
 use gst::prelude::*;
 use std::cmp;
-use std::convert::{TryFrom, TryInto};
 use std::fmt;
 use std::mem;
 use std::ptr;
@@ -607,8 +606,6 @@ impl fmt::Debug for VideoTimeCodeMeta {
 #[cfg(feature = "v1_16")]
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn test_add_get_set_meta() {
         gst::init().unwrap();

@@ -5,7 +5,6 @@ use crate::BaseParseFrame;
 use glib::prelude::*;
 use glib::translate::*;
 use gst::FormattedValue;
-use std::convert::TryFrom;
 use std::mem;
 
 pub trait BaseParseExtManual: 'static {

@@ -2,7 +2,6 @@
 
 use glib::prelude::*;
 
-use std::convert;
 use std::ops;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -40,7 +39,7 @@ impl Default for AudioConverterConfig {
     }
 }
 
-impl convert::TryFrom<gst::Structure> for AudioConverterConfig {
+impl TryFrom<gst::Structure> for AudioConverterConfig {
     type Error = glib::BoolError;
 
     fn try_from(v: gst::Structure) -> Result<Self, Self::Error> {
@@ -53,7 +52,7 @@ impl convert::TryFrom<gst::Structure> for AudioConverterConfig {
     }
 }
 
-impl<'a> convert::TryFrom<&'a gst::StructureRef> for AudioConverterConfig {
+impl<'a> TryFrom<&'a gst::StructureRef> for AudioConverterConfig {
     type Error = glib::BoolError;
 
     fn try_from(v: &'a gst::StructureRef) -> Result<Self, Self::Error> {

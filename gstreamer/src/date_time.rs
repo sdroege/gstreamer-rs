@@ -2,7 +2,6 @@
 
 use glib::translate::*;
 use std::cmp;
-use std::convert;
 use std::fmt;
 
 use crate::DateTime;
@@ -514,7 +513,7 @@ impl From<glib::DateTime> for DateTime {
     }
 }
 
-impl<'a> convert::TryFrom<&'a DateTime> for glib::DateTime {
+impl<'a> TryFrom<&'a DateTime> for glib::DateTime {
     type Error = glib::BoolError;
 
     fn try_from(v: &'a DateTime) -> Result<glib::DateTime, glib::BoolError> {
@@ -523,7 +522,7 @@ impl<'a> convert::TryFrom<&'a DateTime> for glib::DateTime {
     }
 }
 
-impl convert::TryFrom<DateTime> for glib::DateTime {
+impl TryFrom<DateTime> for glib::DateTime {
     type Error = glib::BoolError;
 
     fn try_from(v: DateTime) -> Result<glib::DateTime, glib::BoolError> {

@@ -2,8 +2,6 @@
 
 #![allow(clippy::upper_case_acronyms)]
 
-use std::convert::{TryFrom, TryInto};
-
 use glib::translate::{FromGlib, IntoGlib};
 use glib::value::{ToValue, ToValueOptional};
 use glib::StaticType;

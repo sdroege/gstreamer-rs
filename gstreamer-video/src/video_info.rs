@@ -222,7 +222,7 @@ impl From<crate::VideoMultiviewFramePacking> for crate::VideoMultiviewMode {
     }
 }
 
-impl std::convert::TryFrom<crate::VideoMultiviewMode> for crate::VideoMultiviewFramePacking {
+impl TryFrom<crate::VideoMultiviewMode> for crate::VideoMultiviewFramePacking {
     type Error = glib::BoolError;
 
     fn try_from(v: crate::VideoMultiviewMode) -> Result<Self, glib::BoolError> {
@@ -1122,11 +1122,9 @@ mod tests {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[test]
     fn test_display() {
-        use std::str::FromStr;
-
         gst::init().unwrap();
 
-        format!("{}", crate::VideoColorimetry::from_str("sRGB").unwrap());
+        format!("{}", "sRGB".parse::<crate::VideoColorimetry>().unwrap());
         format!("{}", crate::VideoFieldOrder::TopFieldFirst);
         format!("{}", crate::VideoInterlaceMode::Progressive);
     }

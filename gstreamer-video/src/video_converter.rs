@@ -2,7 +2,6 @@
 
 use glib::translate::ToGlibPtr;
 
-use std::convert;
 use std::ops;
 use std::ptr;
 
@@ -128,7 +127,7 @@ impl Default for VideoConverterConfig {
     }
 }
 
-impl convert::TryFrom<gst::Structure> for VideoConverterConfig {
+impl TryFrom<gst::Structure> for VideoConverterConfig {
     type Error = glib::BoolError;
 
     fn try_from(v: gst::Structure) -> Result<Self, Self::Error> {
@@ -141,7 +140,7 @@ impl convert::TryFrom<gst::Structure> for VideoConverterConfig {
     }
 }
 
-impl<'a> convert::TryFrom<&'a gst::StructureRef> for VideoConverterConfig {
+impl<'a> TryFrom<&'a gst::StructureRef> for VideoConverterConfig {
     type Error = glib::BoolError;
 
     fn try_from(v: &'a gst::StructureRef) -> Result<Self, Self::Error> {
