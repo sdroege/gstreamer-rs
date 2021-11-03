@@ -34,7 +34,9 @@ impl RTSPSessionMedia {
 unsafe impl Send for RTSPSessionMedia {}
 unsafe impl Sync for RTSPSessionMedia {}
 
-pub const NONE_RTSP_SESSION_MEDIA: Option<&RTSPSessionMedia> = None;
+impl RTSPSessionMedia {
+    pub const NONE: Option<&'static RTSPSessionMedia> = None;
+}
 
 pub trait RTSPSessionMediaExt: 'static {
     //#[doc(alias = "gst_rtsp_session_media_alloc_channels")]

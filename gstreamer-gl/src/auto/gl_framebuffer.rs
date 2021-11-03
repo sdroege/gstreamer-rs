@@ -50,7 +50,9 @@ impl GLFramebuffer {
 unsafe impl Send for GLFramebuffer {}
 unsafe impl Sync for GLFramebuffer {}
 
-pub const NONE_GL_FRAMEBUFFER: Option<&GLFramebuffer> = None;
+impl GLFramebuffer {
+    pub const NONE: Option<&'static GLFramebuffer> = None;
+}
 
 pub trait GLFramebufferExt: 'static {
     #[doc(alias = "gst_gl_framebuffer_attach")]

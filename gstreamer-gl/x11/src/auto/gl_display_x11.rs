@@ -31,4 +31,6 @@ impl GLDisplayX11 {
 unsafe impl Send for GLDisplayX11 {}
 unsafe impl Sync for GLDisplayX11 {}
 
-pub const NONE_GL_DISPLAY_X11: Option<&GLDisplayX11> = None;
+impl GLDisplayX11 {
+    pub const NONE: Option<&'static GLDisplayX11> = None;
+}

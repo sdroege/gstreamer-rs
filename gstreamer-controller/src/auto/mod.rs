@@ -4,33 +4,29 @@
 // DO NOT EDIT
 
 mod argb_control_binding;
-pub use self::argb_control_binding::{ARGBControlBinding, NONE_ARGB_CONTROL_BINDING};
+pub use self::argb_control_binding::ARGBControlBinding;
 
 mod direct_control_binding;
-pub use self::direct_control_binding::{DirectControlBinding, NONE_DIRECT_CONTROL_BINDING};
+pub use self::direct_control_binding::DirectControlBinding;
 
 mod interpolation_control_source;
-pub use self::interpolation_control_source::{
-    InterpolationControlSource, NONE_INTERPOLATION_CONTROL_SOURCE,
-};
+pub use self::interpolation_control_source::InterpolationControlSource;
 
 mod lfo_control_source;
-pub use self::lfo_control_source::{LFOControlSource, NONE_LFO_CONTROL_SOURCE};
+pub use self::lfo_control_source::LFOControlSource;
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 mod proxy_control_binding;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-pub use self::proxy_control_binding::{ProxyControlBinding, NONE_PROXY_CONTROL_BINDING};
+pub use self::proxy_control_binding::ProxyControlBinding;
 
 mod timed_value_control_source;
-pub use self::timed_value_control_source::{
-    TimedValueControlSource, NONE_TIMED_VALUE_CONTROL_SOURCE,
-};
+pub use self::timed_value_control_source::TimedValueControlSource;
 
 mod trigger_control_source;
-pub use self::trigger_control_source::{TriggerControlSource, NONE_TRIGGER_CONTROL_SOURCE};
+pub use self::trigger_control_source::TriggerControlSource;
 
 mod enums;
 pub use self::enums::InterpolationMode;

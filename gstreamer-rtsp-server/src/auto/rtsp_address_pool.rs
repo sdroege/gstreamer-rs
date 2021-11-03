@@ -34,7 +34,9 @@ impl Default for RTSPAddressPool {
 unsafe impl Send for RTSPAddressPool {}
 unsafe impl Sync for RTSPAddressPool {}
 
-pub const NONE_RTSP_ADDRESS_POOL: Option<&RTSPAddressPool> = None;
+impl RTSPAddressPool {
+    pub const NONE: Option<&'static RTSPAddressPool> = None;
+}
 
 pub trait RTSPAddressPoolExt: 'static {
     #[doc(alias = "gst_rtsp_address_pool_acquire_address")]

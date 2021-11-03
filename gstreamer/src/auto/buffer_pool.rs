@@ -19,7 +19,9 @@ glib::wrapper! {
 unsafe impl Send for BufferPool {}
 unsafe impl Sync for BufferPool {}
 
-pub const NONE_BUFFER_POOL: Option<&BufferPool> = None;
+impl BufferPool {
+    pub const NONE: Option<&'static BufferPool> = None;
+}
 
 pub trait BufferPoolExt: 'static {
     #[doc(alias = "gst_buffer_pool_get_options")]

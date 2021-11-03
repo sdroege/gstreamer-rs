@@ -26,7 +26,9 @@ glib::wrapper! {
 unsafe impl Send for Tracer {}
 unsafe impl Sync for Tracer {}
 
-pub const NONE_TRACER: Option<&Tracer> = None;
+impl Tracer {
+    pub const NONE: Option<&'static Tracer> = None;
+}
 
 pub trait TracerExt: 'static {
     fn params(&self) -> Option<glib::GString>;

@@ -39,7 +39,9 @@ impl Preset {
 unsafe impl Send for Preset {}
 unsafe impl Sync for Preset {}
 
-pub const NONE_PRESET: Option<&Preset> = None;
+impl Preset {
+    pub const NONE: Option<&'static Preset> = None;
+}
 
 pub trait PresetExt: 'static {
     #[doc(alias = "gst_preset_delete_preset")]

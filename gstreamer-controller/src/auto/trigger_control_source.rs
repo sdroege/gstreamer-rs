@@ -42,7 +42,9 @@ impl Default for TriggerControlSource {
 unsafe impl Send for TriggerControlSource {}
 unsafe impl Sync for TriggerControlSource {}
 
-pub const NONE_TRIGGER_CONTROL_SOURCE: Option<&TriggerControlSource> = None;
+impl TriggerControlSource {
+    pub const NONE: Option<&'static TriggerControlSource> = None;
+}
 
 pub trait TriggerControlSourceExt: 'static {
     fn tolerance(&self) -> i64;

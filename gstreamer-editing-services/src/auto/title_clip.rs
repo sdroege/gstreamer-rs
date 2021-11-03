@@ -37,7 +37,9 @@ impl TitleClip {
     }
 }
 
-pub const NONE_TITLE_CLIP: Option<&TitleClip> = None;
+impl TitleClip {
+    pub const NONE: Option<&'static TitleClip> = None;
+}
 
 pub trait TitleClipExt: 'static {
     #[deprecated = "Since 1.6"]

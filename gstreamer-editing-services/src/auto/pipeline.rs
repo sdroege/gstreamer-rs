@@ -39,7 +39,9 @@ impl Default for Pipeline {
     }
 }
 
-pub const NONE_PIPELINE: Option<&Pipeline> = None;
+impl Pipeline {
+    pub const NONE: Option<&'static Pipeline> = None;
+}
 
 pub trait GESPipelineExt: 'static {
     #[doc(alias = "ges_pipeline_get_mode")]

@@ -30,4 +30,6 @@ impl Default for AudioTrack {
     }
 }
 
-pub const NONE_AUDIO_TRACK: Option<&AudioTrack> = None;
+impl AudioTrack {
+    pub const NONE: Option<&'static AudioTrack> = None;
+}

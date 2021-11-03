@@ -54,4 +54,6 @@ impl CommandLineFormatter {
     }
 }
 
-pub const NONE_COMMAND_LINE_FORMATTER: Option<&CommandLineFormatter> = None;
+impl CommandLineFormatter {
+    pub const NONE: Option<&'static CommandLineFormatter> = None;
+}

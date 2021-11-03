@@ -34,7 +34,9 @@ impl Default for RTSPMountPoints {
 unsafe impl Send for RTSPMountPoints {}
 unsafe impl Sync for RTSPMountPoints {}
 
-pub const NONE_RTSP_MOUNT_POINTS: Option<&RTSPMountPoints> = None;
+impl RTSPMountPoints {
+    pub const NONE: Option<&'static RTSPMountPoints> = None;
+}
 
 pub trait RTSPMountPointsExt: 'static {
     #[doc(alias = "gst_rtsp_mount_points_add_factory")]

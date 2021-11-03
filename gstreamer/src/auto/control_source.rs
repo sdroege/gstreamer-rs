@@ -21,7 +21,9 @@ glib::wrapper! {
 unsafe impl Send for ControlSource {}
 unsafe impl Sync for ControlSource {}
 
-pub const NONE_CONTROL_SOURCE: Option<&ControlSource> = None;
+impl ControlSource {
+    pub const NONE: Option<&'static ControlSource> = None;
+}
 
 pub trait ControlSourceExt: 'static {
     #[doc(alias = "gst_control_source_get_value")]

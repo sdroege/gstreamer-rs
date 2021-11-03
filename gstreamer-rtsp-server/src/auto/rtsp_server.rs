@@ -65,7 +65,9 @@ impl Default for RTSPServer {
 unsafe impl Send for RTSPServer {}
 unsafe impl Sync for RTSPServer {}
 
-pub const NONE_RTSP_SERVER: Option<&RTSPServer> = None;
+impl RTSPServer {
+    pub const NONE: Option<&'static RTSPServer> = None;
+}
 
 pub trait RTSPServerExt: 'static {
     #[doc(alias = "gst_rtsp_server_client_filter")]

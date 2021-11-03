@@ -41,7 +41,9 @@ impl Bin {
 unsafe impl Send for Bin {}
 unsafe impl Sync for Bin {}
 
-pub const NONE_BIN: Option<&Bin> = None;
+impl Bin {
+    pub const NONE: Option<&'static Bin> = None;
+}
 
 pub trait GstBinExt: 'static {
     #[doc(alias = "gst_bin_add")]

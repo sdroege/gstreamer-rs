@@ -4,7 +4,7 @@
 // DO NOT EDIT
 
 mod gl_display_wayland;
-pub use self::gl_display_wayland::{GLDisplayWayland, NONE_GL_DISPLAY_WAYLAND};
+pub use self::gl_display_wayland::GLDisplayWayland;
 
 #[doc(hidden)]
 pub mod traits {}

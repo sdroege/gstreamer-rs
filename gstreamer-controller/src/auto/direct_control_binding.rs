@@ -61,7 +61,9 @@ impl DirectControlBinding {
 unsafe impl Send for DirectControlBinding {}
 unsafe impl Sync for DirectControlBinding {}
 
-pub const NONE_DIRECT_CONTROL_BINDING: Option<&DirectControlBinding> = None;
+impl DirectControlBinding {
+    pub const NONE: Option<&'static DirectControlBinding> = None;
+}
 
 pub trait DirectControlBindingExt: 'static {
     fn is_absolute(&self) -> bool;

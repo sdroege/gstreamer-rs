@@ -32,4 +32,6 @@ impl Default for VideoBufferPool {
 unsafe impl Send for VideoBufferPool {}
 unsafe impl Sync for VideoBufferPool {}
 
-pub const NONE_VIDEO_BUFFER_POOL: Option<&VideoBufferPool> = None;
+impl VideoBufferPool {
+    pub const NONE: Option<&'static VideoBufferPool> = None;
+}

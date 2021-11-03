@@ -26,7 +26,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_META_CONTAINER: Option<&MetaContainer> = None;
+impl MetaContainer {
+    pub const NONE: Option<&'static MetaContainer> = None;
+}
 
 pub trait MetaContainerExt: 'static {
     #[doc(alias = "ges_meta_container_add_metas_from_string")]

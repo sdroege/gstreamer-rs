@@ -25,7 +25,9 @@ glib::wrapper! {
 unsafe impl Send for GLBaseSrc {}
 unsafe impl Sync for GLBaseSrc {}
 
-pub const NONE_GL_BASE_SRC: Option<&GLBaseSrc> = None;
+impl GLBaseSrc {
+    pub const NONE: Option<&'static GLBaseSrc> = None;
+}
 
 pub trait GLBaseSrcExt: 'static {
     #[doc(alias = "timestamp-offset")]

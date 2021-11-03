@@ -17,5 +17,6 @@ impl VideoAggregatorParallelConvertPad {}
 unsafe impl Send for VideoAggregatorParallelConvertPad {}
 unsafe impl Sync for VideoAggregatorParallelConvertPad {}
 
-pub const NONE_VIDEO_AGGREGATOR_PARALLEL_CONVERT_PAD: Option<&VideoAggregatorParallelConvertPad> =
-    None;
+impl VideoAggregatorParallelConvertPad {
+    pub const NONE: Option<&'static VideoAggregatorParallelConvertPad> = None;
+}

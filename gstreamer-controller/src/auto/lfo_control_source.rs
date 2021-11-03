@@ -42,7 +42,9 @@ impl Default for LFOControlSource {
 unsafe impl Send for LFOControlSource {}
 unsafe impl Sync for LFOControlSource {}
 
-pub const NONE_LFO_CONTROL_SOURCE: Option<&LFOControlSource> = None;
+impl LFOControlSource {
+    pub const NONE: Option<&'static LFOControlSource> = None;
+}
 
 pub trait LFOControlSourceExt: 'static {
     fn amplitude(&self) -> f64;

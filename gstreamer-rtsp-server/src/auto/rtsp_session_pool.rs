@@ -39,7 +39,9 @@ impl Default for RTSPSessionPool {
 unsafe impl Send for RTSPSessionPool {}
 unsafe impl Sync for RTSPSessionPool {}
 
-pub const NONE_RTSP_SESSION_POOL: Option<&RTSPSessionPool> = None;
+impl RTSPSessionPool {
+    pub const NONE: Option<&'static RTSPSessionPool> = None;
+}
 
 pub trait RTSPSessionPoolExt: 'static {
     #[doc(alias = "gst_rtsp_session_pool_cleanup")]

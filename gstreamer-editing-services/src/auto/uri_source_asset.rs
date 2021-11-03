@@ -19,7 +19,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_URI_SOURCE_ASSET: Option<&UriSourceAsset> = None;
+impl UriSourceAsset {
+    pub const NONE: Option<&'static UriSourceAsset> = None;
+}
 
 pub trait UriSourceAssetExt: 'static {
     #[doc(alias = "ges_uri_source_asset_get_filesource_asset")]

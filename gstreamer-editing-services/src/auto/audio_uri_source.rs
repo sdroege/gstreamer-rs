@@ -22,7 +22,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_AUDIO_URI_SOURCE: Option<&AudioUriSource> = None;
+impl AudioUriSource {
+    pub const NONE: Option<&'static AudioUriSource> = None;
+}
 
 pub trait AudioUriSourceExt: 'static {
     fn uri(&self) -> Option<glib::GString>;

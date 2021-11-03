@@ -4,46 +4,46 @@
 // DO NOT EDIT
 
 mod rtsp_address_pool;
-pub use self::rtsp_address_pool::{RTSPAddressPool, NONE_RTSP_ADDRESS_POOL};
+pub use self::rtsp_address_pool::RTSPAddressPool;
 
 mod rtsp_auth;
-pub use self::rtsp_auth::{RTSPAuth, NONE_RTSP_AUTH};
+pub use self::rtsp_auth::RTSPAuth;
 
 mod rtsp_client;
-pub use self::rtsp_client::{RTSPClient, NONE_RTSP_CLIENT};
+pub use self::rtsp_client::RTSPClient;
 
 mod rtsp_media;
-pub use self::rtsp_media::{RTSPMedia, NONE_RTSP_MEDIA};
+pub use self::rtsp_media::RTSPMedia;
 
 mod rtsp_media_factory;
-pub use self::rtsp_media_factory::{RTSPMediaFactory, NONE_RTSP_MEDIA_FACTORY};
+pub use self::rtsp_media_factory::RTSPMediaFactory;
 
 mod rtsp_media_factory_uri;
-pub use self::rtsp_media_factory_uri::{RTSPMediaFactoryURI, NONE_RTSP_MEDIA_FACTORY_URI};
+pub use self::rtsp_media_factory_uri::RTSPMediaFactoryURI;
 
 mod rtsp_mount_points;
-pub use self::rtsp_mount_points::{RTSPMountPoints, NONE_RTSP_MOUNT_POINTS};
+pub use self::rtsp_mount_points::RTSPMountPoints;
 
 mod rtsp_server;
-pub use self::rtsp_server::{RTSPServer, NONE_RTSP_SERVER};
+pub use self::rtsp_server::RTSPServer;
 
 mod rtsp_session;
-pub use self::rtsp_session::{RTSPSession, NONE_RTSP_SESSION};
+pub use self::rtsp_session::RTSPSession;
 
 mod rtsp_session_media;
-pub use self::rtsp_session_media::{RTSPSessionMedia, NONE_RTSP_SESSION_MEDIA};
+pub use self::rtsp_session_media::RTSPSessionMedia;
 
 mod rtsp_session_pool;
-pub use self::rtsp_session_pool::{RTSPSessionPool, NONE_RTSP_SESSION_POOL};
+pub use self::rtsp_session_pool::RTSPSessionPool;
 
 mod rtsp_stream;
-pub use self::rtsp_stream::{RTSPStream, NONE_RTSP_STREAM};
+pub use self::rtsp_stream::RTSPStream;
 
 mod rtsp_stream_transport;
-pub use self::rtsp_stream_transport::{RTSPStreamTransport, NONE_RTSP_STREAM_TRANSPORT};
+pub use self::rtsp_stream_transport::RTSPStreamTransport;
 
 mod rtsp_thread_pool;
-pub use self::rtsp_thread_pool::{RTSPThreadPool, NONE_RTSP_THREAD_POOL};
+pub use self::rtsp_thread_pool::RTSPThreadPool;
 
 mod rtsp_address;
 pub use self::rtsp_address::RTSPAddress;

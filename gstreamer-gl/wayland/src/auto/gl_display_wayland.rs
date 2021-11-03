@@ -31,4 +31,6 @@ impl GLDisplayWayland {
 unsafe impl Send for GLDisplayWayland {}
 unsafe impl Sync for GLDisplayWayland {}
 
-pub const NONE_GL_DISPLAY_WAYLAND: Option<&GLDisplayWayland> = None;
+impl GLDisplayWayland {
+    pub const NONE: Option<&'static GLDisplayWayland> = None;
+}

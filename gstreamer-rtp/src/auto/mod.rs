@@ -8,7 +8,7 @@
 mod rtp_header_extension;
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-pub use self::rtp_header_extension::{RTPHeaderExtension, NONE_RTP_HEADER_EXTENSION};
+pub use self::rtp_header_extension::RTPHeaderExtension;
 
 mod enums;
 pub use self::enums::RTCPFBType;

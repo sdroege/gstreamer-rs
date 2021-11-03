@@ -60,7 +60,9 @@ impl Default for RTSPAuth {
 unsafe impl Send for RTSPAuth {}
 unsafe impl Sync for RTSPAuth {}
 
-pub const NONE_RTSP_AUTH: Option<&RTSPAuth> = None;
+impl RTSPAuth {
+    pub const NONE: Option<&'static RTSPAuth> = None;
+}
 
 pub trait RTSPAuthExt: 'static {
     #[doc(alias = "gst_rtsp_auth_add_basic")]

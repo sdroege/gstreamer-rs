@@ -18,7 +18,9 @@ glib::wrapper! {
 unsafe impl Send for PlayerStreamInfo {}
 unsafe impl Sync for PlayerStreamInfo {}
 
-pub const NONE_PLAYER_STREAM_INFO: Option<&PlayerStreamInfo> = None;
+impl PlayerStreamInfo {
+    pub const NONE: Option<&'static PlayerStreamInfo> = None;
+}
 
 pub trait PlayerStreamInfoExt: 'static {
     #[doc(alias = "gst_player_stream_info_get_caps")]

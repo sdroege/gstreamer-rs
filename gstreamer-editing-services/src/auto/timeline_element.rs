@@ -41,7 +41,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_TIMELINE_ELEMENT: Option<&TimelineElement> = None;
+impl TimelineElement {
+    pub const NONE: Option<&'static TimelineElement> = None;
+}
 
 pub trait TimelineElementExt: 'static {
     //#[doc(alias = "ges_timeline_element_add_child_property")]

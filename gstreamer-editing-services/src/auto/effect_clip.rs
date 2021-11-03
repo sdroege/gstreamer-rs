@@ -39,7 +39,9 @@ impl EffectClip {
     }
 }
 
-pub const NONE_EFFECT_CLIP: Option<&EffectClip> = None;
+impl EffectClip {
+    pub const NONE: Option<&'static EffectClip> = None;
+}
 
 pub trait EffectClipExt: 'static {
     #[doc(alias = "audio-bin-description")]

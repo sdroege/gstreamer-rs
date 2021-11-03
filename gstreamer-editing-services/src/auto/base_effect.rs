@@ -22,7 +22,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_BASE_EFFECT: Option<&BaseEffect> = None;
+impl BaseEffect {
+    pub const NONE: Option<&'static BaseEffect> = None;
+}
 
 pub trait BaseEffectExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]

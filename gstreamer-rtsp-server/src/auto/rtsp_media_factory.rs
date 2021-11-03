@@ -44,7 +44,9 @@ impl Default for RTSPMediaFactory {
 unsafe impl Send for RTSPMediaFactory {}
 unsafe impl Sync for RTSPMediaFactory {}
 
-pub const NONE_RTSP_MEDIA_FACTORY: Option<&RTSPMediaFactory> = None;
+impl RTSPMediaFactory {
+    pub const NONE: Option<&'static RTSPMediaFactory> = None;
+}
 
 pub trait RTSPMediaFactoryExt: 'static {
     //#[doc(alias = "gst_rtsp_media_factory_add_role")]

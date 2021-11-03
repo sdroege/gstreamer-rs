@@ -30,7 +30,9 @@ impl MultiFileSource {
     }
 }
 
-pub const NONE_MULTI_FILE_SOURCE: Option<&MultiFileSource> = None;
+impl MultiFileSource {
+    pub const NONE: Option<&'static MultiFileSource> = None;
+}
 
 pub trait MultiFileSourceExt: 'static {
     fn uri(&self) -> Option<glib::GString>;

@@ -22,7 +22,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_VIDEO_URI_SOURCE: Option<&VideoUriSource> = None;
+impl VideoUriSource {
+    pub const NONE: Option<&'static VideoUriSource> = None;
+}
 
 pub trait VideoUriSourceExt: 'static {
     fn uri(&self) -> Option<glib::GString>;

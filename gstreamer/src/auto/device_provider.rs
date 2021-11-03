@@ -27,7 +27,9 @@ glib::wrapper! {
 unsafe impl Send for DeviceProvider {}
 unsafe impl Sync for DeviceProvider {}
 
-pub const NONE_DEVICE_PROVIDER: Option<&DeviceProvider> = None;
+impl DeviceProvider {
+    pub const NONE: Option<&'static DeviceProvider> = None;
+}
 
 pub trait DeviceProviderExt: 'static {
     #[doc(alias = "gst_device_provider_can_monitor")]

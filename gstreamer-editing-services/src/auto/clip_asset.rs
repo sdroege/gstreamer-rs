@@ -29,7 +29,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_CLIP_ASSET: Option<&ClipAsset> = None;
+impl ClipAsset {
+    pub const NONE: Option<&'static ClipAsset> = None;
+}
 
 pub trait ClipAssetExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]

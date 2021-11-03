@@ -35,7 +35,9 @@ impl Project {
     }
 }
 
-pub const NONE_PROJECT: Option<&Project> = None;
+impl Project {
+    pub const NONE: Option<&'static Project> = None;
+}
 
 pub trait ProjectExt: 'static {
     #[doc(alias = "ges_project_add_asset")]

@@ -17,4 +17,6 @@ impl VideoFilter {}
 unsafe impl Send for VideoFilter {}
 unsafe impl Sync for VideoFilter {}
 
-pub const NONE_VIDEO_FILTER: Option<&VideoFilter> = None;
+impl VideoFilter {
+    pub const NONE: Option<&'static VideoFilter> = None;
+}

@@ -72,7 +72,9 @@ impl UriClipAsset {
     }
 }
 
-pub const NONE_URI_CLIP_ASSET: Option<&UriClipAsset> = None;
+impl UriClipAsset {
+    pub const NONE: Option<&'static UriClipAsset> = None;
+}
 
 pub trait UriClipAssetExt: 'static {
     #[doc(alias = "ges_uri_clip_asset_get_duration")]

@@ -26,7 +26,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_TRACK_ELEMENT_ASSET: Option<&TrackElementAsset> = None;
+impl TrackElementAsset {
+    pub const NONE: Option<&'static TrackElementAsset> = None;
+}
 
 pub trait TrackElementAssetExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]

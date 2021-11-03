@@ -40,7 +40,9 @@ impl Default for RTSPMediaFactoryURI {
 unsafe impl Send for RTSPMediaFactoryURI {}
 unsafe impl Sync for RTSPMediaFactoryURI {}
 
-pub const NONE_RTSP_MEDIA_FACTORY_URI: Option<&RTSPMediaFactoryURI> = None;
+impl RTSPMediaFactoryURI {
+    pub const NONE: Option<&'static RTSPMediaFactoryURI> = None;
+}
 
 pub trait RTSPMediaFactoryURIExt: 'static {
     #[doc(alias = "gst_rtsp_media_factory_uri_get_uri")]

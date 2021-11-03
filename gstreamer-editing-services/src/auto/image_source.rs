@@ -22,7 +22,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_IMAGE_SOURCE: Option<&ImageSource> = None;
+impl ImageSource {
+    pub const NONE: Option<&'static ImageSource> = None;
+}
 
 pub trait ImageSourceExt: 'static {
     fn uri(&self) -> Option<glib::GString>;

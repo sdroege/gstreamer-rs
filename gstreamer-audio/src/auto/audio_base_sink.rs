@@ -25,7 +25,9 @@ glib::wrapper! {
 unsafe impl Send for AudioBaseSink {}
 unsafe impl Sync for AudioBaseSink {}
 
-pub const NONE_AUDIO_BASE_SINK: Option<&AudioBaseSink> = None;
+impl AudioBaseSink {
+    pub const NONE: Option<&'static AudioBaseSink> = None;
+}
 
 pub trait AudioBaseSinkExt: 'static {
     //#[doc(alias = "gst_audio_base_sink_create_ringbuffer")]

@@ -25,7 +25,9 @@ glib::wrapper! {
 unsafe impl Send for BaseSrc {}
 unsafe impl Sync for BaseSrc {}
 
-pub const NONE_BASE_SRC: Option<&BaseSrc> = None;
+impl BaseSrc {
+    pub const NONE: Option<&'static BaseSrc> = None;
+}
 
 pub trait BaseSrcExt: 'static {
     #[doc(alias = "gst_base_src_get_blocksize")]

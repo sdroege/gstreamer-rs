@@ -79,7 +79,9 @@ impl Clock {
 unsafe impl Send for Clock {}
 unsafe impl Sync for Clock {}
 
-pub const NONE_CLOCK: Option<&Clock> = None;
+impl Clock {
+    pub const NONE: Option<&'static Clock> = None;
+}
 
 pub trait ClockExt: 'static {
     #[doc(alias = "gst_clock_add_observation")]

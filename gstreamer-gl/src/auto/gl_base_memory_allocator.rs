@@ -17,4 +17,6 @@ impl GLBaseMemoryAllocator {}
 unsafe impl Send for GLBaseMemoryAllocator {}
 unsafe impl Sync for GLBaseMemoryAllocator {}
 
-pub const NONE_GL_BASE_MEMORY_ALLOCATOR: Option<&GLBaseMemoryAllocator> = None;
+impl GLBaseMemoryAllocator {
+    pub const NONE: Option<&'static GLBaseMemoryAllocator> = None;
+}

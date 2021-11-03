@@ -21,7 +21,9 @@ glib::wrapper! {
 unsafe impl Send for GLFilter {}
 unsafe impl Sync for GLFilter {}
 
-pub const NONE_GL_FILTER: Option<&GLFilter> = None;
+impl GLFilter {
+    pub const NONE: Option<&'static GLFilter> = None;
+}
 
 pub trait GLFilterExt: 'static {
     #[doc(alias = "gst_gl_filter_draw_fullscreen_quad")]

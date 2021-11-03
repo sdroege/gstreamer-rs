@@ -33,7 +33,9 @@ impl Effect {
     }
 }
 
-pub const NONE_EFFECT: Option<&Effect> = None;
+impl Effect {
+    pub const NONE: Option<&'static Effect> = None;
+}
 
 pub trait EffectExt: 'static {
     #[doc(alias = "bin-description")]

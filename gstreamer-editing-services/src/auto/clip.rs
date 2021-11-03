@@ -36,7 +36,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_CLIP: Option<&Clip> = None;
+impl Clip {
+    pub const NONE: Option<&'static Clip> = None;
+}
 
 pub trait ClipExt: 'static {
     #[doc(alias = "ges_clip_add_asset")]

@@ -40,7 +40,9 @@ impl Default for Group {
     }
 }
 
-pub const NONE_GROUP: Option<&Group> = None;
+impl Group {
+    pub const NONE: Option<&'static Group> = None;
+}
 
 pub trait GroupExt: 'static {
     fn duration(&self) -> u64;

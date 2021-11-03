@@ -34,7 +34,9 @@ impl GLWindow {
 unsafe impl Send for GLWindow {}
 unsafe impl Sync for GLWindow {}
 
-pub const NONE_GL_WINDOW: Option<&GLWindow> = None;
+impl GLWindow {
+    pub const NONE: Option<&'static GLWindow> = None;
+}
 
 pub trait GLWindowExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]

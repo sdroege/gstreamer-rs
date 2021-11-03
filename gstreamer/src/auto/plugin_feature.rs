@@ -20,7 +20,9 @@ glib::wrapper! {
 unsafe impl Send for PluginFeature {}
 unsafe impl Sync for PluginFeature {}
 
-pub const NONE_PLUGIN_FEATURE: Option<&PluginFeature> = None;
+impl PluginFeature {
+    pub const NONE: Option<&'static PluginFeature> = None;
+}
 
 pub trait PluginFeatureExt: 'static {
     #[doc(alias = "gst_plugin_feature_check_version")]

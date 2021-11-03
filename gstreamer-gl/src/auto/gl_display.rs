@@ -51,7 +51,9 @@ impl Default for GLDisplay {
 unsafe impl Send for GLDisplay {}
 unsafe impl Sync for GLDisplay {}
 
-pub const NONE_GL_DISPLAY: Option<&GLDisplay> = None;
+impl GLDisplay {
+    pub const NONE: Option<&'static GLDisplay> = None;
+}
 
 pub trait GLDisplayExt: 'static {
     #[doc(alias = "gst_gl_display_add_context")]

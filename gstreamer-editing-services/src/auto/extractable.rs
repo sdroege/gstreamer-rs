@@ -16,7 +16,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_EXTRACTABLE: Option<&Extractable> = None;
+impl Extractable {
+    pub const NONE: Option<&'static Extractable> = None;
+}
 
 pub trait ExtractableExt: 'static {
     #[doc(alias = "ges_extractable_get_asset")]

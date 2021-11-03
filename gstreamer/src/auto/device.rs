@@ -27,7 +27,9 @@ glib::wrapper! {
 unsafe impl Send for Device {}
 unsafe impl Sync for Device {}
 
-pub const NONE_DEVICE: Option<&Device> = None;
+impl Device {
+    pub const NONE: Option<&'static Device> = None;
+}
 
 pub trait DeviceExt: 'static {
     #[doc(alias = "gst_device_create_element")]

@@ -66,7 +66,9 @@ impl Element {
 unsafe impl Send for Element {}
 unsafe impl Sync for Element {}
 
-pub const NONE_ELEMENT: Option<&Element> = None;
+impl Element {
+    pub const NONE: Option<&'static Element> = None;
+}
 
 pub trait ElementExt: 'static {
     #[doc(alias = "gst_element_abort_state")]

@@ -44,7 +44,9 @@ impl Default for InterpolationControlSource {
 unsafe impl Send for InterpolationControlSource {}
 unsafe impl Sync for InterpolationControlSource {}
 
-pub const NONE_INTERPOLATION_CONTROL_SOURCE: Option<&InterpolationControlSource> = None;
+impl InterpolationControlSource {
+    pub const NONE: Option<&'static InterpolationControlSource> = None;
+}
 
 pub trait InterpolationControlSourceExt: 'static {
     fn mode(&self) -> InterpolationMode;

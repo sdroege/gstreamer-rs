@@ -24,7 +24,9 @@ impl RTSPStreamTransport {
     //}
 }
 
-pub const NONE_RTSP_STREAM_TRANSPORT: Option<&RTSPStreamTransport> = None;
+impl RTSPStreamTransport {
+    pub const NONE: Option<&'static RTSPStreamTransport> = None;
+}
 
 pub trait RTSPStreamTransportExt: 'static {
     #[doc(alias = "gst_rtsp_stream_transport_get_rtpinfo")]

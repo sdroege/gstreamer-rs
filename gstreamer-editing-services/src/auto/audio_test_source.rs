@@ -21,7 +21,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_AUDIO_TEST_SOURCE: Option<&AudioTestSource> = None;
+impl AudioTestSource {
+    pub const NONE: Option<&'static AudioTestSource> = None;
+}
 
 pub trait AudioTestSourceExt: 'static {
     #[doc(alias = "ges_audio_test_source_get_freq")]

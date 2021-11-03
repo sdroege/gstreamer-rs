@@ -70,7 +70,9 @@ impl Default for Timeline {
     }
 }
 
-pub const NONE_TIMELINE: Option<&Timeline> = None;
+impl Timeline {
+    pub const NONE: Option<&'static Timeline> = None;
+}
 
 pub trait TimelineExt: 'static {
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]

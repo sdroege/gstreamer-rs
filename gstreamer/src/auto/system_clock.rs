@@ -44,7 +44,9 @@ impl SystemClock {
 unsafe impl Send for SystemClock {}
 unsafe impl Sync for SystemClock {}
 
-pub const NONE_SYSTEM_CLOCK: Option<&SystemClock> = None;
+impl SystemClock {
+    pub const NONE: Option<&'static SystemClock> = None;
+}
 
 pub trait SystemClockExt: 'static {
     #[doc(alias = "clock-type")]

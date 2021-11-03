@@ -4,35 +4,35 @@
 // DO NOT EDIT
 
 mod gl_base_filter;
-pub use self::gl_base_filter::{GLBaseFilter, NONE_GL_BASE_FILTER};
+pub use self::gl_base_filter::GLBaseFilter;
 
 mod gl_base_memory_allocator;
-pub use self::gl_base_memory_allocator::{GLBaseMemoryAllocator, NONE_GL_BASE_MEMORY_ALLOCATOR};
+pub use self::gl_base_memory_allocator::GLBaseMemoryAllocator;
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 mod gl_base_src;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-pub use self::gl_base_src::{GLBaseSrc, NONE_GL_BASE_SRC};
+pub use self::gl_base_src::GLBaseSrc;
 
 mod gl_color_convert;
 pub use self::gl_color_convert::GLColorConvert;
 
 mod gl_context;
-pub use self::gl_context::{GLContext, NONE_GL_CONTEXT};
+pub use self::gl_context::GLContext;
 
 mod gl_display;
-pub use self::gl_display::{GLDisplay, NONE_GL_DISPLAY};
+pub use self::gl_display::GLDisplay;
 
 mod gl_filter;
-pub use self::gl_filter::{GLFilter, NONE_GL_FILTER};
+pub use self::gl_filter::GLFilter;
 
 mod gl_framebuffer;
-pub use self::gl_framebuffer::{GLFramebuffer, NONE_GL_FRAMEBUFFER};
+pub use self::gl_framebuffer::GLFramebuffer;
 
 mod gl_memory_allocator;
-pub use self::gl_memory_allocator::{GLMemoryAllocator, NONE_GL_MEMORY_ALLOCATOR};
+pub use self::gl_memory_allocator::GLMemoryAllocator;
 
 mod gl_overlay_compositor;
 pub use self::gl_overlay_compositor::GLOverlayCompositor;
@@ -50,7 +50,7 @@ mod gl_view_convert;
 pub use self::gl_view_convert::GLViewConvert;
 
 mod gl_window;
-pub use self::gl_window::{GLWindow, NONE_GL_WINDOW};
+pub use self::gl_window::GLWindow;
 
 mod gl_allocation_params;
 pub use self::gl_allocation_params::GLAllocationParams;

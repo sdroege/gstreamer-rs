@@ -27,7 +27,9 @@ impl VideoOverlay {
 unsafe impl Send for VideoOverlay {}
 unsafe impl Sync for VideoOverlay {}
 
-pub const NONE_VIDEO_OVERLAY: Option<&VideoOverlay> = None;
+impl VideoOverlay {
+    pub const NONE: Option<&'static VideoOverlay> = None;
+}
 
 pub trait VideoOverlayExt: 'static {
     #[doc(alias = "gst_video_overlay_expose")]

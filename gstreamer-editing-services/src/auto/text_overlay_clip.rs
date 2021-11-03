@@ -38,7 +38,9 @@ impl TextOverlayClip {
     }
 }
 
-pub const NONE_TEXT_OVERLAY_CLIP: Option<&TextOverlayClip> = None;
+impl TextOverlayClip {
+    pub const NONE: Option<&'static TextOverlayClip> = None;
+}
 
 pub trait TextOverlayClipExt: 'static {
     #[doc(alias = "ges_text_overlay_clip_get_color")]

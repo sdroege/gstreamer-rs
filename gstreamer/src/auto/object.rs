@@ -56,7 +56,9 @@ impl fmt::Display for Object {
 unsafe impl Send for Object {}
 unsafe impl Sync for Object {}
 
-pub const NONE_OBJECT: Option<&Object> = None;
+impl Object {
+    pub const NONE: Option<&'static Object> = None;
+}
 
 pub trait GstObjectExt: 'static {
     #[doc(alias = "gst_object_add_control_binding")]

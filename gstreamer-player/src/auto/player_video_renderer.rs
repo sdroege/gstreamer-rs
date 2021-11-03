@@ -17,7 +17,9 @@ glib::wrapper! {
 unsafe impl Send for PlayerVideoRenderer {}
 unsafe impl Sync for PlayerVideoRenderer {}
 
-pub const NONE_PLAYER_VIDEO_RENDERER: Option<&PlayerVideoRenderer> = None;
+impl PlayerVideoRenderer {
+    pub const NONE: Option<&'static PlayerVideoRenderer> = None;
+}
 
 pub trait PlayerVideoRendererExt: 'static {}
 

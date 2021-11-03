@@ -25,7 +25,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_VIDEO_SOURCE: Option<&VideoSource> = None;
+impl VideoSource {
+    pub const NONE: Option<&'static VideoSource> = None;
+}
 
 pub trait VideoSourceExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]

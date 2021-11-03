@@ -4,25 +4,25 @@
 // DO NOT EDIT
 
 mod audio_base_sink;
-pub use self::audio_base_sink::{AudioBaseSink, NONE_AUDIO_BASE_SINK};
+pub use self::audio_base_sink::AudioBaseSink;
 
 mod audio_base_src;
-pub use self::audio_base_src::{AudioBaseSrc, NONE_AUDIO_BASE_SRC};
+pub use self::audio_base_src::AudioBaseSrc;
 
 mod audio_decoder;
-pub use self::audio_decoder::{AudioDecoder, NONE_AUDIO_DECODER};
+pub use self::audio_decoder::AudioDecoder;
 
 mod audio_encoder;
-pub use self::audio_encoder::{AudioEncoder, NONE_AUDIO_ENCODER};
+pub use self::audio_encoder::AudioEncoder;
 
 mod audio_sink;
-pub use self::audio_sink::{AudioSink, NONE_AUDIO_SINK};
+pub use self::audio_sink::AudioSink;
 
 mod audio_src;
-pub use self::audio_src::{AudioSrc, NONE_AUDIO_SRC};
+pub use self::audio_src::AudioSrc;
 
 mod stream_volume;
-pub use self::stream_volume::{StreamVolume, NONE_STREAM_VOLUME};
+pub use self::stream_volume::StreamVolume;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]

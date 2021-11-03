@@ -35,7 +35,9 @@ impl Container {
     }
 }
 
-pub const NONE_CONTAINER: Option<&Container> = None;
+impl Container {
+    pub const NONE: Option<&'static Container> = None;
+}
 
 pub trait GESContainerExt: 'static {
     #[doc(alias = "ges_container_add")]

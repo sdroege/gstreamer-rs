@@ -45,7 +45,9 @@ impl TransitionClip {
     }
 }
 
-pub const NONE_TRANSITION_CLIP: Option<&TransitionClip> = None;
+impl TransitionClip {
+    pub const NONE: Option<&'static TransitionClip> = None;
+}
 
 pub trait TransitionClipExt: 'static {
     fn vtype(&self) -> VideoStandardTransitionType;

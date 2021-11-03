@@ -39,7 +39,9 @@ impl Pipeline {
 unsafe impl Send for Pipeline {}
 unsafe impl Sync for Pipeline {}
 
-pub const NONE_PIPELINE: Option<&Pipeline> = None;
+impl Pipeline {
+    pub const NONE: Option<&'static Pipeline> = None;
+}
 
 pub trait PipelineExt: 'static {
     #[doc(alias = "gst_pipeline_auto_clock")]

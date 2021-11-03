@@ -44,7 +44,9 @@ impl RTSPMedia {
 unsafe impl Send for RTSPMedia {}
 unsafe impl Sync for RTSPMedia {}
 
-pub const NONE_RTSP_MEDIA: Option<&RTSPMedia> = None;
+impl RTSPMedia {
+    pub const NONE: Option<&'static RTSPMedia> = None;
+}
 
 pub trait RTSPMediaExt: 'static {
     #[doc(alias = "gst_rtsp_media_collect_streams")]

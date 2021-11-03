@@ -8,30 +8,28 @@
 mod video_aggregator_parallel_convert_pad;
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-pub use self::video_aggregator_parallel_convert_pad::{
-    VideoAggregatorParallelConvertPad, NONE_VIDEO_AGGREGATOR_PARALLEL_CONVERT_PAD,
-};
+pub use self::video_aggregator_parallel_convert_pad::VideoAggregatorParallelConvertPad;
 
 mod video_buffer_pool;
-pub use self::video_buffer_pool::{VideoBufferPool, NONE_VIDEO_BUFFER_POOL};
+pub use self::video_buffer_pool::VideoBufferPool;
 
 mod video_decoder;
-pub use self::video_decoder::{VideoDecoder, NONE_VIDEO_DECODER};
+pub use self::video_decoder::VideoDecoder;
 
 mod video_encoder;
-pub use self::video_encoder::{VideoEncoder, NONE_VIDEO_ENCODER};
+pub use self::video_encoder::VideoEncoder;
 
 mod video_filter;
-pub use self::video_filter::{VideoFilter, NONE_VIDEO_FILTER};
+pub use self::video_filter::VideoFilter;
 
 mod video_orientation;
-pub use self::video_orientation::{VideoOrientation, NONE_VIDEO_ORIENTATION};
+pub use self::video_orientation::VideoOrientation;
 
 mod video_overlay;
-pub use self::video_overlay::{VideoOverlay, NONE_VIDEO_OVERLAY};
+pub use self::video_overlay::VideoOverlay;
 
 mod video_sink;
-pub use self::video_sink::{VideoSink, NONE_VIDEO_SINK};
+pub use self::video_sink::VideoSink;
 
 mod enums;
 #[cfg(any(feature = "v1_18", feature = "dox"))]

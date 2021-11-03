@@ -33,4 +33,6 @@ impl GLMemoryAllocator {
 unsafe impl Send for GLMemoryAllocator {}
 unsafe impl Sync for GLMemoryAllocator {}
 
-pub const NONE_GL_MEMORY_ALLOCATOR: Option<&GLMemoryAllocator> = None;
+impl GLMemoryAllocator {
+    pub const NONE: Option<&'static GLMemoryAllocator> = None;
+}

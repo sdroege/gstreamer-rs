@@ -44,7 +44,9 @@ impl TestClip {
     }
 }
 
-pub const NONE_TEST_CLIP: Option<&TestClip> = None;
+impl TestClip {
+    pub const NONE: Option<&'static TestClip> = None;
+}
 
 pub trait TestClipExt: 'static {
     #[doc(alias = "ges_test_clip_get_frequency")]

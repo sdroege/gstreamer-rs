@@ -21,7 +21,9 @@ glib::wrapper! {
 unsafe impl Send for ControlBinding {}
 unsafe impl Sync for ControlBinding {}
 
-pub const NONE_CONTROL_BINDING: Option<&ControlBinding> = None;
+impl ControlBinding {
+    pub const NONE: Option<&'static ControlBinding> = None;
+}
 
 pub trait ControlBindingExt: 'static {
     #[doc(alias = "gst_control_binding_get_value")]

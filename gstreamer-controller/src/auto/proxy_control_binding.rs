@@ -40,4 +40,6 @@ impl ProxyControlBinding {
 unsafe impl Send for ProxyControlBinding {}
 unsafe impl Sync for ProxyControlBinding {}
 
-pub const NONE_PROXY_CONTROL_BINDING: Option<&ProxyControlBinding> = None;
+impl ProxyControlBinding {
+    pub const NONE: Option<&'static ProxyControlBinding> = None;
+}

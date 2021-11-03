@@ -65,7 +65,9 @@ impl EncodingProfile {
 unsafe impl Send for EncodingProfile {}
 unsafe impl Sync for EncodingProfile {}
 
-pub const NONE_ENCODING_PROFILE: Option<&EncodingProfile> = None;
+impl EncodingProfile {
+    pub const NONE: Option<&'static EncodingProfile> = None;
+}
 
 pub trait EncodingProfileExt: 'static {
     #[cfg(any(feature = "v1_12", feature = "dox"))]

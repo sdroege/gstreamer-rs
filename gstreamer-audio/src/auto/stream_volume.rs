@@ -32,7 +32,9 @@ impl StreamVolume {
 unsafe impl Send for StreamVolume {}
 unsafe impl Sync for StreamVolume {}
 
-pub const NONE_STREAM_VOLUME: Option<&StreamVolume> = None;
+impl StreamVolume {
+    pub const NONE: Option<&'static StreamVolume> = None;
+}
 
 pub trait StreamVolumeExt: 'static {
     #[doc(alias = "gst_stream_volume_get_mute")]

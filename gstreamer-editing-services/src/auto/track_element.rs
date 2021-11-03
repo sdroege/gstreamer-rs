@@ -28,7 +28,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_TRACK_ELEMENT: Option<&TrackElement> = None;
+impl TrackElement {
+    pub const NONE: Option<&'static TrackElement> = None;
+}
 
 pub trait TrackElementExt: 'static {
     #[doc(alias = "ges_track_element_add_children_props")]

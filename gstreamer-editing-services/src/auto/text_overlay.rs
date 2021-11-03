@@ -31,7 +31,9 @@ impl TextOverlay {
     }
 }
 
-pub const NONE_TEXT_OVERLAY: Option<&TextOverlay> = None;
+impl TextOverlay {
+    pub const NONE: Option<&'static TextOverlay> = None;
+}
 
 pub trait TextOverlayExt: 'static {
     #[doc(alias = "ges_text_overlay_get_color")]

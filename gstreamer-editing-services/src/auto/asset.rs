@@ -114,7 +114,9 @@ impl Asset {
     }
 }
 
-pub const NONE_ASSET: Option<&Asset> = None;
+impl Asset {
+    pub const NONE: Option<&'static Asset> = None;
+}
 
 pub trait AssetExt: 'static {
     #[doc(alias = "ges_asset_extract")]

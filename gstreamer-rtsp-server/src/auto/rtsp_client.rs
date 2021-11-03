@@ -49,7 +49,9 @@ impl Default for RTSPClient {
 unsafe impl Send for RTSPClient {}
 unsafe impl Sync for RTSPClient {}
 
-pub const NONE_RTSP_CLIENT: Option<&RTSPClient> = None;
+impl RTSPClient {
+    pub const NONE: Option<&'static RTSPClient> = None;
+}
 
 pub trait RTSPClientExt: 'static {
     #[doc(alias = "gst_rtsp_client_close")]

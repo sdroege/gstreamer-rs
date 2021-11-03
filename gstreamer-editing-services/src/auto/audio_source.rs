@@ -20,4 +20,6 @@ glib::wrapper! {
 
 impl AudioSource {}
 
-pub const NONE_AUDIO_SOURCE: Option<&AudioSource> = None;
+impl AudioSource {
+    pub const NONE: Option<&'static AudioSource> = None;
+}

@@ -50,7 +50,9 @@ impl ARGBControlBinding {
 unsafe impl Send for ARGBControlBinding {}
 unsafe impl Sync for ARGBControlBinding {}
 
-pub const NONE_ARGB_CONTROL_BINDING: Option<&ARGBControlBinding> = None;
+impl ARGBControlBinding {
+    pub const NONE: Option<&'static ARGBControlBinding> = None;
+}
 
 pub trait ARGBControlBindingExt: 'static {
     #[doc(alias = "control-source-a")]

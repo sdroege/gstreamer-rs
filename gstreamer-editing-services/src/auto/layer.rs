@@ -46,7 +46,9 @@ impl Default for Layer {
     }
 }
 
-pub const NONE_LAYER: Option<&Layer> = None;
+impl Layer {
+    pub const NONE: Option<&'static Layer> = None;
+}
 
 pub trait LayerExt: 'static {
     #[doc(alias = "ges_layer_add_asset")]

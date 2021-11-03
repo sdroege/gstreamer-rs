@@ -47,7 +47,9 @@ impl RTSPStream {
 unsafe impl Send for RTSPStream {}
 unsafe impl Sync for RTSPStream {}
 
-pub const NONE_RTSP_STREAM: Option<&RTSPStream> = None;
+impl RTSPStream {
+    pub const NONE: Option<&'static RTSPStream> = None;
+}
 
 pub trait RTSPStreamExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]

@@ -39,7 +39,9 @@ impl Track {
     }
 }
 
-pub const NONE_TRACK: Option<&Track> = None;
+impl Track {
+    pub const NONE: Option<&'static Track> = None;
+}
 
 pub trait GESTrackExt: 'static {
     #[doc(alias = "ges_track_add_element")]

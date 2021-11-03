@@ -27,7 +27,9 @@ impl ProxyPad {
 unsafe impl Send for ProxyPad {}
 unsafe impl Sync for ProxyPad {}
 
-pub const NONE_PROXY_PAD: Option<&ProxyPad> = None;
+impl ProxyPad {
+    pub const NONE: Option<&'static ProxyPad> = None;
+}
 
 pub trait ProxyPadExt: 'static {
     #[doc(alias = "gst_proxy_pad_get_internal")]

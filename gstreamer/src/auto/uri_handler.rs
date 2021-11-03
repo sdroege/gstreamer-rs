@@ -20,7 +20,9 @@ glib::wrapper! {
 unsafe impl Send for URIHandler {}
 unsafe impl Sync for URIHandler {}
 
-pub const NONE_URI_HANDLER: Option<&URIHandler> = None;
+impl URIHandler {
+    pub const NONE: Option<&'static URIHandler> = None;
+}
 
 pub trait URIHandlerExt: 'static {
     #[doc(alias = "gst_uri_handler_get_protocols")]

@@ -37,7 +37,9 @@ impl UriClip {
     }
 }
 
-pub const NONE_URI_CLIP: Option<&UriClip> = None;
+impl UriClip {
+    pub const NONE: Option<&'static UriClip> = None;
+}
 
 pub trait UriClipExt: 'static {
     #[doc(alias = "ges_uri_clip_get_uri")]

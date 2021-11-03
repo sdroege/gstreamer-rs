@@ -37,7 +37,9 @@ impl Allocator {
 unsafe impl Send for Allocator {}
 unsafe impl Sync for Allocator {}
 
-pub const NONE_ALLOCATOR: Option<&Allocator> = None;
+impl Allocator {
+    pub const NONE: Option<&'static Allocator> = None;
+}
 
 pub trait AllocatorExt: 'static {
     #[doc(alias = "gst_allocator_alloc")]

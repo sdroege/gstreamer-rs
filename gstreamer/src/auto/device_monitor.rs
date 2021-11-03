@@ -28,7 +28,9 @@ glib::wrapper! {
 unsafe impl Send for DeviceMonitor {}
 unsafe impl Sync for DeviceMonitor {}
 
-pub const NONE_DEVICE_MONITOR: Option<&DeviceMonitor> = None;
+impl DeviceMonitor {
+    pub const NONE: Option<&'static DeviceMonitor> = None;
+}
 
 pub trait DeviceMonitorExt: 'static {
     #[doc(alias = "gst_device_monitor_get_bus")]

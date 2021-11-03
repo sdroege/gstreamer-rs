@@ -4,72 +4,72 @@
 // DO NOT EDIT
 
 mod asset;
-pub use self::asset::{Asset, NONE_ASSET};
+pub use self::asset::Asset;
 
 mod audio_source;
-pub use self::audio_source::{AudioSource, NONE_AUDIO_SOURCE};
+pub use self::audio_source::AudioSource;
 
 mod audio_test_source;
-pub use self::audio_test_source::{AudioTestSource, NONE_AUDIO_TEST_SOURCE};
+pub use self::audio_test_source::AudioTestSource;
 
 mod audio_track;
-pub use self::audio_track::{AudioTrack, NONE_AUDIO_TRACK};
+pub use self::audio_track::AudioTrack;
 
 mod audio_transition;
-pub use self::audio_transition::{AudioTransition, NONE_AUDIO_TRANSITION};
+pub use self::audio_transition::AudioTransition;
 
 mod audio_uri_source;
-pub use self::audio_uri_source::{AudioUriSource, NONE_AUDIO_URI_SOURCE};
+pub use self::audio_uri_source::AudioUriSource;
 
 mod base_effect;
-pub use self::base_effect::{BaseEffect, NONE_BASE_EFFECT};
+pub use self::base_effect::BaseEffect;
 
 mod base_effect_clip;
-pub use self::base_effect_clip::{BaseEffectClip, NONE_BASE_EFFECT_CLIP};
+pub use self::base_effect_clip::BaseEffectClip;
 
 mod base_transition_clip;
-pub use self::base_transition_clip::{BaseTransitionClip, NONE_BASE_TRANSITION_CLIP};
+pub use self::base_transition_clip::BaseTransitionClip;
 
 mod base_xml_formatter;
-pub use self::base_xml_formatter::{BaseXmlFormatter, NONE_BASE_XML_FORMATTER};
+pub use self::base_xml_formatter::BaseXmlFormatter;
 
 mod clip;
-pub use self::clip::{Clip, NONE_CLIP};
+pub use self::clip::Clip;
 
 mod clip_asset;
-pub use self::clip_asset::{ClipAsset, NONE_CLIP_ASSET};
+pub use self::clip_asset::ClipAsset;
 
 mod command_line_formatter;
-pub use self::command_line_formatter::{CommandLineFormatter, NONE_COMMAND_LINE_FORMATTER};
+pub use self::command_line_formatter::CommandLineFormatter;
 
 mod container;
-pub use self::container::{Container, NONE_CONTAINER};
+pub use self::container::Container;
 
 mod effect;
-pub use self::effect::{Effect, NONE_EFFECT};
+pub use self::effect::Effect;
 
 mod effect_asset;
-pub use self::effect_asset::{EffectAsset, NONE_EFFECT_ASSET};
+pub use self::effect_asset::EffectAsset;
 
 mod effect_clip;
-pub use self::effect_clip::{EffectClip, NONE_EFFECT_CLIP};
+pub use self::effect_clip::EffectClip;
 
 mod extractable;
-pub use self::extractable::{Extractable, NONE_EXTRACTABLE};
+pub use self::extractable::Extractable;
 
 mod formatter;
-pub use self::formatter::{Formatter, NONE_FORMATTER};
+pub use self::formatter::Formatter;
 
 mod group;
-pub use self::group::{Group, NONE_GROUP};
+pub use self::group::Group;
 
 #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
 mod image_source;
 #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
-pub use self::image_source::{ImageSource, NONE_IMAGE_SOURCE};
+pub use self::image_source::ImageSource;
 
 mod layer;
-pub use self::layer::{Layer, NONE_LAYER};
+pub use self::layer::Layer;
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -86,103 +86,103 @@ mod marker_list;
 pub use self::marker_list::MarkerList;
 
 mod meta_container;
-pub use self::meta_container::{MetaContainer, NONE_META_CONTAINER};
+pub use self::meta_container::MetaContainer;
 
 #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
 mod multi_file_source;
 #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
-pub use self::multi_file_source::{MultiFileSource, NONE_MULTI_FILE_SOURCE};
+pub use self::multi_file_source::MultiFileSource;
 
 mod operation;
-pub use self::operation::{Operation, NONE_OPERATION};
+pub use self::operation::Operation;
 
 mod operation_clip;
-pub use self::operation_clip::{OperationClip, NONE_OPERATION_CLIP};
+pub use self::operation_clip::OperationClip;
 
 mod overlay_clip;
-pub use self::overlay_clip::{OverlayClip, NONE_OVERLAY_CLIP};
+pub use self::overlay_clip::OverlayClip;
 
 mod pipeline;
-pub use self::pipeline::{Pipeline, NONE_PIPELINE};
+pub use self::pipeline::Pipeline;
 
 mod project;
-pub use self::project::{Project, NONE_PROJECT};
+pub use self::project::Project;
 
 mod source;
-pub use self::source::{Source, NONE_SOURCE};
+pub use self::source::Source;
 
 mod source_clip;
-pub use self::source_clip::{SourceClip, NONE_SOURCE_CLIP};
+pub use self::source_clip::SourceClip;
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 mod source_clip_asset;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-pub use self::source_clip_asset::{SourceClipAsset, NONE_SOURCE_CLIP_ASSET};
+pub use self::source_clip_asset::SourceClipAsset;
 
 mod test_clip;
-pub use self::test_clip::{TestClip, NONE_TEST_CLIP};
+pub use self::test_clip::TestClip;
 
 mod text_overlay;
-pub use self::text_overlay::{TextOverlay, NONE_TEXT_OVERLAY};
+pub use self::text_overlay::TextOverlay;
 
 mod text_overlay_clip;
-pub use self::text_overlay_clip::{TextOverlayClip, NONE_TEXT_OVERLAY_CLIP};
+pub use self::text_overlay_clip::TextOverlayClip;
 
 mod timeline;
-pub use self::timeline::{Timeline, NONE_TIMELINE};
+pub use self::timeline::Timeline;
 
 mod timeline_element;
-pub use self::timeline_element::{TimelineElement, NONE_TIMELINE_ELEMENT};
+pub use self::timeline_element::TimelineElement;
 
 mod title_clip;
-pub use self::title_clip::{TitleClip, NONE_TITLE_CLIP};
+pub use self::title_clip::TitleClip;
 
 mod title_source;
-pub use self::title_source::{TitleSource, NONE_TITLE_SOURCE};
+pub use self::title_source::TitleSource;
 
 mod track;
-pub use self::track::{Track, NONE_TRACK};
+pub use self::track::Track;
 
 mod track_element;
-pub use self::track_element::{TrackElement, NONE_TRACK_ELEMENT};
+pub use self::track_element::TrackElement;
 
 mod track_element_asset;
-pub use self::track_element_asset::{TrackElementAsset, NONE_TRACK_ELEMENT_ASSET};
+pub use self::track_element_asset::TrackElementAsset;
 
 mod transition;
-pub use self::transition::{Transition, NONE_TRANSITION};
+pub use self::transition::Transition;
 
 mod transition_clip;
-pub use self::transition_clip::{TransitionClip, NONE_TRANSITION_CLIP};
+pub use self::transition_clip::TransitionClip;
 
 mod uri_clip;
-pub use self::uri_clip::{UriClip, NONE_URI_CLIP};
+pub use self::uri_clip::UriClip;
 
 mod uri_clip_asset;
-pub use self::uri_clip_asset::{UriClipAsset, NONE_URI_CLIP_ASSET};
+pub use self::uri_clip_asset::UriClipAsset;
 
 mod uri_source_asset;
-pub use self::uri_source_asset::{UriSourceAsset, NONE_URI_SOURCE_ASSET};
+pub use self::uri_source_asset::UriSourceAsset;
 
 mod video_source;
-pub use self::video_source::{VideoSource, NONE_VIDEO_SOURCE};
+pub use self::video_source::VideoSource;
 
 mod video_test_source;
-pub use self::video_test_source::{VideoTestSource, NONE_VIDEO_TEST_SOURCE};
+pub use self::video_test_source::VideoTestSource;
 
 mod video_track;
-pub use self::video_track::{VideoTrack, NONE_VIDEO_TRACK};
+pub use self::video_track::VideoTrack;
 
 mod video_transition;
-pub use self::video_transition::{VideoTransition, NONE_VIDEO_TRANSITION};
+pub use self::video_transition::VideoTransition;
 
 mod video_uri_source;
-pub use self::video_uri_source::{VideoUriSource, NONE_VIDEO_URI_SOURCE};
+pub use self::video_uri_source::VideoUriSource;
 
 mod xml_formatter;
-pub use self::xml_formatter::{XmlFormatter, NONE_XML_FORMATTER};
+pub use self::xml_formatter::XmlFormatter;
 
 mod enums;
 pub use self::enums::AssetLoadingReturn;

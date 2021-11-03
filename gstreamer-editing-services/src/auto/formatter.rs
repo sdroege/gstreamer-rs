@@ -56,7 +56,9 @@ impl Formatter {
     }
 }
 
-pub const NONE_FORMATTER: Option<&Formatter> = None;
+impl Formatter {
+    pub const NONE: Option<&'static Formatter> = None;
+}
 
 pub trait FormatterExt: 'static {
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]

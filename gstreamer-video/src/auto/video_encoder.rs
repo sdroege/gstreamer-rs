@@ -28,7 +28,9 @@ glib::wrapper! {
 unsafe impl Send for VideoEncoder {}
 unsafe impl Sync for VideoEncoder {}
 
-pub const NONE_VIDEO_ENCODER: Option<&VideoEncoder> = None;
+impl VideoEncoder {
+    pub const NONE: Option<&'static VideoEncoder> = None;
+}
 
 pub trait VideoEncoderExt: 'static {
     #[doc(alias = "gst_video_encoder_allocate_output_buffer")]

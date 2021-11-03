@@ -11,29 +11,29 @@ pub use self::adapter::Adapter;
 mod aggregator;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-pub use self::aggregator::{Aggregator, NONE_AGGREGATOR};
+pub use self::aggregator::Aggregator;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod aggregator_pad;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-pub use self::aggregator_pad::{AggregatorPad, NONE_AGGREGATOR_PAD};
+pub use self::aggregator_pad::AggregatorPad;
 
 mod base_parse;
-pub use self::base_parse::{BaseParse, NONE_BASE_PARSE};
+pub use self::base_parse::BaseParse;
 
 mod base_sink;
-pub use self::base_sink::{BaseSink, NONE_BASE_SINK};
+pub use self::base_sink::BaseSink;
 
 mod base_src;
-pub use self::base_src::{BaseSrc, NONE_BASE_SRC};
+pub use self::base_src::BaseSrc;
 
 mod base_transform;
-pub use self::base_transform::{BaseTransform, NONE_BASE_TRANSFORM};
+pub use self::base_transform::BaseTransform;
 
 mod push_src;
-pub use self::push_src::{PushSrc, NONE_PUSH_SRC};
+pub use self::push_src::PushSrc;
 
 mod enums;
 #[cfg(any(feature = "v1_18", feature = "dox"))]

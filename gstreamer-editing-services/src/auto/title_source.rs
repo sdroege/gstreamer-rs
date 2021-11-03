@@ -23,7 +23,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_TITLE_SOURCE: Option<&TitleSource> = None;
+impl TitleSource {
+    pub const NONE: Option<&'static TitleSource> = None;
+}
 
 pub trait TitleSourceExt: 'static {
     #[doc(alias = "ges_title_source_get_background_color")]

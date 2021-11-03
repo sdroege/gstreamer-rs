@@ -19,4 +19,6 @@ impl PushSrc {}
 unsafe impl Send for PushSrc {}
 unsafe impl Sync for PushSrc {}
 
-pub const NONE_PUSH_SRC: Option<&PushSrc> = None;
+impl PushSrc {
+    pub const NONE: Option<&'static PushSrc> = None;
+}

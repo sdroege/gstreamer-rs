@@ -21,7 +21,9 @@ glib::wrapper! {
 unsafe impl Send for GhostPad {}
 unsafe impl Sync for GhostPad {}
 
-pub const NONE_GHOST_PAD: Option<&GhostPad> = None;
+impl GhostPad {
+    pub const NONE: Option<&'static GhostPad> = None;
+}
 
 pub trait GhostPadExt: 'static {
     #[doc(alias = "gst_ghost_pad_get_target")]

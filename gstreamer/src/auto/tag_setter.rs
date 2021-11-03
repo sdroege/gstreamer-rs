@@ -22,7 +22,9 @@ glib::wrapper! {
 unsafe impl Send for TagSetter {}
 unsafe impl Sync for TagSetter {}
 
-pub const NONE_TAG_SETTER: Option<&TagSetter> = None;
+impl TagSetter {
+    pub const NONE: Option<&'static TagSetter> = None;
+}
 
 pub trait TagSetterExt: 'static {
     //#[doc(alias = "gst_tag_setter_add_tag_valist")]

@@ -30,4 +30,6 @@ impl Default for VideoTrack {
     }
 }
 
-pub const NONE_VIDEO_TRACK: Option<&VideoTrack> = None;
+impl VideoTrack {
+    pub const NONE: Option<&'static VideoTrack> = None;
+}

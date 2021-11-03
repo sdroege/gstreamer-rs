@@ -48,7 +48,9 @@ impl Default for RTSPThreadPool {
 unsafe impl Send for RTSPThreadPool {}
 unsafe impl Sync for RTSPThreadPool {}
 
-pub const NONE_RTSP_THREAD_POOL: Option<&RTSPThreadPool> = None;
+impl RTSPThreadPool {
+    pub const NONE: Option<&'static RTSPThreadPool> = None;
+}
 
 pub trait RTSPThreadPoolExt: 'static {
     #[doc(alias = "gst_rtsp_thread_pool_get_max_threads")]

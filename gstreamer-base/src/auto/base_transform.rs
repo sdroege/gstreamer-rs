@@ -25,7 +25,9 @@ glib::wrapper! {
 unsafe impl Send for BaseTransform {}
 unsafe impl Sync for BaseTransform {}
 
-pub const NONE_BASE_TRANSFORM: Option<&BaseTransform> = None;
+impl BaseTransform {
+    pub const NONE: Option<&'static BaseTransform> = None;
+}
 
 pub trait BaseTransformExt: 'static {
     #[doc(alias = "gst_base_transform_get_buffer_pool")]

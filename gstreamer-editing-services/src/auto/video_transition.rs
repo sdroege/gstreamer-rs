@@ -43,7 +43,9 @@ impl Default for VideoTransition {
     }
 }
 
-pub const NONE_VIDEO_TRANSITION: Option<&VideoTransition> = None;
+impl VideoTransition {
+    pub const NONE: Option<&'static VideoTransition> = None;
+}
 
 pub trait VideoTransitionExt: 'static {
     #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]

@@ -19,4 +19,6 @@ impl AudioSrc {}
 unsafe impl Send for AudioSrc {}
 unsafe impl Sync for AudioSrc {}
 
-pub const NONE_AUDIO_SRC: Option<&AudioSrc> = None;
+impl AudioSrc {
+    pub const NONE: Option<&'static AudioSrc> = None;
+}

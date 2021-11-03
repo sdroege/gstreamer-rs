@@ -35,4 +35,6 @@ impl Default for AudioTransition {
     }
 }
 
-pub const NONE_AUDIO_TRANSITION: Option<&AudioTransition> = None;
+impl AudioTransition {
+    pub const NONE: Option<&'static AudioTransition> = None;
+}

@@ -4,73 +4,73 @@
 // DO NOT EDIT
 
 mod allocator;
-pub use self::allocator::{Allocator, NONE_ALLOCATOR};
+pub use self::allocator::Allocator;
 
 mod bin;
-pub use self::bin::{Bin, NONE_BIN};
+pub use self::bin::Bin;
 
 mod buffer_pool;
-pub use self::buffer_pool::{BufferPool, NONE_BUFFER_POOL};
+pub use self::buffer_pool::BufferPool;
 
 mod bus;
 pub use self::bus::Bus;
 
 mod child_proxy;
-pub use self::child_proxy::{ChildProxy, NONE_CHILD_PROXY};
+pub use self::child_proxy::ChildProxy;
 
 mod clock;
-pub use self::clock::{Clock, NONE_CLOCK};
+pub use self::clock::Clock;
 
 mod control_binding;
-pub use self::control_binding::{ControlBinding, NONE_CONTROL_BINDING};
+pub use self::control_binding::ControlBinding;
 
 mod control_source;
-pub use self::control_source::{ControlSource, NONE_CONTROL_SOURCE};
+pub use self::control_source::ControlSource;
 
 mod device;
-pub use self::device::{Device, NONE_DEVICE};
+pub use self::device::Device;
 
 mod device_monitor;
-pub use self::device_monitor::{DeviceMonitor, NONE_DEVICE_MONITOR};
+pub use self::device_monitor::DeviceMonitor;
 
 mod device_provider;
-pub use self::device_provider::{DeviceProvider, NONE_DEVICE_PROVIDER};
+pub use self::device_provider::DeviceProvider;
 
 mod device_provider_factory;
 pub use self::device_provider_factory::DeviceProviderFactory;
 
 mod element;
-pub use self::element::{Element, NONE_ELEMENT};
+pub use self::element::Element;
 
 mod element_factory;
 pub use self::element_factory::ElementFactory;
 
 mod ghost_pad;
-pub use self::ghost_pad::{GhostPad, NONE_GHOST_PAD};
+pub use self::ghost_pad::GhostPad;
 
 mod object;
-pub use self::object::{Object, NONE_OBJECT};
+pub use self::object::Object;
 
 mod pad;
-pub use self::pad::{Pad, NONE_PAD};
+pub use self::pad::Pad;
 
 mod pad_template;
 pub use self::pad_template::PadTemplate;
 
 mod pipeline;
-pub use self::pipeline::{Pipeline, NONE_PIPELINE};
+pub use self::pipeline::Pipeline;
 
 mod plugin;
 pub use self::plugin::Plugin;
 
 mod plugin_feature;
-pub use self::plugin_feature::{PluginFeature, NONE_PLUGIN_FEATURE};
+pub use self::plugin_feature::PluginFeature;
 
 mod preset;
-pub use self::preset::{Preset, NONE_PRESET};
+pub use self::preset::Preset;
 
 mod proxy_pad;
-pub use self::proxy_pad::{ProxyPad, NONE_PROXY_PAD};
+pub use self::proxy_pad::ProxyPad;
 
 mod registry;
 pub use self::registry::Registry;
@@ -90,16 +90,16 @@ mod stream_collection;
 pub use self::stream_collection::StreamCollection;
 
 mod system_clock;
-pub use self::system_clock::{SystemClock, NONE_SYSTEM_CLOCK};
+pub use self::system_clock::SystemClock;
 
 mod tag_setter;
-pub use self::tag_setter::{TagSetter, NONE_TAG_SETTER};
+pub use self::tag_setter::TagSetter;
 
 mod toc_setter;
-pub use self::toc_setter::{TocSetter, NONE_TOC_SETTER};
+pub use self::toc_setter::TocSetter;
 
 mod tracer;
-pub use self::tracer::{Tracer, NONE_TRACER};
+pub use self::tracer::Tracer;
 
 mod tracer_factory;
 pub use self::tracer_factory::TracerFactory;
@@ -108,7 +108,7 @@ mod type_find_factory;
 pub use self::type_find_factory::TypeFindFactory;
 
 mod uri_handler;
-pub use self::uri_handler::{URIHandler, NONE_URI_HANDLER};
+pub use self::uri_handler::URIHandler;
 
 mod date_time;
 pub use self::date_time::DateTime;

@@ -19,4 +19,6 @@ impl AudioSink {}
 unsafe impl Send for AudioSink {}
 unsafe impl Sync for AudioSink {}
 
-pub const NONE_AUDIO_SINK: Option<&AudioSink> = None;
+impl AudioSink {
+    pub const NONE: Option<&'static AudioSink> = None;
+}

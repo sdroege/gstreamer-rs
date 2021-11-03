@@ -37,7 +37,9 @@ impl RTSPSession {
 unsafe impl Send for RTSPSession {}
 unsafe impl Sync for RTSPSession {}
 
-pub const NONE_RTSP_SESSION: Option<&RTSPSession> = None;
+impl RTSPSession {
+    pub const NONE: Option<&'static RTSPSession> = None;
+}
 
 pub trait RTSPSessionExt: 'static {
     #[doc(alias = "gst_rtsp_session_allow_expire")]

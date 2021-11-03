@@ -44,7 +44,9 @@ impl VideoOrientation {
 unsafe impl Send for VideoOrientation {}
 unsafe impl Sync for VideoOrientation {}
 
-pub const NONE_VIDEO_ORIENTATION: Option<&VideoOrientation> = None;
+impl VideoOrientation {
+    pub const NONE: Option<&'static VideoOrientation> = None;
+}
 
 pub trait VideoOrientationExt: 'static {
     #[doc(alias = "gst_video_orientation_get_hcenter")]

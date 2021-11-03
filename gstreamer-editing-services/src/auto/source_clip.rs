@@ -31,4 +31,6 @@ impl SourceClip {
     }
 }
 
-pub const NONE_SOURCE_CLIP: Option<&SourceClip> = None;
+impl SourceClip {
+    pub const NONE: Option<&'static SourceClip> = None;
+}

@@ -22,7 +22,9 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_VIDEO_TEST_SOURCE: Option<&VideoTestSource> = None;
+impl VideoTestSource {
+    pub const NONE: Option<&'static VideoTestSource> = None;
+}
 
 pub trait VideoTestSourceExt: 'static {
     #[doc(alias = "ges_video_test_source_get_pattern")]

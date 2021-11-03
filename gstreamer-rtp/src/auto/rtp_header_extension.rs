@@ -32,7 +32,9 @@ impl RTPHeaderExtension {
 unsafe impl Send for RTPHeaderExtension {}
 unsafe impl Sync for RTPHeaderExtension {}
 
-pub const NONE_RTP_HEADER_EXTENSION: Option<&RTPHeaderExtension> = None;
+impl RTPHeaderExtension {
+    pub const NONE: Option<&'static RTPHeaderExtension> = None;
+}
 
 pub trait RTPHeaderExtensionExt: 'static {
     #[doc(alias = "gst_rtp_header_extension_get_direction")]

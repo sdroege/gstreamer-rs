@@ -26,7 +26,9 @@ glib::wrapper! {
 unsafe impl Send for BaseSink {}
 unsafe impl Sync for BaseSink {}
 
-pub const NONE_BASE_SINK: Option<&BaseSink> = None;
+impl BaseSink {
+    pub const NONE: Option<&'static BaseSink> = None;
+}
 
 pub trait BaseSinkExt: 'static {
     //#[doc(alias = "gst_base_sink_do_preroll")]
