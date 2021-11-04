@@ -24,7 +24,7 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
   rustup component add clippy-preview
   rustup component add rustfmt
   cargo install --force cargo-deny
-  cargo install --force cargo-outdated
+  cargo install --force cargo-outdated --git https://github.com/cuviper/cargo-outdated.git --branch cargo-2021
 fi
 
 if [ "$RUST_VERSION" = "nightly" ]; then
