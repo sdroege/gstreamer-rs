@@ -212,11 +212,6 @@ pub trait ElementExt: 'static {
         caps: Option<&Caps>,
     ) -> Option<Pad>;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_element_request_pad_simple")]
-    fn request_pad_simple(&self, name: &str) -> Option<Pad>;
-
     #[doc(alias = "gst_element_set_base_time")]
     fn set_base_time(&self, time: ClockTime);
 
@@ -633,17 +628,6 @@ impl<O: IsA<Element>> ElementExt for O {
                 templ.to_glib_none().0,
                 name.to_glib_none().0,
                 caps.to_glib_none().0,
-            ))
-        }
-    }
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    fn request_pad_simple(&self, name: &str) -> Option<Pad> {
-        unsafe {
-            from_glib_full(ffi::gst_element_request_pad_simple(
-                self.as_ref().to_glib_none().0,
-                name.to_glib_none().0,
             ))
         }
     }

@@ -875,9 +875,13 @@ manual_traits = ["ElementExtManual"]
     [[object.function]]
     name = "get_request_pad"
     # rename to more explicit name and avoid conflict with `request_pad`
-    # TODO: request_pad_simple is now _also_ in the 1.20 bindings!
     rename = "request_pad_simple"
-    # Renamed version only available in not(1.20)
+    # Renamed version is not deprecated
+    manual = true
+
+    [[object.function]]
+    name = "request_pad_simple"
+    # see above
     manual = true
 
     [[object.function]]

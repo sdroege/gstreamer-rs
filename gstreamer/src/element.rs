@@ -270,10 +270,9 @@ pub trait ElementExtManual: 'static {
     #[doc(alias = "get_current_clock_time")]
     fn current_clock_time(&self) -> Option<crate::ClockTime>;
 
-    #[cfg(any(not(feature = "v1_20"), feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(not(feature = "v1_20"))))]
     #[doc(alias = "gst_element_get_request_pad")]
     #[doc(alias = "get_request_pad")]
+    #[doc(alias = "gst_element_request_pad_simple")]
     fn request_pad_simple(&self, name: &str) -> Option<Pad>;
 }
 
@@ -797,13 +796,22 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    #[cfg(any(not(feature = "v1_20"), feature = "dox"))]
     fn request_pad_simple(&self, name: &str) -> Option<Pad> {
         unsafe {
-            from_glib_full(ffi::gst_element_get_request_pad(
-                self.as_ref().to_glib_none().0,
-                name.to_glib_none().0,
-            ))
+            #[cfg(feature = "v1_20")]
+            {
+                from_glib_full(ffi::gst_element_request_pad_simple(
+                    self.as_ref().to_glib_none().0,
+                    name.to_glib_none().0,
+                ))
+            }
+            #[cfg(not(feature = "v1_20"))]
+            {
+                from_glib_full(ffi::gst_element_get_request_pad(
+                    self.as_ref().to_glib_none().0,
+                    name.to_glib_none().0,
+                ))
+            }
         }
     }
 }
