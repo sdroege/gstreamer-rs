@@ -201,17 +201,14 @@ pub fn video_make_raw_caps(
 ) -> gst::caps::Builder<gst::caps::NoFeature> {
     assert_initialized_main_thread!();
 
-    let formats: Vec<glib::SendValue> = formats
-        .iter()
-        .map(|f| match f {
-            crate::VideoFormat::Encoded => panic!("Invalid encoded format"),
-            crate::VideoFormat::Unknown => panic!("Invalid unknown format"),
-            _ => f.to_string().to_send_value(),
-        })
-        .collect();
+    let formats = formats.iter().map(|f| match f {
+        crate::VideoFormat::Encoded => panic!("Invalid encoded format"),
+        crate::VideoFormat::Unknown => panic!("Invalid unknown format"),
+        _ => f.to_string().to_send_value(),
+    });
 
     gst::caps::Caps::builder("video/x-raw")
-        .field("format", gst::List::from_owned(formats))
+        .field("format", gst::List::from_values(formats))
         .field("width", gst::IntRange::<i32>::new(1, i32::MAX))
         .field("height", gst::IntRange::<i32>::new(1, i32::MAX))
         .field(

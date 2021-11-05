@@ -51,17 +51,14 @@ pub fn audio_make_raw_caps(
 ) -> gst::caps::Builder<gst::caps::NoFeature> {
     assert_initialized_main_thread!();
 
-    let formats: Vec<glib::SendValue> = formats
-        .iter()
-        .map(|f| match f {
-            crate::AudioFormat::Encoded => panic!("Invalid encoded format"),
-            crate::AudioFormat::Unknown => panic!("Invalid unknown format"),
-            _ => f.to_string().to_send_value(),
-        })
-        .collect();
+    let formats = formats.iter().map(|f| match f {
+        crate::AudioFormat::Encoded => panic!("Invalid encoded format"),
+        crate::AudioFormat::Unknown => panic!("Invalid unknown format"),
+        _ => f.to_string().to_send_value(),
+    });
 
     let builder = gst::caps::Caps::builder("audio/x-raw")
-        .field("format", gst::List::from_owned(formats))
+        .field("format", gst::List::from_values(formats))
         .field("rate", gst::IntRange::<i32>::new(1, i32::MAX))
         .field("channels", gst::IntRange::<i32>::new(1, i32::MAX));
 

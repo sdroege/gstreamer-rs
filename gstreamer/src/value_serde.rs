@@ -37,7 +37,7 @@ pub(crate) static LIST_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(List::static_
 pub(crate) static SAMPLE_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Sample::static_type);
 pub(crate) static BUFFER_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Buffer::static_type);
 
-impl<'a> Serialize for Fraction {
+impl Serialize for Fraction {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         self.0.serialize(serializer)
     }
@@ -150,7 +150,7 @@ impl Serialize for SendValue {
 
 macro_rules! impl_ser_send_value_collection (
     ($t:ident) => (
-        impl<'a> Serialize for $t<'a> {
+        impl Serialize for $t {
             fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
                 let send_value_vec = unsafe {
                     &*(self.as_slice() as *const [glib::SendValue] as *const [SendValue])
@@ -270,11 +270,11 @@ impl<'de> Deserialize<'de> for SendValue {
 
 macro_rules! impl_de_send_value_collection (
     ($t:ident) => {
-        impl<'a, 'de> Deserialize<'de> for $t<'a> {
+        impl<'de> Deserialize<'de> for $t {
             fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
                 skip_assert_initialized!();
                 let send_value_vec = Vec::<SendValue>::deserialize(deserializer)?;
-                Ok($t::from_owned(unsafe{
+                Ok($t::from_values(unsafe{
                     mem::transmute::<Vec<SendValue>, Vec<glib::SendValue>>(send_value_vec)
                 }))
             }
@@ -348,19 +348,8 @@ mod tests {
         // Array
         let value_13 = Fraction::new(1, 3);
         let value_12 = Fraction::new(1, 2);
-        let value_str = "test str";
-        let value_str_none: Option<&str> = None;
-        let value_date = Date::new_dmy(19, DateMonth::August, 2019).unwrap();
-        let value_date_none: Option<Date> = None;
 
-        let array = Array::new(&[
-            &value_13,
-            &value_12,
-            &value_str,
-            &value_str_none,
-            &value_date,
-            &value_date_none,
-        ]);
+        let array = Array::new(&[&value_13, &value_12]);
 
         let res = ron::ser::to_string_pretty(&array, pretty_config.clone());
         assert_eq!(
@@ -368,10 +357,6 @@ mod tests {
                 r#"["#,
                 r#"    ("Fraction", (1, 3)),"#,
                 r#"    ("Fraction", (1, 2)),"#,
-                r#"    ("String", Some("test str")),"#,
-                r#"    ("String", None),"#,
-                r#"    ("Date", Some(YMD(2019, 8, 19))),"#,
-                r#"    ("Date", None),"#,
                 r#"]"#
             )
             .to_owned()),
@@ -379,39 +364,16 @@ mod tests {
         );
 
         let res = serde_json::to_string(&array).unwrap();
-        assert_eq!(
-            r#"[["Fraction",[1,3]],["Fraction",[1,2]],["String","test str"],["String",null],["Date",{"YMD":[2019,8,19]}],["Date",null]]"#
-                .to_owned(),
-            res
-        );
+        assert_eq!(r#"[["Fraction",[1,3]],["Fraction",[1,2]]]"#.to_owned(), res);
 
         // List
         let value_12 = Fraction::new(1, 2);
-        let value_str = "test str";
-        let value_str_none: Option<&str> = None;
-        let value_date_time = DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap();
-        let value_date_time_none: Option<DateTime> = None;
 
-        let list = List::new(&[
-            &value_12,
-            &value_str,
-            &value_str_none,
-            &value_date_time,
-            &value_date_time_none,
-        ]);
+        let list = List::new(&[&value_12]);
 
         let res = ron::ser::to_string_pretty(&list, pretty_config);
         assert_eq!(
-            Ok(concat!(
-                r#"["#,
-                r#"    ("Fraction", (1, 2)),"#,
-                r#"    ("String", Some("test str")),"#,
-                r#"    ("String", None),"#,
-                r#"    ("DateTime", Some(YMDhmsTz(2019, 8, 19, 13, 34, 42, 2))),"#,
-                r#"    ("DateTime", None),"#,
-                r#"]"#
-            )
-            .to_owned()),
+            Ok(concat!(r#"["#, r#"    ("Fraction", (1, 2)),"#, r#"]"#).to_owned()),
             res,
         );
     }
@@ -624,19 +586,8 @@ mod tests {
         // Array
         let value_13 = Fraction::new(1, 3);
         let value_12 = Fraction::new(1, 2);
-        let value_str = "test str";
-        let value_str_none: Option<&str> = None;
-        let value_date = Date::new_dmy(19, DateMonth::August, 2019).unwrap();
-        let value_date_none: Option<Date> = None;
 
-        let array = Array::new(&[
-            &value_13,
-            &value_12,
-            &value_str,
-            &value_str_none,
-            &value_date,
-            &value_date_none,
-        ]);
+        let array = Array::new(&[&value_13, &value_12]);
         let array_ser = ron::ser::to_string(&array).unwrap();
 
         let array_de: Array = ron::de::from_str(array_ser.as_str()).unwrap();
@@ -654,37 +605,10 @@ mod tests {
         assert_eq!(fraction_de.0.numer(), fraction.0.numer());
         assert_eq!(fraction.0.denom(), fraction.0.denom());
 
-        assert_eq!(
-            slice_de[2].get::<String>().expect("slice_de[2]"),
-            slice[2].get::<String>().expect("slice[2]")
-        );
-
-        assert!(slice[3]
-            .get::<Option<String>>()
-            .expect("slice[3]")
-            .is_none());
-
-        assert_eq!(
-            slice_de[4].get::<Date>().expect("slice_de[4]"),
-            slice[4].get::<Date>().expect("slice[4]")
-        );
-
-        assert!(slice[5].get::<Option<Date>>().expect("slice[5]").is_none());
-
         // List
         let value_12 = Fraction::new(1, 2);
-        let value_str = "test str";
-        let value_str_none: Option<&str> = None;
-        let value_date_time = DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap();
-        let value_date_time_none: Option<DateTime> = None;
 
-        let list = List::new(&[
-            &value_12,
-            &value_str,
-            &value_str_none,
-            &value_date_time,
-            &value_date_time_none,
-        ]);
+        let list = List::new(&[&value_12]);
         let list_ser = ron::ser::to_string(&list).unwrap();
 
         let list_de: List = ron::de::from_str(list_ser.as_str()).unwrap();
@@ -696,25 +620,5 @@ mod tests {
         let fraction = slice[0].get::<Fraction>().expect("slice[0]");
         assert_eq!(fraction_de.0.numer(), fraction.0.numer());
         assert_eq!(fraction_de.0.denom(), fraction.0.denom());
-
-        assert_eq!(
-            slice_de[1].get::<String>().expect("slice_de[1]"),
-            slice[1].get::<String>().expect("slice[1]")
-        );
-
-        assert!(slice[2]
-            .get::<Option<String>>()
-            .expect("slice[2]")
-            .is_none());
-
-        assert_eq!(
-            slice_de[3].get::<DateTime>().expect("slice_de[3]"),
-            slice[3].get::<DateTime>().expect("slice[3]")
-        );
-
-        assert!(slice[4]
-            .get::<Option<DateTime>>()
-            .expect("slice[4]")
-            .is_none());
     }
 }
