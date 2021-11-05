@@ -894,15 +894,13 @@ impl<T: AsPtr> Uri<T> {
 
 impl<T: AsMutPtr> Uri<T> {
     #[doc(alias = "gst_query_set_uri")]
-    pub fn set_uri<'b, U: Into<&'b str>>(&mut self, uri: U) {
-        let uri = uri.into();
+    pub fn set_uri(&mut self, uri: &str) {
         unsafe {
             ffi::gst_query_set_uri(self.0.as_mut_ptr(), uri.to_glib_none().0);
         }
     }
 
-    pub fn set_redirection<'b, U: Into<&'b str>>(&mut self, uri: U, permanent: bool) {
-        let uri = uri.into();
+    pub fn set_redirection(&mut self, uri: &str, permanent: bool) {
         unsafe {
             ffi::gst_query_set_uri_redirection(self.0.as_mut_ptr(), uri.to_glib_none().0);
             ffi::gst_query_set_uri_redirection_permanent(

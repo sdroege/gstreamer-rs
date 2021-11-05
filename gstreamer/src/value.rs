@@ -852,15 +852,12 @@ pub trait GstValueExt: Sized {
     #[doc(alias = "gst_value_serialize")]
     fn serialize(&self) -> Result<glib::GString, glib::BoolError>;
     #[doc(alias = "gst_value_deserialize")]
-    fn deserialize<'a, T: Into<&'a str>>(
-        s: T,
-        type_: glib::Type,
-    ) -> Result<glib::Value, glib::BoolError>;
+    fn deserialize(s: &str, type_: glib::Type) -> Result<glib::Value, glib::BoolError>;
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_value_deserialize_with_pspec")]
-    fn deserialize_with_pspec<'a, T: Into<&'a str>>(
-        s: T,
+    fn deserialize_with_pspec(
+        s: &str,
         pspec: &glib::ParamSpec,
     ) -> Result<glib::Value, glib::BoolError>;
 }
@@ -1002,13 +999,8 @@ impl GstValueExt for glib::Value {
         }
     }
 
-    fn deserialize<'a, T: Into<&'a str>>(
-        s: T,
-        type_: glib::Type,
-    ) -> Result<glib::Value, glib::BoolError> {
+    fn deserialize(s: &str, type_: glib::Type) -> Result<glib::Value, glib::BoolError> {
         assert_initialized_main_thread!();
-
-        let s = s.into();
 
         unsafe {
             let mut value = glib::Value::from_type(type_);
@@ -1026,13 +1018,11 @@ impl GstValueExt for glib::Value {
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    fn deserialize_with_pspec<'a, T: Into<&'a str>>(
-        s: T,
+    fn deserialize_with_pspec(
+        s: &str,
         pspec: &glib::ParamSpec,
     ) -> Result<glib::Value, glib::BoolError> {
         assert_initialized_main_thread!();
-
-        let s = s.into();
 
         unsafe {
             let mut value = glib::Value::from_type(pspec.value_type());
