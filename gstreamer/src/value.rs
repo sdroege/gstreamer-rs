@@ -295,35 +295,53 @@ impl<T: Copy> IntRange<T> {
     }
 }
 
-impl IntRange<i32> {
-    pub fn new(min: i32, max: i32) -> Self {
+#[doc(hidden)]
+pub trait IntRangeType: Sized + Clone + Copy + 'static {
+    fn with_min_max(min: Self, max: Self) -> IntRange<Self>;
+    fn with_step(min: Self, max: Self, step: Self) -> IntRange<Self>;
+}
+
+impl IntRangeType for i32 {
+    fn with_min_max(min: i32, max: i32) -> IntRange<Self> {
         skip_assert_initialized!();
-        Self::with_step(min, max, 1)
+        IntRange { min, max, step: 1 }
     }
 
-    pub fn with_step(min: i32, max: i32, step: i32) -> Self {
+    fn with_step(min: i32, max: i32, step: i32) -> IntRange<Self> {
         assert_initialized_main_thread!();
 
         assert!(min <= max);
         assert!(step > 0);
 
-        Self { min, max, step }
+        IntRange { min, max, step }
     }
 }
 
-impl IntRange<i64> {
-    pub fn new(min: i64, max: i64) -> Self {
+impl IntRangeType for i64 {
+    fn with_min_max(min: i64, max: i64) -> IntRange<Self> {
         skip_assert_initialized!();
-        Self::with_step(min, max, 1)
+        IntRange { min, max, step: 1 }
     }
 
-    pub fn with_step(min: i64, max: i64, step: i64) -> Self {
+    fn with_step(min: i64, max: i64, step: i64) -> IntRange<Self> {
         assert_initialized_main_thread!();
 
         assert!(min <= max);
         assert!(step > 0);
 
-        Self { min, max, step }
+        IntRange { min, max, step }
+    }
+}
+
+impl<T: IntRangeType> IntRange<T> {
+    pub fn new(min: T, max: T) -> IntRange<T> {
+        assert_initialized_main_thread!();
+        T::with_min_max(min, max)
+    }
+
+    pub fn with_step(min: T, max: T, step: T) -> IntRange<T> {
+        assert_initialized_main_thread!();
+        T::with_step(min, max, step)
     }
 }
 
@@ -1191,6 +1209,15 @@ mod tests {
         f3 *= f4;
 
         assert_eq!(f3, crate::Fraction::new(2, 27));
+    }
+
+    #[test]
+    fn test_int_range_constructor() {
+        crate::init().unwrap();
+
+        // Type inference should figure out the type
+        let _r1 = crate::IntRange::new(1i32, 2i32);
+        let _r2 = crate::IntRange::with_step(2i64, 3i64, 4i64);
     }
 
     #[test]

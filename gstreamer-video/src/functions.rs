@@ -209,8 +209,8 @@ pub fn video_make_raw_caps(
 
     gst::caps::Caps::builder("video/x-raw")
         .field("format", gst::List::from_values(formats))
-        .field("width", gst::IntRange::<i32>::new(1, i32::MAX))
-        .field("height", gst::IntRange::<i32>::new(1, i32::MAX))
+        .field("width", gst::IntRange::new(1, i32::MAX))
+        .field("height", gst::IntRange::new(1, i32::MAX))
         .field(
             "framerate",
             gst::FractionRange::new(gst::Fraction::new(0, 1), gst::Fraction::new(i32::MAX, 1)),

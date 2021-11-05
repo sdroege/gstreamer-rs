@@ -59,8 +59,8 @@ pub fn audio_make_raw_caps(
 
     let builder = gst::caps::Caps::builder("audio/x-raw")
         .field("format", gst::List::from_values(formats))
-        .field("rate", gst::IntRange::<i32>::new(1, i32::MAX))
-        .field("channels", gst::IntRange::<i32>::new(1, i32::MAX));
+        .field("rate", gst::IntRange::new(1, i32::MAX))
+        .field("channels", gst::IntRange::new(1, i32::MAX));
 
     match layout {
         crate::AudioLayout::Interleaved => builder.field("layout", "interleaved"),

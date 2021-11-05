@@ -322,7 +322,7 @@ mod tests {
         assert_eq!(r#"{"min":[1,3],"max":[1,2]}"#.to_owned(), res);
 
         // IntRange
-        let int_range = IntRange::<i32>::with_step(0, 42, 21);
+        let int_range = IntRange::with_step(0, 42, 21);
         let res = ron::ser::to_string_pretty(&int_range, pretty_config.clone());
         assert_eq!(Ok("(    min: 0,    max: 42,    step: 21,)".to_owned()), res,);
 
@@ -455,7 +455,7 @@ mod tests {
         );
 
         // IntRange
-        let int_range = IntRange::<i32>::with_step(0, 42, 21);
+        let int_range = IntRange::with_step(0, 42, 21);
         let int_range_ser = ron::ser::to_string(&int_range).unwrap();
         let int_range_de: IntRange<i32> = ron::de::from_str(int_range_ser.as_str()).unwrap();
         assert_eq!(int_range_de.min(), int_range.min());
