@@ -400,13 +400,13 @@ impl<'a> VideoInfoBuilder<'a> {
             }
 
             if let Some(par) = self.par {
-                info.par_n = *par.numer();
-                info.par_d = *par.denom();
+                info.par_n = par.numer();
+                info.par_d = par.denom();
             }
 
             if let Some(fps) = self.fps {
-                info.fps_n = *fps.numer();
-                info.fps_d = *fps.denom();
+                info.fps_n = fps.numer();
+                info.fps_d = fps.denom();
             }
 
             if let Some(offset) = self.offset {

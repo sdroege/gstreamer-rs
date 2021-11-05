@@ -46,8 +46,8 @@ impl VideoTimeCode {
             let mut v = mem::MaybeUninit::zeroed();
             ffi::gst_video_time_code_init(
                 v.as_mut_ptr(),
-                *fps.numer() as u32,
-                *fps.denom() as u32,
+                fps.numer() as u32,
+                fps.denom() as u32,
                 latest_daily_jam.to_glib_none().0,
                 flags.into_glib(),
                 hours,
@@ -71,13 +71,13 @@ impl VideoTimeCode {
         field_count: u32,
     ) -> Result<Self, glib::error::BoolError> {
         assert_initialized_main_thread!();
-        assert!(*fps.denom() > 0);
+        assert!(fps.denom() > 0);
         unsafe {
             let mut v = mem::MaybeUninit::zeroed();
             let res = ffi::gst_video_time_code_init_from_date_time_full(
                 v.as_mut_ptr(),
-                *fps.numer() as u32,
-                *fps.denom() as u32,
+                fps.numer() as u32,
+                fps.denom() as u32,
                 dt.to_glib_none().0,
                 flags.into_glib(),
                 field_count,
@@ -97,8 +97,8 @@ impl VideoTimeCode {
     }
 
     pub fn set_fps(&mut self, fps: gst::Fraction) {
-        self.0.config.fps_n = *fps.numer() as u32;
-        self.0.config.fps_d = *fps.denom() as u32;
+        self.0.config.fps_n = fps.numer() as u32;
+        self.0.config.fps_d = fps.denom() as u32;
     }
 
     pub fn set_flags(&mut self, flags: VideoTimeCodeFlags) {

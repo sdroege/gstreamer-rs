@@ -109,8 +109,8 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
 
                 // Calculate a target width/height that keeps the display aspect ratio while having
                 // a height of 240 pixels
-                let display_aspect_ratio = (info.width() as f64 * *info.par().numer() as f64)
-                    / (info.height() as f64 * *info.par().denom() as f64);
+                let display_aspect_ratio = (info.width() as f64 * info.par().numer() as f64)
+                    / (info.height() as f64 * info.par().denom() as f64);
                 let target_height = 240;
                 let target_width = target_height as f64 * display_aspect_ratio;
 

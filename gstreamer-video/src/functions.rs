@@ -157,10 +157,10 @@ pub fn calculate_display_ratio(
             dar_d.as_mut_ptr(),
             video_width,
             video_height,
-            *video_par.numer() as u32,
-            *video_par.denom() as u32,
-            *display_par.numer() as u32,
-            *display_par.denom() as u32,
+            video_par.numer() as u32,
+            video_par.denom() as u32,
+            display_par.numer() as u32,
+            display_par.denom() as u32,
         ));
         if res {
             Some(gst::Fraction::new(

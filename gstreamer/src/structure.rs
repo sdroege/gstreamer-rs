@@ -638,8 +638,8 @@ impl StructureRef {
             from_glib(ffi::gst_structure_fixate_field_nearest_fraction(
                 &mut self.0,
                 name.to_glib_none().0,
-                *target.numer(),
-                *target.denom(),
+                target.numer(),
+                target.denom(),
             ))
         }
     }

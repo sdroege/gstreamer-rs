@@ -28,6 +28,14 @@ impl Fraction {
         assert_initialized_main_thread!();
         Rational32::approximate_float(x).map(|r| r.into())
     }
+
+    pub fn numer(&self) -> i32 {
+        *self.0.numer()
+    }
+
+    pub fn denom(&self) -> i32 {
+        *self.0.denom()
+    }
 }
 
 impl fmt::Display for Fraction {
@@ -263,7 +271,7 @@ impl glib::value::ToValue for Fraction {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
-            ffi::gst_value_set_fraction(value.to_glib_none_mut().0, *self.numer(), *self.denom());
+            ffi::gst_value_set_fraction(value.to_glib_none_mut().0, self.numer(), self.denom());
         }
         value
     }
@@ -526,10 +534,10 @@ impl glib::value::ToValue for FractionRange {
         unsafe {
             ffi::gst_value_set_fraction_range_full(
                 value.to_glib_none_mut().0,
-                *self.min().numer(),
-                *self.min().denom(),
-                *self.max().numer(),
-                *self.max().denom(),
+                self.min().numer(),
+                self.min().denom(),
+                self.max().numer(),
+                self.max().denom(),
             );
         }
         value

@@ -61,12 +61,12 @@ impl GstParamSpecExt for glib::ParamSpec {
                 name.to_glib_none().0,
                 nick.to_glib_none().0,
                 blurb.to_glib_none().0,
-                *min.numer(),
-                *min.denom(),
-                *max.numer(),
-                *max.denom(),
-                *default.numer(),
-                *default.denom(),
+                min.numer(),
+                min.denom(),
+                max.numer(),
+                max.denom(),
+                default.numer(),
+                default.denom(),
                 flags.into_glib(),
             ))
         }
