@@ -65,6 +65,8 @@ manual = [
     "GObject.Value",
     "Gst.AllocationParams",
     "Gst.CapsFeatures",
+    "Gst.DebugCategory",
+    "Gst.DebugMessage",
     "Gst.Segment",
     "Gst.StaticCaps",
     "Gst.StaticPadTemplate",

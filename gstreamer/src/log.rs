@@ -44,6 +44,9 @@ impl DebugMessage {
 pub struct DebugCategory(Option<ptr::NonNull<ffi::GstDebugCategory>>);
 
 impl DebugCategory {
+    #[doc(alias = "gst_debug_category_new")]
+    #[doc(alias = "GST_DEBUG_CATEGORY")]
+    #[doc(alias = "GST_DEBUG_CATEGORY_INIT")]
     pub fn new(
         name: &str,
         color: crate::DebugColorFlags,
@@ -70,6 +73,7 @@ impl DebugCategory {
         }
     }
 
+    #[doc(alias = "gst_debug_get_category")]
     pub fn get(name: &str) -> Option<DebugCategory> {
         skip_assert_initialized!();
         unsafe {
@@ -188,10 +192,42 @@ impl DebugCategory {
             );
         }
     }
+
+    #[doc(alias = "get_all_categories")]
+    #[doc(alias = "gst_debug_get_all_categories")]
+    pub fn all_categories() -> DebugCategoryList {
+        unsafe { DebugCategoryList(ptr::NonNull::new(ffi::gst_debug_get_all_categories())) }
+    }
 }
 
 unsafe impl Sync for DebugCategory {}
 unsafe impl Send for DebugCategory {}
+
+// checker-ignore-item
+pub struct DebugCategoryList(Option<ptr::NonNull<glib::ffi::GSList>>);
+
+unsafe impl Sync for DebugCategoryList {}
+unsafe impl Send for DebugCategoryList {}
+
+impl Iterator for DebugCategoryList {
+    type Item = DebugCategory;
+
+    fn next(&mut self) -> Option<DebugCategory> {
+        match self.0 {
+            None => None,
+            Some(cur) => unsafe {
+                let next = cur.as_ref().next;
+                self.0 = ptr::NonNull::new(next);
+                let cat = DebugCategory(Some(
+                    ptr::NonNull::new(cur.as_ref().data as *mut ffi::GstDebugCategory).unwrap(),
+                ));
+                glib::ffi::g_slist_free_1(cur.as_ptr());
+
+                Some(cat)
+            },
+        }
+    }
+}
 
 impl fmt::Debug for DebugCategory {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -517,6 +553,13 @@ mod tests {
         let perf_cat = DebugCategory::get("GST_PERFORMANCE")
             .expect("Unable to find `DebugCategory` with name \"GST_PERFORMANCE\"");
         assert_eq!(perf_cat.name(), CAT_PERFORMANCE.name());
+    }
+
+    #[test]
+    fn all() {
+        crate::init().unwrap();
+
+        assert!(DebugCategory::all_categories().any(|c| c.name() == "GST_PERFORMANCE"));
     }
 
     #[test]
