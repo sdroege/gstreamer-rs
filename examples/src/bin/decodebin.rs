@@ -81,7 +81,7 @@ fn example_main() -> Result<(), Error> {
         gst::ElementFactory::make("decodebin", None).map_err(|_| MissingElement("decodebin"))?;
 
     // Tell the filesrc what file to load
-    src.set_property("location", uri)?;
+    src.set_property("location", uri);
 
     pipeline.add_many(&[&src, &decodebin])?;
     gst::Element::link_many(&[&src, &decodebin])?;

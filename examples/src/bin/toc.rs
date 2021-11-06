@@ -31,7 +31,7 @@ fn example_main() {
     let src = gst::ElementFactory::make("filesrc", None).unwrap();
     let decodebin = gst::ElementFactory::make("decodebin", None).unwrap();
 
-    src.set_property("location", uri).unwrap();
+    src.set_property("location", uri);
 
     pipeline.add_many(&[&src, &decodebin]).unwrap();
     gst::Element::link_many(&[&src, &decodebin]).unwrap();

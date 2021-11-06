@@ -29,7 +29,7 @@ impl<O: IsA<glib::Object>> GObjectExtManualGst for O {
             }
         };
 
-        self.set_property_from_value(name, &value)
+        self.try_set_property_from_value(name, &value)
     }
 }
 
@@ -45,7 +45,7 @@ mod tests {
         fakesink
             .set_property_from_str("state-error", "ready-to-paused")
             .unwrap();
-        let v = fakesink.property("state-error").unwrap();
+        let v = fakesink.property_value("state-error");
         let e = glib::EnumValue::from_value(&v).unwrap();
         assert_eq!(e.nick(), "ready-to-paused");
     }

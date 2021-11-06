@@ -6,32 +6,17 @@ use glib::prelude::*;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::Value;
 
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 impl Discoverer {
     pub fn set_timeout(&self, timeout: gst::ClockTime) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut _,
-                "timeout".to_glib_none().0,
-                Value::from(&timeout).to_glib_none().0,
-            );
-        }
+        self.set_property("timeout", &timeout);
     }
 
     pub fn timeout(&self) -> gst::ClockTime {
-        let mut value = Value::from(&0u64);
-        unsafe {
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut _,
-                "timeout".to_glib_none().0,
-                value.to_glib_none_mut().0,
-            );
-        }
-        value.get().expect("undefined timeout")
+        self.property("timeout")
     }
 
     #[doc(alias = "timeout")]

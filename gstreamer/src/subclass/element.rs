@@ -806,7 +806,7 @@ mod tests {
         let src = ElementFactory::make("fakesrc", None).unwrap();
         let sink = ElementFactory::make("fakesink", None).unwrap();
 
-        src.set_property("num-buffers", 100i32).unwrap();
+        src.set_property("num-buffers", 100i32);
 
         pipeline
             .add_many(&[&src, element.upcast_ref(), &sink])

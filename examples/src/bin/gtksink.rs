@@ -33,11 +33,11 @@ fn create_ui(app: &gtk::Application) {
         // video frames to our texture (if they are not already in the GPU). Now we tell the OpenGL-sink
         // about our gtkglsink element, form where it will retrieve the OpenGL texture to fill.
         let glsinkbin = gst::ElementFactory::make("glsinkbin", None).unwrap();
-        glsinkbin.set_property("sink", &gtkglsink).unwrap();
+        glsinkbin.set_property("sink", &gtkglsink);
         // The gtkglsink creates the gtk widget for us. This is accessible through a property.
         // So we get it and use it later to add it to our gui.
-        let widget = gtkglsink.property("widget").unwrap();
-        (glsinkbin, widget.get::<gtk::Widget>().unwrap())
+        let widget = gtkglsink.property::<gtk::Widget>("widget");
+        (glsinkbin, widget)
     } else {
         // Unfortunately, using the OpenGL widget didn't work out, so we will have to render
         // our frames manually, using the CPU. An example why this may fail is, when
@@ -45,8 +45,8 @@ fn create_ui(app: &gtk::Application) {
         let sink = gst::ElementFactory::make("gtksink", None).unwrap();
         // The gtksink creates the gtk widget for us. This is accessible through a property.
         // So we get it and use it later to add it to our gui.
-        let widget = sink.property("widget").unwrap();
-        (sink, widget.get::<gtk::Widget>().unwrap())
+        let widget = sink.property::<gtk::Widget>("widget");
+        (sink, widget)
     };
 
     pipeline.add_many(&[&src, &sink]).unwrap();

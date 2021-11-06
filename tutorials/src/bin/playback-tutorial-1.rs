@@ -12,19 +12,16 @@ use std::{thread, time};
 mod tutorials_common;
 
 fn analyze_streams(playbin: &gst::Element) {
-    let n_video = playbin.property("n-video").unwrap().get::<i32>().unwrap();
-    let n_audio = playbin.property("n-audio").unwrap().get::<i32>().unwrap();
-    let n_text = playbin.property("n-text").unwrap().get::<i32>().unwrap();
+    let n_video = playbin.property::<i32>("n-video");
+    let n_audio = playbin.property::<i32>("n-audio");
+    let n_text = playbin.property::<i32>("n-text");
     println!(
         "{} video stream(s), {} audio stream(s), {} text stream(s)",
         n_video, n_audio, n_text
     );
 
     for i in 0..n_video {
-        let tags = playbin
-            .emit_by_name("get-video-tags", &[&i])
-            .unwrap()
-            .unwrap();
+        let tags = playbin.emit_by_name("get-video-tags", &[&i]).unwrap();
 
         if let Ok(tags) = tags.get::<gst::TagList>() {
             println!("video stream {}:", i);
@@ -35,10 +32,7 @@ fn analyze_streams(playbin: &gst::Element) {
     }
 
     for i in 0..n_audio {
-        let tags = playbin
-            .emit_by_name("get-audio-tags", &[&i])
-            .unwrap()
-            .unwrap();
+        let tags = playbin.emit_by_name("get-audio-tags", &[&i]).unwrap();
 
         if let Ok(tags) = tags.get::<gst::TagList>() {
             println!("audio stream {}:", i);
@@ -55,10 +49,7 @@ fn analyze_streams(playbin: &gst::Element) {
     }
 
     for i in 0..n_text {
-        let tags = playbin
-            .emit_by_name("get-text-tags", &[&i])
-            .unwrap()
-            .unwrap();
+        let tags = playbin.emit_by_name("get-text-tags", &[&i]).unwrap();
 
         if let Ok(tags) = tags.get::<gst::TagList>() {
             println!("subtitle stream {}:", i);
@@ -68,21 +59,9 @@ fn analyze_streams(playbin: &gst::Element) {
         }
     }
 
-    let current_video = playbin
-        .property("current-video")
-        .unwrap()
-        .get::<i32>()
-        .unwrap();
-    let current_audio = playbin
-        .property("current-audio")
-        .unwrap()
-        .get::<i32>()
-        .unwrap();
-    let current_text = playbin
-        .property("current-text")
-        .unwrap()
-        .get::<i32>()
-        .unwrap();
+    let current_video = playbin.property::<i32>("current-video");
+    let current_audio = playbin.property::<i32>("current-audio");
+    let current_text = playbin.property::<i32>("current-text");
     println!(
         "Currently playing video stream {}, audio stream {}, text stream {}",
         current_video, current_audio, current_text
@@ -100,11 +79,11 @@ fn handle_keyboard(playbin: &gst::Element, main_loop: &glib::MainLoop) {
                     if let Some(index) = index.to_digit(10) {
                         // Here index can only be 0-9
                         let index = index as i32;
-                        let n_audio = playbin.property("n-audio").unwrap().get::<i32>().unwrap();
+                        let n_audio = playbin.property::<i32>("n-audio");
 
                         if index < n_audio {
                             println!("Setting current audio stream to {}", index);
-                            playbin.set_property("current-audio", index).unwrap();
+                            playbin.set_property("current-audio", index);
                         } else {
                             eprintln!("Index out of bounds");
                         }
@@ -134,10 +113,10 @@ fn tutorial_main() -> Result<(), Error> {
     // Set URI to play
     let uri =
         "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_cropped_multilingual.webm";
-    playbin.set_property("uri", uri)?;
+    playbin.set_property("uri", uri);
 
     // Set flags to show Audio and Video but ignore Subtitles
-    let flags = playbin.property("flags")?;
+    let flags = playbin.property_value("flags");
     let flags_class = FlagsClass::new(flags.type_()).unwrap();
 
     let flags = flags_class
@@ -148,10 +127,10 @@ fn tutorial_main() -> Result<(), Error> {
         .unset_by_nick("text")
         .build()
         .unwrap();
-    playbin.set_property_from_value("flags", &flags)?;
+    playbin.set_property_from_value("flags", &flags);
 
     // Set connection speed. This will affect some internal decisions of playbin
-    playbin.set_property("connection-speed", 56u64)?;
+    playbin.set_property("connection-speed", 56u64);
 
     // Handle keyboard input
     let playbin_clone = playbin.clone();

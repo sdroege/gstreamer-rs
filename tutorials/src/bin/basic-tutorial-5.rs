@@ -40,9 +40,9 @@ mod tutorial5 {
         let propname: &str = &format!("n-{}", stype);
         let signame: &str = &format!("get-{}-tags", stype);
 
-        let x = playbin.property(propname).unwrap().get::<i32>().unwrap();
+        let x = playbin.property::<i32>(propname);
         for i in 0..x {
-            let tags = playbin.emit_by_name(signame, &[&i]).unwrap().unwrap();
+            let tags = playbin.emit_by_name(signame, &[&i]).unwrap();
 
             if let Ok(Some(tags)) = tags.get::<Option<gst::TagList>>() {
                 textbuf.insert_at_cursor(&format!("{} stream {}:\n ", stype, i));
@@ -302,37 +302,31 @@ mod tutorial5 {
         let uri = "https://www.freedesktop.org/software/gstreamer-sdk/\
                    data/media/sintel_trailer-480p.webm";
         let playbin = gst::ElementFactory::make("playbin", None).unwrap();
-        playbin.set_property("uri", uri).unwrap();
+        playbin.set_property("uri", uri);
 
-        playbin
-            .connect("video-tags-changed", false, |args| {
-                let pipeline = args[0]
-                    .get::<gst::Element>()
-                    .expect("playbin \"video-tags-changed\" args[0]");
-                post_app_message(&pipeline);
-                None
-            })
-            .unwrap();
+        playbin.connect("video-tags-changed", false, |args| {
+            let pipeline = args[0]
+                .get::<gst::Element>()
+                .expect("playbin \"video-tags-changed\" args[0]");
+            post_app_message(&pipeline);
+            None
+        });
 
-        playbin
-            .connect("audio-tags-changed", false, |args| {
-                let pipeline = args[0]
-                    .get::<gst::Element>()
-                    .expect("playbin \"audio-tags-changed\" args[0]");
-                post_app_message(&pipeline);
-                None
-            })
-            .unwrap();
+        playbin.connect("audio-tags-changed", false, |args| {
+            let pipeline = args[0]
+                .get::<gst::Element>()
+                .expect("playbin \"audio-tags-changed\" args[0]");
+            post_app_message(&pipeline);
+            None
+        });
 
-        playbin
-            .connect("text-tags-changed", false, move |args| {
-                let pipeline = args[0]
-                    .get::<gst::Element>()
-                    .expect("playbin \"text-tags-changed\" args[0]");
-                post_app_message(&pipeline);
-                None
-            })
-            .unwrap();
+        playbin.connect("text-tags-changed", false, move |args| {
+            let pipeline = args[0]
+                .get::<gst::Element>()
+                .expect("playbin \"text-tags-changed\" args[0]");
+            post_app_message(&pipeline);
+            None
+        });
 
         let window = create_ui(&playbin);
 

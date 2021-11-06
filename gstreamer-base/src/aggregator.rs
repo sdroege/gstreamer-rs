@@ -8,9 +8,6 @@ use glib::signal::{connect_raw, SignalHandlerId};
 use glib::translate::*;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-use glib::Value;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::boxed::Box as Box_;
 use std::mem;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -129,29 +126,14 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn min_upstream_latency(&self) -> gst::ClockTime {
-        unsafe {
-            let mut value = Value::from_type(<gst::ClockTime as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"min-upstream-latency\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("AggregatorExtManual::min_upstream_latency")
-        }
+        self.as_ref().property("min-upstream-latency")
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_min_upstream_latency(&self, min_upstream_latency: gst::ClockTime) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"min-upstream-latency\0".as_ptr() as *const _,
-                Value::from(&min_upstream_latency).to_glib_none().0,
-            );
-        }
+        self.as_ref()
+            .set_property("min-upstream-latency", &min_upstream_latency);
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]

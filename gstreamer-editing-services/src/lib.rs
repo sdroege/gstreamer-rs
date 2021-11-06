@@ -57,6 +57,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::use_self)]
 #[allow(clippy::needless_borrow)]
 #[allow(deprecated)]
+#[allow(unused_imports)]
 mod auto;
 pub use crate::auto::*;
 

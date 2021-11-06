@@ -454,7 +454,7 @@ mod tests {
         let appsrc = gst::ElementFactory::make("appsrc", None).unwrap();
         let fakesink = gst::ElementFactory::make("fakesink", None).unwrap();
 
-        fakesink.set_property("signal-handoffs", true).unwrap();
+        fakesink.set_property("signal-handoffs", true);
 
         let pipeline = gst::Pipeline::new(None);
         pipeline.add(&appsrc).unwrap();
@@ -475,17 +475,15 @@ mod tests {
 
         let handoff_count_reference = Arc::new(AtomicUsize::new(0));
 
-        fakesink
-            .connect("handoff", false, {
-                let handoff_count_reference = Arc::clone(&handoff_count_reference);
+        fakesink.connect("handoff", false, {
+            let handoff_count_reference = Arc::clone(&handoff_count_reference);
 
-                move |_| {
-                    handoff_count_reference.fetch_add(1, Ordering::AcqRel);
+            move |_| {
+                handoff_count_reference.fetch_add(1, Ordering::AcqRel);
 
-                    None
-                }
-            })
-            .unwrap();
+                None
+            }
+        });
 
         pipeline.set_state(gst::State::Playing).unwrap();
 

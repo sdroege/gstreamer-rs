@@ -26,6 +26,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::too_many_arguments)]
 #[allow(clippy::match_same_arms)]
 #[allow(clippy::use_self)]
+#[allow(unused_imports)]
 mod auto;
 pub use crate::auto::*;
 

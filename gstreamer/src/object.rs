@@ -74,7 +74,6 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
 
             None
         })
-        .unwrap()
     }
 
     fn set_object_flags(&self, flags: ObjectFlags) {
@@ -145,7 +144,7 @@ mod tests {
             *notify_clone.lock().unwrap() = Some((id.clone(), prop.name()));
         });
 
-        identity.set_property("silent", false).unwrap();
+        identity.set_property("silent", false);
         assert_eq!(
             *notify.lock().unwrap(),
             Some((identity.upcast::<crate::Object>(), "silent"))

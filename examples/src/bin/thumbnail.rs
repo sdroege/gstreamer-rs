@@ -47,7 +47,7 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
         .expect("Sink element is expected to be an appsink!");
 
     // Don't synchronize on the clock, we only want a snapshot asap.
-    appsink.set_property("sync", false).unwrap();
+    appsink.set_property("sync", false);
 
     // Tell the appsink what format we want.
     // This can be set after linking the two objects, because format negotiation between

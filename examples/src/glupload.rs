@@ -543,9 +543,9 @@ impl App {
             .dynamic_cast::<gst_app::AppSink>()
             .expect("Sink element is expected to be an appsink!");
 
-        appsink.set_property("enable-last-sample", false)?;
-        appsink.set_property("emit-signals", false)?;
-        appsink.set_property("max-buffers", 1u32)?;
+        appsink.set_property("enable-last-sample", false);
+        appsink.set_property("emit-signals", false);
+        appsink.set_property("max-buffers", 1u32);
 
         let caps = gst::Caps::builder("video/x-raw")
             .features(&[&gst_gl::CAPS_FEATURE_MEMORY_GL_MEMORY])
@@ -571,7 +571,7 @@ impl App {
             let sink = gst::ElementFactory::make("glsinkbin", None)
                 .map_err(|_| MissingElement("glsinkbin"))?;
 
-            sink.set_property("sink", &appsink)?;
+            sink.set_property("sink", &appsink);
 
             pipeline.add_many(&[&src, &sink])?;
             src.link(&sink)?;
@@ -680,11 +680,7 @@ pub(crate) fn main_loop(app: App) -> Result<(), Error> {
 
                 {
                     if gst_gl_context.is_none() {
-                        gst_gl_context = glupload
-                            .property("context")
-                            .unwrap()
-                            .get::<Option<gst_gl::GLContext>>()
-                            .unwrap();
+                        gst_gl_context = glupload.property::<Option<gst_gl::GLContext>>("context");
                     }
 
                     let sync_meta = buffer.meta::<gst_gl::GLSyncMeta>().unwrap();

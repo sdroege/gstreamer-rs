@@ -76,9 +76,7 @@ fn configure_encodebin(encodebin: &gst::Element) {
     .build();
 
     // Finally, apply the EncodingProfile onto our encodebin element.
-    encodebin
-        .set_property("profile", &container_profile)
-        .expect("set profile property failed");
+    encodebin.set_property("profile", &container_profile);
 }
 
 fn example_main() -> Result<(), Error> {
@@ -104,10 +102,8 @@ fn example_main() -> Result<(), Error> {
     let sink =
         gst::ElementFactory::make("filesink", None).map_err(|_| MissingElement("filesink"))?;
 
-    src.set_property("uri", uri)
-        .expect("setting URI Property failed");
-    sink.set_property("location", output_file)
-        .expect("setting location property failed");
+    src.set_property("uri", uri);
+    sink.set_property("location", output_file);
 
     // Configure the encodebin.
     // Here we tell the bin what format we expect it to create at its output.

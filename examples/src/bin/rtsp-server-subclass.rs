@@ -130,10 +130,10 @@ mod media_factory {
                 let pay = gst::ElementFactory::make("rtpvp8pay", Some("pay0")).unwrap();
 
                 // Configure the videotestsrc live
-                src.set_property("is-live", true).unwrap();
+                src.set_property("is-live", true);
 
                 // Produce encoded data as fast as possible
-                enc.set_property("deadline", 1i64).unwrap();
+                enc.set_property("deadline", 1i64);
 
                 bin.add_many(&[&src, &enc, &pay]).unwrap();
                 gst::Element::link_many(&[&src, &enc, &pay]).unwrap();

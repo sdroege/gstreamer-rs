@@ -31,6 +31,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::type_complexity)]
 #[allow(clippy::use_self)]
 #[allow(clippy::needless_borrow)]
+#[allow(unused_imports)]
 mod auto;
 pub use crate::auto::functions::*;
 pub use crate::auto::*;

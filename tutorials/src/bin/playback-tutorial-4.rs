@@ -20,10 +20,10 @@ fn tutorial_main() -> Result<(), Error> {
     let uri =
         "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
     let pipeline = gst::ElementFactory::make("playbin", None)?;
-    pipeline.set_property("uri", uri).unwrap();
+    pipeline.set_property("uri", uri);
 
     // Set the download flag
-    let flags = pipeline.property("flags")?;
+    let flags = pipeline.property_value("flags");
     let flags_class = FlagsClass::new(flags.type_()).unwrap();
     let flags = flags_class
         .builder_with_value(flags)
@@ -31,10 +31,10 @@ fn tutorial_main() -> Result<(), Error> {
         .set_by_nick("download")
         .build()
         .unwrap();
-    pipeline.set_property_from_value("flags", &flags).unwrap();
+    pipeline.set_property_from_value("flags", &flags);
 
     // Uncomment this line to limit the amount of downloaded data.
-    // pipeline.set_property("ring-buffer-max-size", 4_000_000u64)?;
+    // pipeline.set_property("ring-buffer-max-size", 4_000_000u64);
 
     // Start playing
     let mut is_live = false;
@@ -103,16 +103,12 @@ fn tutorial_main() -> Result<(), Error> {
         let download_buffer = args[1].get::<gst::Object>().unwrap();
         println!(
             "Temporary file: {:?}",
-            download_buffer
-                .property("temp-location")
-                .unwrap()
-                .get::<Option<String>>()
-                .unwrap()
+            download_buffer.property::<Option<String>>("temp-location")
         );
         // Uncomment this line to keep the temporary file after the program exists.
         // download_buffer.set_property("temp-remove", false).ok();
         None
-    })?;
+    });
 
     let pipeline_weak_ = pipeline.downgrade();
     let timeout_id = glib::timeout_add_seconds(1, move || {

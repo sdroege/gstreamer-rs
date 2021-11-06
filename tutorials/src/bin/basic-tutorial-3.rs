@@ -30,9 +30,7 @@ fn tutorial_main() {
     // Set the URI to play
     let uri =
         "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
-    source
-        .set_property("uri", uri)
-        .expect("Can't set uri property on uridecodebin");
+    source.set_property("uri", uri);
 
     // Connect the pad-added signal
     source.connect_pad_added(move |src, src_pad| {

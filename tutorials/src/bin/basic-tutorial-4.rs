@@ -31,9 +31,7 @@ fn tutorial_main() {
     // Set the URI to play
     let uri =
         "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
-    playbin
-        .set_property("uri", uri)
-        .expect("Can't set uri property on playbin");
+    playbin.set_property("uri", uri);
 
     // Start playing
     playbin

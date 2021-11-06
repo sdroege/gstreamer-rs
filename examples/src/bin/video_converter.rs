@@ -24,10 +24,10 @@ fn example_main() {
     /* Completely contrived example that takes the 4:3 input video, cuts out a 5:4 frame
      * and then adds pillarbox borders to place it in a 16:9 target area */
     /* The output will be the full frame: */
-    sinkpad.set_property("xpos", 0i32).unwrap();
-    sinkpad.set_property("ypos", 0i32).unwrap();
-    sinkpad.set_property("width", 1280i32).unwrap();
-    sinkpad.set_property("height", 720i32).unwrap();
+    sinkpad.set_property("xpos", 0i32);
+    sinkpad.set_property("ypos", 0i32);
+    sinkpad.set_property("width", 1280i32);
+    sinkpad.set_property("height", 720i32);
 
     let mut converter_config = gst_video::VideoConverterConfig::new();
     /* Crop the input frame to 5:4: */
@@ -41,9 +41,7 @@ fn example_main() {
     converter_config.set_dest_y(0);
     converter_config.set_dest_height(Some(720));
 
-    sinkpad
-        .set_property("converter-config", &*converter_config)
-        .unwrap();
+    sinkpad.set_property("converter-config", &*converter_config);
     pipeline
         .set_state(gst::State::Playing)
         .expect("Unable to set the pipeline to the `Playing` state");

@@ -29,7 +29,7 @@ fn example_main() {
 
     // Create a new playbin element, and tell it what uri to play back.
     let playbin = gst::ElementFactory::make("playbin", None).unwrap();
-    playbin.set_property("uri", uri).unwrap();
+    playbin.set_property("uri", uri);
 
     // For flags handling
     // With flags, one can configure playbin's behavior such as whether it
@@ -50,53 +50,48 @@ fn example_main() {
     // - Live streams (such as internet radios) update this metadata during the stream
     // Note that this signal will be emitted from the streaming threads usually,
     // not the application's threads!
-    playbin
-        .connect("audio-tags-changed", false, |values| {
-            // The metadata of any of the contained audio streams changed
-            // In the case of a live-stream from an internet radio, this could for example
-            // mark the beginning of a new track, or a new DJ.
-            let playbin = values[0]
-                .get::<glib::Object>()
-                .expect("playbin \"audio-tags-changed\" signal values[1]");
-            // This gets the index of the stream that changed. This is neccessary, since
-            // there could e.g. be multiple audio streams (english, spanish, ...).
-            let idx = values[1]
-                .get::<i32>()
-                .expect("playbin \"audio-tags-changed\" signal values[1]");
+    playbin.connect("audio-tags-changed", false, |values| {
+        // The metadata of any of the contained audio streams changed
+        // In the case of a live-stream from an internet radio, this could for example
+        // mark the beginning of a new track, or a new DJ.
+        let playbin = values[0]
+            .get::<glib::Object>()
+            .expect("playbin \"audio-tags-changed\" signal values[1]");
+        // This gets the index of the stream that changed. This is neccessary, since
+        // there could e.g. be multiple audio streams (english, spanish, ...).
+        let idx = values[1]
+            .get::<i32>()
+            .expect("playbin \"audio-tags-changed\" signal values[1]");
 
-            println!("audio tags of audio stream {} changed:", idx);
+        println!("audio tags of audio stream {} changed:", idx);
 
-            // HELP: is this correct?
-            // We were only notified about the change of metadata. If we want to do
-            // something with it, we first need to actually query the metadata from the playbin.
-            // We do this by facilliating the get-audio-tags action-signal on playbin.
-            // Sending an action-signal to an element essentially is a function call on the element.
-            // It is done that way, because elements do not have their own function API, they are
-            // relying on GStreamer and GLib's API. The only way an element can communicate with an
-            // application is via properties, signals or action signals (or custom messages, events, queries).
-            // So what the following code does, is essentially asking playbin to tell us its already
-            // internally stored tag list for this stream index.
-            let tags = playbin
-                .emit_by_name("get-audio-tags", &[&idx])
-                .unwrap()
-                .unwrap();
-            let tags = tags.get::<gst::TagList>().expect("tags");
+        // HELP: is this correct?
+        // We were only notified about the change of metadata. If we want to do
+        // something with it, we first need to actually query the metadata from the playbin.
+        // We do this by facilliating the get-audio-tags action-signal on playbin.
+        // Sending an action-signal to an element essentially is a function call on the element.
+        // It is done that way, because elements do not have their own function API, they are
+        // relying on GStreamer and GLib's API. The only way an element can communicate with an
+        // application is via properties, signals or action signals (or custom messages, events, queries).
+        // So what the following code does, is essentially asking playbin to tell us its already
+        // internally stored tag list for this stream index.
+        let tags = playbin.emit_by_name("get-audio-tags", &[&idx]).unwrap();
+        let tags = tags.get::<gst::TagList>().expect("tags");
 
-            if let Some(artist) = tags.get::<gst::tags::Artist>() {
-                println!("  Artist: {}", artist.get());
-            }
+        if let Some(artist) = tags.get::<gst::tags::Artist>() {
+            println!("  Artist: {}", artist.get());
+        }
 
-            if let Some(title) = tags.get::<gst::tags::Title>() {
-                println!("  Title: {}", title.get());
-            }
+        if let Some(title) = tags.get::<gst::tags::Title>() {
+            println!("  Title: {}", title.get());
+        }
 
-            if let Some(album) = tags.get::<gst::tags::Album>() {
-                println!("  Album: {}", album.get());
-            }
+        if let Some(album) = tags.get::<gst::tags::Album>() {
+            println!("  Album: {}", album.get());
+        }
 
-            None
-        })
-        .unwrap();
+        None
+    });
 
     // The playbin element itself is a playbin, so it can be used as one, despite being
     // created from an element factory.

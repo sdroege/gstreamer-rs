@@ -23,6 +23,7 @@ macro_rules! assert_initialized_main_thread {
 #[allow(clippy::cast_ptr_alignment)]
 #[allow(clippy::use_self)]
 #[allow(clippy::needless_borrow)]
+#[allow(unused_imports)]
 mod auto;
 pub use crate::auto::*;
 

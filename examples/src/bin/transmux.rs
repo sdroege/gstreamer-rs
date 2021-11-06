@@ -68,18 +68,11 @@ fn example_main() -> Result<(), Error> {
     let sink =
         gst::ElementFactory::make("filesink", None).map_err(|_| MissingElement("filesink"))?;
 
-    sink.set_property("location", output_file)
-        .expect("setting location property failed");
+    sink.set_property("location", output_file);
     // Increase the queue capacity to 100MB to avoid a stalling pipeline
-    queue
-        .set_property("max-size-buffers", 0u32)
-        .expect("changing capacity of multiqueue failed");
-    queue
-        .set_property("max-size-time", 0u64)
-        .expect("changing capacity of multiqueue failed");
-    queue
-        .set_property("max-size-bytes", 1024u32 * 1024 * 100)
-        .expect("changing capacity of multiqueue failed");
+    queue.set_property("max-size-buffers", 0u32);
+    queue.set_property("max-size-time", 0u64);
+    queue.set_property("max-size-bytes", 1024u32 * 1024 * 100);
 
     pipeline
         .add_many(&[&src, &typefinder, &queue, &muxer, &sink])
@@ -90,55 +83,53 @@ fn example_main() -> Result<(), Error> {
 
     let pipeline_clone = pipeline.clone();
     let typefinder_clone = typefinder.clone();
-    typefinder
-        .connect("have-type", false, move |values| {
-            let (pipeline, typefinder) = (&pipeline_clone, &typefinder_clone);
+    typefinder.connect("have-type", false, move |values| {
+        let (pipeline, typefinder) = (&pipeline_clone, &typefinder_clone);
 
-            // Use the detected format to select between a small set of supported demuxers
-            // Hint: This should probably never be done manually, for stuff like this,
-            // the decodebin should be used, that does this stuff automatically and handles
-            // much more corner-cases. This is just for the sake of being an example.
-            let caps = values[2]
-                .get::<gst::Caps>()
-                .expect("typefinder \"have-type\" signal values[2]");
-            let format_name = caps.structure(0).expect("Failed to get format name").name();
+        // Use the detected format to select between a small set of supported demuxers
+        // Hint: This should probably never be done manually, for stuff like this,
+        // the decodebin should be used, that does this stuff automatically and handles
+        // much more corner-cases. This is just for the sake of being an example.
+        let caps = values[2]
+            .get::<gst::Caps>()
+            .expect("typefinder \"have-type\" signal values[2]");
+        let format_name = caps.structure(0).expect("Failed to get format name").name();
 
-            let demuxer = match format_name {
-                "video/x-matroska" | "video/webm" => {
-                    gst::ElementFactory::make("matroskademux", None).expect("matroskademux missing")
-                }
-                "video/quicktime" => {
-                    gst::ElementFactory::make("qtdemux", None).expect("qtdemux missing")
-                }
-                _ => {
-                    eprintln!("Sorry, this format is not supported by this example.");
-                    std::process::exit(-1);
-                }
-            };
+        let demuxer = match format_name {
+            "video/x-matroska" | "video/webm" => {
+                gst::ElementFactory::make("matroskademux", None).expect("matroskademux missing")
+            }
+            "video/quicktime" => {
+                gst::ElementFactory::make("qtdemux", None).expect("qtdemux missing")
+            }
+            _ => {
+                eprintln!("Sorry, this format is not supported by this example.");
+                std::process::exit(-1);
+            }
+        };
 
-            // We found a supported format and created the appropriate demuxer -> link it
-            pipeline
-                .add(&demuxer)
-                .expect("Failed to build remux pipeline");
-            // We simply keep the typefinder element and pipe the data through it.
-            // Removing is non-trivial since it started reading data from the pipeline
-            // that the next element (the format specific demuxer) would need.
-            typefinder
-                .link(&demuxer)
-                .expect("Failed to build remux pipeline");
+        // We found a supported format and created the appropriate demuxer -> link it
+        pipeline
+            .add(&demuxer)
+            .expect("Failed to build remux pipeline");
+        // We simply keep the typefinder element and pipe the data through it.
+        // Removing is non-trivial since it started reading data from the pipeline
+        // that the next element (the format specific demuxer) would need.
+        typefinder
+            .link(&demuxer)
+            .expect("Failed to build remux pipeline");
 
-            let queue_clone = queue.clone();
-            let muxer_clone = muxer.clone();
-            demuxer.connect_pad_added(move |demux, src_pad| {
-                handle_demux_pad_added(demux, src_pad, &queue_clone, &muxer_clone)
-            });
-            demuxer
-                .sync_state_with_parent()
-                .expect("Failed to build remux pipeline");
+        let queue_clone = queue.clone();
+        let muxer_clone = muxer.clone();
+        demuxer.connect_pad_added(move |demux, src_pad| {
+            handle_demux_pad_added(demux, src_pad, &queue_clone, &muxer_clone)
+        });
+        demuxer
+            .sync_state_with_parent()
+            .expect("Failed to build remux pipeline");
 
-            None
-        })
-        .expect("Failed to register have-type signal of typefind");
+        None
+    });
 
     pipeline.set_state(gst::State::Playing)?;
 
