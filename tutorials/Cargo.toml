@@ -34,3 +34,11 @@ required-features = ["termion"]
 [[bin]]
 name = "playback-tutorial-1"
 required-features = ["termion"]
+
+[[bin]]
+name = "playback-tutorial-2"
+required-features = ["termion"]
+
+[[bin]]
+name = "playback-tutorial-5"
+required-features = ["termion", "gst-video"]
