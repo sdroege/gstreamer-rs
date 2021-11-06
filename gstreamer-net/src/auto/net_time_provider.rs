@@ -23,95 +23,33 @@ glib::wrapper! {
 
 impl NetTimeProvider {
     pub fn is_active(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"active\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `active` getter")
-        }
+        glib::ObjectExt::property(self, "active")
     }
 
     pub fn set_active(&self, active: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"active\0".as_ptr() as *const _,
-                active.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "active", &active)
     }
 
     pub fn address(&self) -> Option<glib::GString> {
-        unsafe {
-            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"address\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `address` getter")
-        }
+        glib::ObjectExt::property(self, "address")
     }
 
     pub fn clock(&self) -> Option<gst::Clock> {
-        unsafe {
-            let mut value = glib::Value::from_type(<gst::Clock as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"clock\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `clock` getter")
-        }
+        glib::ObjectExt::property(self, "clock")
     }
 
     pub fn port(&self) -> i32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"port\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `port` getter")
-        }
+        glib::ObjectExt::property(self, "port")
     }
 
     #[doc(alias = "qos-dscp")]
     pub fn qos_dscp(&self) -> i32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"qos-dscp\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `qos-dscp` getter")
-        }
+        glib::ObjectExt::property(self, "qos-dscp")
     }
 
     #[doc(alias = "qos-dscp")]
     pub fn set_qos_dscp(&self, qos_dscp: i32) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"qos-dscp\0".as_ptr() as *const _,
-                qos_dscp.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "qos-dscp", &qos_dscp)
     }
 
     #[doc(alias = "active")]

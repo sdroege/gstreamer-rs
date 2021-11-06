@@ -60,27 +60,11 @@ pub trait TriggerControlSourceExt: 'static {
 
 impl<O: IsA<TriggerControlSource>> TriggerControlSourceExt for O {
     fn tolerance(&self) -> i64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"tolerance\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `tolerance` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "tolerance")
     }
 
     fn set_tolerance(&self, tolerance: i64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"tolerance\0".as_ptr() as *const _,
-                tolerance.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "tolerance", &tolerance)
     }
 
     fn connect_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(

@@ -25,17 +25,7 @@ impl Marker {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn position(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"position\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `position` getter")
-        }
+        glib::ObjectExt::property(self, "position")
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]

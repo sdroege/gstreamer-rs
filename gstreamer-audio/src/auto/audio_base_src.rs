@@ -133,79 +133,27 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
     //}
 
     fn actual_buffer_time(&self) -> i64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"actual-buffer-time\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `actual-buffer-time` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "actual-buffer-time")
     }
 
     fn actual_latency_time(&self) -> i64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"actual-latency-time\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `actual-latency-time` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "actual-latency-time")
     }
 
     fn buffer_time(&self) -> i64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"buffer-time\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `buffer-time` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "buffer-time")
     }
 
     fn set_buffer_time(&self, buffer_time: i64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"buffer-time\0".as_ptr() as *const _,
-                buffer_time.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "buffer-time", &buffer_time)
     }
 
     fn latency_time(&self) -> i64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"latency-time\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `latency-time` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "latency-time")
     }
 
     fn set_latency_time(&self, latency_time: i64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"latency-time\0".as_ptr() as *const _,
-                latency_time.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "latency-time", &latency_time)
     }
 
     fn connect_actual_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(

@@ -87,123 +87,43 @@ pub trait GroupExt: 'static {
 
 impl<O: IsA<Group>> GroupExt for O {
     fn duration(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"duration\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `duration` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "duration")
     }
 
     fn set_duration(&self, duration: u64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"duration\0".as_ptr() as *const _,
-                duration.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "duration", &duration)
     }
 
     fn in_point(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"in-point\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `in-point` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "in-point")
     }
 
     fn set_in_point(&self, in_point: u64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"in-point\0".as_ptr() as *const _,
-                in_point.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "in-point", &in_point)
     }
 
     fn max_duration(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"max-duration\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `max-duration` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "max-duration")
     }
 
     fn set_max_duration(&self, max_duration: u64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"max-duration\0".as_ptr() as *const _,
-                max_duration.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "max-duration", &max_duration)
     }
 
     fn priority(&self) -> u32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"priority\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `priority` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "priority")
     }
 
     fn set_priority(&self, priority: u32) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"priority\0".as_ptr() as *const _,
-                priority.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "priority", &priority)
     }
 
     fn start(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"start\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `start` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "start")
     }
 
     fn set_start(&self, start: u64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"start\0".as_ptr() as *const _,
-                start.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "start", &start)
     }
 
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

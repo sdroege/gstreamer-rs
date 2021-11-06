@@ -414,73 +414,27 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     }
 
     fn is_async(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"async\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `async` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "async")
     }
 
     fn set_async(&self, async_: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"async\0".as_ptr() as *const _,
-                async_.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "async", &async_)
     }
 
     fn enables_last_sample(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"enable-last-sample\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `enable-last-sample` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "enable-last-sample")
     }
 
     fn set_enable_last_sample(&self, enable_last_sample: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"enable-last-sample\0".as_ptr() as *const _,
-                enable_last_sample.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "enable-last-sample", &enable_last_sample)
     }
 
     fn is_qos(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"qos\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value.get().expect("Return Value for property `qos` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "qos")
     }
 
     fn set_qos(&self, qos: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"qos\0".as_ptr() as *const _,
-                qos.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "qos", &qos)
     }
 
     fn connect_async_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {

@@ -70,28 +70,12 @@ impl PlayerVideoOverlayVideoRenderer {
 
     #[doc(alias = "video-sink")]
     pub fn video_sink(&self) -> Option<gst::Element> {
-        unsafe {
-            let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"video-sink\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `video-sink` getter")
-        }
+        glib::ObjectExt::property(self, "video-sink")
     }
 
     #[doc(alias = "video-sink")]
     pub fn set_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"video-sink\0".as_ptr() as *const _,
-                video_sink.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "video-sink", &video_sink)
     }
 
     #[doc(alias = "video-sink")]

@@ -108,63 +108,22 @@ impl PadTemplate {
     }
 
     pub fn direction(&self) -> PadDirection {
-        unsafe {
-            let mut value = glib::Value::from_type(<PadDirection as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"direction\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `direction` getter")
-        }
+        glib::ObjectExt::property(self, "direction")
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gtype(&self) -> glib::types::Type {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<glib::types::Type as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"gtype\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `gtype` getter")
-        }
+        glib::ObjectExt::property(self, "gtype")
     }
 
     #[doc(alias = "name-template")]
     pub fn name_template(&self) -> Option<glib::GString> {
-        unsafe {
-            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"name-template\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `name-template` getter")
-        }
+        glib::ObjectExt::property(self, "name-template")
     }
 
     pub fn presence(&self) -> PadPresence {
-        unsafe {
-            let mut value = glib::Value::from_type(<PadPresence as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"presence\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `presence` getter")
-        }
+        glib::ObjectExt::property(self, "presence")
     }
 
     #[doc(alias = "pad-created")]

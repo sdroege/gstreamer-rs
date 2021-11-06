@@ -728,89 +728,31 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     }
 
     fn get_property_bind_mcast_address(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"bind-mcast-address\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `bind-mcast-address` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "bind-mcast-address")
     }
 
     fn set_property_bind_mcast_address(&self, bind_mcast_address: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"bind-mcast-address\0".as_ptr() as *const _,
-                bind_mcast_address.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "bind-mcast-address", &bind_mcast_address)
     }
 
     fn get_property_dscp_qos(&self) -> i32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"dscp-qos\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `dscp-qos` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "dscp-qos")
     }
 
     fn set_property_dscp_qos(&self, dscp_qos: i32) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"dscp-qos\0".as_ptr() as *const _,
-                dscp_qos.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "dscp-qos", &dscp_qos)
     }
 
     fn get_property_max_mcast_ttl(&self) -> u32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"max-mcast-ttl\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `max-mcast-ttl` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "max-mcast-ttl")
     }
 
     fn set_property_max_mcast_ttl(&self, max_mcast_ttl: u32) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"max-mcast-ttl\0".as_ptr() as *const _,
-                max_mcast_ttl.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "max-mcast-ttl", &max_mcast_ttl)
     }
 
     fn is_stop_on_disconnect(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"stop-on-disconnect\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `stop-on-disconnect` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "stop-on-disconnect")
     }
 
     fn connect_media_configure<F: Fn(&Self, &RTSPMedia) + Send + Sync + 'static>(

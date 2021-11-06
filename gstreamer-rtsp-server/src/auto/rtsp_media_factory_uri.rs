@@ -87,27 +87,11 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
     }
 
     fn uses_gstpay(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"use-gstpay\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `use-gstpay` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "use-gstpay")
     }
 
     fn set_use_gstpay(&self, use_gstpay: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"use-gstpay\0".as_ptr() as *const _,
-                use_gstpay.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "use-gstpay", &use_gstpay)
     }
 
     fn connect_uri_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {

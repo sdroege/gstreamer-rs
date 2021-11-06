@@ -53,35 +53,13 @@ impl WebRTCRTPSender {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn priority(&self) -> WebRTCPriorityType {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<WebRTCPriorityType as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"priority\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `priority` getter")
-        }
+        glib::ObjectExt::property(self, "priority")
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn transport(&self) -> Option<WebRTCDTLSTransport> {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<WebRTCDTLSTransport as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"transport\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `transport` getter")
-        }
+        glib::ObjectExt::property(self, "transport")
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]

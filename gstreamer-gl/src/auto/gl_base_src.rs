@@ -45,27 +45,11 @@ pub trait GLBaseSrcExt: 'static {
 
 impl<O: IsA<GLBaseSrc>> GLBaseSrcExt for O {
     fn timestamp_offset(&self) -> i64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"timestamp-offset\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `timestamp-offset` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "timestamp-offset")
     }
 
     fn set_timestamp_offset(&self, timestamp_offset: i64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"timestamp-offset\0".as_ptr() as *const _,
-                timestamp_offset.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "timestamp-offset", &timestamp_offset)
     }
 
     fn connect_timestamp_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(

@@ -20,18 +20,7 @@ glib::wrapper! {
 impl PlayerGMainContextSignalDispatcher {
     #[doc(alias = "application-context")]
     pub fn application_context(&self) -> Option<glib::MainContext> {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<glib::MainContext as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"application-context\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `application-context` getter")
-        }
+        glib::ObjectExt::property(self, "application-context")
     }
 }
 

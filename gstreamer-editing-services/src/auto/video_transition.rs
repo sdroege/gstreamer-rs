@@ -135,27 +135,11 @@ impl<O: IsA<VideoTransition>> VideoTransitionExt for O {
     }
 
     fn inverts(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"invert\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `invert` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "invert")
     }
 
     fn set_invert(&self, invert: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"invert\0".as_ptr() as *const _,
-                invert.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "invert", &invert)
     }
 
     fn connect_border_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

@@ -184,25 +184,11 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
     }
 
     fn is_qos(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"qos\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value.get().expect("Return Value for property `qos` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "qos")
     }
 
     fn set_qos(&self, qos: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"qos\0".as_ptr() as *const _,
-                qos.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "qos", &qos)
     }
 
     fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {

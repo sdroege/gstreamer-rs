@@ -22,62 +22,22 @@ glib::wrapper! {
 
 impl PtpClock {
     pub fn domain(&self) -> u32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"domain\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `domain` getter")
-        }
+        glib::ObjectExt::property(self, "domain")
     }
 
     #[doc(alias = "grandmaster-clock-id")]
     pub fn grandmaster_clock_id(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"grandmaster-clock-id\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `grandmaster-clock-id` getter")
-        }
+        glib::ObjectExt::property(self, "grandmaster-clock-id")
     }
 
     #[doc(alias = "internal-clock")]
     pub fn internal_clock(&self) -> Option<gst::Clock> {
-        unsafe {
-            let mut value = glib::Value::from_type(<gst::Clock as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"internal-clock\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `internal-clock` getter")
-        }
+        glib::ObjectExt::property(self, "internal-clock")
     }
 
     #[doc(alias = "master-clock-id")]
     pub fn master_clock_id(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"master-clock-id\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `master-clock-id` getter")
-        }
+        glib::ObjectExt::property(self, "master-clock-id")
     }
 
     #[doc(alias = "grandmaster-clock-id")]

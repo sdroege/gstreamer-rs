@@ -442,27 +442,11 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
     }
 
     fn get_property_content_length_limit(&self) -> u32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"content-length-limit\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `content-length-limit` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "content-length-limit")
     }
 
     fn set_property_content_length_limit(&self, content_length_limit: u32) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"content-length-limit\0".as_ptr() as *const _,
-                content_length_limit.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "content-length-limit", &content_length_limit)
     }
 
     fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(

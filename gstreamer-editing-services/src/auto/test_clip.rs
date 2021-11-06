@@ -139,27 +139,11 @@ impl<O: IsA<TestClip>> TestClipExt for O {
     }
 
     fn freq(&self) -> f64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<f64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"freq\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `freq` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "freq")
     }
 
     fn set_freq(&self, freq: f64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"freq\0".as_ptr() as *const _,
-                freq.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "freq", &freq)
     }
 
     fn connect_freq_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

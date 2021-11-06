@@ -181,28 +181,12 @@ impl AppSink {
 
     #[doc(alias = "buffer-list")]
     pub fn is_buffer_list(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"buffer-list\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `buffer-list` getter")
-        }
+        glib::ObjectExt::property(self, "buffer-list")
     }
 
     #[doc(alias = "buffer-list")]
     pub fn set_buffer_list(&self, buffer_list: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"buffer-list\0".as_ptr() as *const _,
-                buffer_list.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "buffer-list", &buffer_list)
     }
 
     #[doc(alias = "buffer-list")]

@@ -44,152 +44,57 @@ impl WebRTCRTPTransceiver {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "codec-preferences")]
     pub fn codec_preferences(&self) -> Option<gst::Caps> {
-        unsafe {
-            let mut value = glib::Value::from_type(<gst::Caps as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"codec-preferences\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `codec-preferences` getter")
-        }
+        glib::ObjectExt::property(self, "codec-preferences")
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "codec-preferences")]
     pub fn set_codec_preferences(&self, codec_preferences: Option<&gst::Caps>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"codec-preferences\0".as_ptr() as *const _,
-                codec_preferences.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "codec-preferences", &codec_preferences)
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "current-direction")]
     pub fn current_direction(&self) -> WebRTCRTPTransceiverDirection {
-        unsafe {
-            let mut value = glib::Value::from_type(
-                <WebRTCRTPTransceiverDirection as StaticType>::static_type(),
-            );
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"current-direction\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `current-direction` getter")
-        }
+        glib::ObjectExt::property(self, "current-direction")
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn direction(&self) -> WebRTCRTPTransceiverDirection {
-        unsafe {
-            let mut value = glib::Value::from_type(
-                <WebRTCRTPTransceiverDirection as StaticType>::static_type(),
-            );
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"direction\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `direction` getter")
-        }
+        glib::ObjectExt::property(self, "direction")
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn set_direction(&self, direction: WebRTCRTPTransceiverDirection) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"direction\0".as_ptr() as *const _,
-                direction.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "direction", &direction)
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn kind(&self) -> WebRTCKind {
-        unsafe {
-            let mut value = glib::Value::from_type(<WebRTCKind as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"kind\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `kind` getter")
-        }
+        glib::ObjectExt::property(self, "kind")
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn mid(&self) -> Option<glib::GString> {
-        unsafe {
-            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"mid\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value.get().expect("Return Value for property `mid` getter")
-        }
+        glib::ObjectExt::property(self, "mid")
     }
 
     pub fn mlineindex(&self) -> u32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"mlineindex\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `mlineindex` getter")
-        }
+        glib::ObjectExt::property(self, "mlineindex")
     }
 
     pub fn receiver(&self) -> Option<WebRTCRTPReceiver> {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<WebRTCRTPReceiver as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"receiver\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `receiver` getter")
-        }
+        glib::ObjectExt::property(self, "receiver")
     }
 
     pub fn sender(&self) -> Option<WebRTCRTPSender> {
-        unsafe {
-            let mut value = glib::Value::from_type(<WebRTCRTPSender as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"sender\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `sender` getter")
-        }
+        glib::ObjectExt::property(self, "sender")
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]

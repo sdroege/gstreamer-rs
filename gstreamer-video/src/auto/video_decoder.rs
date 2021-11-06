@@ -430,19 +430,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     fn automatic_request_sync_point_flags(&self) -> VideoDecoderRequestSyncPointFlags {
-        unsafe {
-            let mut value = glib::Value::from_type(
-                <VideoDecoderRequestSyncPointFlags as StaticType>::static_type(),
-            );
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"automatic-request-sync-point-flags\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `automatic-request-sync-point-flags` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "automatic-request-sync-point-flags")
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
@@ -451,126 +439,71 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         &self,
         automatic_request_sync_point_flags: VideoDecoderRequestSyncPointFlags,
     ) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"automatic-request-sync-point-flags\0".as_ptr() as *const _,
-                automatic_request_sync_point_flags
-                    .to_value()
-                    .to_glib_none()
-                    .0,
-            );
-        }
+        glib::ObjectExt::set_property(
+            self.as_ref(),
+            "automatic-request-sync-point-flags",
+            &automatic_request_sync_point_flags,
+        )
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     fn is_automatic_request_sync_points(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"automatic-request-sync-points\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `automatic-request-sync-points` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "automatic-request-sync-points")
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     fn set_automatic_request_sync_points(&self, automatic_request_sync_points: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"automatic-request-sync-points\0".as_ptr() as *const _,
-                automatic_request_sync_points.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(
+            self.as_ref(),
+            "automatic-request-sync-points",
+            &automatic_request_sync_points,
+        )
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     fn is_discard_corrupted_frames(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"discard-corrupted-frames\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `discard-corrupted-frames` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "discard-corrupted-frames")
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     fn set_discard_corrupted_frames(&self, discard_corrupted_frames: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"discard-corrupted-frames\0".as_ptr() as *const _,
-                discard_corrupted_frames.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(
+            self.as_ref(),
+            "discard-corrupted-frames",
+            &discard_corrupted_frames,
+        )
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     fn min_force_key_unit_interval(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"min-force-key-unit-interval\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `min-force-key-unit-interval` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "min-force-key-unit-interval")
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     fn set_min_force_key_unit_interval(&self, min_force_key_unit_interval: u64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"min-force-key-unit-interval\0".as_ptr() as *const _,
-                min_force_key_unit_interval.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(
+            self.as_ref(),
+            "min-force-key-unit-interval",
+            &min_force_key_unit_interval,
+        )
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn is_qos(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"qos\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value.get().expect("Return Value for property `qos` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "qos")
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_qos(&self, qos: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"qos\0".as_ptr() as *const _,
-                qos.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "qos", &qos)
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]

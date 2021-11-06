@@ -24,181 +24,67 @@ glib::wrapper! {
 
 impl NetClientClock {
     pub fn address(&self) -> Option<glib::GString> {
-        unsafe {
-            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"address\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `address` getter")
-        }
+        glib::ObjectExt::property(self, "address")
     }
 
     pub fn set_address(&self, address: Option<&str>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"address\0".as_ptr() as *const _,
-                address.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "address", &address)
     }
 
     #[doc(alias = "base-time")]
     pub fn base_time(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"base-time\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `base-time` getter")
-        }
+        glib::ObjectExt::property(self, "base-time")
     }
 
     pub fn bus(&self) -> Option<gst::Bus> {
-        unsafe {
-            let mut value = glib::Value::from_type(<gst::Bus as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"bus\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value.get().expect("Return Value for property `bus` getter")
-        }
+        glib::ObjectExt::property(self, "bus")
     }
 
     pub fn set_bus<P: IsA<gst::Bus>>(&self, bus: Option<&P>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"bus\0".as_ptr() as *const _,
-                bus.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "bus", &bus)
     }
 
     #[doc(alias = "internal-clock")]
     pub fn internal_clock(&self) -> Option<gst::Clock> {
-        unsafe {
-            let mut value = glib::Value::from_type(<gst::Clock as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"internal-clock\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `internal-clock` getter")
-        }
+        glib::ObjectExt::property(self, "internal-clock")
     }
 
     #[doc(alias = "minimum-update-interval")]
     pub fn minimum_update_interval(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"minimum-update-interval\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `minimum-update-interval` getter")
-        }
+        glib::ObjectExt::property(self, "minimum-update-interval")
     }
 
     #[doc(alias = "minimum-update-interval")]
     pub fn set_minimum_update_interval(&self, minimum_update_interval: u64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"minimum-update-interval\0".as_ptr() as *const _,
-                minimum_update_interval.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "minimum-update-interval", &minimum_update_interval)
     }
 
     pub fn port(&self) -> i32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"port\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `port` getter")
-        }
+        glib::ObjectExt::property(self, "port")
     }
 
     pub fn set_port(&self, port: i32) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"port\0".as_ptr() as *const _,
-                port.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "port", &port)
     }
 
     #[doc(alias = "qos-dscp")]
     pub fn qos_dscp(&self) -> i32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"qos-dscp\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `qos-dscp` getter")
-        }
+        glib::ObjectExt::property(self, "qos-dscp")
     }
 
     #[doc(alias = "qos-dscp")]
     pub fn set_qos_dscp(&self, qos_dscp: i32) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"qos-dscp\0".as_ptr() as *const _,
-                qos_dscp.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "qos-dscp", &qos_dscp)
     }
 
     #[doc(alias = "round-trip-limit")]
     pub fn round_trip_limit(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"round-trip-limit\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `round-trip-limit` getter")
-        }
+        glib::ObjectExt::property(self, "round-trip-limit")
     }
 
     #[doc(alias = "round-trip-limit")]
     pub fn set_round_trip_limit(&self, round_trip_limit: u64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"round-trip-limit\0".as_ptr() as *const _,
-                round_trip_limit.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "round-trip-limit", &round_trip_limit)
     }
 
     #[doc(alias = "address")]

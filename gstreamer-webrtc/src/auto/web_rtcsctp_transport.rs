@@ -25,62 +25,20 @@ glib::wrapper! {
 impl WebRTCSCTPTransport {
     #[doc(alias = "max-channels")]
     pub fn max_channels(&self) -> u32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"max-channels\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `max-channels` getter")
-        }
+        glib::ObjectExt::property(self, "max-channels")
     }
 
     #[doc(alias = "max-message-size")]
     pub fn max_message_size(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"max-message-size\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `max-message-size` getter")
-        }
+        glib::ObjectExt::property(self, "max-message-size")
     }
 
     pub fn state(&self) -> WebRTCSCTPTransportState {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<WebRTCSCTPTransportState as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"state\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `state` getter")
-        }
+        glib::ObjectExt::property(self, "state")
     }
 
     pub fn transport(&self) -> Option<WebRTCDTLSTransport> {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<WebRTCDTLSTransport as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"transport\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `transport` getter")
-        }
+        glib::ObjectExt::property(self, "transport")
     }
 
     #[doc(alias = "max-channels")]

@@ -45,27 +45,11 @@ pub trait VideoSinkExt: 'static {
 
 impl<O: IsA<VideoSink>> VideoSinkExt for O {
     fn shows_preroll_frame(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"show-preroll-frame\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `show-preroll-frame` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "show-preroll-frame")
     }
 
     fn set_show_preroll_frame(&self, show_preroll_frame: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"show-preroll-frame\0".as_ptr() as *const _,
-                show_preroll_frame.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "show-preroll-frame", &show_preroll_frame)
     }
 
     fn connect_show_preroll_frame_notify<F: Fn(&Self) + Send + Sync + 'static>(

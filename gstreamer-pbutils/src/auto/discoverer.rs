@@ -87,30 +87,14 @@ impl Discoverer {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "use-cache")]
     pub fn uses_cache(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"use-cache\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `use-cache` getter")
-        }
+        glib::ObjectExt::property(self, "use-cache")
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "use-cache")]
     pub fn set_use_cache(&self, use_cache: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"use-cache\0".as_ptr() as *const _,
-                use_cache.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "use-cache", &use_cache)
     }
 
     #[doc(alias = "discovered")]

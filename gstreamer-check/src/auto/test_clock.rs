@@ -85,43 +85,17 @@ impl TestClock {
 
     #[doc(alias = "clock-type")]
     pub fn clock_type(&self) -> gst::ClockType {
-        unsafe {
-            let mut value = glib::Value::from_type(<gst::ClockType as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"clock-type\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `clock-type` getter")
-        }
+        glib::ObjectExt::property(self, "clock-type")
     }
 
     #[doc(alias = "clock-type")]
     pub fn set_clock_type(&self, clock_type: gst::ClockType) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"clock-type\0".as_ptr() as *const _,
-                clock_type.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "clock-type", &clock_type)
     }
 
     #[doc(alias = "start-time")]
     pub fn start_time(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"start-time\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `start-time` getter")
-        }
+        glib::ObjectExt::property(self, "start-time")
     }
 
     //#[doc(alias = "gst_test_clock_id_list_get_latest_time")]

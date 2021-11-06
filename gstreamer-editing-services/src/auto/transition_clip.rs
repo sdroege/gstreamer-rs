@@ -60,28 +60,11 @@ pub trait TransitionClipExt: 'static {
 
 impl<O: IsA<TransitionClip>> TransitionClipExt for O {
     fn vtype(&self) -> VideoStandardTransitionType {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<VideoStandardTransitionType as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"vtype\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `vtype` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "vtype")
     }
 
     fn set_vtype(&self, vtype: VideoStandardTransitionType) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"vtype\0".as_ptr() as *const _,
-                vtype.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "vtype", &vtype)
     }
 
     fn connect_vtype_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

@@ -106,103 +106,35 @@ pub trait ARGBControlBindingExt: 'static {
 
 impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
     fn control_source_a(&self) -> Option<gst::ControlSource> {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"control-source-a\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `control-source-a` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "control-source-a")
     }
 
     fn set_control_source_a<P: IsA<gst::ControlSource>>(&self, control_source_a: Option<&P>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"control-source-a\0".as_ptr() as *const _,
-                control_source_a.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "control-source-a", &control_source_a)
     }
 
     fn control_source_b(&self) -> Option<gst::ControlSource> {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"control-source-b\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `control-source-b` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "control-source-b")
     }
 
     fn set_control_source_b<P: IsA<gst::ControlSource>>(&self, control_source_b: Option<&P>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"control-source-b\0".as_ptr() as *const _,
-                control_source_b.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "control-source-b", &control_source_b)
     }
 
     fn control_source_g(&self) -> Option<gst::ControlSource> {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"control-source-g\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `control-source-g` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "control-source-g")
     }
 
     fn set_control_source_g<P: IsA<gst::ControlSource>>(&self, control_source_g: Option<&P>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"control-source-g\0".as_ptr() as *const _,
-                control_source_g.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "control-source-g", &control_source_g)
     }
 
     fn control_source_r(&self) -> Option<gst::ControlSource> {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"control-source-r\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `control-source-r` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "control-source-r")
     }
 
     fn set_control_source_r<P: IsA<gst::ControlSource>>(&self, control_source_r: Option<&P>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"control-source-r\0".as_ptr() as *const _,
-                control_source_r.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "control-source-r", &control_source_r)
     }
 
     fn connect_control_source_a_notify<F: Fn(&Self) + Send + Sync + 'static>(

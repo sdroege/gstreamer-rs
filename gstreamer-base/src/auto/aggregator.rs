@@ -227,82 +227,33 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn emits_signals(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"emit-signals\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `emit-signals` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "emit-signals")
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_emit_signals(&self, emit_signals: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"emit-signals\0".as_ptr() as *const _,
-                emit_signals.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "emit-signals", &emit_signals)
     }
 
     fn start_time(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"start-time\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `start-time` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "start-time")
     }
 
     fn set_start_time(&self, start_time: u64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"start-time\0".as_ptr() as *const _,
-                start_time.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "start-time", &start_time)
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn start_time_selection(&self) -> AggregatorStartTimeSelection {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<AggregatorStartTimeSelection as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"start-time-selection\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `start-time-selection` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "start-time-selection")
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_start_time_selection(&self, start_time_selection: AggregatorStartTimeSelection) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"start-time-selection\0".as_ptr() as *const _,
-                start_time_selection.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "start-time-selection", &start_time_selection)
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]

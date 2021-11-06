@@ -48,172 +48,60 @@ impl WebRTCDataChannel {
 
     #[doc(alias = "buffered-amount")]
     pub fn buffered_amount(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"buffered-amount\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `buffered-amount` getter")
-        }
+        glib::ObjectExt::property(self, "buffered-amount")
     }
 
     #[doc(alias = "buffered-amount-low-threshold")]
     pub fn buffered_amount_low_threshold(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"buffered-amount-low-threshold\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `buffered-amount-low-threshold` getter")
-        }
+        glib::ObjectExt::property(self, "buffered-amount-low-threshold")
     }
 
     #[doc(alias = "buffered-amount-low-threshold")]
     pub fn set_buffered_amount_low_threshold(&self, buffered_amount_low_threshold: u64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"buffered-amount-low-threshold\0".as_ptr() as *const _,
-                buffered_amount_low_threshold.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(
+            self,
+            "buffered-amount-low-threshold",
+            &buffered_amount_low_threshold,
+        )
     }
 
     pub fn id(&self) -> i32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"id\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value.get().expect("Return Value for property `id` getter")
-        }
+        glib::ObjectExt::property(self, "id")
     }
 
     pub fn label(&self) -> Option<glib::GString> {
-        unsafe {
-            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"label\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `label` getter")
-        }
+        glib::ObjectExt::property(self, "label")
     }
 
     #[doc(alias = "max-packet-lifetime")]
     pub fn max_packet_lifetime(&self) -> i32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"max-packet-lifetime\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `max-packet-lifetime` getter")
-        }
+        glib::ObjectExt::property(self, "max-packet-lifetime")
     }
 
     #[doc(alias = "max-retransmits")]
     pub fn max_retransmits(&self) -> i32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"max-retransmits\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `max-retransmits` getter")
-        }
+        glib::ObjectExt::property(self, "max-retransmits")
     }
 
     pub fn is_negotiated(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"negotiated\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `negotiated` getter")
-        }
+        glib::ObjectExt::property(self, "negotiated")
     }
 
     pub fn is_ordered(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"ordered\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `ordered` getter")
-        }
+        glib::ObjectExt::property(self, "ordered")
     }
 
     pub fn priority(&self) -> WebRTCPriorityType {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<WebRTCPriorityType as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"priority\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `priority` getter")
-        }
+        glib::ObjectExt::property(self, "priority")
     }
 
     pub fn protocol(&self) -> Option<glib::GString> {
-        unsafe {
-            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"protocol\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `protocol` getter")
-        }
+        glib::ObjectExt::property(self, "protocol")
     }
 
     #[doc(alias = "ready-state")]
     pub fn ready_state(&self) -> WebRTCDataChannelState {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<WebRTCDataChannelState as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"ready-state\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `ready-state` getter")
-        }
+        glib::ObjectExt::property(self, "ready-state")
     }
 
     #[doc(alias = "close")]
@@ -239,11 +127,7 @@ impl WebRTCDataChannel {
     }
 
     pub fn emit_close(&self) {
-        let _ = unsafe {
-            glib::Object::from_glib_borrow(self.as_ptr() as *mut glib::gobject_ffi::GObject)
-                .emit_by_name("close", &[])
-                .unwrap()
-        };
+        let _ = self.emit_by_name("close", &[]);
     }
 
     #[doc(alias = "on-buffered-amount-low")]
@@ -449,11 +333,7 @@ impl WebRTCDataChannel {
     }
 
     pub fn emit_send_data(&self, data: Option<&glib::Bytes>) {
-        let _ = unsafe {
-            glib::Object::from_glib_borrow(self.as_ptr() as *mut glib::gobject_ffi::GObject)
-                .emit_by_name("send-data", &[&data])
-                .unwrap()
-        };
+        let _ = self.emit_by_name("send-data", &[&data]);
     }
 
     #[doc(alias = "send-string")]
@@ -490,11 +370,7 @@ impl WebRTCDataChannel {
     }
 
     pub fn emit_send_string(&self, data: Option<&str>) {
-        let _ = unsafe {
-            glib::Object::from_glib_borrow(self.as_ptr() as *mut glib::gobject_ffi::GObject)
-                .emit_by_name("send-string", &[&data])
-                .unwrap()
-        };
+        let _ = self.emit_by_name("send-string", &[&data]);
     }
 
     #[doc(alias = "buffered-amount")]

@@ -250,51 +250,19 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     }
 
     fn num_buffers(&self) -> i32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"num-buffers\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `num-buffers` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "num-buffers")
     }
 
     fn set_num_buffers(&self, num_buffers: i32) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"num-buffers\0".as_ptr() as *const _,
-                num_buffers.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "num-buffers", &num_buffers)
     }
 
     fn is_typefind(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"typefind\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `typefind` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "typefind")
     }
 
     fn set_typefind(&self, typefind: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"typefind\0".as_ptr() as *const _,
-                typefind.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "typefind", &typefind)
     }
 
     fn connect_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(

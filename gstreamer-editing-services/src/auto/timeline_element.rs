@@ -677,51 +677,19 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     }
 
     fn in_point(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"in-point\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `in-point` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "in-point")
     }
 
     fn set_in_point(&self, in_point: u64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"in-point\0".as_ptr() as *const _,
-                in_point.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "in-point", &in_point)
     }
 
     fn is_serialize(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"serialize\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `serialize` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "serialize")
     }
 
     fn set_serialize(&self, serialize: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"serialize\0".as_ptr() as *const _,
-                serialize.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "serialize", &serialize)
     }
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]

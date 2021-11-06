@@ -188,27 +188,11 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
     }
 
     fn is_disable_passthrough(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"disable-passthrough\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `disable-passthrough` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "disable-passthrough")
     }
 
     fn set_disable_passthrough(&self, disable_passthrough: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"disable-passthrough\0".as_ptr() as *const _,
-                disable_passthrough.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "disable-passthrough", &disable_passthrough)
     }
 
     fn connect_disable_passthrough_notify<F: Fn(&Self) + Send + Sync + 'static>(

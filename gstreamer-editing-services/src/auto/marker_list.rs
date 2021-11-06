@@ -86,29 +86,13 @@ impl MarkerList {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn flags(&self) -> MarkerFlags {
-        unsafe {
-            let mut value = glib::Value::from_type(<MarkerFlags as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"flags\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `flags` getter")
-        }
+        glib::ObjectExt::property(self, "flags")
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn set_flags(&self, flags: MarkerFlags) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"flags\0".as_ptr() as *const _,
-                flags.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "flags", &flags)
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]

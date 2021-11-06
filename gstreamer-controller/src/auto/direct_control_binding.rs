@@ -83,42 +83,15 @@ pub trait DirectControlBindingExt: 'static {
 
 impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
     fn is_absolute(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"absolute\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `absolute` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "absolute")
     }
 
     fn control_source(&self) -> Option<gst::ControlSource> {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"control-source\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `control-source` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "control-source")
     }
 
     fn set_control_source<P: IsA<gst::ControlSource>>(&self, control_source: Option<&P>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"control-source\0".as_ptr() as *const _,
-                control_source.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "control-source", &control_source)
     }
 
     fn connect_control_source_notify<F: Fn(&Self) + Send + Sync + 'static>(

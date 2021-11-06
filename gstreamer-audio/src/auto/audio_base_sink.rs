@@ -231,75 +231,27 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
     //}
 
     fn buffer_time(&self) -> i64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"buffer-time\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `buffer-time` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "buffer-time")
     }
 
     fn set_buffer_time(&self, buffer_time: i64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"buffer-time\0".as_ptr() as *const _,
-                buffer_time.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "buffer-time", &buffer_time)
     }
 
     fn can_activate_pull(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"can-activate-pull\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `can-activate-pull` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "can-activate-pull")
     }
 
     fn set_can_activate_pull(&self, can_activate_pull: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"can-activate-pull\0".as_ptr() as *const _,
-                can_activate_pull.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "can-activate-pull", &can_activate_pull)
     }
 
     fn latency_time(&self) -> i64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"latency-time\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `latency-time` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "latency-time")
     }
 
     fn set_latency_time(&self, latency_time: i64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"latency-time\0".as_ptr() as *const _,
-                latency_time.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "latency-time", &latency_time)
     }
 
     fn connect_alignment_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(

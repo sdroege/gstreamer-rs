@@ -218,23 +218,11 @@ impl<O: IsA<TextOverlayClip>> TextOverlayClipExt for O {
     }
 
     fn set_halignment(&self, halignment: TextHAlign) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"halignment\0".as_ptr() as *const _,
-                halignment.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "halignment", &halignment)
     }
 
     fn set_valignment(&self, valignment: TextVAlign) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"valignment\0".as_ptr() as *const _,
-                valignment.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "valignment", &valignment)
     }
 
     fn connect_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

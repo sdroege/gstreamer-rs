@@ -508,51 +508,19 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     }
 
     fn is_drop_backlog(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"drop-backlog\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `drop-backlog` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "drop-backlog")
     }
 
     fn set_drop_backlog(&self, drop_backlog: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"drop-backlog\0".as_ptr() as *const _,
-                drop_backlog.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "drop-backlog", &drop_backlog)
     }
 
     fn post_session_timeout(&self) -> i32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"post-session-timeout\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `post-session-timeout` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "post-session-timeout")
     }
 
     fn set_post_session_timeout(&self, post_session_timeout: i32) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"post-session-timeout\0".as_ptr() as *const _,
-                post_session_timeout.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "post-session-timeout", &post_session_timeout)
     }
 
     fn connect_announce_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(

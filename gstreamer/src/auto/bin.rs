@@ -235,51 +235,19 @@ impl<O: IsA<Bin>> GstBinExt for O {
     }
 
     fn is_async_handling(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"async-handling\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `async-handling` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "async-handling")
     }
 
     fn set_async_handling(&self, async_handling: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"async-handling\0".as_ptr() as *const _,
-                async_handling.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "async-handling", &async_handling)
     }
 
     fn is_message_forward(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"message-forward\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `message-forward` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "message-forward")
     }
 
     fn set_message_forward(&self, message_forward: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"message-forward\0".as_ptr() as *const _,
-                message_forward.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "message-forward", &message_forward)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]

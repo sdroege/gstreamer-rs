@@ -97,123 +97,43 @@ pub trait LFOControlSourceExt: 'static {
 
 impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
     fn amplitude(&self) -> f64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<f64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"amplitude\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `amplitude` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "amplitude")
     }
 
     fn set_amplitude(&self, amplitude: f64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"amplitude\0".as_ptr() as *const _,
-                amplitude.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "amplitude", &amplitude)
     }
 
     fn frequency(&self) -> f64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<f64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"frequency\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `frequency` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "frequency")
     }
 
     fn set_frequency(&self, frequency: f64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"frequency\0".as_ptr() as *const _,
-                frequency.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "frequency", &frequency)
     }
 
     fn offset(&self) -> f64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<f64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"offset\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `offset` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "offset")
     }
 
     fn set_offset(&self, offset: f64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"offset\0".as_ptr() as *const _,
-                offset.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "offset", &offset)
     }
 
     fn timeshift(&self) -> u64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"timeshift\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `timeshift` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "timeshift")
     }
 
     fn set_timeshift(&self, timeshift: u64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"timeshift\0".as_ptr() as *const _,
-                timeshift.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "timeshift", &timeshift)
     }
 
     fn waveform(&self) -> LFOWaveform {
-        unsafe {
-            let mut value = glib::Value::from_type(<LFOWaveform as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"waveform\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `waveform` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "waveform")
     }
 
     fn set_waveform(&self, waveform: LFOWaveform) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"waveform\0".as_ptr() as *const _,
-                waveform.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "waveform", &waveform)
     }
 
     fn connect_amplitude_notify<F: Fn(&Self) + Send + Sync + 'static>(

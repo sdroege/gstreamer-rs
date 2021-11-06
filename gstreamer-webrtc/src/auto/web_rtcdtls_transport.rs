@@ -25,111 +25,37 @@ glib::wrapper! {
 
 impl WebRTCDTLSTransport {
     pub fn certificate(&self) -> Option<glib::GString> {
-        unsafe {
-            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"certificate\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `certificate` getter")
-        }
+        glib::ObjectExt::property(self, "certificate")
     }
 
     pub fn set_certificate(&self, certificate: Option<&str>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"certificate\0".as_ptr() as *const _,
-                certificate.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "certificate", &certificate)
     }
 
     pub fn is_client(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"client\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `client` getter")
-        }
+        glib::ObjectExt::property(self, "client")
     }
 
     pub fn set_client(&self, client: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"client\0".as_ptr() as *const _,
-                client.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "client", &client)
     }
 
     #[doc(alias = "remote-certificate")]
     pub fn remote_certificate(&self) -> Option<glib::GString> {
-        unsafe {
-            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"remote-certificate\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `remote-certificate` getter")
-        }
+        glib::ObjectExt::property(self, "remote-certificate")
     }
 
     #[doc(alias = "session-id")]
     pub fn session_id(&self) -> u32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"session-id\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `session-id` getter")
-        }
+        glib::ObjectExt::property(self, "session-id")
     }
 
     pub fn state(&self) -> WebRTCDTLSTransportState {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<WebRTCDTLSTransportState as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"state\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `state` getter")
-        }
+        glib::ObjectExt::property(self, "state")
     }
 
     pub fn transport(&self) -> Option<WebRTCICETransport> {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<WebRTCICETransport as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"transport\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `transport` getter")
-        }
+        glib::ObjectExt::property(self, "transport")
     }
 
     #[doc(alias = "certificate")]

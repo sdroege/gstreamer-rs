@@ -59,28 +59,11 @@ pub trait InterpolationControlSourceExt: 'static {
 
 impl<O: IsA<InterpolationControlSource>> InterpolationControlSourceExt for O {
     fn mode(&self) -> InterpolationMode {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<InterpolationMode as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"mode\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `mode` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "mode")
     }
 
     fn set_mode(&self, mode: InterpolationMode) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"mode\0".as_ptr() as *const _,
-                mode.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "mode", &mode)
     }
 
     fn connect_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {

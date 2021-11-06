@@ -193,185 +193,73 @@ impl AppSrc {
     }
 
     pub fn is_block(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"block\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `block` getter")
-        }
+        glib::ObjectExt::property(self, "block")
     }
 
     pub fn set_block(&self, block: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"block\0".as_ptr() as *const _,
-                block.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "block", &block)
     }
 
     pub fn format(&self) -> gst::Format {
-        unsafe {
-            let mut value = glib::Value::from_type(<gst::Format as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"format\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `format` getter")
-        }
+        glib::ObjectExt::property(self, "format")
     }
 
     pub fn set_format(&self, format: gst::Format) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"format\0".as_ptr() as *const _,
-                format.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "format", &format)
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "handle-segment-change")]
     pub fn is_handle_segment_change(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"handle-segment-change\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `handle-segment-change` getter")
-        }
+        glib::ObjectExt::property(self, "handle-segment-change")
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "handle-segment-change")]
     pub fn set_handle_segment_change(&self, handle_segment_change: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"handle-segment-change\0".as_ptr() as *const _,
-                handle_segment_change.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "handle-segment-change", &handle_segment_change)
     }
 
     #[doc(alias = "is-live")]
     pub fn is_live(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"is-live\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `is-live` getter")
-        }
+        glib::ObjectExt::property(self, "is-live")
     }
 
     #[doc(alias = "is-live")]
     pub fn set_is_live(&self, is_live: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"is-live\0".as_ptr() as *const _,
-                is_live.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "is-live", &is_live)
     }
 
     #[doc(alias = "max-latency")]
     pub fn max_latency(&self) -> i64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"max-latency\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `max-latency` getter")
-        }
+        glib::ObjectExt::property(self, "max-latency")
     }
 
     #[doc(alias = "max-latency")]
     pub fn set_max_latency(&self, max_latency: i64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"max-latency\0".as_ptr() as *const _,
-                max_latency.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "max-latency", &max_latency)
     }
 
     #[doc(alias = "min-latency")]
     pub fn min_latency(&self) -> i64 {
-        unsafe {
-            let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"min-latency\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `min-latency` getter")
-        }
+        glib::ObjectExt::property(self, "min-latency")
     }
 
     #[doc(alias = "min-latency")]
     pub fn set_min_latency(&self, min_latency: i64) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"min-latency\0".as_ptr() as *const _,
-                min_latency.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "min-latency", &min_latency)
     }
 
     #[doc(alias = "min-percent")]
     pub fn min_percent(&self) -> u32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"min-percent\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `min-percent` getter")
-        }
+        glib::ObjectExt::property(self, "min-percent")
     }
 
     #[doc(alias = "min-percent")]
     pub fn set_min_percent(&self, min_percent: u32) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"min-percent\0".as_ptr() as *const _,
-                min_percent.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "min-percent", &min_percent)
     }
 
     #[doc(alias = "block")]

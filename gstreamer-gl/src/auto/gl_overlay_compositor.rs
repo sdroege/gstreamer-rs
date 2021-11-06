@@ -65,29 +65,13 @@ impl GLOverlayCompositor {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn is_yinvert(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"yinvert\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `yinvert` getter")
-        }
+        glib::ObjectExt::property(self, "yinvert")
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_yinvert(&self, yinvert: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"yinvert\0".as_ptr() as *const _,
-                yinvert.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "yinvert", &yinvert)
     }
 
     #[doc(alias = "gst_gl_overlay_compositor_add_caps")]

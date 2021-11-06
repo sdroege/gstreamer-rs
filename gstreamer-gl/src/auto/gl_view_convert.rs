@@ -95,140 +95,52 @@ impl GLViewConvert {
 
     #[doc(alias = "downmix-mode")]
     pub fn downmix_mode(&self) -> GLStereoDownmix {
-        unsafe {
-            let mut value = glib::Value::from_type(<GLStereoDownmix as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"downmix-mode\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `downmix-mode` getter")
-        }
+        glib::ObjectExt::property(self, "downmix-mode")
     }
 
     #[doc(alias = "downmix-mode")]
     pub fn set_downmix_mode(&self, downmix_mode: GLStereoDownmix) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"downmix-mode\0".as_ptr() as *const _,
-                downmix_mode.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "downmix-mode", &downmix_mode)
     }
 
     #[doc(alias = "input-flags-override")]
     pub fn input_flags_override(&self) -> gst_video::VideoMultiviewFlags {
-        unsafe {
-            let mut value = glib::Value::from_type(
-                <gst_video::VideoMultiviewFlags as StaticType>::static_type(),
-            );
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"input-flags-override\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `input-flags-override` getter")
-        }
+        glib::ObjectExt::property(self, "input-flags-override")
     }
 
     #[doc(alias = "input-flags-override")]
     pub fn set_input_flags_override(&self, input_flags_override: gst_video::VideoMultiviewFlags) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"input-flags-override\0".as_ptr() as *const _,
-                input_flags_override.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "input-flags-override", &input_flags_override)
     }
 
     #[doc(alias = "input-mode-override")]
     pub fn input_mode_override(&self) -> gst_video::VideoMultiviewMode {
-        unsafe {
-            let mut value = glib::Value::from_type(
-                <gst_video::VideoMultiviewMode as StaticType>::static_type(),
-            );
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"input-mode-override\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `input-mode-override` getter")
-        }
+        glib::ObjectExt::property(self, "input-mode-override")
     }
 
     #[doc(alias = "input-mode-override")]
     pub fn set_input_mode_override(&self, input_mode_override: gst_video::VideoMultiviewMode) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"input-mode-override\0".as_ptr() as *const _,
-                input_mode_override.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "input-mode-override", &input_mode_override)
     }
 
     #[doc(alias = "output-flags-override")]
     pub fn output_flags_override(&self) -> gst_video::VideoMultiviewFlags {
-        unsafe {
-            let mut value = glib::Value::from_type(
-                <gst_video::VideoMultiviewFlags as StaticType>::static_type(),
-            );
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"output-flags-override\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `output-flags-override` getter")
-        }
+        glib::ObjectExt::property(self, "output-flags-override")
     }
 
     #[doc(alias = "output-flags-override")]
     pub fn set_output_flags_override(&self, output_flags_override: gst_video::VideoMultiviewFlags) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"output-flags-override\0".as_ptr() as *const _,
-                output_flags_override.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "output-flags-override", &output_flags_override)
     }
 
     #[doc(alias = "output-mode-override")]
     pub fn output_mode_override(&self) -> gst_video::VideoMultiviewMode {
-        unsafe {
-            let mut value = glib::Value::from_type(
-                <gst_video::VideoMultiviewMode as StaticType>::static_type(),
-            );
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"output-mode-override\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `output-mode-override` getter")
-        }
+        glib::ObjectExt::property(self, "output-mode-override")
     }
 
     #[doc(alias = "output-mode-override")]
     pub fn set_output_mode_override(&self, output_mode_override: gst_video::VideoMultiviewMode) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"output-mode-override\0".as_ptr() as *const _,
-                output_mode_override.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "output-mode-override", &output_mode_override)
     }
 
     #[doc(alias = "downmix-mode")]

@@ -275,51 +275,23 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
     }
 
     fn extra_timeout(&self) -> u32 {
-        unsafe {
-            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"extra-timeout\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `extra-timeout` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "extra-timeout")
     }
 
     fn set_extra_timeout(&self, extra_timeout: u32) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"extra-timeout\0".as_ptr() as *const _,
-                extra_timeout.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "extra-timeout", &extra_timeout)
     }
 
     fn is_timeout_always_visible(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"timeout-always-visible\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `timeout-always-visible` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "timeout-always-visible")
     }
 
     fn set_timeout_always_visible(&self, timeout_always_visible: bool) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"timeout-always-visible\0".as_ptr() as *const _,
-                timeout_always_visible.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(
+            self.as_ref(),
+            "timeout-always-visible",
+            &timeout_always_visible,
+        )
     }
 
     fn connect_extra_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(

@@ -25,49 +25,16 @@ glib::wrapper! {
 
 impl WebRTCICETransport {
     pub fn component(&self) -> WebRTCICEComponent {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<WebRTCICEComponent as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"component\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `component` getter")
-        }
+        glib::ObjectExt::property(self, "component")
     }
 
     #[doc(alias = "gathering-state")]
     pub fn gathering_state(&self) -> WebRTCICEGatheringState {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<WebRTCICEGatheringState as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"gathering-state\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `gathering-state` getter")
-        }
+        glib::ObjectExt::property(self, "gathering-state")
     }
 
     pub fn state(&self) -> WebRTCICEConnectionState {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<WebRTCICEConnectionState as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"state\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `state` getter")
-        }
+        glib::ObjectExt::property(self, "state")
     }
 
     #[doc(alias = "on-new-candidate")]

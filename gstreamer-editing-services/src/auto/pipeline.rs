@@ -257,113 +257,39 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     }
 
     fn audio_filter(&self) -> Option<gst::Element> {
-        unsafe {
-            let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"audio-filter\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `audio-filter` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "audio-filter")
     }
 
     fn set_audio_filter<P: IsA<gst::Element>>(&self, audio_filter: Option<&P>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"audio-filter\0".as_ptr() as *const _,
-                audio_filter.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "audio-filter", &audio_filter)
     }
 
     fn audio_sink(&self) -> Option<gst::Element> {
-        unsafe {
-            let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"audio-sink\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `audio-sink` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "audio-sink")
     }
 
     fn set_audio_sink<P: IsA<gst::Element>>(&self, audio_sink: Option<&P>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"audio-sink\0".as_ptr() as *const _,
-                audio_sink.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "audio-sink", &audio_sink)
     }
 
     fn timeline(&self) -> Option<Timeline> {
-        unsafe {
-            let mut value = glib::Value::from_type(<Timeline as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"timeline\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `timeline` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "timeline")
     }
 
     fn video_filter(&self) -> Option<gst::Element> {
-        unsafe {
-            let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"video-filter\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `video-filter` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "video-filter")
     }
 
     fn set_video_filter<P: IsA<gst::Element>>(&self, video_filter: Option<&P>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"video-filter\0".as_ptr() as *const _,
-                video_filter.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "video-filter", &video_filter)
     }
 
     fn video_sink(&self) -> Option<gst::Element> {
-        unsafe {
-            let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"video-sink\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `video-sink` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "video-sink")
     }
 
     fn set_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"video-sink\0".as_ptr() as *const _,
-                video_sink.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "video-sink", &video_sink)
     }
 
     fn connect_audio_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

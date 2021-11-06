@@ -347,72 +347,26 @@ impl Player {
     }
 
     pub fn suburi(&self) -> Option<glib::GString> {
-        unsafe {
-            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"suburi\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `suburi` getter")
-        }
+        glib::ObjectExt::property(self, "suburi")
     }
 
     pub fn set_suburi(&self, suburi: Option<&str>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"suburi\0".as_ptr() as *const _,
-                suburi.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "suburi", &suburi)
     }
 
     #[doc(alias = "video-multiview-flags")]
     pub fn video_multiview_flags(&self) -> gst_video::VideoMultiviewFlags {
-        unsafe {
-            let mut value = glib::Value::from_type(
-                <gst_video::VideoMultiviewFlags as StaticType>::static_type(),
-            );
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"video-multiview-flags\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `video-multiview-flags` getter")
-        }
+        glib::ObjectExt::property(self, "video-multiview-flags")
     }
 
     #[doc(alias = "video-multiview-flags")]
     pub fn set_video_multiview_flags(&self, video_multiview_flags: gst_video::VideoMultiviewFlags) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"video-multiview-flags\0".as_ptr() as *const _,
-                video_multiview_flags.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "video-multiview-flags", &video_multiview_flags)
     }
 
     #[doc(alias = "video-multiview-mode")]
     pub fn video_multiview_mode(&self) -> gst_video::VideoMultiviewFramePacking {
-        unsafe {
-            let mut value = glib::Value::from_type(
-                <gst_video::VideoMultiviewFramePacking as StaticType>::static_type(),
-            );
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"video-multiview-mode\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `video-multiview-mode` getter")
-        }
+        glib::ObjectExt::property(self, "video-multiview-mode")
     }
 
     #[doc(alias = "video-multiview-mode")]
@@ -420,29 +374,12 @@ impl Player {
         &self,
         video_multiview_mode: gst_video::VideoMultiviewFramePacking,
     ) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"video-multiview-mode\0".as_ptr() as *const _,
-                video_multiview_mode.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self, "video-multiview-mode", &video_multiview_mode)
     }
 
     #[doc(alias = "video-renderer")]
     pub fn video_renderer(&self) -> Option<PlayerVideoRenderer> {
-        unsafe {
-            let mut value =
-                glib::Value::from_type(<PlayerVideoRenderer as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"video-renderer\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `video-renderer` getter")
-        }
+        glib::ObjectExt::property(self, "video-renderer")
     }
 
     #[doc(alias = "gst_player_get_audio_streams")]

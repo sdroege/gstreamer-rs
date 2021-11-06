@@ -41,27 +41,11 @@ pub trait TracerExt: 'static {
 
 impl<O: IsA<Tracer>> TracerExt for O {
     fn params(&self) -> Option<glib::GString> {
-        unsafe {
-            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"params\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `params` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "params")
     }
 
     fn set_params(&self, params: Option<&str>) {
-        unsafe {
-            glib::gobject_ffi::g_object_set_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"params\0".as_ptr() as *const _,
-                params.to_value().to_glib_none().0,
-            );
-        }
+        glib::ObjectExt::set_property(self.as_ref(), "params", &params)
     }
 
     fn connect_params_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {

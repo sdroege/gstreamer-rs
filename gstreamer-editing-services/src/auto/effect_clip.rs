@@ -53,30 +53,10 @@ pub trait EffectClipExt: 'static {
 
 impl<O: IsA<EffectClip>> EffectClipExt for O {
     fn audio_bin_description(&self) -> Option<glib::GString> {
-        unsafe {
-            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"audio-bin-description\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `audio-bin-description` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "audio-bin-description")
     }
 
     fn video_bin_description(&self) -> Option<glib::GString> {
-        unsafe {
-            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"video-bin-description\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `video-bin-description` getter")
-        }
+        glib::ObjectExt::property(self.as_ref(), "video-bin-description")
     }
 }
