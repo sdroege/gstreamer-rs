@@ -3,8 +3,9 @@
 
 // {uridecodebin} - {videoconvert} - {appsink}
 
-// The appsink enforces RGBA so that the image crate can use it. The image crate also requires
-// tightly packed pixels, which is the case for RGBA by default in GStreamer.
+// The appsink enforces RGBx so that the image crate can use it. The sample layout is passed
+// with the correct stride from GStreamer to the image crate as GStreamer does not necessarily
+// produce tightly packed pixels, and in case of RGBx never.
 
 use gst::element_error;
 use gst::prelude::*;
@@ -54,7 +55,7 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
     // both elements will happen during pre-rolling of the pipeline.
     appsink.set_caps(Some(
         &gst::Caps::builder("video/x-raw")
-            .field("format", gst_video::VideoFormat::Rgba.to_str())
+            .field("format", gst_video::VideoFormat::Rgbx.to_str())
             .build(),
     ));
 
@@ -78,14 +79,14 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
                     gst::FlowError::Error
                 })?;
 
-                let caps = sample.caps().expect("Sample without caps");
-                let info = gst_video::VideoInfo::from_caps(caps).expect("Failed to parse caps");
-
                 // Make sure that we only get a single buffer
                 if got_snapshot {
                     return Err(gst::FlowError::Eos);
                 }
                 got_snapshot = true;
+
+                let caps = sample.caps().expect("Sample without caps");
+                let info = gst_video::VideoInfo::from_caps(caps).expect("Failed to parse caps");
 
                 // At this point, buffer is only a reference to an existing memory region somewhere.
                 // When we want to access its content, we have to map it while requesting the required
@@ -94,37 +95,49 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
                 // on the machine's main memory itself, but rather in the GPU's memory.
                 // So mapping the buffer makes the underlying memory region accessible to us.
                 // See: https://gstreamer.freedesktop.org/documentation/plugin-development/advanced/allocation.html
-                let map = buffer.map_readable().map_err(|_| {
-                    element_error!(
-                        appsink,
-                        gst::ResourceError::Failed,
-                        ("Failed to map buffer readable")
-                    );
+                let frame = gst_video::VideoFrameRef::from_buffer_ref_readable(buffer, &info)
+                    .map_err(|_| {
+                        element_error!(
+                            appsink,
+                            gst::ResourceError::Failed,
+                            ("Failed to map buffer readable")
+                        );
 
-                    gst::FlowError::Error
-                })?;
+                        gst::FlowError::Error
+                    })?;
 
                 // We only want to have a single buffer and then have the pipeline terminate
                 println!("Have video frame");
 
                 // Calculate a target width/height that keeps the display aspect ratio while having
                 // a height of 240 pixels
-                let display_aspect_ratio = (info.width() as f64 * info.par().numer() as f64)
-                    / (info.height() as f64 * info.par().denom() as f64);
+                let display_aspect_ratio = (frame.width() as f64 * info.par().numer() as f64)
+                    / (frame.height() as f64 * info.par().denom() as f64);
                 let target_height = 240;
                 let target_width = target_height as f64 * display_aspect_ratio;
 
-                // Create an ImageBuffer around the borrowed video frame data from GStreamer.
-                let img = image::ImageBuffer::<image::Rgba<u8>, _>::from_raw(
-                    info.width(),
-                    info.height(),
-                    map,
-                )
-                .expect("Failed to create ImageBuffer, probably a stride mismatch");
+                // Create a FlatSamples around the borrowed video frame data from GStreamer with
+                // the correct stride as provided by GStreamer.
+                let img = image::FlatSamples::<&[u8]> {
+                    samples: frame.plane_data(0).unwrap(),
+                    layout: image::flat::SampleLayout {
+                        channels: 3,       // RGB
+                        channel_stride: 1, // 1 byte from component to component
+                        width: frame.width(),
+                        width_stride: 4, // 4 byte from pixel to pixel
+                        height: frame.height(),
+                        height_stride: frame.plane_stride()[0] as usize, // stride from line to line
+                    },
+                    color_hint: Some(image::ColorType::Rgb8),
+                };
 
                 // Scale image to our target dimensions
-                let scaled_img =
-                    image::imageops::thumbnail(&img, target_width as u32, target_height as u32);
+                let scaled_img = image::imageops::thumbnail(
+                    &img.as_view::<image::Rgb<u8>>()
+                        .expect("couldn't create image view"),
+                    target_width as u32,
+                    target_height as u32,
+                );
 
                 // Save it at the specific location. This automatically detects the file type
                 // based on the filename.
