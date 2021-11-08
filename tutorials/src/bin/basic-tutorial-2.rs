@@ -21,7 +21,7 @@ fn tutorial_main() {
     source.link(&sink).expect("Elements could not be linked.");
 
     // Modify the source's properties
-    source.set_property_from_str("pattern", "smpte").unwrap();
+    source.set_property_from_str("pattern", "smpte");
 
     // Start playing
     pipeline

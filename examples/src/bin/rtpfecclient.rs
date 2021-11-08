@@ -134,7 +134,7 @@ fn example_main() -> Result<(), Error> {
             pipeline.add_many(&[&enc, &mux, &sink])?;
             gst::Element::link_many(&[&filter, &enc, &mux, &sink])?;
             sink.set_property("location", "out.mkv");
-            enc.set_property_from_str("tune", "zerolatency")?;
+            enc.set_property_from_str("tune", "zerolatency");
             eprintln!("Recording to out.mkv");
         }
         _ => return Err(Error::from(UsageError(args[0].clone()))),

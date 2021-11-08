@@ -64,8 +64,8 @@ fn main() {
 
     let pipeline = gst::Pipeline::new(Some("test-pipeline"));
 
-    visual.set_property_from_str("shader", "none").unwrap();
-    visual.set_property_from_str("style", "lines").unwrap();
+    visual.set_property_from_str("shader", "none");
+    visual.set_property_from_str("style", "lines");
 
     pipeline
         .add_many(&[

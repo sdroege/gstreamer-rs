@@ -89,7 +89,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
     // The videotestsrc supports multiple test patterns. In this example, we will use the
     // pattern with a white ball moving around the video's center point.
-    src.set_property_from_str("pattern", "ball").unwrap();
+    src.set_property_from_str("pattern", "ball");
 
     // The PangoFontMap represents the set of fonts available for a particular rendering system.
     let fontmap = pangocairo::FontMap::new().unwrap();
