@@ -22,6 +22,7 @@ use crate::{SpecificFormattedValue, SpecificFormattedValueIntrinsic};
 use std::cell::RefCell;
 use std::mem;
 use std::num::NonZeroU64;
+use std::ops::ControlFlow;
 use std::ptr;
 
 use glib::ffi::gpointer;
@@ -86,6 +87,13 @@ impl<'a> Drop for StreamLock<'a> {
 pub enum PadGetRangeSuccess {
     FilledBuffer,
     NewBuffer(crate::Buffer),
+}
+
+#[derive(Debug)]
+pub enum EventForeachAction {
+    Keep,
+    Remove,
+    Replace(Event),
 }
 
 pub trait PadExtManual: 'static {
@@ -275,9 +283,10 @@ pub trait PadExtManual: 'static {
 
     #[doc(alias = "get_mode")]
     fn mode(&self) -> crate::PadMode;
-
     #[doc(alias = "gst_pad_sticky_events_foreach")]
-    fn sticky_events_foreach<F: FnMut(Event) -> Result<Option<Event>, Option<Event>>>(
+    fn sticky_events_foreach<
+        F: FnMut(&Event) -> ControlFlow<EventForeachAction, EventForeachAction>,
+    >(
         &self,
         func: F,
     );
@@ -969,50 +978,51 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn sticky_events_foreach<F: FnMut(Event) -> Result<Option<Event>, Option<Event>>>(
+    fn sticky_events_foreach<
+        F: FnMut(&Event) -> ControlFlow<EventForeachAction, EventForeachAction>,
+    >(
         &self,
         func: F,
     ) {
-        unsafe extern "C" fn trampoline(
+        unsafe extern "C" fn trampoline<
+            F: FnMut(&Event) -> ControlFlow<EventForeachAction, EventForeachAction>,
+        >(
             _pad: *mut ffi::GstPad,
             event: *mut *mut ffi::GstEvent,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let func =
-                user_data as *mut &mut (dyn FnMut(Event) -> Result<Option<Event>, Option<Event>>);
-            let res = (*func)(from_glib_full(*event));
+            let func = user_data as *mut F;
+            let res = (*func)(&from_glib_borrow(*event));
 
-            match res {
-                Ok(Some(ev)) => {
-                    *event = ev.into_ptr();
-                    glib::ffi::GTRUE
-                }
-                Err(Some(ev)) => {
-                    *event = ev.into_ptr();
-                    glib::ffi::GFALSE
-                }
-                Ok(None) => {
+            let (do_continue, ev_action) = match res {
+                ControlFlow::Continue(ev_action) => (glib::ffi::GTRUE, ev_action),
+                ControlFlow::Break(ev_action) => (glib::ffi::GFALSE, ev_action),
+            };
+
+            use EventForeachAction::*;
+
+            match ev_action {
+                Keep => (), // do nothing
+                Remove => {
+                    ffi::gst_mini_object_unref(*event as *mut _);
                     *event = ptr::null_mut();
-                    glib::ffi::GTRUE
                 }
-                Err(None) => {
-                    *event = ptr::null_mut();
-                    glib::ffi::GFALSE
+                Replace(ev) => {
+                    ffi::gst_mini_object_unref(*event as *mut _);
+                    *event = ev.into_ptr();
                 }
             }
+
+            do_continue
         }
 
         unsafe {
             let mut func = func;
-            let func_obj: &mut (dyn FnMut(Event) -> Result<Option<Event>, Option<Event>>) =
-                &mut func;
-            let func_ptr = &func_obj
-                as *const &mut (dyn FnMut(Event) -> Result<Option<Event>, Option<Event>>)
-                as glib::ffi::gpointer;
+            let func_ptr = &mut func as *mut F as glib::ffi::gpointer;
 
             ffi::gst_pad_sticky_events_foreach(
                 self.as_ref().to_glib_none().0,
-                Some(trampoline),
+                Some(trampoline::<F>),
                 func_ptr,
             );
         }
@@ -2105,6 +2115,110 @@ mod tests {
         assert!(
             events.iter().all(|e| e.is_writable()),
             "An event ref leaked!"
+        );
+    }
+
+    #[test]
+    fn test_sticky_events_foreach() {
+        crate::init().unwrap();
+
+        let pad = crate::Pad::builder(Some("sink"), crate::PadDirection::Sink).build();
+        pad.set_active(true).unwrap();
+
+        // Send some sticky events
+        assert!(pad.send_event(crate::event::StreamStart::new("test")));
+
+        let caps = crate::Caps::builder("some/x-caps").build();
+        assert!(pad.send_event(crate::event::Caps::new(&caps)));
+
+        let segment = crate::FormattedSegment::<crate::ClockTime>::new();
+        assert!(pad.send_event(crate::event::Segment::new(segment.as_ref())));
+
+        let mut sticky_events = Vec::new();
+        pad.sticky_events_foreach(|event| {
+            sticky_events.push(event.clone());
+            ControlFlow::Continue(EventForeachAction::Keep)
+        });
+        assert_eq!(sticky_events.len(), 3);
+
+        // Test early exit from foreach loop
+        let mut sticky_events2 = Vec::new();
+        pad.sticky_events_foreach(|event| {
+            sticky_events2.push(event.clone());
+            if event.type_() == crate::EventType::Caps {
+                ControlFlow::Break(EventForeachAction::Keep)
+            } else {
+                ControlFlow::Continue(EventForeachAction::Keep)
+            }
+        });
+        assert_eq!(sticky_events2.len(), 2);
+
+        let mut sticky_events3 = Vec::new();
+        pad.sticky_events_foreach(|event| {
+            sticky_events3.push(event.clone());
+            ControlFlow::Continue(EventForeachAction::Keep)
+        });
+        assert_eq!(sticky_events3.len(), 3);
+
+        for (e1, e2) in sticky_events.iter().zip(sticky_events3.iter()) {
+            assert_eq!(e1.as_ref() as *const _, e2.as_ref() as *const _);
+        }
+
+        // Replace segment event
+        pad.sticky_events_foreach(|event| {
+            let action = if event.type_() == crate::EventType::Segment {
+                let byte_segment = crate::FormattedSegment::<crate::format::Bytes>::new();
+                EventForeachAction::Replace(crate::event::Segment::new(&byte_segment))
+            } else {
+                EventForeachAction::Keep
+            };
+            ControlFlow::Continue(action)
+        });
+
+        // Check that segment event is different now
+        let mut sticky_events4 = Vec::new();
+        pad.sticky_events_foreach(|event| {
+            sticky_events4.push(event.clone());
+            ControlFlow::Continue(EventForeachAction::Keep)
+        });
+        assert_eq!(sticky_events4.len(), 3);
+        assert_eq!(
+            sticky_events[0].as_ref() as *const _,
+            sticky_events4[0].as_ref() as *const _
+        );
+        assert_eq!(
+            sticky_events[1].as_ref() as *const _,
+            sticky_events4[1].as_ref() as *const _
+        );
+        assert_ne!(
+            sticky_events[2].as_ref() as *const _,
+            sticky_events4[2].as_ref() as *const _
+        );
+
+        // Drop caps event
+        pad.sticky_events_foreach(|event| {
+            let action = if event.type_() == crate::EventType::Caps {
+                EventForeachAction::Remove
+            } else {
+                EventForeachAction::Keep
+            };
+            ControlFlow::Continue(action)
+        });
+
+        // Check that caps event actually got removed
+        let mut sticky_events5 = Vec::new();
+        pad.sticky_events_foreach(|event| {
+            sticky_events5.push(event.clone());
+            ControlFlow::Continue(EventForeachAction::Keep)
+        });
+        assert_eq!(sticky_events5.len(), 2);
+        assert_eq!(
+            sticky_events4[0].as_ref() as *const _,
+            sticky_events5[0].as_ref() as *const _
+        );
+        assert_eq!(
+            sticky_events4[2].as_ref() as *const _,
+            sticky_events5[1].as_ref() as *const _
         );
     }
 }

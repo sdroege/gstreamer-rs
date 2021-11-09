@@ -173,6 +173,7 @@ mod gobject;
 mod iterator;
 mod object;
 mod pad;
+pub use pad::*;
 mod registry;
 pub use crate::pad::PadBuilder;
 mod control_binding;
