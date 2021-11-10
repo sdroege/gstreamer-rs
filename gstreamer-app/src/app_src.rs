@@ -340,6 +340,17 @@ impl AppSrc {
         }
     }
 
+    #[doc(alias = "set-automatic-eos")]
+    #[doc(alias = "gst_base_src_set_automatic_eos")]
+    pub fn set_automatic_eos(&self, automatic_eos: bool) {
+        unsafe {
+            gst_base::ffi::gst_base_src_set_automatic_eos(
+                self.as_ptr() as *mut gst_base::ffi::GstBaseSrc,
+                automatic_eos.into_glib(),
+            );
+        }
+    }
+
     pub fn sink(&self) -> AppSrcSink {
         AppSrcSink::new(self)
     }
