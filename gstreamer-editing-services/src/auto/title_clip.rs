@@ -114,10 +114,10 @@ pub trait TitleClipExt: 'static {
     #[doc(alias = "ges_title_clip_set_ypos")]
     fn set_ypos(&self, position: f64);
 
-    #[deprecated = "Since 1.6"]
+    #[cfg_attr(feature = "v1_6", deprecated = "Since 1.6")]
     fn background(&self) -> u32;
 
-    #[deprecated = "Since 1.6"]
+    #[cfg_attr(feature = "v1_6", deprecated = "Since 1.6")]
     fn color(&self) -> u32;
 
     #[deprecated = "Since 1.6"]
