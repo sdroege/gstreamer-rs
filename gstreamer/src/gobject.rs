@@ -51,7 +51,7 @@ mod tests {
         let fakesink = crate::ElementFactory::make("fakesink", None).unwrap();
         fakesink.set_property_from_str("state-error", "ready-to-paused");
         let v = fakesink.property_value("state-error");
-        let e = glib::EnumValue::from_value(&v).unwrap();
+        let (_klass, e) = glib::EnumValue::from_value(&v).unwrap();
         assert_eq!(e.nick(), "ready-to-paused");
     }
 }
