@@ -81,22 +81,27 @@ impl GroupId {
 }
 
 impl EventType {
+    #[doc(alias = "GST_EVENT_IS_UPSTREAM")]
     pub fn is_upstream(self) -> bool {
         (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_UPSTREAM != 0
     }
 
+    #[doc(alias = "GST_EVENT_IS_DOWNSTREAM")]
     pub fn is_downstream(self) -> bool {
         (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_DOWNSTREAM != 0
     }
 
+    #[doc(alias = "GST_EVENT_IS_SERIALIZED")]
     pub fn is_serialized(self) -> bool {
         (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_SERIALIZED != 0
     }
 
+    #[doc(alias = "GST_EVENT_IS_STICKY")]
     pub fn is_sticky(self) -> bool {
         (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY != 0
     }
 
+    #[doc(alias = "GST_EVENT_IS_STICKY_MULTI")]
     pub fn is_sticky_multi(self) -> bool {
         (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY_MULTI != 0
     }
@@ -173,33 +178,40 @@ impl EventRef {
         }
     }
 
+    #[doc(alias = "gst_event_writable_structure")]
     pub fn structure_mut(&mut self) -> &mut StructureRef {
         unsafe {
             StructureRef::from_glib_borrow_mut(ffi::gst_event_writable_structure(self.as_mut_ptr()))
         }
     }
 
+    #[doc(alias = "GST_EVENT_IS_UPSTREAM")]
     pub fn is_upstream(&self) -> bool {
         self.type_().is_upstream()
     }
 
+    #[doc(alias = "GST_EVENT_IS_DOWNSTREAM")]
     pub fn is_downstream(&self) -> bool {
         self.type_().is_downstream()
     }
 
+    #[doc(alias = "GST_EVENT_IS_SERIALIZED")]
     pub fn is_serialized(&self) -> bool {
         self.type_().is_serialized()
     }
 
+    #[doc(alias = "GST_EVENT_IS_STICKY")]
     pub fn is_sticky(&self) -> bool {
         self.type_().is_sticky()
     }
 
+    #[doc(alias = "GST_EVENT_IS_STICKY_MULTI")]
     pub fn is_sticky_multi(&self) -> bool {
         self.type_().is_sticky_multi()
     }
 
     #[doc(alias = "get_type")]
+    #[doc(alias = "GST_EVENT_TYPE")]
     pub fn type_(&self) -> EventType {
         unsafe { from_glib((*self.as_ptr()).type_) }
     }
@@ -398,6 +410,7 @@ macro_rules! declare_concrete_event {
 
 declare_concrete_event!(FlushStart, T);
 impl FlushStart<Event> {
+    #[doc(alias = "gst_event_new_flush_start")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Event {
         skip_assert_initialized!();
@@ -412,6 +425,7 @@ impl FlushStart<Event> {
 
 declare_concrete_event!(FlushStop, T);
 impl FlushStop<Event> {
+    #[doc(alias = "gst_event_new_flush_stop")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(reset_time: bool) -> Event {
         skip_assert_initialized!();
@@ -426,6 +440,7 @@ impl FlushStop<Event> {
 
 impl<T: AsPtr> FlushStop<T> {
     #[doc(alias = "get_reset_time")]
+    #[doc(alias = "gst_event_parse_flush_stop")]
     pub fn resets_time(&self) -> bool {
         unsafe {
             let mut reset_time = mem::MaybeUninit::uninit();
@@ -439,6 +454,7 @@ impl<T: AsPtr> FlushStop<T> {
 
 declare_concrete_event!(@sticky StreamStart, T);
 impl StreamStart<Event> {
+    #[doc(alias = "gst_event_new_stream_start")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(stream_id: &str) -> Event {
         skip_assert_initialized!();
@@ -453,6 +469,7 @@ impl StreamStart<Event> {
 
 impl<T: AsPtr> StreamStart<T> {
     #[doc(alias = "get_stream_id")]
+    #[doc(alias = "gst_event_parse_stream_start")]
     pub fn stream_id(&self) -> &str {
         unsafe {
             let mut stream_id = ptr::null();
@@ -506,6 +523,7 @@ impl<T: AsPtr> StreamStart<T> {
 
 declare_concrete_event!(@sticky Caps, T);
 impl Caps<Event> {
+    #[doc(alias = "gst_event_new_caps")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(caps: &crate::Caps) -> Event {
         skip_assert_initialized!();
@@ -531,6 +549,7 @@ impl<T: AsPtr> Caps<T> {
     }
 
     #[doc(alias = "get_caps_owned")]
+    #[doc(alias = "gst_event_parse_caps")]
     pub fn caps_owned(&self) -> crate::Caps {
         unsafe { from_glib_none(self.caps().as_ptr()) }
     }
@@ -538,6 +557,7 @@ impl<T: AsPtr> Caps<T> {
 
 declare_concrete_event!(@sticky Segment, T);
 impl Segment<Event> {
+    #[doc(alias = "gst_event_new_segment")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<F: crate::FormattedValueIntrinsic>(segment: &crate::FormattedSegment<F>) -> Event {
         skip_assert_initialized!();
@@ -573,6 +593,7 @@ declare_concrete_event!(@sticky StreamCollection, T);
 impl StreamCollection<Event> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_event_new_stream_collection")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(stream_collection: &crate::StreamCollection) -> Event {
         skip_assert_initialized!();
@@ -606,6 +627,7 @@ impl<T: AsPtr> StreamCollection<T> {
 
 declare_concrete_event!(@sticky Tag, T);
 impl Tag<Event> {
+    #[doc(alias = "gst_event_new_tag")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(tags: crate::TagList) -> Event {
         skip_assert_initialized!();
@@ -631,6 +653,7 @@ impl<T: AsPtr> Tag<T> {
     }
 
     #[doc(alias = "get_tag_owned")]
+    #[doc(alias = "gst_event_parse_tag")]
     pub fn tag_owned(&self) -> crate::TagList {
         unsafe { from_glib_none(self.tag().as_ptr()) }
     }
@@ -638,6 +661,7 @@ impl<T: AsPtr> Tag<T> {
 
 declare_concrete_event!(@sticky Buffersize, T);
 impl Buffersize<Event> {
+    #[doc(alias = "gst_event_new_buffer_size")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(minsize: V, maxsize: V, r#async: bool) -> Event {
         skip_assert_initialized!();
@@ -659,6 +683,7 @@ impl Buffersize<Event> {
 }
 
 impl<T: AsPtr> Buffersize<T> {
+    #[doc(alias = "gst_event_parse_buffer_size")]
     pub fn get(&self) -> (GenericFormattedValue, GenericFormattedValue, bool) {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -684,6 +709,7 @@ impl<T: AsPtr> Buffersize<T> {
 
 declare_concrete_event!(@sticky SinkMessage, T);
 impl SinkMessage<Event> {
+    #[doc(alias = "gst_event_new_sink_message")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(name: &str, msg: &crate::Message) -> Event {
         skip_assert_initialized!();
@@ -717,6 +743,7 @@ declare_concrete_event!(@sticky StreamGroupDone, T);
 impl StreamGroupDone<Event> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_event_new_stream_group_done")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(group_id: GroupId) -> Event {
         skip_assert_initialized!();
@@ -737,6 +764,7 @@ impl<T: AsPtr> StreamGroupDone<T> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_group_id")]
+    #[doc(alias = "gst_event_parse_stream_group_done")]
     pub fn group_id(&self) -> GroupId {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
@@ -752,6 +780,7 @@ impl<T: AsPtr> StreamGroupDone<T> {
 
 declare_concrete_event!(@sticky Eos, T);
 impl Eos<Event> {
+    #[doc(alias = "gst_event_new_eos")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Event {
         skip_assert_initialized!();
@@ -768,6 +797,7 @@ declare_concrete_event!(@sticky Toc, T);
 impl Toc<Event> {
     // FIXME could use false for updated as default
     // Even better: use an enum for updated so that it is more explicit than true / false
+    #[doc(alias = "gst_event_new_toc")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(toc: &crate::Toc, updated: bool) -> Event {
         skip_assert_initialized!();
@@ -797,6 +827,7 @@ impl<T: AsPtr> Toc<T> {
     }
 
     #[doc(alias = "get_toc_owned")]
+    #[doc(alias = "gst_event_parse_toc")]
     pub fn toc_owned(&self) -> (crate::Toc, bool) {
         unsafe {
             let (toc, updated) = self.toc();
@@ -807,6 +838,7 @@ impl<T: AsPtr> Toc<T> {
 
 declare_concrete_event!(@sticky Protection, T);
 impl Protection<Event> {
+    #[doc(alias = "gst_event_new_protection")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(system_id: &str, data: &crate::Buffer) -> Event {
         skip_assert_initialized!();
@@ -820,6 +852,7 @@ impl Protection<Event> {
 }
 
 impl<T: AsPtr> Protection<T> {
+    #[doc(alias = "gst_event_parse_protection")]
     pub fn get(&self) -> (&str, &crate::BufferRef, Option<&str>) {
         unsafe {
             let mut system_id = ptr::null();
@@ -845,6 +878,7 @@ impl<T: AsPtr> Protection<T> {
         }
     }
 
+    #[doc(alias = "gst_event_parse_protection")]
     pub fn get_owned(&self) -> (&str, crate::Buffer, Option<&str>) {
         unsafe {
             let (system_id, buffer, origin) = self.get();
@@ -855,6 +889,7 @@ impl<T: AsPtr> Protection<T> {
 
 declare_concrete_event!(SegmentDone, T);
 impl SegmentDone<Event> {
+    #[doc(alias = "gst_event_new_segment_done")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(position: V) -> Event {
         skip_assert_initialized!();
@@ -869,6 +904,7 @@ impl SegmentDone<Event> {
 }
 
 impl<T: AsPtr> SegmentDone<T> {
+    #[doc(alias = "gst_event_parse_segment_done")]
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -887,6 +923,7 @@ impl<T: AsPtr> SegmentDone<T> {
 
 declare_concrete_event!(Gap, T);
 impl Gap<Event> {
+    #[doc(alias = "gst_event_new_gap")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(timestamp: ClockTime, duration: impl Into<Option<ClockTime>>) -> Event {
         skip_assert_initialized!();
@@ -900,6 +937,7 @@ impl Gap<Event> {
 }
 
 impl<T: AsPtr> Gap<T> {
+    #[doc(alias = "gst_event_parse_gap")]
     pub fn get(&self) -> (ClockTime, Option<ClockTime>) {
         unsafe {
             let mut timestamp = mem::MaybeUninit::uninit();
@@ -936,6 +974,7 @@ declare_concrete_event!(@sticky InstantRateChange, T);
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl InstantRateChange<Event> {
+    #[doc(alias = "gst_event_new_instant_rate_change")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(multiplier: f64, new_flags: crate::SegmentFlags) -> Event {
         skip_assert_initialized!();
@@ -954,6 +993,7 @@ impl InstantRateChange<Event> {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<T: AsPtr> InstantRateChange<T> {
+    #[doc(alias = "gst_event_parse_instant_rate_change")]
     pub fn get(&self) -> (f64, crate::SegmentFlags) {
         unsafe {
             let mut multiplier = mem::MaybeUninit::uninit();
@@ -972,6 +1012,7 @@ impl<T: AsPtr> InstantRateChange<T> {
 
 declare_concrete_event!(Qos, T);
 impl Qos<Event> {
+    #[doc(alias = "gst_event_new_qos")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(
         type_: crate::QOSType,
@@ -992,6 +1033,7 @@ impl Qos<Event> {
 }
 
 impl<T: AsPtr> Qos<T> {
+    #[doc(alias = "gst_event_parse_qos")]
     pub fn get(&self) -> (crate::QOSType, f64, i64, Option<ClockTime>) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
@@ -1019,6 +1061,7 @@ impl<T: AsPtr> Qos<T> {
 
 declare_concrete_event!(Seek, T);
 impl Seek<Event> {
+    #[doc(alias = "gst_event_new_seek")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(
         rate: f64,
@@ -1050,6 +1093,7 @@ impl Seek<Event> {
 }
 
 impl<T: AsPtr> Seek<T> {
+    #[doc(alias = "gst_event_parse_seek")]
     pub fn get(
         &self,
     ) -> (
@@ -1111,6 +1155,7 @@ impl<T: AsPtr> Seek<T> {
 
 declare_concrete_event!(Navigation, T);
 impl Navigation<Event> {
+    #[doc(alias = "gst_event_new_navigation")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
@@ -1125,6 +1170,7 @@ impl Navigation<Event> {
 
 declare_concrete_event!(Latency, T);
 impl Latency<Event> {
+    #[doc(alias = "gst_event_new_latency")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(latency: ClockTime) -> Event {
         skip_assert_initialized!();
@@ -1153,6 +1199,7 @@ impl<T: AsPtr> Latency<T> {
 
 declare_concrete_event!(Step, T);
 impl Step<Event> {
+    #[doc(alias = "gst_event_new_step")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(
         amount: V,
@@ -1176,6 +1223,7 @@ impl Step<Event> {
 }
 
 impl<T: AsPtr> Step<T> {
+    #[doc(alias = "gst_event_parse_step")]
     pub fn get(&self) -> (GenericFormattedValue, f64, bool, bool) {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -1208,6 +1256,7 @@ impl<T: AsPtr> Step<T> {
 
 declare_concrete_event!(Reconfigure, T);
 impl Reconfigure<Event> {
+    #[doc(alias = "gst_event_new_reconfigure")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Event {
         skip_assert_initialized!();
@@ -1222,6 +1271,7 @@ impl Reconfigure<Event> {
 
 declare_concrete_event!(TocSelect, T);
 impl TocSelect<Event> {
+    #[doc(alias = "gst_event_new_toc_select")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(uid: &str) -> Event {
         skip_assert_initialized!();
@@ -1255,6 +1305,7 @@ declare_concrete_event!(SelectStreams, T);
 impl SelectStreams<Event> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_event_new_select_streams")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(streams: &[&str]) -> Event {
         skip_assert_initialized!();
@@ -1295,6 +1346,7 @@ declare_concrete_event!(InstantRateSyncTime, T);
 impl InstantRateSyncTime<Event> {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_event_new_instant_rate_sync_time")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(
         rate_multiplier: f64,
@@ -1348,6 +1400,7 @@ impl<T: AsPtr> InstantRateSyncTime<T> {
 
 declare_concrete_event!(CustomUpstream, T);
 impl CustomUpstream<Event> {
+    #[doc(alias = "gst_event_new_custom")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
@@ -1362,6 +1415,7 @@ impl CustomUpstream<Event> {
 
 declare_concrete_event!(CustomDownstream, T);
 impl CustomDownstream<Event> {
+    #[doc(alias = "gst_event_new_custom")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
@@ -1376,6 +1430,7 @@ impl CustomDownstream<Event> {
 
 declare_concrete_event!(CustomDownstreamOob, T);
 impl CustomDownstreamOob<Event> {
+    #[doc(alias = "gst_event_new_custom")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
@@ -1390,6 +1445,7 @@ impl CustomDownstreamOob<Event> {
 
 declare_concrete_event!(@sticky CustomDownstreamSticky, T);
 impl CustomDownstreamSticky<Event> {
+    #[doc(alias = "gst_event_new_custom")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
@@ -1404,6 +1460,7 @@ impl CustomDownstreamSticky<Event> {
 
 declare_concrete_event!(CustomBoth, T);
 impl CustomBoth<Event> {
+    #[doc(alias = "gst_event_new_custom")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
@@ -1418,6 +1475,7 @@ impl CustomBoth<Event> {
 
 declare_concrete_event!(CustomBothOob, T);
 impl CustomBothOob<Event> {
+    #[doc(alias = "gst_event_new_custom")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
@@ -1476,6 +1534,7 @@ impl<'a> EventBuilder<'a> {
 
 macro_rules! event_builder_generic_impl {
     ($new_fn:expr) => {
+        #[doc(alias = "gst_event_set_seqnum")]
         #[allow(clippy::needless_update)]
         pub fn seqnum(self, seqnum: Seqnum) -> Self {
             Self {
@@ -1484,6 +1543,7 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
+        #[doc(alias = "gst_event_set_running_time_offset")]
         #[allow(clippy::needless_update)]
         pub fn running_time_offset(self, running_time_offset: i64) -> Self {
             Self {

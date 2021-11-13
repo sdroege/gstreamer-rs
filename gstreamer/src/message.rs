@@ -249,6 +249,7 @@ macro_rules! declare_concrete_message(
 
 declare_concrete_message!(Eos);
 impl<'a> Eos<'a> {
+    #[doc(alias = "gst_message_new_eos")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Message {
         skip_assert_initialized!();
@@ -263,6 +264,7 @@ impl<'a> Eos<'a> {
 
 declare_concrete_message!(Error);
 impl<'a> Error<'a> {
+    #[doc(alias = "gst_message_new_error")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<T: MessageErrorDomain>(error: T, message: &str) -> Message {
         skip_assert_initialized!();
@@ -287,6 +289,7 @@ impl<'a> Error<'a> {
     }
 
     #[doc(alias = "get_debug")]
+    #[doc(alias = "gst_message_parse_error")]
     pub fn debug(&self) -> Option<String> {
         unsafe {
             let mut debug = ptr::null_mut();
@@ -318,6 +321,7 @@ impl<'a> Error<'a> {
 
 declare_concrete_message!(Warning);
 impl<'a> Warning<'a> {
+    #[doc(alias = "gst_message_new_warning")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<T: MessageErrorDomain>(error: T, message: &str) -> Message {
         skip_assert_initialized!();
@@ -330,6 +334,7 @@ impl<'a> Warning<'a> {
     }
 
     #[doc(alias = "get_error")]
+    #[doc(alias = "gst_message_parse_warning")]
     pub fn error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
@@ -341,6 +346,7 @@ impl<'a> Warning<'a> {
     }
 
     #[doc(alias = "get_debug")]
+    #[doc(alias = "gst_message_parse_warning")]
     pub fn debug(&self) -> Option<String> {
         unsafe {
             let mut debug = ptr::null_mut();
@@ -354,12 +360,12 @@ impl<'a> Warning<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_details")]
-    #[doc(alias = "gst_message_parse_error_details")]
+    #[doc(alias = "gst_message_parse_warning_details")]
     pub fn details(&self) -> Option<&StructureRef> {
         unsafe {
             let mut details = ptr::null();
 
-            ffi::gst_message_parse_error_details(self.as_mut_ptr(), &mut details);
+            ffi::gst_message_parse_warning_details(self.as_mut_ptr(), &mut details);
 
             if details.is_null() {
                 None
@@ -372,6 +378,7 @@ impl<'a> Warning<'a> {
 
 declare_concrete_message!(Info);
 impl<'a> Info<'a> {
+    #[doc(alias = "gst_message_new_info")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<T: MessageErrorDomain>(error: T, message: &str) -> Message {
         skip_assert_initialized!();
@@ -384,6 +391,7 @@ impl<'a> Info<'a> {
     }
 
     #[doc(alias = "get_error")]
+    #[doc(alias = "gst_message_parse_info")]
     pub fn error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
@@ -395,6 +403,7 @@ impl<'a> Info<'a> {
     }
 
     #[doc(alias = "get_debug")]
+    #[doc(alias = "gst_message_parse_info")]
     pub fn debug(&self) -> Option<String> {
         unsafe {
             let mut debug = ptr::null_mut();
@@ -408,12 +417,12 @@ impl<'a> Info<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_details")]
-    #[doc(alias = "gst_message_parse_error_details")]
+    #[doc(alias = "gst_message_parse_info_details")]
     pub fn details(&self) -> Option<&StructureRef> {
         unsafe {
             let mut details = ptr::null();
 
-            ffi::gst_message_parse_error_details(self.as_mut_ptr(), &mut details);
+            ffi::gst_message_parse_info_details(self.as_mut_ptr(), &mut details);
 
             if details.is_null() {
                 None
@@ -426,6 +435,7 @@ impl<'a> Info<'a> {
 
 declare_concrete_message!(Tag);
 impl<'a> Tag<'a> {
+    #[doc(alias = "gst_message_new_tag")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(tags: &TagList) -> Message {
         skip_assert_initialized!();
@@ -438,6 +448,7 @@ impl<'a> Tag<'a> {
     }
 
     #[doc(alias = "get_tags")]
+    #[doc(alias = "gst_message_parse_tag")]
     pub fn tags(&self) -> TagList {
         unsafe {
             let mut tags = ptr::null_mut();
@@ -449,6 +460,7 @@ impl<'a> Tag<'a> {
 
 declare_concrete_message!(Buffering);
 impl<'a> Buffering<'a> {
+    #[doc(alias = "gst_message_new_buffering")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(percent: i32) -> Message {
         skip_assert_initialized!();
@@ -461,6 +473,7 @@ impl<'a> Buffering<'a> {
     }
 
     #[doc(alias = "get_percent")]
+    #[doc(alias = "gst_message_parse_buffering")]
     pub fn percent(&self) -> i32 {
         unsafe {
             let mut p = mem::MaybeUninit::uninit();
@@ -498,6 +511,7 @@ impl<'a> Buffering<'a> {
 
 declare_concrete_message!(StateChanged);
 impl<'a> StateChanged<'a> {
+    #[doc(alias = "gst_message_new_state_changed")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(old: crate::State, new: crate::State, pending: crate::State) -> Message {
         skip_assert_initialized!();
@@ -514,6 +528,7 @@ impl<'a> StateChanged<'a> {
     }
 
     #[doc(alias = "get_old")]
+    #[doc(alias = "gst_message_parse_state_changed")]
     pub fn old(&self) -> crate::State {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
@@ -530,6 +545,7 @@ impl<'a> StateChanged<'a> {
     }
 
     #[doc(alias = "get_current")]
+    #[doc(alias = "gst_message_parse_state_changed")]
     pub fn current(&self) -> crate::State {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
@@ -546,6 +562,7 @@ impl<'a> StateChanged<'a> {
     }
 
     #[doc(alias = "get_pending")]
+    #[doc(alias = "gst_message_parse_state_changed")]
     pub fn pending(&self) -> crate::State {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
@@ -564,6 +581,7 @@ impl<'a> StateChanged<'a> {
 
 declare_concrete_message!(StateDirty);
 impl<'a> StateDirty<'a> {
+    #[doc(alias = "gst_message_new_state_dirty")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Message {
         skip_assert_initialized!();
@@ -578,6 +596,7 @@ impl<'a> StateDirty<'a> {
 
 declare_concrete_message!(StepDone);
 impl<'a> StepDone<'a> {
+    #[doc(alias = "gst_message_new_step_done")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(
         amount: V,
@@ -618,6 +637,7 @@ impl<'a> StepDone<'a> {
         )
     }
 
+    #[doc(alias = "gst_message_parse_step_done")]
     pub fn get(
         &self,
     ) -> (
@@ -668,6 +688,7 @@ impl<'a> StepDone<'a> {
 
 declare_concrete_message!(ClockProvide);
 impl<'a> ClockProvide<'a> {
+    #[doc(alias = "gst_message_new_clock_provide")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(clock: &crate::Clock, ready: bool) -> Message {
         skip_assert_initialized!();
@@ -692,6 +713,7 @@ impl<'a> ClockProvide<'a> {
     }
 
     #[doc(alias = "get_ready")]
+    #[doc(alias = "gst_message_parse_clock_provide")]
     pub fn is_ready(&self) -> bool {
         unsafe {
             let mut ready = mem::MaybeUninit::uninit();
@@ -709,6 +731,7 @@ impl<'a> ClockProvide<'a> {
 
 declare_concrete_message!(ClockLost);
 impl<'a> ClockLost<'a> {
+    #[doc(alias = "gst_message_new_clock_lost")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(clock: &crate::Clock) -> Message {
         skip_assert_initialized!();
@@ -735,6 +758,7 @@ impl<'a> ClockLost<'a> {
 
 declare_concrete_message!(NewClock);
 impl<'a> NewClock<'a> {
+    #[doc(alias = "gst_message_new_new_clock")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(clock: &crate::Clock) -> Message {
         skip_assert_initialized!();
@@ -761,6 +785,7 @@ impl<'a> NewClock<'a> {
 
 declare_concrete_message!(StructureChange);
 impl<'a> StructureChange<'a> {
+    #[doc(alias = "gst_message_new_structure_change")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(type_: crate::StructureChangeType, owner: &crate::Element, busy: bool) -> Message {
         skip_assert_initialized!();
@@ -776,6 +801,7 @@ impl<'a> StructureChange<'a> {
         StructureChangeBuilder::new(type_, owner, busy)
     }
 
+    #[doc(alias = "gst_message_parse_structure_change")]
     pub fn get(&self) -> (crate::StructureChangeType, crate::Element, bool) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
@@ -800,6 +826,7 @@ impl<'a> StructureChange<'a> {
 
 declare_concrete_message!(StreamStatus);
 impl<'a> StreamStatus<'a> {
+    #[doc(alias = "gst_message_new_stream_status")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(type_: crate::StreamStatusType, owner: &crate::Element) -> Message {
         skip_assert_initialized!();
@@ -811,6 +838,7 @@ impl<'a> StreamStatus<'a> {
         StreamStatusBuilder::new(type_, owner)
     }
 
+    #[doc(alias = "gst_message_parse_stream_status")]
     pub fn get(&self) -> (crate::StreamStatusType, crate::Element) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
@@ -835,6 +863,7 @@ impl<'a> StreamStatus<'a> {
 
 declare_concrete_message!(Application);
 impl<'a> Application<'a> {
+    #[doc(alias = "gst_message_new_application")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Message {
         skip_assert_initialized!();
@@ -849,6 +878,7 @@ impl<'a> Application<'a> {
 
 declare_concrete_message!(Element);
 impl<'a> Element<'a> {
+    #[doc(alias = "gst_message_new_element")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Message {
         skip_assert_initialized!();
@@ -863,6 +893,7 @@ impl<'a> Element<'a> {
 
 declare_concrete_message!(SegmentStart);
 impl<'a> SegmentStart<'a> {
+    #[doc(alias = "gst_message_new_segment_start")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(position: V) -> Message {
         skip_assert_initialized!();
@@ -875,6 +906,7 @@ impl<'a> SegmentStart<'a> {
         SegmentStartBuilder::new(position)
     }
 
+    #[doc(alias = "gst_message_parse_segment_start")]
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
             let mut format = mem::MaybeUninit::uninit();
@@ -893,6 +925,7 @@ impl<'a> SegmentStart<'a> {
 
 declare_concrete_message!(SegmentDone);
 impl<'a> SegmentDone<'a> {
+    #[doc(alias = "gst_message_new_segment_done")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(position: V) -> Message {
         skip_assert_initialized!();
@@ -905,6 +938,7 @@ impl<'a> SegmentDone<'a> {
         SegmentDoneBuilder::new(position)
     }
 
+    #[doc(alias = "gst_message_parse_segment_done")]
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
             let mut format = mem::MaybeUninit::uninit();
@@ -923,6 +957,7 @@ impl<'a> SegmentDone<'a> {
 
 declare_concrete_message!(DurationChanged);
 impl<'a> DurationChanged<'a> {
+    #[doc(alias = "gst_message_new_duration_changed")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Message {
         skip_assert_initialized!();
@@ -937,6 +972,7 @@ impl<'a> DurationChanged<'a> {
 
 declare_concrete_message!(Latency);
 impl<'a> Latency<'a> {
+    #[doc(alias = "gst_message_new_latency")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Message {
         skip_assert_initialized!();
@@ -951,6 +987,7 @@ impl<'a> Latency<'a> {
 
 declare_concrete_message!(AsyncStart);
 impl<'a> AsyncStart<'a> {
+    #[doc(alias = "gst_message_new_async_start")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Message {
         skip_assert_initialized!();
@@ -965,6 +1002,7 @@ impl<'a> AsyncStart<'a> {
 
 declare_concrete_message!(AsyncDone);
 impl<'a> AsyncDone<'a> {
+    #[doc(alias = "gst_message_new_async_done")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(running_time: impl Into<Option<crate::ClockTime>>) -> Message {
         skip_assert_initialized!();
@@ -977,6 +1015,7 @@ impl<'a> AsyncDone<'a> {
     }
 
     #[doc(alias = "get_running_time")]
+    #[doc(alias = "gst_message_parse_async_done")]
     pub fn running_time(&self) -> Option<crate::ClockTime> {
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
@@ -990,6 +1029,7 @@ impl<'a> AsyncDone<'a> {
 
 declare_concrete_message!(RequestState);
 impl<'a> RequestState<'a> {
+    #[doc(alias = "gst_message_new_request_state")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(state: crate::State) -> Message {
         skip_assert_initialized!();
@@ -1002,6 +1042,7 @@ impl<'a> RequestState<'a> {
     }
 
     #[doc(alias = "get_requested_state")]
+    #[doc(alias = "gst_message_parse_request_state")]
     pub fn requested_state(&self) -> crate::State {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
@@ -1015,6 +1056,7 @@ impl<'a> RequestState<'a> {
 
 declare_concrete_message!(StepStart);
 impl<'a> StepStart<'a> {
+    #[doc(alias = "gst_message_new_step_start")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(
         active: bool,
@@ -1038,6 +1080,7 @@ impl<'a> StepStart<'a> {
         StepStartBuilder::new(active, amount.into(), rate, flush, intermediate)
     }
 
+    #[doc(alias = "gst_message_parse_step_start")]
     pub fn get(&self) -> (bool, GenericFormattedValue, f64, bool, bool) {
         unsafe {
             let mut active = mem::MaybeUninit::uninit();
@@ -1073,6 +1116,7 @@ impl<'a> StepStart<'a> {
 
 declare_concrete_message!(Qos);
 impl<'a> Qos<'a> {
+    #[doc(alias = "gst_message_new_qos")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(
         live: bool,
@@ -1095,6 +1139,7 @@ impl<'a> Qos<'a> {
         QosBuilder::new(live)
     }
 
+    #[doc(alias = "gst_message_parse_qos")]
     pub fn get(
         &self,
     ) -> (
@@ -1184,6 +1229,7 @@ impl<'a> Qos<'a> {
 
 declare_concrete_message!(Progress);
 impl<'a> Progress<'a> {
+    #[doc(alias = "gst_message_new_progress")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(type_: crate::ProgressType, code: &'a str, text: &'a str) -> Message {
         skip_assert_initialized!();
@@ -1199,6 +1245,7 @@ impl<'a> Progress<'a> {
         ProgressBuilder::new(type_, code, text)
     }
 
+    #[doc(alias = "gst_message_parse_progress")]
     pub fn get(&self) -> (crate::ProgressType, &'a str, &'a str) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
@@ -1224,6 +1271,7 @@ declare_concrete_message!(Toc);
 impl<'a> Toc<'a> {
     // FIXME could use false for updated as default
     // Even better: use an enum for updated so that it is more explicit than true / false
+    #[doc(alias = "gst_message_new_toc")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(toc: &crate::Toc, updated: bool) -> Message {
         skip_assert_initialized!();
@@ -1249,6 +1297,7 @@ impl<'a> Toc<'a> {
 
 declare_concrete_message!(ResetTime);
 impl<'a> ResetTime<'a> {
+    #[doc(alias = "gst_message_new_reset_time")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(running_time: crate::ClockTime) -> Message {
         skip_assert_initialized!();
@@ -1261,6 +1310,7 @@ impl<'a> ResetTime<'a> {
     }
 
     #[doc(alias = "get_running_time")]
+    #[doc(alias = "gst_message_parse_reset_time")]
     pub fn running_time(&self) -> crate::ClockTime {
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
@@ -1274,6 +1324,7 @@ impl<'a> ResetTime<'a> {
 
 declare_concrete_message!(StreamStart);
 impl<'a> StreamStart<'a> {
+    #[doc(alias = "gst_message_new_stream_start")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Message {
         skip_assert_initialized!();
@@ -1310,6 +1361,7 @@ impl<'a> StreamStart<'a> {
 
 declare_concrete_message!(NeedContext);
 impl<'a> NeedContext<'a> {
+    #[doc(alias = "gst_message_new_need_context")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(context_type: &str) -> Message {
         skip_assert_initialized!();
@@ -1336,6 +1388,7 @@ impl<'a> NeedContext<'a> {
 
 declare_concrete_message!(HaveContext);
 impl<'a> HaveContext<'a> {
+    #[doc(alias = "gst_message_new_have_context")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(context: crate::Context) -> Message {
         skip_assert_initialized!();
@@ -1360,6 +1413,7 @@ impl<'a> HaveContext<'a> {
 
 declare_concrete_message!(DeviceAdded);
 impl<'a> DeviceAdded<'a> {
+    #[doc(alias = "gst_message_new_device_added")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(device: &crate::Device) -> Message {
         skip_assert_initialized!();
@@ -1386,6 +1440,7 @@ impl<'a> DeviceAdded<'a> {
 
 declare_concrete_message!(DeviceRemoved);
 impl<'a> DeviceRemoved<'a> {
+    #[doc(alias = "gst_message_new_device_removed")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(device: &crate::Device) -> Message {
         skip_assert_initialized!();
@@ -1416,6 +1471,7 @@ declare_concrete_message!(PropertyNotify);
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> PropertyNotify<'a> {
+    #[doc(alias = "gst_message_new_property_notify")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(property_name: &str) -> Message {
         skip_assert_initialized!();
@@ -1427,6 +1483,7 @@ impl<'a> PropertyNotify<'a> {
         PropertyNotifyBuilder::new(property_name)
     }
 
+    #[doc(alias = "gst_message_parse_property_notify")]
     pub fn get(&self) -> (Object, &str, Option<&'a glib::Value>) {
         unsafe {
             let mut object = ptr::null_mut();
@@ -1459,6 +1516,7 @@ declare_concrete_message!(StreamCollection);
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamCollection<'a> {
+    #[doc(alias = "gst_message_new_stream_collection")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(collection: &crate::StreamCollection) -> Message {
         skip_assert_initialized!();
@@ -1489,6 +1547,7 @@ declare_concrete_message!(StreamsSelected);
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamsSelected<'a> {
+    #[doc(alias = "gst_message_new_streams_selected")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(collection: &crate::StreamCollection) -> Message {
         skip_assert_initialized!();
@@ -1501,6 +1560,7 @@ impl<'a> StreamsSelected<'a> {
     }
 
     #[doc(alias = "get_stream_collection")]
+    #[doc(alias = "gst_message_parse_streams_selected")]
     pub fn stream_collection(&self) -> crate::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
@@ -1536,6 +1596,7 @@ declare_concrete_message!(Redirect);
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> Redirect<'a> {
+    #[doc(alias = "gst_message_new_redirect")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(location: &str) -> Message {
         skip_assert_initialized!();
@@ -1549,6 +1610,7 @@ impl<'a> Redirect<'a> {
 
     #[doc(alias = "get_entries")]
     #[doc(alias = "gst_message_get_num_redirect_entries")]
+    #[doc(alias = "gst_message_parse_redirect_entry")]
     pub fn entries(&self) -> Vec<(&str, Option<TagList>, Option<&StructureRef>)> {
         unsafe {
             let n = ffi::gst_message_get_num_redirect_entries(self.as_mut_ptr());
@@ -1590,6 +1652,7 @@ declare_concrete_message!(DeviceChanged);
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> DeviceChanged<'a> {
+    #[doc(alias = "gst_message_new_device_changed")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(device: &'a crate::Device, changed_device: &'a crate::Device) -> Message {
         skip_assert_initialized!();
@@ -1628,6 +1691,7 @@ declare_concrete_message!(InstantRateRequest);
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<'a> InstantRateRequest<'a> {
+    #[doc(alias = "gst_message_new_instant_rate_request")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(rate_multiplier: f64) -> Message {
         skip_assert_initialized!();
@@ -1710,6 +1774,7 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
+        #[doc(alias = "gst_message_set_seqnum")]
         #[allow(clippy::needless_update)]
         pub fn seqnum(self, seqnum: Seqnum) -> Self {
             Self {
