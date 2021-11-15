@@ -17,6 +17,9 @@ external_libraries = [
 ]
 
 generate = [
+    "GstVideo.ColorBalance",
+    "GstVideo.ColorBalanceChannel",
+    "GstVideo.ColorBalanceType",
     "GstVideo.VideoAFDSpec",
     "GstVideo.VideoAFDValue",
     "GstVideo.VideoAggregatorParallelConvertPad",

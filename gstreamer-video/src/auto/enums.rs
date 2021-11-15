@@ -11,6 +11,76 @@ use glib::Type;
 use std::ffi::CStr;
 use std::fmt;
 
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstColorBalanceType")]
+pub enum ColorBalanceType {
+    #[doc(alias = "GST_COLOR_BALANCE_HARDWARE")]
+    Hardware,
+    #[doc(alias = "GST_COLOR_BALANCE_SOFTWARE")]
+    Software,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for ColorBalanceType {
+    type GlibType = ffi::GstColorBalanceType;
+
+    fn into_glib(self) -> ffi::GstColorBalanceType {
+        match self {
+            Self::Hardware => ffi::GST_COLOR_BALANCE_HARDWARE,
+            Self::Software => ffi::GST_COLOR_BALANCE_SOFTWARE,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstColorBalanceType> for ColorBalanceType {
+    unsafe fn from_glib(value: ffi::GstColorBalanceType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GST_COLOR_BALANCE_HARDWARE => Self::Hardware,
+            ffi::GST_COLOR_BALANCE_SOFTWARE => Self::Software,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for ColorBalanceType {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_color_balance_type_get_type()) }
+    }
+}
+
+impl glib::value::ValueType for ColorBalanceType {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for ColorBalanceType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for ColorBalanceType {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]

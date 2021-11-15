@@ -114,6 +114,8 @@ mod video_hdr;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 pub use crate::video_hdr::*;
 
+mod color_balance_channel;
+
 pub const VIDEO_ENCODER_FLOW_NEED_DATA: gst::FlowSuccess = gst::FlowSuccess::CustomSuccess;
 pub const VIDEO_DECODER_FLOW_NEED_DATA: gst::FlowSuccess = gst::FlowSuccess::CustomSuccess;
 

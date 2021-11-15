@@ -3,6 +3,12 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+mod color_balance;
+pub use self::color_balance::ColorBalance;
+
+mod color_balance_channel;
+pub use self::color_balance_channel::ColorBalanceChannel;
+
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 mod video_aggregator_parallel_convert_pad;
@@ -32,6 +38,7 @@ mod video_sink;
 pub use self::video_sink::VideoSink;
 
 mod enums;
+pub use self::enums::ColorBalanceType;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 pub use self::enums::VideoAFDSpec;
@@ -82,6 +89,8 @@ pub use self::flags::VideoTimeCodeFlags;
 
 #[doc(hidden)]
 pub mod traits {
+    pub use super::color_balance::ColorBalanceExt;
+    pub use super::color_balance_channel::ColorBalanceChannelExt;
     pub use super::video_decoder::VideoDecoderExt;
     pub use super::video_encoder::VideoEncoderExt;
     pub use super::video_orientation::VideoOrientationExt;
