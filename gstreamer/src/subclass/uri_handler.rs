@@ -102,8 +102,6 @@ unsafe impl<T: URIHandlerImpl> IsImplementable<T> for URIHandler {
         iface.get_uri = Some(uri_handler_get_uri::<T>);
         iface.set_uri = Some(uri_handler_set_uri::<T>);
     }
-
-    fn instance_init(_instance: &mut glib::subclass::InitializingObject<T>) {}
 }
 
 unsafe extern "C" fn uri_handler_get_type<T: URIHandlerImpl>(
