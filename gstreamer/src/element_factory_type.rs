@@ -5,7 +5,7 @@ use glib::translate::*;
 
 bitflags! {
     #[doc(alias = "GstElementFactoryListType")]
-    pub struct ElementFactoryListType: u64 {
+    pub struct ElementFactoryType: u64 {
         #[doc(alias = "GST_ELEMENT_FACTORY_TYPE_DECODER")]
         const DECODER          = ffi::GST_ELEMENT_FACTORY_TYPE_DECODER as u64;
         #[doc(alias = "GST_ELEMENT_FACTORY_TYPE_ENCODER")]
@@ -57,7 +57,7 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl IntoGlib for ElementFactoryListType {
+impl IntoGlib for ElementFactoryType {
     type GlibType = ffi::GstElementFactoryListType;
 
     fn into_glib(self) -> ffi::GstElementFactoryListType {
@@ -66,9 +66,9 @@ impl IntoGlib for ElementFactoryListType {
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstElementFactoryListType> for ElementFactoryListType {
-    unsafe fn from_glib(value: ffi::GstElementFactoryListType) -> ElementFactoryListType {
+impl FromGlib<ffi::GstElementFactoryListType> for ElementFactoryType {
+    unsafe fn from_glib(value: ffi::GstElementFactoryListType) -> ElementFactoryType {
         skip_assert_initialized!();
-        ElementFactoryListType::from_bits_truncate(value)
+        ElementFactoryType::from_bits_truncate(value)
     }
 }

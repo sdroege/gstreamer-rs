@@ -5,6 +5,8 @@
 
 use crate::Object;
 use crate::PluginFeature;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use glib::translate::*;
 
 glib::wrapper! {
@@ -27,13 +29,6 @@ impl TracerFactory {
                 self.to_glib_none().0,
             ))
         }
-    }
-
-    #[doc(alias = "gst_tracer_factory_get_list")]
-    #[doc(alias = "get_list")]
-    pub fn list() -> Vec<TracerFactory> {
-        assert_initialized_main_thread!();
-        unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_tracer_factory_get_list()) }
     }
 }
 

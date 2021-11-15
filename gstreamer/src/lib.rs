@@ -142,10 +142,11 @@ mod pipeline;
 mod allocation_params;
 pub use self::allocation_params::AllocationParams;
 
-mod element_factory_list_type;
-pub use element_factory_list_type::*;
+mod element_factory_type;
+pub use element_factory_type::*;
 
 mod tracer;
+mod tracer_factory;
 
 // OS dependent Bus extensions (also import the other platform mod for doc)
 #[cfg(any(all(unix, feature = "v1_14"), feature = "dox"))]
@@ -164,6 +165,7 @@ mod date_time;
 mod date_time_serde;
 mod device_monitor;
 mod device_provider;
+mod device_provider_factory;
 mod enums;
 pub use crate::enums::MessageType;
 mod ghost_pad;
@@ -171,6 +173,7 @@ mod gobject;
 mod iterator;
 mod object;
 mod pad;
+mod registry;
 pub use crate::pad::PadBuilder;
 mod control_binding;
 mod control_source;
@@ -204,6 +207,7 @@ pub mod stream_collection;
 
 mod typefind;
 pub use crate::typefind::*;
+mod typefind_factory;
 
 pub mod format;
 pub use crate::format::{

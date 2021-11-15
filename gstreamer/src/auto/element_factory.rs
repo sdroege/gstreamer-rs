@@ -5,12 +5,8 @@
 
 use crate::Caps;
 use crate::Element;
-use crate::ElementFactoryListType;
 use crate::Object;
-use crate::PadDirection;
 use crate::PluginFeature;
-use crate::Rank;
-use crate::StaticPadTemplate;
 use crate::URIType;
 use glib::translate::*;
 
@@ -112,16 +108,6 @@ impl ElementFactory {
         unsafe { ffi::gst_element_factory_get_num_pad_templates(self.to_glib_none().0) }
     }
 
-    #[doc(alias = "gst_element_factory_get_static_pad_templates")]
-    #[doc(alias = "get_static_pad_templates")]
-    pub fn static_pad_templates(&self) -> Vec<StaticPadTemplate> {
-        unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::gst_element_factory_get_static_pad_templates(
-                self.to_glib_none().0,
-            ))
-        }
-    }
-
     #[doc(alias = "gst_element_factory_get_uri_protocols")]
     #[doc(alias = "get_uri_protocols")]
     pub fn uri_protocols(&self) -> Vec<glib::GString> {
@@ -148,49 +134,10 @@ impl ElementFactory {
         }
     }
 
-    #[doc(alias = "gst_element_factory_list_is_type")]
-    pub fn list_is_type(&self, type_: ElementFactoryListType) -> bool {
-        unsafe {
-            from_glib(ffi::gst_element_factory_list_is_type(
-                self.to_glib_none().0,
-                type_.into_glib(),
-            ))
-        }
-    }
-
     #[doc(alias = "gst_element_factory_find")]
     pub fn find(name: &str) -> Option<ElementFactory> {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_element_factory_find(name.to_glib_none().0)) }
-    }
-
-    #[doc(alias = "gst_element_factory_list_filter")]
-    pub fn list_filter(
-        list: &[ElementFactory],
-        caps: &Caps,
-        direction: PadDirection,
-        subsetonly: bool,
-    ) -> Vec<ElementFactory> {
-        assert_initialized_main_thread!();
-        unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_element_factory_list_filter(
-                list.to_glib_none().0,
-                caps.to_glib_none().0,
-                direction.into_glib(),
-                subsetonly.into_glib(),
-            ))
-        }
-    }
-
-    #[doc(alias = "gst_element_factory_list_get_elements")]
-    pub fn list_get_elements(type_: ElementFactoryListType, minrank: Rank) -> Vec<ElementFactory> {
-        assert_initialized_main_thread!();
-        unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_element_factory_list_get_elements(
-                type_.into_glib(),
-                minrank.into_glib(),
-            ))
-        }
     }
 
     #[doc(alias = "gst_element_factory_make")]

@@ -58,6 +58,10 @@ pub trait DeviceMonitorExtManual: 'static {
     #[doc(alias = "gst_device_monitor_remove_filter")]
     fn remove_filter(&self, filter_id: DeviceMonitorFilterId)
         -> Result<(), glib::error::BoolError>;
+
+    #[doc(alias = "gst_device_monitor_get_devices")]
+    #[doc(alias = "get_devices")]
+    fn devices(&self) -> glib::List<crate::Device>;
 }
 
 impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {
@@ -93,6 +97,14 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {
                 ),
                 "Failed to remove the filter"
             )
+        }
+    }
+
+    fn devices(&self) -> glib::List<crate::Device> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_device_monitor_get_devices(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 }

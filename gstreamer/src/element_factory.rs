@@ -3,10 +3,11 @@
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 use crate::Element;
 use crate::ElementFactory;
+use crate::Rank;
+use crate::StaticPadTemplate;
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 use glib::prelude::*;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
 use glib::translate::*;
 
 impl ElementFactory {
@@ -60,6 +61,40 @@ impl ElementFactory {
                 values.as_ptr() as *const glib::gobject_ffi::GValue,
             ))
             .ok_or_else(|| glib::bool_error!("Failed to create element from factory name"))
+        }
+    }
+
+    #[doc(alias = "gst_element_factory_get_static_pad_templates")]
+    #[doc(alias = "get_static_pad_templates")]
+    pub fn static_pad_templates(&self) -> glib::List<StaticPadTemplate> {
+        unsafe {
+            glib::List::from_glib_none_static(ffi::gst_element_factory_get_static_pad_templates(
+                self.to_glib_none().0,
+            ) as *mut _)
+        }
+    }
+
+    #[doc(alias = "gst_element_factory_list_is_type")]
+    pub fn has_type(&self, type_: crate::ElementFactoryType) -> bool {
+        unsafe {
+            from_glib(ffi::gst_element_factory_list_is_type(
+                self.to_glib_none().0,
+                type_.into_glib(),
+            ))
+        }
+    }
+
+    #[doc(alias = "gst_element_factory_list_get_elements")]
+    pub fn factories_with_type(
+        type_: crate::ElementFactoryType,
+        minrank: Rank,
+    ) -> glib::List<ElementFactory> {
+        assert_initialized_main_thread!();
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_element_factory_list_get_elements(
+                type_.into_glib(),
+                minrank.into_glib(),
+            ))
         }
     }
 }

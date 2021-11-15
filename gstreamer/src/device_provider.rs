@@ -36,6 +36,10 @@ pub trait DeviceProviderExtManual: 'static {
     #[doc(alias = "get_metadata")]
     #[doc(alias = "gst_device_provider_class_get_metadata")]
     fn metadata<'a>(&self, key: &str) -> Option<&'a str>;
+
+    #[doc(alias = "gst_device_provider_get_devices")]
+    #[doc(alias = "get_devices")]
+    fn devices(&self) -> glib::List<crate::Device>;
 }
 
 impl<O: IsA<DeviceProvider>> DeviceProviderExtManual for O {
@@ -51,6 +55,14 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExtManual for O {
             } else {
                 Some(CStr::from_ptr(ptr).to_str().unwrap())
             }
+        }
+    }
+
+    fn devices(&self) -> glib::List<crate::Device> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_device_provider_get_devices(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 }

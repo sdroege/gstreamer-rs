@@ -10,6 +10,9 @@ use crate::Element;
 use crate::Object;
 use crate::ParseContext;
 use crate::ParseFlags;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+use crate::Tracer;
 
 pub fn parse_bin_from_description_with_name(
     bin_description: &str,
@@ -188,6 +191,14 @@ pub fn type_is_plugin_api(type_: glib::types::Type) -> Option<crate::PluginAPIFl
             None
         }
     }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[doc(alias = "gst_tracing_get_active_tracers")]
+pub fn active_tracers() -> glib::List<Tracer> {
+    assert_initialized_main_thread!();
+    unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_tracing_get_active_tracers()) }
 }
 
 #[cfg(test)]

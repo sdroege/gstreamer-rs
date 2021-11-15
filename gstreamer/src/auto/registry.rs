@@ -69,34 +69,6 @@ impl Registry {
         }
     }
 
-    #[doc(alias = "gst_registry_feature_filter")]
-    pub fn feature_filter<P: FnMut(&PluginFeature) -> bool>(
-        &self,
-        filter: P,
-        first: bool,
-    ) -> Vec<PluginFeature> {
-        let filter_data: P = filter;
-        unsafe extern "C" fn filter_func<P: FnMut(&PluginFeature) -> bool>(
-            feature: *mut ffi::GstPluginFeature,
-            user_data: glib::ffi::gpointer,
-        ) -> glib::ffi::gboolean {
-            let feature = from_glib_borrow(feature);
-            let callback: *mut P = user_data as *const _ as usize as *mut P;
-            let res = (*callback)(&feature);
-            res.into_glib()
-        }
-        let filter = Some(filter_func::<P> as _);
-        let super_callback0: &P = &filter_data;
-        unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_registry_feature_filter(
-                self.to_glib_none().0,
-                filter,
-                first.into_glib(),
-                super_callback0 as *const _ as usize as *mut _,
-            ))
-        }
-    }
-
     #[doc(alias = "gst_registry_find_feature")]
     pub fn find_feature(&self, name: &str, type_: glib::types::Type) -> Option<PluginFeature> {
         unsafe {
@@ -118,42 +90,10 @@ impl Registry {
         }
     }
 
-    #[doc(alias = "gst_registry_get_feature_list")]
-    #[doc(alias = "get_feature_list")]
-    pub fn feature_list(&self, type_: glib::types::Type) -> Vec<PluginFeature> {
-        unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_registry_get_feature_list(
-                self.to_glib_none().0,
-                type_.into_glib(),
-            ))
-        }
-    }
-
-    #[doc(alias = "gst_registry_get_feature_list_by_plugin")]
-    #[doc(alias = "get_feature_list_by_plugin")]
-    pub fn feature_list_by_plugin(&self, name: &str) -> Vec<PluginFeature> {
-        unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_registry_get_feature_list_by_plugin(
-                self.to_glib_none().0,
-                name.to_glib_none().0,
-            ))
-        }
-    }
-
     #[doc(alias = "gst_registry_get_feature_list_cookie")]
     #[doc(alias = "get_feature_list_cookie")]
     pub fn feature_list_cookie(&self) -> u32 {
         unsafe { ffi::gst_registry_get_feature_list_cookie(self.to_glib_none().0) }
-    }
-
-    #[doc(alias = "gst_registry_get_plugin_list")]
-    #[doc(alias = "get_plugin_list")]
-    pub fn plugin_list(&self) -> Vec<Plugin> {
-        unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_registry_get_plugin_list(
-                self.to_glib_none().0,
-            ))
-        }
     }
 
     #[doc(alias = "gst_registry_lookup")]
@@ -172,30 +112,6 @@ impl Registry {
             from_glib_full(ffi::gst_registry_lookup_feature(
                 self.to_glib_none().0,
                 name.to_glib_none().0,
-            ))
-        }
-    }
-
-    #[doc(alias = "gst_registry_plugin_filter")]
-    pub fn plugin_filter<P: FnMut(&Plugin) -> bool>(&self, filter: P, first: bool) -> Vec<Plugin> {
-        let filter_data: P = filter;
-        unsafe extern "C" fn filter_func<P: FnMut(&Plugin) -> bool>(
-            plugin: *mut ffi::GstPlugin,
-            user_data: glib::ffi::gpointer,
-        ) -> glib::ffi::gboolean {
-            let plugin = from_glib_borrow(plugin);
-            let callback: *mut P = user_data as *const _ as usize as *mut P;
-            let res = (*callback)(&plugin);
-            res.into_glib()
-        }
-        let filter = Some(filter_func::<P> as _);
-        let super_callback0: &P = &filter_data;
-        unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_registry_plugin_filter(
-                self.to_glib_none().0,
-                filter,
-                first.into_glib(),
-                super_callback0 as *const _ as usize as *mut _,
             ))
         }
     }

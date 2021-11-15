@@ -6,7 +6,6 @@
 use crate::DeviceProvider;
 use crate::Object;
 use crate::PluginFeature;
-use crate::Rank;
 use glib::translate::*;
 
 glib::wrapper! {
@@ -89,16 +88,6 @@ impl DeviceProviderFactory {
             from_glib_full(ffi::gst_device_provider_factory_get_by_name(
                 factoryname.to_glib_none().0,
             ))
-        }
-    }
-
-    #[doc(alias = "gst_device_provider_factory_list_get_device_providers")]
-    pub fn list_get_device_providers(minrank: Rank) -> Vec<DeviceProviderFactory> {
-        assert_initialized_main_thread!();
-        unsafe {
-            FromGlibPtrContainer::from_glib_full(
-                ffi::gst_device_provider_factory_list_get_device_providers(minrank.into_glib()),
-            )
         }
     }
 }

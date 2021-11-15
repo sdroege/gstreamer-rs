@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use crate::Bus;
-use crate::Device;
 use crate::Object;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -36,10 +35,6 @@ pub trait DeviceMonitorExt: 'static {
     #[doc(alias = "gst_device_monitor_get_bus")]
     #[doc(alias = "get_bus")]
     fn bus(&self) -> Bus;
-
-    #[doc(alias = "gst_device_monitor_get_devices")]
-    #[doc(alias = "get_devices")]
-    fn devices(&self) -> Vec<Device>;
 
     #[doc(alias = "gst_device_monitor_get_providers")]
     #[doc(alias = "get_providers")]
@@ -75,14 +70,6 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
     fn bus(&self) -> Bus {
         unsafe {
             from_glib_full(ffi::gst_device_monitor_get_bus(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn devices(&self) -> Vec<Device> {
-        unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_device_monitor_get_devices(
                 self.as_ref().to_glib_none().0,
             ))
         }

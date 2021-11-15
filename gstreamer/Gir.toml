@@ -1091,6 +1091,28 @@ final_type = true
     # separate name/value arrays need to be merged
     manual = true
 
+    [[object.function]]
+    name = "get_static_pad_templates"
+    # Use glib::List as return type
+    manual = true
+
+    [[object.function]]
+    name = "list_is_type"
+    rename = "has_type"
+    # Renamed flags type
+    manual = true
+
+    [[object.function]]
+    name = "list_filter"
+    # can_{sink,src}_{all,any}_caps() around an iterator is the same
+    ignore = true
+
+    [[object.function]]
+    name = "list_get_elements"
+    rename = "factories_with_type"
+    # Use glib::List as return type
+    manual = true
+
 [[object]]
 name = "Gst.TypeFindFactory"
 status = "generate"
@@ -1101,10 +1123,21 @@ final_type = true
     # Set up native functions in `TypeFind`, calling into trait argument
     manual = true
 
+    [[object.function]]
+    name = "get_list"
+    rename = "factories"
+    # Use glib::List as return type
+    manual = true
+
 [[object]]
 name = "Gst.DeviceProviderFactory"
 status = "generate"
 final_type = true
+    [[object.function]]
+    name = "list_get_device_providers"
+    rename = "factories"
+    # Use glib::List as return type
+    manual = true
 
 [[object]]
 name = "Gst.DeviceProvider"
@@ -1122,6 +1155,11 @@ manual_traits = ["DeviceProviderExtManual"]
     [[object.function]]
     name = "get_metadata"
     # better manual function
+    manual = true
+
+    [[object.function]]
+    name = "get_devices"
+    # Use glib::List as return type
     manual = true
 
 [[object]]
@@ -1146,6 +1184,11 @@ manual_traits = ["DeviceMonitorExtManual"]
     [[object.function]]
     name = "remove_filter"
     # Use DeviceMonitorFilterId and return Result<(), glib::BoolError>
+    manual = true
+
+    [[object.function]]
+    name = "get_devices"
+    # Use glib::List as return type
     manual = true
 
 [[object]]
@@ -1655,6 +1698,36 @@ final_type = true
         [object.function.return]
         bool_return_is_error = "Failed to add plugin"
 
+    [[object.function]]
+    name = "feature_filter"
+    rename = "features_filtered"
+    # Use glib::List as return type
+    manual = true
+
+    [[object.function]]
+    name = "get_feature_list"
+    rename = "features"
+    # Use glib::List as return type
+    manual = true
+
+    [[object.function]]
+    name = "get_feature_list_by_plugin"
+    rename = "features_by_plugin"
+    # Use glib::List as return type
+    manual = true
+
+    [[object.function]]
+    name = "get_plugin_list"
+    rename = "plugins"
+    # Use glib::List as return type
+    manual = true
+
+    [[object.function]]
+    name = "plugin_filter"
+    rename = "plugins_filtered"
+    # Use glib::List as return type
+    manual = true
+
 [[object]]
 name = "Gst.BufferPool"
 status = "generate"
@@ -2041,6 +2114,12 @@ status = "generate"
     # implemented as part of Tracer subclassing
     manual = true
 
+    [[object.function]]
+    name = "tracing_get_active_tracers"
+    rename = "active_tracers"
+    # Use glib::List as return type
+    manual = true
+
 [[object]]
 name = "Gst.State"
 status = "generate"
@@ -2261,6 +2340,12 @@ status = "generate"
 [[object]]
 name = "Gst.TracerFactory"
 status = "generate"
+
+    [[object.function]]
+    name = "get_list"
+    rename = "factories"
+    # Use glib::List as return type
+    manual = true
 
 [[object]]
 name = "Gst.URIType"

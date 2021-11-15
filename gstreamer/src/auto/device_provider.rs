@@ -50,10 +50,6 @@ pub trait DeviceProviderExt: 'static {
     #[doc(alias = "get_bus")]
     fn bus(&self) -> Bus;
 
-    #[doc(alias = "gst_device_provider_get_devices")]
-    #[doc(alias = "get_devices")]
-    fn devices(&self) -> Vec<Device>;
-
     #[doc(alias = "gst_device_provider_get_factory")]
     #[doc(alias = "get_factory")]
     fn factory(&self) -> Option<DeviceProviderFactory>;
@@ -134,14 +130,6 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
     fn bus(&self) -> Bus {
         unsafe {
             from_glib_full(ffi::gst_device_provider_get_bus(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn devices(&self) -> Vec<Device> {
-        unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_device_provider_get_devices(
                 self.as_ref().to_glib_none().0,
             ))
         }
