@@ -172,6 +172,7 @@ pub use self::flags::EventTypeFlags;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 pub use self::flags::GapFlags;
 pub use self::flags::MemoryFlags;
+pub use self::flags::MetaFlags;
 pub use self::flags::ObjectFlags;
 pub use self::flags::PadFlags;
 pub use self::flags::PadLinkCheck;

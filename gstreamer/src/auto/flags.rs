@@ -800,6 +800,68 @@ impl ToValue for MemoryFlags {
 }
 
 bitflags! {
+    #[doc(alias = "GstMetaFlags")]
+    pub struct MetaFlags: u32 {
+        #[doc(alias = "GST_META_FLAG_READONLY")]
+        const READONLY = ffi::GST_META_FLAG_READONLY as u32;
+        #[doc(alias = "GST_META_FLAG_POOLED")]
+        const POOLED = ffi::GST_META_FLAG_POOLED as u32;
+        #[doc(alias = "GST_META_FLAG_LOCKED")]
+        const LOCKED = ffi::GST_META_FLAG_LOCKED as u32;
+    }
+}
+
+#[doc(hidden)]
+impl IntoGlib for MetaFlags {
+    type GlibType = ffi::GstMetaFlags;
+
+    fn into_glib(self) -> ffi::GstMetaFlags {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstMetaFlags> for MetaFlags {
+    unsafe fn from_glib(value: ffi::GstMetaFlags) -> Self {
+        skip_assert_initialized!();
+        Self::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for MetaFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_meta_flags_get_type()) }
+    }
+}
+
+impl glib::value::ValueType for MetaFlags {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for MetaFlags {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for MetaFlags {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+bitflags! {
     #[doc(alias = "GstObjectFlags")]
     pub struct ObjectFlags: u32 {
         #[cfg(any(feature = "v1_10", feature = "dox"))]

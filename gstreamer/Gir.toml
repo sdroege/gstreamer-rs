@@ -2268,3 +2268,13 @@ status = "generate"
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
+
+[[object]]
+name = "Gst.MetaFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+    [[object.member]]
+    name = "last"
+    ignore = true
