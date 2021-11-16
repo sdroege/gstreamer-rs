@@ -32,6 +32,4 @@ pub use crate::app_src::AppSrcCallbacks;
 pub mod prelude {
     #[doc(hidden)]
     pub use gst_base::prelude::*;
-
-    pub use crate::auto::traits::*;
 }

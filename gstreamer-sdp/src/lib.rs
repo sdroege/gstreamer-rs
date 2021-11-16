@@ -52,6 +52,4 @@ pub use crate::sdp_zone::*;
 pub mod prelude {
     #[doc(hidden)]
     pub use gst::prelude::*;
-
-    pub use crate::auto::traits::*;
 }

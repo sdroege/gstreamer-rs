@@ -35,6 +35,4 @@ pub use crate::harness::Harness;
 pub mod prelude {
     #[doc(hidden)]
     pub use gst::prelude::*;
-
-    pub use crate::auto::traits::*;
 }

@@ -42,6 +42,4 @@ pub mod prelude {
     pub use gio::prelude::*;
     #[doc(hidden)]
     pub use gst::prelude::*;
-
-    pub use crate::auto::traits::*;
 }

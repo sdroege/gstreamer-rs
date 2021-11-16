@@ -37,6 +37,4 @@ mod web_rtc_session_description;
 pub mod prelude {
     #[doc(hidden)]
     pub use gst_sdp::prelude::*;
-
-    pub use crate::auto::traits::*;
 }

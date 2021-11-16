@@ -33,6 +33,4 @@ pub use crate::auto::*;
 pub mod prelude {
     #[doc(hidden)]
     pub use gst_sdp::prelude::*;
-
-    pub use crate::auto::traits::*;
 }
