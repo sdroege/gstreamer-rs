@@ -45,6 +45,8 @@ glib::wrapper! {
 }
 
 impl UriClipAsset {
+    pub const NONE: Option<&'static UriClipAsset> = None;
+
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //#[doc(alias = "ges_uri_clip_asset_finish")]
@@ -70,10 +72,6 @@ impl UriClipAsset {
             }
         }
     }
-}
-
-impl UriClipAsset {
-    pub const NONE: Option<&'static UriClipAsset> = None;
 }
 
 pub trait UriClipAssetExt: 'static {

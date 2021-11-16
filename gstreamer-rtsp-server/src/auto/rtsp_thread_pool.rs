@@ -24,6 +24,8 @@ glib::wrapper! {
 }
 
 impl RTSPThreadPool {
+    pub const NONE: Option<&'static RTSPThreadPool> = None;
+
     #[doc(alias = "gst_rtsp_thread_pool_new")]
     pub fn new() -> RTSPThreadPool {
         assert_initialized_main_thread!();
@@ -47,10 +49,6 @@ impl Default for RTSPThreadPool {
 
 unsafe impl Send for RTSPThreadPool {}
 unsafe impl Sync for RTSPThreadPool {}
-
-impl RTSPThreadPool {
-    pub const NONE: Option<&'static RTSPThreadPool> = None;
-}
 
 pub trait RTSPThreadPoolExt: 'static {
     #[doc(alias = "gst_rtsp_thread_pool_get_max_threads")]

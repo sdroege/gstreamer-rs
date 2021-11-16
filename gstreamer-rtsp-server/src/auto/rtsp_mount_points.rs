@@ -18,6 +18,8 @@ glib::wrapper! {
 }
 
 impl RTSPMountPoints {
+    pub const NONE: Option<&'static RTSPMountPoints> = None;
+
     #[doc(alias = "gst_rtsp_mount_points_new")]
     pub fn new() -> RTSPMountPoints {
         assert_initialized_main_thread!();
@@ -33,10 +35,6 @@ impl Default for RTSPMountPoints {
 
 unsafe impl Send for RTSPMountPoints {}
 unsafe impl Sync for RTSPMountPoints {}
-
-impl RTSPMountPoints {
-    pub const NONE: Option<&'static RTSPMountPoints> = None;
-}
 
 pub trait RTSPMountPointsExt: 'static {
     #[doc(alias = "gst_rtsp_mount_points_add_factory")]

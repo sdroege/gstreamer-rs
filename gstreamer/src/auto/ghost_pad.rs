@@ -18,12 +18,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for GhostPad {}
-unsafe impl Sync for GhostPad {}
-
 impl GhostPad {
     pub const NONE: Option<&'static GhostPad> = None;
 }
+
+unsafe impl Send for GhostPad {}
+unsafe impl Sync for GhostPad {}
 
 pub trait GhostPadExt: 'static {
     #[doc(alias = "gst_ghost_pad_get_target")]

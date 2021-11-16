@@ -24,6 +24,8 @@ glib::wrapper! {
 }
 
 impl GLWindow {
+    pub const NONE: Option<&'static GLWindow> = None;
+
     #[doc(alias = "gst_gl_window_new")]
     pub fn new(display: &impl IsA<GLDisplay>) -> GLWindow {
         skip_assert_initialized!();
@@ -33,10 +35,6 @@ impl GLWindow {
 
 unsafe impl Send for GLWindow {}
 unsafe impl Sync for GLWindow {}
-
-impl GLWindow {
-    pub const NONE: Option<&'static GLWindow> = None;
-}
 
 pub trait GLWindowExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]

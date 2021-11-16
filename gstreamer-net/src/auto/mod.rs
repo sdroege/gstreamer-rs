@@ -14,6 +14,3 @@ pub use self::ntp_clock::NtpClock;
 
 mod ptp_clock;
 pub use self::ptp_clock::PtpClock;
-
-#[doc(hidden)]
-pub mod traits {}

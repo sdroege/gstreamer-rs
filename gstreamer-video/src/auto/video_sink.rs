@@ -22,12 +22,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for VideoSink {}
-unsafe impl Sync for VideoSink {}
-
 impl VideoSink {
     pub const NONE: Option<&'static VideoSink> = None;
 }
+
+unsafe impl Send for VideoSink {}
+unsafe impl Sync for VideoSink {}
 
 pub trait VideoSinkExt: 'static {
     #[doc(alias = "show-preroll-frame")]

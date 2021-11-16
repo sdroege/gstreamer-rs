@@ -15,8 +15,6 @@ glib::wrapper! {
     }
 }
 
-impl BaseXmlFormatter {}
-
 impl BaseXmlFormatter {
     pub const NONE: Option<&'static BaseXmlFormatter> = None;
 }

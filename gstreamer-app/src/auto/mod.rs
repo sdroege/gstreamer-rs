@@ -14,6 +14,3 @@ mod enums;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 pub use self::enums::AppLeakyType;
 pub use self::enums::AppStreamType;
-
-#[doc(hidden)]
-pub mod traits {}

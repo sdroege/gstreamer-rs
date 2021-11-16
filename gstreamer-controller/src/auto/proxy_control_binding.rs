@@ -17,6 +17,8 @@ glib::wrapper! {
 }
 
 impl ProxyControlBinding {
+    pub const NONE: Option<&'static ProxyControlBinding> = None;
+
     #[doc(alias = "gst_proxy_control_binding_new")]
     pub fn new(
         object: &impl IsA<gst::Object>,
@@ -39,7 +41,3 @@ impl ProxyControlBinding {
 
 unsafe impl Send for ProxyControlBinding {}
 unsafe impl Sync for ProxyControlBinding {}
-
-impl ProxyControlBinding {
-    pub const NONE: Option<&'static ProxyControlBinding> = None;
-}

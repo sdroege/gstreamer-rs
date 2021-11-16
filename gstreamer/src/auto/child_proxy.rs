@@ -20,12 +20,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for ChildProxy {}
-unsafe impl Sync for ChildProxy {}
-
 impl ChildProxy {
     pub const NONE: Option<&'static ChildProxy> = None;
 }
+
+unsafe impl Send for ChildProxy {}
+unsafe impl Sync for ChildProxy {}
 
 pub trait ChildProxyExt: 'static {
     #[doc(alias = "gst_child_proxy_child_added")]

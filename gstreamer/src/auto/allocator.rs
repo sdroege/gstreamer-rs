@@ -19,6 +19,8 @@ glib::wrapper! {
 }
 
 impl Allocator {
+    pub const NONE: Option<&'static Allocator> = None;
+
     #[doc(alias = "gst_allocator_find")]
     pub fn find(name: Option<&str>) -> Option<Allocator> {
         assert_initialized_main_thread!();
@@ -36,10 +38,6 @@ impl Allocator {
 
 unsafe impl Send for Allocator {}
 unsafe impl Sync for Allocator {}
-
-impl Allocator {
-    pub const NONE: Option<&'static Allocator> = None;
-}
 
 pub trait AllocatorExt: 'static {
     #[doc(alias = "gst_allocator_alloc")]

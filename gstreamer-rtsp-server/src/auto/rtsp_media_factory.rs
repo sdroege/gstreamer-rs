@@ -28,6 +28,8 @@ glib::wrapper! {
 }
 
 impl RTSPMediaFactory {
+    pub const NONE: Option<&'static RTSPMediaFactory> = None;
+
     #[doc(alias = "gst_rtsp_media_factory_new")]
     pub fn new() -> RTSPMediaFactory {
         assert_initialized_main_thread!();
@@ -43,10 +45,6 @@ impl Default for RTSPMediaFactory {
 
 unsafe impl Send for RTSPMediaFactory {}
 unsafe impl Sync for RTSPMediaFactory {}
-
-impl RTSPMediaFactory {
-    pub const NONE: Option<&'static RTSPMediaFactory> = None;
-}
 
 pub trait RTSPMediaFactoryExt: 'static {
     //#[doc(alias = "gst_rtsp_media_factory_add_role")]

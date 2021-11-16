@@ -26,12 +26,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for AggregatorPad {}
-unsafe impl Sync for AggregatorPad {}
-
 impl AggregatorPad {
     pub const NONE: Option<&'static AggregatorPad> = None;
 }
+
+unsafe impl Send for AggregatorPad {}
+unsafe impl Sync for AggregatorPad {}
 
 pub trait AggregatorPadExt: 'static {
     #[doc(alias = "gst_aggregator_pad_drop_buffer")]

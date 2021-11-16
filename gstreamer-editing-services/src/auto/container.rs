@@ -28,15 +28,13 @@ glib::wrapper! {
 }
 
 impl Container {
+    pub const NONE: Option<&'static Container> = None;
+
     #[doc(alias = "ges_container_group")]
     pub fn group(containers: &[Container]) -> Option<Container> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_container_group(containers.to_glib_none().0)) }
     }
-}
-
-impl Container {
-    pub const NONE: Option<&'static Container> = None;
 }
 
 pub trait GESContainerExt: 'static {

@@ -27,6 +27,8 @@ glib::wrapper! {
 }
 
 impl UriClip {
+    pub const NONE: Option<&'static UriClip> = None;
+
     #[doc(alias = "ges_uri_clip_new")]
     pub fn new(uri: &str) -> Result<UriClip, glib::BoolError> {
         assert_initialized_main_thread!();
@@ -35,10 +37,6 @@ impl UriClip {
                 .ok_or_else(|| glib::bool_error!("Failed to create Uri clip from Uri"))
         }
     }
-}
-
-impl UriClip {
-    pub const NONE: Option<&'static UriClip> = None;
 }
 
 pub trait UriClipExt: 'static {

@@ -27,6 +27,8 @@ glib::wrapper! {
 }
 
 impl RTSPSession {
+    pub const NONE: Option<&'static RTSPSession> = None;
+
     #[doc(alias = "gst_rtsp_session_new")]
     pub fn new(sessionid: &str) -> RTSPSession {
         assert_initialized_main_thread!();
@@ -36,10 +38,6 @@ impl RTSPSession {
 
 unsafe impl Send for RTSPSession {}
 unsafe impl Sync for RTSPSession {}
-
-impl RTSPSession {
-    pub const NONE: Option<&'static RTSPSession> = None;
-}
 
 pub trait RTSPSessionExt: 'static {
     #[doc(alias = "gst_rtsp_session_allow_expire")]

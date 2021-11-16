@@ -28,12 +28,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for Aggregator {}
-unsafe impl Sync for Aggregator {}
-
 impl Aggregator {
     pub const NONE: Option<&'static Aggregator> = None;
 }
+
+unsafe impl Send for Aggregator {}
+unsafe impl Sync for Aggregator {}
 
 pub trait AggregatorExt: 'static {
     #[doc(alias = "gst_aggregator_get_buffer_pool")]

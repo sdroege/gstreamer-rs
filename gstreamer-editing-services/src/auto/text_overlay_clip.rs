@@ -31,15 +31,13 @@ glib::wrapper! {
 }
 
 impl TextOverlayClip {
+    pub const NONE: Option<&'static TextOverlayClip> = None;
+
     #[doc(alias = "ges_text_overlay_clip_new")]
     pub fn new() -> Option<TextOverlayClip> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_text_overlay_clip_new()) }
     }
-}
-
-impl TextOverlayClip {
-    pub const NONE: Option<&'static TextOverlayClip> = None;
 }
 
 pub trait TextOverlayClipExt: 'static {

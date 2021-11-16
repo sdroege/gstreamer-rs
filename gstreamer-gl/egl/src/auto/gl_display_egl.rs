@@ -16,6 +16,8 @@ glib::wrapper! {
 }
 
 impl GLDisplayEGL {
+    pub const NONE: Option<&'static GLDisplayEGL> = None;
+
     #[doc(alias = "gst_gl_display_egl_new")]
     pub fn new() -> GLDisplayEGL {
         assert_initialized_main_thread!();
@@ -53,7 +55,3 @@ impl Default for GLDisplayEGL {
 
 unsafe impl Send for GLDisplayEGL {}
 unsafe impl Sync for GLDisplayEGL {}
-
-impl GLDisplayEGL {
-    pub const NONE: Option<&'static GLDisplayEGL> = None;
-}

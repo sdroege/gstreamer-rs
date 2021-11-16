@@ -23,6 +23,8 @@ glib::wrapper! {
 }
 
 impl RTSPSessionPool {
+    pub const NONE: Option<&'static RTSPSessionPool> = None;
+
     #[doc(alias = "gst_rtsp_session_pool_new")]
     pub fn new() -> RTSPSessionPool {
         assert_initialized_main_thread!();
@@ -38,10 +40,6 @@ impl Default for RTSPSessionPool {
 
 unsafe impl Send for RTSPSessionPool {}
 unsafe impl Sync for RTSPSessionPool {}
-
-impl RTSPSessionPool {
-    pub const NONE: Option<&'static RTSPSessionPool> = None;
-}
 
 pub trait RTSPSessionPoolExt: 'static {
     #[doc(alias = "gst_rtsp_session_pool_cleanup")]

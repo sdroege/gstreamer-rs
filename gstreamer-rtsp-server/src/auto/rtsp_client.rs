@@ -33,6 +33,8 @@ glib::wrapper! {
 }
 
 impl RTSPClient {
+    pub const NONE: Option<&'static RTSPClient> = None;
+
     #[doc(alias = "gst_rtsp_client_new")]
     pub fn new() -> RTSPClient {
         assert_initialized_main_thread!();
@@ -48,10 +50,6 @@ impl Default for RTSPClient {
 
 unsafe impl Send for RTSPClient {}
 unsafe impl Sync for RTSPClient {}
-
-impl RTSPClient {
-    pub const NONE: Option<&'static RTSPClient> = None;
-}
 
 pub trait RTSPClientExt: 'static {
     #[doc(alias = "gst_rtsp_client_close")]

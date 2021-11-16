@@ -12,11 +12,9 @@ glib::wrapper! {
     }
 }
 
-impl VideoAggregatorParallelConvertPad {}
-
-unsafe impl Send for VideoAggregatorParallelConvertPad {}
-unsafe impl Sync for VideoAggregatorParallelConvertPad {}
-
 impl VideoAggregatorParallelConvertPad {
     pub const NONE: Option<&'static VideoAggregatorParallelConvertPad> = None;
 }
+
+unsafe impl Send for VideoAggregatorParallelConvertPad {}
+unsafe impl Sync for VideoAggregatorParallelConvertPad {}

@@ -27,6 +27,8 @@ glib::wrapper! {
 }
 
 impl Group {
+    pub const NONE: Option<&'static Group> = None;
+
     #[doc(alias = "ges_group_new")]
     pub fn new() -> Group {
         assert_initialized_main_thread!();
@@ -38,10 +40,6 @@ impl Default for Group {
     fn default() -> Self {
         Self::new()
     }
-}
-
-impl Group {
-    pub const NONE: Option<&'static Group> = None;
 }
 
 pub trait GroupExt: 'static {

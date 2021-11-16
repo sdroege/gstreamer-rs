@@ -22,12 +22,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for ColorBalance {}
-unsafe impl Sync for ColorBalance {}
-
 impl ColorBalance {
     pub const NONE: Option<&'static ColorBalance> = None;
 }
+
+unsafe impl Send for ColorBalance {}
+unsafe impl Sync for ColorBalance {}
 
 pub trait ColorBalanceExt: 'static {
     #[doc(alias = "gst_color_balance_get_balance_type")]

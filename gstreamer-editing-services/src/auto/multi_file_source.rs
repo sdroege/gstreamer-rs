@@ -23,15 +23,13 @@ glib::wrapper! {
 }
 
 impl MultiFileSource {
+    pub const NONE: Option<&'static MultiFileSource> = None;
+
     #[doc(alias = "ges_multi_file_source_new")]
     pub fn new(uri: &str) -> MultiFileSource {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_multi_file_source_new(uri.to_glib_none().0)) }
     }
-}
-
-impl MultiFileSource {
-    pub const NONE: Option<&'static MultiFileSource> = None;
 }
 
 pub trait MultiFileSourceExt: 'static {

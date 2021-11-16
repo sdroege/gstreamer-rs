@@ -15,12 +15,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for DiscovererStreamInfo {}
-unsafe impl Sync for DiscovererStreamInfo {}
-
 impl DiscovererStreamInfo {
     pub const NONE: Option<&'static DiscovererStreamInfo> = None;
 }
+
+unsafe impl Send for DiscovererStreamInfo {}
+unsafe impl Sync for DiscovererStreamInfo {}
 
 pub trait DiscovererStreamInfoExt: 'static {
     #[doc(alias = "gst_discoverer_stream_info_get_caps")]

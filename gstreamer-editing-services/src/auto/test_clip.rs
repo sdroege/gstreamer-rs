@@ -30,6 +30,8 @@ glib::wrapper! {
 }
 
 impl TestClip {
+    pub const NONE: Option<&'static TestClip> = None;
+
     #[doc(alias = "ges_test_clip_new")]
     pub fn new() -> Option<TestClip> {
         assert_initialized_main_thread!();
@@ -42,10 +44,6 @@ impl TestClip {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_test_clip_new_for_nick(nick.to_glib_none().0)) }
     }
-}
-
-impl TestClip {
-    pub const NONE: Option<&'static TestClip> = None;
 }
 
 pub trait TestClipExt: 'static {

@@ -32,15 +32,13 @@ glib::wrapper! {
 }
 
 impl Track {
+    pub const NONE: Option<&'static Track> = None;
+
     #[doc(alias = "ges_track_new")]
     pub fn new(type_: TrackType, caps: &gst::Caps) -> Track {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_track_new(type_.into_glib(), caps.to_glib_full())) }
     }
-}
-
-impl Track {
-    pub const NONE: Option<&'static Track> = None;
 }
 
 pub trait GESTrackExt: 'static {

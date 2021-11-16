@@ -23,6 +23,8 @@ glib::wrapper! {
 }
 
 impl Effect {
+    pub const NONE: Option<&'static Effect> = None;
+
     #[doc(alias = "ges_effect_new")]
     pub fn new(bin_description: &str) -> Result<Effect, glib::BoolError> {
         assert_initialized_main_thread!();
@@ -31,10 +33,6 @@ impl Effect {
                 .ok_or_else(|| glib::bool_error!("Failed to create effect from description"))
         }
     }
-}
-
-impl Effect {
-    pub const NONE: Option<&'static Effect> = None;
 }
 
 pub trait EffectExt: 'static {

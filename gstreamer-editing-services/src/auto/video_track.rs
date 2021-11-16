@@ -17,6 +17,8 @@ glib::wrapper! {
 }
 
 impl VideoTrack {
+    pub const NONE: Option<&'static VideoTrack> = None;
+
     #[doc(alias = "ges_video_track_new")]
     pub fn new() -> VideoTrack {
         assert_initialized_main_thread!();
@@ -28,8 +30,4 @@ impl Default for VideoTrack {
     fn default() -> Self {
         Self::new()
     }
-}
-
-impl VideoTrack {
-    pub const NONE: Option<&'static VideoTrack> = None;
 }

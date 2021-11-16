@@ -19,8 +19,6 @@ glib::wrapper! {
     }
 }
 
-impl OverlayClip {}
-
 impl OverlayClip {
     pub const NONE: Option<&'static OverlayClip> = None;
 }

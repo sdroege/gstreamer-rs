@@ -39,6 +39,8 @@ glib::wrapper! {
 }
 
 impl Element {
+    pub const NONE: Option<&'static Element> = None;
+
     #[doc(alias = "gst_element_make_from_uri")]
     pub fn make_from_uri(
         type_: URIType,
@@ -65,10 +67,6 @@ impl Element {
 
 unsafe impl Send for Element {}
 unsafe impl Sync for Element {}
-
-impl Element {
-    pub const NONE: Option<&'static Element> = None;
-}
 
 pub trait ElementExt: 'static {
     #[doc(alias = "gst_element_abort_state")]

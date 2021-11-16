@@ -19,8 +19,6 @@ glib::wrapper! {
     }
 }
 
-impl BaseTransitionClip {}
-
 impl BaseTransitionClip {
     pub const NONE: Option<&'static BaseTransitionClip> = None;
 }

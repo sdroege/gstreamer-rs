@@ -25,6 +25,8 @@ glib::wrapper! {
 }
 
 impl InterpolationControlSource {
+    pub const NONE: Option<&'static InterpolationControlSource> = None;
+
     #[doc(alias = "gst_interpolation_control_source_new")]
     pub fn new() -> InterpolationControlSource {
         assert_initialized_main_thread!();
@@ -43,10 +45,6 @@ impl Default for InterpolationControlSource {
 
 unsafe impl Send for InterpolationControlSource {}
 unsafe impl Sync for InterpolationControlSource {}
-
-impl InterpolationControlSource {
-    pub const NONE: Option<&'static InterpolationControlSource> = None;
-}
 
 pub trait InterpolationControlSourceExt: 'static {
     fn mode(&self) -> InterpolationMode;

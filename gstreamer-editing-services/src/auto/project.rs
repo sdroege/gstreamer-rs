@@ -28,15 +28,13 @@ glib::wrapper! {
 }
 
 impl Project {
+    pub const NONE: Option<&'static Project> = None;
+
     #[doc(alias = "ges_project_new")]
     pub fn new(uri: Option<&str>) -> Project {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::ges_project_new(uri.to_glib_none().0)) }
     }
-}
-
-impl Project {
-    pub const NONE: Option<&'static Project> = None;
 }
 
 pub trait ProjectExt: 'static {

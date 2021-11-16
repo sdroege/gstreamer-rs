@@ -18,6 +18,8 @@ glib::wrapper! {
 }
 
 impl RTPHeaderExtension {
+    pub const NONE: Option<&'static RTPHeaderExtension> = None;
+
     #[doc(alias = "gst_rtp_header_extension_create_from_uri")]
     pub fn create_from_uri(uri: &str) -> Option<RTPHeaderExtension> {
         assert_initialized_main_thread!();
@@ -31,10 +33,6 @@ impl RTPHeaderExtension {
 
 unsafe impl Send for RTPHeaderExtension {}
 unsafe impl Sync for RTPHeaderExtension {}
-
-impl RTPHeaderExtension {
-    pub const NONE: Option<&'static RTPHeaderExtension> = None;
-}
 
 pub trait RTPHeaderExtensionExt: 'static {
     #[doc(alias = "gst_rtp_header_extension_get_direction")]

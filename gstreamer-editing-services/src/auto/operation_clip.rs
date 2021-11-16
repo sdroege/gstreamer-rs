@@ -18,8 +18,6 @@ glib::wrapper! {
     }
 }
 
-impl OperationClip {}
-
 impl OperationClip {
     pub const NONE: Option<&'static OperationClip> = None;
 }

@@ -26,6 +26,8 @@ glib::wrapper! {
 }
 
 impl GLDisplay {
+    pub const NONE: Option<&'static GLDisplay> = None;
+
     #[doc(alias = "gst_gl_display_new")]
     pub fn new() -> GLDisplay {
         assert_initialized_main_thread!();
@@ -50,10 +52,6 @@ impl Default for GLDisplay {
 
 unsafe impl Send for GLDisplay {}
 unsafe impl Sync for GLDisplay {}
-
-impl GLDisplay {
-    pub const NONE: Option<&'static GLDisplay> = None;
-}
 
 pub trait GLDisplayExt: 'static {
     #[doc(alias = "gst_gl_display_add_context")]

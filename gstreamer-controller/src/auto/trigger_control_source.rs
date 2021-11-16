@@ -24,6 +24,8 @@ glib::wrapper! {
 }
 
 impl TriggerControlSource {
+    pub const NONE: Option<&'static TriggerControlSource> = None;
+
     #[doc(alias = "gst_trigger_control_source_new")]
     pub fn new() -> TriggerControlSource {
         assert_initialized_main_thread!();
@@ -41,10 +43,6 @@ impl Default for TriggerControlSource {
 
 unsafe impl Send for TriggerControlSource {}
 unsafe impl Sync for TriggerControlSource {}
-
-impl TriggerControlSource {
-    pub const NONE: Option<&'static TriggerControlSource> = None;
-}
 
 pub trait TriggerControlSourceExt: 'static {
     fn tolerance(&self) -> i64;

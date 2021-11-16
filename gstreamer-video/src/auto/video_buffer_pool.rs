@@ -16,6 +16,8 @@ glib::wrapper! {
 }
 
 impl VideoBufferPool {
+    pub const NONE: Option<&'static VideoBufferPool> = None;
+
     #[doc(alias = "gst_video_buffer_pool_new")]
     pub fn new() -> VideoBufferPool {
         assert_initialized_main_thread!();
@@ -31,7 +33,3 @@ impl Default for VideoBufferPool {
 
 unsafe impl Send for VideoBufferPool {}
 unsafe impl Sync for VideoBufferPool {}
-
-impl VideoBufferPool {
-    pub const NONE: Option<&'static VideoBufferPool> = None;
-}

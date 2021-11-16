@@ -18,14 +18,12 @@ glib::wrapper! {
 }
 
 impl RTSPStreamTransport {
+    pub const NONE: Option<&'static RTSPStreamTransport> = None;
+
     //#[doc(alias = "gst_rtsp_stream_transport_new")]
     //pub fn new(stream: &impl IsA<RTSPStream>, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> RTSPStreamTransport {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_transport_new() }
     //}
-}
-
-impl RTSPStreamTransport {
-    pub const NONE: Option<&'static RTSPStreamTransport> = None;
 }
 
 pub trait RTSPStreamTransportExt: 'static {

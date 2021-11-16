@@ -31,6 +31,8 @@ glib::wrapper! {
 }
 
 impl Bin {
+    pub const NONE: Option<&'static Bin> = None;
+
     #[doc(alias = "gst_bin_new")]
     pub fn new(name: Option<&str>) -> Bin {
         assert_initialized_main_thread!();
@@ -40,10 +42,6 @@ impl Bin {
 
 unsafe impl Send for Bin {}
 unsafe impl Sync for Bin {}
-
-impl Bin {
-    pub const NONE: Option<&'static Bin> = None;
-}
 
 pub trait GstBinExt: 'static {
     #[doc(alias = "gst_bin_add")]

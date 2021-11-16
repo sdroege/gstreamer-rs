@@ -18,6 +18,8 @@ glib::wrapper! {
 }
 
 impl ProxyPad {
+    pub const NONE: Option<&'static ProxyPad> = None;
+
     //#[doc(alias = "gst_proxy_pad_iterate_internal_links_default")]
     //pub fn iterate_internal_links_default(pad: &impl IsA<Pad>, parent: Option<&impl IsA<Object>>) -> /*Ignored*/Option<Iterator> {
     //    unsafe { TODO: call ffi:gst_proxy_pad_iterate_internal_links_default() }
@@ -26,10 +28,6 @@ impl ProxyPad {
 
 unsafe impl Send for ProxyPad {}
 unsafe impl Sync for ProxyPad {}
-
-impl ProxyPad {
-    pub const NONE: Option<&'static ProxyPad> = None;
-}
 
 pub trait ProxyPadExt: 'static {
     #[doc(alias = "gst_proxy_pad_get_internal")]

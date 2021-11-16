@@ -22,12 +22,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for AudioEncoder {}
-unsafe impl Sync for AudioEncoder {}
-
 impl AudioEncoder {
     pub const NONE: Option<&'static AudioEncoder> = None;
 }
+
+unsafe impl Send for AudioEncoder {}
+unsafe impl Sync for AudioEncoder {}
 
 pub trait AudioEncoderExt: 'static {
     #[doc(alias = "gst_audio_encoder_allocate_output_buffer")]

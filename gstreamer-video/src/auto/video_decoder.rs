@@ -40,12 +40,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for VideoDecoder {}
-unsafe impl Sync for VideoDecoder {}
-
 impl VideoDecoder {
     pub const NONE: Option<&'static VideoDecoder> = None;
 }
+
+unsafe impl Send for VideoDecoder {}
+unsafe impl Sync for VideoDecoder {}
 
 pub trait VideoDecoderExt: 'static {
     #[doc(alias = "gst_video_decoder_add_to_frame")]

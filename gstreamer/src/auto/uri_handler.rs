@@ -17,12 +17,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for URIHandler {}
-unsafe impl Sync for URIHandler {}
-
 impl URIHandler {
     pub const NONE: Option<&'static URIHandler> = None;
 }
+
+unsafe impl Send for URIHandler {}
+unsafe impl Sync for URIHandler {}
 
 pub trait URIHandlerExt: 'static {
     #[doc(alias = "gst_uri_handler_get_protocols")]

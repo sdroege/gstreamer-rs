@@ -19,6 +19,8 @@ glib::wrapper! {
 }
 
 impl GLFramebuffer {
+    pub const NONE: Option<&'static GLFramebuffer> = None;
+
     #[doc(alias = "gst_gl_framebuffer_new")]
     pub fn new(context: &impl IsA<GLContext>) -> GLFramebuffer {
         skip_assert_initialized!();
@@ -49,10 +51,6 @@ impl GLFramebuffer {
 
 unsafe impl Send for GLFramebuffer {}
 unsafe impl Sync for GLFramebuffer {}
-
-impl GLFramebuffer {
-    pub const NONE: Option<&'static GLFramebuffer> = None;
-}
 
 pub trait GLFramebufferExt: 'static {
     #[doc(alias = "gst_gl_framebuffer_attach")]

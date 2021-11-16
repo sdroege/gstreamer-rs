@@ -25,12 +25,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for VideoEncoder {}
-unsafe impl Sync for VideoEncoder {}
-
 impl VideoEncoder {
     pub const NONE: Option<&'static VideoEncoder> = None;
 }
+
+unsafe impl Send for VideoEncoder {}
+unsafe impl Sync for VideoEncoder {}
 
 pub trait VideoEncoderExt: 'static {
     #[doc(alias = "gst_video_encoder_allocate_output_buffer")]

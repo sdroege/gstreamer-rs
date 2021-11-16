@@ -21,12 +21,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for TimedValueControlSource {}
-unsafe impl Sync for TimedValueControlSource {}
-
 impl TimedValueControlSource {
     pub const NONE: Option<&'static TimedValueControlSource> = None;
 }
+
+unsafe impl Send for TimedValueControlSource {}
+unsafe impl Sync for TimedValueControlSource {}
 
 pub trait TimedValueControlSourceExt: 'static {
     //#[doc(alias = "gst_timed_value_control_source_find_control_point_iter")]

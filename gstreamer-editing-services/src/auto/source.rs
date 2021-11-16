@@ -17,8 +17,6 @@ glib::wrapper! {
     }
 }
 
-impl Source {}
-
 impl Source {
     pub const NONE: Option<&'static Source> = None;
 }

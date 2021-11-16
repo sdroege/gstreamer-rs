@@ -23,6 +23,8 @@ glib::wrapper! {
 }
 
 impl DirectControlBinding {
+    pub const NONE: Option<&'static DirectControlBinding> = None;
+
     #[doc(alias = "gst_direct_control_binding_new")]
     pub fn new(
         object: &impl IsA<gst::Object>,
@@ -60,10 +62,6 @@ impl DirectControlBinding {
 
 unsafe impl Send for DirectControlBinding {}
 unsafe impl Sync for DirectControlBinding {}
-
-impl DirectControlBinding {
-    pub const NONE: Option<&'static DirectControlBinding> = None;
-}
 
 pub trait DirectControlBindingExt: 'static {
     fn is_absolute(&self) -> bool;

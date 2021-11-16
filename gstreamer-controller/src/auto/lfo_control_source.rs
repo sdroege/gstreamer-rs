@@ -24,6 +24,8 @@ glib::wrapper! {
 }
 
 impl LFOControlSource {
+    pub const NONE: Option<&'static LFOControlSource> = None;
+
     #[doc(alias = "gst_lfo_control_source_new")]
     pub fn new() -> LFOControlSource {
         assert_initialized_main_thread!();
@@ -41,10 +43,6 @@ impl Default for LFOControlSource {
 
 unsafe impl Send for LFOControlSource {}
 unsafe impl Sync for LFOControlSource {}
-
-impl LFOControlSource {
-    pub const NONE: Option<&'static LFOControlSource> = None;
-}
 
 pub trait LFOControlSourceExt: 'static {
     fn amplitude(&self) -> f64;

@@ -20,12 +20,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for ColorBalanceChannel {}
-unsafe impl Sync for ColorBalanceChannel {}
-
 impl ColorBalanceChannel {
     pub const NONE: Option<&'static ColorBalanceChannel> = None;
 }
+
+unsafe impl Send for ColorBalanceChannel {}
+unsafe impl Sync for ColorBalanceChannel {}
 
 pub trait ColorBalanceChannelExt: 'static {
     #[doc(alias = "value-changed")]

@@ -68,6 +68,3 @@ pub use self::enums::WebRTCSCTPTransportState;
 pub use self::enums::WebRTCSDPType;
 pub use self::enums::WebRTCSignalingState;
 pub use self::enums::WebRTCStatsType;
-
-#[doc(hidden)]
-pub mod traits {}

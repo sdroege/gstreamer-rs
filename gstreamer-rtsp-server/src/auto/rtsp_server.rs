@@ -30,6 +30,8 @@ glib::wrapper! {
 }
 
 impl RTSPServer {
+    pub const NONE: Option<&'static RTSPServer> = None;
+
     #[doc(alias = "gst_rtsp_server_new")]
     pub fn new() -> RTSPServer {
         assert_initialized_main_thread!();
@@ -64,10 +66,6 @@ impl Default for RTSPServer {
 
 unsafe impl Send for RTSPServer {}
 unsafe impl Sync for RTSPServer {}
-
-impl RTSPServer {
-    pub const NONE: Option<&'static RTSPServer> = None;
-}
 
 pub trait RTSPServerExt: 'static {
     #[doc(alias = "gst_rtsp_server_client_filter")]

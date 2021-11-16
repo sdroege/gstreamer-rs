@@ -25,12 +25,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for DeviceMonitor {}
-unsafe impl Sync for DeviceMonitor {}
-
 impl DeviceMonitor {
     pub const NONE: Option<&'static DeviceMonitor> = None;
 }
+
+unsafe impl Send for DeviceMonitor {}
+unsafe impl Sync for DeviceMonitor {}
 
 pub trait DeviceMonitorExt: 'static {
     #[doc(alias = "gst_device_monitor_get_bus")]

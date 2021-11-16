@@ -19,8 +19,6 @@ glib::wrapper! {
     }
 }
 
-impl BaseEffectClip {}
-
 impl BaseEffectClip {
     pub const NONE: Option<&'static BaseEffectClip> = None;
 }

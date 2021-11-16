@@ -22,12 +22,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for GLBaseFilter {}
-unsafe impl Sync for GLBaseFilter {}
-
 impl GLBaseFilter {
     pub const NONE: Option<&'static GLBaseFilter> = None;
 }
+
+unsafe impl Send for GLBaseFilter {}
+unsafe impl Sync for GLBaseFilter {}
 
 pub trait GLBaseFilterExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]

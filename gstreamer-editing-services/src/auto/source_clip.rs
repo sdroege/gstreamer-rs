@@ -22,6 +22,8 @@ glib::wrapper! {
 }
 
 impl SourceClip {
+    pub const NONE: Option<&'static SourceClip> = None;
+
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_source_clip_new_time_overlay")]
@@ -29,8 +31,4 @@ impl SourceClip {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_source_clip_new_time_overlay()) }
     }
-}
-
-impl SourceClip {
-    pub const NONE: Option<&'static SourceClip> = None;
 }

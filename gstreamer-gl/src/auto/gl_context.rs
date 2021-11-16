@@ -24,6 +24,8 @@ glib::wrapper! {
 }
 
 impl GLContext {
+    pub const NONE: Option<&'static GLContext> = None;
+
     #[doc(alias = "gst_gl_context_new")]
     pub fn new(display: &impl IsA<GLDisplay>) -> GLContext {
         skip_assert_initialized!();
@@ -58,10 +60,6 @@ impl GLContext {
 
 unsafe impl Send for GLContext {}
 unsafe impl Sync for GLContext {}
-
-impl GLContext {
-    pub const NONE: Option<&'static GLContext> = None;
-}
 
 pub trait GLContextExt: 'static {
     #[doc(alias = "gst_gl_context_activate")]

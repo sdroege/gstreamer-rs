@@ -5,6 +5,3 @@
 
 mod gl_display_wayland;
 pub use self::gl_display_wayland::GLDisplayWayland;
-
-#[doc(hidden)]
-pub mod traits {}

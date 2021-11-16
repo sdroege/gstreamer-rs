@@ -17,12 +17,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for PluginFeature {}
-unsafe impl Sync for PluginFeature {}
-
 impl PluginFeature {
     pub const NONE: Option<&'static PluginFeature> = None;
 }
+
+unsafe impl Send for PluginFeature {}
+unsafe impl Sync for PluginFeature {}
 
 pub trait PluginFeatureExt: 'static {
     #[doc(alias = "gst_plugin_feature_check_version")]

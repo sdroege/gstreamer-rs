@@ -30,6 +30,8 @@ glib::wrapper! {
 }
 
 impl VideoTransition {
+    pub const NONE: Option<&'static VideoTransition> = None;
+
     #[doc(alias = "ges_video_transition_new")]
     pub fn new() -> VideoTransition {
         assert_initialized_main_thread!();
@@ -41,10 +43,6 @@ impl Default for VideoTransition {
     fn default() -> Self {
         Self::new()
     }
-}
-
-impl VideoTransition {
-    pub const NONE: Option<&'static VideoTransition> = None;
 }
 
 pub trait VideoTransitionExt: 'static {

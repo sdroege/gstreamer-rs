@@ -5,6 +5,3 @@
 
 mod gl_display_x11;
 pub use self::gl_display_x11::GLDisplayX11;
-
-#[doc(hidden)]
-pub mod traits {}

@@ -34,6 +34,8 @@ glib::wrapper! {
 }
 
 impl RTSPMedia {
+    pub const NONE: Option<&'static RTSPMedia> = None;
+
     #[doc(alias = "gst_rtsp_media_new")]
     pub fn new(element: &impl IsA<gst::Element>) -> RTSPMedia {
         assert_initialized_main_thread!();
@@ -43,10 +45,6 @@ impl RTSPMedia {
 
 unsafe impl Send for RTSPMedia {}
 unsafe impl Sync for RTSPMedia {}
-
-impl RTSPMedia {
-    pub const NONE: Option<&'static RTSPMedia> = None;
-}
 
 pub trait RTSPMediaExt: 'static {
     #[doc(alias = "gst_rtsp_media_collect_streams")]

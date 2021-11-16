@@ -24,6 +24,8 @@ glib::wrapper! {
 }
 
 impl EffectClip {
+    pub const NONE: Option<&'static EffectClip> = None;
+
     #[doc(alias = "ges_effect_clip_new")]
     pub fn new(
         video_bin_description: Option<&str>,
@@ -37,10 +39,6 @@ impl EffectClip {
             ))
         }
     }
-}
-
-impl EffectClip {
-    pub const NONE: Option<&'static EffectClip> = None;
 }
 
 pub trait EffectClipExt: 'static {

@@ -30,15 +30,13 @@ glib::wrapper! {
 }
 
 impl TitleClip {
+    pub const NONE: Option<&'static TitleClip> = None;
+
     #[doc(alias = "ges_title_clip_new")]
     pub fn new() -> Option<TitleClip> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_title_clip_new()) }
     }
-}
-
-impl TitleClip {
-    pub const NONE: Option<&'static TitleClip> = None;
 }
 
 pub trait TitleClipExt: 'static {

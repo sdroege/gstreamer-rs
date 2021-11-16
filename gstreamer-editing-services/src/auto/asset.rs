@@ -25,6 +25,8 @@ glib::wrapper! {
 }
 
 impl Asset {
+    pub const NONE: Option<&'static Asset> = None;
+
     #[doc(alias = "ges_asset_needs_reload")]
     pub fn needs_reload(extractable_type: glib::types::Type, id: Option<&str>) -> bool {
         assert_initialized_main_thread!();
@@ -112,10 +114,6 @@ impl Asset {
             );
         }))
     }
-}
-
-impl Asset {
-    pub const NONE: Option<&'static Asset> = None;
 }
 
 pub trait AssetExt: 'static {

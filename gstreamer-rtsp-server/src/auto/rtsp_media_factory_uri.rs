@@ -24,6 +24,8 @@ glib::wrapper! {
 }
 
 impl RTSPMediaFactoryURI {
+    pub const NONE: Option<&'static RTSPMediaFactoryURI> = None;
+
     #[doc(alias = "gst_rtsp_media_factory_uri_new")]
     pub fn new() -> RTSPMediaFactoryURI {
         assert_initialized_main_thread!();
@@ -39,10 +41,6 @@ impl Default for RTSPMediaFactoryURI {
 
 unsafe impl Send for RTSPMediaFactoryURI {}
 unsafe impl Sync for RTSPMediaFactoryURI {}
-
-impl RTSPMediaFactoryURI {
-    pub const NONE: Option<&'static RTSPMediaFactoryURI> = None;
-}
 
 pub trait RTSPMediaFactoryURIExt: 'static {
     #[doc(alias = "gst_rtsp_media_factory_uri_get_uri")]

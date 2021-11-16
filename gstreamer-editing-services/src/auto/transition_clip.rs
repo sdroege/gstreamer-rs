@@ -31,6 +31,8 @@ glib::wrapper! {
 }
 
 impl TransitionClip {
+    pub const NONE: Option<&'static TransitionClip> = None;
+
     #[doc(alias = "ges_transition_clip_new")]
     pub fn new(vtype: VideoStandardTransitionType) -> Option<TransitionClip> {
         assert_initialized_main_thread!();
@@ -43,10 +45,6 @@ impl TransitionClip {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_transition_clip_new_for_nick(nick.to_glib_none().0)) }
     }
-}
-
-impl TransitionClip {
-    pub const NONE: Option<&'static TransitionClip> = None;
 }
 
 pub trait TransitionClipExt: 'static {

@@ -16,8 +16,6 @@ glib::wrapper! {
     }
 }
 
-impl SourceClipAsset {}
-
 impl SourceClipAsset {
     pub const NONE: Option<&'static SourceClipAsset> = None;
 }

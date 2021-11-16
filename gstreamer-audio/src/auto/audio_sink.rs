@@ -14,11 +14,9 @@ glib::wrapper! {
     }
 }
 
-impl AudioSink {}
-
-unsafe impl Send for AudioSink {}
-unsafe impl Sync for AudioSink {}
-
 impl AudioSink {
     pub const NONE: Option<&'static AudioSink> = None;
 }
+
+unsafe impl Send for AudioSink {}
+unsafe impl Sync for AudioSink {}

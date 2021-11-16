@@ -17,6 +17,8 @@ glib::wrapper! {
 }
 
 impl Preset {
+    pub const NONE: Option<&'static Preset> = None;
+
     #[doc(alias = "gst_preset_get_app_dir")]
     #[doc(alias = "get_app_dir")]
     pub fn app_dir() -> Option<std::path::PathBuf> {
@@ -38,10 +40,6 @@ impl Preset {
 
 unsafe impl Send for Preset {}
 unsafe impl Sync for Preset {}
-
-impl Preset {
-    pub const NONE: Option<&'static Preset> = None;
-}
 
 pub trait PresetExt: 'static {
     #[doc(alias = "gst_preset_delete_preset")]

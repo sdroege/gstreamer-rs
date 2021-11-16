@@ -24,12 +24,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for Device {}
-unsafe impl Sync for Device {}
-
 impl Device {
     pub const NONE: Option<&'static Device> = None;
 }
+
+unsafe impl Send for Device {}
+unsafe impl Sync for Device {}
 
 pub trait DeviceExt: 'static {
     #[doc(alias = "gst_device_create_element")]

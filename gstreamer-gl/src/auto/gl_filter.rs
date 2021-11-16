@@ -18,12 +18,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for GLFilter {}
-unsafe impl Sync for GLFilter {}
-
 impl GLFilter {
     pub const NONE: Option<&'static GLFilter> = None;
 }
+
+unsafe impl Send for GLFilter {}
+unsafe impl Sync for GLFilter {}
 
 pub trait GLFilterExt: 'static {
     #[doc(alias = "gst_gl_filter_draw_fullscreen_quad")]

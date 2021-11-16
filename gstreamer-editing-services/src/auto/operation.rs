@@ -17,8 +17,6 @@ glib::wrapper! {
     }
 }
 
-impl Operation {}
-
 impl Operation {
     pub const NONE: Option<&'static Operation> = None;
 }

@@ -19,6 +19,8 @@ glib::wrapper! {
 }
 
 impl RTSPSessionMedia {
+    pub const NONE: Option<&'static RTSPSessionMedia> = None;
+
     #[doc(alias = "gst_rtsp_session_media_new")]
     pub fn new(path: &str, media: &impl IsA<RTSPMedia>) -> RTSPSessionMedia {
         skip_assert_initialized!();
@@ -33,10 +35,6 @@ impl RTSPSessionMedia {
 
 unsafe impl Send for RTSPSessionMedia {}
 unsafe impl Sync for RTSPSessionMedia {}
-
-impl RTSPSessionMedia {
-    pub const NONE: Option<&'static RTSPSessionMedia> = None;
-}
 
 pub trait RTSPSessionMediaExt: 'static {
     //#[doc(alias = "gst_rtsp_session_media_alloc_channels")]

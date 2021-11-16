@@ -5,6 +5,3 @@
 
 mod gl_display_egl;
 pub use self::gl_display_egl::GLDisplayEGL;
-
-#[doc(hidden)]
-pub mod traits {}

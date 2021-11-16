@@ -18,6 +18,8 @@ glib::wrapper! {
 }
 
 impl RTSPAddressPool {
+    pub const NONE: Option<&'static RTSPAddressPool> = None;
+
     #[doc(alias = "gst_rtsp_address_pool_new")]
     pub fn new() -> RTSPAddressPool {
         assert_initialized_main_thread!();
@@ -33,10 +35,6 @@ impl Default for RTSPAddressPool {
 
 unsafe impl Send for RTSPAddressPool {}
 unsafe impl Sync for RTSPAddressPool {}
-
-impl RTSPAddressPool {
-    pub const NONE: Option<&'static RTSPAddressPool> = None;
-}
 
 pub trait RTSPAddressPoolExt: 'static {
     #[doc(alias = "gst_rtsp_address_pool_acquire_address")]

@@ -18,8 +18,6 @@ glib::wrapper! {
     }
 }
 
-impl Transition {}
-
 impl Transition {
     pub const NONE: Option<&'static Transition> = None;
 }

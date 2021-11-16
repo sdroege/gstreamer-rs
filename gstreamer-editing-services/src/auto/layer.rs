@@ -33,6 +33,8 @@ glib::wrapper! {
 }
 
 impl Layer {
+    pub const NONE: Option<&'static Layer> = None;
+
     #[doc(alias = "ges_layer_new")]
     pub fn new() -> Layer {
         assert_initialized_main_thread!();
@@ -44,10 +46,6 @@ impl Default for Layer {
     fn default() -> Self {
         Self::new()
     }
-}
-
-impl Layer {
-    pub const NONE: Option<&'static Layer> = None;
 }
 
 pub trait LayerExt: 'static {

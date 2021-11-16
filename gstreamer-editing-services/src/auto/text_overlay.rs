@@ -23,16 +23,14 @@ glib::wrapper! {
 }
 
 impl TextOverlay {
+    pub const NONE: Option<&'static TextOverlay> = None;
+
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[doc(alias = "ges_text_overlay_new")]
     pub fn new() -> Option<TextOverlay> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_text_overlay_new()) }
     }
-}
-
-impl TextOverlay {
-    pub const NONE: Option<&'static TextOverlay> = None;
 }
 
 pub trait TextOverlayExt: 'static {

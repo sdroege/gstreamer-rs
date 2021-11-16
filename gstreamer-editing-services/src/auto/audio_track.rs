@@ -17,6 +17,8 @@ glib::wrapper! {
 }
 
 impl AudioTrack {
+    pub const NONE: Option<&'static AudioTrack> = None;
+
     #[doc(alias = "ges_audio_track_new")]
     pub fn new() -> AudioTrack {
         assert_initialized_main_thread!();
@@ -28,8 +30,4 @@ impl Default for AudioTrack {
     fn default() -> Self {
         Self::new()
     }
-}
-
-impl AudioTrack {
-    pub const NONE: Option<&'static AudioTrack> = None;
 }

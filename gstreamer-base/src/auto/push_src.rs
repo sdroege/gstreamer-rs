@@ -14,11 +14,9 @@ glib::wrapper! {
     }
 }
 
-impl PushSrc {}
-
-unsafe impl Send for PushSrc {}
-unsafe impl Sync for PushSrc {}
-
 impl PushSrc {
     pub const NONE: Option<&'static PushSrc> = None;
 }
+
+unsafe impl Send for PushSrc {}
+unsafe impl Sync for PushSrc {}

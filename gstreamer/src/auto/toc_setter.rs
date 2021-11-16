@@ -18,12 +18,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for TocSetter {}
-unsafe impl Sync for TocSetter {}
-
 impl TocSetter {
     pub const NONE: Option<&'static TocSetter> = None;
 }
+
+unsafe impl Send for TocSetter {}
+unsafe impl Sync for TocSetter {}
 
 pub trait TocSetterExt: 'static {
     #[doc(alias = "gst_toc_setter_get_toc")]

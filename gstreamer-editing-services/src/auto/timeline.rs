@@ -36,6 +36,8 @@ glib::wrapper! {
 }
 
 impl Timeline {
+    pub const NONE: Option<&'static Timeline> = None;
+
     #[doc(alias = "ges_timeline_new")]
     pub fn new() -> Timeline {
         assert_initialized_main_thread!();
@@ -68,10 +70,6 @@ impl Default for Timeline {
     fn default() -> Self {
         Self::new()
     }
-}
-
-impl Timeline {
-    pub const NONE: Option<&'static Timeline> = None;
 }
 
 pub trait TimelineExt: 'static {

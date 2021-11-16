@@ -15,6 +15,8 @@ glib::wrapper! {
 }
 
 impl GLDisplayX11 {
+    pub const NONE: Option<&'static GLDisplayX11> = None;
+
     #[doc(alias = "gst_gl_display_x11_new")]
     pub fn new(name: Option<&str>) -> GLDisplayX11 {
         assert_initialized_main_thread!();
@@ -30,7 +32,3 @@ impl GLDisplayX11 {
 
 unsafe impl Send for GLDisplayX11 {}
 unsafe impl Sync for GLDisplayX11 {}
-
-impl GLDisplayX11 {
-    pub const NONE: Option<&'static GLDisplayX11> = None;
-}

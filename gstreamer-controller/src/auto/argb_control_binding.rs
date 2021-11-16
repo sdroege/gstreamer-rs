@@ -23,6 +23,8 @@ glib::wrapper! {
 }
 
 impl ARGBControlBinding {
+    pub const NONE: Option<&'static ARGBControlBinding> = None;
+
     #[doc(alias = "gst_argb_control_binding_new")]
     pub fn new(
         object: &impl IsA<gst::Object>,
@@ -49,10 +51,6 @@ impl ARGBControlBinding {
 
 unsafe impl Send for ARGBControlBinding {}
 unsafe impl Sync for ARGBControlBinding {}
-
-impl ARGBControlBinding {
-    pub const NONE: Option<&'static ARGBControlBinding> = None;
-}
 
 pub trait ARGBControlBindingExt: 'static {
     #[doc(alias = "control-source-a")]

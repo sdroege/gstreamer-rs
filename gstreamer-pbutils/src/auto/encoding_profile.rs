@@ -32,6 +32,8 @@ glib::wrapper! {
 }
 
 impl EncodingProfile {
+    pub const NONE: Option<&'static EncodingProfile> = None;
+
     #[doc(alias = "gst_encoding_profile_find")]
     pub fn find(
         targetname: &str,
@@ -64,10 +66,6 @@ impl EncodingProfile {
 
 unsafe impl Send for EncodingProfile {}
 unsafe impl Sync for EncodingProfile {}
-
-impl EncodingProfile {
-    pub const NONE: Option<&'static EncodingProfile> = None;
-}
 
 pub trait EncodingProfileExt: 'static {
     #[cfg(any(feature = "v1_12", feature = "dox"))]

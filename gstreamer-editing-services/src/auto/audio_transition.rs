@@ -21,6 +21,8 @@ glib::wrapper! {
 }
 
 impl AudioTransition {
+    pub const NONE: Option<&'static AudioTransition> = None;
+
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[doc(alias = "ges_audio_transition_new")]
     pub fn new() -> AudioTransition {
@@ -33,8 +35,4 @@ impl Default for AudioTransition {
     fn default() -> Self {
         Self::new()
     }
-}
-
-impl AudioTransition {
-    pub const NONE: Option<&'static AudioTransition> = None;
 }

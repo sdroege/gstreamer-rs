@@ -14,11 +14,9 @@ glib::wrapper! {
     }
 }
 
-impl AudioSrc {}
-
-unsafe impl Send for AudioSrc {}
-unsafe impl Sync for AudioSrc {}
-
 impl AudioSrc {
     pub const NONE: Option<&'static AudioSrc> = None;
 }
+
+unsafe impl Send for AudioSrc {}
+unsafe impl Sync for AudioSrc {}

@@ -27,6 +27,8 @@ glib::wrapper! {
 }
 
 impl RTSPStream {
+    pub const NONE: Option<&'static RTSPStream> = None;
+
     #[doc(alias = "gst_rtsp_stream_new")]
     pub fn new(
         idx: u32,
@@ -46,10 +48,6 @@ impl RTSPStream {
 
 unsafe impl Send for RTSPStream {}
 unsafe impl Sync for RTSPStream {}
-
-impl RTSPStream {
-    pub const NONE: Option<&'static RTSPStream> = None;
-}
 
 pub trait RTSPStreamExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]

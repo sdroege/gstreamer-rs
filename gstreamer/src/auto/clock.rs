@@ -26,6 +26,8 @@ glib::wrapper! {
 }
 
 impl Clock {
+    pub const NONE: Option<&'static Clock> = None;
+
     //#[doc(alias = "gst_clock_id_compare_func")]
     //pub fn id_compare_func(id1: /*Unimplemented*/Option<Fundamental: Pointer>, id2: /*Unimplemented*/Option<Fundamental: Pointer>) -> i32 {
     //    unsafe { TODO: call ffi:gst_clock_id_compare_func() }
@@ -78,10 +80,6 @@ impl Clock {
 
 unsafe impl Send for Clock {}
 unsafe impl Sync for Clock {}
-
-impl Clock {
-    pub const NONE: Option<&'static Clock> = None;
-}
 
 pub trait ClockExt: 'static {
     #[doc(alias = "gst_clock_add_observation")]

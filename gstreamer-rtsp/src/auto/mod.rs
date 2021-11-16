@@ -30,6 +30,3 @@ pub use self::flags::RTSPLowerTrans;
 pub use self::flags::RTSPMethod;
 pub use self::flags::RTSPProfile;
 pub use self::flags::RTSPTransMode;
-
-#[doc(hidden)]
-pub mod traits {}

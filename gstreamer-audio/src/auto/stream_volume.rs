@@ -22,6 +22,8 @@ glib::wrapper! {
 }
 
 impl StreamVolume {
+    pub const NONE: Option<&'static StreamVolume> = None;
+
     #[doc(alias = "gst_stream_volume_convert_volume")]
     pub fn convert_volume(from: StreamVolumeFormat, to: StreamVolumeFormat, val: f64) -> f64 {
         assert_initialized_main_thread!();
@@ -31,10 +33,6 @@ impl StreamVolume {
 
 unsafe impl Send for StreamVolume {}
 unsafe impl Sync for StreamVolume {}
-
-impl StreamVolume {
-    pub const NONE: Option<&'static StreamVolume> = None;
-}
 
 pub trait StreamVolumeExt: 'static {
     #[doc(alias = "gst_stream_volume_get_mute")]

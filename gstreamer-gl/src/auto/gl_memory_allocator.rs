@@ -18,6 +18,8 @@ glib::wrapper! {
 }
 
 impl GLMemoryAllocator {
+    pub const NONE: Option<&'static GLMemoryAllocator> = None;
+
     #[doc(alias = "gst_gl_memory_allocator_get_default")]
     #[doc(alias = "get_default")]
     pub fn default(context: &impl IsA<GLContext>) -> Option<GLMemoryAllocator> {
@@ -32,7 +34,3 @@ impl GLMemoryAllocator {
 
 unsafe impl Send for GLMemoryAllocator {}
 unsafe impl Sync for GLMemoryAllocator {}
-
-impl GLMemoryAllocator {
-    pub const NONE: Option<&'static GLMemoryAllocator> = None;
-}

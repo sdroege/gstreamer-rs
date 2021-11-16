@@ -12,11 +12,9 @@ glib::wrapper! {
     }
 }
 
-impl GLBaseMemoryAllocator {}
-
-unsafe impl Send for GLBaseMemoryAllocator {}
-unsafe impl Sync for GLBaseMemoryAllocator {}
-
 impl GLBaseMemoryAllocator {
     pub const NONE: Option<&'static GLBaseMemoryAllocator> = None;
 }
+
+unsafe impl Send for GLBaseMemoryAllocator {}
+unsafe impl Sync for GLBaseMemoryAllocator {}

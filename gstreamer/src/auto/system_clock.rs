@@ -26,6 +26,8 @@ glib::wrapper! {
 }
 
 impl SystemClock {
+    pub const NONE: Option<&'static SystemClock> = None;
+
     #[doc(alias = "gst_system_clock_obtain")]
     pub fn obtain() -> Clock {
         assert_initialized_main_thread!();
@@ -43,10 +45,6 @@ impl SystemClock {
 
 unsafe impl Send for SystemClock {}
 unsafe impl Sync for SystemClock {}
-
-impl SystemClock {
-    pub const NONE: Option<&'static SystemClock> = None;
-}
 
 pub trait SystemClockExt: 'static {
     #[doc(alias = "clock-type")]

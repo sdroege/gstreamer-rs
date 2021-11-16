@@ -12,11 +12,9 @@ glib::wrapper! {
     }
 }
 
-impl VideoFilter {}
-
-unsafe impl Send for VideoFilter {}
-unsafe impl Sync for VideoFilter {}
-
 impl VideoFilter {
     pub const NONE: Option<&'static VideoFilter> = None;
 }
+
+unsafe impl Send for VideoFilter {}
+unsafe impl Sync for VideoFilter {}

@@ -39,12 +39,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for Pad {}
-unsafe impl Sync for Pad {}
-
 impl Pad {
     pub const NONE: Option<&'static Pad> = None;
 }
+
+unsafe impl Send for Pad {}
+unsafe impl Sync for Pad {}
 
 pub trait PadExt: 'static {
     #[doc(alias = "gst_pad_activate_mode")]

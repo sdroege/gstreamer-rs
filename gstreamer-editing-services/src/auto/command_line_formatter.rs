@@ -25,6 +25,8 @@ glib::wrapper! {
 }
 
 impl CommandLineFormatter {
+    pub const NONE: Option<&'static CommandLineFormatter> = None;
+
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "ges_command_line_formatter_get_help")]
@@ -52,8 +54,4 @@ impl CommandLineFormatter {
             ))
         }
     }
-}
-
-impl CommandLineFormatter {
-    pub const NONE: Option<&'static CommandLineFormatter> = None;
 }

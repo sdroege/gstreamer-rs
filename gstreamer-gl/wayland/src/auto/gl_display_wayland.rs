@@ -15,6 +15,8 @@ glib::wrapper! {
 }
 
 impl GLDisplayWayland {
+    pub const NONE: Option<&'static GLDisplayWayland> = None;
+
     #[doc(alias = "gst_gl_display_wayland_new")]
     pub fn new(name: Option<&str>) -> GLDisplayWayland {
         assert_initialized_main_thread!();
@@ -30,7 +32,3 @@ impl GLDisplayWayland {
 
 unsafe impl Send for GLDisplayWayland {}
 unsafe impl Sync for GLDisplayWayland {}
-
-impl GLDisplayWayland {
-    pub const NONE: Option<&'static GLDisplayWayland> = None;
-}

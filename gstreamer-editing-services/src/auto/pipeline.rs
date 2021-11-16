@@ -26,6 +26,8 @@ glib::wrapper! {
 }
 
 impl Pipeline {
+    pub const NONE: Option<&'static Pipeline> = None;
+
     #[doc(alias = "ges_pipeline_new")]
     pub fn new() -> Pipeline {
         assert_initialized_main_thread!();
@@ -37,10 +39,6 @@ impl Default for Pipeline {
     fn default() -> Self {
         Self::new()
     }
-}
-
-impl Pipeline {
-    pub const NONE: Option<&'static Pipeline> = None;
 }
 
 pub trait GESPipelineExt: 'static {

@@ -20,6 +20,8 @@ glib::wrapper! {
 }
 
 impl Formatter {
+    pub const NONE: Option<&'static Formatter> = None;
+
     #[doc(alias = "ges_formatter_can_load_uri")]
     pub fn can_load_uri(uri: &str) -> Result<(), glib::Error> {
         assert_initialized_main_thread!();
@@ -54,10 +56,6 @@ impl Formatter {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_formatter_get_default()) }
     }
-}
-
-impl Formatter {
-    pub const NONE: Option<&'static Formatter> = None;
 }
 
 pub trait FormatterExt: 'static {

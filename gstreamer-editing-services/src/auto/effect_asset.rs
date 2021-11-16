@@ -16,8 +16,6 @@ glib::wrapper! {
     }
 }
 
-impl EffectAsset {}
-
 impl EffectAsset {
     pub const NONE: Option<&'static EffectAsset> = None;
 }

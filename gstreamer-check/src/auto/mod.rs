@@ -5,6 +5,3 @@
 
 mod test_clock;
 pub use self::test_clock::TestClock;
-
-#[doc(hidden)]
-pub mod traits {}

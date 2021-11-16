@@ -14,12 +14,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for PlayerVideoRenderer {}
-unsafe impl Sync for PlayerVideoRenderer {}
-
 impl PlayerVideoRenderer {
     pub const NONE: Option<&'static PlayerVideoRenderer> = None;
 }
+
+unsafe impl Send for PlayerVideoRenderer {}
+unsafe impl Sync for PlayerVideoRenderer {}
 
 pub trait PlayerVideoRendererExt: 'static {}
 

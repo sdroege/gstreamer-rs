@@ -24,6 +24,8 @@ glib::wrapper! {
 }
 
 impl Object {
+    pub const NONE: Option<&'static Object> = None;
+
     #[doc(alias = "gst_object_check_uniqueness")]
     pub fn check_uniqueness(list: &[Object], name: &str) -> bool {
         assert_initialized_main_thread!();
@@ -55,10 +57,6 @@ impl fmt::Display for Object {
 
 unsafe impl Send for Object {}
 unsafe impl Sync for Object {}
-
-impl Object {
-    pub const NONE: Option<&'static Object> = None;
-}
 
 pub trait GstObjectExt: 'static {
     #[doc(alias = "gst_object_add_control_binding")]

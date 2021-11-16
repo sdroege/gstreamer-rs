@@ -20,6 +20,8 @@ glib::wrapper! {
 }
 
 impl VideoOrientation {
+    pub const NONE: Option<&'static VideoOrientation> = None;
+
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_video_orientation_from_tag")]
@@ -43,10 +45,6 @@ impl VideoOrientation {
 
 unsafe impl Send for VideoOrientation {}
 unsafe impl Sync for VideoOrientation {}
-
-impl VideoOrientation {
-    pub const NONE: Option<&'static VideoOrientation> = None;
-}
 
 pub trait VideoOrientationExt: 'static {
     #[doc(alias = "gst_video_orientation_get_hcenter")]

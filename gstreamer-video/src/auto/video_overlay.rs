@@ -16,6 +16,8 @@ glib::wrapper! {
 }
 
 impl VideoOverlay {
+    pub const NONE: Option<&'static VideoOverlay> = None;
+
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //#[doc(alias = "gst_video_overlay_install_properties")]
@@ -26,10 +28,6 @@ impl VideoOverlay {
 
 unsafe impl Send for VideoOverlay {}
 unsafe impl Sync for VideoOverlay {}
-
-impl VideoOverlay {
-    pub const NONE: Option<&'static VideoOverlay> = None;
-}
 
 pub trait VideoOverlayExt: 'static {
     #[doc(alias = "gst_video_overlay_expose")]

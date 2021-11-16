@@ -14,12 +14,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for PlayerSignalDispatcher {}
-unsafe impl Sync for PlayerSignalDispatcher {}
-
 impl PlayerSignalDispatcher {
     pub const NONE: Option<&'static PlayerSignalDispatcher> = None;
 }
+
+unsafe impl Send for PlayerSignalDispatcher {}
+unsafe impl Sync for PlayerSignalDispatcher {}
 
 pub trait PlayerSignalDispatcherExt: 'static {}
 

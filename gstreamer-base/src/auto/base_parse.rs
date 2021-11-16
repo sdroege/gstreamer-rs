@@ -22,12 +22,12 @@ glib::wrapper! {
     }
 }
 
-unsafe impl Send for BaseParse {}
-unsafe impl Sync for BaseParse {}
-
 impl BaseParse {
     pub const NONE: Option<&'static BaseParse> = None;
 }
+
+unsafe impl Send for BaseParse {}
+unsafe impl Sync for BaseParse {}
 
 pub trait BaseParseExt: 'static {
     #[doc(alias = "gst_base_parse_add_index_entry")]

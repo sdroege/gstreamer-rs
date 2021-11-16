@@ -22,6 +22,8 @@ glib::wrapper! {
 }
 
 impl RTSPAuth {
+    pub const NONE: Option<&'static RTSPAuth> = None;
+
     #[doc(alias = "gst_rtsp_auth_new")]
     pub fn new() -> RTSPAuth {
         assert_initialized_main_thread!();
@@ -59,10 +61,6 @@ impl Default for RTSPAuth {
 
 unsafe impl Send for RTSPAuth {}
 unsafe impl Sync for RTSPAuth {}
-
-impl RTSPAuth {
-    pub const NONE: Option<&'static RTSPAuth> = None;
-}
 
 pub trait RTSPAuthExt: 'static {
     #[doc(alias = "gst_rtsp_auth_add_basic")]
