@@ -250,43 +250,35 @@ impl DebugCategory {
 
     #[doc(alias = "get_all_categories")]
     #[doc(alias = "gst_debug_get_all_categories")]
-    pub fn all_categories() -> DebugCategoryList {
-        unsafe { DebugCategoryList(ptr::NonNull::new(ffi::gst_debug_get_all_categories())) }
+    pub fn all_categories() -> glib::SList<DebugCategory> {
+        unsafe { glib::SList::from_glib_container_static(ffi::gst_debug_get_all_categories()) }
     }
 }
 
 unsafe impl Sync for DebugCategory {}
 unsafe impl Send for DebugCategory {}
 
-// checker-ignore-item
-pub struct DebugCategoryList(Option<ptr::NonNull<glib::ffi::GSList>>);
-
-unsafe impl Sync for DebugCategoryList {}
-unsafe impl Send for DebugCategoryList {}
-
-impl Iterator for DebugCategoryList {
-    type Item = DebugCategory;
-
-    fn next(&mut self) -> Option<DebugCategory> {
-        match self.0 {
-            None => None,
-            Some(cur) => unsafe {
-                let next = cur.as_ref().next;
-                self.0 = ptr::NonNull::new(next);
-                let cat = DebugCategory(Some(
-                    ptr::NonNull::new(cur.as_ref().data as *mut ffi::GstDebugCategory).unwrap(),
-                ));
-                glib::ffi::g_slist_free_1(cur.as_ptr());
-
-                Some(cat)
-            },
-        }
-    }
-}
-
 impl fmt::Debug for DebugCategory {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_tuple("DebugCategory").field(&self.name()).finish()
+    }
+}
+
+impl GlibPtrDefault for DebugCategory {
+    type GlibType = *mut ffi::GstDebugCategory;
+}
+
+impl FromGlibPtrNone<*mut ffi::GstDebugCategory> for DebugCategory {
+    unsafe fn from_glib_none(ptr: *mut ffi::GstDebugCategory) -> Self {
+        assert!(!ptr.is_null());
+        DebugCategory(Some(ptr::NonNull::new_unchecked(ptr)))
+    }
+}
+
+impl FromGlibPtrFull<*mut ffi::GstDebugCategory> for DebugCategory {
+    unsafe fn from_glib_full(ptr: *mut ffi::GstDebugCategory) -> Self {
+        assert!(!ptr.is_null());
+        DebugCategory(Some(ptr::NonNull::new_unchecked(ptr)))
     }
 }
 
