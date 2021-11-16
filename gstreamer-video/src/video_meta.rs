@@ -17,7 +17,7 @@ impl VideoMeta {
     #[doc(alias = "gst_buffer_add_video_meta")]
     pub fn add(
         buffer: &mut gst::BufferRef,
-        flags: crate::VideoFrameFlags,
+        video_frame_flags: crate::VideoFrameFlags,
         format: crate::VideoFormat,
         width: u32,
         height: u32,
@@ -45,7 +45,7 @@ impl VideoMeta {
         unsafe {
             let meta = ffi::gst_buffer_add_video_meta(
                 buffer.as_mut_ptr(),
-                flags.into_glib(),
+                video_frame_flags.into_glib(),
                 format.into_glib(),
                 width,
                 height,
@@ -61,7 +61,7 @@ impl VideoMeta {
 
     pub fn add_full<'a>(
         buffer: &'a mut gst::BufferRef,
-        flags: crate::VideoFrameFlags,
+        video_frame_flags: crate::VideoFrameFlags,
         format: crate::VideoFormat,
         width: u32,
         height: u32,
@@ -95,7 +95,7 @@ impl VideoMeta {
         unsafe {
             let meta = ffi::gst_buffer_add_video_meta_full(
                 buffer.as_mut_ptr(),
-                flags.into_glib(),
+                video_frame_flags.into_glib(),
                 format.into_glib(),
                 width,
                 height,
@@ -113,7 +113,7 @@ impl VideoMeta {
     }
 
     #[doc(alias = "get_flags")]
-    pub fn flags(&self) -> crate::VideoFrameFlags {
+    pub fn video_frame_flags(&self) -> crate::VideoFrameFlags {
         unsafe { from_glib(self.0.flags) }
     }
 
@@ -234,7 +234,7 @@ impl fmt::Debug for VideoMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoMeta")
             .field("id", &self.id())
-            .field("flags", &self.flags())
+            .field("video_frame_flags", &self.video_frame_flags())
             .field("format", &self.format())
             .field("width", &self.width())
             .field("height", &self.height())
@@ -895,7 +895,7 @@ mod tests {
             )
             .unwrap();
             assert_eq!(meta.id(), 0);
-            assert_eq!(meta.flags(), crate::VideoFrameFlags::empty());
+            assert_eq!(meta.video_frame_flags(), crate::VideoFrameFlags::empty());
             assert_eq!(meta.format(), crate::VideoFormat::Argb);
             assert_eq!(meta.width(), 320);
             assert_eq!(meta.height(), 240);
@@ -907,7 +907,7 @@ mod tests {
         {
             let meta = buffer.meta::<VideoMeta>().unwrap();
             assert_eq!(meta.id(), 0);
-            assert_eq!(meta.flags(), crate::VideoFrameFlags::empty());
+            assert_eq!(meta.video_frame_flags(), crate::VideoFrameFlags::empty());
             assert_eq!(meta.format(), crate::VideoFormat::Argb);
             assert_eq!(meta.width(), 320);
             assert_eq!(meta.height(), 240);
@@ -934,7 +934,7 @@ mod tests {
             )
             .unwrap();
             assert_eq!(meta.id(), 0);
-            assert_eq!(meta.flags(), crate::VideoFrameFlags::empty());
+            assert_eq!(meta.video_frame_flags(), crate::VideoFrameFlags::empty());
             assert_eq!(meta.format(), crate::VideoFormat::Argb);
             assert_eq!(meta.width(), 320);
             assert_eq!(meta.height(), 240);
@@ -946,7 +946,7 @@ mod tests {
         {
             let meta = buffer.meta::<VideoMeta>().unwrap();
             assert_eq!(meta.id(), 0);
-            assert_eq!(meta.flags(), crate::VideoFrameFlags::empty());
+            assert_eq!(meta.video_frame_flags(), crate::VideoFrameFlags::empty());
             assert_eq!(meta.format(), crate::VideoFormat::Argb);
             assert_eq!(meta.width(), 320);
             assert_eq!(meta.height(), 240);
