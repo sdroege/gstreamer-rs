@@ -257,13 +257,19 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
 
 impl<'a, T> MetaRefMut<'a, T, Standalone> {
     #[doc(alias = "gst_buffer_remove_meta")]
-    pub fn remove(self) {
+    pub fn remove(self) -> Result<(), glib::BoolError> {
+        if self.flags().contains(crate::MetaFlags::LOCKED) {
+            return Err(glib::bool_error!("Can't remove locked meta"));
+        }
+
         unsafe {
             let res = ffi::gst_buffer_remove_meta(
                 self.buffer.as_mut_ptr(),
                 self.meta as *mut T as *mut ffi::GstMeta,
             );
             assert_ne!(res, glib::ffi::GFALSE);
+
+            Ok(())
         }
     }
 }
@@ -733,7 +739,7 @@ mod tests {
             unsafe {
                 assert_eq!(meta.parent().as_ptr(), parent.as_ptr());
             }
-            meta.remove();
+            meta.remove().unwrap();
         }
 
         {
