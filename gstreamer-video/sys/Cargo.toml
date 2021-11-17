@@ -4,16 +4,20 @@ system-deps = "5"
 [dependencies]
 libc = "0.2"
 
-[dependencies.glib-sys]
+[dependencies.glib]
+package = "glib-sys"
 git = "https://github.com/gtk-rs/gtk-rs-core"
 
-[dependencies.gobject-sys]
+[dependencies.gobject]
+package = "gobject-sys"
 git = "https://github.com/gtk-rs/gtk-rs-core"
 
-[dependencies.gstreamer-base-sys]
+[dependencies.gst_base]
+package = "gstreamer-base-sys"
 path = "../../gstreamer-base/sys"
 
-[dependencies.gstreamer-sys]
+[dependencies.gst]
+package = "gstreamer-sys"
 path = "../../gstreamer/sys"
 
 [dev-dependencies]
