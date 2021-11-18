@@ -1,5 +1,5 @@
 [build-dependencies]
-system-deps = "5"
+system-deps = "6"
 
 [dependencies]
 libc = "0.2"

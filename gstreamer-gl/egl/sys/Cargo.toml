@@ -43,7 +43,7 @@ package = "gstreamer-gl-sys"
 path = "../../sys"
 
 [build-dependencies]
-system-deps = "5"
+system-deps = "6"
 
 [dev-dependencies]
 shell-words = "1.0.0"
