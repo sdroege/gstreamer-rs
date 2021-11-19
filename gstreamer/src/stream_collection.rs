@@ -2,8 +2,13 @@
 
 use crate::Stream;
 use crate::StreamCollection;
+use glib::object::ObjectType as ObjectType_;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 
 #[derive(Debug)]
 pub struct Iter<'a> {
@@ -93,6 +98,7 @@ impl StreamCollectionBuilder {
 }
 
 impl StreamCollection {
+    #[doc(alias = "gst_stream_collection_new")]
     pub fn builder(upstream_id: Option<&str>) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         let upstream_id = upstream_id.to_glib_none();
@@ -105,6 +111,46 @@ impl StreamCollection {
         };
 
         StreamCollectionBuilder(collection)
+    }
+
+    #[doc(alias = "stream-notify")]
+    pub fn connect_stream_notify<
+        F: Fn(&Self, &Stream, &glib::ParamSpec) + Send + Sync + 'static,
+    >(
+        &self,
+        detail: Option<&str>,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn stream_notify_trampoline<
+            F: Fn(&StreamCollection, &Stream, &glib::ParamSpec) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstStreamCollection,
+            object: *mut ffi::GstStream,
+            p0: *mut glib::gobject_ffi::GParamSpec,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(
+                &from_glib_borrow(this),
+                &from_glib_borrow(object),
+                &from_glib_borrow(p0),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            let detailed_signal_name = detail.map(|name| format!("stream-notify::{}\0", name));
+            let signal_name: &[u8] = detailed_signal_name
+                .as_ref()
+                .map_or(&b"stream-notify\0"[..], |n| n.as_bytes());
+            connect_raw(
+                self.as_ptr() as *mut _,
+                signal_name.as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    stream_notify_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
     }
 
     pub fn iter(&self) -> Iter {
