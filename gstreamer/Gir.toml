@@ -248,6 +248,9 @@ manual_traits = ["ChildProxyExtManual"]
     name = "set_property"
     rename = "set_child_property"
     manual = true
+    [[object.function]]
+    name = "lookup"
+    manual = true
 
 [[object]]
 name = "Gst.ClockTime"

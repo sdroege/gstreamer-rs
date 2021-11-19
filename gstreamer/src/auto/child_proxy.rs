@@ -53,9 +53,6 @@ pub trait ChildProxyExt: 'static {
     //#[doc(alias = "get_valist")]
     //fn valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
-    //#[doc(alias = "gst_child_proxy_lookup")]
-    //fn lookup(&self, name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<glib::Object>;
-
     //#[doc(alias = "gst_child_proxy_set")]
     //fn set(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -124,10 +121,6 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
 
     //fn valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi:gst_child_proxy_get_valist() }
-    //}
-
-    //fn lookup(&self, name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<glib::Object> {
-    //    unsafe { TODO: call ffi:gst_child_proxy_lookup() }
     //}
 
     //fn set(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
