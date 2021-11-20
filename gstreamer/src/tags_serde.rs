@@ -336,7 +336,7 @@ mod tests {
                 TagMergeMode::Append,
             );
             tags.add::<DateTime>(
-                &crate::DateTime::new_ymd(2018, 5, 28).unwrap(),
+                &crate::DateTime::from_ymd(2018, 5, 28).unwrap(),
                 TagMergeMode::Append,
             );
 
@@ -481,7 +481,7 @@ mod tests {
         );
         assert_eq!(
             tags.index::<DateTime>(0).unwrap().get(),
-            crate::DateTime::new_ymd(2018, 5, 28).unwrap()
+            crate::DateTime::from_ymd(2018, 5, 28).unwrap()
         );
         let sample = tags.index::<Image>(0).unwrap().get();
         let buffer = sample.buffer().unwrap();
@@ -517,7 +517,7 @@ mod tests {
         );
         assert_eq!(
             tags.index::<DateTime>(0).unwrap().get(),
-            crate::DateTime::new_ymd(2018, 5, 28).unwrap()
+            crate::DateTime::from_ymd(2018, 5, 28).unwrap()
         );
         let sample = tags.index::<Image>(0).unwrap().get();
         let buffer = sample.buffer().unwrap();
@@ -546,7 +546,7 @@ mod tests {
                 TagMergeMode::Append,
             );
             tags.add::<DateTime>(
-                &crate::DateTime::new_ymd(2018, 5, 28).unwrap(),
+                &crate::DateTime::from_ymd(2018, 5, 28).unwrap(),
                 TagMergeMode::Append,
             );
 
@@ -594,7 +594,7 @@ mod tests {
         );
         assert_eq!(
             tags.index::<DateTime>(0).unwrap().get(),
-            crate::DateTime::new_ymd(2018, 5, 28).unwrap()
+            crate::DateTime::from_ymd(2018, 5, 28).unwrap()
         );
         let sample = tags.index::<Image>(0).unwrap().get();
         let buffer = sample.buffer().unwrap();

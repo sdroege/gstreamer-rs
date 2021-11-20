@@ -144,7 +144,7 @@ impl DateTime {
     }
 
     #[doc(alias = "gst_date_time_new_local_time")]
-    pub fn new_local_time(
+    pub fn from_local_time(
         year: impl Into<i32>,
         month: impl Into<Option<i32>>,
         day: impl Into<Option<i32>>,
@@ -177,7 +177,7 @@ impl DateTime {
     }
 
     #[doc(alias = "gst_date_time_new_y")]
-    pub fn new_y(year: i32) -> Result<DateTime, glib::BoolError> {
+    pub fn from_y(year: i32) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
 
         validate(None, year, None, None, None, None, None)?;
@@ -189,7 +189,7 @@ impl DateTime {
     }
 
     #[doc(alias = "gst_date_time_new_ym")]
-    pub fn new_ym(year: i32, month: i32) -> Result<DateTime, glib::BoolError> {
+    pub fn from_ym(year: i32, month: i32) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
 
         validate(None, year, Some(month), None, None, None, None)?;
@@ -201,7 +201,7 @@ impl DateTime {
     }
 
     #[doc(alias = "gst_date_time_new_ymd")]
-    pub fn new_ymd(year: i32, month: i32, day: i32) -> Result<DateTime, glib::BoolError> {
+    pub fn from_ymd(year: i32, month: i32, day: i32) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
 
         validate(None, year, Some(month), Some(day), None, None, None)?;
@@ -567,7 +567,7 @@ mod tests {
         assert_eq!(utc_date_time.microsecond().unwrap(), 123_456);
 
         // Date without an hour (which implies no TZ)
-        let utc_date_time = DateTime::new_ymd(2019, 1, 1).unwrap().to_utc().unwrap();
+        let utc_date_time = DateTime::from_ymd(2019, 1, 1).unwrap().to_utc().unwrap();
         assert_eq!(utc_date_time.year(), 2019);
         assert_eq!(utc_date_time.month().unwrap(), 1);
         assert_eq!(utc_date_time.day().unwrap(), 1);
@@ -646,30 +646,36 @@ mod tests {
         );
 
         // Partially defined `DateTime`
-        assert!(DateTime::new_ymd(2020, 8, 20).unwrap() > DateTime::new_ymd(2019, 8, 20).unwrap());
-        assert!(DateTime::new_ymd(2019, 9, 20).unwrap() > DateTime::new_ymd(2019, 8, 20).unwrap());
-        assert!(DateTime::new_ymd(2019, 8, 21).unwrap() > DateTime::new_ymd(2019, 8, 20).unwrap());
+        assert!(
+            DateTime::from_ymd(2020, 8, 20).unwrap() > DateTime::from_ymd(2019, 8, 20).unwrap()
+        );
+        assert!(
+            DateTime::from_ymd(2019, 9, 20).unwrap() > DateTime::from_ymd(2019, 8, 20).unwrap()
+        );
+        assert!(
+            DateTime::from_ymd(2019, 8, 21).unwrap() > DateTime::from_ymd(2019, 8, 20).unwrap()
+        );
 
-        assert!(DateTime::new_ym(2020, 8).unwrap() > DateTime::new_ym(2019, 8).unwrap());
-        assert!(DateTime::new_ym(2019, 9).unwrap() > DateTime::new_ym(2019, 8).unwrap());
-        assert!(DateTime::new_ym(2019, 9).unwrap() > DateTime::new_ymd(2019, 8, 20).unwrap());
+        assert!(DateTime::from_ym(2020, 8).unwrap() > DateTime::from_ym(2019, 8).unwrap());
+        assert!(DateTime::from_ym(2019, 9).unwrap() > DateTime::from_ym(2019, 8).unwrap());
+        assert!(DateTime::from_ym(2019, 9).unwrap() > DateTime::from_ymd(2019, 8, 20).unwrap());
 
-        assert!(DateTime::new_y(2020).unwrap() > DateTime::new_y(2019).unwrap());
-        assert!(DateTime::new_ym(2020, 1).unwrap() > DateTime::new_y(2019).unwrap());
+        assert!(DateTime::from_y(2020).unwrap() > DateTime::from_y(2019).unwrap());
+        assert!(DateTime::from_ym(2020, 1).unwrap() > DateTime::from_y(2019).unwrap());
 
         assert!(
             DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64).unwrap()
-                < DateTime::new_ymd(2020, 8, 20).unwrap()
+                < DateTime::from_ymd(2020, 8, 20).unwrap()
         );
 
         assert!(
-            DateTime::new_ymd(2020, 8, 20).unwrap()
+            DateTime::from_ymd(2020, 8, 20).unwrap()
                 > DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64).unwrap()
         );
 
         // Comparison occurs on the same TZ when the `DateTime` doesn't have time (note 2)
         assert!(
-            DateTime::new_ymd(2020, 1, 1).unwrap()
+            DateTime::from_ymd(2020, 1, 1).unwrap()
                 > DateTime::new(-2f32, 2019, 12, 31, 23, 59, 0f64).unwrap()
         );
 
@@ -678,17 +684,17 @@ mod tests {
         // but we can't tell if it's before or after and they are not equal (note 1)
         assert!(DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64)
             .unwrap()
-            .partial_cmp(&DateTime::new_ymd(2019, 8, 20).unwrap())
+            .partial_cmp(&DateTime::from_ymd(2019, 8, 20).unwrap())
             .is_none());
 
-        assert!(DateTime::new_ymd(2019, 8, 20)
+        assert!(DateTime::from_ymd(2019, 8, 20)
             .unwrap()
             .partial_cmp(&DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64).unwrap())
             .is_none());
 
-        assert!(DateTime::new_ym(2019, 1)
+        assert!(DateTime::from_ym(2019, 1)
             .unwrap()
-            .partial_cmp(&DateTime::new_y(2019).unwrap())
+            .partial_cmp(&DateTime::from_y(2019).unwrap())
             .is_none());
     }
 
@@ -712,26 +718,26 @@ mod tests {
         );
 
         assert_eq!(
-            DateTime::new_ymd(2018, 5, 28).unwrap(),
-            DateTime::new_ymd(2018, 5, 28).unwrap()
+            DateTime::from_ymd(2018, 5, 28).unwrap(),
+            DateTime::from_ymd(2018, 5, 28).unwrap()
         );
 
         // In the following cases, the partially defined `DateTime` is a range WRT
         // the fully defined `DateTime` and this range includes the fully defined `DateTime`,
         // but they are not equal (note 1)
         assert_ne!(
-            DateTime::new_ymd(2018, 5, 28).unwrap(),
+            DateTime::from_ymd(2018, 5, 28).unwrap(),
             DateTime::new(2f32, 2018, 5, 28, 16, 6, None).unwrap()
         );
 
         assert_ne!(
             DateTime::new(2f32, 2018, 5, 28, 16, 6, None).unwrap(),
-            DateTime::new_ym(2018, 5).unwrap()
+            DateTime::from_ym(2018, 5).unwrap()
         );
 
         assert_ne!(
             DateTime::new(2f32, 2018, 5, 28, 16, 6, None).unwrap(),
-            DateTime::new_y(2018).unwrap()
+            DateTime::from_y(2018).unwrap()
         );
     }
 }
