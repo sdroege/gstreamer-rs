@@ -332,7 +332,7 @@ mod tests {
             tags.add::<Bitrate>(&96_000, TagMergeMode::Append); // u32
             tags.add::<TrackGain>(&1f64, TagMergeMode::Append); // f64
             tags.add::<Date>(
-                &glib::Date::new_dmy(28, glib::DateMonth::May, 2018).unwrap(),
+                &glib::Date::from_dmy(28, glib::DateMonth::May, 2018).unwrap(),
                 TagMergeMode::Append,
             );
             tags.add::<DateTime>(
@@ -477,7 +477,7 @@ mod tests {
         assert!((tags.index::<TrackGain>(0).unwrap().get() - 1f64).abs() < std::f64::EPSILON);
         assert_eq!(
             tags.index::<Date>(0).unwrap().get(),
-            glib::Date::new_dmy(28, glib::DateMonth::May, 2018).unwrap()
+            glib::Date::from_dmy(28, glib::DateMonth::May, 2018).unwrap()
         );
         assert_eq!(
             tags.index::<DateTime>(0).unwrap().get(),
@@ -513,7 +513,7 @@ mod tests {
         assert!((tags.index::<TrackGain>(0).unwrap().get() - 1f64).abs() < std::f64::EPSILON);
         assert_eq!(
             tags.index::<Date>(0).unwrap().get(),
-            glib::Date::new_dmy(28, glib::DateMonth::May, 2018).unwrap()
+            glib::Date::from_dmy(28, glib::DateMonth::May, 2018).unwrap()
         );
         assert_eq!(
             tags.index::<DateTime>(0).unwrap().get(),
@@ -542,7 +542,7 @@ mod tests {
             tags.add::<Bitrate>(&96_000, TagMergeMode::Append); // u32
             tags.add::<TrackGain>(&1f64, TagMergeMode::Append); // f64
             tags.add::<Date>(
-                &glib::Date::new_dmy(28, glib::DateMonth::May, 2018).unwrap(),
+                &glib::Date::from_dmy(28, glib::DateMonth::May, 2018).unwrap(),
                 TagMergeMode::Append,
             );
             tags.add::<DateTime>(

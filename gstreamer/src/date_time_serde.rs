@@ -118,7 +118,7 @@ impl TryFrom<DateTimeVariants> for Date {
                     return Err(glib::bool_error!("Out of range `month` for `Date`"));
                 }
 
-                Ok(Date(glib::Date::new_dmy(
+                Ok(Date(glib::Date::from_dmy(
                     d.try_into()
                         .map_err(|_| glib::bool_error!("Out of range `day` for `Date`"))?,
                     month,

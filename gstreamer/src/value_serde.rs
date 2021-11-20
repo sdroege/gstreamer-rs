@@ -506,7 +506,7 @@ mod tests {
             .is_none());
 
         assert_eq!(
-            Date::new_dmy(19, DateMonth::August, 2019).unwrap(),
+            Date::from_dmy(19, DateMonth::August, 2019).unwrap(),
             slice[4].get::<Date>().expect("slice[4]")
         );
 
@@ -536,7 +536,7 @@ mod tests {
             .is_none());
 
         assert_eq!(
-            Date::new_dmy(19, DateMonth::August, 2019).unwrap(),
+            Date::from_dmy(19, DateMonth::August, 2019).unwrap(),
             slice[4].get::<Date>().expect("slice[4]")
         );
 

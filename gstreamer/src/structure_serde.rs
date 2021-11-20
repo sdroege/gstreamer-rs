@@ -180,7 +180,7 @@ mod tests {
             .field("f2", &String::from("bcd"))
             .field("f3", 123i32)
             .field("fraction", Fraction::new(1, 2))
-            .field("date", Date::new_dmy(19, DateMonth::August, 2019).unwrap())
+            .field("date", Date::from_dmy(19, DateMonth::August, 2019).unwrap())
             .field(
                 "date_time",
                 DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap(),
@@ -235,7 +235,7 @@ mod tests {
                 .field("f1", "abc")
                 .field("f2", "bcd")
                 .field("f3", 123)
-                .field("date", Date::new_dmy(19, DateMonth::August, 2019).unwrap())
+                .field("date", Date::from_dmy(19, DateMonth::August, 2019).unwrap())
                 .field(
                     "date_time",
                     DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap()
@@ -256,7 +256,7 @@ mod tests {
             .field("f2", "bcd".to_owned())
             .field("f3", 123i32)
             .field("fraction", Fraction::new(1, 2))
-            .field("date", Date::new_dmy(19, DateMonth::August, 2019).unwrap())
+            .field("date", Date::from_dmy(19, DateMonth::August, 2019).unwrap())
             .field(
                 "date_time",
                 DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap(),

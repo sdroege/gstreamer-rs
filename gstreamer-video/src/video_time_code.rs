@@ -613,7 +613,7 @@ mod tests {
         let mut buffer = gst::Buffer::new();
         {
             let datetime =
-                glib::DateTime::new_utc(2021, 2, 4, 10, 53, 17.0).expect("can't create datetime");
+                glib::DateTime::from_utc(2021, 2, 4, 10, 53, 17.0).expect("can't create datetime");
             let time_code = crate::VideoTimeCode::from_date_time(
                 gst::Fraction::new(30, 1),
                 &datetime,
@@ -629,7 +629,7 @@ mod tests {
             );
 
             let datetime =
-                glib::DateTime::new_utc(2021, 2, 4, 10, 53, 17.0).expect("can't create datetime");
+                glib::DateTime::from_utc(2021, 2, 4, 10, 53, 17.0).expect("can't create datetime");
             let mut time_code_2 = crate::ValidVideoTimeCode::try_from(
                 crate::VideoTimeCode::from_date_time(
                     gst::Fraction::new(30, 1),

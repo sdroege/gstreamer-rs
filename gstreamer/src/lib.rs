@@ -307,7 +307,6 @@ pub mod prelude {
     pub use crate::message::MessageErrorDomain;
     pub use crate::object::GstObjectExtManual;
     pub use crate::pad::PadExtManual;
-    pub use crate::param_spec::GstParamSpecExt;
     pub use crate::pipeline::GstPipelineExtManual;
     pub use crate::plugin::GstPluginExtManual;
     pub use crate::plugin_feature::PluginFeatureExtManual;
