@@ -147,7 +147,7 @@ impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecArray {
 impl ParamSpecArray {
     #[allow(clippy::new_ret_no_self)]
     #[doc(alias = "gst_param_spec_array")]
-    pub fn new_array(
+    pub fn new(
         name: &str,
         nick: &str,
         blurb: &str,
