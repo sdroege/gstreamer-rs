@@ -75,8 +75,7 @@ fn example_main() {
         // application is via properties, signals or action signals (or custom messages, events, queries).
         // So what the following code does, is essentially asking playbin to tell us its already
         // internally stored tag list for this stream index.
-        let tags = playbin.emit_by_name("get-audio-tags", &[&idx]).unwrap();
-        let tags = tags.get::<gst::TagList>().expect("tags");
+        let tags = playbin.emit_by_name::<gst::TagList>("get-audio-tags", &[&idx]);
 
         if let Some(artist) = tags.get::<gst::tags::Artist>() {
             println!("  Artist: {}", artist.get());

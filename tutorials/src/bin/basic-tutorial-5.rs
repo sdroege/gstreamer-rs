@@ -42,26 +42,24 @@ mod tutorial5 {
 
         let x = playbin.property::<i32>(propname);
         for i in 0..x {
-            let tags = playbin.emit_by_name(signame, &[&i]).unwrap();
+            let tags = playbin.emit_by_name::<gst::TagList>(signame, &[&i]);
 
-            if let Ok(Some(tags)) = tags.get::<Option<gst::TagList>>() {
-                textbuf.insert_at_cursor(&format!("{} stream {}:\n ", stype, i));
+            textbuf.insert_at_cursor(&format!("{} stream {}:\n ", stype, i));
 
-                if let Some(codec) = tags.get::<gst::tags::VideoCodec>() {
-                    textbuf.insert_at_cursor(&format!("    codec: {} \n", codec.get()));
-                }
+            if let Some(codec) = tags.get::<gst::tags::VideoCodec>() {
+                textbuf.insert_at_cursor(&format!("    codec: {} \n", codec.get()));
+            }
 
-                if let Some(codec) = tags.get::<gst::tags::AudioCodec>() {
-                    textbuf.insert_at_cursor(&format!("    codec: {} \n", codec.get()));
-                }
+            if let Some(codec) = tags.get::<gst::tags::AudioCodec>() {
+                textbuf.insert_at_cursor(&format!("    codec: {} \n", codec.get()));
+            }
 
-                if let Some(lang) = tags.get::<gst::tags::LanguageCode>() {
-                    textbuf.insert_at_cursor(&format!("    language: {} \n", lang.get()));
-                }
+            if let Some(lang) = tags.get::<gst::tags::LanguageCode>() {
+                textbuf.insert_at_cursor(&format!("    language: {} \n", lang.get()));
+            }
 
-                if let Some(bitrate) = tags.get::<gst::tags::Bitrate>() {
-                    textbuf.insert_at_cursor(&format!("    bitrate: {} \n", bitrate.get()));
-                }
+            if let Some(bitrate) = tags.get::<gst::tags::Bitrate>() {
+                textbuf.insert_at_cursor(&format!("    bitrate: {} \n", bitrate.get()));
             }
         }
     }
