@@ -127,7 +127,7 @@ impl WebRTCDataChannel {
     }
 
     pub fn emit_close(&self) {
-        let _ = self.emit_by_name("close", &[]);
+        self.emit_by_name::<()>("close", &[]);
     }
 
     #[doc(alias = "on-buffered-amount-low")]
@@ -333,7 +333,7 @@ impl WebRTCDataChannel {
     }
 
     pub fn emit_send_data(&self, data: Option<&glib::Bytes>) {
-        let _ = self.emit_by_name("send-data", &[&data]);
+        self.emit_by_name::<()>("send-data", &[&data]);
     }
 
     #[doc(alias = "send-string")]
@@ -370,7 +370,7 @@ impl WebRTCDataChannel {
     }
 
     pub fn emit_send_string(&self, data: Option<&str>) {
-        let _ = self.emit_by_name("send-string", &[&data]);
+        self.emit_by_name::<()>("send-string", &[&data]);
     }
 
     #[doc(alias = "buffered-amount")]
