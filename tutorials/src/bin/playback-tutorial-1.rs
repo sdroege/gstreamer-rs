@@ -21,35 +21,41 @@ fn analyze_streams(playbin: &gst::Element) {
     );
 
     for i in 0..n_video {
-        let tags = playbin.emit_by_name::<gst::TagList>("get-video-tags", &[&i]);
+        let tags = playbin.emit_by_name::<Option<gst::TagList>>("get-video-tags", &[&i]);
 
-        println!("video stream {}:", i);
-        if let Some(codec) = tags.get::<gst::tags::VideoCodec>() {
-            println!("    codec: {}", codec.get());
+        if let Some(tags) = tags {
+            println!("video stream {}:", i);
+            if let Some(codec) = tags.get::<gst::tags::VideoCodec>() {
+                println!("    codec: {}", codec.get());
+            }
         }
     }
 
     for i in 0..n_audio {
-        let tags = playbin.emit_by_name::<gst::TagList>("get-audio-tags", &[&i]);
+        let tags = playbin.emit_by_name::<Option<gst::TagList>>("get-audio-tags", &[&i]);
 
-        println!("audio stream {}:", i);
-        if let Some(codec) = tags.get::<gst::tags::AudioCodec>() {
-            println!("    codec: {}", codec.get());
-        }
-        if let Some(codec) = tags.get::<gst::tags::LanguageCode>() {
-            println!("    language: {}", codec.get());
-        }
-        if let Some(codec) = tags.get::<gst::tags::Bitrate>() {
-            println!("    bitrate: {}", codec.get());
+        if let Some(tags) = tags {
+            println!("audio stream {}:", i);
+            if let Some(codec) = tags.get::<gst::tags::AudioCodec>() {
+                println!("    codec: {}", codec.get());
+            }
+            if let Some(codec) = tags.get::<gst::tags::LanguageCode>() {
+                println!("    language: {}", codec.get());
+            }
+            if let Some(codec) = tags.get::<gst::tags::Bitrate>() {
+                println!("    bitrate: {}", codec.get());
+            }
         }
     }
 
     for i in 0..n_text {
-        let tags = playbin.emit_by_name::<gst::TagList>("get-text-tags", &[&i]);
+        let tags = playbin.emit_by_name::<Option<gst::TagList>>("get-text-tags", &[&i]);
 
-        println!("subtitle stream {}:", i);
-        if let Some(codec) = tags.get::<gst::tags::LanguageCode>() {
-            println!("    language: {}", codec.get());
+        if let Some(tags) = tags {
+            println!("subtitle stream {}:", i);
+            if let Some(codec) = tags.get::<gst::tags::LanguageCode>() {
+                println!("    language: {}", codec.get());
+            }
         }
     }
 
