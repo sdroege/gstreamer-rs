@@ -2,6 +2,7 @@
 
 use glib::translate::{from_glib, from_glib_full, from_glib_none, IntoGlib};
 use std::fmt;
+use std::ops::ControlFlow;
 use std::ptr;
 
 use crate::Buffer;
@@ -106,16 +107,16 @@ impl BufferListRef {
     }
 
     #[doc(alias = "gst_buffer_list_foreach")]
-    pub fn foreach<F: FnMut(&BufferRef, u32) -> bool>(&self, func: F) -> bool {
-        unsafe extern "C" fn trampoline<F: FnMut(&BufferRef, u32) -> bool>(
+    pub fn foreach<F: FnMut(&Buffer, u32) -> ControlFlow<(), ()>>(&self, func: F) -> bool {
+        unsafe extern "C" fn trampoline<F: FnMut(&Buffer, u32) -> ControlFlow<(), ()>>(
             buffer: *mut *mut ffi::GstBuffer,
             idx: u32,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let func = user_data as *const _ as usize as *mut F;
-            let res = (*func)(BufferRef::from_ptr(*buffer), idx);
+            let res = (*func)(&Buffer::from_glib_borrow(*buffer), idx);
 
-            res.into_glib()
+            matches!(res, ControlFlow::Continue(_)).into_glib()
         }
 
         unsafe {
@@ -129,34 +130,40 @@ impl BufferListRef {
         }
     }
 
-    pub fn foreach_mut<F: FnMut(Buffer, u32) -> Result<Option<Buffer>, Option<Buffer>>>(
+    pub fn foreach_mut<F: FnMut(Buffer, u32) -> ControlFlow<Option<Buffer>, Option<Buffer>>>(
         &mut self,
         func: F,
     ) -> bool {
         unsafe extern "C" fn trampoline<
-            F: FnMut(Buffer, u32) -> Result<Option<Buffer>, Option<Buffer>>,
+            F: FnMut(Buffer, u32) -> ControlFlow<Option<Buffer>, Option<Buffer>>,
         >(
             buffer: *mut *mut ffi::GstBuffer,
             idx: u32,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let func = user_data as *const _ as usize as *mut F;
-            let res = (*func)(Buffer::from_glib_full(*buffer), idx);
+            let res = (*func)(
+                Buffer::from_glib_full(
+                    ptr::replace(buffer, ptr::null_mut::<ffi::GstBuffer>()) as *mut ffi::GstBuffer
+                ),
+                idx,
+            );
 
-            match res {
-                Ok(None) | Err(None) => {
+            let (cont, res_buffer) = match res {
+                ControlFlow::Continue(res_buffer) => (true, res_buffer),
+                ControlFlow::Break(res_buffer) => (false, res_buffer),
+            };
+
+            match res_buffer {
+                None => {
                     *buffer = ptr::null_mut();
-                    res.is_ok().into_glib()
                 }
-                Ok(Some(b)) => {
-                    *buffer = b.into_ptr();
-                    glib::ffi::GTRUE
-                }
-                Err(Some(b)) => {
-                    *buffer = b.into_ptr();
-                    glib::ffi::GFALSE
+                Some(new_buffer) => {
+                    *buffer = new_buffer.into_ptr();
                 }
             }
+
+            cont.into_glib()
         }
 
         unsafe {
@@ -328,8 +335,7 @@ mod tests {
         let mut res = vec![];
         buffer_list.foreach(|buffer, idx| {
             res.push((buffer.pts(), idx));
-
-            true
+            ControlFlow::Continue(())
         });
 
         assert_eq!(
@@ -363,13 +369,13 @@ mod tests {
             res.push((buffer.pts(), idx));
 
             if let Some(ClockTime::ZERO) = buffer.pts() {
-                Ok(Some(buffer))
+                ControlFlow::Continue(Some(buffer))
             } else if let Some(ClockTime::SECOND) = buffer.pts() {
-                Ok(None)
+                ControlFlow::Continue(None)
             } else {
                 let mut new_buffer = Buffer::new();
                 new_buffer.get_mut().unwrap().set_pts(3 * ClockTime::SECOND);
-                Ok(Some(new_buffer))
+                ControlFlow::Continue(Some(new_buffer))
             }
         });
 
@@ -385,8 +391,7 @@ mod tests {
         let mut res = vec![];
         buffer_list.foreach(|buffer, idx| {
             res.push((buffer.pts(), idx));
-
-            true
+            ControlFlow::Continue(())
         });
 
         assert_eq!(
