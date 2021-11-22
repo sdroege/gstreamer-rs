@@ -17,9 +17,6 @@ use gst::element_warning;
 
 use gst_pbutils::prelude::*;
 
-#[cfg(feature = "v1_10")]
-use glib::GBoxed;
-
 use std::env;
 #[cfg(feature = "v1_10")]
 use std::sync::{Arc, Mutex};
@@ -44,8 +41,8 @@ struct ErrorMessage {
 }
 
 #[cfg(feature = "v1_10")]
-#[derive(Clone, Debug, GBoxed)]
-#[gboxed(type_name = "ErrorValue")]
+#[derive(Clone, Debug, glib::Boxed)]
+#[boxed_type(name = "ErrorValue")]
 struct ErrorValue(Arc<Mutex<Option<Error>>>);
 
 fn configure_encodebin(encodebin: &gst::Element) {
