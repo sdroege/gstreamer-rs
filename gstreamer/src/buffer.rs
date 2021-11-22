@@ -4,6 +4,7 @@ use std::fmt;
 use std::marker::PhantomData;
 use std::mem;
 use std::ops;
+use std::ops::ControlFlow;
 use std::ptr;
 use std::slice;
 use std::u64;
@@ -21,6 +22,12 @@ use glib::translate::{from_glib, from_glib_full, FromGlib, FromGlibPtrFull, Into
 
 pub enum Readable {}
 pub enum Writable {}
+
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+pub enum BufferMetaForeachAction {
+    Keep,
+    Remove,
+}
 
 mini_object_wrapper!(Buffer, BufferRef, ffi::GstBuffer, || {
     ffi::gst_buffer_get_type()
@@ -434,8 +441,8 @@ impl BufferRef {
     }
 
     #[doc(alias = "gst_buffer_foreach_meta")]
-    pub fn foreach_meta<F: FnMut(MetaRef<Meta>) -> bool>(&self, func: F) -> bool {
-        unsafe extern "C" fn trampoline<F: FnMut(MetaRef<Meta>) -> bool>(
+    pub fn foreach_meta<F: FnMut(MetaRef<Meta>) -> ControlFlow<(), ()>>(&self, func: F) -> bool {
+        unsafe extern "C" fn trampoline<F: FnMut(MetaRef<Meta>) -> ControlFlow<(), ()>>(
             buffer: *mut ffi::GstBuffer,
             meta: *mut *mut ffi::GstMeta,
             user_data: glib::ffi::gpointer,
@@ -443,7 +450,7 @@ impl BufferRef {
             let func = user_data as *const _ as usize as *mut F;
             let res = (*func)(Meta::from_ptr(BufferRef::from_ptr(buffer), *meta));
 
-            res.into_glib()
+            matches!(res, ControlFlow::Continue(_)).into_glib()
         }
 
         unsafe {
@@ -458,13 +465,17 @@ impl BufferRef {
     }
 
     pub fn foreach_meta_mut<
-        F: FnMut(MetaRefMut<Meta, crate::meta::Iterated>) -> Result<bool, bool>,
+        F: FnMut(
+            MetaRefMut<Meta, crate::meta::Iterated>,
+        ) -> ControlFlow<BufferMetaForeachAction, BufferMetaForeachAction>,
     >(
         &mut self,
         func: F,
     ) -> bool {
         unsafe extern "C" fn trampoline<
-            F: FnMut(MetaRefMut<Meta, crate::meta::Iterated>) -> Result<bool, bool>,
+            F: FnMut(
+                MetaRefMut<Meta, crate::meta::Iterated>,
+            ) -> ControlFlow<BufferMetaForeachAction, BufferMetaForeachAction>,
         >(
             buffer: *mut ffi::GstBuffer,
             meta: *mut *mut ffi::GstMeta,
@@ -473,13 +484,16 @@ impl BufferRef {
             let func = user_data as *const _ as usize as *mut F;
             let res = (*func)(Meta::from_mut_ptr(BufferRef::from_mut_ptr(buffer), *meta));
 
-            match res {
-                Ok(false) | Err(false) => {
-                    *meta = ptr::null_mut();
-                    res.is_ok().into_glib()
-                }
-                Ok(true) | Err(true) => res.is_ok().into_glib(),
+            let (cont, action) = match res {
+                ControlFlow::Continue(action) => (true, action),
+                ControlFlow::Break(action) => (false, action),
+            };
+
+            if action == BufferMetaForeachAction::Remove {
+                *meta = ptr::null_mut();
             }
+
+            cont.into_glib()
         }
 
         unsafe {
@@ -1381,7 +1395,7 @@ mod tests {
                 .downcast_ref::<crate::ReferenceTimestampMeta>()
                 .unwrap();
             res.push(meta.timestamp());
-            true
+            ControlFlow::Continue(())
         });
 
         assert_eq!(&[ClockTime::ZERO, ClockTime::SECOND][..], &res[..]);
@@ -1417,9 +1431,9 @@ mod tests {
                 .unwrap();
             res.push(meta.timestamp());
             if meta.timestamp() == ClockTime::SECOND {
-                Ok(false)
+                ControlFlow::Continue(BufferMetaForeachAction::Remove)
             } else {
-                Ok(true)
+                ControlFlow::Continue(BufferMetaForeachAction::Keep)
             }
         });
 
@@ -1431,7 +1445,7 @@ mod tests {
                 .downcast_ref::<crate::ReferenceTimestampMeta>()
                 .unwrap();
             res.push(meta.timestamp());
-            true
+            ControlFlow::Continue(())
         });
 
         assert_eq!(&[ClockTime::ZERO][..], &res[..]);
