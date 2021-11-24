@@ -6,6 +6,7 @@ use glib::prelude::*;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::signal::{connect_raw, SignalHandlerId};
 use glib::translate::*;
+use gst::FormattedValue;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::boxed::Box as Box_;
@@ -53,6 +54,8 @@ pub trait AggregatorExtManual: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_aggregator_update_segment")]
     fn update_segment<F: gst::FormattedValueIntrinsic>(&self, segment: &gst::FormattedSegment<F>);
+
+    fn set_position<V: FormattedValue>(&self, position: V);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -162,6 +165,21 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
                 self.as_ref().to_glib_none().0,
                 mut_override(segment.to_glib_none().0),
             )
+        }
+    }
+
+    fn set_position<V: FormattedValue>(&self, position: V) {
+        unsafe {
+            let ptr: *mut ffi::GstAggregator = self.as_ref().to_glib_none().0;
+            let ptr = &mut *ptr;
+            let _guard = crate::utils::MutexGuard::lock(&ptr.parent.object.lock);
+
+            // gstaggregator.c asserts that the src pad is always of type GST_TYPE_AGGREGATOR_PAD,
+            // so the pointer cast here should be safe.
+            let srcpad = &mut *(ptr.srcpad as *mut ffi::GstAggregatorPad);
+
+            assert_eq!(srcpad.segment.format, position.format().into_glib());
+            srcpad.segment.position = position.into_raw_value() as u64;
         }
     }
 
