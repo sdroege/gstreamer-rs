@@ -1113,6 +1113,11 @@ final_type = true
     # Use glib::List as return type
     manual = true
 
+    [[object.function]]
+    name = "get_metadata"
+    # Use str as return type
+    manual = true
+
 [[object]]
 name = "Gst.TypeFindFactory"
 status = "generate"
@@ -1137,6 +1142,11 @@ final_type = true
     name = "list_get_device_providers"
     rename = "factories"
     # Use glib::List as return type
+    manual = true
+
+    [[object.function]]
+    name = "get_metadata"
+    # Use str as return type
     manual = true
 
 [[object]]

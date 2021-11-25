@@ -33,17 +33,6 @@ impl DeviceProviderFactory {
         }
     }
 
-    #[doc(alias = "gst_device_provider_factory_get_metadata")]
-    #[doc(alias = "get_metadata")]
-    pub fn metadata(&self, key: &str) -> Option<glib::GString> {
-        unsafe {
-            from_glib_none(ffi::gst_device_provider_factory_get_metadata(
-                self.to_glib_none().0,
-                key.to_glib_none().0,
-            ))
-        }
-    }
-
     #[doc(alias = "gst_device_provider_factory_get_metadata_keys")]
     #[doc(alias = "get_metadata_keys")]
     pub fn metadata_keys(&self) -> Vec<glib::GString> {
