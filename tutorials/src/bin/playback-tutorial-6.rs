@@ -9,7 +9,7 @@ mod tutorials_common;
 fn filter_vis_features(feature: &gst::PluginFeature) -> bool {
     match feature.downcast_ref::<gst::ElementFactory>() {
         Some(factory) => {
-            let klass = factory.metadata(&gst::ELEMENT_METADATA_KLASS).unwrap();
+            let klass = factory.klass();
             klass.contains("Visualization")
         }
         None => false,
@@ -29,7 +29,7 @@ fn tutorial_main() -> Result<(), Error> {
     println!("Available visualization plugins:");
     for feature in list {
         let factory = feature.downcast::<gst::ElementFactory>().unwrap();
-        let name = factory.metadata(&gst::ELEMENT_METADATA_LONGNAME).unwrap();
+        let name = factory.longname();
         println!("  {}", name);
 
         if selected_factory.is_none() && name.starts_with("GOOM") {
@@ -41,9 +41,7 @@ fn tutorial_main() -> Result<(), Error> {
     let vis_factory = selected_factory.expect("No visualization plugins found.");
 
     // We have now selected a factory for the visualization element
-    let name = vis_factory
-        .metadata(&gst::ELEMENT_METADATA_LONGNAME)
-        .unwrap();
+    let name = vis_factory.longname();
     println!("Selected {}", name);
     let vis_plugin = vis_factory.create(None).unwrap();
 
