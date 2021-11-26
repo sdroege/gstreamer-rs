@@ -18,6 +18,7 @@ use once_cell::sync::Lazy;
 use crate::Buffer;
 use crate::DateTime;
 use crate::Sample;
+use crate::Structure;
 
 use crate::date_time_serde;
 use crate::value::*;
@@ -36,6 +37,7 @@ pub(crate) static INT_RANGE_I64_OTHER_TYPE_ID: Lazy<glib::Type> =
 pub(crate) static LIST_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(List::static_type);
 pub(crate) static SAMPLE_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Sample::static_type);
 pub(crate) static BUFFER_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Buffer::static_type);
+pub(crate) static STRUCTURE_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Structure::static_type);
 
 impl Serialize for Fraction {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -85,6 +87,8 @@ macro_rules! ser_value (
                     ser_some_value!($value, Array, $ser_closure)
                 } else if *BITMASK_OTHER_TYPE_ID == type_id {
                     ser_some_value!($value, Bitmask, $ser_closure)
+                } else if *STRUCTURE_OTHER_TYPE_ID == type_id {
+                    ser_some_value!($value, Structure, $ser_closure)
                 } else if *DATE_OTHER_TYPE_ID == type_id {
                     ser_opt_value!($value, Date, |type_, value: Option<Date>| {
                         // Need to wrap the `glib::Date` in new type `date_time_serde::Date` first
@@ -213,6 +217,7 @@ macro_rules! de_send_value(
             "String" => de_opt_send_value!($type_name, $seq, String),
             "Array" => de_some_send_value!($type_name, $seq, Array),
             "Bitmask" => de_some_send_value!($type_name, $seq, Bitmask),
+            "Structure" => de_some_send_value!($type_name, $seq, Structure),
             "Date" => {
                 // Need to deserialize as `date_time_serde::Date` new type
                 // See comment in `date_time_serde.rs`
@@ -294,6 +299,7 @@ mod tests {
     use crate::FractionRange;
     use crate::IntRange;
     use crate::List;
+    use crate::Structure;
 
     use glib::{Date, DateMonth};
 
@@ -332,11 +338,30 @@ mod tests {
         // Bitmask
         let bitmask = Bitmask::new(1024 + 128 + 32);
 
-        let res = ron::ser::to_string_pretty(&bitmask, pretty_config);
+        let res = ron::ser::to_string_pretty(&bitmask, pretty_config.clone());
         assert_eq!(Ok("(1184)".to_owned()), res);
 
         let res = serde_json::to_string(&bitmask).unwrap();
         assert_eq!("1184".to_owned(), res);
+
+        // Nested structure
+        let s = Structure::builder("foobar")
+            .field("foo", 42)
+            .field("baz", Structure::builder("baz").field("foo", 43).build())
+            .build();
+
+        let res = ron::ser::to_string_pretty(&s, pretty_config);
+        assert_eq!(
+            Ok(r#"("foobar", [    ("foo", "i32", 42),    ("baz", "Structure", ("baz", [        ("foo", "i32", 43),    ])),])"#.to_owned()),
+            res
+        );
+
+        let res = serde_json::to_string(&s).unwrap();
+        assert_eq!(
+            r#"["foobar",[["foo","i32",42],["baz","Structure",["baz",[["foo","i32",43]]]]]]"#
+                .to_owned(),
+            res
+        );
     }
 
     #[test]
@@ -427,6 +452,21 @@ mod tests {
         let bitmask_json = "1184";
         let bitmask: Bitmask = serde_json::from_str(bitmask_json).unwrap();
         assert_eq!(bitmask_ref, bitmask);
+
+        // Nested structure
+        let s_ref = Structure::builder("foobar")
+            .field("foo", 42)
+            .field("baz", Structure::builder("baz").field("foo", 43).build())
+            .build();
+
+        let s_ron = r#"("foobar", [    ("foo", "i32", 42),    ("baz", "Structure", ("baz", [        ("foo", "i32", 43),    ])),])"#;
+        let s: Structure = ron::de::from_str(s_ron).unwrap();
+        assert_eq!(s_ref, s);
+
+        let s_json =
+            r#"["foobar",[["foo","i32",42],["baz","Structure",["baz",[["foo","i32",43]]]]]]"#;
+        let s: Structure = serde_json::from_str(s_json).unwrap();
+        assert_eq!(s_ref, s);
     }
 
     #[test]
@@ -467,6 +507,15 @@ mod tests {
         let bitmask_ser = ron::ser::to_string(&bitmask).unwrap();
         let bitmask_de: Bitmask = ron::de::from_str(bitmask_ser.as_str()).unwrap();
         assert_eq!(bitmask_de, bitmask);
+
+        // Nested structure
+        let s = Structure::builder("foobar")
+            .field("foo", 42)
+            .field("baz", Structure::builder("baz").field("foo", 43).build())
+            .build();
+        let s_ser = ron::ser::to_string(&s).unwrap();
+        let s_de: Structure = ron::de::from_str(s_ser.as_str()).unwrap();
+        assert_eq!(s_de, s);
     }
 
     #[allow(clippy::cognitive_complexity)]
