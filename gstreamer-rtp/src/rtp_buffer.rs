@@ -184,6 +184,11 @@ impl<'a> RTPBuffer<'a, Writable> {
             ffi::gst_rtp_buffer_remove_extension_data(&mut self.rtp_buffer);
         }
     }
+
+    #[doc(alias = "gst_rtp_buffer_set_padding")]
+    pub fn set_padding(&mut self, padding: bool) {
+        unsafe { ffi::gst_rtp_buffer_set_padding(&mut self.rtp_buffer, padding.into_glib()) }
+    }
 }
 
 impl<'a, T> RTPBuffer<'a, T> {
@@ -343,6 +348,16 @@ impl<'a, T> RTPBuffer<'a, T> {
             } else {
                 None
             }
+        }
+    }
+
+    #[doc(alias = "get_padding")]
+    #[doc(alias = "gst_rtp_buffer_get_padding")]
+    pub fn has_padding(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_rtp_buffer_get_padding(
+                glib::translate::mut_override(&self.rtp_buffer),
+            ))
         }
     }
 }
@@ -541,5 +556,29 @@ mod tests {
         let (extracted_appbits, data) = result.unwrap();
         assert_eq!(appbits, extracted_appbits);
         assert_eq!(data, &extension_data);
+    }
+
+    #[test]
+    fn test_padding() {
+        gst::init().unwrap();
+
+        let csrc_count = 2;
+        let payload_size = 16;
+        let mut buffer = gst::Buffer::new_rtp_with_sizes(payload_size, 4, csrc_count).unwrap();
+        {
+            let rtp_buffer = RTPBuffer::from_buffer_readable(&buffer).unwrap();
+            assert!(rtp_buffer.has_padding());
+        }
+        {
+            let buffer = buffer.get_mut().unwrap();
+            let mut rtp_buffer = RTPBuffer::from_buffer_writable(buffer).unwrap();
+
+            rtp_buffer.set_padding(false);
+        }
+
+        {
+            let rtp_buffer = RTPBuffer::from_buffer_readable(&buffer).unwrap();
+            assert!(!rtp_buffer.has_padding());
+        }
     }
 }
