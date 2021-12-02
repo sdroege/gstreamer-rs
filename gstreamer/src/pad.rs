@@ -1369,6 +1369,7 @@ where
     res.into_glib()
 }
 
+#[allow(clippy::needless_option_as_deref)]
 unsafe extern "C" fn trampoline_getrange_function<
     T,
     F: Fn(

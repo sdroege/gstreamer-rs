@@ -222,6 +222,7 @@ unsafe extern "C" fn push_src_alloc<T: PushSrcImpl>(
     .into_glib()
 }
 
+#[allow(clippy::needless_option_as_deref)]
 unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
     ptr: *mut ffi::GstPushSrc,
     buffer_ptr: *mut gst::ffi::GstBuffer,

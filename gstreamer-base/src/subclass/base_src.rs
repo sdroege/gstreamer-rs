@@ -772,6 +772,7 @@ unsafe extern "C" fn base_src_alloc<T: BaseSrcImpl>(
     .into_glib()
 }
 
+#[allow(clippy::needless_option_as_deref)]
 unsafe extern "C" fn base_src_create<T: BaseSrcImpl>(
     ptr: *mut ffi::GstBaseSrc,
     offset: u64,
