@@ -31,7 +31,7 @@ fn print_tags(info: &DiscovererInfo) {
     let tags = info.tags();
     match tags {
         Some(taglist) => {
-            println!("  {}", taglist.to_string()); // FIXME use an iterator
+            println!("  {}", taglist); // FIXME use an iterator
         }
         None => {
             println!("  no tags");
