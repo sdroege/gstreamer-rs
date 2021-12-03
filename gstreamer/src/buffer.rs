@@ -1179,8 +1179,10 @@ impl<T> Eq for MappedBuffer<T> {}
 unsafe impl<T> Send for MappedBuffer<T> {}
 unsafe impl<T> Sync for MappedBuffer<T> {}
 
+#[doc(alias = "GST_BUFFER_COPY_METADATA")]
 pub const BUFFER_COPY_METADATA: crate::BufferCopyFlags =
     crate::BufferCopyFlags::from_bits_truncate(ffi::GST_BUFFER_COPY_METADATA);
+#[doc(alias = "GST_BUFFER_COPY_ALL")]
 pub const BUFFER_COPY_ALL: crate::BufferCopyFlags =
     crate::BufferCopyFlags::from_bits_truncate(ffi::GST_BUFFER_COPY_ALL);
 

@@ -42,6 +42,7 @@ pub type Time = ClockTime;
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Buffers(pub u64);
 impl Buffers {
+    #[doc(alias = "GST_BUFFER_OFFSET_NONE")]
     pub const OFFSET_NONE: u64 = ffi::GST_BUFFER_OFFSET_NONE;
     pub const MAX: Self = Self(Self::OFFSET_NONE - 1);
 }
@@ -49,7 +50,9 @@ impl Buffers {
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Percent(pub u32);
 impl Percent {
+    #[doc(alias = "GST_FORMAT_PERCENT_MAX")]
     pub const MAX: Self = Self(ffi::GST_FORMAT_PERCENT_MAX as u32);
+    #[doc(alias = "GST_FORMAT_PERCENT_SCALE")]
     pub const SCALE: u32 = ffi::GST_FORMAT_PERCENT_SCALE as u32;
 }
 

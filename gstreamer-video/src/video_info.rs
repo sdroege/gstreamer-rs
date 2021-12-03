@@ -8,6 +8,7 @@ use std::mem;
 use std::ptr;
 use std::str;
 
+#[doc(alias = "GST_VIDEO_MAX_PLANES")]
 pub const VIDEO_MAX_PLANES: usize = ffi::GST_VIDEO_MAX_PLANES as usize;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]

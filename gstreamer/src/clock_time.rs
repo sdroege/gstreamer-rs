@@ -15,10 +15,15 @@ use std::{cmp, fmt, str};
 pub struct ClockTime(pub(crate) u64);
 
 impl ClockTime {
+    #[doc(alias = "GST_SECOND")]
     pub const SECOND: ClockTime = ClockTime(1_000_000_000);
+    #[doc(alias = "GST_MSECOND")]
     pub const MSECOND: ClockTime = ClockTime(1_000_000);
+    #[doc(alias = "GST_USECOND")]
     pub const USECOND: ClockTime = ClockTime(1_000);
+    #[doc(alias = "GST_NSECOND")]
     pub const NSECOND: ClockTime = ClockTime(1);
+    // checker-ignore-item
     pub const MAX: ClockTime = ClockTime(ffi::GST_CLOCK_TIME_NONE - 1);
 
     pub const fn hours(self) -> u64 {
