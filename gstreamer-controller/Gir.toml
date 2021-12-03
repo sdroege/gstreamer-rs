@@ -18,19 +18,19 @@ external_libraries = [
 generate = [
     "GstController.ARGBControlBinding",
     "GstController.DirectControlBinding",
-    "GstController.InterpolationControlSource",
-    "GstController.LFOControlSource",
-    "GstController.TriggerControlSource",
-    "GstController.DirectControlBindingConvertValue",
     "GstController.DirectControlBindingConvertGValue",
-    "GstController.LFOWaveform",
+    "GstController.DirectControlBindingConvertValue",
+    "GstController.InterpolationControlSource",
     "GstController.InterpolationMode",
+    "GstController.LFOControlSource",
+    "GstController.LFOWaveform",
+    "GstController.TriggerControlSource",
 ]
 
 manual = [
-    "Gst.Object",
     "Gst.ControlBinding",
     "Gst.ControlSource",
+    "Gst.Object",
     "GstController.ControlPoint",
 ]
 
@@ -39,6 +39,10 @@ name = "Gst.ClockTime"
 status = "manual"
 conversion_type = "Option"
 
+[[object]]
+name = "GstController.ProxyControlBinding"
+status = "generate"
+version = "1.12"
 
 [[object]]
 name = "GstController.TimedValueControlSource"
@@ -55,8 +59,3 @@ status = "generate"
         [[object.function.parameter]]
         name = "timestamp"
         mandatory = true
-
-[[object]]
-name = "GstController.ProxyControlBinding"
-status = "generate"
-version = "1.12"

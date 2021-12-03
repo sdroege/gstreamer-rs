@@ -63,6 +63,18 @@ status = "manual"
 conversion_type = "Option"
 
 [[object]]
+name = "GstCheck.Harness"
+status = "manual"
+
+    [[object.function]]
+    name = "new_with_element"
+    rename = "with_element"
+
+    [[object.function]]
+    name = "new_with_padnames"
+    rename = "with_padnames"
+
+[[object]]
 name = "GstCheck.TestClock"
 status = "generate"
 final_type = true
@@ -107,15 +119,3 @@ final_type = true
     [[object.function]]
     name = "timed_wait_for_multiple_pending_ids"
     manual = true
-
-[[object]]
-name = "GstCheck.Harness"
-status = "manual"
-
-    [[object.function]]
-    name = "new_with_element"
-    rename = "with_element"
-
-    [[object.function]]
-    name = "new_with_padnames"
-    rename = "with_padnames"

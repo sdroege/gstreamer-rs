@@ -46,6 +46,16 @@ manual = [
 ]
 
 [[object]]
+name = "GstWebRTC.WebRTCDataChannel"
+status = "generate"
+final_type = true
+
+    [[object.function]]
+    name = "on_error"
+    # takes ownership of SDP message
+    manual = true
+
+[[object]]
 name = "GstWebRTC.WebRTCDTLSTransport"
 status = "generate"
 final_type = true
@@ -71,24 +81,9 @@ status = "generate"
 final_type = true
 
 [[object]]
-name = "GstWebRTC.WebRTCSessionDescription"
+name = "GstWebRTC.WebRTCSCTPTransport"
 status = "generate"
-final_type = true
-
-    [[object.function]]
-    name = "new"
-    # takes ownership of SDP message
-    ignore = true
-
-[[object]]
-name = "GstWebRTC.WebRTCDataChannel"
-status = "generate"
-final_type = true
-
-    [[object.function]]
-    name = "on_error"
-    # takes ownership of SDP message
-    manual = true
+version = "1.20"
 
 [[object]]
 name = "GstWebRTC.WebRTCSDPType"
@@ -100,6 +95,11 @@ status = "generate"
         nullable = false
 
 [[object]]
-name = "GstWebRTC.WebRTCSCTPTransport"
+name = "GstWebRTC.WebRTCSessionDescription"
 status = "generate"
-version = "1.20"
+final_type = true
+
+    [[object.function]]
+    name = "new"
+    # takes ownership of SDP message
+    ignore = true

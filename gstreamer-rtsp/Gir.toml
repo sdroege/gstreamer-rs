@@ -10,9 +10,9 @@ single_version_file = true
 generate_display_trait = false
 
 external_libraries = [
+    "Gio",
     "GLib",
     "GObject",
-    "Gio",
     "GstSdp"
 ]
 
@@ -34,18 +34,9 @@ manual = [
 ]
 
 [[object]]
-name = "GstRtsp.RTSPUrl"
-status = "generate"
-concurrency = "send"
-
-    [[object.function]]
-    name = "get_port"
-    ignore = true
-
-[[object]]
-name = "GstRtsp.RTSPAuthParam"
-status = "generate"
-concurrency = "send"
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
 
 [[object]]
 name = "Gst.ClockTime"
@@ -53,14 +44,14 @@ status = "manual"
 conversion_type = "Option"
 
 [[object]]
-name = "Gst.Caps"
+name = "Gst.Structure"
 status = "manual"
 ref_mode = "ref"
 
 [[object]]
-name = "Gst.Structure"
-status = "manual"
-ref_mode = "ref"
+name = "GstRtsp.RTSPAuthParam"
+status = "generate"
+concurrency = "send"
 
 [[object]]
 name = "GstRtsp.RTSPLowerTrans"
@@ -88,4 +79,13 @@ name = "GstRtsp.RTSPTransMode"
 status = "generate"
     [[object.member]]
     name = "unknown"
+    ignore = true
+
+[[object]]
+name = "GstRtsp.RTSPUrl"
+status = "generate"
+concurrency = "send"
+
+    [[object.function]]
+    name = "get_port"
     ignore = true

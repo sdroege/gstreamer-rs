@@ -479,8 +479,12 @@ bitflags! {
         const MULTIPLE_VIEW = ffi::GST_VIDEO_FRAME_FLAG_MULTIPLE_VIEW as u32;
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_FIRST_IN_BUNDLE")]
         const FIRST_IN_BUNDLE = ffi::GST_VIDEO_FRAME_FLAG_FIRST_IN_BUNDLE as u32;
+        #[cfg(any(feature = "v1_16", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_TOP_FIELD")]
         const TOP_FIELD = ffi::GST_VIDEO_FRAME_FLAG_TOP_FIELD as u32;
+        #[cfg(any(feature = "v1_16", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_BOTTOM_FIELD")]
         const BOTTOM_FIELD = ffi::GST_VIDEO_FRAME_FLAG_BOTTOM_FIELD as u32;
     }

@@ -21,6 +21,9 @@ glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }
 gst = { package = "gstreamer", path = "../gstreamer" }
 gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp" }
 
+[dev-dependencies]
+gir-format-check = "0.1"
+
 [features]
 default = []
 v1_10 = ["gst/v1_10", "gst-sdp/v1_10", "ffi/v1_10"]

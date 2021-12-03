@@ -14,8 +14,8 @@ external_libraries = [
     "GObject",
     "Gst",
     "GstBase",
-    "GstVideo",
     "GstGL",
+    "GstVideo",
 ]
 
 generate = [
@@ -26,16 +26,11 @@ manual = [
     "GLib.Error",
     "GLib.Thread",
     "GObject.Object",
-    "Gst.Object",
     "Gst.FlowReturn",
+    "Gst.Object",
     "Gst.PadDirection",
     "GstGL.GLDisplay",
 ]
-
-[[object]]
-name = "Gst.Structure"
-status = "manual"
-ref_mode = "ref"
 
 [[object]]
 name = "Gst.Buffer"
@@ -49,5 +44,10 @@ ref_mode = "ref"
 
 [[object]]
 name = "Gst.Query"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Structure"
 status = "manual"
 ref_mode = "ref"

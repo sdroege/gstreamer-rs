@@ -64,6 +64,20 @@ status = "manual"
     rename = "from_buffer_readable"
 
 [[object]]
+name = "GstRtp.RTPBufferFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "GstRtp.RTPBufferMapFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
 name = "GstRtp.RTPHeaderExtension"
 status = "generate"
 manual_traits = ["RTPHeaderExtensionExtManual"]
@@ -91,17 +105,3 @@ manual_traits = ["RTPHeaderExtensionExtManual"]
     name = "get_sdp_caps_field_name"
         [object.function.return]
         nullable = false
-
-[[object]]
-name = "GstRtp.RTPBufferFlags"
-status = "generate"
-    [[object.member]]
-    name = "last"
-    ignore = true
-
-[[object]]
-name = "GstRtp.RTPBufferMapFlags"
-status = "generate"
-    [[object.member]]
-    name = "last"
-    ignore = true

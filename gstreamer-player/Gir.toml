@@ -32,8 +32,8 @@ manual = [
     "GLib.Error",
     "GLib.MainContext",
     "GObject.Object",
-    "Gst.Object",
     "Gst.Element",
+    "Gst.Object",
     "GstVideo.VideoMultiviewFlags",
     "GstVideo.VideoMultiviewFramePacking",
 ]
@@ -44,18 +44,22 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
-name = "Gst.TagList"
+name = "Gst.ClockTime"
 status = "manual"
-ref_mode = "ref"
+conversion_type = "Option"
 
 [[object]]
 name = "Gst.Sample"
 status = "manual"
 ref_mode = "ref"
 
-
 [[object]]
 name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.TagList"
 status = "manual"
 ref_mode = "ref"
 
@@ -182,6 +186,21 @@ status = "generate"
 final_type = true
 
 [[object]]
+name = "GstPlayer.PlayerGMainContextSignalDispatcher"
+status = "generate"
+final_type = true
+
+    [[object.function]]
+    name = "new"
+    # Wrong return value
+    ignore = true
+
+[[object]]
+name = "GstPlayer.PlayerSubtitleInfo"
+status = "generate"
+final_type = true
+
+[[object]]
 name = "GstPlayer.PlayerVideoInfo"
 status = "generate"
 final_type = true
@@ -195,11 +214,6 @@ final_type = true
     name = "get_pixel_aspect_ratio"
     # Fraction
     manual = true
-
-[[object]]
-name = "GstPlayer.PlayerSubtitleInfo"
-status = "generate"
-final_type = true
 
 [[object]]
 name = "GstPlayer.PlayerVideoOverlayVideoRenderer"
@@ -223,18 +237,3 @@ final_type = true
     [[object.function]]
     name = "set_window_handle"
     manual = true
-
-[[object]]
-name = "GstPlayer.PlayerGMainContextSignalDispatcher"
-status = "generate"
-final_type = true
-
-    [[object.function]]
-    name = "new"
-    # Wrong return value
-    ignore = true
-
-[[object]]
-name = "Gst.ClockTime"
-status = "manual"
-conversion_type = "Option"

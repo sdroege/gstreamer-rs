@@ -38,6 +38,7 @@ fragile = "1"
 ron = "0.7"
 serde_json = "1.0"
 futures-executor = "0.3.1"
+gir-format-check = "0.1"
 
 [features]
 default = []

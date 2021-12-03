@@ -27,6 +27,7 @@ fragile = "1"
 
 [dev-dependencies]
 itertools = "0.10"
+gir-format-check = "0.1"
 
 [features]
 default = []

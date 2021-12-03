@@ -25,6 +25,9 @@ gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp" }
 gst-rtsp = { package = "gstreamer-rtsp", path = "../gstreamer-rtsp" }
 gst-net = { package = "gstreamer-net", path = "../gstreamer-net" }
 
+[dev-dependencies]
+gir-format-check = "0.1"
+
 [features]
 default = []
 v1_10 = ["gst/v1_10", "gst-sdp/v1_10", "gst-rtsp/v1_10", "gst-net/v1_10", "ffi/v1_10"]

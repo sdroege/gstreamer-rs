@@ -11,10 +11,10 @@ generate_display_trait = false
 trust_return_value_nullability = true
 
 external_libraries = [
+    "Gio",
     "GLib",
     "GObject",
     "Gst",
-    "Gio",
 ]
 
 generate = [
@@ -35,26 +35,6 @@ status = "manual"
 conversion_type = "Option"
 
 [[object]]
-name = "GstNet.NtpClock"
-status = "generate"
-final_type = true
-
-    [[object.function]]
-    name = "new"
-    # Floating reference handling
-    manual = true
-
-[[object]]
-name = "GstNet.PtpClock"
-status = "generate"
-final_type = true
-
-    [[object.function]]
-    name = "new"
-    # Floating reference handling
-    manual = true
-
-[[object]]
 name = "GstNet.NetClientClock"
 status = "generate"
 final_type = true
@@ -66,6 +46,26 @@ final_type = true
 
 [[object]]
 name = "GstNet.NetTimeProvider"
+status = "generate"
+final_type = true
+
+    [[object.function]]
+    name = "new"
+    # Floating reference handling
+    manual = true
+
+[[object]]
+name = "GstNet.NtpClock"
+status = "generate"
+final_type = true
+
+    [[object.function]]
+    name = "new"
+    # Floating reference handling
+    manual = true
+
+[[object]]
+name = "GstNet.PtpClock"
 status = "generate"
 final_type = true
 

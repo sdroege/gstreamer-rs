@@ -35,7 +35,7 @@ manual = [
 ]
 
 [[object]]
-name = "Gst.Toc"
+name = "Gst.Buffer"
 status = "manual"
 ref_mode = "ref"
 
@@ -45,14 +45,9 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
-name = "Gst.Message"
+name = "Gst.ClockTime"
 status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Buffer"
-status = "manual"
-ref_mode = "ref"
+conversion_type = "Option"
 
 [[object]]
 name = "Gst.Event"
@@ -60,7 +55,7 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
-name = "Gst.TagList"
+name = "Gst.Message"
 status = "manual"
 ref_mode = "ref"
 
@@ -70,203 +65,15 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
-name = "Gst.ClockTime"
+name = "Gst.TagList"
 status = "manual"
-conversion_type = "Option"
+ref_mode = "ref"
+
 
 [[object]]
-name = "GstPbutils.Discoverer"
-status = "generate"
-final_type = true
-
-    [[object.function]]
-    name = "discover_uri_async"
-        [object.function.return]
-        bool_return_is_error = "Failed to add URI to list of discovers"
-
-    [[object.function]]
-    name = "new"
-        [[object.function.parameter]]
-        name = "timeout"
-        mandatory = true
-
-    # Manually implemented to use ClockTime
-    [[object.property]]
-    name = "timeout"
-    manual = true
-
-    [[object.property]]
-    name = "use-cache"
-    version = "1.16"
-
-[[object]]
-name = "GstPbutils.DiscovererInfo"
-status = "generate"
-
-    [[object.function]]
-    name = "copy"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "to_variant"
-        [object.function.return]
-        nullable_return_is_error = "Failed to serialize DiscovererInfo to Variant"
-
-    [[object.function]]
-    name = "from_variant"
-        [object.function.return]
-        nullable_return_is_error = "Failed to deserialize DiscovererInfo from Variant"
-
-[[object]]
-name = "GstPbutils.DiscovererStreamInfo"
-status = "generate"
-final_type = false
-
-    # Not useful
-    [[object.function]]
-    name = "list_free"
-    ignore = true
-
-    [[object.function]]
-    name = "get_stream_type_nick"
-        [object.function.return]
-        nullable = false
-
-[[object]]
-name = "GstPbutils.DiscovererAudioInfo"
-status = "generate"
-final_type = true
-
-[[object]]
-name = "GstPbutils.DiscovererVideoInfo"
-status = "generate"
-final_type = true
-
-    # Implement manually to expose as gst::Fraction
-    [[object.function]]
-    name = "get_framerate_num"
-    manual = true
-    [[object.function]]
-    name = "get_framerate_denom"
-    manual = true
-    [[object.function]]
-    name = "get_par_num"
-    manual = true
-    [[object.function]]
-    name = "get_par_denom"
-    manual = true
-
-[[object]]
-name = "GstPbutils.DiscovererSubtitleInfo"
-status = "generate"
-final_type = true
-
-[[object]]
-name = "GstPbutils.DiscovererContainerInfo"
-status = "generate"
-final_type = true
-
-[[object]]
-name = "GstPbutils.EncodingProfile"
-status = "generate"
-
-    # Ignore all setters, making it immutable. A builder will be provided.
-    [[object.function]]
-    name = "new"
-    manual = true
-    [[object.function]]
-    pattern = "set_.*"
-    manual = true
-
-    [[object.function]]
-    pattern = "get_restriction"
-    manual = true
-
-    [[object.function]]
-    name = "copy"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "get_input_caps"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "get_format"
-        [object.function.return]
-        nullable = false
-
-    [[object.property]]
-    name = "restriction-caps"
-    # encodingprofile is immutable after constructed
-    ignore = true
-
-    [[object.function]]
-    name = "from_discoverer"
-        [object.function.return]
-        nullable_return_is_error = "Failed to create EncodingProfile from DiscovererInfo"
-
-[[object]]
-name = "GstPbutils.EncodingContainerProfile"
-status = "generate"
-
-    # Make it immutable, only able to be constructed for a builder
-    [[object.function]]
-    name = "new"
-    manual = true
-
-    [[object.function]]
-    name = "add_profile"
-    manual = true
-
-[[object]]
-name = "GstPbutils.EncodingTarget"
-status = "generate"
-
-    [[object.function]]
-    name = "add_profile"
-    # can be provided on constructor and we better
-    # consider this immutable
-    ignore = true
-
-    [[object.function]]
-    name = "get_category"
-        [object.function.return]
-        nullable = false
-    [[object.function]]
-    name = "get_description"
-        [object.function.return]
-        nullable = false
-    [[object.function]]
-    name = "get_name"
-        [object.function.return]
-        nullable = false
-
-[[object]]
-name = "GstPbutils.EncodingAudioProfile"
-status = "generate"
-final_type = true
-    # Ignore all setters, making it immutable. A builder will be provided.
-    [[object.function]]
-    name = "new"
-    manual = true
-    [[object.function]]
-    pattern = "set_.*"
-    manual = true
-
-[[object]]
-name = "GstPbutils.EncodingVideoProfile"
-status = "generate"
-final_type = true
-    # Ignore all setters, making it immutable. A builder will be provided.
-    [[object.function]]
-    name = "new"
-    manual = true
-    [[object.function]]
-    pattern = "set_.*"
-    manual = true
+name = "Gst.Toc"
+status = "manual"
+ref_mode = "ref"
 
 [[object]]
 name = "GstPbutils.*"
@@ -347,6 +154,60 @@ status = "generate"
     assertion = "skip"
 
 [[object]]
+name = "GstPbutils.Discoverer"
+status = "generate"
+final_type = true
+
+    [[object.function]]
+    name = "discover_uri_async"
+        [object.function.return]
+        bool_return_is_error = "Failed to add URI to list of discovers"
+
+    [[object.function]]
+    name = "new"
+        [[object.function.parameter]]
+        name = "timeout"
+        mandatory = true
+
+    # Manually implemented to use ClockTime
+    [[object.property]]
+    name = "timeout"
+    manual = true
+
+    [[object.property]]
+    name = "use-cache"
+    version = "1.16"
+
+[[object]]
+name = "GstPbutils.DiscovererAudioInfo"
+status = "generate"
+final_type = true
+
+[[object]]
+name = "GstPbutils.DiscovererContainerInfo"
+status = "generate"
+final_type = true
+
+[[object]]
+name = "GstPbutils.DiscovererInfo"
+status = "generate"
+
+    [[object.function]]
+    name = "copy"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "to_variant"
+        [object.function.return]
+        nullable_return_is_error = "Failed to serialize DiscovererInfo to Variant"
+
+    [[object.function]]
+    name = "from_variant"
+        [object.function.return]
+        nullable_return_is_error = "Failed to deserialize DiscovererInfo from Variant"
+
+[[object]]
 name = "GstPbutils.DiscovererSerializeFlags"
 status = "generate"
     [[object.member]]
@@ -355,3 +216,143 @@ status = "generate"
     [[object.member]]
     name = "all"
     ignore = true
+
+[[object]]
+name = "GstPbutils.DiscovererStreamInfo"
+status = "generate"
+final_type = false
+
+    # Not useful
+    [[object.function]]
+    name = "list_free"
+    ignore = true
+
+    [[object.function]]
+    name = "get_stream_type_nick"
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "GstPbutils.DiscovererSubtitleInfo"
+status = "generate"
+final_type = true
+
+[[object]]
+name = "GstPbutils.DiscovererVideoInfo"
+status = "generate"
+final_type = true
+
+    # Implement manually to expose as gst::Fraction
+    [[object.function]]
+    name = "get_framerate_num"
+    manual = true
+    [[object.function]]
+    name = "get_framerate_denom"
+    manual = true
+    [[object.function]]
+    name = "get_par_num"
+    manual = true
+    [[object.function]]
+    name = "get_par_denom"
+    manual = true
+
+[[object]]
+name = "GstPbutils.EncodingAudioProfile"
+status = "generate"
+final_type = true
+    # Ignore all setters, making it immutable. A builder will be provided.
+    [[object.function]]
+    name = "new"
+    manual = true
+    [[object.function]]
+    pattern = "set_.*"
+    manual = true
+
+[[object]]
+name = "GstPbutils.EncodingContainerProfile"
+status = "generate"
+
+    # Make it immutable, only able to be constructed for a builder
+    [[object.function]]
+    name = "new"
+    manual = true
+
+    [[object.function]]
+    name = "add_profile"
+    manual = true
+
+[[object]]
+name = "GstPbutils.EncodingProfile"
+status = "generate"
+
+    # Ignore all setters, making it immutable. A builder will be provided.
+    [[object.function]]
+    name = "new"
+    manual = true
+    [[object.function]]
+    pattern = "set_.*"
+    manual = true
+
+    [[object.function]]
+    pattern = "get_restriction"
+    manual = true
+
+    [[object.function]]
+    name = "copy"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "get_input_caps"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "get_format"
+        [object.function.return]
+        nullable = false
+
+    [[object.property]]
+    name = "restriction-caps"
+    # encodingprofile is immutable after constructed
+    ignore = true
+
+    [[object.function]]
+    name = "from_discoverer"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create EncodingProfile from DiscovererInfo"
+
+[[object]]
+name = "GstPbutils.EncodingTarget"
+status = "generate"
+
+    [[object.function]]
+    name = "add_profile"
+    # can be provided on constructor and we better
+    # consider this immutable
+    ignore = true
+
+    [[object.function]]
+    name = "get_category"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "get_description"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "get_name"
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "GstPbutils.EncodingVideoProfile"
+status = "generate"
+final_type = true
+    # Ignore all setters, making it immutable. A builder will be provided.
+    [[object.function]]
+    name = "new"
+    manual = true
+    [[object.function]]
+    pattern = "set_.*"
+    manual = true

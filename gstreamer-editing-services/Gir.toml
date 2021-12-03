@@ -9,138 +9,110 @@ single_version_file = true
 generate_display_trait = false
 
 external_libraries = [
+    "Gio",
     "GLib",
     "GObject",
-    "Gio",
     "Gst",
     "GstPbutils",
 ]
 
 manual = [
+    "Gio.AsyncReadyCallback",
+    "Gio.Cancellable",
     "GLib.Date",
     "GLib.DateTime",
     "GLib.Error",
     "GLib.Source",
     "GLib.Type",
-    "Gio.Cancellable",
-    "Gio.AsyncReadyCallback",
     "GObject.Object",
     "GObject.Value",
-    "Gst.DateTime",
+    "Gst.Bin",
     "Gst.ChildProxy",
     "Gst.ControlBinding",
     "Gst.ControlSource",
     "Gst.CoreError",
+    "Gst.DateTime",
     "Gst.Element",
     "Gst.ElementFactory",
     "Gst.EventType",
-    "Gst.Bin",
     "Gst.Pad",
     "Gst.Pipeline",
     "Gst.Segment",
     "Gst.State",
     "Gst.StaticCaps",
     "Gst.StaticPadTemplate",
-    "GstPbutils.EncodingProfile",
     "GstPbutils.DiscovererInfo",
     "GstPbutils.DiscovererStreamInfo",
+    "GstPbutils.EncodingProfile",
 ]
 
 generate = [
-    "GES.PipelineFlags",
-    "GES.FrameNumber",
-    "GES.Group",
-    "GES.UriClipAsset",
-    "GES.UriSourceAsset",
-    "GES.OperationClip",
-    "GES.TransitionClip",
-    "GES.BaseTransitionClip",
-    "GES.VideoStandardTransitionType",
-    "GES.Source",
+    "GES.AssetLoadingReturn",
     "GES.AudioSource",
     "GES.AudioTestSource",
     "GES.AudioTrack",
     "GES.AudioTransition",
-    "GES.Operation",
-    "GES.Transition",
     "GES.AudioUriSource",
     "GES.BaseEffectClip",
-    "GES.Formatter",
+    "GES.BaseTransitionClip",
     "GES.BaseXmlFormatter",
     "GES.ChildrenControlMode",
     "GES.ClipAsset",
-    "GES.TrackElementAsset",
     "GES.EffectAsset",
     "GES.EffectClip",
+    "GES.Error",
     "GES.ExtractableCheckId",
-    "GES.VideoUriSource",
-    "GES.VideoSource",
+    "GES.Formatter",
+    "GES.FrameNumber",
+    "GES.Group",
     "GES.ImageSource",
-    "GES.MultiFileSource",
-    "GES.OverlayClip",
+    "GES.Marker",
+    "GES.MarkerFlags",
+    "GES.MarkerList",
     "GES.MetaContainer",
     "GES.MetaFlag",
-    "GES.Marker",
-    "GES.MarkerList",
-    "GES.MarkerFlags",
+    "GES.MultiFileSource",
+    "GES.Operation",
+    "GES.OperationClip",
+    "GES.OverlayClip",
+    "GES.PipelineFlags",
+    "GES.Source",
     "GES.SourceClip",
     "GES.SourceClipAsset",
     "GES.TestClip",
+    "GES.TextHAlign",
+    "GES.TextOverlay",
+    "GES.TextOverlayClip",
+    "GES.TextVAlign",
+    "GES.TitleClip",
+    "GES.TitleSource",
+    "GES.TrackElementAsset",
+    "GES.Transition",
+    "GES.TransitionClip",
+    "GES.UriClipAsset",
+    "GES.UriSourceAsset",
+    "GES.VideoSource",
+    "GES.VideoStandardTransitionType",
     "GES.VideoTestPattern",
     "GES.VideoTestSource",
     "GES.VideoTrack",
     "GES.VideoTransition",
+    "GES.VideoUriSource",
     "GES.XmlFormatter",
-    "GES.TextHAlign",
-    "GES.TextVAlign",
-    "GES.TextOverlay",
-    "GES.TextOverlayClip",
-    "GES.TitleClip",
-    "GES.TitleSource",
-    "GES.AssetLoadingReturn",
-    "GES.Error",
 ]
 
 [[object]]
-name = "Gst.Object"
-# For renaming the trait...
-status = "manual"
-trait_name = "GstObjectExt"
-
-[[object]]
-name = "Gst.Structure"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Caps"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Buffer"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.BufferList"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Sample"
-status = "manual"
-ref_mode = "ref"
+name = "GES.Asset"
+status = "generate"
+    [[object.function]]
+    name = "set_proxy"
+        [object.function.return]
+        bool_return_is_error = "Failed to set proxy"
 
     [[object.function]]
-    name = "get_caps"
-    # Function moved to SampleRef
-    ignore = true
-
-[[object]]
-name = "Gst.ClockTime"
-status = "manual"
-conversion_type = "Option"
+    name = "unproxy"
+        [object.function.return]
+        bool_return_is_error = "Failed to unproxy asset"
 
 [[object]]
 name = "GES.BaseEffect"
@@ -151,20 +123,37 @@ status = "generate"
     ignore = true
 
 [[object]]
-name = "GES.Effect"
+name = "GES.Clip"
 status = "generate"
     [[object.function]]
-    name = "new"
+    name = "get_duration_limit"
         [object.function.return]
-        nullable_return_is_error = "Failed to create effect from description"
+        mandatory = true
 
-[[object]]
-name = "GES.UriClip"
-status = "generate"
     [[object.function]]
-    name = "new"
+    name = "move_to_layer"
         [object.function.return]
-        nullable_return_is_error = "Failed to create Uri clip from Uri"
+        bool_return_is_error = "Failed to move clip to specified layer"
+
+    [[object.function]]
+    name = "set_top_effect_index"
+        [object.function.return]
+        bool_return_is_error = "Failed to move effect"
+
+    [[object.function]]
+    name = "set_top_effect_priority"
+        [object.function.return]
+        bool_return_is_error = "Failed to the set top effect priority"
+
+    [[object.function]]
+    name = "add_asset"
+        [object.function.return]
+        nullable_return_is_error = "Failed to add asset"
+
+    [[object.function]]
+    name = "split"
+        [object.function.return]
+        nullable_return_is_error = "Failed to split clip"
 
 [[object]]
 name = "GES.CommandLineFormatter"
@@ -177,6 +166,117 @@ status = "generate"
     name = "get_timeline_uri"
         [object.function.return]
         nullable = false
+
+[[object]]
+name = "GES.Container"
+status = "generate"
+trait_name = "GESContainerExt"
+    [[object.function]]
+    name = "add"
+        [object.function.return]
+        bool_return_is_error = "Failed to add element"
+
+    [[object.function]]
+    name = "remove"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove element"
+
+    [[object.function]]
+    name = "edit"
+        [object.function.return]
+        bool_return_is_error = "Failed to edit container"
+
+[[object]]
+name = "GES.Edge"
+status = "generate"
+    [[object.function]]
+    name = "name"
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "GES.EditMode"
+status = "generate"
+    [[object.function]]
+    name = "name"
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "GES.Effect"
+status = "generate"
+    [[object.function]]
+    name = "new"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create effect from description"
+
+[[object]]
+name = "GES.Extractable"
+status = "generate"
+    [[object.function]]
+    name = "set_asset"
+        [object.function.return]
+        bool_return_is_error = "Failed to set asset"
+
+[[object]]
+name = "GES.Layer"
+status = "generate"
+    [[object.function]]
+    name = "add_clip"
+        [object.function.return]
+        bool_return_is_error = "Failed to add clip"
+
+    [[object.function]]
+    name = "get_duration"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "remove_clip"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove clip"
+
+    [[object.function]]
+    name = "add_asset"
+        [object.function.return]
+        nullable_return_is_error = "Failed to add asset"
+
+[[object]]
+name = "GES.Pipeline"
+status = "generate"
+trait_name = "GESPipelineExt"
+    [[object.function]]
+    name = "set_render_settings"
+        [object.function.return]
+        bool_return_is_error = "Failed to set render settings"
+
+    [[object.function]]
+    name = "set_mode"
+        [object.function.return]
+        bool_return_is_error = "Failed to set mode"
+
+    [[object.function]]
+    name = "save_thumbnail"
+        [object.function.return]
+        bool_return_is_error = "Failed to save thumbnail"
+
+    [[object.function]]
+    name = "set_timeline"
+        [object.function.return]
+        bool_return_is_error = "Failed to set timeline"
+
+[[object]]
+name = "GES.Project"
+status = "generate"
+    [[object.function]]
+    name = "add_encoding_profile"
+        [object.function.return]
+        bool_return_is_error = "Failed to add profile"
+
+    [[object.function]]
+    name = "remove_asset"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove asset"
 
 [[object]]
 name = "GES.Timeline"
@@ -238,169 +338,6 @@ status = "generate"
         [[object.function.parameter]]
         name = "snapping_distance"
         mandatory = true
-
-[[object]]
-name = "GES.Container"
-status = "generate"
-trait_name = "GESContainerExt"
-    [[object.function]]
-    name = "add"
-        [object.function.return]
-        bool_return_is_error = "Failed to add element"
-
-    [[object.function]]
-    name = "remove"
-        [object.function.return]
-        bool_return_is_error = "Failed to remove element"
-
-    [[object.function]]
-    name = "edit"
-        [object.function.return]
-        bool_return_is_error = "Failed to edit container"
-
-[[object]]
-name = "GES.Pipeline"
-status = "generate"
-trait_name = "GESPipelineExt"
-    [[object.function]]
-    name = "set_render_settings"
-        [object.function.return]
-        bool_return_is_error = "Failed to set render settings"
-
-    [[object.function]]
-    name = "set_mode"
-        [object.function.return]
-        bool_return_is_error = "Failed to set mode"
-
-    [[object.function]]
-    name = "save_thumbnail"
-        [object.function.return]
-        bool_return_is_error = "Failed to save thumbnail"
-
-    [[object.function]]
-    name = "set_timeline"
-        [object.function.return]
-        bool_return_is_error = "Failed to set timeline"
-
-[[object]]
-name = "GES.Track"
-status = "generate"
-trait_name = "GESTrackExt"
-    [[object.function]]
-    name = "add_element"
-        [object.function.return]
-        bool_return_is_error = "Failed to add element"
-
-    [[object.function]]
-    name = "remove_element"
-        [object.function.return]
-        bool_return_is_error = "Failed to remove element"
-
-[[object]]
-name = "GES.Asset"
-status = "generate"
-    [[object.function]]
-    name = "set_proxy"
-        [object.function.return]
-        bool_return_is_error = "Failed to set proxy"
-
-    [[object.function]]
-    name = "unproxy"
-        [object.function.return]
-        bool_return_is_error = "Failed to unproxy asset"
-
-[[object]]
-name = "GES.Clip"
-status = "generate"
-    [[object.function]]
-    name = "get_duration_limit"
-        [object.function.return]
-        mandatory = true
-
-    [[object.function]]
-    name = "move_to_layer"
-        [object.function.return]
-        bool_return_is_error = "Failed to move clip to specified layer"
-
-    [[object.function]]
-    name = "set_top_effect_index"
-        [object.function.return]
-        bool_return_is_error = "Failed to move effect"
-
-    [[object.function]]
-    name = "set_top_effect_priority"
-        [object.function.return]
-        bool_return_is_error = "Failed to the set top effect priority"
-
-    [[object.function]]
-    name = "add_asset"
-        [object.function.return]
-        nullable_return_is_error = "Failed to add asset"
-
-    [[object.function]]
-    name = "split"
-        [object.function.return]
-        nullable_return_is_error = "Failed to split clip"
-
-[[object]]
-name = "GES.Extractable"
-status = "generate"
-    [[object.function]]
-    name = "set_asset"
-        [object.function.return]
-        bool_return_is_error = "Failed to set asset"
-
-[[object]]
-name = "GES.Edge"
-status = "generate"
-    [[object.function]]
-    name = "name"
-        [object.function.return]
-        nullable = false
-
-[[object]]
-name = "GES.EditMode"
-status = "generate"
-    [[object.function]]
-    name = "name"
-        [object.function.return]
-        nullable = false
-
-[[object]]
-name = "GES.Layer"
-status = "generate"
-    [[object.function]]
-    name = "add_clip"
-        [object.function.return]
-        bool_return_is_error = "Failed to add clip"
-
-    [[object.function]]
-    name = "get_duration"
-        [object.function.return]
-        mandatory = true
-
-    [[object.function]]
-    name = "remove_clip"
-        [object.function.return]
-        bool_return_is_error = "Failed to remove clip"
-
-    [[object.function]]
-    name = "add_asset"
-        [object.function.return]
-        nullable_return_is_error = "Failed to add asset"
-
-[[object]]
-name = "GES.Project"
-status = "generate"
-    [[object.function]]
-    name = "add_encoding_profile"
-        [object.function.return]
-        bool_return_is_error = "Failed to add profile"
-
-    [[object.function]]
-    name = "remove_asset"
-        [object.function.return]
-        bool_return_is_error = "Failed to remove asset"
 
 [[object]]
 name = "GES.TimelineElement"
@@ -507,6 +444,20 @@ manual_traits = ["TimelineElementExtManual"]
         nullable_return_is_error = "Failed to copy timeline element"
 
 [[object]]
+name = "GES.Track"
+status = "generate"
+trait_name = "GESTrackExt"
+    [[object.function]]
+    name = "add_element"
+        [object.function.return]
+        bool_return_is_error = "Failed to add element"
+
+    [[object.function]]
+    name = "remove_element"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove element"
+
+[[object]]
 name = "GES.TrackElement"
 status = "generate"
     [[object.function]]
@@ -526,3 +477,52 @@ status = "generate"
     name = "name"
         [object.function.return]
         nullable = false
+
+[[object]]
+name = "GES.UriClip"
+status = "generate"
+    [[object.function]]
+    name = "new"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create Uri clip from Uri"
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.BufferList"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "Option"
+
+[[object]]
+name = "Gst.Object"
+# For renaming the trait...
+status = "manual"
+trait_name = "GstObjectExt"
+
+[[object]]
+name = "Gst.Sample"
+status = "manual"
+ref_mode = "ref"
+
+    [[object.function]]
+    name = "get_caps"
+    # Function moved to SampleRef
+    ignore = true
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref"

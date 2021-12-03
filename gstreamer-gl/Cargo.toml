@@ -28,6 +28,9 @@ gst = { package = "gstreamer", path = "../gstreamer", features = ["v1_14"] }
 gst-base = { package = "gstreamer-base", path = "../gstreamer-base", features = ["v1_14"] }
 gst-video = { package = "gstreamer-video", path = "../gstreamer-video", features = ["v1_14"] }
 
+[dev-dependencies]
+gir-format-check = "0.1"
+
 [features]
 default = []
 dox = ["v1_20", "ffi/dox", "glib/dox", "gst/dox", "gst-base/dox", "gst-video/dox"]

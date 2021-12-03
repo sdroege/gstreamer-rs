@@ -18,31 +18,21 @@ external_libraries = [
 ]
 
 generate = [
-    # Enums
+    "GstGL.GLBaseFilter",
+    "GstGL.GLBaseMemoryAllocator",
+    "GstGL.GLBaseSrc",
     "GstGL.GLConfigCaveat",
+    "GstGL.GLConfigSurfaceType",
+    "GstGL.GLContextError",
     "GstGL.GLFormat",
+    "GstGL.GLMemoryAllocator",
     "GstGL.GLQueryType",
+    "GstGL.GLSLError",
     "GstGL.GLSLVersion",
     "GstGL.GLStereoDownmix",
     "GstGL.GLTextureTarget",
     "GstGL.GLUploadReturn",
-    # Flags
-    "GstGL.GLConfigSurfaceType",
-    # Enums Errors
-    #"GstGL.GLBaseMemoryError",
-    "GstGL.GLContextError",
-    "GstGL.GLSLError",
     "GstGL.GLWindowError",
-    # Records
-    #"GstGL.GLRenderbufferAllocationParams",
-    # Objects
-    #"GstGL.GLBufferPool",
-    "GstGL.GLBaseFilter",
-    "GstGL.GLBaseMemoryAllocator",
-    "GstGL.GLBaseSrc",
-    "GstGL.GLMemoryAllocator",
-    #"GstGL.GLMemoryPBOAllocator",
-    #"GstGL.GLRenderbufferAllocator",
 ]
 
 manual = [
@@ -72,11 +62,6 @@ manual = [
 ]
 
 [[object]]
-name = "Gst.Structure"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
 name = "Gst.Buffer"
 status = "manual"
 ref_mode = "ref"
@@ -92,14 +77,69 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "GstGL.GLAllocationParams"
+status = "generate"
+
+    [[object.function]]
+    name = "free_data"
+    # Function should only be called by subclasses from
+    # an overridden `free` vfunc.
+    ignore = true
+
+    [[object.function]]
+    name = "copy_data"
+        [[object.function.parameter]]
+        name = "src"
+        const = true
+
+[[object]]
+name = "GstGL.GLAPI"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+    [[object.member]]
+    name = "any"
+    ignore = true
+
+    [[object.function]]
+    name = "to_string"
+        [object.function.return]
+        nullable = false
+
+[[object]]
 name = "GstGL.GLBuffer"
 status = "manual"
 ref_mode = "ref"
 
 [[object]]
-name = "GstGL.GLQuery"
-status = "manual"
-ref_mode = "ref"
+name = "GstGL.GLColorConvert"
+status = "generate"
+final_type = true
+    [[object.function]]
+    name = "set_caps"
+        [object.function.return]
+        bool_return_is_error = "Failed to set caps"
+
+    [[object.function]]
+    name = "decide_allocation"
+    # correct mutability
+    ignore = true
+
+    [[object.function]]
+    name = "fixate_caps"
+    # correct reference ownership
+    ignore = true
+
+    [[object.function]]
+    name = "perform"
+    # transfer gst::Buffer not reference
+    ignore = true
 
 [[object]]
 name = "GstGL.GLContext"
@@ -203,82 +243,49 @@ status = "generate"
         nullable_return_is_error = "Failed to create window"
 
 [[object]]
-name = "GstGL.GLWindow"
+name = "GstGL.GLDisplayType"
 status = "generate"
-
-    [[object.function]]
-    name = "get_window_handle"
-    # return native handle
+    [[object.member]]
+    name = "none"
     ignore = true
-
-    [[object.function]]
-    name = "send_message"
-        # callback
-    ignore = true
-
-    [[object.function]]
-    name = "send_message_async"
-    # callback
-    ignore = true
-
-    [[object.function]]
-    name = "set_close_callback"
-    # callback
-    ignore = true
-
-    [[object.function]]
-    name = "set_draw_callback"
-    # callback
-    ignore = true
-
-    [[object.function]]
-    name = "set_render_rectangle"
-        [object.function.return]
-        bool_return_is_error = "Failed to set the specified region"
-
-    [[object.function]]
-    name = "set_resize_callback"
-    # callback
-    ignore = true
-
-    [[object.function]]
-    name = "set_window_handle"
-    # handle
-    ignore = true
-
-    [[object.function]]
-    name = "get_display"
-    # handle
-    ignore = true
-
-    [[object.function]]
-    name = "error_quark"
-    # bad error domian definition in gir
+    [[object.member]]
+    name = "any"
     ignore = true
 
 [[object]]
-name = "GstGL.GLColorConvert"
+name = "GstGL.GLFilter"
 status = "generate"
-final_type = true
+
     [[object.function]]
-    name = "set_caps"
+    name = "add_rgba_pad_templates"
+    # Automatically called if
+    # GLFilterImpl::ADD_RGBA_PAD_TEMPLATES is true
+    ignore = true
+
+    [[object.function]]
+    pattern = "render_to_target\\w*"
+        [[object.function.parameter]]
+        pattern = "input|output"
+        const = true
+
+    [[object.function]]
+    name = "render_to_target"
         [object.function.return]
-        bool_return_is_error = "Failed to set caps"
+        bool_return_is_error = "`func` returned `false`"
 
     [[object.function]]
-    name = "decide_allocation"
-    # correct mutability
-    ignore = true
+    name = "filter_texture"
+        [object.function.return]
+        bool_return_is_error = "Failed to transform texture"
+
+[[object]]
+name = "GstGL.GLFramebuffer"
+status = "generate"
 
     [[object.function]]
-    name = "fixate_caps"
-    # correct reference ownership
-    ignore = true
-
-    [[object.function]]
-    name = "perform"
-    # transfer gst::Buffer not reference
-    ignore = true
+    name = "attach"
+    # attachment_point parameter unchecked
+    unsafe = true
 
 [[object]]
 name = "GstGL.GLOverlayCompositor"
@@ -295,14 +302,24 @@ final_type = true
     version = "1.16"
 
 [[object]]
-name = "GstGL.GLSLStage"
+name = "GstGL.GLPlatform"
 status = "generate"
-final_type = true
+    [[object.member]]
+    name = "none"
+    ignore = true
+    [[object.member]]
+    name = "any"
+    ignore = true
 
     [[object.function]]
-    name = "set_strings"
+    name = "to_string"
         [object.function.return]
-        bool_return_is_error = "Failed to attach stage to set strings"
+        nullable = false
+
+[[object]]
+name = "GstGL.GLQuery"
+status = "manual"
+ref_mode = "ref"
 
 [[object]]
 name = "GstGL.GLShader"
@@ -365,6 +382,26 @@ final_type = true
     ignore = true
 
 [[object]]
+name = "GstGL.GLSLProfile"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+    [[object.member]]
+    name = "any"
+    ignore = true
+
+[[object]]
+name = "GstGL.GLSLStage"
+status = "generate"
+final_type = true
+
+    [[object.function]]
+    name = "set_strings"
+        [object.function.return]
+        bool_return_is_error = "Failed to attach stage to set strings"
+
+[[object]]
 name = "GstGL.GLUpload"
 status = "generate"
 final_type = true
@@ -388,6 +425,22 @@ final_type = true
     name = "get_input_template_caps"
         [object.function.return]
         nullable = false
+
+[[object]]
+name = "GstGL.GLVideoAllocationParams"
+status = "generate"
+
+    [[object.function]]
+    name = "free_data"
+    # Function should only be called by subclasses from
+    # an overridden `free` vfunc.
+    ignore = true
+
+    [[object.function]]
+    name = "copy_data"
+        [[object.function.parameter]]
+        name = "src_vid"
+        const = true
 
 [[object]]
 name = "GstGL.GLViewConvert"
@@ -420,119 +473,55 @@ final_type = true
     ignore = true
 
 [[object]]
-name = "GstGL.GLDisplayType"
+name = "GstGL.GLWindow"
 status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
-    [[object.member]]
-    name = "any"
-    ignore = true
 
-[[object]]
-name = "GstGL.GLAPI"
-status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
-    [[object.member]]
-    name = "any"
+    [[object.function]]
+    name = "get_window_handle"
+    # return native handle
     ignore = true
 
     [[object.function]]
-    name = "to_string"
+    name = "send_message"
+        # callback
+    ignore = true
+
+    [[object.function]]
+    name = "send_message_async"
+    # callback
+    ignore = true
+
+    [[object.function]]
+    name = "set_close_callback"
+    # callback
+    ignore = true
+
+    [[object.function]]
+    name = "set_draw_callback"
+    # callback
+    ignore = true
+
+    [[object.function]]
+    name = "set_render_rectangle"
         [object.function.return]
-        nullable = false
+        bool_return_is_error = "Failed to set the specified region"
 
-[[object]]
-name = "GstGL.GLPlatform"
-status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
-    [[object.member]]
-    name = "any"
+    [[object.function]]
+    name = "set_resize_callback"
+    # callback
     ignore = true
 
     [[object.function]]
-    name = "to_string"
-        [object.function.return]
-        nullable = false
-
-[[object]]
-name = "GstGL.GLSLProfile"
-status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
-    [[object.member]]
-    name = "any"
-    ignore = true
-
-[[object]]
-name = "GstGL.GLAllocationParams"
-status = "generate"
-
-    [[object.function]]
-    name = "free_data"
-    # Function should only be called by subclasses from
-    # an overridden `free` vfunc.
+    name = "set_window_handle"
+    # handle
     ignore = true
 
     [[object.function]]
-    name = "copy_data"
-        [[object.function.parameter]]
-        name = "src"
-        const = true
-
-[[object]]
-name = "GstGL.GLVideoAllocationParams"
-status = "generate"
-
-    [[object.function]]
-    name = "free_data"
-    # Function should only be called by subclasses from
-    # an overridden `free` vfunc.
+    name = "get_display"
+    # handle
     ignore = true
 
     [[object.function]]
-    name = "copy_data"
-        [[object.function.parameter]]
-        name = "src_vid"
-        const = true
-
-[[object]]
-name = "GstGL.GLFramebuffer"
-status = "generate"
-
-    [[object.function]]
-    name = "attach"
-    # attachment_point parameter unchecked
-    unsafe = true
-
-[[object]]
-name = "GstGL.GLFilter"
-status = "generate"
-
-    [[object.function]]
-    name = "add_rgba_pad_templates"
-    # Automatically called if
-    # GLFilterImpl::ADD_RGBA_PAD_TEMPLATES is true
+    name = "error_quark"
+    # bad error domian definition in gir
     ignore = true
-
-    [[object.function]]
-    pattern = "render_to_target\\w*"
-        [[object.function.parameter]]
-        pattern = "input|output"
-        const = true
-
-    [[object.function]]
-    name = "render_to_target"
-        [object.function.return]
-        bool_return_is_error = "`func` returned `false`"
-
-    [[object.function]]
-    name = "filter_texture"
-        [object.function.return]
-        bool_return_is_error = "Failed to transform texture"
-

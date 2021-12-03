@@ -17,17 +17,17 @@ external_libraries = [
 ]
 
 generate = [
+    "GstAudio.AudioBaseSrc",
+    "GstAudio.AudioChannelPosition",
     "GstAudio.AudioDitherMethod",
-    "GstAudio.AudioNoiseShapingMethod",
-    "GstAudio.AudioResamplerMethod",
     "GstAudio.AudioFormatFlags",
     "GstAudio.AudioLayout",
-    "GstAudio.AudioChannelPosition",
-    "GstAudio.StreamVolume",
-    "GstAudio.StreamVolumeFormat",
+    "GstAudio.AudioNoiseShapingMethod",
+    "GstAudio.AudioResamplerMethod",
     "GstAudio.AudioSink",
     "GstAudio.AudioSrc",
-    "GstAudio.AudioBaseSrc",
+    "GstAudio.StreamVolume",
+    "GstAudio.StreamVolumeFormat",
 ]
 
 manual = [
@@ -39,26 +39,15 @@ manual = [
     "Gst.Format",
     "Gst.TagList",
     "Gst.TagMergeMode",
-    "GstBase.BaseSink",
-    "GstBase.BaseSrc",
     "GstAudio.AudioClippingMeta",
     "GstAudio.AudioFormatInfo",
     "GstAudio.AudioInfo",
     "GstAudio.AudioLevelMeta",
     "GstAudio.AudioMeta",
     "GstAudio.AudioRingBufferSpec",
+    "GstBase.BaseSink",
+    "GstBase.BaseSrc",
 ]
-
-[[object]]
-name = "Gst.Object"
-# For renaming the trait...
-status = "manual"
-trait_name = "GstObjectExt"
-
-[[object]]
-name = "Gst.Caps"
-status = "manual"
-ref_mode = "ref"
 
 [[object]]
 name = "Gst.Buffer"
@@ -66,9 +55,20 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
 name = "Gst.ClockTime"
 status = "manual"
 conversion_type = "Option"
+
+[[object]]
+name = "Gst.Object"
+# For renaming the trait...
+status = "manual"
+trait_name = "GstObjectExt"
 
 [[object]]
 name = "GstAudio.AudioBaseSink"
@@ -104,154 +104,6 @@ status = "manual"
     name = "map"
     # Readable and writable variant dealing with mutability
     rename = "from_buffer_readable"
-
-[[object]]
-name = "GstAudio.AudioFormat"
-status = "generate"
-
-    [[object.derive]]
-    name = "Debug, Eq, PartialEq, Hash"
-
-    [[object.member]]
-    name = "s16"
-    # Platform dependant
-    manual = true
-
-    [[object.member]]
-    name = "u16"
-    # Platform dependant
-    manual = true
-
-    [[object.member]]
-    name = "s24_32"
-    # Platform dependant
-    manual = true
-
-    [[object.member]]
-    name = "u24_32"
-    # Platform dependant
-    manual = true
-
-    [[object.member]]
-    name = "s32"
-    # Platform dependant
-    manual = true
-
-    [[object.member]]
-    name = "u32"
-    # Platform dependant
-    manual = true
-
-    [[object.member]]
-    name = "s24"
-    # Platform dependant
-    manual = true
-
-    [[object.member]]
-    name = "u24"
-    # Platform dependant
-    manual = true
-
-    [[object.member]]
-    name = "s20"
-    # Platform dependant
-    manual = true
-
-    [[object.member]]
-    name = "u20"
-    # Platform dependant
-    manual = true
-
-    [[object.member]]
-    name = "s18"
-    # Platform dependant
-    manual = true
-
-    [[object.member]]
-    name = "u18"
-    # Platform dependant
-    manual = true
-
-    [[object.member]]
-    name = "f32"
-    # Platform dependant
-    manual = true
-
-    [[object.member]]
-    name = "f64"
-    # Platform dependant
-    manual = true
-
-    [[object.function]]
-    name = "to_string"
-    # This has an Unknown field that may return NULL or "UNKNOWN"
-    manual = true
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "fill_silence"
-    # Function does not belong in AudioFormat but AudioFormatInfo.
-    # Manual implementation is available, and glib argument conversion
-    # is broken.
-    manual = true
-
-    [[object.function]]
-    name = "get_info"
-    # Result is not nullable, function does effectively the same
-    # as AudioFormatInfo::from_format()
-    ignore = true
-
-    [[object.function]]
-    name = "build_integer"
-    # Use custom AudioEndianness enum
-    manual = true
-
-[[object]]
-name = "GstAudio.AudioStreamAlign"
-status = "generate"
-
-    [[object.function]]
-    name = "process"
-    # bool does not signal error
-    manual = true
-
-    [[object.function]]
-    pattern = "get_.*"
-        [[object.function.parameter]]
-        name = "align"
-        const = true
-
-    [[object.function]]
-    name = "new"
-        [[object.function.parameter]]
-        name = "alignment_threshold"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "discont_wait"
-        mandatory = true
-
-    [[object.function]]
-    name = "get_alignment_threshold"
-        [object.function.return]
-        mandatory = true
-
-    [[object.function]]
-    name = "get_discont_wait"
-        [object.function.return]
-        mandatory = true
-
-    [[object.function]]
-    name = "set_alignment_threshold"
-        [[object.function.parameter]]
-        name = "alignment_threshold"
-        mandatory = true
-
-    [[object.function]]
-    name = "set_discont_wait"
-        [[object.function.parameter]]
-        name = "discont_wait"
-        mandatory = true
 
 [[object]]
 name = "GstAudio.AudioDecoder"
@@ -381,6 +233,122 @@ manual_traits = ["AudioEncoderExtManual"]
         nullable_return_is_error = "Failed to allocate output buffer"
 
 [[object]]
+name = "GstAudio.AudioFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "GstAudio.AudioFormat"
+status = "generate"
+
+    [[object.derive]]
+    name = "Debug, Eq, PartialEq, Hash"
+
+    [[object.member]]
+    name = "s16"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
+    name = "u16"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
+    name = "s24_32"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
+    name = "u24_32"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
+    name = "s32"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
+    name = "u32"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
+    name = "s24"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
+    name = "u24"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
+    name = "s20"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
+    name = "u20"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
+    name = "s18"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
+    name = "u18"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
+    name = "f32"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
+    name = "f64"
+    # Platform dependant
+    manual = true
+
+    [[object.function]]
+    name = "to_string"
+    # This has an Unknown field that may return NULL or "UNKNOWN"
+    manual = true
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "fill_silence"
+    # Function does not belong in AudioFormat but AudioFormatInfo.
+    # Manual implementation is available, and glib argument conversion
+    # is broken.
+    manual = true
+
+    [[object.function]]
+    name = "get_info"
+    # Result is not nullable, function does effectively the same
+    # as AudioFormatInfo::from_format()
+    ignore = true
+
+    [[object.function]]
+    name = "build_integer"
+    # Use custom AudioEndianness enum
+    manual = true
+
+[[object]]
+name = "GstAudio.AudioPackFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
 name = "GstAudio.AudioRingBufferFormatType"
 status = "generate"
 
@@ -397,15 +365,47 @@ status = "generate"
     version = "1.12"
 
 [[object]]
-name = "GstAudio.AudioFlags"
+name = "GstAudio.AudioStreamAlign"
 status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
 
-[[object]]
-name = "GstAudio.AudioPackFlags"
-status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
+    [[object.function]]
+    name = "process"
+    # bool does not signal error
+    manual = true
+
+    [[object.function]]
+    pattern = "get_.*"
+        [[object.function.parameter]]
+        name = "align"
+        const = true
+
+    [[object.function]]
+    name = "new"
+        [[object.function.parameter]]
+        name = "alignment_threshold"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "discont_wait"
+        mandatory = true
+
+    [[object.function]]
+    name = "get_alignment_threshold"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "get_discont_wait"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "set_alignment_threshold"
+        [[object.function.parameter]]
+        name = "alignment_threshold"
+        mandatory = true
+
+    [[object.function]]
+    name = "set_discont_wait"
+        [[object.function.parameter]]
+        name = "discont_wait"
+        mandatory = true

@@ -23,6 +23,9 @@ gst = { package = "gstreamer", path = "../gstreamer" }
 gst-base = { package = "gstreamer-base", path = "../gstreamer-base" }
 gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils" }
 
+[dev-dependencies]
+gir-format-check = "0.1"
+
 [features]
 v1_10 = ["gst/v1_10", "gst-base/v1_10", "gst-pbutils/v1_10", "ffi/v1_10"]
 v1_12 = ["gst/v1_12", "gst-base/v1_12", "gst-pbutils/v1_12", "ffi/v1_12", "v1_10"]

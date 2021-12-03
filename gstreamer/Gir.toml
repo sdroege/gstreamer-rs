@@ -74,1744 +74,6 @@ manual = [
 ]
 
 [[object]]
-name = "Gst.Allocator"
-status = "generate"
-
-    [[object.function]]
-    name = "alloc"
-        [object.function.return]
-        nullable_return_is_error = "Failed to allocate memory"
-        [[object.function.parameter]]
-        name = "params"
-        const = true
-
-[[object]]
-name = "Gst.Bin"
-status = "generate"
-trait_name = "GstBinExt"
-    [[object.signal]]
-    name = "do-latency"
-    # Use Result<(), glib::BoolError>
-    manual = true
-
-    [[object.function]]
-    name = "add_many"
-    # Implemented by repeatedly calling add()
-    manual = true
-    [[object.function]]
-    name = "remove_many"
-    # Implemented by repeatedly calling remove()
-    manual = true
-
-    [[object.function]]
-    name = "iterate_all_by_element_factory_name"
-    manual = true
-    [[object.function]]
-    name = "iterate_all_by_interface"
-    manual = true
-    [[object.function]]
-    name = "iterate_elements"
-    manual = true
-    [[object.function]]
-    name = "iterate_recurse"
-    manual = true
-    [[object.function]]
-    name = "iterate_sinks"
-    manual = true
-    [[object.function]]
-    name = "iterate_sorted"
-    manual = true
-    [[object.function]]
-    name = "iterate_sources"
-    manual = true
-
-    [[object.function]]
-    name = "add"
-        [object.function.return]
-        bool_return_is_error = "Failed to add element"
-
-    [[object.function]]
-    name = "remove"
-        [object.function.return]
-        bool_return_is_error = "Failed to remove element"
-
-    [[object.function]]
-    name = "recalculate_latency"
-        [object.function.return]
-        bool_return_is_error = "Failed to recalculate latency"
-
-    [[object.function]]
-    name = "sync_children_states"
-        [object.function.return]
-        bool_return_is_error = "Failed to sync children states"
-
-[[object]]
-name = "Gst.BinFlags"
-status = "generate"
-    [[object.member]]
-    name = "last"
-    ignore = true
-
-[[object]]
-name = "Gst.Bus"
-status = "generate"
-final_type = true
-    [[object.function]]
-    name = "set_sync_handler"
-    # Into<Option<_>> makes this hard to use
-    manual = true
-
-    [[object.function]]
-    name = "add_signal_watch_full"
-    # Priority
-    manual = true
-
-    [[object.function]]
-    name = "timed_pop_filtered"
-    # Uses enum as flags
-    manual = true
-    [[object.function]]
-    name = "pop_filtered"
-    # Uses enum as flags
-    manual = true
-    [[object.function]]
-    name = "poll"
-    # Uses enum as flags
-    manual = true
-
-    [[object.function]]
-    name = "create_watch"
-    # More convenient manual implementation
-    manual = true
-
-    [[object.function]]
-    name = "add_watch"
-    # More specific trait bounds possible for the closure
-    manual = true
-
-    [[object.function]]
-    name = "add_watch_full"
-    # More specific trait bounds possible for the closure
-    manual = true
-
-    [[object.function]]
-    name = "remove_watch"
-        [object.function.return]
-        bool_return_is_error = "Bus has no event source"
-
-    [[object.signal]]
-    name = "message"
-    concurrency = "send"
-
-    [[object.function]]
-    name = "post"
-        [object.function.return]
-        bool_return_is_error = "Failed to post message"
-
-[[object]]
-name = "Gst.BufferFlags"
-status = "generate"
-    [[object.derive]]
-    name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
-
-    [[object.member]]
-    name = "last"
-    ignore = true
-
-[[object]]
-name = "Gst.BufferCopyFlags"
-status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
-
-[[object]]
-name = "Gst.BufferPoolAcquireFlags"
-status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
-    [[object.member]]
-    name = "last"
-    ignore = true
-
-[[object]]
-name = "Gst.ChildProxy"
-status = "generate"
-manual_traits = ["ChildProxyExtManual"]
-    [[object.function]]
-    name = "get_property"
-    rename = "child_property"
-    manual = true
-    [[object.function]]
-    name = "set_property"
-    rename = "set_child_property"
-    manual = true
-    [[object.function]]
-    name = "lookup"
-    manual = true
-
-[[object]]
-name = "Gst.ClockTime"
-status = "manual"
-conversion_type = "Option"
-
-[[object]]
-name = "Gst.ClockFlags"
-status = "generate"
-    [[object.member]]
-    name = "last"
-    ignore = true
-
-[[object]]
-name = "Gst.ElementFactoryListType"
-status = "manual"
-conversion_type = "scalar"
-
-[[object]]
-name = "Gst.Format"
-status = "generate"
-    [[object.derive]]
-    name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
-    [[object.derive]]
-    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
-    [[object.function]]
-    name = "register"
-    # Needs manual work
-    ignore = true
-
-[[object]]
-name = "Gst.Memory"
-status = "manual"
-
-    [[object.function]]
-    name = "map"
-    # Readable and writable variant dealing with mutability
-    # Non-into variants available under MemoryRef
-    rename = "into_mapped_memory_readable"
-
-    [[object.function]]
-    name = "unmap"
-    ignore = true
-
-[[object]]
-name = "Gst.PadDirection"
-status = "generate"
-    [[object.derive]]
-    name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
-    [[object.derive]]
-    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
-
-[[object]]
-name = "Gst.PadPresence"
-status = "generate"
-    [[object.derive]]
-    name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
-    [[object.derive]]
-    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
-
-[[object]]
-name = "Gst.SeekFlags"
-status = "generate"
-    [[object.member]]
-    name = "trickmode_forward_predicted"
-    version = "1.18"
-    [[object.member]]
-    name = "instant_rate_change"
-    version = "1.18"
-    [[object.member]]
-    name = "none"
-    ignore = true
-
-[[object]]
-name = "Gst.SegmentFlags"
-status = "generate"
-    [[object.derive]]
-    name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
-    [[object.member]]
-    name = "trickmode_forward_predicted"
-    version = "1.18"
-    [[object.member]]
-    name = "none"
-    ignore = true
-
-[[object]]
-name = "Gst.StackTraceFlags"
-status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
-
-[[object]]
-name = "Gst.StreamFlags"
-status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
-
-[[object]]
-name = "Gst.TagSetter"
-status = "generate"
-manual_traits = ["TagSetterExtManual"]
-    [[object.function]]
-    name = "add_tag_value"
-    manual = true
-
-    [[object.function]]
-    name = "add_tags"
-    # Takes a raw pointer
-    ignore = true
-
-[[object]]
-name = "Gst.TocScope"
-status = "generate"
-    [[object.derive]]
-    name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
-    [[object.derive]]
-    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
-
-[[object]]
-name = "Gst.TocEntryType"
-status = "generate"
-    [[object.derive]]
-    name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
-    [[object.derive]]
-    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
-
-[[object]]
-name = "Gst.TocLoopType"
-status = "generate"
-    [[object.derive]]
-    name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
-    [[object.derive]]
-    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
-
-[[object]]
-name = "Gst.Rank"
-status = "generate"
-    [[object.derive]]
-    name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
-    [[object.derive]]
-    name = "Debug"
-
-[[object]]
-name = "Gst.TypeFindProbability"
-status = "generate"
-    [[object.derive]]
-    name = "Debug"
-
-[[object]]
-name = "Gst.EventType"
-status = "generate"
-    [[object.derive]]
-    name = "Debug, PartialEq, Eq, Hash"
-    [[object.member]]
-    name = "select_streams"
-    version = "1.10"
-    [[object.member]]
-    name = "stream_collection"
-    version = "1.10"
-    [[object.member]]
-    name = "stream_group_done"
-    version = "1.10"
-    [[object.member]]
-    name = "instant_rate_change"
-    version = "1.18"
-    [[object.member]]
-    name = "instant_rate_sync_time"
-    version = "1.18"
-
-[[object]]
-name = "Gst.Structure"
-status = "manual"
-ref_mode = "ref"
-    # Functions moved to `StructureRef`
-    [[object.function]]
-    name = "set"
-    ignore = true
-    [[object.function]]
-    name = "set_value"
-    ignore = true
-    [[object.function]]
-    name = "get_value"
-    ignore = true
-
-    [[object.function]]
-    name = "id_get_value"
-    rename = "value_by_quark"
-    ignore = true
-    [[object.function]]
-    name = "take_value"
-    rename = "set_value"
-    ignore = true
-    [[object.function]]
-    name = "id_take_value"
-    rename = "set_value_by_quark"
-    ignore = true
-    [[object.function]]
-    name = "get_name"
-    rename = "name"
-    ignore = true
-    [[object.function]]
-    name = "get_name_id"
-    rename = "name_quark"
-    ignore = true
-    [[object.function]]
-    name = "set_name"
-    ignore = true
-
-    [[object.function]]
-    name = "has_field"
-    ignore = true
-    [[object.function]]
-    name = "has_field_with_typed"
-    rename = "has_field_with_type"
-    ignore = true
-    [[object.function]]
-    name = "id_has_field"
-    rename = "has_field_by_quark"
-    ignore = true
-    [[object.function]]
-    name = "id_has_field_typed"
-    rename = "has_field_with_type_by_quark"
-    ignore = true
-    [[object.function]]
-    name = "remove_field"
-    ignore = true
-    [[object.function]]
-    name = "remove_fields"
-    # Repeatedly call remove_field()
-    ignore = true
-    [[object.function]]
-    name = "remove_all_fields"
-    ignore = true
-    [[object.function]]
-    name = "get_nth_field_name"
-    ignore = true
-    [[object.function]]
-    name = "n_fields"
-    ignore = true
-    [[object.function]]
-    name = "can_intersect"
-    ignore = true
-    [[object.function]]
-    name = "intersect"
-    ignore = true
-    [[object.function]]
-    name = "is_subset"
-    ignore = true
-
-    [[object.function]]
-    name = "fixate"
-    ignore=true
-    [[object.function]]
-    name = "fixate_field"
-    ignore=true
-    [[object.function]]
-    name = "fixate_field_boolean"
-    ignore=true
-    [[object.function]]
-    name = "fixate_field_string"
-    ignore=true
-    [[object.function]]
-    name = "fixate_field_nearest_double"
-    ignore=true
-    [[object.function]]
-    name = "fixate_field_nearest_fraction"
-    ignore=true
-    [[object.function]]
-    name = "fixate_field_nearest_int"
-    ignore=true
-
-    # Not implemented
-    [[object.function]]
-    name = "set_parent_refcount"
-    ignore = true
-
-[[object]]
-name = "Gst.ParseContext"
-status = "manual"
-ref_mode = "ref-mut"
-
-[[object]]
-name = "Gst.ParseFlags"
-status = "generate"
-    [[object.member]]
-    name = "place_in_bin"
-    version = "1.10"
-    [[object.member]]
-    name = "none"
-    ignore = true
-
-[[object]]
-name = "Gst.PipelineFlags"
-status = "generate"
-    [[object.member]]
-    name = "last"
-    ignore = true
-
-[[object]]
-name = "Gst.PluginDependencyFlags"
-status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
-
-[[object]]
-name = "Gst.Caps"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Buffer"
-status = "manual"
-ref_mode = "ref"
-
-    [[object.function]]
-    name = "map"
-    # Readable and writable variant dealing with mutability
-    # Non-into variants available under BufferRef
-    rename = "into_mapped_buffer_readable"
-
-    [[object.function]]
-    name = "unmap"
-    ignore = true
-
-[[object]]
-name = "Gst.BufferList"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Sample"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Message"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Event"
-status = "manual"
-ref_mode = "ref"
-
-    [[object.function]]
-    name = "new_caps"
-    # Moved to CapsBuilder::new()
-    ignore = true
-
-    [[object.function]]
-    name = "new_qos"
-    # Moved to QosBuilder::new()
-    ignore = true
-
-    [[object.function]]
-    name = "new_seek"
-    # Moved to SeekBuilder::new()
-    ignore = true
-
-    [[object.function]]
-    name = "parse_stream"
-    # Moved to StreamStart::stream()
-    ignore = true
-
-    [[object.function]]
-    name = "parse_stream_start"
-    # Moved to StreamStart::stream_id()
-    ignore = true
-
-[[object]]
-name = "Gst.TagList"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.TagScope"
-status = "generate"
-    [[object.derive]]
-    name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
-    [[object.derive]]
-    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
-
-[[object]]
-name = "Gst.Query"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Context"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Toc"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.TocEntry"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Pipeline"
-status = "generate"
-    [[object.function]]
-    name = "get_delay"
-        [object.function.return]
-        mandatory = true
-
-    [[object.function]]
-    name = "set_delay"
-        [[object.function.parameter]]
-        name = "delay"
-        mandatory = true
-
-[[object]]
-name = "Gst.Promise"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.ClockID"
-status = "manual"
-
-    [[object.function]]
-    name = "compare_func"
-    rename = "compare_by_time"
-
-[[object]]
-name = "Gst.Clock"
-status = "generate"
-manual_traits = ["ClockExtManual"]
-    [[object.function]]
-    name = "adjust_with_calibration"
-    # Associated function
-    manual = true
-    [[object.function]]
-    name = "unadjust_with_calibration"
-    # Associated function
-    manual = true
-
-    [[object.function]]
-    name = "new_periodic_id"
-    manual = true
-    [[object.function]]
-    name = "periodic_id_reinit"
-    manual = true
-    [[object.function]]
-    name = "new_single_shot_id"
-    manual = true
-    [[object.function]]
-    name = "single_shot_id_reinit"
-    manual = true
-
-    [[object.function]]
-    name = "add_observation"
-        [[object.function.parameter]]
-        name = "slave"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "master"
-        mandatory = true
-
-    [[object.function]]
-    name = "add_observation_unapplied"
-        [[object.function.parameter]]
-        name = "slave"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "master"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "internal"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "external"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "rate_num"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "rate_denom"
-        mandatory = true
-
-    [[object.function]]
-    name = "adjust_unlocked"
-        [[object.function.parameter]]
-        name = "internal"
-        mandatory = true
-
-    [[object.function]]
-    name = "get_calibration"
-        [[object.function.parameter]]
-        name = "internal"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "external"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "rate_num"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "rate_denom"
-        mandatory = true
-
-    [[object.function]]
-    name = "get_internal_time"
-        [object.function.return]
-        mandatory = true
-
-    [[object.function]]
-    name = "get_resolution"
-        [object.function.return]
-        mandatory = true
-
-    [[object.function]]
-    name = "set_calibration"
-        [[object.function.parameter]]
-        name = "internal"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "external"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "rate_num"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "rate_denom"
-        mandatory = true
-
-    [[object.function]]
-    name = "set_master"
-        [object.function.return]
-        bool_return_is_error = "Failed to set master clock"
-
-    [[object.function]]
-    name = "set_resolution"
-        [[object.function.parameter]]
-        name = "resolution"
-        mandatory = true
-        [object.function.return]
-        mandatory = true
-
-    [[object.function]]
-    name = "unadjust_unlocked"
-        [[object.function.parameter]]
-        name = "external"
-        mandatory = true
-
-    [[object.function]]
-    name = "wait_for_sync"
-        [object.function.return]
-        bool_return_is_error = "Timed out waiting for sync"
-
-[[object]]
-name = "Gst.ClockType"
-status = "generate"
-    [[object.member]]
-    name = "tai"
-    version = "1.18"
-
-[[object]]
-name = "Gst.ElementFlags"
-status = "generate"
-    [[object.member]]
-    name = "last"
-    ignore = true
-
-[[object]]
-name = "Gst.MemoryFlags"
-status = "generate"
-    [[object.member]]
-    name = "last"
-    ignore = true
-
-[[object]]
-name = "Gst.Element"
-status = "generate"
-manual_traits = ["ElementExtManual"]
-
-    # Manual implementation provides associated functions on `Element`,
-    # but gir considers these methods on `ElementExtManual` in the docs.
-    [[object.function]]
-    name = "link_many"
-    ignore = true
-    [[object.function]]
-    name = "unlink_many"
-    ignore = true
-    [[object.function]]
-    name = "register"
-    ignore = true
-
-    [[object.function]]
-    name = "call_async"
-    # more specific closure type possible
-    manual = true
-
-    [[object.function]]
-    name = "set_base_time"
-        [[object.function.parameter]]
-        name = "time"
-        mandatory = true
-
-    [[object.function]]
-    name = "get_current_running_time"
-    # manual implementation also works for earlier versions
-    manual = true
-
-    [[object.function]]
-    name = "get_current_clock_time"
-    # manual implementation also works for earlier versions
-    manual = true
-
-    [[object.function]]
-    name = "get_request_pad"
-    # rename to more explicit name and avoid conflict with `request_pad`
-    rename = "request_pad_simple"
-    # Renamed version is not deprecated
-    manual = true
-
-    [[object.function]]
-    name = "request_pad_simple"
-    # see above
-    manual = true
-
-    [[object.function]]
-    name = "post_message"
-    # takes ownership of message
-    manual = true
-
-    [[object.function]]
-    name = "add_pad"
-        [object.function.return]
-        bool_return_is_error = "Failed to add pad"
-
-    [[object.function]]
-    name = "remove_pad"
-        [object.function.return]
-        bool_return_is_error = "Failed to remove pad"
-
-    [[object.function]]
-    name = "link"
-        [object.function.return]
-        bool_return_is_error = "Failed to link elements"
-
-    [[object.function]]
-    name = "link_filtered"
-        [[object.function.parameter]]
-        name = "filter"
-        # Can use `link` instead
-        nullable = false
-        [object.function.return]
-        bool_return_is_error = "Failed to link elements"
-
-    [[object.function]]
-    name = "link_pads"
-        [object.function.return]
-        bool_return_is_error = "Failed to link pads"
-
-    [[object.function]]
-    name = "link_pads_filtered"
-        [[object.function.parameter]]
-        name = "filter"
-        # Can use `link` instead
-        nullable = false
-        [object.function.return]
-        bool_return_is_error = "Failed to link pads"
-
-    [[object.function]]
-    name = "link_pads_full"
-        [object.function.return]
-        bool_return_is_error = "Failed to link pads"
-
-    [[object.function]]
-    name = "set_clock"
-        [object.function.return]
-        bool_return_is_error = "Failed to set clock"
-
-    [[object.function]]
-    name = "sync_state_with_parent"
-        [object.function.return]
-        bool_return_is_error = "Failed to sync state with parent"
-
-    [[object.function]]
-    name = "query"
-    # correct mutability
-    manual = true
-
-    [[object.function]]
-    name = "send_event"
-    # Pass by value
-    manual = true
-
-    [[object.function]]
-    name = "get_context_unlocked"
-    # Unsafe
-    ignore = true
-
-    [[object.function]]
-    name = "add_property_deep_notify_watch"
-    # ulong
-    manual = true
-
-    [[object.function]]
-    name = "add_property_notify_watch"
-    # ulong
-    manual = true
-
-    [[object.function]]
-    name = "remove_property_notify_watch"
-    # ulong
-    manual = true
-
-    [[object.function]]
-    name = "query_duration"
-    # formatted value
-    manual = true
-
-    [[object.function]]
-    name = "query_position"
-    # formatted value
-    manual = true
-
-    [[object.function]]
-    name = "query_convert"
-    # formatted value
-    manual = true
-
-    [[object.function]]
-    name = "seek"
-    # formatted value
-    manual = true
-
-    [[object.function]]
-    name = "seek_simple"
-    # formatted value
-    manual = true
-
-    [[object.function]]
-    name = "state_change_return_get_name"
-    # Wrong place
-    ignore = true
-
-    [[object.function]]
-    name = "state_get_name"
-    # Wrong place
-    ignore = true
-
-    [[object.function]]
-    name = "get_metadata"
-    # better manual function
-    manual = true
-
-    [[object.function]]
-    name = "get_pad_template"
-    # better manual function
-    manual = true
-
-    [[object.function]]
-    name = "get_pad_template_list"
-    # better manual function
-    manual = true
-
-    # Limited subset of `MessageType`,
-    # see `ElementMessageType`.
-    [[object.function]]
-    name = "message_full"
-    manual = true
-    [[object.function]]
-    name = "message_full_with_details"
-    manual = true
-
-    # Return iterators
-    [[object.function]]
-    name = "iterate_pads"
-    manual = true
-    [[object.function]]
-    name = "iterate_sink_pads"
-    manual = true
-    [[object.function]]
-    name = "iterate_src_pads"
-    manual = true
-
-[[object]]
-name = "Gst.ElementFactory"
-status = "generate"
-final_type = true
-    [[object.function]]
-    name = "create"
-        [object.function.return]
-        nullable_return_is_error = "Failed to create element from factory"
-
-    [[object.function]]
-    name = "make"
-        [object.function.return]
-        nullable_return_is_error = "Failed to create element from factory name"
-
-    [[object.function]]
-    name = "create_full"
-    # varargs
-    ignore = true
-
-    [[object.function]]
-    name = "create_valist"
-    # varargs
-    ignore = true
-
-    [[object.function]]
-    name = "create_with_properties"
-    # separate name/value arrays need to be merged
-    manual = true
-
-    [[object.function]]
-    name = "make_full"
-    # varargs
-    ignore = true
-
-    [[object.function]]
-    name = "make_valist"
-    # varargs
-    ignore = true
-
-    [[object.function]]
-    name = "make_with_properties"
-    # separate name/value arrays need to be merged
-    manual = true
-
-    [[object.function]]
-    name = "get_static_pad_templates"
-    # Use glib::List as return type
-    manual = true
-
-    [[object.function]]
-    name = "list_is_type"
-    rename = "has_type"
-    # Renamed flags type
-    manual = true
-
-    [[object.function]]
-    name = "list_filter"
-    # can_{sink,src}_{all,any}_caps() around an iterator is the same
-    ignore = true
-
-    [[object.function]]
-    name = "list_get_elements"
-    rename = "factories_with_type"
-    # Use glib::List as return type
-    manual = true
-
-    [[object.function]]
-    name = "get_metadata"
-    # Use str as return type
-    manual = true
-
-[[object]]
-name = "Gst.TypeFindFactory"
-status = "generate"
-final_type = true
-
-    [[object.function]]
-    name = "call_function"
-    # Set up native functions in `TypeFind`, calling into trait argument
-    manual = true
-
-    [[object.function]]
-    name = "get_list"
-    rename = "factories"
-    # Use glib::List as return type
-    manual = true
-
-[[object]]
-name = "Gst.DeviceProviderFactory"
-status = "generate"
-final_type = true
-    [[object.function]]
-    name = "list_get_device_providers"
-    rename = "factories"
-    # Use glib::List as return type
-    manual = true
-
-    [[object.function]]
-    name = "get_metadata"
-    # Use str as return type
-    manual = true
-
-[[object]]
-name = "Gst.DeviceProvider"
-status = "generate"
-manual_traits = ["DeviceProviderExtManual"]
-    [[object.function]]
-    name = "start"
-        [object.function.return]
-        bool_return_is_error = "Failed to start"
-
-    [[object.function]]
-    name = "register"
-    manual = true
-
-    [[object.function]]
-    name = "get_metadata"
-    # better manual function
-    manual = true
-
-    [[object.function]]
-    name = "get_devices"
-    # Use glib::List as return type
-    manual = true
-
-[[object]]
-name = "Gst.DeviceMonitor"
-status = "generate"
-manual_traits = ["DeviceMonitorExtManual"]
-    [[object.function]]
-    name = "new"
-    # Work-around for 1.14 switch from transfer-floating to transfer-full
-    manual = true
-
-    [[object.function]]
-    name = "add_filter"
-    # Return Option<DeviceMonitorFilterId>
-    manual = true
-
-    [[object.function]]
-    name = "start"
-        [object.function.return]
-        bool_return_is_error = "Failed to start"
-
-    [[object.function]]
-    name = "remove_filter"
-    # Use DeviceMonitorFilterId and return Result<(), glib::BoolError>
-    manual = true
-
-    [[object.function]]
-    name = "get_devices"
-    # Use glib::List as return type
-    manual = true
-
-[[object]]
-name = "Gst.Device"
-status = "generate"
-    [[object.function]]
-    name = "reconfigure_element"
-        [object.function.return]
-        bool_return_is_error = "Failed to reconfigure the element to use this device"
-
-    [[object.function]]
-    name = "create_element"
-        [object.function.return]
-        nullable_return_is_error = "Failed to create element for device"
-
-[[object]]
-name = "Gst.Object"
-# For renaming the trait...
-status = "generate"
-trait_name = "GstObjectExt"
-    [[object.function]]
-    name = "set_name"
-    # Don't allow changing the name at random times
-    ignore = true
-
-    [[object.property]]
-    name = "name"
-    # There are accessor functions for this
-    ignore = true
-
-    [[object.function]]
-    name = "ref_sink"
-    # Takes a raw pointer
-    ignore = true
-
-    [[object.function]]
-    name = "get_name"
-        [object.function.return]
-        # Nullable state only occurs during instance init and finalize
-        # which cannot be observed from Rust
-        nullable = false
-
-    [[object.function]]
-    name = "set_parent"
-        [object.function.return]
-        bool_return_is_error = "Failed to set parent object"
-
-    [[object.function]]
-    name = "sync_values"
-        [[object.function.parameter]]
-        name = "timestamp"
-        mandatory = true
-        [object.function.return]
-        bool_return_is_error = "Failed to sync values"
-
-    [[object.function]]
-    name = "value"
-        [[object.function.parameter]]
-        name = "timestamp"
-        mandatory = true
-
-    [[object.function]]
-    name = "get_g_value_array"
-    ignore = true
-
-    [[object.function]]
-    name = "add_control_binding"
-    [object.function.return]
-    bool_return_is_error = "Failed to add control binding"
-
-[[object]]
-name = "Gst.ObjectFlags"
-status = "generate"
-    [[object.member]]
-    name = "may_be_leaked"
-    version = "1.10"
-    [[object.member]]
-    name = "last"
-    ignore = true
-
-[[object]]
-name = "Gst.PadFlags"
-status = "generate"
-    [[object.member]]
-    name = "last"
-    ignore = true
-
-[[object]]
-name = "Gst.PadLinkCheck"
-status = "generate"
-    [[object.member]]
-    name = "nothing"
-    ignore = true
-
-[[object]]
-name = "Gst.PadProbeType"
-status = "generate"
-    [[object.member]]
-    name = "invalid"
-    ignore = true
-
-[[object]]
-name = "Gst.Pad"
-status = "generate"
-manual_traits = ["PadExtManual"]
-    [[object.function]]
-    name = "link_maybe_ghosting"
-        [object.function.return]
-        bool_return_is_error = "Failed to link pads, possibly ghosting"
-
-    [[object.function]]
-    name = "link_maybe_ghosting_full"
-        [object.function.return]
-        bool_return_is_error = "Failed to link pads, possibly ghosting"
-
-    [[object.function]]
-    name = "unlink"
-        [object.function.return]
-        bool_return_is_error = "Failed to unlink pad"
-
-    [[object.function]]
-    name = "pause_task"
-        [object.function.return]
-        bool_return_is_error = "Failed to pause pad task"
-
-    [[object.function]]
-    name = "stop_task"
-        [object.function.return]
-        bool_return_is_error = "Failed to stop pad task"
-
-    [[object.function]]
-    name = "set_active"
-        [object.function.return]
-        bool_return_is_error = "Failed to activate pad"
-
-    [[object.function]]
-    name = "activate_mode"
-        [object.function.return]
-        bool_return_is_error = "Failed to activate mode pad"
-
-    [[object.function]]
-    name = "remove_probe"
-    # Don't use a ulong
-    manual = true
-
-    [[object.function]]
-    name = "chain"
-    # Move buffer
-    manual = true
-
-    [[object.function]]
-    name = "push"
-    # Move buffer
-    manual = true
-
-    [[object.function]]
-    name = "chain_list"
-    # Move buffer
-    manual = true
-
-    [[object.function]]
-    name = "push_list"
-    # Move buffer
-    manual = true
-
-    [[object.function]]
-    name = "pull_range"
-    # Buffer can be NULL
-    manual = true
-
-    [[object.function]]
-    name = "get_range"
-    # Buffer can be NULL
-    manual = true
-
-    [[object.function]]
-    name = "get_last_flow_return"
-    # Use Result<FlowSuccess, FlowError>
-    rename = "last_flow_result"
-
-    [[object.function]]
-    name = "query"
-    # Correct mutability
-    manual = true
-
-    [[object.function]]
-    name = "peer_query"
-    # Correct mutability
-    manual = true
-
-    [[object.function]]
-    name = "query_default"
-    # Correct mutability
-    manual = true
-
-    [[object.function]]
-    name = "proxy_query_caps"
-    # Correct mutability
-    manual = true
-
-    [[object.function]]
-    name = "proxy_query_accept_caps"
-    # Correct mutability
-    manual = true
-
-    [[object.function]]
-    name = "event_default"
-    # Pass by value
-    manual = true
-
-    [[object.function]]
-    name = "push_event"
-    # Pass by value
-    manual = true
-
-    [[object.function]]
-    name = "send_event"
-    # Pass by value
-    manual = true
-
-    [[object.function]]
-    name = "new"
-    # Also has builder()
-    manual = true
-
-    [[object.function]]
-    name = "new_from_template"
-    # Also has builder_with_template()
-    rename = "from_template"
-    manual = true
-
-    [[object.function]]
-    name = "new_from_static_template"
-    # Also has builder_with_static_template()
-    rename = "from_static_template"
-    manual = true
-
-    [[object.function]]
-    name = "query_duration"
-    # formatted value
-    manual = true
-
-    [[object.function]]
-    name = "query_position"
-    # formatted value
-    manual = true
-
-    [[object.function]]
-    name = "query_convert"
-    # formatted value
-    manual = true
-
-    [[object.function]]
-    name = "peer_query_duration"
-    # formatted value
-    manual = true
-
-    [[object.function]]
-    name = "peer_query_position"
-    # formatted value
-    manual = true
-
-    [[object.function]]
-    name = "peer_query_convert"
-    # formatted value
-    manual = true
-
-    [[object.function]]
-    name = "link_get_name"
-    # Wrong place
-    manual = true
-
-    [[object.function]]
-    pattern = "set_.*_function_full"
-    # More specific closure trait bounds possible
-    manual = true
-
-    [[object.function]]
-    name = "start_task"
-    # More specific closure trait bounds possible
-    manual = true
-
-    [[object.function]]
-    name = "sticky_events_foreach"
-    # Complex closure argument handling
-    manual = true
-
-    [[object.function]]
-    name = "get_sticky_event"
-    # More convenient API
-    manual = true
-
-    [[object.function]]
-    name = "add_probe"
-    # Complex closure argument handling
-    manual = true
-
-    [[object.property]]
-    name = "template"
-    # Has a proper getter
-    ignore = true
-
-[[object]]
-name = "Gst.PadTemplate"
-status = "generate"
-final_type = true
-    [[object.function]]
-    name = "new"
-        [object.function.return]
-        nullable_return_is_error = "Failed to create pad template"
-
-    [[object.function]]
-    name = "new_with_gtype"
-        [object.function.return]
-        nullable_return_is_error = "Failed to create pad template"
-
-    [[object.function]]
-    name = "new_from_static_pad_template_with_gtype"
-    # static pad template manual
-    manual = true
-
-[[object]]
-name = "Gst.GhostPad"
-status = "generate"
-    [[object.function]]
-    name = "set_target"
-        [object.function.return]
-        bool_return_is_error = "Failed to set target"
-
-    [[object.function]]
-    name = "new"
-    rename = "with_target"
-    manual = true
-
-    [[object.function]]
-    name = "new_no_target"
-    rename = "new"
-    manual = true
-
-    [[object.function]]
-    name = "new_from_template"
-    rename = "from_template_with_target"
-    manual = true
-
-    [[object.function]]
-    name = "new_no_target_from_template"
-    rename = "from_template"
-    manual = true
-
-    [[object.function]]
-    name = "construct"
-    ignore = true
-
-    [[object.function]]
-    name = "activate_mode_default"
-    # wrong instance type
-    manual = true
-
-    [[object.function]]
-    name = "internal_activate_mode_default"
-    # wrong instance type
-    manual = true
-
-[[object]]
-name = "Gst.ProxyPad"
-status = "generate"
-manual_traits = ["ProxyPadExtManual"]
-
-    [[object.function]]
-    name = "chain_default"
-    # Buffer move
-    manual = true
-
-    [[object.function]]
-    name = "chain_list_default"
-    # Buffer move
-    manual = true
-
-    [[object.function]]
-    name = "getrange_default"
-    # Buffer move
-    manual = true
-
-[[object]]
-name = "Gst.Stream"
-status = "generate"
-final_type = true
-    [[object.function]]
-    name = "new"
-    # Work-around for 1.14 switch from transfer-floating to transfer-full
-    manual = true
-
-    [[object.property]]
-    name = "caps"
-    version = "1.10"
-
-    [[object.property]]
-    name = "stream-flags"
-    version = "1.10"
-
-    [[object.property]]
-    name = "stream-id"
-    version = "1.10"
-
-    [[object.property]]
-    name = "stream-type"
-    version = "1.10"
-
-    [[object.property]]
-    name = "tags"
-    version = "1.10"
-
-[[object]]
-name = "Gst.StreamCollection"
-status = "generate"
-final_type = true
-    [[object.function]]
-    name = "new"
-    # Work-around for 1.14 switch from transfer-floating to transfer-full
-    manual = true
-
-    [[object.function]]
-    name = "add_stream"
-    # Ignore return value which is always `true`
-    manual = true
-
-    [[object.property]]
-    name = "upstream-id"
-    version = "1.10"
-    generate = ["get"]
-
-[[object]]
-name = "Gst.Plugin"
-status = "generate"
-final_type = true
-
-    [[object.function]]
-    pattern = "register_static.*"
-    # Needs manual implementation
-    ignore = true
-
-    [[object.function]]
-    name = "list_free"
-    # useless and unsafe
-    ignore = true
-
-    [[object.function]]
-    name = "set_cache_data"
-    # pass by value
-    manual = true
-
-    [[object.function]]
-    name = "get_cache_data"
-    # structure ref
-    manual = true
-
-    [[object.function]]
-    name = "load"
-        [object.function.return]
-        nullable_return_is_error = "Failed to load plugin"
-
-    [[object.function]]
-    name = "load_by_name"
-        [object.function.return]
-        nullable_return_is_error = "Failed to load plugin"
-
-[[object]]
-name = "Gst.PluginFeature"
-status = "generate"
-manual_traits = ["PluginFeatureExtManual"]
-    [[object.function]]
-    pattern = "list_.*"
-    ignore = true
-
-    [[object.function]]
-    name = "rank_compare_func"
-    ignore = true
-
-    [[object.function]]
-    name = "get_rank"
-    manual = true
-
-    [[object.function]]
-    name = "set_rank"
-    manual = true
-
-    [[object.function]]
-    name = "load"
-    manual = true
-
-[[object]]
-name = "Gst.Registry"
-status = "generate"
-final_type = true
-
-    [[object.function]]
-    pattern = "fork_.*"
-    ignore = true
-
-    [[object.function]]
-    name = "add_feature"
-        [object.function.return]
-        bool_return_is_error = "Failed to add feature"
-
-    [[object.function]]
-    name = "add_plugin"
-        [object.function.return]
-        bool_return_is_error = "Failed to add plugin"
-
-    [[object.function]]
-    name = "feature_filter"
-    rename = "features_filtered"
-    # Use glib::List as return type
-    manual = true
-
-    [[object.function]]
-    name = "get_feature_list"
-    rename = "features"
-    # Use glib::List as return type
-    manual = true
-
-    [[object.function]]
-    name = "get_feature_list_by_plugin"
-    rename = "features_by_plugin"
-    # Use glib::List as return type
-    manual = true
-
-    [[object.function]]
-    name = "get_plugin_list"
-    rename = "plugins"
-    # Use glib::List as return type
-    manual = true
-
-    [[object.function]]
-    name = "plugin_filter"
-    rename = "plugins_filtered"
-    # Use glib::List as return type
-    manual = true
-
-[[object]]
-name = "Gst.BufferPool"
-status = "generate"
-manual_traits = ["BufferPoolExtManual"]
-    [[object.function]]
-    pattern = "config_.*"
-    # A different type
-    ignore = true
-
-    [[object.function]]
-    name = "get_config"
-    # A different type
-    manual = true
-
-    [[object.function]]
-    name = "set_config"
-    # Takes ownership
-    manual = true
-
-    [[object.function]]
-    name = "acquire_buffer"
-    # Params and return value
-    manual = true
-
-    [[object.function]]
-    name = "release_buffer"
-    # Takes ownership
-    manual = true
-
-    [[object.function]]
-    name = "new"
-    # Work-around for 1.14 switch from transfer-floating to transfer-full
-    manual = true
-
-    [[object.function]]
-    name = "set_active"
-        [object.function.return]
-        bool_return_is_error = "Failed to activate buffer pool"
-
-[[object]]
-name = "Gst.Preset"
-status = "generate"
-
-    [[object.function]]
-    name = "set_app_dir"
-        [object.function.return]
-        bool_return_is_error = "Failed to set app preset directory"
-
-    [[object.function]]
-    name = "delete_preset"
-        [object.function.return]
-        bool_return_is_error = "Failed to delete preset"
-
-    [[object.function]]
-    name = "load_preset"
-        [object.function.return]
-        bool_return_is_error = "Failed to load preset"
-
-    [[object.function]]
-    name = "save_preset"
-        [object.function.return]
-        bool_return_is_error = "Failed to save preset"
-
-    [[object.function]]
-    name = "rename_preset"
-        [object.function.return]
-        bool_return_is_error = "Failed to rename preset"
-
-    [[object.function]]
-    name = "set_meta"
-        [object.function.return]
-        bool_return_is_error = "Failed to set preset meta"
-
-[[object]]
 name = "Gst.*"
 status = "generate"
     # We'll opt-in for constants at a later time
@@ -2131,50 +393,388 @@ status = "generate"
     manual = true
 
 [[object]]
-name = "Gst.State"
+name = "Gst.Allocator"
+status = "generate"
+
+    [[object.function]]
+    name = "alloc"
+        [object.function.return]
+        nullable_return_is_error = "Failed to allocate memory"
+        [[object.function.parameter]]
+        name = "params"
+        const = true
+
+[[object]]
+name = "Gst.Bin"
+status = "generate"
+trait_name = "GstBinExt"
+    [[object.signal]]
+    name = "do-latency"
+    # Use Result<(), glib::BoolError>
+    manual = true
+
+    [[object.function]]
+    name = "add_many"
+    # Implemented by repeatedly calling add()
+    manual = true
+    [[object.function]]
+    name = "remove_many"
+    # Implemented by repeatedly calling remove()
+    manual = true
+
+    [[object.function]]
+    name = "iterate_all_by_element_factory_name"
+    manual = true
+    [[object.function]]
+    name = "iterate_all_by_interface"
+    manual = true
+    [[object.function]]
+    name = "iterate_elements"
+    manual = true
+    [[object.function]]
+    name = "iterate_recurse"
+    manual = true
+    [[object.function]]
+    name = "iterate_sinks"
+    manual = true
+    [[object.function]]
+    name = "iterate_sorted"
+    manual = true
+    [[object.function]]
+    name = "iterate_sources"
+    manual = true
+
+    [[object.function]]
+    name = "add"
+        [object.function.return]
+        bool_return_is_error = "Failed to add element"
+
+    [[object.function]]
+    name = "remove"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove element"
+
+    [[object.function]]
+    name = "recalculate_latency"
+        [object.function.return]
+        bool_return_is_error = "Failed to recalculate latency"
+
+    [[object.function]]
+    name = "sync_children_states"
+        [object.function.return]
+        bool_return_is_error = "Failed to sync children states"
+
+[[object]]
+name = "Gst.BinFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+    [[object.function]]
+    name = "map"
+    # Readable and writable variant dealing with mutability
+    # Non-into variants available under BufferRef
+    rename = "into_mapped_buffer_readable"
+
+    [[object.function]]
+    name = "unmap"
+    ignore = true
+
+[[object]]
+name = "Gst.BufferCopyFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "Gst.BufferFlags"
 status = "generate"
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
     cfg_condition = "feature = \"ser_de\""
-    [[object.derive]]
-    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+
+    [[object.member]]
+    name = "last"
+    ignore = true
 
 [[object]]
-name = "Gst.StateChange"
+name = "Gst.BufferList"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.BufferPool"
 status = "generate"
+manual_traits = ["BufferPoolExtManual"]
     [[object.function]]
-    name = "get_name"
-    # Manual function for < v1_14:
+    pattern = "config_.*"
+    # A different type
+    ignore = true
+
+    [[object.function]]
+    name = "get_config"
+    # A different type
     manual = true
-    # Always generate the trait, without version constraint:
-    version = "1.8"
+
+    [[object.function]]
+    name = "set_config"
+    # Takes ownership
+    manual = true
+
+    [[object.function]]
+    name = "acquire_buffer"
+    # Params and return value
+    manual = true
+
+    [[object.function]]
+    name = "release_buffer"
+    # Takes ownership
+    manual = true
+
+    [[object.function]]
+    name = "new"
+    # Work-around for 1.14 switch from transfer-floating to transfer-full
+    manual = true
+
+    [[object.function]]
+    name = "set_active"
+        [object.function.return]
+        bool_return_is_error = "Failed to activate buffer pool"
 
 [[object]]
-name = "Gst.StateChangeReturn"
+name = "Gst.BufferPoolAcquireFlags"
 status = "generate"
-must_use = true
-    [object.conversion_type]
-    variant = "Result"
-    ok_type = "StateChangeSuccess"
-    err_type = "StateChangeError"
+    [[object.member]]
+    name = "none"
+    ignore = true
+    [[object.member]]
+    name = "last"
+    ignore = true
 
 [[object]]
-name = "Gst.FlowReturn"
+name = "Gst.Bus"
 status = "generate"
-must_use = true
-    [object.conversion_type]
-    variant = "Result"
-    ok_type = "FlowSuccess"
-    err_type = "FlowError"
+final_type = true
+    [[object.function]]
+    name = "set_sync_handler"
+    # Into<Option<_>> makes this hard to use
+    manual = true
+
+    [[object.function]]
+    name = "add_signal_watch_full"
+    # Priority
+    manual = true
+
+    [[object.function]]
+    name = "timed_pop_filtered"
+    # Uses enum as flags
+    manual = true
+    [[object.function]]
+    name = "pop_filtered"
+    # Uses enum as flags
+    manual = true
+    [[object.function]]
+    name = "poll"
+    # Uses enum as flags
+    manual = true
+
+    [[object.function]]
+    name = "create_watch"
+    # More convenient manual implementation
+    manual = true
+
+    [[object.function]]
+    name = "add_watch"
+    # More specific trait bounds possible for the closure
+    manual = true
+
+    [[object.function]]
+    name = "add_watch_full"
+    # More specific trait bounds possible for the closure
+    manual = true
+
+    [[object.function]]
+    name = "remove_watch"
+        [object.function.return]
+        bool_return_is_error = "Bus has no event source"
+
+    [[object.signal]]
+    name = "message"
+    concurrency = "send"
+
+    [[object.function]]
+    name = "post"
+        [object.function.return]
+        bool_return_is_error = "Failed to post message"
 
 [[object]]
-name = "Gst.PadLinkReturn"
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.ChildProxy"
 status = "generate"
-must_use = true
-    [object.conversion_type]
-    variant = "Result"
-    ok_type = "PadLinkSuccess"
-    err_type = "PadLinkError"
+manual_traits = ["ChildProxyExtManual"]
+    [[object.function]]
+    name = "get_property"
+    rename = "child_property"
+    manual = true
+    [[object.function]]
+    name = "set_property"
+    rename = "set_child_property"
+    manual = true
+    [[object.function]]
+    name = "lookup"
+    manual = true
+
+[[object]]
+name = "Gst.Clock"
+status = "generate"
+manual_traits = ["ClockExtManual"]
+    [[object.function]]
+    name = "adjust_with_calibration"
+    # Associated function
+    manual = true
+    [[object.function]]
+    name = "unadjust_with_calibration"
+    # Associated function
+    manual = true
+
+    [[object.function]]
+    name = "new_periodic_id"
+    manual = true
+    [[object.function]]
+    name = "periodic_id_reinit"
+    manual = true
+    [[object.function]]
+    name = "new_single_shot_id"
+    manual = true
+    [[object.function]]
+    name = "single_shot_id_reinit"
+    manual = true
+
+    [[object.function]]
+    name = "add_observation"
+        [[object.function.parameter]]
+        name = "slave"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "master"
+        mandatory = true
+
+    [[object.function]]
+    name = "add_observation_unapplied"
+        [[object.function.parameter]]
+        name = "slave"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "master"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "internal"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "external"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "rate_num"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "rate_denom"
+        mandatory = true
+
+    [[object.function]]
+    name = "adjust_unlocked"
+        [[object.function.parameter]]
+        name = "internal"
+        mandatory = true
+
+    [[object.function]]
+    name = "get_calibration"
+        [[object.function.parameter]]
+        name = "internal"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "external"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "rate_num"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "rate_denom"
+        mandatory = true
+
+    [[object.function]]
+    name = "get_internal_time"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "get_resolution"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "set_calibration"
+        [[object.function.parameter]]
+        name = "internal"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "external"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "rate_num"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "rate_denom"
+        mandatory = true
+
+    [[object.function]]
+    name = "set_master"
+        [object.function.return]
+        bool_return_is_error = "Failed to set master clock"
+
+    [[object.function]]
+    name = "set_resolution"
+        [[object.function.parameter]]
+        name = "resolution"
+        mandatory = true
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "unadjust_unlocked"
+        [[object.function.parameter]]
+        name = "external"
+        mandatory = true
+
+    [[object.function]]
+    name = "wait_for_sync"
+        [object.function.return]
+        bool_return_is_error = "Timed out waiting for sync"
+
+[[object]]
+name = "Gst.ClockFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "Gst.ClockID"
+status = "manual"
+
+    [[object.function]]
+    name = "compare_func"
+    rename = "compare_by_time"
 
 [[object]]
 name = "Gst.ClockReturn"
@@ -2184,6 +784,60 @@ must_use = true
     variant = "Result"
     ok_type = "ClockSuccess"
     err_type = "ClockError"
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "Option"
+
+[[object]]
+name = "Gst.ClockType"
+status = "generate"
+    [[object.member]]
+    name = "tai"
+    version = "1.18"
+
+[[object]]
+name = "Gst.Context"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.ControlBinding"
+status = "generate"
+manual_traits = ["ControlBindingExtManual"]
+generate_builder = true
+    [[object.function]]
+    name = "get_g_value_array"
+    manual = true
+
+    [[object.function]]
+    name = "get_value"
+        [[object.function.parameter]]
+        name = "timestamp"
+        mandatory = true
+
+    [[object.function]]
+    name = "sync_values"
+        [[object.function.parameter]]
+        name = "timestamp"
+        mandatory = true
+
+[[object]]
+name = "Gst.ControlSource"
+status = "generate"
+manual_traits = ["ControlSourceExtManual"]
+generate_builder = true
+    [[object.function]]
+    name = "control_source_get_value"
+    rename = "value"
+        [[object.function.parameter]]
+        name = "timestamp"
+        mandatory = true
+
+    [[object.function]]
+    name = "control_source_get_value_array"
+    manual = true
 
 [[object]]
 name = "Gst.DateTime"
@@ -2303,41 +957,1375 @@ status = "generate"
         nullable_return_is_error = "Can't create DateTime from UNIX epoch"
 
 [[object]]
-name = "Gst.ControlSource"
+name = "Gst.Device"
 status = "generate"
-manual_traits = ["ControlSourceExtManual"]
-generate_builder = true
     [[object.function]]
-    name = "control_source_get_value"
-    rename = "value"
-        [[object.function.parameter]]
-        name = "timestamp"
-        mandatory = true
+    name = "reconfigure_element"
+        [object.function.return]
+        bool_return_is_error = "Failed to reconfigure the element to use this device"
 
     [[object.function]]
-    name = "control_source_get_value_array"
+    name = "create_element"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create element for device"
+
+[[object]]
+name = "Gst.DeviceMonitor"
+status = "generate"
+manual_traits = ["DeviceMonitorExtManual"]
+    [[object.function]]
+    name = "new"
+    # Work-around for 1.14 switch from transfer-floating to transfer-full
+    manual = true
+
+    [[object.function]]
+    name = "add_filter"
+    # Return Option<DeviceMonitorFilterId>
+    manual = true
+
+    [[object.function]]
+    name = "start"
+        [object.function.return]
+        bool_return_is_error = "Failed to start"
+
+    [[object.function]]
+    name = "remove_filter"
+    # Use DeviceMonitorFilterId and return Result<(), glib::BoolError>
+    manual = true
+
+    [[object.function]]
+    name = "get_devices"
+    # Use glib::List as return type
     manual = true
 
 [[object]]
-name = "Gst.ControlBinding"
+name = "Gst.DeviceProvider"
 status = "generate"
-manual_traits = ["ControlBindingExtManual"]
-generate_builder = true
+manual_traits = ["DeviceProviderExtManual"]
     [[object.function]]
-    name = "get_g_value_array"
+    name = "start"
+        [object.function.return]
+        bool_return_is_error = "Failed to start"
+
+    [[object.function]]
+    name = "register"
     manual = true
 
     [[object.function]]
-    name = "get_value"
+    name = "get_metadata"
+    # better manual function
+    manual = true
+
+    [[object.function]]
+    name = "get_devices"
+    # Use glib::List as return type
+    manual = true
+
+[[object]]
+name = "Gst.DeviceProviderFactory"
+status = "generate"
+final_type = true
+    [[object.function]]
+    name = "list_get_device_providers"
+    rename = "factories"
+    # Use glib::List as return type
+    manual = true
+
+    [[object.function]]
+    name = "get_metadata"
+    # Use str as return type
+    manual = true
+
+[[object]]
+name = "Gst.Element"
+status = "generate"
+manual_traits = ["ElementExtManual"]
+
+    # Manual implementation provides associated functions on `Element`,
+    # but gir considers these methods on `ElementExtManual` in the docs.
+    [[object.function]]
+    name = "link_many"
+    ignore = true
+    [[object.function]]
+    name = "unlink_many"
+    ignore = true
+    [[object.function]]
+    name = "register"
+    ignore = true
+
+    [[object.function]]
+    name = "call_async"
+    # more specific closure type possible
+    manual = true
+
+    [[object.function]]
+    name = "set_base_time"
         [[object.function.parameter]]
-        name = "timestamp"
+        name = "time"
         mandatory = true
+
+    [[object.function]]
+    name = "get_current_running_time"
+    # manual implementation also works for earlier versions
+    manual = true
+
+    [[object.function]]
+    name = "get_current_clock_time"
+    # manual implementation also works for earlier versions
+    manual = true
+
+    [[object.function]]
+    name = "get_request_pad"
+    # rename to more explicit name and avoid conflict with `request_pad`
+    rename = "request_pad_simple"
+    # Renamed version is not deprecated
+    manual = true
+
+    [[object.function]]
+    name = "request_pad_simple"
+    # see above
+    manual = true
+
+    [[object.function]]
+    name = "post_message"
+    # takes ownership of message
+    manual = true
+
+    [[object.function]]
+    name = "add_pad"
+        [object.function.return]
+        bool_return_is_error = "Failed to add pad"
+
+    [[object.function]]
+    name = "remove_pad"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove pad"
+
+    [[object.function]]
+    name = "link"
+        [object.function.return]
+        bool_return_is_error = "Failed to link elements"
+
+    [[object.function]]
+    name = "link_filtered"
+        [[object.function.parameter]]
+        name = "filter"
+        # Can use `link` instead
+        nullable = false
+        [object.function.return]
+        bool_return_is_error = "Failed to link elements"
+
+    [[object.function]]
+    name = "link_pads"
+        [object.function.return]
+        bool_return_is_error = "Failed to link pads"
+
+    [[object.function]]
+    name = "link_pads_filtered"
+        [[object.function.parameter]]
+        name = "filter"
+        # Can use `link` instead
+        nullable = false
+        [object.function.return]
+        bool_return_is_error = "Failed to link pads"
+
+    [[object.function]]
+    name = "link_pads_full"
+        [object.function.return]
+        bool_return_is_error = "Failed to link pads"
+
+    [[object.function]]
+    name = "set_clock"
+        [object.function.return]
+        bool_return_is_error = "Failed to set clock"
+
+    [[object.function]]
+    name = "sync_state_with_parent"
+        [object.function.return]
+        bool_return_is_error = "Failed to sync state with parent"
+
+    [[object.function]]
+    name = "query"
+    # correct mutability
+    manual = true
+
+    [[object.function]]
+    name = "send_event"
+    # Pass by value
+    manual = true
+
+    [[object.function]]
+    name = "get_context_unlocked"
+    # Unsafe
+    ignore = true
+
+    [[object.function]]
+    name = "add_property_deep_notify_watch"
+    # ulong
+    manual = true
+
+    [[object.function]]
+    name = "add_property_notify_watch"
+    # ulong
+    manual = true
+
+    [[object.function]]
+    name = "remove_property_notify_watch"
+    # ulong
+    manual = true
+
+    [[object.function]]
+    name = "query_duration"
+    # formatted value
+    manual = true
+
+    [[object.function]]
+    name = "query_position"
+    # formatted value
+    manual = true
+
+    [[object.function]]
+    name = "query_convert"
+    # formatted value
+    manual = true
+
+    [[object.function]]
+    name = "seek"
+    # formatted value
+    manual = true
+
+    [[object.function]]
+    name = "seek_simple"
+    # formatted value
+    manual = true
+
+    [[object.function]]
+    name = "state_change_return_get_name"
+    # Wrong place
+    ignore = true
+
+    [[object.function]]
+    name = "state_get_name"
+    # Wrong place
+    ignore = true
+
+    [[object.function]]
+    name = "get_metadata"
+    # better manual function
+    manual = true
+
+    [[object.function]]
+    name = "get_pad_template"
+    # better manual function
+    manual = true
+
+    [[object.function]]
+    name = "get_pad_template_list"
+    # better manual function
+    manual = true
+
+    # Limited subset of `MessageType`,
+    # see `ElementMessageType`.
+    [[object.function]]
+    name = "message_full"
+    manual = true
+    [[object.function]]
+    name = "message_full_with_details"
+    manual = true
+
+    # Return iterators
+    [[object.function]]
+    name = "iterate_pads"
+    manual = true
+    [[object.function]]
+    name = "iterate_sink_pads"
+    manual = true
+    [[object.function]]
+    name = "iterate_src_pads"
+    manual = true
+
+[[object]]
+name = "Gst.ElementFactory"
+status = "generate"
+final_type = true
+    [[object.function]]
+    name = "create"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create element from factory"
+
+    [[object.function]]
+    name = "make"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create element from factory name"
+
+    [[object.function]]
+    name = "create_full"
+    # varargs
+    ignore = true
+
+    [[object.function]]
+    name = "create_valist"
+    # varargs
+    ignore = true
+
+    [[object.function]]
+    name = "create_with_properties"
+    # separate name/value arrays need to be merged
+    manual = true
+
+    [[object.function]]
+    name = "make_full"
+    # varargs
+    ignore = true
+
+    [[object.function]]
+    name = "make_valist"
+    # varargs
+    ignore = true
+
+    [[object.function]]
+    name = "make_with_properties"
+    # separate name/value arrays need to be merged
+    manual = true
+
+    [[object.function]]
+    name = "get_static_pad_templates"
+    # Use glib::List as return type
+    manual = true
+
+    [[object.function]]
+    name = "list_is_type"
+    rename = "has_type"
+    # Renamed flags type
+    manual = true
+
+    [[object.function]]
+    name = "list_filter"
+    # can_{sink,src}_{all,any}_caps() around an iterator is the same
+    ignore = true
+
+    [[object.function]]
+    name = "list_get_elements"
+    rename = "factories_with_type"
+    # Use glib::List as return type
+    manual = true
+
+    [[object.function]]
+    name = "get_metadata"
+    # Use str as return type
+    manual = true
+
+[[object]]
+name = "Gst.ElementFactoryListType"
+status = "manual"
+conversion_type = "scalar"
+
+[[object]]
+name = "Gst.ElementFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "Gst.Event"
+status = "manual"
+ref_mode = "ref"
+
+    [[object.function]]
+    name = "new_caps"
+    # Moved to CapsBuilder::new()
+    ignore = true
+
+    [[object.function]]
+    name = "new_qos"
+    # Moved to QosBuilder::new()
+    ignore = true
+
+    [[object.function]]
+    name = "new_seek"
+    # Moved to SeekBuilder::new()
+    ignore = true
+
+    [[object.function]]
+    name = "parse_stream"
+    # Moved to StreamStart::stream()
+    ignore = true
+
+    [[object.function]]
+    name = "parse_stream_start"
+    # Moved to StreamStart::stream_id()
+    ignore = true
+
+[[object]]
+name = "Gst.EventType"
+status = "generate"
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, Hash"
+    [[object.member]]
+    name = "select_streams"
+    version = "1.10"
+    [[object.member]]
+    name = "stream_collection"
+    version = "1.10"
+    [[object.member]]
+    name = "stream_group_done"
+    version = "1.10"
+    [[object.member]]
+    name = "instant_rate_change"
+    version = "1.18"
+    [[object.member]]
+    name = "instant_rate_sync_time"
+    version = "1.18"
+
+[[object]]
+name = "Gst.FlowReturn"
+status = "generate"
+must_use = true
+    [object.conversion_type]
+    variant = "Result"
+    ok_type = "FlowSuccess"
+    err_type = "FlowError"
+
+[[object]]
+name = "Gst.Format"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+    [[object.function]]
+    name = "register"
+    # Needs manual work
+    ignore = true
+
+[[object]]
+name = "Gst.GhostPad"
+status = "generate"
+    [[object.function]]
+    name = "set_target"
+        [object.function.return]
+        bool_return_is_error = "Failed to set target"
+
+    [[object.function]]
+    name = "new"
+    rename = "with_target"
+    manual = true
+
+    [[object.function]]
+    name = "new_no_target"
+    rename = "new"
+    manual = true
+
+    [[object.function]]
+    name = "new_from_template"
+    rename = "from_template_with_target"
+    manual = true
+
+    [[object.function]]
+    name = "new_no_target_from_template"
+    rename = "from_template"
+    manual = true
+
+    [[object.function]]
+    name = "construct"
+    ignore = true
+
+    [[object.function]]
+    name = "activate_mode_default"
+    # wrong instance type
+    manual = true
+
+    [[object.function]]
+    name = "internal_activate_mode_default"
+    # wrong instance type
+    manual = true
+
+[[object]]
+name = "Gst.Memory"
+status = "manual"
+
+    [[object.function]]
+    name = "map"
+    # Readable and writable variant dealing with mutability
+    # Non-into variants available under MemoryRef
+    rename = "into_mapped_memory_readable"
+
+    [[object.function]]
+    name = "unmap"
+    ignore = true
+
+[[object]]
+name = "Gst.MemoryFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "Gst.Message"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.MetaFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "Gst.Object"
+# For renaming the trait...
+status = "generate"
+trait_name = "GstObjectExt"
+    [[object.function]]
+    name = "set_name"
+    # Don't allow changing the name at random times
+    ignore = true
+
+    [[object.property]]
+    name = "name"
+    # There are accessor functions for this
+    ignore = true
+
+    [[object.function]]
+    name = "ref_sink"
+    # Takes a raw pointer
+    ignore = true
+
+    [[object.function]]
+    name = "get_name"
+        [object.function.return]
+        # Nullable state only occurs during instance init and finalize
+        # which cannot be observed from Rust
+        nullable = false
+
+    [[object.function]]
+    name = "set_parent"
+        [object.function.return]
+        bool_return_is_error = "Failed to set parent object"
 
     [[object.function]]
     name = "sync_values"
         [[object.function.parameter]]
         name = "timestamp"
         mandatory = true
+        [object.function.return]
+        bool_return_is_error = "Failed to sync values"
+
+    [[object.function]]
+    name = "value"
+        [[object.function.parameter]]
+        name = "timestamp"
+        mandatory = true
+
+    [[object.function]]
+    name = "get_g_value_array"
+    ignore = true
+
+    [[object.function]]
+    name = "add_control_binding"
+    [object.function.return]
+    bool_return_is_error = "Failed to add control binding"
+
+[[object]]
+name = "Gst.ObjectFlags"
+status = "generate"
+    [[object.member]]
+    name = "may_be_leaked"
+    version = "1.10"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "Gst.Pad"
+status = "generate"
+manual_traits = ["PadExtManual"]
+    [[object.function]]
+    name = "link_maybe_ghosting"
+        [object.function.return]
+        bool_return_is_error = "Failed to link pads, possibly ghosting"
+
+    [[object.function]]
+    name = "link_maybe_ghosting_full"
+        [object.function.return]
+        bool_return_is_error = "Failed to link pads, possibly ghosting"
+
+    [[object.function]]
+    name = "unlink"
+        [object.function.return]
+        bool_return_is_error = "Failed to unlink pad"
+
+    [[object.function]]
+    name = "pause_task"
+        [object.function.return]
+        bool_return_is_error = "Failed to pause pad task"
+
+    [[object.function]]
+    name = "stop_task"
+        [object.function.return]
+        bool_return_is_error = "Failed to stop pad task"
+
+    [[object.function]]
+    name = "set_active"
+        [object.function.return]
+        bool_return_is_error = "Failed to activate pad"
+
+    [[object.function]]
+    name = "activate_mode"
+        [object.function.return]
+        bool_return_is_error = "Failed to activate mode pad"
+
+    [[object.function]]
+    name = "remove_probe"
+    # Don't use a ulong
+    manual = true
+
+    [[object.function]]
+    name = "chain"
+    # Move buffer
+    manual = true
+
+    [[object.function]]
+    name = "push"
+    # Move buffer
+    manual = true
+
+    [[object.function]]
+    name = "chain_list"
+    # Move buffer
+    manual = true
+
+    [[object.function]]
+    name = "push_list"
+    # Move buffer
+    manual = true
+
+    [[object.function]]
+    name = "pull_range"
+    # Buffer can be NULL
+    manual = true
+
+    [[object.function]]
+    name = "get_range"
+    # Buffer can be NULL
+    manual = true
+
+    [[object.function]]
+    name = "get_last_flow_return"
+    # Use Result<FlowSuccess, FlowError>
+    rename = "last_flow_result"
+
+    [[object.function]]
+    name = "query"
+    # Correct mutability
+    manual = true
+
+    [[object.function]]
+    name = "peer_query"
+    # Correct mutability
+    manual = true
+
+    [[object.function]]
+    name = "query_default"
+    # Correct mutability
+    manual = true
+
+    [[object.function]]
+    name = "proxy_query_caps"
+    # Correct mutability
+    manual = true
+
+    [[object.function]]
+    name = "proxy_query_accept_caps"
+    # Correct mutability
+    manual = true
+
+    [[object.function]]
+    name = "event_default"
+    # Pass by value
+    manual = true
+
+    [[object.function]]
+    name = "push_event"
+    # Pass by value
+    manual = true
+
+    [[object.function]]
+    name = "send_event"
+    # Pass by value
+    manual = true
+
+    [[object.function]]
+    name = "new"
+    # Also has builder()
+    manual = true
+
+    [[object.function]]
+    name = "new_from_template"
+    # Also has builder_with_template()
+    rename = "from_template"
+    manual = true
+
+    [[object.function]]
+    name = "new_from_static_template"
+    # Also has builder_with_static_template()
+    rename = "from_static_template"
+    manual = true
+
+    [[object.function]]
+    name = "query_duration"
+    # formatted value
+    manual = true
+
+    [[object.function]]
+    name = "query_position"
+    # formatted value
+    manual = true
+
+    [[object.function]]
+    name = "query_convert"
+    # formatted value
+    manual = true
+
+    [[object.function]]
+    name = "peer_query_duration"
+    # formatted value
+    manual = true
+
+    [[object.function]]
+    name = "peer_query_position"
+    # formatted value
+    manual = true
+
+    [[object.function]]
+    name = "peer_query_convert"
+    # formatted value
+    manual = true
+
+    [[object.function]]
+    name = "link_get_name"
+    # Wrong place
+    manual = true
+
+    [[object.function]]
+    pattern = "set_.*_function_full"
+    # More specific closure trait bounds possible
+    manual = true
+
+    [[object.function]]
+    name = "start_task"
+    # More specific closure trait bounds possible
+    manual = true
+
+    [[object.function]]
+    name = "sticky_events_foreach"
+    # Complex closure argument handling
+    manual = true
+
+    [[object.function]]
+    name = "get_sticky_event"
+    # More convenient API
+    manual = true
+
+    [[object.function]]
+    name = "add_probe"
+    # Complex closure argument handling
+    manual = true
+
+    [[object.property]]
+    name = "template"
+    # Has a proper getter
+    ignore = true
+
+[[object]]
+name = "Gst.PadDirection"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+
+[[object]]
+name = "Gst.PadFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "Gst.PadLinkCheck"
+status = "generate"
+    [[object.member]]
+    name = "nothing"
+    ignore = true
+
+[[object]]
+name = "Gst.PadLinkReturn"
+status = "generate"
+must_use = true
+    [object.conversion_type]
+    variant = "Result"
+    ok_type = "PadLinkSuccess"
+    err_type = "PadLinkError"
+
+[[object]]
+name = "Gst.PadPresence"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+
+[[object]]
+name = "Gst.PadProbeType"
+status = "generate"
+    [[object.member]]
+    name = "invalid"
+    ignore = true
+
+[[object]]
+name = "Gst.PadTemplate"
+status = "generate"
+final_type = true
+    [[object.function]]
+    name = "new"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create pad template"
+
+    [[object.function]]
+    name = "new_with_gtype"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create pad template"
+
+    [[object.function]]
+    name = "new_from_static_pad_template_with_gtype"
+    # static pad template manual
+    manual = true
+
+[[object]]
+name = "Gst.ParseContext"
+status = "manual"
+ref_mode = "ref-mut"
+
+[[object]]
+name = "Gst.ParseFlags"
+status = "generate"
+    [[object.member]]
+    name = "place_in_bin"
+    version = "1.10"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "Gst.Pipeline"
+status = "generate"
+    [[object.function]]
+    name = "get_delay"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "set_delay"
+        [[object.function.parameter]]
+        name = "delay"
+        mandatory = true
+
+[[object]]
+name = "Gst.PipelineFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "Gst.Plugin"
+status = "generate"
+final_type = true
+
+    [[object.function]]
+    pattern = "register_static.*"
+    # Needs manual implementation
+    ignore = true
+
+    [[object.function]]
+    name = "list_free"
+    # useless and unsafe
+    ignore = true
+
+    [[object.function]]
+    name = "set_cache_data"
+    # pass by value
+    manual = true
+
+    [[object.function]]
+    name = "get_cache_data"
+    # structure ref
+    manual = true
+
+    [[object.function]]
+    name = "load"
+        [object.function.return]
+        nullable_return_is_error = "Failed to load plugin"
+
+    [[object.function]]
+    name = "load_by_name"
+        [object.function.return]
+        nullable_return_is_error = "Failed to load plugin"
+
+[[object]]
+name = "Gst.PluginDependencyFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "Gst.PluginFeature"
+status = "generate"
+manual_traits = ["PluginFeatureExtManual"]
+    [[object.function]]
+    pattern = "list_.*"
+    ignore = true
+
+    [[object.function]]
+    name = "rank_compare_func"
+    ignore = true
+
+    [[object.function]]
+    name = "get_rank"
+    manual = true
+
+    [[object.function]]
+    name = "set_rank"
+    manual = true
+
+    [[object.function]]
+    name = "load"
+    manual = true
+
+[[object]]
+name = "Gst.Preset"
+status = "generate"
+
+    [[object.function]]
+    name = "set_app_dir"
+        [object.function.return]
+        bool_return_is_error = "Failed to set app preset directory"
+
+    [[object.function]]
+    name = "delete_preset"
+        [object.function.return]
+        bool_return_is_error = "Failed to delete preset"
+
+    [[object.function]]
+    name = "load_preset"
+        [object.function.return]
+        bool_return_is_error = "Failed to load preset"
+
+    [[object.function]]
+    name = "save_preset"
+        [object.function.return]
+        bool_return_is_error = "Failed to save preset"
+
+    [[object.function]]
+    name = "rename_preset"
+        [object.function.return]
+        bool_return_is_error = "Failed to rename preset"
+
+    [[object.function]]
+    name = "set_meta"
+        [object.function.return]
+        bool_return_is_error = "Failed to set preset meta"
+
+[[object]]
+name = "Gst.Promise"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.ProxyPad"
+status = "generate"
+manual_traits = ["ProxyPadExtManual"]
+
+    [[object.function]]
+    name = "chain_default"
+    # Buffer move
+    manual = true
+
+    [[object.function]]
+    name = "chain_list_default"
+    # Buffer move
+    manual = true
+
+    [[object.function]]
+    name = "getrange_default"
+    # Buffer move
+    manual = true
+
+[[object]]
+name = "Gst.Query"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Rank"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug"
+
+[[object]]
+name = "Gst.Registry"
+status = "generate"
+final_type = true
+
+    [[object.function]]
+    pattern = "fork_.*"
+    ignore = true
+
+    [[object.function]]
+    name = "add_feature"
+        [object.function.return]
+        bool_return_is_error = "Failed to add feature"
+
+    [[object.function]]
+    name = "add_plugin"
+        [object.function.return]
+        bool_return_is_error = "Failed to add plugin"
+
+    [[object.function]]
+    name = "feature_filter"
+    rename = "features_filtered"
+    # Use glib::List as return type
+    manual = true
+
+    [[object.function]]
+    name = "get_feature_list"
+    rename = "features"
+    # Use glib::List as return type
+    manual = true
+
+    [[object.function]]
+    name = "get_feature_list_by_plugin"
+    rename = "features_by_plugin"
+    # Use glib::List as return type
+    manual = true
+
+    [[object.function]]
+    name = "get_plugin_list"
+    rename = "plugins"
+    # Use glib::List as return type
+    manual = true
+
+    [[object.function]]
+    name = "plugin_filter"
+    rename = "plugins_filtered"
+    # Use glib::List as return type
+    manual = true
+
+[[object]]
+name = "Gst.Sample"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.SeekFlags"
+status = "generate"
+    [[object.member]]
+    name = "trickmode_forward_predicted"
+    version = "1.18"
+    [[object.member]]
+    name = "instant_rate_change"
+    version = "1.18"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "Gst.SegmentFlags"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.member]]
+    name = "trickmode_forward_predicted"
+    version = "1.18"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "Gst.StackTraceFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "Gst.State"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+
+[[object]]
+name = "Gst.StateChange"
+status = "generate"
+    [[object.function]]
+    name = "get_name"
+    # Manual function for < v1_14:
+    manual = true
+    # Always generate the trait, without version constraint:
+    version = "1.8"
+
+[[object]]
+name = "Gst.StateChangeReturn"
+status = "generate"
+must_use = true
+    [object.conversion_type]
+    variant = "Result"
+    ok_type = "StateChangeSuccess"
+    err_type = "StateChangeError"
+
+[[object]]
+name = "Gst.Stream"
+status = "generate"
+final_type = true
+    [[object.function]]
+    name = "new"
+    # Work-around for 1.14 switch from transfer-floating to transfer-full
+    manual = true
+
+    [[object.property]]
+    name = "caps"
+    version = "1.10"
+
+    [[object.property]]
+    name = "stream-flags"
+    version = "1.10"
+
+    [[object.property]]
+    name = "stream-id"
+    version = "1.10"
+
+    [[object.property]]
+    name = "stream-type"
+    version = "1.10"
+
+    [[object.property]]
+    name = "tags"
+    version = "1.10"
+
+[[object]]
+name = "Gst.StreamCollection"
+status = "generate"
+final_type = true
+    [[object.function]]
+    name = "new"
+    # Work-around for 1.14 switch from transfer-floating to transfer-full
+    manual = true
+
+    [[object.function]]
+    name = "add_stream"
+    # Ignore return value which is always `true`
+    manual = true
+
+    [[object.property]]
+    name = "upstream-id"
+    version = "1.10"
+    generate = ["get"]
+
+[[object]]
+name = "Gst.StreamFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref"
+    # Functions moved to `StructureRef`
+    [[object.function]]
+    name = "set"
+    ignore = true
+    [[object.function]]
+    name = "set_value"
+    ignore = true
+    [[object.function]]
+    name = "get_value"
+    ignore = true
+
+    [[object.function]]
+    name = "id_get_value"
+    rename = "value_by_quark"
+    ignore = true
+    [[object.function]]
+    name = "take_value"
+    rename = "set_value"
+    ignore = true
+    [[object.function]]
+    name = "id_take_value"
+    rename = "set_value_by_quark"
+    ignore = true
+    [[object.function]]
+    name = "get_name"
+    rename = "name"
+    ignore = true
+    [[object.function]]
+    name = "get_name_id"
+    rename = "name_quark"
+    ignore = true
+    [[object.function]]
+    name = "set_name"
+    ignore = true
+
+    [[object.function]]
+    name = "has_field"
+    ignore = true
+    [[object.function]]
+    name = "has_field_with_typed"
+    rename = "has_field_with_type"
+    ignore = true
+    [[object.function]]
+    name = "id_has_field"
+    rename = "has_field_by_quark"
+    ignore = true
+    [[object.function]]
+    name = "id_has_field_typed"
+    rename = "has_field_with_type_by_quark"
+    ignore = true
+    [[object.function]]
+    name = "remove_field"
+    ignore = true
+    [[object.function]]
+    name = "remove_fields"
+    # Repeatedly call remove_field()
+    ignore = true
+    [[object.function]]
+    name = "remove_all_fields"
+    ignore = true
+    [[object.function]]
+    name = "get_nth_field_name"
+    ignore = true
+    [[object.function]]
+    name = "n_fields"
+    ignore = true
+    [[object.function]]
+    name = "can_intersect"
+    ignore = true
+    [[object.function]]
+    name = "intersect"
+    ignore = true
+    [[object.function]]
+    name = "is_subset"
+    ignore = true
+
+    [[object.function]]
+    name = "fixate"
+    ignore=true
+    [[object.function]]
+    name = "fixate_field"
+    ignore=true
+    [[object.function]]
+    name = "fixate_field_boolean"
+    ignore=true
+    [[object.function]]
+    name = "fixate_field_string"
+    ignore=true
+    [[object.function]]
+    name = "fixate_field_nearest_double"
+    ignore=true
+    [[object.function]]
+    name = "fixate_field_nearest_fraction"
+    ignore=true
+    [[object.function]]
+    name = "fixate_field_nearest_int"
+    ignore=true
+
+    # Not implemented
+    [[object.function]]
+    name = "set_parent_refcount"
+    ignore = true
+
+[[object]]
+name = "Gst.TagList"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.TagScope"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+
+[[object]]
+name = "Gst.TagSetter"
+status = "generate"
+manual_traits = ["TagSetterExtManual"]
+    [[object.function]]
+    name = "add_tag_value"
+    manual = true
+
+    [[object.function]]
+    name = "add_tags"
+    # Takes a raw pointer
+    ignore = true
+
+[[object]]
+name = "Gst.Toc"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.TocEntry"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.TocEntryType"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+
+[[object]]
+name = "Gst.TocLoopType"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+
+[[object]]
+name = "Gst.TocScope"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
 [[object]]
 name = "Gst.Tracer"
@@ -2358,6 +2346,28 @@ status = "generate"
     manual = true
 
 [[object]]
+name = "Gst.TypeFindFactory"
+status = "generate"
+final_type = true
+
+    [[object.function]]
+    name = "call_function"
+    # Set up native functions in `TypeFind`, calling into trait argument
+    manual = true
+
+    [[object.function]]
+    name = "get_list"
+    rename = "factories"
+    # Use glib::List as return type
+    manual = true
+
+[[object]]
+name = "Gst.TypeFindProbability"
+status = "generate"
+    [[object.derive]]
+    name = "Debug"
+
+[[object]]
 name = "Gst.URIType"
 status = "generate"
     [[object.derive]]
@@ -2365,14 +2375,3 @@ status = "generate"
     cfg_condition = "feature = \"ser_de\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
-
-
-[[object]]
-name = "Gst.MetaFlags"
-status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
-    [[object.member]]
-    name = "last"
-    ignore = true

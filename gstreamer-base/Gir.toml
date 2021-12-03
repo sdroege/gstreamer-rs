@@ -17,8 +17,8 @@ external_libraries = [
 ]
 
 generate = [
-    "GstBase.PushSrc",
     "GstBase.AggregatorStartTimeSelection",
+    "GstBase.PushSrc",
 ]
 
 manual = [
@@ -44,6 +44,21 @@ manual = [
 ]
 
 [[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.BufferList"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
 name = "Gst.ClockReturn"
 status = "manual"
 must_use = true
@@ -53,6 +68,11 @@ must_use = true
     err_type = "gst::ClockError"
 
 [[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "Option"
+
+[[object]]
 name = "Gst.FlowReturn"
 status = "manual"
 must_use = true
@@ -60,6 +80,59 @@ must_use = true
     variant = "Result"
     ok_type = "gst::FlowSuccess"
     err_type = "gst::FlowError"
+
+[[object]]
+name = "Gst.Sample"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.TagList"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "GstBase.*"
+status = "generate"
+    # We'll opt-in for constants at a later time
+    [[object.constant]]
+    pattern = ".+"
+    ignore = true
+
+    [[object.function]]
+    name = "type_find_helper_for_data"
+    # broken return value
+    ignore = true
+
+    [[object.function]]
+    name = "type_find_helper_for_data_with_extension"
+    # broken return value
+    ignore = true
+
+    [[object.function]]
+    name = "type_find_helper_for_buffer"
+    # broken return value
+    ignore = true
+
+    [[object.function]]
+    name = "type_find_helper_for_buffer_with_extension"
+    # broken return value
+    ignore = true
+
+    [[object.function]]
+    name = "type_find_helper"
+        [object.function.return]
+        nullable_return_is_error = "Could not find type"
+
+    [[object.function]]
+    name = "type_find_helper_for_extension"
+        [object.function.return]
+        nullable_return_is_error = "Could not find type"
 
 [[object]]
 name = "GstBase.Adapter"
@@ -107,11 +180,106 @@ concurrency = "send-unique"
     manual = true
 
 [[object]]
-name = "GstBase.FlowCombiner"
-# Manual because ref/unref functions were added much later
-status = "manual"
-final_type = true
-concurrency = "none"
+name = "GstBase.Aggregator"
+status = "generate"
+manual_traits = ["AggregatorExtManual"]
+
+    [[object.function]]
+    name = "update_segment"
+    # Takes FormattedValue as argument
+    manual = true
+
+    [[object.function]]
+    name = "get_allocator"
+    manual = true
+
+    [[object.function]]
+    name = "finish_buffer"
+    # Takes ownership
+    manual = true
+
+    [[object.function]]
+    name = "finish_buffer_list"
+    # Takes ownership
+    manual = true
+
+    [[object.function]]
+    name = "selected_samples"
+    # Info parameter
+    manual = true
+
+    [[object.function]]
+    name = "set_latency"
+        [[object.function.parameter]]
+        name = "min_latency"
+        mandatory = true
+
+    [[object.property]]
+    name = "latency"
+    version = "1.14"
+
+    [[object.property]]
+    name = "start-time-selection"
+    version = "1.18"
+
+    [[object.property]]
+    name = "min-upstream-latency"
+    # clock time instead of u64
+    manual = true
+
+    [[object.signal]]
+    name = "samples-selected"
+    # StructureRef instead of Structure
+    manual = true
+
+[[object]]
+name = "GstBase.AggregatorPad"
+status = "generate"
+manual_traits = ["AggregatorPadExtManual"]
+
+[[object]]
+name = "GstBase.BaseParse"
+status = "generate"
+manual_traits = ["BaseParseExtManual"]
+    [[object.function]]
+    name = "add_index_entry"
+        [[object.function.parameter]]
+        name = "ts"
+        mandatory = true
+
+    [[object.function]]
+    name = "finish_frame"
+    manual = true
+
+    [[object.function]]
+    name = "set_duration"
+    manual = true
+
+    [[object.function]]
+    name = "set_latency"
+        [[object.function.parameter]]
+        name = "min_latency"
+        mandatory = true
+
+    [[object.function]]
+    name = "convert_default"
+    manual = true
+
+    [[object.function]]
+    name = "set_frame_rate"
+    manual = true
+
+    # Didn't bind gst_base_parse_frame_{new,init} so not needed
+    [[object.function]]
+    name = "push_frame"
+    ignore = true
+
+[[object]]
+name = "GstBase.BaseParseFrameFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
 
 [[object]]
 name = "GstBase.BaseSink"
@@ -250,176 +418,8 @@ manual_traits = ["BaseTransformExtManual"]
     ignore = true
 
 [[object]]
-name = "GstBase.Aggregator"
-status = "generate"
-manual_traits = ["AggregatorExtManual"]
-
-    [[object.function]]
-    name = "update_segment"
-    # Takes FormattedValue as argument
-    manual = true
-
-    [[object.function]]
-    name = "get_allocator"
-    manual = true
-
-    [[object.function]]
-    name = "finish_buffer"
-    # Takes ownership
-    manual = true
-
-    [[object.function]]
-    name = "finish_buffer_list"
-    # Takes ownership
-    manual = true
-
-    [[object.function]]
-    name = "selected_samples"
-    # Info parameter
-    manual = true
-
-    [[object.function]]
-    name = "set_latency"
-        [[object.function.parameter]]
-        name = "min_latency"
-        mandatory = true
-
-    [[object.property]]
-    name = "latency"
-    version = "1.14"
-
-    [[object.property]]
-    name = "start-time-selection"
-    version = "1.18"
-
-    [[object.property]]
-    name = "min-upstream-latency"
-    # clock time instead of u64
-    manual = true
-
-    [[object.signal]]
-    name = "samples-selected"
-    # StructureRef instead of Structure
-    manual = true
-
-[[object]]
-name = "GstBase.AggregatorPad"
-status = "generate"
-manual_traits = ["AggregatorPadExtManual"]
-
-[[object]]
-name = "GstBase.*"
-status = "generate"
-    # We'll opt-in for constants at a later time
-    [[object.constant]]
-    pattern = ".+"
-    ignore = true
-
-    [[object.function]]
-    name = "type_find_helper_for_data"
-    # broken return value
-    ignore = true
-
-    [[object.function]]
-    name = "type_find_helper_for_data_with_extension"
-    # broken return value
-    ignore = true
-
-    [[object.function]]
-    name = "type_find_helper_for_buffer"
-    # broken return value
-    ignore = true
-
-    [[object.function]]
-    name = "type_find_helper_for_buffer_with_extension"
-    # broken return value
-    ignore = true
-
-    [[object.function]]
-    name = "type_find_helper"
-        [object.function.return]
-        nullable_return_is_error = "Could not find type"
-
-    [[object.function]]
-    name = "type_find_helper_for_extension"
-        [object.function.return]
-        nullable_return_is_error = "Could not find type"
-
-[[object]]
-name = "Gst.Structure"
+name = "GstBase.FlowCombiner"
+# Manual because ref/unref functions were added much later
 status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Caps"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Buffer"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.BufferList"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Sample"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.ClockTime"
-status = "manual"
-conversion_type = "Option"
-
-[[object]]
-name = "Gst.TagList"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "GstBase.BaseParse"
-status = "generate"
-manual_traits = ["BaseParseExtManual"]
-    [[object.function]]
-    name = "add_index_entry"
-        [[object.function.parameter]]
-        name = "ts"
-        mandatory = true
-
-    [[object.function]]
-    name = "finish_frame"
-    manual = true
-
-    [[object.function]]
-    name = "set_duration"
-    manual = true
-
-    [[object.function]]
-    name = "set_latency"
-        [[object.function.parameter]]
-        name = "min_latency"
-        mandatory = true
-
-    [[object.function]]
-    name = "convert_default"
-    manual = true
-
-    [[object.function]]
-    name = "set_frame_rate"
-    manual = true
-
-    # Didn't bind gst_base_parse_frame_{new,init} so not needed
-    [[object.function]]
-    name = "push_frame"
-    ignore = true
-
-[[object]]
-name = "GstBase.BaseParseFrameFlags"
-status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
+final_type = true
+concurrency = "none"

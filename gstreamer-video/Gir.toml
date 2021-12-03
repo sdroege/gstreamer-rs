@@ -65,8 +65,8 @@ manual = [
     "GstBase.BaseTransform",
     "GstVideo.VideoCodecFrame",
     "GstVideo.VideoCodecState",
-    "GstVideo.VideoColorRange",
     "GstVideo.VideoColorimetry",
+    "GstVideo.VideoColorRange",
     "GstVideo.VideoFormatInfo",
     "GstVideo.VideoInfo",
     "GstVideo.VideoMeta",
@@ -75,63 +75,77 @@ manual = [
 ]
 
 [[object]]
-name = "Gst.ClockTime"
-status = "manual"
-conversion_type = "Option"
-
-[[object]]
 name = "Gst.Caps"
 status = "manual"
 ref_mode = "ref"
 
 [[object]]
-name = "GstVideo.VideoFrame"
+name = "Gst.ClockTime"
 status = "manual"
-
-    [[object.function]]
-    name = "map"
-    # Readable and writable variant dealing with mutability
-    rename = "from_buffer_readable"
+conversion_type = "Option"
 
 [[object]]
-name = "GstVideo.VideoOrientation"
+name = "GstVideo.VideoBufferFlags"
 status = "generate"
-    [[object.function]]
-    name = "set_hcenter"
-        [object.function.return]
-        bool_return_is_error = "Failed to set horizontal centering"
-    [[object.function]]
-    name = "set_hflip"
-        [object.function.return]
-        bool_return_is_error = "Failed to set horizontal flipping"
-    [[object.function]]
-    name = "set_vcenter"
-        [object.function.return]
-        bool_return_is_error = "Failed to set vertical centering"
-    [[object.function]]
-    name = "set_vflip"
-        [object.function.return]
-        bool_return_is_error = "Failed to set vertical flipping"
+    [[object.member]]
+    name = "top_field"
+    version = "1.16"
+    [[object.member]]
+    name = "bottom_field"
+    version = "1.16"
+    [[object.member]]
+    name = "marker"
+    version = "1.18"
+    [[object.member]]
+    name = "last"
+    ignore = true
 
 [[object]]
-name = "GstVideo.VideoOverlay"
+name = "GstVideo.VideoChromaSite"
 status = "generate"
-manual_traits = ["VideoOverlayExtManual"]
-
-    [[object.function]]
-    name = "set_property"
-    # Only for implementors of GstVideoOverlay
+    [[object.member]]
+    name = "unknown"
     ignore = true
 
     [[object.function]]
-    name = "set_window_handle"
-    # Pointer argument
+    name = "to_string"
+    # Manual function for < v1_20:
     manual = true
-
-    [[object.function]]
-    name = "set_render_rectangle"
+    # Always generate the trait, without version constraint:
+    version = "1.8"
         [object.function.return]
-        bool_return_is_error = "Failed to set render rectangle"
+        nullable = false
+
+[[object]]
+name = "GstVideo.VideoCodecFrameFlags"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.20"
+
+[[object]]
+name = "GstVideo.VideoColorMatrix"
+status = "generate"
+    [[object.function]]
+    name = "get_Kr_Kb"
+    # Function and parameter name capitalization is wrong
+    ignore = true
+
+[[object]]
+name = "GstVideo.VideoColorPrimaries"
+status = "generate"
+    [[object.member]]
+    name = "smptest428"
+    version = "1.16"
+    [[object.member]]
+    name = "smpterp431"
+    version = "1.16"
+    [[object.member]]
+    name = "smpteeg432"
+    version = "1.16"
+    [[object.member]]
+    name = "ebu3213"
+    version = "1.16"
 
 [[object]]
 name = "GstVideo.VideoDecoder"
@@ -294,6 +308,24 @@ manual_traits = ["VideoEncoderExtManual"]
     name = "allocate_output_buffer"
         [object.function.return]
         nullable_return_is_error = "Failed to allocate output buffer"
+
+[[object]]
+name = "GstVideo.VideoFieldOrder"
+status = "generate"
+
+    [[object.function]]
+    name = "to_string"
+    # This has an Unknown field that may return NULL or "UNKNOWN"
+    manual = true
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "GstVideo.VideoFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
 
 [[object]]
 name = "GstVideo.VideoFormat"
@@ -465,33 +497,13 @@ status = "generate"
     manual = true
 
 [[object]]
-name = "GstVideo.VideoSink"
-status = "generate"
+name = "GstVideo.VideoFrame"
+status = "manual"
 
     [[object.function]]
-    name = "center_rect"
-    # Implemented in video_rectangle
-    manual = true
-
-[[object]]
-name = "GstVideo.VideoOverlayFormatFlags"
-status = "generate"
-    [[object.function]]
-    name = "get_type"
-    version = "1.16"
-    [[object.member]]
-    name = "none"
-    ignore = true
-
-[[object]]
-name = "GstVideo.VideoTimeCodeFlags"
-status = "generate"
-    [[object.function]]
-    name = "get_type"
-    version = "1.18"
-    [[object.member]]
-    name = "none"
-    ignore = true
+    name = "map"
+    # Readable and writable variant dealing with mutability
+    rename = "from_buffer_readable"
 
 [[object]]
 name = "GstVideo.VideoFrameFlags"
@@ -502,28 +514,8 @@ status = "generate"
     [[object.member]]
     name = "bottom_field"
     version = "1.16"
-
-[[object]]
-name = "GstVideo.VideoCodecFrameFlags"
-status = "generate"
-    [[object.function]]
-    name = "get_type"
-    version = "1.20"
-
-[[object]]
-name = "GstVideo.VideoBufferFlags"
-status = "generate"
     [[object.member]]
-    name = "top_field"
-    version = "1.16"
-    [[object.member]]
-    name = "bottom_field"
-    version = "1.16"
-    [[object.member]]
-    name = "marker"
-    version = "1.18"
-    [[object.member]]
-    name = "last"
+    name = "none"
     ignore = true
 
 [[object]]
@@ -539,36 +531,6 @@ status = "generate"
         nullable = false
 
 [[object]]
-name = "GstVideo.VideoChromaSite"
-status = "generate"
-    [[object.member]]
-    name = "unknown"
-    ignore = true
-
-    [[object.function]]
-    name = "to_string"
-    # Manual function for < v1_20:
-    manual = true
-    # Always generate the trait, without version constraint:
-    version = "1.8"
-        [object.function.return]
-        nullable = false
-
-[[object]]
-name = "GstVideo.VideoFlags"
-status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
-
-[[object]]
-name = "GstVideo.VideoFrameFlags"
-status = "generate"
-    [[object.member]]
-    name = "none"
-    ignore = true
-
-[[object]]
 name = "GstVideo.VideoMultiviewFlags"
 status = "generate"
     [[object.member]]
@@ -576,8 +538,77 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "GstVideo.VideoOrientation"
+status = "generate"
+    [[object.function]]
+    name = "set_hcenter"
+        [object.function.return]
+        bool_return_is_error = "Failed to set horizontal centering"
+    [[object.function]]
+    name = "set_hflip"
+        [object.function.return]
+        bool_return_is_error = "Failed to set horizontal flipping"
+    [[object.function]]
+    name = "set_vcenter"
+        [object.function.return]
+        bool_return_is_error = "Failed to set vertical centering"
+    [[object.function]]
+    name = "set_vflip"
+        [object.function.return]
+        bool_return_is_error = "Failed to set vertical flipping"
+
+[[object]]
+name = "GstVideo.VideoOverlay"
+status = "generate"
+manual_traits = ["VideoOverlayExtManual"]
+
+    [[object.function]]
+    name = "set_property"
+    # Only for implementors of GstVideoOverlay
+    ignore = true
+
+    [[object.function]]
+    name = "set_window_handle"
+    # Pointer argument
+    manual = true
+
+    [[object.function]]
+    name = "set_render_rectangle"
+        [object.function.return]
+        bool_return_is_error = "Failed to set render rectangle"
+
+[[object]]
+name = "GstVideo.VideoOverlayFormatFlags"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.16"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
 name = "GstVideo.VideoPackFlags"
 status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "GstVideo.VideoSink"
+status = "generate"
+
+    [[object.function]]
+    name = "center_rect"
+    # Implemented in video_rectangle
+    manual = true
+
+[[object]]
+name = "GstVideo.VideoTimeCodeFlags"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.18"
     [[object.member]]
     name = "none"
     ignore = true
@@ -594,38 +625,3 @@ status = "generate"
     [[object.member]]
     name = "arib_std_b67"
     version = "1.18"
-
-[[object]]
-name = "GstVideo.VideoColorPrimaries"
-status = "generate"
-    [[object.member]]
-    name = "smptest428"
-    version = "1.16"
-    [[object.member]]
-    name = "smpterp431"
-    version = "1.16"
-    [[object.member]]
-    name = "smpteeg432"
-    version = "1.16"
-    [[object.member]]
-    name = "ebu3213"
-    version = "1.16"
-
-[[object]]
-name = "GstVideo.VideoFieldOrder"
-status = "generate"
-
-    [[object.function]]
-    name = "to_string"
-    # This has an Unknown field that may return NULL or "UNKNOWN"
-    manual = true
-        [object.function.return]
-        nullable = false
-
-[[object]]
-name = "GstVideo.VideoColorMatrix"
-status = "generate"
-    [[object.function]]
-    name = "get_Kr_Kb"
-    # Function and parameter name capitalization is wrong
-    ignore = true

@@ -22,12 +22,32 @@ generate = [
 
 manual = [
     "GObject.Object",
-    "Gst.Object",
     "Gst.Element",
-    "Gst.URIHandler",
     "Gst.Format",
     "Gst.MiniObject",
+    "Gst.Object",
+    "Gst.URIHandler",
 ]
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.BufferList"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "Option"
 
 [[object]]
 name = "Gst.FlowReturn"
@@ -37,6 +57,16 @@ must_use = true
     variant = "Result"
     ok_type = "gst::FlowSuccess"
     err_type = "gst::FlowError"
+
+[[object]]
+name = "Gst.Sample"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref"
 
 [[object]]
 name = "GstApp.AppSink"
@@ -209,33 +239,3 @@ final_type = true
         [[object.function.parameter]]
             name = "caps"
             nullable = true
-
-[[object]]
-name = "Gst.Structure"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Caps"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Buffer"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.BufferList"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.Sample"
-status = "manual"
-ref_mode = "ref"
-
-[[object]]
-name = "Gst.ClockTime"
-status = "manual"
-conversion_type = "Option"
