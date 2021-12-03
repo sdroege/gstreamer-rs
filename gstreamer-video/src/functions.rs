@@ -316,13 +316,13 @@ mod tests {
     #[should_panic(expected = "Invalid encoded format")]
     fn video_caps_encoded() {
         gst::init().unwrap();
-        video_make_raw_caps(&[crate::VideoFormat::Encoded]);
+        let _caps = video_make_raw_caps(&[crate::VideoFormat::Encoded]);
     }
 
     #[test]
     #[should_panic(expected = "Invalid unknown format")]
     fn video_caps_unknown() {
         gst::init().unwrap();
-        video_make_raw_caps(&[crate::VideoFormat::Unknown]);
+        let _caps = video_make_raw_caps(&[crate::VideoFormat::Unknown]);
     }
 }

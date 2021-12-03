@@ -1796,6 +1796,7 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
+        #[must_use = "Building the message without using it has no effect"]
         pub fn build(mut self) -> Message {
             assert_initialized_main_thread!();
             unsafe {
@@ -1824,6 +1825,7 @@ macro_rules! message_builder_generic_impl {
     };
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct EosBuilder<'a> {
     builder: MessageBuilder<'a>,
 }
@@ -1846,6 +1848,7 @@ impl MessageErrorDomain for crate::ResourceError {}
 impl MessageErrorDomain for crate::StreamError {}
 impl MessageErrorDomain for crate::LibraryError {}
 
+#[must_use = "The builder must be built to be used"]
 pub struct ErrorBuilder<'a, T> {
     builder: MessageBuilder<'a>,
     error: T,
@@ -1912,6 +1915,7 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct WarningBuilder<'a, T> {
     builder: MessageBuilder<'a>,
     error: T,
@@ -1978,6 +1982,7 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct InfoBuilder<'a, T> {
     builder: MessageBuilder<'a>,
     error: T,
@@ -2044,6 +2049,7 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct TagBuilder<'a> {
     builder: MessageBuilder<'a>,
     tags: &'a TagList,
@@ -2064,6 +2070,7 @@ impl<'a> TagBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct BufferingBuilder<'a> {
     builder: MessageBuilder<'a>,
     percent: i32,
@@ -2111,6 +2118,7 @@ impl<'a> BufferingBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct StateChangedBuilder<'a> {
     builder: MessageBuilder<'a>,
     old: crate::State,
@@ -2137,6 +2145,7 @@ impl<'a> StateChangedBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct StateDirtyBuilder<'a> {
     builder: MessageBuilder<'a>,
 }
@@ -2152,6 +2161,7 @@ impl<'a> StateDirtyBuilder<'a> {
     message_builder_generic_impl!(|_, src| ffi::gst_message_new_state_dirty(src));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct StepDoneBuilder<'a> {
     builder: MessageBuilder<'a>,
     amount: GenericFormattedValue,
@@ -2196,6 +2206,7 @@ impl<'a> StepDoneBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct ClockProvideBuilder<'a> {
     builder: MessageBuilder<'a>,
     clock: &'a crate::Clock,
@@ -2219,6 +2230,7 @@ impl<'a> ClockProvideBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct ClockLostBuilder<'a> {
     builder: MessageBuilder<'a>,
     clock: &'a crate::Clock,
@@ -2239,6 +2251,7 @@ impl<'a> ClockLostBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct NewClockBuilder<'a> {
     builder: MessageBuilder<'a>,
     clock: &'a crate::Clock,
@@ -2259,6 +2272,7 @@ impl<'a> NewClockBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct StructureChangeBuilder<'a> {
     builder: MessageBuilder<'a>,
     type_: crate::StructureChangeType,
@@ -2285,6 +2299,7 @@ impl<'a> StructureChangeBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct StreamStatusBuilder<'a> {
     builder: MessageBuilder<'a>,
     type_: crate::StreamStatusType,
@@ -2323,6 +2338,7 @@ impl<'a> StreamStatusBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct ApplicationBuilder<'a> {
     builder: MessageBuilder<'a>,
     structure: Option<crate::Structure>,
@@ -2343,6 +2359,7 @@ impl<'a> ApplicationBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct ElementBuilder<'a> {
     builder: MessageBuilder<'a>,
     structure: Option<crate::Structure>,
@@ -2363,6 +2380,7 @@ impl<'a> ElementBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct SegmentStartBuilder<'a> {
     builder: MessageBuilder<'a>,
     position: GenericFormattedValue,
@@ -2384,6 +2402,7 @@ impl<'a> SegmentStartBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct SegmentDoneBuilder<'a> {
     builder: MessageBuilder<'a>,
     position: GenericFormattedValue,
@@ -2405,6 +2424,7 @@ impl<'a> SegmentDoneBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct DurationChangedBuilder<'a> {
     builder: MessageBuilder<'a>,
 }
@@ -2420,6 +2440,7 @@ impl<'a> DurationChangedBuilder<'a> {
     message_builder_generic_impl!(|_, src| ffi::gst_message_new_duration_changed(src));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct LatencyBuilder<'a> {
     builder: MessageBuilder<'a>,
 }
@@ -2435,6 +2456,7 @@ impl<'a> LatencyBuilder<'a> {
     message_builder_generic_impl!(|_, src| ffi::gst_message_new_latency(src));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct AsyncStartBuilder<'a> {
     builder: MessageBuilder<'a>,
 }
@@ -2450,6 +2472,7 @@ impl<'a> AsyncStartBuilder<'a> {
     message_builder_generic_impl!(|_, src| ffi::gst_message_new_async_start(src));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct AsyncDoneBuilder<'a> {
     builder: MessageBuilder<'a>,
     running_time: Option<crate::ClockTime>,
@@ -2475,6 +2498,7 @@ impl<'a> AsyncDoneBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct RequestStateBuilder<'a> {
     builder: MessageBuilder<'a>,
     state: crate::State,
@@ -2495,6 +2519,7 @@ impl<'a> RequestStateBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct StepStartBuilder<'a> {
     builder: MessageBuilder<'a>,
     active: bool,
@@ -2534,6 +2559,7 @@ impl<'a> StepStartBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct QosBuilder<'a> {
     builder: MessageBuilder<'a>,
     live: bool,
@@ -2621,6 +2647,7 @@ impl<'a> QosBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct ProgressBuilder<'a> {
     builder: MessageBuilder<'a>,
     type_: crate::ProgressType,
@@ -2647,6 +2674,7 @@ impl<'a> ProgressBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct TocBuilder<'a> {
     builder: MessageBuilder<'a>,
     toc: &'a crate::Toc,
@@ -2670,6 +2698,7 @@ impl<'a> TocBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct ResetTimeBuilder<'a> {
     builder: MessageBuilder<'a>,
     running_time: crate::ClockTime,
@@ -2690,6 +2719,7 @@ impl<'a> ResetTimeBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct StreamStartBuilder<'a> {
     builder: MessageBuilder<'a>,
     group_id: Option<GroupId>,
@@ -2720,6 +2750,7 @@ impl<'a> StreamStartBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct NeedContextBuilder<'a> {
     builder: MessageBuilder<'a>,
     context_type: &'a str,
@@ -2740,6 +2771,7 @@ impl<'a> NeedContextBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct HaveContextBuilder<'a> {
     builder: MessageBuilder<'a>,
     context: Option<crate::Context>,
@@ -2760,6 +2792,7 @@ impl<'a> HaveContextBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct DeviceAddedBuilder<'a> {
     builder: MessageBuilder<'a>,
     device: &'a crate::Device,
@@ -2780,6 +2813,7 @@ impl<'a> DeviceAddedBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct DeviceRemovedBuilder<'a> {
     builder: MessageBuilder<'a>,
     device: &'a crate::Device,
@@ -2802,6 +2836,7 @@ impl<'a> DeviceRemovedBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[must_use = "The builder must be built to be used"]
 pub struct PropertyNotifyBuilder<'a> {
     builder: MessageBuilder<'a>,
     property_name: &'a str,
@@ -2843,6 +2878,7 @@ impl<'a> PropertyNotifyBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[must_use = "The builder must be built to be used"]
 pub struct StreamCollectionBuilder<'a> {
     builder: MessageBuilder<'a>,
     collection: &'a crate::StreamCollection,
@@ -2866,6 +2902,7 @@ impl<'a> StreamCollectionBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[must_use = "The builder must be built to be used"]
 pub struct StreamsSelectedBuilder<'a> {
     builder: MessageBuilder<'a>,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -2908,6 +2945,7 @@ impl<'a> StreamsSelectedBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[must_use = "The builder must be built to be used"]
 pub struct RedirectBuilder<'a> {
     builder: MessageBuilder<'a>,
     location: &'a str,
@@ -2992,6 +3030,7 @@ impl<'a> RedirectBuilder<'a> {
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[must_use = "The builder must be built to be used"]
 pub struct DeviceChangedBuilder<'a> {
     builder: MessageBuilder<'a>,
     device: &'a crate::Device,
@@ -3019,6 +3058,7 @@ impl<'a> DeviceChangedBuilder<'a> {
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[must_use = "The builder must be built to be used"]
 pub struct InstantRateRequestBuilder<'a> {
     builder: MessageBuilder<'a>,
     rate_multiplier: f64,

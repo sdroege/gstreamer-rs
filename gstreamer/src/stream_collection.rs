@@ -67,6 +67,7 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 impl<'a> ExactSizeIterator for Iter<'a> {}
 
 #[derive(Debug, Clone)]
+#[must_use = "The builder must be built to be used"]
 pub struct StreamCollectionBuilder(StreamCollection);
 
 impl StreamCollectionBuilder {
@@ -92,6 +93,7 @@ impl StreamCollectionBuilder {
         self
     }
 
+    #[must_use = "Building the stream collection without using it has no effect"]
     pub fn build(self) -> StreamCollection {
         self.0
     }

@@ -272,6 +272,7 @@ impl fmt::Debug for VideoInfo {
 }
 
 #[derive(Debug)]
+#[must_use = "The builder must be built to be used"]
 pub struct VideoInfoBuilder<'a> {
     format: crate::VideoFormat,
     width: u32,

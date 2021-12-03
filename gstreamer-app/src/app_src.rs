@@ -40,6 +40,7 @@ impl AppSrcCallbacks {
 }
 
 #[allow(clippy::type_complexity)]
+#[must_use = "The builder must be built to be used"]
 pub struct AppSrcCallbacksBuilder {
     need_data: Option<RefCell<Box<dyn FnMut(&AppSrc, u32) + Send + 'static>>>,
     enough_data: Option<Box<dyn Fn(&AppSrc) + Send + Sync + 'static>>,
@@ -71,6 +72,7 @@ impl AppSrcCallbacksBuilder {
         }
     }
 
+    #[must_use = "Building the callbacks without using them has no effect"]
     pub fn build(self) -> AppSrcCallbacks {
         let have_need_data = self.need_data.is_some();
         let have_enough_data = self.enough_data.is_some();

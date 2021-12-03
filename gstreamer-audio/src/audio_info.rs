@@ -26,6 +26,7 @@ impl fmt::Debug for AudioInfo {
 }
 
 #[derive(Debug)]
+#[must_use = "The builder must be built to be used"]
 pub struct AudioInfoBuilder<'a> {
     format: crate::AudioFormat,
     rate: u32,
@@ -36,6 +37,7 @@ pub struct AudioInfoBuilder<'a> {
 }
 
 impl<'a> AudioInfoBuilder<'a> {
+    #[must_use = "The built AudioInfo must be used"]
     pub fn build(self) -> Result<AudioInfo, glib::error::BoolError> {
         unsafe {
             let mut info = mem::MaybeUninit::uninit();

@@ -36,6 +36,7 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
+        #[must_use = "Building the event without using it has no effect"]
         pub fn build(mut self) -> gst::Event {
             assert_initialized_main_thread!();
             unsafe {
@@ -64,6 +65,7 @@ macro_rules! event_builder_generic_impl {
     };
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct DownstreamForceKeyUnitEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,
@@ -180,6 +182,7 @@ impl DownstreamForceKeyUnitEvent {
     }
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct UpstreamForceKeyUnitEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,
@@ -291,6 +294,7 @@ impl ForceKeyUnitEvent {
     }
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct StillFrameEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,

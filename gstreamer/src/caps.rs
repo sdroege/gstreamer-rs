@@ -662,6 +662,7 @@ impl Eq for CapsRef {}
 pub enum NoFeature {}
 pub enum HasFeatures {}
 
+#[must_use = "The builder must be built to be used"]
 pub struct Builder<T> {
     s: crate::Structure,
     features: Option<CapsFeatures>,
@@ -711,6 +712,7 @@ impl<T> Builder<T> {
         self
     }
 
+    #[must_use = "Building the caps without using them has no effect"]
     pub fn build(self) -> Caps {
         let mut caps = Caps::new_empty();
 
@@ -724,6 +726,7 @@ impl<T> Builder<T> {
 pub enum AnyFeatures {}
 pub enum SomeFeatures {}
 
+#[must_use = "The builder must be built to be used"]
 pub struct BuilderFull<T> {
     caps: crate::Caps,
     features: Option<CapsFeatures>,
@@ -806,6 +809,7 @@ impl<T> BuilderFull<T> {
         self.append_structure(structure, None)
     }
 
+    #[must_use = "Building the caps without using them has no effect"]
     pub fn build(self) -> Caps {
         self.caps
     }

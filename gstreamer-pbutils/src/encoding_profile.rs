@@ -400,6 +400,7 @@ fn set_common_fields<T: EncodingProfileBuilderCommon>(
 }
 
 #[derive(Debug)]
+#[must_use = "The builder must be built to be used"]
 pub struct EncodingAudioProfileBuilder<'a> {
     base: EncodingProfileBuilderCommonData<'a>,
     restriction: Option<&'a gst::Caps>,
@@ -422,6 +423,7 @@ impl<'a> EncodingAudioProfileBuilder<'a> {
         self
     }
 
+    #[must_use = "Building the profile without using it has no effect"]
     pub fn build(self) -> EncodingAudioProfile {
         let profile = EncodingAudioProfile::new(
             self.base.format,
@@ -437,6 +439,7 @@ impl<'a> EncodingAudioProfileBuilder<'a> {
 }
 
 #[derive(Debug)]
+#[must_use = "The builder must be built to be used"]
 pub struct EncodingVideoProfileBuilder<'a> {
     base: EncodingProfileBuilderCommonData<'a>,
     restriction: Option<&'a gst::Caps>,
@@ -475,6 +478,7 @@ impl<'a> EncodingVideoProfileBuilder<'a> {
         self
     }
 
+    #[must_use = "Building the profile without using it has no effect"]
     pub fn build(self) -> EncodingVideoProfile {
         let video_profile = EncodingVideoProfile::new(
             self.base.format,
@@ -493,6 +497,7 @@ impl<'a> EncodingVideoProfileBuilder<'a> {
 }
 
 #[derive(Debug)]
+#[must_use = "The builder must be built to be used"]
 pub struct EncodingContainerProfileBuilder<'a> {
     base: EncodingProfileBuilderCommonData<'a>,
     profiles: Vec<EncodingProfile>,
@@ -509,6 +514,7 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
         }
     }
 
+    #[must_use = "Building the profile without using it has no effect"]
     pub fn build(self) -> EncodingContainerProfile {
         let container_profile = EncodingContainerProfile::new(
             self.base.name,

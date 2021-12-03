@@ -1563,6 +1563,7 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
+        #[must_use = "Building the event without using it has no effect"]
         pub fn build(mut self) -> Event {
             assert_initialized_main_thread!();
             unsafe {
@@ -1591,6 +1592,7 @@ macro_rules! event_builder_generic_impl {
     };
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct FlushStartBuilder<'a> {
     builder: EventBuilder<'a>,
 }
@@ -1606,6 +1608,7 @@ impl<'a> FlushStartBuilder<'a> {
     event_builder_generic_impl!(|_| { ffi::gst_event_new_flush_start() });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct FlushStopBuilder<'a> {
     builder: EventBuilder<'a>,
     reset_time: bool,
@@ -1624,6 +1627,7 @@ impl<'a> FlushStopBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct StreamStartBuilder<'a> {
     builder: EventBuilder<'a>,
     stream_id: &'a str,
@@ -1689,6 +1693,7 @@ impl<'a> StreamStartBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct CapsBuilder<'a> {
     builder: EventBuilder<'a>,
     caps: &'a crate::Caps,
@@ -1706,6 +1711,7 @@ impl<'a> CapsBuilder<'a> {
     event_builder_generic_impl!(|s: &Self| { ffi::gst_event_new_caps(s.caps.as_mut_ptr()) });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct SegmentBuilder<'a> {
     builder: EventBuilder<'a>,
     segment: &'a crate::Segment,
@@ -1727,6 +1733,7 @@ impl<'a> SegmentBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[must_use = "The builder must be built to be used"]
 pub struct StreamCollectionBuilder<'a> {
     builder: EventBuilder<'a>,
     stream_collection: &'a crate::StreamCollection,
@@ -1750,6 +1757,7 @@ impl<'a> StreamCollectionBuilder<'a> {
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[must_use = "The builder must be built to be used"]
 pub struct InstantRateSyncTimeBuilder<'a> {
     builder: EventBuilder<'a>,
     rate_multiplier: f64,
@@ -1783,6 +1791,7 @@ impl<'a> InstantRateSyncTimeBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct TagBuilder<'a> {
     builder: EventBuilder<'a>,
     tags: Option<crate::TagList>,
@@ -1803,6 +1812,7 @@ impl<'a> TagBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct BuffersizeBuilder<'a> {
     builder: EventBuilder<'a>,
     minsize: GenericFormattedValue,
@@ -1831,6 +1841,7 @@ impl<'a> BuffersizeBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct SinkMessageBuilder<'a> {
     builder: EventBuilder<'a>,
     name: &'a str,
@@ -1854,6 +1865,7 @@ impl<'a> SinkMessageBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[must_use = "The builder must be built to be used"]
 pub struct StreamGroupDoneBuilder<'a> {
     builder: EventBuilder<'a>,
     group_id: GroupId,
@@ -1875,6 +1887,7 @@ impl<'a> StreamGroupDoneBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct EosBuilder<'a> {
     builder: EventBuilder<'a>,
 }
@@ -1890,6 +1903,7 @@ impl<'a> EosBuilder<'a> {
     event_builder_generic_impl!(|_| ffi::gst_event_new_eos());
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct TocBuilder<'a> {
     builder: EventBuilder<'a>,
     toc: &'a crate::Toc,
@@ -1912,6 +1926,7 @@ impl<'a> TocBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct ProtectionBuilder<'a> {
     builder: EventBuilder<'a>,
     system_id: &'a str,
@@ -1946,6 +1961,7 @@ impl<'a> ProtectionBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct SegmentDoneBuilder<'a> {
     builder: EventBuilder<'a>,
     position: GenericFormattedValue,
@@ -1965,6 +1981,7 @@ impl<'a> SegmentDoneBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct GapBuilder<'a> {
     builder: EventBuilder<'a>,
     timestamp: ClockTime,
@@ -2012,6 +2029,7 @@ impl<'a> GapBuilder<'a> {
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[must_use = "The builder must be built to be used"]
 pub struct InstantRateChangeBuilder<'a> {
     builder: EventBuilder<'a>,
     multiplier: f64,
@@ -2036,6 +2054,7 @@ impl<'a> InstantRateChangeBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct QosBuilder<'a> {
     builder: EventBuilder<'a>,
     type_: crate::QOSType,
@@ -2069,6 +2088,7 @@ impl<'a> QosBuilder<'a> {
     ));
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct SeekBuilder<'a> {
     builder: EventBuilder<'a>,
     rate: f64,
@@ -2131,6 +2151,7 @@ impl<'a> SeekBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct NavigationBuilder<'a> {
     builder: EventBuilder<'a>,
     structure: Option<Structure>,
@@ -2151,6 +2172,7 @@ impl<'a> NavigationBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct LatencyBuilder<'a> {
     builder: EventBuilder<'a>,
     latency: ClockTime,
@@ -2168,6 +2190,7 @@ impl<'a> LatencyBuilder<'a> {
     event_builder_generic_impl!(|s: &Self| { ffi::gst_event_new_latency(s.latency.into_glib()) });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct StepBuilder<'a> {
     builder: EventBuilder<'a>,
     amount: GenericFormattedValue,
@@ -2199,6 +2222,7 @@ impl<'a> StepBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct ReconfigureBuilder<'a> {
     builder: EventBuilder<'a>,
 }
@@ -2214,6 +2238,7 @@ impl<'a> ReconfigureBuilder<'a> {
     event_builder_generic_impl!(|_| { ffi::gst_event_new_reconfigure() });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct TocSelectBuilder<'a> {
     builder: EventBuilder<'a>,
     uid: &'a str,
@@ -2235,6 +2260,7 @@ impl<'a> TocSelectBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[must_use = "The builder must be built to be used"]
 pub struct SelectStreamsBuilder<'a> {
     builder: EventBuilder<'a>,
     streams: &'a [&'a str],
@@ -2256,6 +2282,7 @@ impl<'a> SelectStreamsBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct CustomUpstreamBuilder<'a> {
     builder: EventBuilder<'a>,
     structure: Option<Structure>,
@@ -2276,6 +2303,7 @@ impl<'a> CustomUpstreamBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct CustomDownstreamBuilder<'a> {
     builder: EventBuilder<'a>,
     structure: Option<Structure>,
@@ -2296,6 +2324,7 @@ impl<'a> CustomDownstreamBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct CustomDownstreamOobBuilder<'a> {
     builder: EventBuilder<'a>,
     structure: Option<Structure>,
@@ -2316,6 +2345,7 @@ impl<'a> CustomDownstreamOobBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct CustomDownstreamStickyBuilder<'a> {
     builder: EventBuilder<'a>,
     structure: Option<Structure>,
@@ -2339,6 +2369,7 @@ impl<'a> CustomDownstreamStickyBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct CustomBothBuilder<'a> {
     builder: EventBuilder<'a>,
     structure: Option<Structure>,
@@ -2359,6 +2390,7 @@ impl<'a> CustomBothBuilder<'a> {
     });
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct CustomBothOobBuilder<'a> {
     builder: EventBuilder<'a>,
     structure: Option<Structure>,

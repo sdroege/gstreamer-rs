@@ -122,7 +122,7 @@ mod tests {
     #[should_panic(expected = "Invalid encoded format")]
     fn audio_caps_encoded() {
         gst::init().unwrap();
-        audio_make_raw_caps(
+        let _caps = audio_make_raw_caps(
             &[crate::AudioFormat::Encoded],
             crate::AudioLayout::Interleaved,
         );
@@ -132,7 +132,7 @@ mod tests {
     #[should_panic(expected = "Invalid unknown format")]
     fn audio_caps_unknown() {
         gst::init().unwrap();
-        audio_make_raw_caps(
+        let _caps = audio_make_raw_caps(
             &[crate::AudioFormat::Unknown],
             crate::AudioLayout::Interleaved,
         );

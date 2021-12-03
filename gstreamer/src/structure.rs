@@ -864,6 +864,7 @@ impl std::iter::Extend<(glib::Quark, SendValue)> for StructureRef {
 }
 
 #[derive(Debug)]
+#[must_use = "The builder must be built to be used"]
 pub struct Builder {
     s: Structure,
 }
@@ -881,6 +882,7 @@ impl Builder {
         self
     }
 
+    #[must_use = "Building the structure without using it has no effect"]
     pub fn build(self) -> Structure {
         self.s
     }

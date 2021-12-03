@@ -1618,6 +1618,7 @@ impl Pad {
     }
 }
 
+#[must_use = "The builder must be built to be used"]
 pub struct PadBuilder<T>(pub(crate) T);
 
 impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
@@ -1847,6 +1848,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[must_use = "Building the pad without using it has no effect"]
     pub fn build(self) -> T {
         self.0
     }

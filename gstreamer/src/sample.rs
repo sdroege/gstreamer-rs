@@ -22,6 +22,7 @@ mini_object_wrapper!(Sample, SampleRef, ffi::GstSample, || {
 });
 
 #[derive(Debug, Clone)]
+#[must_use = "The builder must be built to be used"]
 pub struct SampleBuilder<'a> {
     buffer: Option<&'a Buffer>,
     buffer_list: Option<&'a BufferList>,
@@ -68,6 +69,7 @@ impl<'a> SampleBuilder<'a> {
         }
     }
 
+    #[must_use = "Building the sample without using it has no effect"]
     pub fn build(self) -> Sample {
         assert_initialized_main_thread!();
 

@@ -54,6 +54,7 @@ impl AppSinkCallbacks {
 }
 
 #[allow(clippy::type_complexity)]
+#[must_use = "The builder must be built to be used"]
 pub struct AppSinkCallbacksBuilder {
     eos: Option<RefCell<Box<dyn FnMut(&AppSink) + Send + 'static>>>,
     new_preroll: Option<
@@ -110,6 +111,7 @@ impl AppSinkCallbacksBuilder {
         }
     }
 
+    #[must_use = "Building the callbacks without using them has no effect"]
     pub fn build(self) -> AppSinkCallbacks {
         let have_eos = self.eos.is_some();
         let have_new_preroll = self.new_preroll.is_some();
