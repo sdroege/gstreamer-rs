@@ -140,7 +140,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
         element: &Self::Type,
         decide_query: Option<gst::query::Allocation<&gst::QueryRef>>,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage> {
+    ) -> Result<(), gst::LoggableError> {
         self.parent_propose_allocation(element, decide_query, query)
     }
 
@@ -148,7 +148,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
         &self,
         element: &Self::Type,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage> {
+    ) -> Result<(), gst::LoggableError> {
         self.parent_decide_allocation(element, query)
     }
 
@@ -279,13 +279,13 @@ pub trait BaseTransformImplExt: ObjectSubclass {
         element: &Self::Type,
         decide_query: Option<gst::query::Allocation<&gst::QueryRef>>,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage>;
+    ) -> Result<(), gst::LoggableError>;
 
     fn parent_decide_allocation(
         &self,
         element: &Self::Type,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage>;
+    ) -> Result<(), gst::LoggableError>;
 
     fn parent_copy_metadata(
         &self,
@@ -719,28 +719,25 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         element: &Self::Type,
         decide_query: Option<gst::query::Allocation<&gst::QueryRef>>,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage> {
+    ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             (*parent_class)
                 .propose_allocation
                 .map(|f| {
-                    if from_glib(f(
-                        element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
-                        decide_query
-                            .as_ref()
-                            .map(|q| q.as_mut_ptr())
-                            .unwrap_or(ptr::null_mut()),
-                        query.as_mut_ptr(),
-                    )) {
-                        Ok(())
-                    } else {
-                        Err(gst::error_msg!(
-                            gst::CoreError::StateChange,
-                            ["Parent function `propose_allocation` failed"]
-                        ))
-                    }
+                    gst::result_from_gboolean!(
+                        f(
+                            element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
+                            decide_query
+                                .as_ref()
+                                .map(|q| q.as_mut_ptr())
+                                .unwrap_or(ptr::null_mut()),
+                            query.as_mut_ptr(),
+                        ),
+                        gst::CAT_RUST,
+                        "Parent function `propose_allocation` failed",
+                    )
                 })
                 .unwrap_or(Ok(()))
         }
@@ -750,24 +747,21 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         &self,
         element: &Self::Type,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage> {
+    ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             (*parent_class)
                 .decide_allocation
                 .map(|f| {
-                    if from_glib(f(
-                        element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
-                        query.as_mut_ptr(),
-                    )) {
-                        Ok(())
-                    } else {
-                        Err(gst::error_msg!(
-                            gst::CoreError::StateChange,
-                            ["Parent function `decide_allocation` failed"]
-                        ))
-                    }
+                    gst::result_from_gboolean!(
+                        f(
+                            element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
+                            query.as_mut_ptr(),
+                        ),
+                        gst::CAT_RUST,
+                        "Parent function `decide_allocation` failed,"
+                    )
                 })
                 .unwrap_or(Ok(()))
         }
@@ -1343,7 +1337,7 @@ unsafe extern "C" fn base_transform_propose_allocation<T: BaseTransformImpl>(
         match imp.propose_allocation(wrap.unsafe_cast_ref(), decide_query, query) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(err);
+                err.log_with_object(&*wrap);
                 false
             }
         }
@@ -1367,7 +1361,7 @@ unsafe extern "C" fn base_transform_decide_allocation<T: BaseTransformImpl>(
         match imp.decide_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(err);
+                err.log_with_object(&*wrap);
                 false
             }
         }

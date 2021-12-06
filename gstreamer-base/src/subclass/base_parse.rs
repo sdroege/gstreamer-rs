@@ -24,7 +24,7 @@ pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
         &self,
         element: &Self::Type,
         caps: &gst::Caps,
-    ) -> Result<(), gst::ErrorMessage> {
+    ) -> Result<(), gst::LoggableError> {
         self.parent_set_sink_caps(element, caps)
     }
 
@@ -55,7 +55,7 @@ pub trait BaseParseImplExt: ObjectSubclass {
         &self,
         element: &Self::Type,
         caps: &gst::Caps,
-    ) -> Result<(), gst::ErrorMessage>;
+    ) -> Result<(), gst::LoggableError>;
 
     fn parent_handle_frame<'a>(
         &'a self,
@@ -116,24 +116,21 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
         &self,
         element: &Self::Type,
         caps: &gst::Caps,
-    ) -> Result<(), gst::ErrorMessage> {
+    ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
             (*parent_class)
                 .set_sink_caps
                 .map(|f| {
-                    if from_glib(f(
-                        element.unsafe_cast_ref::<BaseParse>().to_glib_none().0,
-                        caps.to_glib_none().0,
-                    )) {
-                        Ok(())
-                    } else {
-                        Err(gst::error_msg!(
-                            gst::CoreError::StateChange,
-                            ["Parent function `set_sink_caps` failed"]
-                        ))
-                    }
+                    gst::result_from_gboolean!(
+                        f(
+                            element.unsafe_cast_ref::<BaseParse>().to_glib_none().0,
+                            caps.to_glib_none().0,
+                        ),
+                        gst::CAT_RUST,
+                        "Parent function `set_sink_caps` failed",
+                    )
                 })
                 .unwrap_or(Ok(()))
         }
@@ -259,7 +256,7 @@ unsafe extern "C" fn base_parse_set_sink_caps<T: BaseParseImpl>(
         match imp.set_sink_caps(wrap.unsafe_cast_ref(), &caps) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(err);
+                err.log_with_object(&*wrap);
                 false
             }
         }

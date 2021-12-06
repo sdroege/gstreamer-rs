@@ -82,7 +82,7 @@ pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl {
         &self,
         element: &Self::Type,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage> {
+    ) -> Result<(), gst::LoggableError> {
         self.parent_propose_allocation(element, query)
     }
 }
@@ -138,7 +138,7 @@ pub trait BaseSinkImplExt: ObjectSubclass {
         &self,
         element: &Self::Type,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage>;
+    ) -> Result<(), gst::LoggableError>;
 }
 
 impl<T: BaseSinkImpl> BaseSinkImplExt for T {
@@ -404,24 +404,21 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         &self,
         element: &Self::Type,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage> {
+    ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .propose_allocation
                 .map(|f| {
-                    if from_glib(f(
-                        element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
-                        query.as_mut_ptr(),
-                    )) {
-                        Ok(())
-                    } else {
-                        Err(gst::error_msg!(
-                            gst::CoreError::StateChange,
-                            ["Parent function `propose_allocation` failed"]
-                        ))
-                    }
+                    gst::result_from_gboolean!(
+                        f(
+                            element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
+                            query.as_mut_ptr(),
+                        ),
+                        gst::CAT_RUST,
+                        "Parent function `propose_allocation` failed",
+                    )
                 })
                 .unwrap_or(Ok(()))
         }
@@ -682,7 +679,7 @@ unsafe extern "C" fn base_sink_propose_allocation<T: BaseSinkImpl>(
         match imp.propose_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(err);
+                err.log_with_object(&*wrap);
                 false
             }
         }

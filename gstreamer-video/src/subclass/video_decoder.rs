@@ -92,7 +92,7 @@ pub trait VideoDecoderImpl: VideoDecoderImplExt + ElementImpl {
         &self,
         element: &Self::Type,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage> {
+    ) -> Result<(), gst::LoggableError> {
         self.parent_propose_allocation(element, query)
     }
 
@@ -100,7 +100,7 @@ pub trait VideoDecoderImpl: VideoDecoderImplExt + ElementImpl {
         &self,
         element: &Self::Type,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage> {
+    ) -> Result<(), gst::LoggableError> {
         self.parent_decide_allocation(element, query)
     }
 
@@ -167,13 +167,13 @@ pub trait VideoDecoderImplExt: ObjectSubclass {
         &self,
         element: &Self::Type,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage>;
+    ) -> Result<(), gst::LoggableError>;
 
     fn parent_decide_allocation(
         &self,
         element: &Self::Type,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage>;
+    ) -> Result<(), gst::LoggableError>;
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
@@ -495,24 +495,21 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
         &self,
         element: &Self::Type,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage> {
+    ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoDecoderClass;
             (*parent_class)
                 .propose_allocation
                 .map(|f| {
-                    if from_glib(f(
-                        element.unsafe_cast_ref::<VideoDecoder>().to_glib_none().0,
-                        query.as_mut_ptr(),
-                    )) {
-                        Ok(())
-                    } else {
-                        Err(gst::error_msg!(
-                            gst::CoreError::StateChange,
-                            ["Parent function `propose_allocation` failed"]
-                        ))
-                    }
+                    gst::result_from_gboolean!(
+                        f(
+                            element.unsafe_cast_ref::<VideoDecoder>().to_glib_none().0,
+                            query.as_mut_ptr(),
+                        ),
+                        gst::CAT_RUST,
+                        "Parent function `propose_allocation` failed",
+                    )
                 })
                 .unwrap_or(Ok(()))
         }
@@ -522,24 +519,21 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
         &self,
         element: &Self::Type,
         query: gst::query::Allocation<&mut gst::QueryRef>,
-    ) -> Result<(), gst::ErrorMessage> {
+    ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoDecoderClass;
             (*parent_class)
                 .decide_allocation
                 .map(|f| {
-                    if from_glib(f(
-                        element.unsafe_cast_ref::<VideoDecoder>().to_glib_none().0,
-                        query.as_mut_ptr(),
-                    )) {
-                        Ok(())
-                    } else {
-                        Err(gst::error_msg!(
-                            gst::CoreError::StateChange,
-                            ["Parent function `decide_allocation` failed"]
-                        ))
-                    }
+                    gst::result_from_gboolean!(
+                        f(
+                            element.unsafe_cast_ref::<VideoDecoder>().to_glib_none().0,
+                            query.as_mut_ptr(),
+                        ),
+                        gst::CAT_RUST,
+                        "Parent function `decide_allocation` failed",
+                    )
                 })
                 .unwrap_or(Ok(()))
         }
@@ -883,7 +877,7 @@ unsafe extern "C" fn video_decoder_propose_allocation<T: VideoDecoderImpl>(
         match imp.propose_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(err);
+                err.log_with_object(&*wrap);
                 false
             }
         }
@@ -907,7 +901,7 @@ unsafe extern "C" fn video_decoder_decide_allocation<T: VideoDecoderImpl>(
         match imp.decide_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(err);
+                err.log_with_object(&*wrap);
                 false
             }
         }
