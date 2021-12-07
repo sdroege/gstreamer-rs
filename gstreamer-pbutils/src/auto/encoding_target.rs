@@ -91,7 +91,8 @@ impl EncodingTarget {
     pub fn save(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gst_encoding_target_save(self.to_glib_none().0, &mut error);
+            let is_ok = ffi::gst_encoding_target_save(self.to_glib_none().0, &mut error);
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -104,11 +105,12 @@ impl EncodingTarget {
     pub fn save_to_file(&self, filepath: impl AsRef<std::path::Path>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gst_encoding_target_save_to_file(
+            let is_ok = ffi::gst_encoding_target_save_to_file(
                 self.to_glib_none().0,
                 filepath.as_ref().to_glib_none().0,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

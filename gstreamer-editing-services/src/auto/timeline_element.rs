@@ -320,7 +320,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_timeline_element_edit_full(
+            let is_ok = ffi::ges_timeline_element_edit_full(
                 self.as_ref().to_glib_none().0,
                 new_layer_priority,
                 mode.into_glib(),
@@ -328,6 +328,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
                 position,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -568,12 +569,13 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_timeline_element_set_child_property_full(
+            let is_ok = ffi::ges_timeline_element_set_child_property_full(
                 self.as_ref().to_glib_none().0,
                 property_name.to_glib_none().0,
                 value.to_glib_none().0,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

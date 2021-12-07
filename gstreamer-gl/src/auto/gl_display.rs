@@ -119,12 +119,13 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         unsafe {
             let mut p_context = ptr::null_mut();
             let mut error = ptr::null_mut();
-            let _ = ffi::gst_gl_display_create_context(
+            let is_ok = ffi::gst_gl_display_create_context(
                 self.as_ref().to_glib_none().0,
                 other_context.as_ref().to_glib_none().0,
                 &mut p_context,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(from_glib_full(p_context))
             } else {

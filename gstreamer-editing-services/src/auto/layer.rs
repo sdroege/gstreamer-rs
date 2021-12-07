@@ -221,11 +221,12 @@ impl<O: IsA<Layer>> LayerExt for O {
     fn add_clip_full(&self, clip: &impl IsA<Clip>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_layer_add_clip_full(
+            let is_ok = ffi::ges_layer_add_clip_full(
                 self.as_ref().to_glib_none().0,
                 clip.as_ref().to_glib_none().0,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

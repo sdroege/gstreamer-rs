@@ -27,7 +27,8 @@ impl Formatter {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_formatter_can_load_uri(uri.to_glib_none().0, &mut error);
+            let is_ok = ffi::ges_formatter_can_load_uri(uri.to_glib_none().0, &mut error);
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -41,7 +42,8 @@ impl Formatter {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_formatter_can_save_uri(uri.to_glib_none().0, &mut error);
+            let is_ok = ffi::ges_formatter_can_save_uri(uri.to_glib_none().0, &mut error);
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -77,12 +79,13 @@ impl<O: IsA<Formatter>> FormatterExt for O {
     fn load_from_uri(&self, timeline: &impl IsA<Timeline>, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_formatter_load_from_uri(
+            let is_ok = ffi::ges_formatter_load_from_uri(
                 self.as_ref().to_glib_none().0,
                 timeline.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -99,13 +102,14 @@ impl<O: IsA<Formatter>> FormatterExt for O {
     ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_formatter_save_to_uri(
+            let is_ok = ffi::ges_formatter_save_to_uri(
                 self.as_ref().to_glib_none().0,
                 timeline.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,
                 overwrite.into_glib(),
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

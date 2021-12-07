@@ -242,11 +242,12 @@ impl<O: IsA<Project>> ProjectExt for O {
     fn load(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_project_load(
+            let is_ok = ffi::ges_project_load(
                 self.as_ref().to_glib_none().0,
                 timeline.as_ref().to_glib_none().0,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -276,7 +277,7 @@ impl<O: IsA<Project>> ProjectExt for O {
     ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_project_save(
+            let is_ok = ffi::ges_project_save(
                 self.as_ref().to_glib_none().0,
                 timeline.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,
@@ -284,6 +285,7 @@ impl<O: IsA<Project>> ProjectExt for O {
                 overwrite.into_glib(),
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

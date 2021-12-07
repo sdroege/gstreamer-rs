@@ -163,11 +163,12 @@ impl<O: IsA<Track>> GESTrackExt for O {
     fn add_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_track_add_element_full(
+            let is_ok = ffi::ges_track_add_element_full(
                 self.as_ref().to_glib_none().0,
                 object.as_ref().to_glib_none().0,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -230,11 +231,12 @@ impl<O: IsA<Track>> GESTrackExt for O {
     fn remove_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_track_remove_element_full(
+            let is_ok = ffi::ges_track_remove_element_full(
                 self.as_ref().to_glib_none().0,
                 object.as_ref().to_glib_none().0,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

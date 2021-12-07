@@ -65,11 +65,12 @@ impl<O: IsA<URIHandler>> URIHandlerExt for O {
     fn set_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gst_uri_handler_set_uri(
+            let is_ok = ffi::gst_uri_handler_set_uri(
                 self.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

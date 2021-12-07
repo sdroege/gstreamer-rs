@@ -226,12 +226,13 @@ impl<O: IsA<Clip>> ClipExt for O {
     fn add_top_effect(&self, effect: &impl IsA<BaseEffect>, index: i32) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_clip_add_top_effect(
+            let is_ok = ffi::ges_clip_add_top_effect(
                 self.as_ref().to_glib_none().0,
                 effect.as_ref().to_glib_none().0,
                 index,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -403,11 +404,12 @@ impl<O: IsA<Clip>> ClipExt for O {
     fn move_to_layer_full(&self, layer: &impl IsA<Layer>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_clip_move_to_layer_full(
+            let is_ok = ffi::ges_clip_move_to_layer_full(
                 self.as_ref().to_glib_none().0,
                 layer.as_ref().to_glib_none().0,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -421,11 +423,12 @@ impl<O: IsA<Clip>> ClipExt for O {
     fn remove_top_effect(&self, effect: &impl IsA<BaseEffect>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_clip_remove_top_effect(
+            let is_ok = ffi::ges_clip_remove_top_effect(
                 self.as_ref().to_glib_none().0,
                 effect.as_ref().to_glib_none().0,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -469,12 +472,13 @@ impl<O: IsA<Clip>> ClipExt for O {
     ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_clip_set_top_effect_index_full(
+            let is_ok = ffi::ges_clip_set_top_effect_index_full(
                 self.as_ref().to_glib_none().0,
                 effect.as_ref().to_glib_none().0,
                 newindex,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

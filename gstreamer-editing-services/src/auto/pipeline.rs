@@ -200,7 +200,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_pipeline_save_thumbnail(
+            let is_ok = ffi::ges_pipeline_save_thumbnail(
                 self.as_ref().to_glib_none().0,
                 width,
                 height,
@@ -208,6 +208,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
                 location.to_glib_none().0,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

@@ -107,11 +107,12 @@ impl GLShader {
     pub fn compile_attach_stage(&self, stage: &GLSLStage) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gst_gl_shader_compile_attach_stage(
+            let is_ok = ffi::gst_gl_shader_compile_attach_stage(
                 self.to_glib_none().0,
                 stage.to_glib_none().0,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -157,7 +158,8 @@ impl GLShader {
     pub fn link(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gst_gl_shader_link(self.to_glib_none().0, &mut error);
+            let is_ok = ffi::gst_gl_shader_link(self.to_glib_none().0, &mut error);
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

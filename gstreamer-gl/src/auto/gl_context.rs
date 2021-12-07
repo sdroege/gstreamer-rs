@@ -216,11 +216,12 @@ impl<O: IsA<GLContext>> GLContextExt for O {
     fn create(&self, other_context: Option<&impl IsA<GLContext>>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gst_gl_context_create(
+            let is_ok = ffi::gst_gl_context_create(
                 self.as_ref().to_glib_none().0,
                 other_context.map(|p| p.as_ref()).to_glib_none().0,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -238,7 +239,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
     fn fill_info(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gst_gl_context_fill_info(self.as_ref().to_glib_none().0, &mut error);
+            let is_ok = ffi::gst_gl_context_fill_info(self.as_ref().to_glib_none().0, &mut error);
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

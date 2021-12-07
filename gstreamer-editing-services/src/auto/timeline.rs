@@ -412,11 +412,12 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     fn load_from_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_timeline_load_from_uri(
+            let is_ok = ffi::ges_timeline_load_from_uri(
                 self.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -492,13 +493,14 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_timeline_save_to_uri(
+            let is_ok = ffi::ges_timeline_save_to_uri(
                 self.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,
                 formatter_asset.map(|p| p.as_ref()).to_glib_none().0,
                 overwrite.into_glib(),
                 &mut error,
             );
+            assert_eq!(is_ok == 0, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
