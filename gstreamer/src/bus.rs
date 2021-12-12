@@ -98,6 +98,7 @@ fn into_raw_sync<F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>(
 }
 
 impl Bus {
+    #[doc(alias = "gst_bus_add_signal_watch")]
     #[doc(alias = "gst_bus_add_signal_watch_full")]
     pub fn add_signal_watch_full(&self, priority: Priority) {
         unsafe {
@@ -132,6 +133,7 @@ impl Bus {
         }
     }
 
+    #[doc(alias = "gst_bus_add_watch")]
     #[doc(alias = "gst_bus_add_watch_full")]
     pub fn add_watch<F>(&self, func: F) -> Result<SourceId, glib::BoolError>
     where
@@ -154,6 +156,8 @@ impl Bus {
         }
     }
 
+    #[doc(alias = "gst_bus_add_watch")]
+    #[doc(alias = "gst_bus_add_watch_full")]
     pub fn add_watch_local<F>(&self, func: F) -> Result<SourceId, glib::BoolError>
     where
         F: FnMut(&Bus, &Message) -> Continue + 'static,
@@ -231,10 +235,12 @@ impl Bus {
         }
     }
 
+    #[doc(alias = "gst_bus_pop")]
     pub fn iter(&self) -> Iter {
         self.iter_timed(Some(crate::ClockTime::ZERO))
     }
 
+    #[doc(alias = "gst_bus_timed_pop")]
     pub fn iter_timed(&self, timeout: impl Into<Option<crate::ClockTime>>) -> Iter {
         Iter {
             bus: self,
@@ -242,6 +248,7 @@ impl Bus {
         }
     }
 
+    #[doc(alias = "gst_bus_pop_filtered")]
     pub fn iter_filtered<'a>(
         &'a self,
         msg_types: &'a [MessageType],
@@ -249,6 +256,7 @@ impl Bus {
         self.iter_timed_filtered(Some(crate::ClockTime::ZERO), msg_types)
     }
 
+    #[doc(alias = "gst_bus_timed_pop_filtered")]
     pub fn iter_timed_filtered<'a>(
         &'a self,
         timeout: impl Into<Option<crate::ClockTime>>,
@@ -258,6 +266,7 @@ impl Bus {
             .filter(move |msg| msg_types.contains(&msg.type_()))
     }
 
+    #[doc(alias = "gst_bus_timed_pop_filtered")]
     pub fn timed_pop_filtered(
         &self,
         timeout: impl Into<Option<crate::ClockTime>> + Clone,
@@ -271,6 +280,7 @@ impl Bus {
         }
     }
 
+    #[doc(alias = "gst_bus_pop_filtered")]
     pub fn pop_filtered(&self, msg_types: &[MessageType]) -> Option<Message> {
         loop {
             let msg = self.pop()?;

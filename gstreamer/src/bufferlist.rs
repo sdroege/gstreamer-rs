@@ -34,6 +34,7 @@ impl BufferListRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_list_add")]
     pub fn add(&mut self, buffer: Buffer) {
         self.insert(-1, buffer);
     }
@@ -60,6 +61,7 @@ impl BufferListRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_list_get")]
     pub fn get_owned(&self, idx: u32) -> Option<Buffer> {
         unsafe {
             let ptr = ffi::gst_buffer_list_get(self.as_mut_ptr(), idx);
@@ -130,6 +132,7 @@ impl BufferListRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_list_foreach")]
     pub fn foreach_mut<F: FnMut(Buffer, u32) -> ControlFlow<Option<Buffer>, Option<Buffer>>>(
         &mut self,
         func: F,

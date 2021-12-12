@@ -68,6 +68,7 @@ unsafe impl Send for Structure {}
 unsafe impl Sync for Structure {}
 
 impl Structure {
+    #[doc(alias = "gst_structure_new")]
     pub fn builder(name: &str) -> Builder {
         assert_initialized_main_thread!();
         Builder::new(name)
@@ -83,6 +84,7 @@ impl Structure {
         }
     }
 
+    #[doc(alias = "gst_structure_new")]
     pub fn new(name: &str, values: &[(&str, &(dyn ToSendValue + Sync))]) -> Structure {
         assert_initialized_main_thread!();
         let mut structure = Structure::new_empty(name);
@@ -380,6 +382,7 @@ impl StructureRef {
         self as *const Self as *mut ffi::GstStructure
     }
 
+    #[doc(alias = "gst_structure_get")]
     pub fn get<'a, T: FromValue<'a>>(&'a self, name: &str) -> Result<T, GetError>
     where
         <<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error: GlibValueError,
@@ -388,6 +391,7 @@ impl StructureRef {
         self.get_by_quark(name)
     }
 
+    #[doc(alias = "gst_structure_get")]
     pub fn get_optional<'a, T: FromValue<'a>>(&'a self, name: &str) -> Result<Option<T>, GetError>
     where
         <<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error: GlibValueError,
@@ -397,11 +401,13 @@ impl StructureRef {
     }
 
     #[doc(alias = "get_value")]
+    #[doc(alias = "gst_structure_get_value")]
     pub fn value(&self, name: &str) -> Result<&SendValue, GetError> {
         let name = glib::Quark::from_string(name);
         self.value_by_quark(name)
     }
 
+    #[doc(alias = "gst_structure_id_get")]
     pub fn get_by_quark<'a, T: FromValue<'a>>(&'a self, name: glib::Quark) -> Result<T, GetError>
     where
         <<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error: GlibValueError,
@@ -411,6 +417,7 @@ impl StructureRef {
             .map_err(|err| GetError::from_value_get_error(name.to_string(), err))
     }
 
+    #[doc(alias = "gst_structure_id_get")]
     pub fn get_optional_by_quark<'a, T: FromValue<'a>>(
         &'a self,
         name: glib::Quark,
@@ -425,6 +432,7 @@ impl StructureRef {
             .map_err(|err| GetError::from_value_get_error(name.to_string(), err))
     }
 
+    #[doc(alias = "gst_structure_id_get_value")]
     pub fn value_by_quark(&self, name: glib::Quark) -> Result<&SendValue, GetError> {
         unsafe {
             let value = ffi::gst_structure_id_get_value(&self.0, name.into_glib());
@@ -437,11 +445,13 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_set")]
     pub fn set<T: ToSendValue + Sync>(&mut self, name: &str, value: T) {
         let value = value.to_send_value();
         self.set_value(name, value);
     }
 
+    #[doc(alias = "gst_structure_set_value")]
     pub fn set_value(&mut self, name: &str, value: SendValue) {
         unsafe {
             ffi::gst_structure_take_value(
@@ -452,11 +462,13 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_id_set")]
     pub fn set_by_quark<T: ToSendValue + Sync>(&mut self, name: glib::Quark, value: T) {
         let value = value.to_send_value();
         self.set_value_by_quark(name, value);
     }
 
+    #[doc(alias = "gst_structure_id_set_value")]
     pub fn set_value_by_quark(&mut self, name: glib::Quark, value: SendValue) {
         unsafe {
             ffi::gst_structure_id_take_value(&mut self.0, name.into_glib(), &mut value.into_raw());
@@ -473,6 +485,7 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_get_name_id")]
     pub fn name_quark(&self) -> glib::Quark {
         unsafe { from_glib(ffi::gst_structure_get_name_id(&self.0)) }
     }
@@ -492,6 +505,7 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_has_field_typed")]
     pub fn has_field_with_type(&self, field: &str, type_: glib::Type) -> bool {
         unsafe {
             from_glib(ffi::gst_structure_has_field_typed(
@@ -502,10 +516,12 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_id_has_field")]
     pub fn has_field_by_quark(&self, field: glib::Quark) -> bool {
         unsafe { from_glib(ffi::gst_structure_id_has_field(&self.0, field.into_glib())) }
     }
 
+    #[doc(alias = "gst_structure_id_has_field_typed")]
     pub fn has_field_with_type_by_quark(&self, field: glib::Quark, type_: glib::Type) -> bool {
         unsafe {
             from_glib(ffi::gst_structure_id_has_field_typed(
@@ -523,6 +539,7 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_remove_fields")]
     pub fn remove_fields(&mut self, fields: &[&str]) {
         for f in fields {
             self.remove_field(f)

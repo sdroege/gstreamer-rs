@@ -48,6 +48,7 @@ impl FromGlib<libc::c_ulong> for PadProbeId {
     }
 }
 
+#[doc(alias = "GstPadProbeInfo")]
 #[derive(Debug)]
 pub struct PadProbeInfo<'a> {
     pub mask: PadProbeType,
@@ -168,10 +169,14 @@ pub trait PadExtManual: 'static {
 
     fn stream_lock(&self) -> StreamLock;
 
+    #[doc(alias = "gst_pad_set_activate_function")]
+    #[doc(alias = "gst_pad_set_activate_function_full")]
     unsafe fn set_activate_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&crate::Object>) -> Result<(), LoggableError> + Send + Sync + 'static;
 
+    #[doc(alias = "gst_pad_set_activatemode_function")]
+    #[doc(alias = "gst_pad_set_activatemode_function_full")]
     unsafe fn set_activatemode_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&crate::Object>, crate::PadMode, bool) -> Result<(), LoggableError>
@@ -179,6 +184,8 @@ pub trait PadExtManual: 'static {
             + Sync
             + 'static;
 
+    #[doc(alias = "gst_pad_set_chain_function")]
+    #[doc(alias = "gst_pad_set_chain_function_full")]
     unsafe fn set_chain_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&crate::Object>, crate::Buffer) -> Result<FlowSuccess, FlowError>
@@ -186,6 +193,8 @@ pub trait PadExtManual: 'static {
             + Sync
             + 'static;
 
+    #[doc(alias = "gst_pad_set_chain_list_function")]
+    #[doc(alias = "gst_pad_set_chain_list_function_full")]
     unsafe fn set_chain_list_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&crate::Object>, crate::BufferList) -> Result<FlowSuccess, FlowError>
@@ -193,10 +202,14 @@ pub trait PadExtManual: 'static {
             + Sync
             + 'static;
 
+    #[doc(alias = "gst_pad_set_event_function")]
+    #[doc(alias = "gst_pad_set_event_function_full")]
     unsafe fn set_event_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&crate::Object>, crate::Event) -> bool + Send + Sync + 'static;
 
+    #[doc(alias = "gst_pad_set_event_full_function")]
+    #[doc(alias = "gst_pad_set_event_full_function_full")]
     unsafe fn set_event_full_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&crate::Object>, crate::Event) -> Result<FlowSuccess, FlowError>
@@ -204,6 +217,8 @@ pub trait PadExtManual: 'static {
             + Sync
             + 'static;
 
+    #[doc(alias = "gst_pad_set_getrange_function")]
+    #[doc(alias = "gst_pad_set_getrange_function_full")]
     unsafe fn set_getrange_function<F>(&self, func: F)
     where
         F: Fn(
@@ -217,10 +232,14 @@ pub trait PadExtManual: 'static {
             + Sync
             + 'static;
 
+    #[doc(alias = "gst_pad_set_iterate_internal_links_function")]
+    #[doc(alias = "gst_pad_set_iterate_internal_links_function_full")]
     unsafe fn set_iterate_internal_links_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&crate::Object>) -> crate::Iterator<Pad> + Send + Sync + 'static;
 
+    #[doc(alias = "gst_pad_set_link_function")]
+    #[doc(alias = "gst_pad_set_link_function_full")]
     unsafe fn set_link_function<F>(&self, func: F)
     where
         F: Fn(
@@ -232,10 +251,14 @@ pub trait PadExtManual: 'static {
             + Sync
             + 'static;
 
+    #[doc(alias = "gst_pad_set_query_function")]
+    #[doc(alias = "gst_pad_set_query_function_full")]
     unsafe fn set_query_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&crate::Object>, &mut crate::QueryRef) -> bool + Send + Sync + 'static;
 
+    #[doc(alias = "gst_pad_set_unlink_function")]
+    #[doc(alias = "gst_pad_set_unlink_function_full")]
     unsafe fn set_unlink_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&crate::Object>) + Send + Sync + 'static;
@@ -248,6 +271,7 @@ pub trait PadExtManual: 'static {
         &self,
         src_val: V,
     ) -> Option<U>;
+    #[doc(alias = "gst_pad_peer_query_convert")]
     fn peer_query_convert_generic<V: Into<GenericFormattedValue>>(
         &self,
         src_val: V,
@@ -256,10 +280,12 @@ pub trait PadExtManual: 'static {
 
     #[doc(alias = "gst_pad_peer_query_duration")]
     fn peer_query_duration<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T>;
+    #[doc(alias = "gst_pad_peer_query_duration")]
     fn peer_query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_pad_peer_query_position")]
     fn peer_query_position<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T>;
+    #[doc(alias = "gst_pad_peer_query_position")]
     fn peer_query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_pad_query_convert")]
@@ -267,6 +293,7 @@ pub trait PadExtManual: 'static {
         &self,
         src_val: V,
     ) -> Option<U>;
+    #[doc(alias = "gst_pad_query_convert")]
     fn query_convert_generic<V: Into<GenericFormattedValue>>(
         &self,
         src_val: V,
@@ -275,14 +302,18 @@ pub trait PadExtManual: 'static {
 
     #[doc(alias = "gst_pad_query_duration")]
     fn query_duration<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T>;
+    #[doc(alias = "gst_pad_query_duration")]
     fn query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_pad_query_position")]
     fn query_position<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T>;
+    #[doc(alias = "gst_pad_query_position")]
     fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "get_mode")]
+    #[doc(alias = "GST_PAD_MODE")]
     fn mode(&self) -> crate::PadMode;
+
     #[doc(alias = "gst_pad_sticky_events_foreach")]
     fn sticky_events_foreach<
         F: FnMut(&Event) -> ControlFlow<EventForeachAction, EventForeachAction>,
@@ -1581,21 +1612,25 @@ unsafe extern "C" fn destroy_closure_pad_task<F>(ptr: gpointer) {
 }
 
 impl Pad {
+    #[doc(alias = "gst_pad_new")]
     pub fn new(name: Option<&str>, direction: crate::PadDirection) -> Self {
         skip_assert_initialized!();
         Self::builder(name, direction).build()
     }
 
+    #[doc(alias = "gst_pad_new")]
     pub fn builder(name: Option<&str>, direction: crate::PadDirection) -> PadBuilder<Self> {
         skip_assert_initialized!();
         PadBuilder::new(name, direction)
     }
 
+    #[doc(alias = "gst_pad_new_from_static_template")]
     pub fn from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Self {
         skip_assert_initialized!();
         Self::builder_with_static_template(templ, name).build()
     }
 
+    #[doc(alias = "gst_pad_new_from_static_template")]
     pub fn builder_with_static_template(
         templ: &StaticPadTemplate,
         name: Option<&str>,
@@ -1604,11 +1639,13 @@ impl Pad {
         PadBuilder::from_static_template(templ, name)
     }
 
+    #[doc(alias = "gst_pad_new_from_template")]
     pub fn from_template(templ: &crate::PadTemplate, name: Option<&str>) -> Self {
         skip_assert_initialized!();
         Self::builder_with_template(templ, name).build()
     }
 
+    #[doc(alias = "gst_pad_new_from_template")]
     pub fn builder_with_template(
         templ: &crate::PadTemplate,
         name: Option<&str>,
@@ -1693,6 +1730,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         PadBuilder(pad)
     }
 
+    #[doc(alias = "gst_pad_set_activate_function")]
     pub fn activate_function<F>(self, func: F) -> Self
     where
         F: Fn(&T, Option<&crate::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
@@ -1704,6 +1742,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_activatemode_function")]
     pub fn activatemode_function<F>(self, func: F) -> Self
     where
         F: Fn(&T, Option<&crate::Object>, crate::PadMode, bool) -> Result<(), LoggableError>
@@ -1718,6 +1757,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_chain_function")]
     pub fn chain_function<F>(self, func: F) -> Self
     where
         F: Fn(&T, Option<&crate::Object>, crate::Buffer) -> Result<FlowSuccess, FlowError>
@@ -1732,6 +1772,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_chain_list_function")]
     pub fn chain_list_function<F>(self, func: F) -> Self
     where
         F: Fn(&T, Option<&crate::Object>, crate::BufferList) -> Result<FlowSuccess, FlowError>
@@ -1746,6 +1787,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_event_function")]
     pub fn event_function<F>(self, func: F) -> Self
     where
         F: Fn(&T, Option<&crate::Object>, crate::Event) -> bool + Send + Sync + 'static,
@@ -1757,6 +1799,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_event_full_function")]
     pub fn event_full_function<F>(self, func: F) -> Self
     where
         F: Fn(&T, Option<&crate::Object>, crate::Event) -> Result<FlowSuccess, FlowError>
@@ -1771,6 +1814,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_getrange_function")]
     pub fn getrange_function<F>(self, func: F) -> Self
     where
         F: Fn(
@@ -1791,6 +1835,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_iterate_internal_links_function")]
     pub fn iterate_internal_links_function<F>(self, func: F) -> Self
     where
         F: Fn(&T, Option<&crate::Object>) -> crate::Iterator<Pad> + Send + Sync + 'static,
@@ -1802,6 +1847,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_link_function")]
     pub fn link_function<F>(self, func: F) -> Self
     where
         F: Fn(
@@ -1820,6 +1866,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_query_function")]
     pub fn query_function<F>(self, func: F) -> Self
     where
         F: Fn(&T, Option<&crate::Object>, &mut crate::QueryRef) -> bool + Send + Sync + 'static,
@@ -1831,6 +1878,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_unlink_function")]
     pub fn unlink_function<F>(self, func: F) -> Self
     where
         F: Fn(&T, Option<&crate::Object>) + Send + Sync + 'static,

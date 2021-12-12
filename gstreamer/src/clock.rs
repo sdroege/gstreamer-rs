@@ -34,6 +34,7 @@ glib::wrapper! {
 impl ClockId {
     #[doc(alias = "get_time")]
     #[doc(alias = "gst_clock_id_get_time")]
+    #[doc(alias = "GST_CLOCK_ENTRY_TIME")]
     pub fn time(&self) -> ClockTime {
         unsafe {
             try_from_glib(ffi::gst_clock_id_get_time(self.to_glib_none().0))
@@ -55,6 +56,7 @@ impl ClockId {
         }
     }
 
+    #[doc(alias = "gst_clock_id_compare_func")]
     pub fn compare_by_time(&self, other: &Self) -> cmp::Ordering {
         unsafe {
             let res = ffi::gst_clock_id_compare_func(self.to_glib_none().0, other.to_glib_none().0);
@@ -83,6 +85,7 @@ impl ClockId {
     }
 
     #[doc(alias = "get_type")]
+    #[doc(alias = "GST_CLOCK_ENTRY_TYPE")]
     pub fn type_(&self) -> ClockEntryType {
         unsafe {
             let ptr: *mut ffi::GstClockEntry = self.to_glib_none().0 as *mut _;
@@ -91,6 +94,7 @@ impl ClockId {
     }
 
     #[doc(alias = "get_status")]
+    #[doc(alias = "GST_CLOCK_ENTRY_STATUS")]
     pub fn status(&self) -> &AtomicClockReturn {
         unsafe {
             let ptr: *mut ffi::GstClockEntry = self.to_glib_none().0 as *mut _;
@@ -130,6 +134,7 @@ impl TryFrom<ClockId> for SingleShotClockId {
 }
 
 impl SingleShotClockId {
+    #[doc(alias = "gst_clock_id_compare_func")]
     pub fn compare_by_time(&self, other: &Self) -> cmp::Ordering {
         self.0.compare_by_time(&other.0)
     }
@@ -241,6 +246,7 @@ impl TryFrom<ClockId> for PeriodicClockId {
 
 impl PeriodicClockId {
     #[doc(alias = "get_interval")]
+    #[doc(alias = "GST_CLOCK_ENTRY_INTERVAL")]
     pub fn interval(&self) -> ClockTime {
         unsafe {
             let ptr: *mut ffi::GstClockEntry = self.to_glib_none().0 as *mut _;
@@ -248,6 +254,7 @@ impl PeriodicClockId {
         }
     }
 
+    #[doc(alias = "gst_clock_id_compare_func")]
     pub fn compare_by_time(&self, other: &Self) -> cmp::Ordering {
         self.0.compare_by_time(&other.0)
     }

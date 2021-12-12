@@ -60,21 +60,25 @@ impl GhostPad {
         }
     }
 
+    #[doc(alias = "gst_ghost_pad_new_no_target")]
     pub fn new(name: Option<&str>, direction: crate::PadDirection) -> Self {
         skip_assert_initialized!();
         Self::builder(name, direction).build()
     }
 
+    #[doc(alias = "gst_ghost_pad_new_no_target")]
     pub fn builder(name: Option<&str>, direction: crate::PadDirection) -> PadBuilder<Self> {
         skip_assert_initialized!();
         PadBuilder::new(name, direction)
     }
 
+    #[doc(alias = "gst_ghost_pad_new_no_target_from_static_template")]
     pub fn from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Self {
         skip_assert_initialized!();
         Self::builder_with_static_template(templ, name).build()
     }
 
+    #[doc(alias = "gst_ghost_pad_new_no_target_from_static_template")]
     pub fn builder_with_static_template(
         templ: &StaticPadTemplate,
         name: Option<&str>,
@@ -83,11 +87,13 @@ impl GhostPad {
         PadBuilder::from_static_template(templ, name)
     }
 
+    #[doc(alias = "gst_ghost_pad_new_no_target_from_template")]
     pub fn from_template(templ: &crate::PadTemplate, name: Option<&str>) -> Self {
         skip_assert_initialized!();
         Self::builder_with_template(templ, name).build()
     }
 
+    #[doc(alias = "gst_ghost_pad_new_no_target_from_template")]
     pub fn builder_with_template(
         templ: &crate::PadTemplate,
         name: Option<&str>,
@@ -96,6 +102,7 @@ impl GhostPad {
         PadBuilder::from_template(templ, name)
     }
 
+    #[doc(alias = "gst_ghost_pad_new")]
     pub fn with_target<P: IsA<Pad>>(
         name: Option<&str>,
         target: &P,
@@ -104,6 +111,7 @@ impl GhostPad {
         Self::builder(name, target.direction()).build_with_target(target)
     }
 
+    #[doc(alias = "gst_ghost_pad_new_from_template")]
     pub fn from_template_with_target<P: IsA<Pad>>(
         templ: &crate::PadTemplate,
         name: Option<&str>,
@@ -122,6 +130,7 @@ impl GhostPad {
 }
 
 impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
+    #[doc(alias = "gst_pad_set_activate_function")]
     pub fn proxy_pad_activate_function<F>(self, func: F) -> Self
     where
         F: Fn(&crate::ProxyPad, Option<&crate::Object>) -> Result<(), LoggableError>
@@ -141,6 +150,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_activatemode_function")]
     pub fn proxy_pad_activatemode_function<F>(self, func: F) -> Self
     where
         F: Fn(
@@ -165,6 +175,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_chain_function")]
     pub fn proxy_pad_chain_function<F>(self, func: F) -> Self
     where
         F: Fn(
@@ -188,6 +199,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_chain_list_function")]
     pub fn proxy_pad_chain_list_function<F>(self, func: F) -> Self
     where
         F: Fn(
@@ -211,6 +223,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_event_function")]
     pub fn proxy_pad_event_function<F>(self, func: F) -> Self
     where
         F: Fn(&crate::ProxyPad, Option<&crate::Object>, crate::Event) -> bool
@@ -230,6 +243,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_event_full_function")]
     pub fn proxy_pad_event_full_function<F>(self, func: F) -> Self
     where
         F: Fn(
@@ -253,6 +267,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_getrange_function")]
     pub fn proxy_pad_getrange_function<F>(self, func: F) -> Self
     where
         F: Fn(
@@ -278,6 +293,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_iterate_internal_links_function")]
     pub fn proxy_pad_iterate_internal_links_function<F>(self, func: F) -> Self
     where
         F: Fn(&crate::ProxyPad, Option<&crate::Object>) -> crate::Iterator<Pad>
@@ -297,6 +313,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_link_function")]
     pub fn proxy_pad_link_function<F>(self, func: F) -> Self
     where
         F: Fn(
@@ -320,6 +337,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_query_function")]
     pub fn proxy_pad_query_function<F>(self, func: F) -> Self
     where
         F: Fn(&crate::ProxyPad, Option<&crate::Object>, &mut crate::QueryRef) -> bool
@@ -339,6 +357,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_unlink_function")]
     pub fn proxy_pad_unlink_function<F>(self, func: F) -> Self
     where
         F: Fn(&crate::ProxyPad, Option<&crate::Object>) + Send + Sync + 'static,

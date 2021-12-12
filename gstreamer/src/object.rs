@@ -8,6 +8,7 @@ use crate::ClockTime;
 use crate::ObjectFlags;
 
 pub trait GstObjectExtManual: 'static {
+    #[doc(alias = "deep-notify")]
     fn connect_deep_notify<F: Fn(&Self, &crate::Object, &glib::ParamSpec) + Send + Sync + 'static>(
         &self,
         name: Option<&str>,

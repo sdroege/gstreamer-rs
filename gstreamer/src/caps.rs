@@ -15,21 +15,25 @@ use glib::value::ToSendValue;
 mini_object_wrapper!(Caps, CapsRef, ffi::GstCaps, || { ffi::gst_caps_get_type() });
 
 impl Caps {
+    #[doc(alias = "gst_caps_new_simple")]
     pub fn builder(name: &str) -> Builder<NoFeature> {
         assert_initialized_main_thread!();
         Builder::new(name)
     }
 
+    #[doc(alias = "gst_caps_new_full")]
     pub fn builder_full() -> BuilderFull<SomeFeatures> {
         assert_initialized_main_thread!();
         BuilderFull::new()
     }
 
+    #[doc(alias = "gst_caps_new_full")]
     pub fn builder_full_with_features(features: CapsFeatures) -> BuilderFull<SomeFeatures> {
         assert_initialized_main_thread!();
         BuilderFull::with_features(features)
     }
 
+    #[doc(alias = "gst_caps_new_full")]
     pub fn builder_full_with_any_features() -> BuilderFull<AnyFeatures> {
         assert_initialized_main_thread!();
         BuilderFull::with_any_features()
@@ -47,6 +51,7 @@ impl Caps {
         unsafe { from_glib_full(ffi::gst_caps_new_any()) }
     }
 
+    #[doc(alias = "gst_caps_new_simple")]
     pub fn new_simple(name: &str, values: &[(&str, &(dyn ToSendValue + Sync))]) -> Self {
         assert_initialized_main_thread!();
         let mut caps = Caps::new_empty();
@@ -209,6 +214,7 @@ impl std::iter::Extend<(Structure, Option<CapsFeatures>)> for CapsRef {
 }
 
 impl CapsRef {
+    #[doc(alias = "gst_caps_set_simple")]
     pub fn set_simple(&mut self, values: &[(&str, &(dyn ToSendValue + Sync))]) {
         for &(name, value) in values {
             let value = value.to_value();
@@ -241,6 +247,7 @@ impl CapsRef {
     }
 
     #[doc(alias = "get_mut_structure")]
+    #[doc(alias = "gst_caps_get_structure")]
     pub fn structure_mut(&mut self, idx: u32) -> Option<&mut StructureRef> {
         if idx >= self.size() {
             return None;
@@ -270,6 +277,7 @@ impl CapsRef {
     }
 
     #[doc(alias = "get_mut_features")]
+    #[doc(alias = "gst_caps_get_features")]
     pub fn features_mut(&mut self, idx: u32) -> Option<&mut CapsFeaturesRef> {
         if idx >= self.size() {
             return None;
@@ -369,6 +377,7 @@ impl CapsRef {
         }
     }
 
+    #[doc(alias = "gst_caps_intersect_full")]
     pub fn intersect_with_mode(&self, other: &Self, mode: CapsIntersectMode) -> Caps {
         unsafe {
             from_glib_full(ffi::gst_caps_intersect_full(

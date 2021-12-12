@@ -32,6 +32,7 @@ use std::num::NonZeroU64;
 use std::pin::Pin;
 
 impl Element {
+    #[doc(alias = "gst_element_link_many")]
     pub fn link_many<E: IsA<Element>>(elements: &[&E]) -> Result<(), glib::BoolError> {
         skip_assert_initialized!();
         for e in elements.windows(2) {
@@ -49,6 +50,7 @@ impl Element {
         Ok(())
     }
 
+    #[doc(alias = "gst_element_unlink_many")]
     pub fn unlink_many<E: IsA<Element>>(elements: &[&E]) {
         skip_assert_initialized!();
         for e in elements.windows(2) {
@@ -181,10 +183,13 @@ pub trait ElementExtManual: 'static {
     fn iterate_src_pads(&self) -> crate::Iterator<Pad>;
 
     #[doc(alias = "get_pads")]
+    #[doc(alias = "gst_element_foreach_pad")]
     fn pads(&self) -> Vec<Pad>;
     #[doc(alias = "get_sink_pads")]
+    #[doc(alias = "gst_element_foreach_sink_pad")]
     fn sink_pads(&self) -> Vec<Pad>;
     #[doc(alias = "get_src_pads")]
+    #[doc(alias = "gst_element_foreach_src_pad")]
     fn src_pads(&self) -> Vec<Pad>;
 
     fn num_pads(&self) -> u16;
@@ -227,10 +232,12 @@ pub trait ElementExtManual: 'static {
 
     #[doc(alias = "gst_element_query_duration")]
     fn query_duration<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T>;
+    #[doc(alias = "gst_element_query_duration")]
     fn query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_element_query_position")]
     fn query_position<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T>;
+    #[doc(alias = "gst_element_query_position")]
     fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_element_seek")]
@@ -265,9 +272,11 @@ pub trait ElementExtManual: 'static {
         T: Send + 'static;
 
     #[doc(alias = "get_current_running_time")]
+    #[doc(alias = "gst_element_get_current_running_time")]
     fn current_running_time(&self) -> Option<crate::ClockTime>;
 
     #[doc(alias = "get_current_clock_time")]
+    #[doc(alias = "gst_element_get_current_clock_time")]
     fn current_clock_time(&self) -> Option<crate::ClockTime>;
 
     #[doc(alias = "gst_element_get_request_pad")]
@@ -861,37 +870,45 @@ pub unsafe trait ElementClassExt {
 
 unsafe impl<T: IsA<Element> + glib::object::IsClass> ElementClassExt for glib::object::Class<T> {}
 
+#[doc(alias = "GST_ELEMENT_METADATA_AUTHOR")]
 pub static ELEMENT_METADATA_AUTHOR: Lazy<&'static str> = Lazy::new(|| unsafe {
     CStr::from_ptr(ffi::GST_ELEMENT_METADATA_AUTHOR)
         .to_str()
         .unwrap()
 });
+#[doc(alias = "GST_ELEMENT_METADATA_DESCRIPTION")]
 pub static ELEMENT_METADATA_DESCRIPTION: Lazy<&'static str> = Lazy::new(|| unsafe {
     CStr::from_ptr(ffi::GST_ELEMENT_METADATA_DESCRIPTION)
         .to_str()
         .unwrap()
 });
+#[doc(alias = "GST_ELEMENT_METADATA_DOC_URI")]
 pub static ELEMENT_METADATA_DOC_URI: Lazy<&'static str> = Lazy::new(|| unsafe {
     CStr::from_ptr(ffi::GST_ELEMENT_METADATA_DOC_URI)
         .to_str()
         .unwrap()
 });
+#[doc(alias = "GST_ELEMENT_METADATA_ICON_NAME")]
 pub static ELEMENT_METADATA_ICON_NAME: Lazy<&'static str> = Lazy::new(|| unsafe {
     CStr::from_ptr(ffi::GST_ELEMENT_METADATA_ICON_NAME)
         .to_str()
         .unwrap()
 });
+#[doc(alias = "GST_ELEMENT_METADATA_KLASS")]
 pub static ELEMENT_METADATA_KLASS: Lazy<&'static str> = Lazy::new(|| unsafe {
     CStr::from_ptr(ffi::GST_ELEMENT_METADATA_KLASS)
         .to_str()
         .unwrap()
 });
+#[doc(alias = "GST_ELEMENT_METADATA_LONGNAME")]
 pub static ELEMENT_METADATA_LONGNAME: Lazy<&'static str> = Lazy::new(|| unsafe {
     CStr::from_ptr(ffi::GST_ELEMENT_METADATA_LONGNAME)
         .to_str()
         .unwrap()
 });
 
+#[doc(alias = "GST_ELEMENT_ERROR")]
+#[doc(alias = "GST_ELEMENT_ERROR_WITH_DETAILS")]
 #[macro_export]
 macro_rules! element_error(
     ($obj:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
@@ -1047,6 +1064,8 @@ macro_rules! element_error(
     }};
 );
 
+#[doc(alias = "GST_ELEMENT_WARNING")]
+#[doc(alias = "GST_ELEMENT_WARNING_WITH_DETAILS")]
 #[macro_export]
 macro_rules! element_warning(
     ($obj:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
@@ -1202,6 +1221,8 @@ macro_rules! element_warning(
     }};
 );
 
+#[doc(alias = "GST_ELEMENT_INFO")]
+#[doc(alias = "GST_ELEMENT_INFO_WITH_DETAILS")]
 #[macro_export]
 macro_rules! element_info(
     ($obj:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {

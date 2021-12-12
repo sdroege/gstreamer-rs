@@ -16,9 +16,12 @@ use std::mem::transmute;
 use std::path;
 
 pub trait GstBinExtManual: 'static {
+    #[doc(alias = "gst_bin_add_many")]
     fn add_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError>;
+    #[doc(alias = "gst_bin_remove_many")]
     fn remove_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError>;
 
+    #[doc(alias = "do-latency")]
     fn connect_do_latency<F: Fn(&Self) -> Result<(), LoggableError> + Send + Sync + 'static>(
         &self,
         f: F,
@@ -43,12 +46,17 @@ pub trait GstBinExtManual: 'static {
     #[doc(alias = "get_children")]
     fn children(&self) -> Vec<Element>;
 
+    #[doc(alias = "gst_debug_bin_to_dot_data")]
     fn debug_to_dot_data(&self, details: crate::DebugGraphDetails) -> GString;
+    #[doc(alias = "GST_DEBUG_BIN_TO_DOT_FILE")]
+    #[doc(alias = "gst_debug_bin_to_dot_file")]
     fn debug_to_dot_file(
         &self,
         details: crate::DebugGraphDetails,
         file_name: impl AsRef<path::Path>,
     );
+    #[doc(alias = "GST_DEBUG_BIN_TO_DOT_FILE_WITH_TS")]
+    #[doc(alias = "gst_debug_bin_to_dot_file_with_ts")]
     fn debug_to_dot_file_with_ts(
         &self,
         details: crate::DebugGraphDetails,

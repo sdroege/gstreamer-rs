@@ -19,6 +19,7 @@ unsafe impl Send for CapsFeatures {}
 unsafe impl Sync for CapsFeatures {}
 
 impl CapsFeatures {
+    #[doc(alias = "gst_caps_features_new")]
     pub fn new(features: &[&str]) -> Self {
         assert_initialized_main_thread!();
         let mut f = Self::new_empty();
@@ -30,6 +31,7 @@ impl CapsFeatures {
         f
     }
 
+    #[doc(alias = "gst_caps_features_new_id")]
     pub fn from_quarks(features: &[glib::Quark]) -> Self {
         assert_initialized_main_thread!();
         let mut f = Self::new_empty();
@@ -324,6 +326,7 @@ impl CapsFeaturesRef {
         }
     }
 
+    #[doc(alias = "gst_caps_features_contains_id")]
     pub fn contains_quark(&self, feature: glib::Quark) -> bool {
         unsafe {
             from_glib(ffi::gst_caps_features_contains_id(
@@ -356,6 +359,7 @@ impl CapsFeaturesRef {
         }
     }
 
+    #[doc(alias = "gst_caps_features_get_nth_id")]
     pub fn nth_quark(&self, idx: u32) -> Option<glib::Quark> {
         if idx >= self.size() {
             return None;
@@ -377,10 +381,12 @@ impl CapsFeaturesRef {
         unsafe { ffi::gst_caps_features_remove(self.as_mut_ptr(), feature.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_caps_features_add_id")]
     pub fn add_from_quark(&mut self, feature: glib::Quark) {
         unsafe { ffi::gst_caps_features_add_id(self.as_mut_ptr(), feature.into_glib()) }
     }
 
+    #[doc(alias = "gst_caps_features_remove_id")]
     pub fn remove_by_quark(&mut self, feature: glib::Quark) {
         unsafe { ffi::gst_caps_features_remove_id(self.as_mut_ptr(), feature.into_glib()) }
     }

@@ -368,12 +368,14 @@ impl<T> TagValue<T> {
 }
 
 impl TagListRef {
+    #[doc(alias = "gst_tag_list_add")]
     pub fn add<'a, T: Tag<'a>>(&mut self, value: &T::TagType, mode: TagMergeMode) {
         // result can be safely ignored here as `value`'s type is tied to `T::tag_name()`
         let v = <T::TagType as ToSendValue>::to_send_value(value);
         let _res = self.add_value(T::tag_name(), &v, mode);
     }
 
+    #[doc(alias = "gst_tag_list_add")]
     pub fn add_generic<T: ToSendValue + Sync>(
         &mut self,
         tag_name: &str,
@@ -410,10 +412,12 @@ impl TagListRef {
         Ok(())
     }
 
+    #[doc(alias = "gst_tag_list_remove_tag")]
     pub fn remove<'a, T: Tag<'a>>(&mut self) {
         self.remove_generic(T::tag_name());
     }
 
+    #[doc(alias = "gst_tag_list_remove_tag")]
     pub fn remove_generic(&mut self, tag_name: &str) {
         unsafe {
             let tag_name = tag_name.to_glib_none();
@@ -422,6 +426,7 @@ impl TagListRef {
         }
     }
 
+    #[doc(alias = "gst_tag_list_get")]
     pub fn get<'a, T: Tag<'a>>(&self) -> Option<TagValue<T::TagType>> {
         self.generic(T::tag_name()).map(|value| {
             if !value.is::<T::TagType>() {
@@ -435,6 +440,7 @@ impl TagListRef {
         })
     }
 
+    #[doc(alias = "gst_tag_list_get")]
     #[doc(alias = "get_generic")]
     pub fn generic(&self, tag_name: &str) -> Option<SendValue> {
         unsafe {
@@ -469,6 +475,7 @@ impl TagListRef {
     }
 
     #[doc(alias = "get_index")]
+    #[doc(alias = "gst_tag_list_get_index")]
     pub fn index<'a, T: Tag<'a>>(&self, idx: u32) -> Option<&'a TagValue<T::TagType>> {
         self.index_generic(T::tag_name(), idx).map(|value| {
             if !value.is::<T::TagType>() {
@@ -483,6 +490,7 @@ impl TagListRef {
     }
 
     #[doc(alias = "get_index_generic")]
+    #[doc(alias = "gst_tag_list_get_index")]
     pub fn index_generic<'a>(&'a self, tag_name: &str, idx: u32) -> Option<&'a SendValue> {
         unsafe {
             let value =
@@ -497,11 +505,13 @@ impl TagListRef {
     }
 
     #[doc(alias = "get_size")]
+    #[doc(alias = "gst_tag_list_get_tag_size")]
     pub fn size<'a, T: Tag<'a>>(&self) -> u32 {
         self.size_by_name(T::tag_name())
     }
 
     #[doc(alias = "get_size_by_name")]
+    #[doc(alias = "gst_tag_list_get_tag_size")]
     pub fn size_by_name(&self, tag_name: &str) -> u32 {
         unsafe { ffi::gst_tag_list_get_tag_size(self.as_ptr(), tag_name.to_glib_none().0) }
     }

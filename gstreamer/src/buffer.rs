@@ -53,6 +53,8 @@ impl Buffer {
         unsafe { from_glib_full(ffi::gst_buffer_new()) }
     }
 
+    #[doc(alias = "gst_buffer_new_allocate")]
+    #[doc(alias = "gst_buffer_new_and_alloc")]
     pub fn with_size(size: usize) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
 
@@ -71,6 +73,7 @@ impl Buffer {
         drop(slice);
     }
 
+    #[doc(alias = "gst_buffer_new_wrapped_full")]
     pub fn from_mut_slice<T: AsMut<[u8]> + Send + 'static>(slice: T) -> Self {
         assert_initialized_main_thread!();
 
@@ -93,6 +96,7 @@ impl Buffer {
         }
     }
 
+    #[doc(alias = "gst_buffer_new_wrapped_full")]
     pub fn from_slice<T: AsRef<[u8]> + Send + 'static>(slice: T) -> Self {
         assert_initialized_main_thread!();
 
@@ -115,6 +119,7 @@ impl Buffer {
         }
     }
 
+    #[doc(alias = "gst_buffer_map")]
     pub fn into_mapped_buffer_readable(self) -> Result<MappedBuffer<Readable>, Self> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
@@ -135,6 +140,7 @@ impl Buffer {
         }
     }
 
+    #[doc(alias = "gst_buffer_map")]
     pub fn into_mapped_buffer_writable(self) -> Result<MappedBuffer<Writable>, Self> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
@@ -180,6 +186,7 @@ impl Default for Buffer {
 }
 
 impl BufferRef {
+    #[doc(alias = "gst_buffer_map")]
     pub fn map_readable(&self) -> Result<BufferMap<Readable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
@@ -197,6 +204,7 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_map")]
     pub fn map_writable(&mut self) -> Result<BufferMap<Writable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
@@ -259,6 +267,7 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_fill")]
     pub fn copy_from_slice(&mut self, offset: usize, slice: &[u8]) -> Result<(), usize> {
         let maxsize = self.maxsize();
         let size = slice.len();
@@ -282,6 +291,7 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_extract")]
     pub fn copy_to_slice(&self, offset: usize, slice: &mut [u8]) -> Result<(), usize> {
         let maxsize = self.size();
         let size = slice.len();
@@ -340,6 +350,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_offset")]
+    #[doc(alias = "GST_BUFFER_OFFSET")]
     pub fn offset(&self) -> u64 {
         self.0.offset
     }
@@ -349,6 +360,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_offset_end")]
+    #[doc(alias = "GST_BUFFER_OFFSET_END")]
     pub fn offset_end(&self) -> u64 {
         self.0.offset_end
     }
@@ -358,6 +370,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_pts")]
+    #[doc(alias = "GST_BUFFER_PTS")]
     pub fn pts(&self) -> Option<ClockTime> {
         unsafe { from_glib(self.0.pts) }
     }
@@ -367,6 +380,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_dts")]
+    #[doc(alias = "GST_BUFFER_DTS")]
     pub fn dts(&self) -> Option<ClockTime> {
         unsafe { from_glib(self.0.dts) }
     }
@@ -376,6 +390,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_dts_or_pts")]
+    #[doc(alias = "GST_BUFFER_DTS_OR_PTS")]
     pub fn dts_or_pts(&self) -> Option<ClockTime> {
         let val = self.dts();
         if val.is_none() {
@@ -386,6 +401,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_duration")]
+    #[doc(alias = "GST_BUFFER_DURATION")]
     pub fn duration(&self) -> Option<ClockTime> {
         unsafe { from_glib(self.0.duration) }
     }
@@ -395,14 +411,17 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_flags")]
+    #[doc(alias = "GST_BUFFER_FLAGS")]
     pub fn flags(&self) -> BufferFlags {
         BufferFlags::from_bits_truncate(self.0.mini_object.flags)
     }
 
+    #[doc(alias = "GST_BUFFER_FLAG_SET")]
     pub fn set_flags(&mut self, flags: BufferFlags) {
         self.0.mini_object.flags |= flags.bits();
     }
 
+    #[doc(alias = "GST_BUFFER_FLAG_UNSET")]
     pub fn unset_flags(&mut self, flags: BufferFlags) {
         self.0.mini_object.flags &= !flags.bits();
     }
@@ -464,6 +483,7 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "gst_buffer_foreach_meta")]
     pub fn foreach_meta_mut<
         F: FnMut(
             MetaRefMut<Meta, crate::meta::Iterated>,
@@ -637,6 +657,7 @@ impl BufferRef {
         unsafe { MemoryRef::from_ptr(ffi::gst_buffer_peek_memory(self.as_mut_ptr(), idx)) }
     }
 
+    #[doc(alias = "gst_buffer_peek_memory")]
     pub fn peek_memory_mut(&mut self, idx: u32) -> Result<&mut MemoryRef, glib::BoolError> {
         assert!(idx < self.n_memory());
         unsafe {
