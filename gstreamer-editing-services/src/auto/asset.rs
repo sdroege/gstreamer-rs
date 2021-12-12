@@ -97,7 +97,7 @@ impl Asset {
         }
     }
 
-    pub fn request_async_future(
+    pub fn request_future(
         extractable_type: glib::types::Type,
         id: Option<&str>,
     ) -> Pin<Box_<dyn std::future::Future<Output = Result<Asset, glib::Error>> + 'static>> {
