@@ -495,6 +495,11 @@ impl StructureRef {
         unsafe { ffi::gst_structure_set_name(&mut self.0, name.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_structure_has_name")]
+    pub fn has_name(&self, name: &str) -> bool {
+        self.name() == name
+    }
+
     #[doc(alias = "gst_structure_has_field")]
     pub fn has_field(&self, field: &str) -> bool {
         unsafe {
