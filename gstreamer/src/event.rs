@@ -216,6 +216,11 @@ impl EventRef {
         unsafe { from_glib((*self.as_ptr()).type_) }
     }
 
+    #[doc(alias = "gst_event_has_name")]
+    pub fn has_name(&self, name: &str) -> bool {
+        self.structure().map_or(false, |s| s.has_name(name))
+    }
+
     pub fn view(&self) -> EventView<&EventRef> {
         let type_ = unsafe { (*self.as_ptr()).type_ };
 

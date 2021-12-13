@@ -68,6 +68,11 @@ impl MessageRef {
         }
     }
 
+    #[doc(alias = "gst_message_has_name")]
+    pub fn has_name(&self, name: &str) -> bool {
+        self.structure().map_or(false, |s| s.has_name(name))
+    }
+
     pub fn view(&self) -> MessageView {
         let type_ = unsafe { (*self.as_ptr()).type_ };
 
