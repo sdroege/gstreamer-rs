@@ -125,7 +125,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
                 &mut p_context,
                 &mut error,
             );
-            assert_eq!(is_ok == 0, !error.is_null());
+            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(from_glib_full(p_context))
             } else {

@@ -28,7 +28,7 @@ impl Formatter {
         unsafe {
             let mut error = ptr::null_mut();
             let is_ok = ffi::ges_formatter_can_load_uri(uri.to_glib_none().0, &mut error);
-            assert_eq!(is_ok == 0, !error.is_null());
+            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -43,7 +43,7 @@ impl Formatter {
         unsafe {
             let mut error = ptr::null_mut();
             let is_ok = ffi::ges_formatter_can_save_uri(uri.to_glib_none().0, &mut error);
-            assert_eq!(is_ok == 0, !error.is_null());
+            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -85,7 +85,7 @@ impl<O: IsA<Formatter>> FormatterExt for O {
                 uri.to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == 0, !error.is_null());
+            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -109,7 +109,7 @@ impl<O: IsA<Formatter>> FormatterExt for O {
                 overwrite.into_glib(),
                 &mut error,
             );
-            assert_eq!(is_ok == 0, !error.is_null());
+            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

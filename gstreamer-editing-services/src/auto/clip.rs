@@ -232,7 +232,7 @@ impl<O: IsA<Clip>> ClipExt for O {
                 index,
                 &mut error,
             );
-            assert_eq!(is_ok == 0, !error.is_null());
+            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -409,7 +409,7 @@ impl<O: IsA<Clip>> ClipExt for O {
                 layer.as_ref().to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == 0, !error.is_null());
+            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -428,7 +428,7 @@ impl<O: IsA<Clip>> ClipExt for O {
                 effect.as_ref().to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == 0, !error.is_null());
+            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -478,7 +478,7 @@ impl<O: IsA<Clip>> ClipExt for O {
                 newindex,
                 &mut error,
             );
-            assert_eq!(is_ok == 0, !error.is_null());
+            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

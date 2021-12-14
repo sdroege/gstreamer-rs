@@ -221,7 +221,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
                 other_context.map(|p| p.as_ref()).to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == 0, !error.is_null());
+            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -240,7 +240,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         unsafe {
             let mut error = ptr::null_mut();
             let is_ok = ffi::gst_gl_context_fill_info(self.as_ref().to_glib_none().0, &mut error);
-            assert_eq!(is_ok == 0, !error.is_null());
+            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
