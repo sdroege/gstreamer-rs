@@ -278,6 +278,23 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
+    #[doc(alias = "get_payload")]
+    #[doc(alias = "gst_rtp_buffer_get_payload")]
+    pub fn payload_mut(&mut self) -> Result<&mut [u8], glib::error::BoolError> {
+        let size = self.payload_size();
+        if size == 0 {
+            return Ok(&mut []);
+        }
+        unsafe {
+            let pointer = ffi::gst_rtp_buffer_get_payload(&mut self.rtp_buffer);
+            if pointer.is_null() {
+                Err(glib::bool_error!("Failed to get payload data"))
+            } else {
+                Ok(slice::from_raw_parts_mut(pointer as *mut u8, size as usize))
+            }
+        }
+    }
+
     #[doc(alias = "get_extension")]
     pub fn is_extension(&self) -> bool {
         unsafe {
@@ -465,6 +482,31 @@ mod tests {
         let payload = rtp_buffer.payload();
         assert!(payload.is_ok());
         assert_eq!(payload.unwrap().len(), payload_size as usize);
+    }
+
+    #[test]
+    fn test_mut_payload() {
+        gst::init().unwrap();
+
+        let csrc_count = 2;
+        let payload_size = 8;
+        let mut buffer = gst::Buffer::new_rtp_with_sizes(payload_size, 4, csrc_count).unwrap();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            let mut rtp_buffer = RTPBuffer::from_buffer_writable(buffer).unwrap();
+
+            let payload = rtp_buffer.payload_mut();
+            assert!(payload.is_ok());
+
+            let payload = payload.unwrap();
+            payload[3] = 42;
+        }
+
+        let rtp_buffer = RTPBuffer::from_buffer_readable(&buffer).unwrap();
+        let payload = rtp_buffer.payload();
+
+        assert!(payload.is_ok());
+        assert_eq!(payload.unwrap()[3], 42);
     }
 
     #[test]
