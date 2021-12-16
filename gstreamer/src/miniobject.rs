@@ -462,6 +462,8 @@ macro_rules! mini_object_wrapper (
             type Type = Self;
         }
 
+        impl glib::value::ValueTypeOptional for $name { }
+
         unsafe impl<'a> $crate::glib::value::FromValue<'a> for $name {
             type Checker = $crate::glib::value::GenericValueTypeOrNoneChecker<Self>;
 

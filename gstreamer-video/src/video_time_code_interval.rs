@@ -210,6 +210,8 @@ impl glib::value::ValueType for VideoTimeCodeInterval {
     type Type = Self;
 }
 
+impl glib::value::ValueTypeOptional for VideoTimeCodeInterval {}
+
 #[doc(hidden)]
 unsafe impl<'a> glib::value::FromValue<'a> for VideoTimeCodeInterval {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;

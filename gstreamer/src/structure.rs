@@ -306,6 +306,8 @@ impl glib::value::ValueType for Structure {
     type Type = Self;
 }
 
+impl glib::value::ValueTypeOptional for Structure {}
+
 unsafe impl<'a> glib::value::FromValue<'a> for Structure {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 

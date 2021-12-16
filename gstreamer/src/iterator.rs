@@ -502,6 +502,8 @@ impl<T: StaticType + 'static> glib::value::ValueType for Iterator<T> {
     type Type = Self;
 }
 
+impl<T: StaticType + 'static> glib::value::ValueTypeOptional for Iterator<T> {}
+
 unsafe impl<'a, T: StaticType + 'static> glib::value::FromValue<'a> for Iterator<T> {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 

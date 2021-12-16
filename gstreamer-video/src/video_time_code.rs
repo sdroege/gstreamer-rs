@@ -444,6 +444,8 @@ macro_rules! generic_impl {
             type Type = Self;
         }
 
+        impl glib::value::ValueTypeOptional for $name {}
+
         #[doc(hidden)]
         unsafe impl<'a> glib::value::FromValue<'a> for $name {
             type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;

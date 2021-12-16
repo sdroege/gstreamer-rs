@@ -235,6 +235,8 @@ impl glib::value::ValueType for CapsFeatures {
     type Type = Self;
 }
 
+impl glib::value::ValueTypeOptional for CapsFeatures {}
+
 unsafe impl<'a> glib::value::FromValue<'a> for CapsFeatures {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
