@@ -20,6 +20,8 @@ generate = [
     "GstVideo.ColorBalance",
     "GstVideo.ColorBalanceChannel",
     "GstVideo.ColorBalanceType",
+    "GstVideo.NavigationMessageType",
+    "GstVideo.NavigationQueryType",
     "GstVideo.VideoAFDSpec",
     "GstVideo.VideoAFDValue",
     "GstVideo.VideoAggregatorParallelConvertPad",
@@ -83,6 +85,129 @@ ref_mode = "ref"
 name = "Gst.ClockTime"
 status = "manual"
 conversion_type = "Option"
+
+[[object]]
+name = "Gst.Event"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Query"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "gst.Structure"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "GstVideo.Navigation"
+status = "generate"
+    [[object.function]]
+    name = "event_parse_key_event"
+    manual = true
+
+    [[object.function]]
+    name = "send_event"
+    manual = true
+
+    [[object.function]]
+    name = "event_parse_mouse_button_event"
+    manual = true
+
+    [[object.function]]
+    name = "event_parse_mouse_move_event"
+    manual = true
+
+    [[object.function]]
+    name = "event_parse_command"
+    manual = true
+
+    [[object.function]]
+    name = "message_parse_event"
+    manual = true
+
+    [[object.function]]
+    name = "message_get_type"
+    manual = true
+
+    [[object.function]]
+    name = "message_new_event"
+    manual = true
+
+    [[object.function]]
+    name = "event_parse_mouse_scroll_event"
+    manual = true
+
+    [[object.function]]
+    name = "event_get_type"
+    manual = true
+
+
+    [[object.function]]
+    name = "message_new_commands_changed"
+    ignore = true
+
+    [[object.function]]
+    name = "message_parse_angles_changed"
+    ignore = true
+
+    [[object.function]]
+    name = "message_new_mouse_over"
+    ignore = true
+
+    [[object.function]]
+    name = "message_parse_mouse_over"
+    ignore = true
+
+    [[object.function]]
+    name = "message_new_angles_changed"
+    ignore = true
+
+    [[object.function]]
+    name = "query_get_type"
+    ignore = true
+
+    [[object.function]]
+    name = "query_new_angles"
+    ignore = true
+
+    [[object.function]]
+    name = "query_new_commands"
+    ignore = true
+
+    [[object.function]]
+    name = "query_parse_angles"
+    ignore = true
+
+    [[object.function]]
+    name = "query_parse_commands_length"
+    ignore = true
+
+    [[object.function]]
+    name = "query_parse_commands_nth"
+    ignore = true
+
+    [[object.function]]
+    name = "query_set_angles"
+    ignore = true
+
+[[object]]
+name = "GstVideo.NavigationCommand"
+status = "generate"
+    [[object.derive]]
+    name = "serde::Serialize, serde::Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, Eq, PartialEq, Ord, PartialOrd, Hash"
+
+[[object]]
+name = "GstVideo.NavigationEventType"
+status = "generate"
+    [[object.member]]
+    name = "mouse_scroll"
+    version = "1.18"
 
 [[object]]
 name = "GstVideo.VideoBufferFlags"

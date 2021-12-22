@@ -9,6 +9,9 @@ pub use self::color_balance::ColorBalance;
 mod color_balance_channel;
 pub use self::color_balance_channel::ColorBalanceChannel;
 
+mod navigation;
+pub use self::navigation::Navigation;
+
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 mod video_aggregator_parallel_convert_pad;
@@ -39,6 +42,10 @@ pub use self::video_sink::VideoSink;
 
 mod enums;
 pub use self::enums::ColorBalanceType;
+pub use self::enums::NavigationCommand;
+pub use self::enums::NavigationEventType;
+pub use self::enums::NavigationMessageType;
+pub use self::enums::NavigationQueryType;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 pub use self::enums::VideoAFDSpec;
@@ -91,6 +98,7 @@ pub use self::flags::VideoTimeCodeFlags;
 pub mod traits {
     pub use super::color_balance::ColorBalanceExt;
     pub use super::color_balance_channel::ColorBalanceChannelExt;
+    pub use super::navigation::NavigationExt;
     pub use super::video_decoder::VideoDecoderExt;
     pub use super::video_encoder::VideoEncoderExt;
     pub use super::video_orientation::VideoOrientationExt;

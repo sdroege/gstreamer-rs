@@ -30,6 +30,8 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use crate::auto::*;
 
+mod navigation;
+
 mod caps_features;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -54,10 +56,19 @@ pub mod video_frame;
 pub use crate::video_frame::{VideoFrame, VideoFrameRef};
 mod video_overlay;
 pub use crate::video_overlay::is_video_overlay_prepare_window_handle_message;
+
 pub mod video_event;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+pub use crate::video_event::MouseScrollEvent;
 pub use crate::video_event::{
-    DownstreamForceKeyUnitEvent, ForceKeyUnitEvent, StillFrameEvent, UpstreamForceKeyUnitEvent,
+    CommandEvent, DownstreamForceKeyUnitEvent, ForceKeyUnitEvent, KeyEvent, MouseButtonEvent,
+    MouseMoveEvent, NavigationEvent, StillFrameEvent, UpstreamForceKeyUnitEvent,
 };
+
+pub mod video_message;
+pub use crate::video_message::{NavigationEventMessage, NavigationMessage};
+
 mod functions;
 pub use crate::functions::*;
 mod video_rectangle;
@@ -126,6 +137,7 @@ pub mod prelude {
     pub use gst_base::prelude::*;
 
     pub use crate::auto::traits::*;
+    pub use crate::navigation::NavigationExtManual;
     pub use crate::video_buffer_pool::VideoBufferPoolConfig;
     pub use crate::video_decoder::VideoDecoderExtManual;
     pub use crate::video_encoder::VideoEncoderExtManual;

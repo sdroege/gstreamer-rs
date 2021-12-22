@@ -1,8 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{from_glib, from_glib_full, IntoGlib};
+use crate::{NavigationCommand, NavigationEventType};
+use glib::translate::{from_glib, from_glib_none, from_glib_full, IntoGlib};
 use glib::ToSendValue;
-use std::mem;
+use std::{mem, ptr};
 
 // FIXME: Copy from gstreamer/src/event.rs
 macro_rules! event_builder_generic_impl {
@@ -345,6 +346,216 @@ impl StillFrameEvent {
                 })
             } else {
                 Err(glib::bool_error!("Invalid still-frame event"))
+            }
+        }
+    }
+}
+
+#[derive(Clone, PartialEq, Debug)]
+pub struct KeyEvent {
+    pub key: String,
+}
+
+impl KeyEvent {
+    #[doc(alias = "gst_navigation_event_parse_key_event")]
+    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut key = ptr::null();
+            let ret = from_glib(ffi::gst_navigation_event_parse_key_event(
+                event.as_mut_ptr(),
+                &mut key,
+            ));
+
+            if ret {
+                Ok(Self {
+                    key: from_glib_none(key),
+                })
+            } else {
+                Err(glib::bool_error!("Invalid key event"))
+            }
+        }
+    }
+}
+
+#[derive(Clone, PartialEq, Debug)]
+pub struct MouseButtonEvent {
+    pub button: i32,
+    pub x: f64,
+    pub y: f64,
+}
+
+impl MouseButtonEvent {
+    #[doc(alias = "gst_navigation_event_parse_mouse_button_event")]
+    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut button = mem::MaybeUninit::uninit();
+            let mut x = mem::MaybeUninit::uninit();
+            let mut y = mem::MaybeUninit::uninit();
+            let ret = from_glib(ffi::gst_navigation_event_parse_mouse_button_event(
+                event.as_mut_ptr(),
+                button.as_mut_ptr(),
+                x.as_mut_ptr(),
+                y.as_mut_ptr(),
+            ));
+            let button = button.assume_init();
+            let x = x.assume_init();
+            let y = y.assume_init();
+            if ret {
+                Ok(Self { button, x, y })
+            } else {
+                Err(glib::bool_error!("Invalid mouse button event"))
+            }
+        }
+    }
+}
+
+#[derive(Clone, PartialEq, Debug)]
+pub struct MouseMoveEvent {
+    pub x: f64,
+    pub y: f64,
+}
+
+impl MouseMoveEvent {
+    #[doc(alias = "gst_navigation_event_parse_mouse_move_event")]
+    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut x = mem::MaybeUninit::uninit();
+            let mut y = mem::MaybeUninit::uninit();
+            let ret = from_glib(ffi::gst_navigation_event_parse_mouse_move_event(
+                event.as_mut_ptr(),
+                x.as_mut_ptr(),
+                y.as_mut_ptr(),
+            ));
+            let x = x.assume_init();
+            let y = y.assume_init();
+            if ret {
+                Ok(Self { x, y })
+            } else {
+                Err(glib::bool_error!("Invalid mouse move event"))
+            }
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[derive(Clone, PartialEq, Debug)]
+pub struct MouseScrollEvent {
+    pub x: f64,
+    pub y: f64,
+    pub delta_x: f64,
+    pub delta_y: f64,
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl MouseScrollEvent {
+    #[doc(alias = "gst_navigation_event_parse_mouse_scroll_event")]
+    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut x = mem::MaybeUninit::uninit();
+            let mut y = mem::MaybeUninit::uninit();
+            let mut delta_x = mem::MaybeUninit::uninit();
+            let mut delta_y = mem::MaybeUninit::uninit();
+            let ret = from_glib(ffi::gst_navigation_event_parse_mouse_scroll_event(
+                event.as_mut_ptr(),
+                x.as_mut_ptr(),
+                y.as_mut_ptr(),
+                delta_x.as_mut_ptr(),
+                delta_y.as_mut_ptr(),
+            ));
+            let x = x.assume_init();
+            let y = y.assume_init();
+            let delta_x = delta_x.assume_init();
+            let delta_y = delta_y.assume_init();
+            if ret {
+                Ok(Self {
+                    x,
+                    y,
+                    delta_x,
+                    delta_y,
+                })
+            } else {
+                Err(glib::bool_error!("Invalid mouse button event"))
+            }
+        }
+    }
+}
+
+#[derive(Clone, PartialEq, Debug)]
+pub struct CommandEvent {
+    cmd: NavigationCommand,
+}
+
+impl CommandEvent {
+    #[doc(alias = "gst_navigation_event_parse_command")]
+    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut command = mem::MaybeUninit::uninit();
+            let ret = from_glib(ffi::gst_navigation_event_parse_command(
+                event.as_mut_ptr(),
+                command.as_mut_ptr(),
+            ));
+            let command = command.assume_init();
+            if ret {
+                Ok(Self {
+                    cmd: from_glib(command),
+                })
+            } else {
+                Err(glib::bool_error!("Invalid navigation command event"))
+            }
+        }
+    }
+}
+
+#[derive(Clone, PartialEq, Debug)]
+pub enum NavigationEvent {
+    KeyPress(KeyEvent),
+    KeyRelease(KeyEvent),
+    MouseMove(MouseMoveEvent),
+    MouseButtonPress(MouseButtonEvent),
+    MouseButtonRelease(MouseButtonEvent),
+    Command(CommandEvent),
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    MouseScroll(MouseScrollEvent),
+}
+
+impl NavigationEvent {
+    #[doc(alias = "gst_navigation_event_get_type")]
+    pub fn type_(event: &gst::EventRef) -> NavigationEventType {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_navigation_event_get_type(event.as_mut_ptr())) }
+    }
+
+    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
+        skip_assert_initialized!();
+
+        let event_type: NavigationEventType = Self::type_(event);
+
+        match event_type {
+            NavigationEventType::MouseMove => MouseMoveEvent::parse(event).map(Self::MouseMove),
+            NavigationEventType::KeyPress => KeyEvent::parse(event).map(Self::KeyPress),
+            NavigationEventType::KeyRelease => KeyEvent::parse(event).map(Self::KeyRelease),
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+            NavigationEventType::MouseScroll => {
+                MouseScrollEvent::parse(event).map(Self::MouseScroll)
+            }
+            NavigationEventType::MouseButtonPress => {
+                MouseButtonEvent::parse(event).map(Self::MouseButtonPress)
+            }
+            NavigationEventType::MouseButtonRelease => {
+                MouseButtonEvent::parse(event).map(Self::MouseButtonRelease)
+            }
+            NavigationEventType::Command => CommandEvent::parse(event).map(Self::Command),
+            NavigationEventType::Invalid | NavigationEventType::__Unknown(_) => {
+                return Err(glib::bool_error!("Invalid navigation event"))
             }
         }
     }

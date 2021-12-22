@@ -81,6 +81,382 @@ impl ToValue for ColorBalanceType {
     }
 }
 
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstNavigationCommand")]
+pub enum NavigationCommand {
+    #[doc(alias = "GST_NAVIGATION_COMMAND_INVALID")]
+    Invalid,
+    #[doc(alias = "GST_NAVIGATION_COMMAND_MENU1")]
+    Menu1,
+    #[doc(alias = "GST_NAVIGATION_COMMAND_MENU2")]
+    Menu2,
+    #[doc(alias = "GST_NAVIGATION_COMMAND_MENU3")]
+    Menu3,
+    #[doc(alias = "GST_NAVIGATION_COMMAND_MENU4")]
+    Menu4,
+    #[doc(alias = "GST_NAVIGATION_COMMAND_MENU5")]
+    Menu5,
+    #[doc(alias = "GST_NAVIGATION_COMMAND_MENU6")]
+    Menu6,
+    #[doc(alias = "GST_NAVIGATION_COMMAND_MENU7")]
+    Menu7,
+    #[doc(alias = "GST_NAVIGATION_COMMAND_LEFT")]
+    Left,
+    #[doc(alias = "GST_NAVIGATION_COMMAND_RIGHT")]
+    Right,
+    #[doc(alias = "GST_NAVIGATION_COMMAND_UP")]
+    Up,
+    #[doc(alias = "GST_NAVIGATION_COMMAND_DOWN")]
+    Down,
+    #[doc(alias = "GST_NAVIGATION_COMMAND_ACTIVATE")]
+    Activate,
+    #[doc(alias = "GST_NAVIGATION_COMMAND_PREV_ANGLE")]
+    PrevAngle,
+    #[doc(alias = "GST_NAVIGATION_COMMAND_NEXT_ANGLE")]
+    NextAngle,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for NavigationCommand {
+    type GlibType = ffi::GstNavigationCommand;
+
+    fn into_glib(self) -> ffi::GstNavigationCommand {
+        match self {
+            Self::Invalid => ffi::GST_NAVIGATION_COMMAND_INVALID,
+            Self::Menu1 => ffi::GST_NAVIGATION_COMMAND_MENU1,
+            Self::Menu2 => ffi::GST_NAVIGATION_COMMAND_MENU2,
+            Self::Menu3 => ffi::GST_NAVIGATION_COMMAND_MENU3,
+            Self::Menu4 => ffi::GST_NAVIGATION_COMMAND_MENU4,
+            Self::Menu5 => ffi::GST_NAVIGATION_COMMAND_MENU5,
+            Self::Menu6 => ffi::GST_NAVIGATION_COMMAND_MENU6,
+            Self::Menu7 => ffi::GST_NAVIGATION_COMMAND_MENU7,
+            Self::Left => ffi::GST_NAVIGATION_COMMAND_LEFT,
+            Self::Right => ffi::GST_NAVIGATION_COMMAND_RIGHT,
+            Self::Up => ffi::GST_NAVIGATION_COMMAND_UP,
+            Self::Down => ffi::GST_NAVIGATION_COMMAND_DOWN,
+            Self::Activate => ffi::GST_NAVIGATION_COMMAND_ACTIVATE,
+            Self::PrevAngle => ffi::GST_NAVIGATION_COMMAND_PREV_ANGLE,
+            Self::NextAngle => ffi::GST_NAVIGATION_COMMAND_NEXT_ANGLE,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstNavigationCommand> for NavigationCommand {
+    unsafe fn from_glib(value: ffi::GstNavigationCommand) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GST_NAVIGATION_COMMAND_INVALID => Self::Invalid,
+            ffi::GST_NAVIGATION_COMMAND_MENU1 => Self::Menu1,
+            ffi::GST_NAVIGATION_COMMAND_MENU2 => Self::Menu2,
+            ffi::GST_NAVIGATION_COMMAND_MENU3 => Self::Menu3,
+            ffi::GST_NAVIGATION_COMMAND_MENU4 => Self::Menu4,
+            ffi::GST_NAVIGATION_COMMAND_MENU5 => Self::Menu5,
+            ffi::GST_NAVIGATION_COMMAND_MENU6 => Self::Menu6,
+            ffi::GST_NAVIGATION_COMMAND_MENU7 => Self::Menu7,
+            ffi::GST_NAVIGATION_COMMAND_LEFT => Self::Left,
+            ffi::GST_NAVIGATION_COMMAND_RIGHT => Self::Right,
+            ffi::GST_NAVIGATION_COMMAND_UP => Self::Up,
+            ffi::GST_NAVIGATION_COMMAND_DOWN => Self::Down,
+            ffi::GST_NAVIGATION_COMMAND_ACTIVATE => Self::Activate,
+            ffi::GST_NAVIGATION_COMMAND_PREV_ANGLE => Self::PrevAngle,
+            ffi::GST_NAVIGATION_COMMAND_NEXT_ANGLE => Self::NextAngle,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for NavigationCommand {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_navigation_command_get_type()) }
+    }
+}
+
+impl glib::value::ValueType for NavigationCommand {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for NavigationCommand {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for NavigationCommand {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstNavigationEventType")]
+pub enum NavigationEventType {
+    #[doc(alias = "GST_NAVIGATION_EVENT_INVALID")]
+    Invalid,
+    #[doc(alias = "GST_NAVIGATION_EVENT_KEY_PRESS")]
+    KeyPress,
+    #[doc(alias = "GST_NAVIGATION_EVENT_KEY_RELEASE")]
+    KeyRelease,
+    #[doc(alias = "GST_NAVIGATION_EVENT_MOUSE_BUTTON_PRESS")]
+    MouseButtonPress,
+    #[doc(alias = "GST_NAVIGATION_EVENT_MOUSE_BUTTON_RELEASE")]
+    MouseButtonRelease,
+    #[doc(alias = "GST_NAVIGATION_EVENT_MOUSE_MOVE")]
+    MouseMove,
+    #[doc(alias = "GST_NAVIGATION_EVENT_COMMAND")]
+    Command,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_NAVIGATION_EVENT_MOUSE_SCROLL")]
+    MouseScroll,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for NavigationEventType {
+    type GlibType = ffi::GstNavigationEventType;
+
+    fn into_glib(self) -> ffi::GstNavigationEventType {
+        match self {
+            Self::Invalid => ffi::GST_NAVIGATION_EVENT_INVALID,
+            Self::KeyPress => ffi::GST_NAVIGATION_EVENT_KEY_PRESS,
+            Self::KeyRelease => ffi::GST_NAVIGATION_EVENT_KEY_RELEASE,
+            Self::MouseButtonPress => ffi::GST_NAVIGATION_EVENT_MOUSE_BUTTON_PRESS,
+            Self::MouseButtonRelease => ffi::GST_NAVIGATION_EVENT_MOUSE_BUTTON_RELEASE,
+            Self::MouseMove => ffi::GST_NAVIGATION_EVENT_MOUSE_MOVE,
+            Self::Command => ffi::GST_NAVIGATION_EVENT_COMMAND,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            Self::MouseScroll => ffi::GST_NAVIGATION_EVENT_MOUSE_SCROLL,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstNavigationEventType> for NavigationEventType {
+    unsafe fn from_glib(value: ffi::GstNavigationEventType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GST_NAVIGATION_EVENT_INVALID => Self::Invalid,
+            ffi::GST_NAVIGATION_EVENT_KEY_PRESS => Self::KeyPress,
+            ffi::GST_NAVIGATION_EVENT_KEY_RELEASE => Self::KeyRelease,
+            ffi::GST_NAVIGATION_EVENT_MOUSE_BUTTON_PRESS => Self::MouseButtonPress,
+            ffi::GST_NAVIGATION_EVENT_MOUSE_BUTTON_RELEASE => Self::MouseButtonRelease,
+            ffi::GST_NAVIGATION_EVENT_MOUSE_MOVE => Self::MouseMove,
+            ffi::GST_NAVIGATION_EVENT_COMMAND => Self::Command,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            ffi::GST_NAVIGATION_EVENT_MOUSE_SCROLL => Self::MouseScroll,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for NavigationEventType {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_navigation_event_type_get_type()) }
+    }
+}
+
+impl glib::value::ValueType for NavigationEventType {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for NavigationEventType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for NavigationEventType {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstNavigationMessageType")]
+pub enum NavigationMessageType {
+    #[doc(alias = "GST_NAVIGATION_MESSAGE_INVALID")]
+    Invalid,
+    #[doc(alias = "GST_NAVIGATION_MESSAGE_MOUSE_OVER")]
+    MouseOver,
+    #[doc(alias = "GST_NAVIGATION_MESSAGE_COMMANDS_CHANGED")]
+    CommandsChanged,
+    #[doc(alias = "GST_NAVIGATION_MESSAGE_ANGLES_CHANGED")]
+    AnglesChanged,
+    #[doc(alias = "GST_NAVIGATION_MESSAGE_EVENT")]
+    Event,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for NavigationMessageType {
+    type GlibType = ffi::GstNavigationMessageType;
+
+    fn into_glib(self) -> ffi::GstNavigationMessageType {
+        match self {
+            Self::Invalid => ffi::GST_NAVIGATION_MESSAGE_INVALID,
+            Self::MouseOver => ffi::GST_NAVIGATION_MESSAGE_MOUSE_OVER,
+            Self::CommandsChanged => ffi::GST_NAVIGATION_MESSAGE_COMMANDS_CHANGED,
+            Self::AnglesChanged => ffi::GST_NAVIGATION_MESSAGE_ANGLES_CHANGED,
+            Self::Event => ffi::GST_NAVIGATION_MESSAGE_EVENT,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstNavigationMessageType> for NavigationMessageType {
+    unsafe fn from_glib(value: ffi::GstNavigationMessageType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GST_NAVIGATION_MESSAGE_INVALID => Self::Invalid,
+            ffi::GST_NAVIGATION_MESSAGE_MOUSE_OVER => Self::MouseOver,
+            ffi::GST_NAVIGATION_MESSAGE_COMMANDS_CHANGED => Self::CommandsChanged,
+            ffi::GST_NAVIGATION_MESSAGE_ANGLES_CHANGED => Self::AnglesChanged,
+            ffi::GST_NAVIGATION_MESSAGE_EVENT => Self::Event,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for NavigationMessageType {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_navigation_message_type_get_type()) }
+    }
+}
+
+impl glib::value::ValueType for NavigationMessageType {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for NavigationMessageType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for NavigationMessageType {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstNavigationQueryType")]
+pub enum NavigationQueryType {
+    #[doc(alias = "GST_NAVIGATION_QUERY_INVALID")]
+    Invalid,
+    #[doc(alias = "GST_NAVIGATION_QUERY_COMMANDS")]
+    Commands,
+    #[doc(alias = "GST_NAVIGATION_QUERY_ANGLES")]
+    Angles,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for NavigationQueryType {
+    type GlibType = ffi::GstNavigationQueryType;
+
+    fn into_glib(self) -> ffi::GstNavigationQueryType {
+        match self {
+            Self::Invalid => ffi::GST_NAVIGATION_QUERY_INVALID,
+            Self::Commands => ffi::GST_NAVIGATION_QUERY_COMMANDS,
+            Self::Angles => ffi::GST_NAVIGATION_QUERY_ANGLES,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstNavigationQueryType> for NavigationQueryType {
+    unsafe fn from_glib(value: ffi::GstNavigationQueryType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GST_NAVIGATION_QUERY_INVALID => Self::Invalid,
+            ffi::GST_NAVIGATION_QUERY_COMMANDS => Self::Commands,
+            ffi::GST_NAVIGATION_QUERY_ANGLES => Self::Angles,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for NavigationQueryType {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_navigation_query_type_get_type()) }
+    }
+}
+
+impl glib::value::ValueType for NavigationQueryType {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for NavigationQueryType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for NavigationQueryType {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]

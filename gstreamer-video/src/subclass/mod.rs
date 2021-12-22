@@ -2,6 +2,7 @@
 
 #![allow(clippy::cast_ptr_alignment)]
 
+mod navigation;
 mod video_decoder;
 mod video_encoder;
 mod video_filter;
@@ -11,6 +12,7 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst_base::subclass::prelude::*;
 
+    pub use super::navigation::NavigationImpl;
     pub use super::video_decoder::{VideoDecoderImpl, VideoDecoderImplExt};
     pub use super::video_encoder::{VideoEncoderImpl, VideoEncoderImplExt};
     pub use super::video_filter::{VideoFilterImpl, VideoFilterImplExt};
