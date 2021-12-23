@@ -58,12 +58,9 @@ mod video_overlay;
 pub use crate::video_overlay::is_video_overlay_prepare_window_handle_message;
 
 pub mod video_event;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-pub use crate::video_event::MouseScrollEvent;
 pub use crate::video_event::{
-    CommandEvent, DownstreamForceKeyUnitEvent, ForceKeyUnitEvent, KeyEvent, MouseButtonEvent,
-    MouseMoveEvent, NavigationEvent, StillFrameEvent, UpstreamForceKeyUnitEvent,
+    DownstreamForceKeyUnitEvent, ForceKeyUnitEvent, NavigationEvent, StillFrameEvent,
+    UpstreamForceKeyUnitEvent,
 };
 
 pub mod video_message;

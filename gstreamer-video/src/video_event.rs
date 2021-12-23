@@ -1,9 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
-
 use crate::{NavigationCommand, NavigationEventType};
-use glib::translate::{from_glib, from_glib_none, from_glib_full, IntoGlib};
+use glib::translate::{from_glib, from_glib_full, IntoGlib};
 use glib::ToSendValue;
-use std::{mem, ptr};
+use std::mem;
 
 // FIXME: Copy from gstreamer/src/event.rs
 macro_rules! event_builder_generic_impl {
@@ -351,212 +350,296 @@ impl StillFrameEvent {
     }
 }
 
-#[derive(Clone, PartialEq, Debug)]
-pub struct KeyEvent {
-    pub key: String,
-}
-
-impl KeyEvent {
-    #[doc(alias = "gst_navigation_event_parse_key_event")]
-    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
-        assert_initialized_main_thread!();
-        unsafe {
-            let mut key = ptr::null();
-            let ret = from_glib(ffi::gst_navigation_event_parse_key_event(
-                event.as_mut_ptr(),
-                &mut key,
-            ));
-
-            if ret {
-                Ok(Self {
-                    key: from_glib_none(key),
-                })
-            } else {
-                Err(glib::bool_error!("Invalid key event"))
-            }
-        }
-    }
-}
-
-#[derive(Clone, PartialEq, Debug)]
-pub struct MouseButtonEvent {
-    pub button: i32,
-    pub x: f64,
-    pub y: f64,
-}
-
-impl MouseButtonEvent {
-    #[doc(alias = "gst_navigation_event_parse_mouse_button_event")]
-    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
-        assert_initialized_main_thread!();
-        unsafe {
-            let mut button = mem::MaybeUninit::uninit();
-            let mut x = mem::MaybeUninit::uninit();
-            let mut y = mem::MaybeUninit::uninit();
-            let ret = from_glib(ffi::gst_navigation_event_parse_mouse_button_event(
-                event.as_mut_ptr(),
-                button.as_mut_ptr(),
-                x.as_mut_ptr(),
-                y.as_mut_ptr(),
-            ));
-            let button = button.assume_init();
-            let x = x.assume_init();
-            let y = y.assume_init();
-            if ret {
-                Ok(Self { button, x, y })
-            } else {
-                Err(glib::bool_error!("Invalid mouse button event"))
-            }
-        }
-    }
-}
-
-#[derive(Clone, PartialEq, Debug)]
-pub struct MouseMoveEvent {
-    pub x: f64,
-    pub y: f64,
-}
-
-impl MouseMoveEvent {
-    #[doc(alias = "gst_navigation_event_parse_mouse_move_event")]
-    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
-        assert_initialized_main_thread!();
-        unsafe {
-            let mut x = mem::MaybeUninit::uninit();
-            let mut y = mem::MaybeUninit::uninit();
-            let ret = from_glib(ffi::gst_navigation_event_parse_mouse_move_event(
-                event.as_mut_ptr(),
-                x.as_mut_ptr(),
-                y.as_mut_ptr(),
-            ));
-            let x = x.assume_init();
-            let y = y.assume_init();
-            if ret {
-                Ok(Self { x, y })
-            } else {
-                Err(glib::bool_error!("Invalid mouse move event"))
-            }
-        }
-    }
-}
-
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-#[derive(Clone, PartialEq, Debug)]
-pub struct MouseScrollEvent {
-    pub x: f64,
-    pub y: f64,
-    pub delta_x: f64,
-    pub delta_y: f64,
-}
-
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-impl MouseScrollEvent {
-    #[doc(alias = "gst_navigation_event_parse_mouse_scroll_event")]
-    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
-        assert_initialized_main_thread!();
-        unsafe {
-            let mut x = mem::MaybeUninit::uninit();
-            let mut y = mem::MaybeUninit::uninit();
-            let mut delta_x = mem::MaybeUninit::uninit();
-            let mut delta_y = mem::MaybeUninit::uninit();
-            let ret = from_glib(ffi::gst_navigation_event_parse_mouse_scroll_event(
-                event.as_mut_ptr(),
-                x.as_mut_ptr(),
-                y.as_mut_ptr(),
-                delta_x.as_mut_ptr(),
-                delta_y.as_mut_ptr(),
-            ));
-            let x = x.assume_init();
-            let y = y.assume_init();
-            let delta_x = delta_x.assume_init();
-            let delta_y = delta_y.assume_init();
-            if ret {
-                Ok(Self {
-                    x,
-                    y,
-                    delta_x,
-                    delta_y,
-                })
-            } else {
-                Err(glib::bool_error!("Invalid mouse button event"))
-            }
-        }
-    }
-}
-
-#[derive(Clone, PartialEq, Debug)]
-pub struct CommandEvent {
-    cmd: NavigationCommand,
-}
-
-impl CommandEvent {
-    #[doc(alias = "gst_navigation_event_parse_command")]
-    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
-        assert_initialized_main_thread!();
-        unsafe {
-            let mut command = mem::MaybeUninit::uninit();
-            let ret = from_glib(ffi::gst_navigation_event_parse_command(
-                event.as_mut_ptr(),
-                command.as_mut_ptr(),
-            ));
-            let command = command.assume_init();
-            if ret {
-                Ok(Self {
-                    cmd: from_glib(command),
-                })
-            } else {
-                Err(glib::bool_error!("Invalid navigation command event"))
-            }
-        }
-    }
-}
-
+const NAVIGATION_EVENT_NAME: &str = "application/x-gst-navigation";
+#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "ser_de", serde(tag = "event"))]
 #[derive(Clone, PartialEq, Debug)]
 pub enum NavigationEvent {
-    KeyPress(KeyEvent),
-    KeyRelease(KeyEvent),
-    MouseMove(MouseMoveEvent),
-    MouseButtonPress(MouseButtonEvent),
-    MouseButtonRelease(MouseButtonEvent),
-    Command(CommandEvent),
+    KeyPress {
+        key: String,
+    },
+    KeyRelease {
+        key: String,
+    },
+    MouseMove {
+        x: f64,
+        y: f64,
+    },
+    MouseButtonPress {
+        button: i32,
+        x: f64,
+        y: f64,
+    },
+    MouseButtonRelease {
+        button: i32,
+        x: f64,
+        y: f64,
+    },
+    Command {
+        command: NavigationCommand,
+    },
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    MouseScroll(MouseScrollEvent),
+    MouseScroll {
+        x: f64,
+        y: f64,
+        delta_x: f64,
+        delta_y: f64,
+    },
 }
 
 impl NavigationEvent {
+    pub fn new_key_press(key: &str) -> NavigationEvent {
+        assert_initialized_main_thread!();
+        Self::KeyPress {
+            key: key.to_string(),
+        }
+    }
+
+    pub fn new_key_release(key: &str) -> NavigationEvent {
+        assert_initialized_main_thread!();
+        Self::KeyRelease {
+            key: key.to_string(),
+        }
+    }
+
+    pub fn new_mouse_move(x: f64, y: f64) -> NavigationEvent {
+        assert_initialized_main_thread!();
+        Self::MouseMove { x, y }
+    }
+
+    pub fn new_mouse_button_press(button: i32, x: f64, y: f64) -> NavigationEvent {
+        assert_initialized_main_thread!();
+        Self::MouseButtonPress { button, x, y }
+    }
+
+    pub fn new_mouse_button_release(button: i32, x: f64, y: f64) -> NavigationEvent {
+        assert_initialized_main_thread!();
+        Self::MouseButtonRelease { button, x, y }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn new_mouse_scroll(x: f64, y: f64, delta_x: f64, delta_y: f64) -> NavigationEvent {
+        assert_initialized_main_thread!();
+        Self::MouseScroll {
+            x,
+            y,
+            delta_x,
+            delta_y,
+        }
+    }
+
+    pub fn new_command(command: NavigationCommand) -> NavigationEvent {
+        assert_initialized_main_thread!();
+        Self::Command { command }
+    }
+
     #[doc(alias = "gst_navigation_event_get_type")]
     pub fn type_(event: &gst::EventRef) -> NavigationEventType {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_navigation_event_get_type(event.as_mut_ptr())) }
     }
 
+    #[doc(alias = "gst_navigation_event_parse_mouse_button_event")]
+    #[doc(alias = "gst_navigation_event_parse_mouse_command")]
+    #[doc(alias = "gst_navigation_event_parse_mouse_scroll_event")]
+    #[doc(alias = "gst_navigation_event_parse_mouse_move_event")]
     pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
         skip_assert_initialized!();
 
-        let event_type: NavigationEventType = Self::type_(event);
-
-        match event_type {
-            NavigationEventType::MouseMove => MouseMoveEvent::parse(event).map(Self::MouseMove),
-            NavigationEventType::KeyPress => KeyEvent::parse(event).map(Self::KeyPress),
-            NavigationEventType::KeyRelease => KeyEvent::parse(event).map(Self::KeyRelease),
+        let structure = event
+            .structure()
+            .ok_or_else(|| glib::bool_error!("Invalid mouse event"))?;
+        Ok(match Self::type_(event) {
+            NavigationEventType::MouseMove => Self::new_mouse_move(
+                structure
+                    .get("pointer_x")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+                structure
+                    .get("pointer_y")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+            ),
+            NavigationEventType::MouseButtonPress => Self::new_mouse_button_press(
+                structure
+                    .get("button")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+                structure
+                    .get("pointer_x")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+                structure
+                    .get("pointer_y")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+            ),
+            NavigationEventType::MouseButtonRelease => Self::new_mouse_button_press(
+                structure
+                    .get("button")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+                structure
+                    .get("pointer_x")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+                structure
+                    .get("pointer_y")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+            ),
             #[cfg(any(feature = "v1_18", feature = "dox"))]
             #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-            NavigationEventType::MouseScroll => {
-                MouseScrollEvent::parse(event).map(Self::MouseScroll)
-            }
-            NavigationEventType::MouseButtonPress => {
-                MouseButtonEvent::parse(event).map(Self::MouseButtonPress)
-            }
-            NavigationEventType::MouseButtonRelease => {
-                MouseButtonEvent::parse(event).map(Self::MouseButtonRelease)
-            }
-            NavigationEventType::Command => CommandEvent::parse(event).map(Self::Command),
+            NavigationEventType::MouseScroll => Self::new_mouse_scroll(
+                structure
+                    .get("pointer_x")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+                structure
+                    .get("pointer_y")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+                structure
+                    .get("delta_pointer_x")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+                structure
+                    .get("delta_pointer_y")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+            ),
+            NavigationEventType::KeyPress => Self::new_key_press(
+                structure
+                    .get("key")
+                    .map_err(|_| glib::bool_error!("Invalid key press event"))?,
+            ),
+            NavigationEventType::KeyRelease => Self::new_key_release(
+                structure
+                    .get("key")
+                    .map_err(|_| glib::bool_error!("Invalid key press event"))?,
+            ),
+            NavigationEventType::Command => Self::new_command(
+                structure
+                    .get("command-code")
+                    .map_err(|_| glib::bool_error!("Invalid key press event"))?,
+            ),
             NavigationEventType::Invalid | NavigationEventType::__Unknown(_) => {
                 return Err(glib::bool_error!("Invalid navigation event"))
             }
+        })
+    }
+
+    pub fn build(&self) -> gst::Event {
+        skip_assert_initialized!();
+
+        gst::event::Navigation::new(match self {
+            Self::MouseMove { x, y } => gst::Structure::builder(NAVIGATION_EVENT_NAME)
+                .field("event", "mouse-move")
+                .field("pointer_x", x)
+                .field("pointer_y", y)
+                .build(),
+            Self::MouseButtonPress { button, x, y } => {
+                gst::Structure::builder(NAVIGATION_EVENT_NAME)
+                    .field("event", "mouse-button-press")
+                    .field("button", button)
+                    .field("pointer_x", x)
+                    .field("pointer_y", y)
+                    .build()
+            }
+            Self::MouseButtonRelease { button, x, y } => {
+                gst::Structure::builder(NAVIGATION_EVENT_NAME)
+                    .field("event", "mouse-button-release")
+                    .field("button", button)
+                    .field("pointer_x", x)
+                    .field("pointer_y", y)
+                    .build()
+            }
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+            Self::MouseScroll {
+                x,
+                y,
+                delta_x,
+                delta_y,
+            } => gst::Structure::builder(NAVIGATION_EVENT_NAME)
+                .field("event", "mouse-scroll")
+                .field("pointer_x", x)
+                .field("pointer_y", y)
+                .field("delta_pointer_x", delta_x)
+                .field("delta_pointer_y", delta_y)
+                .build(),
+            Self::KeyPress { key } => gst::Structure::builder(NAVIGATION_EVENT_NAME)
+                .field("event", "key-press")
+                .field("key", key)
+                .build(),
+            Self::KeyRelease { key } => gst::Structure::builder(NAVIGATION_EVENT_NAME)
+                .field("event", "key-release")
+                .field("key", key)
+                .build(),
+            Self::Command { command } => gst::Structure::builder(NAVIGATION_EVENT_NAME)
+                .field("event", "command")
+                .field("command-code", command)
+                .build(),
+        })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    #[cfg(feature = "ser_de")]
+    fn serialize_navigation_events() {
+        use crate::NavigationEvent;
+
+        gst::init().unwrap();
+
+        let ev = NavigationEvent::new_mouse_scroll(1.0, 2.0, 3.0, 4.0).build();
+        let navigation_event = NavigationEvent::parse(&ev).unwrap();
+        match &navigation_event {
+            NavigationEvent::MouseScroll {
+                x,
+                y,
+                delta_x,
+                delta_y,
+            } => {
+                assert!(*x == 1.0 && *y == 2.0 && *delta_x == 3.0 && *delta_y == 4.0);
+            }
+            _ => unreachable!(),
         }
+
+        let json_event = serde_json::to_string(&navigation_event).unwrap();
+        assert_eq!(
+            json_event,
+            r#"{"event":"MouseScroll","x":1.0,"y":2.0,"delta_x":3.0,"delta_y":4.0}"#
+        );
+        let navigation_event: NavigationEvent = serde_json::from_str(&json_event).unwrap();
+        match &navigation_event {
+            NavigationEvent::MouseScroll {
+                x,
+                y,
+                delta_x,
+                delta_y,
+            } => {
+                assert!(*x == 1.0 && *y == 2.0 && *delta_x == 3.0 && *delta_y == 4.0);
+            }
+            _ => unreachable!(),
+        }
+
+        let ev = NavigationEvent::new_mouse_button_press(1, 1.0, 2.0).build();
+        let navigation_event = NavigationEvent::parse(&ev).unwrap();
+        match &navigation_event {
+            NavigationEvent::MouseButtonPress { button, x, y } => {
+                assert!(*button == 1 && *x == 1.0 && *y == 2.0);
+            }
+            _ => unreachable!(),
+        }
+
+        let json_event = serde_json::to_string(&navigation_event).unwrap();
+        assert_eq!(
+            json_event,
+            r#"{"event":"MouseButtonPress","button":1,"x":1.0,"y":2.0}"#
+        );
+
+        let ev = NavigationEvent::new_key_release("a").build();
+        let navigation_event = NavigationEvent::parse(&ev).unwrap();
+        match &navigation_event {
+            NavigationEvent::KeyRelease { key } => {
+                assert_eq!(key, "a");
+            }
+            _ => unreachable!(),
+        }
+
+        let json_event = serde_json::to_string(&navigation_event).unwrap();
+        assert_eq!(json_event, r#"{"event":"KeyRelease","key":"a"}"#);
     }
 }

@@ -81,6 +81,7 @@ impl ToValue for ColorBalanceType {
     }
 }
 
+#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstNavigationCommand")]
