@@ -519,10 +519,9 @@ impl NavigationEvent {
         })
     }
 
-    pub fn build(&self) -> gst::Event {
+    pub fn structure(&self) -> gst::Structure {
         skip_assert_initialized!();
-
-        gst::event::Navigation::new(match self {
+        match self {
             Self::MouseMove { x, y } => gst::Structure::builder(NAVIGATION_EVENT_NAME)
                 .field("event", "mouse-move")
                 .field("pointer_x", x)
@@ -570,7 +569,13 @@ impl NavigationEvent {
                 .field("event", "command")
                 .field("command-code", command)
                 .build(),
-        })
+        }
+    }
+
+    pub fn build(&self) -> gst::Event {
+        skip_assert_initialized!();
+
+        gst::event::Navigation::new(self.structure())
     }
 }
 
