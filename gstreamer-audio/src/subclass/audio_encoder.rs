@@ -491,7 +491,7 @@ unsafe extern "C" fn audio_encoder_open<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -510,7 +510,7 @@ unsafe extern "C" fn audio_encoder_close<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -529,7 +529,7 @@ unsafe extern "C" fn audio_encoder_start<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -548,7 +548,7 @@ unsafe extern "C" fn audio_encoder_stop<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -568,7 +568,7 @@ unsafe extern "C" fn audio_encoder_set_format<T: AudioEncoderImpl>(
     info: *mut ffi::GstAudioInfo,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -590,7 +590,7 @@ unsafe extern "C" fn audio_encoder_handle_frame<T: AudioEncoderImpl>(
     // FIXME: Misgenerated in gstreamer-audio-sys
     let buffer = buffer as *mut gst::ffi::GstBuffer;
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
@@ -608,7 +608,7 @@ unsafe extern "C" fn audio_encoder_pre_push<T: AudioEncoderImpl>(
     buffer: *mut *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
@@ -630,7 +630,7 @@ unsafe extern "C" fn audio_encoder_pre_push<T: AudioEncoderImpl>(
 
 unsafe extern "C" fn audio_encoder_flush<T: AudioEncoderImpl>(ptr: *mut ffi::GstAudioEncoder) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), (), {
@@ -642,7 +642,7 @@ unsafe extern "C" fn audio_encoder_negotiate<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -662,7 +662,7 @@ unsafe extern "C" fn audio_encoder_getcaps<T: AudioEncoderImpl>(
     filter: *mut gst::ffi::GstCaps,
 ) -> *mut gst::ffi::GstCaps {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), gst::Caps::new_empty(), {
@@ -682,7 +682,7 @@ unsafe extern "C" fn audio_encoder_sink_event<T: AudioEncoderImpl>(
     event: *mut gst::ffi::GstEvent,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -696,7 +696,7 @@ unsafe extern "C" fn audio_encoder_sink_query<T: AudioEncoderImpl>(
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -710,7 +710,7 @@ unsafe extern "C" fn audio_encoder_src_event<T: AudioEncoderImpl>(
     event: *mut gst::ffi::GstEvent,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -724,7 +724,7 @@ unsafe extern "C" fn audio_encoder_src_query<T: AudioEncoderImpl>(
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -738,7 +738,7 @@ unsafe extern "C" fn audio_encoder_propose_allocation<T: AudioEncoderImpl>(
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
     let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
         gst::QueryView::Allocation(allocation) => allocation,
@@ -762,7 +762,7 @@ unsafe extern "C" fn audio_encoder_decide_allocation<T: AudioEncoderImpl>(
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
     let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
         gst::QueryView::Allocation(allocation) => allocation,

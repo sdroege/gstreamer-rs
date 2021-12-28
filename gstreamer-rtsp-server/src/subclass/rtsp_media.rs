@@ -479,7 +479,7 @@ unsafe extern "C" fn media_handle_message<T: RTSPMediaImpl>(
     message: *mut gst::ffi::GstMessage,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.handle_message(wrap.unsafe_cast_ref(), gst::MessageRef::from_ptr(message))
@@ -491,7 +491,7 @@ unsafe extern "C" fn media_prepare<T: RTSPMediaImpl>(
     thread: *mut ffi::GstRTSPThread,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.prepare(wrap.unsafe_cast_ref(), &from_glib_borrow(thread)) {
@@ -507,7 +507,7 @@ unsafe extern "C" fn media_unprepare<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.unprepare(wrap.unsafe_cast_ref()) {
@@ -523,7 +523,7 @@ unsafe extern "C" fn media_suspend<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.suspend(wrap.unsafe_cast_ref()) {
@@ -539,7 +539,7 @@ unsafe extern "C" fn media_unsuspend<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.unsuspend(wrap.unsafe_cast_ref()) {
@@ -556,7 +556,7 @@ unsafe extern "C" fn media_query_position<T: RTSPMediaImpl>(
     position: *mut i64,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.query_position(wrap.unsafe_cast_ref()) {
@@ -573,7 +573,7 @@ unsafe extern "C" fn media_query_stop<T: RTSPMediaImpl>(
     stop: *mut i64,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.query_stop(wrap.unsafe_cast_ref()) {
@@ -589,7 +589,7 @@ unsafe extern "C" fn media_create_rtpbin<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
 ) -> *mut gst::ffi::GstElement {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     let res: *mut gst::ffi::GstElement = imp.create_rtpbin(wrap.unsafe_cast_ref()).to_glib_full();
@@ -606,7 +606,7 @@ unsafe extern "C" fn media_setup_rtpbin<T: RTSPMediaImpl>(
     rtpbin: *mut gst::ffi::GstElement,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     // If the rtpbin was floating before make sure it is not anymore for now so
@@ -635,7 +635,7 @@ unsafe extern "C" fn media_setup_sdp<T: RTSPMediaImpl>(
     info: *mut ffi::GstSDPInfo,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.setup_sdp(
@@ -656,7 +656,7 @@ unsafe extern "C" fn media_new_stream<T: RTSPMediaImpl>(
     stream: *mut ffi::GstRTSPStream,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.new_stream(wrap.unsafe_cast_ref(), &from_glib_borrow(stream));
@@ -667,7 +667,7 @@ unsafe extern "C" fn media_removed_stream<T: RTSPMediaImpl>(
     stream: *mut ffi::GstRTSPStream,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.removed_stream(wrap.unsafe_cast_ref(), &from_glib_borrow(stream));
@@ -675,7 +675,7 @@ unsafe extern "C" fn media_removed_stream<T: RTSPMediaImpl>(
 
 unsafe extern "C" fn media_prepared<T: RTSPMediaImpl>(ptr: *mut ffi::GstRTSPMedia) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.prepared(wrap.unsafe_cast_ref());
@@ -683,7 +683,7 @@ unsafe extern "C" fn media_prepared<T: RTSPMediaImpl>(ptr: *mut ffi::GstRTSPMedi
 
 unsafe extern "C" fn media_unprepared<T: RTSPMediaImpl>(ptr: *mut ffi::GstRTSPMedia) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.unprepared(wrap.unsafe_cast_ref());
@@ -694,7 +694,7 @@ unsafe extern "C" fn media_target_state<T: RTSPMediaImpl>(
     state: gst::ffi::GstState,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.target_state(wrap.unsafe_cast_ref(), from_glib(state));
@@ -705,7 +705,7 @@ unsafe extern "C" fn media_new_state<T: RTSPMediaImpl>(
     state: gst::ffi::GstState,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.new_state(wrap.unsafe_cast_ref(), from_glib(state));
@@ -716,7 +716,7 @@ unsafe extern "C" fn media_handle_sdp<T: RTSPMediaImpl>(
     sdp: *mut gst_sdp::ffi::GstSDPMessage,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.handle_sdp(

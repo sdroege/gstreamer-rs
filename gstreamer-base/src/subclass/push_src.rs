@@ -189,7 +189,7 @@ unsafe extern "C" fn push_src_fill<T: PushSrcImpl>(
     buffer: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<PushSrc> = from_glib_borrow(ptr);
     let buffer = gst::BufferRef::from_mut_ptr(buffer);
 
@@ -204,7 +204,7 @@ unsafe extern "C" fn push_src_alloc<T: PushSrcImpl>(
     buffer_ptr: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<PushSrc> = from_glib_borrow(ptr);
     // FIXME: Wrong signature in -sys bindings
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
@@ -228,7 +228,7 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
     buffer_ptr: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<PushSrc> = from_glib_borrow(ptr);
     // FIXME: Wrong signature in -sys bindings
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3

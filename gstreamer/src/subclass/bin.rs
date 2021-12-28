@@ -113,7 +113,7 @@ unsafe extern "C" fn bin_add_element<T: BinImpl>(
     element: *mut ffi::GstElement,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
     panic_to_error!(&wrap, imp.panicked(), false, {
@@ -133,7 +133,7 @@ unsafe extern "C" fn bin_remove_element<T: BinImpl>(
     element: *mut ffi::GstElement,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
     // If we get a floating reference passed simply return FALSE here. It can't be
@@ -162,7 +162,7 @@ unsafe extern "C" fn bin_handle_message<T: BinImpl>(
     message: *mut ffi::GstMessage,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
     panic_to_error!(&wrap, imp.panicked(), (), {

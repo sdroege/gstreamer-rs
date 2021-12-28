@@ -241,7 +241,7 @@ unsafe extern "C" fn video_filter_set_info<T: VideoFilterImpl>(
     out_info: *mut ffi::GstVideoInfo,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoFilter> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -268,7 +268,7 @@ unsafe extern "C" fn video_filter_transform_frame<T: VideoFilterImpl>(
     outframe: *mut ffi::GstVideoFrame,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoFilter> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
@@ -287,7 +287,7 @@ unsafe extern "C" fn video_filter_transform_frame_ip<T: VideoFilterImpl>(
     frame: *mut ffi::GstVideoFrame,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoFilter> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {

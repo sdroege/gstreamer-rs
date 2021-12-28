@@ -105,7 +105,7 @@ unsafe extern "C" fn aggregator_pad_flush<T: AggregatorPadImpl>(
     aggregator: *mut ffi::GstAggregator,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AggregatorPad> = from_glib_borrow(ptr);
 
     let res: gst::FlowReturn = imp
@@ -120,7 +120,7 @@ unsafe extern "C" fn aggregator_pad_skip_buffer<T: AggregatorPadImpl>(
     buffer: *mut gst::ffi::GstBuffer,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AggregatorPad> = from_glib_borrow(ptr);
 
     imp.skip_buffer(

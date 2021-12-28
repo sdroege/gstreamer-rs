@@ -483,7 +483,7 @@ unsafe extern "C" fn video_encoder_open<T: VideoEncoderImpl>(
     ptr: *mut ffi::GstVideoEncoder,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -502,7 +502,7 @@ unsafe extern "C" fn video_encoder_close<T: VideoEncoderImpl>(
     ptr: *mut ffi::GstVideoEncoder,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -521,7 +521,7 @@ unsafe extern "C" fn video_encoder_start<T: VideoEncoderImpl>(
     ptr: *mut ffi::GstVideoEncoder,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -540,7 +540,7 @@ unsafe extern "C" fn video_encoder_stop<T: VideoEncoderImpl>(
     ptr: *mut ffi::GstVideoEncoder,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -559,7 +559,7 @@ unsafe extern "C" fn video_encoder_finish<T: VideoEncoderImpl>(
     ptr: *mut ffi::GstVideoEncoder,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
@@ -573,7 +573,7 @@ unsafe extern "C" fn video_encoder_set_format<T: VideoEncoderImpl>(
     state: *mut ffi::GstVideoCodecState,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
     ffi::gst_video_codec_state_ref(state);
     let wrap_state = VideoCodecState::<Readable>::new(state);
@@ -595,7 +595,7 @@ unsafe extern "C" fn video_encoder_handle_frame<T: VideoEncoderImpl>(
     frame: *mut ffi::GstVideoCodecFrame,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
     let wrap_frame = VideoCodecFrame::new(frame, &*wrap);
 
@@ -609,7 +609,7 @@ unsafe extern "C" fn video_encoder_flush<T: VideoEncoderImpl>(
     ptr: *mut ffi::GstVideoEncoder,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -622,7 +622,7 @@ unsafe extern "C" fn video_encoder_negotiate<T: VideoEncoderImpl>(
     ptr: *mut ffi::GstVideoEncoder,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -642,7 +642,7 @@ unsafe extern "C" fn video_encoder_getcaps<T: VideoEncoderImpl>(
     filter: *mut gst::ffi::GstCaps,
 ) -> *mut gst::ffi::GstCaps {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), gst::Caps::new_empty(), {
@@ -662,7 +662,7 @@ unsafe extern "C" fn video_encoder_sink_event<T: VideoEncoderImpl>(
     event: *mut gst::ffi::GstEvent,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -676,7 +676,7 @@ unsafe extern "C" fn video_encoder_sink_query<T: VideoEncoderImpl>(
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -690,7 +690,7 @@ unsafe extern "C" fn video_encoder_src_event<T: VideoEncoderImpl>(
     event: *mut gst::ffi::GstEvent,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -704,7 +704,7 @@ unsafe extern "C" fn video_encoder_src_query<T: VideoEncoderImpl>(
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -718,7 +718,7 @@ unsafe extern "C" fn video_encoder_propose_allocation<T: VideoEncoderImpl>(
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
     let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
         gst::QueryView::Allocation(allocation) => allocation,
@@ -742,7 +742,7 @@ unsafe extern "C" fn video_encoder_decide_allocation<T: VideoEncoderImpl>(
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
     let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
         gst::QueryView::Allocation(allocation) => allocation,

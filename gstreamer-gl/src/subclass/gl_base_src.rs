@@ -106,7 +106,7 @@ unsafe impl<T: GLBaseSrcImpl> IsSubclassable<T> for GLBaseSrc {
 
 unsafe extern "C" fn gl_start<T: GLBaseSrcImpl>(ptr: *mut GstGLBaseSrc) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<GLBaseSrc> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -123,7 +123,7 @@ unsafe extern "C" fn gl_start<T: GLBaseSrcImpl>(ptr: *mut GstGLBaseSrc) -> glib:
 
 unsafe extern "C" fn gl_stop<T: GLBaseSrcImpl>(ptr: *mut GstGLBaseSrc) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<GLBaseSrc> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), (), {
@@ -136,7 +136,7 @@ unsafe extern "C" fn fill_gl_memory<T: GLBaseSrcImpl>(
     memory: *mut GstGLMemory,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<GLBaseSrc> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {

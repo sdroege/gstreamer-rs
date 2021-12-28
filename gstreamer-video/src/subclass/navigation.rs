@@ -50,7 +50,7 @@ unsafe extern "C" fn navigation_send_event<T: NavigationImpl>(
     structure: *mut GstStructure,
 ) {
     let instance = &*(nav as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
 
     imp.send_event(
         from_glib_borrow::<_, Navigation>(nav).unsafe_cast_ref(),

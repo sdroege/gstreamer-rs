@@ -450,7 +450,7 @@ unsafe extern "C" fn base_sink_start<T: BaseSinkImpl>(
     ptr: *mut ffi::GstBaseSink,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -469,7 +469,7 @@ unsafe extern "C" fn base_sink_stop<T: BaseSinkImpl>(
     ptr: *mut ffi::GstBaseSink,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -489,7 +489,7 @@ unsafe extern "C" fn base_sink_render<T: BaseSinkImpl>(
     buffer: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let buffer = from_glib_borrow(buffer);
 
@@ -504,7 +504,7 @@ unsafe extern "C" fn base_sink_prepare<T: BaseSinkImpl>(
     buffer: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let buffer = from_glib_borrow(buffer);
 
@@ -519,7 +519,7 @@ unsafe extern "C" fn base_sink_render_list<T: BaseSinkImpl>(
     list: *mut gst::ffi::GstBufferList,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let list = from_glib_borrow(list);
 
@@ -534,7 +534,7 @@ unsafe extern "C" fn base_sink_prepare_list<T: BaseSinkImpl>(
     list: *mut gst::ffi::GstBufferList,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let list = from_glib_borrow(list);
 
@@ -549,7 +549,7 @@ unsafe extern "C" fn base_sink_query<T: BaseSinkImpl>(
     query_ptr: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query_ptr);
 
@@ -564,7 +564,7 @@ unsafe extern "C" fn base_sink_event<T: BaseSinkImpl>(
     event_ptr: *mut gst::ffi::GstEvent,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -578,7 +578,7 @@ unsafe extern "C" fn base_sink_get_caps<T: BaseSinkImpl>(
     filter: *mut gst::ffi::GstCaps,
 ) -> *mut gst::ffi::GstCaps {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let filter = Option::<gst::Caps>::from_glib_borrow(filter);
 
@@ -594,7 +594,7 @@ unsafe extern "C" fn base_sink_set_caps<T: BaseSinkImpl>(
     caps: *mut gst::ffi::GstCaps,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let caps = from_glib_borrow(caps);
 
@@ -615,7 +615,7 @@ unsafe extern "C" fn base_sink_fixate<T: BaseSinkImpl>(
     caps: *mut gst::ffi::GstCaps,
 ) -> *mut gst::ffi::GstCaps {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let caps = from_glib_full(caps);
 
@@ -629,7 +629,7 @@ unsafe extern "C" fn base_sink_unlock<T: BaseSinkImpl>(
     ptr: *mut ffi::GstBaseSink,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -648,7 +648,7 @@ unsafe extern "C" fn base_sink_unlock_stop<T: BaseSinkImpl>(
     ptr: *mut ffi::GstBaseSink,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -668,7 +668,7 @@ unsafe extern "C" fn base_sink_propose_allocation<T: BaseSinkImpl>(
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
         gst::QueryView::Allocation(allocation) => allocation,

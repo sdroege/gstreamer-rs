@@ -60,7 +60,7 @@ unsafe extern "C" fn video_sink_show_frame<T: VideoSinkImpl>(
     buffer: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<VideoSink> = from_glib_borrow(ptr);
     let buffer = from_glib_borrow(buffer);
 

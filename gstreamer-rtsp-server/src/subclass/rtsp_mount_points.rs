@@ -61,7 +61,7 @@ unsafe extern "C" fn mount_points_make_path<T: RTSPMountPointsImpl>(
     url: *const GstRTSPUrl,
 ) -> *mut std::os::raw::c_char {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPMountPoints> = from_glib_borrow(ptr);
 
     imp.make_path(wrap.unsafe_cast_ref(), &from_glib_borrow(url))

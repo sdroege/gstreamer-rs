@@ -348,7 +348,7 @@ impl<T: ElementImpl> ElementImplExt for T {
             assert!(element.type_().is_a(T::type_()));
             let ptr: *mut ffi::GstElement = element.as_ptr() as *mut _;
             let instance = &*(ptr as *mut T::Instance);
-            let imp = instance.impl_();
+            let imp = instance.imp();
 
             panic_to_error!(element, imp.panicked(), fallback(), { f(imp) })
         }
@@ -364,7 +364,7 @@ impl<T: ElementImpl> ElementImplExt for T {
             assert!(wrap.type_().is_a(Self::type_()));
             let ptr: *mut ffi::GstElement = wrap.to_glib_none().0;
             let instance = &*(ptr as *mut Self::Instance);
-            let imp = instance.impl_();
+            let imp = instance.imp();
 
             panic_to_error!(wrap, imp.panicked(), fallback(), {
                 f(imp, wrap.unsafe_cast_ref())
@@ -424,7 +424,7 @@ unsafe extern "C" fn element_change_state<T: ElementImpl>(
     transition: ffi::GstStateChange,
 ) -> ffi::GstStateChangeReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     // *Never* fail downwards state changes, this causes bugs in GStreamer
@@ -450,7 +450,7 @@ unsafe extern "C" fn element_request_new_pad<T: ElementImpl>(
     caps: *const ffi::GstCaps,
 ) -> *mut ffi::GstPad {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     let caps = Option::<crate::Caps>::from_glib_borrow(caps);
@@ -484,7 +484,7 @@ unsafe extern "C" fn element_release_pad<T: ElementImpl>(
     pad: *mut ffi::GstPad,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     // If we get a floating reference passed simply return here. It can't be stored inside this
@@ -505,7 +505,7 @@ unsafe extern "C" fn element_send_event<T: ElementImpl>(
     event: *mut ffi::GstEvent,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     panic_to_error!(&wrap, imp.panicked(), false, {
@@ -519,7 +519,7 @@ unsafe extern "C" fn element_query<T: ElementImpl>(
     query: *mut ffi::GstQuery,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
     let query = QueryRef::from_mut_ptr(query);
 
@@ -534,7 +534,7 @@ unsafe extern "C" fn element_set_context<T: ElementImpl>(
     context: *mut ffi::GstContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     panic_to_error!(&wrap, imp.panicked(), (), {
@@ -547,7 +547,7 @@ unsafe extern "C" fn element_set_clock<T: ElementImpl>(
     clock: *mut ffi::GstClock,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     let clock = Option::<crate::Clock>::from_glib_borrow(clock);
@@ -562,7 +562,7 @@ unsafe extern "C" fn element_provide_clock<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
 ) -> *mut ffi::GstClock {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     panic_to_error!(&wrap, imp.panicked(), None, {
@@ -576,7 +576,7 @@ unsafe extern "C" fn element_post_message<T: ElementImpl>(
     msg: *mut ffi::GstMessage,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     // Can't catch panics here as posting the error message would cause

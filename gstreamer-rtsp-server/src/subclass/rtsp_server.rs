@@ -60,7 +60,7 @@ unsafe extern "C" fn server_create_client<T: RTSPServerImpl>(
     ptr: *mut ffi::GstRTSPServer,
 ) -> *mut ffi::GstRTSPClient {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPServer> = from_glib_borrow(ptr);
 
     imp.create_client(wrap.unsafe_cast_ref()).to_glib_full()
@@ -71,7 +71,7 @@ unsafe extern "C" fn server_client_connected<T: RTSPServerImpl>(
     client: *mut ffi::GstRTSPClient,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPServer> = from_glib_borrow(ptr);
 
     imp.client_connected(wrap.unsafe_cast_ref(), &from_glib_borrow(client));

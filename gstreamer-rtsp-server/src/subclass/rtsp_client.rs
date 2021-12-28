@@ -895,7 +895,7 @@ unsafe extern "C" fn client_create_sdp<T: RTSPClientImpl>(
     media: *mut ffi::GstRTSPMedia,
 ) -> *mut gst_sdp::ffi::GstSDPMessage {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     let sdp =
@@ -912,7 +912,7 @@ unsafe extern "C" fn client_configure_client_media<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     match imp.configure_client_media(
@@ -934,7 +934,7 @@ unsafe extern "C" fn client_params_set<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) -> gst_rtsp::ffi::GstRTSPResult {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.params_set(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
@@ -946,7 +946,7 @@ unsafe extern "C" fn client_params_get<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) -> gst_rtsp::ffi::GstRTSPResult {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.params_get(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
@@ -958,7 +958,7 @@ unsafe extern "C" fn client_make_path_from_uri<T: RTSPClientImpl>(
     url: *const gst_rtsp::ffi::GstRTSPUrl,
 ) -> *mut std::os::raw::c_char {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.make_path_from_uri(wrap.unsafe_cast_ref(), &from_glib_borrow(url))
@@ -967,7 +967,7 @@ unsafe extern "C" fn client_make_path_from_uri<T: RTSPClientImpl>(
 
 unsafe extern "C" fn client_closed<T: RTSPClientImpl>(ptr: *mut ffi::GstRTSPClient) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.closed(wrap.unsafe_cast_ref());
@@ -978,7 +978,7 @@ unsafe extern "C" fn client_new_session<T: RTSPClientImpl>(
     session: *mut ffi::GstRTSPSession,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.new_session(wrap.unsafe_cast_ref(), &from_glib_borrow(session));
@@ -989,7 +989,7 @@ unsafe extern "C" fn client_options_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.options_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx));
@@ -1000,7 +1000,7 @@ unsafe extern "C" fn client_describe_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.describe_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx));
@@ -1011,7 +1011,7 @@ unsafe extern "C" fn client_setup_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.setup_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx));
@@ -1022,7 +1022,7 @@ unsafe extern "C" fn client_play_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.play_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx));
@@ -1033,7 +1033,7 @@ unsafe extern "C" fn client_pause_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pause_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx));
@@ -1044,7 +1044,7 @@ unsafe extern "C" fn client_teardown_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.teardown_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx));
@@ -1055,7 +1055,7 @@ unsafe extern "C" fn client_set_parameter_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.set_parameter_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx));
@@ -1066,7 +1066,7 @@ unsafe extern "C" fn client_get_parameter_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.parameter_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx));
@@ -1077,7 +1077,7 @@ unsafe extern "C" fn client_announce_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.announce_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx));
@@ -1088,7 +1088,7 @@ unsafe extern "C" fn client_record_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.record_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx));
@@ -1099,7 +1099,7 @@ unsafe extern "C" fn client_handle_response<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.handle_response(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx));
@@ -1112,7 +1112,7 @@ unsafe extern "C" fn client_handle_sdp<T: RTSPClientImpl>(
     sdp: *mut gst_sdp::ffi::GstSDPMessage,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     match imp.handle_sdp(
@@ -1135,7 +1135,7 @@ unsafe extern "C" fn client_check_requirements<T: RTSPClientImpl>(
     arr: *mut *mut std::os::raw::c_char,
 ) -> *mut std::os::raw::c_char {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.check_requirements(
@@ -1151,7 +1151,7 @@ unsafe extern "C" fn client_pre_options_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_options_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
@@ -1163,7 +1163,7 @@ unsafe extern "C" fn client_pre_describe_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_describe_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
@@ -1175,7 +1175,7 @@ unsafe extern "C" fn client_pre_setup_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_setup_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
@@ -1187,7 +1187,7 @@ unsafe extern "C" fn client_pre_play_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_play_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
@@ -1199,7 +1199,7 @@ unsafe extern "C" fn client_pre_pause_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_pause_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
@@ -1211,7 +1211,7 @@ unsafe extern "C" fn client_pre_teardown_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_teardown_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
@@ -1223,7 +1223,7 @@ unsafe extern "C" fn client_pre_set_parameter_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_set_parameter_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
@@ -1235,7 +1235,7 @@ unsafe extern "C" fn client_pre_get_parameter_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_get_parameter_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
@@ -1247,7 +1247,7 @@ unsafe extern "C" fn client_pre_announce_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_announce_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
@@ -1259,7 +1259,7 @@ unsafe extern "C" fn client_pre_record_request<T: RTSPClientImpl>(
     ctx: *mut ffi::GstRTSPContext,
 ) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_record_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))

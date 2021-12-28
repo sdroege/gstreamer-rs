@@ -251,7 +251,7 @@ unsafe extern "C" fn clock_change_resolution<T: ClockImpl>(
     new_resolution: ffi::GstClockTime,
 ) -> ffi::GstClockTime {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
     let old_resolution = match from_glib(old_resolution) {
@@ -271,7 +271,7 @@ unsafe extern "C" fn clock_get_resolution<T: ClockImpl>(
     ptr: *mut ffi::GstClock,
 ) -> ffi::GstClockTime {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
     imp.resolution(wrap.unsafe_cast_ref()).into_glib()
@@ -281,7 +281,7 @@ unsafe extern "C" fn clock_get_internal_time<T: ClockImpl>(
     ptr: *mut ffi::GstClock,
 ) -> ffi::GstClockTime {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
     imp.internal_time(wrap.unsafe_cast_ref()).into_glib()
@@ -293,7 +293,7 @@ unsafe extern "C" fn clock_wait<T: ClockImpl>(
     jitter: *mut ffi::GstClockTimeDiff,
 ) -> ffi::GstClockReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
     let (res, j) = imp.wait(
@@ -312,7 +312,7 @@ unsafe extern "C" fn clock_wait_async<T: ClockImpl>(
     id: *mut ffi::GstClockEntry,
 ) -> ffi::GstClockReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
     ClockReturn::from(imp.wait_async(
@@ -327,7 +327,7 @@ unsafe extern "C" fn clock_unschedule<T: ClockImpl>(
     id: *mut ffi::GstClockEntry,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
     imp.unschedule(

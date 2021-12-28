@@ -176,7 +176,7 @@ unsafe extern "C" fn device_provider_probe<T: DeviceProviderImpl>(
     ptr: *mut ffi::GstDeviceProvider,
 ) -> *mut glib::ffi::GList {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<DeviceProvider> = from_glib_borrow(ptr);
 
     imp.probe(wrap.unsafe_cast_ref()).to_glib_full()
@@ -186,7 +186,7 @@ unsafe extern "C" fn device_provider_start<T: DeviceProviderImpl>(
     ptr: *mut ffi::GstDeviceProvider,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<DeviceProvider> = from_glib_borrow(ptr);
 
     match imp.start(wrap.unsafe_cast_ref()) {
@@ -201,7 +201,7 @@ unsafe extern "C" fn device_provider_start<T: DeviceProviderImpl>(
 
 unsafe extern "C" fn device_provider_stop<T: DeviceProviderImpl>(ptr: *mut ffi::GstDeviceProvider) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<DeviceProvider> = from_glib_borrow(ptr);
 
     imp.stop(wrap.unsafe_cast_ref());

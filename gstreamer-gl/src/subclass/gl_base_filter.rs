@@ -116,7 +116,7 @@ unsafe extern "C" fn gl_set_caps<T: GLBaseFilterImpl>(
     outcaps: *mut GstCaps,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<GLBaseFilter> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -139,7 +139,7 @@ unsafe extern "C" fn gl_start<T: GLBaseFilterImpl>(
     ptr: *mut GstGLBaseFilter,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<GLBaseFilter> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -156,7 +156,7 @@ unsafe extern "C" fn gl_start<T: GLBaseFilterImpl>(
 
 unsafe extern "C" fn gl_stop<T: GLBaseFilterImpl>(ptr: *mut GstGLBaseFilter) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<GLBaseFilter> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), (), {

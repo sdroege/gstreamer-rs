@@ -114,7 +114,7 @@ unsafe extern "C" fn device_create_element<T: DeviceImpl>(
     name: *const libc::c_char,
 ) -> *mut ffi::GstElement {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Device> = from_glib_borrow(ptr);
 
     match imp.create_element(
@@ -147,7 +147,7 @@ unsafe extern "C" fn device_reconfigure_element<T: DeviceImpl>(
     element: *mut ffi::GstElement,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<Device> = from_glib_borrow(ptr);
 
     match imp.reconfigure_element(wrap.unsafe_cast_ref(), &from_glib_borrow(element)) {

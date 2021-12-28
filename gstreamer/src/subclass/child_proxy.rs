@@ -131,7 +131,7 @@ unsafe extern "C" fn child_proxy_get_child_by_name<T: ChildProxyImpl>(
     name: *const libc::c_char,
 ) -> *mut glib::gobject_ffi::GObject {
     let instance = &*(child_proxy as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
 
     imp.child_by_name(
         from_glib_borrow::<_, ChildProxy>(child_proxy).unsafe_cast_ref(),
@@ -145,7 +145,7 @@ unsafe extern "C" fn child_proxy_get_child_by_index<T: ChildProxyImpl>(
     index: u32,
 ) -> *mut glib::gobject_ffi::GObject {
     let instance = &*(child_proxy as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
 
     imp.child_by_index(
         from_glib_borrow::<_, ChildProxy>(child_proxy).unsafe_cast_ref(),
@@ -158,7 +158,7 @@ unsafe extern "C" fn child_proxy_get_children_count<T: ChildProxyImpl>(
     child_proxy: *mut ffi::GstChildProxy,
 ) -> u32 {
     let instance = &*(child_proxy as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
 
     imp.children_count(from_glib_borrow::<_, ChildProxy>(child_proxy).unsafe_cast_ref())
 }
@@ -169,7 +169,7 @@ unsafe extern "C" fn child_proxy_child_added<T: ChildProxyImpl>(
     name: *const libc::c_char,
 ) {
     let instance = &*(child_proxy as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
 
     imp.child_added(
         from_glib_borrow::<_, ChildProxy>(child_proxy).unsafe_cast_ref(),
@@ -184,7 +184,7 @@ unsafe extern "C" fn child_proxy_child_removed<T: ChildProxyImpl>(
     name: *const libc::c_char,
 ) {
     let instance = &*(child_proxy as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
 
     imp.child_removed(
         from_glib_borrow::<_, ChildProxy>(child_proxy).unsafe_cast_ref(),

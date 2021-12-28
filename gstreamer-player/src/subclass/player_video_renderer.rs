@@ -61,7 +61,7 @@ unsafe extern "C" fn video_renderer_create_video_sink<T: PlayerVideoRendererImpl
         Lazy::new(|| glib::Quark::from_string("gstreamer-rs-player-video-sink"));
 
     let instance = &*(video_renderer as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
 
     let sink = imp.create_video_sink(
         from_glib_borrow::<_, PlayerVideoRenderer>(video_renderer).unsafe_cast_ref(),

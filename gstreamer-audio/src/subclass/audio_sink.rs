@@ -201,7 +201,7 @@ unsafe extern "C" fn audiosink_close<T: AudioSinkImpl>(
     ptr: *mut ffi::GstAudioSink,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -218,7 +218,7 @@ unsafe extern "C" fn audiosink_close<T: AudioSinkImpl>(
 
 unsafe extern "C" fn audiosink_delay<T: AudioSinkImpl>(ptr: *mut ffi::GstAudioSink) -> u32 {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), 0, {
@@ -230,7 +230,7 @@ unsafe extern "C" fn audiosink_open<T: AudioSinkImpl>(
     ptr: *mut ffi::GstAudioSink,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -250,7 +250,7 @@ unsafe extern "C" fn audiosink_prepare<T: AudioSinkImpl>(
     spec: *mut ffi::GstAudioRingBufferSpec,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
     let spec = &mut *(spec as *mut AudioRingBufferSpec);
@@ -271,7 +271,7 @@ unsafe extern "C" fn audiosink_unprepare<T: AudioSinkImpl>(
     ptr: *mut ffi::GstAudioSink,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), false, {
@@ -292,7 +292,7 @@ unsafe extern "C" fn audiosink_write<T: AudioSinkImpl>(
     length: u32,
 ) -> i32 {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
     let data_slice = std::slice::from_raw_parts(data as *const u8, length as usize);
 
@@ -303,7 +303,7 @@ unsafe extern "C" fn audiosink_write<T: AudioSinkImpl>(
 
 unsafe extern "C" fn audiosink_reset<T: AudioSinkImpl>(ptr: *mut ffi::GstAudioSink) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.impl_();
+    let imp = instance.imp();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, imp.panicked(), (), {
