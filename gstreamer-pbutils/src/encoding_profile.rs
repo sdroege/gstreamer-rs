@@ -316,21 +316,29 @@ impl<'a> EncodingProfileBuilderCommonData<'a> {
 
 pub trait EncodingProfileBuilder<'a>: Sized {
     #[doc(alias = "gst_encoding_profile_set_name")]
+    #[must_use]
     fn name(self, name: &'a str) -> Self;
     #[doc(alias = "gst_encoding_profile_set_description")]
+    #[must_use]
     fn description(self, description: &'a str) -> Self;
     #[doc(alias = "gst_encoding_profile_set_preset")]
+    #[must_use]
     fn preset(self, preset: &'a str) -> Self;
     #[doc(alias = "gst_encoding_profile_set_preset_name")]
+    #[must_use]
     fn preset_name(self, preset_name: &'a str) -> Self;
     #[doc(alias = "gst_encoding_profile_set_presence")]
+    #[must_use]
     fn presence(self, presence: u32) -> Self;
     #[doc(alias = "gst_encoding_profile_set_allow_dynamic_output")]
+    #[must_use]
     fn allow_dynamic_output(self, allow: bool) -> Self;
     #[doc(alias = "gst_encoding_profile_set_enabled")]
+    #[must_use]
     fn enabled(self, enabled: bool) -> Self;
     #[cfg(feature = "v1_18")]
     #[doc(alias = "gst_encoding_profile_set_single_segment")]
+    #[must_use]
     fn single_segment(self, single_segment: bool) -> Self;
 }
 

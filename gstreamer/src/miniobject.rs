@@ -92,6 +92,7 @@ macro_rules! mini_object_wrapper (
                 }
             }
 
+            #[must_use]
             pub fn upcast(self) -> $crate::miniobject::MiniObject {
                 unsafe {
                     from_glib_full(self.into_ptr() as *mut $crate::ffi::GstMiniObject)

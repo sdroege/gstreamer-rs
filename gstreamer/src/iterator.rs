@@ -66,6 +66,7 @@ where
     }
 
     #[doc(alias = "gst_iterator_filter")]
+    #[must_use]
     pub fn filter<F>(self, func: F) -> Self
     where
         F: Fn(T) -> bool + Send + Sync + 'static,

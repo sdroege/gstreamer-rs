@@ -644,6 +644,7 @@ impl ToValue for MessageType {
 }
 
 impl State {
+    #[must_use]
     pub fn next(self, pending: Self) -> Self {
         let current = self.into_glib();
         let pending = pending.into_glib();
