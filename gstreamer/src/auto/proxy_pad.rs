@@ -32,6 +32,7 @@ unsafe impl Sync for ProxyPad {}
 pub trait ProxyPadExt: 'static {
     #[doc(alias = "gst_proxy_pad_get_internal")]
     #[doc(alias = "get_internal")]
+    #[must_use]
     fn internal(&self) -> Option<ProxyPad>;
 }
 

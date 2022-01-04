@@ -110,12 +110,14 @@ pub trait PadExt: 'static {
 
     #[doc(alias = "gst_pad_get_peer")]
     #[doc(alias = "get_peer")]
+    #[must_use]
     fn peer(&self) -> Option<Pad>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_pad_get_single_internal_link")]
     #[doc(alias = "get_single_internal_link")]
+    #[must_use]
     fn single_internal_link(&self) -> Option<Pad>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]

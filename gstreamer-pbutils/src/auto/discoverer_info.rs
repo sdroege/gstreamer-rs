@@ -19,6 +19,7 @@ glib::wrapper! {
 
 impl DiscovererInfo {
     #[doc(alias = "gst_discoverer_info_copy")]
+    #[must_use]
     pub fn copy(&self) -> DiscovererInfo {
         unsafe { from_glib_full(ffi::gst_discoverer_info_copy(self.to_glib_none().0)) }
     }

@@ -105,6 +105,7 @@ pub trait ClockExt: 'static {
 
     #[doc(alias = "gst_clock_get_master")]
     #[doc(alias = "get_master")]
+    #[must_use]
     fn master(&self) -> Option<Clock>;
 
     #[doc(alias = "gst_clock_get_resolution")]

@@ -134,10 +134,12 @@ pub trait AssetExt: 'static {
 
     #[doc(alias = "ges_asset_get_proxy")]
     #[doc(alias = "get_proxy")]
+    #[must_use]
     fn proxy(&self) -> Option<Asset>;
 
     #[doc(alias = "ges_asset_get_proxy_target")]
     #[doc(alias = "get_proxy_target")]
+    #[must_use]
     fn proxy_target(&self) -> Option<Asset>;
 
     #[doc(alias = "ges_asset_list_proxies")]

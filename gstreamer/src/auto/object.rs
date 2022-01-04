@@ -82,6 +82,7 @@ pub trait GstObjectExt: 'static {
 
     #[doc(alias = "gst_object_get_parent")]
     #[doc(alias = "get_parent")]
+    #[must_use]
     fn parent(&self) -> Option<Object>;
 
     #[doc(alias = "gst_object_get_path_string")]

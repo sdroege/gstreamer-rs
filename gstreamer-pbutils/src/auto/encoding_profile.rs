@@ -71,6 +71,7 @@ pub trait EncodingProfileExt: 'static {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_encoding_profile_copy")]
+    #[must_use]
     fn copy(&self) -> EncodingProfile;
 
     #[doc(alias = "gst_encoding_profile_get_allow_dynamic_output")]

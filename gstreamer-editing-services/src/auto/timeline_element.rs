@@ -121,6 +121,7 @@ pub trait TimelineElementExt: 'static {
 
     #[doc(alias = "ges_timeline_element_get_parent")]
     #[doc(alias = "get_parent")]
+    #[must_use]
     fn parent(&self) -> Option<TimelineElement>;
 
     #[doc(alias = "ges_timeline_element_get_priority")]
@@ -137,6 +138,7 @@ pub trait TimelineElementExt: 'static {
 
     #[doc(alias = "ges_timeline_element_get_toplevel_parent")]
     #[doc(alias = "get_toplevel_parent")]
+    #[must_use]
     fn toplevel_parent(&self) -> Option<TimelineElement>;
 
     #[doc(alias = "ges_timeline_element_get_track_types")]

@@ -53,7 +53,7 @@ pub trait RTSPMediaExt: 'static {
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //#[doc(alias = "gst_rtsp_media_complete_pipeline")]
-    //fn complete_pipeline(&self, transports: /*Ignored*/&[&gst_rtsp::RTSPTransport]) -> bool;
+    //fn complete_pipeline(&self, transports: /*Ignored*/&[gst_rtsp::RTSPTransport]) -> bool;
 
     #[doc(alias = "gst_rtsp_media_create_stream")]
     fn create_stream(
@@ -469,7 +469,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    //fn complete_pipeline(&self, transports: /*Ignored*/&[&gst_rtsp::RTSPTransport]) -> bool {
+    //fn complete_pipeline(&self, transports: /*Ignored*/&[gst_rtsp::RTSPTransport]) -> bool {
     //    unsafe { TODO: call ffi:gst_rtsp_media_complete_pipeline() }
     //}
 

@@ -33,10 +33,12 @@ pub trait DiscovererStreamInfoExt: 'static {
 
     #[doc(alias = "gst_discoverer_stream_info_get_next")]
     #[doc(alias = "get_next")]
+    #[must_use]
     fn next(&self) -> Option<DiscovererStreamInfo>;
 
     #[doc(alias = "gst_discoverer_stream_info_get_previous")]
     #[doc(alias = "get_previous")]
+    #[must_use]
     fn previous(&self) -> Option<DiscovererStreamInfo>;
 
     #[doc(alias = "gst_discoverer_stream_info_get_stream_id")]

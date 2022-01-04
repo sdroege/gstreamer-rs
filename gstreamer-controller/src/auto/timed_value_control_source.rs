@@ -44,7 +44,7 @@ pub trait TimedValueControlSourceExt: 'static {
     fn set(&self, timestamp: gst::ClockTime, value: f64) -> bool;
 
     //#[doc(alias = "gst_timed_value_control_source_set_from_list")]
-    //fn set_from_list(&self, timedvalues: /*Ignored*/&[&gst::TimedValue]) -> bool;
+    //fn set_from_list(&self, timedvalues: /*Ignored*/&[gst::TimedValue]) -> bool;
 
     #[doc(alias = "gst_timed_value_control_source_unset")]
     fn unset(&self, timestamp: gst::ClockTime) -> bool;
@@ -94,7 +94,7 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
         }
     }
 
-    //fn set_from_list(&self, timedvalues: /*Ignored*/&[&gst::TimedValue]) -> bool {
+    //fn set_from_list(&self, timedvalues: /*Ignored*/&[gst::TimedValue]) -> bool {
     //    unsafe { TODO: call ffi:gst_timed_value_control_source_set_from_list() }
     //}
 
