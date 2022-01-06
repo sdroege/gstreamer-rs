@@ -16,6 +16,9 @@ mod gl_base_src;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 pub use self::gl_base_src::GLBaseSrc;
 
+mod gl_buffer_pool;
+pub use self::gl_buffer_pool::GLBufferPool;
+
 mod gl_color_convert;
 pub use self::gl_color_convert::GLColorConvert;
 
@@ -87,6 +90,7 @@ pub mod traits {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub use super::gl_base_src::GLBaseSrcExt;
+    pub use super::gl_buffer_pool::GLBufferPoolExt;
     pub use super::gl_context::GLContextExt;
     pub use super::gl_display::GLDisplayExt;
     pub use super::gl_filter::GLFilterExt;

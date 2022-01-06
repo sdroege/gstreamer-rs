@@ -21,6 +21,7 @@ generate = [
     "GstGL.GLBaseFilter",
     "GstGL.GLBaseMemoryAllocator",
     "GstGL.GLBaseSrc",
+    "GstGL.GLBufferPool",
     "GstGL.GLConfigCaveat",
     "GstGL.GLConfigSurfaceType",
     "GstGL.GLContextError",
