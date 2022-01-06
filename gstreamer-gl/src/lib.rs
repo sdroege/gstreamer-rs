@@ -28,14 +28,15 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::use_self)]
 #[allow(unused_imports)]
 mod auto;
+pub use crate::auto::functions::*;
 pub use crate::auto::*;
 
 mod caps_features;
-pub use crate::caps_features::{CAPS_FEATURES_MEMORY_GL_MEMORY, CAPS_FEATURE_MEMORY_GL_MEMORY};
+pub use crate::caps_features::CAPS_FEATURES_MEMORY_GL_MEMORY;
 mod context;
+pub mod functions;
+pub use crate::functions::*;
 mod gl_context;
-mod gl_display;
-pub use crate::gl_display::GL_DISPLAY_CONTEXT_TYPE;
 mod gl_sync_meta;
 mod gl_video_frame;
 pub use crate::gl_sync_meta::*;

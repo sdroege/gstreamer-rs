@@ -83,6 +83,128 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "GstGL.*"
+status = "generate"
+    [[object.function]]
+    name = "buffer_add_gl_sync_meta"
+    manual = true
+    [[object.function]]
+    name = "buffer_add_gl_sync_meta_full"
+    manual = true
+    [[object.function]]
+    name = "context_get_gl_display"
+    manual = true
+    [[object.function]]
+    name = "context_set_gl_display"
+    manual = true
+    [[object.function]]
+    name = "gl_sync_meta_api_get_type"
+    manual = true
+    [[object.function]]
+    name = "gl_handle_context_query"
+    manual = true
+    [[object.function]]
+    name = "gl_handle_set_context"
+    manual = true
+
+    # gir has issues with the inout annotation
+    [[object.function]]
+    name = "gl_ensure_element_data"
+    ignore = true
+
+    # These need manual bindings
+    [[object.function]]
+    name = "buffer_pool_config_get_gl_allocation_params"
+    ignore = true
+    [[object.function]]
+    name = "buffer_pool_config_set_gl_allocation_params"
+    ignore = true
+
+    # Needs manual binding to be an extension on gst_video::VideoAffineTransformationMeta
+    [[object.function]]
+    name = "gl_get_affine_transformation_meta_as_ndc"
+    ignore = true
+    [[object.function]]
+    name = "gl_set_affine_transformation_meta_from_ndc"
+    ignore = true
+
+    # Needs manual binding to be an extension on gst_video::VideoInfo
+    [[object.function]]
+    name = "gl_get_plane_data_size"
+    ignore = true
+    [[object.function]]
+    name = "gl_get_plane_start"
+    ignore = true
+
+    # Needs manual binding
+    [[object.function]]
+    name = "gl_insert_debug_marker"
+    ignore = true
+
+    # Needs manual binding around `[[f32;4];4]`
+    [[object.function]]
+    name = "gl_multiply_matrix4"
+    ignore = true
+
+    # Should be a method on GLContextExtManual
+    [[object.function]]
+    name = "gl_sized_gl_format_from_gl_format_type"
+    ignore = true
+
+    # Should be method on GLTextureTarget and/or Value
+    [[object.function]]
+    name = "gl_value_get_texture_target_mask"
+    ignore = true
+
+    # This needs to return a value
+    # target_mask is a bitwise mask of the GLTextureTarget enum
+    [[object.function]]
+    name = "gl_value_set_texture_target_from_mask"
+    ignore = true
+
+    # This needs more checks like target != GLTextureTarget::None
+    # and a value that's already initialized as a string.
+    # Could become GLTextureTarget::to_value() maybe.
+    [[object.function]]
+    name = "gl_value_set_texture_target"
+    ignore = true
+
+    # Should be a method/constructor on GLSLVersion
+    [[object.function]]
+    name = "gl_version_to_glsl_version"
+    ignore = true
+
+    # ffi constant is ignored
+    [[object.constant]]
+    name = "GL_COLOR_CONVERT_FORMATS"
+    ignore = true
+    [[object.constant]]
+    name = "GL_MEMORY_VIDEO_FORMATS_STR"
+    ignore = true
+
+    # the below need manual bindings
+    [[object.function]]
+    name = "is_gl_base_memory"
+    ignore = true
+    [[object.function]]
+    name = "is_gl_buffer"
+    ignore = true
+    [[object.function]]
+    name = "is_gl_memory"
+    ignore = true
+    [[object.function]]
+    name = "is_gl_memory_pbo"
+    ignore = true
+    [[object.function]]
+    name = "is_gl_renderbuffer"
+    ignore = true
+
+    # duplicate of gst_gl_stereo_downmix_get_type
+    [[object.function]]
+    name = "gl_stereo_downmix_mode_get_type"
+    ignore = true
+
+[[object]]
 name = "GstGL.GLAllocationParams"
 status = "generate"
 

@@ -84,6 +84,40 @@ pub use self::flags::GLPlatform;
 pub use self::flags::GLSLProfile;
 pub use self::flags::GLAPI;
 
+pub mod functions;
+
+mod constants;
+pub use self::constants::BUFFER_POOL_OPTION_GL_SYNC_META;
+pub use self::constants::BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_2D;
+pub use self::constants::BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_EXTERNAL_OES;
+pub use self::constants::BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_RECTANGLE;
+pub use self::constants::CAPS_FEATURE_MEMORY_GL_BUFFER;
+pub use self::constants::CAPS_FEATURE_MEMORY_GL_MEMORY;
+pub use self::constants::GL_API_GLES1_NAME;
+pub use self::constants::GL_API_GLES2_NAME;
+pub use self::constants::GL_API_OPENGL3_NAME;
+pub use self::constants::GL_API_OPENGL_NAME;
+pub use self::constants::GL_BASE_MEMORY_ALLOCATOR_NAME;
+pub use self::constants::GL_BUFFER_ALLOCATOR_NAME;
+pub use self::constants::GL_COLOR_CONVERT_EXT_FORMATS;
+pub use self::constants::GL_COLOR_CONVERT_VIDEO_CAPS;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::constants::GL_CONFIG_STRUCTURE_NAME;
+pub use self::constants::GL_CONTEXT_TYPE_CGL;
+pub use self::constants::GL_CONTEXT_TYPE_EAGL;
+pub use self::constants::GL_CONTEXT_TYPE_EGL;
+pub use self::constants::GL_CONTEXT_TYPE_GLX;
+pub use self::constants::GL_CONTEXT_TYPE_WGL;
+pub use self::constants::GL_DISPLAY_CONTEXT_TYPE;
+pub use self::constants::GL_MEMORY_ALLOCATOR_NAME;
+pub use self::constants::GL_MEMORY_PBO_ALLOCATOR_NAME;
+pub use self::constants::GL_MEMORY_VIDEO_EXT_FORMATS;
+pub use self::constants::GL_RENDERBUFFER_ALLOCATOR_NAME;
+pub use self::constants::GL_TEXTURE_TARGET_2D_STR;
+pub use self::constants::GL_TEXTURE_TARGET_EXTERNAL_OES_STR;
+pub use self::constants::GL_TEXTURE_TARGET_RECTANGLE_STR;
+
 #[doc(hidden)]
 pub mod traits {
     pub use super::gl_base_filter::GLBaseFilterExt;
