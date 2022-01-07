@@ -190,7 +190,7 @@ manual_traits = ["GLContextExtManual"]
 
     [[object.function]]
     name = "error_quark"
-    # bad error domian definition in gir
+    # bad error domain definition in gir
     ignore = true
 
     [[object.function]]
@@ -463,7 +463,7 @@ final_type = true
     ignore = true
 
     [[object.function]]
-    name = "tranform_caps"
+    name = "transform_caps"
         [object.function.return]
         nullable = false
 
@@ -523,5 +523,5 @@ status = "generate"
 
     [[object.function]]
     name = "error_quark"
-    # bad error domian definition in gir
+    # bad error domain definition in gir
     ignore = true
