@@ -475,6 +475,111 @@ impl CapsRef {
     pub fn serialize(&self, flags: crate::SerializeFlags) -> glib::GString {
         unsafe { from_glib_full(ffi::gst_caps_serialize(&self.0, flags.into_glib())) }
     }
+
+    #[doc(alias = "gst_caps_foreach")]
+    pub fn foreach<F: FnMut(&CapsFeaturesRef, &StructureRef) -> std::ops::ControlFlow<()>>(
+        &self,
+        mut func: F,
+    ) -> bool {
+        unsafe {
+            unsafe extern "C" fn trampoline<
+                F: FnMut(&CapsFeaturesRef, &StructureRef) -> std::ops::ControlFlow<()>,
+            >(
+                features: *mut ffi::GstCapsFeatures,
+                s: *mut ffi::GstStructure,
+                user_data: glib::ffi::gpointer,
+            ) -> glib::ffi::gboolean {
+                let func = &mut *(user_data as *mut F);
+                let res = func(
+                    CapsFeaturesRef::from_glib_borrow(features),
+                    StructureRef::from_glib_borrow(s),
+                );
+
+                matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+            }
+            let func = &mut func as *mut F;
+            from_glib(ffi::gst_caps_foreach(
+                self.as_ptr(),
+                Some(trampoline::<F>),
+                func as glib::ffi::gpointer,
+            ))
+        }
+    }
+
+    #[doc(alias = "gst_caps_map_in_place")]
+    pub fn map_in_place<
+        F: FnMut(&mut CapsFeaturesRef, &mut StructureRef) -> std::ops::ControlFlow<()>,
+    >(
+        &mut self,
+        mut func: F,
+    ) -> bool {
+        unsafe {
+            unsafe extern "C" fn trampoline<
+                F: FnMut(&mut CapsFeaturesRef, &mut StructureRef) -> std::ops::ControlFlow<()>,
+            >(
+                features: *mut ffi::GstCapsFeatures,
+                s: *mut ffi::GstStructure,
+                user_data: glib::ffi::gpointer,
+            ) -> glib::ffi::gboolean {
+                let func = &mut *(user_data as *mut F);
+                let res = func(
+                    CapsFeaturesRef::from_glib_borrow_mut(features),
+                    StructureRef::from_glib_borrow_mut(s),
+                );
+
+                matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+            }
+            let func = &mut func as *mut F;
+            from_glib(ffi::gst_caps_map_in_place(
+                self.as_mut_ptr(),
+                Some(trampoline::<F>),
+                func as glib::ffi::gpointer,
+            ))
+        }
+    }
+
+    #[doc(alias = "gst_caps_filter_and_map_in_place")]
+    pub fn filter_map_in_place<
+        F: FnMut(&mut CapsFeaturesRef, &mut StructureRef) -> CapsFilterMapAction,
+    >(
+        &mut self,
+        mut func: F,
+    ) {
+        unsafe {
+            unsafe extern "C" fn trampoline<
+                F: FnMut(&mut CapsFeaturesRef, &mut StructureRef) -> CapsFilterMapAction,
+            >(
+                features: *mut ffi::GstCapsFeatures,
+                s: *mut ffi::GstStructure,
+                user_data: glib::ffi::gpointer,
+            ) -> glib::ffi::gboolean {
+                let func = &mut *(user_data as *mut F);
+
+                let res = func(
+                    CapsFeaturesRef::from_glib_borrow_mut(features),
+                    StructureRef::from_glib_borrow_mut(s),
+                );
+
+                match res {
+                    CapsFilterMapAction::Keep => glib::ffi::GTRUE,
+                    CapsFilterMapAction::Remove => glib::ffi::GFALSE,
+                }
+            }
+
+            let func = &mut func as *mut F;
+            ffi::gst_caps_filter_and_map_in_place(
+                self.as_mut_ptr(),
+                Some(trampoline::<F>),
+                func as glib::ffi::gpointer,
+            );
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum CapsFilterMapAction {
+    Keep,
+    Remove,
 }
 
 macro_rules! define_iter(

@@ -65,7 +65,7 @@ pub use crate::structure::{Structure, StructureRef};
 mod structure_serde;
 
 pub mod caps;
-pub use crate::caps::{Caps, CapsRef};
+pub use crate::caps::{Caps, CapsFilterMapAction, CapsRef};
 mod caps_features;
 #[cfg(feature = "ser_de")]
 mod caps_serde;
