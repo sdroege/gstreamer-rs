@@ -685,6 +685,97 @@ impl StructureRef {
     pub fn serialize(&self, flags: crate::SerializeFlags) -> glib::GString {
         unsafe { from_glib_full(ffi::gst_structure_serialize(&self.0, flags.into_glib())) }
     }
+
+    #[doc(alias = "gst_structure_foreach")]
+    pub fn foreach<F: FnMut(glib::Quark, &glib::Value) -> std::ops::ControlFlow<()>>(
+        &self,
+        mut func: F,
+    ) -> bool {
+        unsafe {
+            unsafe extern "C" fn trampoline<
+                F: FnMut(glib::Quark, &glib::Value) -> std::ops::ControlFlow<()>,
+            >(
+                quark: glib::ffi::GQuark,
+                value: *const glib::gobject_ffi::GValue,
+                user_data: glib::ffi::gpointer,
+            ) -> glib::ffi::gboolean {
+                let func = &mut *(user_data as *mut F);
+                let res = func(from_glib(quark), &*(value as *const glib::Value));
+
+                matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+            }
+            let func = &mut func as *mut F;
+            from_glib(ffi::gst_structure_foreach(
+                self.as_ptr(),
+                Some(trampoline::<F>),
+                func as glib::ffi::gpointer,
+            ))
+        }
+    }
+
+    #[doc(alias = "gst_structure_map_in_place")]
+    pub fn map_in_place<F: FnMut(glib::Quark, &mut glib::Value) -> std::ops::ControlFlow<()>>(
+        &mut self,
+        mut func: F,
+    ) -> bool {
+        unsafe {
+            unsafe extern "C" fn trampoline<
+                F: FnMut(glib::Quark, &mut glib::Value) -> std::ops::ControlFlow<()>,
+            >(
+                quark: glib::ffi::GQuark,
+                value: *mut glib::gobject_ffi::GValue,
+                user_data: glib::ffi::gpointer,
+            ) -> glib::ffi::gboolean {
+                let func = &mut *(user_data as *mut F);
+                let res = func(from_glib(quark), &mut *(value as *mut glib::Value));
+
+                matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+            }
+            let func = &mut func as *mut F;
+            from_glib(ffi::gst_structure_map_in_place(
+                self.as_mut_ptr(),
+                Some(trampoline::<F>),
+                func as glib::ffi::gpointer,
+            ))
+        }
+    }
+
+    #[doc(alias = "gst_structure_filter_and_map_in_place")]
+    pub fn filter_map_in_place<F: FnMut(glib::Quark, glib::Value) -> Option<glib::Value>>(
+        &mut self,
+        mut func: F,
+    ) {
+        unsafe {
+            unsafe extern "C" fn trampoline<
+                F: FnMut(glib::Quark, glib::Value) -> Option<glib::Value>,
+            >(
+                quark: glib::ffi::GQuark,
+                value: *mut glib::gobject_ffi::GValue,
+                user_data: glib::ffi::gpointer,
+            ) -> glib::ffi::gboolean {
+                let func = &mut *(user_data as *mut F);
+
+                let v = mem::replace(
+                    &mut *(value as *mut glib::Value),
+                    glib::Value::uninitialized(),
+                );
+                match func(from_glib(quark), v) {
+                    None => glib::ffi::GFALSE,
+                    Some(v) => {
+                        *value = v.into_raw();
+                        glib::ffi::GTRUE
+                    }
+                }
+            }
+
+            let func = &mut func as *mut F;
+            ffi::gst_structure_filter_and_map_in_place(
+                self.as_mut_ptr(),
+                Some(trampoline::<F>),
+                func as glib::ffi::gpointer,
+            );
+        }
+    }
 }
 
 impl fmt::Display for StructureRef {
