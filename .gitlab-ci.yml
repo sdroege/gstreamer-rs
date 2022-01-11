@@ -100,8 +100,11 @@ stages:
   - .fdo.container-build@debian
   stage: container-base
   variables:
-    FDO_DISTRIBUTION_PACKAGES: "build-essential curl python3-setuptools liborc-0.4-dev libglib2.0-dev libxml2-dev libgtk-3-dev libegl1-mesa libgles2-mesa libgl1-mesa-dri libgl1-mesa-glx libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates ninja-build python3-pip flex bison libglib2.0-dev libx11-dev libx11-xcb-dev libsoup2.4-dev libvorbis-dev libogg-dev libtheora-dev libmatroska-dev libvpx-dev libopus-dev"
-    FDO_DISTRIBUTION_EXEC: 'bash ci/install-gst.sh && pip3 install git+http://gitlab.freedesktop.org/freedesktop/ci-templates'
+    FDO_DISTRIBUTION_PACKAGES: "build-essential curl python3-setuptools liborc-0.4-dev libglib2.0-dev libxml2-dev libgtk-3-dev libegl1-mesa libgles2-mesa libgl1-mesa-dri libgl1-mesa-glx libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates ninja-build python3-pip flex bison libglib2.0-dev libx11-dev libx11-xcb-dev libsoup2.4-dev libvorbis-dev libogg-dev libtheora-dev libmatroska-dev libvpx-dev libopus-dev libgraphene-1.0-dev"
+    FDO_DISTRIBUTION_EXEC: >-
+      bash ci/install-gst.sh &&
+      bash ci/install-gtk4.sh &&
+      pip3 install git+http://gitlab.freedesktop.org/freedesktop/ci-templates
 
 .build-final-image:
   extends:
