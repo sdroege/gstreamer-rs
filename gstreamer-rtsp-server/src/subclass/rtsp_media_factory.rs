@@ -284,7 +284,7 @@ unsafe extern "C" fn factory_create_pipeline<T: RTSPMediaFactoryImpl>(
     use once_cell::sync::Lazy;
 
     static PIPELINE_QUARK: Lazy<glib::Quark> =
-        Lazy::new(|| glib::Quark::from_string("gstreamer-rs-rtsp-media-pipeline"));
+        Lazy::new(|| glib::Quark::from_str("gstreamer-rs-rtsp-media-pipeline"));
 
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();

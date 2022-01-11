@@ -290,7 +290,7 @@ impl AppSink {
     pub fn set_callbacks(&self, callbacks: AppSinkCallbacks) {
         use once_cell::sync::Lazy;
         static SET_ONCE_QUARK: Lazy<glib::Quark> =
-            Lazy::new(|| glib::Quark::from_string("gstreamer-rs-app-sink-callbacks"));
+            Lazy::new(|| glib::Quark::from_str("gstreamer-rs-app-sink-callbacks"));
 
         unsafe {
             let sink = self.to_glib_none().0;

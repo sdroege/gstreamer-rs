@@ -191,7 +191,7 @@ impl Bus {
     {
         use once_cell::sync::Lazy;
         static SET_ONCE_QUARK: Lazy<glib::Quark> =
-            Lazy::new(|| glib::Quark::from_string("gstreamer-rs-sync-handler"));
+            Lazy::new(|| glib::Quark::from_str("gstreamer-rs-sync-handler"));
 
         unsafe {
             let bus = self.to_glib_none().0;

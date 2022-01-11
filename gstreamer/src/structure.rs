@@ -389,7 +389,7 @@ impl StructureRef {
     where
         <<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error: GlibValueError,
     {
-        let name = glib::Quark::from_string(name);
+        let name = glib::Quark::from_str(name);
         self.get_by_quark(name)
     }
 
@@ -398,14 +398,14 @@ impl StructureRef {
     where
         <<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error: GlibValueError,
     {
-        let name = glib::Quark::from_string(name);
+        let name = glib::Quark::from_str(name);
         self.get_optional_by_quark(name)
     }
 
     #[doc(alias = "get_value")]
     #[doc(alias = "gst_structure_get_value")]
     pub fn value(&self, name: &str) -> Result<&SendValue, GetError> {
-        let name = glib::Quark::from_string(name);
+        let name = glib::Quark::from_str(name);
         self.value_by_quark(name)
     }
 
@@ -416,7 +416,7 @@ impl StructureRef {
     {
         self.value_by_quark(name)?
             .get()
-            .map_err(|err| GetError::from_value_get_error(name.to_string(), err))
+            .map_err(|err| GetError::from_value_get_error(name.as_str(), err))
     }
 
     #[doc(alias = "gst_structure_id_get")]
@@ -431,7 +431,7 @@ impl StructureRef {
             .ok()
             .map(|v| v.get())
             .transpose()
-            .map_err(|err| GetError::from_value_get_error(name.to_string(), err))
+            .map_err(|err| GetError::from_value_get_error(name.as_str(), err))
     }
 
     #[doc(alias = "gst_structure_id_get_value")]
@@ -440,7 +440,7 @@ impl StructureRef {
             let value = ffi::gst_structure_id_get_value(&self.0, name.into_glib());
 
             if value.is_null() {
-                return Err(GetError::new_field_not_found(name.to_string()));
+                return Err(GetError::new_field_not_found(name.as_str()));
             }
 
             Ok(&*(value as *const SendValue))

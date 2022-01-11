@@ -238,7 +238,7 @@ impl AppSrc {
     pub fn set_callbacks(&self, callbacks: AppSrcCallbacks) {
         use once_cell::sync::Lazy;
         static SET_ONCE_QUARK: Lazy<glib::Quark> =
-            Lazy::new(|| glib::Quark::from_string("gstreamer-rs-app-src-callbacks"));
+            Lazy::new(|| glib::Quark::from_str("gstreamer-rs-app-src-callbacks"));
 
         unsafe {
             let src = self.to_glib_none().0;
