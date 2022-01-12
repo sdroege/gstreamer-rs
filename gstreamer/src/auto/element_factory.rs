@@ -97,6 +97,18 @@ impl ElementFactory {
         unsafe { ffi::gst_element_factory_get_num_pad_templates(self.to_glib_none().0) }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_element_factory_get_skip_documentation")]
+    #[doc(alias = "get_skip_documentation")]
+    pub fn skips_documentation(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_element_factory_get_skip_documentation(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
     #[doc(alias = "gst_element_factory_get_uri_protocols")]
     #[doc(alias = "get_uri_protocols")]
     pub fn uri_protocols(&self) -> Vec<glib::GString> {

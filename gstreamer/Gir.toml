@@ -392,6 +392,11 @@ status = "generate"
     # Use glib::List as return type
     manual = true
 
+    [[object.function]]
+    name = "type_mark_as_plugin_api"
+    # Needs integration into subclassing infrastructure
+    ignore = true
+
 [[object]]
 name = "Gst.Allocator"
 status = "generate"
@@ -1243,6 +1248,11 @@ manual_traits = ["ElementExtManual"]
     [[object.function]]
     name = "iterate_src_pads"
     manual = true
+
+    [[object.function]]
+    name = "type_set_skip_documentation"
+    # Needs integration into subclassing infrastructure
+    ignore = true
 
 [[object]]
 name = "Gst.ElementFactory"

@@ -8,9 +8,6 @@ use crate::ClockTime;
 use crate::DebugGraphDetails;
 use crate::DebugLevel;
 use crate::Element;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use crate::PluginAPIFlags;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use crate::StackTraceFlags;
@@ -233,16 +230,6 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
         } else {
             Err(from_glib_full(error))
         }
-    }
-}
-
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-#[doc(alias = "gst_type_mark_as_plugin_api")]
-pub fn type_mark_as_plugin_api(type_: glib::types::Type, flags: PluginAPIFlags) {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gst_type_mark_as_plugin_api(type_.into_glib(), flags.into_glib());
     }
 }
 
