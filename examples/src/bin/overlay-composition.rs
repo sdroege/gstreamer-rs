@@ -10,6 +10,7 @@
 //
 // There is a small amount of unsafe code that demonstrates how to work around
 // Cairo's internal refcounting of the target buffer surface
+#![allow(clippy::non_send_fields_in_send_ty)]
 
 use gst::prelude::*;
 

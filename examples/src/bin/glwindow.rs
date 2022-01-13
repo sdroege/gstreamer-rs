@@ -1,3 +1,5 @@
+#![allow(clippy::non_send_fields_in_send_ty)]
+
 #[path = "../glupload.rs"]
 mod glupload;
 use glupload::*;

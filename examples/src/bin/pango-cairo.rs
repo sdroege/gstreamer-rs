@@ -10,6 +10,7 @@
 // {videotestsrc} - {cairooverlay} - {capsfilter} - {videoconvert} - {autovideosink}
 // The capsfilter element allows us to dictate the video resolution we want for the
 // videotestsrc and the cairooverlay element.
+#![allow(clippy::non_send_fields_in_send_ty)]
 
 use gst::prelude::*;
 

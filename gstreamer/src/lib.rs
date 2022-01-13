@@ -4,6 +4,7 @@
 #![recursion_limit = "256"]
 #![allow(clippy::missing_safety_doc)]
 #![allow(clippy::manual_range_contains)]
+#![allow(clippy::non_send_fields_in_send_ty)]
 #![doc = include_str!("../README.md")]
 
 // Re-exported for the subclass gst_plugin_define! macro

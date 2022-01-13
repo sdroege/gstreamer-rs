@@ -2,6 +2,7 @@
 //
 // It simply attaches a GstMeta with a Rust String to buffers that are passed into
 // an appsrc and retrieves them again from an appsink.
+#![allow(clippy::non_send_fields_in_send_ty)]
 
 use gst::element_error;
 use gst::prelude::*;

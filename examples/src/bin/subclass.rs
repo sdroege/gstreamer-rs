@@ -5,6 +5,7 @@
 //
 // Our filter can only handle F32 mono and acts as a FIR filter. The filter impulse response /
 // coefficients are provided via Rust API on the filter as a Vec<f32>.
+#![allow(clippy::non_send_fields_in_send_ty)]
 
 use gst::prelude::*;
 use gst::{element_error, gst_info, gst_trace};

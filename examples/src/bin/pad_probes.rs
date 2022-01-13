@@ -6,6 +6,7 @@
 //                 |-[probe]
 //                /
 // {audiotestsrc} - {fakesink}
+#![allow(clippy::question_mark)]
 
 use gst::prelude::*;
 

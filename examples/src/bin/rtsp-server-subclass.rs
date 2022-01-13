@@ -6,6 +6,7 @@
 //
 // It also comes with a custom RTSP server/client subclass for hooking into
 // the client machinery and printing some status.
+#![allow(clippy::non_send_fields_in_send_ty)]
 
 use gst_rtsp_server::prelude::*;
 
