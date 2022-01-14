@@ -556,6 +556,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::nonminimal_bool)]
     fn comp() {
         assert!(ClockTime::ZERO < CT_2);
         assert!(Some(ClockTime::ZERO) < Some(CT_2));
