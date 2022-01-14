@@ -7,10 +7,6 @@
 // {videotestsrc} - {overlaycomposition} - {capsfilter} - {videoconvert} - {autovideosink}
 // The capsfilter element allows us to dictate the video resolution we want for the
 // videotestsrc and the overlaycomposition element.
-//
-// There is a small amount of unsafe code that demonstrates how to work around
-// Cairo's internal refcounting of the target buffer surface
-#![allow(clippy::non_send_fields_in_send_ty)]
 
 use gst::prelude::*;
 
@@ -150,105 +146,86 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
         let angle = 2.0 * PI * (timestamp % (10 * gst::ClockTime::SECOND)).nseconds() as f64
             / (10.0 * gst::ClockTime::SECOND.nseconds() as f64);
 
-        /* Create a gst::Buffer for Cairo to draw into */
-        let frame_width = info.width() as usize;
-        let frame_height = info.height() as usize;
-        let stride = 4 * frame_width;
-        let frame_size = stride * frame_height;
+        /* Create a Cairo image surface to draw into and the context around it. */
+        let surface = cairo::ImageSurface::create(
+            cairo::Format::ARgb32,
+            info.width() as i32,
+            info.height() as i32,
+        )
+        .unwrap();
+        let cr = cairo::Context::new(&surface).expect("Failed to create cairo context");
+
+        cr.save().expect("Failed to save state");
+        cr.set_operator(cairo::Operator::Clear);
+        cr.paint().expect("Failed to clear background");
+        cr.restore().expect("Failed to restore state");
+
+        // The image we draw (the text) will be static, but we will change the
+        // transformation on the drawing context, which rotates and shifts everything
+        // that we draw afterwards. Like this, we have no complicated calulations
+        // in the actual drawing below.
+        // Calling multiple transformation methods after each other will apply the
+        // new transformation on top. If you repeat the cr.rotate(angle) line below
+        // this a second time, everything in the canvas will rotate twice as fast.
+        cr.translate(
+            f64::from(info.width()) / 2.0,
+            f64::from(info.height()) / 2.0,
+        );
+        cr.rotate(angle);
+
+        // This loop will render 10 times the string "GStreamer" in a circle
+        for i in 0..10 {
+            // Cairo, like most rendering frameworks, is using a stack for transformations
+            // with this, we push our current transformation onto this stack - allowing us
+            // to make temporary changes / render something / and then returning to the
+            // previous transformations.
+            cr.save().expect("Failed to save state");
+
+            let angle = (360. * f64::from(i)) / 10.0;
+            let red = (1.0 + f64::cos((angle - 60.0) * PI / 180.0)) / 2.0;
+            cr.set_source_rgb(red, 0.0, 1.0 - red);
+            cr.rotate(angle * PI / 180.0);
+
+            // Update the text layout. This function is only updating pango's internal state.
+            // So e.g. that after a 90 degree rotation it knows that what was previously going
+            // to end up as a 200x100 rectangle would now be 100x200.
+            pangocairo::functions::update_layout(&cr, &**layout);
+            let (width, _height) = layout.size();
+            // Using width and height of the text, we can properly possition it within
+            // our canvas.
+            cr.move_to(
+                -(f64::from(width) / f64::from(pango::SCALE)) / 2.0,
+                -(f64::from(info.height())) / 2.0,
+            );
+            // After telling the layout object where to draw itself, we actually tell
+            // it to draw itself into our cairo context.
+            pangocairo::functions::show_layout(&cr, &**layout);
+
+            // Here we go one step up in our stack of transformations, removing any
+            // changes we did to them since the last call to cr.save();
+            cr.restore().expect("Failed to restore state");
+        }
+
+        /* Drop the Cairo context to release the additional reference to the data and
+         * then take ownership of the data. This only works if we have the one and only
+         * reference to the image surface */
+        drop(cr);
+        let stride = surface.stride();
+        let data = surface.take_data().unwrap();
 
         /* Create an RGBA buffer, and add a video meta that the videooverlaycomposition expects */
-        let mut buffer = gst::Buffer::with_size(frame_size).unwrap();
+        let mut buffer = gst::Buffer::from_mut_slice(data);
 
-        gst_video::VideoMeta::add(
+        gst_video::VideoMeta::add_full(
             buffer.get_mut().unwrap(),
             gst_video::VideoFrameFlags::empty(),
             gst_video::VideoFormat::Bgra,
-            frame_width as u32,
-            frame_height as u32,
+            info.width(),
+            info.height(),
+            &[0],
+            &[stride],
         )
         .unwrap();
-
-        let buffer = buffer.into_mapped_buffer_writable().unwrap();
-        let buffer = {
-            let buffer_ptr = unsafe { buffer.buffer().as_ptr() };
-            let surface = cairo::ImageSurface::create_for_data(
-                buffer,
-                cairo::Format::ARgb32,
-                frame_width as i32,
-                frame_height as i32,
-                stride as i32,
-            )
-            .unwrap();
-
-            let cr = cairo::Context::new(&surface).expect("Failed to create cairo context");
-
-            cr.save().expect("Failed to save state");
-            cr.set_operator(cairo::Operator::Clear);
-            cr.paint().expect("Failed to clear background");
-            cr.restore().expect("Failed to restore state");
-
-            // The image we draw (the text) will be static, but we will change the
-            // transformation on the drawing context, which rotates and shifts everything
-            // that we draw afterwards. Like this, we have no complicated calulations
-            // in the actual drawing below.
-            // Calling multiple transformation methods after each other will apply the
-            // new transformation on top. If you repeat the cr.rotate(angle) line below
-            // this a second time, everything in the canvas will rotate twice as fast.
-            cr.translate(
-                f64::from(info.width()) / 2.0,
-                f64::from(info.height()) / 2.0,
-            );
-            cr.rotate(angle);
-
-            // This loop will render 10 times the string "GStreamer" in a circle
-            for i in 0..10 {
-                // Cairo, like most rendering frameworks, is using a stack for transformations
-                // with this, we push our current transformation onto this stack - allowing us
-                // to make temporary changes / render something / and then returning to the
-                // previous transformations.
-                cr.save().expect("Failed to save state");
-
-                let angle = (360. * f64::from(i)) / 10.0;
-                let red = (1.0 + f64::cos((angle - 60.0) * PI / 180.0)) / 2.0;
-                cr.set_source_rgb(red, 0.0, 1.0 - red);
-                cr.rotate(angle * PI / 180.0);
-
-                // Update the text layout. This function is only updating pango's internal state.
-                // So e.g. that after a 90 degree rotation it knows that what was previously going
-                // to end up as a 200x100 rectangle would now be 100x200.
-                pangocairo::functions::update_layout(&cr, &**layout);
-                let (width, _height) = layout.size();
-                // Using width and height of the text, we can properly possition it within
-                // our canvas.
-                cr.move_to(
-                    -(f64::from(width) / f64::from(pango::SCALE)) / 2.0,
-                    -(f64::from(info.height())) / 2.0,
-                );
-                // After telling the layout object where to draw itself, we actually tell
-                // it to draw itself into our cairo context.
-                pangocairo::functions::show_layout(&cr, &**layout);
-
-                // Here we go one step up in our stack of transformations, removing any
-                // changes we did to them since the last call to cr.save();
-                cr.restore().expect("Failed to restore state");
-            }
-
-            // Safety: The surface still owns a mutable reference to the buffer but our reference
-            // to the surface here is the last one. After dropping the surface the buffer would be
-            // freed, so we keep an additional strong reference here before dropping the surface,
-            // which is then returned. As such it's guaranteed that nothing is using the buffer
-            // anymore mutably.
-            drop(cr);
-            unsafe {
-                assert_eq!(
-                    cairo::ffi::cairo_surface_get_reference_count(surface.to_raw_none()),
-                    1
-                );
-                let buffer = glib::translate::from_glib_none(buffer_ptr);
-                drop(surface);
-                buffer
-            }
-        };
 
         /* Turn the buffer into a VideoOverlayRectangle, then place
          * that into a VideoOverlayComposition and return it.
@@ -260,8 +237,8 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             &buffer,
             0,
             0,
-            frame_width as u32,
-            frame_height as u32,
+            info.width(),
+            info.height(),
             gst_video::VideoOverlayFormatFlags::PREMULTIPLIED_ALPHA,
         );
 
