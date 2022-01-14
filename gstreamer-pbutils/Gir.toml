@@ -83,10 +83,89 @@ status = "generate"
     pattern = ".+"
     ignore = true
 
-    # Codec utils need some special care
     [[object.function]]
-    pattern = "codec_utils.*"
-    ignore = true
+    pattern = "codec_utils_(aac_caps_set_level_and_profile|h264_caps_set_level_and_profile|h265_caps_set_level_tier_and_profile|mpeg4video_caps_set_level_and_profile)"
+    # Needs mutable caps references and checks for the caps
+    manual = true
+
+    [[object.function]]
+    name = "codec_utils_aac_get_level"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get AAC level"
+
+    [[object.function]]
+    name = "codec_utils_aac_get_profile"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get AAC profile"
+
+    [[object.function]]
+    name = "codec_utils_h264_get_level"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get H264 level"
+
+    [[object.function]]
+    name = "codec_utils_h264_get_profile"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get H264 profile"
+
+    [[object.function]]
+    name = "codec_utils_h264_get_profile_flags_level"
+    manual = true
+
+    [[object.function]]
+    name = "codec_utils_h265_get_level"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get H265 level"
+
+    [[object.function]]
+    name = "codec_utils_h265_get_profile"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get H265 profile"
+
+    [[object.function]]
+    name = "codec_utils_h265_get_tier"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get H265 tier"
+
+    [[object.function]]
+    name = "codec_utils_mpeg4video_get_level"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get MPEG4 video level"
+
+    [[object.function]]
+    name = "codec_utils_mpeg4video_get_profile"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get MPEG4 video profile"
+
+    [[object.function]]
+    name = "codec_utils_caps_get_mime_codec"
+        [object.function.return]
+        nullable_return_is_error = "Unsupported caps"
+
+    [[object.function]]
+    name = "codec_utils_opus_create_caps_from_header"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create caps from Opus headers"
+
+    [[object.function]]
+    name = "codec_utils_opus_create_caps"
+    # Manual checks
+    manual = true
+
+    [[object.function]]
+    name = "codec_utils_opus_create_header"
+    # Manual checks
+    manual = true
+
+    [[object.function]]
+    name = "codec_utils_opus_parse_caps"
+    # Manual checks
+    manual = true
+
+    [[object.function]]
+    name = "codec_utils_opus_parse_header"
+    # Manual checks
+    manual = true
 
     # Plugin installer API needs some manual impls
     [[object.function]]

@@ -10,6 +10,203 @@ use crate::PbUtilsCapsDescriptionFlags;
 use glib::translate::*;
 use std::mem;
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[doc(alias = "gst_codec_utils_aac_get_channels")]
+pub fn codec_utils_aac_get_channels(audio_config: &[u8]) -> u32 {
+    assert_initialized_main_thread!();
+    let len = audio_config.len() as u32;
+    unsafe { ffi::gst_codec_utils_aac_get_channels(audio_config.to_glib_none().0, len) }
+}
+
+#[doc(alias = "gst_codec_utils_aac_get_index_from_sample_rate")]
+pub fn codec_utils_aac_get_index_from_sample_rate(rate: u32) -> i32 {
+    assert_initialized_main_thread!();
+    unsafe { ffi::gst_codec_utils_aac_get_index_from_sample_rate(rate) }
+}
+
+#[doc(alias = "gst_codec_utils_aac_get_level")]
+pub fn codec_utils_aac_get_level(audio_config: &[u8]) -> Result<glib::GString, glib::BoolError> {
+    assert_initialized_main_thread!();
+    let len = audio_config.len() as u32;
+    unsafe {
+        Option::<_>::from_glib_none(ffi::gst_codec_utils_aac_get_level(
+            audio_config.to_glib_none().0,
+            len,
+        ))
+        .ok_or_else(|| glib::bool_error!("Failed to get AAC level"))
+    }
+}
+
+#[doc(alias = "gst_codec_utils_aac_get_profile")]
+pub fn codec_utils_aac_get_profile(audio_config: &[u8]) -> Result<glib::GString, glib::BoolError> {
+    assert_initialized_main_thread!();
+    let len = audio_config.len() as u32;
+    unsafe {
+        Option::<_>::from_glib_none(ffi::gst_codec_utils_aac_get_profile(
+            audio_config.to_glib_none().0,
+            len,
+        ))
+        .ok_or_else(|| glib::bool_error!("Failed to get AAC profile"))
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[doc(alias = "gst_codec_utils_aac_get_sample_rate")]
+pub fn codec_utils_aac_get_sample_rate(audio_config: &[u8]) -> u32 {
+    assert_initialized_main_thread!();
+    let len = audio_config.len() as u32;
+    unsafe { ffi::gst_codec_utils_aac_get_sample_rate(audio_config.to_glib_none().0, len) }
+}
+
+#[doc(alias = "gst_codec_utils_aac_get_sample_rate_from_index")]
+pub fn codec_utils_aac_get_sample_rate_from_index(sr_idx: u32) -> u32 {
+    assert_initialized_main_thread!();
+    unsafe { ffi::gst_codec_utils_aac_get_sample_rate_from_index(sr_idx) }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(alias = "gst_codec_utils_caps_get_mime_codec")]
+pub fn codec_utils_caps_get_mime_codec(caps: &gst::Caps) -> Result<glib::GString, glib::BoolError> {
+    assert_initialized_main_thread!();
+    unsafe {
+        Option::<_>::from_glib_full(ffi::gst_codec_utils_caps_get_mime_codec(
+            caps.to_glib_none().0,
+        ))
+        .ok_or_else(|| glib::bool_error!("Unsupported caps"))
+    }
+}
+
+#[doc(alias = "gst_codec_utils_h264_get_level")]
+pub fn codec_utils_h264_get_level(sps: &[u8]) -> Result<glib::GString, glib::BoolError> {
+    assert_initialized_main_thread!();
+    let len = sps.len() as u32;
+    unsafe {
+        Option::<_>::from_glib_none(ffi::gst_codec_utils_h264_get_level(
+            sps.to_glib_none().0,
+            len,
+        ))
+        .ok_or_else(|| glib::bool_error!("Failed to get H264 level"))
+    }
+}
+
+#[doc(alias = "gst_codec_utils_h264_get_level_idc")]
+pub fn codec_utils_h264_get_level_idc(level: &str) -> u8 {
+    assert_initialized_main_thread!();
+    unsafe { ffi::gst_codec_utils_h264_get_level_idc(level.to_glib_none().0) }
+}
+
+#[doc(alias = "gst_codec_utils_h264_get_profile")]
+pub fn codec_utils_h264_get_profile(sps: &[u8]) -> Result<glib::GString, glib::BoolError> {
+    assert_initialized_main_thread!();
+    let len = sps.len() as u32;
+    unsafe {
+        Option::<_>::from_glib_none(ffi::gst_codec_utils_h264_get_profile(
+            sps.to_glib_none().0,
+            len,
+        ))
+        .ok_or_else(|| glib::bool_error!("Failed to get H264 profile"))
+    }
+}
+
+#[doc(alias = "gst_codec_utils_h265_get_level")]
+pub fn codec_utils_h265_get_level(
+    profile_tier_level: &[u8],
+) -> Result<glib::GString, glib::BoolError> {
+    assert_initialized_main_thread!();
+    let len = profile_tier_level.len() as u32;
+    unsafe {
+        Option::<_>::from_glib_none(ffi::gst_codec_utils_h265_get_level(
+            profile_tier_level.to_glib_none().0,
+            len,
+        ))
+        .ok_or_else(|| glib::bool_error!("Failed to get H265 level"))
+    }
+}
+
+#[doc(alias = "gst_codec_utils_h265_get_level_idc")]
+pub fn codec_utils_h265_get_level_idc(level: &str) -> u8 {
+    assert_initialized_main_thread!();
+    unsafe { ffi::gst_codec_utils_h265_get_level_idc(level.to_glib_none().0) }
+}
+
+#[doc(alias = "gst_codec_utils_h265_get_profile")]
+pub fn codec_utils_h265_get_profile(
+    profile_tier_level: &[u8],
+) -> Result<glib::GString, glib::BoolError> {
+    assert_initialized_main_thread!();
+    let len = profile_tier_level.len() as u32;
+    unsafe {
+        Option::<_>::from_glib_none(ffi::gst_codec_utils_h265_get_profile(
+            profile_tier_level.to_glib_none().0,
+            len,
+        ))
+        .ok_or_else(|| glib::bool_error!("Failed to get H265 profile"))
+    }
+}
+
+#[doc(alias = "gst_codec_utils_h265_get_tier")]
+pub fn codec_utils_h265_get_tier(
+    profile_tier_level: &[u8],
+) -> Result<glib::GString, glib::BoolError> {
+    assert_initialized_main_thread!();
+    let len = profile_tier_level.len() as u32;
+    unsafe {
+        Option::<_>::from_glib_none(ffi::gst_codec_utils_h265_get_tier(
+            profile_tier_level.to_glib_none().0,
+            len,
+        ))
+        .ok_or_else(|| glib::bool_error!("Failed to get H265 tier"))
+    }
+}
+
+#[doc(alias = "gst_codec_utils_mpeg4video_get_level")]
+pub fn codec_utils_mpeg4video_get_level(
+    vis_obj_seq: &[u8],
+) -> Result<glib::GString, glib::BoolError> {
+    assert_initialized_main_thread!();
+    let len = vis_obj_seq.len() as u32;
+    unsafe {
+        Option::<_>::from_glib_none(ffi::gst_codec_utils_mpeg4video_get_level(
+            vis_obj_seq.to_glib_none().0,
+            len,
+        ))
+        .ok_or_else(|| glib::bool_error!("Failed to get MPEG4 video level"))
+    }
+}
+
+#[doc(alias = "gst_codec_utils_mpeg4video_get_profile")]
+pub fn codec_utils_mpeg4video_get_profile(
+    vis_obj_seq: &[u8],
+) -> Result<glib::GString, glib::BoolError> {
+    assert_initialized_main_thread!();
+    let len = vis_obj_seq.len() as u32;
+    unsafe {
+        Option::<_>::from_glib_none(ffi::gst_codec_utils_mpeg4video_get_profile(
+            vis_obj_seq.to_glib_none().0,
+            len,
+        ))
+        .ok_or_else(|| glib::bool_error!("Failed to get MPEG4 video profile"))
+    }
+}
+
+#[doc(alias = "gst_codec_utils_opus_create_caps_from_header")]
+pub fn codec_utils_opus_create_caps_from_header(
+    header: &gst::Buffer,
+    comments: Option<&gst::Buffer>,
+) -> Result<gst::Caps, glib::BoolError> {
+    assert_initialized_main_thread!();
+    unsafe {
+        Option::<_>::from_glib_full(ffi::gst_codec_utils_opus_create_caps_from_header(
+            header.to_glib_none().0,
+            comments.to_glib_none().0,
+        ))
+        .ok_or_else(|| glib::bool_error!("Failed to create caps from Opus headers"))
+    }
+}
+
 #[doc(alias = "gst_encoding_list_all_targets")]
 pub fn encoding_list_all_targets(categoryname: Option<&str>) -> Vec<EncodingTarget> {
     assert_initialized_main_thread!();
