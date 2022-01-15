@@ -45,6 +45,7 @@ variables:
   # latest release must be at the top
   # (only relevant on master branch)
   RELEASES:
+    0.18=0.18
     0.17=0.17
     0.16=0.16
 
