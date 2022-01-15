@@ -17,13 +17,13 @@ rust-version = "1.56"
 bitflags = "1.0"
 libc = "0.2"
 once_cell = "1.0"
-ffi = { package = "gstreamer-rtsp-server-sys", path = "sys", features = ["v1_8"] }
+ffi = { package = "gstreamer-rtsp-server-sys", version = "0.18", path = "sys", features = ["v1_8"] }
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.15", version = "0.15" }
 gio = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.15", version = "0.15" }
-gst = { package = "gstreamer", path = "../gstreamer" }
-gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp" }
-gst-rtsp = { package = "gstreamer-rtsp", path = "../gstreamer-rtsp" }
-gst-net = { package = "gstreamer-net", path = "../gstreamer-net" }
+gst = { package = "gstreamer", version = "0.18", path = "../gstreamer" }
+gst-sdp = { package = "gstreamer-sdp", version = "0.18", path = "../gstreamer-sdp" }
+gst-rtsp = { package = "gstreamer-rtsp", version = "0.18", path = "../gstreamer-rtsp" }
+gst-net = { package = "gstreamer-net", version = "0.18", path = "../gstreamer-net" }
 
 [dev-dependencies]
 gir-format-check = "0.1"

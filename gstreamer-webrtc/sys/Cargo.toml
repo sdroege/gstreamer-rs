@@ -13,6 +13,7 @@ version = "0.15"
 [dependencies.gst_sdp]
 package = "gstreamer-sdp-sys"
 path = "../../gstreamer-sdp/sys"
+version = "0.18"
 features = ["v1_14"]
 
 [dev-dependencies]
