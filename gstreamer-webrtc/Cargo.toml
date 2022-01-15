@@ -16,7 +16,7 @@ rust-version = "1.56"
 [dependencies]
 libc = "0.2"
 ffi = { package = "gstreamer-webrtc-sys", path = "sys" }
-glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }
+glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.15", version = "0.15" }
 gst = { package = "gstreamer", path = "../gstreamer", features = ["v1_14"] }
 gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp", features = ["v1_14"] }
 
