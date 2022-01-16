@@ -5,6 +5,83 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.18.0] - 2022-01-16
+### Added
+- `gst_rtp::RtpHeaderExtension::read()` and `write()`.
+- `gst::ElementMetadata` has a `const` constructor now.
+- `gst_rtp::RtpBuffer` API works on buffer references instead of plain buffers
+   for statically enforcing writability and usage in more places.
+- `gst_video::VideoCodecAlphaMeta` and `gst::CustomMeta`.
+- `gst::MiniObject` for generically passing around mini objects instead of
+   their concrete types.
+- `gst_app::AppSink` `new-event` callback and `pull_object()` function.
+- `gst_pbutils::PbUtilsCapsDescriptionFlags` and
+  `pb_utils_get_caps_description_flags()`.
+- `gst_rtp::RtpBuffer::remove_extension_data()`.
+- `gst_video::VideoDecoder` subframe API.
+- `gst_webrtc::WebRTCSCTPTransport`.
+- `gst::ElementFactory` `create_with_properties()` / `make_with_properties()`.
+- `gst_video::VideoContentLightLevel` and `VideoMasteringDisplayInfo` for HDR
+   signalling.
+- Lots of missing `GES` API.
+- `gst::AllocationParams` and support in the allocation query.
+- `propose_allocation()` and `decide_allocation()` support in the various base
+   classes.
+- `Iterator` implementation for `gst_video::VideoOverlayComposition`.
+- `Extend`, `IntoIterator` and `FromIterator` implementations for `Buffer`,
+  `Caps`, `BufferList`, `CapsFeatures`, `StreamCollection` and `Structure` for
+   more natural Rust APIs.
+- `instant-rate-change` events/messages bindings.
+- Support for arithmetic operations on `Option<gst::ClockTime>` and related
+  types.
+- `gst_video::ColorBalance`.
+- `gst::MetaFlags`.
+- `gst_base::Aggregator::set_position()`.
+- Convenience getters for `gst::ElementFactory` and
+  `gst::DeviceProviderFactory` metadata.
+- `gst_rtp::RtpBuffer::set_padding()`, `get_padding()` and `payload_mut()`.
+- `#[must_use]` to many types and functions.
+- `gst::Event`, `gst::Message` and `gst::Structure` `has_name()`.
+- `gst_video::Navigation` subclassing support and API improvements.
+- `gst::Structure` and `gst::Caps` `foreach()`, `map_in_place()` and
+  `filter_map_in_place()`.
+- `gst_gl::GLBufferPool` and various GL constants and functions.
+- `gst_pbutils` codec utils APIs.
+
+### Fixed
+- `gst_base::BaseTransform::prepare_output_buffer()` correctly reflects buffer
+  writability.
+
+### Changed
+- Compatible with the 0.15 gtk-rs release.
+- Updated to the latest GStreamer 1.20 APIs while still supporting up to
+  GStreamer 1.8. Any new 1.20 APIs might still change until the stable 1.20
+  release.
+- Update all code to the Rust 2021 edition. This causes no user-facing
+  changes.
+- `gst::Sample::segment()` returns a reference instead of a copy of the
+  segment.
+- `gst::Object::set_property_from_str()` returns a `Result` now instead of silently
+  failing like the C version.
+- Allow handling passed in buffers in `gst_base::PushSrc::create`.
+- Allow passing in `None` in `gst_player::Player::set_uri()`.
+- Use `[[f32; 4]; 4]` instead of `[f32; 16]` for affine transformation matrix.
+- `gst::Pad::sticky_event()` statically gets the event of the requested type
+  instead of requiring to match on it afterwards.
+- Clean up `gst_pbutils` `EncodingProfile` API to be harder to misuse and less
+  confusing.
+- Various `gst::Array`, `gst::List`, `gst::IntRange` and `gst::Fraction` API
+  improvements that should reduce some friction.
+- Directly generate `NUL`-terminated C strings in debug log API instead of
+  having multiple allocations per message.
+- Various functions return `glib::SList` and `glib::List` now to avoid copying
+  into a `Vec` if only iteration is needed.
+- `gst::ChildProxy` API is more consistent with object property API.
+- Improved `gst::Buffer::foreach()`, `gst::Pad::sticky_events_foreach()` and
+  `gst::BufferList::foreach()` APIs.
+- Don't post error messages from `propose_allocation()` and
+  `decide_allocation()`.
+
 ## [0.17.4] - 2021-09-13
 ### Added
 - Add constructor for device provider metadata.
@@ -1068,7 +1145,12 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.17.0...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.0...HEAD
+[0.18.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.17.4...0.18.0
+[0.17.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.17.3...0.17.4
+[0.17.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.17.2...0.17.3
+[0.17.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.17.1...0.17.2
+[0.17.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.17.0...0.17.1
 [0.17.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.7...0.17.0
 [0.16.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.6...0.16.7
 [0.16.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.5...0.16.6
