@@ -1,4 +1,4 @@
-# gstreamer-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-audio-sys.svg)](https://crates.io/crates/gstreamer-audio-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
+# gstreamer-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-audio-sys.svg)](https://crates.io/crates/gstreamer-audio-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/main/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/main)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Audio library) FFI bindings for Rust.
 

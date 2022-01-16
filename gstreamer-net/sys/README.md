@@ -1,4 +1,4 @@
-# gstreamer-net-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-net-sys.svg)](https://crates.io/crates/gstreamer-net-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
+# gstreamer-net-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-net-sys.svg)](https://crates.io/crates/gstreamer-net-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/main/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/main)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Net Library) FFI bindings for Rust.
 

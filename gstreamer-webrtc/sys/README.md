@@ -1,4 +1,4 @@
-# gstreamer-webrtc-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-webrtc-sys.svg)](https://crates.io/crates/gstreamer-webrtc-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
+# gstreamer-webrtc-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-webrtc-sys.svg)](https://crates.io/crates/gstreamer-webrtc-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/main/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/main)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (WebRTC library) FFI bindings for Rust.
 

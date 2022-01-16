@@ -1,4 +1,4 @@
-# gstreamer-editing-services-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-editing-services-sys.svg)](https://crates.io/crates/gstreamer-editing-services-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
+# gstreamer-editing-services-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-editing-services-sys.svg)](https://crates.io/crates/gstreamer-editing-services-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/main/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/main)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Editing Services) FFI bindings for Rust.
 

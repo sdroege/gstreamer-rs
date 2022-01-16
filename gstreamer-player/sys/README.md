@@ -1,4 +1,4 @@
-# gstreamer-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-player-sys.svg)](https://crates.io/crates/gstreamer-player-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
+# gstreamer-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-player-sys.svg)](https://crates.io/crates/gstreamer-player-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/main/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/main)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Player library) FFI bindings for Rust.
 

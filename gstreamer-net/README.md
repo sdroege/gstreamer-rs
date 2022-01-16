@@ -1,4 +1,4 @@
-# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-net.svg)](https://crates.io/crates/gstreamer-net) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
+# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-net.svg)](https://crates.io/crates/gstreamer-net) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/main/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/main)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Net library) bindings for Rust.
 Documentation can be found [here](https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer_net/).
@@ -162,12 +162,12 @@ In addition there are
 [tutorials](https://gstreamer.freedesktop.org/documentation/tutorials/) on the
 GStreamer website. Many of them were ported to Rust already and the code can
 be found in the
-[tutorials](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/tree/master/tutorials)
+[tutorials](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/tree/main/tutorials)
 directory.
 
 Some further examples for various aspects of GStreamer and how to use it from
 Rust can be found in the
-[examples](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/tree/master/examples)
+[examples](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/tree/main/examples)
 directory.
 
 Various GStreamer plugins written in Rust can be found in the
