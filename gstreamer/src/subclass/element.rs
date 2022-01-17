@@ -821,7 +821,7 @@ mod tests {
 
         pipeline.set_state(crate::State::Null).unwrap();
 
-        let imp = imp::TestElement::from_instance(&element);
+        let imp = element.imp();
         assert_eq!(imp.n_buffers.load(atomic::Ordering::SeqCst), 100);
         assert!(imp.reached_playing.load(atomic::Ordering::SeqCst));
     }
