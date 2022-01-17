@@ -14,6 +14,7 @@ use glib::translate::*;
 use glib::StaticType;
 
 #[doc(alias = "GstCapsFeatures")]
+#[repr(transparent)]
 pub struct CapsFeatures(ptr::NonNull<ffi::GstCapsFeatures>);
 unsafe impl Send for CapsFeatures {}
 unsafe impl Sync for CapsFeatures {}
