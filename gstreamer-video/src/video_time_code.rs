@@ -16,8 +16,10 @@ use crate::VideoTimeCodeFlags;
 use crate::VideoTimeCodeInterval;
 
 #[doc(alias = "GstVideoTimeCode")]
+#[repr(transparent)]
 pub struct VideoTimeCode(ffi::GstVideoTimeCode);
 #[doc(alias = "GstVideoTimeCode")]
+#[repr(transparent)]
 pub struct ValidVideoTimeCode(ffi::GstVideoTimeCode);
 
 impl VideoTimeCode {
