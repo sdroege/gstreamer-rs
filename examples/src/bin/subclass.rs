@@ -236,7 +236,7 @@ mod fir_filter {
         // Sets the coefficients by getting access to the private
         // struct and simply setting them
         pub fn set_coeffs(&self, coeffs: Vec<f32>) {
-            let imp = imp::FirFilter::from_instance(self);
+            let imp = self.imp();
             *imp.coeffs.lock().unwrap() = coeffs;
         }
     }

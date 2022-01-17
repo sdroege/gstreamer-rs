@@ -150,7 +150,7 @@ mod tests {
         pad.link(&otherpad).unwrap();
         pad.unlink(&otherpad).unwrap();
 
-        let imp = imp::TestPad::from_instance(&pad);
+        let imp = pad.imp();
         assert!(imp.linked.load(atomic::Ordering::SeqCst));
         assert!(imp.unlinked.load(atomic::Ordering::SeqCst));
     }
