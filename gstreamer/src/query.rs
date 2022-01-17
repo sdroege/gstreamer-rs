@@ -1318,15 +1318,13 @@ impl AcceptCaps<Query> {
             )))
         }
     }
-}
 
-impl<T: AsPtr> AcceptCaps<T> {
     #[doc(alias = "get_caps")]
     #[doc(alias = "gst_query_parse_accept_caps")]
     pub fn caps(&self) -> &crate::CapsRef {
         unsafe {
             let mut caps = ptr::null_mut();
-            ffi::gst_query_parse_accept_caps(self.0.as_ptr(), &mut caps);
+            ffi::gst_query_parse_accept_caps(AsPtr::as_ptr(&self.0), &mut caps);
             crate::CapsRef::from_ptr(caps)
         }
     }
@@ -1336,7 +1334,45 @@ impl<T: AsPtr> AcceptCaps<T> {
     pub fn caps_owned(&self) -> crate::Caps {
         unsafe { from_glib_none(self.caps().as_ptr()) }
     }
+}
 
+impl<'a> AcceptCaps<&'a QueryRef> {
+    #[doc(alias = "get_caps")]
+    #[doc(alias = "gst_query_parse_accept_caps")]
+    pub fn caps(&self) -> &'a crate::CapsRef {
+        unsafe {
+            let mut caps = ptr::null_mut();
+            ffi::gst_query_parse_accept_caps(AsPtr::as_ptr(&self.0), &mut caps);
+            crate::CapsRef::from_ptr(caps)
+        }
+    }
+
+    #[doc(alias = "get_caps_owned")]
+    #[doc(alias = "gst_query_parse_accept_caps")]
+    pub fn caps_owned(&self) -> crate::Caps {
+        unsafe { from_glib_none(self.caps().as_ptr()) }
+    }
+}
+
+impl<'a> AcceptCaps<&'a mut QueryRef> {
+    #[doc(alias = "get_caps")]
+    #[doc(alias = "gst_query_parse_accept_caps")]
+    pub fn caps(&self) -> &'a crate::CapsRef {
+        unsafe {
+            let mut caps = ptr::null_mut();
+            ffi::gst_query_parse_accept_caps(AsPtr::as_ptr(&self.0), &mut caps);
+            crate::CapsRef::from_ptr(caps)
+        }
+    }
+
+    #[doc(alias = "get_caps_owned")]
+    #[doc(alias = "gst_query_parse_accept_caps")]
+    pub fn caps_owned(&self) -> crate::Caps {
+        unsafe { from_glib_none(self.caps().as_ptr()) }
+    }
+}
+
+impl<T: AsPtr> AcceptCaps<T> {
     #[doc(alias = "get_result")]
     #[doc(alias = "gst_query_parse_accept_caps_result")]
     pub fn result(&self) -> bool {
@@ -1447,15 +1483,13 @@ impl Context<Query> {
             )))
         }
     }
-}
 
-impl<T: AsPtr> Context<T> {
     #[doc(alias = "get_context")]
     #[doc(alias = "gst_query_parse_context")]
     pub fn context(&self) -> Option<&crate::ContextRef> {
         unsafe {
             let mut context = ptr::null_mut();
-            ffi::gst_query_parse_context(self.0.as_ptr(), &mut context);
+            ffi::gst_query_parse_context(AsPtr::as_ptr(&self.0), &mut context);
             if context.is_null() {
                 None
             } else {
@@ -1478,7 +1512,77 @@ impl<T: AsPtr> Context<T> {
     pub fn context_type(&self) -> &str {
         unsafe {
             let mut context_type = ptr::null();
-            ffi::gst_query_parse_context_type(self.0.as_ptr(), &mut context_type);
+            ffi::gst_query_parse_context_type(AsPtr::as_ptr(&self.0), &mut context_type);
+            CStr::from_ptr(context_type).to_str().unwrap()
+        }
+    }
+}
+
+impl<'a> Context<&'a QueryRef> {
+    #[doc(alias = "get_context")]
+    #[doc(alias = "gst_query_parse_context")]
+    pub fn context(&self) -> Option<&'a crate::ContextRef> {
+        unsafe {
+            let mut context = ptr::null_mut();
+            ffi::gst_query_parse_context(AsPtr::as_ptr(&self.0), &mut context);
+            if context.is_null() {
+                None
+            } else {
+                Some(crate::ContextRef::from_ptr(context))
+            }
+        }
+    }
+
+    #[doc(alias = "get_context_owned")]
+    #[doc(alias = "gst_query_parse_context")]
+    pub fn context_owned(&self) -> Option<crate::Context> {
+        unsafe {
+            self.context()
+                .map(|context| from_glib_none(context.as_ptr()))
+        }
+    }
+
+    #[doc(alias = "get_context_type")]
+    #[doc(alias = "gst_query_parse_context_type")]
+    pub fn context_type(&self) -> &'a str {
+        unsafe {
+            let mut context_type = ptr::null();
+            ffi::gst_query_parse_context_type(AsPtr::as_ptr(&self.0), &mut context_type);
+            CStr::from_ptr(context_type).to_str().unwrap()
+        }
+    }
+}
+
+impl<'a> Context<&'a mut QueryRef> {
+    #[doc(alias = "get_context")]
+    #[doc(alias = "gst_query_parse_context")]
+    pub fn context(&self) -> Option<&'a crate::ContextRef> {
+        unsafe {
+            let mut context = ptr::null_mut();
+            ffi::gst_query_parse_context(AsPtr::as_ptr(&self.0), &mut context);
+            if context.is_null() {
+                None
+            } else {
+                Some(crate::ContextRef::from_ptr(context))
+            }
+        }
+    }
+
+    #[doc(alias = "get_context_owned")]
+    #[doc(alias = "gst_query_parse_context")]
+    pub fn context_owned(&self) -> Option<crate::Context> {
+        unsafe {
+            self.context()
+                .map(|context| from_glib_none(context.as_ptr()))
+        }
+    }
+
+    #[doc(alias = "get_context_type")]
+    #[doc(alias = "gst_query_parse_context_type")]
+    pub fn context_type(&self) -> &'a str {
+        unsafe {
+            let mut context_type = ptr::null();
+            ffi::gst_query_parse_context_type(AsPtr::as_ptr(&self.0), &mut context_type);
             CStr::from_ptr(context_type).to_str().unwrap()
         }
     }

@@ -470,20 +470,33 @@ impl StreamStart<Event> {
         assert_initialized_main_thread!();
         StreamStartBuilder::new(stream_id)
     }
-}
 
-impl<T: AsPtr> StreamStart<T> {
     #[doc(alias = "get_stream_id")]
     #[doc(alias = "gst_event_parse_stream_start")]
     pub fn stream_id(&self) -> &str {
         unsafe {
             let mut stream_id = ptr::null();
 
-            ffi::gst_event_parse_stream_start(self.0.as_ptr(), &mut stream_id);
+            ffi::gst_event_parse_stream_start(AsPtr::as_ptr(&self.0), &mut stream_id);
             CStr::from_ptr(stream_id).to_str().unwrap()
         }
     }
+}
 
+impl<'a> StreamStart<&'a EventRef> {
+    #[doc(alias = "get_stream_id")]
+    #[doc(alias = "gst_event_parse_stream_start")]
+    pub fn stream_id(&self) -> &'a str {
+        unsafe {
+            let mut stream_id = ptr::null();
+
+            ffi::gst_event_parse_stream_start(AsPtr::as_ptr(&self.0), &mut stream_id);
+            CStr::from_ptr(stream_id).to_str().unwrap()
+        }
+    }
+}
+
+impl<T: AsPtr> StreamStart<T> {
     #[doc(alias = "get_stream_flags")]
     #[doc(alias = "gst_event_parse_stream_flags")]
     pub fn stream_flags(&self) -> crate::StreamFlags {
@@ -539,16 +552,33 @@ impl Caps<Event> {
         assert_initialized_main_thread!();
         CapsBuilder::new(caps)
     }
-}
 
-impl<T: AsPtr> Caps<T> {
     #[doc(alias = "get_caps")]
     #[doc(alias = "gst_event_parse_caps")]
     pub fn caps(&self) -> &crate::CapsRef {
         unsafe {
             let mut caps = ptr::null_mut();
 
-            ffi::gst_event_parse_caps(self.0.as_ptr(), &mut caps);
+            ffi::gst_event_parse_caps(AsPtr::as_ptr(&self.0), &mut caps);
+            crate::CapsRef::from_ptr(caps)
+        }
+    }
+
+    #[doc(alias = "get_caps_owned")]
+    #[doc(alias = "gst_event_parse_caps")]
+    pub fn caps_owned(&self) -> crate::Caps {
+        unsafe { from_glib_none(self.caps().as_ptr()) }
+    }
+}
+
+impl<'a> Caps<&'a EventRef> {
+    #[doc(alias = "get_caps")]
+    #[doc(alias = "gst_event_parse_caps")]
+    pub fn caps(&self) -> &'a crate::CapsRef {
+        unsafe {
+            let mut caps = ptr::null_mut();
+
+            ffi::gst_event_parse_caps(AsPtr::as_ptr(&self.0), &mut caps);
             crate::CapsRef::from_ptr(caps)
         }
     }
@@ -575,16 +605,27 @@ impl Segment<Event> {
         assert_initialized_main_thread!();
         SegmentBuilder::new(segment.as_ref())
     }
-}
 
-impl<T: AsPtr> Segment<T> {
     #[doc(alias = "get_segment")]
     #[doc(alias = "gst_event_parse_segment")]
     pub fn segment(&self) -> &crate::Segment {
         unsafe {
             let mut segment = ptr::null();
 
-            ffi::gst_event_parse_segment(self.0.as_ptr(), &mut segment);
+            ffi::gst_event_parse_segment(AsPtr::as_ptr(&self.0), &mut segment);
+            &*(segment as *mut ffi::GstSegment as *mut crate::Segment)
+        }
+    }
+}
+
+impl<'a> Segment<&'a EventRef> {
+    #[doc(alias = "get_segment")]
+    #[doc(alias = "gst_event_parse_segment")]
+    pub fn segment(&self) -> &'a crate::Segment {
+        unsafe {
+            let mut segment = ptr::null();
+
+            ffi::gst_event_parse_segment(AsPtr::as_ptr(&self.0), &mut segment);
             &*(segment as *mut ffi::GstSegment as *mut crate::Segment)
         }
     }
@@ -643,16 +684,33 @@ impl Tag<Event> {
         assert_initialized_main_thread!();
         TagBuilder::new(tags)
     }
-}
 
-impl<T: AsPtr> Tag<T> {
     #[doc(alias = "get_tag")]
     #[doc(alias = "gst_event_parse_tag")]
     pub fn tag(&self) -> &crate::TagListRef {
         unsafe {
             let mut tags = ptr::null_mut();
 
-            ffi::gst_event_parse_tag(self.0.as_ptr(), &mut tags);
+            ffi::gst_event_parse_tag(AsPtr::as_ptr(&self.0), &mut tags);
+            crate::TagListRef::from_ptr(tags)
+        }
+    }
+
+    #[doc(alias = "get_tag_owned")]
+    #[doc(alias = "gst_event_parse_tag")]
+    pub fn tag_owned(&self) -> crate::TagList {
+        unsafe { from_glib_none(self.tag().as_ptr()) }
+    }
+}
+
+impl<'a> Tag<&'a EventRef> {
+    #[doc(alias = "get_tag")]
+    #[doc(alias = "gst_event_parse_tag")]
+    pub fn tag(&self) -> &'a crate::TagListRef {
+        unsafe {
+            let mut tags = ptr::null_mut();
+
+            ffi::gst_event_parse_tag(AsPtr::as_ptr(&self.0), &mut tags);
             crate::TagListRef::from_ptr(tags)
         }
     }
@@ -1287,15 +1345,26 @@ impl TocSelect<Event> {
         assert_initialized_main_thread!();
         TocSelectBuilder::new(uid)
     }
-}
 
-impl<T: AsPtr> TocSelect<T> {
     #[doc(alias = "get_uid")]
     pub fn uid(&self) -> &str {
         unsafe {
             let mut uid = ptr::null_mut();
 
-            ffi::gst_event_parse_toc_select(self.0.as_ptr(), &mut uid);
+            ffi::gst_event_parse_toc_select(AsPtr::as_ptr(&self.0), &mut uid);
+
+            CStr::from_ptr(uid).to_str().unwrap()
+        }
+    }
+}
+
+impl<'a> TocSelect<&'a EventRef> {
+    #[doc(alias = "get_uid")]
+    pub fn uid(&self) -> &'a str {
+        unsafe {
+            let mut uid = ptr::null_mut();
+
+            ffi::gst_event_parse_toc_select(AsPtr::as_ptr(&self.0), &mut uid);
 
             CStr::from_ptr(uid).to_str().unwrap()
         }
