@@ -12,6 +12,7 @@ pub trait IsMiniObject:
 #[macro_export]
 macro_rules! mini_object_wrapper (
     ($name:ident, $ref_name:ident, $ffi_name:path) => {
+        #[repr(transparent)]
         pub struct $name {
             obj: std::ptr::NonNull<$ffi_name>,
         }
