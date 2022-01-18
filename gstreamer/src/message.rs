@@ -9,6 +9,7 @@ use crate::Object;
 use crate::Seqnum;
 use crate::TagList;
 
+use std::borrow::Borrow;
 use std::ffi::CStr;
 use std::fmt;
 use std::mem;
@@ -16,9 +17,7 @@ use std::num::NonZeroU32;
 use std::ops::Deref;
 use std::ptr;
 
-use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, mut_override, try_from_glib, IntoGlib, ToGlibPtr,
-};
+use glib::translate::*;
 
 mini_object_wrapper!(Message, MessageRef, ffi::GstMessage, || {
     ffi::gst_message_get_type()
@@ -74,63 +73,58 @@ impl MessageRef {
     }
 
     pub fn view(&self) -> MessageView {
-        let type_ = unsafe { (*self.as_ptr()).type_ };
+        unsafe {
+            let type_ = (*self.as_ptr()).type_;
 
-        match type_ {
-            ffi::GST_MESSAGE_EOS => MessageView::Eos(Eos(self)),
-            ffi::GST_MESSAGE_ERROR => MessageView::Error(Error(self)),
-            ffi::GST_MESSAGE_WARNING => MessageView::Warning(Warning(self)),
-            ffi::GST_MESSAGE_INFO => MessageView::Info(Info(self)),
-            ffi::GST_MESSAGE_TAG => MessageView::Tag(Tag(self)),
-            ffi::GST_MESSAGE_BUFFERING => MessageView::Buffering(Buffering(self)),
-            ffi::GST_MESSAGE_STATE_CHANGED => MessageView::StateChanged(StateChanged(self)),
-            ffi::GST_MESSAGE_STATE_DIRTY => MessageView::StateDirty(StateDirty(self)),
-            ffi::GST_MESSAGE_STEP_DONE => MessageView::StepDone(StepDone(self)),
-            ffi::GST_MESSAGE_CLOCK_PROVIDE => MessageView::ClockProvide(ClockProvide(self)),
-            ffi::GST_MESSAGE_CLOCK_LOST => MessageView::ClockLost(ClockLost(self)),
-            ffi::GST_MESSAGE_NEW_CLOCK => MessageView::NewClock(NewClock(self)),
-            ffi::GST_MESSAGE_STRUCTURE_CHANGE => {
-                MessageView::StructureChange(StructureChange(self))
+            match type_ {
+                ffi::GST_MESSAGE_EOS => Eos::view(self),
+                ffi::GST_MESSAGE_ERROR => Error::view(self),
+                ffi::GST_MESSAGE_WARNING => Warning::view(self),
+                ffi::GST_MESSAGE_INFO => Info::view(self),
+                ffi::GST_MESSAGE_TAG => Tag::view(self),
+                ffi::GST_MESSAGE_BUFFERING => Buffering::view(self),
+                ffi::GST_MESSAGE_STATE_CHANGED => StateChanged::view(self),
+                ffi::GST_MESSAGE_STATE_DIRTY => StateDirty::view(self),
+                ffi::GST_MESSAGE_STEP_DONE => StepDone::view(self),
+                ffi::GST_MESSAGE_CLOCK_PROVIDE => ClockProvide::view(self),
+                ffi::GST_MESSAGE_CLOCK_LOST => ClockLost::view(self),
+                ffi::GST_MESSAGE_NEW_CLOCK => NewClock::view(self),
+                ffi::GST_MESSAGE_STRUCTURE_CHANGE => StructureChange::view(self),
+                ffi::GST_MESSAGE_STREAM_STATUS => StreamStatus::view(self),
+                ffi::GST_MESSAGE_APPLICATION => Application::view(self),
+                ffi::GST_MESSAGE_ELEMENT => Element::view(self),
+                ffi::GST_MESSAGE_SEGMENT_START => SegmentStart::view(self),
+                ffi::GST_MESSAGE_SEGMENT_DONE => SegmentDone::view(self),
+                ffi::GST_MESSAGE_DURATION_CHANGED => DurationChanged::view(self),
+                ffi::GST_MESSAGE_LATENCY => Latency::view(self),
+                ffi::GST_MESSAGE_ASYNC_START => AsyncStart::view(self),
+                ffi::GST_MESSAGE_ASYNC_DONE => AsyncDone::view(self),
+                ffi::GST_MESSAGE_REQUEST_STATE => RequestState::view(self),
+                ffi::GST_MESSAGE_STEP_START => StepStart::view(self),
+                ffi::GST_MESSAGE_QOS => Qos::view(self),
+                ffi::GST_MESSAGE_PROGRESS => Progress::view(self),
+                ffi::GST_MESSAGE_TOC => Toc::view(self),
+                ffi::GST_MESSAGE_RESET_TIME => ResetTime::view(self),
+                ffi::GST_MESSAGE_STREAM_START => StreamStart::view(self),
+                ffi::GST_MESSAGE_NEED_CONTEXT => NeedContext::view(self),
+                ffi::GST_MESSAGE_HAVE_CONTEXT => HaveContext::view(self),
+                ffi::GST_MESSAGE_DEVICE_ADDED => DeviceAdded::view(self),
+                ffi::GST_MESSAGE_DEVICE_REMOVED => DeviceRemoved::view(self),
+                #[cfg(any(feature = "v1_10", feature = "dox"))]
+                #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+                ffi::GST_MESSAGE_REDIRECT => Redirect::view(self),
+                #[cfg(any(feature = "v1_10", feature = "dox"))]
+                ffi::GST_MESSAGE_PROPERTY_NOTIFY => PropertyNotify::view(self),
+                #[cfg(any(feature = "v1_10", feature = "dox"))]
+                ffi::GST_MESSAGE_STREAM_COLLECTION => StreamCollection::view(self),
+                #[cfg(any(feature = "v1_10", feature = "dox"))]
+                ffi::GST_MESSAGE_STREAMS_SELECTED => StreamsSelected::view(self),
+                #[cfg(any(feature = "v1_16", feature = "dox"))]
+                ffi::GST_MESSAGE_DEVICE_CHANGED => DeviceChanged::view(self),
+                #[cfg(any(feature = "v1_18", feature = "dox"))]
+                ffi::GST_MESSAGE_INSTANT_RATE_REQUEST => InstantRateRequest::view(self),
+                _ => MessageView::Other,
             }
-            ffi::GST_MESSAGE_STREAM_STATUS => MessageView::StreamStatus(StreamStatus(self)),
-            ffi::GST_MESSAGE_APPLICATION => MessageView::Application(Application(self)),
-            ffi::GST_MESSAGE_ELEMENT => MessageView::Element(Element(self)),
-            ffi::GST_MESSAGE_SEGMENT_START => MessageView::SegmentStart(SegmentStart(self)),
-            ffi::GST_MESSAGE_SEGMENT_DONE => MessageView::SegmentDone(SegmentDone(self)),
-            ffi::GST_MESSAGE_DURATION_CHANGED => {
-                MessageView::DurationChanged(DurationChanged(self))
-            }
-            ffi::GST_MESSAGE_LATENCY => MessageView::Latency(Latency(self)),
-            ffi::GST_MESSAGE_ASYNC_START => MessageView::AsyncStart(AsyncStart(self)),
-            ffi::GST_MESSAGE_ASYNC_DONE => MessageView::AsyncDone(AsyncDone(self)),
-            ffi::GST_MESSAGE_REQUEST_STATE => MessageView::RequestState(RequestState(self)),
-            ffi::GST_MESSAGE_STEP_START => MessageView::StepStart(StepStart(self)),
-            ffi::GST_MESSAGE_QOS => MessageView::Qos(Qos(self)),
-            ffi::GST_MESSAGE_PROGRESS => MessageView::Progress(Progress(self)),
-            ffi::GST_MESSAGE_TOC => MessageView::Toc(Toc(self)),
-            ffi::GST_MESSAGE_RESET_TIME => MessageView::ResetTime(ResetTime(self)),
-            ffi::GST_MESSAGE_STREAM_START => MessageView::StreamStart(StreamStart(self)),
-            ffi::GST_MESSAGE_NEED_CONTEXT => MessageView::NeedContext(NeedContext(self)),
-            ffi::GST_MESSAGE_HAVE_CONTEXT => MessageView::HaveContext(HaveContext(self)),
-            ffi::GST_MESSAGE_DEVICE_ADDED => MessageView::DeviceAdded(DeviceAdded(self)),
-            ffi::GST_MESSAGE_DEVICE_REMOVED => MessageView::DeviceRemoved(DeviceRemoved(self)),
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
-            ffi::GST_MESSAGE_PROPERTY_NOTIFY => MessageView::PropertyNotify(PropertyNotify(self)),
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
-            ffi::GST_MESSAGE_STREAM_COLLECTION => {
-                MessageView::StreamCollection(StreamCollection(self))
-            }
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
-            ffi::GST_MESSAGE_STREAMS_SELECTED => {
-                MessageView::StreamsSelected(StreamsSelected(self))
-            }
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
-            ffi::GST_MESSAGE_DEVICE_CHANGED => MessageView::DeviceChanged(DeviceChanged(self)),
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
-            ffi::GST_MESSAGE_INSTANT_RATE_REQUEST => {
-                MessageView::InstantRateRequest(InstantRateRequest(self))
-            }
-            _ => MessageView::Other,
         }
     }
 
@@ -183,77 +177,128 @@ impl fmt::Debug for MessageRef {
 #[derive(Debug)]
 #[non_exhaustive]
 pub enum MessageView<'a> {
-    Eos(Eos<'a>),
-    Error(Error<'a>),
-    Warning(Warning<'a>),
-    Info(Info<'a>),
-    Tag(Tag<'a>),
-    Buffering(Buffering<'a>),
-    StateChanged(StateChanged<'a>),
-    StateDirty(StateDirty<'a>),
-    StepDone(StepDone<'a>),
-    ClockProvide(ClockProvide<'a>),
-    ClockLost(ClockLost<'a>),
-    NewClock(NewClock<'a>),
-    StructureChange(StructureChange<'a>),
-    StreamStatus(StreamStatus<'a>),
-    Application(Application<'a>),
-    Element(Element<'a>),
-    SegmentStart(SegmentStart<'a>),
-    SegmentDone(SegmentDone<'a>),
-    DurationChanged(DurationChanged<'a>),
-    Latency(Latency<'a>),
-    AsyncStart(AsyncStart<'a>),
-    AsyncDone(AsyncDone<'a>),
-    RequestState(RequestState<'a>),
-    StepStart(StepStart<'a>),
-    Qos(Qos<'a>),
-    Progress(Progress<'a>),
-    Toc(Toc<'a>),
-    ResetTime(ResetTime<'a>),
-    StreamStart(StreamStart<'a>),
-    NeedContext(NeedContext<'a>),
-    HaveContext(HaveContext<'a>),
-    DeviceAdded(DeviceAdded<'a>),
-    DeviceRemoved(DeviceRemoved<'a>),
+    Eos(&'a Eos),
+    Error(&'a Error),
+    Warning(&'a Warning),
+    Info(&'a Info),
+    Tag(&'a Tag),
+    Buffering(&'a Buffering),
+    StateChanged(&'a StateChanged),
+    StateDirty(&'a StateDirty),
+    StepDone(&'a StepDone),
+    ClockProvide(&'a ClockProvide),
+    ClockLost(&'a ClockLost),
+    NewClock(&'a NewClock),
+    StructureChange(&'a StructureChange),
+    StreamStatus(&'a StreamStatus),
+    Application(&'a Application),
+    Element(&'a Element),
+    SegmentStart(&'a SegmentStart),
+    SegmentDone(&'a SegmentDone),
+    DurationChanged(&'a DurationChanged),
+    Latency(&'a Latency),
+    AsyncStart(&'a AsyncStart),
+    AsyncDone(&'a AsyncDone),
+    RequestState(&'a RequestState),
+    StepStart(&'a StepStart),
+    Qos(&'a Qos),
+    Progress(&'a Progress),
+    Toc(&'a Toc),
+    ResetTime(&'a ResetTime),
+    StreamStart(&'a StreamStart),
+    NeedContext(&'a NeedContext),
+    HaveContext(&'a HaveContext),
+    DeviceAdded(&'a DeviceAdded),
+    DeviceRemoved(&'a DeviceRemoved),
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    PropertyNotify(PropertyNotify<'a>),
+    PropertyNotify(&'a PropertyNotify),
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    StreamCollection(StreamCollection<'a>),
+    StreamCollection(&'a StreamCollection),
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    StreamsSelected(StreamsSelected<'a>),
+    StreamsSelected(&'a StreamsSelected),
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    Redirect(Redirect<'a>),
+    Redirect(&'a Redirect),
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    DeviceChanged(DeviceChanged<'a>),
+    DeviceChanged(&'a DeviceChanged),
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    InstantRateRequest(InstantRateRequest<'a>),
+    InstantRateRequest(&'a InstantRateRequest),
     Other,
 }
 
 macro_rules! declare_concrete_message(
-    ($name:ident) => {
+    ($name:ident, $param:ident) => {
         #[derive(Debug)]
-        pub struct $name<'a>(&'a MessageRef);
+        #[repr(transparent)]
+        pub struct $name<$param = MessageRef>($param);
 
-        impl<'a> Deref for $name<'a> {
+        impl $name {
+            pub fn message(&self) -> &MessageRef {
+                unsafe { &*(self as *const Self as *const MessageRef) }
+            }
+
+            unsafe fn view(message: &MessageRef) -> MessageView<'_> {
+                let message = &*(message as *const MessageRef as *const Self);
+                MessageView::$name(message)
+            }
+        }
+
+        impl Deref for $name {
             type Target = MessageRef;
 
             fn deref(&self) -> &Self::Target {
-                self.0
+                unsafe {
+                    &*(self as *const Self as *const Self::Target)
+                }
+            }
+        }
+
+        impl ToOwned for $name {
+            type Owned = $name<Message>;
+
+            fn to_owned(&self) -> Self::Owned {
+                $name::<Message>(self.copy())
+            }
+        }
+
+        impl $name<Message> {
+            pub fn get_mut(&mut self) -> Option<&mut $name> {
+                self.0.get_mut().map(|message| unsafe {
+                    &mut *(message as *mut MessageRef as *mut $name)
+                })
+            }
+        }
+
+        impl Deref for $name<Message> {
+            type Target = $name;
+
+            fn deref(&self) -> &Self::Target {
+                unsafe { &*(self.0.as_ptr() as *const Self::Target) }
+            }
+        }
+
+        impl Borrow<$name> for $name<Message> {
+            fn borrow(&self) -> &$name {
+                &*self
+            }
+        }
+
+        impl From<$name<Message>> for Message {
+            fn from(concrete: $name<Message>) -> Self {
+                skip_assert_initialized!();
+                concrete.0
             }
         }
     }
 );
 
-declare_concrete_message!(Eos);
-impl<'a> Eos<'a> {
+declare_concrete_message!(Eos, T);
+impl Eos {
     #[doc(alias = "gst_message_new_eos")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Message {
@@ -261,14 +306,14 @@ impl<'a> Eos<'a> {
         Self::builder().build()
     }
 
-    pub fn builder() -> EosBuilder<'a> {
+    pub fn builder<'a>() -> EosBuilder<'a> {
         assert_initialized_main_thread!();
         EosBuilder::new()
     }
 }
 
-declare_concrete_message!(Error);
-impl<'a> Error<'a> {
+declare_concrete_message!(Error, T);
+impl Error {
     #[doc(alias = "gst_message_new_error")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<T: MessageErrorDomain>(error: T, message: &str) -> Message {
@@ -324,8 +369,8 @@ impl<'a> Error<'a> {
     }
 }
 
-declare_concrete_message!(Warning);
-impl<'a> Warning<'a> {
+declare_concrete_message!(Warning, T);
+impl Warning {
     #[doc(alias = "gst_message_new_warning")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<T: MessageErrorDomain>(error: T, message: &str) -> Message {
@@ -381,8 +426,8 @@ impl<'a> Warning<'a> {
     }
 }
 
-declare_concrete_message!(Info);
-impl<'a> Info<'a> {
+declare_concrete_message!(Info, T);
+impl Info {
     #[doc(alias = "gst_message_new_info")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<T: MessageErrorDomain>(error: T, message: &str) -> Message {
@@ -438,8 +483,8 @@ impl<'a> Info<'a> {
     }
 }
 
-declare_concrete_message!(Tag);
-impl<'a> Tag<'a> {
+declare_concrete_message!(Tag, T);
+impl Tag {
     #[doc(alias = "gst_message_new_tag")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(tags: &TagList) -> Message {
@@ -463,8 +508,8 @@ impl<'a> Tag<'a> {
     }
 }
 
-declare_concrete_message!(Buffering);
-impl<'a> Buffering<'a> {
+declare_concrete_message!(Buffering, T);
+impl Buffering {
     #[doc(alias = "gst_message_new_buffering")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(percent: i32) -> Message {
@@ -472,7 +517,7 @@ impl<'a> Buffering<'a> {
         Self::builder(percent).build()
     }
 
-    pub fn builder(percent: i32) -> BufferingBuilder<'a> {
+    pub fn builder<'a>(percent: i32) -> BufferingBuilder<'a> {
         assert_initialized_main_thread!();
         BufferingBuilder::new(percent)
     }
@@ -514,8 +559,8 @@ impl<'a> Buffering<'a> {
     }
 }
 
-declare_concrete_message!(StateChanged);
-impl<'a> StateChanged<'a> {
+declare_concrete_message!(StateChanged, T);
+impl StateChanged {
     #[doc(alias = "gst_message_new_state_changed")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(old: crate::State, new: crate::State, pending: crate::State) -> Message {
@@ -523,7 +568,7 @@ impl<'a> StateChanged<'a> {
         Self::builder(old, new, pending).build()
     }
 
-    pub fn builder(
+    pub fn builder<'a>(
         old: crate::State,
         new: crate::State,
         pending: crate::State,
@@ -584,8 +629,8 @@ impl<'a> StateChanged<'a> {
     }
 }
 
-declare_concrete_message!(StateDirty);
-impl<'a> StateDirty<'a> {
+declare_concrete_message!(StateDirty, T);
+impl StateDirty {
     #[doc(alias = "gst_message_new_state_dirty")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Message {
@@ -593,14 +638,14 @@ impl<'a> StateDirty<'a> {
         Self::builder().build()
     }
 
-    pub fn builder() -> StateDirtyBuilder<'a> {
+    pub fn builder<'a>() -> StateDirtyBuilder<'a> {
         assert_initialized_main_thread!();
         StateDirtyBuilder::new()
     }
 }
 
-declare_concrete_message!(StepDone);
-impl<'a> StepDone<'a> {
+declare_concrete_message!(StepDone, T);
+impl StepDone {
     #[doc(alias = "gst_message_new_step_done")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(
@@ -623,7 +668,7 @@ impl<'a> StepDone<'a> {
         .build()
     }
 
-    pub fn builder<V: Into<GenericFormattedValue>>(
+    pub fn builder<'a, V: Into<GenericFormattedValue>>(
         amount: V,
         rate: f64,
         flush: bool,
@@ -691,8 +736,8 @@ impl<'a> StepDone<'a> {
     }
 }
 
-declare_concrete_message!(ClockProvide);
-impl<'a> ClockProvide<'a> {
+declare_concrete_message!(ClockProvide, T);
+impl ClockProvide {
     #[doc(alias = "gst_message_new_clock_provide")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(clock: &crate::Clock, ready: bool) -> Message {
@@ -734,8 +779,8 @@ impl<'a> ClockProvide<'a> {
     }
 }
 
-declare_concrete_message!(ClockLost);
-impl<'a> ClockLost<'a> {
+declare_concrete_message!(ClockLost, T);
+impl ClockLost {
     #[doc(alias = "gst_message_new_clock_lost")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(clock: &crate::Clock) -> Message {
@@ -761,8 +806,8 @@ impl<'a> ClockLost<'a> {
     }
 }
 
-declare_concrete_message!(NewClock);
-impl<'a> NewClock<'a> {
+declare_concrete_message!(NewClock, T);
+impl NewClock {
     #[doc(alias = "gst_message_new_new_clock")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(clock: &crate::Clock) -> Message {
@@ -788,8 +833,8 @@ impl<'a> NewClock<'a> {
     }
 }
 
-declare_concrete_message!(StructureChange);
-impl<'a> StructureChange<'a> {
+declare_concrete_message!(StructureChange, T);
+impl StructureChange {
     #[doc(alias = "gst_message_new_structure_change")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(type_: crate::StructureChangeType, owner: &crate::Element, busy: bool) -> Message {
@@ -829,8 +874,8 @@ impl<'a> StructureChange<'a> {
     }
 }
 
-declare_concrete_message!(StreamStatus);
-impl<'a> StreamStatus<'a> {
+declare_concrete_message!(StreamStatus, T);
+impl StreamStatus {
     #[doc(alias = "gst_message_new_stream_status")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(type_: crate::StreamStatusType, owner: &crate::Element) -> Message {
@@ -866,8 +911,8 @@ impl<'a> StreamStatus<'a> {
     }
 }
 
-declare_concrete_message!(Application);
-impl<'a> Application<'a> {
+declare_concrete_message!(Application, T);
+impl Application {
     #[doc(alias = "gst_message_new_application")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Message {
@@ -875,14 +920,14 @@ impl<'a> Application<'a> {
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: crate::Structure) -> ApplicationBuilder<'a> {
+    pub fn builder<'a>(structure: crate::Structure) -> ApplicationBuilder<'a> {
         assert_initialized_main_thread!();
         ApplicationBuilder::new(structure)
     }
 }
 
-declare_concrete_message!(Element);
-impl<'a> Element<'a> {
+declare_concrete_message!(Element, T);
+impl Element {
     #[doc(alias = "gst_message_new_element")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(structure: crate::Structure) -> Message {
@@ -890,14 +935,14 @@ impl<'a> Element<'a> {
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: crate::Structure) -> ElementBuilder<'a> {
+    pub fn builder<'a>(structure: crate::Structure) -> ElementBuilder<'a> {
         assert_initialized_main_thread!();
         ElementBuilder::new(structure)
     }
 }
 
-declare_concrete_message!(SegmentStart);
-impl<'a> SegmentStart<'a> {
+declare_concrete_message!(SegmentStart, T);
+impl SegmentStart {
     #[doc(alias = "gst_message_new_segment_start")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(position: V) -> Message {
@@ -905,7 +950,7 @@ impl<'a> SegmentStart<'a> {
         Self::builder(position).build()
     }
 
-    pub fn builder<V: Into<GenericFormattedValue>>(position: V) -> SegmentStartBuilder<'a> {
+    pub fn builder<'a, V: Into<GenericFormattedValue>>(position: V) -> SegmentStartBuilder<'a> {
         assert_initialized_main_thread!();
         let position = position.into();
         SegmentStartBuilder::new(position)
@@ -928,8 +973,8 @@ impl<'a> SegmentStart<'a> {
     }
 }
 
-declare_concrete_message!(SegmentDone);
-impl<'a> SegmentDone<'a> {
+declare_concrete_message!(SegmentDone, T);
+impl SegmentDone {
     #[doc(alias = "gst_message_new_segment_done")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(position: V) -> Message {
@@ -937,7 +982,7 @@ impl<'a> SegmentDone<'a> {
         Self::builder(position).build()
     }
 
-    pub fn builder<V: Into<GenericFormattedValue>>(position: V) -> SegmentDoneBuilder<'a> {
+    pub fn builder<'a, V: Into<GenericFormattedValue>>(position: V) -> SegmentDoneBuilder<'a> {
         assert_initialized_main_thread!();
         let position = position.into();
         SegmentDoneBuilder::new(position)
@@ -960,8 +1005,8 @@ impl<'a> SegmentDone<'a> {
     }
 }
 
-declare_concrete_message!(DurationChanged);
-impl<'a> DurationChanged<'a> {
+declare_concrete_message!(DurationChanged, T);
+impl DurationChanged {
     #[doc(alias = "gst_message_new_duration_changed")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Message {
@@ -969,14 +1014,14 @@ impl<'a> DurationChanged<'a> {
         Self::builder().build()
     }
 
-    pub fn builder() -> DurationChangedBuilder<'a> {
+    pub fn builder<'a>() -> DurationChangedBuilder<'a> {
         assert_initialized_main_thread!();
         DurationChangedBuilder::new()
     }
 }
 
-declare_concrete_message!(Latency);
-impl<'a> Latency<'a> {
+declare_concrete_message!(Latency, T);
+impl Latency {
     #[doc(alias = "gst_message_new_latency")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Message {
@@ -984,14 +1029,14 @@ impl<'a> Latency<'a> {
         Self::builder().build()
     }
 
-    pub fn builder() -> LatencyBuilder<'a> {
+    pub fn builder<'a>() -> LatencyBuilder<'a> {
         assert_initialized_main_thread!();
         LatencyBuilder::new()
     }
 }
 
-declare_concrete_message!(AsyncStart);
-impl<'a> AsyncStart<'a> {
+declare_concrete_message!(AsyncStart, T);
+impl AsyncStart {
     #[doc(alias = "gst_message_new_async_start")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Message {
@@ -999,14 +1044,14 @@ impl<'a> AsyncStart<'a> {
         Self::builder().build()
     }
 
-    pub fn builder() -> AsyncStartBuilder<'a> {
+    pub fn builder<'a>() -> AsyncStartBuilder<'a> {
         assert_initialized_main_thread!();
         AsyncStartBuilder::new()
     }
 }
 
-declare_concrete_message!(AsyncDone);
-impl<'a> AsyncDone<'a> {
+declare_concrete_message!(AsyncDone, T);
+impl AsyncDone {
     #[doc(alias = "gst_message_new_async_done")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(running_time: impl Into<Option<crate::ClockTime>>) -> Message {
@@ -1014,7 +1059,7 @@ impl<'a> AsyncDone<'a> {
         Self::builder().running_time(running_time).build()
     }
 
-    pub fn builder() -> AsyncDoneBuilder<'a> {
+    pub fn builder<'a>() -> AsyncDoneBuilder<'a> {
         assert_initialized_main_thread!();
         AsyncDoneBuilder::new()
     }
@@ -1032,8 +1077,8 @@ impl<'a> AsyncDone<'a> {
     }
 }
 
-declare_concrete_message!(RequestState);
-impl<'a> RequestState<'a> {
+declare_concrete_message!(RequestState, T);
+impl RequestState {
     #[doc(alias = "gst_message_new_request_state")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(state: crate::State) -> Message {
@@ -1041,7 +1086,7 @@ impl<'a> RequestState<'a> {
         Self::builder(state).build()
     }
 
-    pub fn builder(state: crate::State) -> RequestStateBuilder<'a> {
+    pub fn builder<'a>(state: crate::State) -> RequestStateBuilder<'a> {
         assert_initialized_main_thread!();
         RequestStateBuilder::new(state)
     }
@@ -1059,8 +1104,8 @@ impl<'a> RequestState<'a> {
     }
 }
 
-declare_concrete_message!(StepStart);
-impl<'a> StepStart<'a> {
+declare_concrete_message!(StepStart, T);
+impl StepStart {
     #[doc(alias = "gst_message_new_step_start")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(
@@ -1074,7 +1119,7 @@ impl<'a> StepStart<'a> {
         Self::builder(active, amount.into(), rate, flush, intermediate).build()
     }
 
-    pub fn builder<V: Into<GenericFormattedValue>>(
+    pub fn builder<'a, V: Into<GenericFormattedValue>>(
         active: bool,
         amount: V,
         rate: f64,
@@ -1119,8 +1164,8 @@ impl<'a> StepStart<'a> {
     }
 }
 
-declare_concrete_message!(Qos);
-impl<'a> Qos<'a> {
+declare_concrete_message!(Qos, T);
+impl Qos {
     #[doc(alias = "gst_message_new_qos")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(
@@ -1139,7 +1184,7 @@ impl<'a> Qos<'a> {
             .build()
     }
 
-    pub fn builder(live: bool) -> QosBuilder<'a> {
+    pub fn builder<'a>(live: bool) -> QosBuilder<'a> {
         assert_initialized_main_thread!();
         QosBuilder::new(live)
     }
@@ -1232,16 +1277,16 @@ impl<'a> Qos<'a> {
     }
 }
 
-declare_concrete_message!(Progress);
-impl<'a> Progress<'a> {
+declare_concrete_message!(Progress, T);
+impl Progress {
     #[doc(alias = "gst_message_new_progress")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(type_: crate::ProgressType, code: &'a str, text: &'a str) -> Message {
+    pub fn new(type_: crate::ProgressType, code: &str, text: &str) -> Message {
         skip_assert_initialized!();
         Self::builder(type_, code, text).build()
     }
 
-    pub fn builder(
+    pub fn builder<'a>(
         type_: crate::ProgressType,
         code: &'a str,
         text: &'a str,
@@ -1251,7 +1296,7 @@ impl<'a> Progress<'a> {
     }
 
     #[doc(alias = "gst_message_parse_progress")]
-    pub fn get(&self) -> (crate::ProgressType, &'a str, &'a str) {
+    pub fn get(&self) -> (crate::ProgressType, &str, &str) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
             let mut code = ptr::null_mut();
@@ -1272,8 +1317,8 @@ impl<'a> Progress<'a> {
     }
 }
 
-declare_concrete_message!(Toc);
-impl<'a> Toc<'a> {
+declare_concrete_message!(Toc, T);
+impl Toc {
     // FIXME could use false for updated as default
     // Even better: use an enum for updated so that it is more explicit than true / false
     #[doc(alias = "gst_message_new_toc")]
@@ -1300,8 +1345,8 @@ impl<'a> Toc<'a> {
     }
 }
 
-declare_concrete_message!(ResetTime);
-impl<'a> ResetTime<'a> {
+declare_concrete_message!(ResetTime, T);
+impl ResetTime {
     #[doc(alias = "gst_message_new_reset_time")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(running_time: crate::ClockTime) -> Message {
@@ -1309,7 +1354,7 @@ impl<'a> ResetTime<'a> {
         Self::builder(running_time).build()
     }
 
-    pub fn builder(running_time: crate::ClockTime) -> ResetTimeBuilder<'a> {
+    pub fn builder<'a>(running_time: crate::ClockTime) -> ResetTimeBuilder<'a> {
         assert_initialized_main_thread!();
         ResetTimeBuilder::new(running_time)
     }
@@ -1327,8 +1372,8 @@ impl<'a> ResetTime<'a> {
     }
 }
 
-declare_concrete_message!(StreamStart);
-impl<'a> StreamStart<'a> {
+declare_concrete_message!(StreamStart, T);
+impl StreamStart {
     #[doc(alias = "gst_message_new_stream_start")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new() -> Message {
@@ -1336,7 +1381,7 @@ impl<'a> StreamStart<'a> {
         Self::builder().build()
     }
 
-    pub fn builder() -> StreamStartBuilder<'a> {
+    pub fn builder<'a>() -> StreamStartBuilder<'a> {
         assert_initialized_main_thread!();
         StreamStartBuilder::new()
     }
@@ -1364,8 +1409,8 @@ impl<'a> StreamStart<'a> {
     }
 }
 
-declare_concrete_message!(NeedContext);
-impl<'a> NeedContext<'a> {
+declare_concrete_message!(NeedContext, T);
+impl NeedContext {
     #[doc(alias = "gst_message_new_need_context")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(context_type: &str) -> Message {
@@ -1391,8 +1436,8 @@ impl<'a> NeedContext<'a> {
     }
 }
 
-declare_concrete_message!(HaveContext);
-impl<'a> HaveContext<'a> {
+declare_concrete_message!(HaveContext, T);
+impl HaveContext {
     #[doc(alias = "gst_message_new_have_context")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(context: crate::Context) -> Message {
@@ -1400,7 +1445,7 @@ impl<'a> HaveContext<'a> {
         Self::builder(context).build()
     }
 
-    pub fn builder(context: crate::Context) -> HaveContextBuilder<'a> {
+    pub fn builder<'a>(context: crate::Context) -> HaveContextBuilder<'a> {
         assert_initialized_main_thread!();
         HaveContextBuilder::new(context)
     }
@@ -1416,8 +1461,8 @@ impl<'a> HaveContext<'a> {
     }
 }
 
-declare_concrete_message!(DeviceAdded);
-impl<'a> DeviceAdded<'a> {
+declare_concrete_message!(DeviceAdded, T);
+impl DeviceAdded {
     #[doc(alias = "gst_message_new_device_added")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(device: &crate::Device) -> Message {
@@ -1443,8 +1488,8 @@ impl<'a> DeviceAdded<'a> {
     }
 }
 
-declare_concrete_message!(DeviceRemoved);
-impl<'a> DeviceRemoved<'a> {
+declare_concrete_message!(DeviceRemoved, T);
+impl DeviceRemoved {
     #[doc(alias = "gst_message_new_device_removed")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(device: &crate::Device) -> Message {
@@ -1472,10 +1517,10 @@ impl<'a> DeviceRemoved<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-declare_concrete_message!(PropertyNotify);
+declare_concrete_message!(PropertyNotify, T);
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-impl<'a> PropertyNotify<'a> {
+impl PropertyNotify {
     #[doc(alias = "gst_message_new_property_notify")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(property_name: &str) -> Message {
@@ -1489,7 +1534,7 @@ impl<'a> PropertyNotify<'a> {
     }
 
     #[doc(alias = "gst_message_parse_property_notify")]
-    pub fn get(&self) -> (Object, &str, Option<&'a glib::Value>) {
+    pub fn get(&self) -> (Object, &str, Option<&glib::Value>) {
         unsafe {
             let mut object = ptr::null_mut();
             let mut property_name = ptr::null();
@@ -1517,10 +1562,10 @@ impl<'a> PropertyNotify<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-declare_concrete_message!(StreamCollection);
+declare_concrete_message!(StreamCollection, T);
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-impl<'a> StreamCollection<'a> {
+impl StreamCollection {
     #[doc(alias = "gst_message_new_stream_collection")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(collection: &crate::StreamCollection) -> Message {
@@ -1548,10 +1593,10 @@ impl<'a> StreamCollection<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-declare_concrete_message!(StreamsSelected);
+declare_concrete_message!(StreamsSelected, T);
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-impl<'a> StreamsSelected<'a> {
+impl StreamsSelected {
     #[doc(alias = "gst_message_new_streams_selected")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(collection: &crate::StreamCollection) -> Message {
@@ -1597,10 +1642,10 @@ impl<'a> StreamsSelected<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-declare_concrete_message!(Redirect);
+declare_concrete_message!(Redirect, T);
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-impl<'a> Redirect<'a> {
+impl Redirect {
     #[doc(alias = "gst_message_new_redirect")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(location: &str) -> Message {
@@ -1653,18 +1698,18 @@ impl<'a> Redirect<'a> {
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-declare_concrete_message!(DeviceChanged);
+declare_concrete_message!(DeviceChanged, T);
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-impl<'a> DeviceChanged<'a> {
+impl DeviceChanged {
     #[doc(alias = "gst_message_new_device_changed")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(device: &'a crate::Device, changed_device: &'a crate::Device) -> Message {
+    pub fn new(device: &crate::Device, changed_device: &crate::Device) -> Message {
         skip_assert_initialized!();
         Self::builder(device, changed_device).build()
     }
 
-    pub fn builder(
+    pub fn builder<'a>(
         device: &'a crate::Device,
         changed_device: &'a crate::Device,
     ) -> DeviceChangedBuilder<'a> {
@@ -1692,10 +1737,10 @@ impl<'a> DeviceChanged<'a> {
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-declare_concrete_message!(InstantRateRequest);
+declare_concrete_message!(InstantRateRequest, T);
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-impl<'a> InstantRateRequest<'a> {
+impl InstantRateRequest {
     #[doc(alias = "gst_message_new_instant_rate_request")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(rate_multiplier: f64) -> Message {
@@ -1703,7 +1748,7 @@ impl<'a> InstantRateRequest<'a> {
         Self::builder(rate_multiplier).build()
     }
 
-    pub fn builder(rate_multiplier: f64) -> InstantRateRequestBuilder<'a> {
+    pub fn builder<'a>(rate_multiplier: f64) -> InstantRateRequestBuilder<'a> {
         assert_initialized_main_thread!();
         InstantRateRequestBuilder::new(rate_multiplier)
     }

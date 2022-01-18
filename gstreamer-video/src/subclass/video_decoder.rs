@@ -91,7 +91,7 @@ pub trait VideoDecoderImpl: VideoDecoderImplExt + ElementImpl {
     fn propose_allocation(
         &self,
         element: &Self::Type,
-        query: gst::query::Allocation<&mut gst::QueryRef>,
+        query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError> {
         self.parent_propose_allocation(element, query)
     }
@@ -99,7 +99,7 @@ pub trait VideoDecoderImpl: VideoDecoderImplExt + ElementImpl {
     fn decide_allocation(
         &self,
         element: &Self::Type,
-        query: gst::query::Allocation<&mut gst::QueryRef>,
+        query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError> {
         self.parent_decide_allocation(element, query)
     }
@@ -166,13 +166,13 @@ pub trait VideoDecoderImplExt: ObjectSubclass {
     fn parent_propose_allocation(
         &self,
         element: &Self::Type,
-        query: gst::query::Allocation<&mut gst::QueryRef>,
+        query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError>;
 
     fn parent_decide_allocation(
         &self,
         element: &Self::Type,
-        query: gst::query::Allocation<&mut gst::QueryRef>,
+        query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError>;
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
@@ -494,7 +494,7 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
     fn parent_propose_allocation(
         &self,
         element: &Self::Type,
-        query: gst::query::Allocation<&mut gst::QueryRef>,
+        query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
@@ -518,7 +518,7 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
     fn parent_decide_allocation(
         &self,
         element: &Self::Type,
-        query: gst::query::Allocation<&mut gst::QueryRef>,
+        query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
@@ -869,7 +869,7 @@ unsafe extern "C" fn video_decoder_propose_allocation<T: VideoDecoderImpl>(
     let imp = instance.imp();
     let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
     let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
-        gst::QueryView::Allocation(allocation) => allocation,
+        gst::QueryViewMut::Allocation(allocation) => allocation,
         _ => unreachable!(),
     };
 
@@ -893,7 +893,7 @@ unsafe extern "C" fn video_decoder_decide_allocation<T: VideoDecoderImpl>(
     let imp = instance.imp();
     let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
     let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
-        gst::QueryView::Allocation(allocation) => allocation,
+        gst::QueryViewMut::Allocation(allocation) => allocation,
         _ => unreachable!(),
     };
 

@@ -81,7 +81,7 @@ pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl {
     fn propose_allocation(
         &self,
         element: &Self::Type,
-        query: gst::query::Allocation<&mut gst::QueryRef>,
+        query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError> {
         self.parent_propose_allocation(element, query)
     }
@@ -137,7 +137,7 @@ pub trait BaseSinkImplExt: ObjectSubclass {
     fn parent_propose_allocation(
         &self,
         element: &Self::Type,
-        query: gst::query::Allocation<&mut gst::QueryRef>,
+        query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError>;
 }
 
@@ -403,7 +403,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
     fn parent_propose_allocation(
         &self,
         element: &Self::Type,
-        query: gst::query::Allocation<&mut gst::QueryRef>,
+        query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
@@ -671,7 +671,7 @@ unsafe extern "C" fn base_sink_propose_allocation<T: BaseSinkImpl>(
     let imp = instance.imp();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
-        gst::QueryView::Allocation(allocation) => allocation,
+        gst::QueryViewMut::Allocation(allocation) => allocation,
         _ => unreachable!(),
     };
 

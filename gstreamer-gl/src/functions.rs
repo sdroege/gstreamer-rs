@@ -7,7 +7,7 @@ use std::ptr;
 #[doc(alias = "gst_gl_handle_context_query")]
 pub fn gl_handle_context_query(
     element: &impl IsA<gst::Element>,
-    query: gst::query::Context<&mut gst::QueryRef>,
+    query: &mut gst::query::Context,
     display: Option<&impl IsA<GLDisplay>>,
     context: Option<&impl IsA<GLContext>>,
     other_context: Option<&impl IsA<GLContext>>,

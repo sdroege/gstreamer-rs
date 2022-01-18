@@ -4,6 +4,7 @@ use crate::structure::*;
 use crate::ClockTime;
 use crate::GenericFormattedValue;
 
+use std::borrow::Borrow;
 use std::cmp;
 use std::ffi::CStr;
 use std::fmt;
@@ -12,9 +13,7 @@ use std::num::NonZeroU32;
 use std::ops::Deref;
 use std::ptr;
 
-use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, try_from_glib, IntoGlib, ToGlibPtr,
-};
+use glib::translate::*;
 use glib::value::ToSendValue;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -221,55 +220,49 @@ impl EventRef {
         self.structure().map_or(false, |s| s.has_name(name))
     }
 
-    pub fn view(&self) -> EventView<&EventRef> {
-        let type_ = unsafe { (*self.as_ptr()).type_ };
+    pub fn view(&self) -> EventView {
+        unsafe {
+            let type_ = (*self.as_ptr()).type_;
 
-        match type_ {
-            ffi::GST_EVENT_FLUSH_START => EventView::FlushStart(FlushStart(self)),
-            ffi::GST_EVENT_FLUSH_STOP => EventView::FlushStop(FlushStop(self)),
-            ffi::GST_EVENT_STREAM_START => EventView::StreamStart(StreamStart(self)),
-            ffi::GST_EVENT_CAPS => EventView::Caps(Caps(self)),
-            ffi::GST_EVENT_SEGMENT => EventView::Segment(Segment(self)),
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
-            ffi::GST_EVENT_STREAM_COLLECTION => EventView::StreamCollection(StreamCollection(self)),
-            ffi::GST_EVENT_TAG => EventView::Tag(Tag(self)),
-            ffi::GST_EVENT_BUFFERSIZE => EventView::Buffersize(Buffersize(self)),
-            ffi::GST_EVENT_SINK_MESSAGE => EventView::SinkMessage(SinkMessage(self)),
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
-            ffi::GST_EVENT_STREAM_GROUP_DONE => EventView::StreamGroupDone(StreamGroupDone(self)),
-            ffi::GST_EVENT_EOS => EventView::Eos(Eos(self)),
-            ffi::GST_EVENT_TOC => EventView::Toc(Toc(self)),
-            ffi::GST_EVENT_PROTECTION => EventView::Protection(Protection(self)),
-            ffi::GST_EVENT_SEGMENT_DONE => EventView::SegmentDone(SegmentDone(self)),
-            ffi::GST_EVENT_GAP => EventView::Gap(Gap(self)),
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
-            ffi::GST_EVENT_INSTANT_RATE_CHANGE => {
-                EventView::InstantRateChange(InstantRateChange(self))
+            match type_ {
+                ffi::GST_EVENT_FLUSH_START => FlushStart::view(self),
+                ffi::GST_EVENT_FLUSH_STOP => FlushStop::view(self),
+                ffi::GST_EVENT_STREAM_START => StreamStart::view(self),
+                ffi::GST_EVENT_CAPS => Caps::view(self),
+                ffi::GST_EVENT_SEGMENT => Segment::view(self),
+                #[cfg(any(feature = "v1_10", feature = "dox"))]
+                ffi::GST_EVENT_STREAM_COLLECTION => StreamCollection::view(self),
+                ffi::GST_EVENT_TAG => Tag::view(self),
+                ffi::GST_EVENT_BUFFERSIZE => Buffersize::view(self),
+                ffi::GST_EVENT_SINK_MESSAGE => SinkMessage::view(self),
+                #[cfg(any(feature = "v1_10", feature = "dox"))]
+                ffi::GST_EVENT_STREAM_GROUP_DONE => StreamGroupDone::view(self),
+                ffi::GST_EVENT_EOS => Eos::view(self),
+                ffi::GST_EVENT_TOC => Toc::view(self),
+                ffi::GST_EVENT_PROTECTION => Protection::view(self),
+                ffi::GST_EVENT_SEGMENT_DONE => SegmentDone::view(self),
+                ffi::GST_EVENT_GAP => Gap::view(self),
+                #[cfg(any(feature = "v1_18", feature = "dox"))]
+                ffi::GST_EVENT_INSTANT_RATE_CHANGE => InstantRateChange::view(self),
+                ffi::GST_EVENT_QOS => Qos::view(self),
+                ffi::GST_EVENT_SEEK => Seek::view(self),
+                ffi::GST_EVENT_NAVIGATION => Navigation::view(self),
+                ffi::GST_EVENT_LATENCY => Latency::view(self),
+                ffi::GST_EVENT_STEP => Step::view(self),
+                ffi::GST_EVENT_RECONFIGURE => Reconfigure::view(self),
+                ffi::GST_EVENT_TOC_SELECT => TocSelect::view(self),
+                #[cfg(any(feature = "v1_10", feature = "dox"))]
+                ffi::GST_EVENT_SELECT_STREAMS => SelectStreams::view(self),
+                #[cfg(any(feature = "v1_18", feature = "dox"))]
+                ffi::GST_EVENT_INSTANT_RATE_SYNC_TIME => InstantRateSyncTime::view(self),
+                ffi::GST_EVENT_CUSTOM_UPSTREAM => CustomUpstream::view(self),
+                ffi::GST_EVENT_CUSTOM_DOWNSTREAM => CustomDownstream::view(self),
+                ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB => CustomDownstreamOob::view(self),
+                ffi::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY => CustomDownstreamSticky::view(self),
+                ffi::GST_EVENT_CUSTOM_BOTH => CustomBoth::view(self),
+                ffi::GST_EVENT_CUSTOM_BOTH_OOB => CustomBothOob::view(self),
+                _ => Other::view(self),
             }
-            ffi::GST_EVENT_QOS => EventView::Qos(Qos(self)),
-            ffi::GST_EVENT_SEEK => EventView::Seek(Seek(self)),
-            ffi::GST_EVENT_NAVIGATION => EventView::Navigation(Navigation(self)),
-            ffi::GST_EVENT_LATENCY => EventView::Latency(Latency(self)),
-            ffi::GST_EVENT_STEP => EventView::Step(Step(self)),
-            ffi::GST_EVENT_RECONFIGURE => EventView::Reconfigure(Reconfigure(self)),
-            ffi::GST_EVENT_TOC_SELECT => EventView::TocSelect(TocSelect(self)),
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
-            ffi::GST_EVENT_SELECT_STREAMS => EventView::SelectStreams(SelectStreams(self)),
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
-            ffi::GST_EVENT_INSTANT_RATE_SYNC_TIME => {
-                EventView::InstantRateSyncTime(InstantRateSyncTime(self))
-            }
-            ffi::GST_EVENT_CUSTOM_UPSTREAM => EventView::CustomUpstream(CustomUpstream(self)),
-            ffi::GST_EVENT_CUSTOM_DOWNSTREAM => EventView::CustomDownstream(CustomDownstream(self)),
-            ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB => {
-                EventView::CustomDownstreamOob(CustomDownstreamOob(self))
-            }
-            ffi::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY => {
-                EventView::CustomDownstreamSticky(CustomDownstreamSticky(self))
-            }
-            ffi::GST_EVENT_CUSTOM_BOTH => EventView::CustomBoth(CustomBoth(self)),
-            ffi::GST_EVENT_CUSTOM_BOTH_OOB => EventView::CustomBothOob(CustomBothOob(self)),
-            _ => EventView::Other(Other(self)),
         }
     }
 }
@@ -291,116 +284,122 @@ impl fmt::Debug for EventRef {
     }
 }
 
-pub unsafe trait AsPtr {
-    unsafe fn as_ptr(&self) -> *mut ffi::GstEvent;
-}
-
-unsafe impl AsPtr for Event {
-    unsafe fn as_ptr(&self) -> *mut ffi::GstEvent {
-        EventRef::as_ptr(self) as *mut ffi::GstEvent
-    }
-}
-
-unsafe impl<'a> AsPtr for &'a EventRef {
-    unsafe fn as_ptr(&self) -> *mut ffi::GstEvent {
-        EventRef::as_ptr(self) as *mut ffi::GstEvent
-    }
-}
-
-pub trait StickyEventType {
+pub trait StickyEventType: ToOwned {
     const TYPE: EventType;
 
-    unsafe fn from_event(event: Event) -> Self;
+    unsafe fn from_event(event: Event) -> Self::Owned;
 }
 
 #[derive(Debug)]
 #[non_exhaustive]
-pub enum EventView<T> {
-    FlushStart(FlushStart<T>),
-    FlushStop(FlushStop<T>),
-    StreamStart(StreamStart<T>),
-    Caps(Caps<T>),
-    Segment(Segment<T>),
+pub enum EventView<'a> {
+    FlushStart(&'a FlushStart),
+    FlushStop(&'a FlushStop),
+    StreamStart(&'a StreamStart),
+    Caps(&'a Caps),
+    Segment(&'a Segment),
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    StreamCollection(StreamCollection<T>),
-    Tag(Tag<T>),
-    Buffersize(Buffersize<T>),
-    SinkMessage(SinkMessage<T>),
+    StreamCollection(&'a StreamCollection),
+    Tag(&'a Tag),
+    Buffersize(&'a Buffersize),
+    SinkMessage(&'a SinkMessage),
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    StreamGroupDone(StreamGroupDone<T>),
-    Eos(Eos<T>),
-    Toc(Toc<T>),
-    Protection(Protection<T>),
-    SegmentDone(SegmentDone<T>),
-    Gap(Gap<T>),
+    StreamGroupDone(&'a StreamGroupDone),
+    Eos(&'a Eos),
+    Toc(&'a Toc),
+    Protection(&'a Protection),
+    SegmentDone(&'a SegmentDone),
+    Gap(&'a Gap),
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    InstantRateChange(InstantRateChange<T>),
-    Qos(Qos<T>),
-    Seek(Seek<T>),
-    Navigation(Navigation<T>),
-    Latency(Latency<T>),
-    Step(Step<T>),
-    Reconfigure(Reconfigure<T>),
-    TocSelect(TocSelect<T>),
+    InstantRateChange(&'a InstantRateChange),
+    Qos(&'a Qos),
+    Seek(&'a Seek),
+    Navigation(&'a Navigation),
+    Latency(&'a Latency),
+    Step(&'a Step),
+    Reconfigure(&'a Reconfigure),
+    TocSelect(&'a TocSelect),
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    SelectStreams(SelectStreams<T>),
+    SelectStreams(&'a SelectStreams),
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    InstantRateSyncTime(InstantRateSyncTime<T>),
-    CustomUpstream(CustomUpstream<T>),
-    CustomDownstream(CustomDownstream<T>),
-    CustomDownstreamOob(CustomDownstreamOob<T>),
-    CustomDownstreamSticky(CustomDownstreamSticky<T>),
-    CustomBoth(CustomBoth<T>),
-    CustomBothOob(CustomBothOob<T>),
-    Other(Other<T>),
+    InstantRateSyncTime(&'a InstantRateSyncTime),
+    CustomUpstream(&'a CustomUpstream),
+    CustomDownstream(&'a CustomDownstream),
+    CustomDownstreamOob(&'a CustomDownstreamOob),
+    CustomDownstreamSticky(&'a CustomDownstreamSticky),
+    CustomBoth(&'a CustomBoth),
+    CustomBothOob(&'a CustomBothOob),
+    Other(&'a Other),
 }
 
 macro_rules! declare_concrete_event {
     (@sticky $name:ident, $param:ident) => {
         declare_concrete_event!($name, $param);
 
-        impl StickyEventType for $name<Event> {
+        impl StickyEventType for $name {
             const TYPE: EventType = EventType::$name;
 
-            unsafe fn from_event(event: Event) -> Self {
-                Self(event)
+            unsafe fn from_event(event: Event) -> Self::Owned {
+                $name::<Event>(event)
             }
         }
     };
     ($name:ident, $param:ident) => {
         #[derive(Debug)]
-        pub struct $name<$param>($param);
+        #[repr(transparent)]
+        pub struct $name<$param = EventRef>($param);
 
-        impl<'a> $name<&'a EventRef> {
+        impl $name {
             pub fn event(&self) -> &EventRef {
-                self.0
+                unsafe { &*(self as *const Self as *const EventRef) }
+            }
+
+            unsafe fn view(event: &EventRef) -> EventView<'_> {
+                let event = &*(event as *const EventRef as *const Self);
+                EventView::$name(event)
             }
         }
 
-        impl<'a> Deref for $name<&'a EventRef> {
+        impl Deref for $name {
             type Target = EventRef;
 
             fn deref(&self) -> &Self::Target {
-                self.0
+                self.event()
             }
         }
 
-        impl Deref for $name<Event> {
-            type Target = EventRef;
+        impl ToOwned for $name {
+            type Owned = $name<Event>;
 
-            fn deref(&self) -> &Self::Target {
-                &self.0
+            fn to_owned(&self) -> Self::Owned {
+                $name::<Event>(self.copy())
             }
         }
 
         impl $name<Event> {
-            pub fn get_mut(&mut self) -> Option<&mut EventRef> {
-                self.0.get_mut()
+            pub fn get_mut(&mut self) -> Option<&mut $name> {
+                self.0
+                    .get_mut()
+                    .map(|event| unsafe { &mut *(event as *mut EventRef as *mut $name) })
+            }
+        }
+
+        impl Deref for $name<Event> {
+            type Target = $name;
+
+            fn deref(&self) -> &Self::Target {
+                unsafe { &*(self.0.as_ptr() as *const Self::Target) }
+            }
+        }
+
+        impl Borrow<$name> for $name<Event> {
+            fn borrow(&self) -> &$name {
+                &*self
             }
         }
 
@@ -443,14 +442,14 @@ impl FlushStop<Event> {
     }
 }
 
-impl<T: AsPtr> FlushStop<T> {
+impl FlushStop {
     #[doc(alias = "get_reset_time")]
     #[doc(alias = "gst_event_parse_flush_stop")]
     pub fn resets_time(&self) -> bool {
         unsafe {
             let mut reset_time = mem::MaybeUninit::uninit();
 
-            ffi::gst_event_parse_flush_stop(self.0.as_ptr(), reset_time.as_mut_ptr());
+            ffi::gst_event_parse_flush_stop(self.as_mut_ptr(), reset_time.as_mut_ptr());
 
             from_glib(reset_time.assume_init())
         }
@@ -470,40 +469,27 @@ impl StreamStart<Event> {
         assert_initialized_main_thread!();
         StreamStartBuilder::new(stream_id)
     }
+}
 
+impl StreamStart {
     #[doc(alias = "get_stream_id")]
     #[doc(alias = "gst_event_parse_stream_start")]
     pub fn stream_id(&self) -> &str {
         unsafe {
             let mut stream_id = ptr::null();
 
-            ffi::gst_event_parse_stream_start(AsPtr::as_ptr(&self.0), &mut stream_id);
+            ffi::gst_event_parse_stream_start(self.as_mut_ptr(), &mut stream_id);
             CStr::from_ptr(stream_id).to_str().unwrap()
         }
     }
-}
 
-impl<'a> StreamStart<&'a EventRef> {
-    #[doc(alias = "get_stream_id")]
-    #[doc(alias = "gst_event_parse_stream_start")]
-    pub fn stream_id(&self) -> &'a str {
-        unsafe {
-            let mut stream_id = ptr::null();
-
-            ffi::gst_event_parse_stream_start(AsPtr::as_ptr(&self.0), &mut stream_id);
-            CStr::from_ptr(stream_id).to_str().unwrap()
-        }
-    }
-}
-
-impl<T: AsPtr> StreamStart<T> {
     #[doc(alias = "get_stream_flags")]
     #[doc(alias = "gst_event_parse_stream_flags")]
     pub fn stream_flags(&self) -> crate::StreamFlags {
         unsafe {
             let mut stream_flags = mem::MaybeUninit::uninit();
 
-            ffi::gst_event_parse_stream_flags(self.0.as_ptr(), stream_flags.as_mut_ptr());
+            ffi::gst_event_parse_stream_flags(self.as_mut_ptr(), stream_flags.as_mut_ptr());
 
             from_glib(stream_flags.assume_init())
         }
@@ -515,7 +501,7 @@ impl<T: AsPtr> StreamStart<T> {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
 
-            ffi::gst_event_parse_group_id(self.0.as_ptr(), group_id.as_mut_ptr());
+            ffi::gst_event_parse_group_id(self.as_mut_ptr(), group_id.as_mut_ptr());
 
             let group_id = group_id.assume_init();
             if group_id == 0 {
@@ -533,7 +519,7 @@ impl<T: AsPtr> StreamStart<T> {
     pub fn stream(&self) -> Option<crate::Stream> {
         unsafe {
             let mut stream = ptr::null_mut();
-            ffi::gst_event_parse_stream(self.0.as_ptr(), &mut stream);
+            ffi::gst_event_parse_stream(self.as_mut_ptr(), &mut stream);
             from_glib_full(stream)
         }
     }
@@ -552,33 +538,16 @@ impl Caps<Event> {
         assert_initialized_main_thread!();
         CapsBuilder::new(caps)
     }
+}
 
+impl Caps {
     #[doc(alias = "get_caps")]
     #[doc(alias = "gst_event_parse_caps")]
     pub fn caps(&self) -> &crate::CapsRef {
         unsafe {
             let mut caps = ptr::null_mut();
 
-            ffi::gst_event_parse_caps(AsPtr::as_ptr(&self.0), &mut caps);
-            crate::CapsRef::from_ptr(caps)
-        }
-    }
-
-    #[doc(alias = "get_caps_owned")]
-    #[doc(alias = "gst_event_parse_caps")]
-    pub fn caps_owned(&self) -> crate::Caps {
-        unsafe { from_glib_none(self.caps().as_ptr()) }
-    }
-}
-
-impl<'a> Caps<&'a EventRef> {
-    #[doc(alias = "get_caps")]
-    #[doc(alias = "gst_event_parse_caps")]
-    pub fn caps(&self) -> &'a crate::CapsRef {
-        unsafe {
-            let mut caps = ptr::null_mut();
-
-            ffi::gst_event_parse_caps(AsPtr::as_ptr(&self.0), &mut caps);
+            ffi::gst_event_parse_caps(self.as_mut_ptr(), &mut caps);
             crate::CapsRef::from_ptr(caps)
         }
     }
@@ -605,27 +574,16 @@ impl Segment<Event> {
         assert_initialized_main_thread!();
         SegmentBuilder::new(segment.as_ref())
     }
+}
 
+impl Segment {
     #[doc(alias = "get_segment")]
     #[doc(alias = "gst_event_parse_segment")]
     pub fn segment(&self) -> &crate::Segment {
         unsafe {
             let mut segment = ptr::null();
 
-            ffi::gst_event_parse_segment(AsPtr::as_ptr(&self.0), &mut segment);
-            &*(segment as *mut ffi::GstSegment as *mut crate::Segment)
-        }
-    }
-}
-
-impl<'a> Segment<&'a EventRef> {
-    #[doc(alias = "get_segment")]
-    #[doc(alias = "gst_event_parse_segment")]
-    pub fn segment(&self) -> &'a crate::Segment {
-        unsafe {
-            let mut segment = ptr::null();
-
-            ffi::gst_event_parse_segment(AsPtr::as_ptr(&self.0), &mut segment);
+            ffi::gst_event_parse_segment(self.as_mut_ptr(), &mut segment);
             &*(segment as *mut ffi::GstSegment as *mut crate::Segment)
         }
     }
@@ -656,7 +614,7 @@ impl StreamCollection<Event> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-impl<T: AsPtr> StreamCollection<T> {
+impl StreamCollection {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_stream_collection")]
@@ -665,7 +623,7 @@ impl<T: AsPtr> StreamCollection<T> {
         unsafe {
             let mut stream_collection = ptr::null_mut();
 
-            ffi::gst_event_parse_stream_collection(self.0.as_ptr(), &mut stream_collection);
+            ffi::gst_event_parse_stream_collection(self.as_mut_ptr(), &mut stream_collection);
             from_glib_full(stream_collection)
         }
     }
@@ -684,33 +642,16 @@ impl Tag<Event> {
         assert_initialized_main_thread!();
         TagBuilder::new(tags)
     }
+}
 
+impl Tag {
     #[doc(alias = "get_tag")]
     #[doc(alias = "gst_event_parse_tag")]
     pub fn tag(&self) -> &crate::TagListRef {
         unsafe {
             let mut tags = ptr::null_mut();
 
-            ffi::gst_event_parse_tag(AsPtr::as_ptr(&self.0), &mut tags);
-            crate::TagListRef::from_ptr(tags)
-        }
-    }
-
-    #[doc(alias = "get_tag_owned")]
-    #[doc(alias = "gst_event_parse_tag")]
-    pub fn tag_owned(&self) -> crate::TagList {
-        unsafe { from_glib_none(self.tag().as_ptr()) }
-    }
-}
-
-impl<'a> Tag<&'a EventRef> {
-    #[doc(alias = "get_tag")]
-    #[doc(alias = "gst_event_parse_tag")]
-    pub fn tag(&self) -> &'a crate::TagListRef {
-        unsafe {
-            let mut tags = ptr::null_mut();
-
-            ffi::gst_event_parse_tag(AsPtr::as_ptr(&self.0), &mut tags);
+            ffi::gst_event_parse_tag(self.as_mut_ptr(), &mut tags);
             crate::TagListRef::from_ptr(tags)
         }
     }
@@ -745,7 +686,7 @@ impl Buffersize<Event> {
     }
 }
 
-impl<T: AsPtr> Buffersize<T> {
+impl Buffersize {
     #[doc(alias = "gst_event_parse_buffer_size")]
     pub fn get(&self) -> (GenericFormattedValue, GenericFormattedValue, bool) {
         unsafe {
@@ -755,7 +696,7 @@ impl<T: AsPtr> Buffersize<T> {
             let mut async_ = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_buffer_size(
-                self.0.as_ptr(),
+                self.as_mut_ptr(),
                 fmt.as_mut_ptr(),
                 minsize.as_mut_ptr(),
                 maxsize.as_mut_ptr(),
@@ -785,14 +726,14 @@ impl SinkMessage<Event> {
     }
 }
 
-impl<T: AsPtr> SinkMessage<T> {
+impl SinkMessage {
     #[doc(alias = "get_message")]
     #[doc(alias = "gst_event_parse_sink_message")]
     pub fn message(&self) -> crate::Message {
         unsafe {
             let mut msg = ptr::null_mut();
 
-            ffi::gst_event_parse_sink_message(self.0.as_ptr(), &mut msg);
+            ffi::gst_event_parse_sink_message(self.as_mut_ptr(), &mut msg);
             from_glib_full(msg)
         }
     }
@@ -823,7 +764,7 @@ impl StreamGroupDone<Event> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-impl<T: AsPtr> StreamGroupDone<T> {
+impl StreamGroupDone {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_group_id")]
@@ -832,7 +773,7 @@ impl<T: AsPtr> StreamGroupDone<T> {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
 
-            ffi::gst_event_parse_stream_group_done(self.0.as_ptr(), group_id.as_mut_ptr());
+            ffi::gst_event_parse_stream_group_done(self.as_mut_ptr(), group_id.as_mut_ptr());
 
             let group_id = group_id.assume_init();
             assert_ne!(group_id, 0);
@@ -873,7 +814,7 @@ impl Toc<Event> {
     }
 }
 
-impl<T: AsPtr> Toc<T> {
+impl Toc {
     #[doc(alias = "get_toc")]
     #[doc(alias = "gst_event_parse_toc")]
     pub fn toc(&self) -> (&crate::TocRef, bool) {
@@ -881,7 +822,7 @@ impl<T: AsPtr> Toc<T> {
             let mut toc = ptr::null_mut();
             let mut updated = mem::MaybeUninit::uninit();
 
-            ffi::gst_event_parse_toc(self.0.as_ptr(), &mut toc, updated.as_mut_ptr());
+            ffi::gst_event_parse_toc(self.as_mut_ptr(), &mut toc, updated.as_mut_ptr());
             (
                 crate::TocRef::from_ptr(toc),
                 from_glib(updated.assume_init()),
@@ -914,7 +855,7 @@ impl Protection<Event> {
     }
 }
 
-impl<T: AsPtr> Protection<T> {
+impl Protection {
     #[doc(alias = "gst_event_parse_protection")]
     pub fn get(&self) -> (&str, &crate::BufferRef, Option<&str>) {
         unsafe {
@@ -923,7 +864,7 @@ impl<T: AsPtr> Protection<T> {
             let mut origin = ptr::null();
 
             ffi::gst_event_parse_protection(
-                self.0.as_ptr(),
+                self.as_mut_ptr(),
                 &mut system_id,
                 &mut buffer,
                 &mut origin,
@@ -966,7 +907,7 @@ impl SegmentDone<Event> {
     }
 }
 
-impl<T: AsPtr> SegmentDone<T> {
+impl SegmentDone {
     #[doc(alias = "gst_event_parse_segment_done")]
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
@@ -974,7 +915,7 @@ impl<T: AsPtr> SegmentDone<T> {
             let mut position = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_segment_done(
-                self.0.as_ptr(),
+                self.as_mut_ptr(),
                 fmt.as_mut_ptr(),
                 position.as_mut_ptr(),
             );
@@ -999,7 +940,7 @@ impl Gap<Event> {
     }
 }
 
-impl<T: AsPtr> Gap<T> {
+impl Gap {
     #[doc(alias = "gst_event_parse_gap")]
     pub fn get(&self) -> (ClockTime, Option<ClockTime>) {
         unsafe {
@@ -1007,7 +948,7 @@ impl<T: AsPtr> Gap<T> {
             let mut duration = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_gap(
-                self.0.as_ptr(),
+                self.as_mut_ptr(),
                 timestamp.as_mut_ptr(),
                 duration.as_mut_ptr(),
             );
@@ -1025,7 +966,7 @@ impl<T: AsPtr> Gap<T> {
     pub fn gap_flags(&self) -> crate::GapFlags {
         unsafe {
             let mut flags = mem::MaybeUninit::uninit();
-            ffi::gst_event_parse_gap_flags(self.0.as_ptr(), flags.as_mut_ptr());
+            ffi::gst_event_parse_gap_flags(self.as_mut_ptr(), flags.as_mut_ptr());
             from_glib(flags.assume_init())
         }
     }
@@ -1055,7 +996,7 @@ impl InstantRateChange<Event> {
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-impl<T: AsPtr> InstantRateChange<T> {
+impl InstantRateChange {
     #[doc(alias = "gst_event_parse_instant_rate_change")]
     pub fn get(&self) -> (f64, crate::SegmentFlags) {
         unsafe {
@@ -1063,7 +1004,7 @@ impl<T: AsPtr> InstantRateChange<T> {
             let mut new_flags = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_instant_rate_change(
-                self.0.as_ptr(),
+                self.as_mut_ptr(),
                 multiplier.as_mut_ptr(),
                 new_flags.as_mut_ptr(),
             );
@@ -1095,7 +1036,7 @@ impl Qos<Event> {
     }
 }
 
-impl<T: AsPtr> Qos<T> {
+impl Qos {
     #[doc(alias = "gst_event_parse_qos")]
     pub fn get(&self) -> (crate::QOSType, f64, i64, Option<ClockTime>) {
         unsafe {
@@ -1105,7 +1046,7 @@ impl<T: AsPtr> Qos<T> {
             let mut timestamp = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_qos(
-                self.0.as_ptr(),
+                self.as_mut_ptr(),
                 type_.as_mut_ptr(),
                 proportion.as_mut_ptr(),
                 diff.as_mut_ptr(),
@@ -1155,7 +1096,7 @@ impl Seek<Event> {
     }
 }
 
-impl<T: AsPtr> Seek<T> {
+impl Seek {
     #[doc(alias = "gst_event_parse_seek")]
     pub fn get(
         &self,
@@ -1177,7 +1118,7 @@ impl<T: AsPtr> Seek<T> {
             let mut stop = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_seek(
-                self.0.as_ptr(),
+                self.as_mut_ptr(),
                 rate.as_mut_ptr(),
                 fmt.as_mut_ptr(),
                 flags.as_mut_ptr(),
@@ -1207,7 +1148,7 @@ impl<T: AsPtr> Seek<T> {
             let mut trickmode_interval = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_seek_trickmode_interval(
-                self.0.as_ptr(),
+                self.as_mut_ptr(),
                 trickmode_interval.as_mut_ptr(),
             );
 
@@ -1246,14 +1187,14 @@ impl Latency<Event> {
     }
 }
 
-impl<T: AsPtr> Latency<T> {
+impl Latency {
     #[doc(alias = "get_latency")]
     #[doc(alias = "gst_event_parse_latency")]
     pub fn latency(&self) -> ClockTime {
         unsafe {
             let mut latency = mem::MaybeUninit::uninit();
 
-            ffi::gst_event_parse_latency(self.0.as_ptr(), latency.as_mut_ptr());
+            ffi::gst_event_parse_latency(self.as_mut_ptr(), latency.as_mut_ptr());
 
             try_from_glib(latency.assume_init()).expect("undefined latency")
         }
@@ -1285,7 +1226,7 @@ impl Step<Event> {
     }
 }
 
-impl<T: AsPtr> Step<T> {
+impl Step {
     #[doc(alias = "gst_event_parse_step")]
     pub fn get(&self) -> (GenericFormattedValue, f64, bool, bool) {
         unsafe {
@@ -1296,7 +1237,7 @@ impl<T: AsPtr> Step<T> {
             let mut intermediate = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_step(
-                self.0.as_ptr(),
+                self.as_mut_ptr(),
                 fmt.as_mut_ptr(),
                 amount.as_mut_ptr(),
                 rate.as_mut_ptr(),
@@ -1345,26 +1286,15 @@ impl TocSelect<Event> {
         assert_initialized_main_thread!();
         TocSelectBuilder::new(uid)
     }
+}
 
+impl TocSelect {
     #[doc(alias = "get_uid")]
     pub fn uid(&self) -> &str {
         unsafe {
             let mut uid = ptr::null_mut();
 
-            ffi::gst_event_parse_toc_select(AsPtr::as_ptr(&self.0), &mut uid);
-
-            CStr::from_ptr(uid).to_str().unwrap()
-        }
-    }
-}
-
-impl<'a> TocSelect<&'a EventRef> {
-    #[doc(alias = "get_uid")]
-    pub fn uid(&self) -> &'a str {
-        unsafe {
-            let mut uid = ptr::null_mut();
-
-            ffi::gst_event_parse_toc_select(AsPtr::as_ptr(&self.0), &mut uid);
+            ffi::gst_event_parse_toc_select(self.as_mut_ptr(), &mut uid);
 
             CStr::from_ptr(uid).to_str().unwrap()
         }
@@ -1396,7 +1326,7 @@ impl SelectStreams<Event> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-impl<T: AsPtr> SelectStreams<T> {
+impl SelectStreams {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_streams")]
@@ -1405,7 +1335,7 @@ impl<T: AsPtr> SelectStreams<T> {
         unsafe {
             let mut streams = ptr::null_mut();
 
-            ffi::gst_event_parse_select_streams(self.0.as_ptr(), &mut streams);
+            ffi::gst_event_parse_select_streams(self.as_mut_ptr(), &mut streams);
 
             FromGlibPtrContainer::from_glib_full(streams)
         }
@@ -1445,7 +1375,7 @@ impl InstantRateSyncTime<Event> {
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-impl<T: AsPtr> InstantRateSyncTime<T> {
+impl InstantRateSyncTime {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "parse_instant_rate_sync_time")]
@@ -1457,7 +1387,7 @@ impl<T: AsPtr> InstantRateSyncTime<T> {
             let mut upstream_running_time = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_instant_rate_sync_time(
-                self.0.as_ptr(),
+                self.as_mut_ptr(),
                 rate_multiplier.as_mut_ptr(),
                 running_time.as_mut_ptr(),
                 upstream_running_time.as_mut_ptr(),
@@ -2546,5 +2476,20 @@ mod tests {
 
         let structure = flush_start_evt.structure().unwrap();
         assert_eq!(structure.get("test"), Ok(42u32));
+    }
+
+    #[test]
+    fn test_view_lifetimes() {
+        crate::init().unwrap();
+
+        let caps = crate::Caps::builder("some/x-caps").build();
+        let event = crate::event::Caps::new(&caps);
+
+        let caps2 = match event.view() {
+            EventView::Caps(caps) => caps.caps(),
+            _ => unreachable!(),
+        };
+
+        assert_eq!(&*caps, caps2);
     }
 }

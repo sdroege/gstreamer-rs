@@ -324,7 +324,7 @@ pub trait PadExtManual: 'static {
 
     #[doc(alias = "gst_pad_get_sticky_event")]
     #[doc(alias = "get_sticky_event")]
-    fn sticky_event<T: crate::event::StickyEventType>(&self, idx: u32) -> Option<T>;
+    fn sticky_event<T: crate::event::StickyEventType>(&self, idx: u32) -> Option<T::Owned>;
 
     fn set_pad_flags(&self, flags: PadFlags);
 
@@ -1059,7 +1059,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn sticky_event<T: crate::event::StickyEventType>(&self, idx: u32) -> Option<T> {
+    fn sticky_event<T: crate::event::StickyEventType>(&self, idx: u32) -> Option<T::Owned> {
         unsafe {
             let ptr = ffi::gst_pad_get_sticky_event(
                 self.as_ref().to_glib_none().0,
@@ -2167,6 +2167,32 @@ mod tests {
             events.iter().all(|e| e.is_writable()),
             "An event ref leaked!"
         );
+    }
+
+    #[test]
+    fn test_sticky_events() {
+        crate::init().unwrap();
+
+        let pad = crate::Pad::builder(Some("sink"), crate::PadDirection::Sink).build();
+        pad.set_active(true).unwrap();
+
+        // Send some sticky events
+        assert!(pad.send_event(crate::event::StreamStart::new("test")));
+
+        let caps = crate::Caps::builder("some/x-caps").build();
+        assert!(pad.send_event(crate::event::Caps::new(&caps)));
+
+        let segment = crate::FormattedSegment::<crate::ClockTime>::new();
+        assert!(pad.send_event(crate::event::Segment::new(segment.as_ref())));
+
+        let stream_start = pad.sticky_event::<crate::event::StreamStart>(0).unwrap();
+        assert_eq!(stream_start.stream_id(), "test");
+
+        let caps2 = pad.sticky_event::<crate::event::Caps>(0).unwrap();
+        assert_eq!(&*caps, caps2.caps());
+
+        let segment = pad.sticky_event::<crate::event::Segment>(0).unwrap();
+        assert_eq!(segment.segment().format(), crate::Format::Time);
     }
 
     #[test]
