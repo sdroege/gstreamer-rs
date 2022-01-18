@@ -115,6 +115,8 @@ impl MessageRef {
             ffi::GST_MESSAGE_DEVICE_ADDED => MessageView::DeviceAdded(DeviceAdded(self)),
             ffi::GST_MESSAGE_DEVICE_REMOVED => MessageView::DeviceRemoved(DeviceRemoved(self)),
             #[cfg(any(feature = "v1_10", feature = "dox"))]
+            ffi::GST_MESSAGE_REDIRECT => MessageView::Redirect(Redirect(self)),
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_MESSAGE_PROPERTY_NOTIFY => MessageView::PropertyNotify(PropertyNotify(self)),
             #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_MESSAGE_STREAM_COLLECTION => {
