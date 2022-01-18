@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.18.1] - 2022-01-18
+### Fixed
+- `Message::view()` also handles the redirect message now.
+- `Message` and `Query` view variants that return references now borrow again
+  from the underlying query and not the view enum, allowing to use them in a
+  wider scope.
+
+### Changed
+- All miniobjects, `VideoTimeCode`, `Structure` and `CapsFeatures` are marked
+  as `#[repr(transparent)]` now to ensure that their memory representation is
+  exactly the underlying raw pointer.
+
 ## [0.18.0] - 2022-01-16
 ### Added
 - `gst_rtp::RtpHeaderExtension::read()` and `write()`.
