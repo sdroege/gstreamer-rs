@@ -58,7 +58,7 @@ pub fn convert_sample_async_local<F>(
             .acquire()
             .expect("thread default main context already acquired by another thread");
 
-        let func = fragile::Fragile::new(func);
+        let func = glib::thread_guard::ThreadGuard::new(func);
 
         convert_sample_async_unsafe(sample, caps, timeout, move |res| (func.into_inner())(res))
     }
