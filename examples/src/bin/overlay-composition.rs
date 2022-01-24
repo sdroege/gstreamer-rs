@@ -116,7 +116,6 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
         info: None,
     }));
 
-    let drawer_clone = drawer.clone();
     // Connect to the overlaycomposition element's "draw" signal, which is emitted for
     // each videoframe piped through the element. The signal handler needs to
     // return a gst_video::VideoOverlayComposition to be drawn on the frame
@@ -128,126 +127,124 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     //
     // In this case, the signal passes the gst::Element and a gst::Sample with
     // the current buffer
-    overlay.connect("draw", false, move |args| {
-        use std::f64::consts::PI;
+    overlay.connect_closure(
+        "draw",
+        false,
+        glib::closure!(@strong drawer => move |_overlay: &gst::Element,
+                                               sample: &gst::Sample| {
+            use std::f64::consts::PI;
 
-        let drawer = &drawer_clone;
-        let drawer = drawer.lock().unwrap();
+            let drawer = drawer.lock().unwrap();
 
-        // Get the signal's arguments
-        let _overlay = args[0].get::<gst::Element>().unwrap();
-        let sample = args[1].get::<gst::Sample>().unwrap();
-        let buffer = sample.buffer().unwrap();
-        let timestamp = buffer.pts().unwrap();
+            let buffer = sample.buffer().unwrap();
+            let timestamp = buffer.pts().unwrap();
 
-        let info = drawer.info.as_ref().unwrap();
-        let layout = drawer.layout.borrow();
+            let info = drawer.info.as_ref().unwrap();
+            let layout = drawer.layout.borrow();
 
-        let angle = 2.0 * PI * (timestamp % (10 * gst::ClockTime::SECOND)).nseconds() as f64
-            / (10.0 * gst::ClockTime::SECOND.nseconds() as f64);
+            let angle = 2.0 * PI * (timestamp % (10 * gst::ClockTime::SECOND)).nseconds() as f64
+                / (10.0 * gst::ClockTime::SECOND.nseconds() as f64);
 
-        /* Create a Cairo image surface to draw into and the context around it. */
-        let surface = cairo::ImageSurface::create(
-            cairo::Format::ARgb32,
-            info.width() as i32,
-            info.height() as i32,
-        )
-        .unwrap();
-        let cr = cairo::Context::new(&surface).expect("Failed to create cairo context");
+            /* Create a Cairo image surface to draw into and the context around it. */
+            let surface = cairo::ImageSurface::create(
+                cairo::Format::ARgb32,
+                info.width() as i32,
+                info.height() as i32,
+            )
+            .unwrap();
+            let cr = cairo::Context::new(&surface).expect("Failed to create cairo context");
 
-        cr.save().expect("Failed to save state");
-        cr.set_operator(cairo::Operator::Clear);
-        cr.paint().expect("Failed to clear background");
-        cr.restore().expect("Failed to restore state");
-
-        // The image we draw (the text) will be static, but we will change the
-        // transformation on the drawing context, which rotates and shifts everything
-        // that we draw afterwards. Like this, we have no complicated calulations
-        // in the actual drawing below.
-        // Calling multiple transformation methods after each other will apply the
-        // new transformation on top. If you repeat the cr.rotate(angle) line below
-        // this a second time, everything in the canvas will rotate twice as fast.
-        cr.translate(
-            f64::from(info.width()) / 2.0,
-            f64::from(info.height()) / 2.0,
-        );
-        cr.rotate(angle);
-
-        // This loop will render 10 times the string "GStreamer" in a circle
-        for i in 0..10 {
-            // Cairo, like most rendering frameworks, is using a stack for transformations
-            // with this, we push our current transformation onto this stack - allowing us
-            // to make temporary changes / render something / and then returning to the
-            // previous transformations.
             cr.save().expect("Failed to save state");
-
-            let angle = (360. * f64::from(i)) / 10.0;
-            let red = (1.0 + f64::cos((angle - 60.0) * PI / 180.0)) / 2.0;
-            cr.set_source_rgb(red, 0.0, 1.0 - red);
-            cr.rotate(angle * PI / 180.0);
-
-            // Update the text layout. This function is only updating pango's internal state.
-            // So e.g. that after a 90 degree rotation it knows that what was previously going
-            // to end up as a 200x100 rectangle would now be 100x200.
-            pangocairo::functions::update_layout(&cr, &**layout);
-            let (width, _height) = layout.size();
-            // Using width and height of the text, we can properly possition it within
-            // our canvas.
-            cr.move_to(
-                -(f64::from(width) / f64::from(pango::SCALE)) / 2.0,
-                -(f64::from(info.height())) / 2.0,
-            );
-            // After telling the layout object where to draw itself, we actually tell
-            // it to draw itself into our cairo context.
-            pangocairo::functions::show_layout(&cr, &**layout);
-
-            // Here we go one step up in our stack of transformations, removing any
-            // changes we did to them since the last call to cr.save();
+            cr.set_operator(cairo::Operator::Clear);
+            cr.paint().expect("Failed to clear background");
             cr.restore().expect("Failed to restore state");
-        }
 
-        /* Drop the Cairo context to release the additional reference to the data and
-         * then take ownership of the data. This only works if we have the one and only
-         * reference to the image surface */
-        drop(cr);
-        let stride = surface.stride();
-        let data = surface.take_data().unwrap();
+            // The image we draw (the text) will be static, but we will change the
+            // transformation on the drawing context, which rotates and shifts everything
+            // that we draw afterwards. Like this, we have no complicated calulations
+            // in the actual drawing below.
+            // Calling multiple transformation methods after each other will apply the
+            // new transformation on top. If you repeat the cr.rotate(angle) line below
+            // this a second time, everything in the canvas will rotate twice as fast.
+            cr.translate(
+                f64::from(info.width()) / 2.0,
+                f64::from(info.height()) / 2.0,
+            );
+            cr.rotate(angle);
 
-        /* Create an RGBA buffer, and add a video meta that the videooverlaycomposition expects */
-        let mut buffer = gst::Buffer::from_mut_slice(data);
+            // This loop will render 10 times the string "GStreamer" in a circle
+            for i in 0..10 {
+                // Cairo, like most rendering frameworks, is using a stack for transformations
+                // with this, we push our current transformation onto this stack - allowing us
+                // to make temporary changes / render something / and then returning to the
+                // previous transformations.
+                cr.save().expect("Failed to save state");
 
-        gst_video::VideoMeta::add_full(
-            buffer.get_mut().unwrap(),
-            gst_video::VideoFrameFlags::empty(),
-            gst_video::VideoFormat::Bgra,
-            info.width(),
-            info.height(),
-            &[0],
-            &[stride],
-        )
-        .unwrap();
+                let angle = (360. * f64::from(i)) / 10.0;
+                let red = (1.0 + f64::cos((angle - 60.0) * PI / 180.0)) / 2.0;
+                cr.set_source_rgb(red, 0.0, 1.0 - red);
+                cr.rotate(angle * PI / 180.0);
 
-        /* Turn the buffer into a VideoOverlayRectangle, then place
-         * that into a VideoOverlayComposition and return it.
-         *
-         * A VideoOverlayComposition can take a Vec of such rectangles
-         * spaced around the video frame, but we're just outputting 1
-         * here */
-        let rect = gst_video::VideoOverlayRectangle::new_raw(
-            &buffer,
-            0,
-            0,
-            info.width(),
-            info.height(),
-            gst_video::VideoOverlayFormatFlags::PREMULTIPLIED_ALPHA,
-        );
+                // Update the text layout. This function is only updating pango's internal state.
+                // So e.g. that after a 90 degree rotation it knows that what was previously going
+                // to end up as a 200x100 rectangle would now be 100x200.
+                pangocairo::functions::update_layout(&cr, &**layout);
+                let (width, _height) = layout.size();
+                // Using width and height of the text, we can properly possition it within
+                // our canvas.
+                cr.move_to(
+                    -(f64::from(width) / f64::from(pango::SCALE)) / 2.0,
+                    -(f64::from(info.height())) / 2.0,
+                );
+                // After telling the layout object where to draw itself, we actually tell
+                // it to draw itself into our cairo context.
+                pangocairo::functions::show_layout(&cr, &**layout);
 
-        Some(
+                // Here we go one step up in our stack of transformations, removing any
+                // changes we did to them since the last call to cr.save();
+                cr.restore().expect("Failed to restore state");
+            }
+
+            /* Drop the Cairo context to release the additional reference to the data and
+             * then take ownership of the data. This only works if we have the one and only
+             * reference to the image surface */
+            drop(cr);
+            let stride = surface.stride();
+            let data = surface.take_data().unwrap();
+
+            /* Create an RGBA buffer, and add a video meta that the videooverlaycomposition expects */
+            let mut buffer = gst::Buffer::from_mut_slice(data);
+
+            gst_video::VideoMeta::add_full(
+                buffer.get_mut().unwrap(),
+                gst_video::VideoFrameFlags::empty(),
+                gst_video::VideoFormat::Bgra,
+                info.width(),
+                info.height(),
+                &[0],
+                &[stride],
+            )
+            .unwrap();
+
+            /* Turn the buffer into a VideoOverlayRectangle, then place
+             * that into a VideoOverlayComposition and return it.
+             *
+             * A VideoOverlayComposition can take a Vec of such rectangles
+             * spaced around the video frame, but we're just outputting 1
+             * here */
+            let rect = gst_video::VideoOverlayRectangle::new_raw(
+                &buffer,
+                0,
+                0,
+                info.width(),
+                info.height(),
+                gst_video::VideoOverlayFormatFlags::PREMULTIPLIED_ALPHA,
+            );
+
             gst_video::VideoOverlayComposition::new(Some(&rect))
                 .unwrap()
-                .to_value(),
-        )
-    });
+        }),
+    );
 
     // Add a signal handler to the overlay's "caps-changed" signal. This could e.g.
     // be called when the sink that we render to does not support resizing the image
@@ -256,15 +253,17 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     // resize our canvas's size.
     // Another possibility for when this might happen is, when our video is a network
     // stream that dynamically changes resolution when enough bandwith is available.
-    overlay.connect("caps-changed", false, move |args| {
-        let _overlay = args[0].get::<gst::Element>().unwrap();
-        let caps = args[1].get::<gst::Caps>().unwrap();
-
-        let mut drawer = drawer.lock().unwrap();
-        drawer.info = Some(gst_video::VideoInfo::from_caps(&caps).unwrap());
-
-        None
-    });
+    overlay.connect_closure(
+        "caps-changed",
+        false,
+        glib::closure!(move |_overlay: &gst::Element,
+                             caps: &gst::Caps,
+                             _width: u32,
+                             _height: u32| {
+            let mut drawer = drawer.lock().unwrap();
+            drawer.info = Some(gst_video::VideoInfo::from_caps(caps).unwrap());
+        }),
+    );
 
     Ok(pipeline)
 }
