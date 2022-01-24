@@ -139,17 +139,16 @@ impl DebugCategory {
     #[doc(alias = "get_description")]
     #[doc(alias = "gst_debug_category_get_description")]
     pub fn description<'a>(self) -> Option<&'a str> {
-        match self.0 {
-            Some(cat) => unsafe {
-                let ptr = ffi::gst_debug_category_get_description(cat.as_ptr());
+        let cat = self.0?;
 
-                if ptr.is_null() {
-                    None
-                } else {
-                    Some(CStr::from_ptr(ptr).to_str().unwrap())
-                }
-            },
-            None => None,
+        unsafe {
+            let ptr = ffi::gst_debug_category_get_description(cat.as_ptr());
+
+            if ptr.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(ptr).to_str().unwrap())
+            }
         }
     }
 
