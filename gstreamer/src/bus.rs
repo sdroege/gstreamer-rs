@@ -13,8 +13,6 @@ use std::mem::transmute;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
-use fragile::Fragile;
-
 use crate::Bus;
 use crate::BusSyncReply;
 use crate::Message;
@@ -48,20 +46,22 @@ unsafe extern "C" fn trampoline_watch_local<F: FnMut(&Bus, &Message) -> Continue
     msg: *mut ffi::GstMessage,
     func: gpointer,
 ) -> gboolean {
-    let func: &Fragile<RefCell<F>> = &*(func as *const Fragile<RefCell<F>>);
-    (&mut *func.get().borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg))
+    let func: &glib::thread_guard::ThreadGuard<RefCell<F>> =
+        &*(func as *const glib::thread_guard::ThreadGuard<RefCell<F>>);
+    (&mut *func.get_ref().borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg))
         .into_glib()
 }
 
 unsafe extern "C" fn destroy_closure_watch_local<F: FnMut(&Bus, &Message) -> Continue + 'static>(
     ptr: gpointer,
 ) {
-    Box::<Fragile<RefCell<F>>>::from_raw(ptr as *mut _);
+    Box::<glib::thread_guard::ThreadGuard<RefCell<F>>>::from_raw(ptr as *mut _);
 }
 
 fn into_raw_watch_local<F: FnMut(&Bus, &Message) -> Continue + 'static>(func: F) -> gpointer {
     #[allow(clippy::type_complexity)]
-    let func: Box<Fragile<RefCell<F>>> = Box::new(Fragile::new(RefCell::new(func)));
+    let func: Box<glib::thread_guard::ThreadGuard<RefCell<F>>> =
+        Box::new(glib::thread_guard::ThreadGuard::new(RefCell::new(func)));
     Box::into_raw(func) as gpointer
 }
 
