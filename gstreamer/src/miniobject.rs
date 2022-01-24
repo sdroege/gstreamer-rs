@@ -477,6 +477,19 @@ macro_rules! mini_object_wrapper (
             }
         }
 
+        unsafe impl<'a> $crate::glib::value::FromValue<'a> for &'a $name {
+            type Checker = $crate::glib::value::GenericValueTypeOrNoneChecker<Self>;
+
+            unsafe fn from_value(value: &'a $crate::glib::Value) -> Self {
+                skip_assert_initialized!();
+                assert_eq!(std::mem::size_of::<$name>(), std::mem::size_of::<$crate::glib::ffi::gpointer>());
+                let value = &*(value as *const $crate::glib::Value as *const $crate::glib::gobject_ffi::GValue);
+                let ptr = &value.data[0].v_pointer as *const $crate::glib::ffi::gpointer as *const *const $ffi_name;
+                assert!(!(*ptr).is_null());
+                &*(ptr as *const $name)
+            }
+        }
+
         impl $crate::glib::value::ToValue for $name {
             fn to_value(&self) -> $crate::glib::Value {
                 let mut value = $crate::glib::Value::for_value_type::<Self>();
