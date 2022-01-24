@@ -253,6 +253,33 @@ impl DebugCategory {
     pub fn all_categories() -> glib::SList<DebugCategory> {
         unsafe { glib::SList::from_glib_container_static(ffi::gst_debug_get_all_categories()) }
     }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_debug_log_get_line")]
+    pub fn get_line(
+        &self,
+        level: crate::DebugLevel,
+        file: &str,
+        module: &str,
+        line: u32,
+        object: Option<&LoggedObject>,
+        message: &DebugMessage,
+    ) -> Option<glib::GString> {
+        let cat = self.0?;
+
+        unsafe {
+            from_glib_full(ffi::gst_debug_log_get_line(
+                cat.as_ptr(),
+                level.into_glib(),
+                file.to_glib_none().0,
+                module.to_glib_none().0,
+                line as i32,
+                object.map(|o| o.as_ptr()).unwrap_or(ptr::null_mut()),
+                message.0.as_ptr(),
+            ))
+        }
+    }
 }
 
 unsafe impl Sync for DebugCategory {}
