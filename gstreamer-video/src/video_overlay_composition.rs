@@ -303,6 +303,13 @@ impl VideoOverlayCompositionRef {
         }
     }
 
+    #[doc(alias = "gst_video_overlay_composition_add_rectangle")]
+    pub fn add_rectangle(&mut self, rect: &VideoOverlayRectangleRef) {
+        unsafe {
+            ffi::gst_video_overlay_composition_add_rectangle(self.as_mut_ptr(), rect.as_mut_ptr());
+        }
+    }
+
     #[doc(alias = "get_seqnum")]
     #[doc(alias = "gst_video_overlay_composition_get_seqnum")]
     pub fn seqnum(&self) -> u32 {
