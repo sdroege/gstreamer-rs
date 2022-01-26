@@ -268,6 +268,17 @@ impl VideoOverlayComposition {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+impl Default for VideoOverlayComposition {
+    fn default() -> Self {
+        assert_initialized_main_thread!();
+
+        use std::ptr;
+
+        unsafe { from_glib_full(ffi::gst_video_overlay_composition_new(ptr::null_mut())) }
+    }
+}
+
 impl VideoOverlayCompositionRef {
     #[doc(alias = "gst_video_overlay_composition_n_rectangles")]
     pub fn n_rectangles(&self) -> u32 {
