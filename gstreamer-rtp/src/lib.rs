@@ -30,6 +30,8 @@ mod auto;
 pub use crate::auto::functions::*;
 pub use crate::auto::*;
 
+pub mod subclass;
+
 pub mod rtp_buffer;
 pub use crate::rtp_buffer::{compare_seqnum, RTPBuffer};
 #[cfg(any(feature = "v1_20", feature = "dox"))]
