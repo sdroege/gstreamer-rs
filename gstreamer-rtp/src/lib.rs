@@ -27,6 +27,7 @@ macro_rules! skip_assert_initialized {
 #[allow(non_snake_case)]
 #[allow(clippy::use_self)]
 mod auto;
+pub use crate::auto::functions::*;
 pub use crate::auto::*;
 
 pub mod rtp_buffer;
