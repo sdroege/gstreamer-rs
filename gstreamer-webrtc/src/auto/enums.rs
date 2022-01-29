@@ -3,9 +3,15 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use glib::error::ErrorDomain;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::ToValue;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use glib::Quark;
 use glib::StaticType;
 use glib::Type;
 use std::ffi::CStr;
@@ -346,6 +352,154 @@ unsafe impl<'a> FromValue<'a> for WebRTCDataChannelState {
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl ToValue for WebRTCDataChannelState {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstWebRTCError")]
+pub enum WebRTCError {
+    #[doc(alias = "GST_WEBRTC_ERROR_DATA_CHANNEL_FAILURE")]
+    DataChannelFailure,
+    #[doc(alias = "GST_WEBRTC_ERROR_DTLS_FAILURE")]
+    DtlsFailure,
+    #[doc(alias = "GST_WEBRTC_ERROR_FINGERPRINT_FAILURE")]
+    FingerprintFailure,
+    #[doc(alias = "GST_WEBRTC_ERROR_SCTP_FAILURE")]
+    SctpFailure,
+    #[doc(alias = "GST_WEBRTC_ERROR_SDP_SYNTAX_ERROR")]
+    SdpSyntaxError,
+    #[doc(alias = "GST_WEBRTC_ERROR_HARDWARE_ENCODER_NOT_AVAILABLE")]
+    HardwareEncoderNotAvailable,
+    #[doc(alias = "GST_WEBRTC_ERROR_ENCODER_ERROR")]
+    EncoderError,
+    #[doc(alias = "GST_WEBRTC_ERROR_INVALID_STATE")]
+    InvalidState,
+    #[doc(alias = "GST_WEBRTC_ERROR_INTERNAL_FAILURE")]
+    InternalFailure,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl IntoGlib for WebRTCError {
+    type GlibType = ffi::GstWebRTCError;
+
+    fn into_glib(self) -> ffi::GstWebRTCError {
+        match self {
+            Self::DataChannelFailure => ffi::GST_WEBRTC_ERROR_DATA_CHANNEL_FAILURE,
+            Self::DtlsFailure => ffi::GST_WEBRTC_ERROR_DTLS_FAILURE,
+            Self::FingerprintFailure => ffi::GST_WEBRTC_ERROR_FINGERPRINT_FAILURE,
+            Self::SctpFailure => ffi::GST_WEBRTC_ERROR_SCTP_FAILURE,
+            Self::SdpSyntaxError => ffi::GST_WEBRTC_ERROR_SDP_SYNTAX_ERROR,
+            Self::HardwareEncoderNotAvailable => {
+                ffi::GST_WEBRTC_ERROR_HARDWARE_ENCODER_NOT_AVAILABLE
+            }
+            Self::EncoderError => ffi::GST_WEBRTC_ERROR_ENCODER_ERROR,
+            Self::InvalidState => ffi::GST_WEBRTC_ERROR_INVALID_STATE,
+            Self::InternalFailure => ffi::GST_WEBRTC_ERROR_INTERNAL_FAILURE,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstWebRTCError> for WebRTCError {
+    unsafe fn from_glib(value: ffi::GstWebRTCError) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GST_WEBRTC_ERROR_DATA_CHANNEL_FAILURE => Self::DataChannelFailure,
+            ffi::GST_WEBRTC_ERROR_DTLS_FAILURE => Self::DtlsFailure,
+            ffi::GST_WEBRTC_ERROR_FINGERPRINT_FAILURE => Self::FingerprintFailure,
+            ffi::GST_WEBRTC_ERROR_SCTP_FAILURE => Self::SctpFailure,
+            ffi::GST_WEBRTC_ERROR_SDP_SYNTAX_ERROR => Self::SdpSyntaxError,
+            ffi::GST_WEBRTC_ERROR_HARDWARE_ENCODER_NOT_AVAILABLE => {
+                Self::HardwareEncoderNotAvailable
+            }
+            ffi::GST_WEBRTC_ERROR_ENCODER_ERROR => Self::EncoderError,
+            ffi::GST_WEBRTC_ERROR_INVALID_STATE => Self::InvalidState,
+            ffi::GST_WEBRTC_ERROR_INTERNAL_FAILURE => Self::InternalFailure,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl ErrorDomain for WebRTCError {
+    fn domain() -> Quark {
+        skip_assert_initialized!();
+
+        unsafe { from_glib(ffi::gst_webrtc_error_quark()) }
+    }
+
+    fn code(self) -> i32 {
+        self.into_glib()
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
+        match code {
+            ffi::GST_WEBRTC_ERROR_DATA_CHANNEL_FAILURE => Some(Self::DataChannelFailure),
+            ffi::GST_WEBRTC_ERROR_DTLS_FAILURE => Some(Self::DtlsFailure),
+            ffi::GST_WEBRTC_ERROR_FINGERPRINT_FAILURE => Some(Self::FingerprintFailure),
+            ffi::GST_WEBRTC_ERROR_SCTP_FAILURE => Some(Self::SctpFailure),
+            ffi::GST_WEBRTC_ERROR_SDP_SYNTAX_ERROR => Some(Self::SdpSyntaxError),
+            ffi::GST_WEBRTC_ERROR_HARDWARE_ENCODER_NOT_AVAILABLE => {
+                Some(Self::HardwareEncoderNotAvailable)
+            }
+            ffi::GST_WEBRTC_ERROR_ENCODER_ERROR => Some(Self::EncoderError),
+            ffi::GST_WEBRTC_ERROR_INVALID_STATE => Some(Self::InvalidState),
+            ffi::GST_WEBRTC_ERROR_INTERNAL_FAILURE => Some(Self::InternalFailure),
+            value => Some(Self::__Unknown(value)),
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl StaticType for WebRTCError {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_webrtc_error_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::value::ValueType for WebRTCError {
+    type Type = Self;
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl<'a> FromValue<'a> for WebRTCError {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl ToValue for WebRTCError {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
