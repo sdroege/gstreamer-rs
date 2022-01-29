@@ -21,6 +21,7 @@ generate = [
     "GstWebRTC.WebRTCDataChannelState",
     "GstWebRTC.WebRTCDTLSSetup",
     "GstWebRTC.WebRTCDTLSTransportState",
+    "GstWebRTC.WebRTCError",
     "GstWebRTC.WebRTCFECType",
     "GstWebRTC.WebRTCICEComponent",
     "GstWebRTC.WebRTCICEConnectionState",
