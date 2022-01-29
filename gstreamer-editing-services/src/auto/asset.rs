@@ -60,16 +60,28 @@ impl Asset {
     }
 
     #[doc(alias = "ges_asset_request_async")]
-    pub fn request_async<P: FnOnce(Result<Asset, glib::Error>) + Send + 'static>(
+    pub fn request_async<P: FnOnce(Result<Asset, glib::Error>) + 'static>(
         extractable_type: glib::types::Type,
         id: Option<&str>,
         cancellable: Option<&impl IsA<gio::Cancellable>>,
         callback: P,
     ) {
         assert_initialized_main_thread!();
-        let user_data: Box_<P> = Box_::new(callback);
+
+        let main_context = glib::MainContext::ref_thread_default();
+        let is_main_context_owner = main_context.is_owner();
+        let has_acquired_main_context = (!is_main_context_owner)
+            .then(|| main_context.acquire().ok())
+            .flatten();
+        assert!(
+            is_main_context_owner || has_acquired_main_context.is_some(),
+            "Async operations only allowed if the thread is owning the MainContext"
+        );
+
+        let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+            Box_::new(glib::thread_guard::ThreadGuard::new(callback));
         unsafe extern "C" fn request_async_trampoline<
-            P: FnOnce(Result<Asset, glib::Error>) + Send + 'static,
+            P: FnOnce(Result<Asset, glib::Error>) + 'static,
         >(
             _source_object: *mut glib::gobject_ffi::GObject,
             res: *mut gio::ffi::GAsyncResult,
@@ -82,7 +94,9 @@ impl Asset {
             } else {
                 Err(from_glib_full(error))
             };
-            let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+            let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
+                Box_::from_raw(user_data as *mut _);
+            let callback: P = callback.into_inner();
             callback(result);
         }
         let callback = request_async_trampoline::<P>;
