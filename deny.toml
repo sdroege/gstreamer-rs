@@ -33,8 +33,3 @@ unknown-git = "deny"
 allow-git = [
   "https://github.com/gtk-rs/gtk-rs-core",
 ]
-
-# ignore duplicated heck dependency because various crates depend on an old version
-[[bans.skip]]
-name = "heck"
-version = "0.3"
