@@ -5,6 +5,26 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.18.3] - 2022-01-31
+### Added
+- `Default` implementation for `gst_video::VideoOverlayComposition` when
+  targetting GStreamer 1.20.
+- `gst_video::VideoOverlayComposition::add_rectangle()` in addition to the
+  addition of all rectangles via an iterator during construction.
+- Subclassing support for `gst_rtp::RTPHeaderExtension`.
+- `gst_webrtc::WebRTCError` for programatically handling WebRTC errors.
+
+### Fixed
+- `gst_rtp::RTPHeaderExtension` has `gst::Element` set as parent class now.
+- Global functions are re-exported from the `gst_rtp` crate root.
+
+### Changed
+- GIO-style async operations in GES no longer need `Send`-able closures.
+
+### Removed
+- `fragile` is no longer a dependency and instead the corresponding GLib API
+  is used.
+
 ## [0.18.2] - 2022-01-24
 ### Added
 - `glib::FromValue` for mini object references.
