@@ -140,6 +140,18 @@ impl<'a> VideoCodecFrame<'a> {
         }
     }
 
+    #[doc(alias = "get_input_buffer")]
+    pub fn input_buffer_owned(&self) -> Option<gst::Buffer> {
+        unsafe {
+            let ptr = (*self.to_glib_none().0).input_buffer;
+            if ptr.is_null() {
+                None
+            } else {
+                Some(from_glib_none(ptr))
+            }
+        }
+    }
+
     #[doc(alias = "get_output_buffer")]
     pub fn output_buffer(&self) -> Option<&gst::BufferRef> {
         unsafe {
