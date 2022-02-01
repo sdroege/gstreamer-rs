@@ -119,6 +119,8 @@ impl ObjectImpl for TracingTracerPriv {
     }
 }
 
+impl GstObjectImpl for TracingTracerPriv {}
+
 impl TracerImpl for TracingTracerPriv {
     fn pad_push_pre(&self, _: u64, pad: &Pad, _: &Buffer) {
         self.pad_pre("pad_push", pad);
