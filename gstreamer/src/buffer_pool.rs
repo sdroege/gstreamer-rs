@@ -4,51 +4,106 @@ use crate::AllocationParams;
 use crate::Allocator;
 use crate::BufferPool;
 use crate::Structure;
+use crate::StructureRef;
 
 use glib::prelude::*;
 use glib::translate::*;
 
 use std::mem;
 use std::ops;
+use std::ops::Deref;
+use std::ops::DerefMut;
 use std::ptr;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[repr(transparent)]
 pub struct BufferPoolConfig(Structure);
 
-impl ops::Deref for BufferPoolConfig {
+impl Deref for BufferPoolConfig {
+    type Target = BufferPoolConfigRef;
+
+    fn deref(&self) -> &BufferPoolConfigRef {
+        unsafe { &*(self.0.as_ptr() as *const StructureRef as *const BufferPoolConfigRef) }
+    }
+}
+
+impl DerefMut for BufferPoolConfig {
+    fn deref_mut(&mut self) -> &mut BufferPoolConfigRef {
+        unsafe { &mut *(self.0.as_ptr() as *mut StructureRef as *mut BufferPoolConfigRef) }
+    }
+}
+
+impl AsRef<BufferPoolConfigRef> for BufferPoolConfig {
+    fn as_ref(&self) -> &BufferPoolConfigRef {
+        self.deref()
+    }
+}
+
+impl AsMut<BufferPoolConfigRef> for BufferPoolConfig {
+    fn as_mut(&mut self) -> &mut BufferPoolConfigRef {
+        self.deref_mut()
+    }
+}
+
+#[derive(Debug)]
+#[repr(transparent)]
+pub struct BufferPoolConfigRef(StructureRef);
+
+impl BufferPoolConfigRef {
+    pub unsafe fn from_glib_borrow<'a>(ptr: *const ffi::GstStructure) -> &'a BufferPoolConfigRef {
+        assert!(!ptr.is_null());
+
+        &*(ptr as *mut StructureRef as *mut BufferPoolConfigRef)
+    }
+
+    pub unsafe fn from_glib_borrow_mut<'a>(
+        ptr: *mut ffi::GstStructure,
+    ) -> &'a mut BufferPoolConfigRef {
+        assert!(!ptr.is_null());
+
+        &mut *(ptr as *mut StructureRef as *mut BufferPoolConfigRef)
+    }
+
+    pub unsafe fn as_ptr(&self) -> *const ffi::GstStructure {
+        self as *const Self as *const ffi::GstStructure
+    }
+
+    pub unsafe fn as_mut_ptr(&self) -> *mut ffi::GstStructure {
+        self as *const Self as *mut ffi::GstStructure
+    }
+}
+
+impl ops::Deref for BufferPoolConfigRef {
     type Target = crate::StructureRef;
 
     fn deref(&self) -> &crate::StructureRef {
-        self.0.deref()
+        &self.0
     }
 }
 
-impl ops::DerefMut for BufferPoolConfig {
+impl ops::DerefMut for BufferPoolConfigRef {
     fn deref_mut(&mut self) -> &mut crate::StructureRef {
-        self.0.deref_mut()
+        &mut self.0
     }
 }
 
-impl AsRef<crate::StructureRef> for BufferPoolConfig {
+impl AsRef<crate::StructureRef> for BufferPoolConfigRef {
     fn as_ref(&self) -> &crate::StructureRef {
-        self.0.as_ref()
+        &self.0
     }
 }
 
-impl AsMut<crate::StructureRef> for BufferPoolConfig {
+impl AsMut<crate::StructureRef> for BufferPoolConfigRef {
     fn as_mut(&mut self) -> &mut crate::StructureRef {
-        self.0.as_mut()
+        &mut self.0
     }
 }
 
-impl BufferPoolConfig {
+impl BufferPoolConfigRef {
     #[doc(alias = "gst_buffer_pool_config_add_option")]
     pub fn add_option(&mut self, option: &str) {
         unsafe {
-            ffi::gst_buffer_pool_config_add_option(
-                self.0.to_glib_none_mut().0,
-                option.to_glib_none().0,
-            );
+            ffi::gst_buffer_pool_config_add_option(self.0.as_mut_ptr(), option.to_glib_none().0);
         }
     }
 
@@ -56,7 +111,7 @@ impl BufferPoolConfig {
     pub fn has_option(&self, option: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_buffer_pool_config_has_option(
-                self.0.to_glib_none().0,
+                self.0.as_mut_ptr(),
                 option.to_glib_none().0,
             ))
         }
@@ -66,12 +121,12 @@ impl BufferPoolConfig {
     #[doc(alias = "gst_buffer_pool_config_n_options")]
     pub fn options(&self) -> Vec<String> {
         unsafe {
-            let n = ffi::gst_buffer_pool_config_n_options(self.0.to_glib_none().0) as usize;
+            let n = ffi::gst_buffer_pool_config_n_options(self.0.as_mut_ptr()) as usize;
             let mut options = Vec::with_capacity(n);
 
             for i in 0..n {
                 options.push(from_glib_none(ffi::gst_buffer_pool_config_get_option(
-                    self.0.to_glib_none().0,
+                    self.0.as_mut_ptr(),
                     i as u32,
                 )));
             }
@@ -90,7 +145,7 @@ impl BufferPoolConfig {
     ) {
         unsafe {
             ffi::gst_buffer_pool_config_set_params(
-                self.0.to_glib_none_mut().0,
+                self.0.as_mut_ptr(),
                 caps.to_glib_none().0,
                 size,
                 min_buffers,
@@ -109,7 +164,7 @@ impl BufferPoolConfig {
             let mut max_buffers = mem::MaybeUninit::uninit();
 
             let ret: bool = from_glib(ffi::gst_buffer_pool_config_get_params(
-                self.0.to_glib_none().0,
+                self.0.as_mut_ptr(),
                 &mut caps,
                 size.as_mut_ptr(),
                 min_buffers.as_mut_ptr(),
@@ -139,7 +194,7 @@ impl BufferPoolConfig {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_buffer_pool_config_validate_params(
-                    self.0.to_glib_none().0,
+                    self.0.as_mut_ptr(),
                     caps.to_glib_none().0,
                     size,
                     min_buffers,
@@ -157,7 +212,7 @@ impl BufferPoolConfig {
             let mut allocator = ptr::null_mut();
             let mut params = mem::MaybeUninit::zeroed();
             let ret = from_glib(ffi::gst_buffer_pool_config_get_allocator(
-                self.0.to_glib_none().0,
+                self.0.as_mut_ptr(),
                 &mut allocator,
                 params.as_mut_ptr(),
             ));
@@ -174,7 +229,7 @@ impl BufferPoolConfig {
         assert!(allocator.is_some() || params.is_some());
         unsafe {
             ffi::gst_buffer_pool_config_set_allocator(
-                self.0.to_glib_none().0,
+                self.0.as_mut_ptr(),
                 allocator.to_glib_none().0,
                 match params {
                     Some(val) => val.as_ptr(),
@@ -268,6 +323,13 @@ impl<'a> ToGlibPtrMut<'a, *mut ffi::GstBufferPoolAcquireParams> for BufferPoolAc
         &'a mut self,
     ) -> glib::translate::StashMut<'a, *mut ffi::GstBufferPoolAcquireParams, Self> {
         glib::translate::StashMut(&mut self.0, self)
+    }
+}
+
+#[doc(hidden)]
+impl FromGlibPtrNone<*mut ffi::GstBufferPoolAcquireParams> for BufferPoolAcquireParams {
+    unsafe fn from_glib_none(ptr: *mut ffi::GstBufferPoolAcquireParams) -> Self {
+        Self(*ptr)
     }
 }
 

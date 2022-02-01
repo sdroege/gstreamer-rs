@@ -16,6 +16,7 @@ mod plugin;
 mod plugin;
 
 mod bin;
+mod buffer_pool;
 mod child_proxy;
 mod element;
 mod ghost_pad;
@@ -46,6 +47,7 @@ pub mod prelude {
     pub use glib::subclass::prelude::*;
 
     pub use super::bin::{BinImpl, BinImplExt};
+    pub use super::buffer_pool::{BufferPoolImpl, BufferPoolImplExt};
     pub use super::child_proxy::{ChildProxyImpl, ChildProxyImplExt};
     pub use super::clock::{ClockImpl, ClockImplExt};
     pub use super::device::{DeviceImpl, DeviceImplExt};
