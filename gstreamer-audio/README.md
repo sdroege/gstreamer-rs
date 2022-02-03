@@ -1,7 +1,7 @@
 # gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-audio.svg)](https://crates.io/crates/gstreamer-audio) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Audio library) bindings for Rust.
-Documentation can be found [here](https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer_audio/).
+Documentation can be found [here](https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_audio/).
 
 These bindings are providing a safe API that can be used to interface with
 GStreamer, e.g. for writing GStreamer-based applications and GStreamer plugins.

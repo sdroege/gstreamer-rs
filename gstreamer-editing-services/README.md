@@ -1,7 +1,7 @@
 # gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-editing-services.svg)](https://crates.io/crates/gstreamer-editing-services)  [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
 
 [GStreamer Editing Services](https://gstreamer.freedesktop.org/) bindings for Rust.
-Documentation can be found [here](https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer_editing_services/).
+Documentation can be found [here](https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_editing_services/).
 
 NOTE: The GStreamer Editing Services API is not Thread Safe and before the 1.16
 release this was not properly expressed in the code, leading to possible data

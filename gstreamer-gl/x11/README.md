@@ -2,7 +2,7 @@
 
 [GStreamer](https://gstreamer.freedesktop.org/) (OpenGL library, X11 support)
 bindings for Rust.  Documentation can be found
-[here](https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer_gl_x11/).
+[here](https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_gl_x11/).
 
 These bindings are providing a safe API that can be used to interface with
 GStreamer, e.g. for writing GStreamer-based applications and GStreamer plugins.
