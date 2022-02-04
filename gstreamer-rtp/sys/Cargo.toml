@@ -53,7 +53,7 @@ license = "MIT"
 name = "gstreamer-rtp-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
-version = "0.18.3"
+version = "0.18.4"
 edition = "2021"
 rust-version = "1.56"
 [package.metadata.docs.rs]

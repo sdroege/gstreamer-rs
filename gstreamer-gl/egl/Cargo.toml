@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-gl-egl"
-version = "0.18.3"
+version = "0.18.4"
 authors = [
     "Sebastian Dröge <sebastian@centricular.com>",
     "Víctor M. Jáquez L. <vjaquez@igalia.com>"
