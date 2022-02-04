@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.18.4] - 2022-02-04
+### Changed
+- Update gir files to GStreamer 1.20.0 release.
+
+### Added
+- `gst_video::VideoCodecFrame::input_buffer_owned()` for getting an owned
+  reference.
+
+### Fixed
+- All documentation links in the `README.md`s are correct again.
+
 ## [0.18.3] - 2022-01-31
 ### Added
 - `Default` implementation for `gst_video::VideoOverlayComposition` when
