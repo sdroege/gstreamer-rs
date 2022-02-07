@@ -294,7 +294,11 @@ unsafe extern "C" fn audiosink_write<T: AudioSinkImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
-    let data_slice = std::slice::from_raw_parts(data as *const u8, length as usize);
+    let data_slice = if length == 0 {
+        &[]
+    } else {
+        std::slice::from_raw_parts(data as *const u8, length as usize)
+    };
 
     gst::panic_to_error!(&wrap, imp.panicked(), -1, {
         imp.write(wrap.unsafe_cast_ref(), data_slice).unwrap_or(-1)

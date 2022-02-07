@@ -333,7 +333,11 @@ impl<'a, T> RTPBuffer<'a, T> {
                 &mut size,
             ));
             if result {
-                Some(slice::from_raw_parts(data as *const u8, size as usize))
+                if size == 0 {
+                    Some(&[])
+                } else {
+                    Some(slice::from_raw_parts(data as *const u8, size as usize))
+                }
             } else {
                 None
             }
@@ -358,10 +362,14 @@ impl<'a, T> RTPBuffer<'a, T> {
                 &mut size,
             ));
             if result {
-                Some((
-                    appbits,
-                    slice::from_raw_parts(data as *const u8, size as usize),
-                ))
+                if size == 0 {
+                    Some((appbits, &[]))
+                } else {
+                    Some((
+                        appbits,
+                        slice::from_raw_parts(data as *const u8, size as usize),
+                    ))
+                }
             } else {
                 None
             }

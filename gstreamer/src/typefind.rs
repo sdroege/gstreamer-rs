@@ -63,6 +63,8 @@ impl TypeFind {
             let data = ffi::gst_type_find_peek(&mut self.0, offset, size);
             if data.is_null() {
                 None
+            } else if size == 0 {
+                Some(&[])
             } else {
                 Some(slice::from_raw_parts(data, size as usize))
             }

@@ -1055,12 +1055,18 @@ impl<'a, T> BufferMap<'a, T> {
     }
 
     pub fn as_slice(&self) -> &[u8] {
+        if self.map_info.size == 0 {
+            return &[];
+        }
         unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
     }
 }
 
 impl<'a> BufferMap<'a, Writable> {
     pub fn as_mut_slice(&mut self) -> &mut [u8] {
+        if self.map_info.size == 0 {
+            return &mut [];
+        }
         unsafe { slice::from_raw_parts_mut(self.map_info.data as *mut u8, self.map_info.size) }
     }
 }
@@ -1118,6 +1124,9 @@ unsafe impl<'a, T> Sync for BufferMap<'a, T> {}
 
 impl<T> MappedBuffer<T> {
     pub fn as_slice(&self) -> &[u8] {
+        if self.map_info.size == 0 {
+            return &[];
+        }
         unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
     }
 
@@ -1143,6 +1152,9 @@ impl<T> MappedBuffer<T> {
 
 impl MappedBuffer<Writable> {
     pub fn as_mut_slice(&mut self) -> &mut [u8] {
+        if self.map_info.size == 0 {
+            return &mut [];
+        }
         unsafe { slice::from_raw_parts_mut(self.map_info.data as *mut u8, self.map_info.size) }
     }
 }

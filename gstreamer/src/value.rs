@@ -709,7 +709,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for Array {
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         let arr = (*value.to_glib_none().0).data[0].v_pointer as *const glib::ffi::GArray;
-        if arr.is_null() {
+        if arr.is_null() || (*arr).len == 0 {
             Self(Vec::new())
         } else {
             #[allow(clippy::cast_ptr_alignment)]
@@ -782,7 +782,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for ArrayRef<'a> {
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         let arr = (*value.to_glib_none().0).data[0].v_pointer as *const glib::ffi::GArray;
-        if arr.is_null() {
+        if arr.is_null() || (*arr).len == 0 {
             Self(&[])
         } else {
             #[allow(clippy::cast_ptr_alignment)]
@@ -879,7 +879,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for List {
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         let arr = (*value.to_glib_none().0).data[0].v_pointer as *const glib::ffi::GArray;
-        if arr.is_null() {
+        if arr.is_null() || (*arr).len == 0 {
             Self(Vec::new())
         } else {
             #[allow(clippy::cast_ptr_alignment)]
@@ -952,7 +952,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for ListRef<'a> {
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         let arr = (*value.to_glib_none().0).data[0].v_pointer as *const glib::ffi::GArray;
-        if arr.is_null() {
+        if arr.is_null() || (*arr).len == 0 {
             Self(&[])
         } else {
             #[allow(clippy::cast_ptr_alignment)]

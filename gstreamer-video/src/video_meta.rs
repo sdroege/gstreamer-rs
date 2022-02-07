@@ -625,6 +625,9 @@ impl VideoCaptionMeta {
 
     #[doc(alias = "get_data")]
     pub fn data(&self) -> &[u8] {
+        if self.0.size == 0 {
+            return &[];
+        }
         unsafe {
             use std::slice;
 
