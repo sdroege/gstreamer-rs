@@ -341,6 +341,10 @@ impl<T> AudioBufferRef<T> {
             ));
         }
 
+        if self.plane_size() == 0 {
+            return Ok(&[]);
+        }
+
         unsafe {
             Ok(slice::from_raw_parts(
                 (*self.audio_buffer.planes.add(plane as usize)) as *const u8,
@@ -468,6 +472,10 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
             return Err(glib::bool_error!(
                 "Plane index higher than number of planes"
             ));
+        }
+
+        if self.plane_size() == 0 {
+            return Ok(&mut []);
         }
 
         unsafe {

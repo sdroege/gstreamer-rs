@@ -311,7 +311,11 @@ unsafe extern "C" fn audiosrc_read<T: AudioSrcImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
     let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
-    let data_slice = std::slice::from_raw_parts_mut(data as *mut u8, length as usize);
+    let data_slice = if length == 0 {
+        &mut []
+    } else {
+        std::slice::from_raw_parts_mut(data as *mut u8, length as usize)
+    };
 
     gst::panic_to_error!(&wrap, imp.panicked(), 0, {
         let (res, timestamp_res) = imp

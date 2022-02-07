@@ -331,12 +331,18 @@ impl<'a, T> MemoryMap<'a, T> {
     }
 
     pub fn as_slice(&self) -> &[u8] {
+        if self.map_info.size == 0 {
+            return &[];
+        }
         unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
     }
 }
 
 impl<'a> MemoryMap<'a, Writable> {
     pub fn as_mut_slice(&mut self) -> &mut [u8] {
+        if self.map_info.size == 0 {
+            return &mut [];
+        }
         unsafe { slice::from_raw_parts_mut(self.map_info.data as *mut u8, self.map_info.size) }
     }
 }
@@ -394,6 +400,9 @@ unsafe impl<'a, T> Sync for MemoryMap<'a, T> {}
 
 impl<T> MappedMemory<T> {
     pub fn as_slice(&self) -> &[u8] {
+        if self.map_info.size == 0 {
+            return &[];
+        }
         unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
     }
 
@@ -419,6 +428,9 @@ impl<T> MappedMemory<T> {
 
 impl MappedMemory<Writable> {
     pub fn as_mut_slice(&mut self) -> &mut [u8] {
+        if self.map_info.size == 0 {
+            return &mut [];
+        }
         unsafe { slice::from_raw_parts_mut(self.map_info.data as *mut u8, self.map_info.size) }
     }
 }

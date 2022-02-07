@@ -386,7 +386,11 @@ unsafe extern "C" fn write<T: RTPHeaderExtensionImpl>(
             gst::BufferRef::from_ptr(input),
             from_glib(write_flags),
             gst::BufferRef::from_mut_ptr(output),
-            std::slice::from_raw_parts_mut(output_data, output_data_len),
+            if output_data_len == 0 {
+                &mut []
+            } else {
+                std::slice::from_raw_parts_mut(output_data, output_data_len)
+            },
         ) {
             Ok(len) => len as isize,
             Err(err) => {
@@ -412,7 +416,11 @@ unsafe extern "C" fn read<T: RTPHeaderExtensionImpl>(
         match imp.read(
             wrap.unsafe_cast_ref(),
             from_glib(read_flags),
-            std::slice::from_raw_parts(input_data, input_data_len),
+            if input_data_len == 0 {
+                &[]
+            } else {
+                std::slice::from_raw_parts(input_data, input_data_len)
+            },
             gst::BufferRef::from_mut_ptr(output),
         ) {
             Ok(_) => true,

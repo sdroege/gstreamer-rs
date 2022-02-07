@@ -164,6 +164,10 @@ impl<T> VideoFrame<T> {
         // components in the plane is the same, which is probably safe
         let h = format_info.scale_height(plane as u8, self.height());
 
+        if w == 0 || h == 0 {
+            return Ok(&[]);
+        }
+
         unsafe {
             Ok(slice::from_raw_parts(
                 self.frame.data[plane as usize] as *const u8,
@@ -378,6 +382,10 @@ impl VideoFrame<Writable> {
         // components in the plane is the same, which is probably safe
         let h = format_info.scale_height(plane as u8, self.height());
 
+        if w == 0 || h == 0 {
+            return Ok(&mut []);
+        }
+
         unsafe {
             Ok(slice::from_raw_parts_mut(
                 self.frame.data[plane as usize] as *mut u8,
@@ -535,6 +543,10 @@ impl<T> VideoFrameRef<T> {
         // FIXME: This assumes that the horizontal subsampling of all
         // components in the plane is the same, which is probably safe
         let h = format_info.scale_height(plane as u8, self.height());
+
+        if w == 0 || h == 0 {
+            return Ok(&[]);
+        }
 
         unsafe {
             Ok(slice::from_raw_parts(
@@ -769,6 +781,10 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         // FIXME: This assumes that the horizontal subsampling of all
         // components in the plane is the same, which is probably safe
         let h = format_info.scale_height(plane as u8, self.height());
+
+        if w == 0 || h == 0 {
+            return Ok(&mut []);
+        }
 
         unsafe {
             Ok(slice::from_raw_parts_mut(
