@@ -1,3 +1,4 @@
+use crate::{callsite::GstCallsiteKind, state_desc, PadFlags};
 use gstreamer::{
     ffi::{
         gst_debug_add_log_function, gst_debug_category_get_name, gst_debug_message_get,
@@ -12,9 +13,7 @@ use gstreamer::{
 };
 use libc::{c_char, c_int, c_void};
 use std::{convert::TryFrom, ffi::CStr};
-use tracing_core::{Callsite, Event, Kind, Level};
-
-use crate::{state_desc, PadFlags};
+use tracing_core::{Callsite, Event, Level};
 
 unsafe extern "C" fn log_callback(
     category: *mut gstreamer::ffi::GstDebugCategory,
@@ -71,7 +70,7 @@ unsafe extern "C" fn log_callback(
             Some(&file),
             Some(&module),
             Some(line as u32),
-            Kind::EVENT,
+            GstCallsiteKind::Event,
             &[
                 "message",
                 "gobject.address",

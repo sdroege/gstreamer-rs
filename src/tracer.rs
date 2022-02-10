@@ -1,5 +1,4 @@
-use std::cell::RefCell;
-
+use crate::callsite::GstCallsiteKind;
 use glib::subclass::basic;
 use gstreamer::{
     glib,
@@ -8,8 +7,8 @@ use gstreamer::{
     traits::{GstObjectExt, PadExt},
     Buffer, FlowReturn, Object, Pad, Query, Tracer,
 };
+use std::cell::RefCell;
 use tracing::{span::Attributes, Callsite, Dispatch, Id};
-use tracing_core::Kind;
 
 struct EnteredSpan {
     id: Id,
@@ -51,7 +50,7 @@ impl TracingTracerPriv {
             None,
             None,
             None,
-            Kind::SPAN,
+            GstCallsiteKind::Span,
             &["gstpad.state", "gstpad.parent.name"],
         );
         let interest = callsite.interest();

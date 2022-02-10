@@ -9,6 +9,12 @@ use std::{
 use tracing::{field::FieldSet, Level};
 use tracing_core::{identify_callsite, Callsite, Interest, Kind, Metadata};
 
+#[derive(PartialEq, Eq, PartialOrd, Ord, Copy, Clone, Debug)]
+pub(crate) enum GstCallsiteKind {
+    Event = 0,
+    Span = 1,
+}
+
 pub(crate) struct GstCallsite {
     interest: AtomicUsize,
     metadata: Metadata<'static>,
@@ -67,7 +73,10 @@ impl GstCallsite {
                     key.line,
                     key.module.map(|_| &string[..module.len()]),
                     fieldset,
-                    key.kind.clone(),
+                    match key.kind {
+                        GstCallsiteKind::Span => Kind::SPAN,
+                        GstCallsiteKind::Event => Kind::EVENT,
+                    },
                 ),
             });
             &*callsite
@@ -123,7 +132,7 @@ struct Key<'a> {
     target: &'a str,
     name: &'static str,
     fields: &'static [&'static str],
-    kind: Kind,
+    kind: GstCallsiteKind,
 }
 
 impl PartialEq for Key<'_> {
@@ -149,13 +158,7 @@ impl Ord for Key<'_> {
             .then_with(move || self.file.cmp(&other.file))
             .then_with(move || self.name.cmp(other.name))
             .then_with(move || self.fields.cmp(other.fields))
-            .then_with(move || match (&self.kind, &other.kind) {
-                (&Kind::EVENT, &Kind::EVENT) | (&Kind::SPAN, &Kind::SPAN) => {
-                    std::cmp::Ordering::Equal
-                }
-                (&Kind::EVENT, &Kind::SPAN) => std::cmp::Ordering::Less,
-                (&Kind::SPAN, &Kind::EVENT) => std::cmp::Ordering::Greater,
-            })
+            .then_with(move || self.kind.cmp(&other.kind))
             .then_with(move || self.target.cmp(other.target))
     }
 }
@@ -177,7 +180,7 @@ impl DynamicCallsites {
         file: Option<&str>,
         module: Option<&str>,
         line: Option<u32>,
-        kind: Kind,
+        kind: GstCallsiteKind,
         fields: &'static [&'static str],
     ) -> &'static GstCallsite {
         let mut guard = self.data.lock().unwrap_or_else(PoisonError::into_inner);
@@ -188,7 +191,7 @@ impl DynamicCallsites {
             file,
             module,
             line,
-            kind: kind.clone(),
+            kind,
             fields,
         };
         if let Some(callsite) = guard.get(&lookup_key) {
