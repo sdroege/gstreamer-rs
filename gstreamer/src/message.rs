@@ -2960,7 +2960,7 @@ pub struct StreamsSelectedBuilder<'a> {
     collection: &'a crate::StreamCollection,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    streams: Option<&'a [&'a crate::Stream]>,
+    streams: Option<Vec<crate::Stream>>,
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -2975,16 +2975,24 @@ impl<'a> StreamsSelectedBuilder<'a> {
         }
     }
 
-    pub fn streams(self, streams: &'a [&'a crate::Stream]) -> Self {
+    pub fn streams(
+        self,
+        streams: impl IntoIterator<Item = impl std::borrow::Borrow<crate::Stream>>,
+    ) -> Self {
         Self {
-            streams: Some(streams),
+            streams: Some(
+                streams
+                    .into_iter()
+                    .map(|s| s.borrow().clone())
+                    .collect::<Vec<_>>(),
+            ),
             ..self
         }
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
         let msg = ffi::gst_message_new_streams_selected(src, s.collection.to_glib_none().0);
-        if let Some(streams) = s.streams {
+        if let Some(ref streams) = s.streams {
             for stream in streams {
                 ffi::gst_message_streams_selected_add(msg, stream.to_glib_none().0);
             }
