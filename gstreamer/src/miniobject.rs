@@ -574,17 +574,17 @@ impl MiniObjectRef {
         unsafe { from_glib((*self.as_ptr()).type_) }
     }
 
-    pub fn downcast_ref<T: IsMiniObject + glib::StaticType>(&self) -> Option<&T> {
+    pub fn downcast_ref<T: IsMiniObject + glib::StaticType>(&self) -> Option<&T::RefType> {
         if self.type_().is_a(T::static_type()) {
-            unsafe { Some(&*(self as *const Self as *const T)) }
+            unsafe { Some(&*(self as *const Self as *const T::RefType)) }
         } else {
             None
         }
     }
 
-    pub fn downcast_mut<T: IsMiniObject + glib::StaticType>(&mut self) -> Option<&mut T> {
+    pub fn downcast_mut<T: IsMiniObject + glib::StaticType>(&mut self) -> Option<&mut T::RefType> {
         if self.type_().is_a(T::static_type()) {
-            unsafe { Some(&mut *(self as *mut Self as *mut T)) }
+            unsafe { Some(&mut *(self as *mut Self as *mut T::RefType)) }
         } else {
             None
         }
