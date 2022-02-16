@@ -1,6 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::translate::*;
+use std::fmt;
 
 pub trait IsMiniObject:
     AsRef<Self::RefType> + FromGlibPtrFull<*mut Self::FfiType> + Send + Sync + 'static
@@ -550,6 +551,21 @@ impl MiniObject {
         } else {
             Err(self)
         }
+    }
+}
+
+impl fmt::Debug for MiniObject {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.as_ref().fmt(f)
+    }
+}
+
+impl fmt::Debug for MiniObjectRef {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("MiniObject")
+            .field("ptr", unsafe { &self.as_ptr() })
+            .field("type", &self.type_())
+            .finish()
     }
 }
 
