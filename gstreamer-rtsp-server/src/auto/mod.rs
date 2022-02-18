@@ -24,6 +24,34 @@ pub use self::rtsp_media_factory_uri::RTSPMediaFactoryURI;
 mod rtsp_mount_points;
 pub use self::rtsp_mount_points::RTSPMountPoints;
 
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+mod rtsp_onvif_client;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+pub use self::rtsp_onvif_client::RTSPOnvifClient;
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+mod rtsp_onvif_media;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+pub use self::rtsp_onvif_media::RTSPOnvifMedia;
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+mod rtsp_onvif_media_factory;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+pub use self::rtsp_onvif_media_factory::RTSPOnvifMediaFactory;
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+mod rtsp_onvif_server;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+pub use self::rtsp_onvif_server::RTSPOnvifServer;
+
 mod rtsp_server;
 pub use self::rtsp_server::RTSPServer;
 
@@ -69,6 +97,12 @@ pub mod traits {
     pub use super::rtsp_media_factory::RTSPMediaFactoryExt;
     pub use super::rtsp_media_factory_uri::RTSPMediaFactoryURIExt;
     pub use super::rtsp_mount_points::RTSPMountPointsExt;
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    pub use super::rtsp_onvif_media::RTSPOnvifMediaExt;
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    pub use super::rtsp_onvif_media_factory::RTSPOnvifMediaFactoryExt;
     pub use super::rtsp_server::RTSPServerExt;
     pub use super::rtsp_session::RTSPSessionExt;
     pub use super::rtsp_session_media::RTSPSessionMediaExt;

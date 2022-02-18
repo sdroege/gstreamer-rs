@@ -24,6 +24,9 @@ generate = [
     "GstRtspServer.RTSPFilterResult",
     "GstRtspServer.RTSPMediaFactoryURI",
     "GstRtspServer.RTSPMediaStatus",
+    "GstRtspServer.RTSPOnvifClient",
+    "GstRtspServer.RTSPOnvifMedia",
+    "GstRtspServer.RTSPOnvifServer",
     "GstRtspServer.RTSPPublishClockMode",
     "GstRtspServer.RTSPSuspendMode",
     "GstRtspServer.RTSPThreadPool",
@@ -236,6 +239,14 @@ status="generate"
         [object.function.return]
         nullable_return_is_error = "Failed to make path"
 
+[[object]]
+name = "GstRtspServer.RTSPOnvifMediaFactory"
+status = "generate"
+manual_traits = ["RTSPMediaExtManual"]
+    [[object.function]]
+    name = "requires_backchannel"
+    # on extension trait
+    manual = true
 
 [[object]]
 name = "GstRtspServer.RTSPServer"
