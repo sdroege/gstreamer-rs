@@ -78,8 +78,8 @@ version = "1.16"
 [package.metadata.system-deps.gstreamer_1_0.v1_18]
 version = "1.18"
 
-[package.metadata.system-deps.gstreamer_1_0.v1_20]
-version = "1.19.1"
-
 [package.metadata.system-deps.gstreamer_1_0.v1_18_3]
 version = "1.18.3"
+
+[package.metadata.system-deps.gstreamer_1_0.v1_20]
+version = "1.19.1"
