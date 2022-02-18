@@ -77,4 +77,4 @@ version = "1.16"
 version = "1.18"
 
 [package.metadata.system-deps.gstreamer_check_1_0.v1_20]
-version = "1.19.1"
+version = "1.20"
