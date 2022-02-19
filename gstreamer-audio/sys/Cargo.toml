@@ -25,17 +25,13 @@ shell-words = "1.0.0"
 tempfile = "3"
 
 [features]
-v1_2 = []
-v1_4 = ["v1_2"]
-v1_6 = ["v1_4"]
-v1_8 = ["v1_6"]
-v1_10 = ["v1_8"]
+v1_10 = []
 v1_12 = ["v1_10"]
 v1_14 = ["v1_12"]
 v1_16 = ["v1_14"]
 v1_18 = ["v1_16"]
-dox = []
 v1_20 = ["v1_18"]
+dox = []
 
 [lib]
 name = "gstreamer_audio_sys"
