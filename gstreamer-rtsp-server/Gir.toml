@@ -182,15 +182,6 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
-name = "GstRtspServer.RTSPOnvifMediaFactory"
-status = "generate"
-manual_traits = ["RTSPMediaExtManual"]
-    [[object.function]]
-    name = "requires_backchannel"
-    # on extension trait
-    manual = true
-
-[[object]]
 name = "GstRtspServer.RTSPMedia"
 status = "generate"
 manual_traits = ["RTSPMediaExtManual"]
