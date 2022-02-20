@@ -5,6 +5,23 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.18.5] - 2022-02-20
+### Changed
+- Require GStreamer 1.20.0 at least when building with `v1_20`. Earlier
+  versions were already going to fail due to API mismatches before.
+
+### Added
+- `gst::BufferPool` subclassing support.
+- `Debug` impl for `gst::MiniObject`.
+- `gst_rtsp_server::RTSPOnvifServer` and related API, including subclassing
+  support.
+
+### Fixed
+- Handle empty slices correctly at the FFI layer.
+- `MiniObjectRef::downcast_ref()` and similar functions return the correct
+  type now. While this is an API change, the previous API would've never
+  worked.
+
 ## [0.18.4] - 2022-02-04
 ### Changed
 - Update gir files to GStreamer 1.20.0 release.
