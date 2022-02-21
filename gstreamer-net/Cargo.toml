@@ -11,7 +11,7 @@ homepage = "https://gstreamer.freedesktop.org"
 documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_net/"
 keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
 edition = "2021"
-rust-version = "1.56"
+rust-version = "1.57"
 
 [dependencies]
 ffi = { package = "gstreamer-net-sys", path = "sys", features = ["v1_8"] }
