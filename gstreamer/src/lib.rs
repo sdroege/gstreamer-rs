@@ -237,8 +237,11 @@ pub use crate::buffer_pool::*;
 
 mod pad_template;
 
-mod param_spec;
-pub use crate::param_spec::*;
+pub mod param_spec;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+pub use crate::param_spec::ParamSpecArray;
+pub use crate::param_spec::ParamSpecFraction;
 
 pub mod functions;
 pub use crate::functions::*;

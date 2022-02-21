@@ -37,6 +37,11 @@ impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecFraction {
 }
 
 impl ParamSpecFraction {
+    pub fn builder(name: &str) -> ParamSpecFractionBuilder {
+        assert_initialized_main_thread!();
+        ParamSpecFractionBuilder::new(name)
+    }
+
     #[allow(clippy::new_ret_no_self)]
     #[doc(alias = "gst_param_spec_fraction")]
     pub fn new(
@@ -98,6 +103,86 @@ impl ParamSpecFraction {
     }
 }
 
+#[derive(Default)]
+#[must_use]
+pub struct ParamSpecFractionBuilder<'a> {
+    name: &'a str,
+    nick: Option<&'a str>,
+    blurb: Option<&'a str>,
+    flags: glib::ParamFlags,
+    minimum: Option<crate::Fraction>,
+    maximum: Option<crate::Fraction>,
+    default_value: Option<crate::Fraction>,
+}
+
+impl<'a> ParamSpecFractionBuilder<'a> {
+    fn new(name: &'a str) -> Self {
+        assert_initialized_main_thread!();
+        Self {
+            name,
+            ..Default::default()
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Default: `self.name`
+    pub fn nick(mut self, nick: &'a str) -> Self {
+        self.nick = Some(nick);
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Default: `self.name`
+    pub fn blurb(mut self, blurb: &'a str) -> Self {
+        self.blurb = Some(blurb);
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Default: `glib::ParamFlags::READWRITE`
+    pub fn flags(mut self, flags: glib::ParamFlags) -> Self {
+        self.flags = flags;
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Default: `-i32::MAX/1`
+    pub fn minimum(mut self, minimum: crate::Fraction) -> Self {
+        self.minimum = Some(minimum);
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Default: `i32::MAX/1`
+    pub fn maximum(mut self, maximum: crate::Fraction) -> Self {
+        self.maximum = Some(maximum);
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Default: `0/1`
+    pub fn default_value(mut self, default_value: crate::Fraction) -> Self {
+        self.default_value = Some(default_value);
+        self
+    }
+
+    #[must_use]
+    pub fn build(self) -> ParamSpec {
+        ParamSpecFraction::new(
+            self.name,
+            self.nick.unwrap_or(self.name),
+            self.blurb.unwrap_or(self.name),
+            self.minimum
+                .unwrap_or_else(|| crate::Fraction::new(-i32::MAX, 1)),
+            self.maximum
+                .unwrap_or_else(|| crate::Fraction::new(i32::MAX, 1)),
+            self.default_value
+                .unwrap_or_else(|| crate::Fraction::new(0, 1)),
+            self.flags,
+        )
+    }
+}
+
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 glib::wrapper! {
@@ -145,6 +230,11 @@ impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecArray {
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl ParamSpecArray {
+    pub fn builder(name: &str) -> ParamSpecArrayBuilder {
+        assert_initialized_main_thread!();
+        ParamSpecArrayBuilder::new(name)
+    }
+
     #[allow(clippy::new_ret_no_self)]
     #[doc(alias = "gst_param_spec_array")]
     pub fn new(
@@ -180,6 +270,69 @@ impl ParamSpecArray {
 
     pub fn upcast_ref(&self) -> &ParamSpec {
         &*self
+    }
+}
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[derive(Default)]
+#[must_use]
+pub struct ParamSpecArrayBuilder<'a> {
+    name: &'a str,
+    nick: Option<&'a str>,
+    blurb: Option<&'a str>,
+    flags: glib::ParamFlags,
+    element_spec: Option<&'a glib::ParamSpec>,
+}
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+impl<'a> ParamSpecArrayBuilder<'a> {
+    fn new(name: &'a str) -> Self {
+        assert_initialized_main_thread!();
+        Self {
+            name,
+            ..Default::default()
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Default: `self.name`
+    pub fn nick(mut self, nick: &'a str) -> Self {
+        self.nick = Some(nick);
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Default: `self.name`
+    pub fn blurb(mut self, blurb: &'a str) -> Self {
+        self.blurb = Some(blurb);
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Default: `glib::ParamFlags::READWRITE`
+    pub fn flags(mut self, flags: glib::ParamFlags) -> Self {
+        self.flags = flags;
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Default: `None`
+    pub fn element_spec(mut self, element_spec: &'a glib::ParamSpec) -> Self {
+        self.element_spec = Some(element_spec);
+        self
+    }
+
+    #[must_use]
+    pub fn build(self) -> ParamSpec {
+        ParamSpecArray::new(
+            self.name,
+            self.nick.unwrap_or(self.name),
+            self.blurb.unwrap_or(self.name),
+            self.element_spec,
+            self.flags,
+        )
     }
 }
 
