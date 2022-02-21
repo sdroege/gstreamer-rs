@@ -111,7 +111,7 @@ impl glib::value::ToValue for ClockTime {
         let mut value = glib::Value::for_value_type::<ClockTime>();
         let gct = self.into_glib();
         if gct == ffi::GST_CLOCK_TIME_NONE {
-            crate::gst_warning!(
+            crate::warning!(
                 crate::CAT_RUST,
                 "converting a defined `ClockTime` with value `ffi::GST_CLOCK_TIME_NONE` to `Value`, this is probably not what you wanted.",
             );

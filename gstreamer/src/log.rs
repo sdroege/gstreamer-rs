@@ -357,87 +357,87 @@ declare_debug_category_from_name!(CAT_LOCKING, "GST_LOCKING");
 declare_debug_category_from_name!(CAT_CONTEXT, "GST_CONTEXT");
 
 #[macro_export]
-macro_rules! gst_error(
+macro_rules! error(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Error, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Error, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Error, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Error, $($args)*)
     }};
 );
 
 #[macro_export]
-macro_rules! gst_warning(
+macro_rules! warning(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Warning, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Warning, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Warning, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Warning, $($args)*)
     }};
 );
 
 #[macro_export]
-macro_rules! gst_fixme(
+macro_rules! fixme(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Fixme, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Fixme, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Fixme, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Fixme, $($args)*)
     }};
 );
 
 #[macro_export]
-macro_rules! gst_info(
+macro_rules! info(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Info, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Info, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Info, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Info, $($args)*)
     }};
 );
 
 #[macro_export]
-macro_rules! gst_debug(
+macro_rules! debug(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Debug, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Debug, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Debug, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Debug, $($args)*)
     }};
 );
 
 #[macro_export]
-macro_rules! gst_log(
+macro_rules! log(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Log, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Log, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Log, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Log, $($args)*)
     }};
 );
 
 #[macro_export]
-macro_rules! gst_trace(
+macro_rules! trace(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Trace, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Trace, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Trace, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Trace, $($args)*)
     }};
 );
 
 #[macro_export]
-macro_rules! gst_memdump(
+macro_rules! memdump(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Memdump, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Memdump, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Memdump, $($args)*)
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Memdump, $($args)*)
     }};
 );
 
 #[macro_export]
-macro_rules! gst_log_with_level(
+macro_rules! log_with_level(
     ($cat:expr, level: $level:expr, obj: $obj:expr, $($args:tt)*) => { {
         $crate::DebugCategory::log($cat.clone(), Some($obj), $level, file!(),
             module_path!(), line!(), format_args!($($args)*))
@@ -645,24 +645,24 @@ mod tests {
             Some("some debug category"),
         );
 
-        gst_error!(cat, "meh");
-        gst_warning!(cat, "meh");
-        gst_fixme!(cat, "meh");
-        gst_info!(cat, "meh");
-        gst_debug!(cat, "meh");
-        gst_log!(cat, "meh");
-        gst_trace!(cat, "meh");
-        gst_memdump!(cat, "meh");
+        error!(cat, "meh");
+        warning!(cat, "meh");
+        fixme!(cat, "meh");
+        info!(cat, "meh");
+        debug!(cat, "meh");
+        log!(cat, "meh");
+        trace!(cat, "meh");
+        memdump!(cat, "meh");
 
         let obj = crate::Bin::new(Some("meh"));
-        gst_error!(cat, obj: &obj, "meh");
-        gst_warning!(cat, obj: &obj, "meh");
-        gst_fixme!(cat, obj: &obj, "meh");
-        gst_info!(cat, obj: &obj, "meh");
-        gst_debug!(cat, obj: &obj, "meh");
-        gst_log!(cat, obj: &obj, "meh");
-        gst_trace!(cat, obj: &obj, "meh");
-        gst_memdump!(cat, obj: &obj, "meh");
+        error!(cat, obj: &obj, "meh");
+        warning!(cat, obj: &obj, "meh");
+        fixme!(cat, obj: &obj, "meh");
+        info!(cat, obj: &obj, "meh");
+        debug!(cat, obj: &obj, "meh");
+        log!(cat, obj: &obj, "meh");
+        trace!(cat, obj: &obj, "meh");
+        memdump!(cat, obj: &obj, "meh");
     }
 
     #[test]
@@ -703,13 +703,13 @@ mod tests {
 
         debug_remove_default_log_function();
         let log_fn = debug_add_log_function(handler);
-        gst_info!(cat, obj: &obj, "meh");
+        info!(cat, obj: &obj, "meh");
 
         receiver.recv().unwrap();
 
         debug_remove_log_function(log_fn);
 
-        gst_info!(cat, obj: &obj, "meh2");
+        info!(cat, obj: &obj, "meh2");
         assert!(receiver.recv().is_err());
     }
 }

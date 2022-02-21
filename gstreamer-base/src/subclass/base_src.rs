@@ -4,7 +4,6 @@ use glib::prelude::*;
 use glib::translate::*;
 
 use gst::subclass::prelude::*;
-use gst::{gst_debug, gst_error};
 
 use std::mem;
 use std::ptr;
@@ -375,7 +374,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                         if buffer_ptr != orig_buffer_ptr {
                             let new_buffer = gst::BufferRef::from_ptr(buffer_ptr);
 
-                            gst_debug!(
+                            gst::debug!(
                                 gst::CAT_PERFORMANCE,
                                 obj: element.unsafe_cast_ref::<BaseSrc>(),
                                 "Returned new buffer from parent create function, copying into passed buffer"
@@ -384,7 +383,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                             let mut map = match passed_buffer.map_writable() {
                                 Ok(map) => map,
                                 Err(_) => {
-                                    gst_error!(
+                                    gst::error!(
                                         gst::CAT_RUST,
                                         obj: element.unsafe_cast_ref::<BaseSrc>(),
                                         "Failed to map passed buffer writable"
@@ -403,7 +402,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                             match new_buffer.copy_into(passed_buffer, gst::BUFFER_COPY_METADATA, 0, None) {
                                 Ok(_) => Ok(CreateSuccess::FilledBuffer),
                                 Err(_) => {
-                                    gst_error!(
+                                    gst::error!(
                                         gst::CAT_RUST,
                                         obj: element.unsafe_cast_ref::<BaseSrc>(),
                                         "Failed to copy buffer metadata"
@@ -799,7 +798,7 @@ unsafe extern "C" fn base_src_create<T: BaseSrcImpl>(
             Ok(CreateSuccess::NewBuffer(new_buffer)) => {
                 if let Some(passed_buffer) = buffer {
                     if passed_buffer.as_ptr() != new_buffer.as_ptr() {
-                        gst_debug!(
+                        gst::debug!(
                             gst::CAT_PERFORMANCE,
                             obj: &*wrap,
                             "Returned new buffer from create function, copying into passed buffer"
@@ -808,7 +807,7 @@ unsafe extern "C" fn base_src_create<T: BaseSrcImpl>(
                         let mut map = match passed_buffer.map_writable() {
                             Ok(map) => map,
                             Err(_) => {
-                                gst_error!(
+                                gst::error!(
                                     gst::CAT_RUST,
                                     obj: &*wrap,
                                     "Failed to map passed buffer writable"
@@ -832,7 +831,7 @@ unsafe extern "C" fn base_src_create<T: BaseSrcImpl>(
                         ) {
                             Ok(_) => gst::FlowReturn::Ok,
                             Err(_) => {
-                                gst_error!(
+                                gst::error!(
                                     gst::CAT_RUST,
                                     obj: &*wrap,
                                     "Failed to copy buffer metadata"

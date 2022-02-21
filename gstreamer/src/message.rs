@@ -41,7 +41,7 @@ impl MessageRef {
                 // As a workaround, let's generate an unused valid seqnum.
                 let next = Seqnum::next();
 
-                crate::gst_warning!(
+                crate::warning!(
                     crate::CAT_RUST,
                     "get_seqnum detected invalid seqnum, returning next {:?}",
                     next

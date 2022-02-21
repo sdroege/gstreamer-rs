@@ -5,7 +5,6 @@
 //
 // It's possible to dump the logs at any time in an application,
 // not just on exit like is done here.
-use gst::gst_error;
 use gst::prelude::*;
 
 use std::process;
@@ -71,7 +70,7 @@ fn example_main() {
         .expect("Unable to set the pipeline to the `Null` state");
 
     /* Insert a message into the debug log */
-    gst_error!(gst::CAT_DEFAULT, "Hi from the debug log ringbuffer example");
+    gst::error!(gst::CAT_DEFAULT, "Hi from the debug log ringbuffer example");
 
     println!("Dumping debug logs\n");
     for s in gst::debug_ring_buffer_logger_get_logs().iter() {

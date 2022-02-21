@@ -89,18 +89,18 @@ macro_rules! plugin_define(
                         Ok(_) => $crate::glib::ffi::GTRUE,
                         Err(err) => {
                             let cat = $crate::DebugCategory::get("GST_PLUGIN_LOADING").unwrap();
-                            $crate::gst_error!(cat, "Failed to register plugin: {}", err);
+                            $crate::error!(cat, "Failed to register plugin: {}", err);
                             $crate::glib::ffi::GFALSE
                         }
                     }
                     Err(err) => {
                         let cat = $crate::DebugCategory::get("GST_PLUGIN_LOADING").unwrap();
                         if let Some(cause) = err.downcast_ref::<&str>() {
-                            $crate::gst_error!(cat, "Failed to initialize plugin due to panic: {}", cause);
+                            $crate::error!(cat, "Failed to initialize plugin due to panic: {}", cause);
                         } else if let Some(cause) = err.downcast_ref::<String>() {
-                            $crate::gst_error!(cat, "Failed to initialize plugin due to panic: {}", cause);
+                            $crate::error!(cat, "Failed to initialize plugin due to panic: {}", cause);
                         } else {
-                            $crate::gst_error!(cat, "Failed to initialize plugin due to panic");
+                            $crate::error!(cat, "Failed to initialize plugin due to panic");
                         }
 
                         $crate::glib::ffi::GFALSE

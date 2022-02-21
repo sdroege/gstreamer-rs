@@ -8,7 +8,6 @@
 #![allow(clippy::non_send_fields_in_send_ty)]
 
 use gst::prelude::*;
-use gst::{element_error, gst_info, gst_trace};
 
 use anyhow::Error;
 use derive_more::{Display, Error};
@@ -18,8 +17,6 @@ mod examples_common;
 
 // Our custom FIR filter element is defined in this module
 mod fir_filter {
-    use super::*;
-
     use gst_base::subclass::prelude::*;
 
     use byte_slice_cast::*;
@@ -149,7 +146,7 @@ mod fir_filter {
                 // Drop state
                 self.history.lock().unwrap().clear();
 
-                gst_info!(CAT, obj: element, "Stopped");
+                gst::info!(CAT, obj: element, "Stopped");
 
                 Ok(())
             }
@@ -163,13 +160,13 @@ mod fir_filter {
                 // Get coefficients and return directly if we have none
                 let coeffs = self.coeffs.lock().unwrap();
                 if coeffs.is_empty() {
-                    gst_trace!(CAT, obj: element, "No coefficients set -- passthrough");
+                    gst::trace!(CAT, obj: element, "No coefficients set -- passthrough");
                     return Ok(gst::FlowSuccess::Ok);
                 }
 
                 // Try mapping the input buffer as writable
                 let mut data = buf.map_writable().map_err(|_| {
-                    element_error!(
+                    gst::element_error!(
                         element,
                         gst::CoreError::Failed,
                         ["Failed to map input buffer readable"]
@@ -179,7 +176,7 @@ mod fir_filter {
 
                 // And reinterprete it as a slice of f32
                 let samples = data.as_mut_slice_of::<f32>().map_err(|err| {
-                    element_error!(
+                    gst::element_error!(
                         element,
                         gst::CoreError::Failed,
                         ["Failed to cast input buffer as f32 slice: {}", err]
@@ -189,7 +186,7 @@ mod fir_filter {
 
                 let mut history = self.history.lock().unwrap();
 
-                gst_trace!(
+                gst::trace!(
                     CAT,
                     obj: element,
                     "Transforming {} samples with filter of length {}",

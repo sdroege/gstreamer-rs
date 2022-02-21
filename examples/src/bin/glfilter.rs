@@ -78,7 +78,7 @@ mod mirror {
                 vertex.compile().unwrap();
                 shader.attach_unlocked(&vertex)?;
 
-                gst::gst_debug!(
+                gst::debug!(
                     CAT,
                     obj: filter,
                     "Compiling fragment shader {}",
@@ -97,7 +97,7 @@ mod mirror {
                 shader.attach_unlocked(&fragment)?;
                 shader.link().unwrap();
 
-                gst::gst_debug!(
+                gst::debug!(
                     CAT,
                     obj: filter,
                     "Successfully compiled and linked {:?}",

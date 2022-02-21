@@ -1446,7 +1446,7 @@ where
     ) {
         Ok(PadGetRangeSuccess::NewBuffer(new_buffer)) => {
             if let Some(passed_buffer) = passed_buffer {
-                gst_debug!(
+                crate::debug!(
                     crate::CAT_PERFORMANCE,
                     obj: pad.unsafe_cast_ref::<glib::Object>(),
                     "Returned new buffer from getrange function, copying into passed buffer"
@@ -1455,7 +1455,7 @@ where
                 let mut map = match passed_buffer.map_writable() {
                     Ok(map) => map,
                     Err(_) => {
-                        gst_error!(
+                        crate::error!(
                             crate::CAT_RUST,
                             obj: pad.unsafe_cast_ref::<glib::Object>(),
                             "Failed to map passed buffer writable"
@@ -1474,7 +1474,7 @@ where
                 match new_buffer.copy_into(passed_buffer, crate::BUFFER_COPY_METADATA, 0, None) {
                     Ok(_) => FlowReturn::Ok.into_glib(),
                     Err(_) => {
-                        gst_error!(
+                        crate::error!(
                             crate::CAT_RUST,
                             obj: pad.unsafe_cast_ref::<glib::Object>(),
                             "Failed to copy buffer metadata"

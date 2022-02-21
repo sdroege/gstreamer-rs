@@ -4,7 +4,6 @@ use crate::prelude::*;
 
 use glib::translate::*;
 
-use gst::gst_warning;
 use gst::subclass::prelude::*;
 
 use std::mem;
@@ -1379,7 +1378,7 @@ unsafe extern "C" fn base_transform_copy_metadata<T: BaseTransformImpl>(
     let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
 
     if gst::ffi::gst_mini_object_is_writable(outbuf as *mut _) == glib::ffi::GFALSE {
-        gst_warning!(
+        gst::warning!(
             gst::CAT_RUST,
             obj: &*wrap,
             "buffer {:?} not writable",
