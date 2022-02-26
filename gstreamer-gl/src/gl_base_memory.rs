@@ -1,32 +1,32 @@
 use glib::prelude::*;
 use glib::translate::*;
+use gst::Memory;
 
 use crate::GLAllocationParams;
 use crate::GLBaseMemoryAllocator;
 
 use ffi::GstGLBaseMemory;
-use gst::ffi::GstMemory;
 use gst::MemoryRef;
 use gst::{result_from_gboolean, LoggableError, CAT_RUST};
 
-gst::mini_object_wrapper!(
+gst::memory_object_wrapper!(
     GLBaseMemory,
     GLBaseMemoryRef,
     GstGLBaseMemory,
-    ffi::gst_gl_base_memory_get_type
+    |mem: &MemoryRef| { unsafe { from_glib(ffi::gst_is_gl_base_memory(mem.as_mut_ptr())) } },
+    Memory,
+    MemoryRef
 );
 
-impl std::ops::Deref for GLBaseMemoryRef {
-    type Target = MemoryRef;
-
-    fn deref(&self) -> &Self::Target {
-        unsafe { &*(&self.0.mem as *const GstMemory).cast::<Self::Target>() }
+impl std::fmt::Debug for GLBaseMemory {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        GLBaseMemoryRef::fmt(self, f)
     }
 }
 
-impl std::ops::DerefMut for GLBaseMemoryRef {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        unsafe { &mut *(&mut self.0.mem as *mut GstMemory).cast::<Self::Target>() }
+impl std::fmt::Debug for GLBaseMemoryRef {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        gst::MemoryRef::fmt(self, f)
     }
 }
 
