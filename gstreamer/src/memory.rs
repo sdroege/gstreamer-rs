@@ -3,7 +3,7 @@
 use std::fmt;
 use std::marker::PhantomData;
 use std::mem;
-use std::ops;
+use std::ops::{Deref, DerefMut};
 use std::ptr;
 use std::slice;
 
@@ -359,7 +359,7 @@ impl<'a> AsMut<[u8]> for MemoryMap<'a, Writable> {
     }
 }
 
-impl<'a, T> ops::Deref for MemoryMap<'a, T> {
+impl<'a, T> Deref for MemoryMap<'a, T> {
     type Target = [u8];
 
     fn deref(&self) -> &[u8] {
@@ -367,7 +367,7 @@ impl<'a, T> ops::Deref for MemoryMap<'a, T> {
     }
 }
 
-impl<'a> ops::DerefMut for MemoryMap<'a, Writable> {
+impl<'a> DerefMut for MemoryMap<'a, Writable> {
     fn deref_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
@@ -447,7 +447,7 @@ impl AsMut<[u8]> for MappedMemory<Writable> {
     }
 }
 
-impl<T> ops::Deref for MappedMemory<T> {
+impl<T> Deref for MappedMemory<T> {
     type Target = [u8];
 
     fn deref(&self) -> &[u8] {
@@ -455,7 +455,7 @@ impl<T> ops::Deref for MappedMemory<T> {
     }
 }
 
-impl ops::DerefMut for MappedMemory<Writable> {
+impl DerefMut for MappedMemory<Writable> {
     fn deref_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
@@ -522,6 +522,342 @@ impl<'a> fmt::Debug for Dump<'a> {
     }
 }
 
+pub unsafe trait MemoryType: crate::prelude::IsMiniObject + AsRef<Memory>
+where
+    <Self as crate::prelude::IsMiniObject>::RefType: AsRef<MemoryRef> + AsMut<MemoryRef>,
+{
+    fn check_memory_type(mem: &MemoryRef) -> bool;
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum MemoryTypeMismatchError {
+    #[error(transparent)]
+    ValueTypeMismatch(#[from] glib::value::ValueTypeMismatchError),
+    #[error("the memory is not of the requested type {requested}")]
+    MemoryTypeMismatch { requested: &'static str },
+}
+
+pub struct MemoryTypeValueTypeChecker<M>(PhantomData<M>);
+
+unsafe impl<M> glib::value::ValueTypeChecker for MemoryTypeValueTypeChecker<M>
+where
+    M: MemoryType + glib::StaticType,
+    <M as crate::prelude::IsMiniObject>::RefType: AsRef<MemoryRef> + AsMut<MemoryRef>,
+{
+    type Error = glib::value::ValueTypeMismatchOrNoneError<MemoryTypeMismatchError>;
+
+    fn check(value: &glib::Value) -> Result<(), Self::Error> {
+        skip_assert_initialized!();
+        let mem = value.get::<&Memory>().map_err(|err| match err {
+            glib::value::ValueTypeMismatchOrNoneError::UnexpectedNone => {
+                glib::value::ValueTypeMismatchOrNoneError::UnexpectedNone
+            }
+            glib::value::ValueTypeMismatchOrNoneError::WrongValueType(err) => {
+                glib::value::ValueTypeMismatchOrNoneError::WrongValueType(
+                    MemoryTypeMismatchError::ValueTypeMismatch(err),
+                )
+            }
+        })?;
+
+        if mem.is_memory_type::<M>() {
+            Ok(())
+        } else {
+            Err(glib::value::ValueTypeMismatchOrNoneError::WrongValueType(
+                MemoryTypeMismatchError::MemoryTypeMismatch {
+                    requested: std::any::type_name::<M>(),
+                },
+            ))
+        }
+    }
+}
+
+impl AsRef<MemoryRef> for MemoryRef {
+    fn as_ref(&self) -> &MemoryRef {
+        self
+    }
+}
+
+impl AsMut<MemoryRef> for MemoryRef {
+    fn as_mut(&mut self) -> &mut MemoryRef {
+        self
+    }
+}
+
+impl AsRef<Memory> for Memory {
+    fn as_ref(&self) -> &Memory {
+        self
+    }
+}
+
+unsafe impl MemoryType for Memory {
+    fn check_memory_type(_mem: &MemoryRef) -> bool {
+        skip_assert_initialized!();
+        true
+    }
+}
+
+impl Memory {
+    pub fn downcast_memory<M: MemoryType>(self) -> Result<M, Self>
+    where
+        <M as crate::prelude::IsMiniObject>::RefType: AsRef<MemoryRef> + AsMut<MemoryRef>,
+    {
+        if M::check_memory_type(&self) {
+            unsafe { Ok(from_glib_full(self.into_ptr() as *mut M::FfiType)) }
+        } else {
+            Err(self)
+        }
+    }
+}
+
+impl MemoryRef {
+    pub fn is_memory_type<M: MemoryType>(&self) -> bool
+    where
+        <M as crate::prelude::IsMiniObject>::RefType: AsRef<MemoryRef> + AsMut<MemoryRef>,
+    {
+        M::check_memory_type(self)
+    }
+
+    pub fn downcast_memory_ref<M: MemoryType>(&self) -> Option<&M::RefType>
+    where
+        <M as crate::prelude::IsMiniObject>::RefType: AsRef<MemoryRef> + AsMut<MemoryRef>,
+    {
+        if M::check_memory_type(self) {
+            unsafe { Some(&*(self as *const Self as *const M::RefType)) }
+        } else {
+            None
+        }
+    }
+
+    pub fn downcast_memory_mut<M: MemoryType>(&mut self) -> Option<&mut M::RefType>
+    where
+        <M as crate::prelude::IsMiniObject>::RefType: AsRef<MemoryRef> + AsMut<MemoryRef>,
+    {
+        if M::check_memory_type(self) {
+            unsafe { Some(&mut *(self as *mut Self as *mut M::RefType)) }
+        } else {
+            None
+        }
+    }
+}
+
+#[macro_export]
+macro_rules! memory_object_wrapper {
+    ($name:ident, $ref_name:ident, $ffi_name:path, $mem_type_check:expr, $parent_memory_type:path, $parent_memory_ref_type:path) => {
+        $crate::mini_object_wrapper!($name, $ref_name, $ffi_name);
+
+        unsafe impl $crate::memory::MemoryType for $name {
+            fn check_memory_type(mem: &$crate::MemoryRef) -> bool {
+                skip_assert_initialized!();
+                $mem_type_check(mem)
+            }
+        }
+
+        impl $name {
+            pub fn downcast_memory<M: $crate::memory::MemoryType>(self) -> Result<M, Self>
+            where
+                <M as $crate::miniobject::IsMiniObject>::RefType: AsRef<$crate::MemoryRef>
+                    + AsMut<$crate::MemoryRef>
+                    + AsRef<$ref_name>
+                    + AsMut<$ref_name>,
+            {
+                if M::check_memory_type(&self) {
+                    unsafe {
+                        Ok($crate::glib::translate::from_glib_full(
+                            self.into_ptr() as *mut M::FfiType
+                        ))
+                    }
+                } else {
+                    Err(self)
+                }
+            }
+
+            pub fn upcast_memory<M>(self) -> M
+            where
+                M: $crate::memory::MemoryType
+                    + $crate::glib::translate::FromGlibPtrFull<
+                        *const <M as $crate::miniobject::IsMiniObject>::FfiType,
+                    >,
+                <M as $crate::miniobject::IsMiniObject>::RefType:
+                    AsRef<$crate::MemoryRef> + AsMut<$crate::MemoryRef>,
+                Self: AsRef<M>,
+            {
+                unsafe {
+                    $crate::glib::translate::from_glib_full(
+                        self.into_ptr() as *const <M as $crate::miniobject::IsMiniObject>::FfiType
+                    )
+                }
+            }
+        }
+
+        impl $ref_name {
+            pub fn upcast_memory_ref<M>(&self) -> &M::RefType
+            where
+                M: $crate::memory::MemoryType,
+                <M as $crate::miniobject::IsMiniObject>::RefType:
+                    AsRef<$crate::MemoryRef> + AsMut<$crate::MemoryRef>,
+                Self: AsRef<M::RefType> + AsMut<M::RefType>
+            {
+                self.as_ref()
+            }
+
+            pub fn upcast_memory_mut<M>(&mut self) -> &mut M::RefType
+            where
+                M: $crate::memory::MemoryType,
+                <M as $crate::miniobject::IsMiniObject>::RefType:
+                    AsRef<$crate::MemoryRef> + AsMut<$crate::MemoryRef>,
+                Self: AsRef<M::RefType> + AsMut<M::RefType>
+            {
+                self.as_mut()
+            }
+        }
+
+        impl std::ops::Deref for $ref_name {
+            type Target = $parent_memory_ref_type;
+
+            fn deref(&self) -> &Self::Target {
+                unsafe { &*(self as *const _ as *const Self::Target) }
+            }
+        }
+
+        impl std::ops::DerefMut for $ref_name {
+            fn deref_mut(&mut self) -> &mut Self::Target {
+                unsafe { &mut *(self as *mut _ as *mut Self::Target) }
+            }
+        }
+
+        impl AsRef<$parent_memory_type> for $name {
+            fn as_ref(&self) -> &$parent_memory_type {
+                unsafe { &*(self as *const _ as *const $parent_memory_type) }
+            }
+        }
+
+        impl AsRef<$parent_memory_ref_type> for $ref_name {
+            fn as_ref(&self) -> &$parent_memory_ref_type {
+                self
+            }
+        }
+
+        impl AsMut<$parent_memory_ref_type> for $ref_name {
+            fn as_mut(&mut self) -> &mut $parent_memory_ref_type {
+                &mut *self
+            }
+        }
+
+        impl $crate::glib::types::StaticType for $name {
+            fn static_type() -> glib::types::Type {
+                $ref_name::static_type()
+            }
+        }
+
+        impl $crate::glib::types::StaticType for $ref_name {
+            fn static_type() -> $crate::glib::types::Type {
+                unsafe { $crate::glib::translate::from_glib($crate::ffi::gst_memory_get_type()) }
+            }
+        }
+
+        impl $crate::glib::value::ValueType for $name {
+            type Type = Self;
+        }
+
+        unsafe impl<'a> $crate::glib::value::FromValue<'a> for $name {
+            type Checker = $crate::memory::MemoryTypeValueTypeChecker<Self>;
+
+            unsafe fn from_value(value: &'a $crate::glib::Value) -> Self {
+                skip_assert_initialized!();
+                $crate::glib::translate::from_glib_none($crate::glib::gobject_ffi::g_value_get_boxed(
+                    $crate::glib::translate::ToGlibPtr::to_glib_none(value).0,
+                ) as *mut $ffi_name)
+            }
+        }
+
+        unsafe impl<'a> $crate::glib::value::FromValue<'a> for &'a $name {
+            type Checker = $crate::memory::MemoryTypeValueTypeChecker<$name>;
+
+            unsafe fn from_value(value: &'a $crate::glib::Value) -> Self {
+                skip_assert_initialized!();
+                assert_eq!(
+                    std::mem::size_of::<$name>(),
+                    std::mem::size_of::<$crate::glib::ffi::gpointer>()
+                );
+                let value = &*(value as *const $crate::glib::Value as *const $crate::glib::gobject_ffi::GValue);
+                let ptr = &value.data[0].v_pointer as *const $crate::glib::ffi::gpointer
+                    as *const *const $ffi_name;
+                assert!(!(*ptr).is_null());
+                &*(ptr as *const $name)
+            }
+        }
+
+        impl $crate::glib::value::ToValue for $name {
+            fn to_value(&self) -> $crate::glib::Value {
+                let mut value = $crate::glib::Value::for_value_type::<Self>();
+                unsafe {
+                    $crate::glib::gobject_ffi::g_value_set_boxed(
+                        $crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(&mut value).0,
+                        $crate::glib::translate::ToGlibPtr::<*const $ffi_name>::to_glib_none(self).0
+                            as *mut _,
+                    )
+                }
+                value
+            }
+
+            fn value_type(&self) -> glib::Type {
+                <Self as glib::StaticType>::static_type()
+            }
+        }
+
+        impl $crate::glib::value::ToValueOptional for $name {
+            fn to_value_optional(s: Option<&Self>) -> $crate::glib::Value {
+                skip_assert_initialized!();
+                let mut value = $crate::glib::Value::for_value_type::<Self>();
+                unsafe {
+                    $crate::glib::gobject_ffi::g_value_set_boxed(
+                        $crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(&mut value).0,
+                        $crate::glib::translate::ToGlibPtr::<*const $ffi_name>::to_glib_none(&s).0
+                            as *mut _,
+                    )
+                }
+                value
+            }
+        }
+
+        unsafe impl<'a> $crate::glib::value::FromValue<'a> for &'a $ref_name {
+            type Checker = $crate::memory::MemoryTypeValueTypeChecker<$name>;
+
+            unsafe fn from_value(value: &'a glib::Value) -> Self {
+                skip_assert_initialized!();
+                &*($crate::glib::gobject_ffi::g_value_get_boxed($crate::glib::translate::ToGlibPtr::to_glib_none(value).0)
+                    as *const $ref_name)
+            }
+        }
+
+        // Can't have SetValue/SetValueOptional impls as otherwise one could use it to get
+        // immutable references from a mutable reference without borrowing via the value
+    };
+    ($name:ident, $ref_name:ident, $ffi_name:path, $mem_type_check:expr, $parent_memory_type:path, $parent_memory_ref_type:path, $($parent_parent_memory_type:path, $parent_parent_memory_ref_type:path),*) => {
+        $crate::memory_object_wrapper!($name, $ref_name, $ffi_name, $mem_type_check, $parent_memory_type, $parent_memory_ref_type);
+
+        $(
+            impl AsRef<$parent_parent_memory_type> for $name {
+                fn as_ref(&self) -> &$parent_parent_memory_type {
+                    unsafe { &*(self as *const _ as *const $parent_parent_memory_type) }
+                }
+            }
+
+            impl AsRef<$parent_parent_memory_ref_type> for $ref_name {
+                fn as_ref(&self) -> &$parent_parent_memory_ref_type {
+                    self
+                }
+            }
+
+            impl AsMut<$parent_parent_memory_ref_type> for $ref_name {
+                fn as_mut(&mut self) -> &mut $parent_parent_memory_ref_type {
+                    &mut *self
+                }
+            }
+        )*
+    };
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -536,5 +872,20 @@ mod tests {
 
         let mem = crate::Memory::from_slice(vec![0; 64]);
         dbg!(mem.dump(None));
+    }
+
+    #[test]
+    fn test_value() {
+        use glib::prelude::*;
+
+        crate::init().unwrap();
+
+        let v = None::<&crate::Memory>.to_value();
+        assert!(matches!(v.get::<Option<crate::Memory>>(), Ok(None)));
+
+        let mem = crate::Memory::from_slice(vec![1, 2, 3, 4]);
+        let v = mem.to_value();
+        assert!(matches!(v.get::<Option<crate::Memory>>(), Ok(Some(_))));
+        assert!(matches!(v.get::<crate::Memory>(), Ok(_)));
     }
 }

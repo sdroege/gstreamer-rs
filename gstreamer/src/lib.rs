@@ -335,6 +335,8 @@ pub mod prelude {
         SpecificFormattedValueIntrinsic,
     };
     pub use crate::utils::Displayable;
+
+    pub use crate::memory::MemoryType;
 }
 
 #[macro_use]
