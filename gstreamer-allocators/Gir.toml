@@ -1,0 +1,72 @@
+[options]
+concurrency = "send+sync"
+generate_display_trait = false
+generate_safety_asserts = true
+girs_directories = ["../gir-files", "../gst-gir-files"]
+library = "GstAllocators"
+min_cfg_version = "1.8"
+single_version_file = true
+trust_return_value_nullability = true
+version = "1.0"
+work_mode = "normal"
+
+external_libraries = [
+  "GLib",
+  "GObject",
+  "Gst",
+]
+
+generate = [
+    "GstAllocators.FdMemoryFlags",
+    "GstAllocators.PhysMemoryAllocator",
+]
+
+manual = [
+  "Gst.Allocator",
+  "Gst.Memory",
+]
+
+[[object]]
+name = "Gst.Buffer"
+ref_mode = "ref"
+status = "manual"
+
+[[object]]
+name = "GstAllocators.*"
+status = "generate"
+    [[object.function]]
+    name = "dmabuf_memory_get_fd"
+    manual = true
+    [[object.function]]
+    name = "fd_memory_get_fd"
+    manual = true
+    [[object.function]]
+    name = "is_dmabuf_memory"
+    manual = true
+    [[object.function]]
+    name = "is_fd_memory"
+    manual = true
+    [[object.function]]
+    name = "is_phys_memory"
+    manual = true
+    [[object.function]]
+    name = "phys_memory_get_phys_addr"
+    manual = true
+
+[[object]]
+name = "GstAllocators.DmaBufAllocator"
+status = "generate"
+cfg_condition = "target_os = \"linux\""
+    [[object.function]]
+    name = "alloc"
+    manual = true
+    [[object.function]]
+    name = "alloc_with_flags"
+    manual = true
+
+[[object]]
+name = "GstAllocators.FdAllocator"
+status = "generate"
+    [[object.function]]
+    name = "alloc"
+    manual = true
