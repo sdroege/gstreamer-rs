@@ -180,70 +180,37 @@ impl DebugCategory {
             None => ptr::null_mut(),
         };
 
+        let mut w = glib::GStringBuilder::default();
+
+        // Can't really happen but better safe than sorry
+        if fmt::write(&mut w, args).is_err() {
+            return;
+        }
+
         #[cfg(feature = "v1_20")]
-        {
-            let mut w = glib::GStringBuilder::default();
-
-            // Can't really happen but better safe than sorry
-            if fmt::write(&mut w, args).is_err() {
-                return;
-            }
-
-            unsafe {
-                ffi::gst_debug_log_literal(
-                    cat.as_ptr(),
-                    level.into_glib(),
-                    file.to_glib_none().0,
-                    module.to_glib_none().0,
-                    line as i32,
-                    obj_ptr,
-                    w.into_string().to_glib_none().0,
-                );
-            }
+        unsafe {
+            ffi::gst_debug_log_literal(
+                cat.as_ptr(),
+                level.into_glib(),
+                file.to_glib_none().0,
+                module.to_glib_none().0,
+                line as i32,
+                obj_ptr,
+                w.into_string().to_glib_none().0,
+            );
         }
         #[cfg(not(feature = "v1_20"))]
-        {
-            // Replace literal percentage signs with two so that they are not interpreted as printf
-            // format specifiers
-            struct Write(glib::GStringBuilder);
-            impl fmt::Write for Write {
-                fn write_str(&mut self, mut s: &str) -> Result<(), fmt::Error> {
-                    while let Some((prefix, suffix)) = s.split_once('%') {
-                        self.0.append(prefix);
-                        self.0.append("%%");
-                        s = suffix;
-                    }
-                    self.0.append(s);
-                    Ok(())
-                }
-
-                fn write_char(&mut self, c: char) -> fmt::Result {
-                    if c == '%' {
-                        self.0.append("%%");
-                    } else {
-                        self.0.append_c(c);
-                    }
-                    Ok(())
-                }
-            }
-            let mut w = Write(glib::GStringBuilder::default());
-
-            // Can't really happen but better safe than sorry
-            if fmt::write(&mut w, args).is_err() {
-                return;
-            }
-
-            unsafe {
-                ffi::gst_debug_log(
-                    cat.as_ptr(),
-                    level.into_glib(),
-                    file.to_glib_none().0,
-                    module.to_glib_none().0,
-                    line as i32,
-                    obj_ptr,
-                    w.0.into_string().to_glib_none().0,
-                );
-            }
+        unsafe {
+            ffi::gst_debug_log(
+                cat.as_ptr(),
+                level.into_glib(),
+                file.to_glib_none().0,
+                module.to_glib_none().0,
+                line as i32,
+                obj_ptr,
+                b"%s\0".as_ptr() as *const _,
+                ToGlibPtr::<*const i8>::to_glib_none(&w.into_string()).0,
+            );
         }
     }
 
