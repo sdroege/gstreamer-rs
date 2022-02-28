@@ -1,0 +1,55 @@
+[options]
+girs_directories = ["../gir-files", "../gst-gir-files"]
+library = "GstValidate"
+version = "1.0"
+min_cfg_version = "1.22"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+generate_display_trait = false
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+]
+
+generate = [
+    "GstValidate.Action",
+    "GstValidate.Reporter",
+    "GstValidate.BinMonitor",
+    "GstValidate.Monitor",
+    "GstValidate.ElementMonitor",
+    "GstValidate.PadMonitor",
+    "GstValidate.PipelineMonitor",
+    "GstValidate.Report",
+    "GstValidate.Runner",
+    "GstValidate.Issue",
+    "GstValidate.ReportingDetails",
+    "GstValidate.ReportLevel",
+    "GstValidate.IssueFlags",
+    "GstValidate.IssueId",
+]
+
+manual = [
+    "GLib.Bytes",
+    "GLib.Error",
+    "GObject.Object",
+    "Gst.Caps",
+    "Gst.Structure",
+    "Gst.Object",
+    "Gst.Bin",
+    "Gst.Element",
+    "Gst.Pipeline",
+    "Gst.State",
+    "Gst.Pad",
+    "Gst.Format",
+    "Gst.SeekFlags",
+    "Gst.SeekType",
+]
+
+[[object]]
+name = "GstValidate.Scenario"
+status = "generate"
+concurrency = "none"

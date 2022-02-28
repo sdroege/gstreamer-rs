@@ -1,0 +1,13 @@
+[options]
+girs_directories = ["../../gir-files", "../../gst-gir-files"]
+library = "GstValidate"
+version = "1.0"
+min_cfg_version = "1.22"
+work_mode = "sys"
+
+external_libraries = [
+    "GLib",
+    "Gio",
+    "GObject",
+    "GStreamer",
+]

@@ -234,6 +234,9 @@ plugins-update-nightly:
           gstreamer-audio|gstreamer-editing-services|gstreamer-gl|gstreamer-pbutils|gstreamer-rtp|gstreamer-rtsp|gstreamer-video|gstreamer)
             echo "--features=ser_de,v1_22"
             ;;
+          gstreamer-validate)
+            echo ""
+            ;;
           *)
             echo "--features=v1_22"
             ;;
@@ -322,7 +325,15 @@ test nightly all-features:
     - |
       get_features() {
         module=${1%%/sys}
-        echo "--features=v1_22"
+        case "$module" in
+          gstreamer-validate)
+            echo ""
+            ;;
+          *)
+            echo "--features=v1_22"
+            ;;
+        esac
+
       }
       # First build and test all the crates with their relevant features
       # Keep features in sync with below
@@ -418,6 +429,9 @@ clippy:
         case "$crate" in
           gstreamer-audio|gstreamer-editing-services|gstreamer-gl|gstreamer-pbutils|gstreamer-rtp|gstreamer-rtsp|gstreamer-video|gstreamer)
             echo "--features=ser_de,v1_22"
+            ;;
+          gstreamer-validate)
+            echo ""
             ;;
           *)
             echo "--features=v1_22"
