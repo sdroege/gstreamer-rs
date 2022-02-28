@@ -545,7 +545,6 @@ mod tests {
             const NAME: &'static str = "TestBufferPool";
             type Type = super::TestBufferPool;
             type ParentType = BufferPool;
-            type Interfaces = ();
         }
     }
 

@@ -780,9 +780,6 @@ mod tests {
         pub struct TestElement(ObjectSubclass<imp::TestElement>) @extends Element, crate::Object;
     }
 
-    unsafe impl Send for TestElement {}
-    unsafe impl Sync for TestElement {}
-
     impl TestElement {
         pub fn new(name: Option<&str>) -> Self {
             glib::Object::new(&[("name", &name)]).unwrap()

@@ -129,9 +129,6 @@ mod tests {
         pub struct TestPad(ObjectSubclass<imp::TestPad>) @extends Pad, crate::Object;
     }
 
-    unsafe impl Send for TestPad {}
-    unsafe impl Sync for TestPad {}
-
     impl TestPad {
         pub fn new(name: &str, direction: PadDirection) -> Self {
             glib::Object::new(&[("name", &name), ("direction", &direction)]).unwrap()

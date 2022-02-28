@@ -150,10 +150,6 @@ mod media_factory {
         pub struct Factory(ObjectSubclass<imp::Factory>) @extends gst_rtsp_server::RTSPMediaFactory;
     }
 
-    // Factories must be Send+Sync, and ours is
-    unsafe impl Send for Factory {}
-    unsafe impl Sync for Factory {}
-
     impl Default for Factory {
         // Creates a new instance of our factory
         fn default() -> Factory {
@@ -209,10 +205,6 @@ mod media {
     glib::wrapper! {
         pub struct Media(ObjectSubclass<imp::Media>) @extends gst_rtsp_server::RTSPMedia;
     }
-
-    // Medias must be Send+Sync, and ours is
-    unsafe impl Send for Media {}
-    unsafe impl Sync for Media {}
 }
 
 // Our custom RTSP server subclass that reports when clients are connecting and uses
@@ -270,10 +262,6 @@ mod server {
         pub struct Server(ObjectSubclass<imp::Server>) @extends gst_rtsp_server::RTSPServer;
     }
 
-    // Servers must be Send+Sync, and ours is
-    unsafe impl Send for Server {}
-    unsafe impl Sync for Server {}
-
     impl Default for Server {
         // Creates a new instance of our factory
         fn default() -> Server {
@@ -322,10 +310,6 @@ mod client {
         pub struct Client(ObjectSubclass<imp::Client>) @extends gst_rtsp_server::RTSPClient;
     }
 
-    // Clients must be Send+Sync, and ours is
-    unsafe impl Send for Client {}
-    unsafe impl Sync for Client {}
-
     impl Default for Client {
         // Creates a new instance of our factory
         fn default() -> Client {
@@ -373,10 +357,6 @@ mod mount_points {
     glib::wrapper! {
         pub struct MountPoints(ObjectSubclass<imp::MountPoints>) @extends gst_rtsp_server::RTSPMountPoints;
     }
-
-    // MountPoints must be Send+Sync, and ours is
-    unsafe impl Send for MountPoints {}
-    unsafe impl Sync for MountPoints {}
 
     impl Default for MountPoints {
         // Creates a new instance of our factory

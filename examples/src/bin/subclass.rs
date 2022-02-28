@@ -220,10 +220,6 @@ mod fir_filter {
         pub struct FirFilter(ObjectSubclass<imp::FirFilter>) @extends gst_base::BaseTransform, gst::Element, gst::Object;
     }
 
-    // GStreamer elements must be Send+Sync, and ours is
-    unsafe impl Send for FirFilter {}
-    unsafe impl Sync for FirFilter {}
-
     impl FirFilter {
         // Creates a new instance of our filter with the given name
         pub fn new(name: Option<&str>) -> FirFilter {
