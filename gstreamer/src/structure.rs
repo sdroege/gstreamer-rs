@@ -15,50 +15,26 @@ use glib::value::{FromValue, SendValue, ToSendValue};
 use glib::StaticType;
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
-pub enum GetError {
+pub enum GetError<E: std::error::Error> {
     #[error("GetError: Structure field with name {name} not found")]
     FieldNotFound { name: &'static str },
     #[error("GetError: Structure field with name {name} not retrieved")]
     ValueGetError {
         name: &'static str,
         #[source]
-        type_mismatch_error: glib::value::ValueTypeMismatchOrNoneError,
+        error: E,
     },
 }
 
-impl GetError {
+impl<E: std::error::Error> GetError<E> {
     fn new_field_not_found(name: &'static str) -> Self {
         skip_assert_initialized!();
         GetError::FieldNotFound { name }
     }
 
-    fn from_value_get_error<E: GlibValueError>(name: &'static str, err: E) -> Self {
+    fn from_value_get_error(name: &'static str, error: E) -> Self {
         skip_assert_initialized!();
-        E::from_value_error(name, err)
-    }
-}
-
-pub trait GlibValueError: 'static {
-    fn from_value_error(name: &'static str, err: Self) -> GetError;
-}
-
-impl GlibValueError for glib::value::ValueTypeMismatchError {
-    fn from_value_error(name: &'static str, err: Self) -> GetError {
-        skip_assert_initialized!();
-        GetError::ValueGetError {
-            name,
-            type_mismatch_error: glib::value::ValueTypeMismatchOrNoneError::from(err),
-        }
-    }
-}
-
-impl GlibValueError for glib::value::ValueTypeMismatchOrNoneError {
-    fn from_value_error(name: &'static str, err: Self) -> GetError {
-        skip_assert_initialized!();
-        GetError::ValueGetError {
-            name,
-            type_mismatch_error: err,
-        }
+        GetError::ValueGetError { name, error }
     }
 }
 
@@ -386,36 +362,45 @@ impl StructureRef {
     }
 
     #[doc(alias = "gst_structure_get")]
-    pub fn get<'a, T: FromValue<'a>>(&'a self, name: &str) -> Result<T, GetError>
-    where
-        <<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error: GlibValueError,
+    pub fn get<'a, T: FromValue<'a>>(
+        &'a self,
+        name: &str,
+    ) -> Result<T, GetError<<<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error>>
     {
         let name = glib::Quark::from_str(name);
         self.get_by_quark(name)
     }
 
     #[doc(alias = "gst_structure_get")]
-    pub fn get_optional<'a, T: FromValue<'a>>(&'a self, name: &str) -> Result<Option<T>, GetError>
-    where
-        <<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error: GlibValueError,
-    {
+    pub fn get_optional<'a, T: FromValue<'a>>(
+        &'a self,
+        name: &str,
+    ) -> Result<
+        Option<T>,
+        GetError<<<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error>,
+    > {
         let name = glib::Quark::from_str(name);
         self.get_optional_by_quark(name)
     }
 
     #[doc(alias = "get_value")]
     #[doc(alias = "gst_structure_get_value")]
-    pub fn value(&self, name: &str) -> Result<&SendValue, GetError> {
+    pub fn value(&self, name: &str) -> Result<&SendValue, GetError<std::convert::Infallible>> {
         let name = glib::Quark::from_str(name);
         self.value_by_quark(name)
     }
 
     #[doc(alias = "gst_structure_id_get")]
-    pub fn get_by_quark<'a, T: FromValue<'a>>(&'a self, name: glib::Quark) -> Result<T, GetError>
-    where
-        <<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error: GlibValueError,
+    pub fn get_by_quark<'a, T: FromValue<'a>>(
+        &'a self,
+        name: glib::Quark,
+    ) -> Result<T, GetError<<<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error>>
     {
-        self.value_by_quark(name)?
+        self.value_by_quark(name)
+            .map_err(|err| match err {
+                GetError::FieldNotFound { name } => GetError::FieldNotFound { name },
+                _ => unreachable!(),
+            })?
             .get()
             .map_err(|err| GetError::from_value_get_error(name.as_str(), err))
     }
@@ -424,10 +409,10 @@ impl StructureRef {
     pub fn get_optional_by_quark<'a, T: FromValue<'a>>(
         &'a self,
         name: glib::Quark,
-    ) -> Result<Option<T>, GetError>
-    where
-        <<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error: GlibValueError,
-    {
+    ) -> Result<
+        Option<T>,
+        GetError<<<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error>,
+    > {
         self.value_by_quark(name)
             .ok()
             .map(|v| v.get())
@@ -436,7 +421,10 @@ impl StructureRef {
     }
 
     #[doc(alias = "gst_structure_id_get_value")]
-    pub fn value_by_quark(&self, name: glib::Quark) -> Result<&SendValue, GetError> {
+    pub fn value_by_quark(
+        &self,
+        name: glib::Quark,
+    ) -> Result<&SendValue, GetError<std::convert::Infallible>> {
         unsafe {
             let value = ffi::gst_structure_id_get_value(&self.0, name.into_glib());
 

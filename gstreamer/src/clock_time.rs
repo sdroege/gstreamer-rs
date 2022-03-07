@@ -77,14 +77,14 @@ impl glib::value::ValueType for ClockTime {
     type Type = Self;
 }
 
-pub struct ClockTimeValueTypeOrNoneChecker<T>(std::marker::PhantomData<T>);
+pub enum ClockTimeValueTypeOrNoneChecker {}
 
-unsafe impl<T: StaticType> glib::value::ValueTypeChecker for ClockTimeValueTypeOrNoneChecker<T> {
-    type Error = glib::value::ValueTypeMismatchOrNoneError;
+unsafe impl glib::value::ValueTypeChecker for ClockTimeValueTypeOrNoneChecker {
+    type Error = glib::value::ValueTypeMismatchOrNoneError<glib::value::ValueTypeMismatchError>;
 
     fn check(value: &glib::Value) -> Result<(), Self::Error> {
         skip_assert_initialized!();
-        glib::value::GenericValueTypeChecker::<T>::check(value)?;
+        glib::value::GenericValueTypeChecker::<ClockTime>::check(value)?;
 
         let gct = unsafe { glib::gobject_ffi::g_value_get_uint64(value.to_glib_none().0) };
         if gct == ffi::GST_CLOCK_TIME_NONE {
@@ -96,7 +96,7 @@ unsafe impl<T: StaticType> glib::value::ValueTypeChecker for ClockTimeValueTypeO
 }
 
 unsafe impl<'a> glib::value::FromValue<'a> for ClockTime {
-    type Checker = ClockTimeValueTypeOrNoneChecker<Self>;
+    type Checker = ClockTimeValueTypeOrNoneChecker;
 
     unsafe fn from_value(value: &glib::Value) -> ClockTime {
         skip_assert_initialized!();
