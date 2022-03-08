@@ -653,7 +653,7 @@ unsafe impl Send for Array {}
 unsafe impl Sync for Array {}
 
 impl Array {
-    pub fn new(values: impl IntoIterator<Item = impl ToSendValue + Sync>) -> Self {
+    pub fn new(values: impl IntoIterator<Item = impl ToSendValue + Send>) -> Self {
         assert_initialized_main_thread!();
 
         Self(values.into_iter().map(|v| v.to_send_value()).collect())
@@ -823,7 +823,7 @@ unsafe impl Send for List {}
 unsafe impl Sync for List {}
 
 impl List {
-    pub fn new(values: impl IntoIterator<Item = impl ToSendValue + Sync>) -> Self {
+    pub fn new(values: impl IntoIterator<Item = impl ToSendValue + Send>) -> Self {
         assert_initialized_main_thread!();
 
         Self(values.into_iter().map(|v| v.to_send_value()).collect())
