@@ -110,8 +110,8 @@ checksum = "14c189c53d098945499cdfa7ecc63567cf3886b3332b312a5b4585d8d3a6a610"
 
 [[package]]
 name = "cairo-rs"
-version = "0.15.6"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#333045f456b0a5512b0d6551d97722e2aa95b193"
+version = "0.15.7"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#34a54da9f7477c0ce03b40986f5064cbf5fd03dd"
 dependencies = [
  "bitflags",
  "cairo-sys-rs",
@@ -122,8 +122,8 @@ dependencies = [
 
 [[package]]
 name = "cairo-sys-rs"
-version = "0.15.6"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#333045f456b0a5512b0d6551d97722e2aa95b193"
+version = "0.15.7"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#34a54da9f7477c0ce03b40986f5064cbf5fd03dd"
 dependencies = [
  "glib-sys",
  "libc",
@@ -446,7 +446,7 @@ checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
 
 [[package]]
 name = "examples"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "anyhow",
  "byte-slice-cast",
@@ -668,8 +668,8 @@ dependencies = [
 
 [[package]]
 name = "gdk-pixbuf"
-version = "0.15.6"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#333045f456b0a5512b0d6551d97722e2aa95b193"
+version = "0.15.7"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#34a54da9f7477c0ce03b40986f5064cbf5fd03dd"
 dependencies = [
  "bitflags",
  "gdk-pixbuf-sys",
@@ -680,8 +680,8 @@ dependencies = [
 
 [[package]]
 name = "gdk-pixbuf-sys"
-version = "0.15.6"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#333045f456b0a5512b0d6551d97722e2aa95b193"
+version = "0.15.7"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#34a54da9f7477c0ce03b40986f5064cbf5fd03dd"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -731,8 +731,8 @@ dependencies = [
 
 [[package]]
 name = "gio"
-version = "0.15.6"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#333045f456b0a5512b0d6551d97722e2aa95b193"
+version = "0.15.7"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#34a54da9f7477c0ce03b40986f5064cbf5fd03dd"
 dependencies = [
  "bitflags",
  "futures-channel",
@@ -747,8 +747,8 @@ dependencies = [
 
 [[package]]
 name = "gio-sys"
-version = "0.15.6"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#333045f456b0a5512b0d6551d97722e2aa95b193"
+version = "0.15.7"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#34a54da9f7477c0ce03b40986f5064cbf5fd03dd"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -776,8 +776,8 @@ dependencies = [
 
 [[package]]
 name = "glib"
-version = "0.15.6"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#333045f456b0a5512b0d6551d97722e2aa95b193"
+version = "0.15.7"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#34a54da9f7477c0ce03b40986f5064cbf5fd03dd"
 dependencies = [
  "bitflags",
  "futures-channel",
@@ -796,8 +796,8 @@ dependencies = [
 
 [[package]]
 name = "glib-macros"
-version = "0.15.6"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#333045f456b0a5512b0d6551d97722e2aa95b193"
+version = "0.15.7"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#34a54da9f7477c0ce03b40986f5064cbf5fd03dd"
 dependencies = [
  "anyhow",
  "heck",
@@ -810,8 +810,8 @@ dependencies = [
 
 [[package]]
 name = "glib-sys"
-version = "0.15.6"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#333045f456b0a5512b0d6551d97722e2aa95b193"
+version = "0.15.7"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#34a54da9f7477c0ce03b40986f5064cbf5fd03dd"
 dependencies = [
  "libc",
  "system-deps",
@@ -891,8 +891,8 @@ dependencies = [
 
 [[package]]
 name = "gobject-sys"
-version = "0.15.6"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#333045f456b0a5512b0d6551d97722e2aa95b193"
+version = "0.15.7"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#34a54da9f7477c0ce03b40986f5064cbf5fd03dd"
 dependencies = [
  "glib-sys",
  "libc",
@@ -901,7 +901,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "bitflags",
  "cfg-if 1.0.0",
@@ -929,7 +929,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-app"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "bitflags",
  "futures-core",
@@ -947,7 +947,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-app-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gstreamer-base-sys",
@@ -960,7 +960,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-audio"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "array-init",
  "bitflags",
@@ -977,7 +977,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-audio-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -991,7 +991,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-base"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "bitflags",
  "cfg-if 1.0.0",
@@ -1004,7 +1004,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-base-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1017,7 +1017,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-check"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1028,7 +1028,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-check-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1041,7 +1041,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-controller"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1053,7 +1053,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-controller-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1067,7 +1067,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-editing-services"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "bitflags",
  "gio",
@@ -1082,7 +1082,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-editing-services-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -1097,7 +1097,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "bitflags",
  "byteorder",
@@ -1114,7 +1114,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-egl"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1126,7 +1126,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-egl-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gstreamer-gl-sys",
@@ -1138,7 +1138,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1153,7 +1153,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-wayland"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1165,7 +1165,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-wayland-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gstreamer-gl-sys",
@@ -1177,7 +1177,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-x11"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1189,7 +1189,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-x11-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gstreamer-gl-sys",
@@ -1201,7 +1201,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-mpegts-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gstreamer-base-sys",
@@ -1214,7 +1214,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-net"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "gio",
  "gir-format-check",
@@ -1225,7 +1225,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-net-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -1238,7 +1238,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-pbutils"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1251,7 +1251,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-pbutils-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1266,7 +1266,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-player"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1280,7 +1280,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-player-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1294,7 +1294,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtp"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1307,7 +1307,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtp-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gstreamer-base-sys",
@@ -1320,7 +1320,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtsp"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1333,7 +1333,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtsp-server"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "bitflags",
  "gio",
@@ -1350,7 +1350,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtsp-server-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -1367,7 +1367,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtsp-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -1382,7 +1382,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-sdp"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1392,7 +1392,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-sdp-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gstreamer-sys",
@@ -1404,7 +1404,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1416,7 +1416,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-tag-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1429,7 +1429,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-video"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "bitflags",
  "cfg-if 1.0.0",
@@ -1448,7 +1448,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-video-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1462,7 +1462,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-webrtc"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1474,7 +1474,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-webrtc-sys"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "glib-sys",
  "gstreamer-sdp-sys",
@@ -1996,8 +1996,8 @@ dependencies = [
 
 [[package]]
 name = "pango"
-version = "0.15.6"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#333045f456b0a5512b0d6551d97722e2aa95b193"
+version = "0.15.7"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#34a54da9f7477c0ce03b40986f5064cbf5fd03dd"
 dependencies = [
  "bitflags",
  "glib",
@@ -2008,8 +2008,8 @@ dependencies = [
 
 [[package]]
 name = "pango-sys"
-version = "0.15.6"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#333045f456b0a5512b0d6551d97722e2aa95b193"
+version = "0.15.7"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#34a54da9f7477c0ce03b40986f5064cbf5fd03dd"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -2019,8 +2019,8 @@ dependencies = [
 
 [[package]]
 name = "pangocairo"
-version = "0.15.6"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#333045f456b0a5512b0d6551d97722e2aa95b193"
+version = "0.15.7"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#34a54da9f7477c0ce03b40986f5064cbf5fd03dd"
 dependencies = [
  "bitflags",
  "cairo-rs",
@@ -2032,8 +2032,8 @@ dependencies = [
 
 [[package]]
 name = "pangocairo-sys"
-version = "0.15.6"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#333045f456b0a5512b0d6551d97722e2aa95b193"
+version = "0.15.7"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.15#34a54da9f7477c0ce03b40986f5064cbf5fd03dd"
 dependencies = [
  "cairo-sys-rs",
  "glib-sys",
@@ -2537,7 +2537,7 @@ dependencies = [
 
 [[package]]
 name = "tutorials"
-version = "0.18.5"
+version = "0.18.6"
 dependencies = [
  "anyhow",
  "byte-slice-cast",
