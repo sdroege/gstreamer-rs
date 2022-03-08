@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.18.6] - 2022-03-08
+### Fixed
+- Require `Send` and not `Sync` for the values of an `gst::Array` / `gst::List`.
+
+### Changed
+- Simplify and speed up log message string construction
+
 ## [0.18.5] - 2022-02-20
 ### Changed
 - Require GStreamer 1.20.0 at least when building with `v1_20`. Earlier
@@ -1210,7 +1217,13 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.0...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.6...HEAD
+[0.18.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.5...0.18.6
+[0.18.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.4...0.18.5
+[0.18.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.3...0.18.4
+[0.18.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.2...0.18.3
+[0.18.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.1...0.18.2
+[0.18.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.0...0.18.1
 [0.18.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.17.4...0.18.0
 [0.17.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.17.3...0.17.4
 [0.17.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.17.2...0.17.3
