@@ -408,31 +408,7 @@ gir-checks:
   extends: .img-stable
   stage: 'extras'
   script:
-    - git diff --exit-code
-    - git clone --depth 1 https://github.com/gtk-rs/checker
-    - git diff --exit-code
-    - cd checker && echo '[workspace]' >> Cargo.toml
-    - cd .. && git diff --exit-code && cd checker
-    - cargo build --locked --color=always --release
-    - cd .. && git diff --exit-code && cd checker
-    - |
-      cargo run --color=always --release -- ../gstreamer* ../gstreamer-gl/{egl,wayland,x11}
-    - cd .. && git diff --exit-code && cd checker
-    # Check doc aliases
-    - |
-      for crate in ../gstreamer* ../gstreamer-gl/{egl,wayland,x11}; do
-        echo '--> Checking doc aliases in ' $crate
-        python3 doc_aliases.py $crate
-      done
-    - cd ..
-    # To ensure that there was no missing #[doc(alias = "...")]
-    - git diff --exit-code
-    - |
-      for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
-        echo '-->' $crate
-        ./checker/check_init_asserts $crate
-      done
-    - git diff --exit-code
+    - python3 ci/gir-checks.py
 
 outdated:
   extends: .img-stable
