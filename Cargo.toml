@@ -45,6 +45,7 @@ members = [
   "gstreamer-video",
   "gstreamer-webrtc",
   "gstreamer-allocators",
+  "gstreamer-utils",
   "examples",
   "tutorials",
 ]
