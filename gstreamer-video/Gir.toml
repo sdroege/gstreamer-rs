@@ -144,6 +144,33 @@ status = "generate"
     name = "event_get_type"
     manual = true
 
+    [[object.function]]
+    name = "event_new_command"
+    manual = true
+
+    [[object.function]]
+    name = "event_new_key_press"
+    manual = true
+
+    [[object.function]]
+    name = "event_new_key_release"
+    manual = true
+
+    [[object.function]]
+    name = "event_new_mouse_button_press"
+    manual = true
+
+    [[object.function]]
+    name = "event_new_mouse_button_release"
+    manual = true
+
+    [[object.function]]
+    name = "event_new_mouse_move"
+    manual = true
+
+    [[object.function]]
+    name = "event_new_mouse_scroll"
+    manual = true
 
     [[object.function]]
     name = "message_new_commands_changed"

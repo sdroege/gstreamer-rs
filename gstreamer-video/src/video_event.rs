@@ -389,6 +389,7 @@ pub enum NavigationEvent {
 }
 
 impl NavigationEvent {
+    #[doc(alias = "gst_navigation_event_new_key_press")]
     pub fn new_key_press(key: &str) -> NavigationEvent {
         assert_initialized_main_thread!();
         Self::KeyPress {
@@ -396,6 +397,7 @@ impl NavigationEvent {
         }
     }
 
+    #[doc(alias = "gst_navigation_event_new_key_release")]
     pub fn new_key_release(key: &str) -> NavigationEvent {
         assert_initialized_main_thread!();
         Self::KeyRelease {
@@ -403,16 +405,19 @@ impl NavigationEvent {
         }
     }
 
+    #[doc(alias = "gst_navigation_event_new_mouse_move")]
     pub fn new_mouse_move(x: f64, y: f64) -> NavigationEvent {
         assert_initialized_main_thread!();
         Self::MouseMove { x, y }
     }
 
+    #[doc(alias = "gst_navigation_event_new_mouse_button_press")]
     pub fn new_mouse_button_press(button: i32, x: f64, y: f64) -> NavigationEvent {
         assert_initialized_main_thread!();
         Self::MouseButtonPress { button, x, y }
     }
 
+    #[doc(alias = "gst_navigation_event_new_mouse_button_release")]
     pub fn new_mouse_button_release(button: i32, x: f64, y: f64) -> NavigationEvent {
         assert_initialized_main_thread!();
         Self::MouseButtonRelease { button, x, y }
@@ -420,6 +425,7 @@ impl NavigationEvent {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_navigation_event_new_mouse_scroll")]
     pub fn new_mouse_scroll(x: f64, y: f64, delta_x: f64, delta_y: f64) -> NavigationEvent {
         assert_initialized_main_thread!();
         Self::MouseScroll {
@@ -430,6 +436,7 @@ impl NavigationEvent {
         }
     }
 
+    #[doc(alias = "gst_navigation_event_new_command")]
     pub fn new_command(command: NavigationCommand) -> NavigationEvent {
         assert_initialized_main_thread!();
         Self::Command { command }
