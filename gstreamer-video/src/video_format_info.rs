@@ -107,6 +107,12 @@ impl VideoFormatInfo {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_PALETTE != 0
     }
 
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn has_subtiles(&self) -> bool {
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_SUBTILES != 0
+    }
+
     pub fn is_complex(&self) -> bool {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_COMPLEX != 0
     }
