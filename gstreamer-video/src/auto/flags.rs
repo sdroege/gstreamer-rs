@@ -411,6 +411,10 @@ bitflags! {
         const UNPACK = ffi::GST_VIDEO_FORMAT_FLAG_UNPACK as u32;
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_TILED")]
         const TILED = ffi::GST_VIDEO_FORMAT_FLAG_TILED as u32;
+        #[cfg(any(feature = "v1_22", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+        #[doc(alias = "GST_VIDEO_FORMAT_FLAG_SUBTILES")]
+        const SUBTILES = ffi::GST_VIDEO_FORMAT_FLAG_SUBTILES as u32;
     }
 }
 

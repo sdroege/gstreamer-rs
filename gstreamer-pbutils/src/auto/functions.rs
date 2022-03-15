@@ -66,6 +66,18 @@ pub fn codec_utils_aac_get_sample_rate_from_index(sr_idx: u32) -> u32 {
     unsafe { ffi::gst_codec_utils_aac_get_sample_rate_from_index(sr_idx) }
 }
 
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[doc(alias = "gst_codec_utils_caps_from_mime_codec")]
+pub fn codec_utils_caps_from_mime_codec(codecs_field: &str) -> Option<gst::Caps> {
+    assert_initialized_main_thread!();
+    unsafe {
+        from_glib_full(ffi::gst_codec_utils_caps_from_mime_codec(
+            codecs_field.to_glib_none().0,
+        ))
+    }
+}
+
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 #[doc(alias = "gst_codec_utils_caps_get_mime_codec")]

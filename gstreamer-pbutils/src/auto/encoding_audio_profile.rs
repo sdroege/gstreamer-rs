@@ -14,5 +14,7 @@ glib::wrapper! {
     }
 }
 
+impl EncodingAudioProfile {}
+
 unsafe impl Send for EncodingAudioProfile {}
 unsafe impl Sync for EncodingAudioProfile {}

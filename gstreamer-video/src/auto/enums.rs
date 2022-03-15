@@ -1707,6 +1707,10 @@ pub enum VideoFormat {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_VIDEO_FORMAT_ABGR64_BE")]
     Abgr64Be,
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_NV12_16L32S")]
+    Nv1216l32s,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -1909,6 +1913,8 @@ impl IntoGlib for VideoFormat {
             Self::Abgr64Le => ffi::GST_VIDEO_FORMAT_ABGR64_LE,
             #[cfg(any(feature = "v1_20", feature = "dox"))]
             Self::Abgr64Be => ffi::GST_VIDEO_FORMAT_ABGR64_BE,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            Self::Nv1216l32s => ffi::GST_VIDEO_FORMAT_NV12_16L32S,
             Self::__Unknown(value) => value,
         }
     }
@@ -2078,6 +2084,8 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
             ffi::GST_VIDEO_FORMAT_ABGR64_LE => Self::Abgr64Le,
             #[cfg(any(feature = "v1_20", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_ABGR64_BE => Self::Abgr64Be,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            ffi::GST_VIDEO_FORMAT_NV12_16L32S => Self::Nv1216l32s,
             value => Self::__Unknown(value),
         }
     }

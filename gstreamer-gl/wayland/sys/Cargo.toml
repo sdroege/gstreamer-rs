@@ -25,6 +25,7 @@ version = "1.18"
 
 [package.metadata.system-deps.gstreamer_gl_wayland_1_0.v1_20]
 version = "1.20"
+
 [package.metadata.system-deps.gstreamer_gl_wayland_1_0.v1_22]
 version = "1.21"
 [package.metadata.docs.rs]
