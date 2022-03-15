@@ -157,6 +157,22 @@ impl AudioConverterConfig {
             })
             .unwrap_or_else(Vec::new)
     }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn set_dither_threshold(&mut self, v: u32) {
+        self.0.set("GstAudioConverter.dither-threshold", &v);
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "get_dither_threshold")]
+    pub fn dither_threshold(&self) -> u32 {
+        self.0
+            .get_optional("GstAudioConverter.dither-threshold")
+            .expect("Wrong type")
+            .unwrap_or(20)
+    }
 }
 
 #[cfg(test)]
