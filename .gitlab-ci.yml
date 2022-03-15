@@ -222,9 +222,9 @@ plugins-update-nightly:
       get_features() {
         crate=$1
         if [ "$crate" = "gstreamer" ]; then
-          echo "--features=ser_de,v1_20"
+          echo "--features=ser_de,v1_22"
         else
-          echo "--features=v1_20"
+          echo "--features=v1_22"
         fi
       }
       for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
@@ -293,7 +293,7 @@ test nightly all-features:
     - |
       get_features() {
         module=${1%%/sys}
-        echo "--features=v1_20"
+        echo "--features=v1_22"
       }
       # First build and test all the crates with their relevant features
       # Keep features in sync with below
@@ -369,9 +369,9 @@ clippy:
       get_features() {
         crate=$1
         if [ "$crate" = "gstreamer" ]; then
-          echo "--features=ser_de,v1_20"
+          echo "--features=ser_de,v1_22"
         else
-          echo "--features=v1_20"
+          echo "--features=v1_22"
         fi
       }
       for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
