@@ -1,6 +1,6 @@
 set -e
 
-pip3 install meson==0.60.3
+pip3 install meson==0.61.3
 
 # gstreamer-rs already has a 'gstreamer' directory so don't clone there
 pushd .

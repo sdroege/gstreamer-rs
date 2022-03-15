@@ -1,6 +1,6 @@
 set -eux
 
-BRANCH=gtk-4-4
+BRANCH=gtk-4-6
 
 git clone https://gitlab.gnome.org/GNOME/gtk.git --branch $BRANCH --depth=1
 cd gtk
