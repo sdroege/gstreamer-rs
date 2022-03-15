@@ -99,6 +99,9 @@ pub use self::enums::VideoTileMode;
 pub use self::enums::VideoTransferFunction;
 
 mod flags;
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+pub use self::flags::NavigationModifierType;
 pub use self::flags::VideoBufferFlags;
 pub use self::flags::VideoChromaSite;
 pub use self::flags::VideoCodecFrameFlags;

@@ -6,9 +6,6 @@
 use crate::NavigationCommand;
 use glib::object::IsA;
 use glib::translate::*;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-use std::mem;
 
 glib::wrapper! {
     #[doc(alias = "GstNavigation")]
@@ -21,140 +18,6 @@ glib::wrapper! {
 
 impl Navigation {
     pub const NONE: Option<&'static Navigation> = None;
-
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    #[doc(alias = "gst_navigation_event_get_coordinates")]
-    pub fn event_get_coordinates(event: &gst::Event) -> Option<(f64, f64)> {
-        assert_initialized_main_thread!();
-        unsafe {
-            let mut x = mem::MaybeUninit::uninit();
-            let mut y = mem::MaybeUninit::uninit();
-            let ret = from_glib(ffi::gst_navigation_event_get_coordinates(
-                event.to_glib_none().0,
-                x.as_mut_ptr(),
-                y.as_mut_ptr(),
-            ));
-            let x = x.assume_init();
-            let y = y.assume_init();
-            if ret {
-                Some((x, y))
-            } else {
-                None
-            }
-        }
-    }
-
-    //#[cfg(any(feature = "v1_22", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    //#[doc(alias = "gst_navigation_event_new_touch_cancel")]
-    //pub fn event_new_touch_cancel(state: /*Ignored*/NavigationModifierType) -> Option<gst::Event> {
-    //    unsafe { TODO: call ffi:gst_navigation_event_new_touch_cancel() }
-    //}
-
-    //#[cfg(any(feature = "v1_22", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    //#[doc(alias = "gst_navigation_event_new_touch_down")]
-    //pub fn event_new_touch_down(identifier: u32, x: f64, y: f64, pressure: f64, state: /*Ignored*/NavigationModifierType) -> Option<gst::Event> {
-    //    unsafe { TODO: call ffi:gst_navigation_event_new_touch_down() }
-    //}
-
-    //#[cfg(any(feature = "v1_22", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    //#[doc(alias = "gst_navigation_event_new_touch_frame")]
-    //pub fn event_new_touch_frame(state: /*Ignored*/NavigationModifierType) -> Option<gst::Event> {
-    //    unsafe { TODO: call ffi:gst_navigation_event_new_touch_frame() }
-    //}
-
-    //#[cfg(any(feature = "v1_22", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    //#[doc(alias = "gst_navigation_event_new_touch_motion")]
-    //pub fn event_new_touch_motion(identifier: u32, x: f64, y: f64, pressure: f64, state: /*Ignored*/NavigationModifierType) -> Option<gst::Event> {
-    //    unsafe { TODO: call ffi:gst_navigation_event_new_touch_motion() }
-    //}
-
-    //#[cfg(any(feature = "v1_22", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    //#[doc(alias = "gst_navigation_event_new_touch_up")]
-    //pub fn event_new_touch_up(identifier: u32, x: f64, y: f64, state: /*Ignored*/NavigationModifierType) -> Option<gst::Event> {
-    //    unsafe { TODO: call ffi:gst_navigation_event_new_touch_up() }
-    //}
-
-    //#[cfg(any(feature = "v1_22", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    //#[doc(alias = "gst_navigation_event_parse_modifier_state")]
-    //pub fn event_parse_modifier_state(event: &gst::Event, state: /*Ignored*/NavigationModifierType) -> bool {
-    //    unsafe { TODO: call ffi:gst_navigation_event_parse_modifier_state() }
-    //}
-
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    #[doc(alias = "gst_navigation_event_parse_touch_event")]
-    pub fn event_parse_touch_event(event: &gst::Event) -> Option<(u32, f64, f64, f64)> {
-        assert_initialized_main_thread!();
-        unsafe {
-            let mut identifier = mem::MaybeUninit::uninit();
-            let mut x = mem::MaybeUninit::uninit();
-            let mut y = mem::MaybeUninit::uninit();
-            let mut pressure = mem::MaybeUninit::uninit();
-            let ret = from_glib(ffi::gst_navigation_event_parse_touch_event(
-                event.to_glib_none().0,
-                identifier.as_mut_ptr(),
-                x.as_mut_ptr(),
-                y.as_mut_ptr(),
-                pressure.as_mut_ptr(),
-            ));
-            let identifier = identifier.assume_init();
-            let x = x.assume_init();
-            let y = y.assume_init();
-            let pressure = pressure.assume_init();
-            if ret {
-                Some((identifier, x, y, pressure))
-            } else {
-                None
-            }
-        }
-    }
-
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    #[doc(alias = "gst_navigation_event_parse_touch_up_event")]
-    pub fn event_parse_touch_up_event(event: &gst::Event) -> Option<(u32, f64, f64)> {
-        assert_initialized_main_thread!();
-        unsafe {
-            let mut identifier = mem::MaybeUninit::uninit();
-            let mut x = mem::MaybeUninit::uninit();
-            let mut y = mem::MaybeUninit::uninit();
-            let ret = from_glib(ffi::gst_navigation_event_parse_touch_up_event(
-                event.to_glib_none().0,
-                identifier.as_mut_ptr(),
-                x.as_mut_ptr(),
-                y.as_mut_ptr(),
-            ));
-            let identifier = identifier.assume_init();
-            let x = x.assume_init();
-            let y = y.assume_init();
-            if ret {
-                Some((identifier, x, y))
-            } else {
-                None
-            }
-        }
-    }
-
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    #[doc(alias = "gst_navigation_event_set_coordinates")]
-    pub fn event_set_coordinates(event: &gst::Event, x: f64, y: f64) -> bool {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib(ffi::gst_navigation_event_set_coordinates(
-                event.to_glib_none().0,
-                x,
-                y,
-            ))
-        }
-    }
 
     //#[doc(alias = "gst_navigation_query_set_commands")]
     //pub fn query_set_commands(query: &gst::Query, n_cmds: i32, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
@@ -174,11 +37,6 @@ pub trait NavigationExt: 'static {
     #[doc(alias = "gst_navigation_send_command")]
     fn send_command(&self, command: NavigationCommand);
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    #[doc(alias = "gst_navigation_send_event_simple")]
-    fn send_event_simple(&self, event: &gst::Event);
-
     #[doc(alias = "gst_navigation_send_key_event")]
     fn send_key_event(&self, event: &str, key: &str);
 
@@ -195,17 +53,6 @@ impl<O: IsA<Navigation>> NavigationExt for O {
     fn send_command(&self, command: NavigationCommand) {
         unsafe {
             ffi::gst_navigation_send_command(self.as_ref().to_glib_none().0, command.into_glib());
-        }
-    }
-
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    fn send_event_simple(&self, event: &gst::Event) {
-        unsafe {
-            ffi::gst_navigation_send_event_simple(
-                self.as_ref().to_glib_none().0,
-                event.to_glib_full(),
-            );
         }
     }
 

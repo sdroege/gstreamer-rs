@@ -113,10 +113,6 @@ status = "generate"
     manual = true
 
     [[object.function]]
-    name = "send_event"
-    manual = true
-
-    [[object.function]]
     name = "event_parse_mouse_button_event"
     manual = true
 
@@ -129,19 +125,19 @@ status = "generate"
     manual = true
 
     [[object.function]]
-    name = "message_parse_event"
+    name = "event_parse_touch_event"
     manual = true
 
     [[object.function]]
-    name = "message_get_type"
-    manual = true
-
-    [[object.function]]
-    name = "message_new_event"
+    name = "event_parse_touch_up_event"
     manual = true
 
     [[object.function]]
     name = "event_parse_mouse_scroll_event"
+    manual = true
+
+    [[object.function]]
+    name = "event_parse_modifier_state"
     manual = true
 
     [[object.function]]
@@ -175,6 +171,68 @@ status = "generate"
     [[object.function]]
     name = "event_new_mouse_scroll"
     manual = true
+
+    [[object.function]]
+    name = "event_new_touch_down"
+    manual = true
+
+    [[object.function]]
+    name = "event_new_touch_motion"
+    manual = true
+
+    [[object.function]]
+    name = "event_new_touch_up"
+    manual = true
+
+    [[object.function]]
+    name = "event_new_touch_frame"
+    manual = true
+
+    [[object.function]]
+    name = "event_new_touch_cancel"
+    manual = true
+
+    [[object.function]]
+    name = "event_get_coordinates"
+    manual = true
+
+    [[object.function]]
+    name = "event_set_coordinates"
+    manual = true
+
+    [[object.function]]
+    name = "send_event"
+    manual = true
+
+    [[object.function]]
+    name = "send_event_simple"
+    manual = true
+
+    [[object.function]]
+    name = "send_key_event"
+
+    [[object.function]]
+    name = "send_mouse_event"
+
+    [[object.function]]
+    name = "send_mouse_scroll_event"
+
+    [[object.function]]
+    name = "send_command"
+
+
+    [[object.function]]
+    name = "message_parse_event"
+    manual = true
+
+    [[object.function]]
+    name = "message_get_type"
+    manual = true
+
+    [[object.function]]
+    name = "message_new_event"
+    manual = true
+
 
     [[object.function]]
     name = "message_new_commands_changed"
@@ -239,6 +297,31 @@ status = "generate"
     [[object.member]]
     name = "mouse_scroll"
     version = "1.18"
+    [[object.member]]
+    name = "touch_down"
+    version = "1.22"
+    [[object.member]]
+    name = "touch_motion"
+    version = "1.22"
+    [[object.member]]
+    name = "touch_up"
+    version = "1.22"
+    [[object.member]]
+    name = "touch_frame"
+    version = "1.22"
+    [[object.member]]
+    name = "touch_cancel"
+    version = "1.22"
+
+[[object]]
+name = "GstVideo.NavigationModifierType"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+    [[object.member]]
+    name = "mask"
+    ignore = true
 
 [[object]]
 name = "GstVideo.VideoAggregatorConvertPad"

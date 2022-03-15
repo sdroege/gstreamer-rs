@@ -11,6 +11,100 @@ use glib::StaticType;
 use glib::Type;
 use std::fmt;
 
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+bitflags! {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "GstNavigationModifierType")]
+    pub struct NavigationModifierType: u32 {
+        #[doc(alias = "GST_NAVIGATION_MODIFIER_SHIFT_MASK")]
+        const SHIFT_MASK = ffi::GST_NAVIGATION_MODIFIER_SHIFT_MASK as u32;
+        #[doc(alias = "GST_NAVIGATION_MODIFIER_LOCK_MASK")]
+        const LOCK_MASK = ffi::GST_NAVIGATION_MODIFIER_LOCK_MASK as u32;
+        #[doc(alias = "GST_NAVIGATION_MODIFIER_CONTROL_MASK")]
+        const CONTROL_MASK = ffi::GST_NAVIGATION_MODIFIER_CONTROL_MASK as u32;
+        #[doc(alias = "GST_NAVIGATION_MODIFIER_ALT_MASK")]
+        const ALT_MASK = ffi::GST_NAVIGATION_MODIFIER_ALT_MASK as u32;
+        #[doc(alias = "GST_NAVIGATION_MODIFIER_BUTTON1_MASK")]
+        const BUTTON1_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON1_MASK as u32;
+        #[doc(alias = "GST_NAVIGATION_MODIFIER_BUTTON2_MASK")]
+        const BUTTON2_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON2_MASK as u32;
+        #[doc(alias = "GST_NAVIGATION_MODIFIER_BUTTON3_MASK")]
+        const BUTTON3_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON3_MASK as u32;
+        #[doc(alias = "GST_NAVIGATION_MODIFIER_BUTTON4_MASK")]
+        const BUTTON4_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON4_MASK as u32;
+        #[doc(alias = "GST_NAVIGATION_MODIFIER_BUTTON5_MASK")]
+        const BUTTON5_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON5_MASK as u32;
+        #[doc(alias = "GST_NAVIGATION_MODIFIER_SUPER_MASK")]
+        const SUPER_MASK = ffi::GST_NAVIGATION_MODIFIER_SUPER_MASK as u32;
+        #[doc(alias = "GST_NAVIGATION_MODIFIER_HYPER_MASK")]
+        const HYPER_MASK = ffi::GST_NAVIGATION_MODIFIER_HYPER_MASK as u32;
+        #[doc(alias = "GST_NAVIGATION_MODIFIER_META_MASK")]
+        const META_MASK = ffi::GST_NAVIGATION_MODIFIER_META_MASK as u32;
+    }
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[doc(hidden)]
+impl IntoGlib for NavigationModifierType {
+    type GlibType = ffi::GstNavigationModifierType;
+
+    fn into_glib(self) -> ffi::GstNavigationModifierType {
+        self.bits()
+    }
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstNavigationModifierType> for NavigationModifierType {
+    unsafe fn from_glib(value: ffi::GstNavigationModifierType) -> Self {
+        skip_assert_initialized!();
+        Self::from_bits_truncate(value)
+    }
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+impl StaticType for NavigationModifierType {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_navigation_modifier_type_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+impl glib::value::ValueType for NavigationModifierType {
+    type Type = Self;
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+unsafe impl<'a> FromValue<'a> for NavigationModifierType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+impl ToValue for NavigationModifierType {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstVideoBufferFlags")]
     pub struct VideoBufferFlags: u32 {
