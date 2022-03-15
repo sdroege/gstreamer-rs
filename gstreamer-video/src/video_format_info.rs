@@ -311,6 +311,19 @@ impl VideoFormatInfo {
         }
         (offset, scale)
     }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "gst_video_format_info_extrapolate_stride")]
+    pub fn extrapolate_stride(&self, plane: u32, stride: u32) -> u32 {
+        unsafe {
+            ffi::gst_video_format_info_extrapolate_stride(
+                self.to_glib_none().0,
+                plane as i32,
+                stride as i32,
+            ) as u32
+        }
+    }
 }
 
 unsafe impl Sync for VideoFormatInfo {}
