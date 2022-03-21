@@ -12,6 +12,27 @@ pub use self::color_balance_channel::ColorBalanceChannel;
 mod navigation;
 pub use self::navigation::Navigation;
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+mod video_aggregator;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+pub use self::video_aggregator::VideoAggregator;
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+mod video_aggregator_convert_pad;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+pub use self::video_aggregator_convert_pad::VideoAggregatorConvertPad;
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+mod video_aggregator_pad;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+pub use self::video_aggregator_pad::VideoAggregatorPad;
+
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 mod video_aggregator_parallel_convert_pad;
@@ -99,6 +120,15 @@ pub mod traits {
     pub use super::color_balance::ColorBalanceExt;
     pub use super::color_balance_channel::ColorBalanceChannelExt;
     pub use super::navigation::NavigationExt;
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    pub use super::video_aggregator::VideoAggregatorExt;
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    pub use super::video_aggregator_convert_pad::VideoAggregatorConvertPadExt;
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    pub use super::video_aggregator_pad::VideoAggregatorPadExt;
     pub use super::video_decoder::VideoDecoderExt;
     pub use super::video_encoder::VideoEncoderExt;
     pub use super::video_orientation::VideoOrientationExt;

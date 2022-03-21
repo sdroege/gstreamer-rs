@@ -24,6 +24,7 @@ generate = [
     "GstVideo.NavigationQueryType",
     "GstVideo.VideoAFDSpec",
     "GstVideo.VideoAFDValue",
+    "GstVideo.VideoAggregator",
     "GstVideo.VideoAggregatorParallelConvertPad",
     "GstVideo.VideoAlphaMode",
     "GstVideo.VideoBufferPool",
@@ -59,10 +60,13 @@ manual = [
     "Gst.Memory",
     "Gst.Message",
     "Gst.Object",
+    "Gst.Pad",
     "Gst.Pipeline",
     "Gst.State",
     "Gst.TagList",
     "Gst.TagMergeMode",
+    "GstBase.Aggregator",
+    "GstBase.AggregatorPad",
     "GstBase.BaseSink",
     "GstBase.BaseTransform",
     "GstVideo.VideoCodecFrame",
@@ -235,6 +239,30 @@ status = "generate"
     [[object.member]]
     name = "mouse_scroll"
     version = "1.18"
+
+[[object]]
+name = "GstVideo.VideoAggregatorConvertPad"
+status = "generate"
+    [[object.property]]
+    name = "converter-config"
+    # wrong type
+    manual = true
+
+[[object]]
+name = "GstVideo.VideoAggregatorPad"
+status = "generate"
+    [[object.function]]
+    name = "get_current_buffer"
+    # needs special considerations
+    manual = true
+    [[object.function]]
+    name = "get_prepared_frame"
+    # needs special considerations
+    manual = true
+    [[object.function]]
+    name = "has_current_buffer"
+    # needs special considerations
+    manual = true
 
 [[object]]
 name = "GstVideo.VideoBufferFlags"

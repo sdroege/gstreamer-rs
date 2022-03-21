@@ -125,6 +125,16 @@ pub use crate::video_hdr::*;
 
 mod color_balance_channel;
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+mod video_aggregator;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+mod video_aggregator_convert_pad;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+mod video_aggregator_pad;
+
 pub const VIDEO_ENCODER_FLOW_NEED_DATA: gst::FlowSuccess = gst::FlowSuccess::CustomSuccess;
 pub const VIDEO_DECODER_FLOW_NEED_DATA: gst::FlowSuccess = gst::FlowSuccess::CustomSuccess;
 
@@ -136,6 +146,15 @@ pub mod prelude {
 
     pub use crate::auto::traits::*;
     pub use crate::navigation::NavigationExtManual;
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    pub use crate::video_aggregator::VideoAggregatorExtManual;
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    pub use crate::video_aggregator_convert_pad::VideoAggregatorConvertPadExtManual;
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    pub use crate::video_aggregator_pad::VideoAggregatorPadExtManual;
     pub use crate::video_buffer_pool::VideoBufferPoolConfig;
     pub use crate::video_decoder::VideoDecoderExtManual;
     pub use crate::video_encoder::VideoEncoderExtManual;

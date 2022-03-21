@@ -8,6 +8,10 @@ mod video_encoder;
 mod video_filter;
 mod video_sink;
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+pub use video_aggregator::AggregateFramesToken;
+
 pub mod prelude {
     #[doc(hidden)]
     pub use gst_base::subclass::prelude::*;
