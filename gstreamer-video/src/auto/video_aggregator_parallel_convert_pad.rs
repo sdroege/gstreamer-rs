@@ -3,9 +3,12 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::VideoAggregatorConvertPad;
+use crate::VideoAggregatorPad;
+
 glib::wrapper! {
     #[doc(alias = "GstVideoAggregatorParallelConvertPad")]
-    pub struct VideoAggregatorParallelConvertPad(Object<ffi::GstVideoAggregatorParallelConvertPad, ffi::GstVideoAggregatorParallelConvertPadClass>) @extends gst::Object;
+    pub struct VideoAggregatorParallelConvertPad(Object<ffi::GstVideoAggregatorParallelConvertPad, ffi::GstVideoAggregatorParallelConvertPadClass>) @extends VideoAggregatorConvertPad, VideoAggregatorPad, gst_base::AggregatorPad, gst::Pad, gst::Object;
 
     match fn {
         type_ => || ffi::gst_video_aggregator_parallel_convert_pad_get_type(),
