@@ -71,9 +71,8 @@ pub trait AggregatorExtManual: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_samples_selected<
-        P,
         F: Fn(
-                &P,
+                &Self,
                 &gst::Segment,
                 Option<gst::ClockTime>,
                 Option<gst::ClockTime>,
@@ -84,9 +83,7 @@ pub trait AggregatorExtManual: 'static {
     >(
         &self,
         f: F,
-    ) -> SignalHandlerId
-    where
-        P: IsA<Aggregator>;
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<Aggregator>> AggregatorExtManual for O {
@@ -208,9 +205,8 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_samples_selected<
-        P,
         F: Fn(
-                &P,
+                &Self,
                 &gst::Segment,
                 Option<gst::ClockTime>,
                 Option<gst::ClockTime>,
@@ -221,10 +217,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     >(
         &self,
         f: F,
-    ) -> SignalHandlerId
-    where
-        P: IsA<Aggregator>,
-    {
+    ) -> SignalHandlerId {
         unsafe extern "C" fn samples_selected_trampoline<
             P,
             F: Fn(
@@ -268,7 +261,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
                 self.as_ptr() as *mut _,
                 b"samples-selected\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
-                    samples_selected_trampoline::<P, F> as *const (),
+                    samples_selected_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
