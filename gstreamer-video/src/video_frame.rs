@@ -201,6 +201,12 @@ impl<T> VideoFrame<T> {
     pub fn as_ptr(&self) -> *const ffi::GstVideoFrame {
         &self.frame
     }
+
+    pub fn into_raw(self) -> ffi::GstVideoFrame {
+        let mut s = mem::ManuallyDrop::new(self);
+        s.buffer = None;
+        s.frame
+    }
 }
 
 impl<T> Drop for VideoFrame<T> {
