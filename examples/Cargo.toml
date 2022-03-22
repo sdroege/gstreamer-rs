@@ -187,3 +187,7 @@ required-features = ["image"]
 [[bin]]
 name = "fd_allocator"
 required-features = ["allocators"]
+
+[[bin]]
+name = "cairo_compositor"
+required-features = ["cairo-rs", "gst-video/v1_18"]
