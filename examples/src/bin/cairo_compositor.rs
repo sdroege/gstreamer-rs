@@ -5,12 +5,11 @@ use gst::prelude::*;
 use gst_base::prelude::*;
 
 use anyhow::{Context, Error};
-use derive_more::{Display, Error};
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
-// Our custom compositor element is defined in this module
+// Our custom compositor element is defined in this module.
 mod cairo_compositor {
     use super::*;
     use gst_base::subclass::prelude::*;
@@ -19,13 +18,13 @@ mod cairo_compositor {
 
     use once_cell::sync::Lazy;
 
-    // In the imp submodule we include the actual implementation
+    // In the imp submodule we include the actual implementation of the compositor.
     mod imp {
         use super::*;
 
         use std::sync::Mutex;
 
-        // Settings of the compositor
+        // Settings of the compositor.
         #[derive(Clone)]
         struct Settings {
             background_color: u32,
@@ -39,7 +38,7 @@ mod cairo_compositor {
             }
         }
 
-        // This is the private data of our pad
+        // This is the private data of our compositor.
         #[derive(Default)]
         pub struct CairoCompositor {
             settings: Mutex<Settings>,
@@ -47,7 +46,7 @@ mod cairo_compositor {
 
         // This trait registers our type with the GObject object system and
         // provides the entry points for creating a new instance and setting
-        // up the class data
+        // up the class data.
         #[glib::object_subclass]
         impl ObjectSubclass for CairoCompositor {
             const NAME: &'static str = "CairoCompositor";
@@ -55,14 +54,17 @@ mod cairo_compositor {
             type ParentType = gst_video::VideoAggregator;
         }
 
-        // Implementation of glib::Object virtual methods
+        // Implementation of glib::Object virtual methods.
         impl ObjectImpl for CairoCompositor {
+            // Specfication of the compositor properties.
+            // In this case a single property for configuring the background color of the
+            // composition.
             fn properties() -> &'static [glib::ParamSpec] {
                 static PROPERTIES: Lazy<Vec<glib::ParamSpec>> = Lazy::new(|| {
                     vec![glib::ParamSpecUInt::new(
                         "background-color",
                         "Background Color",
-                        "Background color as AARRGGBB",
+                        "Background color as 0xRRGGBB",
                         0,
                         u32::MAX,
                         Settings::default().background_color,
@@ -73,6 +75,7 @@ mod cairo_compositor {
                 &*PROPERTIES
             }
 
+            // Called by the application whenever the value of a property should be changed.
             fn set_property(
                 &self,
                 _obj: &Self::Type,
@@ -90,6 +93,7 @@ mod cairo_compositor {
                 };
             }
 
+            // Called by the application whenever the value of a property should be retrieved.
             fn property(
                 &self,
                 _obj: &Self::Type,
@@ -105,13 +109,13 @@ mod cairo_compositor {
             }
         }
 
-        // Implementation of gst::Object virtual methods
+        // Implementation of gst::Object virtual methods.
         impl GstObjectImpl for CairoCompositor {}
 
-        // Implementation of gst::Element virtual methods
+        // Implementation of gst::Element virtual methods.
         impl ElementImpl for CairoCompositor {
             // The element specific metadata. This information is what is visible from
-            // gst-inspect-1.0 and can also be programatically retrieved from the gst::Registry
+            // gst-inspect-1.0 and can also be programmatically retrieved from the gst::Registry
             // after initial registration without having to load the plugin in memory.
             fn metadata() -> Option<&'static gst::subclass::ElementMetadata> {
                 static ELEMENT_METADATA: Lazy<gst::subclass::ElementMetadata> = Lazy::new(|| {
@@ -137,6 +141,7 @@ mod cairo_compositor {
                         .field("format", gst_video::VideoFormat::Bgrx.to_str())
                         .field("width", gst::IntRange::<i32>::new(1, i32::MAX))
                         .field("height", gst::IntRange::<i32>::new(1, i32::MAX))
+                        .field("pixel-aspect-ratio", gst::Fraction::new(1, 1))
                         .field(
                             "framerate",
                             gst::FractionRange::new(
@@ -148,17 +153,19 @@ mod cairo_compositor {
 
                     vec![
                         // The src pad template must be named "src" for aggregator
-                        // and always be there
-                        gst::PadTemplate::with_gtype(
+                        // and always be there.
+                        gst::PadTemplate::new(
                             "src",
                             gst::PadDirection::Src,
                             gst::PadPresence::Always,
                             &caps,
-                            super::CairoCompositorPad::static_type(),
                         )
                         .unwrap(),
                         // The sink pad template must be named "sink_%u" by default for aggregator
-                        // and be requested by the application
+                        // and be requested by the application.
+                        //
+                        // Also declare here that it should be a pad with our custom compositor pad
+                        // type that is defined further below.
                         gst::PadTemplate::with_gtype(
                             "sink_%u",
                             gst::PadDirection::Sink,
@@ -174,8 +181,9 @@ mod cairo_compositor {
             }
         }
 
-        // Implementation of gst_base::Aggregator virtual methods
+        // Implementation of gst_base::Aggregator virtual methods.
         impl AggregatorImpl for CairoCompositor {
+            // Called whenever a query arrives at the given sink pad of the compositor.
             fn sink_query(
                 &self,
                 aggregator: &Self::Type,
@@ -214,17 +222,24 @@ mod cairo_compositor {
             }
         }
 
-        // Implementation of gst_video::VideoAggregator virtual methods
+        // Implementation of gst_video::VideoAggregator virtual methods.
         impl VideoAggregatorImpl for CairoCompositor {
+            // Called by videoaggregator whenever the output format should be determined.
             fn find_best_format(
                 &self,
                 _element: &Self::Type,
                 _downstream_caps: &gst::Caps,
             ) -> Option<(gst_video::VideoInfo, bool)> {
-                // Let videoaggregator select whatever format downstream wants
+                // Let videoaggregator select whatever format downstream wants.
+                //
+                // By default videoaggregator doesn't allow a different format than the input
+                // format.
                 None
             }
 
+            // Called whenever a new output frame should be produced. At this point, each pad has
+            // either no frame queued up at all or the frame that should be used for this output
+            // time.
             fn aggregate_frames(
                 &self,
                 element: &Self::Type,
@@ -233,21 +248,28 @@ mod cairo_compositor {
             ) -> Result<gst::FlowSuccess, gst::FlowError> {
                 let pads = element.sink_pads();
 
+                // Map the output frame writable.
                 let out_info = element.video_info().unwrap();
                 let mut out_frame =
                     gst_video::VideoFrameRef::from_buffer_ref_writable(outbuf, &out_info).unwrap();
 
+                // And then create a cairo context for drawing on the output frame.
                 with_frame(&mut out_frame, |ctx| {
                     let settings = self.settings.lock().unwrap().clone();
 
+                    // First of all, clear the background.
                     let bg = (
                         ((settings.background_color >> 16) & 0xff) as f64 / 255.0,
                         ((settings.background_color >> 8) & 0xff) as f64 / 255.0,
                         ((settings.background_color >> 0) & 0xff) as f64 / 255.0,
                     );
+                    ctx.set_operator(cairo::Operator::Source);
                     ctx.set_source_rgb(bg.0, bg.1, bg.2);
                     ctx.paint().unwrap();
 
+                    ctx.set_operator(cairo::Operator::Over);
+
+                    // Then for each pad (in zorder), draw it according to the current settings.
                     for pad in pads {
                         let pad = pad.downcast_ref::<CairoCompositorPad>().unwrap();
 
@@ -286,6 +308,8 @@ mod cairo_compositor {
         }
     }
 
+    // Creates a cairo context around the given video frame and then calls the closure to operate
+    // on the cairo context. Ensures that no references to the video frame stay inside cairo.
     fn with_frame<F: FnOnce(&cairo::Context)>(
         frame: &mut gst_video::VideoFrameRef<&mut gst::BufferRef>,
         func: F,
@@ -315,6 +339,8 @@ mod cairo_compositor {
         }
     }
 
+    // Paints the frame with the given alpha on the cairo context at the current origin.
+    // Ensures that no references to the video frame stay inside cairo.
     fn paint_frame(
         ctx: &cairo::Context,
         frame: &gst_video::VideoFrameRef<&gst::BufferRef>,
@@ -348,24 +374,27 @@ mod cairo_compositor {
     }
 
     // This here defines the public interface of our element and implements
-    // the corresponding traits so that it behaves like any other gst::Element
+    // the corresponding traits so that it behaves like any other gst::Element.
     glib::wrapper! {
         pub struct CairoCompositor(ObjectSubclass<imp::CairoCompositor>) @extends gst_video::VideoAggregator, gst_base::Aggregator, gst::Element, gst::Object;
     }
 
     impl CairoCompositor {
-        // Creates a new instance of our compositor with the given name
+        // Creates a new instance of our compositor with the given name.
         pub fn new(name: Option<&str>) -> Self {
             glib::Object::new(&[("name", &name)]).expect("Failed to create cairo compositor")
         }
     }
 
-    // In the imp submodule we include the implementation of the pad subclass
+    // In the imp submodule we include the implementation of the pad subclass.
+    //
+    // This doesn't implement any additional logic but only provides properties for configuring the
+    // appearance of the stream corresponding to this pad and the storage of the property values.
     mod imp_pad {
         use super::*;
         use std::sync::Mutex;
 
-        // Settings of our pad
+        // Settings of our pad.
         #[derive(Clone)]
         pub(super) struct Settings {
             pub(super) alpha: f64,
@@ -387,7 +416,7 @@ mod cairo_compositor {
             }
         }
 
-        // This is the private data of our pad
+        // This is the private data of our pad.
         #[derive(Default)]
         pub struct CairoCompositorPad {
             pub(super) settings: Mutex<Settings>,
@@ -395,7 +424,7 @@ mod cairo_compositor {
 
         // This trait registers our type with the GObject object system and
         // provides the entry points for creating a new instance and setting
-        // up the class data
+        // up the class data.
         #[glib::object_subclass]
         impl ObjectSubclass for CairoCompositorPad {
             const NAME: &'static str = "CairoCompositorPad";
@@ -403,8 +432,11 @@ mod cairo_compositor {
             type ParentType = gst_video::VideoAggregatorPad;
         }
 
-        // Implementation of glib::Object virtual methods
+        // Implementation of glib::Object virtual methods.
         impl ObjectImpl for CairoCompositorPad {
+            // Specfication of the compositor pad properties.
+            // In this case there are various properties for defining the position and otherwise
+            // the appearance of the stream corresponding to this pad.
             fn properties() -> &'static [glib::ParamSpec] {
                 static PROPERTIES: Lazy<Vec<glib::ParamSpec>> = Lazy::new(|| {
                     vec![
@@ -459,6 +491,7 @@ mod cairo_compositor {
                 PROPERTIES.as_ref()
             }
 
+            // Called by the application whenever the value of a property should be changed.
             fn set_property(
                 &self,
                 _obj: &Self::Type,
@@ -488,6 +521,7 @@ mod cairo_compositor {
                 };
             }
 
+            // Called by the application whenever the value of a property should be retrieved.
             fn property(
                 &self,
                 _obj: &Self::Type,
@@ -507,39 +541,30 @@ mod cairo_compositor {
             }
         }
 
-        // Implementation of gst::Object virtual methods
+        // Implementation of gst::Object virtual methods.
         impl GstObjectImpl for CairoCompositorPad {}
 
-        // Implementation of gst::Pad virtual methods
+        // Implementation of gst::Pad virtual methods.
         impl PadImpl for CairoCompositorPad {}
 
-        // Implementation of gst_base::AggregatorPad virtual methods
+        // Implementation of gst_base::AggregatorPad virtual methods.
         impl AggregatorPadImpl for CairoCompositorPad {}
 
-        // Implementation of gst_video::VideoAggregatorPad virtual methods
+        // Implementation of gst_video::VideoAggregatorPad virtual methods.
         impl VideoAggregatorPadImpl for CairoCompositorPad {}
     }
 
     // This here defines the public interface of our element and implements
-    // the corresponding traits so that it behaves like any other gst::Element
+    // the corresponding traits so that it behaves like any other gst::Pad.
     glib::wrapper! {
         pub struct CairoCompositorPad(ObjectSubclass<imp_pad::CairoCompositorPad>) @extends gst_video::VideoAggregatorPad, gst_base::AggregatorPad, gst::Pad, gst::Object;
     }
 }
 
-#[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
-struct ErrorMessage {
-    src: String,
-    error: String,
-    debug: Option<String>,
-    source: glib::Error,
-}
-
 fn create_pipeline() -> Result<gst::Pipeline, Error> {
     gst::init()?;
 
-    // Create our pipeline with the compositor and two input streams
+    // Create our pipeline with the compositor and two input streams.
     let pipeline = gst::Pipeline::new(None);
     let src1 = gst::ElementFactory::make("videotestsrc", None).context("Creating videotestsrc")?;
     let src2 = gst::ElementFactory::make("videotestsrc", None).context("Creating videotestsrc")?;
@@ -550,9 +575,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
     pipeline.add_many(&[&src1, &src2, comp.upcast_ref(), &conv, &sink])?;
 
-    src1.set_property_from_str("pattern", "ball");
-    src2.set_property_from_str("pattern", "smpte");
-
+    // Link everything together.
     src1.link_filtered(
         &comp,
         &gst::Caps::builder("video/x-raw")
@@ -579,6 +602,9 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     .context("Linking converter")?;
     conv.link(&sink).context("Linking sink")?;
 
+    src1.set_property_from_str("pattern", "ball");
+    src2.set_property_from_str("pattern", "smpte");
+
     comp.set_property("background-color", 0xff_33_33_33u32);
 
     // Change positions etc of both inputs based on a timer
@@ -593,7 +619,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
     comp.set_emit_signals(true);
     comp.connect_samples_selected(move |_agg, _seg, pts, _dts, _dur, _info| {
-        // Position and rotation period is 10s
+        // Position and rotation period is 10s.
         let pos = (pts.unwrap().nseconds() % gst::ClockTime::from_seconds(10).nseconds()) as f64
             / gst::ClockTime::from_seconds(10).nseconds() as f64;
 
@@ -612,18 +638,19 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
         sink_0.set_property("rotate", pos * 360.0);
         sink_1.set_property("rotate", 360.0 - pos * 360.0);
 
-        // Alpha period is 2s
+        // Alpha period is 2s.
         let pos = (pts.unwrap().nseconds() % gst::ClockTime::from_seconds(2).nseconds()) as f64
             / gst::ClockTime::from_seconds(2).nseconds() as f64;
-        if pos < 0.5 {
-            sink_0.set_property("alpha", 2.0 * pos);
-            sink_1.set_property("alpha", 1.0 - 2.0 * pos);
-        } else {
-            sink_0.set_property("alpha", 1.0 - 2.0 * (pos - 0.5));
-            sink_1.set_property("alpha", 2.0 * (pos - 0.5));
-        }
+        sink_0.set_property(
+            "alpha",
+            (1.0 + f64::sin(2.0 * std::f64::consts::PI * pos)) / 2.0,
+        );
+        sink_1.set_property(
+            "alpha",
+            (1.0 + f64::cos(2.0 * std::f64::consts::PI * pos)) / 2.0,
+        );
 
-        // Scale period is 20s
+        // Scale period is 20s.
         let pos = (pts.unwrap().nseconds() % gst::ClockTime::from_seconds(20).nseconds()) as f64
             / gst::ClockTime::from_seconds(20).nseconds() as f64;
         sink_0.set_property("scale", pos);
@@ -633,55 +660,59 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     Ok(pipeline)
 }
 
+// Start the pipeline and collect messages from the bus until an error or EOS.
 fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
     pipeline.set_state(gst::State::Playing)?;
 
     let bus = pipeline
         .bus()
         .expect("Pipeline without bus. Shouldn't happen!");
+    let mut bus_stream = bus.stream();
 
-    let main_loop = glib::MainLoop::new(None, false);
-    bus.add_watch({
-        let main_loop = main_loop.clone();
-        move |_bus, msg| {
+    let main_context = glib::MainContext::default();
+
+    // Storage for any error so we can report it later.
+    let mut error = None;
+    main_context.block_on(async {
+        use futures::prelude::*;
+
+        while let Some(msg) = bus_stream.next().await {
             use gst::MessageView;
 
             match msg.view() {
-                MessageView::Eos(..) => main_loop.quit(),
+                MessageView::Eos(..) => break,
                 MessageView::Error(err) => {
-                    println!(
+                    error = Some(anyhow::anyhow!(
                         "Error from {:?}: {} ({:?})",
                         err.src().map(|s| s.path_string()),
                         err.error(),
                         err.debug()
-                    );
+                    ));
 
-                    main_loop.quit();
+                    break;
                 }
                 _ => (),
             }
-
-            glib::Continue(true)
         }
-    })
-    .unwrap();
+    });
 
-    main_loop.run();
+    // In case of error, report to the caller.
+    if let Some(error) = error {
+        let _ = pipeline.set_state(gst::State::Null);
+        return Err(error);
+    }
 
     pipeline.set_state(gst::State::Null)?;
 
     Ok(())
 }
 
-fn example_main() {
-    match create_pipeline().and_then(main_loop) {
-        Ok(r) => r,
-        Err(e) => eprintln!("Error! {}", e),
-    }
+fn example_main() -> Result<(), Error> {
+    create_pipeline().and_then(main_loop)
 }
 
-fn main() {
+fn main() -> Result<(), Error> {
     // tutorials_common::run is only required to set up the application environment on macOS
-    // (but not necessary in normal Cocoa applications where this is set up automatically)
-    examples_common::run(example_main);
+    // (but not necessary in normal Cocoa applications where this is set up automatically).
+    examples_common::run(example_main)
 }
