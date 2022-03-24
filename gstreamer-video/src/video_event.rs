@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 use crate::{NavigationCommand, NavigationEventType};
-use glib::translate::{from_glib, from_glib_full, IntoGlib};
+use glib::translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr};
 use glib::ToSendValue;
 use gst::EventType;
 use std::mem;
@@ -355,6 +355,251 @@ impl StillFrameEvent {
     }
 }
 
+macro_rules! nav_event_builder {
+    ($builder:ident, $($event_field:ident: $event_type:ty,)? [$( $field_names:ident : $field_types:ty),*], $new_fn: expr) => {
+        #[must_use = "The builder must be built to be used"]
+        pub struct $builder<'a> {
+            seqnum: Option<gst::Seqnum>,
+            running_time_offset: Option<i64>,
+            other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
+            $($field_names: $field_types,)*
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+            modifier_state: NavigationModifierType,
+            $($event_field: $event_type,)?
+        }
+
+        impl<'a> $builder<'a> {
+            pub fn new($($event_field: $event_type)?) -> Self {
+                skip_assert_initialized!();
+                Self {
+                    seqnum: None,
+                    running_time_offset: None,
+                    other_fields: Vec::new(),
+                    $($field_names: <$field_types>::default(),)*
+                    #[cfg(any(feature = "v1_22", feature = "dox"))]
+                    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+                    modifier_state: NavigationModifierType::empty(),
+                    $($event_field,)?
+                }
+            }
+
+            $(pub fn $field_names(self, $field_names: $field_types) -> Self {
+                Self { $field_names, ..self }
+            })*
+
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+            pub fn modifier_state(self, modifier_state: NavigationModifierType) -> Self {
+                Self { modifier_state, ..self }
+            }
+
+            event_builder_generic_impl!($new_fn);
+        }
+    };
+}
+
+pub enum KeyEventType<'a> {
+    Press { key: &'a str },
+    Release { key: &'a str },
+}
+
+nav_event_builder!(
+    KeyEventBuilder,
+    kind: KeyEventType<'a>,
+    [],
+    |s: &mut Self| {
+        let event = match s.kind {
+            KeyEventType::Press { key } => NavigationEvent::KeyPress {
+                key: key.to_owned(),
+                #[cfg(any(feature = "v1_22", feature = "dox"))]
+                #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+                modifier_state: s.modifier_state,
+            },
+            KeyEventType::Release { key } => NavigationEvent::KeyRelease {
+                key: key.to_owned(),
+                #[cfg(any(feature = "v1_22", feature = "dox"))]
+                #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+                modifier_state: s.modifier_state,
+            },
+        };
+        gst::ffi::gst_event_new_navigation(event.structure().to_glib_full())
+    }
+);
+
+pub enum MouseEventType {
+    Move,
+    Press {
+        button: i32,
+    },
+    Release {
+        button: i32,
+    },
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    Scroll {
+        delta_x: f64,
+        delta_y: f64,
+    },
+}
+
+nav_event_builder!(
+    MouseEventBuilder,
+    kind: MouseEventType,
+    [x: f64, y: f64],
+    |s: &mut Self| {
+        let event = match s.kind {
+            MouseEventType::Move => NavigationEvent::MouseMove {
+                x: s.x,
+                y: s.y,
+                #[cfg(any(feature = "v1_22", feature = "dox"))]
+                #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+                modifier_state: s.modifier_state,
+            },
+            MouseEventType::Press { button } => NavigationEvent::MouseButtonPress {
+                button,
+                x: s.x,
+                y: s.y,
+                #[cfg(any(feature = "v1_22", feature = "dox"))]
+                #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+                modifier_state: s.modifier_state,
+            },
+            MouseEventType::Release { button } => NavigationEvent::MouseButtonRelease {
+                button,
+                x: s.x,
+                y: s.y,
+                #[cfg(any(feature = "v1_22", feature = "dox"))]
+                #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+                modifier_state: s.modifier_state,
+            },
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+            MouseEventType::Scroll { delta_x, delta_y } => NavigationEvent::MouseScroll {
+                x: s.x,
+                y: s.y,
+                delta_x,
+                delta_y,
+                #[cfg(any(feature = "v1_22", feature = "dox"))]
+                #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+                modifier_state: s.modifier_state,
+            },
+        };
+        gst::ffi::gst_event_new_navigation(event.structure().to_glib_full())
+    }
+);
+
+#[must_use = "The builder must be built to be used"]
+pub struct CommandEventBuilder<'a> {
+    seqnum: Option<gst::Seqnum>,
+    running_time_offset: Option<i64>,
+    other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
+    command: NavigationCommand,
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    modifier_state: NavigationModifierType,
+}
+
+impl<'a> CommandEventBuilder<'a> {
+    pub fn new(command: NavigationCommand) -> Self {
+        skip_assert_initialized!();
+        Self {
+            seqnum: None,
+            running_time_offset: None,
+            other_fields: Vec::new(),
+            command,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+            modifier_state: NavigationModifierType::empty(),
+        }
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn modifier_state(self, modifier_state: NavigationModifierType) -> Self {
+        Self {
+            modifier_state,
+            ..self
+        }
+    }
+
+    event_builder_generic_impl!(|s: &mut Self| {
+        let event = NavigationEvent::Command {
+            command: s.command,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+            modifier_state: s.modifier_state,
+        };
+        gst::ffi::gst_event_new_navigation(event.structure().to_glib_full())
+    });
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+pub enum TouchEventType {
+    Down { pressure: f64 },
+    Motion { pressure: f64 },
+    Up,
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+nav_event_builder!(
+    TouchEventBuilder,
+    kind: TouchEventType,
+    [identifier: u32, x: f64, y: f64],
+    |s: &mut Self| {
+        let event = match s.kind {
+            TouchEventType::Down { pressure } => NavigationEvent::TouchDown {
+                identifier: s.identifier,
+                x: s.x,
+                y: s.y,
+                modifier_state: s.modifier_state,
+                pressure,
+            },
+            TouchEventType::Motion { pressure } => NavigationEvent::TouchMotion {
+                identifier: s.identifier,
+                x: s.x,
+                y: s.y,
+                modifier_state: s.modifier_state,
+                pressure,
+            },
+            TouchEventType::Up => NavigationEvent::TouchUp {
+                identifier: s.identifier,
+                x: s.x,
+                y: s.y,
+                modifier_state: s.modifier_state,
+            },
+        };
+        gst::ffi::gst_event_new_navigation(event.structure().to_glib_full())
+    }
+);
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+pub enum TouchMetaEventType {
+    Frame,
+    Cancel,
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+nav_event_builder!(
+    TouchMetaEventBuilder,
+    kind: TouchMetaEventType,
+    [],
+    |s: &mut Self| {
+        let event = match s.kind {
+            TouchMetaEventType::Frame => NavigationEvent::TouchFrame {
+                modifier_state: s.modifier_state,
+            },
+            TouchMetaEventType::Cancel => NavigationEvent::TouchCancel {
+                modifier_state: s.modifier_state,
+            },
+        };
+        gst::ffi::gst_event_new_navigation(event.structure().to_glib_full())
+    }
+);
+
 const NAVIGATION_EVENT_NAME: &str = "application/x-gst-navigation";
 #[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
 #[cfg_attr(feature = "ser_de", serde(tag = "event"))]
@@ -607,6 +852,108 @@ impl NavigationEvent {
             #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
             modifier_state: NavigationModifierType::empty(),
         }
+    }
+
+    pub fn key_press_builder(key: &str) -> KeyEventBuilder {
+        assert_initialized_main_thread!();
+        KeyEventBuilder::new(KeyEventType::Press { key })
+    }
+
+    pub fn key_release_builder(key: &str) -> KeyEventBuilder {
+        assert_initialized_main_thread!();
+        KeyEventBuilder::new(KeyEventType::Release { key })
+    }
+
+    pub fn mouse_move_builder(x: f64, y: f64) -> MouseEventBuilder<'static> {
+        assert_initialized_main_thread!();
+        MouseEventBuilder::new(MouseEventType::Move {}).x(x).y(y)
+    }
+
+    pub fn mouse_button_press_builder(button: i32, x: f64, y: f64) -> MouseEventBuilder<'static> {
+        assert_initialized_main_thread!();
+        MouseEventBuilder::new(MouseEventType::Press { button })
+            .x(x)
+            .y(y)
+    }
+
+    pub fn mouse_button_release_builder(button: i32, x: f64, y: f64) -> MouseEventBuilder<'static> {
+        assert_initialized_main_thread!();
+        MouseEventBuilder::new(MouseEventType::Press { button })
+            .x(x)
+            .y(y)
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn mouse_scroll_builder(
+        x: f64,
+        y: f64,
+        delta_x: f64,
+        delta_y: f64,
+    ) -> MouseEventBuilder<'static> {
+        assert_initialized_main_thread!();
+        MouseEventBuilder::new(MouseEventType::Scroll { delta_x, delta_y })
+            .x(x)
+            .y(y)
+    }
+
+    pub fn command_builder(command: NavigationCommand) -> CommandEventBuilder<'static> {
+        assert_initialized_main_thread!();
+        CommandEventBuilder::new(command)
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn touch_down_builder(
+        identifier: u32,
+        x: f64,
+        y: f64,
+        pressure: f64,
+    ) -> TouchEventBuilder<'static> {
+        assert_initialized_main_thread!();
+        TouchEventBuilder::new(TouchEventType::Down { pressure })
+            .identifier(identifier)
+            .x(x)
+            .y(y)
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn touch_motion_builder(
+        identifier: u32,
+        x: f64,
+        y: f64,
+        pressure: f64,
+    ) -> TouchEventBuilder<'static> {
+        assert_initialized_main_thread!();
+        TouchEventBuilder::new(TouchEventType::Motion { pressure })
+            .identifier(identifier)
+            .x(x)
+            .y(y)
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn touch_up_builder(identifier: u32, x: f64, y: f64) -> TouchEventBuilder<'static> {
+        assert_initialized_main_thread!();
+        TouchEventBuilder::new(TouchEventType::Up)
+            .identifier(identifier)
+            .x(x)
+            .y(y)
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn touch_frame_builder() -> TouchMetaEventBuilder<'static> {
+        assert_initialized_main_thread!();
+        TouchMetaEventBuilder::new(TouchMetaEventType::Frame)
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn touch_cancel_builder() -> TouchMetaEventBuilder<'static> {
+        assert_initialized_main_thread!();
+        TouchMetaEventBuilder::new(TouchMetaEventType::Cancel)
     }
 
     #[doc(alias = "gst_navigation_event_get_type")]
