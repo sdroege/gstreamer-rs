@@ -137,7 +137,7 @@ unsafe extern "C" fn trampoline_need_data(
 
     if let Some(ref need_data) = callbacks.need_data {
         let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
-            (&mut *need_data.borrow_mut())(&element, length)
+            (*need_data.borrow_mut())(&element, length)
         }));
         match result {
             Ok(result) => result,
