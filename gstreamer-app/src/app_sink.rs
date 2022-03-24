@@ -169,9 +169,7 @@ unsafe extern "C" fn trampoline_eos(appsink: *mut ffi::GstAppSink, callbacks: gp
     }
 
     if let Some(ref eos) = callbacks.eos {
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
-            (&mut *eos.borrow_mut())(&element)
-        }));
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| (*eos.borrow_mut())(&element)));
         match result {
             Ok(result) => result,
             Err(err) => {
@@ -197,7 +195,7 @@ unsafe extern "C" fn trampoline_new_preroll(
 
     let ret = if let Some(ref new_preroll) = callbacks.new_preroll {
         let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
-            (&mut *new_preroll.borrow_mut())(&element).into()
+            (*new_preroll.borrow_mut())(&element).into()
         }));
         match result {
             Ok(result) => result,
@@ -230,7 +228,7 @@ unsafe extern "C" fn trampoline_new_sample(
 
     let ret = if let Some(ref new_sample) = callbacks.new_sample {
         let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
-            (&mut *new_sample.borrow_mut())(&element).into()
+            (*new_sample.borrow_mut())(&element).into()
         }));
         match result {
             Ok(result) => result,
@@ -263,7 +261,7 @@ unsafe extern "C" fn trampoline_new_event(
 
     let ret = if let Some(ref new_event) = callbacks.new_event {
         let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
-            (&mut *new_event.borrow_mut())(&element)
+            (*new_event.borrow_mut())(&element)
         }));
         match result {
             Ok(result) => result,

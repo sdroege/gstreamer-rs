@@ -24,7 +24,7 @@ unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + Sen
     func: gpointer,
 ) -> gboolean {
     let func: &RefCell<F> = &*(func as *const RefCell<F>);
-    (&mut *func.borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib()
+    (*func.borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib()
 }
 
 unsafe extern "C" fn destroy_closure_watch<
@@ -48,7 +48,7 @@ unsafe extern "C" fn trampoline_watch_local<F: FnMut(&Bus, &Message) -> Continue
 ) -> gboolean {
     let func: &glib::thread_guard::ThreadGuard<RefCell<F>> =
         &*(func as *const glib::thread_guard::ThreadGuard<RefCell<F>>);
-    (&mut *func.get_ref().borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg))
+    (*func.get_ref().borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg))
         .into_glib()
 }
 

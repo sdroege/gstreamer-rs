@@ -13,7 +13,7 @@ unsafe extern "C" fn trampoline_watch<F: FnMut(&RTSPSessionPool) -> Continue + S
     func: gpointer,
 ) -> gboolean {
     let func: &RefCell<F> = &*(func as *const RefCell<F>);
-    (&mut *func.borrow_mut())(&from_glib_borrow(pool)).into_glib()
+    (*func.borrow_mut())(&from_glib_borrow(pool)).into_glib()
 }
 
 unsafe extern "C" fn destroy_closure_watch<

@@ -1598,7 +1598,7 @@ unsafe extern "C" fn destroy_closure<F>(ptr: gpointer) {
 
 unsafe extern "C" fn trampoline_pad_task<F: FnMut() + Send + 'static>(func: gpointer) {
     let func: &RefCell<F> = &*(func as *const RefCell<F>);
-    (&mut *func.borrow_mut())()
+    (*func.borrow_mut())()
 }
 
 fn into_raw_pad_task<F: FnMut() + Send + 'static>(func: F) -> gpointer {
