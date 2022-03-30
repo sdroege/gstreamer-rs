@@ -444,7 +444,7 @@ coverage:
   stage: 'extras'
   variables:
     ALL_FEATURES: 'yes'
-    RUSTFLAGS: "-Zinstrument-coverage"
+    RUSTFLAGS: "-Cinstrument-coverage"
     LLVM_PROFILE_FILE: "gstreamer-rs-%p-%m.profraw"
   script:
     - *cargo_test
