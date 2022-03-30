@@ -52,6 +52,7 @@ mod cairo_compositor {
             const NAME: &'static str = "CairoCompositor";
             type Type = super::CairoCompositor;
             type ParentType = gst_video::VideoAggregator;
+            type Interfaces = (gst::ChildProxy,);
         }
 
         // Implementation of glib::Object virtual methods.
@@ -178,6 +179,24 @@ mod cairo_compositor {
                 });
 
                 PAD_TEMPLATES.as_ref()
+            }
+
+            // Notify via the child proxy interface whenever a new pad is added or removed.
+            fn request_new_pad(
+                &self,
+                element: &Self::Type,
+                templ: &gst::PadTemplate,
+                name: Option<String>,
+                caps: Option<&gst::Caps>,
+            ) -> Option<gst::Pad> {
+                let pad = self.parent_request_new_pad(element, templ, name, caps)?;
+                element.child_added(&pad, &pad.name());
+                Some(pad)
+            }
+
+            fn release_pad(&self, element: &Self::Type, pad: &gst::Pad) {
+                element.child_removed(pad, &pad.name());
+                self.parent_release_pad(element, pad);
             }
         }
 
@@ -306,6 +325,31 @@ mod cairo_compositor {
                 Ok(gst::FlowSuccess::Ok)
             }
         }
+
+        // Implementation of gst::ChildProxy virtual methods.
+        //
+        // This allows accessing the pads and their properties from e.g. gst-launch.
+        impl ChildProxyImpl for CairoCompositor {
+            fn children_count(&self, object: &Self::Type) -> u32 {
+                object.num_pads() as u32
+            }
+
+            fn child_by_name(&self, object: &Self::Type, name: &str) -> Option<glib::Object> {
+                object
+                    .pads()
+                    .into_iter()
+                    .find(|p| p.name() == name)
+                    .map(|p| p.upcast())
+            }
+
+            fn child_by_index(&self, object: &Self::Type, index: u32) -> Option<glib::Object> {
+                object
+                    .pads()
+                    .into_iter()
+                    .nth(index as usize)
+                    .map(|p| p.upcast())
+            }
+        }
     }
 
     // Creates a cairo context around the given video frame and then calls the closure to operate
@@ -376,7 +420,7 @@ mod cairo_compositor {
     // This here defines the public interface of our element and implements
     // the corresponding traits so that it behaves like any other gst::Element.
     glib::wrapper! {
-        pub struct CairoCompositor(ObjectSubclass<imp::CairoCompositor>) @extends gst_video::VideoAggregator, gst_base::Aggregator, gst::Element, gst::Object;
+        pub struct CairoCompositor(ObjectSubclass<imp::CairoCompositor>) @extends gst_video::VideoAggregator, gst_base::Aggregator, gst::Element, gst::Object, @implements gst::ChildProxy;
     }
 
     impl CairoCompositor {
