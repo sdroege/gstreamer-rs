@@ -226,6 +226,26 @@ pub enum NavigationEventType {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_NAVIGATION_EVENT_MOUSE_SCROLL")]
     MouseScroll,
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "GST_NAVIGATION_EVENT_TOUCH_DOWN")]
+    TouchDown,
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "GST_NAVIGATION_EVENT_TOUCH_MOTION")]
+    TouchMotion,
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "GST_NAVIGATION_EVENT_TOUCH_UP")]
+    TouchUp,
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "GST_NAVIGATION_EVENT_TOUCH_FRAME")]
+    TouchFrame,
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "GST_NAVIGATION_EVENT_TOUCH_CANCEL")]
+    TouchCancel,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -245,6 +265,16 @@ impl IntoGlib for NavigationEventType {
             Self::Command => ffi::GST_NAVIGATION_EVENT_COMMAND,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
             Self::MouseScroll => ffi::GST_NAVIGATION_EVENT_MOUSE_SCROLL,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            Self::TouchDown => ffi::GST_NAVIGATION_EVENT_TOUCH_DOWN,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            Self::TouchMotion => ffi::GST_NAVIGATION_EVENT_TOUCH_MOTION,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            Self::TouchUp => ffi::GST_NAVIGATION_EVENT_TOUCH_UP,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            Self::TouchFrame => ffi::GST_NAVIGATION_EVENT_TOUCH_FRAME,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            Self::TouchCancel => ffi::GST_NAVIGATION_EVENT_TOUCH_CANCEL,
             Self::__Unknown(value) => value,
         }
     }
@@ -264,6 +294,16 @@ impl FromGlib<ffi::GstNavigationEventType> for NavigationEventType {
             ffi::GST_NAVIGATION_EVENT_COMMAND => Self::Command,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
             ffi::GST_NAVIGATION_EVENT_MOUSE_SCROLL => Self::MouseScroll,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            ffi::GST_NAVIGATION_EVENT_TOUCH_DOWN => Self::TouchDown,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            ffi::GST_NAVIGATION_EVENT_TOUCH_MOTION => Self::TouchMotion,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            ffi::GST_NAVIGATION_EVENT_TOUCH_UP => Self::TouchUp,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            ffi::GST_NAVIGATION_EVENT_TOUCH_FRAME => Self::TouchFrame,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            ffi::GST_NAVIGATION_EVENT_TOUCH_CANCEL => Self::TouchCancel,
             value => Self::__Unknown(value),
         }
     }
@@ -1711,6 +1751,14 @@ pub enum VideoFormat {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GST_VIDEO_FORMAT_NV12_16L32S")]
     Nv1216l32s,
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_NV12_8L128")]
+    Nv128l128,
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_NV12_10BE_8L128")]
+    Nv1210be8l128,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -1915,6 +1963,10 @@ impl IntoGlib for VideoFormat {
             Self::Abgr64Be => ffi::GST_VIDEO_FORMAT_ABGR64_BE,
             #[cfg(any(feature = "v1_22", feature = "dox"))]
             Self::Nv1216l32s => ffi::GST_VIDEO_FORMAT_NV12_16L32S,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            Self::Nv128l128 => ffi::GST_VIDEO_FORMAT_NV12_8L128,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            Self::Nv1210be8l128 => ffi::GST_VIDEO_FORMAT_NV12_10BE_8L128,
             Self::__Unknown(value) => value,
         }
     }
@@ -2086,6 +2138,10 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
             ffi::GST_VIDEO_FORMAT_ABGR64_BE => Self::Abgr64Be,
             #[cfg(any(feature = "v1_22", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_NV12_16L32S => Self::Nv1216l32s,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            ffi::GST_VIDEO_FORMAT_NV12_8L128 => Self::Nv128l128,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            ffi::GST_VIDEO_FORMAT_NV12_10BE_8L128 => Self::Nv1210be8l128,
             value => Self::__Unknown(value),
         }
     }

@@ -389,6 +389,10 @@ pub enum WebRTCError {
     InvalidState,
     #[doc(alias = "GST_WEBRTC_ERROR_INTERNAL_FAILURE")]
     InternalFailure,
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "GST_WEBRTC_ERROR_INVALID_MODIFICATION")]
+    InvalidModification,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -412,6 +416,8 @@ impl IntoGlib for WebRTCError {
             Self::EncoderError => ffi::GST_WEBRTC_ERROR_ENCODER_ERROR,
             Self::InvalidState => ffi::GST_WEBRTC_ERROR_INVALID_STATE,
             Self::InternalFailure => ffi::GST_WEBRTC_ERROR_INTERNAL_FAILURE,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            Self::InvalidModification => ffi::GST_WEBRTC_ERROR_INVALID_MODIFICATION,
             Self::__Unknown(value) => value,
         }
     }
@@ -435,6 +441,8 @@ impl FromGlib<ffi::GstWebRTCError> for WebRTCError {
             ffi::GST_WEBRTC_ERROR_ENCODER_ERROR => Self::EncoderError,
             ffi::GST_WEBRTC_ERROR_INVALID_STATE => Self::InvalidState,
             ffi::GST_WEBRTC_ERROR_INTERNAL_FAILURE => Self::InternalFailure,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            ffi::GST_WEBRTC_ERROR_INVALID_MODIFICATION => Self::InvalidModification,
             value => Self::__Unknown(value),
         }
     }
@@ -467,6 +475,8 @@ impl ErrorDomain for WebRTCError {
             ffi::GST_WEBRTC_ERROR_ENCODER_ERROR => Some(Self::EncoderError),
             ffi::GST_WEBRTC_ERROR_INVALID_STATE => Some(Self::InvalidState),
             ffi::GST_WEBRTC_ERROR_INTERNAL_FAILURE => Some(Self::InternalFailure),
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            ffi::GST_WEBRTC_ERROR_INVALID_MODIFICATION => Some(Self::InvalidModification),
             value => Some(Self::__Unknown(value)),
         }
     }
