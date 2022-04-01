@@ -8,6 +8,9 @@ mod navigation;
 mod video_aggregator;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+mod video_aggregator_convert_pad;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 mod video_aggregator_pad;
 mod video_decoder;
 mod video_encoder;
@@ -26,6 +29,9 @@ pub mod prelude {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub use super::video_aggregator::{VideoAggregatorImpl, VideoAggregatorImplExt};
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    pub use super::video_aggregator_convert_pad::VideoAggregatorConvertPadImpl;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub use super::video_aggregator_pad::{VideoAggregatorPadImpl, VideoAggregatorPadImplExt};
