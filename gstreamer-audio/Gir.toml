@@ -17,6 +17,8 @@ external_libraries = [
 ]
 
 generate = [
+    "GstAudio.AudioAggregatorConvertPad",
+    "GstAudio.AudioAggregatorPad",
     "GstAudio.AudioBaseSrc",
     "GstAudio.AudioChannelPosition",
     "GstAudio.AudioDitherMethod",
@@ -45,6 +47,8 @@ manual = [
     "GstAudio.AudioLevelMeta",
     "GstAudio.AudioMeta",
     "GstAudio.AudioRingBufferSpec",
+    "GstBase.Aggregator",
+    "GstBase.AggregatorPad",
     "GstBase.BaseSink",
     "GstBase.BaseSrc",
 ]
@@ -69,6 +73,20 @@ name = "Gst.Object"
 # For renaming the trait...
 status = "manual"
 trait_name = "GstObjectExt"
+
+[[object]]
+name = "GstAudio.AudioAggregator"
+status = "generate"
+
+    [[object.function]]
+    name = "set_sink_caps"
+    # capsref
+    manual = true
+
+    [[object.property]]
+    name = "output-buffer-duration-fraction"
+    # fraction
+    manual = true
 
 [[object]]
 name = "GstAudio.AudioBaseSink"

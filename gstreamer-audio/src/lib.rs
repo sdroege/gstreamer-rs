@@ -45,6 +45,15 @@ mod audio_channel_position;
 pub use crate::audio_channel_position::*;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+mod audio_aggregator;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+mod audio_aggregator_convert_pad;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+mod audio_aggregator_pad;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod audio_stream_align;
 mod functions;
 pub use crate::functions::*;
@@ -61,6 +70,10 @@ mod audio_encoder;
 mod audio_converter;
 pub use crate::audio_converter::AudioConverterConfig;
 
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+mod utils;
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_audio::prelude::*" without getting conflicts
 pub mod prelude {
@@ -69,7 +82,17 @@ pub mod prelude {
 
     pub use super::audio_decoder::AudioDecoderExtManual;
     pub use super::audio_encoder::AudioEncoderExtManual;
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    pub use crate::audio_aggregator::AudioAggregatorExtManual;
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    pub use crate::audio_aggregator_convert_pad::AudioAggregatorConvertPadExtManual;
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    pub use crate::audio_aggregator_pad::AudioAggregatorPadExtManual;
     pub use crate::audio_format::AudioFormatIteratorExt;
+
     pub use crate::auto::traits::*;
 }
 
