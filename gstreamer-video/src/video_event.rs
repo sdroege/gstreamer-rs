@@ -9,6 +9,10 @@ use std::mem;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
 use crate::NavigationModifierType;
 
+#[cfg(all(feature = "ser_de", any(feature = "v1_22", feature = "dox")))]
+#[cfg_attr(feature = "dox", feature = "ser_de", doc(cfg(feature = "v1_22")))]
+use glib::{FlagsClass, StaticType};
+
 // FIXME: Copy from gstreamer/src/event.rs
 macro_rules! event_builder_generic_impl {
     ($new_fn:expr) => {
@@ -1226,7 +1230,6 @@ impl NavigationEvent {
         };
 
         #[cfg(any(feature = "v1_22", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
         if true {
             structure = match self {
                 Self::MouseMove { modifier_state, .. } => structure.field("state", modifier_state),
@@ -1264,16 +1267,96 @@ impl NavigationEvent {
     }
 }
 
+#[cfg(all(feature = "ser_de", any(feature = "v1_22", feature = "dox")))]
+#[cfg_attr(feature = "dox", feature = "ser_de", doc(cfg(feature = "v1_22")))]
+impl serde::Serialize for NavigationModifierType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let class = FlagsClass::new(NavigationModifierType::static_type()).unwrap();
+
+        let mut handled = NavigationModifierType::empty();
+        let mut res = "".to_owned();
+        for v in class.values() {
+            let value = v.value();
+            if value.count_ones() != 1 || value & handled.bits() != 0 {
+                continue;
+            } else if (value & self.bits()) == value {
+                if !res.is_empty() {
+                    res.push('+');
+                }
+                res.push_str(v.nick());
+                handled.insert(NavigationModifierType::from_bits(value).unwrap());
+            }
+        }
+
+        if res.is_empty() {
+            res = "empty".to_owned();
+        }
+
+        serializer.serialize_str(&res)
+    }
+}
+
+#[cfg(all(feature = "ser_de", any(feature = "v1_22", feature = "dox")))]
+#[cfg_attr(feature = "dox", feature = "ser_de", doc(cfg(feature = "v1_22")))]
+struct NavigationModifierTypeVisitor;
+
+#[cfg(all(feature = "ser_de", any(feature = "v1_22", feature = "dox")))]
+#[cfg_attr(feature = "dox", feature = "ser_de", doc(cfg(feature = "v1_22")))]
+impl<'de> serde::de::Visitor<'de> for NavigationModifierTypeVisitor {
+    type Value = NavigationModifierType;
+
+    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+        formatter.write_str("one or more mask names separated by plus signs, or \"empty\"")
+    }
+
+    fn visit_str<E: serde::de::Error>(self, value: &str) -> std::result::Result<Self::Value, E> {
+        let mut gvalue = glib::Value::from_type(NavigationModifierType::static_type());
+        let tokens = value.split('+');
+        let class = FlagsClass::new(NavigationModifierType::static_type()).unwrap();
+
+        for token in tokens {
+            gvalue = class
+                .set_by_nick(gvalue, token)
+                .map_err(|_| serde::de::Error::custom(&format!("Invalid value: {}", token)))?;
+        }
+
+        Ok(unsafe {
+            from_glib(glib::gobject_ffi::g_value_get_flags(
+                gvalue.to_glib_none().0,
+            ))
+        })
+    }
+}
+
+#[cfg(all(feature = "ser_de", any(feature = "v1_22", feature = "dox")))]
+#[cfg_attr(feature = "dox", feature = "ser_de", doc(cfg(feature = "v1_22")))]
+impl<'de> serde::Deserialize<'de> for NavigationModifierType {
+    fn deserialize<D: serde::de::Deserializer<'de>>(
+        deserializer: D,
+    ) -> std::result::Result<Self, D::Error> {
+        skip_assert_initialized!();
+        deserializer.deserialize_str(NavigationModifierTypeVisitor)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
     #[cfg(feature = "ser_de")]
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn serialize_navigation_events() {
-        use crate::NavigationEvent;
+        use crate::{NavigationEvent, NavigationModifierType};
 
         gst::init().unwrap();
 
-        let ev = NavigationEvent::new_mouse_scroll(1.0, 2.0, 3.0, 4.0).build();
+        let mods = NavigationModifierType::SHIFT_MASK | NavigationModifierType::CONTROL_MASK;
+        let ev = NavigationEvent::mouse_scroll_builder(1.0, 2.0, 3.0, 4.0)
+            .modifier_state(mods)
+            .build();
         let navigation_event = NavigationEvent::parse(&ev).unwrap();
         match &navigation_event {
             NavigationEvent::MouseScroll {
@@ -1281,8 +1364,15 @@ mod tests {
                 y,
                 delta_x,
                 delta_y,
+                modifier_state,
             } => {
-                assert!(*x == 1.0 && *y == 2.0 && *delta_x == 3.0 && *delta_y == 4.0);
+                assert!(
+                    *x == 1.0
+                        && *y == 2.0
+                        && *delta_x == 3.0
+                        && *delta_y == 4.0
+                        && *modifier_state == mods
+                );
             }
             _ => unreachable!(),
         }
@@ -1290,7 +1380,7 @@ mod tests {
         let json_event = serde_json::to_string(&navigation_event).unwrap();
         assert_eq!(
             json_event,
-            r#"{"event":"MouseScroll","x":1.0,"y":2.0,"delta_x":3.0,"delta_y":4.0}"#
+            r#"{"event":"MouseScroll","x":1.0,"y":2.0,"delta_x":3.0,"delta_y":4.0,"modifier_state":"shift-mask+control-mask"}"#
         );
         let navigation_event: NavigationEvent = serde_json::from_str(&json_event).unwrap();
         match &navigation_event {
@@ -1299,8 +1389,15 @@ mod tests {
                 y,
                 delta_x,
                 delta_y,
+                modifier_state,
             } => {
-                assert!(*x == 1.0 && *y == 2.0 && *delta_x == 3.0 && *delta_y == 4.0);
+                assert!(
+                    *x == 1.0
+                        && *y == 2.0
+                        && *delta_x == 3.0
+                        && *delta_y == 4.0
+                        && *modifier_state == mods
+                );
             }
             _ => unreachable!(),
         }
@@ -1308,8 +1405,18 @@ mod tests {
         let ev = NavigationEvent::new_mouse_button_press(1, 1.0, 2.0).build();
         let navigation_event = NavigationEvent::parse(&ev).unwrap();
         match &navigation_event {
-            NavigationEvent::MouseButtonPress { button, x, y } => {
-                assert!(*button == 1 && *x == 1.0 && *y == 2.0);
+            NavigationEvent::MouseButtonPress {
+                button,
+                x,
+                y,
+                modifier_state,
+            } => {
+                assert!(
+                    *button == 1
+                        && *x == 1.0
+                        && *y == 2.0
+                        && *modifier_state == NavigationModifierType::empty()
+                );
             }
             _ => unreachable!(),
         }
@@ -1317,26 +1424,47 @@ mod tests {
         let json_event = serde_json::to_string(&navigation_event).unwrap();
         assert_eq!(
             json_event,
-            r#"{"event":"MouseButtonPress","button":1,"x":1.0,"y":2.0}"#
+            r#"{"event":"MouseButtonPress","button":1,"x":1.0,"y":2.0,"modifier_state":"empty"}"#
         );
 
-        let ev = NavigationEvent::new_key_release("a").build();
+        let mods = NavigationModifierType::META_MASK;
+        let ev = NavigationEvent::key_release_builder("a")
+            .modifier_state(mods)
+            .build();
         let navigation_event = NavigationEvent::parse(&ev).unwrap();
         match &navigation_event {
-            NavigationEvent::KeyRelease { key } => {
-                assert_eq!(key, "a");
+            NavigationEvent::KeyRelease {
+                key,
+                modifier_state,
+            } => {
+                assert!(*key == "a" && *modifier_state == mods);
             }
             _ => unreachable!(),
         }
 
         let json_event = serde_json::to_string(&navigation_event).unwrap();
-        assert_eq!(json_event, r#"{"event":"KeyRelease","key":"a"}"#);
+        assert_eq!(
+            json_event,
+            r#"{"event":"KeyRelease","key":"a","modifier_state":"meta-mask"}"#
+        );
 
         let ev = NavigationEvent::new_touch_motion(0, 1.0, 2.0, 0.5).build();
         let navigation_event = NavigationEvent::parse(&ev).unwrap();
         match &navigation_event {
-            NavigationEvent::TouchMotion { id, x, y, pressure } => {
-                assert!(*id == 0 && *x = 1.0 && *y == 2.0 && *pressure == 0.5);
+            NavigationEvent::TouchMotion {
+                identifier,
+                x,
+                y,
+                pressure,
+                modifier_state,
+            } => {
+                assert!(
+                    *identifier == 0
+                        && *x == 1.0
+                        && *y == 2.0
+                        && *pressure == 0.5
+                        && *modifier_state == NavigationModifierType::empty()
+                );
             }
             _ => unreachable!(),
         }
@@ -1344,14 +1472,22 @@ mod tests {
         let json_event = serde_json::to_string(&navigation_event).unwrap();
         assert_eq!(
             json_event,
-            r#"{"event":"TouchMotion","identifier":0,"x":1.0,"y":2.0,"pressure":0.5}"#
+            r#"{"event":"TouchMotion","identifier":0,"x":1.0,"y":2.0,"pressure":0.5,"modifier_state":"empty"}"#
         );
 
-        let ev = NavigationEvent::new_touch_cancel().build();
+        let ev = NavigationEvent::touch_cancel_builder().build();
         let navigation_event = NavigationEvent::parse(&ev).unwrap();
-        assert!(matches!(&navigation_event, NavigationEvent::TouchCancel {}));
+        match &navigation_event {
+            NavigationEvent::TouchCancel { modifier_state } => {
+                assert!(*modifier_state == NavigationModifierType::empty());
+            }
+            _ => unreachable!(),
+        }
 
         let json_event = serde_json::to_string(&navigation_event).unwrap();
-        assert_eq!(json_event, r#"{"event":"TouchCancel"}"#);
+        assert_eq!(
+            json_event,
+            r#"{"event":"TouchCancel","modifier_state":"empty"}"#
+        );
     }
 }
