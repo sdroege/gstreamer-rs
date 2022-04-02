@@ -43,24 +43,27 @@ pub trait TaskExt: 'static {
     fn state(&self) -> TaskState;
 
     #[doc(alias = "gst_task_join")]
-    fn join(&self) -> bool;
+    fn join(&self) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_task_pause")]
-    fn pause(&self) -> bool;
+    fn pause(&self) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_task_resume")]
-    fn resume(&self) -> bool;
+    fn resume(&self) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_task_set_pool")]
     fn set_pool(&self, pool: &impl IsA<TaskPool>);
 
+    #[doc(alias = "gst_task_set_state")]
+    fn set_state(&self, state: TaskState) -> Result<(), glib::error::BoolError>;
+
     #[doc(alias = "gst_task_start")]
-    fn start(&self) -> bool;
+    fn start(&self) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_task_stop")]
-    fn stop(&self) -> bool;
+    fn stop(&self) -> Result<(), glib::error::BoolError>;
 }
 
 impl<O: IsA<Task>> TaskExt for O {
@@ -72,18 +75,33 @@ impl<O: IsA<Task>> TaskExt for O {
         unsafe { from_glib(ffi::gst_task_get_state(self.as_ref().to_glib_none().0)) }
     }
 
-    fn join(&self) -> bool {
-        unsafe { from_glib(ffi::gst_task_join(self.as_ref().to_glib_none().0)) }
+    fn join(&self) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_task_join(self.as_ref().to_glib_none().0),
+                "Failed to join task"
+            )
+        }
     }
 
-    fn pause(&self) -> bool {
-        unsafe { from_glib(ffi::gst_task_pause(self.as_ref().to_glib_none().0)) }
+    fn pause(&self) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_task_pause(self.as_ref().to_glib_none().0),
+                "Failed to pause task"
+            )
+        }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn resume(&self) -> bool {
-        unsafe { from_glib(ffi::gst_task_resume(self.as_ref().to_glib_none().0)) }
+    fn resume(&self) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_task_resume(self.as_ref().to_glib_none().0),
+                "Failed to resume task"
+            )
+        }
     }
 
     fn set_pool(&self, pool: &impl IsA<TaskPool>) {
@@ -95,11 +113,30 @@ impl<O: IsA<Task>> TaskExt for O {
         }
     }
 
-    fn start(&self) -> bool {
-        unsafe { from_glib(ffi::gst_task_start(self.as_ref().to_glib_none().0)) }
+    fn set_state(&self, state: TaskState) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_task_set_state(self.as_ref().to_glib_none().0, state.into_glib()),
+                "Failed to set task state"
+            )
+        }
     }
 
-    fn stop(&self) -> bool {
-        unsafe { from_glib(ffi::gst_task_stop(self.as_ref().to_glib_none().0)) }
+    fn start(&self) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_task_start(self.as_ref().to_glib_none().0),
+                "Failed to start task"
+            )
+        }
+    }
+
+    fn stop(&self) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_task_stop(self.as_ref().to_glib_none().0),
+                "Failed to stop task"
+            )
+        }
     }
 }
