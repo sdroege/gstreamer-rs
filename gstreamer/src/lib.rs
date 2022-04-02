@@ -182,6 +182,8 @@ mod control_source;
 mod parse_context;
 mod proxy_pad;
 mod tag_setter;
+pub mod task;
+pub use task::{TaskLock, TaskLockGuard};
 mod task_pool;
 pub use crate::element::{ElementMessageType, NotifyWatchId};
 pub use crate::element::{

@@ -2306,19 +2306,46 @@ status = "generate"
     # Need work
     [[object.function]]
     name = "new"
-    ignore = true
+    manual = true
     [[object.function]]
     name = "set_enter_callback"
-    ignore = true
+    manual = true
     [[object.function]]
     name = "set_leave_callback"
-    ignore = true
+    manual = true
     [[object.function]]
     name = "set_lock"
-    ignore = true
+    manual = true
+
+    [[object.function]]
+    name = "start"
+        [object.function.return]
+        bool_return_is_error = "Failed to start task"
+
+    [[object.function]]
+    name = "stop"
+        [object.function.return]
+        bool_return_is_error = "Failed to stop task"
+
+    [[object.function]]
+    name = "pause"
+        [object.function.return]
+        bool_return_is_error = "Failed to pause task"
+
+    [[object.function]]
+    name = "resume"
+        [object.function.return]
+        bool_return_is_error = "Failed to resume task"
+
+    [[object.function]]
+    name = "join"
+        [object.function.return]
+        bool_return_is_error = "Failed to join task"
+
     [[object.function]]
     name = "set_state"
-    ignore = true
+        [object.function.return]
+        bool_return_is_error = "Failed to set task state"
 
 [[object]]
 name = "Gst.TaskPool"
