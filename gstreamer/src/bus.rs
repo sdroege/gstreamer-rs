@@ -7,7 +7,6 @@ use glib::ffi::{gboolean, gpointer};
 use glib::prelude::*;
 use glib::source::{Continue, Priority, SourceId};
 use glib::translate::*;
-use std::cell::RefCell;
 use std::future;
 use std::mem::transmute;
 use std::pin::Pin;
@@ -23,8 +22,8 @@ unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + Sen
     msg: *mut ffi::GstMessage,
     func: gpointer,
 ) -> gboolean {
-    let func: &RefCell<F> = &*(func as *const RefCell<F>);
-    (*func.borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib()
+    let func: &mut F = &mut *(func as *mut F);
+    func(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib()
 }
 
 unsafe extern "C" fn destroy_closure_watch<
@@ -32,12 +31,12 @@ unsafe extern "C" fn destroy_closure_watch<
 >(
     ptr: gpointer,
 ) {
-    Box::<RefCell<F>>::from_raw(ptr as *mut _);
+    Box::<F>::from_raw(ptr as *mut _);
 }
 
 fn into_raw_watch<F: FnMut(&Bus, &Message) -> Continue + Send + 'static>(func: F) -> gpointer {
     #[allow(clippy::type_complexity)]
-    let func: Box<RefCell<F>> = Box::new(RefCell::new(func));
+    let func: Box<F> = Box::new(func);
     Box::into_raw(func) as gpointer
 }
 
@@ -46,22 +45,21 @@ unsafe extern "C" fn trampoline_watch_local<F: FnMut(&Bus, &Message) -> Continue
     msg: *mut ffi::GstMessage,
     func: gpointer,
 ) -> gboolean {
-    let func: &glib::thread_guard::ThreadGuard<RefCell<F>> =
-        &*(func as *const glib::thread_guard::ThreadGuard<RefCell<F>>);
-    (*func.get_ref().borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg))
-        .into_glib()
+    let func: &mut glib::thread_guard::ThreadGuard<F> =
+        &mut *(func as *mut glib::thread_guard::ThreadGuard<F>);
+    (func.get_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib()
 }
 
 unsafe extern "C" fn destroy_closure_watch_local<F: FnMut(&Bus, &Message) -> Continue + 'static>(
     ptr: gpointer,
 ) {
-    Box::<glib::thread_guard::ThreadGuard<RefCell<F>>>::from_raw(ptr as *mut _);
+    Box::<glib::thread_guard::ThreadGuard<F>>::from_raw(ptr as *mut _);
 }
 
 fn into_raw_watch_local<F: FnMut(&Bus, &Message) -> Continue + 'static>(func: F) -> gpointer {
     #[allow(clippy::type_complexity)]
-    let func: Box<glib::thread_guard::ThreadGuard<RefCell<F>>> =
-        Box::new(glib::thread_guard::ThreadGuard::new(RefCell::new(func)));
+    let func: Box<glib::thread_guard::ThreadGuard<F>> =
+        Box::new(glib::thread_guard::ThreadGuard::new(func));
     Box::into_raw(func) as gpointer
 }
 

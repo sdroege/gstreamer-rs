@@ -19,7 +19,6 @@ use crate::QueryRef;
 use crate::StaticPadTemplate;
 use crate::{SpecificFormattedValue, SpecificFormattedValueIntrinsic};
 
-use std::cell::RefCell;
 use std::mem;
 use std::num::NonZeroU64;
 use std::ops::ControlFlow;
@@ -1597,18 +1596,18 @@ unsafe extern "C" fn destroy_closure<F>(ptr: gpointer) {
 }
 
 unsafe extern "C" fn trampoline_pad_task<F: FnMut() + Send + 'static>(func: gpointer) {
-    let func: &RefCell<F> = &*(func as *const RefCell<F>);
-    (*func.borrow_mut())()
+    let func: &mut F = &mut *(func as *mut F);
+    func()
 }
 
 fn into_raw_pad_task<F: FnMut() + Send + 'static>(func: F) -> gpointer {
     #[allow(clippy::type_complexity)]
-    let func: Box<RefCell<F>> = Box::new(RefCell::new(func));
+    let func: Box<F> = Box::new(func);
     Box::into_raw(func) as gpointer
 }
 
 unsafe extern "C" fn destroy_closure_pad_task<F>(ptr: gpointer) {
-    Box::<RefCell<F>>::from_raw(ptr as *mut _);
+    Box::<F>::from_raw(ptr as *mut _);
 }
 
 impl Pad {

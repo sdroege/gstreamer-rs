@@ -6,7 +6,6 @@ use glib::prelude::*;
 use glib::translate::*;
 
 use crate::AppSrc;
-use std::cell::RefCell;
 use std::mem;
 use std::panic;
 use std::pin::Pin;
@@ -17,7 +16,7 @@ use std::task::{Context, Poll, Waker};
 
 #[allow(clippy::type_complexity)]
 pub struct AppSrcCallbacks {
-    need_data: Option<RefCell<Box<dyn FnMut(&AppSrc, u32) + Send + 'static>>>,
+    need_data: Option<Box<dyn FnMut(&AppSrc, u32) + Send + 'static>>,
     enough_data: Option<Box<dyn Fn(&AppSrc) + Send + Sync + 'static>>,
     seek_data: Option<Box<dyn Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>>,
     panicked: AtomicBool,
@@ -42,7 +41,7 @@ impl AppSrcCallbacks {
 #[allow(clippy::type_complexity)]
 #[must_use = "The builder must be built to be used"]
 pub struct AppSrcCallbacksBuilder {
-    need_data: Option<RefCell<Box<dyn FnMut(&AppSrc, u32) + Send + 'static>>>,
+    need_data: Option<Box<dyn FnMut(&AppSrc, u32) + Send + 'static>>,
     enough_data: Option<Box<dyn Fn(&AppSrc) + Send + Sync + 'static>>,
     seek_data: Option<Box<dyn Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>>,
 }
@@ -50,7 +49,7 @@ pub struct AppSrcCallbacksBuilder {
 impl AppSrcCallbacksBuilder {
     pub fn need_data<F: FnMut(&AppSrc, u32) + Send + 'static>(self, need_data: F) -> Self {
         Self {
-            need_data: Some(RefCell::new(Box::new(need_data))),
+            need_data: Some(Box::new(need_data)),
             ..self
         }
     }
@@ -126,23 +125,21 @@ unsafe extern "C" fn trampoline_need_data(
     length: u32,
     callbacks: gpointer,
 ) {
-    let callbacks = &*(callbacks as *const AppSrcCallbacks);
+    let callbacks = callbacks as *mut AppSrcCallbacks;
     let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
 
-    if callbacks.panicked.load(Ordering::Relaxed) {
+    if (*callbacks).panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
         gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
         return;
     }
 
-    if let Some(ref need_data) = callbacks.need_data {
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
-            (*need_data.borrow_mut())(&element, length)
-        }));
+    if let Some(ref mut need_data) = (*callbacks).need_data {
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| need_data(&element, length)));
         match result {
             Ok(result) => result,
             Err(err) => {
-                callbacks.panicked.store(true, Ordering::Relaxed);
+                (*callbacks).panicked.store(true, Ordering::Relaxed);
                 post_panic_error_message(&element, &err);
             }
         }
@@ -150,21 +147,21 @@ unsafe extern "C" fn trampoline_need_data(
 }
 
 unsafe extern "C" fn trampoline_enough_data(appsrc: *mut ffi::GstAppSrc, callbacks: gpointer) {
-    let callbacks = &*(callbacks as *const AppSrcCallbacks);
+    let callbacks = callbacks as *const AppSrcCallbacks;
     let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
 
-    if callbacks.panicked.load(Ordering::Relaxed) {
+    if (*callbacks).panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
         gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
         return;
     }
 
-    if let Some(ref enough_data) = callbacks.enough_data {
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| (*enough_data)(&element)));
+    if let Some(ref enough_data) = (*callbacks).enough_data {
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| enough_data(&element)));
         match result {
             Ok(result) => result,
             Err(err) => {
-                callbacks.panicked.store(true, Ordering::Relaxed);
+                (*callbacks).panicked.store(true, Ordering::Relaxed);
                 post_panic_error_message(&element, &err);
             }
         }
@@ -176,22 +173,21 @@ unsafe extern "C" fn trampoline_seek_data(
     offset: u64,
     callbacks: gpointer,
 ) -> gboolean {
-    let callbacks = &*(callbacks as *const AppSrcCallbacks);
+    let callbacks = callbacks as *const AppSrcCallbacks;
     let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
 
-    if callbacks.panicked.load(Ordering::Relaxed) {
+    if (*callbacks).panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
         gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
         return false.into_glib();
     }
 
-    let ret = if let Some(ref seek_data) = callbacks.seek_data {
-        let result =
-            panic::catch_unwind(panic::AssertUnwindSafe(|| (*seek_data)(&element, offset)));
+    let ret = if let Some(ref seek_data) = (*callbacks).seek_data {
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| seek_data(&element, offset)));
         match result {
             Ok(result) => result,
             Err(err) => {
-                callbacks.panicked.store(true, Ordering::Relaxed);
+                (*callbacks).panicked.store(true, Ordering::Relaxed);
                 post_panic_error_message(&element, &err);
 
                 false

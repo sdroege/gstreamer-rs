@@ -5,15 +5,14 @@ use glib::ffi::{gboolean, gpointer};
 use glib::prelude::*;
 use glib::source::{Continue, Priority};
 use glib::translate::*;
-use std::cell::RefCell;
 use std::mem::transmute;
 
 unsafe extern "C" fn trampoline_watch<F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static>(
     pool: *mut ffi::GstRTSPSessionPool,
     func: gpointer,
 ) -> gboolean {
-    let func: &RefCell<F> = &*(func as *const RefCell<F>);
-    (*func.borrow_mut())(&from_glib_borrow(pool)).into_glib()
+    let func: &mut F = &mut *(func as *mut F);
+    func(&from_glib_borrow(pool)).into_glib()
 }
 
 unsafe extern "C" fn destroy_closure_watch<
@@ -21,12 +20,12 @@ unsafe extern "C" fn destroy_closure_watch<
 >(
     ptr: gpointer,
 ) {
-    Box::<RefCell<F>>::from_raw(ptr as *mut _);
+    Box::<F>::from_raw(ptr as *mut _);
 }
 
 fn into_raw_watch<F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static>(func: F) -> gpointer {
     #[allow(clippy::type_complexity)]
-    let func: Box<RefCell<F>> = Box::new(RefCell::new(func));
+    let func: Box<F> = Box::new(func);
     Box::into_raw(func) as gpointer
 }
 
