@@ -4,7 +4,6 @@ use crate::AppSink;
 use glib::ffi::gpointer;
 use glib::prelude::*;
 use glib::translate::*;
-use std::cell::RefCell;
 use std::mem;
 use std::panic;
 use std::ptr;
@@ -22,18 +21,14 @@ use {
 
 #[allow(clippy::type_complexity)]
 pub struct AppSinkCallbacks {
-    eos: Option<RefCell<Box<dyn FnMut(&AppSink) + Send + 'static>>>,
+    eos: Option<Box<dyn FnMut(&AppSink) + Send + 'static>>,
     new_preroll: Option<
-        RefCell<
-            Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
-        >,
+        Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
     >,
     new_sample: Option<
-        RefCell<
-            Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
-        >,
+        Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
     >,
-    new_event: Option<RefCell<Box<dyn FnMut(&AppSink) -> bool + Send + 'static>>>,
+    new_event: Option<Box<dyn FnMut(&AppSink) -> bool + Send + 'static>>,
     panicked: AtomicBool,
     callbacks: ffi::GstAppSinkCallbacks,
 }
@@ -56,24 +51,20 @@ impl AppSinkCallbacks {
 #[allow(clippy::type_complexity)]
 #[must_use = "The builder must be built to be used"]
 pub struct AppSinkCallbacksBuilder {
-    eos: Option<RefCell<Box<dyn FnMut(&AppSink) + Send + 'static>>>,
+    eos: Option<Box<dyn FnMut(&AppSink) + Send + 'static>>,
     new_preroll: Option<
-        RefCell<
-            Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
-        >,
+        Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
     >,
     new_sample: Option<
-        RefCell<
-            Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
-        >,
+        Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
     >,
-    new_event: Option<RefCell<Box<dyn FnMut(&AppSink) -> bool + Send + 'static>>>,
+    new_event: Option<Box<dyn FnMut(&AppSink) -> bool + Send + 'static>>,
 }
 
 impl AppSinkCallbacksBuilder {
     pub fn eos<F: FnMut(&AppSink) + Send + 'static>(self, eos: F) -> Self {
         Self {
-            eos: Some(RefCell::new(Box::new(eos))),
+            eos: Some(Box::new(eos)),
             ..self
         }
     }
@@ -85,7 +76,7 @@ impl AppSinkCallbacksBuilder {
         new_preroll: F,
     ) -> Self {
         Self {
-            new_preroll: Some(RefCell::new(Box::new(new_preroll))),
+            new_preroll: Some(Box::new(new_preroll)),
             ..self
         }
     }
@@ -97,7 +88,7 @@ impl AppSinkCallbacksBuilder {
         new_sample: F,
     ) -> Self {
         Self {
-            new_sample: Some(RefCell::new(Box::new(new_sample))),
+            new_sample: Some(Box::new(new_sample)),
             ..self
         }
     }
@@ -106,7 +97,7 @@ impl AppSinkCallbacksBuilder {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn new_event<F: FnMut(&AppSink) -> bool + Send + 'static>(self, new_event: F) -> Self {
         Self {
-            new_event: Some(RefCell::new(Box::new(new_event))),
+            new_event: Some(Box::new(new_event)),
             ..self
         }
     }
@@ -159,21 +150,21 @@ fn post_panic_error_message(element: &AppSink, err: &dyn std::any::Any) {
 }
 
 unsafe extern "C" fn trampoline_eos(appsink: *mut ffi::GstAppSink, callbacks: gpointer) {
-    let callbacks = &*(callbacks as *const AppSinkCallbacks);
+    let callbacks = callbacks as *mut AppSinkCallbacks;
     let element: Borrowed<AppSink> = from_glib_borrow(appsink);
 
-    if callbacks.panicked.load(Ordering::Relaxed) {
+    if (*callbacks).panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
         gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
         return;
     }
 
-    if let Some(ref eos) = callbacks.eos {
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| (*eos.borrow_mut())(&element)));
+    if let Some(ref mut eos) = (*callbacks).eos {
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| eos(&element)));
         match result {
             Ok(result) => result,
             Err(err) => {
-                callbacks.panicked.store(true, Ordering::Relaxed);
+                (*callbacks).panicked.store(true, Ordering::Relaxed);
                 post_panic_error_message(&element, &err);
             }
         }
@@ -184,23 +175,21 @@ unsafe extern "C" fn trampoline_new_preroll(
     appsink: *mut ffi::GstAppSink,
     callbacks: gpointer,
 ) -> gst::ffi::GstFlowReturn {
-    let callbacks = &*(callbacks as *const AppSinkCallbacks);
+    let callbacks = callbacks as *mut AppSinkCallbacks;
     let element: Borrowed<AppSink> = from_glib_borrow(appsink);
 
-    if callbacks.panicked.load(Ordering::Relaxed) {
+    if (*callbacks).panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
         gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
         return gst::FlowReturn::Error.into_glib();
     }
 
-    let ret = if let Some(ref new_preroll) = callbacks.new_preroll {
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
-            (*new_preroll.borrow_mut())(&element).into()
-        }));
+    let ret = if let Some(ref mut new_preroll) = (*callbacks).new_preroll {
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| new_preroll(&element).into()));
         match result {
             Ok(result) => result,
             Err(err) => {
-                callbacks.panicked.store(true, Ordering::Relaxed);
+                (*callbacks).panicked.store(true, Ordering::Relaxed);
                 post_panic_error_message(&element, &err);
 
                 gst::FlowReturn::Error
@@ -217,23 +206,21 @@ unsafe extern "C" fn trampoline_new_sample(
     appsink: *mut ffi::GstAppSink,
     callbacks: gpointer,
 ) -> gst::ffi::GstFlowReturn {
-    let callbacks = &*(callbacks as *const AppSinkCallbacks);
+    let callbacks = callbacks as *mut AppSinkCallbacks;
     let element: Borrowed<AppSink> = from_glib_borrow(appsink);
 
-    if callbacks.panicked.load(Ordering::Relaxed) {
+    if (*callbacks).panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
         gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
         return gst::FlowReturn::Error.into_glib();
     }
 
-    let ret = if let Some(ref new_sample) = callbacks.new_sample {
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
-            (*new_sample.borrow_mut())(&element).into()
-        }));
+    let ret = if let Some(ref mut new_sample) = (*callbacks).new_sample {
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| new_sample(&element).into()));
         match result {
             Ok(result) => result,
             Err(err) => {
-                callbacks.panicked.store(true, Ordering::Relaxed);
+                (*callbacks).panicked.store(true, Ordering::Relaxed);
                 post_panic_error_message(&element, &err);
 
                 gst::FlowReturn::Error
@@ -250,23 +237,21 @@ unsafe extern "C" fn trampoline_new_event(
     appsink: *mut ffi::GstAppSink,
     callbacks: gpointer,
 ) -> glib::ffi::gboolean {
-    let callbacks = &*(callbacks as *const AppSinkCallbacks);
+    let callbacks = callbacks as *mut AppSinkCallbacks;
     let element: Borrowed<AppSink> = from_glib_borrow(appsink);
 
-    if callbacks.panicked.load(Ordering::Relaxed) {
+    if (*callbacks).panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
         gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
         return false.into_glib();
     }
 
-    let ret = if let Some(ref new_event) = callbacks.new_event {
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
-            (*new_event.borrow_mut())(&element)
-        }));
+    let ret = if let Some(ref mut new_event) = (*callbacks).new_event {
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| new_event(&element)));
         match result {
             Ok(result) => result,
             Err(err) => {
-                callbacks.panicked.store(true, Ordering::Relaxed);
+                (*callbacks).panicked.store(true, Ordering::Relaxed);
                 post_panic_error_message(&element, &err);
 
                 false
