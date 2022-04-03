@@ -55,7 +55,9 @@ pub mod message;
 pub use crate::message::{Message, MessageErrorDomain, MessageRef, MessageView};
 
 mod value;
-pub use crate::value::*;
+pub use crate::value::{
+    Array, ArrayRef, Bitmask, Fraction, FractionRange, IntRange, List, ListRef,
+};
 #[cfg(feature = "ser_de")]
 #[macro_use]
 mod value_serde;
@@ -174,13 +176,15 @@ mod gobject;
 mod iterator;
 mod object;
 mod pad;
-pub use pad::*;
-mod registry;
-pub use crate::pad::PadBuilder;
+pub use pad::{
+    EventForeachAction, PadBuilder, PadGetRangeSuccess, PadProbeData, PadProbeId, PadProbeInfo,
+    StreamLock,
+};
 mod control_binding;
 mod control_source;
 mod parse_context;
 mod proxy_pad;
+mod registry;
 mod tag_setter;
 mod task_pool;
 pub use crate::element::{ElementMessageType, NotifyWatchId};
@@ -197,7 +201,6 @@ pub use crate::enums::{
     ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, PadLinkSuccess,
     StateChangeError, StateChangeSuccess, TagError,
 };
-pub use crate::pad::{PadGetRangeSuccess, PadProbeData, PadProbeId, PadProbeInfo};
 pub use crate::parse_context::ParseContext;
 mod plugin_feature;
 
@@ -235,7 +238,7 @@ mod clock;
 pub use crate::clock::{AtomicClockReturn, ClockId, PeriodicClockId, SingleShotClockId};
 
 mod buffer_pool;
-pub use crate::buffer_pool::*;
+pub use crate::buffer_pool::{BufferPoolAcquireParams, BufferPoolConfig, BufferPoolConfigRef};
 
 mod pad_template;
 
