@@ -630,11 +630,15 @@ impl VideoInfo {
             return crate::VideoFormat::Unknown;
         }
 
-        unsafe { from_glib((*self.0.finfo).format) }
+        self.format_info().format()
     }
 
     pub fn format_info(&self) -> crate::VideoFormatInfo {
-        crate::VideoFormatInfo::from_format(self.format())
+        unsafe { crate::VideoFormatInfo::from_ptr(self.0.finfo) }
+    }
+
+    pub fn name<'a>(&self) -> &'a str {
+        self.format_info().name()
     }
 
     pub fn width(&self) -> u32 {
@@ -679,12 +683,55 @@ impl VideoInfo {
         unsafe { VideoColorimetry(ptr::read(&self.0.colorimetry)) }
     }
 
+    pub fn comp_depth(&self, component: u8) -> u32 {
+        self.format_info().depth()[component as usize]
+    }
+
+    pub fn comp_height(&self, component: u8) -> u32 {
+        self.format_info().scale_height(component, self.height())
+    }
+
+    pub fn comp_width(&self, component: u8) -> u32 {
+        self.format_info().scale_width(component, self.width())
+    }
+
+    pub fn comp_offset(&self, component: u8) -> usize {
+        self.offset()[self.format_info().plane()[component as usize] as usize]
+            + self.format_info().poffset()[component as usize] as usize
+    }
+
+    pub fn comp_plane(&self, component: u8) -> u32 {
+        self.format_info().plane()[component as usize]
+    }
+
+    pub fn comp_poffset(&self, component: u8) -> u32 {
+        self.format_info().poffset()[component as usize]
+    }
+
+    pub fn comp_pstride(&self, component: u8) -> i32 {
+        self.format_info().pixel_stride()[component as usize]
+    }
+
+    pub fn comp_stride(&self, component: u8) -> i32 {
+        self.stride()[self.format_info().plane()[component as usize] as usize]
+    }
+
     pub fn par(&self) -> gst::Fraction {
         gst::Fraction::new(self.0.par_n, self.0.par_d)
     }
 
     pub fn fps(&self) -> gst::Fraction {
         gst::Fraction::new(self.0.fps_n, self.0.fps_d)
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    pub fn field_rate(&self) -> gst::Fraction {
+        if self.interlace_mode() == crate::VideoInterlaceMode::Alternate {
+            2 * self.fps()
+        } else {
+            self.fps()
+        }
     }
 
     pub fn offset(&self) -> &[usize] {

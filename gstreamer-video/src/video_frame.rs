@@ -120,6 +120,16 @@ impl<T> VideoFrame<T> {
         self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
     }
 
+    pub fn is_bottom_field(&self) -> bool {
+        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
+            && !self.flags().contains(crate::VideoFrameFlags::TFF)
+    }
+
+    pub fn is_top_field(&self) -> bool {
+        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
+            && self.flags().contains(crate::VideoFrameFlags::TFF)
+    }
+
     pub fn n_planes(&self) -> u32 {
         self.info().n_planes()
     }
@@ -134,6 +144,43 @@ impl<T> VideoFrame<T> {
 
     pub fn plane_offset(&self) -> &[usize] {
         self.info().offset()
+    }
+
+    pub fn comp_data(&self, component: u32) -> Result<&[u8], glib::BoolError> {
+        let poffset = self.info().comp_poffset(component as u8) as usize;
+        Ok(&self.plane_data(self.format_info().plane()[component as usize])?[poffset..])
+    }
+
+    pub fn comp_depth(&self, component: u32) -> u32 {
+        self.info().comp_depth(component as u8)
+    }
+
+    pub fn comp_height(&self, component: u32) -> u32 {
+        self.info().comp_height(component as u8)
+    }
+
+    pub fn comp_width(&self, component: u32) -> u32 {
+        self.info().comp_width(component as u8)
+    }
+
+    pub fn comp_offset(&self, component: u32) -> usize {
+        self.info().comp_offset(component as u8)
+    }
+
+    pub fn comp_poffset(&self, component: u32) -> u32 {
+        self.info().comp_poffset(component as u8)
+    }
+
+    pub fn comp_pstride(&self, component: u32) -> i32 {
+        self.info().comp_pstride(component as u8)
+    }
+
+    pub fn comp_stride(&self, component: u32) -> i32 {
+        self.info().comp_stride(component as u8)
+    }
+
+    pub fn comp_plane(&self, component: u32) -> u32 {
+        self.info().comp_plane(component as u8)
     }
 
     pub fn buffer(&self) -> &gst::BufferRef {
@@ -364,6 +411,11 @@ impl VideoFrame<Writable> {
         unsafe { gst::BufferRef::from_mut_ptr(self.frame.buffer) }
     }
 
+    pub fn comp_data_mut(&mut self, component: u32) -> Result<&mut [u8], glib::BoolError> {
+        let poffset = self.info().comp_poffset(component as u8) as usize;
+        Ok(&mut self.plane_data_mut(self.format_info().plane()[component as usize])?[poffset..])
+    }
+
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
         if plane >= self.n_planes() {
             return Err(glib::bool_error!(
@@ -510,6 +562,16 @@ impl<T> VideoFrameRef<T> {
         self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
     }
 
+    pub fn is_bottom_field(&self) -> bool {
+        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
+            && !self.flags().contains(crate::VideoFrameFlags::TFF)
+    }
+
+    pub fn is_top_field(&self) -> bool {
+        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
+            && self.flags().contains(crate::VideoFrameFlags::TFF)
+    }
+
     pub fn n_planes(&self) -> u32 {
         self.info().n_planes()
     }
@@ -524,6 +586,43 @@ impl<T> VideoFrameRef<T> {
 
     pub fn plane_offset(&self) -> &[usize] {
         self.info().offset()
+    }
+
+    pub fn comp_data(&self, component: u32) -> Result<&[u8], glib::BoolError> {
+        let poffset = self.info().comp_poffset(component as u8) as usize;
+        Ok(&self.plane_data(self.format_info().plane()[component as usize])?[poffset..])
+    }
+
+    pub fn comp_depth(&self, component: u32) -> u32 {
+        self.info().comp_depth(component as u8)
+    }
+
+    pub fn comp_height(&self, component: u32) -> u32 {
+        self.info().comp_height(component as u8)
+    }
+
+    pub fn comp_width(&self, component: u32) -> u32 {
+        self.info().comp_width(component as u8)
+    }
+
+    pub fn comp_offset(&self, component: u32) -> usize {
+        self.info().comp_offset(component as u8)
+    }
+
+    pub fn comp_poffset(&self, component: u32) -> u32 {
+        self.info().comp_poffset(component as u8)
+    }
+
+    pub fn comp_pstride(&self, component: u32) -> i32 {
+        self.info().comp_pstride(component as u8)
+    }
+
+    pub fn comp_stride(&self, component: u32) -> i32 {
+        self.info().comp_stride(component as u8)
+    }
+
+    pub fn comp_plane(&self, component: u32) -> u32 {
+        self.info().comp_plane(component as u8)
     }
 
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
@@ -762,6 +861,11 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
 
     pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
         self.buffer.as_mut().unwrap()
+    }
+
+    pub fn comp_data_mut(&mut self, component: u32) -> Result<&mut [u8], glib::BoolError> {
+        let poffset = self.info().comp_poffset(component as u8) as usize;
+        Ok(&mut self.plane_data_mut(self.format_info().plane()[component as usize])?[poffset..])
     }
 
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
