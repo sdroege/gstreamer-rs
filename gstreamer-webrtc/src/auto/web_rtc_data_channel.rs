@@ -259,7 +259,8 @@ impl WebRTCDataChannel {
                 &from_glib_borrow(this),
                 Option::<glib::GString>::from_glib_borrow(data)
                     .as_ref()
-                    .as_deref(),
+                    .as_ref()
+                    .map(|s| s.as_str()),
             )
         }
         unsafe {
@@ -353,7 +354,8 @@ impl WebRTCDataChannel {
                 &from_glib_borrow(this),
                 Option::<glib::GString>::from_glib_borrow(data)
                     .as_ref()
-                    .as_deref(),
+                    .as_ref()
+                    .map(|s| s.as_str()),
             )
         }
         unsafe {
