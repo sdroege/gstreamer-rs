@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.18.7] - 2022-04-04
+### Added
+- Bindings for `VideoAggregator` and the `VideoAggregatorPad`s.
+- Bindings for `AudioAggregator` and the `AudioAggregatorPad`s.
+- Bindings for `TaskPool`.
+- Various helper functions for `VideoFormatInfo`, `VideoInfo` and
+  `VideoFrame`.
+
 ## [0.18.6] - 2022-03-08
 ### Fixed
 - Require `Send` and not `Sync` for the values of an `gst::Array` / `gst::List`.
