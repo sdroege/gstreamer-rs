@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-audio"
-version = "0.18.6"
+version = "0.18.7"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Audio library"
