@@ -12,6 +12,12 @@ use glib::translate::{from_glib, IntoGlib, ToGlibPtr};
 pub struct VideoFormatInfo(&'static ffi::GstVideoFormatInfo);
 
 impl VideoFormatInfo {
+    pub unsafe fn from_ptr(format_info: *const ffi::GstVideoFormatInfo) -> Self {
+        assert_initialized_main_thread!();
+        assert!(!format_info.is_null());
+        Self(&*format_info)
+    }
+
     pub fn from_format(format: crate::VideoFormat) -> Self {
         assert_initialized_main_thread!();
 
