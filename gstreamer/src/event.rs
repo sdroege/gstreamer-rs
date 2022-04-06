@@ -595,8 +595,6 @@ declare_concrete_event!(@sticky StreamCollection, T);
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StreamCollection<Event> {
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_event_new_stream_collection")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(stream_collection: &crate::StreamCollection) -> Event {
@@ -604,8 +602,6 @@ impl StreamCollection<Event> {
         Self::builder(stream_collection).build()
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn builder(stream_collection: &crate::StreamCollection) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         StreamCollectionBuilder::new(stream_collection)
@@ -615,8 +611,6 @@ impl StreamCollection<Event> {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StreamCollection {
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_stream_collection")]
     #[doc(alias = "gst_event_parse_stream_collection")]
     pub fn stream_collection(&self) -> crate::StreamCollection {
@@ -745,8 +739,6 @@ declare_concrete_event!(@sticky StreamGroupDone, T);
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StreamGroupDone<Event> {
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_event_new_stream_group_done")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(group_id: GroupId) -> Event {
@@ -754,8 +746,6 @@ impl StreamGroupDone<Event> {
         Self::builder(group_id).build()
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn builder<'a>(group_id: GroupId) -> StreamGroupDoneBuilder<'a> {
         assert_initialized_main_thread!();
         StreamGroupDoneBuilder::new(group_id)
@@ -765,8 +755,6 @@ impl StreamGroupDone<Event> {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StreamGroupDone {
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_group_id")]
     #[doc(alias = "gst_event_parse_stream_group_done")]
     pub fn group_id(&self) -> GroupId {
@@ -1307,8 +1295,6 @@ declare_concrete_event!(SelectStreams, T);
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl SelectStreams<Event> {
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_event_new_select_streams")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(streams: &[&str]) -> Event {
@@ -1316,8 +1302,6 @@ impl SelectStreams<Event> {
         Self::builder(streams).build()
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn builder<'a>(streams: &'a [&'a str]) -> SelectStreamsBuilder<'a> {
         assert_initialized_main_thread!();
         SelectStreamsBuilder::new(streams)
@@ -1327,8 +1311,6 @@ impl SelectStreams<Event> {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl SelectStreams {
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_streams")]
     #[doc(alias = "gst_event_parse_select_streams")]
     pub fn streams(&self) -> Vec<String> {
@@ -1348,8 +1330,6 @@ declare_concrete_event!(InstantRateSyncTime, T);
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl InstantRateSyncTime<Event> {
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_event_new_instant_rate_sync_time")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(
@@ -1361,8 +1341,6 @@ impl InstantRateSyncTime<Event> {
         Self::builder(rate_multiplier, running_time, upstream_running_time).build()
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn builder<'a>(
         rate_multiplier: f64,
         running_time: ClockTime,
@@ -1376,8 +1354,6 @@ impl InstantRateSyncTime<Event> {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl InstantRateSyncTime {
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "parse_instant_rate_sync_time")]
     #[doc(alias = "gst_event_parse_instant_rate_sync_time")]
     pub fn get(&self) -> (f64, ClockTime, ClockTime) {

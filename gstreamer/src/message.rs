@@ -2955,11 +2955,7 @@ impl<'a> StreamCollectionBuilder<'a> {
 #[must_use = "The builder must be built to be used"]
 pub struct StreamsSelectedBuilder<'a> {
     builder: MessageBuilder<'a>,
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     collection: &'a crate::StreamCollection,
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     streams: Option<Vec<crate::Stream>>,
 }
 
