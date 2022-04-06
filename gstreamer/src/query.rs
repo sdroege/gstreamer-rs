@@ -76,6 +76,7 @@ impl QueryRef {
                 ffi::GST_QUERY_CAPS => Caps::view(self),
                 ffi::GST_QUERY_DRAIN => Drain::view(self),
                 ffi::GST_QUERY_CONTEXT => Context::view(self),
+                #[cfg(any(feature = "v1_16", feature = "dox"))]
                 ffi::GST_QUERY_BITRATE => Bitrate::view(self),
                 _ => Other::view(self),
             }
@@ -103,6 +104,7 @@ impl QueryRef {
                 ffi::GST_QUERY_CAPS => Caps::view_mut(self),
                 ffi::GST_QUERY_DRAIN => Drain::view_mut(self),
                 ffi::GST_QUERY_CONTEXT => Context::view_mut(self),
+                #[cfg(any(feature = "v1_16", feature = "dox"))]
                 ffi::GST_QUERY_BITRATE => Bitrate::view_mut(self),
                 _ => Other::view_mut(self),
             }
@@ -148,6 +150,8 @@ pub enum QueryView<'a> {
     Caps(&'a Caps),
     Drain(&'a Drain),
     Context(&'a Context),
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     Bitrate(&'a Bitrate),
     Other(&'a Other),
 }
@@ -171,6 +175,8 @@ pub enum QueryViewMut<'a> {
     Caps(&'a mut Caps),
     Drain(&'a mut Drain),
     Context(&'a mut Context),
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     Bitrate(&'a mut Bitrate),
     Other(&'a mut Other),
 }
@@ -1509,6 +1515,8 @@ impl Context {
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 declare_concrete_query!(Bitrate, T);
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -1529,9 +1537,9 @@ impl Default for Bitrate<Query> {
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl Bitrate {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "get_bitrate")]
     #[doc(alias = "gst_query_parse_bitrate")]
     pub fn bitrate(&self) -> u32 {
@@ -1542,8 +1550,6 @@ impl Bitrate {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_query_set_bitrate")]
     pub fn set_bitrate(&mut self, bitrate: u32) {
         unsafe {
