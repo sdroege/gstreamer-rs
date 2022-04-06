@@ -275,8 +275,6 @@ impl ToValue for WebRTCDTLSTransportState {
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCDataChannelState")]
 pub enum WebRTCDataChannelState {
-    #[doc(alias = "GST_WEBRTC_DATA_CHANNEL_STATE_NEW")]
-    New,
     #[doc(alias = "GST_WEBRTC_DATA_CHANNEL_STATE_CONNECTING")]
     Connecting,
     #[doc(alias = "GST_WEBRTC_DATA_CHANNEL_STATE_OPEN")]
@@ -297,7 +295,6 @@ impl IntoGlib for WebRTCDataChannelState {
 
     fn into_glib(self) -> ffi::GstWebRTCDataChannelState {
         match self {
-            Self::New => ffi::GST_WEBRTC_DATA_CHANNEL_STATE_NEW,
             Self::Connecting => ffi::GST_WEBRTC_DATA_CHANNEL_STATE_CONNECTING,
             Self::Open => ffi::GST_WEBRTC_DATA_CHANNEL_STATE_OPEN,
             Self::Closing => ffi::GST_WEBRTC_DATA_CHANNEL_STATE_CLOSING,
@@ -314,7 +311,6 @@ impl FromGlib<ffi::GstWebRTCDataChannelState> for WebRTCDataChannelState {
     unsafe fn from_glib(value: ffi::GstWebRTCDataChannelState) -> Self {
         skip_assert_initialized!();
         match value {
-            ffi::GST_WEBRTC_DATA_CHANNEL_STATE_NEW => Self::New,
             ffi::GST_WEBRTC_DATA_CHANNEL_STATE_CONNECTING => Self::Connecting,
             ffi::GST_WEBRTC_DATA_CHANNEL_STATE_OPEN => Self::Open,
             ffi::GST_WEBRTC_DATA_CHANNEL_STATE_CLOSING => Self::Closing,
