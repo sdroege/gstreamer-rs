@@ -78,6 +78,8 @@ impl QueryRef {
                 ffi::GST_QUERY_CONTEXT => Context::view(self),
                 #[cfg(any(feature = "v1_16", feature = "dox"))]
                 ffi::GST_QUERY_BITRATE => Bitrate::view(self),
+                #[cfg(any(feature = "v1_22", feature = "dox"))]
+                ffi::GST_QUERY_SELECTABLE => Selectable::view(self),
                 _ => Other::view(self),
             }
         }
@@ -106,6 +108,8 @@ impl QueryRef {
                 ffi::GST_QUERY_CONTEXT => Context::view_mut(self),
                 #[cfg(any(feature = "v1_16", feature = "dox"))]
                 ffi::GST_QUERY_BITRATE => Bitrate::view_mut(self),
+                #[cfg(any(feature = "v1_22", feature = "dox"))]
+                ffi::GST_QUERY_SELECTABLE => Selectable::view_mut(self),
                 _ => Other::view_mut(self),
             }
         }
@@ -153,6 +157,9 @@ pub enum QueryView<'a> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     Bitrate(&'a Bitrate),
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    Selectable(&'a Selectable),
     Other(&'a Other),
 }
 
@@ -178,6 +185,9 @@ pub enum QueryViewMut<'a> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     Bitrate(&'a mut Bitrate),
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    Selectable(&'a mut Selectable),
     Other(&'a mut Other),
 }
 
@@ -1554,6 +1564,49 @@ impl Bitrate {
     pub fn set_bitrate(&mut self, bitrate: u32) {
         unsafe {
             ffi::gst_query_set_bitrate(self.as_mut_ptr(), bitrate);
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+declare_concrete_query!(Selectable, T);
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+impl Selectable<Query> {
+    #[doc(alias = "gst_query_new_selectable")]
+    pub fn new() -> Self {
+        assert_initialized_main_thread!();
+        unsafe { Self(from_glib_full(ffi::gst_query_new_selectable())) }
+    }
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+impl Default for Selectable<Query> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+impl Selectable {
+    #[doc(alias = "get_selectable")]
+    #[doc(alias = "gst_query_parse_selectable")]
+    pub fn selectable(&self) -> bool {
+        unsafe {
+            let mut selectable = mem::MaybeUninit::uninit();
+            ffi::gst_query_parse_selectable(self.as_mut_ptr(), selectable.as_mut_ptr());
+            from_glib(selectable.assume_init())
+        }
+    }
+
+    #[doc(alias = "gst_query_set_selectable")]
+    pub fn set_selectable(&mut self, selectable: bool) {
+        unsafe {
+            ffi::gst_query_set_selectable(self.as_mut_ptr(), selectable.into_glib());
         }
     }
 }
