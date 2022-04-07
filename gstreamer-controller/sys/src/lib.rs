@@ -478,8 +478,6 @@ extern "C" {
     // GstProxyControlBinding
     //=========================================================================
     pub fn gst_proxy_control_binding_get_type() -> GType;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_proxy_control_binding_new(
         object: *mut gst::GstObject,
         property_name: *const c_char,

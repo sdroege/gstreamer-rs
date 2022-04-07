@@ -778,8 +778,6 @@ pub enum EventType {
     Caps,
     #[doc(alias = "GST_EVENT_SEGMENT")]
     Segment,
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "GST_EVENT_STREAM_COLLECTION")]
     StreamCollection,
     #[doc(alias = "GST_EVENT_TAG")]
@@ -788,8 +786,6 @@ pub enum EventType {
     Buffersize,
     #[doc(alias = "GST_EVENT_SINK_MESSAGE")]
     SinkMessage,
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "GST_EVENT_STREAM_GROUP_DONE")]
     StreamGroupDone,
     #[doc(alias = "GST_EVENT_EOS")]
@@ -820,8 +816,6 @@ pub enum EventType {
     Reconfigure,
     #[doc(alias = "GST_EVENT_TOC_SELECT")]
     TocSelect,
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "GST_EVENT_SELECT_STREAMS")]
     SelectStreams,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -890,12 +884,10 @@ impl IntoGlib for EventType {
             Self::StreamStart => ffi::GST_EVENT_STREAM_START,
             Self::Caps => ffi::GST_EVENT_CAPS,
             Self::Segment => ffi::GST_EVENT_SEGMENT,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
             Self::StreamCollection => ffi::GST_EVENT_STREAM_COLLECTION,
             Self::Tag => ffi::GST_EVENT_TAG,
             Self::Buffersize => ffi::GST_EVENT_BUFFERSIZE,
             Self::SinkMessage => ffi::GST_EVENT_SINK_MESSAGE,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
             Self::StreamGroupDone => ffi::GST_EVENT_STREAM_GROUP_DONE,
             Self::Eos => ffi::GST_EVENT_EOS,
             Self::Toc => ffi::GST_EVENT_TOC,
@@ -911,7 +903,6 @@ impl IntoGlib for EventType {
             Self::Step => ffi::GST_EVENT_STEP,
             Self::Reconfigure => ffi::GST_EVENT_RECONFIGURE,
             Self::TocSelect => ffi::GST_EVENT_TOC_SELECT,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
             Self::SelectStreams => ffi::GST_EVENT_SELECT_STREAMS,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
             Self::InstantRateSyncTime => ffi::GST_EVENT_INSTANT_RATE_SYNC_TIME,
@@ -937,12 +928,10 @@ impl FromGlib<ffi::GstEventType> for EventType {
             ffi::GST_EVENT_STREAM_START => Self::StreamStart,
             ffi::GST_EVENT_CAPS => Self::Caps,
             ffi::GST_EVENT_SEGMENT => Self::Segment,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_EVENT_STREAM_COLLECTION => Self::StreamCollection,
             ffi::GST_EVENT_TAG => Self::Tag,
             ffi::GST_EVENT_BUFFERSIZE => Self::Buffersize,
             ffi::GST_EVENT_SINK_MESSAGE => Self::SinkMessage,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_EVENT_STREAM_GROUP_DONE => Self::StreamGroupDone,
             ffi::GST_EVENT_EOS => Self::Eos,
             ffi::GST_EVENT_TOC => Self::Toc,
@@ -958,7 +947,6 @@ impl FromGlib<ffi::GstEventType> for EventType {
             ffi::GST_EVENT_STEP => Self::Step,
             ffi::GST_EVENT_RECONFIGURE => Self::Reconfigure,
             ffi::GST_EVENT_TOC_SELECT => Self::TocSelect,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_EVENT_SELECT_STREAMS => Self::SelectStreams,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
             ffi::GST_EVENT_INSTANT_RATE_SYNC_TIME => Self::InstantRateSyncTime,
@@ -2074,8 +2062,6 @@ impl ToValue for ProgressType {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstPromiseResult")]
@@ -2092,8 +2078,6 @@ pub enum PromiseResult {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[doc(hidden)]
 impl IntoGlib for PromiseResult {
     type GlibType = ffi::GstPromiseResult;
@@ -2109,8 +2093,6 @@ impl IntoGlib for PromiseResult {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstPromiseResult> for PromiseResult {
     unsafe fn from_glib(value: ffi::GstPromiseResult) -> Self {
@@ -2125,22 +2107,16 @@ impl FromGlib<ffi::GstPromiseResult> for PromiseResult {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl StaticType for PromiseResult {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_promise_result_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl glib::value::ValueType for PromiseResult {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 unsafe impl<'a> FromValue<'a> for PromiseResult {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -2150,8 +2126,6 @@ unsafe impl<'a> FromValue<'a> for PromiseResult {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl ToValue for PromiseResult {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
@@ -2663,6 +2637,20 @@ pub enum StateChange {
     PlayingToPlaying,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl StateChange {
+    pub fn name<'a>(self) -> &'a str {
+        unsafe {
+            CStr::from_ptr(
+                ffi::gst_state_change_get_name(self.into_glib())
+                    .as_ref()
+                    .expect("gst_state_change_get_name returned NULL"),
+            )
+            .to_str()
+            .expect("gst_state_change_get_name returned an invalid string")
+        }
+    }
 }
 
 impl fmt::Display for StateChange {

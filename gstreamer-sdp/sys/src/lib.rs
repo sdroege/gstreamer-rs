@@ -641,8 +641,6 @@ extern "C" {
         info: *mut GstMIKEYEncryptInfo,
         error: *mut *mut glib::GError,
     ) -> *mut glib::GBytes;
-    #[cfg(any(feature = "v1_8_1", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_8_1")))]
     pub fn gst_mikey_message_to_caps(
         msg: *const GstMIKEYMessage,
         caps: *mut gst::GstCaps,
@@ -854,8 +852,6 @@ extern "C" {
         idx: c_int,
         format: *const c_char,
     ) -> GstSDPResult;
-    #[cfg(any(feature = "v1_8_1", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_8_1")))]
     pub fn gst_sdp_media_parse_keymgmt(
         media: *const GstSDPMedia,
         mikey: *mut *mut GstMIKEYMessage,
@@ -1015,8 +1011,6 @@ extern "C" {
         zone: *mut GstSDPZone,
     ) -> GstSDPResult;
     pub fn gst_sdp_message_medias_len(msg: *const GstSDPMessage) -> c_uint;
-    #[cfg(any(feature = "v1_8_1", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_8_1")))]
     pub fn gst_sdp_message_parse_keymgmt(
         msg: *const GstSDPMessage,
         mikey: *mut *mut GstMIKEYMessage,

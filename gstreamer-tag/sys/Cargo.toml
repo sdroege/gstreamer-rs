@@ -21,10 +21,7 @@ shell-words = "1.0.0"
 tempfile = "3"
 
 [features]
-v1_10 = []
-v1_12 = ["v1_10"]
-v1_14 = ["v1_12"]
-v1_16 = ["v1_14"]
+v1_16 = []
 v1_18 = ["v1_16"]
 v1_20 = ["v1_18"]
 v1_22 = ["v1_20"]
@@ -51,15 +48,6 @@ rust-version = "1.57"
 features = ["dox"]
 [package.metadata.system-deps.gstreamer_tag_1_0]
 name = "gstreamer-tag-1.0"
-version = "1.8"
-
-[package.metadata.system-deps.gstreamer_tag_1_0.v1_10]
-version = "1.10"
-
-[package.metadata.system-deps.gstreamer_tag_1_0.v1_12]
-version = "1.12"
-
-[package.metadata.system-deps.gstreamer_tag_1_0.v1_14]
 version = "1.14"
 
 [package.metadata.system-deps.gstreamer_tag_1_0.v1_16]

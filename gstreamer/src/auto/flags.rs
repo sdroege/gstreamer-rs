@@ -9,11 +9,7 @@ use glib::value::FromValue;
 use glib::value::ToValue;
 use glib::StaticType;
 use glib::Type;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use std::ffi::CStr;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use std::fmt;
 
 bitflags! {
@@ -21,8 +17,6 @@ bitflags! {
     pub struct BinFlags: u32 {
         #[doc(alias = "GST_BIN_FLAG_NO_RESYNC")]
         const NO_RESYNC = ffi::GST_BIN_FLAG_NO_RESYNC as u32;
-        #[cfg(any(feature = "v1_10", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
         #[doc(alias = "GST_BIN_FLAG_STREAMS_AWARE")]
         const STREAMS_AWARE = ffi::GST_BIN_FLAG_STREAMS_AWARE as u32;
     }
@@ -174,8 +168,6 @@ bitflags! {
         const TAG_MEMORY = ffi::GST_BUFFER_FLAG_TAG_MEMORY as u32;
         #[doc(alias = "GST_BUFFER_FLAG_SYNC_AFTER")]
         const SYNC_AFTER = ffi::GST_BUFFER_FLAG_SYNC_AFTER as u32;
-        #[cfg(any(feature = "v1_14", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
         #[doc(alias = "GST_BUFFER_FLAG_NON_DROPPABLE")]
         const NON_DROPPABLE = ffi::GST_BUFFER_FLAG_NON_DROPPABLE as u32;
     }
@@ -864,8 +856,6 @@ impl ToValue for MetaFlags {
 bitflags! {
     #[doc(alias = "GstObjectFlags")]
     pub struct ObjectFlags: u32 {
-        #[cfg(any(feature = "v1_10", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
         #[doc(alias = "GST_OBJECT_FLAG_MAY_BE_LEAKED")]
         const MAY_BE_LEAKED = ffi::GST_OBJECT_FLAG_MAY_BE_LEAKED as u32;
     }
@@ -1174,8 +1164,6 @@ bitflags! {
         const FATAL_ERRORS = ffi::GST_PARSE_FLAG_FATAL_ERRORS as u32;
         #[doc(alias = "GST_PARSE_FLAG_NO_SINGLE_ELEMENT_BINS")]
         const NO_SINGLE_ELEMENT_BINS = ffi::GST_PARSE_FLAG_NO_SINGLE_ELEMENT_BINS as u32;
-        #[cfg(any(feature = "v1_10", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
         #[doc(alias = "GST_PARSE_FLAG_PLACE_IN_BIN")]
         const PLACE_IN_BIN = ffi::GST_PARSE_FLAG_PLACE_IN_BIN as u32;
     }
@@ -1782,9 +1770,7 @@ impl ToValue for SerializeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
 bitflags! {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GstStackTraceFlags")]
     pub struct StackTraceFlags: u32 {
         #[doc(alias = "GST_STACK_TRACE_SHOW_FULL")]
@@ -1792,8 +1778,6 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(hidden)]
 impl IntoGlib for StackTraceFlags {
     type GlibType = ffi::GstStackTraceFlags;
@@ -1803,8 +1787,6 @@ impl IntoGlib for StackTraceFlags {
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstStackTraceFlags> for StackTraceFlags {
     unsafe fn from_glib(value: ffi::GstStackTraceFlags) -> Self {
@@ -1813,22 +1795,16 @@ impl FromGlib<ffi::GstStackTraceFlags> for StackTraceFlags {
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl StaticType for StackTraceFlags {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_stack_trace_flags_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl glib::value::ValueType for StackTraceFlags {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 unsafe impl<'a> FromValue<'a> for StackTraceFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -1838,8 +1814,6 @@ unsafe impl<'a> FromValue<'a> for StackTraceFlags {
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl ToValue for StackTraceFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
@@ -1916,9 +1890,7 @@ impl ToValue for StreamFlags {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
 bitflags! {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "GstStreamType")]
     pub struct StreamType: u32 {
         #[doc(alias = "GST_STREAM_TYPE_UNKNOWN")]
@@ -1934,8 +1906,6 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StreamType {
     pub fn name<'a>(self) -> &'a str {
         unsafe {
@@ -1950,8 +1920,6 @@ impl StreamType {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl fmt::Display for StreamType {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -1959,8 +1927,6 @@ impl fmt::Display for StreamType {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl IntoGlib for StreamType {
     type GlibType = ffi::GstStreamType;
@@ -1970,8 +1936,6 @@ impl IntoGlib for StreamType {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstStreamType> for StreamType {
     unsafe fn from_glib(value: ffi::GstStreamType) -> Self {
@@ -1980,22 +1944,16 @@ impl FromGlib<ffi::GstStreamType> for StreamType {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StaticType for StreamType {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_stream_type_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl glib::value::ValueType for StreamType {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 unsafe impl<'a> FromValue<'a> for StreamType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -2005,8 +1963,6 @@ unsafe impl<'a> FromValue<'a> for StreamType {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl ToValue for StreamType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();

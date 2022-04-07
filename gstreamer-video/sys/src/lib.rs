@@ -2552,14 +2552,8 @@ extern "C" {
     //=========================================================================
     // GstVideoFieldOrder
     //=========================================================================
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_field_order_get_type() -> GType;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_field_order_from_string(order: *const c_char) -> GstVideoFieldOrder;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_field_order_to_string(order: GstVideoFieldOrder) -> *const c_char;
 
     //=========================================================================
@@ -2633,8 +2627,6 @@ extern "C" {
     //=========================================================================
     // GstVideoOrientationMethod
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_orientation_method_get_type() -> GType;
 
     //=========================================================================
@@ -3271,14 +3263,10 @@ extern "C" {
     //=========================================================================
     // GstVideoRegionOfInterestMeta
     //=========================================================================
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_video_region_of_interest_meta_add_param(
         meta: *mut GstVideoRegionOfInterestMeta,
         s: *mut gst::GstStructure,
     );
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_video_region_of_interest_meta_get_param(
         meta: *mut GstVideoRegionOfInterestMeta,
         name: *const c_char,
@@ -3359,11 +3347,7 @@ extern "C" {
     //=========================================================================
     // GstVideoTimeCode
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_get_type() -> GType;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_new(
         fps_n: c_uint,
         fps_d: c_uint,
@@ -3375,11 +3359,7 @@ extern "C" {
         frames: c_uint,
         field_count: c_uint,
     ) -> *mut GstVideoTimeCode;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_new_empty() -> *mut GstVideoTimeCode;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_time_code_new_from_date_time(
         fps_n: c_uint,
         fps_d: c_uint,
@@ -3396,41 +3376,21 @@ extern "C" {
         flags: GstVideoTimeCodeFlags,
         field_count: c_uint,
     ) -> *mut GstVideoTimeCode;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_time_code_new_from_string(tc_str: *const c_char) -> *mut GstVideoTimeCode;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_add_frames(tc: *mut GstVideoTimeCode, frames: i64);
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_time_code_add_interval(
         tc: *const GstVideoTimeCode,
         tc_inter: *const GstVideoTimeCodeInterval,
     ) -> *mut GstVideoTimeCode;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_clear(tc: *mut GstVideoTimeCode);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_compare(
         tc1: *const GstVideoTimeCode,
         tc2: *const GstVideoTimeCode,
     ) -> c_int;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_copy(tc: *const GstVideoTimeCode) -> *mut GstVideoTimeCode;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_frames_since_daily_jam(tc: *const GstVideoTimeCode) -> u64;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_free(tc: *mut GstVideoTimeCode);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_increment_frame(tc: *mut GstVideoTimeCode);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_init(
         tc: *mut GstVideoTimeCode,
         fps_n: c_uint,
@@ -3443,8 +3403,6 @@ extern "C" {
         frames: c_uint,
         field_count: c_uint,
     );
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_time_code_init_from_date_time(
         tc: *mut GstVideoTimeCode,
         fps_n: c_uint,
@@ -3463,51 +3421,29 @@ extern "C" {
         flags: GstVideoTimeCodeFlags,
         field_count: c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_is_valid(tc: *const GstVideoTimeCode) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_nsec_since_daily_jam(tc: *const GstVideoTimeCode) -> u64;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_to_date_time(tc: *const GstVideoTimeCode) -> *mut glib::GDateTime;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_to_string(tc: *const GstVideoTimeCode) -> *mut c_char;
 
     //=========================================================================
     // GstVideoTimeCodeInterval
     //=========================================================================
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_time_code_interval_get_type() -> GType;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_time_code_interval_new(
         hours: c_uint,
         minutes: c_uint,
         seconds: c_uint,
         frames: c_uint,
     ) -> *mut GstVideoTimeCodeInterval;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_time_code_interval_new_from_string(
         tc_inter_str: *const c_char,
     ) -> *mut GstVideoTimeCodeInterval;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_time_code_interval_clear(tc: *mut GstVideoTimeCodeInterval);
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_time_code_interval_copy(
         tc: *const GstVideoTimeCodeInterval,
     ) -> *mut GstVideoTimeCodeInterval;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_time_code_interval_free(tc: *mut GstVideoTimeCodeInterval);
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_time_code_interval_init(
         tc: *mut GstVideoTimeCodeInterval,
         hours: c_uint,
@@ -3519,8 +3455,6 @@ extern "C" {
     //=========================================================================
     // GstVideoTimeCodeMeta
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
@@ -3666,8 +3600,6 @@ extern "C" {
         decoder: *mut GstVideoDecoder,
         frame: *mut GstVideoCodecFrame,
     ) -> gst::GstFlowReturn;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_video_decoder_allocate_output_frame_with_params(
         decoder: *mut GstVideoDecoder,
         frame: *mut GstVideoCodecFrame,
@@ -3852,8 +3784,6 @@ extern "C" {
         min_latency: *mut gst::GstClockTime,
         max_latency: *mut gst::GstClockTime,
     );
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_video_encoder_get_max_encode_time(
         encoder: *mut GstVideoEncoder,
         frame: *mut GstVideoCodecFrame,
@@ -3869,8 +3799,6 @@ extern "C" {
     pub fn gst_video_encoder_get_output_state(
         encoder: *mut GstVideoEncoder,
     ) -> *mut GstVideoCodecState;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_video_encoder_is_qos_enabled(encoder: *mut GstVideoEncoder) -> gboolean;
     pub fn gst_video_encoder_merge_tags(
         encoder: *mut GstVideoEncoder,
@@ -3901,8 +3829,6 @@ extern "C" {
         caps: *mut gst::GstCaps,
         reference: *mut GstVideoCodecState,
     ) -> *mut GstVideoCodecState;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_video_encoder_set_qos_enabled(encoder: *mut GstVideoEncoder, enabled: gboolean);
 
     //=========================================================================
@@ -4200,8 +4126,6 @@ extern "C" {
     //=========================================================================
     // GstVideoDirection
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_direction_get_type() -> GType;
 
     //=========================================================================
@@ -4251,14 +4175,10 @@ extern "C" {
     // GstVideoOverlay
     //=========================================================================
     pub fn gst_video_overlay_get_type() -> GType;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_video_overlay_install_properties(
         oclass: *mut gobject::GObjectClass,
         last_prop_id: c_int,
     );
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_video_overlay_set_property(
         object: *mut gobject::GObject,
         last_prop_id: c_int,
@@ -4362,14 +4282,10 @@ extern "C" {
         w: c_uint,
         h: c_uint,
     ) -> *mut GstVideoRegionOfInterestMeta;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_buffer_add_video_time_code_meta(
         buffer: *mut gst::GstBuffer,
         tc: *const GstVideoTimeCode,
     ) -> *mut GstVideoTimeCodeMeta;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_buffer_add_video_time_code_meta_full(
         buffer: *mut gst::GstBuffer,
         fps_n: c_uint,
@@ -4559,8 +4475,6 @@ extern "C" {
         x_tiles: c_int,
         y_tiles: c_int,
     ) -> c_uint;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_video_time_code_meta_api_get_type() -> GType;
 
 }

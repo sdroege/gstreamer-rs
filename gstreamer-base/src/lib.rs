@@ -38,11 +38,7 @@ mod adapter;
 pub use crate::adapter::*;
 mod flow_combiner;
 pub use crate::flow_combiner::*;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod aggregator;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod aggregator_pad;
 mod base_parse;
 mod base_sink;
@@ -62,11 +58,7 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst::prelude::*;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use crate::aggregator::AggregatorExtManual;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use crate::aggregator_pad::AggregatorPadExtManual;
     pub use crate::auto::traits::*;
     pub use crate::base_parse::BaseParseExtManual;

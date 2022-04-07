@@ -309,14 +309,8 @@ extern "C" {
         h: *mut GstHarness,
         sleep: c_ulong,
     ) -> *mut GstHarnessThread;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_harness_take_all_data(h: *mut GstHarness, size: *mut size_t) -> *mut u8;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_harness_take_all_data_as_buffer(h: *mut GstHarness) -> *mut gst::GstBuffer;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_harness_take_all_data_as_bytes(h: *mut GstHarness) -> *mut glib::GBytes;
     pub fn gst_harness_teardown(h: *mut GstHarness);
     pub fn gst_harness_try_pull(h: *mut GstHarness) -> *mut gst::GstBuffer;

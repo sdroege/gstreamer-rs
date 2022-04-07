@@ -5,8 +5,6 @@
 
 use crate::Object;
 use crate::PluginFeature;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use glib::translate::*;
 
 glib::wrapper! {
@@ -19,8 +17,6 @@ glib::wrapper! {
 }
 
 impl TracerFactory {
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_tracer_factory_get_tracer_type")]
     #[doc(alias = "get_tracer_type")]
     pub fn tracer_type(&self) -> glib::types::Type {

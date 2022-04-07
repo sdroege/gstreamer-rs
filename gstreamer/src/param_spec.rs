@@ -183,8 +183,6 @@ impl<'a> ParamSpecFractionBuilder<'a> {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     #[doc(alias = "GstParamSpecArray")]
@@ -197,15 +195,9 @@ glib::wrapper! {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 unsafe impl Send for ParamSpecArray {}
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 unsafe impl Sync for ParamSpecArray {}
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl std::ops::Deref for ParamSpecArray {
     type Target = ParamSpec;
 
@@ -214,12 +206,8 @@ impl std::ops::Deref for ParamSpecArray {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 unsafe impl glib::ParamSpecType for ParamSpecArray {}
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[doc(hidden)]
 impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecArray {
     unsafe fn from_glib_full(ptr: *mut gobject_ffi::GParamSpec) -> Self {
@@ -227,8 +215,6 @@ impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecArray {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl ParamSpecArray {
     pub fn builder(name: &str) -> ParamSpecArrayBuilder {
         assert_initialized_main_thread!();
@@ -273,8 +259,6 @@ impl ParamSpecArray {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[derive(Default)]
 #[must_use]
 pub struct ParamSpecArrayBuilder<'a> {
@@ -285,8 +269,6 @@ pub struct ParamSpecArrayBuilder<'a> {
     element_spec: Option<&'a glib::ParamSpec>,
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl<'a> ParamSpecArrayBuilder<'a> {
     fn new(name: &'a str) -> Self {
         assert_initialized_main_thread!();

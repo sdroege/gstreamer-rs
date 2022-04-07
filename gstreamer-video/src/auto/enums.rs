@@ -1314,8 +1314,6 @@ impl ToValue for VideoDitherMethod {
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoFieldOrder")]
@@ -1330,8 +1328,6 @@ pub enum VideoFieldOrder {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl VideoFieldOrder {
     #[doc(alias = "gst_video_field_order_from_string")]
     pub fn from_string(order: &str) -> VideoFieldOrder {
@@ -1344,8 +1340,6 @@ impl VideoFieldOrder {
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl fmt::Display for VideoFieldOrder {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -1353,8 +1347,6 @@ impl fmt::Display for VideoFieldOrder {
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(hidden)]
 impl IntoGlib for VideoFieldOrder {
     type GlibType = ffi::GstVideoFieldOrder;
@@ -1369,8 +1361,6 @@ impl IntoGlib for VideoFieldOrder {
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoFieldOrder> for VideoFieldOrder {
     unsafe fn from_glib(value: ffi::GstVideoFieldOrder) -> Self {
@@ -1384,22 +1374,16 @@ impl FromGlib<ffi::GstVideoFieldOrder> for VideoFieldOrder {
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl StaticType for VideoFieldOrder {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_field_order_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl glib::value::ValueType for VideoFieldOrder {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 unsafe impl<'a> FromValue<'a> for VideoFieldOrder {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -1409,8 +1393,6 @@ unsafe impl<'a> FromValue<'a> for VideoFieldOrder {
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl ToValue for VideoFieldOrder {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
@@ -1551,84 +1533,44 @@ pub enum VideoFormat {
     A44410le,
     #[doc(alias = "GST_VIDEO_FORMAT_NV61")]
     Nv61,
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "GST_VIDEO_FORMAT_P010_10BE")]
     P01010be,
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "GST_VIDEO_FORMAT_P010_10LE")]
     P01010le,
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "GST_VIDEO_FORMAT_IYU2")]
     Iyu2,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_VIDEO_FORMAT_VYUY")]
     Vyuy,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_VIDEO_FORMAT_GBRA")]
     Gbra,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_VIDEO_FORMAT_GBRA_10BE")]
     Gbra10be,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_VIDEO_FORMAT_GBRA_10LE")]
     Gbra10le,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_VIDEO_FORMAT_GBR_12BE")]
     Gbr12be,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_VIDEO_FORMAT_GBR_12LE")]
     Gbr12le,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_VIDEO_FORMAT_GBRA_12BE")]
     Gbra12be,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_VIDEO_FORMAT_GBRA_12LE")]
     Gbra12le,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_VIDEO_FORMAT_I420_12BE")]
     I42012be,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_VIDEO_FORMAT_I420_12LE")]
     I42012le,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_VIDEO_FORMAT_I422_12BE")]
     I42212be,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_VIDEO_FORMAT_I422_12LE")]
     I42212le,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_VIDEO_FORMAT_Y444_12BE")]
     Y44412be,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_VIDEO_FORMAT_Y444_12LE")]
     Y44412le,
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "GST_VIDEO_FORMAT_GRAY10_LE32")]
     Gray10Le32,
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "GST_VIDEO_FORMAT_NV12_10LE32")]
     Nv1210le32,
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "GST_VIDEO_FORMAT_NV16_10LE32")]
     Nv1610le32,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -1863,45 +1805,25 @@ impl IntoGlib for VideoFormat {
             Self::A44410be => ffi::GST_VIDEO_FORMAT_A444_10BE,
             Self::A44410le => ffi::GST_VIDEO_FORMAT_A444_10LE,
             Self::Nv61 => ffi::GST_VIDEO_FORMAT_NV61,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
             Self::P01010be => ffi::GST_VIDEO_FORMAT_P010_10BE,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
             Self::P01010le => ffi::GST_VIDEO_FORMAT_P010_10LE,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
             Self::Iyu2 => ffi::GST_VIDEO_FORMAT_IYU2,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::Vyuy => ffi::GST_VIDEO_FORMAT_VYUY,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::Gbra => ffi::GST_VIDEO_FORMAT_GBRA,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::Gbra10be => ffi::GST_VIDEO_FORMAT_GBRA_10BE,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::Gbra10le => ffi::GST_VIDEO_FORMAT_GBRA_10LE,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::Gbr12be => ffi::GST_VIDEO_FORMAT_GBR_12BE,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::Gbr12le => ffi::GST_VIDEO_FORMAT_GBR_12LE,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::Gbra12be => ffi::GST_VIDEO_FORMAT_GBRA_12BE,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::Gbra12le => ffi::GST_VIDEO_FORMAT_GBRA_12LE,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::I42012be => ffi::GST_VIDEO_FORMAT_I420_12BE,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::I42012le => ffi::GST_VIDEO_FORMAT_I420_12LE,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::I42212be => ffi::GST_VIDEO_FORMAT_I422_12BE,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::I42212le => ffi::GST_VIDEO_FORMAT_I422_12LE,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::Y44412be => ffi::GST_VIDEO_FORMAT_Y444_12BE,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::Y44412le => ffi::GST_VIDEO_FORMAT_Y444_12LE,
-            #[cfg(any(feature = "v1_14", feature = "dox"))]
             Self::Gray10Le32 => ffi::GST_VIDEO_FORMAT_GRAY10_LE32,
-            #[cfg(any(feature = "v1_14", feature = "dox"))]
             Self::Nv1210le32 => ffi::GST_VIDEO_FORMAT_NV12_10LE32,
-            #[cfg(any(feature = "v1_14", feature = "dox"))]
             Self::Nv1610le32 => ffi::GST_VIDEO_FORMAT_NV16_10LE32,
             #[cfg(any(feature = "v1_16", feature = "dox"))]
             Self::Nv1210le40 => ffi::GST_VIDEO_FORMAT_NV12_10LE40,
@@ -2038,45 +1960,25 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
             ffi::GST_VIDEO_FORMAT_A444_10BE => Self::A44410be,
             ffi::GST_VIDEO_FORMAT_A444_10LE => Self::A44410le,
             ffi::GST_VIDEO_FORMAT_NV61 => Self::Nv61,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_P010_10BE => Self::P01010be,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_P010_10LE => Self::P01010le,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_IYU2 => Self::Iyu2,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_VYUY => Self::Vyuy,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_GBRA => Self::Gbra,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_GBRA_10BE => Self::Gbra10be,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_GBRA_10LE => Self::Gbra10le,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_GBR_12BE => Self::Gbr12be,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_GBR_12LE => Self::Gbr12le,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_GBRA_12BE => Self::Gbra12be,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_GBRA_12LE => Self::Gbra12le,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_I420_12BE => Self::I42012be,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_I420_12LE => Self::I42012le,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_I422_12BE => Self::I42212be,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_I422_12LE => Self::I42212le,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_Y444_12BE => Self::Y44412be,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_Y444_12LE => Self::Y44412le,
-            #[cfg(any(feature = "v1_14", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_GRAY10_LE32 => Self::Gray10Le32,
-            #[cfg(any(feature = "v1_14", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_NV12_10LE32 => Self::Nv1210le32,
-            #[cfg(any(feature = "v1_14", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_NV16_10LE32 => Self::Nv1610le32,
             #[cfg(any(feature = "v1_16", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_NV12_10LE40 => Self::Nv1210le40,
@@ -2687,8 +2589,6 @@ impl ToValue for VideoMultiviewMode {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoOrientationMethod")]
@@ -2717,8 +2617,6 @@ pub enum VideoOrientationMethod {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl IntoGlib for VideoOrientationMethod {
     type GlibType = ffi::GstVideoOrientationMethod;
@@ -2740,8 +2638,6 @@ impl IntoGlib for VideoOrientationMethod {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoOrientationMethod> for VideoOrientationMethod {
     unsafe fn from_glib(value: ffi::GstVideoOrientationMethod) -> Self {
@@ -2762,22 +2658,16 @@ impl FromGlib<ffi::GstVideoOrientationMethod> for VideoOrientationMethod {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StaticType for VideoOrientationMethod {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_orientation_method_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl glib::value::ValueType for VideoOrientationMethod {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 unsafe impl<'a> FromValue<'a> for VideoOrientationMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -2787,8 +2677,6 @@ unsafe impl<'a> FromValue<'a> for VideoOrientationMethod {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl ToValue for VideoOrientationMethod {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();

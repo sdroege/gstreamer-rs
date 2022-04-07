@@ -23,7 +23,7 @@ fn main_loop(uri: &str) -> Result<(), Error> {
 
     let dispatcher = gst_player::PlayerGMainContextSignalDispatcher::new(None);
     let player = gst_player::Player::new(
-        None,
+        gst_player::PlayerVideoRenderer::NONE,
         Some(&dispatcher.upcast::<gst_player::PlayerSignalDispatcher>()),
     );
 

@@ -55,8 +55,6 @@ impl Bus {
         }
     }
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //#[doc(alias = "gst_bus_get_pollfd")]
     //#[doc(alias = "get_pollfd")]
     //pub fn pollfd(&self, fd: /*Ignored*/glib::PollFD) {

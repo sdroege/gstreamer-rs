@@ -66,8 +66,6 @@ pub trait RTSPAuthExt: 'static {
     #[doc(alias = "gst_rtsp_auth_add_basic")]
     fn add_basic(&self, basic: &str, token: &RTSPToken);
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_rtsp_auth_add_digest")]
     fn add_digest(&self, user: &str, pass: &str, token: &RTSPToken);
 
@@ -81,8 +79,6 @@ pub trait RTSPAuthExt: 'static {
     #[doc(alias = "get_realm")]
     fn realm(&self) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_rtsp_auth_get_supported_methods")]
     #[doc(alias = "get_supported_methods")]
     fn supported_methods(&self) -> gst_rtsp::RTSPAuthMethod;
@@ -107,8 +103,6 @@ pub trait RTSPAuthExt: 'static {
     #[doc(alias = "gst_rtsp_auth_remove_basic")]
     fn remove_basic(&self, basic: &str);
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_rtsp_auth_remove_digest")]
     fn remove_digest(&self, user: &str);
 
@@ -117,8 +111,6 @@ pub trait RTSPAuthExt: 'static {
     #[doc(alias = "gst_rtsp_auth_set_realm")]
     fn set_realm(&self, realm: &str);
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_rtsp_auth_set_supported_methods")]
     fn set_supported_methods(&self, methods: gst_rtsp::RTSPAuthMethod);
 
@@ -154,8 +146,6 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn add_digest(&self, user: &str, pass: &str, token: &RTSPToken) {
         unsafe {
             ffi::gst_rtsp_auth_add_digest(
@@ -181,8 +171,6 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         unsafe { from_glib_full(ffi::gst_rtsp_auth_get_realm(self.as_ref().to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn supported_methods(&self) -> gst_rtsp::RTSPAuthMethod {
         unsafe {
             from_glib(ffi::gst_rtsp_auth_get_supported_methods(
@@ -233,8 +221,6 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn remove_digest(&self, user: &str) {
         unsafe {
             ffi::gst_rtsp_auth_remove_digest(self.as_ref().to_glib_none().0, user.to_glib_none().0);
@@ -249,8 +235,6 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn set_supported_methods(&self, methods: gst_rtsp::RTSPAuthMethod) {
         unsafe {
             ffi::gst_rtsp_auth_set_supported_methods(

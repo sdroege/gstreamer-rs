@@ -46,8 +46,6 @@ impl PadTemplate {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_pad_template_new_with_gtype")]
     #[doc(alias = "new_with_gtype")]
     pub fn with_gtype(
@@ -111,8 +109,6 @@ impl PadTemplate {
         glib::ObjectExt::property(self, "direction")
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gtype(&self) -> glib::types::Type {
         glib::ObjectExt::property(self, "gtype")
     }

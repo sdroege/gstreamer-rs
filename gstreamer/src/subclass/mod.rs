@@ -5,14 +5,7 @@
 #[macro_use]
 mod error;
 
-#[cfg(any(feature = "v1_14"))]
 #[macro_use]
-#[path = "plugin_1_14.rs"]
-mod plugin;
-
-#[cfg(not(any(feature = "v1_14")))]
-#[macro_use]
-#[path = "plugin_1_12.rs"]
 mod plugin;
 
 mod bin;

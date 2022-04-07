@@ -836,9 +836,7 @@ impl ToValue for VideoPackFlags {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
 bitflags! {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "GstVideoTimeCodeFlags")]
     pub struct VideoTimeCodeFlags: u32 {
         #[doc(alias = "GST_VIDEO_TIME_CODE_FLAGS_DROP_FRAME")]
@@ -848,8 +846,6 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl IntoGlib for VideoTimeCodeFlags {
     type GlibType = ffi::GstVideoTimeCodeFlags;
@@ -859,8 +855,6 @@ impl IntoGlib for VideoTimeCodeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
     unsafe fn from_glib(value: ffi::GstVideoTimeCodeFlags) -> Self {

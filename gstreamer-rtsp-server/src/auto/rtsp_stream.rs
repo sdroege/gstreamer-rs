@@ -70,8 +70,6 @@ pub trait RTSPStreamExt: 'static {
     //#[doc(alias = "gst_rtsp_stream_allocate_udp_sockets")]
     //fn allocate_udp_sockets(&self, family: gio::SocketFamily, transport: /*Ignored*/&mut gst_rtsp::RTSPTransport, use_client_settings: bool) -> bool;
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //#[doc(alias = "gst_rtsp_stream_complete_stream")]
     //fn complete_stream(&self, transport: /*Ignored*/&gst_rtsp::RTSPTransport) -> bool;
 
@@ -167,8 +165,6 @@ pub trait RTSPStreamExt: 'static {
     #[doc(alias = "get_retransmission_time")]
     fn retransmission_time(&self) -> Option<gst::ClockTime>;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_rtsp_stream_get_rtcp_multicast_socket")]
     #[doc(alias = "get_rtcp_multicast_socket")]
     fn rtcp_multicast_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
@@ -248,18 +244,12 @@ pub trait RTSPStreamExt: 'static {
     #[doc(alias = "gst_rtsp_stream_is_client_side")]
     fn is_client_side(&self) -> bool;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_rtsp_stream_is_complete")]
     fn is_complete(&self) -> bool;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_rtsp_stream_is_receiver")]
     fn is_receiver(&self) -> bool;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_rtsp_stream_is_sender")]
     fn is_sender(&self) -> bool;
 
@@ -324,8 +314,6 @@ pub trait RTSPStreamExt: 'static {
         ttl: u32,
     ) -> Option<RTSPAddress>;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_rtsp_stream_seekable")]
     fn seekable(&self) -> bool;
 
@@ -495,8 +483,6 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_allocate_udp_sockets() }
     //}
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //fn complete_stream(&self, transport: /*Ignored*/&gst_rtsp::RTSPTransport) -> bool {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_complete_stream() }
     //}
@@ -657,8 +643,6 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn rtcp_multicast_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_rtcp_multicast_socket(
@@ -831,8 +815,6 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_complete(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_stream_is_complete(
@@ -841,8 +823,6 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_receiver(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_stream_is_receiver(
@@ -851,8 +831,6 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_sender(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_stream_is_sender(
@@ -999,8 +977,6 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn seekable(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_stream_seekable(

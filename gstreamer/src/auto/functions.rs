@@ -8,16 +8,12 @@ use crate::ClockTime;
 use crate::DebugGraphDetails;
 use crate::DebugLevel;
 use crate::Element;
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use crate::StackTraceFlags;
 use glib::object::IsA;
 use glib::translate::*;
 use std::mem;
 use std::ptr;
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[doc(alias = "gst_debug_add_ring_buffer_logger")]
 pub fn debug_add_ring_buffer_logger(max_size_per_thread: u32, thread_timeout: u32) {
     skip_assert_initialized!();
@@ -75,8 +71,6 @@ pub fn debug_get_default_threshold() -> DebugLevel {
     unsafe { from_glib(ffi::gst_debug_get_default_threshold()) }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(alias = "gst_debug_get_stack_trace")]
 pub fn debug_get_stack_trace(flags: StackTraceFlags) -> Result<glib::GString, glib::BoolError> {
     skip_assert_initialized!();
@@ -106,8 +100,6 @@ pub fn debug_print_stack_trace() {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[doc(alias = "gst_debug_remove_ring_buffer_logger")]
 pub fn debug_remove_ring_buffer_logger() {
     skip_assert_initialized!();
@@ -116,8 +108,6 @@ pub fn debug_remove_ring_buffer_logger() {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[doc(alias = "gst_debug_ring_buffer_logger_get_logs")]
 pub fn debug_ring_buffer_logger_get_logs() -> Vec<glib::GString> {
     skip_assert_initialized!();
@@ -172,8 +162,6 @@ pub fn debug_unset_threshold_for_name(name: &str) {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[doc(alias = "gst_get_main_executable_path")]
 #[doc(alias = "get_main_executable_path")]
 pub fn main_executable_path() -> Result<glib::GString, glib::BoolError> {

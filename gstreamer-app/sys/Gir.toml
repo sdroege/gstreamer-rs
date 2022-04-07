@@ -2,7 +2,7 @@
 girs_directories = ["../../gir-files", "../../gst-gir-files"]
 library = "GstApp"
 version = "1.0"
-min_cfg_version = "1.8"
+min_cfg_version = "1.14"
 work_mode = "sys"
 
 external_libraries = [
@@ -13,9 +13,6 @@ extra_versions = [
     "1.20",
     "1.18",
     "1.16",
-    "1.14",
-    "1.12",
-    "1.10",
 ]
 
 [external_libraries]

@@ -10,8 +10,6 @@ use crate::PbUtilsCapsDescriptionFlags;
 use glib::translate::*;
 use std::mem;
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(alias = "gst_codec_utils_aac_get_channels")]
 pub fn codec_utils_aac_get_channels(audio_config: &[u8]) -> u32 {
     assert_initialized_main_thread!();
@@ -51,8 +49,6 @@ pub fn codec_utils_aac_get_profile(audio_config: &[u8]) -> Result<glib::GString,
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(alias = "gst_codec_utils_aac_get_sample_rate")]
 pub fn codec_utils_aac_get_sample_rate(audio_config: &[u8]) -> u32 {
     assert_initialized_main_thread!();

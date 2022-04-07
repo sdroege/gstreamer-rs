@@ -3,25 +3,13 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod audio_aggregator;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::audio_aggregator::AudioAggregator;
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod audio_aggregator_convert_pad;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::audio_aggregator_convert_pad::AudioAggregatorConvertPad;
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod audio_aggregator_pad;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::audio_aggregator_pad::AudioAggregatorPad;
 
 mod audio_base_sink;
@@ -45,11 +33,7 @@ pub use self::audio_src::AudioSrc;
 mod stream_volume;
 pub use self::stream_volume::StreamVolume;
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod audio_stream_align;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::audio_stream_align::AudioStreamAlign;
 
 mod enums;
@@ -58,8 +42,6 @@ pub use self::enums::AudioDitherMethod;
 pub use self::enums::AudioFormat;
 pub use self::enums::AudioLayout;
 pub use self::enums::AudioNoiseShapingMethod;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub use self::enums::AudioResamplerMethod;
 pub use self::enums::AudioRingBufferFormatType;
 pub use self::enums::StreamVolumeFormat;
@@ -71,14 +53,8 @@ pub use self::flags::AudioPackFlags;
 
 #[doc(hidden)]
 pub mod traits {
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use super::audio_aggregator::AudioAggregatorExt;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use super::audio_aggregator_convert_pad::AudioAggregatorConvertPadExt;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use super::audio_aggregator_pad::AudioAggregatorPadExt;
     pub use super::audio_base_sink::AudioBaseSinkExt;
     pub use super::audio_base_src::AudioBaseSrcExt;

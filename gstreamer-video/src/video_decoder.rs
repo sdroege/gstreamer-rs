@@ -28,8 +28,7 @@ extern "C" {
 }
 
 pub trait VideoDecoderExtManual: 'static {
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_video_decoder_allocate_output_frame")]
     fn allocate_output_frame(
         &self,
         frame: &mut VideoCodecFrame,
@@ -113,8 +112,7 @@ pub trait VideoDecoderExtManual: 'static {
 }
 
 impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_video_decoder_allocate_output_frame")]
     fn allocate_output_frame(
         &self,
         frame: &mut VideoCodecFrame,

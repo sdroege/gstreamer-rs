@@ -6,13 +6,9 @@ use std::cmp;
 use std::fmt;
 use std::mem;
 use std::ptr;
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use std::str;
 
 use crate::VideoTimeCodeFlags;
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use crate::VideoTimeCodeInterval;
 
 #[doc(alias = "GstVideoTimeCode")]
@@ -196,8 +192,6 @@ impl ValidVideoTimeCode {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_video_time_code_add_interval")]
     pub fn add_interval(
         &self,
@@ -497,8 +491,6 @@ macro_rules! generic_impl {
 generic_impl!(VideoTimeCode);
 generic_impl!(ValidVideoTimeCode);
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl str::FromStr for VideoTimeCode {
     type Err = glib::error::BoolError;
 

@@ -50,8 +50,6 @@ pub trait RTSPMediaExt: 'static {
     #[doc(alias = "gst_rtsp_media_collect_streams")]
     fn collect_streams(&self);
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //#[doc(alias = "gst_rtsp_media_complete_pipeline")]
     //fn complete_pipeline(&self, transports: /*Ignored*/&[gst_rtsp::RTSPTransport]) -> bool;
 
@@ -224,8 +222,6 @@ pub trait RTSPMediaExt: 'static {
     //#[doc(alias = "gst_rtsp_media_seek_trickmode")]
     //fn seek_trickmode(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags, rate: f64, trickmode_interval: impl Into<Option<gst::ClockTime>>) -> bool;
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //#[doc(alias = "gst_rtsp_media_seekable")]
     //fn seekable(&self) -> /*Ignored*/gst::ClockTimeDiff;
 
@@ -467,8 +463,6 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //fn complete_pipeline(&self, transports: /*Ignored*/&[gst_rtsp::RTSPTransport]) -> bool {
     //    unsafe { TODO: call ffi:gst_rtsp_media_complete_pipeline() }
     //}
@@ -797,8 +791,6 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_media_seek_trickmode() }
     //}
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //fn seekable(&self) -> /*Ignored*/gst::ClockTimeDiff {
     //    unsafe { TODO: call ffi:gst_rtsp_media_seekable() }
     //}

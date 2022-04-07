@@ -2,7 +2,7 @@
 girs_directories = ["../gir-files", "../gst-gir-files"]
 library = "Gst"
 version = "1.0"
-min_cfg_version = "1.8"
+min_cfg_version = "1.14"
 work_mode = "normal"
 concurrency = "send+sync"
 generate_safety_asserts = true
@@ -41,6 +41,7 @@ generate = [
     "Gst.SchedulingFlags",
     "Gst.SeekType",
     "Gst.SerializeFlags",
+    "Gst.StateChange",
     "Gst.StreamError",
     "Gst.StreamStatusType",
     "Gst.StreamType",
@@ -544,11 +545,6 @@ manual_traits = ["BufferPoolExtManual"]
     manual = true
 
     [[object.function]]
-    name = "new"
-    # Work-around for 1.14 switch from transfer-floating to transfer-full
-    manual = true
-
-    [[object.function]]
     name = "set_active"
         [object.function.return]
         bool_return_is_error = "Failed to activate buffer pool"
@@ -979,11 +975,6 @@ name = "Gst.DeviceMonitor"
 status = "generate"
 manual_traits = ["DeviceMonitorExtManual"]
     [[object.function]]
-    name = "new"
-    # Work-around for 1.14 switch from transfer-floating to transfer-full
-    manual = true
-
-    [[object.function]]
     name = "add_filter"
     # Return Option<DeviceMonitorFilterId>
     manual = true
@@ -1373,15 +1364,6 @@ status = "generate"
     [[object.derive]]
     name = "Debug, PartialEq, Eq, Hash"
     [[object.member]]
-    name = "select_streams"
-    version = "1.10"
-    [[object.member]]
-    name = "stream_collection"
-    version = "1.10"
-    [[object.member]]
-    name = "stream_group_done"
-    version = "1.10"
-    [[object.member]]
     name = "instant_rate_change"
     version = "1.18"
     [[object.member]]
@@ -1546,9 +1528,6 @@ trait_name = "GstObjectExt"
 [[object]]
 name = "Gst.ObjectFlags"
 status = "generate"
-    [[object.member]]
-    name = "may_be_leaked"
-    version = "1.10"
     [[object.member]]
     name = "last"
     ignore = true
@@ -1830,9 +1809,6 @@ ref_mode = "ref-mut"
 name = "Gst.ParseFlags"
 status = "generate"
     [[object.member]]
-    name = "place_in_bin"
-    version = "1.10"
-    [[object.member]]
     name = "none"
     ignore = true
 
@@ -2093,16 +2069,6 @@ status = "generate"
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
 [[object]]
-name = "Gst.StateChange"
-status = "generate"
-    [[object.function]]
-    name = "get_name"
-    # Manual function for < v1_14:
-    manual = true
-    # Always generate the trait, without version constraint:
-    version = "1.8"
-
-[[object]]
 name = "Gst.StateChangeReturn"
 status = "generate"
 must_use = true
@@ -2115,30 +2081,6 @@ must_use = true
 name = "Gst.Stream"
 status = "generate"
 final_type = true
-    [[object.function]]
-    name = "new"
-    # Work-around for 1.14 switch from transfer-floating to transfer-full
-    manual = true
-
-    [[object.property]]
-    name = "caps"
-    version = "1.10"
-
-    [[object.property]]
-    name = "stream-flags"
-    version = "1.10"
-
-    [[object.property]]
-    name = "stream-id"
-    version = "1.10"
-
-    [[object.property]]
-    name = "stream-type"
-    version = "1.10"
-
-    [[object.property]]
-    name = "tags"
-    version = "1.10"
 
 [[object]]
 name = "Gst.StreamCollection"
@@ -2146,7 +2088,7 @@ status = "generate"
 final_type = true
     [[object.function]]
     name = "new"
-    # Work-around for 1.14 switch from transfer-floating to transfer-full
+    # Manual builder pattern
     manual = true
 
     [[object.function]]
@@ -2156,7 +2098,6 @@ final_type = true
 
     [[object.property]]
     name = "upstream-id"
-    version = "1.10"
     generate = ["get"]
 
 [[object]]

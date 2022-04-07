@@ -3,8 +3,6 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use crate::VideoCodecFrame;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -36,8 +34,6 @@ pub trait VideoEncoderExt: 'static {
     #[doc(alias = "gst_video_encoder_allocate_output_buffer")]
     fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError>;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_video_encoder_get_max_encode_time")]
     #[doc(alias = "get_max_encode_time")]
     fn max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
@@ -48,8 +44,6 @@ pub trait VideoEncoderExt: 'static {
     #[doc(alias = "get_min_force_key_unit_interval")]
     fn min_force_key_unit_interval(&self) -> Option<gst::ClockTime>;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_video_encoder_is_qos_enabled")]
     fn is_qos_enabled(&self) -> bool;
 
@@ -70,8 +64,6 @@ pub trait VideoEncoderExt: 'static {
     #[doc(alias = "gst_video_encoder_set_min_pts")]
     fn set_min_pts(&self, min_pts: impl Into<Option<gst::ClockTime>>);
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_video_encoder_set_qos_enabled")]
     fn set_qos_enabled(&self, enabled: bool);
 
@@ -102,8 +94,6 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff {
         unsafe {
             ffi::gst_video_encoder_get_max_encode_time(
@@ -123,8 +113,6 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_qos_enabled(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_video_encoder_is_qos_enabled(
@@ -182,8 +170,6 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn set_qos_enabled(&self, enabled: bool) {
         unsafe {
             ffi::gst_video_encoder_set_qos_enabled(

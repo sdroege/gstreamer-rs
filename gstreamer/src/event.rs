@@ -16,8 +16,6 @@ use std::ptr;
 use glib::translate::*;
 use glib::value::ToSendValue;
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib::translate::FromGlibPtrContainer;
 
 use crate::EventType;
@@ -230,12 +228,10 @@ impl EventRef {
                 ffi::GST_EVENT_STREAM_START => StreamStart::view(self),
                 ffi::GST_EVENT_CAPS => Caps::view(self),
                 ffi::GST_EVENT_SEGMENT => Segment::view(self),
-                #[cfg(any(feature = "v1_10", feature = "dox"))]
                 ffi::GST_EVENT_STREAM_COLLECTION => StreamCollection::view(self),
                 ffi::GST_EVENT_TAG => Tag::view(self),
                 ffi::GST_EVENT_BUFFERSIZE => Buffersize::view(self),
                 ffi::GST_EVENT_SINK_MESSAGE => SinkMessage::view(self),
-                #[cfg(any(feature = "v1_10", feature = "dox"))]
                 ffi::GST_EVENT_STREAM_GROUP_DONE => StreamGroupDone::view(self),
                 ffi::GST_EVENT_EOS => Eos::view(self),
                 ffi::GST_EVENT_TOC => Toc::view(self),
@@ -251,7 +247,6 @@ impl EventRef {
                 ffi::GST_EVENT_STEP => Step::view(self),
                 ffi::GST_EVENT_RECONFIGURE => Reconfigure::view(self),
                 ffi::GST_EVENT_TOC_SELECT => TocSelect::view(self),
-                #[cfg(any(feature = "v1_10", feature = "dox"))]
                 ffi::GST_EVENT_SELECT_STREAMS => SelectStreams::view(self),
                 #[cfg(any(feature = "v1_18", feature = "dox"))]
                 ffi::GST_EVENT_INSTANT_RATE_SYNC_TIME => InstantRateSyncTime::view(self),
@@ -298,14 +293,10 @@ pub enum EventView<'a> {
     StreamStart(&'a StreamStart),
     Caps(&'a Caps),
     Segment(&'a Segment),
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     StreamCollection(&'a StreamCollection),
     Tag(&'a Tag),
     Buffersize(&'a Buffersize),
     SinkMessage(&'a SinkMessage),
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     StreamGroupDone(&'a StreamGroupDone),
     Eos(&'a Eos),
     Toc(&'a Toc),
@@ -322,8 +313,6 @@ pub enum EventView<'a> {
     Step(&'a Step),
     Reconfigure(&'a Reconfigure),
     TocSelect(&'a TocSelect),
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     SelectStreams(&'a SelectStreams),
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -512,8 +501,6 @@ impl StreamStart {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_stream")]
     #[doc(alias = "gst_event_parse_stream")]
     pub fn stream(&self) -> Option<crate::Stream> {
@@ -589,11 +576,7 @@ impl Segment {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 declare_concrete_event!(@sticky StreamCollection, T);
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StreamCollection<Event> {
     #[doc(alias = "gst_event_new_stream_collection")]
     #[allow(clippy::new_ret_no_self)]
@@ -608,8 +591,6 @@ impl StreamCollection<Event> {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StreamCollection {
     #[doc(alias = "get_stream_collection")]
     #[doc(alias = "gst_event_parse_stream_collection")]
@@ -733,11 +714,7 @@ impl SinkMessage {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 declare_concrete_event!(@sticky StreamGroupDone, T);
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StreamGroupDone<Event> {
     #[doc(alias = "gst_event_new_stream_group_done")]
     #[allow(clippy::new_ret_no_self)]
@@ -752,8 +729,6 @@ impl StreamGroupDone<Event> {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StreamGroupDone {
     #[doc(alias = "get_group_id")]
     #[doc(alias = "gst_event_parse_stream_group_done")]
@@ -1289,11 +1264,7 @@ impl TocSelect {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 declare_concrete_event!(SelectStreams, T);
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl SelectStreams<Event> {
     #[doc(alias = "gst_event_new_select_streams")]
     #[allow(clippy::new_ret_no_self)]
@@ -1308,8 +1279,6 @@ impl SelectStreams<Event> {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl SelectStreams {
     #[doc(alias = "get_streams")]
     #[doc(alias = "gst_event_parse_select_streams")]
@@ -1613,8 +1582,6 @@ pub struct StreamStartBuilder<'a> {
     stream_id: &'a str,
     flags: Option<crate::StreamFlags>,
     group_id: Option<GroupId>,
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     stream: Option<crate::Stream>,
 }
 
@@ -1626,8 +1593,6 @@ impl<'a> StreamStartBuilder<'a> {
             stream_id,
             flags: None,
             group_id: None,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
-            #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
             stream: None,
         }
     }
@@ -1646,8 +1611,6 @@ impl<'a> StreamStartBuilder<'a> {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn stream(self, stream: crate::Stream) -> Self {
         Self {
             stream: Some(stream),
@@ -1664,7 +1627,6 @@ impl<'a> StreamStartBuilder<'a> {
             ffi::gst_event_set_group_id(ev, group_id.0.get());
         }
 
-        #[cfg(any(feature = "v1_10", feature = "dox"))]
         if let Some(ref stream) = s.stream {
             ffi::gst_event_set_stream(ev, stream.to_glib_none().0);
         }
@@ -1711,16 +1673,12 @@ impl<'a> SegmentBuilder<'a> {
     });
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[must_use = "The builder must be built to be used"]
 pub struct StreamCollectionBuilder<'a> {
     builder: EventBuilder<'a>,
     stream_collection: &'a crate::StreamCollection,
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamCollectionBuilder<'a> {
     fn new(stream_collection: &'a crate::StreamCollection) -> Self {
         skip_assert_initialized!();
@@ -1843,16 +1801,12 @@ impl<'a> SinkMessageBuilder<'a> {
     });
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[must_use = "The builder must be built to be used"]
 pub struct StreamGroupDoneBuilder<'a> {
     builder: EventBuilder<'a>,
     group_id: GroupId,
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamGroupDoneBuilder<'a> {
     fn new(group_id: GroupId) -> Self {
         skip_assert_initialized!();
@@ -2238,16 +2192,12 @@ impl<'a> TocSelectBuilder<'a> {
     });
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[must_use = "The builder must be built to be used"]
 pub struct SelectStreamsBuilder<'a> {
     builder: EventBuilder<'a>,
     streams: &'a [&'a str],
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> SelectStreamsBuilder<'a> {
     fn new(streams: &'a [&'a str]) -> Self {
         skip_assert_initialized!();

@@ -63,8 +63,6 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_app_src_get_duration")]
     #[doc(alias = "get_duration")]
     pub fn duration(&self) -> Option<gst::ClockTime> {
@@ -135,8 +133,6 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_app_src_set_duration")]
     pub fn set_duration(&self, duration: impl Into<Option<gst::ClockTime>>) {
         unsafe {
@@ -402,8 +398,6 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "duration")]
     pub fn connect_duration_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,

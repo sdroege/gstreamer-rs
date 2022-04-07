@@ -84,8 +84,8 @@ Make sure the version of these libraries is >= 1.14.
 #### GStreamer Binaries
 
 You need to download the *two* `.pkg` files from the GStreamer website and
-install them, e.g. `gstreamer-1.0-1.12.3-x86_64.pkg` and
-`gstreamer-1.0-devel-1.12.3-x86_64.pkg`.
+install them, e.g. `gstreamer-1.0-1.14.0-x86_64.pkg` and
+`gstreamer-1.0-devel-1.14.0-x86_64.pkg`.
 
 After installation, you also need to install `pkg-config` (e.g. via Homebrew)
 and set the `PKG_CONFIG_PATH` environment variable

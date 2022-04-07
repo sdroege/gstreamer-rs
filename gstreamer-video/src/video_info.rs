@@ -245,9 +245,8 @@ pub struct VideoInfo(pub(crate) ffi::GstVideoInfo);
 
 impl fmt::Debug for VideoInfo {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let mut b = f.debug_struct("VideoInfo");
-
-        b.field("format", &self.format())
+        f.debug_struct("VideoInfo")
+            .field("format", &self.format())
             .field("format-info", &self.format_info())
             .field("width", &self.width())
             .field("height", &self.height())
@@ -262,12 +261,9 @@ impl fmt::Debug for VideoInfo {
             .field("offset", &self.offset())
             .field("stride", &self.stride())
             .field("multiview_mode", &self.multiview_mode())
-            .field("multiview_flags", &self.multiview_flags());
-
-        #[cfg(any(feature = "v1_12", feature = "dox"))]
-        b.field("field_order", &self.field_order());
-
-        b.finish()
+            .field("multiview_flags", &self.multiview_flags())
+            .field("field_order", &self.field_order())
+            .finish()
     }
 }
 
@@ -289,8 +285,6 @@ pub struct VideoInfoBuilder<'a> {
     stride: Option<&'a [i32]>,
     multiview_mode: Option<crate::VideoMultiviewMode>,
     multiview_flags: Option<crate::VideoMultiviewFlags>,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     field_order: Option<crate::VideoFieldOrder>,
 }
 
@@ -319,7 +313,7 @@ impl<'a> VideoInfoBuilder<'a> {
                             )
                         })
                     };
-                } else if #[cfg(feature = "v1_12")] {
+                } else {
                     let res: bool = {
                         let res = from_glib(ffi::gst_video_info_set_format(
                             info.as_mut_ptr(),
@@ -327,37 +321,6 @@ impl<'a> VideoInfoBuilder<'a> {
                             self.width,
                             self.height,
                         ));
-
-                        if res {
-                            if let Some(interlace_mode) = self.interlace_mode {
-                                let info = info.as_mut_ptr();
-                                (*info).interlace_mode = interlace_mode.into_glib();
-                            }
-                        }
-
-                        res
-                    };
-                } else {
-                    let res: bool = {
-                        // The bool return value is new with 1.11.1, see
-                        // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/commit/17cdd369e6f2f73329d27dfceb50011f40f1ceb0
-                        let res = if gst::version() < (1, 11, 1, 0) {
-                            ffi::gst_video_info_set_format(
-                                info.as_mut_ptr(),
-                                self.format.into_glib(),
-                                self.width,
-                                self.height,
-                            );
-
-                            true
-                        } else {
-                            from_glib(ffi::gst_video_info_set_format(
-                                info.as_mut_ptr(),
-                                self.format.into_glib(),
-                                self.width,
-                                self.height,
-                            ))
-                        };
 
                         if res {
                             if let Some(interlace_mode) = self.interlace_mode {
@@ -439,7 +402,6 @@ impl<'a> VideoInfoBuilder<'a> {
                 ptr::write(ptr.offset(1), multiview_flags.into_glib());
             }
 
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             if let Some(field_order) = self.field_order {
                 let ptr = &mut info.ABI._gst_reserved as *mut _ as *mut i32;
                 ptr::write(ptr.offset(2), field_order.into_glib());
@@ -533,8 +495,6 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn field_order(self, field_order: crate::VideoFieldOrder) -> Self {
         Self {
             field_order: Some(field_order),
@@ -551,45 +511,23 @@ impl VideoInfo {
     ) -> VideoInfoBuilder<'a> {
         assert_initialized_main_thread!();
 
-        cfg_if::cfg_if! {
-            if #[cfg(any(feature = "v1_12", feature = "dox"))] {
-                VideoInfoBuilder {
-                    format,
-                    width,
-                    height,
-                    interlace_mode: None,
-                    flags: None,
-                    size: None,
-                    views: None,
-                    chroma_site: None,
-                    colorimetry: None,
-                    par: None,
-                    fps: None,
-                    offset: None,
-                    stride: None,
-                    multiview_mode: None,
-                    multiview_flags: None,
-                    field_order: None,
-                }
-            } else {
-                VideoInfoBuilder {
-                    format,
-                    width,
-                    height,
-                    interlace_mode: None,
-                    flags: None,
-                    size: None,
-                    views: None,
-                    chroma_site: None,
-                    colorimetry: None,
-                    par: None,
-                    fps: None,
-                    offset: None,
-                    stride: None,
-                    multiview_mode: None,
-                    multiview_flags: None,
-                }
-            }
+        VideoInfoBuilder {
+            format,
+            width,
+            height,
+            interlace_mode: None,
+            flags: None,
+            size: None,
+            views: None,
+            chroma_site: None,
+            colorimetry: None,
+            par: None,
+            fps: None,
+            offset: None,
+            stride: None,
+            multiview_mode: None,
+            multiview_flags: None,
+            field_order: None,
         }
     }
 
@@ -756,8 +694,6 @@ impl VideoInfo {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn field_order(&self) -> crate::VideoFieldOrder {
         unsafe {
             let ptr = &self.0.ABI._gst_reserved as *const _ as *const i32;
@@ -846,30 +782,11 @@ impl VideoInfo {
 
     #[doc(alias = "gst_video_info_align")]
     pub fn align(&mut self, align: &mut crate::VideoAlignment) -> Result<(), glib::BoolError> {
-        cfg_if::cfg_if! {
-            if #[cfg(feature = "v1_12")] {
-                unsafe {
-                    glib::result_from_gboolean!(ffi::gst_video_info_align(
-                        &mut self.0,
-                        &mut align.0,
-                    ), "Failed to align VideoInfo")
-                }
-            } else {
-                unsafe {
-                    // The bool return value is new with 1.11.1, see
-                    // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/commit/17cdd369e6f2f73329d27dfceb50011f40f1ceb0
-                    if gst::version() < (1, 11, 1, 0) {
-                        ffi::gst_video_info_align(&mut self.0, &mut align.0);
-
-                        Ok(())
-                    } else {
-                        glib::result_from_gboolean!(ffi::gst_video_info_align(
-                            &mut self.0,
-                            &mut align.0,
-                        ), "Failed to align VideoInfo")
-                    }
-                }
-            }
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_video_info_align(&mut self.0, &mut align.0,),
+                "Failed to align VideoInfo"
+            )
         }
     }
 
@@ -1008,8 +925,6 @@ impl glib::translate::FromGlibPtrFull<*mut ffi::GstVideoInfo> for VideoInfo {
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl crate::VideoFieldOrder {
     #[doc(alias = "gst_video_field_order_to_string")]
     pub fn to_str<'a>(self) -> &'a str {
@@ -1030,8 +945,6 @@ impl crate::VideoFieldOrder {
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl str::FromStr for crate::VideoFieldOrder {
     type Err = glib::error::BoolError;
 
@@ -1136,8 +1049,6 @@ mod tests {
         assert!(info == info2);
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[test]
     fn test_video_align() {
         gst::init().unwrap();
@@ -1167,8 +1078,6 @@ mod tests {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[test]
     fn test_display() {
         gst::init().unwrap();

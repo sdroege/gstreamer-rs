@@ -3,6 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use glib::object::Cast;
 use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
@@ -21,6 +22,15 @@ glib::wrapper! {
 }
 
 impl PtpClock {
+    #[doc(alias = "gst_ptp_clock_new")]
+    pub fn new(name: &str, domain: u32) -> PtpClock {
+        assert_initialized_main_thread!();
+        unsafe {
+            gst::Clock::from_glib_full(ffi::gst_ptp_clock_new(name.to_glib_none().0, domain))
+                .unsafe_cast()
+        }
+    }
+
     pub fn domain(&self) -> u32 {
         glib::ObjectExt::property(self, "domain")
     }

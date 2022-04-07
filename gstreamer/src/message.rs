@@ -110,14 +110,9 @@ impl MessageRef {
                 ffi::GST_MESSAGE_HAVE_CONTEXT => HaveContext::view(self),
                 ffi::GST_MESSAGE_DEVICE_ADDED => DeviceAdded::view(self),
                 ffi::GST_MESSAGE_DEVICE_REMOVED => DeviceRemoved::view(self),
-                #[cfg(any(feature = "v1_10", feature = "dox"))]
-                #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
                 ffi::GST_MESSAGE_REDIRECT => Redirect::view(self),
-                #[cfg(any(feature = "v1_10", feature = "dox"))]
                 ffi::GST_MESSAGE_PROPERTY_NOTIFY => PropertyNotify::view(self),
-                #[cfg(any(feature = "v1_10", feature = "dox"))]
                 ffi::GST_MESSAGE_STREAM_COLLECTION => StreamCollection::view(self),
-                #[cfg(any(feature = "v1_10", feature = "dox"))]
                 ffi::GST_MESSAGE_STREAMS_SELECTED => StreamsSelected::view(self),
                 #[cfg(any(feature = "v1_16", feature = "dox"))]
                 ffi::GST_MESSAGE_DEVICE_CHANGED => DeviceChanged::view(self),
@@ -210,17 +205,9 @@ pub enum MessageView<'a> {
     HaveContext(&'a HaveContext),
     DeviceAdded(&'a DeviceAdded),
     DeviceRemoved(&'a DeviceRemoved),
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     PropertyNotify(&'a PropertyNotify),
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     StreamCollection(&'a StreamCollection),
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     StreamsSelected(&'a StreamsSelected),
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     Redirect(&'a Redirect),
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -350,8 +337,6 @@ impl Error {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_details")]
     #[doc(alias = "gst_message_parse_error_details")]
     pub fn details(&self) -> Option<&StructureRef> {
@@ -407,8 +392,6 @@ impl Warning {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_details")]
     #[doc(alias = "gst_message_parse_warning_details")]
     pub fn details(&self) -> Option<&StructureRef> {
@@ -464,8 +447,6 @@ impl Info {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_details")]
     #[doc(alias = "gst_message_parse_info_details")]
     pub fn details(&self) -> Option<&StructureRef> {
@@ -1515,11 +1496,7 @@ impl DeviceRemoved {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 declare_concrete_message!(PropertyNotify, T);
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl PropertyNotify {
     #[doc(alias = "gst_message_new_property_notify")]
     #[allow(clippy::new_ret_no_self)]
@@ -1560,11 +1537,7 @@ impl PropertyNotify {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 declare_concrete_message!(StreamCollection, T);
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StreamCollection {
     #[doc(alias = "gst_message_new_stream_collection")]
     #[allow(clippy::new_ret_no_self)]
@@ -1591,11 +1564,7 @@ impl StreamCollection {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 declare_concrete_message!(StreamsSelected, T);
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StreamsSelected {
     #[doc(alias = "gst_message_new_streams_selected")]
     #[allow(clippy::new_ret_no_self)]
@@ -1640,11 +1609,7 @@ impl StreamsSelected {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 declare_concrete_message!(Redirect, T);
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl Redirect {
     #[doc(alias = "gst_message_new_redirect")]
     #[allow(clippy::new_ret_no_self)]
@@ -1799,8 +1764,6 @@ impl<'a> MessageBuilder<'a> {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn other_fields(self, other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))]) -> Self {
         Self {
             other_fields: self
@@ -1833,8 +1796,6 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
-        #[cfg(any(feature = "v1_14", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
         #[allow(clippy::needless_update)]
         pub fn other_fields(
             self,
@@ -1856,7 +1817,6 @@ macro_rules! message_builder_generic_impl {
                     ffi::gst_message_set_seqnum(msg, seqnum.0.get());
                 }
 
-                #[cfg(any(feature = "v1_14", feature = "dox"))]
                 if !self.builder.other_fields.is_empty() {
                     let structure = ffi::gst_message_writable_structure(msg);
 
@@ -1927,8 +1887,6 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
@@ -1937,31 +1895,19 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        cfg_if::cfg_if! {
-            if #[cfg(any(feature = "v1_10", feature = "dox"))] {
-                let details = match s.details.take() {
-                    None => ptr::null_mut(),
-                    Some(details) => details.into_ptr(),
-                };
+        let details = match s.details.take() {
+            None => ptr::null_mut(),
+            Some(details) => details.into_ptr(),
+        };
 
-                let error = glib::Error::new(s.error, s.message);
+        let error = glib::Error::new(s.error, s.message);
 
-                ffi::gst_message_new_error_with_details(
-                    src,
-                    mut_override(error.to_glib_none().0),
-                    s.debug.to_glib_none().0,
-                    details,
-                )
-            } else {
-                let error = glib::Error::new(s.error, s.message);
-
-                ffi::gst_message_new_error(
-                    src,
-                    mut_override(error.to_glib_none().0),
-                    s.debug.to_glib_none().0,
-                )
-            }
-        }
+        ffi::gst_message_new_error_with_details(
+            src,
+            mut_override(error.to_glib_none().0),
+            s.debug.to_glib_none().0,
+            details,
+        )
     });
 }
 
@@ -1994,8 +1940,6 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
@@ -2004,31 +1948,19 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        cfg_if::cfg_if! {
-            if #[cfg(any(feature = "v1_10", feature = "dox"))] {
-                let details = match s.details.take() {
-                    None => ptr::null_mut(),
-                    Some(details) => details.into_ptr(),
-                };
+        let details = match s.details.take() {
+            None => ptr::null_mut(),
+            Some(details) => details.into_ptr(),
+        };
 
-                let error = glib::Error::new(s.error, s.message);
+        let error = glib::Error::new(s.error, s.message);
 
-                ffi::gst_message_new_warning_with_details(
-                    src,
-                    mut_override(error.to_glib_none().0),
-                    s.debug.to_glib_none().0,
-                    details,
-                )
-            } else {
-                let error = glib::Error::new(s.error, s.message);
-
-                ffi::gst_message_new_warning(
-                    src,
-                    mut_override(error.to_glib_none().0),
-                    s.debug.to_glib_none().0,
-                )
-            }
-        }
+        ffi::gst_message_new_warning_with_details(
+            src,
+            mut_override(error.to_glib_none().0),
+            s.debug.to_glib_none().0,
+            details,
+        )
     });
 }
 
@@ -2061,8 +1993,6 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
@@ -2071,31 +2001,19 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        cfg_if::cfg_if! {
-            if #[cfg(any(feature = "v1_10", feature = "dox"))] {
-                let details = match s.details.take() {
-                    None => ptr::null_mut(),
-                    Some(details) => details.into_ptr(),
-                };
+        let details = match s.details.take() {
+            None => ptr::null_mut(),
+            Some(details) => details.into_ptr(),
+        };
 
-                let error = glib::Error::new(s.error, s.message);
+        let error = glib::Error::new(s.error, s.message);
 
-                ffi::gst_message_new_info_with_details(
-                    src,
-                    mut_override(error.to_glib_none().0),
-                    s.debug.to_glib_none().0,
-                    details,
-                )
-            } else {
-                let error = glib::Error::new(s.error, s.message);
-
-                ffi::gst_message_new_info(
-                    src,
-                    mut_override(error.to_glib_none().0),
-                    s.debug.to_glib_none().0,
-                )
-            }
-        }
+        ffi::gst_message_new_info_with_details(
+            src,
+            mut_override(error.to_glib_none().0),
+            s.debug.to_glib_none().0,
+            details,
+        )
     });
 }
 
@@ -2884,8 +2802,6 @@ impl<'a> DeviceRemovedBuilder<'a> {
     ));
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[must_use = "The builder must be built to be used"]
 pub struct PropertyNotifyBuilder<'a> {
     builder: MessageBuilder<'a>,
@@ -2893,8 +2809,6 @@ pub struct PropertyNotifyBuilder<'a> {
     value: Option<&'a (dyn glib::ToSendValue + Sync)>,
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> PropertyNotifyBuilder<'a> {
     fn new(property_name: &'a str) -> Self {
         skip_assert_initialized!();
@@ -2926,16 +2840,12 @@ impl<'a> PropertyNotifyBuilder<'a> {
     });
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[must_use = "The builder must be built to be used"]
 pub struct StreamCollectionBuilder<'a> {
     builder: MessageBuilder<'a>,
     collection: &'a crate::StreamCollection,
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamCollectionBuilder<'a> {
     fn new(collection: &'a crate::StreamCollection) -> Self {
         skip_assert_initialized!();
@@ -2950,8 +2860,6 @@ impl<'a> StreamCollectionBuilder<'a> {
     });
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[must_use = "The builder must be built to be used"]
 pub struct StreamsSelectedBuilder<'a> {
     builder: MessageBuilder<'a>,
@@ -2959,8 +2867,6 @@ pub struct StreamsSelectedBuilder<'a> {
     streams: Option<Vec<crate::Stream>>,
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamsSelectedBuilder<'a> {
     fn new(collection: &'a crate::StreamCollection) -> Self {
         skip_assert_initialized!();
@@ -2997,8 +2903,6 @@ impl<'a> StreamsSelectedBuilder<'a> {
     });
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[must_use = "The builder must be built to be used"]
 pub struct RedirectBuilder<'a> {
     builder: MessageBuilder<'a>,
@@ -3009,8 +2913,6 @@ pub struct RedirectBuilder<'a> {
     entries: Option<&'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)]>,
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> RedirectBuilder<'a> {
     fn new(location: &'a str) -> Self {
         skip_assert_initialized!();
@@ -3163,7 +3065,6 @@ mod tests {
         }
     }
 
-    #[cfg(feature = "v1_14")]
     #[test]
     fn test_other_fields() {
         crate::init().unwrap();

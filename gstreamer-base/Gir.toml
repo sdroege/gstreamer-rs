@@ -2,7 +2,7 @@
 girs_directories = ["../gir-files", "../gst-gir-files"]
 library = "GstBase"
 version = "1.0"
-min_cfg_version = "1.8"
+min_cfg_version = "1.14"
 work_mode = "normal"
 concurrency = "send+sync"
 generate_safety_asserts = true
@@ -213,10 +213,6 @@ manual_traits = ["AggregatorExtManual"]
         [[object.function.parameter]]
         name = "min_latency"
         mandatory = true
-
-    [[object.property]]
-    name = "latency"
-    version = "1.14"
 
     [[object.property]]
     name = "start-time-selection"

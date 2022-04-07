@@ -1401,8 +1401,6 @@ mod tests {
         assert_eq!(last, 4);
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[test]
     fn test_meta_foreach() {
         crate::init().unwrap();
@@ -1436,8 +1434,6 @@ mod tests {
         assert_eq!(&[ClockTime::ZERO, ClockTime::SECOND][..], &res[..]);
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[test]
     fn test_meta_foreach_mut() {
         crate::init().unwrap();

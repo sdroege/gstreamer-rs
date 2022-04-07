@@ -631,8 +631,6 @@ extern "C" {
     //=========================================================================
     // GstRTPBufferFlags
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_rtp_buffer_flags_get_type() -> GType;
 
     //=========================================================================
@@ -684,8 +682,6 @@ extern "C" {
     //=========================================================================
     // GstRTCPPacket
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_rtcp_packet_add_profile_specific_ext(
         packet: *mut GstRTCPPacket,
         data: *const u8,
@@ -701,35 +697,17 @@ extern "C" {
         lsr: u32,
         dlsr: u32,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_rtcp_packet_app_get_data(packet: *mut GstRTCPPacket) -> *mut u8;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_rtcp_packet_app_get_data_length(packet: *mut GstRTCPPacket) -> u16;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_rtcp_packet_app_get_name(packet: *mut GstRTCPPacket) -> *const c_char;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_rtcp_packet_app_get_ssrc(packet: *mut GstRTCPPacket) -> u32;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_rtcp_packet_app_get_subtype(packet: *mut GstRTCPPacket) -> u8;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_rtcp_packet_app_set_data_length(
         packet: *mut GstRTCPPacket,
         wordlen: u16,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_rtcp_packet_app_set_name(packet: *mut GstRTCPPacket, name: *const c_char);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_rtcp_packet_app_set_ssrc(packet: *mut GstRTCPPacket, ssrc: u32);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_rtcp_packet_app_set_subtype(packet: *mut GstRTCPPacket, subtype: u8);
     pub fn gst_rtcp_packet_bye_add_ssrc(packet: *mut GstRTCPPacket, ssrc: u32) -> gboolean;
     pub fn gst_rtcp_packet_bye_add_ssrcs(
@@ -745,8 +723,6 @@ extern "C" {
         packet: *mut GstRTCPPacket,
         reason: *const c_char,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_rtcp_packet_copy_profile_specific_ext(
         packet: *mut GstRTCPPacket,
         data: *mut *mut u8,
@@ -764,15 +740,11 @@ extern "C" {
     pub fn gst_rtcp_packet_get_count(packet: *mut GstRTCPPacket) -> u8;
     pub fn gst_rtcp_packet_get_length(packet: *mut GstRTCPPacket) -> u16;
     pub fn gst_rtcp_packet_get_padding(packet: *mut GstRTCPPacket) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_rtcp_packet_get_profile_specific_ext(
         packet: *mut GstRTCPPacket,
         data: *mut *mut u8,
         len: *mut c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_rtcp_packet_get_profile_specific_ext_length(packet: *mut GstRTCPPacket) -> u16;
     pub fn gst_rtcp_packet_get_rb(
         packet: *mut GstRTCPPacket,

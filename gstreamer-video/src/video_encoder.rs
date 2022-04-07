@@ -10,8 +10,6 @@ use std::mem;
 use std::ptr;
 
 pub trait VideoEncoderExtManual: 'static {
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_video_encoder_allocate_output_frame")]
     fn allocate_output_frame(
         &self,
@@ -72,8 +70,6 @@ pub trait VideoEncoderExtManual: 'static {
 }
 
 impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn allocate_output_frame(
         &self,
         frame: &mut VideoCodecFrame,

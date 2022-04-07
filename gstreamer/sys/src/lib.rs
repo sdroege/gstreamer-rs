@@ -662,8 +662,6 @@ pub const GST_ALLOCATOR_FLAG_LAST: GstAllocatorFlags = 1048576;
 
 pub type GstBinFlags = c_uint;
 pub const GST_BIN_FLAG_NO_RESYNC: GstBinFlags = 16384;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub const GST_BIN_FLAG_STREAMS_AWARE: GstBinFlags = 32768;
 pub const GST_BIN_FLAG_LAST: GstBinFlags = 524288;
 
@@ -689,8 +687,6 @@ pub const GST_BUFFER_FLAG_DROPPABLE: GstBufferFlags = 4096;
 pub const GST_BUFFER_FLAG_DELTA_UNIT: GstBufferFlags = 8192;
 pub const GST_BUFFER_FLAG_TAG_MEMORY: GstBufferFlags = 16384;
 pub const GST_BUFFER_FLAG_SYNC_AFTER: GstBufferFlags = 32768;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub const GST_BUFFER_FLAG_NON_DROPPABLE: GstBufferFlags = 65536;
 pub const GST_BUFFER_FLAG_LAST: GstBufferFlags = 1048576;
 
@@ -4103,8 +4099,6 @@ extern "C" {
     //=========================================================================
     // GstPromiseResult
     //=========================================================================
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_promise_result_get_type() -> GType;
 
     //=========================================================================
@@ -4150,8 +4144,6 @@ extern "C" {
     // GstStateChange
     //=========================================================================
     pub fn gst_state_change_get_type() -> GType;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_state_change_get_name(transition: GstStateChange) -> *const c_char;
 
     //=========================================================================
@@ -4413,8 +4405,6 @@ extern "C" {
     //=========================================================================
     // GstStackTraceFlags
     //=========================================================================
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_stack_trace_flags_get_type() -> GType;
 
     //=========================================================================
@@ -4425,11 +4415,7 @@ extern "C" {
     //=========================================================================
     // GstStreamType
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_type_get_type() -> GType;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_type_get_name(stype: GstStreamType) -> *const c_char;
 
     //=========================================================================
@@ -4507,8 +4493,6 @@ extern "C" {
         buffer: *mut GstBuffer,
         info: *mut GstStructure,
     ) -> *mut GstProtectionMeta;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_buffer_add_reference_timestamp_meta(
         buffer: *mut GstBuffer,
         reference: *mut GstCaps,
@@ -4579,8 +4563,6 @@ extern "C" {
         buffer: *mut GstBuffer,
         name: *const c_char,
     ) -> *mut GstCustomMeta;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_buffer_get_flags(buffer: *mut GstBuffer) -> GstBufferFlags;
     pub fn gst_buffer_get_memory(buffer: *mut GstBuffer, idx: c_uint) -> *mut GstMemory;
     pub fn gst_buffer_get_memory_range(
@@ -4589,11 +4571,7 @@ extern "C" {
         length: c_int,
     ) -> *mut GstMemory;
     pub fn gst_buffer_get_meta(buffer: *mut GstBuffer, api: GType) -> *mut GstMeta;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_buffer_get_n_meta(buffer: *mut GstBuffer, api_type: GType) -> c_uint;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_buffer_get_reference_timestamp_meta(
         buffer: *mut GstBuffer,
         reference: *mut GstCaps,
@@ -4611,8 +4589,6 @@ extern "C" {
         offset: *mut size_t,
         maxsize: *mut size_t,
     ) -> size_t;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_buffer_has_flags(buffer: *mut GstBuffer, flags: GstBufferFlags) -> gboolean;
     pub fn gst_buffer_insert_memory(buffer: *mut GstBuffer, idx: c_int, mem: *mut GstMemory);
     pub fn gst_buffer_is_all_memory_writable(buffer: *mut GstBuffer) -> gboolean;
@@ -4622,8 +4598,6 @@ extern "C" {
         length: c_int,
     ) -> gboolean;
     pub fn gst_buffer_iterate_meta(buffer: *mut GstBuffer, state: *mut gpointer) -> *mut GstMeta;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_buffer_iterate_meta_filtered(
         buffer: *mut GstBuffer,
         state: *mut gpointer,
@@ -4679,16 +4653,12 @@ extern "C" {
         offset: ssize_t,
         size: ssize_t,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_buffer_set_flags(buffer: *mut GstBuffer, flags: GstBufferFlags) -> gboolean;
     pub fn gst_buffer_set_size(buffer: *mut GstBuffer, size: ssize_t);
     pub fn gst_buffer_unmap(buffer: *mut GstBuffer, info: *mut GstMapInfo);
     #[cfg(any(feature = "v1_18_3", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18_3")))]
     pub fn gst_buffer_unref(buf: *mut GstBuffer);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_buffer_unset_flags(buffer: *mut GstBuffer, flags: GstBufferFlags) -> gboolean;
     pub fn gst_buffer_get_max_memory() -> c_uint;
     #[cfg(any(feature = "v1_18_3", feature = "dox"))]
@@ -4701,8 +4671,6 @@ extern "C" {
     pub fn gst_buffer_list_get_type() -> GType;
     pub fn gst_buffer_list_new() -> *mut GstBufferList;
     pub fn gst_buffer_list_new_sized(size: c_uint) -> *mut GstBufferList;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_buffer_list_calculate_size(list: *mut GstBufferList) -> size_t;
     #[cfg(any(feature = "v1_18_3", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18_3")))]
@@ -4714,8 +4682,6 @@ extern "C" {
         user_data: gpointer,
     ) -> gboolean;
     pub fn gst_buffer_list_get(list: *mut GstBufferList, idx: c_uint) -> *mut GstBuffer;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_buffer_list_get_writable(list: *mut GstBufferList, idx: c_uint) -> *mut GstBuffer;
     pub fn gst_buffer_list_insert(list: *mut GstBufferList, idx: c_int, buffer: *mut GstBuffer);
     pub fn gst_buffer_list_length(list: *mut GstBufferList) -> c_uint;
@@ -5061,8 +5027,6 @@ extern "C" {
         klass: *mut GstElementClass,
         static_templ: *mut GstStaticPadTemplate,
     );
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_element_class_add_static_pad_template_with_gtype(
         klass: *mut GstElementClass,
         static_templ: *mut GstStaticPadTemplate,
@@ -5149,8 +5113,6 @@ extern "C" {
     ) -> *mut GstEvent;
     pub fn gst_event_new_segment(segment: *const GstSegment) -> *mut GstEvent;
     pub fn gst_event_new_segment_done(format: GstFormat, position: i64) -> *mut GstEvent;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_event_new_select_streams(streams: *mut glib::GList) -> *mut GstEvent;
     pub fn gst_event_new_sink_message(name: *const c_char, msg: *mut GstMessage) -> *mut GstEvent;
     pub fn gst_event_new_step(
@@ -5160,11 +5122,7 @@ extern "C" {
         flush: gboolean,
         intermediate: gboolean,
     ) -> *mut GstEvent;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_event_new_stream_collection(collection: *mut GstStreamCollection) -> *mut GstEvent;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_event_new_stream_group_done(group_id: c_uint) -> *mut GstEvent;
     pub fn gst_event_new_stream_start(stream_id: *const c_char) -> *mut GstEvent;
     pub fn gst_event_new_tag(taglist: *mut GstTagList) -> *mut GstEvent;
@@ -5250,8 +5208,6 @@ extern "C" {
         format: *mut GstFormat,
         position: *mut i64,
     );
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_event_parse_select_streams(event: *mut GstEvent, streams: *mut *mut glib::GList);
     pub fn gst_event_parse_sink_message(event: *mut GstEvent, msg: *mut *mut GstMessage);
     pub fn gst_event_parse_step(
@@ -5262,18 +5218,12 @@ extern "C" {
         flush: *mut gboolean,
         intermediate: *mut gboolean,
     );
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_event_parse_stream(event: *mut GstEvent, stream: *mut *mut GstStream);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_event_parse_stream_collection(
         event: *mut GstEvent,
         collection: *mut *mut GstStreamCollection,
     );
     pub fn gst_event_parse_stream_flags(event: *mut GstEvent, flags: *mut GstStreamFlags);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_event_parse_stream_group_done(event: *mut GstEvent, group_id: *mut c_uint);
     pub fn gst_event_parse_stream_start(event: *mut GstEvent, stream_id: *mut *const c_char);
     pub fn gst_event_parse_tag(event: *mut GstEvent, taglist: *mut *mut GstTagList);
@@ -5291,8 +5241,6 @@ extern "C" {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn gst_event_set_seek_trickmode_interval(event: *mut GstEvent, interval: GstClockTime);
     pub fn gst_event_set_seqnum(event: *mut GstEvent, seqnum: u32);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_event_set_stream(event: *mut GstEvent, stream: *mut GstStream);
     pub fn gst_event_set_stream_flags(event: *mut GstEvent, flags: GstStreamFlags);
     #[cfg(any(feature = "v1_18_3", feature = "dox"))]
@@ -5472,8 +5420,6 @@ extern "C" {
         error: *mut glib::GError,
         debug: *const c_char,
     ) -> *mut GstMessage;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_new_error_with_details(
         src: *mut GstObject,
         error: *mut glib::GError,
@@ -5489,8 +5435,6 @@ extern "C" {
         error: *mut glib::GError,
         debug: *const c_char,
     ) -> *mut GstMessage;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_new_info_with_details(
         src: *mut GstObject,
         error: *mut glib::GError,
@@ -5515,8 +5459,6 @@ extern "C" {
         code: *const c_char,
         text: *const c_char,
     ) -> *mut GstMessage;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_new_property_notify(
         src: *mut GstObject,
         property_name: *const c_char,
@@ -5530,8 +5472,6 @@ extern "C" {
         timestamp: u64,
         duration: u64,
     ) -> *mut GstMessage;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_new_redirect(
         src: *mut GstObject,
         location: *const c_char,
@@ -5579,8 +5519,6 @@ extern "C" {
         flush: gboolean,
         intermediate: gboolean,
     ) -> *mut GstMessage;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_new_stream_collection(
         src: *mut GstObject,
         collection: *mut GstStreamCollection,
@@ -5591,8 +5529,6 @@ extern "C" {
         type_: GstStreamStatusType,
         owner: *mut GstElement,
     ) -> *mut GstMessage;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_new_streams_selected(
         src: *mut GstObject,
         collection: *mut GstStreamCollection,
@@ -5614,16 +5550,12 @@ extern "C" {
         error: *mut glib::GError,
         debug: *const c_char,
     ) -> *mut GstMessage;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_new_warning_with_details(
         src: *mut GstObject,
         error: *mut glib::GError,
         debug: *const c_char,
         details: *mut GstStructure,
     ) -> *mut GstMessage;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_add_redirect_entry(
         message: *mut GstMessage,
         location: *const c_char,
@@ -5633,8 +5565,6 @@ extern "C" {
     #[cfg(any(feature = "v1_18_3", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18_3")))]
     pub fn gst_message_copy(msg: *const GstMessage) -> *mut GstMessage;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_get_num_redirect_entries(message: *mut GstMessage) -> size_t;
     pub fn gst_message_get_seqnum(message: *mut GstMessage) -> u32;
     pub fn gst_message_get_stream_status_object(message: *mut GstMessage)
@@ -5674,8 +5604,6 @@ extern "C" {
         gerror: *mut *mut glib::GError,
         debug: *mut *mut c_char,
     );
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_parse_error_details(
         message: *mut GstMessage,
         structure: *mut *const GstStructure,
@@ -5687,8 +5615,6 @@ extern "C" {
         gerror: *mut *mut glib::GError,
         debug: *mut *mut c_char,
     );
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_parse_info_details(
         message: *mut GstMessage,
         structure: *mut *const GstStructure,
@@ -5706,8 +5632,6 @@ extern "C" {
         code: *mut *mut c_char,
         text: *mut *mut c_char,
     );
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_parse_property_notify(
         message: *mut GstMessage,
         object: *mut *mut GstObject,
@@ -5734,8 +5658,6 @@ extern "C" {
         proportion: *mut c_double,
         quality: *mut c_int,
     );
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_parse_redirect_entry(
         message: *mut GstMessage,
         entry_index: size_t,
@@ -5780,8 +5702,6 @@ extern "C" {
         flush: *mut gboolean,
         intermediate: *mut gboolean,
     );
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_parse_stream_collection(
         message: *mut GstMessage,
         collection: *mut *mut GstStreamCollection,
@@ -5791,8 +5711,6 @@ extern "C" {
         type_: *mut GstStreamStatusType,
         owner: *mut *mut GstElement,
     );
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_parse_streams_selected(
         message: *mut GstMessage,
         collection: *mut *mut GstStreamCollection,
@@ -5814,8 +5732,6 @@ extern "C" {
         gerror: *mut *mut glib::GError,
         debug: *mut *mut c_char,
     );
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_parse_warning_details(
         message: *mut GstMessage,
         structure: *mut *const GstStructure,
@@ -5848,14 +5764,8 @@ extern "C" {
         message: *mut GstMessage,
         object: *const gobject::GValue,
     );
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_streams_selected_add(message: *mut GstMessage, stream: *mut GstStream);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_streams_selected_get_size(message: *mut GstMessage) -> c_uint;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_message_streams_selected_get_stream(
         message: *mut GstMessage,
         idx: c_uint,
@@ -5863,8 +5773,6 @@ extern "C" {
     #[cfg(any(feature = "v1_18_3", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18_3")))]
     pub fn gst_message_unref(msg: *mut GstMessage);
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_message_writable_structure(message: *mut GstMessage) -> *mut GstStructure;
     #[cfg(any(feature = "v1_18_3", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18_3")))]
@@ -5991,8 +5899,6 @@ extern "C" {
     //=========================================================================
     pub fn gst_parse_context_get_type() -> GType;
     pub fn gst_parse_context_new() -> *mut GstParseContext;
-    #[cfg(any(feature = "v1_12_1", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12_1")))]
     pub fn gst_parse_context_copy(context: *const GstParseContext) -> *mut GstParseContext;
     pub fn gst_parse_context_free(context: *mut GstParseContext);
     pub fn gst_parse_context_get_missing_elements(
@@ -6045,39 +5951,23 @@ extern "C" {
     //=========================================================================
     // GstPromise
     //=========================================================================
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_promise_get_type() -> GType;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_promise_new() -> *mut GstPromise;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_promise_new_with_change_func(
         func: GstPromiseChangeFunc,
         user_data: gpointer,
         notify: glib::GDestroyNotify,
     ) -> *mut GstPromise;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_promise_expire(promise: *mut GstPromise);
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_promise_get_reply(promise: *mut GstPromise) -> *const GstStructure;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_promise_interrupt(promise: *mut GstPromise);
     #[cfg(any(feature = "v1_18_3", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18_3")))]
     pub fn gst_promise_ref(promise: *mut GstPromise) -> *mut GstPromise;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_promise_reply(promise: *mut GstPromise, s: *mut GstStructure);
     #[cfg(any(feature = "v1_18_3", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18_3")))]
     pub fn gst_promise_unref(promise: *mut GstPromise);
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_promise_wait(promise: *mut GstPromise) -> GstPromiseResult;
 
     //=========================================================================
@@ -6371,8 +6261,6 @@ extern "C" {
     //=========================================================================
     // GstReferenceTimestampMeta
     //=========================================================================
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_reference_timestamp_meta_get_info() -> *const GstMetaInfo;
 
     //=========================================================================
@@ -6590,8 +6478,6 @@ extern "C" {
         first_fieldname: *const c_char,
         ...
     ) -> gboolean;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_structure_get_array(
         structure: *mut GstStructure,
         fieldname: *const c_char,
@@ -6654,8 +6540,6 @@ extern "C" {
         fieldname: *const c_char,
         value: *mut i64,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_structure_get_list(
         structure: *mut GstStructure,
         fieldname: *const c_char,
@@ -6756,15 +6640,11 @@ extern "C" {
         flags: GstSerializeFlags,
     ) -> *mut c_char;
     pub fn gst_structure_set(structure: *mut GstStructure, fieldname: *const c_char, ...);
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_structure_set_array(
         structure: *mut GstStructure,
         fieldname: *const c_char,
         array: *const gobject::GValueArray,
     );
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_structure_set_list(
         structure: *mut GstStructure,
         fieldname: *const c_char,
@@ -7115,8 +6995,6 @@ extern "C" {
     pub fn gst_uri_from_string_with_base(base: *mut GstUri, uri: *const c_char) -> *mut GstUri;
     pub fn gst_uri_get_fragment(uri: *const GstUri) -> *const c_char;
     pub fn gst_uri_get_host(uri: *const GstUri) -> *const c_char;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_uri_get_media_fragment_table(uri: *const GstUri) -> *mut glib::GHashTable;
     pub fn gst_uri_get_path(uri: *const GstUri) -> *mut c_char;
     pub fn gst_uri_get_path_segments(uri: *const GstUri) -> *mut glib::GList;
@@ -7210,8 +7088,6 @@ extern "C" {
     pub fn gst_bin_get_by_name(bin: *mut GstBin, name: *const c_char) -> *mut GstElement;
     pub fn gst_bin_get_by_name_recurse_up(bin: *mut GstBin, name: *const c_char)
         -> *mut GstElement;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_bin_get_suppressed_flags(bin: *mut GstBin) -> GstElementFlags;
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -7228,8 +7104,6 @@ extern "C" {
     pub fn gst_bin_recalculate_latency(bin: *mut GstBin) -> gboolean;
     pub fn gst_bin_remove(bin: *mut GstBin, element: *mut GstElement) -> gboolean;
     pub fn gst_bin_remove_many(bin: *mut GstBin, element_1: *mut GstElement, ...);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_bin_set_suppressed_flags(bin: *mut GstBin, flags: GstElementFlags);
     pub fn gst_bin_sync_children_states(bin: *mut GstBin) -> gboolean;
 
@@ -7324,8 +7198,6 @@ extern "C" {
     pub fn gst_bus_create_watch(bus: *mut GstBus) -> *mut glib::GSource;
     pub fn gst_bus_disable_sync_message_emission(bus: *mut GstBus);
     pub fn gst_bus_enable_sync_message_emission(bus: *mut GstBus);
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_bus_get_pollfd(bus: *mut GstBus, fd: *mut glib::GPollFD);
     pub fn gst_bus_have_pending(bus: *mut GstBus) -> gboolean;
     pub fn gst_bus_peek(bus: *mut GstBus) -> *mut GstMessage;
@@ -7584,8 +7456,6 @@ extern "C" {
     pub fn gst_device_provider_get_hidden_providers(
         provider: *mut GstDeviceProvider,
     ) -> *mut *mut c_char;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_device_provider_get_metadata(
         provider: *mut GstDeviceProvider,
         key: *const c_char,
@@ -7642,11 +7512,7 @@ extern "C" {
     //=========================================================================
     // GstDynamicTypeFactory
     //=========================================================================
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_dynamic_type_factory_get_type() -> GType;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_dynamic_type_factory_load(factoryname: *const c_char) -> GType;
 
     //=========================================================================
@@ -7674,22 +7540,16 @@ extern "C" {
     pub fn gst_element_type_set_skip_documentation(type_: GType);
     pub fn gst_element_abort_state(element: *mut GstElement);
     pub fn gst_element_add_pad(element: *mut GstElement, pad: *mut GstPad) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_element_add_property_deep_notify_watch(
         element: *mut GstElement,
         property_name: *const c_char,
         include_value: gboolean,
     ) -> c_ulong;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_element_add_property_notify_watch(
         element: *mut GstElement,
         property_name: *const c_char,
         include_value: gboolean,
     ) -> c_ulong;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_element_call_async(
         element: *mut GstElement,
         func: GstElementCallAsyncFunc,
@@ -7705,22 +7565,16 @@ extern "C" {
         ret: GstStateChangeReturn,
     ) -> GstStateChangeReturn;
     pub fn gst_element_create_all_pads(element: *mut GstElement);
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_element_foreach_pad(
         element: *mut GstElement,
         func: GstElementForeachPadFunc,
         user_data: gpointer,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_element_foreach_sink_pad(
         element: *mut GstElement,
         func: GstElementForeachPadFunc,
         user_data: gpointer,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_element_foreach_src_pad(
         element: *mut GstElement,
         func: GstElementForeachPadFunc,
@@ -7754,17 +7608,11 @@ extern "C" {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn gst_element_get_current_running_time(element: *mut GstElement) -> GstClockTime;
     pub fn gst_element_get_factory(element: *mut GstElement) -> *mut GstElementFactory;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_element_get_metadata(element: *mut GstElement, key: *const c_char) -> *const c_char;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_element_get_pad_template(
         element: *mut GstElement,
         name: *const c_char,
     ) -> *mut GstPadTemplate;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_element_get_pad_template_list(element: *mut GstElement) -> *mut glib::GList;
     pub fn gst_element_get_request_pad(
         element: *mut GstElement,
@@ -7826,8 +7674,6 @@ extern "C" {
         function: *const c_char,
         line: c_int,
     );
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_element_message_full_with_details(
         element: *mut GstElement,
         type_: GstMessageType,
@@ -7864,8 +7710,6 @@ extern "C" {
     ) -> gboolean;
     pub fn gst_element_release_request_pad(element: *mut GstElement, pad: *mut GstPad);
     pub fn gst_element_remove_pad(element: *mut GstElement, pad: *mut GstPad) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_element_remove_property_notify_watch(element: *mut GstElement, watch_id: c_ulong);
     pub fn gst_element_request_pad(
         element: *mut GstElement,
@@ -8224,12 +8068,8 @@ extern "C" {
         event_type: GstEventType,
         idx: c_uint,
     ) -> *mut GstEvent;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_pad_get_stream(pad: *mut GstPad) -> *mut GstStream;
     pub fn gst_pad_get_stream_id(pad: *mut GstPad) -> *mut c_char;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_pad_get_task_state(pad: *mut GstPad) -> GstTaskState;
     pub fn gst_pad_has_current_caps(pad: *mut GstPad) -> gboolean;
     pub fn gst_pad_is_active(pad: *mut GstPad) -> gboolean;
@@ -8247,11 +8087,7 @@ extern "C" {
         sinkpad: *mut GstPad,
         flags: GstPadLinkCheck,
     ) -> GstPadLinkReturn;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_pad_link_maybe_ghosting(src: *mut GstPad, sink: *mut GstPad) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_pad_link_maybe_ghosting_full(
         src: *mut GstPad,
         sink: *mut GstPad,
@@ -8409,14 +8245,10 @@ extern "C" {
         presence: GstPadPresence,
         caps: *mut GstCaps,
     ) -> *mut GstPadTemplate;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_pad_template_new_from_static_pad_template_with_gtype(
         pad_template: *mut GstStaticPadTemplate,
         pad_type: GType,
     ) -> *mut GstPadTemplate;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_pad_template_new_with_gtype(
         name_template: *const c_char,
         direction: GstPadDirection,
@@ -8436,8 +8268,6 @@ extern "C" {
     //=========================================================================
     // GstParamArray
     //=========================================================================
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_param_spec_array_get_type() -> GType;
 
     //=========================================================================
@@ -8654,71 +8484,37 @@ extern "C" {
     //=========================================================================
     // GstStream
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_get_type() -> GType;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_new(
         stream_id: *const c_char,
         caps: *mut GstCaps,
         type_: GstStreamType,
         flags: GstStreamFlags,
     ) -> *mut GstStream;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_get_caps(stream: *mut GstStream) -> *mut GstCaps;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_get_stream_flags(stream: *mut GstStream) -> GstStreamFlags;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_get_stream_id(stream: *mut GstStream) -> *const c_char;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_get_stream_type(stream: *mut GstStream) -> GstStreamType;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_get_tags(stream: *mut GstStream) -> *mut GstTagList;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_set_caps(stream: *mut GstStream, caps: *mut GstCaps);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_set_stream_flags(stream: *mut GstStream, flags: GstStreamFlags);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_set_stream_type(stream: *mut GstStream, stream_type: GstStreamType);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_set_tags(stream: *mut GstStream, tags: *mut GstTagList);
 
     //=========================================================================
     // GstStreamCollection
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_collection_get_type() -> GType;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_collection_new(upstream_id: *const c_char) -> *mut GstStreamCollection;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_collection_add_stream(
         collection: *mut GstStreamCollection,
         stream: *mut GstStream,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_collection_get_size(collection: *mut GstStreamCollection) -> c_uint;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_collection_get_stream(
         collection: *mut GstStreamCollection,
         index: c_uint,
     ) -> *mut GstStream;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_stream_collection_get_upstream_id(
         collection: *mut GstStreamCollection,
     ) -> *const c_char;
@@ -8798,8 +8594,6 @@ extern "C" {
     //=========================================================================
     pub fn gst_tracer_factory_get_type() -> GType;
     pub fn gst_tracer_factory_get_list() -> *mut glib::GList;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_tracer_factory_get_tracer_type(factory: *mut GstTracerFactory) -> GType;
 
     //=========================================================================
@@ -9026,8 +8820,6 @@ extern "C" {
     //=========================================================================
     // Other functions
     //=========================================================================
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_calculate_linear_regression(
         xy: *const GstClockTime,
         temp: *mut GstClockTime,
@@ -9076,8 +8868,6 @@ extern "C" {
         user_data: gpointer,
         notify: glib::GDestroyNotify,
     );
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_debug_add_ring_buffer_logger(max_size_per_thread: c_uint, thread_timeout: c_uint);
     pub fn gst_debug_bin_to_dot_data(
         bin: *mut GstBin,
@@ -9098,8 +8888,6 @@ extern "C" {
     pub fn gst_debug_get_all_categories() -> *mut glib::GSList;
     pub fn gst_debug_get_color_mode() -> GstDebugColorMode;
     pub fn gst_debug_get_default_threshold() -> GstDebugLevel;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_debug_get_stack_trace(flags: GstStackTraceFlags) -> *mut c_char;
     pub fn gst_debug_is_active() -> gboolean;
     pub fn gst_debug_is_colored() -> gboolean;
@@ -9149,11 +8937,7 @@ extern "C" {
     pub fn gst_debug_print_stack_trace();
     pub fn gst_debug_remove_log_function(func: GstLogFunction) -> c_uint;
     pub fn gst_debug_remove_log_function_by_data(data: gpointer) -> c_uint;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_debug_remove_ring_buffer_logger();
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_debug_ring_buffer_logger_get_logs() -> *mut *mut c_char;
     pub fn gst_debug_set_active(active: gboolean);
     pub fn gst_debug_set_color_mode(mode: GstDebugColorMode);
@@ -9164,8 +8948,6 @@ extern "C" {
     pub fn gst_debug_set_threshold_from_string(list: *const c_char, reset: gboolean);
     pub fn gst_debug_unset_threshold_for_name(name: *const c_char);
     pub fn gst_deinit();
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_dynamic_type_register(plugin: *mut GstPlugin, type_: GType) -> gboolean;
     pub fn gst_error_get_message(domain: glib::GQuark, code: c_int) -> *mut c_char;
     pub fn gst_filename_to_uri(
@@ -9175,8 +8957,6 @@ extern "C" {
     pub fn gst_flow_get_name(ret: GstFlowReturn) -> *const c_char;
     pub fn gst_flow_to_quark(ret: GstFlowReturn) -> glib::GQuark;
     pub fn gst_formats_contains(formats: *const GstFormat, format: GstFormat) -> gboolean;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_get_main_executable_path() -> *const c_char;
     pub fn gst_info_strdup_printf(format: *const c_char, ...) -> *mut c_char;
     //pub fn gst_info_strdup_vprintf(format: *const c_char, args: /*Unimplemented*/va_list) -> *mut c_char;
@@ -9190,11 +8970,7 @@ extern "C" {
     pub fn gst_init_get_option_group() -> *mut glib::GOptionGroup;
     pub fn gst_is_caps_features(obj: gconstpointer) -> gboolean;
     pub fn gst_is_initialized() -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_make_element_message_details(name: *const c_char, ...) -> *mut GstStructure;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_param_spec_array(
         name: *const c_char,
         nick: *const c_char,
@@ -9247,27 +9023,15 @@ extern "C" {
         flags: GstParseFlags,
         error: *mut *mut glib::GError,
     ) -> *mut GstElement;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_print(format: *const c_char, ...);
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_printerr(format: *const c_char, ...);
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_printerrln(format: *const c_char, ...);
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_println(format: *const c_char, ...);
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_protection_filter_systems_by_available_decryptors(
         system_identifiers: *mut *const c_char,
     ) -> *mut *mut c_char;
     pub fn gst_protection_meta_api_get_type() -> GType;
     pub fn gst_protection_select_system(system_identifiers: *mut *const c_char) -> *const c_char;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_reference_timestamp_meta_api_get_type() -> GType;
     pub fn gst_segtrap_is_enabled() -> gboolean;
     pub fn gst_segtrap_set_enabled(enabled: gboolean);
@@ -9326,8 +9090,6 @@ extern "C" {
         user_data: gpointer,
     ) -> gpointer;
     pub fn gst_util_double_to_fraction(src: c_double, dest_n: *mut c_int, dest_d: *mut c_int);
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_util_dump_buffer(buf: *mut GstBuffer);
     pub fn gst_util_dump_mem(mem: *const u8, size: c_uint);
     pub fn gst_util_fraction_add(
@@ -9349,8 +9111,6 @@ extern "C" {
     ) -> gboolean;
     pub fn gst_util_fraction_to_double(src_n: c_int, src_d: c_int, dest: *mut c_double);
     pub fn gst_util_gdouble_to_guint64(value: c_double) -> u64;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_util_get_object_array(
         object: *mut gobject::GObject,
         name: *const c_char,
@@ -9368,8 +9128,6 @@ extern "C" {
         name: *const c_char,
         value: *const c_char,
     );
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_util_set_object_array(
         object: *mut gobject::GObject,
         name: *const c_char,

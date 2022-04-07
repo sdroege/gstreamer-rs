@@ -333,26 +333,6 @@ impl FromGlibPtrNone<*mut ffi::GstBufferPoolAcquireParams> for BufferPoolAcquire
     }
 }
 
-impl BufferPool {
-    #[doc(alias = "gst_buffer_pool_new")]
-    pub fn new() -> BufferPool {
-        assert_initialized_main_thread!();
-        let (major, minor, _, _) = crate::version();
-        if (major, minor) > (1, 12) {
-            unsafe { from_glib_full(ffi::gst_buffer_pool_new()) }
-        } else {
-            // Work-around for 1.14 switching from transfer-floating to transfer-full
-            unsafe { from_glib_none(ffi::gst_buffer_pool_new()) }
-        }
-    }
-}
-
-impl Default for BufferPool {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 pub trait BufferPoolExtManual: 'static {
     #[doc(alias = "get_config")]
     #[doc(alias = "gst_buffer_pool_get_config")]

@@ -12,22 +12,14 @@ mod push_src;
 
 pub use self::base_transform::BaseTransformMode;
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod aggregator;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod aggregator_pad;
 
 pub mod prelude {
     #[doc(hidden)]
     pub use gst::subclass::prelude::*;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use super::aggregator::{AggregatorImpl, AggregatorImplExt};
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use super::aggregator_pad::{AggregatorPadImpl, AggregatorPadImplExt};
     pub use super::base_parse::{BaseParseImpl, BaseParseImplExt};
     pub use super::base_sink::{BaseSinkImpl, BaseSinkImplExt};

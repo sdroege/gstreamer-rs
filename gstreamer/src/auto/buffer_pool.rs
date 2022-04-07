@@ -18,6 +18,18 @@ glib::wrapper! {
 
 impl BufferPool {
     pub const NONE: Option<&'static BufferPool> = None;
+
+    #[doc(alias = "gst_buffer_pool_new")]
+    pub fn new() -> BufferPool {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_full(ffi::gst_buffer_pool_new()) }
+    }
+}
+
+impl Default for BufferPool {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 unsafe impl Send for BufferPool {}

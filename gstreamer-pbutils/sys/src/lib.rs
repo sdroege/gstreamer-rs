@@ -433,8 +433,6 @@ extern "C" {
     //=========================================================================
     pub fn gst_install_plugins_context_get_type() -> GType;
     pub fn gst_install_plugins_context_new() -> *mut GstInstallPluginsContext;
-    #[cfg(any(feature = "v1_12_1", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12_1")))]
     pub fn gst_install_plugins_context_copy(
         ctx: *mut GstInstallPluginsContext,
     ) -> *mut GstInstallPluginsContext;
@@ -483,8 +481,6 @@ extern "C" {
     //=========================================================================
     pub fn gst_discoverer_audio_info_get_type() -> GType;
     pub fn gst_discoverer_audio_info_get_bitrate(info: *const GstDiscovererAudioInfo) -> c_uint;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_discoverer_audio_info_get_channel_mask(info: *const GstDiscovererAudioInfo) -> u64;
     pub fn gst_discoverer_audio_info_get_channels(info: *const GstDiscovererAudioInfo) -> c_uint;
     pub fn gst_discoverer_audio_info_get_depth(info: *const GstDiscovererAudioInfo) -> c_uint;
@@ -521,8 +517,6 @@ extern "C" {
         info: *mut GstDiscovererInfo,
     ) -> *mut glib::GList;
     pub fn gst_discoverer_info_get_duration(info: *const GstDiscovererInfo) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_discoverer_info_get_live(info: *const GstDiscovererInfo) -> gboolean;
     pub fn gst_discoverer_info_get_misc(info: *const GstDiscovererInfo)
         -> *const gst::GstStructure;
@@ -661,8 +655,6 @@ extern "C" {
     pub fn gst_encoding_profile_from_discoverer(
         info: *mut GstDiscovererInfo,
     ) -> *mut GstEncodingProfile;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_encoding_profile_copy(self_: *mut GstEncodingProfile) -> *mut GstEncodingProfile;
     pub fn gst_encoding_profile_get_allow_dynamic_output(
         profile: *mut GstEncodingProfile,
@@ -805,14 +797,10 @@ extern "C" {
         audio_config: *const u8,
         len: c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_codec_utils_aac_get_channels(audio_config: *const u8, len: c_uint) -> c_uint;
     pub fn gst_codec_utils_aac_get_index_from_sample_rate(rate: c_uint) -> c_int;
     pub fn gst_codec_utils_aac_get_level(audio_config: *const u8, len: c_uint) -> *const c_char;
     pub fn gst_codec_utils_aac_get_profile(audio_config: *const u8, len: c_uint) -> *const c_char;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_codec_utils_aac_get_sample_rate(audio_config: *const u8, len: c_uint) -> c_uint;
     pub fn gst_codec_utils_aac_get_sample_rate_from_index(sr_idx: c_uint) -> c_uint;
     #[cfg(any(feature = "v1_22", feature = "dox"))]

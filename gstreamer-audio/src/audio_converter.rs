@@ -109,14 +109,10 @@ impl AudioConverterConfig {
             .unwrap_or(1)
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn set_resampler_method(&mut self, v: crate::AudioResamplerMethod) {
         self.0.set("GstAudioConverter.resampler-method", &v);
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "get_resampler_method")]
     pub fn resampler_method(&self) -> crate::AudioResamplerMethod {
         self.0

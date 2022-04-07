@@ -55,8 +55,6 @@ gtkvideooverlay-x11 = ["gtkvideooverlay"]
 gtkvideooverlay-quartz = ["gtkvideooverlay"]
 rtsp-server = ["gst-rtsp-server", "gst-rtsp", "gst-sdp"]
 rtsp-server-record = ["gst-rtsp-server", "gst-rtsp", "gio"]
-v1_10 = ["gst/v1_10"]
-v1_14 = ["gst/v1_14"]
 pango-cairo = ["pango", "pangocairo", "cairo-rs"]
 overlay-composition = ["pango", "pangocairo", "cairo-rs"]
 gl = ["gst-gl", "gl_generator", "glutin"]
@@ -70,7 +68,6 @@ name = "appsrc"
 
 [[bin]]
 name = "custom_events"
-required-features = ["v1_10"]
 
 [[bin]]
 name = "custom_meta"
@@ -80,7 +77,6 @@ name = "decodebin"
 
 [[bin]]
 name = "debug_ringbuffer"
-required-features = ["v1_14"]
 
 [[bin]]
 name = "encodebin"

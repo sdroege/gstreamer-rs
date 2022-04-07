@@ -91,8 +91,6 @@ pub mod meta;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use crate::meta::MetaSeqnum;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use crate::meta::ReferenceTimestampMeta;
 pub use crate::meta::{Meta, MetaAPI, MetaRef, MetaRefMut, ParentBufferMeta, ProtectionMeta};
 pub mod buffer;
@@ -127,11 +125,7 @@ pub use crate::static_caps::*;
 mod static_pad_template;
 pub use crate::static_pad_template::*;
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub mod promise;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use promise::{Promise, PromiseError};
 
 pub mod bus;
@@ -152,11 +146,9 @@ mod tracer;
 mod tracer_factory;
 
 // OS dependent Bus extensions (also import the other platform mod for doc)
-#[cfg(any(all(unix, feature = "v1_14"), feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(unix, feature = "dox"))]
 mod bus_unix;
-#[cfg(any(all(windows, feature = "v1_14"), feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(windows, feature = "dox"))]
 mod bus_windows;
 
 mod child_proxy;
@@ -207,11 +199,7 @@ pub use crate::parse_context::ParseContext;
 mod plugin_feature;
 
 mod plugin;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub mod stream;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub mod stream_collection;
 
 mod typefind;
@@ -245,8 +233,6 @@ pub use crate::buffer_pool::{BufferPoolAcquireParams, BufferPoolConfig, BufferPo
 mod pad_template;
 
 pub mod param_spec;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use crate::param_spec::ParamSpecArray;
 pub use crate::param_spec::ParamSpecFraction;
 
@@ -305,11 +291,9 @@ pub mod prelude {
     pub use crate::meta::MetaAPI;
 
     // OS dependent Bus extensions (also import the other platform trait for doc)
-    #[cfg(any(all(unix, feature = "v1_14"), feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[cfg(any(unix, feature = "dox"))]
     pub use crate::bus_unix::UnixBusExtManual;
-    #[cfg(any(all(windows, feature = "v1_14"), feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[cfg(any(windows, feature = "dox"))]
     pub use crate::bus_windows::WindowsBusExtManual;
 
     pub use crate::bin::GstBinExtManual;

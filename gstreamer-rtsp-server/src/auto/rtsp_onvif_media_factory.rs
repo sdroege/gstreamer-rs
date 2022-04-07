@@ -29,8 +29,6 @@ impl RTSPOnvifMediaFactory {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl Default for RTSPOnvifMediaFactory {
     fn default() -> Self {
         Self::new()

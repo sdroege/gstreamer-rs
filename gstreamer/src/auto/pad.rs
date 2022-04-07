@@ -15,11 +15,7 @@ use crate::PadLinkError;
 use crate::PadLinkSuccess;
 use crate::PadMode;
 use crate::PadTemplate;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use crate::Stream;
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use crate::TaskState;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -120,8 +116,6 @@ pub trait PadExt: 'static {
     #[must_use]
     fn single_internal_link(&self) -> Option<Pad>;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_pad_get_stream")]
     #[doc(alias = "get_stream")]
     fn stream(&self) -> Option<Stream>;
@@ -130,8 +124,6 @@ pub trait PadExt: 'static {
     #[doc(alias = "get_stream_id")]
     fn stream_id(&self) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_pad_get_task_state")]
     #[doc(alias = "get_task_state")]
     fn task_state(&self) -> TaskState;
@@ -167,13 +159,9 @@ pub trait PadExt: 'static {
         flags: PadLinkCheck,
     ) -> Result<PadLinkSuccess, PadLinkError>;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_pad_link_maybe_ghosting")]
     fn link_maybe_ghosting(&self, sink: &impl IsA<Pad>) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_pad_link_maybe_ghosting_full")]
     fn link_maybe_ghosting_full(
         &self,
@@ -388,8 +376,6 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn stream(&self) -> Option<Stream> {
         unsafe { from_glib_full(ffi::gst_pad_get_stream(self.as_ref().to_glib_none().0)) }
     }
@@ -398,8 +384,6 @@ impl<O: IsA<Pad>> PadExt for O {
         unsafe { from_glib_full(ffi::gst_pad_get_stream_id(self.as_ref().to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn task_state(&self) -> TaskState {
         unsafe { from_glib(ffi::gst_pad_get_task_state(self.as_ref().to_glib_none().0)) }
     }
@@ -459,8 +443,6 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn link_maybe_ghosting(&self, sink: &impl IsA<Pad>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -473,8 +455,6 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn link_maybe_ghosting_full(
         &self,
         sink: &impl IsA<Pad>,

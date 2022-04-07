@@ -33,8 +33,6 @@ pub trait BaseParseExt: 'static {
     #[doc(alias = "gst_base_parse_add_index_entry")]
     fn add_index_entry(&self, offset: u64, ts: gst::ClockTime, key: bool, force: bool) -> bool;
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_base_parse_drain")]
     fn drain(&self);
 
@@ -98,8 +96,6 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn drain(&self) {
         unsafe {
             ffi::gst_base_parse_drain(self.as_ref().to_glib_none().0);

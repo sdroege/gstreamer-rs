@@ -10,9 +10,7 @@ use glib::value::ToValue;
 use glib::StaticType;
 use glib::Type;
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
 bitflags! {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "GstRTPBufferFlags")]
     pub struct RTPBufferFlags: u32 {
         #[doc(alias = "GST_RTP_BUFFER_FLAG_RETRANSMISSION")]
@@ -22,8 +20,6 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl IntoGlib for RTPBufferFlags {
     type GlibType = ffi::GstRTPBufferFlags;
@@ -33,8 +29,6 @@ impl IntoGlib for RTPBufferFlags {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTPBufferFlags> for RTPBufferFlags {
     unsafe fn from_glib(value: ffi::GstRTPBufferFlags) -> Self {
@@ -43,22 +37,16 @@ impl FromGlib<ffi::GstRTPBufferFlags> for RTPBufferFlags {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StaticType for RTPBufferFlags {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtp_buffer_flags_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl glib::value::ValueType for RTPBufferFlags {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 unsafe impl<'a> FromValue<'a> for RTPBufferFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -68,8 +56,6 @@ unsafe impl<'a> FromValue<'a> for RTPBufferFlags {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl ToValue for RTPBufferFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();

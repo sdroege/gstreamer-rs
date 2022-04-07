@@ -781,21 +781,13 @@ extern "C" {
     //=========================================================================
     // GstRTSPAuthCredential
     //=========================================================================
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_rtsp_auth_credential_get_type() -> GType;
 
     //=========================================================================
     // GstRTSPAuthParam
     //=========================================================================
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_rtsp_auth_param_get_type() -> GType;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_rtsp_auth_param_copy(param: *mut GstRTSPAuthParam) -> *mut GstRTSPAuthParam;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_rtsp_auth_param_free(param: *mut GstRTSPAuthParam);
 
     //=========================================================================
@@ -938,8 +930,6 @@ extern "C" {
         message: *mut GstRTSPMessage,
         timeout: i64,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_rtsp_connection_set_accept_certificate_func(
         conn: *mut GstRTSPConnection,
         func: GstRTSPConnectionAcceptCertificateFunc,
@@ -1031,8 +1021,6 @@ extern "C" {
     //=========================================================================
     // GstRTSPMessage
     //=========================================================================
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_rtsp_msg_get_type() -> GType;
     pub fn gst_rtsp_message_add_header(
         msg: *mut GstRTSPMessage,
@@ -1048,8 +1036,6 @@ extern "C" {
         msg: *const GstRTSPMessage,
         str: *mut glib::GString,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_rtsp_message_copy(
         msg: *const GstRTSPMessage,
         copy: *mut *mut GstRTSPMessage,
@@ -1079,8 +1065,6 @@ extern "C" {
         value: *mut *mut c_char,
         index: c_int,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_rtsp_message_get_type(msg: *mut GstRTSPMessage) -> GstRTSPMsgType;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -1098,8 +1082,6 @@ extern "C" {
         reason: *const c_char,
         request: *const GstRTSPMessage,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_rtsp_message_parse_auth_credentials(
         msg: *mut GstRTSPMessage,
         field: GstRTSPHeaderField,
@@ -1343,13 +1325,9 @@ extern "C" {
     //=========================================================================
     // Other functions
     //=========================================================================
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_rtsp_auth_credentials_free(credentials: *mut *mut GstRTSPAuthCredential);
     pub fn gst_rtsp_find_header_field(header: *const c_char) -> GstRTSPHeaderField;
     pub fn gst_rtsp_find_method(method: *const c_char) -> GstRTSPMethod;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_rtsp_generate_digest_auth_response(
         algorithm: *const c_char,
         method: *const c_char,

@@ -5,14 +5,8 @@
 
 use crate::Extractable;
 use crate::Formatter;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use crate::Timeline;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib::object::IsA;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib::translate::*;
 
 glib::wrapper! {
@@ -27,8 +21,6 @@ glib::wrapper! {
 impl CommandLineFormatter {
     pub const NONE: Option<&'static CommandLineFormatter> = None;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "ges_command_line_formatter_get_help")]
     #[doc(alias = "get_help")]
     pub fn help(commands: &[&str]) -> glib::GString {
@@ -42,8 +34,6 @@ impl CommandLineFormatter {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "ges_command_line_formatter_get_timeline_uri")]
     #[doc(alias = "get_timeline_uri")]
     pub fn timeline_uri(timeline: &impl IsA<Timeline>) -> glib::GString {

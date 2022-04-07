@@ -2,7 +2,7 @@
 girs_directories = ["../gir-files", "../gst-gir-files"]
 library = "GstVideo"
 version = "1.0"
-min_cfg_version = "1.8"
+min_cfg_version = "1.14"
 work_mode = "normal"
 concurrency = "send+sync"
 generate_safety_asserts = true
@@ -596,86 +596,6 @@ status = "generate"
 
     [[object.derive]]
     name = "Debug, Eq, PartialEq, Hash"
-
-    [[object.member]]
-    name = "p010_10be"
-    version = "1.10"
-
-    [[object.member]]
-    name = "p010_10le"
-    version = "1.10"
-
-    [[object.member]]
-    name = "iyu2"
-    version = "1.10"
-
-    [[object.member]]
-    name = "vyuy"
-    version = "1.12"
-
-    [[object.member]]
-    name = "gbra"
-    version = "1.12"
-
-    [[object.member]]
-    name = "gbra_10be"
-    version = "1.12"
-
-    [[object.member]]
-    name = "gbra_10le"
-    version = "1.12"
-
-    [[object.member]]
-    name = "gbr_12be"
-    version = "1.12"
-
-    [[object.member]]
-    name = "gbr_12le"
-    version = "1.12"
-
-    [[object.member]]
-    name = "gbra_12be"
-    version = "1.12"
-
-    [[object.member]]
-    name = "gbra_12le"
-    version = "1.12"
-
-    [[object.member]]
-    name = "i420_12be"
-    version = "1.12"
-
-    [[object.member]]
-    name = "i420_12le"
-    version = "1.12"
-
-    [[object.member]]
-    name = "i422_12be"
-    version = "1.12"
-
-    [[object.member]]
-    name = "i422_12le"
-    version = "1.12"
-
-    [[object.member]]
-    name = "y444_12be"
-    version = "1.12"
-
-    [[object.member]]
-    name = "y444_12le"
-    version = "1.12"
-
-    [[object.member]]
-    name = "gray10_le32"
-    version = "1.14"
-
-    [[object.member]]
-    name = "nv12_10le32"
-    version = "1.14"
-
-    [[object.member]]
-    name = "nv16_10le32"
-    version = "1.14"
 
     [[object.member]]
     name = "nv12_10le40"

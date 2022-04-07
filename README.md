@@ -24,7 +24,7 @@ API metadata provided by the GStreamer project.
 ## Installation
 
 To build the GStreamer bindings or anything depending on them, you need to
-have at least GStreamer 1.8 and gst-plugins-base 1.8 installed. In addition,
+have at least GStreamer 1.14 and gst-plugins-base 1.14 installed. In addition,
 some of the examples/tutorials require various GStreamer plugins to be
 available, which can be found in gst-plugins-base, gst-plugins-good,
 gst-plugins-bad, gst-plugins-ugly and/or gst-libav.
@@ -45,16 +45,13 @@ $ apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
       gstreamer1.0-libav libgstrtspserver-1.0-dev libges-1.0-dev
 ```
 
-The minimum required version of the above libraries is >= 1.8. If you
+The minimum required version of the above libraries is >= 1.14. If you
 build the gstreamer-player sub-crate, or any of the examples that
-depend on gstreamer-player, you must ensure that in addition to the
-above packages, `libgstreamer-plugins-bad1.0-dev` is installed and
-that the version is >= 1.12. See the `Cargo.toml` files for the full
-details,
+depend on gstreamer-player, you must ensure that in addition to the above
+packages, `libgstreamer-plugins-bad1.0-dev` is installed. See the `Cargo.toml`
+files for the full details,
 
 ```console
-$ # Only if you wish to install gstreamer-player, make sure the version
-$ # of this package is >= 1.12.
 $ apt-get install libgstreamer-plugins-bad1.0-dev
 ```
 
@@ -82,15 +79,13 @@ $ brew install gstreamer gst-plugins-base gst-plugins-good \
       --enable-gtk3
 ```
 
-If you wish to install the gstreamer-player sub-crate, make sure the
-version of these libraries is >= 1.12. Otherwise, a version >= 1.8 is
-sufficient.
+Make sure the version of these libraries is >= 1.14.
 
 #### GStreamer Binaries
 
 You need to download the *two* `.pkg` files from the GStreamer website and
-install them, e.g. `gstreamer-1.0-1.12.3-x86_64.pkg` and
-`gstreamer-1.0-devel-1.12.3-x86_64.pkg`.
+install them, e.g. `gstreamer-1.0-1.14.0-x86_64.pkg` and
+`gstreamer-1.0-devel-1.14.0-x86_64.pkg`.
 
 After installation, you also need to install `pkg-config` (e.g. via Homebrew)
 and set the `PKG_CONFIG_PATH` environment variable
@@ -118,9 +113,7 @@ $ pacman -S glib2-devel pkg-config \
       mingw-w64-x86_64-gst-rtsp-server
 ```
 
-If you wish to install the gstreamer-player sub-crate, make sure the
-version of these libraries is >= 1.12. Otherwise, a version >= 1.8 is
-sufficient.
+Make sure the version of these libraries is >= 1.14.
 
 Note that the version of `pkg-config` included in `MSYS2` is
 [known to have problems](https://github.com/rust-lang/pkg-config-rs/issues/51#issuecomment-346300858)
@@ -130,8 +123,8 @@ would be [`pkg-config-lite`](https://sourceforge.net/projects/pkgconfiglite/).
 #### GStreamer Binaries
 
 You need to download the *two* `.msi` files for your platform from the
-GStreamer website and install them, e.g. `gstreamer-1.0-x86_64-1.12.3.msi` and
-`gstreamer-1.0-devel-x86_64-1.12.3.msi`.
+GStreamer website and install them, e.g. `gstreamer-1.0-x86_64-1.14.0.msi` and
+`gstreamer-1.0-devel-x86_64-1.14.0.msi`.
 
 After installation, you also need to install `pkg-config` (e.g. via MSYS2 or
 from [here](https://sourceforge.net/projects/pkgconfiglite/))

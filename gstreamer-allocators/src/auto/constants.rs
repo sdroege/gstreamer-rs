@@ -15,8 +15,6 @@ pub static ALLOCATOR_FD: once_cell::sync::Lazy<&'static str> =
     once_cell::sync::Lazy::new(|| unsafe {
         CStr::from_ptr(ffi::GST_ALLOCATOR_FD).to_str().unwrap()
     });
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(alias = "GST_CAPS_FEATURE_MEMORY_DMABUF")]
 pub static CAPS_FEATURE_MEMORY_DMABUF: once_cell::sync::Lazy<&'static str> =
     once_cell::sync::Lazy::new(|| unsafe {

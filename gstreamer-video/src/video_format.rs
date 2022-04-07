@@ -25,15 +25,11 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
         Box::new([
             crate::VideoFormat::Ayuv64,
             crate::VideoFormat::Argb64,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Gbra12le,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Gbra12be,
             crate::VideoFormat::A44410le,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Gbra10le,
             crate::VideoFormat::A44410be,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Gbra10be,
             crate::VideoFormat::A42210le,
             crate::VideoFormat::A42210be,
@@ -43,7 +39,6 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
             crate::VideoFormat::Bgr10a2Le,
             #[cfg(feature = "v1_16")]
             crate::VideoFormat::Y410,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Gbra,
             crate::VideoFormat::Abgr,
             #[cfg(feature = "v1_16")]
@@ -54,21 +49,13 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
             crate::VideoFormat::Rgba,
             crate::VideoFormat::A420,
             crate::VideoFormat::V216,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Y44412le,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Gbr12le,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Y44412be,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Gbr12be,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::I42212le,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::I42212be,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::I42012le,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::I42012be,
             crate::VideoFormat::Y44410le,
             crate::VideoFormat::Gbr10le,
@@ -77,7 +64,6 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
             crate::VideoFormat::R210,
             crate::VideoFormat::I42210le,
             crate::VideoFormat::I42210be,
-            #[cfg(feature = "v1_14")]
             crate::VideoFormat::Nv1610le32,
             #[cfg(feature = "v1_16")]
             crate::VideoFormat::Y210,
@@ -85,13 +71,10 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
             crate::VideoFormat::Uyvp,
             crate::VideoFormat::I42010le,
             crate::VideoFormat::I42010be,
-            #[cfg(feature = "v1_10")]
             crate::VideoFormat::P01010le,
-            #[cfg(feature = "v1_14")]
             crate::VideoFormat::Nv1210le32,
             #[cfg(feature = "v1_16")]
             crate::VideoFormat::Nv1210le40,
-            #[cfg(feature = "v1_10")]
             crate::VideoFormat::P01010be,
             crate::VideoFormat::Y444,
             crate::VideoFormat::Gbr,
@@ -101,14 +84,12 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
             crate::VideoFormat::Xrgb,
             crate::VideoFormat::Rgbx,
             crate::VideoFormat::Bgr,
-            #[cfg(feature = "v1_10")]
             crate::VideoFormat::Iyu2,
             crate::VideoFormat::V308,
             crate::VideoFormat::Rgb,
             crate::VideoFormat::Y42b,
             crate::VideoFormat::Nv61,
             crate::VideoFormat::Nv16,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Vyuy,
             crate::VideoFormat::Uyvy,
             crate::VideoFormat::Yvyu,
@@ -129,7 +110,6 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
             crate::VideoFormat::Rgb8p,
             crate::VideoFormat::Gray16Le,
             crate::VideoFormat::Gray16Be,
-            #[cfg(feature = "v1_14")]
             crate::VideoFormat::Gray10Le32,
             crate::VideoFormat::Gray8,
         ])
@@ -139,15 +119,11 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
         Box::new([
             crate::VideoFormat::Ayuv64,
             crate::VideoFormat::Argb64,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Gbra12be,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Gbra12le,
             crate::VideoFormat::A44410be,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Gbra10be,
             crate::VideoFormat::A44410le,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Gbra10le,
             crate::VideoFormat::A42210be,
             crate::VideoFormat::A42210le,
@@ -157,7 +133,6 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
             crate::VideoFormat::Y410,
             #[cfg(feature = "v1_16")]
             crate::VideoFormat::Bgr10a2Le,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Gbra,
             crate::VideoFormat::Abgr,
             #[cfg(feature = "v1_16")]
@@ -168,21 +143,13 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
             crate::VideoFormat::Rgba,
             crate::VideoFormat::A420,
             crate::VideoFormat::V216,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Y44412be,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Gbr12be,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Y44412le,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Gbr12le,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::I42212be,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::I42212le,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::I42012be,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::I42012le,
             crate::VideoFormat::Y44410be,
             crate::VideoFormat::Gbr10be,
@@ -191,7 +158,6 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
             crate::VideoFormat::R210,
             crate::VideoFormat::I42210be,
             crate::VideoFormat::I42210le,
-            #[cfg(feature = "v1_14")]
             crate::VideoFormat::Nv1610le32,
             #[cfg(feature = "v1_16")]
             crate::VideoFormat::Y210,
@@ -199,11 +165,8 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
             crate::VideoFormat::Uyvp,
             crate::VideoFormat::I42010be,
             crate::VideoFormat::I42010le,
-            #[cfg(feature = "v1_10")]
             crate::VideoFormat::P01010be,
-            #[cfg(feature = "v1_10")]
             crate::VideoFormat::P01010le,
-            #[cfg(feature = "v1_14")]
             crate::VideoFormat::Nv1210le32,
             #[cfg(feature = "v1_16")]
             crate::VideoFormat::Nv1210le40,
@@ -215,14 +178,12 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
             crate::VideoFormat::Xrgb,
             crate::VideoFormat::Rgbx,
             crate::VideoFormat::Bgr,
-            #[cfg(feature = "v1_10")]
             crate::VideoFormat::Iyu2,
             crate::VideoFormat::V308,
             crate::VideoFormat::Rgb,
             crate::VideoFormat::Y42b,
             crate::VideoFormat::Nv61,
             crate::VideoFormat::Nv16,
-            #[cfg(feature = "v1_12")]
             crate::VideoFormat::Vyuy,
             crate::VideoFormat::Uyvy,
             crate::VideoFormat::Yvyu,
@@ -243,7 +204,6 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
             crate::VideoFormat::Rgb8p,
             crate::VideoFormat::Gray16Be,
             crate::VideoFormat::Gray16Le,
-            #[cfg(feature = "v1_14")]
             crate::VideoFormat::Gray10Le32,
             crate::VideoFormat::Gray8,
         ])

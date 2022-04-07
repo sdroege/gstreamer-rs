@@ -129,8 +129,6 @@ extern "C" {
     //=========================================================================
     // GstDmaBufAllocator
     //=========================================================================
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_dmabuf_allocator_get_type() -> GType;
     pub fn gst_dmabuf_allocator_new() -> *mut gst::GstAllocator;
     pub fn gst_dmabuf_allocator_alloc(
@@ -162,8 +160,6 @@ extern "C" {
     //=========================================================================
     // GstPhysMemoryAllocator
     //=========================================================================
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_phys_memory_allocator_get_type() -> GType;
 
     //=========================================================================
@@ -173,11 +169,7 @@ extern "C" {
     pub fn gst_fd_memory_get_fd(mem: *mut gst::GstMemory) -> c_int;
     pub fn gst_is_dmabuf_memory(mem: *mut gst::GstMemory) -> gboolean;
     pub fn gst_is_fd_memory(mem: *mut gst::GstMemory) -> gboolean;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_is_phys_memory(mem: *mut gst::GstMemory) -> gboolean;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_phys_memory_get_phys_addr(mem: *mut gst::GstMemory) -> uintptr_t;
 
 }

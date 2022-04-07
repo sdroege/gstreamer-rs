@@ -87,8 +87,6 @@ pub trait AudioEncoderExt: 'static {
     #[doc(alias = "gst_audio_encoder_proxy_getcaps")]
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_audio_encoder_set_allocation_caps")]
     fn set_allocation_caps(&self, allocation_caps: Option<&gst::Caps>);
 
@@ -275,8 +273,6 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn set_allocation_caps(&self, allocation_caps: Option<&gst::Caps>) {
         unsafe {
             ffi::gst_audio_encoder_set_allocation_caps(

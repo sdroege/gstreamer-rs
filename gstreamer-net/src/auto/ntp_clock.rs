@@ -4,6 +4,8 @@
 // DO NOT EDIT
 
 use crate::NetClientClock;
+use glib::object::Cast;
+use glib::translate::*;
 
 glib::wrapper! {
     #[doc(alias = "GstNtpClock")]
@@ -14,7 +16,26 @@ glib::wrapper! {
     }
 }
 
-impl NtpClock {}
+impl NtpClock {
+    #[doc(alias = "gst_ntp_clock_new")]
+    pub fn new(
+        name: &str,
+        remote_address: &str,
+        remote_port: i32,
+        base_time: impl Into<Option<gst::ClockTime>>,
+    ) -> NtpClock {
+        assert_initialized_main_thread!();
+        unsafe {
+            gst::Clock::from_glib_full(ffi::gst_ntp_clock_new(
+                name.to_glib_none().0,
+                remote_address.to_glib_none().0,
+                remote_port,
+                base_time.into().into_glib(),
+            ))
+            .unsafe_cast()
+        }
+    }
+}
 
 unsafe impl Send for NtpClock {}
 unsafe impl Sync for NtpClock {}

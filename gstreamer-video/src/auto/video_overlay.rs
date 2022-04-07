@@ -18,8 +18,6 @@ glib::wrapper! {
 impl VideoOverlay {
     pub const NONE: Option<&'static VideoOverlay> = None;
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //#[doc(alias = "gst_video_overlay_install_properties")]
     //pub fn install_properties(oclass: /*Ignored*/&mut glib::ObjectClass, last_prop_id: i32) {
     //    unsafe { TODO: call ffi:gst_video_overlay_install_properties() }

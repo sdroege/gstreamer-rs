@@ -68,8 +68,6 @@ unsafe impl Send for EncodingProfile {}
 unsafe impl Sync for EncodingProfile {}
 
 pub trait EncodingProfileExt: 'static {
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_encoding_profile_copy")]
     #[must_use]
     fn copy(&self) -> EncodingProfile;
@@ -142,8 +140,6 @@ pub trait EncodingProfileExt: 'static {
 }
 
 impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn copy(&self) -> EncodingProfile {
         unsafe {
             from_glib_full(ffi::gst_encoding_profile_copy(

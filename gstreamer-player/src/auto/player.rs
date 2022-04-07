@@ -6,12 +6,14 @@
 use crate::PlayerAudioInfo;
 use crate::PlayerColorBalanceType;
 use crate::PlayerMediaInfo;
+use crate::PlayerSignalDispatcher;
 use crate::PlayerSnapshotFormat;
 use crate::PlayerState;
 use crate::PlayerSubtitleInfo;
 use crate::PlayerVideoInfo;
 use crate::PlayerVideoRenderer;
 use crate::PlayerVisualization;
+use glib::object::IsA;
 use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
@@ -31,6 +33,20 @@ glib::wrapper! {
 }
 
 impl Player {
+    #[doc(alias = "gst_player_new")]
+    pub fn new(
+        video_renderer: Option<&impl IsA<PlayerVideoRenderer>>,
+        signal_dispatcher: Option<&impl IsA<PlayerSignalDispatcher>>,
+    ) -> Player {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_full(ffi::gst_player_new(
+                video_renderer.map(|p| p.as_ref()).to_glib_full(),
+                signal_dispatcher.map(|p| p.as_ref()).to_glib_full(),
+            ))
+        }
+    }
+
     #[doc(alias = "gst_player_get_audio_video_offset")]
     #[doc(alias = "get_audio_video_offset")]
     pub fn audio_video_offset(&self) -> i64 {

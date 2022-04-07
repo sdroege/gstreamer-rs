@@ -6,14 +6,8 @@ use std::ops;
 
 use crate::Buffer;
 use crate::BufferRef;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use crate::Caps;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use crate::CapsRef;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use crate::ClockTime;
 
 use glib::translate::*;
@@ -451,21 +445,13 @@ impl fmt::Debug for ProtectionMeta {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[repr(transparent)]
 #[doc(alias = "GstReferenceTimestampMeta")]
 pub struct ReferenceTimestampMeta(ffi::GstReferenceTimestampMeta);
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 unsafe impl Send for ReferenceTimestampMeta {}
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 unsafe impl Sync for ReferenceTimestampMeta {}
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl ReferenceTimestampMeta {
     #[doc(alias = "gst_buffer_add_reference_timestamp_meta")]
     pub fn add<'a>(
@@ -508,8 +494,6 @@ impl ReferenceTimestampMeta {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 unsafe impl MetaAPI for ReferenceTimestampMeta {
     type GstType = ffi::GstReferenceTimestampMeta;
 
@@ -519,8 +503,6 @@ unsafe impl MetaAPI for ReferenceTimestampMeta {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl fmt::Debug for ReferenceTimestampMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use crate::utils::Displayable;

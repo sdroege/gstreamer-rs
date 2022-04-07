@@ -22,8 +22,6 @@ impl DiscovererAudioInfo {
         unsafe { ffi::gst_discoverer_audio_info_get_bitrate(self.to_glib_none().0) }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_discoverer_audio_info_get_channel_mask")]
     #[doc(alias = "get_channel_mask")]
     pub fn channel_mask(&self) -> u64 {

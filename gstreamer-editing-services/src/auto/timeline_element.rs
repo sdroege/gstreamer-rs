@@ -209,7 +209,7 @@ pub trait TimelineElementExt: 'static {
     #[doc(alias = "ges_timeline_element_set_parent")]
     fn set_parent(&self, parent: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError>;
 
-    #[cfg_attr(feature = "v1_10", deprecated = "Since 1.10")]
+    #[deprecated = "Since 1.10"]
     #[doc(alias = "ges_timeline_element_set_priority")]
     fn set_priority(&self, priority: u32) -> bool;
 
@@ -260,7 +260,7 @@ pub trait TimelineElementExt: 'static {
     #[doc(alias = "parent")]
     fn connect_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v1_10", deprecated = "Since 1.10")]
+    #[deprecated = "Since 1.10"]
     #[doc(alias = "priority")]
     fn connect_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 

@@ -519,8 +519,6 @@ impl Harness {
     //    unsafe { TODO: call ffi::gst_harness_stress_statechange_start_full() }
     //}
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_harness_take_all_data_as_buffer")]
     pub fn take_all_data_as_buffer(&mut self) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
@@ -529,8 +527,6 @@ impl Harness {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_harness_take_all_data_as_bytes")]
     pub fn take_all_data_as_bytes(&mut self) -> Result<glib::Bytes, glib::BoolError> {
         unsafe {

@@ -1,9 +1,13 @@
 use crate::auto::AudioAggregator;
 use crate::auto::AudioAggregatorPad;
-use glib::object::{Cast, IsA};
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use glib::object::Cast;
+use glib::object::IsA;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use glib::signal::{connect_raw, SignalHandlerId};
 use glib::translate::*;
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use std::mem::transmute;
 
 pub trait AudioAggregatorExtManual: 'static {

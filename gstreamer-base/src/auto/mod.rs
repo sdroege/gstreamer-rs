@@ -6,18 +6,10 @@
 mod adapter;
 pub use self::adapter::Adapter;
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod aggregator;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::aggregator::Aggregator;
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod aggregator_pad;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::aggregator_pad::AggregatorPad;
 
 mod base_parse;
@@ -47,11 +39,7 @@ pub mod functions;
 
 #[doc(hidden)]
 pub mod traits {
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use super::aggregator::AggregatorExt;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use super::aggregator_pad::AggregatorPadExt;
     pub use super::base_parse::BaseParseExt;
     pub use super::base_sink::BaseSinkExt;

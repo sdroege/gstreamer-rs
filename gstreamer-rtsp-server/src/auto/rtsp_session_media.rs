@@ -60,8 +60,6 @@ pub trait RTSPSessionMediaExt: 'static {
     #[doc(alias = "get_transport")]
     fn transport(&self, idx: u32) -> Option<RTSPStreamTransport>;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_rtsp_session_media_get_transports")]
     #[doc(alias = "get_transports")]
     fn transports(&self) -> Vec<RTSPStreamTransport>;
@@ -121,8 +119,6 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn transports(&self) -> Vec<RTSPStreamTransport> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_session_media_get_transports(

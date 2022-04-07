@@ -1265,8 +1265,6 @@ extern "C" {
         flags: GstBaseParseFrameFlags,
         overhead: c_int,
     ) -> *mut GstBaseParseFrame;
-    #[cfg(any(feature = "v1_12_1", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12_1")))]
     pub fn gst_base_parse_frame_copy(frame: *mut GstBaseParseFrame) -> *mut GstBaseParseFrame;
     pub fn gst_base_parse_frame_free(frame: *mut GstBaseParseFrame);
     pub fn gst_base_parse_frame_init(frame: *mut GstBaseParseFrame);
@@ -1652,13 +1650,9 @@ extern "C" {
     pub fn gst_flow_combiner_add_pad(combiner: *mut GstFlowCombiner, pad: *mut gst::GstPad);
     pub fn gst_flow_combiner_clear(combiner: *mut GstFlowCombiner);
     pub fn gst_flow_combiner_free(combiner: *mut GstFlowCombiner);
-    #[cfg(any(feature = "v1_12_1", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12_1")))]
     pub fn gst_flow_combiner_ref(combiner: *mut GstFlowCombiner) -> *mut GstFlowCombiner;
     pub fn gst_flow_combiner_remove_pad(combiner: *mut GstFlowCombiner, pad: *mut gst::GstPad);
     pub fn gst_flow_combiner_reset(combiner: *mut GstFlowCombiner);
-    #[cfg(any(feature = "v1_12_1", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12_1")))]
     pub fn gst_flow_combiner_unref(combiner: *mut GstFlowCombiner);
     pub fn gst_flow_combiner_update_flow(
         combiner: *mut GstFlowCombiner,
@@ -1698,19 +1692,11 @@ extern "C" {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn gst_queue_array_peek_nth_struct(array: *mut GstQueueArray, idx: c_uint) -> gpointer;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_queue_array_peek_tail(array: *mut GstQueueArray) -> gpointer;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_queue_array_peek_tail_struct(array: *mut GstQueueArray) -> gpointer;
     pub fn gst_queue_array_pop_head(array: *mut GstQueueArray) -> gpointer;
     pub fn gst_queue_array_pop_head_struct(array: *mut GstQueueArray) -> gpointer;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_queue_array_pop_tail(array: *mut GstQueueArray) -> gpointer;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_queue_array_pop_tail_struct(array: *mut GstQueueArray) -> gpointer;
     pub fn gst_queue_array_push_tail(array: *mut GstQueueArray, data: gpointer);
     pub fn gst_queue_array_push_tail_struct(array: *mut GstQueueArray, p_struct: gpointer);
@@ -1740,11 +1726,7 @@ extern "C" {
         offset: size_t,
         size: size_t,
     ) -> *mut glib::GBytes;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_adapter_distance_from_discont(adapter: *mut GstAdapter) -> u64;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_adapter_dts_at_discont(adapter: *mut GstAdapter) -> gst::GstClockTime;
     pub fn gst_adapter_flush(adapter: *mut GstAdapter, flush: size_t);
     pub fn gst_adapter_get_buffer(adapter: *mut GstAdapter, nbytes: size_t) -> *mut gst::GstBuffer;
@@ -1773,8 +1755,6 @@ extern "C" {
         size: size_t,
         value: *mut u32,
     ) -> ssize_t;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_adapter_offset_at_discont(adapter: *mut GstAdapter) -> u64;
     pub fn gst_adapter_prev_dts(adapter: *mut GstAdapter, distance: *mut u64) -> gst::GstClockTime;
     pub fn gst_adapter_prev_dts_at_offset(
@@ -1782,8 +1762,6 @@ extern "C" {
         offset: size_t,
         distance: *mut u64,
     ) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_adapter_prev_offset(adapter: *mut GstAdapter, distance: *mut u64) -> u64;
     pub fn gst_adapter_prev_pts(adapter: *mut GstAdapter, distance: *mut u64) -> gst::GstClockTime;
     pub fn gst_adapter_prev_pts_at_offset(
@@ -1791,8 +1769,6 @@ extern "C" {
         offset: size_t,
         distance: *mut u64,
     ) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_adapter_pts_at_discont(adapter: *mut GstAdapter) -> gst::GstClockTime;
     pub fn gst_adapter_push(adapter: *mut GstAdapter, buf: *mut gst::GstBuffer);
     pub fn gst_adapter_take(adapter: *mut GstAdapter, nbytes: size_t) -> gpointer;
@@ -1812,11 +1788,7 @@ extern "C" {
     //=========================================================================
     // GstAggregator
     //=========================================================================
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_aggregator_get_type() -> GType;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_aggregator_finish_buffer(
         aggregator: *mut GstAggregator,
         buffer: *mut gst::GstBuffer,
@@ -1827,21 +1799,15 @@ extern "C" {
         aggregator: *mut GstAggregator,
         bufferlist: *mut gst::GstBufferList,
     ) -> gst::GstFlowReturn;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_aggregator_get_allocator(
         self_: *mut GstAggregator,
         allocator: *mut *mut gst::GstAllocator,
         params: *mut gst::GstAllocationParams,
     );
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_aggregator_get_buffer_pool(self_: *mut GstAggregator) -> *mut gst::GstBufferPool;
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn gst_aggregator_get_ignore_inactive_pads(self_: *mut GstAggregator) -> gboolean;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_aggregator_get_latency(self_: *mut GstAggregator) -> gst::GstClockTime;
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -1864,15 +1830,11 @@ extern "C" {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn gst_aggregator_set_ignore_inactive_pads(self_: *mut GstAggregator, ignore: gboolean);
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_aggregator_set_latency(
         self_: *mut GstAggregator,
         min_latency: gst::GstClockTime,
         max_latency: gst::GstClockTime,
     );
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_aggregator_set_src_caps(self_: *mut GstAggregator, caps: *mut gst::GstCaps);
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -1887,26 +1849,16 @@ extern "C" {
     //=========================================================================
     // GstAggregatorPad
     //=========================================================================
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_aggregator_pad_get_type() -> GType;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_aggregator_pad_drop_buffer(pad: *mut GstAggregatorPad) -> gboolean;
     #[cfg(any(feature = "v1_14_1", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
     pub fn gst_aggregator_pad_has_buffer(pad: *mut GstAggregatorPad) -> gboolean;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_aggregator_pad_is_eos(pad: *mut GstAggregatorPad) -> gboolean;
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn gst_aggregator_pad_is_inactive(pad: *mut GstAggregatorPad) -> gboolean;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_aggregator_pad_peek_buffer(pad: *mut GstAggregatorPad) -> *mut gst::GstBuffer;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_aggregator_pad_pop_buffer(pad: *mut GstAggregatorPad) -> *mut gst::GstBuffer;
 
     //=========================================================================
@@ -1927,8 +1879,6 @@ extern "C" {
         dest_format: gst::GstFormat,
         dest_value: *mut i64,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_base_parse_drain(parse: *mut GstBaseParse);
     pub fn gst_base_parse_finish_frame(
         parse: *mut GstBaseParse,
@@ -1983,8 +1933,6 @@ extern "C" {
         obj: *mut gst::GstMiniObject,
     ) -> gst::GstFlowReturn;
     pub fn gst_base_sink_get_blocksize(sink: *mut GstBaseSink) -> c_uint;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_base_sink_get_drop_out_of_segment(sink: *mut GstBaseSink) -> gboolean;
     pub fn gst_base_sink_get_last_sample(sink: *mut GstBaseSink) -> *mut gst::GstSample;
     pub fn gst_base_sink_get_latency(sink: *mut GstBaseSink) -> gst::GstClockTime;
@@ -2012,8 +1960,6 @@ extern "C" {
     ) -> gboolean;
     pub fn gst_base_sink_set_async_enabled(sink: *mut GstBaseSink, enabled: gboolean);
     pub fn gst_base_sink_set_blocksize(sink: *mut GstBaseSink, blocksize: c_uint);
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_base_sink_set_drop_out_of_segment(
         sink: *mut GstBaseSink,
         drop_out_of_segment: gboolean,
@@ -2089,8 +2035,6 @@ extern "C" {
     pub fn gst_base_src_set_live(src: *mut GstBaseSrc, live: gboolean);
     pub fn gst_base_src_start_complete(basesrc: *mut GstBaseSrc, ret: gst::GstFlowReturn);
     pub fn gst_base_src_start_wait(basesrc: *mut GstBaseSrc) -> gst::GstFlowReturn;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_base_src_submit_buffer_list(
         src: *mut GstBaseSrc,
         buffer_list: *mut gst::GstBufferList,

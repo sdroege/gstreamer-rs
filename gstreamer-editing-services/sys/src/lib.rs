@@ -3120,14 +3120,10 @@ extern "C" {
     // GESCommandLineFormatter
     //=========================================================================
     pub fn ges_command_line_formatter_get_type() -> GType;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn ges_command_line_formatter_get_help(
         nargs: c_int,
         commands: *mut *mut c_char,
     ) -> *mut c_char;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn ges_command_line_formatter_get_timeline_uri(timeline: *mut GESTimeline) -> *mut c_char;
 
     //=========================================================================

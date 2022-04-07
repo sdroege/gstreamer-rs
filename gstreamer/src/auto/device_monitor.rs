@@ -26,6 +26,18 @@ glib::wrapper! {
 
 impl DeviceMonitor {
     pub const NONE: Option<&'static DeviceMonitor> = None;
+
+    #[doc(alias = "gst_device_monitor_new")]
+    pub fn new() -> DeviceMonitor {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_full(ffi::gst_device_monitor_new()) }
+    }
+}
+
+impl Default for DeviceMonitor {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 unsafe impl Send for DeviceMonitor {}

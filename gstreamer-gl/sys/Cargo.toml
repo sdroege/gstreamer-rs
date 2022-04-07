@@ -15,17 +15,14 @@ git = "https://github.com/gtk-rs/gtk-rs-core"
 [dependencies.gst_base]
 package = "gstreamer-base-sys"
 path = "../../gstreamer-base/sys"
-features = ["v1_14"]
 
 [dependencies.gst]
 package = "gstreamer-sys"
 path = "../../gstreamer/sys"
-features = ["v1_14"]
 
 [dependencies.gst_video]
 package = "gstreamer-video-sys"
 path = "../../gstreamer-video/sys"
-features = ["v1_14"]
 
 [dev-dependencies]
 shell-words = "1.0.0"

@@ -2,7 +2,7 @@
 girs_directories = ["../gir-files", "../gst-gir-files"]
 library = "GstAudio"
 version = "1.0"
-min_cfg_version = "1.8"
+min_cfg_version = "1.14"
 work_mode = "normal"
 concurrency = "send+sync"
 generate_safety_asserts = true
@@ -26,6 +26,7 @@ generate = [
     "GstAudio.AudioLayout",
     "GstAudio.AudioNoiseShapingMethod",
     "GstAudio.AudioResamplerMethod",
+    "GstAudio.AudioRingBufferFormatType",
     "GstAudio.AudioSink",
     "GstAudio.AudioSrc",
     "GstAudio.StreamVolume",
@@ -365,22 +366,6 @@ status = "generate"
     [[object.member]]
     name = "none"
     ignore = true
-
-[[object]]
-name = "GstAudio.AudioRingBufferFormatType"
-status = "generate"
-
-    [[object.member]]
-    name = "mpeg2_aac_raw"
-    version = "1.12"
-
-    [[object.member]]
-    name = "mpeg4_aac_raw"
-    version = "1.12"
-
-    [[object.member]]
-    name = "flac"
-    version = "1.12"
 
 [[object]]
 name = "GstAudio.AudioStreamAlign"

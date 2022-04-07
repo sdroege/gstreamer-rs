@@ -40,22 +40,16 @@ impl Adapter {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_adapter_distance_from_discont")]
     pub fn distance_from_discont(&self) -> u64 {
         unsafe { ffi::gst_adapter_distance_from_discont(self.to_glib_none().0) }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_adapter_dts_at_discont")]
     pub fn dts_at_discont(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib(ffi::gst_adapter_dts_at_discont(self.to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_adapter_offset_at_discont")]
     pub fn offset_at_discont(&self) -> u64 {
         unsafe { ffi::gst_adapter_offset_at_discont(self.to_glib_none().0) }
@@ -88,8 +82,6 @@ impl Adapter {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_adapter_prev_offset")]
     pub fn prev_offset(&self) -> (u64, u64) {
         unsafe {
@@ -127,8 +119,6 @@ impl Adapter {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_adapter_pts_at_discont")]
     pub fn pts_at_discont(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib(ffi::gst_adapter_pts_at_discont(self.to_glib_none().0)) }

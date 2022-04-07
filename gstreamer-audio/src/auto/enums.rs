@@ -631,8 +631,6 @@ impl ToValue for AudioNoiseShapingMethod {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstAudioResamplerMethod")]
@@ -651,8 +649,6 @@ pub enum AudioResamplerMethod {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl IntoGlib for AudioResamplerMethod {
     type GlibType = ffi::GstAudioResamplerMethod;
@@ -669,8 +665,6 @@ impl IntoGlib for AudioResamplerMethod {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioResamplerMethod> for AudioResamplerMethod {
     unsafe fn from_glib(value: ffi::GstAudioResamplerMethod) -> Self {
@@ -686,22 +680,16 @@ impl FromGlib<ffi::GstAudioResamplerMethod> for AudioResamplerMethod {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StaticType for AudioResamplerMethod {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_audio_resampler_method_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl glib::value::ValueType for AudioResamplerMethod {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 unsafe impl<'a> FromValue<'a> for AudioResamplerMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -711,8 +699,6 @@ unsafe impl<'a> FromValue<'a> for AudioResamplerMethod {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl ToValue for AudioResamplerMethod {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
@@ -755,16 +741,10 @@ pub enum AudioRingBufferFormatType {
     Mpeg2Aac,
     #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC")]
     Mpeg4Aac,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC_RAW")]
     Mpeg2AacRaw,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC_RAW")]
     Mpeg4AacRaw,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC")]
     Flac,
     #[doc(hidden)]
@@ -789,11 +769,8 @@ impl IntoGlib for AudioRingBufferFormatType {
             Self::Dts => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DTS,
             Self::Mpeg2Aac => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC,
             Self::Mpeg4Aac => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::Mpeg2AacRaw => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC_RAW,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::Mpeg4AacRaw => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC_RAW,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             Self::Flac => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC,
             Self::__Unknown(value) => value,
         }
@@ -817,11 +794,8 @@ impl FromGlib<ffi::GstAudioRingBufferFormatType> for AudioRingBufferFormatType {
             ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DTS => Self::Dts,
             ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC => Self::Mpeg2Aac,
             ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC => Self::Mpeg4Aac,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC_RAW => Self::Mpeg2AacRaw,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC_RAW => Self::Mpeg4AacRaw,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
             ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC => Self::Flac,
             value => Self::__Unknown(value),
         }

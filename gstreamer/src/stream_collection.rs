@@ -104,13 +104,7 @@ impl StreamCollection {
     pub fn builder(upstream_id: Option<&str>) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         let upstream_id = upstream_id.to_glib_none();
-        let (major, minor, _, _) = crate::version();
-        let collection = if (major, minor) > (1, 12) {
-            unsafe { from_glib_full(ffi::gst_stream_collection_new(upstream_id.0)) }
-        } else {
-            // Work-around for 1.14 switching from transfer-floating to transfer-full
-            unsafe { from_glib_none(ffi::gst_stream_collection_new(upstream_id.0)) }
-        };
+        let collection = unsafe { from_glib_full(ffi::gst_stream_collection_new(upstream_id.0)) };
 
         StreamCollectionBuilder(collection)
     }

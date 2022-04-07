@@ -11,7 +11,6 @@ git = "https://github.com/gtk-rs/gtk-rs-core"
 [dependencies.gst_sdp]
 package = "gstreamer-sdp-sys"
 path = "../../gstreamer-sdp/sys"
-features = ["v1_14"]
 
 [dev-dependencies]
 shell-words = "1.0.0"

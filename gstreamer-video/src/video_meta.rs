@@ -357,7 +357,6 @@ impl VideoRegionOfInterestMeta {
         unsafe { glib::Quark::from_glib(self.0.roi_type).as_str() }
     }
 
-    #[cfg(feature = "v1_14")]
     #[doc(alias = "get_params")]
     pub fn params(&self) -> ParamsIter {
         ParamsIter {
@@ -366,7 +365,6 @@ impl VideoRegionOfInterestMeta {
         }
     }
 
-    #[cfg(feature = "v1_14")]
     #[doc(alias = "get_param")]
     pub fn param<'b>(&self, name: &'b str) -> Option<&gst::StructureRef> {
         self.params().find(|s| s.name() == name)
@@ -387,7 +385,6 @@ impl VideoRegionOfInterestMeta {
         self.0.parent_id = id
     }
 
-    #[cfg(feature = "v1_14")]
     #[doc(alias = "gst_video_region_of_interest_meta_add_param")]
     pub fn add_param(&mut self, s: gst::Structure) {
         unsafe {
@@ -396,13 +393,11 @@ impl VideoRegionOfInterestMeta {
     }
 }
 
-#[cfg(feature = "v1_14")]
 pub struct ParamsIter<'a> {
     _meta: &'a VideoRegionOfInterestMeta,
     list: *const glib::ffi::GList,
 }
 
-#[cfg(feature = "v1_14")]
 impl<'a> Iterator for ParamsIter<'a> {
     type Item = &'a gst::StructureRef;
 
@@ -434,19 +429,13 @@ unsafe impl MetaAPI for VideoRegionOfInterestMeta {
 
 impl fmt::Debug for VideoRegionOfInterestMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let mut f = f.debug_struct("VideoRegionOfInterestMeta");
-
-        f.field("roi_type", &self.roi_type())
+        f.debug_struct("VideoRegionOfInterestMeta")
+            .field("roi_type", &self.roi_type())
             .field("rect", &self.rect())
             .field("id", &self.id())
-            .field("parent_id", &self.parent_id());
-
-        #[cfg(feature = "v1_14")]
-        {
-            f.field("params", &self.params().collect::<Vec<_>>());
-        }
-
-        f.finish()
+            .field("parent_id", &self.parent_id())
+            .field("params", &self.params().collect::<Vec<_>>())
+            .finish()
     }
 }
 

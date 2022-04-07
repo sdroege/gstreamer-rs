@@ -1485,22 +1485,16 @@ extern "C" {
     //=========================================================================
     // GstAudioResamplerFilterInterpolation
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_resampler_filter_interpolation_get_type() -> GType;
 
     //=========================================================================
     // GstAudioResamplerFilterMode
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_resampler_filter_mode_get_type() -> GType;
 
     //=========================================================================
     // GstAudioResamplerMethod
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_resampler_method_get_type() -> GType;
 
     //=========================================================================
@@ -1546,8 +1540,6 @@ extern "C" {
     //=========================================================================
     // GstAudioResamplerFlags
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_resampler_flags_get_type() -> GType;
 
     //=========================================================================
@@ -1605,8 +1597,6 @@ extern "C" {
         out_channels: c_int,
         out_position: *mut GstAudioChannelPosition,
     ) -> *mut GstAudioChannelMixer;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_channel_mixer_new_with_matrix(
         flags: GstAudioChannelMixerFlags,
         format: GstAudioFormat,
@@ -1623,8 +1613,6 @@ extern "C" {
     //=========================================================================
     // GstAudioConverter
     //=========================================================================
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_converter_get_type() -> GType;
     pub fn gst_audio_converter_new(
         flags: GstAudioConverterFlags,
@@ -1632,8 +1620,6 @@ extern "C" {
         out_info: *mut GstAudioInfo,
         config: *mut gst::GstStructure,
     ) -> *mut GstAudioConverter;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_converter_convert(
         convert: *mut GstAudioConverter,
         flags: GstAudioConverterFlags,
@@ -1669,8 +1655,6 @@ extern "C" {
         out: *mut gpointer,
         out_frames: size_t,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_audio_converter_supports_inplace(convert: *mut GstAudioConverter) -> gboolean;
     pub fn gst_audio_converter_update_config(
         convert: *mut GstAudioConverter,
@@ -1773,26 +1757,16 @@ extern "C" {
     //=========================================================================
     // GstAudioResampler
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_resampler_free(resampler: *mut GstAudioResampler);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_resampler_get_in_frames(
         resampler: *mut GstAudioResampler,
         out_frames: size_t,
     ) -> size_t;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_resampler_get_max_latency(resampler: *mut GstAudioResampler) -> size_t;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_resampler_get_out_frames(
         resampler: *mut GstAudioResampler,
         in_frames: size_t,
     ) -> size_t;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_resampler_resample(
         resampler: *mut GstAudioResampler,
         in_: *mut gpointer,
@@ -1800,19 +1774,13 @@ extern "C" {
         out: *mut gpointer,
         out_frames: size_t,
     );
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_resampler_reset(resampler: *mut GstAudioResampler);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_resampler_update(
         resampler: *mut GstAudioResampler,
         in_rate: c_int,
         out_rate: c_int,
         options: *mut gst::GstStructure,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_resampler_new(
         method: GstAudioResamplerMethod,
         flags: GstAudioResamplerFlags,
@@ -1822,8 +1790,6 @@ extern "C" {
         out_rate: c_int,
         options: *mut gst::GstStructure,
     ) -> *mut GstAudioResampler;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_resampler_options_set_quality(
         method: GstAudioResamplerMethod,
         quality: c_uint,
@@ -1835,52 +1801,30 @@ extern "C" {
     //=========================================================================
     // GstAudioStreamAlign
     //=========================================================================
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_stream_align_get_type() -> GType;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_stream_align_new(
         rate: c_int,
         alignment_threshold: gst::GstClockTime,
         discont_wait: gst::GstClockTime,
     ) -> *mut GstAudioStreamAlign;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_stream_align_copy(
         align: *const GstAudioStreamAlign,
     ) -> *mut GstAudioStreamAlign;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_stream_align_free(align: *mut GstAudioStreamAlign);
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_stream_align_get_alignment_threshold(
         align: *const GstAudioStreamAlign,
     ) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_stream_align_get_discont_wait(
         align: *const GstAudioStreamAlign,
     ) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_stream_align_get_rate(align: *const GstAudioStreamAlign) -> c_int;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_stream_align_get_samples_since_discont(
         align: *const GstAudioStreamAlign,
     ) -> u64;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_stream_align_get_timestamp_at_discont(
         align: *const GstAudioStreamAlign,
     ) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_stream_align_mark_discont(align: *mut GstAudioStreamAlign);
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_stream_align_process(
         align: *mut GstAudioStreamAlign,
         discont: gboolean,
@@ -1890,30 +1834,20 @@ extern "C" {
         out_duration: *mut gst::GstClockTime,
         out_sample_position: *mut u64,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_stream_align_set_alignment_threshold(
         align: *mut GstAudioStreamAlign,
         alignment_threshold: gst::GstClockTime,
     );
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_stream_align_set_discont_wait(
         align: *mut GstAudioStreamAlign,
         discont_wait: gst::GstClockTime,
     );
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_stream_align_set_rate(align: *mut GstAudioStreamAlign, rate: c_int);
 
     //=========================================================================
     // GstAudioAggregator
     //=========================================================================
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_aggregator_get_type() -> GType;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_aggregator_set_sink_caps(
         aagg: *mut GstAudioAggregator,
         pad: *mut GstAudioAggregatorPad,
@@ -1923,15 +1857,11 @@ extern "C" {
     //=========================================================================
     // GstAudioAggregatorConvertPad
     //=========================================================================
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_aggregator_convert_pad_get_type() -> GType;
 
     //=========================================================================
     // GstAudioAggregatorPad
     //=========================================================================
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_audio_aggregator_pad_get_type() -> GType;
 
     //=========================================================================
@@ -2074,8 +2004,6 @@ extern "C" {
         caps: *mut gst::GstCaps,
         filter: *mut gst::GstCaps,
     ) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_decoder_set_allocation_caps(
         dec: *mut GstAudioDecoder,
         allocation_caps: *mut gst::GstCaps,
@@ -2153,8 +2081,6 @@ extern "C" {
         caps: *mut gst::GstCaps,
         filter: *mut gst::GstCaps,
     ) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_encoder_set_allocation_caps(
         enc: *mut GstAudioEncoder,
         allocation_caps: *mut gst::GstCaps,
@@ -2250,8 +2176,6 @@ extern "C" {
         cb: GstAudioRingBufferCallback,
         user_data: gpointer,
     );
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_audio_ring_buffer_set_callback_full(
         buf: *mut GstAudioRingBuffer,
         cb: GstAudioRingBufferCallback,
@@ -2318,8 +2242,6 @@ extern "C" {
         force_order: gboolean,
         channel_mask: *mut u64,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_audio_channel_positions_to_string(
         position: *const GstAudioChannelPosition,
         channels: c_int,

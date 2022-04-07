@@ -114,8 +114,6 @@ pub trait AggregatorExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "latency")]
     fn connect_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
         -> SignalHandlerId;
@@ -286,8 +284,6 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn connect_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

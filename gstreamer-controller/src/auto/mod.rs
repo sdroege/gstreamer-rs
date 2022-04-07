@@ -15,11 +15,7 @@ pub use self::interpolation_control_source::InterpolationControlSource;
 mod lfo_control_source;
 pub use self::lfo_control_source::LFOControlSource;
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 mod proxy_control_binding;
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 pub use self::proxy_control_binding::ProxyControlBinding;
 
 mod timed_value_control_source;

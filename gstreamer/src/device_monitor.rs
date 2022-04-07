@@ -8,26 +8,6 @@ use glib::translate::*;
 
 use std::num::NonZeroU32;
 
-impl DeviceMonitor {
-    #[doc(alias = "gst_device_monitor_new")]
-    pub fn new() -> DeviceMonitor {
-        assert_initialized_main_thread!();
-        let (major, minor, _, _) = crate::version();
-        if (major, minor) > (1, 12) {
-            unsafe { from_glib_full(ffi::gst_device_monitor_new()) }
-        } else {
-            // Work-around for 1.14 switching from transfer-floating to transfer-full
-            unsafe { from_glib_none(ffi::gst_device_monitor_new()) }
-        }
-    }
-}
-
-impl Default for DeviceMonitor {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 #[derive(Debug, PartialEq, Eq)]
 pub struct DeviceMonitorFilterId(NonZeroU32);
 

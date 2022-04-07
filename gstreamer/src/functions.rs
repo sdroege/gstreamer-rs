@@ -120,8 +120,6 @@ pub fn parse_launchv_full(
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(alias = "gst_calculate_linear_regression")]
 pub fn calculate_linear_regression(
     xy: &[(u64, u64)],
@@ -206,7 +204,6 @@ mod tests {
     use super::*;
     use crate::prelude::*;
 
-    #[cfg(feature = "v1_12")]
     #[test]
     fn test_calculate_linear_regression() {
         crate::init().unwrap();

@@ -22,13 +22,9 @@ use crate::State;
 use glib::translate::*;
 
 use std::ffi::CStr;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use std::future::Future;
 use std::mem;
 use std::num::NonZeroU64;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use std::pin::Pin;
 
 impl Element {
@@ -155,8 +151,6 @@ pub trait ElementExtManual: 'static {
     #[doc(alias = "get_element_flags")]
     fn element_flags(&self) -> ElementFlags;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::too_many_arguments)]
     #[doc(alias = "gst_element_message_full_with_details")]
     fn message_full_with_details<T: crate::MessageErrorDomain>(
@@ -196,8 +190,6 @@ pub trait ElementExtManual: 'static {
     fn num_sink_pads(&self) -> u16;
     fn num_src_pads(&self) -> u16;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_element_add_property_deep_notify_watch")]
     fn add_property_deep_notify_watch(
         &self,
@@ -205,8 +197,6 @@ pub trait ElementExtManual: 'static {
         include_value: bool,
     ) -> NotifyWatchId;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_element_add_property_notify_watch")]
     fn add_property_notify_watch(
         &self,
@@ -214,8 +204,6 @@ pub trait ElementExtManual: 'static {
         include_value: bool,
     ) -> NotifyWatchId;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_element_remove_property_notify_watch")]
     fn remove_property_notify_watch(&self, watch_id: NotifyWatchId);
 
@@ -257,15 +245,11 @@ pub trait ElementExtManual: 'static {
         seek_pos: V,
     ) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_element_call_async")]
     fn call_async<F>(&self, func: F)
     where
         F: FnOnce(&Self) + Send + 'static;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn call_async_future<F, T>(&self, func: F) -> Pin<Box<dyn Future<Output = T> + Send + 'static>>
     where
         F: FnOnce(&Self) -> T + Send + 'static,
@@ -387,8 +371,6 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn message_full_with_details<T: crate::MessageErrorDomain>(
         &self,
         type_: ElementMessageType,
@@ -529,8 +511,6 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn add_property_deep_notify_watch(
         &self,
         property_name: Option<&str>,
@@ -546,8 +526,6 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn add_property_notify_watch(
         &self,
         property_name: Option<&str>,
@@ -563,8 +541,6 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn remove_property_notify_watch(&self, watch_id: NotifyWatchId) {
         unsafe {
             ffi::gst_element_remove_property_notify_watch(
@@ -736,8 +712,6 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn call_async<F>(&self, func: F)
     where
         F: FnOnce(&Self) + Send + 'static,
@@ -770,8 +744,6 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn call_async_future<F, T>(&self, func: F) -> Pin<Box<dyn Future<Output = T> + Send + 'static>>
     where
         F: FnOnce(&Self) -> T + Send + 'static,
@@ -1382,7 +1354,6 @@ macro_rules! element_info(
 mod tests {
     use super::*;
     use glib::GString;
-    #[cfg(feature = "v1_10")]
     use std::sync::mpsc::channel;
 
     #[test]
@@ -1417,7 +1388,6 @@ mod tests {
     }
 
     #[test]
-    #[cfg(feature = "v1_14")]
     fn test_foreach_pad() {
         crate::init().unwrap();
 
@@ -1433,7 +1403,6 @@ mod tests {
         assert_eq!(pad_names, vec![String::from("sink"), String::from("src")]);
     }
 
-    #[cfg(feature = "v1_10")]
     #[test]
     fn test_call_async() {
         crate::init().unwrap();

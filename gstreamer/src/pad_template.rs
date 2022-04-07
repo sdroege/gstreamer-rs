@@ -1,16 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use crate::PadTemplate;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use crate::StaticPadTemplate;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use glib::translate::*;
 
 impl PadTemplate {
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_pad_template_new_from_static_pad_template_with_gtype")]
     pub fn from_static_pad_template_with_gtype(
         pad_template: &StaticPadTemplate,

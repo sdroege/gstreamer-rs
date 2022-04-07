@@ -22,8 +22,6 @@ glib::wrapper! {
 }
 
 impl AppSink {
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_app_sink_get_buffer_list_support")]
     #[doc(alias = "get_buffer_list_support")]
     pub fn is_buffer_list_support(&self) -> bool {
@@ -89,8 +87,6 @@ impl AppSink {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_app_sink_set_buffer_list_support")]
     pub fn set_buffer_list_support(&self, enable_lists: bool) {
         unsafe {
@@ -149,8 +145,6 @@ impl AppSink {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_app_sink_try_pull_preroll")]
     pub fn try_pull_preroll(
         &self,
@@ -164,8 +158,6 @@ impl AppSink {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_app_sink_try_pull_sample")]
     pub fn try_pull_sample(
         &self,

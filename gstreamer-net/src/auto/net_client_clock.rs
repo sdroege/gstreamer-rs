@@ -3,6 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
@@ -23,6 +24,25 @@ glib::wrapper! {
 }
 
 impl NetClientClock {
+    #[doc(alias = "gst_net_client_clock_new")]
+    pub fn new(
+        name: &str,
+        remote_address: &str,
+        remote_port: i32,
+        base_time: impl Into<Option<gst::ClockTime>>,
+    ) -> NetClientClock {
+        assert_initialized_main_thread!();
+        unsafe {
+            gst::Clock::from_glib_full(ffi::gst_net_client_clock_new(
+                name.to_glib_none().0,
+                remote_address.to_glib_none().0,
+                remote_port,
+                base_time.into().into_glib(),
+            ))
+            .unsafe_cast()
+        }
+    }
+
     pub fn address(&self) -> Option<glib::GString> {
         glib::ObjectExt::property(self, "address")
     }

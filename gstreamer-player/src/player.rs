@@ -1,8 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use crate::Player;
-use crate::PlayerSignalDispatcher;
-use crate::PlayerVideoRenderer;
 use glib::object::ObjectType;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
@@ -11,25 +9,6 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 impl Player {
-    #[doc(alias = "gst_player_new")]
-    pub fn new(
-        video_renderer: Option<&PlayerVideoRenderer>,
-        signal_dispatcher: Option<&PlayerSignalDispatcher>,
-    ) -> Player {
-        assert_initialized_main_thread!();
-        let video_renderer = video_renderer.to_glib_full();
-        let signal_dispatcher = signal_dispatcher.to_glib_full();
-
-        let (major, minor, _, _) = gst::version();
-        if (major, minor) > (1, 12) {
-            unsafe { from_glib_full(ffi::gst_player_new(video_renderer, signal_dispatcher)) }
-        } else {
-            // Workaround for bad floating reference handling in 1.12. This issue was fixed for 1.13 in
-            // https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/commit/gst-libs/gst/player/gstplayer.c?id=634cd87c76f58b5e1383715bafd5614db825c7d1
-            unsafe { from_glib_none(ffi::gst_player_new(video_renderer, signal_dispatcher)) }
-        }
-    }
-
     #[doc(alias = "get_config")]
     #[doc(alias = "gst_player_get_config")]
     pub fn config(&self) -> crate::PlayerConfig {

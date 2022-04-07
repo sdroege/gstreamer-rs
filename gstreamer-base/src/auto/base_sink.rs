@@ -38,8 +38,6 @@ pub trait BaseSinkExt: 'static {
     #[doc(alias = "get_blocksize")]
     fn blocksize(&self) -> u32;
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_base_sink_get_drop_out_of_segment")]
     #[doc(alias = "get_drop_out_of_segment")]
     fn drops_out_of_segment(&self) -> bool;
@@ -91,8 +89,6 @@ pub trait BaseSinkExt: 'static {
     #[doc(alias = "gst_base_sink_set_blocksize")]
     fn set_blocksize(&self, blocksize: u32);
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_base_sink_set_drop_out_of_segment")]
     fn set_drop_out_of_segment(&self, drop_out_of_segment: bool);
 
@@ -233,8 +229,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         unsafe { ffi::gst_base_sink_get_blocksize(self.as_ref().to_glib_none().0) }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn drops_out_of_segment(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_base_sink_get_drop_out_of_segment(
@@ -312,8 +306,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn set_drop_out_of_segment(&self, drop_out_of_segment: bool) {
         unsafe {
             ffi::gst_base_sink_set_drop_out_of_segment(

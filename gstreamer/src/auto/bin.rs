@@ -5,8 +5,6 @@
 
 use crate::ChildProxy;
 use crate::Element;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use crate::ElementFlags;
 use crate::Object;
 use crate::Pad;
@@ -62,8 +60,6 @@ pub trait GstBinExt: 'static {
     #[doc(alias = "get_by_name_recurse_up")]
     fn by_name_recurse_up(&self, name: &str) -> Option<Element>;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_bin_get_suppressed_flags")]
     #[doc(alias = "get_suppressed_flags")]
     fn suppressed_flags(&self) -> ElementFlags;
@@ -74,8 +70,6 @@ pub trait GstBinExt: 'static {
     #[doc(alias = "gst_bin_remove")]
     fn remove(&self, element: &impl IsA<Element>) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_bin_set_suppressed_flags")]
     fn set_suppressed_flags(&self, flags: ElementFlags);
 
@@ -94,16 +88,12 @@ pub trait GstBinExt: 'static {
     #[doc(alias = "message-forward")]
     fn set_message_forward(&self, message_forward: bool);
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "deep-element-added")]
     fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "deep-element-removed")]
     fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
@@ -184,8 +174,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn suppressed_flags(&self) -> ElementFlags {
         unsafe {
             from_glib(ffi::gst_bin_get_suppressed_flags(
@@ -215,8 +203,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn set_suppressed_flags(&self, flags: ElementFlags) {
         unsafe {
             ffi::gst_bin_set_suppressed_flags(self.as_ref().to_glib_none().0, flags.into_glib());
@@ -248,8 +234,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "message-forward", &message_forward)
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -283,8 +267,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,

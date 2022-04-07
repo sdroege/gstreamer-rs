@@ -2,7 +2,7 @@
 girs_directories = ["../../gir-files", "../../gst-gir-files"]
 library = "Gst"
 version = "1.0"
-min_cfg_version = "1.8"
+min_cfg_version = "1.14"
 work_mode = "sys"
 
 extra_versions = [
@@ -10,9 +10,6 @@ extra_versions = [
     "1.18.3",
     "1.18",
     "1.16",
-    "1.14",
-    "1.12",
-    "1.10",
 ]
 
 external_libraries = [
@@ -71,18 +68,8 @@ status = "generate"
     version = "1.18.3"
 
 [[object]]
-name = "Gst.ParamArray"
-status = "generate"
-    [[object.function]]
-    name = "get_type"
-    version = "1.12"
-
-[[object]]
 name = "Gst.*"
 status = "generate"
-    [[object.function]]
-    name = "reference_timestamp_meta_api_get_type"
-    version = "1.14"
     [[object.function]]
     name = "clear_buffer"
     version = "1.18.3"

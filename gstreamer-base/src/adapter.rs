@@ -294,14 +294,10 @@ impl UniqueAdapter {
         self.0.copy_bytes(offset, size)
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn distance_from_discont(&self) -> u64 {
         self.0.distance_from_discont()
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn dts_at_discont(&self) -> Option<gst::ClockTime> {
         self.0.dts_at_discont()
     }
@@ -350,8 +346,6 @@ impl UniqueAdapter {
         self.0.masked_scan_uint32_peek(mask, pattern, offset, size)
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn offset_at_discont(&self) -> u64 {
         self.0.offset_at_discont()
     }
@@ -364,8 +358,6 @@ impl UniqueAdapter {
         self.0.prev_dts_at_offset(offset)
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn prev_offset(&self) -> (u64, u64) {
         self.0.prev_offset()
     }
@@ -378,8 +370,6 @@ impl UniqueAdapter {
         self.0.prev_pts_at_offset(offset)
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn pts_at_discont(&self) -> Option<gst::ClockTime> {
         self.0.pts_at_discont()
     }

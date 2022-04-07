@@ -34,7 +34,6 @@ use gst::element_warning;
 use gst::prelude::*;
 
 use std::env;
-#[cfg(feature = "v1_10")]
 use std::sync::{Arc, Mutex};
 
 use anyhow::Error;
@@ -56,7 +55,6 @@ struct ErrorMessage {
     source: glib::Error,
 }
 
-#[cfg(feature = "v1_10")]
 #[derive(Clone, Debug, glib::Boxed)]
 #[boxed_type(name = "ErrorValue")]
 struct ErrorValue(Arc<Mutex<Option<Error>>>);
@@ -202,7 +200,6 @@ fn example_main() -> Result<(), Error> {
         if let Err(err) = insert_sink(is_audio, is_video) {
             // The following sends a message of type Error on the bus, containing our detailed
             // error information.
-            #[cfg(feature = "v1_10")]
             element_error!(
                 dbin,
                 gst::LibraryError::Failed,
@@ -211,14 +208,6 @@ fn example_main() -> Result<(), Error> {
                             .field("error",
                                    &ErrorValue(Arc::new(Mutex::new(Some(err)))))
                             .build()
-            );
-
-            #[cfg(not(feature = "v1_10"))]
-            element_error!(
-                dbin,
-                gst::LibraryError::Failed,
-                ("Failed to insert sink"),
-                ["{}", err]
             );
         }
     });
@@ -241,39 +230,23 @@ fn example_main() -> Result<(), Error> {
             MessageView::Error(err) => {
                 pipeline.set_state(gst::State::Null)?;
 
-                #[cfg(feature = "v1_10")]
-                {
-                    match err.details() {
-                        // This bus-message of type error contained our custom error-details struct
-                        // that we sent in the pad-added callback above. So we unpack it and log
-                        // the detailed error information here. details contains a glib::SendValue.
-                        // The unpacked error is the converted to a Result::Err, stopping the
-                        // application's execution.
-                        Some(details) if details.name() == "error-details" => details
-                            .get::<&ErrorValue>("error")
-                            .unwrap()
-                            .clone()
-                            .0
-                            .lock()
-                            .unwrap()
-                            .take()
-                            .map(Result::Err)
-                            .expect("error-details message without actual error"),
-                        _ => Err(ErrorMessage {
-                            src: msg
-                                .src()
-                                .map(|s| String::from(s.path_string()))
-                                .unwrap_or_else(|| String::from("None")),
-                            error: err.error().to_string(),
-                            debug: err.debug(),
-                            source: err.error(),
-                        }
-                        .into()),
-                    }?;
-                }
-                #[cfg(not(feature = "v1_10"))]
-                {
-                    return Err(ErrorMessage {
+                match err.details() {
+                    // This bus-message of type error contained our custom error-details struct
+                    // that we sent in the pad-added callback above. So we unpack it and log
+                    // the detailed error information here. details contains a glib::SendValue.
+                    // The unpacked error is the converted to a Result::Err, stopping the
+                    // application's execution.
+                    Some(details) if details.name() == "error-details" => details
+                        .get::<&ErrorValue>("error")
+                        .unwrap()
+                        .clone()
+                        .0
+                        .lock()
+                        .unwrap()
+                        .take()
+                        .map(Result::Err)
+                        .expect("error-details message without actual error"),
+                    _ => Err(ErrorMessage {
                         src: msg
                             .src()
                             .map(|s| String::from(s.path_string()))
@@ -282,8 +255,8 @@ fn example_main() -> Result<(), Error> {
                         debug: err.debug(),
                         source: err.error(),
                     }
-                    .into());
-                }
+                    .into()),
+                }?;
             }
             MessageView::StateChanged(s) => {
                 println!(

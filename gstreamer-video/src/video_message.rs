@@ -2,8 +2,6 @@
 
 use crate::NavigationMessageType;
 use glib::translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr};
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use glib::ToSendValue;
 use gst::ffi as gst_ffi;
 use gst::{prelude::*, Message, Object, Seqnum};
@@ -28,8 +26,6 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
-        #[cfg(any(feature = "v1_14", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
         #[allow(clippy::needless_update)]
         pub fn other_fields(
             self,
@@ -51,7 +47,6 @@ macro_rules! message_builder_generic_impl {
                     gst_ffi::gst_message_set_seqnum(msg, seqnum.into_glib());
                 }
 
-                #[cfg(any(feature = "v1_14", feature = "dox"))]
                 if !self.builder.other_fields.is_empty() {
                     let structure = gst_ffi::gst_message_writable_structure(msg);
 
@@ -102,8 +97,6 @@ impl<'a> MessageBuilder<'a> {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn other_fields(self, other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))]) -> Self {
         Self {
             other_fields: self

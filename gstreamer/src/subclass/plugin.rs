@@ -11,7 +11,7 @@ cfg_if::cfg_if! {
         pub const MINOR_VERSION: i32 = 18;
     } else if #[cfg(feature = "v1_16")] {
         pub const MINOR_VERSION: i32 = 16;
-    } else if #[cfg(feature = "v1_14")] {
+    } else {
         pub const MINOR_VERSION: i32 = 14;
     }
 }

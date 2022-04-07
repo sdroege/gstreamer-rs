@@ -28,10 +28,6 @@ macro_rules! skip_assert_initialized {
 #[allow(unused_imports)]
 mod auto;
 pub use crate::auto::*;
-mod net_client_clock;
-mod net_time_provider;
-mod ntp_clock;
-mod ptp_clock;
 
 pub use crate::net_address_meta::*;
 mod net_address_meta;

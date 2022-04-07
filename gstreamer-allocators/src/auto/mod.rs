@@ -5,23 +5,15 @@
 
 #[cfg(any(target_os = "linux", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(target_os = "linux")))]
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 mod dma_buf_allocator;
 #[cfg(any(target_os = "linux", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(target_os = "linux")))]
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 pub use self::dma_buf_allocator::DmaBufAllocator;
 
 mod fd_allocator;
 pub use self::fd_allocator::FdAllocator;
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod phys_memory_allocator;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::phys_memory_allocator::PhysMemoryAllocator;
 
 mod flags;
@@ -32,13 +24,9 @@ pub mod functions;
 mod constants;
 pub use self::constants::ALLOCATOR_DMABUF;
 pub use self::constants::ALLOCATOR_FD;
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 pub use self::constants::CAPS_FEATURE_MEMORY_DMABUF;
 
 #[doc(hidden)]
 pub mod traits {
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use super::phys_memory_allocator::PhysMemoryAllocatorExt;
 }

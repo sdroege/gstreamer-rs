@@ -88,18 +88,12 @@ pub trait ElementExt: 'static {
     #[doc(alias = "gst_element_create_all_pads")]
     fn create_all_pads(&self);
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_element_foreach_pad")]
     fn foreach_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_element_foreach_sink_pad")]
     fn foreach_sink_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_element_foreach_src_pad")]
     fn foreach_src_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
 
@@ -307,8 +301,6 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn foreach_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(
@@ -333,8 +325,6 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn foreach_sink_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(
@@ -359,8 +349,6 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn foreach_src_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(

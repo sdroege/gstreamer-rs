@@ -9,7 +9,6 @@ use std::panic;
 use std::ptr;
 use std::sync::atomic::{AtomicBool, Ordering};
 
-#[cfg(any(feature = "v1_10"))]
 use {
     futures_core::Stream,
     std::{
@@ -307,8 +306,6 @@ impl AppSink {
     }
 
     #[doc(alias = "drop-out-of-segment")]
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn drops_out_of_segment(&self) -> bool {
         unsafe {
             from_glib(gst_base::ffi::gst_base_sink_get_drop_out_of_segment(
@@ -442,8 +439,6 @@ impl AppSink {
     }
 
     #[doc(alias = "drop-out-of-segment")]
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_base_sink_set_drop_out_of_segment")]
     pub fn set_drop_out_of_segment(&self, drop_out_of_segment: bool) {
         unsafe {
@@ -914,20 +909,17 @@ impl AppSink {
         }
     }
 
-    #[cfg(any(feature = "v1_10"))]
     pub fn stream(&self) -> AppSinkStream {
         AppSinkStream::new(self)
     }
 }
 
-#[cfg(any(feature = "v1_10"))]
 #[derive(Debug)]
 pub struct AppSinkStream {
     app_sink: glib::WeakRef<AppSink>,
     waker_reference: Arc<Mutex<Option<Waker>>>,
 }
 
-#[cfg(any(feature = "v1_10"))]
 impl AppSinkStream {
     fn new(app_sink: &AppSink) -> Self {
         skip_assert_initialized!();
@@ -966,7 +958,6 @@ impl AppSinkStream {
     }
 }
 
-#[cfg(any(feature = "v1_10"))]
 impl Drop for AppSinkStream {
     fn drop(&mut self) {
         // This is not thread-safe before 1.16.3, see
@@ -979,7 +970,6 @@ impl Drop for AppSinkStream {
     }
 }
 
-#[cfg(any(feature = "v1_10"))]
 impl Stream for AppSinkStream {
     type Item = gst::Sample;
 
@@ -1006,7 +996,6 @@ impl Stream for AppSinkStream {
     }
 }
 
-#[cfg(any(feature = "v1_10"))]
 #[cfg(test)]
 mod tests {
     use super::*;

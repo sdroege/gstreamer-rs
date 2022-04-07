@@ -215,8 +215,6 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_app_src_push_buffer_list")]
     pub fn push_buffer_list(
         &self,

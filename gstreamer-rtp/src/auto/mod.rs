@@ -21,8 +21,6 @@ pub use self::enums::RTPPayload;
 pub use self::enums::RTPProfile;
 
 mod flags;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub use self::flags::RTPBufferFlags;
 pub use self::flags::RTPBufferMapFlags;
 #[cfg(any(feature = "v1_20", feature = "dox"))]

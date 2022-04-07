@@ -25,6 +25,24 @@ glib::wrapper! {
 }
 
 impl Stream {
+    #[doc(alias = "gst_stream_new")]
+    pub fn new(
+        stream_id: Option<&str>,
+        caps: Option<&Caps>,
+        type_: StreamType,
+        flags: StreamFlags,
+    ) -> Stream {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_full(ffi::gst_stream_new(
+                stream_id.to_glib_none().0,
+                caps.to_glib_none().0,
+                type_.into_glib(),
+                flags.into_glib(),
+            ))
+        }
+    }
+
     #[doc(alias = "gst_stream_get_caps")]
     #[doc(alias = "get_caps")]
     pub fn caps(&self) -> Option<Caps> {
@@ -83,8 +101,6 @@ impl Stream {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "caps")]
     pub fn connect_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -111,8 +127,6 @@ impl Stream {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "stream-flags")]
     pub fn connect_stream_flags_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -141,8 +155,6 @@ impl Stream {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "stream-type")]
     pub fn connect_stream_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -171,8 +183,6 @@ impl Stream {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "tags")]
     pub fn connect_tags_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,

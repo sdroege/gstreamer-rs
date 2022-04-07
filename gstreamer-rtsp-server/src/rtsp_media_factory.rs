@@ -3,20 +3,14 @@
 use crate::RTSPMediaFactory;
 
 use glib::prelude::*;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use glib::translate::*;
 
 pub trait RTSPMediaFactoryExtManual: 'static {
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_rtsp_media_factory_add_role_from_structure")]
     fn add_role_from_structure(&self, structure: &gst::StructureRef);
 }
 
 impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExtManual for O {
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn add_role_from_structure(&self, structure: &gst::StructureRef) {
         unsafe {
             ffi::gst_rtsp_media_factory_add_role_from_structure(

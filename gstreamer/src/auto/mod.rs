@@ -75,18 +75,10 @@ pub use self::proxy_pad::ProxyPad;
 mod registry;
 pub use self::registry::Registry;
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 mod stream;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub use self::stream::Stream;
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 mod stream_collection;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub use self::stream_collection::StreamCollection;
 
 mod system_clock;
@@ -140,8 +132,6 @@ pub use self::enums::PadProbeReturn;
 pub use self::enums::ParseError;
 pub use self::enums::PluginError;
 pub use self::enums::ProgressType;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::enums::PromiseResult;
 pub use self::enums::QOSType;
 pub use self::enums::Rank;
@@ -196,12 +186,8 @@ pub use self::flags::SegmentFlags;
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 pub use self::flags::SerializeFlags;
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 pub use self::flags::StackTraceFlags;
 pub use self::flags::StreamFlags;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub use self::flags::StreamType;
 
 mod alias;

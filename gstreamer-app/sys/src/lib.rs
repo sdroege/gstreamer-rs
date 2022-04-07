@@ -207,8 +207,6 @@ extern "C" {
     // GstAppSink
     //=========================================================================
     pub fn gst_app_sink_get_type() -> GType;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_app_sink_get_buffer_list_support(appsink: *mut GstAppSink) -> gboolean;
     pub fn gst_app_sink_get_caps(appsink: *mut GstAppSink) -> *mut gst::GstCaps;
     pub fn gst_app_sink_get_drop(appsink: *mut GstAppSink) -> gboolean;
@@ -221,8 +219,6 @@ extern "C" {
     pub fn gst_app_sink_pull_object(appsink: *mut GstAppSink) -> *mut gst::GstMiniObject;
     pub fn gst_app_sink_pull_preroll(appsink: *mut GstAppSink) -> *mut gst::GstSample;
     pub fn gst_app_sink_pull_sample(appsink: *mut GstAppSink) -> *mut gst::GstSample;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn gst_app_sink_set_buffer_list_support(appsink: *mut GstAppSink, enable_lists: gboolean);
     pub fn gst_app_sink_set_callbacks(
         appsink: *mut GstAppSink,
@@ -241,14 +237,10 @@ extern "C" {
         appsink: *mut GstAppSink,
         timeout: gst::GstClockTime,
     ) -> *mut gst::GstMiniObject;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_app_sink_try_pull_preroll(
         appsink: *mut GstAppSink,
         timeout: gst::GstClockTime,
     ) -> *mut gst::GstSample;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_app_sink_try_pull_sample(
         appsink: *mut GstAppSink,
         timeout: gst::GstClockTime,
@@ -267,8 +259,6 @@ extern "C" {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn gst_app_src_get_current_level_time(appsrc: *mut GstAppSrc) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_app_src_get_duration(appsrc: *mut GstAppSrc) -> gst::GstClockTime;
     pub fn gst_app_src_get_emit_signals(appsrc: *mut GstAppSrc) -> gboolean;
     pub fn gst_app_src_get_latency(appsrc: *mut GstAppSrc, min: *mut u64, max: *mut u64);
@@ -288,8 +278,6 @@ extern "C" {
         appsrc: *mut GstAppSrc,
         buffer: *mut gst::GstBuffer,
     ) -> gst::GstFlowReturn;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_app_src_push_buffer_list(
         appsrc: *mut GstAppSrc,
         buffer_list: *mut gst::GstBufferList,
@@ -305,8 +293,6 @@ extern "C" {
         notify: glib::GDestroyNotify,
     );
     pub fn gst_app_src_set_caps(appsrc: *mut GstAppSrc, caps: *const gst::GstCaps);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_app_src_set_duration(appsrc: *mut GstAppSrc, duration: gst::GstClockTime);
     pub fn gst_app_src_set_emit_signals(appsrc: *mut GstAppSrc, emit: gboolean);
     pub fn gst_app_src_set_latency(appsrc: *mut GstAppSrc, min: u64, max: u64);
