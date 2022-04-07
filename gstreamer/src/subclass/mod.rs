@@ -43,6 +43,8 @@ pub use self::element::ElementMetadata;
 pub use self::error::FlowError;
 pub use self::plugin::{MAJOR_VERSION, MINOR_VERSION};
 
+pub use self::task_pool::TaskPoolFunction;
+
 pub mod prelude {
     #[doc(hidden)]
     pub use glib::subclass::prelude::*;
