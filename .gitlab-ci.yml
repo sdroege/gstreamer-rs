@@ -440,7 +440,7 @@ coverage:
   allow_failure: true
   extends:
     - '.cargo test'
-    - .img-nightly
+    - .img-stable
   stage: 'extras'
   variables:
     ALL_FEATURES: 'yes'

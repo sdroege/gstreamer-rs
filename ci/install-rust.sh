@@ -23,15 +23,16 @@ rustc --version
 if [ "$RUST_IMAGE_FULL" = "1" ]; then
   rustup component add clippy-preview
   rustup component add rustfmt
+
   cargo install --force cargo-deny
   cargo install --force cargo-outdated
+
+  # Coverage tools
+  rustup component add llvm-tools-preview
+  cargo install --force grcov
 fi
 
 if [ "$RUST_VERSION" = "nightly" ]; then
-  # Coverage tools
-  cargo install grcov
-  rustup component add llvm-tools-preview
-
   # Documentation tools
   cargo install --force rustdoc-stripper
 fi
