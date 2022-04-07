@@ -101,7 +101,7 @@ After installation, you also need to install `pkg-config` (e.g. via Homebrew)
 and set the `PKG_CONFIG_PATH` environment variable
 
 ```console
-$ export PKG_CONFIG_PATH="/Library/Frameworks/GStreamer.framework/Versions/Current/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+$ export PKG_CONFIG_PATH="/Library/Frameworks/GStreamer.framework/Versions/1.0/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 ```
 
 <a name="installation-windows"/>
