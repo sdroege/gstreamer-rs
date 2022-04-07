@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+mod rtp_base_payload;
+pub use self::rtp_base_payload::RTPBasePayload;
+
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 mod rtp_header_extension;
@@ -78,6 +81,7 @@ pub use self::constants::RTP_PAYLOAD_TS48_STRING;
 
 #[doc(hidden)]
 pub mod traits {
+    pub use super::rtp_base_payload::RTPBasePayloadExt;
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub use super::rtp_header_extension::RTPHeaderExtensionExt;

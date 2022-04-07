@@ -26,6 +26,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::match_same_arms)]
 #[allow(non_snake_case)]
 #[allow(clippy::use_self)]
+#[allow(unused_imports)]
 mod auto;
 pub use crate::auto::functions::*;
 pub use crate::auto::*;
@@ -37,6 +38,10 @@ pub use crate::rtp_buffer::{compare_seqnum, RTPBuffer};
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 pub mod rtp_header_extension;
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub mod rtp_base_payload;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_rtp::prelude::*" without getting conflicts
@@ -50,4 +55,8 @@ pub mod prelude {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub use crate::rtp_header_extension::RTPHeaderExtensionExtManual;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub use crate::rtp_base_payload::RTPBasePayloadExtManual;
 }

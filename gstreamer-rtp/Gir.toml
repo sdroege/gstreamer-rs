@@ -30,11 +30,34 @@ manual = [
     "Gst.Caps",
     "Gst.Element",
     "Gst.ElementFactory",
-    "Gst.Structure",
 ]
 
 [[object]]
 name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.BufferList"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "Option"
+
+[[object]]
+name = "Gst.FlowReturn"
+status = "manual"
+must_use = true
+    [object.conversion_type]
+    variant = "Result"
+    ok_type = "gst::FlowSuccess"
+    err_type = "gst::FlowError"
+
+[[object]]
+name = "Gst.Structure"
 status = "manual"
 ref_mode = "ref"
 
@@ -55,6 +78,42 @@ status = "generate"
     [[object.function]]
     name = "rtp_source_meta_api_get_type"
     ignore = true
+
+[[object]]
+name = "GstRtp.RTPBasePayload"
+status = "generate"
+manual_traits = ["RTPHeaderExtensionExtManual"]
+
+    [[object.function]]
+    name = "set_outcaps"
+    # varargs function
+    ignore = true
+
+    [[object.function]]
+    name = "push"
+    # Move buffer
+    manual = true
+
+    [[object.function]]
+    name = "push_list"
+    # Move buffer list
+    manual = true
+
+    [[object.function]]
+    name = "set_outcaps_structure"
+    # StructureRef instead of Structure
+    manual = true
+    rename = "set_outcaps"
+
+    [[object.function]]
+    name = "allocate_output_buffer"
+        [object.function.return]
+        nullable_return_is_error = "Failed to allocate output buffer"
+
+    [[object.signal]]
+    name = "request-extension"
+        [object.signal.return]
+        nullable = true
 
 [[object]]
 name = "GstRtp.RTPBuffer"
