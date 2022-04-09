@@ -35,7 +35,7 @@ struct ErrorMessage {
 }
 
 struct DrawingContext {
-    layout: glib::SendUniqueCell<LayoutWrapper>,
+    layout: LayoutWrapper,
     info: Option<gst_video::VideoInfo>,
 }
 
@@ -46,15 +46,13 @@ impl ops::Deref for LayoutWrapper {
     type Target = pango::Layout;
 
     fn deref(&self) -> &pango::Layout {
+        assert_eq!(self.0.ref_count(), 1);
         &self.0
     }
 }
 
-unsafe impl glib::SendUnique for LayoutWrapper {
-    fn is_unique(&self) -> bool {
-        self.0.ref_count() == 1
-    }
-}
+// SAFETY: We ensure that there are never multiple references to the layout.
+unsafe impl Send for LayoutWrapper {}
 
 fn create_pipeline() -> Result<gst::Pipeline, Error> {
     gst::init()?;
@@ -111,10 +109,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     // interior mutability (see Rust docs). Via this we can get a mutable reference to the contained
     // data which is checked at runtime for uniqueness (blocking in case of mutex, panic in case
     // of refcell) instead of compile-time (like with normal references).
-    let drawer = Arc::new(Mutex::new(DrawingContext {
-        layout: glib::SendUniqueCell::new(layout).unwrap(),
-        info: None,
-    }));
+    let drawer = Arc::new(Mutex::new(DrawingContext { layout, info: None }));
 
     // Connect to the overlaycomposition element's "draw" signal, which is emitted for
     // each videoframe piped through the element. The signal handler needs to
@@ -140,7 +135,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             let timestamp = buffer.pts().unwrap();
 
             let info = drawer.info.as_ref().unwrap();
-            let layout = drawer.layout.borrow();
+            let layout = &drawer.layout;
 
             let angle = 2.0 * PI * (timestamp % (10 * gst::ClockTime::SECOND)).nseconds() as f64
                 / (10.0 * gst::ClockTime::SECOND.nseconds() as f64);

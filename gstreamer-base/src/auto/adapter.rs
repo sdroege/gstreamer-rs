@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use glib::translate::*;
-use glib::ObjectExt;
 use std::mem;
 
 glib::wrapper! {
@@ -128,11 +127,5 @@ impl Adapter {
 impl Default for Adapter {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-unsafe impl glib::SendUnique for Adapter {
-    fn is_unique(&self) -> bool {
-        self.ref_count() == 1
     }
 }
