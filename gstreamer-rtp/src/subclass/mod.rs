@@ -6,6 +6,8 @@
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 mod rtp_base_payload;
 
+mod rtp_base_depayload;
+
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 mod rtp_header_extension;
@@ -17,6 +19,8 @@ pub mod prelude {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub use super::rtp_base_payload::{RTPBasePayloadImpl, RTPBasePayloadImplExt};
+
+    pub use super::rtp_base_depayload::{RTPBaseDepayloadImpl, RTPBaseDepayloadImplExt};
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]

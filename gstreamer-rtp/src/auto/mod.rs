@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+mod rtp_base_depayload;
+pub use self::rtp_base_depayload::RTPBaseDepayload;
+
 mod rtp_base_payload;
 pub use self::rtp_base_payload::RTPBasePayload;
 
@@ -79,6 +82,7 @@ pub use self::constants::RTP_PAYLOAD_TS48_STRING;
 
 #[doc(hidden)]
 pub mod traits {
+    pub use super::rtp_base_depayload::RTPBaseDepayloadExt;
     pub use super::rtp_base_payload::RTPBasePayloadExt;
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]

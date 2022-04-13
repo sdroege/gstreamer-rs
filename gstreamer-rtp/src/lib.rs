@@ -43,6 +43,8 @@ pub mod rtp_header_extension;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 pub mod rtp_base_payload;
 
+pub mod rtp_base_depayload;
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_rtp::prelude::*" without getting conflicts
 pub mod prelude {
@@ -59,4 +61,6 @@ pub mod prelude {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub use crate::rtp_base_payload::RTPBasePayloadExtManual;
+
+    pub use crate::rtp_base_depayload::RTPBaseDepayloadExtManual;
 }
