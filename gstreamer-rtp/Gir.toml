@@ -80,6 +80,25 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "GstRtp.RTPBaseDepayload"
+status = "generate"
+
+    [[object.function]]
+    name = "push"
+    # Move buffer
+    manual = true
+
+    [[object.function]]
+    name = "push_list"
+    # Move buffer list
+    manual = true
+
+    [[object.signal]]
+    name = "request-extension"
+        [object.signal.return]
+        nullable = true
+
+[[object]]
 name = "GstRtp.RTPBasePayload"
 status = "generate"
 manual_traits = ["RTPHeaderExtensionExtManual"]

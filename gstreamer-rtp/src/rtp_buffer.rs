@@ -49,6 +49,15 @@ impl<'a> RTPBuffer<'a, Readable> {
             }
         }
     }
+
+    pub unsafe fn from_glib_borrow<'b>(
+        rtp_buffer: *mut ffi::GstRTPBuffer,
+    ) -> glib::translate::Borrowed<RTPBuffer<'b, Readable>> {
+        glib::translate::Borrowed::new(RTPBuffer {
+            rtp_buffer: *rtp_buffer,
+            phantom: PhantomData,
+        })
+    }
 }
 
 impl<'a> RTPBuffer<'a, Writable> {
@@ -384,6 +393,14 @@ impl<'a, T> RTPBuffer<'a, T> {
                 glib::translate::mut_override(&self.rtp_buffer),
             ))
         }
+    }
+
+    pub unsafe fn as_ptr(&self) -> *const ffi::GstRTPBuffer {
+        &self.rtp_buffer as *const ffi::GstRTPBuffer
+    }
+
+    pub unsafe fn as_mut_ptr(&self) -> *mut ffi::GstRTPBuffer {
+        &self.rtp_buffer as *const ffi::GstRTPBuffer as *mut ffi::GstRTPBuffer
     }
 }
 
