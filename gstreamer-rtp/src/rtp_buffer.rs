@@ -304,6 +304,29 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
+    #[doc(alias = "get_payload_buffer")]
+    #[doc(alias = "gst_rtp_buffer_get_payload_buffer")]
+    pub fn payload_buffer(&self) -> Result<gst::Buffer, glib::BoolError> {
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_rtp_buffer_get_payload_buffer(
+                glib::translate::mut_override(&self.rtp_buffer),
+            ))
+            .ok_or_else(|| glib::bool_error!("Failed to get payload buffer"))
+        }
+    }
+
+    pub fn buffer(&self) -> Option<&gst::BufferRef> {
+        unsafe {
+            let ptr = self.rtp_buffer.buffer;
+
+            if ptr.is_null() {
+                None
+            } else {
+                Some(gst::BufferRef::from_ptr(ptr))
+            }
+        }
+    }
+
     #[doc(alias = "get_extension")]
     pub fn is_extension(&self) -> bool {
         unsafe {
