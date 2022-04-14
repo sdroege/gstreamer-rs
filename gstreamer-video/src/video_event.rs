@@ -1291,10 +1291,6 @@ impl serde::Serialize for NavigationModifierType {
             }
         }
 
-        if res.is_empty() {
-            res = "empty".to_owned();
-        }
-
         serializer.serialize_str(&res)
     }
 }
@@ -1309,10 +1305,14 @@ impl<'de> serde::de::Visitor<'de> for NavigationModifierTypeVisitor {
     type Value = NavigationModifierType;
 
     fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("one or more mask names separated by plus signs, or \"empty\"")
+        formatter.write_str("one or more mask names separated by plus signs, or the empty string")
     }
 
     fn visit_str<E: serde::de::Error>(self, value: &str) -> std::result::Result<Self::Value, E> {
+        if value.is_empty() {
+            return Ok(NavigationModifierType::empty());
+        }
+
         let mut gvalue = glib::Value::from_type(NavigationModifierType::static_type());
         let tokens = value.split('+');
         let class = FlagsClass::new(NavigationModifierType::static_type()).unwrap();
@@ -1420,12 +1420,28 @@ mod tests {
             }
             _ => unreachable!(),
         }
-
         let json_event = serde_json::to_string(&navigation_event).unwrap();
         assert_eq!(
             json_event,
-            r#"{"event":"MouseButtonPress","button":1,"x":1.0,"y":2.0,"modifier_state":"empty"}"#
+            r#"{"event":"MouseButtonPress","button":1,"x":1.0,"y":2.0,"modifier_state":""}"#
         );
+        let navigation_event: NavigationEvent = serde_json::from_str(&json_event).unwrap();
+        match &navigation_event {
+            NavigationEvent::MouseButtonPress {
+                button,
+                x,
+                y,
+                modifier_state,
+            } => {
+                assert!(
+                    *button == 1
+                        && *x == 1.0
+                        && *y == 2.0
+                        && *modifier_state == NavigationModifierType::empty()
+                );
+            }
+            _ => unreachable!(),
+        }
 
         let mods = NavigationModifierType::META_MASK;
         let ev = NavigationEvent::key_release_builder("a")
@@ -1447,6 +1463,16 @@ mod tests {
             json_event,
             r#"{"event":"KeyRelease","key":"a","modifier_state":"meta-mask"}"#
         );
+        let navigation_event: NavigationEvent = serde_json::from_str(&json_event).unwrap();
+        match &navigation_event {
+            NavigationEvent::KeyRelease {
+                key,
+                modifier_state,
+            } => {
+                assert!(*key == "a" && *modifier_state == mods);
+            }
+            _ => unreachable!(),
+        }
 
         let ev = NavigationEvent::new_touch_motion(0, 1.0, 2.0, 0.5).build();
         let navigation_event = NavigationEvent::parse(&ev).unwrap();
@@ -1472,8 +1498,27 @@ mod tests {
         let json_event = serde_json::to_string(&navigation_event).unwrap();
         assert_eq!(
             json_event,
-            r#"{"event":"TouchMotion","identifier":0,"x":1.0,"y":2.0,"pressure":0.5,"modifier_state":"empty"}"#
+            r#"{"event":"TouchMotion","identifier":0,"x":1.0,"y":2.0,"pressure":0.5,"modifier_state":""}"#
         );
+        let navigation_event: NavigationEvent = serde_json::from_str(&json_event).unwrap();
+        match &navigation_event {
+            NavigationEvent::TouchMotion {
+                identifier,
+                x,
+                y,
+                pressure,
+                modifier_state,
+            } => {
+                assert!(
+                    *identifier == 0
+                        && *x == 1.0
+                        && *y == 2.0
+                        && *pressure == 0.5
+                        && *modifier_state == NavigationModifierType::empty()
+                );
+            }
+            _ => unreachable!(),
+        }
 
         let ev = NavigationEvent::touch_cancel_builder().build();
         let navigation_event = NavigationEvent::parse(&ev).unwrap();
@@ -1485,9 +1530,13 @@ mod tests {
         }
 
         let json_event = serde_json::to_string(&navigation_event).unwrap();
-        assert_eq!(
-            json_event,
-            r#"{"event":"TouchCancel","modifier_state":"empty"}"#
-        );
+        assert_eq!(json_event, r#"{"event":"TouchCancel","modifier_state":""}"#);
+        let navigation_event: NavigationEvent = serde_json::from_str(&json_event).unwrap();
+        match &navigation_event {
+            NavigationEvent::TouchCancel { modifier_state } => {
+                assert!(*modifier_state == NavigationModifierType::empty());
+            }
+            _ => unreachable!(),
+        }
     }
 }
