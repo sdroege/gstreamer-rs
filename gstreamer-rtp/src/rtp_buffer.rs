@@ -427,6 +427,26 @@ impl<'a, T> RTPBuffer<'a, T> {
     }
 }
 
+impl RTPBuffer<'_, ()> {
+    #[doc(alias = "gst_rtp_buffer_calc_header_len")]
+    pub fn calc_header_len(csrc_count: u8) -> u32 {
+        skip_assert_initialized!();
+        unsafe { ffi::gst_rtp_buffer_calc_header_len(csrc_count) }
+    }
+
+    #[doc(alias = "gst_rtp_buffer_calc_packet_len")]
+    pub fn calc_packet_len(payload_len: u32, pad_len: u8, csrc_count: u8) -> u32 {
+        skip_assert_initialized!();
+        unsafe { ffi::gst_rtp_buffer_calc_packet_len(payload_len, pad_len, csrc_count) }
+    }
+
+    #[doc(alias = "gst_rtp_buffer_calc_payload_len")]
+    pub fn calc_payload_len(packet_len: u32, pad_len: u8, csrc_count: u8) -> u32 {
+        skip_assert_initialized!();
+        unsafe { ffi::gst_rtp_buffer_calc_payload_len(packet_len, pad_len, csrc_count) }
+    }
+}
+
 impl<'a, T> Drop for RTPBuffer<'a, T> {
     fn drop(&mut self) {
         unsafe {
@@ -670,5 +690,15 @@ mod tests {
             let rtp_buffer = RTPBuffer::from_buffer_readable(&buffer).unwrap();
             assert!(!rtp_buffer.has_padding());
         }
+    }
+
+    #[test]
+    fn test_calc_functions() {
+        let res = RTPBuffer::calc_header_len(0);
+        assert_eq!(res, 12);
+        let res = RTPBuffer::calc_packet_len(100, 10, 2);
+        assert_eq!(res, 130);
+        let res = RTPBuffer::calc_payload_len(100, 5, 4);
+        assert_eq!(res, 67);
     }
 }
