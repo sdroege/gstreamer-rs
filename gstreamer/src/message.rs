@@ -313,6 +313,20 @@ impl Error {
         ErrorBuilder::new(glib::Error::new(error, message))
     }
 
+    pub fn builder_from_error<'a>(error: glib::Error) -> ErrorBuilder<'a> {
+        assert_initialized_main_thread!();
+
+        use glib::error::ErrorDomain;
+        assert!([
+            crate::CoreError::domain(),
+            crate::ResourceError::domain(),
+            crate::StreamError::domain(),
+            crate::LibraryError::domain(),
+        ]
+        .contains(&error.domain()));
+        ErrorBuilder::new(error)
+    }
+
     #[doc(alias = "get_error")]
     #[doc(alias = "gst_message_parse_error")]
     pub fn error(&self) -> glib::Error {
@@ -368,6 +382,21 @@ impl Warning {
         WarningBuilder::new(glib::Error::new(error, message))
     }
 
+    pub fn builder_from_error<'a>(error: glib::Error) -> WarningBuilder<'a> {
+        assert_initialized_main_thread!();
+
+        use glib::error::ErrorDomain;
+
+        assert!([
+            crate::CoreError::domain(),
+            crate::ResourceError::domain(),
+            crate::StreamError::domain(),
+            crate::LibraryError::domain(),
+        ]
+        .contains(&error.domain()));
+        WarningBuilder::new(error)
+    }
+
     #[doc(alias = "get_error")]
     #[doc(alias = "gst_message_parse_warning")]
     pub fn error(&self) -> glib::Error {
@@ -421,6 +450,21 @@ impl Info {
     pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> InfoBuilder {
         assert_initialized_main_thread!();
         InfoBuilder::new(glib::Error::new(error, message))
+    }
+
+    pub fn builder_from_error<'a>(error: glib::Error) -> InfoBuilder<'a> {
+        assert_initialized_main_thread!();
+
+        use glib::error::ErrorDomain;
+
+        assert!([
+            crate::CoreError::domain(),
+            crate::ResourceError::domain(),
+            crate::StreamError::domain(),
+            crate::LibraryError::domain(),
+        ]
+        .contains(&error.domain()));
+        InfoBuilder::new(error)
     }
 
     #[doc(alias = "get_error")]
