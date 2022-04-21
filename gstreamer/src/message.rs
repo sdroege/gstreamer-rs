@@ -308,9 +308,9 @@ impl Error {
         Self::builder(error, message).build()
     }
 
-    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> ErrorBuilder<T> {
+    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> ErrorBuilder {
         assert_initialized_main_thread!();
-        ErrorBuilder::new(error, message)
+        ErrorBuilder::new(glib::Error::new(error, message))
     }
 
     #[doc(alias = "get_error")]
@@ -363,9 +363,9 @@ impl Warning {
         Self::builder(error, message).build()
     }
 
-    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> WarningBuilder<T> {
+    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> WarningBuilder {
         assert_initialized_main_thread!();
-        WarningBuilder::new(error, message)
+        WarningBuilder::new(glib::Error::new(error, message))
     }
 
     #[doc(alias = "get_error")]
@@ -418,9 +418,9 @@ impl Info {
         Self::builder(error, message).build()
     }
 
-    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> InfoBuilder<T> {
+    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> InfoBuilder {
         assert_initialized_main_thread!();
-        InfoBuilder::new(error, message)
+        InfoBuilder::new(glib::Error::new(error, message))
     }
 
     #[doc(alias = "get_error")]
@@ -1859,22 +1859,20 @@ impl MessageErrorDomain for crate::StreamError {}
 impl MessageErrorDomain for crate::LibraryError {}
 
 #[must_use = "The builder must be built to be used"]
-pub struct ErrorBuilder<'a, T> {
+pub struct ErrorBuilder<'a> {
     builder: MessageBuilder<'a>,
-    error: T,
-    message: &'a str,
+    error: glib::Error,
     debug: Option<&'a str>,
     #[allow(unused)]
     details: Option<Structure>,
 }
 
-impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
-    fn new(error: T, message: &'a str) -> Self {
+impl<'a> ErrorBuilder<'a> {
+    fn new(error: glib::Error) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
             error,
-            message,
             debug: None,
             details: None,
         }
@@ -1899,12 +1897,10 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
             None => ptr::null_mut(),
             Some(details) => details.into_ptr(),
         };
-
-        let error = glib::Error::new(s.error, s.message);
 
         ffi::gst_message_new_error_with_details(
             src,
-            mut_override(error.to_glib_none().0),
+            mut_override(s.error.to_glib_none().0),
             s.debug.to_glib_none().0,
             details,
         )
@@ -1912,22 +1908,20 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
 }
 
 #[must_use = "The builder must be built to be used"]
-pub struct WarningBuilder<'a, T> {
+pub struct WarningBuilder<'a> {
     builder: MessageBuilder<'a>,
-    error: T,
-    message: &'a str,
+    error: glib::Error,
     debug: Option<&'a str>,
     #[allow(unused)]
     details: Option<Structure>,
 }
 
-impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
-    fn new(error: T, message: &'a str) -> Self {
+impl<'a> WarningBuilder<'a> {
+    fn new(error: glib::Error) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
             error,
-            message,
             debug: None,
             details: None,
         }
@@ -1952,12 +1946,10 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
             None => ptr::null_mut(),
             Some(details) => details.into_ptr(),
         };
-
-        let error = glib::Error::new(s.error, s.message);
 
         ffi::gst_message_new_warning_with_details(
             src,
-            mut_override(error.to_glib_none().0),
+            mut_override(s.error.to_glib_none().0),
             s.debug.to_glib_none().0,
             details,
         )
@@ -1965,22 +1957,20 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
 }
 
 #[must_use = "The builder must be built to be used"]
-pub struct InfoBuilder<'a, T> {
+pub struct InfoBuilder<'a> {
     builder: MessageBuilder<'a>,
-    error: T,
-    message: &'a str,
+    error: glib::Error,
     debug: Option<&'a str>,
     #[allow(unused)]
     details: Option<Structure>,
 }
 
-impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
-    fn new(error: T, message: &'a str) -> Self {
+impl<'a> InfoBuilder<'a> {
+    fn new(error: glib::Error) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
             error,
-            message,
             debug: None,
             details: None,
         }
@@ -2006,11 +1996,9 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
             Some(details) => details.into_ptr(),
         };
 
-        let error = glib::Error::new(s.error, s.message);
-
         ffi::gst_message_new_info_with_details(
             src,
-            mut_override(error.to_glib_none().0),
+            mut_override(s.error.to_glib_none().0),
             s.debug.to_glib_none().0,
             details,
         )
