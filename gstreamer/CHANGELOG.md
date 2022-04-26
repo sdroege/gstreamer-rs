@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.18.8] - 2022-04-26
+### Added
+- Bindings for `RTPBasePayload` and `RTPBaseDepayload`.
+- Accessors for `RTPBuffer` buffer.
+- Bindings for `RTPBuffer` length calculation API.
+- More complete `gst::Task` bindings.
+
+### Fixed
+- Export `gst::subclass::TaskPoolFunction`.
+
 ## [0.18.7] - 2022-04-04
 ### Added
 - Bindings for `VideoAggregator` and the `VideoAggregatorPad`s.
