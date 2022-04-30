@@ -2,7 +2,7 @@
 
 use futures_channel::mpsc::{self, UnboundedReceiver};
 use futures_core::Stream;
-use futures_util::StreamExt;
+use futures_util::{stream::FusedStream, StreamExt};
 use glib::ffi::{gboolean, gpointer};
 use glib::prelude::*;
 use glib::source::{Continue, Priority, SourceId};
@@ -295,7 +295,7 @@ impl Bus {
     pub fn stream_filtered<'a>(
         &self,
         message_types: &'a [MessageType],
-    ) -> impl Stream<Item = Message> + Unpin + Send + 'a {
+    ) -> impl Stream<Item = Message> + Unpin + FusedStream + Send + 'a {
         self.stream().filter(move |message| {
             let message_type = message.type_();
 
@@ -356,6 +356,12 @@ impl Stream for BusStream {
 
     fn poll_next(mut self: Pin<&mut Self>, context: &mut Context) -> Poll<Option<Self::Item>> {
         self.receiver.poll_next_unpin(context)
+    }
+}
+
+impl FusedStream for BusStream {
+    fn is_terminated(&self) -> bool {
+        self.receiver.is_terminated()
     }
 }
 
