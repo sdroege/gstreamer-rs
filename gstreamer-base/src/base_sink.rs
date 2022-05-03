@@ -13,6 +13,8 @@ pub trait BaseSinkExtManual: 'static {
     fn query_latency(
         &self,
     ) -> Result<(bool, bool, Option<gst::ClockTime>, Option<gst::ClockTime>), glib::BoolError>;
+
+    fn sink_pad(&self) -> gst::Pad;
 }
 
 impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
@@ -53,6 +55,14 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
             } else {
                 Err(glib::bool_error!("Failed to query latency"))
             }
+        }
+    }
+
+    fn sink_pad(&self) -> gst::Pad {
+        unsafe {
+            let ptr: &ffi::GstBaseSink = &*(self.as_ptr() as *const _);
+
+            from_glib_none(ptr.sinkpad)
         }
     }
 }

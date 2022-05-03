@@ -69,6 +69,10 @@ pub trait VideoEncoderExtManual: 'static {
         &'a self,
         output_state: VideoCodecState<'a, InNegotiation<'a>>,
     ) -> Result<(), gst::FlowError>;
+
+    fn sink_pad(&self) -> gst::Pad;
+
+    fn src_pad(&self) -> gst::Pad;
 }
 
 impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
@@ -250,6 +254,20 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
             Ok(())
         } else {
             Err(gst::FlowError::NotNegotiated)
+        }
+    }
+
+    fn sink_pad(&self) -> gst::Pad {
+        unsafe {
+            let elt: &ffi::GstVideoEncoder = &*(self.as_ptr() as *const _);
+            from_glib_none(elt.sinkpad)
+        }
+    }
+
+    fn src_pad(&self) -> gst::Pad {
+        unsafe {
+            let elt: &ffi::GstVideoEncoder = &*(self.as_ptr() as *const _);
+            from_glib_none(elt.srcpad)
         }
     }
 }
