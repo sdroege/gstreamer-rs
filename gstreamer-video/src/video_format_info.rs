@@ -330,6 +330,24 @@ impl VideoFormatInfo {
             ) as u32
         }
     }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "gst_video_format_info_get_tile_sizes")]
+    pub fn tile_sizes(&self, plane: u32) -> (u32, (u32, u32)) {
+        unsafe {
+            let mut out_ws = std::mem::MaybeUninit::uninit();
+            let mut out_hs = std::mem::MaybeUninit::uninit();
+            let size = ffi::gst_video_format_info_get_tile_sizes(
+                self.to_glib_none().0,
+                plane,
+                out_ws.as_mut_ptr(),
+                out_hs.as_mut_ptr(),
+            );
+
+            (size, (out_ws.assume_init(), out_hs.assume_init()))
+        }
+    }
 }
 
 unsafe impl Sync for VideoFormatInfo {}
