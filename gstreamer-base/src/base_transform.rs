@@ -13,6 +13,10 @@ pub trait BaseTransformExtManual: 'static {
 
     #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment;
+
+    fn sink_pad(&self) -> gst::Pad;
+
+    fn src_pad(&self) -> gst::Pad;
 }
 
 impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
@@ -34,6 +38,20 @@ impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
             let trans: &ffi::GstBaseTransform = &*(self.as_ptr() as *const _);
             let _guard = crate::utils::MutexGuard::lock(&trans.element.object.lock);
             from_glib_none(&trans.segment as *const _)
+        }
+    }
+
+    fn sink_pad(&self) -> gst::Pad {
+        unsafe {
+            let elt: &ffi::GstBaseTransform = &*(self.as_ptr() as *const _);
+            from_glib_none(elt.sinkpad)
+        }
+    }
+
+    fn src_pad(&self) -> gst::Pad {
+        unsafe {
+            let elt: &ffi::GstBaseTransform = &*(self.as_ptr() as *const _);
+            from_glib_none(elt.srcpad)
         }
     }
 }

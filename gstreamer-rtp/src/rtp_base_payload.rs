@@ -15,6 +15,10 @@ pub trait RTPBasePayloadExtManual: 'static {
 
     #[doc(alias = "gst_rtp_base_payload_push_list")]
     fn push_list(&self, list: gst::BufferList) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn sink_pad(&self) -> gst::Pad;
+
+    fn src_pad(&self) -> gst::Pad;
 }
 
 impl<O: IsA<RTPBasePayload>> RTPBasePayloadExtManual for O {
@@ -49,6 +53,20 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExtManual for O {
                 self.as_ref().to_glib_none().0,
                 list.into_ptr(),
             ))
+        }
+    }
+
+    fn sink_pad(&self) -> gst::Pad {
+        unsafe {
+            let elt: &ffi::GstRTPBasePayload = &*(self.as_ptr() as *const _);
+            from_glib_none(elt.sinkpad)
+        }
+    }
+
+    fn src_pad(&self) -> gst::Pad {
+        unsafe {
+            let elt: &ffi::GstRTPBasePayload = &*(self.as_ptr() as *const _);
+            from_glib_none(elt.srcpad)
         }
     }
 }

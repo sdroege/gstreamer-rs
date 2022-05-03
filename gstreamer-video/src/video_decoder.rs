@@ -109,6 +109,10 @@ pub trait VideoDecoderExtManual: 'static {
         function: &str,
         line: u32,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn sink_pad(&self) -> gst::Pad;
+
+    fn src_pad(&self) -> gst::Pad;
 }
 
 impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
@@ -403,6 +407,20 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
                 self.as_ref().to_glib_none().0,
                 frame.to_glib_none().0,
             ))
+        }
+    }
+
+    fn sink_pad(&self) -> gst::Pad {
+        unsafe {
+            let elt: &ffi::GstVideoDecoder = &*(self.as_ptr() as *const _);
+            from_glib_none(elt.sinkpad)
+        }
+    }
+
+    fn src_pad(&self) -> gst::Pad {
+        unsafe {
+            let elt: &ffi::GstVideoDecoder = &*(self.as_ptr() as *const _);
+            from_glib_none(elt.srcpad)
         }
     }
 }

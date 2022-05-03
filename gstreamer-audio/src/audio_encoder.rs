@@ -23,6 +23,10 @@ pub trait AudioEncoderExtManual: 'static {
     #[doc(alias = "get_allocator")]
     #[doc(alias = "gst_audio_encoder_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
+
+    fn sink_pad(&self) -> gst::Pad;
+
+    fn src_pad(&self) -> gst::Pad;
 }
 
 impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
@@ -77,6 +81,20 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
                 &mut params,
             );
             (from_glib_full(allocator), params.into())
+        }
+    }
+
+    fn sink_pad(&self) -> gst::Pad {
+        unsafe {
+            let elt: &ffi::GstAudioEncoder = &*(self.as_ptr() as *const _);
+            from_glib_none(elt.sinkpad)
+        }
+    }
+
+    fn src_pad(&self) -> gst::Pad {
+        unsafe {
+            let elt: &ffi::GstAudioEncoder = &*(self.as_ptr() as *const _);
+            from_glib_none(elt.srcpad)
         }
     }
 }

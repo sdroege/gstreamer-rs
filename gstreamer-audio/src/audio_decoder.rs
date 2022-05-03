@@ -57,6 +57,10 @@ pub trait AudioDecoderExtManual: 'static {
         function: &str,
         line: u32,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn sink_pad(&self) -> gst::Pad;
+
+    fn src_pad(&self) -> gst::Pad;
 }
 
 impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
@@ -171,6 +175,20 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
                 function.to_glib_none().0,
                 line as i32,
             ))
+        }
+    }
+
+    fn sink_pad(&self) -> gst::Pad {
+        unsafe {
+            let elt: &ffi::GstAudioDecoder = &*(self.as_ptr() as *const _);
+            from_glib_none(elt.sinkpad)
+        }
+    }
+
+    fn src_pad(&self) -> gst::Pad {
+        unsafe {
+            let elt: &ffi::GstAudioDecoder = &*(self.as_ptr() as *const _);
+            from_glib_none(elt.srcpad)
         }
     }
 }

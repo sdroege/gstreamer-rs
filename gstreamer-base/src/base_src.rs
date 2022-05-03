@@ -24,6 +24,8 @@ pub trait BaseSrcExtManual: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_base_src_new_segment")]
     fn new_segment(&self, segment: &gst::Segment) -> Result<(), glib::BoolError>;
+
+    fn src_pad(&self) -> gst::Pad;
 }
 
 impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
@@ -90,6 +92,14 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
             } else {
                 Err(glib::bool_error!("Failed to configure new segment"))
             }
+        }
+    }
+
+    fn src_pad(&self) -> gst::Pad {
+        unsafe {
+            let ptr: &ffi::GstBaseSrc = &*(self.as_ptr() as *const _);
+
+            from_glib_none(ptr.srcpad)
         }
     }
 }
