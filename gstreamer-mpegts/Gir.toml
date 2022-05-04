@@ -1,0 +1,68 @@
+[options]
+girs_directories = ["../gir-files", "../gst-gir-files"]
+library = "GstMpegts"
+version = "1.0"
+min_cfg_version = "1.14"
+work_mode = "normal"
+target_path = "."
+concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+generate_display_trait = false
+deprecate_by_min_version = true
+trust_return_value_nullability = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+]
+
+generate = []
+
+manual = [
+    "GLib.Bytes",
+    "Gst.Element",
+]
+
+[[object]]
+name = "GstMpegts.Section"
+status = "generate"
+version = "1.20"
+    [[object.function]]
+    name = "new"
+    ignore = true
+
+    [[object.function]]
+    name = "get_scte_sit"
+    ignore = true
+
+    [[object.function]]
+    name = "packetize"
+    # Invalid code generation for this function
+    ignore = true
+
+    [[object.function]]
+    name = "from_scte_sit"
+    # Invalid code generation for this function
+    ignore = true
+
+    [[object.function]]
+    name = "data"
+        [object.function.return]
+        nullable = true
+        nullable_return_is_error = "Failed to create section"
+
+    [[object.function]]
+    name = "get_tsdt"
+    # Invalid code generation for this function
+    ignore = true
+
+    [[object.function]]
+    name = "get_cat"
+    # Invalid code generation for this function
+    ignore = true
+
+    [[object.function]]
+    name = "send_event"
+    ignore = true
