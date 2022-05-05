@@ -315,15 +315,13 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
-    pub fn buffer(&self) -> Option<&gst::BufferRef> {
+    pub fn buffer(&self) -> &gst::BufferRef {
         unsafe {
             let ptr = self.rtp_buffer.buffer;
 
-            if ptr.is_null() {
-                None
-            } else {
-                Some(gst::BufferRef::from_ptr(ptr))
-            }
+            assert!(!ptr.is_null());
+
+            gst::BufferRef::from_ptr(ptr)
         }
     }
 
