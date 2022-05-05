@@ -141,7 +141,6 @@ impl ToValue for BufferCopyFlags {
 }
 
 bitflags! {
-    #[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
     #[doc(alias = "GstBufferFlags")]
     pub struct BufferFlags: u32 {
         #[doc(alias = "GST_BUFFER_FLAG_LIVE")]
@@ -1624,7 +1623,6 @@ impl ToValue for SeekFlags {
 }
 
 bitflags! {
-    #[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
     #[doc(alias = "GstSegmentFlags")]
     pub struct SegmentFlags: u32 {
         #[doc(alias = "GST_SEGMENT_FLAG_RESET")]
