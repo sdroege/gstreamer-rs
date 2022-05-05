@@ -14,9 +14,9 @@ pub trait BaseTransformExtManual: 'static {
     #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment;
 
-    fn sink_pad(&self) -> gst::Pad;
+    fn sink_pad(&self) -> &gst::Pad;
 
-    fn src_pad(&self) -> gst::Pad;
+    fn src_pad(&self) -> &gst::Pad;
 }
 
 impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
@@ -41,17 +41,17 @@ impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
         }
     }
 
-    fn sink_pad(&self) -> gst::Pad {
+    fn sink_pad(&self) -> &gst::Pad {
         unsafe {
-            let elt: &ffi::GstBaseTransform = &*(self.as_ptr() as *const _);
-            from_glib_none(elt.sinkpad)
+            let elt = &*(self.as_ptr() as *const ffi::GstBaseTransform);
+            &*(&elt.sinkpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
         }
     }
 
-    fn src_pad(&self) -> gst::Pad {
+    fn src_pad(&self) -> &gst::Pad {
         unsafe {
-            let elt: &ffi::GstBaseTransform = &*(self.as_ptr() as *const _);
-            from_glib_none(elt.srcpad)
+            let elt = &*(self.as_ptr() as *const ffi::GstBaseTransform);
+            &*(&elt.srcpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
         }
     }
 }

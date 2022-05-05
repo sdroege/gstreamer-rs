@@ -9,9 +9,9 @@ pub trait RTPBaseDepayloadExtManual: 'static {
     #[doc(alias = "gst_rtp_base_depayload_push_list")]
     fn push_list(&self, list: gst::BufferList) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    fn sink_pad(&self) -> gst::Pad;
+    fn sink_pad(&self) -> &gst::Pad;
 
-    fn src_pad(&self) -> gst::Pad;
+    fn src_pad(&self) -> &gst::Pad;
 }
 
 impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExtManual for O {
@@ -33,17 +33,17 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExtManual for O {
         }
     }
 
-    fn sink_pad(&self) -> gst::Pad {
+    fn sink_pad(&self) -> &gst::Pad {
         unsafe {
-            let elt: &ffi::GstRTPBaseDepayload = &*(self.as_ptr() as *const _);
-            from_glib_none(elt.sinkpad)
+            let elt = &*(self.as_ptr() as *const ffi::GstRTPBaseDepayload);
+            &*(&elt.sinkpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
         }
     }
 
-    fn src_pad(&self) -> gst::Pad {
+    fn src_pad(&self) -> &gst::Pad {
         unsafe {
-            let elt: &ffi::GstRTPBaseDepayload = &*(self.as_ptr() as *const _);
-            from_glib_none(elt.srcpad)
+            let elt = &*(self.as_ptr() as *const ffi::GstRTPBaseDepayload);
+            &*(&elt.srcpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
         }
     }
 }

@@ -58,9 +58,9 @@ pub trait AudioDecoderExtManual: 'static {
         line: u32,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    fn sink_pad(&self) -> gst::Pad;
+    fn sink_pad(&self) -> &gst::Pad;
 
-    fn src_pad(&self) -> gst::Pad;
+    fn src_pad(&self) -> &gst::Pad;
 }
 
 impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
@@ -178,17 +178,17 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
         }
     }
 
-    fn sink_pad(&self) -> gst::Pad {
+    fn sink_pad(&self) -> &gst::Pad {
         unsafe {
-            let elt: &ffi::GstAudioDecoder = &*(self.as_ptr() as *const _);
-            from_glib_none(elt.sinkpad)
+            let elt = &*(self.as_ptr() as *const ffi::GstAudioDecoder);
+            &*(&elt.sinkpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
         }
     }
 
-    fn src_pad(&self) -> gst::Pad {
+    fn src_pad(&self) -> &gst::Pad {
         unsafe {
-            let elt: &ffi::GstAudioDecoder = &*(self.as_ptr() as *const _);
-            from_glib_none(elt.srcpad)
+            let elt = &*(self.as_ptr() as *const ffi::GstAudioDecoder);
+            &*(&elt.srcpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
         }
     }
 }

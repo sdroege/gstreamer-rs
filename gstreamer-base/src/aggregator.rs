@@ -85,7 +85,7 @@ pub trait AggregatorExtManual: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    fn src_pad(&self) -> gst::Pad;
+    fn src_pad(&self) -> &gst::Pad;
 }
 
 impl<O: IsA<Aggregator>> AggregatorExtManual for O {
@@ -270,11 +270,10 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         }
     }
 
-    fn src_pad(&self) -> gst::Pad {
+    fn src_pad(&self) -> &gst::Pad {
         unsafe {
-            let ptr: &ffi::GstAggregator = &*(self.as_ptr() as *const _);
-
-            from_glib_none(ptr.srcpad)
+            let elt = &*(self.as_ptr() as *const ffi::GstAggregator);
+            &*(&elt.srcpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
         }
     }
 }

@@ -24,9 +24,9 @@ pub trait AudioEncoderExtManual: 'static {
     #[doc(alias = "gst_audio_encoder_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
-    fn sink_pad(&self) -> gst::Pad;
+    fn sink_pad(&self) -> &gst::Pad;
 
-    fn src_pad(&self) -> gst::Pad;
+    fn src_pad(&self) -> &gst::Pad;
 }
 
 impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
@@ -84,17 +84,17 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
         }
     }
 
-    fn sink_pad(&self) -> gst::Pad {
+    fn sink_pad(&self) -> &gst::Pad {
         unsafe {
-            let elt: &ffi::GstAudioEncoder = &*(self.as_ptr() as *const _);
-            from_glib_none(elt.sinkpad)
+            let elt = &*(self.as_ptr() as *const ffi::GstAudioEncoder);
+            &*(&elt.sinkpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
         }
     }
 
-    fn src_pad(&self) -> gst::Pad {
+    fn src_pad(&self) -> &gst::Pad {
         unsafe {
-            let elt: &ffi::GstAudioEncoder = &*(self.as_ptr() as *const _);
-            from_glib_none(elt.srcpad)
+            let elt = &*(self.as_ptr() as *const ffi::GstAudioEncoder);
+            &*(&elt.srcpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
         }
     }
 }

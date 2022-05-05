@@ -9,9 +9,9 @@ use std::mem;
 
 pub trait BaseParseExtManual: 'static {
     #[doc(alias = "get_sink_pad")]
-    fn sink_pad(&self) -> gst::Pad;
+    fn sink_pad(&self) -> &gst::Pad;
     #[doc(alias = "get_src_pad")]
-    fn src_pad(&self) -> gst::Pad;
+    fn src_pad(&self) -> &gst::Pad;
 
     #[doc(alias = "gst_base_parse_set_duration")]
     fn set_duration<V: Into<gst::GenericFormattedValue>>(&self, duration: V, interval: u32);
@@ -38,17 +38,17 @@ pub trait BaseParseExtManual: 'static {
 }
 
 impl<O: IsA<BaseParse>> BaseParseExtManual for O {
-    fn sink_pad(&self) -> gst::Pad {
+    fn sink_pad(&self) -> &gst::Pad {
         unsafe {
-            let elt: &ffi::GstBaseParse = &*(self.as_ptr() as *const _);
-            from_glib_none(elt.sinkpad)
+            let elt = &*(self.as_ptr() as *const ffi::GstBaseParse);
+            &*(&elt.sinkpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
         }
     }
 
-    fn src_pad(&self) -> gst::Pad {
+    fn src_pad(&self) -> &gst::Pad {
         unsafe {
-            let elt: &ffi::GstBaseParse = &*(self.as_ptr() as *const _);
-            from_glib_none(elt.srcpad)
+            let elt = &*(self.as_ptr() as *const ffi::GstBaseParse);
+            &*(&elt.srcpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
         }
     }
 

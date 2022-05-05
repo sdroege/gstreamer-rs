@@ -14,7 +14,7 @@ pub trait BaseSinkExtManual: 'static {
         &self,
     ) -> Result<(bool, bool, Option<gst::ClockTime>, Option<gst::ClockTime>), glib::BoolError>;
 
-    fn sink_pad(&self) -> gst::Pad;
+    fn sink_pad(&self) -> &gst::Pad;
 }
 
 impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
@@ -58,11 +58,10 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
         }
     }
 
-    fn sink_pad(&self) -> gst::Pad {
+    fn sink_pad(&self) -> &gst::Pad {
         unsafe {
-            let ptr: &ffi::GstBaseSink = &*(self.as_ptr() as *const _);
-
-            from_glib_none(ptr.sinkpad)
+            let elt = &*(self.as_ptr() as *const ffi::GstBaseSink);
+            &*(&elt.sinkpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
         }
     }
 }
