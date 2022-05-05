@@ -502,10 +502,6 @@ status = "generate"
 [[object]]
 name = "Gst.BufferFlags"
 status = "generate"
-    [[object.derive]]
-    name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
-
     [[object.member]]
     name = "last"
     ignore = true
@@ -2042,9 +2038,6 @@ status = "generate"
 [[object]]
 name = "Gst.SegmentFlags"
 status = "generate"
-    [[object.derive]]
-    name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
     [[object.member]]
     name = "trickmode_forward_predicted"
     version = "1.18"
