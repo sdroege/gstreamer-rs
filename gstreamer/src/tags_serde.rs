@@ -387,17 +387,13 @@ mod tests {
                 r#"                    duration: None,"#,
                 r#"                    offset: 0,"#,
                 r#"                    offset_end: 0,"#,
-                r#"                    flags: ("#,
-                r#"                        bits: 0,"#,
-                r#"                    ),"#,
+                r#"                    flags: "","#,
                 r#"                    buffer: "AQIDBA==","#,
                 r#"                )),"#,
                 r#"                buffer_list: None,"#,
                 r#"                caps: None,"#,
                 r#"                segment: Some(("#,
-                r#"                    flags: ("#,
-                r#"                        bits: 0,"#,
-                r#"                    ),"#,
+                r#"                    flags: "","#,
                 r#"                    rate: 1,"#,
                 r#"                    applied_rate: 1,"#,
                 r#"                    format: Time,"#,
@@ -449,9 +445,7 @@ mod tests {
                                 duration: None,
                                 offset: 0,
                                 offset_end: 0,
-                                flags: (
-                                    bits: 0,
-                                ),
+                                flags: "",
                                 buffer: "AQIDBA==",
                             )),
                             buffer_list: None,
@@ -500,7 +494,7 @@ mod tests {
                     ["replaygain-track-gain", [1.0]],
                     ["date",[{"YMD":[2018,5,28]}]],
                     ["datetime",[{"YMD":[2018,5,28]}]],
-                    ["image",[{"buffer":{"pts":null,"dts":null,"duration":null,"offset":0,"offset_end":0,"flags":{"bits":0},"buffer":[1,2,3,4]},"buffer_list":null,"caps":null,"segment":null,"info":null}]]
+                    ["image",[{"buffer":{"pts":null,"dts":null,"duration":null,"offset":0,"offset_end":0,"flags":"","buffer":[1,2,3,4]},"buffer_list":null,"caps":null,"segment":null,"info":null}]]
                 ]
             }
         "#;

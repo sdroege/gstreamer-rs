@@ -41,6 +41,12 @@ pub use crate::auto::*;
 mod macros;
 
 #[macro_use]
+#[cfg(feature = "ser_de")]
+mod serde_macros;
+#[cfg(feature = "ser_de")]
+pub use crate::serde_macros::*;
+
+#[macro_use]
 mod log;
 pub use crate::log::*;
 
@@ -61,6 +67,9 @@ pub use crate::value::{
 #[cfg(feature = "ser_de")]
 #[macro_use]
 mod value_serde;
+
+#[cfg(feature = "ser_de")]
+mod flag_serde;
 
 pub mod structure;
 pub use crate::structure::{Structure, StructureRef};

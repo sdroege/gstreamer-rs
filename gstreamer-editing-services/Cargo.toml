@@ -22,16 +22,19 @@ gio = { git = "https://github.com/gtk-rs/gtk-rs-core" }
 gst = { package = "gstreamer", path = "../gstreamer" }
 gst-base = { package = "gstreamer-base", path = "../gstreamer-base" }
 gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils" }
+serde = { version = "1.0", optional = true }
 
 [dev-dependencies]
 gir-format-check = "0.1"
+serde_json = "1.0"
 
 [features]
 v1_16 = ["gst/v1_16", "gst-base/v1_16", "gst-pbutils/v1_16", "ffi/v1_16"]
 v1_18 = ["gst/v1_18", "gst-base/v1_18", "gst-pbutils/v1_18", "ffi/v1_18", "v1_16"]
 v1_20 = ["gst/v1_20", "gst-base/v1_20", "gst-pbutils/v1_20", "ffi/v1_20", "v1_18"]
 v1_22 = ["gst/v1_22", "gst-base/v1_22", "gst-pbutils/v1_22", "ffi/v1_22", "v1_20"]
-dox = ["v1_22", "ffi/dox", "glib/dox", "gio/dox", "gst/dox", "gst-base/dox", "gst-pbutils/dox"]
+dox = ["v1_22", "ffi/dox", "glib/dox", "gio/dox", "gst/dox", "gst-base/dox", "gst-pbutils/dox", "ser_de"]
+ser_de = ["serde", "gst/ser_de", "gst-pbutils/ser_de"]
 
 [package.metadata.docs.rs]
 features = ["dox"]

@@ -138,9 +138,7 @@ mod tests {
         assert_eq!(
             Ok(concat!(
                 "(",
-                "    flags: (",
-                "        bits: 9,",
-                "    ),",
+                "    flags: \"reset+segment\",",
                 "    rate: 1,",
                 "    applied_rate: 0.9,",
                 "    format: Time,",
@@ -164,9 +162,7 @@ mod tests {
 
         let segment_ron = r#"
             (
-                flags: (
-                    bits: 9,
-                ),
+                flags: "reset+segment",
                 rate: 1,
                 applied_rate: 0.9,
                 format: Time,
@@ -228,9 +224,7 @@ mod tests {
 
         let segment_ron = r#"
             (
-                flags: (
-                    bits: 9,
-                ),
+                flags: "reset+segment",
                 rate: 1,
                 applied_rate: 0.9,
                 format: Time,

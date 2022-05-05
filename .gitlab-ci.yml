@@ -221,11 +221,14 @@ plugins-update-nightly:
     - |
       get_features() {
         crate=$1
-        if [ "$crate" = "gstreamer" ]; then
-          echo "--features=ser_de,v1_22"
-        else
-          echo "--features=v1_22"
-        fi
+        case "$crate" in
+          gstreamer-audio|gstreamer-editing-services|gstreamer-gl|gstreamer-pbutils|gstreamer-rtp|gstreamer-rtsp|gstreamer-video|gstreamer)
+            echo "--features=ser_de,v1_22"
+            ;;
+          *)
+            echo "--features=v1_22"
+            ;;
+        esac
       }
       for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
         if [ -e $crate/Cargo.toml ]; then
@@ -368,11 +371,14 @@ clippy:
     - |
       get_features() {
         crate=$1
-        if [ "$crate" = "gstreamer" ]; then
-          echo "--features=ser_de,v1_22"
-        else
-          echo "--features=v1_22"
-        fi
+        case "$crate" in
+          gstreamer-audio|gstreamer-editing-services|gstreamer-gl|gstreamer-pbutils|gstreamer-rtp|gstreamer-rtsp|gstreamer-video|gstreamer)
+            echo "--features=ser_de,v1_22"
+            ;;
+          *)
+            echo "--features=v1_22"
+            ;;
+        esac
       }
       for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
         if [ -e $crate/Cargo.toml ]; then

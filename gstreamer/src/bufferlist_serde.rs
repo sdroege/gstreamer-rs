@@ -107,9 +107,7 @@ mod tests {
                 "        duration: Some(4),",
                 "        offset: 0,",
                 "        offset_end: 4,",
-                "        flags: (",
-                "            bits: 0,",
-                "        ),",
+                "        flags: \"\",",
                 "        buffer: \"AQIDBA==\",",
                 "    ),",
                 "    (",
@@ -118,9 +116,7 @@ mod tests {
                 "        duration: Some(2),",
                 "        offset: 4,",
                 "        offset_end: 6,",
-                "        flags: (",
-                "            bits: 0,",
-                "        ),",
+                "        flags: \"\",",
                 "        buffer: \"BQY=\",",
                 "    ),",
                 "]"
@@ -142,9 +138,7 @@ mod tests {
                     duration: Some(4),
                     offset: 0,
                     offset_end: 4,
-                    flags: (
-                        bits: 0,
-                    ),
+                    flags: "",
                     buffer: "AQIDBA==",
                 ),
                 (
@@ -153,9 +147,7 @@ mod tests {
                     duration: Some(2),
                     offset: 4,
                     offset_end: 6,
-                    flags: (
-                        bits: 0,
-                    ),
+                    flags: "",
                     buffer: "BQY=",
                 ),
             ]

@@ -38,6 +38,9 @@ mod auto;
 pub use crate::auto::functions::*;
 pub use crate::auto::*;
 
+#[cfg(feature = "ser_de")]
+mod flag_serde;
+
 mod discoverer;
 pub use crate::discoverer::*;
 

@@ -62,6 +62,9 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use crate::auto::*;
 
+#[cfg(feature = "ser_de")]
+mod flag_serde;
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use ges::prelude::*" without getting conflicts
 pub mod prelude {

@@ -31,6 +31,9 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use crate::auto::*;
 
+#[cfg(feature = "ser_de")]
+mod flag_serde;
+
 mod audio_format;
 pub use crate::audio_format::*;
 mod audio_format_info;

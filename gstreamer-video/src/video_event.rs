@@ -9,10 +9,6 @@ use std::mem;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
 use crate::NavigationModifierType;
 
-#[cfg(all(feature = "ser_de", any(feature = "v1_22", feature = "dox")))]
-#[cfg_attr(feature = "dox", feature = "ser_de", doc(cfg(feature = "v1_22")))]
-use glib::{FlagsClass, StaticType};
-
 // FIXME: Copy from gstreamer/src/event.rs
 macro_rules! event_builder_generic_impl {
     ($new_fn:expr) => {
@@ -1264,81 +1260,6 @@ impl NavigationEvent {
         skip_assert_initialized!();
 
         gst::event::Navigation::new(self.structure())
-    }
-}
-
-#[cfg(all(feature = "ser_de", any(feature = "v1_22", feature = "dox")))]
-#[cfg_attr(feature = "dox", feature = "ser_de", doc(cfg(feature = "v1_22")))]
-impl serde::Serialize for NavigationModifierType {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        let class = FlagsClass::new(NavigationModifierType::static_type()).unwrap();
-
-        let mut handled = NavigationModifierType::empty();
-        let mut res = "".to_owned();
-        for v in class.values() {
-            let value = v.value();
-            if value.count_ones() != 1 || value & handled.bits() != 0 {
-                continue;
-            } else if (value & self.bits()) == value {
-                if !res.is_empty() {
-                    res.push('+');
-                }
-                res.push_str(v.nick());
-                handled.insert(NavigationModifierType::from_bits(value).unwrap());
-            }
-        }
-
-        serializer.serialize_str(&res)
-    }
-}
-
-#[cfg(all(feature = "ser_de", any(feature = "v1_22", feature = "dox")))]
-#[cfg_attr(feature = "dox", feature = "ser_de", doc(cfg(feature = "v1_22")))]
-struct NavigationModifierTypeVisitor;
-
-#[cfg(all(feature = "ser_de", any(feature = "v1_22", feature = "dox")))]
-#[cfg_attr(feature = "dox", feature = "ser_de", doc(cfg(feature = "v1_22")))]
-impl<'de> serde::de::Visitor<'de> for NavigationModifierTypeVisitor {
-    type Value = NavigationModifierType;
-
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("one or more mask names separated by plus signs, or the empty string")
-    }
-
-    fn visit_str<E: serde::de::Error>(self, value: &str) -> std::result::Result<Self::Value, E> {
-        if value.is_empty() {
-            return Ok(NavigationModifierType::empty());
-        }
-
-        let mut gvalue = glib::Value::from_type(NavigationModifierType::static_type());
-        let tokens = value.split('+');
-        let class = FlagsClass::new(NavigationModifierType::static_type()).unwrap();
-
-        for token in tokens {
-            gvalue = class
-                .set_by_nick(gvalue, token)
-                .map_err(|_| serde::de::Error::custom(&format!("Invalid value: {}", token)))?;
-        }
-
-        Ok(unsafe {
-            from_glib(glib::gobject_ffi::g_value_get_flags(
-                gvalue.to_glib_none().0,
-            ))
-        })
-    }
-}
-
-#[cfg(all(feature = "ser_de", any(feature = "v1_22", feature = "dox")))]
-#[cfg_attr(feature = "dox", feature = "ser_de", doc(cfg(feature = "v1_22")))]
-impl<'de> serde::Deserialize<'de> for NavigationModifierType {
-    fn deserialize<D: serde::de::Deserializer<'de>>(
-        deserializer: D,
-    ) -> std::result::Result<Self, D::Error> {
-        skip_assert_initialized!();
-        deserializer.deserialize_str(NavigationModifierTypeVisitor)
     }
 }
 

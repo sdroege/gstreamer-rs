@@ -32,6 +32,9 @@ mod auto;
 pub use crate::auto::functions::*;
 pub use crate::auto::*;
 
+#[cfg(feature = "ser_de")]
+mod flag_serde;
+
 mod caps_features;
 pub use crate::caps_features::CAPS_FEATURES_MEMORY_GL_MEMORY;
 mod context;

@@ -24,9 +24,11 @@ gst = { package = "gstreamer", path = "../gstreamer" }
 gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp" }
 gst-rtsp = { package = "gstreamer-rtsp", path = "../gstreamer-rtsp" }
 gst-net = { package = "gstreamer-net", path = "../gstreamer-net" }
+serde = { version = "1.0", optional = true }
 
 [dev-dependencies]
 gir-format-check = "0.1"
+serde_json = "1.0"
 
 [features]
 default = []
@@ -34,7 +36,8 @@ v1_16 = ["gst/v1_16", "gst-sdp/v1_16", "gst-rtsp/v1_16", "gst-net/v1_16", "ffi/v
 v1_18 = ["gst/v1_18", "gst-sdp/v1_18", "gst-rtsp/v1_18", "gst-net/v1_18", "ffi/v1_18", "v1_16"]
 v1_20 = ["gst/v1_20", "gst-sdp/v1_20", "gst-rtsp/v1_20", "gst-net/v1_20", "ffi/v1_20", "v1_18"]
 v1_22 = ["gst/v1_22", "gst-sdp/v1_22", "gst-rtsp/v1_22", "gst-net/v1_22", "ffi/v1_22", "v1_20"]
-dox = ["v1_22", "ffi/dox", "glib/dox", "gio/dox", "gst/dox", "gst-sdp/dox", "gst-rtsp/dox", "gst-net/dox"]
+dox = ["v1_22", "ffi/dox", "glib/dox", "gio/dox", "gst/dox", "gst-sdp/dox", "gst-rtsp/dox", "gst-net/dox", "ser_de"]
+ser_de = ["serde", "gst/ser_de", "gst-rtsp/ser_de"]
 
 [package.metadata.docs.rs]
 features = ["dox"]

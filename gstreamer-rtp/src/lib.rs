@@ -32,6 +32,9 @@ mod auto;
 pub use crate::auto::functions::*;
 pub use crate::auto::*;
 
+#[cfg(feature = "ser_de")]
+mod flag_serde;
+
 pub mod subclass;
 
 pub mod rtp_buffer;

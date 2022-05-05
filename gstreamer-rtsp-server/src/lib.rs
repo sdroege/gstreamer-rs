@@ -35,6 +35,9 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use crate::auto::*;
 
+#[cfg(feature = "ser_de")]
+mod flag_serde;
+
 mod rtsp_address_pool;
 mod rtsp_auth;
 mod rtsp_client;

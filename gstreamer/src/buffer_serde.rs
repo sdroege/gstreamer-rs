@@ -104,9 +104,7 @@ mod tests {
                 "    duration: Some(5),",
                 "    offset: 3,",
                 "    offset_end: 4,",
-                "    flags: (",
-                "        bits: 80,",
-                "    ),",
+                "    flags: \"live+discont\",",
                 "    buffer: \"AQIDBA==\",",
                 ")"
             )
@@ -123,7 +121,7 @@ mod tests {
                 "\"duration\":5,",
                 "\"offset\":3,",
                 "\"offset_end\":4,",
-                "\"flags\":{\"bits\":80},",
+                "\"flags\":\"live+discont\",",
                 "\"buffer\":[1,2,3,4]",
                 "}"
             )
@@ -143,9 +141,7 @@ mod tests {
                 duration: Some(5),
                 offset: 3,
                 offset_end: 4,
-                flags: (
-                    bits: 80,
-                ),
+                flags: "live+discont",
                 buffer: "AQIDBA==",
             )
         "#;
@@ -168,7 +164,7 @@ mod tests {
                 "duration":5,
                 "offset":3,
                 "offset_end":4,
-                "flags":{"bits":80},
+                "flags":"live+discont",
                 "buffer":[1,2,3,4]
             }
         "#;
