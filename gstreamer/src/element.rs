@@ -129,7 +129,7 @@ pub trait ElementExtManual: 'static {
     #[doc(alias = "get_pad_template")]
     fn pad_template(&self, name: &str) -> Option<PadTemplate>;
     #[doc(alias = "get_pad_template_list")]
-    fn pad_template_list(&self) -> Vec<PadTemplate>;
+    fn pad_template_list(&self) -> glib::List<PadTemplate>;
 
     #[allow(clippy::too_many_arguments)]
     #[doc(alias = "gst_element_message_full")]
@@ -312,7 +312,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         self.element_class().pad_template(name)
     }
 
-    fn pad_template_list(&self) -> Vec<PadTemplate> {
+    fn pad_template_list(&self) -> glib::List<PadTemplate> {
         self.element_class().pad_template_list()
     }
 
@@ -829,11 +829,11 @@ pub unsafe trait ElementClassExt {
 
     #[doc(alias = "get_pad_template_list")]
     #[doc(alias = "gst_element_class_get_pad_template_list")]
-    fn pad_template_list(&self) -> Vec<PadTemplate> {
+    fn pad_template_list(&self) -> glib::List<PadTemplate> {
         unsafe {
             let klass = self as *const _ as *const ffi::GstElementClass;
 
-            FromGlibPtrContainer::from_glib_none(ffi::gst_element_class_get_pad_template_list(
+            glib::List::from_glib_none_static(ffi::gst_element_class_get_pad_template_list(
                 klass as *mut _,
             ))
         }
