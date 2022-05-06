@@ -213,14 +213,16 @@ impl fmt::Debug for VideoOverlayCompositionRef {
 }
 
 impl VideoOverlayComposition {
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[doc(alias = "gst_video_overlay_composition_new")]
-    pub fn new<'a>(rects: impl IntoIterator<Item = &'a VideoOverlayRectangle>) -> Self {
+    pub fn new<'a>(
+        rects: impl IntoIterator<Item = &'a VideoOverlayRectangle>,
+    ) -> Result<Self, glib::error::BoolError> {
         assert_initialized_main_thread!();
 
-        use std::ptr;
-
+        #[cfg(feature = "v1_20")]
         unsafe {
+            use std::ptr;
+
             let composition =
                 Self::from_glib_full(ffi::gst_video_overlay_composition_new(ptr::null_mut()));
 
@@ -231,16 +233,9 @@ impl VideoOverlayComposition {
                 );
             });
 
-            composition
+            Ok(composition)
         }
-    }
-
-    #[cfg(not(any(feature = "v1_20", feature = "dox")))]
-    #[doc(alias = "gst_video_overlay_composition_new")]
-    pub fn new<'a>(
-        rects: impl IntoIterator<Item = &'a VideoOverlayRectangle>,
-    ) -> Result<Self, glib::error::BoolError> {
-        assert_initialized_main_thread!();
+        #[cfg(not(feature = "v1_20"))]
         unsafe {
             let mut iter = rects.into_iter();
 
@@ -352,9 +347,9 @@ impl std::iter::FromIterator<VideoOverlayRectangle> for VideoOverlayComposition 
     fn from_iter<T: IntoIterator<Item = VideoOverlayRectangle>>(iter: T) -> Self {
         assert_initialized_main_thread!();
 
-        use std::ptr;
-
         unsafe {
+            use std::ptr;
+
             let composition =
                 Self::from_glib_full(ffi::gst_video_overlay_composition_new(ptr::null_mut()));
 
@@ -374,7 +369,22 @@ impl std::iter::FromIterator<VideoOverlayRectangle> for VideoOverlayComposition 
 impl<'a> std::iter::FromIterator<&'a VideoOverlayRectangle> for VideoOverlayComposition {
     fn from_iter<T: IntoIterator<Item = &'a VideoOverlayRectangle>>(iter: T) -> Self {
         assert_initialized_main_thread!();
-        VideoOverlayComposition::new(iter.into_iter())
+
+        unsafe {
+            use std::ptr;
+
+            let composition =
+                Self::from_glib_full(ffi::gst_video_overlay_composition_new(ptr::null_mut()));
+
+            iter.into_iter().for_each(|rect| {
+                ffi::gst_video_overlay_composition_add_rectangle(
+                    composition.as_mut_ptr(),
+                    rect.as_mut_ptr(),
+                );
+            });
+
+            composition
+        }
     }
 }
 
