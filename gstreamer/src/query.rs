@@ -910,7 +910,7 @@ impl Custom<Query> {
         unsafe {
             Self(from_glib_full(ffi::gst_query_new_custom(
                 ffi::GST_QUERY_CUSTOM,
-                structure.into_ptr(),
+                structure.into_glib_ptr(),
             )))
         }
     }

@@ -18,7 +18,9 @@ use crate::ClockTime;
 use crate::Memory;
 use crate::MemoryRef;
 
-use glib::translate::{from_glib, from_glib_full, FromGlib, FromGlibPtrFull, IntoGlib};
+use glib::translate::{
+    from_glib, from_glib_full, FromGlib, FromGlibPtrFull, IntoGlib, IntoGlibPtr,
+};
 
 pub enum Readable {}
 pub enum Writable {}
@@ -173,7 +175,7 @@ impl Buffer {
     pub fn append(&mut self, other: Self) {
         skip_assert_initialized!();
         unsafe {
-            let ptr = ffi::gst_buffer_append(self.as_mut_ptr(), other.into_ptr());
+            let ptr = ffi::gst_buffer_append(self.as_mut_ptr(), other.into_glib_ptr());
             self.replace_ptr(ptr);
         }
     }
@@ -529,7 +531,7 @@ impl BufferRef {
 
     #[doc(alias = "gst_buffer_append_memory")]
     pub fn append_memory(&mut self, mem: Memory) {
-        unsafe { ffi::gst_buffer_append_memory(self.as_mut_ptr(), mem.into_ptr()) }
+        unsafe { ffi::gst_buffer_append_memory(self.as_mut_ptr(), mem.into_glib_ptr()) }
     }
 
     #[doc(alias = "gst_buffer_find_memory")]
@@ -622,7 +624,7 @@ impl BufferRef {
                     Some(val) => val as i32,
                     None => -1,
                 },
-                mem.into_ptr(),
+                mem.into_glib_ptr(),
             )
         }
     }
@@ -675,7 +677,7 @@ impl BufferRef {
 
     #[doc(alias = "gst_buffer_prepend_memory")]
     pub fn prepend_memory(&mut self, mem: Memory) {
-        unsafe { ffi::gst_buffer_prepend_memory(self.as_mut_ptr(), mem.into_ptr()) }
+        unsafe { ffi::gst_buffer_prepend_memory(self.as_mut_ptr(), mem.into_glib_ptr()) }
     }
 
     #[doc(alias = "gst_buffer_remove_all_memory")]
@@ -706,13 +708,13 @@ impl BufferRef {
 
     #[doc(alias = "gst_buffer_replace_all_memory")]
     pub fn replace_all_memory(&mut self, mem: Memory) {
-        unsafe { ffi::gst_buffer_replace_all_memory(self.as_mut_ptr(), mem.into_ptr()) }
+        unsafe { ffi::gst_buffer_replace_all_memory(self.as_mut_ptr(), mem.into_glib_ptr()) }
     }
 
     #[doc(alias = "gst_buffer_replace_memory")]
     pub fn replace_memory(&mut self, idx: u32, mem: Memory) {
         assert!(idx < self.n_memory());
-        unsafe { ffi::gst_buffer_replace_memory(self.as_mut_ptr(), idx, mem.into_ptr()) }
+        unsafe { ffi::gst_buffer_replace_memory(self.as_mut_ptr(), idx, mem.into_glib_ptr()) }
     }
 
     #[doc(alias = "gst_buffer_replace_memory_range")]
@@ -726,7 +728,7 @@ impl BufferRef {
                     Some(val) => val as i32,
                     None => -1,
                 },
-                mem.into_ptr(),
+                mem.into_glib_ptr(),
             )
         }
     }

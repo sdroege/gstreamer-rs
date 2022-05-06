@@ -1939,7 +1939,7 @@ impl<'a> ErrorBuilder<'a> {
     message_builder_generic_impl!(|s: &mut Self, src| {
         let details = match s.details.take() {
             None => ptr::null_mut(),
-            Some(details) => details.into_ptr(),
+            Some(details) => details.into_glib_ptr(),
         };
 
         ffi::gst_message_new_error_with_details(
@@ -1988,7 +1988,7 @@ impl<'a> WarningBuilder<'a> {
     message_builder_generic_impl!(|s: &mut Self, src| {
         let details = match s.details.take() {
             None => ptr::null_mut(),
-            Some(details) => details.into_ptr(),
+            Some(details) => details.into_glib_ptr(),
         };
 
         ffi::gst_message_new_warning_with_details(
@@ -2037,7 +2037,7 @@ impl<'a> InfoBuilder<'a> {
     message_builder_generic_impl!(|s: &mut Self, src| {
         let details = match s.details.take() {
             None => ptr::null_mut(),
-            Some(details) => details.into_ptr(),
+            Some(details) => details.into_glib_ptr(),
         };
 
         ffi::gst_message_new_info_with_details(
@@ -2355,7 +2355,7 @@ impl<'a> ApplicationBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_application(
         src,
-        s.structure.take().unwrap().into_ptr()
+        s.structure.take().unwrap().into_glib_ptr()
     ));
 }
 
@@ -2376,7 +2376,7 @@ impl<'a> ElementBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_element(
         src,
-        s.structure.take().unwrap().into_ptr()
+        s.structure.take().unwrap().into_glib_ptr()
     ));
 }
 
@@ -2788,7 +2788,7 @@ impl<'a> HaveContextBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| {
         let context = s.context.take().unwrap();
-        ffi::gst_message_new_have_context(src, context.into_ptr())
+        ffi::gst_message_new_have_context(src, context.into_glib_ptr())
     });
 }
 
@@ -2985,7 +2985,7 @@ impl<'a> RedirectBuilder<'a> {
     message_builder_generic_impl!(|s: &mut Self, src| {
         let entry_struct = s.entry_struct.take();
         let entry_struct_ptr = if let Some(entry_struct) = entry_struct {
-            entry_struct.into_ptr()
+            entry_struct.into_glib_ptr()
         } else {
             ptr::null_mut()
         };
@@ -3000,7 +3000,7 @@ impl<'a> RedirectBuilder<'a> {
             for &(location, tag_list, entry_struct) in entries {
                 let entry_struct = entry_struct.cloned();
                 let entry_struct_ptr = if let Some(entry_struct) = entry_struct {
-                    entry_struct.into_ptr()
+                    entry_struct.into_glib_ptr()
                 } else {
                     ptr::null_mut()
                 };

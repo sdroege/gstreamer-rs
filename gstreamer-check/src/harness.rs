@@ -301,7 +301,12 @@ impl Harness {
 
     #[doc(alias = "gst_harness_push")]
     pub fn push(&mut self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe { try_from_glib(ffi::gst_harness_push(self.0.as_ptr(), buffer.into_ptr())) }
+        unsafe {
+            try_from_glib(ffi::gst_harness_push(
+                self.0.as_ptr(),
+                buffer.into_glib_ptr(),
+            ))
+        }
     }
 
     #[doc(alias = "gst_harness_push_and_pull")]
@@ -309,7 +314,7 @@ impl Harness {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_push_and_pull(
                 self.0.as_ptr(),
-                buffer.into_ptr(),
+                buffer.into_glib_ptr(),
             ))
             .ok_or_else(|| glib::bool_error!("Failed to push and pull buffer"))
         }
@@ -320,7 +325,7 @@ impl Harness {
         unsafe {
             from_glib(ffi::gst_harness_push_event(
                 self.0.as_ptr(),
-                event.into_ptr(),
+                event.into_glib_ptr(),
             ))
         }
     }
@@ -340,7 +345,7 @@ impl Harness {
         unsafe {
             from_glib(ffi::gst_harness_push_upstream_event(
                 self.0.as_ptr(),
-                event.into_ptr(),
+                event.into_glib_ptr(),
             ))
         }
     }
@@ -364,7 +369,7 @@ impl Harness {
     #[doc(alias = "gst_harness_set_caps")]
     pub fn set_caps(&mut self, in_: gst::Caps, out: gst::Caps) {
         unsafe {
-            ffi::gst_harness_set_caps(self.0.as_ptr(), in_.into_ptr(), out.into_ptr());
+            ffi::gst_harness_set_caps(self.0.as_ptr(), in_.into_glib_ptr(), out.into_glib_ptr());
         }
     }
 
@@ -407,7 +412,7 @@ impl Harness {
     #[doc(alias = "gst_harness_set_sink_caps")]
     pub fn set_sink_caps(&mut self, caps: gst::Caps) {
         unsafe {
-            ffi::gst_harness_set_sink_caps(self.0.as_ptr(), caps.into_ptr());
+            ffi::gst_harness_set_sink_caps(self.0.as_ptr(), caps.into_glib_ptr());
         }
     }
 
@@ -421,7 +426,7 @@ impl Harness {
     #[doc(alias = "gst_harness_set_src_caps")]
     pub fn set_src_caps(&mut self, caps: gst::Caps) {
         unsafe {
-            ffi::gst_harness_set_src_caps(self.0.as_ptr(), caps.into_ptr());
+            ffi::gst_harness_set_src_caps(self.0.as_ptr(), caps.into_glib_ptr());
         }
     }
 

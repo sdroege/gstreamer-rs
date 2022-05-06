@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::ToGlibPtr;
+use glib::translate::{IntoGlibPtr, ToGlibPtr};
 
 use std::ops;
 use std::ptr;
@@ -40,7 +40,9 @@ impl VideoConverter {
             let ptr = ffi::gst_video_converter_new(
                 in_info.to_glib_none().0 as *mut _,
                 out_info.to_glib_none().0 as *mut _,
-                config.map(|s| s.0.into_ptr()).unwrap_or(ptr::null_mut()),
+                config
+                    .map(|s| s.0.into_glib_ptr())
+                    .unwrap_or(ptr::null_mut()),
             );
             if ptr.is_null() {
                 Err(glib::bool_error!("Failed to create video converter"))
@@ -66,7 +68,7 @@ impl VideoConverter {
     #[doc(alias = "gst_video_converter_set_config")]
     pub fn set_config(&mut self, config: VideoConverterConfig) {
         unsafe {
-            ffi::gst_video_converter_set_config(self.0.as_ptr(), config.0.into_ptr());
+            ffi::gst_video_converter_set_config(self.0.as_ptr(), config.0.into_glib_ptr());
         }
     }
 

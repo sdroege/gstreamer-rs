@@ -297,7 +297,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .map(|f| {
                     from_glib(f(
                         element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
-                        event.into_ptr(),
+                        event.into_glib_ptr(),
                     ))
                 })
                 .unwrap_or(true)
@@ -353,7 +353,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
             match (*parent_class).fixate {
                 Some(fixate) => from_glib_full(fixate(
                     element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
-                    caps.into_ptr(),
+                    caps.into_glib_ptr(),
                 )),
                 None => caps,
             }
@@ -585,7 +585,7 @@ unsafe extern "C" fn base_sink_get_caps<T: BaseSinkImpl>(
     gst::panic_to_error!(&wrap, imp.panicked(), None, {
         imp.caps(wrap.unsafe_cast_ref(), filter.as_ref().as_ref())
     })
-    .map(|caps| caps.into_ptr())
+    .map(|caps| caps.into_glib_ptr())
     .unwrap_or(ptr::null_mut())
 }
 
@@ -622,7 +622,7 @@ unsafe extern "C" fn base_sink_fixate<T: BaseSinkImpl>(
     gst::panic_to_error!(&wrap, imp.panicked(), gst::Caps::new_empty(), {
         imp.fixate(wrap.unsafe_cast_ref(), caps)
     })
-    .into_ptr()
+    .into_glib_ptr()
 }
 
 unsafe extern "C" fn base_sink_unlock<T: BaseSinkImpl>(

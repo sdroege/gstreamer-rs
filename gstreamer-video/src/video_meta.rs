@@ -3,7 +3,7 @@
 use std::fmt;
 use std::ptr;
 
-use glib::translate::{from_glib, from_glib_none, FromGlib, IntoGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_none, FromGlib, IntoGlib, IntoGlibPtr, ToGlibPtr};
 use gst::prelude::*;
 
 #[repr(transparent)]
@@ -388,7 +388,7 @@ impl VideoRegionOfInterestMeta {
     #[doc(alias = "gst_video_region_of_interest_meta_add_param")]
     pub fn add_param(&mut self, s: gst::Structure) {
         unsafe {
-            ffi::gst_video_region_of_interest_meta_add_param(&mut self.0, s.into_ptr());
+            ffi::gst_video_region_of_interest_meta_add_param(&mut self.0, s.into_glib_ptr());
         }
     }
 }

@@ -189,7 +189,7 @@ impl<'a> VideoCodecFrame<'a> {
                 gst::ffi::gst_mini_object_unref(prev as *mut gst::ffi::GstMiniObject);
             }
 
-            let ptr = output_buffer.into_ptr();
+            let ptr = output_buffer.into_glib_ptr();
             let writable: bool = from_glib(gst::ffi::gst_mini_object_is_writable(
                 ptr as *const gst::ffi::GstMiniObject,
             ));
@@ -217,9 +217,10 @@ impl<'a> VideoCodecFrame<'a> {
     pub fn num_subframes(&self) -> u32 {
         unsafe { (*self.to_glib_none().0).abidata.ABI.num_subframes }
     }
+}
 
-    #[doc(hidden)]
-    pub unsafe fn into_ptr(self) -> *mut ffi::GstVideoCodecFrame {
+impl<'a> IntoGlibPtr<*mut ffi::GstVideoCodecFrame> for VideoCodecFrame<'a> {
+    unsafe fn into_glib_ptr(self) -> *mut ffi::GstVideoCodecFrame {
         let stream_lock = self.element.stream_lock();
         glib::ffi::g_rec_mutex_unlock(stream_lock);
 

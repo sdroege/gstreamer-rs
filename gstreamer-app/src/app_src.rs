@@ -210,7 +210,7 @@ impl AppSrc {
         unsafe {
             try_from_glib(ffi::gst_app_src_push_buffer(
                 self.to_glib_none().0,
-                buffer.into_ptr(),
+                buffer.into_glib_ptr(),
             ))
         }
     }
@@ -223,7 +223,7 @@ impl AppSrc {
         unsafe {
             try_from_glib(ffi::gst_app_src_push_buffer_list(
                 self.to_glib_none().0,
-                list.into_ptr(),
+                list.into_glib_ptr(),
             ))
         }
     }

@@ -343,7 +343,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 Some(ref func) => from_glib_full(func(
                     aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                     aggregator_pad.to_glib_none().0,
-                    buffer.into_ptr(),
+                    buffer.into_glib_ptr(),
                 )),
             }
         }
@@ -362,7 +362,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .expect("Missing parent function `finish_buffer`");
             try_from_glib(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
-                buffer.into_ptr(),
+                buffer.into_glib_ptr(),
             ))
         }
     }
@@ -382,7 +382,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .expect("Missing parent function `finish_buffer_list`");
             try_from_glib(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
-                buffer_list.into_ptr(),
+                buffer_list.into_glib_ptr(),
             ))
         }
     }
@@ -402,7 +402,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
             from_glib(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 aggregator_pad.to_glib_none().0,
-                event.into_ptr(),
+                event.into_glib_ptr(),
             ))
         }
     }
@@ -424,7 +424,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
             try_from_glib(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 aggregator_pad.to_glib_none().0,
-                event.into_ptr(),
+                event.into_glib_ptr(),
             ))
         }
     }
@@ -480,7 +480,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .expect("Missing parent function `src_event`");
             from_glib(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
-                event.into_ptr(),
+                event.into_glib_ptr(),
             ))
         }
     }
@@ -659,7 +659,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .expect("Missing parent function `fixate_src_caps`");
             from_glib_full(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
-                caps.into_ptr(),
+                caps.into_glib_ptr(),
             ))
         }
     }
@@ -847,7 +847,7 @@ unsafe extern "C" fn aggregator_clip<T: AggregatorImpl>(
         )
     });
 
-    ret.map(|r| r.into_ptr()).unwrap_or(ptr::null_mut())
+    ret.map(|r| r.into_glib_ptr()).unwrap_or(ptr::null_mut())
 }
 
 unsafe extern "C" fn aggregator_finish_buffer<T: AggregatorImpl>(
@@ -1117,7 +1117,7 @@ unsafe extern "C" fn aggregator_update_src_caps<T: AggregatorImpl>(
     gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
         match imp.update_src_caps(wrap.unsafe_cast_ref(), &from_glib_borrow(caps)) {
             Ok(res_caps) => {
-                *res = res_caps.into_ptr();
+                *res = res_caps.into_glib_ptr();
                 gst::FlowReturn::Ok
             }
             Err(err) => err.into(),
@@ -1137,7 +1137,7 @@ unsafe extern "C" fn aggregator_fixate_src_caps<T: AggregatorImpl>(
     gst::panic_to_error!(&wrap, imp.panicked(), gst::Caps::new_empty(), {
         imp.fixate_src_caps(wrap.unsafe_cast_ref(), from_glib_full(caps))
     })
-    .into_ptr()
+    .into_glib_ptr()
 }
 
 unsafe extern "C" fn aggregator_negotiated_src_caps<T: AggregatorImpl>(

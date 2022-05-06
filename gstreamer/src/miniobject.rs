@@ -96,12 +96,16 @@ macro_rules! mini_object_wrapper (
 
             #[must_use]
             pub fn upcast(self) -> $crate::miniobject::MiniObject {
+                use $crate::glib::translate::IntoGlibPtr;
+
                 unsafe {
-                    from_glib_full(self.into_ptr() as *mut $crate::ffi::GstMiniObject)
+                    from_glib_full(self.into_glib_ptr() as *mut $crate::ffi::GstMiniObject)
                 }
             }
+        }
 
-            pub unsafe fn into_ptr(self) -> *mut $ffi_name {
+        impl $crate::glib::translate::IntoGlibPtr<*mut $ffi_name> for $name {
+            unsafe fn into_glib_ptr(self) -> *mut $ffi_name {
                 let s = std::mem::ManuallyDrop::new(self);
                 s.as_mut_ptr()
             }
@@ -547,7 +551,7 @@ mini_object_wrapper!(MiniObject, MiniObjectRef, ffi::GstMiniObject, || {
 impl MiniObject {
     pub fn downcast<T: IsMiniObject + glib::StaticType>(self) -> Result<T, Self> {
         if self.type_().is_a(T::static_type()) {
-            unsafe { Ok(from_glib_full(self.into_ptr() as *mut T::FfiType)) }
+            unsafe { Ok(from_glib_full(self.into_glib_ptr() as *mut T::FfiType)) }
         } else {
             Err(self)
         }

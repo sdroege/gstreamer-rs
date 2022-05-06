@@ -129,7 +129,7 @@ unsafe extern "C" fn audio_aggregator_create_output_buffer<T: AudioAggregatorImp
     gst::panic_to_error!(&wrap, imp.panicked(), None, {
         imp.create_output_buffer(wrap.unsafe_cast_ref(), num_frames)
     })
-    .map(|buffer| buffer.into_ptr())
+    .map(|buffer| buffer.into_glib_ptr())
     .unwrap_or(ptr::null_mut())
 }
 

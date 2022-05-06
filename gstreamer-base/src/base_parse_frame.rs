@@ -149,7 +149,7 @@ impl<'a> BaseParseFrame<'a> {
                 gst::ffi::gst_mini_object_unref(prev as *mut gst::ffi::GstMiniObject);
             }
 
-            let ptr = output_buffer.into_ptr();
+            let ptr = output_buffer.into_glib_ptr();
             let writable: bool = from_glib(gst::ffi::gst_mini_object_is_writable(
                 ptr as *const gst::ffi::GstMiniObject,
             ));

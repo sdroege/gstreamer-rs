@@ -7,7 +7,7 @@ use std::ops::{Deref, DerefMut};
 use std::ptr;
 use std::slice;
 
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, IntoGlibPtr, ToGlibPtr};
 
 use crate::AllocationParams;
 use crate::Allocator;
@@ -602,7 +602,7 @@ impl Memory {
         <M as crate::prelude::IsMiniObject>::RefType: AsRef<MemoryRef> + AsMut<MemoryRef>,
     {
         if M::check_memory_type(&self) {
-            unsafe { Ok(from_glib_full(self.into_ptr() as *mut M::FfiType)) }
+            unsafe { Ok(from_glib_full(self.into_glib_ptr() as *mut M::FfiType)) }
         } else {
             Err(self)
         }
@@ -663,7 +663,7 @@ macro_rules! memory_object_wrapper {
                 if M::check_memory_type(&self) {
                     unsafe {
                         Ok($crate::glib::translate::from_glib_full(
-                            self.into_ptr() as *mut M::FfiType
+                            self.into_glib_ptr() as *mut M::FfiType
                         ))
                     }
                 } else {
@@ -683,7 +683,7 @@ macro_rules! memory_object_wrapper {
             {
                 unsafe {
                     $crate::glib::translate::from_glib_full(
-                        self.into_ptr() as *const <M as $crate::miniobject::IsMiniObject>::FfiType
+                        self.into_glib_ptr() as *const <M as $crate::miniobject::IsMiniObject>::FfiType
                     )
                 }
             }

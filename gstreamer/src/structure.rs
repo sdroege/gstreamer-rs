@@ -73,11 +73,6 @@ impl Structure {
         structure
     }
 
-    pub unsafe fn into_ptr(self) -> *mut ffi::GstStructure {
-        let s = mem::ManuallyDrop::new(self);
-        s.0.as_ptr()
-    }
-
     #[allow(clippy::should_implement_trait)]
     pub fn from_iter<'a>(
         name: &str,
@@ -90,6 +85,13 @@ impl Structure {
             .for_each(|(f, v)| structure.set_value(f, v));
 
         structure
+    }
+}
+
+impl IntoGlibPtr<*mut ffi::GstStructure> for Structure {
+    unsafe fn into_glib_ptr(self) -> *mut ffi::GstStructure {
+        let s = mem::ManuallyDrop::new(self);
+        s.0.as_ptr()
     }
 }
 

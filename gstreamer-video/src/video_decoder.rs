@@ -151,7 +151,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_video_decoder_finish_frame(
                 self.as_ref().to_glib_none().0,
-                frame.into_ptr(),
+                frame.into_glib_ptr(),
             ))
         }
     }
@@ -159,7 +159,10 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
     #[doc(alias = "gst_video_decoder_release_frame")]
     fn release_frame(&self, frame: VideoCodecFrame) {
         unsafe {
-            ffi::gst_video_decoder_release_frame(self.as_ref().to_glib_none().0, frame.into_ptr())
+            ffi::gst_video_decoder_release_frame(
+                self.as_ref().to_glib_none().0,
+                frame.into_glib_ptr(),
+            )
         }
     }
 
@@ -168,7 +171,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_video_decoder_drop_frame(
                 self.as_ref().to_glib_none().0,
-                frame.into_ptr(),
+                frame.into_glib_ptr(),
             ))
         }
     }

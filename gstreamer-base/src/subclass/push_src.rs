@@ -211,7 +211,7 @@ unsafe extern "C" fn push_src_alloc<T: PushSrcImpl>(
     gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
         match PushSrcImpl::alloc(imp, wrap.unsafe_cast_ref()) {
             Ok(buffer) => {
-                *buffer_ptr = buffer.into_ptr();
+                *buffer_ptr = buffer.into_glib_ptr();
                 gst::FlowReturn::Ok
             }
             Err(err) => gst::FlowReturn::from(err),
@@ -289,7 +289,7 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
                         gst::FlowReturn::Ok
                     }
                 } else {
-                    *buffer_ptr = new_buffer.into_ptr();
+                    *buffer_ptr = new_buffer.into_glib_ptr();
                     gst::FlowReturn::Ok
                 }
             }

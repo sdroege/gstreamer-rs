@@ -111,6 +111,6 @@ unsafe extern "C" fn audio_aggregator_pad_convert_buffer<T: AudioAggregatorPadIm
         &from_glib_none(out_info),
         &from_glib_borrow(buffer),
     )
-    .map(|buffer| buffer.into_ptr())
+    .map(|buffer| buffer.into_glib_ptr())
     .unwrap_or(ptr::null_mut())
 }

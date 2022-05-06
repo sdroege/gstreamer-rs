@@ -364,7 +364,7 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
             glib::result_from_gboolean!(
                 ffi::gst_buffer_pool_set_config(
                     self.as_ref().to_glib_none().0,
-                    config.0.into_ptr()
+                    config.0.into_glib_ptr()
                 ),
                 "Failed to set config",
             )
@@ -399,7 +399,10 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
 
     fn release_buffer(&self, buffer: crate::Buffer) {
         unsafe {
-            ffi::gst_buffer_pool_release_buffer(self.as_ref().to_glib_none().0, buffer.into_ptr());
+            ffi::gst_buffer_pool_release_buffer(
+                self.as_ref().to_glib_none().0,
+                buffer.into_glib_ptr(),
+            );
         }
     }
 }

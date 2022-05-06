@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{from_glib_full, ToGlibPtr};
+use glib::translate::{from_glib_full, IntoGlibPtr, ToGlibPtr};
 use glib::ToSendValue;
 
 use std::i32;
@@ -16,7 +16,7 @@ pub fn audio_buffer_clip(
 
     unsafe {
         from_glib_full(ffi::gst_audio_buffer_clip(
-            buffer.into_ptr(),
+            buffer.into_glib_ptr(),
             segment.to_glib_none().0,
             rate as i32,
             bpf as i32,
@@ -37,7 +37,7 @@ pub fn audio_buffer_truncate(
 
     unsafe {
         from_glib_full(ffi::gst_audio_buffer_truncate(
-            buffer.into_ptr(),
+            buffer.into_glib_ptr(),
             bpf as i32,
             trim,
             samples.unwrap_or(std::usize::MAX),

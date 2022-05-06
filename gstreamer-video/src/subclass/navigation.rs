@@ -45,7 +45,7 @@ impl<T: NavigationImpl> NavigationImplExt for T {
 
             func(
                 nav.unsafe_cast_ref::<Navigation>().to_glib_none().0,
-                structure.into_ptr(),
+                structure.into_glib_ptr(),
             );
         }
     }
@@ -65,7 +65,7 @@ impl<T: NavigationImpl> NavigationImplExt for T {
 
             func(
                 nav.unsafe_cast_ref::<Navigation>().to_glib_none().0,
-                event.into_ptr(),
+                event.into_glib_ptr(),
             );
         }
     }

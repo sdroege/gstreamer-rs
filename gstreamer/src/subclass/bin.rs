@@ -91,7 +91,7 @@ impl<T: BinImpl> BinImplExt for T {
             if let Some(ref f) = (*parent_class).handle_message {
                 f(
                     bin.unsafe_cast_ref::<crate::Bin>().to_glib_none().0,
-                    message.into_ptr(),
+                    message.into_glib_ptr(),
                 );
             }
         }

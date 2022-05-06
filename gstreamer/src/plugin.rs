@@ -25,7 +25,7 @@ impl Plugin {
     #[doc(alias = "gst_plugin_set_cache_data")]
     pub fn set_cache_data(&self, cache_data: Structure) {
         unsafe {
-            ffi::gst_plugin_set_cache_data(self.to_glib_none().0, cache_data.into_ptr());
+            ffi::gst_plugin_set_cache_data(self.to_glib_none().0, cache_data.into_glib_ptr());
         }
     }
 }

@@ -361,6 +361,6 @@ unsafe extern "C" fn transform_internal_caps<T: GLFilterImpl>(
             filter_caps.as_ref().as_ref(),
         )
     })
-    .map(|caps| caps.into_ptr())
+    .map(|caps| caps.into_glib_ptr())
     .unwrap_or(std::ptr::null_mut())
 }

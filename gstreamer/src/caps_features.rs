@@ -59,8 +59,10 @@ impl CapsFeatures {
         assert_initialized_main_thread!();
         unsafe { CapsFeatures(ptr::NonNull::new_unchecked(ffi::gst_caps_features_new_any())) }
     }
+}
 
-    pub unsafe fn into_ptr(self) -> *mut ffi::GstCapsFeatures {
+impl IntoGlibPtr<*mut ffi::GstCapsFeatures> for CapsFeatures {
+    unsafe fn into_glib_ptr(self) -> *mut ffi::GstCapsFeatures {
         let s = mem::ManuallyDrop::new(self);
         s.0.as_ptr()
     }

@@ -210,7 +210,7 @@ unsafe extern "C" fn video_aggregator_update_caps<T: VideoAggregatorImpl>(
 
     gst::panic_to_error!(&wrap, imp.panicked(), ptr::null_mut(), {
         match imp.update_caps(wrap.unsafe_cast_ref(), &from_glib_borrow(caps)) {
-            Ok(caps) => caps.into_ptr(),
+            Ok(caps) => caps.into_glib_ptr(),
             Err(err) => {
                 err.log_with_object(&*wrap);
                 ptr::null_mut()
@@ -254,7 +254,7 @@ unsafe extern "C" fn video_aggregator_create_output_buffer<T: VideoAggregatorImp
     gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
         match imp.create_output_buffer(wrap.unsafe_cast_ref()) {
             Ok(buffer) => {
-                *outbuf = buffer.map(|b| b.into_ptr()).unwrap_or(ptr::null_mut());
+                *outbuf = buffer.map(|b| b.into_glib_ptr()).unwrap_or(ptr::null_mut());
                 Ok(gst::FlowSuccess::Ok)
             }
             Err(err) => {

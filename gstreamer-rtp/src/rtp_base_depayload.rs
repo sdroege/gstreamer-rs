@@ -19,7 +19,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_rtp_base_depayload_push(
                 self.as_ref().to_glib_none().0,
-                out_buf.into_ptr(),
+                out_buf.into_glib_ptr(),
             ))
         }
     }
@@ -28,7 +28,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_rtp_base_depayload_push_list(
                 self.as_ref().to_glib_none().0,
-                out_list.into_ptr(),
+                out_list.into_glib_ptr(),
             ))
         }
     }

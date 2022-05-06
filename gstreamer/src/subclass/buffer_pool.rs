@@ -162,7 +162,7 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
                         .unsafe_cast_ref::<crate::BufferPool>()
                         .to_glib_none()
                         .0,
-                    buffer.into_ptr(),
+                    buffer.into_glib_ptr(),
                 )
             }
         }
@@ -178,7 +178,7 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
                         .unsafe_cast_ref::<crate::BufferPool>()
                         .to_glib_none()
                         .0,
-                    buffer.into_ptr(),
+                    buffer.into_glib_ptr(),
                 )
             }
         }
@@ -336,7 +336,7 @@ unsafe extern "C" fn buffer_pool_acquire_buffer<T: BufferPoolImpl>(
 
     match imp.acquire_buffer(wrap.unsafe_cast_ref(), params.as_ref()) {
         Ok(b) => {
-            *buffer = b.into_ptr();
+            *buffer = b.into_glib_ptr();
             ffi::GST_FLOW_OK
         }
         Err(err) => err.into_glib(),
@@ -355,7 +355,7 @@ unsafe extern "C" fn buffer_pool_alloc_buffer<T: BufferPoolImpl>(
 
     match imp.alloc_buffer(wrap.unsafe_cast_ref(), params.as_ref()) {
         Ok(b) => {
-            *buffer = b.into_ptr();
+            *buffer = b.into_glib_ptr();
             ffi::GST_FLOW_OK
         }
         Err(err) => err.into_glib(),

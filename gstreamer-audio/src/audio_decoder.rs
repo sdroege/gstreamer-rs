@@ -72,7 +72,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_audio_decoder_finish_frame(
                 self.as_ref().to_glib_none().0,
-                buffer.map(|b| b.into_ptr()).unwrap_or(ptr::null_mut()),
+                buffer.map(|b| b.into_glib_ptr()).unwrap_or(ptr::null_mut()),
                 frames,
             ))
         }
@@ -88,7 +88,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_audio_decoder_finish_subframe(
                 self.as_ref().to_glib_none().0,
-                buffer.map(|b| b.into_ptr()).unwrap_or(ptr::null_mut()),
+                buffer.map(|b| b.into_glib_ptr()).unwrap_or(ptr::null_mut()),
             ))
         }
     }

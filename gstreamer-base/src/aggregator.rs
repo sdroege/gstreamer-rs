@@ -106,7 +106,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_aggregator_finish_buffer(
                 self.as_ref().to_glib_none().0,
-                buffer.into_ptr(),
+                buffer.into_glib_ptr(),
             ))
         }
     }
@@ -120,7 +120,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_aggregator_finish_buffer_list(
                 self.as_ref().to_glib_none().0,
-                bufferlist.into_ptr(),
+                bufferlist.into_glib_ptr(),
             ))
         }
     }

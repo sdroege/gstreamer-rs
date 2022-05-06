@@ -9,7 +9,9 @@ use std::str;
 
 use crate::CapsIntersectMode;
 
-use glib::translate::{from_glib, from_glib_full, FromGlibPtrFull, IntoGlib, ToGlibPtr};
+use glib::translate::{
+    from_glib, from_glib_full, FromGlibPtrFull, IntoGlib, IntoGlibPtr, ToGlibPtr,
+};
 use glib::value::ToSendValue;
 
 mini_object_wrapper!(Caps, CapsRef, ffi::GstCaps, || { ffi::gst_caps_get_type() });
@@ -81,7 +83,7 @@ impl Caps {
     pub fn merge(&mut self, other: Self) {
         skip_assert_initialized!();
         unsafe {
-            let ptr = ffi::gst_caps_merge(self.as_mut_ptr(), other.into_ptr());
+            let ptr = ffi::gst_caps_merge(self.as_mut_ptr(), other.into_glib_ptr());
             self.replace_ptr(ptr);
         }
     }
@@ -90,7 +92,7 @@ impl Caps {
     pub fn merge_structure(&mut self, structure: Structure) {
         skip_assert_initialized!();
         unsafe {
-            let ptr = ffi::gst_caps_merge_structure(self.as_mut_ptr(), structure.into_ptr());
+            let ptr = ffi::gst_caps_merge_structure(self.as_mut_ptr(), structure.into_glib_ptr());
             self.replace_ptr(ptr);
         }
     }
@@ -101,8 +103,10 @@ impl Caps {
         unsafe {
             let ptr = ffi::gst_caps_merge_structure_full(
                 self.as_mut_ptr(),
-                structure.into_ptr(),
-                features.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
+                structure.into_glib_ptr(),
+                features
+                    .map(|f| f.into_glib_ptr())
+                    .unwrap_or(ptr::null_mut()),
             );
             self.replace_ptr(ptr);
         }
@@ -297,7 +301,9 @@ impl CapsRef {
             ffi::gst_caps_set_features(
                 self.as_mut_ptr(),
                 idx,
-                features.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
+                features
+                    .map(|f| f.into_glib_ptr())
+                    .unwrap_or(ptr::null_mut()),
             )
         }
     }
@@ -309,7 +315,9 @@ impl CapsRef {
         unsafe {
             ffi::gst_caps_set_features_simple(
                 self.as_mut_ptr(),
-                features.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
+                features
+                    .map(|f| f.into_glib_ptr())
+                    .unwrap_or(ptr::null_mut()),
             )
         }
     }
@@ -338,7 +346,7 @@ impl CapsRef {
 
     #[doc(alias = "gst_caps_append_structure")]
     pub fn append_structure(&mut self, structure: Structure) {
-        unsafe { ffi::gst_caps_append_structure(self.as_mut_ptr(), structure.into_ptr()) }
+        unsafe { ffi::gst_caps_append_structure(self.as_mut_ptr(), structure.into_glib_ptr()) }
     }
 
     #[doc(alias = "gst_caps_append_structure_full")]
@@ -346,8 +354,10 @@ impl CapsRef {
         unsafe {
             ffi::gst_caps_append_structure_full(
                 self.as_mut_ptr(),
-                structure.into_ptr(),
-                features.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
+                structure.into_glib_ptr(),
+                features
+                    .map(|f| f.into_glib_ptr())
+                    .unwrap_or(ptr::null_mut()),
             )
         }
     }
@@ -359,7 +369,7 @@ impl CapsRef {
 
     #[doc(alias = "gst_caps_append")]
     pub fn append(&mut self, other: Caps) {
-        unsafe { ffi::gst_caps_append(self.as_mut_ptr(), other.into_ptr()) }
+        unsafe { ffi::gst_caps_append(self.as_mut_ptr(), other.into_glib_ptr()) }
     }
 
     #[doc(alias = "gst_caps_can_intersect")]

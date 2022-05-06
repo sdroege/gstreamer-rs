@@ -32,12 +32,6 @@ impl<T> Iterator<T>
 where
     for<'a> T: FromValue<'a> + 'static,
 {
-    pub unsafe fn into_ptr(self) -> *mut ffi::GstIterator {
-        let s = mem::ManuallyDrop::new(self);
-        let it = s.to_glib_none().0;
-        it as *mut _
-    }
-
     #[allow(clippy::should_implement_trait)]
     #[doc(alias = "gst_iterator_next")]
     pub fn next(&mut self) -> Result<Option<T>, IteratorError> {
@@ -81,7 +75,7 @@ where
             );
 
             from_glib_full(ffi::gst_iterator_filter(
-                self.into_ptr(),
+                self.into_glib_ptr(),
                 Some(filter_trampoline::<T>),
                 closure_value.to_glib_none().0,
             ))
@@ -209,6 +203,17 @@ where
     pub fn from_vec(items: Vec<T>) -> Self {
         skip_assert_initialized!();
         Self::new(VecIteratorImpl::new(items))
+    }
+}
+
+impl<T> IntoGlibPtr<*mut ffi::GstIterator> for Iterator<T>
+where
+    for<'a> T: FromValue<'a> + 'static,
+{
+    unsafe fn into_glib_ptr(self) -> *mut ffi::GstIterator {
+        let s = mem::ManuallyDrop::new(self);
+        let it = s.to_glib_none().0;
+        it as *mut _
     }
 }
 

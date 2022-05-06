@@ -108,7 +108,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_video_encoder_finish_frame(
                 self.as_ref().to_glib_none().0,
-                frame.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
+                frame.map(|f| f.into_glib_ptr()).unwrap_or(ptr::null_mut()),
             ))
         }
     }
@@ -221,7 +221,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
             };
             ffi::gst_video_encoder_set_output_state(
                 self.as_ref().to_glib_none().0,
-                caps.into_ptr(),
+                caps.into_glib_ptr(),
                 reference,
             )
         };

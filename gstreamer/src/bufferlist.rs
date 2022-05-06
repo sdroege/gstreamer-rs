@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{from_glib, from_glib_full, from_glib_none, IntoGlib};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, IntoGlib, IntoGlibPtr};
 use std::fmt;
 use std::ops::ControlFlow;
 use std::ptr;
@@ -30,7 +30,7 @@ impl BufferListRef {
     #[doc(alias = "gst_buffer_list_insert")]
     pub fn insert(&mut self, idx: i32, buffer: Buffer) {
         unsafe {
-            ffi::gst_buffer_list_insert(self.as_mut_ptr(), idx, buffer.into_ptr());
+            ffi::gst_buffer_list_insert(self.as_mut_ptr(), idx, buffer.into_glib_ptr());
         }
     }
 
@@ -158,7 +158,7 @@ impl BufferListRef {
                     *buffer = ptr::null_mut();
                 }
                 Some(new_buffer) => {
-                    *buffer = new_buffer.into_ptr();
+                    *buffer = new_buffer.into_glib_ptr();
                 }
             }
 

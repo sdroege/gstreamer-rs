@@ -19,7 +19,7 @@ impl Player {
     pub fn set_config(&self, config: crate::PlayerConfig) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_player_set_config(self.to_glib_none().0, config.into_ptr()),
+                ffi::gst_player_set_config(self.to_glib_none().0, config.into_glib_ptr()),
                 "Failed to set config",
             )
         }

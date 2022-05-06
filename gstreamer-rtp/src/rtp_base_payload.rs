@@ -42,7 +42,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_rtp_base_payload_push(
                 self.as_ref().to_glib_none().0,
-                buffer.into_ptr(),
+                buffer.into_glib_ptr(),
             ))
         }
     }
@@ -51,7 +51,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_rtp_base_payload_push_list(
                 self.as_ref().to_glib_none().0,
-                list.into_ptr(),
+                list.into_glib_ptr(),
             ))
         }
     }

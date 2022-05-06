@@ -129,7 +129,7 @@ impl<T: RTPBasePayloadImpl> RTPBasePayloadImplExt for T {
                 .map(|f| {
                     try_from_glib(f(
                         element.unsafe_cast_ref::<RTPBasePayload>().to_glib_none().0,
-                        buffer.into_ptr(),
+                        buffer.into_glib_ptr(),
                     ))
                 })
                 .unwrap_or(Err(gst::FlowError::Error))
@@ -167,7 +167,7 @@ impl<T: RTPBasePayloadImpl> RTPBasePayloadImplExt for T {
                 .map(|f| {
                     from_glib(f(
                         element.unsafe_cast_ref::<RTPBasePayload>().to_glib_none().0,
-                        event.into_ptr(),
+                        event.into_glib_ptr(),
                     ))
                 })
                 .unwrap_or(false)
@@ -183,7 +183,7 @@ impl<T: RTPBasePayloadImpl> RTPBasePayloadImplExt for T {
                 .map(|f| {
                     from_glib(f(
                         element.unsafe_cast_ref::<RTPBasePayload>().to_glib_none().0,
-                        event.into_ptr(),
+                        event.into_glib_ptr(),
                     ))
                 })
                 .unwrap_or(false)

@@ -411,7 +411,8 @@ impl ProtectionMeta {
     pub fn add(buffer: &mut BufferRef, info: crate::Structure) -> MetaRefMut<Self, Standalone> {
         skip_assert_initialized!();
         unsafe {
-            let meta = ffi::gst_buffer_add_protection_meta(buffer.as_mut_ptr(), info.into_ptr());
+            let meta =
+                ffi::gst_buffer_add_protection_meta(buffer.as_mut_ptr(), info.into_glib_ptr());
 
             Self::from_mut_ptr(buffer, meta)
         }

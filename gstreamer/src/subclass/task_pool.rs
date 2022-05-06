@@ -77,7 +77,7 @@ unsafe extern "C" fn task_pool_prepare<T: TaskPoolImpl>(
         Ok(()) => {}
         Err(err) => {
             if !error.is_null() {
-                *error = err.into_raw();
+                *error = err.into_glib_ptr();
             }
         }
     }
@@ -109,7 +109,7 @@ unsafe extern "C" fn task_pool_push<T: TaskPoolImpl>(
         Err(err) => {
             func.prevent_call();
             if !error.is_null() {
-                *error = err.into_raw();
+                *error = err.into_glib_ptr();
             }
             ptr::null_mut()
         }

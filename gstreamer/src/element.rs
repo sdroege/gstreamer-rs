@@ -299,7 +299,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe {
             from_glib(ffi::gst_element_send_event(
                 self.as_ref().to_glib_none().0,
-                event.into().into_ptr(),
+                event.into().into_glib_ptr(),
             ))
         }
     }
@@ -399,7 +399,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 file.to_glib_none().0,
                 function.to_glib_none().0,
                 line as i32,
-                structure.into_ptr(),
+                structure.into_glib_ptr(),
             );
         }
     }
@@ -407,7 +407,10 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn post_message(&self, message: crate::Message) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_element_post_message(self.as_ref().to_glib_none().0, message.into_ptr()),
+                ffi::gst_element_post_message(
+                    self.as_ref().to_glib_none().0,
+                    message.into_glib_ptr()
+                ),
                 "Failed to post message"
             )
         }

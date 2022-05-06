@@ -88,7 +88,7 @@ impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
                             .unsafe_cast_ref::<RTPBaseDepayload>()
                             .to_glib_none()
                             .0,
-                        event.into_ptr(),
+                        event.into_glib_ptr(),
                     ))
                 })
                 .unwrap_or(false)
@@ -212,7 +212,7 @@ unsafe extern "C" fn rtp_base_depayload_process_rtp_packet<T: RTPBaseDepayloadIm
         let bufwrap = crate::RTPBuffer::<crate::rtp_buffer::Readable>::from_glib_borrow(rtp_packet);
 
         imp.process_rtp_packet(wrap.unsafe_cast_ref(), &bufwrap)
-            .map(|buffer| buffer.into_ptr())
+            .map(|buffer| buffer.into_glib_ptr())
             .unwrap_or(ptr::null_mut())
     })
 }

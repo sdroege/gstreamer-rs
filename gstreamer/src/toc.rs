@@ -5,7 +5,8 @@ use std::fmt;
 use std::mem;
 
 use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, IntoGlib, ToGlibPtr,
+    from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, IntoGlib, IntoGlibPtr,
+    ToGlibPtr,
 };
 
 use crate::TagList;
@@ -45,7 +46,7 @@ impl TocRef {
     #[doc(alias = "gst_toc_append_entry")]
     pub fn append_entry(&mut self, entry: TocEntry) {
         unsafe {
-            ffi::gst_toc_append_entry(self.as_mut_ptr(), entry.into_ptr());
+            ffi::gst_toc_append_entry(self.as_mut_ptr(), entry.into_glib_ptr());
         }
     }
 
@@ -58,7 +59,7 @@ impl TocRef {
     #[doc(alias = "gst_toc_set_tags")]
     pub fn set_tags(&mut self, tag_list: TagList) {
         unsafe {
-            ffi::gst_toc_set_tags(self.as_mut_ptr(), tag_list.into_ptr());
+            ffi::gst_toc_set_tags(self.as_mut_ptr(), tag_list.into_glib_ptr());
         }
     }
 
@@ -130,7 +131,7 @@ impl TocEntryRef {
     #[doc(alias = "gst_toc_entry_append_sub_entry")]
     pub fn append_sub_entry(&mut self, subentry: TocEntry) {
         unsafe {
-            ffi::gst_toc_entry_append_sub_entry(self.as_mut_ptr(), subentry.into_ptr());
+            ffi::gst_toc_entry_append_sub_entry(self.as_mut_ptr(), subentry.into_glib_ptr());
         }
     }
 
@@ -183,7 +184,7 @@ impl TocEntryRef {
     #[doc(alias = "gst_toc_entry_set_tags")]
     pub fn set_tags(&mut self, tag_list: TagList) {
         unsafe {
-            ffi::gst_toc_entry_set_tags(self.as_mut_ptr(), tag_list.into_ptr());
+            ffi::gst_toc_entry_set_tags(self.as_mut_ptr(), tag_list.into_glib_ptr());
         }
     }
 

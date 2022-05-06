@@ -1746,7 +1746,7 @@ impl<'a> TagBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let tags = s.tags.take().unwrap();
-        ffi::gst_event_new_tag(tags.into_ptr())
+        ffi::gst_event_new_tag(tags.into_glib_ptr())
     });
 }
 
@@ -2102,7 +2102,7 @@ impl<'a> NavigationBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take().unwrap();
-        ffi::gst_event_new_navigation(structure.into_ptr())
+        ffi::gst_event_new_navigation(structure.into_glib_ptr())
     });
 }
 
@@ -2229,7 +2229,7 @@ impl<'a> CustomUpstreamBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take().unwrap();
-        ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_UPSTREAM, structure.into_ptr())
+        ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_UPSTREAM, structure.into_glib_ptr())
     });
 }
 
@@ -2250,7 +2250,7 @@ impl<'a> CustomDownstreamBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take().unwrap();
-        ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_DOWNSTREAM, structure.into_ptr())
+        ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_DOWNSTREAM, structure.into_glib_ptr())
     });
 }
 
@@ -2271,7 +2271,10 @@ impl<'a> CustomDownstreamOobBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take().unwrap();
-        ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB, structure.into_ptr())
+        ffi::gst_event_new_custom(
+            ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB,
+            structure.into_glib_ptr(),
+        )
     });
 }
 
@@ -2294,7 +2297,7 @@ impl<'a> CustomDownstreamStickyBuilder<'a> {
         let structure = s.structure.take().unwrap();
         ffi::gst_event_new_custom(
             ffi::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY,
-            structure.into_ptr(),
+            structure.into_glib_ptr(),
         )
     });
 }
@@ -2316,7 +2319,7 @@ impl<'a> CustomBothBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take().unwrap();
-        ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_BOTH, structure.into_ptr())
+        ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_BOTH, structure.into_glib_ptr())
     });
 }
 
@@ -2337,7 +2340,7 @@ impl<'a> CustomBothOobBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take().unwrap();
-        ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_BOTH_OOB, structure.into_ptr())
+        ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_BOTH_OOB, structure.into_glib_ptr())
     });
 }
 

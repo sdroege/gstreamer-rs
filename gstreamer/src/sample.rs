@@ -3,7 +3,7 @@
 use std::fmt;
 use std::ptr;
 
-use glib::translate::{from_glib_full, from_glib_none, mut_override, ToGlibPtr};
+use glib::translate::{from_glib_full, from_glib_none, mut_override, IntoGlibPtr, ToGlibPtr};
 
 use crate::Buffer;
 use crate::BufferList;
@@ -74,7 +74,10 @@ impl<'a> SampleBuilder<'a> {
         assert_initialized_main_thread!();
 
         unsafe {
-            let info = self.info.map(|i| i.into_ptr()).unwrap_or(ptr::null_mut());
+            let info = self
+                .info
+                .map(|i| i.into_glib_ptr())
+                .unwrap_or(ptr::null_mut());
 
             let sample: Sample = from_glib_full(ffi::gst_sample_new(
                 self.buffer.to_glib_none().0,
@@ -223,7 +226,7 @@ impl SampleRef {
         unsafe {
             ffi::gst_sample_set_info(
                 self.as_mut_ptr(),
-                info.map(|i| i.into_ptr()).unwrap_or(ptr::null_mut()),
+                info.map(|i| i.into_glib_ptr()).unwrap_or(ptr::null_mut()),
             );
         }
     }

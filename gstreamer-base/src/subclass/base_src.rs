@@ -536,7 +536,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
             match (*parent_class).fixate {
                 Some(fixate) => from_glib_full(fixate(
                     element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
-                    caps.into_ptr(),
+                    caps.into_glib_ptr(),
                 )),
                 None => caps,
             }
@@ -759,7 +759,7 @@ unsafe extern "C" fn base_src_alloc<T: BaseSrcImpl>(
     gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
         match imp.alloc(wrap.unsafe_cast_ref(), offset, length) {
             Ok(buffer) => {
-                *buffer_ptr = buffer.into_ptr();
+                *buffer_ptr = buffer.into_glib_ptr();
                 gst::FlowReturn::Ok
             }
             Err(err) => gst::FlowReturn::from(err),
@@ -844,7 +844,7 @@ unsafe extern "C" fn base_src_create<T: BaseSrcImpl>(
                         gst::FlowReturn::Ok
                     }
                 } else {
-                    *buffer_ptr = new_buffer.into_ptr();
+                    *buffer_ptr = new_buffer.into_glib_ptr();
                     gst::FlowReturn::Ok
                 }
             }
@@ -914,7 +914,7 @@ unsafe extern "C" fn base_src_get_caps<T: BaseSrcImpl>(
     gst::panic_to_error!(&wrap, imp.panicked(), None, {
         imp.caps(wrap.unsafe_cast_ref(), filter.as_ref().as_ref())
     })
-    .map(|caps| caps.into_ptr())
+    .map(|caps| caps.into_glib_ptr())
     .unwrap_or(ptr::null_mut())
 }
 
@@ -970,7 +970,7 @@ unsafe extern "C" fn base_src_fixate<T: BaseSrcImpl>(
     gst::panic_to_error!(&wrap, imp.panicked(), gst::Caps::new_empty(), {
         imp.fixate(wrap.unsafe_cast_ref(), caps)
     })
-    .into_ptr()
+    .into_glib_ptr()
 }
 
 unsafe extern "C" fn base_src_unlock<T: BaseSrcImpl>(

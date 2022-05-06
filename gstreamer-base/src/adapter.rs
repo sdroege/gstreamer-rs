@@ -234,7 +234,7 @@ impl Adapter {
     #[doc(alias = "gst_adapter_push")]
     pub fn push(&self, buf: gst::Buffer) {
         unsafe {
-            ffi::gst_adapter_push(self.to_glib_none().0, buf.into_ptr());
+            ffi::gst_adapter_push(self.to_glib_none().0, buf.into_glib_ptr());
         }
     }
 }

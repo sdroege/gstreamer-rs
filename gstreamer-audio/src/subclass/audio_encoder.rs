@@ -299,7 +299,7 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioEncoderClass;
             if let Some(f) = (*parent_class).pre_push {
-                let mut buffer = buffer.into_ptr();
+                let mut buffer = buffer.into_glib_ptr();
                 gst::FlowSuccess::try_from_glib(f(
                     element.unsafe_cast_ref::<AudioEncoder>().to_glib_none().0,
                     &mut buffer,
@@ -368,7 +368,7 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
                 .expect("Missing parent function `sink_event`");
             from_glib(f(
                 element.unsafe_cast_ref::<AudioEncoder>().to_glib_none().0,
-                event.into_ptr(),
+                event.into_glib_ptr(),
             ))
         }
     }
@@ -396,7 +396,7 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
                 .expect("Missing parent function `src_event`");
             from_glib(f(
                 element.unsafe_cast_ref::<AudioEncoder>().to_glib_none().0,
-                event.into_ptr(),
+                event.into_glib_ptr(),
             ))
         }
     }
@@ -614,7 +614,7 @@ unsafe extern "C" fn audio_encoder_pre_push<T: AudioEncoderImpl>(
     gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
         match imp.pre_push(wrap.unsafe_cast_ref(), from_glib_full(*buffer)) {
             Ok(Some(new_buffer)) => {
-                *buffer = new_buffer.into_ptr();
+                *buffer = new_buffer.into_glib_ptr();
                 Ok(gst::FlowSuccess::Ok)
             }
             Ok(None) => {

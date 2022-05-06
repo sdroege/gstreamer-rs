@@ -366,7 +366,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_pad_chain(
                 self.as_ref().to_glib_none().0,
-                buffer.into_ptr(),
+                buffer.into_glib_ptr(),
             ))
         }
     }
@@ -375,7 +375,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_pad_push(
                 self.as_ref().to_glib_none().0,
-                buffer.into_ptr(),
+                buffer.into_glib_ptr(),
             ))
         }
     }
@@ -384,7 +384,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_pad_chain_list(
                 self.as_ref().to_glib_none().0,
-                list.into_ptr(),
+                list.into_glib_ptr(),
             ))
         }
     }
@@ -393,7 +393,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             try_from_glib(ffi::gst_pad_push_list(
                 self.as_ref().to_glib_none().0,
-                list.into_ptr(),
+                list.into_glib_ptr(),
             ))
         }
     }
@@ -539,7 +539,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             from_glib(ffi::gst_pad_event_default(
                 self.as_ref().to_glib_none().0,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
-                event.into().into_ptr(),
+                event.into().into_glib_ptr(),
             ))
         }
     }
@@ -548,7 +548,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             from_glib(ffi::gst_pad_push_event(
                 self.as_ref().to_glib_none().0,
-                event.into().into_ptr(),
+                event.into().into_glib_ptr(),
             ))
         }
     }
@@ -557,7 +557,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             from_glib(ffi::gst_pad_send_event(
                 self.as_ref().to_glib_none().0,
-                event.into().into_ptr(),
+                event.into().into_glib_ptr(),
             ))
         }
     }
@@ -1039,7 +1039,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 }
                 Replace(ev) => {
                     ffi::gst_mini_object_unref(*event as *mut _);
-                    *event = ev.into_ptr();
+                    *event = ev.into_glib_ptr();
                 }
             }
 
@@ -1181,15 +1181,15 @@ unsafe fn update_probe_info(
         match probe_info.data {
             Some(PadProbeData::Buffer(buffer)) => {
                 assert_eq!(data_type, Some(Buffer::static_type()));
-                (*info).data = buffer.into_ptr() as *mut libc::c_void;
+                (*info).data = buffer.into_glib_ptr() as *mut libc::c_void;
             }
             Some(PadProbeData::BufferList(bufferlist)) => {
                 assert_eq!(data_type, Some(BufferList::static_type()));
-                (*info).data = bufferlist.into_ptr() as *mut libc::c_void;
+                (*info).data = bufferlist.into_glib_ptr() as *mut libc::c_void;
             }
             Some(PadProbeData::Event(event)) => {
                 assert_eq!(data_type, Some(Event::static_type()));
-                (*info).data = event.into_ptr() as *mut libc::c_void;
+                (*info).data = event.into_glib_ptr() as *mut libc::c_void;
             }
             Some(PadProbeData::Query(query)) => {
                 assert_eq!(data_type, Some(Query::static_type()));
@@ -1483,7 +1483,7 @@ where
                     }
                 }
             } else {
-                *buffer = new_buffer.into_ptr();
+                *buffer = new_buffer.into_glib_ptr();
                 FlowReturn::Ok.into_glib()
             }
         }
@@ -1515,7 +1515,7 @@ where
             .as_ref(),
     );
 
-    ret.into_ptr()
+    ret.into_glib_ptr()
 }
 
 unsafe extern "C" fn trampoline_link_function<

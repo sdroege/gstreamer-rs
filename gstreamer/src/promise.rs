@@ -127,7 +127,7 @@ impl Promise {
         unsafe {
             ffi::gst_promise_reply(
                 self.to_glib_none().0,
-                s.map(|s| s.into_ptr()).unwrap_or(ptr::null_mut()),
+                s.map(|s| s.into_glib_ptr()).unwrap_or(ptr::null_mut()),
             );
         }
     }

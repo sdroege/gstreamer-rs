@@ -444,7 +444,7 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
                 .expect("Missing parent function `sink_event`");
             from_glib(f(
                 element.unsafe_cast_ref::<VideoDecoder>().to_glib_none().0,
-                event.into_ptr(),
+                event.into_glib_ptr(),
             ))
         }
     }
@@ -472,7 +472,7 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
                 .expect("Missing parent function `src_event`");
             from_glib(f(
                 element.unsafe_cast_ref::<VideoDecoder>().to_glib_none().0,
-                event.into_ptr(),
+                event.into_glib_ptr(),
             ))
         }
     }

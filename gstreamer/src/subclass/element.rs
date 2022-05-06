@@ -247,7 +247,7 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .map(|f| {
                     from_glib(f(
                         element.unsafe_cast_ref::<Element>().to_glib_none().0,
-                        event.into_ptr(),
+                        event.into_glib_ptr(),
                     ))
                 })
                 .unwrap_or(false)
@@ -325,7 +325,7 @@ impl<T: ElementImpl> ElementImplExt for T {
             if let Some(f) = (*parent_class).post_message {
                 from_glib(f(
                     element.unsafe_cast_ref::<Element>().to_glib_none().0,
-                    msg.into_ptr(),
+                    msg.into_glib_ptr(),
                 ))
             } else {
                 false
