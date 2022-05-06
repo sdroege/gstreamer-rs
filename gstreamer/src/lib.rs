@@ -240,6 +240,7 @@ mod buffer_pool;
 pub use crate::buffer_pool::{BufferPoolAcquireParams, BufferPoolConfig, BufferPoolConfigRef};
 
 mod pad_template;
+pub use pad_template::PadTemplateBuilder;
 
 pub mod param_spec;
 pub use crate::param_spec::ParamSpecArray;

@@ -74,18 +74,6 @@ impl PadTemplate {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_pad_template_set_documentation_caps")]
-    pub fn set_documentation_caps(&self, caps: &Caps) {
-        unsafe {
-            ffi::gst_pad_template_set_documentation_caps(
-                self.to_glib_none().0,
-                caps.to_glib_full(),
-            );
-        }
-    }
-
     #[doc(alias = "pad-created")]
     pub fn connect_pad_created<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
         &self,

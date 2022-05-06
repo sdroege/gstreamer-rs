@@ -79,4 +79,81 @@ impl PadTemplate {
             from_glib(templ.presence)
         }
     }
+
+    pub fn builder<'a>(
+        name_template: &'a str,
+        direction: PadDirection,
+        presence: PadPresence,
+        caps: &'a Caps,
+    ) -> PadTemplateBuilder<'a> {
+        assert_initialized_main_thread!();
+
+        PadTemplateBuilder {
+            name_template,
+            direction,
+            presence,
+            caps,
+            gtype: None,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+            documentation_caps: None,
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct PadTemplateBuilder<'a> {
+    name_template: &'a str,
+    direction: PadDirection,
+    presence: PadPresence,
+    caps: &'a Caps,
+    gtype: Option<glib::Type>,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    documentation_caps: Option<&'a Caps>,
+}
+
+impl<'a> PadTemplateBuilder<'a> {
+    pub fn gtype(self, gtype: glib::Type) -> Self {
+        PadTemplateBuilder {
+            gtype: Some(gtype),
+            ..self
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn documentation_caps(self, documentation_caps: &'a Caps) -> Self {
+        PadTemplateBuilder {
+            documentation_caps: Some(documentation_caps),
+            ..self
+        }
+    }
+
+    pub fn build(self) -> Result<PadTemplate, glib::BoolError> {
+        let templ = if let Some(gtype) = self.gtype {
+            PadTemplate::with_gtype(
+                self.name_template,
+                self.direction,
+                self.presence,
+                self.caps,
+                gtype,
+            )?
+        } else {
+            PadTemplate::new(self.name_template, self.direction, self.presence, self.caps)?
+        };
+
+        #[cfg(any(feature = "v1_18", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+        if let Some(documentation_caps) = self.documentation_caps {
+            unsafe {
+                ffi::gst_pad_template_set_documentation_caps(
+                    templ.to_glib_none().0,
+                    documentation_caps.to_glib_none().0,
+                );
+            }
+        }
+
+        Ok(templ)
+    }
 }

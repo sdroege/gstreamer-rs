@@ -1802,6 +1802,11 @@ final_type = true
     manual = true
 
     [[object.function]]
+    name = "set_documentation_caps"
+    # builder
+    manual = true
+
+    [[object.function]]
     name = "get_documentation_caps"
     # directly access the field
     manual = true
