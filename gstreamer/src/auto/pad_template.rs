@@ -13,7 +13,6 @@ use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -68,24 +67,6 @@ impl PadTemplate {
         }
     }
 
-    #[doc(alias = "gst_pad_template_get_caps")]
-    #[doc(alias = "get_caps")]
-    pub fn caps(&self) -> Caps {
-        unsafe { from_glib_full(ffi::gst_pad_template_get_caps(self.to_glib_none().0)) }
-    }
-
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_pad_template_get_documentation_caps")]
-    #[doc(alias = "get_documentation_caps")]
-    pub fn documentation_caps(&self) -> Caps {
-        unsafe {
-            from_glib_full(ffi::gst_pad_template_get_documentation_caps(
-                self.to_glib_none().0,
-            ))
-        }
-    }
-
     #[doc(alias = "gst_pad_template_pad_created")]
     pub fn pad_created(&self, pad: &impl IsA<Pad>) {
         unsafe {
@@ -103,23 +84,6 @@ impl PadTemplate {
                 caps.to_glib_full(),
             );
         }
-    }
-
-    pub fn direction(&self) -> PadDirection {
-        glib::ObjectExt::property(self, "direction")
-    }
-
-    pub fn gtype(&self) -> glib::types::Type {
-        glib::ObjectExt::property(self, "gtype")
-    }
-
-    #[doc(alias = "name-template")]
-    pub fn name_template(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self, "name-template")
-    }
-
-    pub fn presence(&self) -> PadPresence {
-        glib::ObjectExt::property(self, "presence")
     }
 
     #[doc(alias = "pad-created")]

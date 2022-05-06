@@ -1796,6 +1796,36 @@ final_type = true
     # static pad template manual
     manual = true
 
+    [[object.function]]
+    name = "get_caps"
+    # directly access the field
+    manual = true
+
+    [[object.function]]
+    name = "get_documentation_caps"
+    # directly access the field
+    manual = true
+
+    [[object.property]]
+    name = "name-template"
+    # directly access the field and borrow the string
+    manual = true
+
+    [[object.property]]
+    name = "direction"
+    # directly access the field
+    manual = true
+
+    [[object.property]]
+    name = "presence"
+    # directly access the field
+    manual = true
+
+    [[object.property]]
+    name = "gtype"
+    # directly access the field
+    manual = true
+
 [[object]]
 name = "Gst.ParseContext"
 status = "manual"
