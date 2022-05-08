@@ -101,6 +101,7 @@ impl PadTemplate {
     }
 }
 
+#[must_use = "The builder must be built to be used"]
 #[derive(Debug)]
 pub struct PadTemplateBuilder<'a> {
     name_template: &'a str,
