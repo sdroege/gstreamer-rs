@@ -8,3 +8,4 @@ meson build -D prefix=/usr/local -Dbuild-tests=false
 ninja -C build
 ninja -C build install
 cd ..
+rm -rf gtk/

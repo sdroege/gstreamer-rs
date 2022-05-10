@@ -15,4 +15,7 @@ meson build -D prefix=/usr/local -D devtools=disabled -D examples=disabled -D gt
 ninja -C build
 ninja -C build install
 
+cd ..
+rm -rf gstreamer/
+
 popd
