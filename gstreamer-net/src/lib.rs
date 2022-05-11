@@ -32,6 +32,9 @@ pub use crate::auto::*;
 pub use crate::net_address_meta::*;
 mod net_address_meta;
 
+mod ptp_clock;
+pub use ptp_clock::PtpStatisticsCallback;
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_net::prelude::*" without getting conflicts
 pub mod prelude {
