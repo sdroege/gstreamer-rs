@@ -143,9 +143,8 @@ build-nightly:
 
 update-nightly:
   extends: build-nightly
-  only:
-    variables:
-      - $UPDATE_NIGHTLY == "1"
+  rules:
+    - if: $UPDATE_NIGHTLY == "1"
   variables:
       FDO_FORCE_REBUILD: 1
 
@@ -404,8 +403,8 @@ clippy:
 deny:
   extends: .img-stable
   stage: 'extras'
-  only:
-    - schedules
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
   script:
     - cargo deny --color=always check
 
@@ -420,8 +419,8 @@ gir-checks:
 outdated:
   extends: .img-stable
   stage: 'extras'
-  only:
-    - schedules
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
   script:
     - cargo outdated --color=always --root-deps-only --exit-code 1 -v
 
