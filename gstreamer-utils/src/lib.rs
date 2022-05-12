@@ -1,3 +1,3 @@
 mod streamproducer;
 
-pub use crate::streamproducer::StreamProducer;
+pub use crate::streamproducer::{ConsumptionLink, StreamProducer};
