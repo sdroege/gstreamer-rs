@@ -57,11 +57,11 @@ impl StreamProducer {
     pub fn add_consumer(&self, consumer: &gst_app::AppSrc) {
         let mut consumers = self.consumers.lock().unwrap();
         if consumers.consumers.contains_key(consumer) {
-            gst::error!(CAT, obj: &self.appsink, "Consumer already added");
+            gst::error!(CAT, obj: &self.appsink, "Consumer {} ({:?}) already added", consumer.name(), consumer);
             return;
         }
 
-        gst::debug!(CAT, obj: &self.appsink, "Adding consumer");
+        gst::debug!(CAT, obj: &self.appsink, "Adding consumer {} ({:?})", consumer.name(), consumer);
 
         Self::configure_consumer(consumer);
 
@@ -101,9 +101,9 @@ impl StreamProducer {
             .remove(consumer)
             .is_some()
         {
-            gst::debug!(CAT, obj: &self.appsink, "Removed consumer {}", name);
+            gst::debug!(CAT, obj: &self.appsink, "Removed consumer {} ({:?})", name, consumer);
         } else {
-            gst::debug!(CAT, obj: &self.appsink, "Consumer {} not found", name);
+            gst::debug!(CAT, obj: &self.appsink, "Consumer {} ({:?}) not found", name, consumer);
         }
     }
 
@@ -299,7 +299,9 @@ impl StreamConsumer {
                     gst::debug!(
                         CAT,
                         obj: appsrc,
-                        "consumer is not consuming fast enough, old samples are getting dropped",
+                        "consumer {} ({:?}) is not consuming fast enough, old samples are getting dropped",
+                        appsrc.name(),
+                        appsrc,
                     );
                 })
                 .build(),
