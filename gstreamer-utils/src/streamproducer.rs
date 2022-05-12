@@ -118,6 +118,21 @@ impl StreamProducer {
     pub fn appsink(&self) -> &gst_app::AppSink {
         &self.appsink
     }
+
+    /// Signals an error on all consumers
+    pub fn error(&self, error: &gst::glib::Error, debug: Option<&str>) {
+        let consumers = self.consumers.lock().unwrap();
+
+        for consumer in consumers.consumers.keys() {
+            let mut msg_builder =
+                gst::message::Error::builder_from_error(error.clone()).src(consumer);
+            if let Some(debug) = debug {
+                msg_builder = msg_builder.debug(debug);
+            }
+
+            let _ = consumer.post_message(msg_builder.build());
+        }
+    }
 }
 
 impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
