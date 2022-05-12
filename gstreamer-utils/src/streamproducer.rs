@@ -102,6 +102,7 @@ impl StreamProducer {
             .is_some()
         {
             gst::debug!(CAT, obj: &self.appsink, "Removed consumer {} ({:?})", name, consumer);
+            consumer.set_callbacks(gst_app::AppSrcCallbacks::builder().build());
         } else {
             gst::debug!(CAT, obj: &self.appsink, "Consumer {} ({:?}) not found", name, consumer);
         }
