@@ -16,18 +16,14 @@ rust-version = "1.57"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-gst = { package = "gstreamer", path = "../gstreamer" }
-gst_app = { package = "gstreamer-app", path = "../gstreamer-app" }
-gst_video = { package = "gstreamer-video", path = "../gstreamer-video" }
+gst = { package = "gstreamer", path = "../gstreamer", features = ["v1_20"] }
+gst_app = { package = "gstreamer-app", path = "../gstreamer-app", features = ["v1_20"] }
+gst_video = { package = "gstreamer-video", path = "../gstreamer-video", features = ["v1_20"] }
 once_cell = "1"
 
 [dev-dependencies]
 futures = { version = "0.3", features = ["executor"] }
-gst_app = { package = "gstreamer-app", path = "../gstreamer-app" }
 
 [features]
 default = []
-v1_16 = []
-v1_18 = ['v1_16']
-v1_20 = ['v1_18']
-v1_22 = ['v1_20']
+v1_22 = []

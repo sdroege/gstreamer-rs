@@ -36,6 +36,23 @@ impl PartialEq for StreamProducer {
 impl Eq for StreamProducer {}
 
 impl StreamProducer {
+    /// Configure a consumer `appsrc` for later use in a `StreamProducer`
+    ///
+    /// This is automatically called when calling `add_consumer()`.
+    pub fn configure_consumer(consumer: &gst_app::AppSrc) {
+        // Latency on the appsrc is set by the publisher before the first buffer
+        // and whenever it changes
+        consumer.set_latency(gst::ClockTime::ZERO, gst::ClockTime::NONE);
+        consumer.set_format(gst::Format::Time);
+        consumer.set_is_live(true);
+        consumer.set_handle_segment_change(true);
+        consumer.set_max_buffers(0);
+        consumer.set_max_bytes(0);
+        consumer.set_max_time(500 * gst::ClockTime::MSECOND);
+        consumer.set_leaky_type(gst_app::AppLeakyType::Downstream);
+        consumer.set_automatic_eos(false);
+    }
+
     /// Add an appsrc to dispatch data to
     pub fn add_consumer(&self, consumer: &gst_app::AppSrc) {
         let mut consumers = self.consumers.lock().unwrap();
@@ -50,15 +67,7 @@ impl StreamProducer {
 
         gst::debug!(CAT, obj: &self.appsink, "Adding consumer");
 
-        consumer.set_property("max-buffers", 0u64);
-        consumer.set_property("max-bytes", 0u64);
-        consumer.set_property("max-time", gst::ClockTime::from_mseconds(500));
-        consumer.set_property("format", gst::Format::Time);
-        consumer.set_property_from_str("leaky-type", "downstream");
-        consumer
-            .try_set_property("handle-segment-change", true)
-            .ok();
-        consumer.set_automatic_eos(false);
+        Self::configure_consumer(consumer);
 
         // Forward force-keyunit events upstream to the appsink
         let srcpad = consumer.static_pad("src").unwrap();
