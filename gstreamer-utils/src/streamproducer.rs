@@ -56,11 +56,7 @@ impl StreamProducer {
     /// Add an appsrc to dispatch data to
     pub fn add_consumer(&self, consumer: &gst_app::AppSrc) {
         let mut consumers = self.consumers.lock().unwrap();
-        if consumers
-            .consumers
-            .get(&(consumer.as_ptr() as usize))
-            .is_some()
-        {
+        if consumers.consumers.contains_key(consumer) {
             gst::error!(CAT, obj: &self.appsink, "Consumer already added");
             return;
         }
@@ -89,7 +85,7 @@ impl StreamProducer {
             .unwrap();
 
         consumers.consumers.insert(
-            consumer.as_ptr() as usize,
+            consumer.clone(),
             StreamConsumer::new(consumer, fku_probe_id),
         );
     }
@@ -102,7 +98,7 @@ impl StreamProducer {
             .lock()
             .unwrap()
             .consumers
-            .remove(&(consumer.as_ptr() as usize))
+            .remove(consumer)
             .is_some()
         {
             gst::debug!(CAT, obj: &self.appsink, "Removed consumer {}", name);
@@ -274,7 +270,7 @@ struct StreamConsumers {
     /// Whether the consumers' appsrc latency needs updating
     latency_updated: bool,
     /// The consumers, AppSrc pointer value -> consumer
-    consumers: HashMap<usize, StreamConsumer>,
+    consumers: HashMap<gst_app::AppSrc, StreamConsumer>,
     /// Whether appsrc samples should be forwarded to consumers yet
     discard: bool,
 }
