@@ -18,6 +18,7 @@ gst-audio = { package = "gstreamer-audio", path = "../gstreamer-audio" }
 gst-base = { package = "gstreamer-base", path = "../gstreamer-base" }
 gst-video = { package = "gstreamer-video", path = "../gstreamer-video" }
 gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils" }
+gst-play = { package = "gstreamer-play", path = "../gstreamer-play", optional = true }
 gst-player = { package = "gstreamer-player", path = "../gstreamer-player", optional = true }
 ges = { package = "gstreamer-editing-services", path = "../gstreamer-editing-services", optional = true }
 gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp", optional = true }
@@ -106,6 +107,10 @@ name = "transmux"
 
 [[bin]]
 name = "pad_probes"
+
+[[bin]]
+name = "play"
+required-features = ["gst-play"]
 
 [[bin]]
 name = "playbin"
