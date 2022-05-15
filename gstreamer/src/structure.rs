@@ -281,6 +281,18 @@ impl FromGlibPtrFull<*mut ffi::GstStructure> for Structure {
     }
 }
 
+impl FromGlibPtrBorrow<*const ffi::GstStructure> for Structure {
+    unsafe fn from_glib_borrow(ptr: *const ffi::GstStructure) -> Borrowed<Self> {
+        Borrowed::new(from_glib_full(ptr))
+    }
+}
+
+impl FromGlibPtrBorrow<*mut ffi::GstStructure> for Structure {
+    unsafe fn from_glib_borrow(ptr: *mut ffi::GstStructure) -> Borrowed<Self> {
+        Borrowed::new(from_glib_full(ptr))
+    }
+}
+
 impl glib::value::ValueType for Structure {
     type Type = Self;
 }
