@@ -1,0 +1,55 @@
+[build-dependencies]
+system-deps = "6"
+
+[dependencies]
+libc = "0.2"
+
+[dependencies.glib]
+package = "glib-sys"
+git = "https://github.com/gtk-rs/gtk-rs-core"
+
+[dependencies.gobject]
+package = "gobject-sys"
+git = "https://github.com/gtk-rs/gtk-rs-core"
+
+[dependencies.gst]
+package = "gstreamer-sys"
+path = "../../gstreamer/sys"
+
+[dependencies.gst_video]
+package = "gstreamer-video-sys"
+path = "../../gstreamer-video/sys"
+
+[dev-dependencies]
+shell-words = "1.0.0"
+tempfile = "3"
+
+[features]
+v1_22 = []
+dox = []
+
+[lib]
+name = "gstreamer_play_sys"
+
+[package]
+authors = ["Sebastian Dröge <sebastian@centricular.com>"]
+build = "build.rs"
+description = "FFI bindings to libgstplay-1.0"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_play_sys/"
+homepage = "https://gstreamer.freedesktop.org"
+keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
+license = "MIT"
+name = "gstreamer-play-sys"
+readme = "README.md"
+repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
+version = "0.19.0"
+edition = "2021"
+rust-version = "1.57"
+[package.metadata.docs.rs]
+features = ["dox"]
+[package.metadata.system-deps.gstreamer_play_1_0]
+name = "gstreamer-play-1.0"
+version = "1.20"
+
+[package.metadata.system-deps.gstreamer_play_1_0.v1_22]
+version = "1.21"

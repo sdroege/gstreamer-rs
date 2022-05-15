@@ -1,0 +1,247 @@
+[options]
+girs_directories = ["../gir-files", "../gst-gir-files"]
+library = "GstPlay"
+version = "1.0"
+min_cfg_version = "1.20"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+generate_display_trait = false
+trust_return_value_nullability = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+]
+
+generate = [
+    "GstPlay.PlayColorBalanceType",
+    "GstPlay.PlayError",
+    "GstPlay.PlayMediaInfo",
+    "GstPlay.PlaySnapshotFormat",
+    "GstPlay.PlayState",
+    "GstPlay.PlayStreamInfo",
+    "GstPlay.PlayVideoRenderer",
+    "GstPlay.PlayVisualization",
+]
+
+manual = [
+    "GLib.Error",
+    "GLib.MainContext",
+    "GObject.Object",
+    "Gst.Element",
+    "Gst.Object",
+    "GstVideo.VideoMultiviewFlags",
+    "GstVideo.VideoMultiviewFramePacking",
+]
+
+[[object]]
+name = "Gst.Bus"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "Option"
+
+[[object]]
+name = "Gst.Message"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Sample"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.TagList"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "GstPlay.Play"
+status = "generate"
+final_type = true
+
+    [[object.function]]
+    name = "visualizations_free"
+    # correct mutability
+    ignore = true
+
+    [[object.function]]
+    name = "set_config"
+    # Custom type
+    manual = true
+
+    [[object.function]]
+    name = "get_config"
+    # Custom type
+    manual = true
+
+    [[object.function]]
+    pattern = "config_.*"
+    # Custom type
+    ignore = true
+
+    [[object.function]]
+    name = "seek"
+        [[object.function.parameter]]
+        name = "position"
+        mandatory = true
+
+    [[object.function]]
+    name = "set_audio_track"
+        [object.function.return]
+        bool_return_is_error = "Failed to set audio track"
+
+    [[object.function]]
+    name = "set_subtitle_track"
+        [object.function.return]
+        bool_return_is_error = "Failed to set subtitle track"
+
+    [[object.function]]
+    name = "set_video_track"
+        [object.function.return]
+        bool_return_is_error = "Failed to set video track"
+
+    [[object.function]]
+    name = "set_visualization"
+        [object.function.return]
+        bool_return_is_error = "Failed to set visualization"
+
+[[object]]
+name = "GstPlay.PlayAudioInfo"
+status = "generate"
+final_type = true
+
+[[object]]
+name = "GstPlay.PlayMessage"
+status = "generate"
+final_type = true
+visibility = "crate"
+
+[[object]]
+name = "GstPlay.PlaySignalAdapter"
+status = "generate"
+final_type = true
+
+    [[object.signal]]
+    name = "buffering"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "duration-changed"
+    concurrency = "send"
+    # Pass ClockTime instead of u64
+    manual = true
+
+    [[object.signal]]
+    name = "end-of-stream"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "error"
+    concurrency = "send"
+        [[object.signal.parameter]]
+        name = "p0"
+        nullable = true
+
+    [[object.signal]]
+    name = "media-info-updated"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "mute-changed"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "position-updated"
+    concurrency = "send"
+    # Pass ClockTime instead of u64
+    manual = true
+
+    [[object.signal]]
+    name = "seek-done"
+    concurrency = "send"
+    # Pass ClockTime instead of u64
+    manual = true
+
+    [[object.signal]]
+    name = "state-changed"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "uri-loaded"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "video-dimensions-changed"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "volume-changed"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "warning"
+    concurrency = "send"
+        [[object.signal.parameter]]
+        name = "p0"
+        nullable = true
+
+[[object]]
+name = "GstPlay.PlaySubtitleInfo"
+status = "generate"
+final_type = true
+
+[[object]]
+name = "GstPlay.PlayVideoInfo"
+status = "generate"
+final_type = true
+
+    [[object.function]]
+    name = "get_framerate"
+    # Fraction
+    manual = true
+
+    [[object.function]]
+    name = "get_pixel_aspect_ratio"
+    # Fraction
+    manual = true
+
+[[object]]
+name = "GstPlay.PlayVideoOverlayVideoRenderer"
+status = "generate"
+final_type = true
+
+    [[object.function]]
+    name = "new"
+    manual = true
+
+    [[object.function]]
+    name = "new_with_sink"
+    # with_handle_and_sink() also calls this.
+    rename = "with_sink"
+    manual = true
+
+    [[object.function]]
+    name = "get_window_handle"
+    manual = true
+
+    [[object.function]]
+    name = "set_window_handle"
+    manual = true
