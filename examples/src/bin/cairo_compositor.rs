@@ -280,7 +280,7 @@ mod cairo_compositor {
                     let bg = (
                         ((settings.background_color >> 16) & 0xff) as f64 / 255.0,
                         ((settings.background_color >> 8) & 0xff) as f64 / 255.0,
-                        ((settings.background_color >> 0) & 0xff) as f64 / 255.0,
+                        (settings.background_color & 0xff) as f64 / 255.0,
                     );
                     ctx.set_operator(cairo::Operator::Source);
                     ctx.set_source_rgb(bg.0, bg.1, bg.2);
@@ -316,7 +316,7 @@ mod cairo_compositor {
                             -(frame.height() as f64 / 2.0),
                         );
 
-                        paint_frame(&ctx, &frame, settings.alpha);
+                        paint_frame(ctx, &frame, settings.alpha);
 
                         ctx.restore().unwrap();
                     }
