@@ -1,3 +1,3 @@
 mod streamproducer;
 
-pub use crate::streamproducer::{ConsumptionLink, StreamProducer};
+pub use crate::streamproducer::{AddConsumerError, ConsumptionLink, StreamProducer};
