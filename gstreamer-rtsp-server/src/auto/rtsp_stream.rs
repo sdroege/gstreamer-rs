@@ -621,10 +621,8 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
                 rate.as_mut_ptr(),
                 applied_rate.as_mut_ptr(),
             ));
-            let rate = rate.assume_init();
-            let applied_rate = applied_rate.assume_init();
             if ret {
-                Some((rate, applied_rate))
+                Some((rate.assume_init(), applied_rate.assume_init()))
             } else {
                 None
             }
@@ -692,12 +690,13 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
                 clock_rate.as_mut_ptr(),
                 running_time.as_mut_ptr(),
             ));
-            let rtptime = rtptime.assume_init();
-            let seq = seq.assume_init();
-            let clock_rate = clock_rate.assume_init();
-            let running_time = running_time.assume_init();
             if ret {
-                Some((rtptime, seq, clock_rate, from_glib(running_time)))
+                Some((
+                    rtptime.assume_init(),
+                    seq.assume_init(),
+                    clock_rate.assume_init(),
+                    from_glib(running_time.assume_init()),
+                ))
             } else {
                 None
             }
@@ -744,8 +743,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         unsafe {
             let mut ssrc = mem::MaybeUninit::uninit();
             ffi::gst_rtsp_stream_get_ssrc(self.as_ref().to_glib_none().0, ssrc.as_mut_ptr());
-            let ssrc = ssrc.assume_init();
-            ssrc
+            ssrc.assume_init()
         }
     }
 

@@ -450,9 +450,11 @@ impl<O: IsA<Element>> ElementExt for O {
                 pending.as_mut_ptr(),
                 timeout.into().into_glib(),
             ));
-            let state = state.assume_init();
-            let pending = pending.assume_init();
-            (ret, from_glib(state), from_glib(pending))
+            (
+                ret,
+                from_glib(state.assume_init()),
+                from_glib(pending.assume_init()),
+            )
         }
     }
 

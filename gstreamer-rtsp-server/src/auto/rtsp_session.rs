@@ -192,8 +192,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
                 path.to_glib_none().0,
                 matched.as_mut_ptr(),
             ));
-            let matched = matched.assume_init();
-            (ret, matched)
+            (ret, matched.assume_init())
         }
     }
 

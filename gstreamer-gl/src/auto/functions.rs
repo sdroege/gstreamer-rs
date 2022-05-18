@@ -46,10 +46,11 @@ pub fn glsl_string_get_version_profile(s: &str) -> Option<(GLSLVersion, GLSLProf
             version.as_mut_ptr(),
             profile.as_mut_ptr(),
         ));
-        let version = version.assume_init();
-        let profile = profile.assume_init();
         if ret {
-            Some((from_glib(version), from_glib(profile)))
+            Some((
+                from_glib(version.assume_init()),
+                from_glib(profile.assume_init()),
+            ))
         } else {
             None
         }

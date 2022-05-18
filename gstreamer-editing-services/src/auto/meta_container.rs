@@ -207,10 +207,11 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
                 flags.as_mut_ptr(),
                 type_.as_mut_ptr(),
             ));
-            let flags = flags.assume_init();
-            let type_ = type_.assume_init();
             if ret {
-                Some((from_glib(flags), from_glib(type_)))
+                Some((
+                    from_glib(flags.assume_init()),
+                    from_glib(type_.assume_init()),
+                ))
             } else {
                 None
             }
@@ -250,9 +251,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
                 meta_item.to_glib_none().0,
                 dest.as_mut_ptr(),
             ));
-            let dest = dest.assume_init();
             if ret {
-                Some(from_glib(dest))
+                Some(from_glib(dest.assume_init()))
             } else {
                 None
             }
@@ -299,9 +299,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
                 meta_item.to_glib_none().0,
                 dest.as_mut_ptr(),
             ));
-            let dest = dest.assume_init();
             if ret {
-                Some(dest)
+                Some(dest.assume_init())
             } else {
                 None
             }
@@ -316,9 +315,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
                 meta_item.to_glib_none().0,
                 dest.as_mut_ptr(),
             ));
-            let dest = dest.assume_init();
             if ret {
-                Some(dest)
+                Some(dest.assume_init())
             } else {
                 None
             }
@@ -333,9 +331,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
                 meta_item.to_glib_none().0,
                 dest.as_mut_ptr(),
             ));
-            let dest = dest.assume_init();
             if ret {
-                Some(dest)
+                Some(dest.assume_init())
             } else {
                 None
             }
@@ -350,9 +347,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
                 meta_item.to_glib_none().0,
                 dest.as_mut_ptr(),
             ));
-            let dest = dest.assume_init();
             if ret {
-                Some(dest)
+                Some(dest.assume_init())
             } else {
                 None
             }
@@ -396,9 +392,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
                 meta_item.to_glib_none().0,
                 dest.as_mut_ptr(),
             ));
-            let dest = dest.assume_init();
             if ret {
-                Some(dest)
+                Some(dest.assume_init())
             } else {
                 None
             }
@@ -413,9 +408,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
                 meta_item.to_glib_none().0,
                 dest.as_mut_ptr(),
             ));
-            let dest = dest.assume_init();
             if ret {
-                Some(dest)
+                Some(dest.assume_init())
             } else {
                 None
             }

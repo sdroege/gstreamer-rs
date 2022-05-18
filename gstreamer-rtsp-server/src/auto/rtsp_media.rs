@@ -619,10 +619,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
                 rate.as_mut_ptr(),
                 applied_rate.as_mut_ptr(),
             ));
-            let rate = rate.assume_init();
-            let applied_rate = applied_rate.assume_init();
             if ret {
-                Some((rate, applied_rate))
+                Some((rate.assume_init(), applied_rate.assume_init()))
             } else {
                 None
             }

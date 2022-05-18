@@ -215,11 +215,9 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
                 min.as_mut_ptr(),
                 max.as_mut_ptr(),
             );
-            let min = min.assume_init();
-            let max = max.assume_init();
             (
-                try_from_glib(min).expect("mandatory glib value is None"),
-                from_glib(max),
+                try_from_glib(min.assume_init()).expect("mandatory glib value is None"),
+                from_glib(max.assume_init()),
             )
         }
     }

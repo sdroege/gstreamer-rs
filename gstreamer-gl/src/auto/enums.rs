@@ -314,9 +314,10 @@ impl GLFormat {
                 unsized_format.as_mut_ptr(),
                 gl_type.as_mut_ptr(),
             );
-            let unsized_format = unsized_format.assume_init();
-            let gl_type = gl_type.assume_init();
-            (from_glib(unsized_format), gl_type)
+            (
+                from_glib(unsized_format.assume_init()),
+                gl_type.assume_init(),
+            )
         }
     }
 
@@ -649,10 +650,11 @@ impl GLSLVersion {
                 version_ret.as_mut_ptr(),
                 profile_ret.as_mut_ptr(),
             ));
-            let version_ret = version_ret.assume_init();
-            let profile_ret = profile_ret.assume_init();
             if ret {
-                Some((from_glib(version_ret), from_glib(profile_ret)))
+                Some((
+                    from_glib(version_ret.assume_init()),
+                    from_glib(profile_ret.assume_init()),
+                ))
             } else {
                 None
             }

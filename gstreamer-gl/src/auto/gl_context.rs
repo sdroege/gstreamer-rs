@@ -51,9 +51,7 @@ impl GLContext {
                 major.as_mut_ptr(),
                 minor.as_mut_ptr(),
             ));
-            let major = major.assume_init();
-            let minor = minor.assume_init();
-            (ret, major, minor)
+            (ret, major.assume_init(), minor.assume_init())
         }
     }
 }
@@ -292,9 +290,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
                 major.as_mut_ptr(),
                 minor.as_mut_ptr(),
             );
-            let major = major.assume_init();
-            let minor = minor.assume_init();
-            (major, minor)
+            (major.assume_init(), minor.assume_init())
         }
     }
 
@@ -307,9 +303,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
                 maj.as_mut_ptr(),
                 min.as_mut_ptr(),
             );
-            let maj = maj.assume_init();
-            let min = min.assume_init();
-            (maj, min)
+            (maj.assume_init(), min.assume_init())
         }
     }
 

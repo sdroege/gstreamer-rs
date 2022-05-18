@@ -62,8 +62,7 @@ impl Adapter {
                 self.to_glib_none().0,
                 distance.as_mut_ptr(),
             ));
-            let distance = distance.assume_init();
-            (ret, distance)
+            (ret, distance.assume_init())
         }
     }
 
@@ -76,8 +75,7 @@ impl Adapter {
                 offset,
                 distance.as_mut_ptr(),
             ));
-            let distance = distance.assume_init();
-            (ret, distance)
+            (ret, distance.assume_init())
         }
     }
 
@@ -86,8 +84,7 @@ impl Adapter {
         unsafe {
             let mut distance = mem::MaybeUninit::uninit();
             let ret = ffi::gst_adapter_prev_offset(self.to_glib_none().0, distance.as_mut_ptr());
-            let distance = distance.assume_init();
-            (ret, distance)
+            (ret, distance.assume_init())
         }
     }
 
@@ -99,8 +96,7 @@ impl Adapter {
                 self.to_glib_none().0,
                 distance.as_mut_ptr(),
             ));
-            let distance = distance.assume_init();
-            (ret, distance)
+            (ret, distance.assume_init())
         }
     }
 
@@ -113,8 +109,7 @@ impl Adapter {
                 offset,
                 distance.as_mut_ptr(),
             ));
-            let distance = distance.assume_init();
-            (ret, distance)
+            (ret, distance.assume_init())
         }
     }
 

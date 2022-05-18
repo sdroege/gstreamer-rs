@@ -135,9 +135,8 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
                 path.to_glib_none().0,
                 matched.as_mut_ptr(),
             ));
-            let matched = matched.assume_init();
             if ret {
-                Some(matched)
+                Some(matched.assume_init())
             } else {
                 None
             }

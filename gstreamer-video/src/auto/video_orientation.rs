@@ -33,9 +33,8 @@ impl VideoOrientation {
                 taglist.to_glib_none().0,
                 method.as_mut_ptr(),
             ));
-            let method = method.assume_init();
             if ret {
-                Some(from_glib(method))
+                Some(from_glib(method.assume_init()))
             } else {
                 None
             }
@@ -84,9 +83,8 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
                 self.as_ref().to_glib_none().0,
                 center.as_mut_ptr(),
             ));
-            let center = center.assume_init();
             if ret {
-                Some(center)
+                Some(center.assume_init())
             } else {
                 None
             }
@@ -100,9 +98,8 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
                 self.as_ref().to_glib_none().0,
                 flip.as_mut_ptr(),
             ));
-            let flip = flip.assume_init();
             if ret {
-                Some(from_glib(flip))
+                Some(from_glib(flip.assume_init()))
             } else {
                 None
             }
@@ -116,9 +113,8 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
                 self.as_ref().to_glib_none().0,
                 center.as_mut_ptr(),
             ));
-            let center = center.assume_init();
             if ret {
-                Some(center)
+                Some(center.assume_init())
             } else {
                 None
             }
@@ -132,9 +128,8 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
                 self.as_ref().to_glib_none().0,
                 flip.as_mut_ptr(),
             ));
-            let flip = flip.assume_init();
             if ret {
-                Some(from_glib(flip))
+                Some(from_glib(flip.assume_init()))
             } else {
                 None
             }

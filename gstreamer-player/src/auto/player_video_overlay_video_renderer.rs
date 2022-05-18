@@ -47,11 +47,12 @@ impl PlayerVideoOverlayVideoRenderer {
                 width.as_mut_ptr(),
                 height.as_mut_ptr(),
             );
-            let x = x.assume_init();
-            let y = y.assume_init();
-            let width = width.assume_init();
-            let height = height.assume_init();
-            (x, y, width, height)
+            (
+                x.assume_init(),
+                y.assume_init(),
+                width.assume_init(),
+                height.assume_init(),
+            )
         }
     }
 

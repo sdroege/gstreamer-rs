@@ -373,8 +373,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
                 time.into().into_glib(),
                 jitter.as_mut_ptr(),
             ));
-            let jitter = jitter.assume_init();
-            (ret, jitter)
+            (ret, jitter.assume_init())
         }
     }
 
@@ -392,8 +391,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
                 time.into_glib(),
                 jitter.as_mut_ptr(),
             ));
-            let jitter = jitter.assume_init();
-            (ret, jitter)
+            (ret, jitter.assume_init())
         }
     }
 

@@ -304,11 +304,12 @@ pub fn plugins_base_version() -> (u32, u32, u32, u32) {
             micro.as_mut_ptr(),
             nano.as_mut_ptr(),
         );
-        let major = major.assume_init();
-        let minor = minor.assume_init();
-        let micro = micro.assume_init();
-        let nano = nano.assume_init();
-        (major, minor, micro, nano)
+        (
+            major.assume_init(),
+            minor.assume_init(),
+            micro.assume_init(),
+            nano.assume_init(),
+        )
     }
 }
 

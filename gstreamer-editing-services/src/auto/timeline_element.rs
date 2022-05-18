@@ -418,10 +418,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
                 framerate_n.as_mut_ptr(),
                 framerate_d.as_mut_ptr(),
             ));
-            let framerate_n = framerate_n.assume_init();
-            let framerate_d = framerate_d.assume_init();
             if ret {
-                Some((framerate_n, framerate_d))
+                Some((framerate_n.assume_init(), framerate_d.assume_init()))
             } else {
                 None
             }

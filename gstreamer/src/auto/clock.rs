@@ -195,9 +195,8 @@ impl<O: IsA<Clock>> ClockExt for O {
                 master.into_glib(),
                 r_squared.as_mut_ptr(),
             ));
-            let r_squared = r_squared.assume_init();
             if ret {
-                Some(r_squared)
+                Some(r_squared.assume_init())
             } else {
                 None
             }
@@ -225,18 +224,13 @@ impl<O: IsA<Clock>> ClockExt for O {
                 rate_num.as_mut_ptr(),
                 rate_denom.as_mut_ptr(),
             ));
-            let r_squared = r_squared.assume_init();
-            let internal = internal.assume_init();
-            let external = external.assume_init();
-            let rate_num = rate_num.assume_init();
-            let rate_denom = rate_denom.assume_init();
             if ret {
                 Some((
-                    r_squared,
-                    try_from_glib(internal).expect("mandatory glib value is None"),
-                    try_from_glib(external).expect("mandatory glib value is None"),
-                    try_from_glib(rate_num).expect("mandatory glib value is None"),
-                    try_from_glib(rate_denom).expect("mandatory glib value is None"),
+                    r_squared.assume_init(),
+                    try_from_glib(internal.assume_init()).expect("mandatory glib value is None"),
+                    try_from_glib(external.assume_init()).expect("mandatory glib value is None"),
+                    try_from_glib(rate_num.assume_init()).expect("mandatory glib value is None"),
+                    try_from_glib(rate_denom.assume_init()).expect("mandatory glib value is None"),
                 ))
             } else {
                 None
@@ -266,15 +260,11 @@ impl<O: IsA<Clock>> ClockExt for O {
                 rate_num.as_mut_ptr(),
                 rate_denom.as_mut_ptr(),
             );
-            let internal = internal.assume_init();
-            let external = external.assume_init();
-            let rate_num = rate_num.assume_init();
-            let rate_denom = rate_denom.assume_init();
             (
-                try_from_glib(internal).expect("mandatory glib value is None"),
-                try_from_glib(external).expect("mandatory glib value is None"),
-                try_from_glib(rate_num).expect("mandatory glib value is None"),
-                try_from_glib(rate_denom).expect("mandatory glib value is None"),
+                try_from_glib(internal.assume_init()).expect("mandatory glib value is None"),
+                try_from_glib(external.assume_init()).expect("mandatory glib value is None"),
+                try_from_glib(rate_num.assume_init()).expect("mandatory glib value is None"),
+                try_from_glib(rate_denom.assume_init()).expect("mandatory glib value is None"),
             )
         }
     }

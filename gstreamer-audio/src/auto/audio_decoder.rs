@@ -188,11 +188,9 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
                 min.as_mut_ptr(),
                 max.as_mut_ptr(),
             );
-            let min = min.assume_init();
-            let max = max.assume_init();
             (
-                try_from_glib(min).expect("mandatory glib value is None"),
-                from_glib(max),
+                try_from_glib(min.assume_init()).expect("mandatory glib value is None"),
+                from_glib(max.assume_init()),
             )
         }
     }
@@ -227,9 +225,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
                 sync.as_mut_ptr(),
                 eos.as_mut_ptr(),
             );
-            let sync = sync.assume_init();
-            let eos = eos.assume_init();
-            (from_glib(sync), from_glib(eos))
+            (from_glib(sync.assume_init()), from_glib(eos.assume_init()))
         }
     }
 
