@@ -36,6 +36,9 @@ workflow:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH
 
+default:
+  interruptible: true
+
 variables:
   FDO_UPSTREAM_REPO: gstreamer/gstreamer-rs
 
@@ -266,11 +269,17 @@ test msrv:
   extends:
     - '.cargo test'
     - .img-msrv
+  needs:
+    - job: 'build-msrv'
+      artifacts: false
 
 test stable:
   extends:
     - '.cargo test'
     - .img-stable
+  needs:
+    - job: 'build-stable'
+      artifacts: false
 
 test stable all-features:
   variables:
@@ -279,12 +288,20 @@ test stable all-features:
   extends:
     - '.cargo test'
     - .img-stable
+  needs:
+    - job: 'build-stable'
+      artifacts: false
+
 
 test nightly:
   allow_failure: true
   extends:
     - '.cargo test'
     - .img-nightly
+  needs:
+    - job: 'build-nightly'
+      artifacts: false
+
 
 test nightly all-features:
   allow_failure: true
@@ -294,6 +311,9 @@ test nightly all-features:
   extends:
     - '.cargo test'
     - .img-nightly
+  needs:
+    - job: 'build-nightly'
+      artifacts: false
 
 .cargo test sys:
   stage: "test"
@@ -342,16 +362,25 @@ test stable sys:
   extends:
     - '.cargo test sys'
     - .img-stable
+  needs:
+    - job: 'build-stable'
+      artifacts: false
 
 test msrv sys:
   extends:
     - '.cargo test sys'
     - .img-msrv
+  needs:
+    - job: 'build-msrv'
+      artifacts: false
 
 test nightly sys:
   extends:
     - '.cargo test sys'
     - .img-nightly
+  needs:
+    - job: 'build-nightly'
+      artifacts: false
 
 rustfmt:
   extends: .img-stable
@@ -359,18 +388,27 @@ rustfmt:
   script:
     - cargo fmt --version
     - cargo fmt -- --color=always --check
+  needs:
+    - job: 'build-stable'
+      artifacts: false
 
 check commits:
   extends: .img-stable
   stage: "lint"
   script:
     - ci-fairy check-commits --textwidth 0 --no-signed-off-by
+  needs:
+    - job: 'build-stable'
+      artifacts: false
 
 clippy:
   extends: .img-stable
   stage: 'extras'
   variables:
     CLIPPY_LINTS: -D warnings
+  needs:
+    - job: 'build-stable'
+      artifacts: false
   script:
     - cargo clippy --version
       # Keep features in sync with above
@@ -403,6 +441,9 @@ clippy:
 deny:
   extends: .img-stable
   stage: 'extras'
+  needs:
+    - job: 'build-stable'
+      artifacts: false
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   script:
@@ -413,12 +454,18 @@ gir-checks:
     GIT_SUBMODULE_STRATEGY: recursive
   extends: .img-stable
   stage: 'extras'
+  needs:
+    - job: 'build-stable'
+      artifacts: false
   script:
     - python3 ci/gir-checks.py
 
 outdated:
   extends: .img-stable
   stage: 'extras'
+  needs:
+    - job: 'build-stable'
+      artifacts: false
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   script:
@@ -430,6 +477,9 @@ coverage:
     - '.cargo test'
     - .img-stable
   stage: 'extras'
+  needs:
+    - job: 'build-stable'
+      artifacts: false
   variables:
     ALL_FEATURES: 'yes'
     RUSTFLAGS: "-Cinstrument-coverage"
@@ -454,6 +504,9 @@ doc-stripping:
     GIT_SUBMODULE_STRATEGY: recursive
   extends: .img-nightly
   stage: 'extras'
+  needs:
+    - job: 'build-nightly'
+      artifacts: false
   script:
     - PATH=~/.cargo/bin/:$PATH ./generator.py --gir-files-directories gir-files gst-gir-files --strip-docs --no-fmt
     - git diff --quiet || (echo 'Files changed after running `rustdoc-stripper -s`, make sure all documentation is protected with `// rustdoc-stripper-ignore-next`!'; git diff; false)
@@ -463,6 +516,9 @@ docs:
     GIT_SUBMODULE_STRATEGY: recursive
   extends: .img-nightly
   stage: 'extras'
+  needs:
+    - job: 'build-nightly'
+      artifacts: false
   script:
     - curl --proto '=https' --tlsv1.2 -sSf -o gir-rustdoc.py
         https://gitlab.gnome.org/World/Rust/gir-rustdoc/-/raw/main/gir-rustdoc.py
@@ -484,8 +540,8 @@ docs:
 pages:
   extends: .img-nightly
   stage: 'deploy'
-  dependencies:
-    - docs
+  needs: [ 'docs' ]
+  interruptible: false
   script:
     - curl --proto '=https' --tlsv1.2 -sSf -o gir-rustdoc.py
         https://gitlab.gnome.org/World/Rust/gir-rustdoc/-/raw/main/gir-rustdoc.py
