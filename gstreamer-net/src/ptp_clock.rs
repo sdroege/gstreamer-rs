@@ -88,7 +88,7 @@ impl PtpClock {
             );
             assert_ne!(id, 0);
 
-            PtpStatisticsCallback(NonZeroU64::new_unchecked(id))
+            PtpStatisticsCallback(NonZeroU64::new_unchecked(id as u64))
         }
     }
 }
