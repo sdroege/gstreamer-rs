@@ -16,7 +16,7 @@ $env:PKG_CONFIG_PATH = "C:/lib/pkgconfig"
     'gstreamer-check',
     'gstreamer-controller',
     'gstreamer-editing-services',
-    # 'gstreamer-gl',
+    'gstreamer-gl',
     # 'gstreamer-gl/egl',
     # 'gstreamer-gl/wayland',
     # 'gstreamer-gl/x11',
