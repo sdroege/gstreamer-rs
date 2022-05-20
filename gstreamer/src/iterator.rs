@@ -691,6 +691,8 @@ where
     }
 }
 
+impl<T> iter::FusedIterator for StdIterator<T> where for<'a> T: FromValue<'a> + 'static {}
+
 #[cfg(test)]
 mod tests {
     use super::*;

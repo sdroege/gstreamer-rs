@@ -1009,8 +1009,8 @@ macro_rules! define_iter(
     #[derive(Debug)]
     pub struct $name<'a> {
         message: &'a SDPMessageRef,
-        idx: u32,
-        len: u32,
+        idx: usize,
+        len: usize,
     }
 
     impl<'a> $name<'a> {
@@ -1021,7 +1021,7 @@ macro_rules! define_iter(
             $name {
                 message,
                 idx: 0,
-                len,
+                len: len as usize,
             }
         }
     }
@@ -1034,19 +1034,38 @@ macro_rules! define_iter(
                 return None;
             }
 
-            let item = $get_item(self.message, self.idx)?;
+            let item = $get_item(self.message, self.idx as u32).unwrap();
             self.idx += 1;
             Some(item)
         }
 
         fn size_hint(&self) -> (usize, Option<usize>) {
-            if self.idx == self.len {
-                return (0, Some(0))
-            }
-
-            let remaining = (self.len - self.idx) as usize;
+            let remaining = self.len - self.idx;
 
             (remaining, Some(remaining))
+        }
+
+        fn count(self) -> usize {
+            self.len - self.idx
+        }
+
+        fn nth(&mut self, n: usize) -> Option<Self::Item> {
+            let (end, overflow) = self.idx.overflowing_add(n);
+            if end >= self.len || overflow {
+                self.idx = self.len;
+                None
+            } else {
+                self.idx = end + 1;
+                Some($get_item(self.message, end as u32).unwrap())
+            }
+        }
+
+        fn last(self) -> Option<Self::Item> {
+            if self.idx == self.len {
+                None
+            } else {
+                Some($get_item(self.message, self.len as u32 - 1).unwrap())
+            }
         }
     }
 
@@ -1058,11 +1077,23 @@ macro_rules! define_iter(
 
             self.len -= 1;
 
-            $get_item(self.message, self.len)
+            Some($get_item(self.message, self.len as u32).unwrap())
+        }
+
+        fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+            let (end, overflow) = self.len.overflowing_sub(n);
+            if end <= self.idx || overflow {
+                self.idx = self.len;
+                None
+            } else {
+                self.len = end - 1;
+                Some($get_item(self.message, self.len as u32).unwrap())
+            }
         }
     }
 
     impl<'a> ExactSizeIterator for $name<'a> {}
+    impl<'a> std::iter::FusedIterator for $name<'a> {}
     }
 );
 
@@ -1071,8 +1102,8 @@ macro_rules! define_iter_mut(
     #[derive(Debug)]
     pub struct $name<'a> {
         message: &'a mut SDPMessageRef,
-        idx: u32,
-        len: u32,
+        idx: usize,
+        len: usize,
     }
 
     impl<'a> $name<'a> {
@@ -1083,7 +1114,7 @@ macro_rules! define_iter_mut(
             $name {
                 message,
                 idx: 0,
-                len,
+                len: len as usize,
             }
         }
     }
@@ -1108,19 +1139,42 @@ macro_rules! define_iter_mut(
                 return None;
             }
 
-            let item = $get_item(message, self.idx)?;
+            let item = $get_item(message, self.idx as u32).unwrap();
             self.idx += 1;
             Some(item)
         }
 
         fn size_hint(&self) -> (usize, Option<usize>) {
-            if self.idx == self.len {
-                return (0, Some(0))
-            }
-
-            let remaining = (self.len - self.idx) as usize;
+            let remaining = self.len - self.idx;
 
             (remaining, Some(remaining))
+        }
+
+
+        fn count(self) -> usize {
+            self.len - self.idx
+        }
+
+        fn nth(&mut self, n: usize) -> Option<Self::Item> {
+            let message = unsafe {
+                &mut *(self.message as *mut SDPMessageRef)
+            };
+            let (end, overflow) = self.idx.overflowing_add(n);
+            if end >= self.len || overflow {
+                self.idx = self.len;
+                None
+            } else {
+                self.idx = end + 1;
+                Some($get_item(message, end as u32).unwrap())
+            }
+        }
+
+        fn last(self) -> Option<Self::Item> {
+            if self.idx == self.len {
+                None
+            } else {
+                Some($get_item(self.message, self.len as u32 - 1).unwrap())
+            }
         }
     }
 
@@ -1134,12 +1188,27 @@ macro_rules! define_iter_mut(
             }
 
             self.len -= 1;
+            Some($get_item(message, self.len as u32).unwrap())
+        }
 
-            $get_item(message, self.len)
+
+        fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+            let message = unsafe {
+                &mut *(self.message as *mut SDPMessageRef)
+            };
+            let (end, overflow) = self.len.overflowing_sub(n);
+            if end <= self.idx || overflow {
+                self.idx = self.len;
+                None
+            } else {
+                self.len = end - 1;
+                Some($get_item(message, self.len as u32).unwrap())
+            }
         }
     }
 
     impl<'a> ExactSizeIterator for $name<'a> {}
+    impl<'a> std::iter::FusedIterator for $name<'a> {}
     }
 );
 

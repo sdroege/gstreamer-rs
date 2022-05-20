@@ -361,7 +361,7 @@ impl VideoRegionOfInterestMeta {
     pub fn params(&self) -> ParamsIter {
         ParamsIter {
             _meta: self,
-            list: self.0.params,
+            list: ptr::NonNull::new(self.0.params),
         }
     }
 
@@ -395,28 +395,28 @@ impl VideoRegionOfInterestMeta {
 
 pub struct ParamsIter<'a> {
     _meta: &'a VideoRegionOfInterestMeta,
-    list: *const glib::ffi::GList,
+    list: Option<ptr::NonNull<glib::ffi::GList>>,
 }
 
 impl<'a> Iterator for ParamsIter<'a> {
     type Item = &'a gst::StructureRef;
 
     fn next(&mut self) -> Option<&'a gst::StructureRef> {
-        if self.list.is_null() {
-            return None;
-        }
+        match self.list {
+            None => None,
+            Some(list) => unsafe {
+                self.list = ptr::NonNull::new(list.as_ref().next);
+                let data = list.as_ref().data;
 
-        unsafe {
-            let data = (*self.list).data;
-            assert!(!data.is_null());
-            self.list = (*self.list).next;
+                let s = gst::StructureRef::from_glib_borrow(data as *const gst::ffi::GstStructure);
 
-            let s = gst::StructureRef::from_glib_borrow(data as *const gst::ffi::GstStructure);
-
-            Some(s)
+                Some(s)
+            },
         }
     }
 }
+
+impl<'a> std::iter::FusedIterator for ParamsIter<'a> {}
 
 unsafe impl MetaAPI for VideoRegionOfInterestMeta {
     type GstType = ffi::GstVideoRegionOfInterestMeta;

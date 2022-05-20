@@ -354,9 +354,34 @@ impl Iterator for VideoFormatIterator {
 
         (remaining, Some(remaining))
     }
+
+    fn count(self) -> usize {
+        self.len - self.idx
+    }
+
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.idx.overflowing_add(n);
+        if end >= self.len || overflow {
+            self.idx = self.len;
+            None
+        } else {
+            self.idx = end + 1;
+            Some(VIDEO_FORMATS_ALL[end])
+        }
+    }
+
+    fn last(self) -> Option<Self::Item> {
+        if self.idx == self.len {
+            None
+        } else {
+            Some(VIDEO_FORMATS_ALL[self.len - 1])
+        }
+    }
 }
 
 impl ExactSizeIterator for VideoFormatIterator {}
+
+impl std::iter::FusedIterator for VideoFormatIterator {}
 
 impl DoubleEndedIterator for VideoFormatIterator {
     fn next_back(&mut self) -> Option<Self::Item> {
@@ -365,6 +390,18 @@ impl DoubleEndedIterator for VideoFormatIterator {
         } else {
             let fmt = VIDEO_FORMATS_ALL[self.len - 1];
             self.len -= 1;
+            Some(fmt)
+        }
+    }
+
+    fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.len.overflowing_sub(n);
+        if end <= self.idx || overflow {
+            self.idx = self.len;
+            None
+        } else {
+            self.len = end - 1;
+            let fmt = VIDEO_FORMATS_ALL[self.len];
             Some(fmt)
         }
     }

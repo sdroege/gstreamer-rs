@@ -606,8 +606,8 @@ impl Eq for TagListRef {}
 #[derive(Debug)]
 pub struct TagIter<'a, T: Tag<'a>> {
     taglist: &'a TagListRef,
-    idx: u32,
-    size: u32,
+    idx: usize,
+    size: usize,
     phantom: PhantomData<T>,
 }
 
@@ -617,7 +617,7 @@ impl<'a, T: Tag<'a>> TagIter<'a, T> {
         TagIter {
             taglist,
             idx: 0,
-            size: taglist.size::<T>(),
+            size: taglist.size::<T>() as usize,
             phantom: PhantomData,
         }
     }
@@ -635,20 +635,39 @@ where
             return None;
         }
 
-        let item = self.taglist.index::<T>(self.idx);
+        let item = self.taglist.index::<T>(self.idx as u32);
         self.idx += 1;
 
         item
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
-        if self.idx == self.size {
-            return (0, Some(0));
-        }
-
-        let remaining = (self.size - self.idx) as usize;
+        let remaining = self.size - self.idx;
 
         (remaining, Some(remaining))
+    }
+
+    fn count(self) -> usize {
+        self.size - self.idx
+    }
+
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.idx.overflowing_add(n);
+        if end >= self.size || overflow {
+            self.idx = self.size;
+            None
+        } else {
+            self.idx = end + 1;
+            self.taglist.index::<T>(end as u32)
+        }
+    }
+
+    fn last(self) -> Option<Self::Item> {
+        if self.idx == self.size {
+            None
+        } else {
+            self.taglist.index::<T>(self.size as u32 - 1)
+        }
     }
 }
 
@@ -663,7 +682,18 @@ where
         }
 
         self.size -= 1;
-        self.taglist.index::<T>(self.size)
+        self.taglist.index::<T>(self.size as u32)
+    }
+
+    fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.size.overflowing_sub(n);
+        if end <= self.idx || overflow {
+            self.idx = self.size;
+            None
+        } else {
+            self.size = end - 1;
+            self.taglist.index::<T>(self.size as u32)
+        }
     }
 }
 
@@ -674,12 +704,19 @@ where
 {
 }
 
+impl<'a, T: Tag<'a>> std::iter::FusedIterator for TagIter<'a, T>
+where
+    <T as Tag<'a>>::TagType: 'a,
+    T: 'a,
+{
+}
+
 #[derive(Debug)]
 pub struct GenericTagIter<'a> {
     taglist: &'a TagListRef,
     name: &'a str,
-    idx: u32,
-    size: u32,
+    idx: usize,
+    size: usize,
 }
 
 impl<'a> GenericTagIter<'a> {
@@ -689,7 +726,7 @@ impl<'a> GenericTagIter<'a> {
             taglist,
             name,
             idx: 0,
-            size: taglist.size_by_name(name),
+            size: taglist.size_by_name(name) as usize,
         }
     }
 }
@@ -702,20 +739,39 @@ impl<'a> Iterator for GenericTagIter<'a> {
             return None;
         }
 
-        let item = self.taglist.index_generic(self.name, self.idx);
+        let item = self.taglist.index_generic(self.name, self.idx as u32);
         self.idx += 1;
 
         item
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
-        if self.idx == self.size {
-            return (0, Some(0));
-        }
-
-        let remaining = (self.size - self.idx) as usize;
+        let remaining = self.size - self.idx;
 
         (remaining, Some(remaining))
+    }
+
+    fn count(self) -> usize {
+        self.size - self.idx
+    }
+
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.idx.overflowing_add(n);
+        if end >= self.size || overflow {
+            self.idx = self.size;
+            None
+        } else {
+            self.idx = end + 1;
+            self.taglist.index_generic(self.name, end as u32)
+        }
+    }
+
+    fn last(self) -> Option<Self::Item> {
+        if self.idx == self.size {
+            None
+        } else {
+            self.taglist.index_generic(self.name, self.size as u32 - 1)
+        }
     }
 }
 
@@ -726,17 +782,30 @@ impl<'a> DoubleEndedIterator for GenericTagIter<'a> {
         }
 
         self.size -= 1;
-        self.taglist.index_generic(self.name, self.size)
+        self.taglist.index_generic(self.name, self.size as u32)
+    }
+
+    fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.size.overflowing_sub(n);
+        if end <= self.idx || overflow {
+            self.idx = self.size;
+            None
+        } else {
+            self.size = end - 1;
+            self.taglist.index_generic(self.name, self.size as u32)
+        }
     }
 }
 
 impl<'a> ExactSizeIterator for GenericTagIter<'a> {}
 
+impl<'a> std::iter::FusedIterator for GenericTagIter<'a> {}
+
 #[derive(Debug)]
 pub struct GenericIter<'a> {
     taglist: &'a TagListRef,
-    idx: u32,
-    size: u32,
+    idx: usize,
+    size: usize,
 }
 
 impl<'a> GenericIter<'a> {
@@ -746,7 +815,7 @@ impl<'a> GenericIter<'a> {
         GenericIter {
             taglist,
             idx: 0,
-            size: if size > 0 { size as u32 } else { 0 },
+            size: if size > 0 { size as usize } else { 0 },
         }
     }
 }
@@ -759,7 +828,7 @@ impl<'a> Iterator for GenericIter<'a> {
             return None;
         }
 
-        let name = self.taglist.nth_tag_name(self.idx);
+        let name = self.taglist.nth_tag_name(self.idx as u32);
         let item = (name, self.taglist.iter_tag_generic(name));
         self.idx += 1;
 
@@ -767,13 +836,34 @@ impl<'a> Iterator for GenericIter<'a> {
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
-        if self.idx == self.size {
-            return (0, Some(0));
-        }
-
-        let remaining = (self.size - self.idx) as usize;
+        let remaining = self.size - self.idx;
 
         (remaining, Some(remaining))
+    }
+
+    fn count(self) -> usize {
+        self.size - self.idx
+    }
+
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.idx.overflowing_add(n);
+        if end >= self.size || overflow {
+            self.idx = self.size;
+            None
+        } else {
+            self.idx = end + 1;
+            let name = self.taglist.nth_tag_name(end as u32);
+            Some((name, self.taglist.iter_tag_generic(name)))
+        }
+    }
+
+    fn last(self) -> Option<Self::Item> {
+        if self.idx == self.size {
+            None
+        } else {
+            let name = self.taglist.nth_tag_name(self.size as u32 - 1);
+            Some((name, self.taglist.iter_tag_generic(name)))
+        }
     }
 }
 
@@ -784,18 +874,32 @@ impl<'a> DoubleEndedIterator for GenericIter<'a> {
         }
 
         self.size -= 1;
-        let name = self.taglist.nth_tag_name(self.idx);
+        let name = self.taglist.nth_tag_name(self.idx as u32);
         Some((name, self.taglist.iter_tag_generic(name)))
+    }
+
+    fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.size.overflowing_sub(n);
+        if end <= self.idx || overflow {
+            self.idx = self.size;
+            None
+        } else {
+            self.size = end - 1;
+            let name = self.taglist.nth_tag_name(self.size as u32);
+            Some((name, self.taglist.iter_tag_generic(name)))
+        }
     }
 }
 
 impl<'a> ExactSizeIterator for GenericIter<'a> {}
 
+impl<'a> std::iter::FusedIterator for GenericIter<'a> {}
+
 #[derive(Debug)]
 pub struct Iter<'a> {
     taglist: &'a TagListRef,
-    idx: u32,
-    size: u32,
+    idx: usize,
+    size: usize,
 }
 
 impl<'a> Iter<'a> {
@@ -805,7 +909,7 @@ impl<'a> Iter<'a> {
         Iter {
             taglist,
             idx: 0,
-            size: if size > 0 { size as u32 } else { 0 },
+            size: if size > 0 { size as usize } else { 0 },
         }
     }
 }
@@ -818,7 +922,7 @@ impl<'a> Iterator for Iter<'a> {
             return None;
         }
 
-        let name = self.taglist.nth_tag_name(self.idx);
+        let name = self.taglist.nth_tag_name(self.idx as u32);
         let item = (name, self.taglist.generic(name).unwrap());
         self.idx += 1;
 
@@ -826,13 +930,34 @@ impl<'a> Iterator for Iter<'a> {
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
-        if self.idx == self.size {
-            return (0, Some(0));
-        }
-
-        let remaining = (self.size - self.idx) as usize;
+        let remaining = self.size - self.idx;
 
         (remaining, Some(remaining))
+    }
+
+    fn count(self) -> usize {
+        self.size - self.idx
+    }
+
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.idx.overflowing_add(n);
+        if end >= self.size || overflow {
+            self.idx = self.size;
+            None
+        } else {
+            self.idx = end + 1;
+            let name = self.taglist.nth_tag_name(end as u32);
+            Some((name, self.taglist.generic(name).unwrap()))
+        }
+    }
+
+    fn last(self) -> Option<Self::Item> {
+        if self.idx == self.size {
+            None
+        } else {
+            let name = self.taglist.nth_tag_name(self.size as u32 - 1);
+            Some((name, self.taglist.generic(name).unwrap()))
+        }
     }
 }
 
@@ -843,12 +968,26 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
         }
 
         self.size -= 1;
-        let name = self.taglist.nth_tag_name(self.idx);
+        let name = self.taglist.nth_tag_name(self.idx as u32);
         Some((name, self.taglist.generic(name).unwrap()))
+    }
+
+    fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.size.overflowing_sub(n);
+        if end <= self.idx || overflow {
+            self.idx = self.size;
+            None
+        } else {
+            self.size = end - 1;
+            let name = self.taglist.nth_tag_name(self.size as u32);
+            Some((name, self.taglist.generic(name).unwrap()))
+        }
     }
 }
 
 impl<'a> ExactSizeIterator for Iter<'a> {}
+
+impl<'a> std::iter::FusedIterator for Iter<'a> {}
 
 #[doc(alias = "gst_tag_exists")]
 pub fn tag_exists(name: &str) -> bool {

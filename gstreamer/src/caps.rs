@@ -597,8 +597,8 @@ macro_rules! define_iter(
     #[derive(Debug)]
     pub struct $name<'a> {
         caps: $typ,
-        idx: u32,
-        n_structures: u32,
+        idx: usize,
+        n_structures: usize,
     }
 
     impl<'a> $name<'a> {
@@ -609,7 +609,7 @@ macro_rules! define_iter(
             $name {
                 caps,
                 idx: 0,
-                n_structures,
+                n_structures: n_structures as usize,
             }
         }
     }
@@ -623,20 +623,43 @@ macro_rules! define_iter(
             }
 
             unsafe {
-                let item = $get_item(self.caps, self.idx)?;
+                let item = $get_item(self.caps, self.idx as u32).unwrap();
                 self.idx += 1;
                 Some(item)
             }
         }
 
         fn size_hint(&self) -> (usize, Option<usize>) {
-            if self.idx == self.n_structures {
-                return (0, Some(0));
-            }
-
-            let remaining = (self.n_structures - self.idx) as usize;
+            let remaining = self.n_structures - self.idx;
 
             (remaining, Some(remaining))
+        }
+
+        fn count(self) -> usize {
+            self.n_structures - self.idx
+        }
+
+        fn nth(&mut self, n: usize) -> Option<Self::Item> {
+            let (end, overflow) = self.idx.overflowing_add(n);
+            if end >= self.n_structures || overflow {
+                self.idx = self.n_structures;
+                None
+            } else {
+                unsafe {
+                    self.idx = end + 1;
+                    Some($get_item(self.caps, end as u32).unwrap())
+                }
+            }
+        }
+
+        fn last(self) -> Option<Self::Item> {
+            if self.idx == self.n_structures {
+                None
+            } else {
+                unsafe {
+                    Some($get_item(self.caps, self.n_structures as u32 - 1).unwrap())
+                }
+            }
         }
     }
 
@@ -649,12 +672,27 @@ macro_rules! define_iter(
             self.n_structures -= 1;
 
             unsafe {
-                $get_item(self.caps, self.n_structures)
+                Some($get_item(self.caps, self.n_structures as u32).unwrap())
+            }
+        }
+
+        fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+            let (end, overflow) = self.n_structures.overflowing_sub(n);
+            if end <= self.idx || overflow {
+                self.idx = self.n_structures;
+                None
+            } else {
+                self.n_structures = end - 1;
+                unsafe {
+                    Some($get_item(self.caps, self.n_structures as u32).unwrap())
+                }
             }
         }
     }
 
     impl<'a> ExactSizeIterator for $name<'a> {}
+
+    impl<'a> std::iter::FusedIterator for $name<'a> {}
     }
 );
 

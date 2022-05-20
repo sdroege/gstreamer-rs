@@ -479,8 +479,8 @@ impl glib::value::ToValueOptional for CapsFeaturesRef {
 #[derive(Debug)]
 pub struct Iter<'a> {
     caps_features: &'a CapsFeaturesRef,
-    idx: u32,
-    n_features: u32,
+    idx: usize,
+    n_features: usize,
 }
 
 impl<'a> Iter<'a> {
@@ -491,7 +491,7 @@ impl<'a> Iter<'a> {
         Iter {
             caps_features,
             idx: 0,
-            n_features,
+            n_features: n_features as usize,
         }
     }
 }
@@ -505,10 +505,9 @@ impl<'a> Iterator for Iter<'a> {
         }
 
         unsafe {
-            let feature = ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), self.idx);
-            if feature.is_null() {
-                return None;
-            }
+            let feature =
+                ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), self.idx as u32);
+            assert!(!feature.is_null());
 
             self.idx += 1;
 
@@ -517,13 +516,45 @@ impl<'a> Iterator for Iter<'a> {
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
-        if self.idx == self.n_features {
-            return (0, Some(0));
-        }
-
-        let remaining = (self.n_features - self.idx) as usize;
+        let remaining = self.n_features - self.idx;
 
         (remaining, Some(remaining))
+    }
+
+    fn count(self) -> usize {
+        self.n_features - self.idx
+    }
+
+    // checker-ignore-item
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.idx.overflowing_add(n);
+        if end >= self.n_features || overflow {
+            self.idx = self.n_features;
+            None
+        } else {
+            unsafe {
+                self.idx = end + 1;
+                let feature =
+                    ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), end as u32);
+                assert!(!feature.is_null());
+                Some(CStr::from_ptr(feature).to_str().unwrap())
+            }
+        }
+    }
+
+    fn last(self) -> Option<Self::Item> {
+        if self.idx == self.n_features {
+            None
+        } else {
+            unsafe {
+                let feature = ffi::gst_caps_features_get_nth(
+                    self.caps_features.as_ptr(),
+                    self.n_features as u32 - 1,
+                );
+                assert!(!feature.is_null());
+                Some(CStr::from_ptr(feature).to_str().unwrap())
+            }
+        }
     }
 }
 
@@ -537,17 +568,36 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 
         unsafe {
             let feature =
-                ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), self.n_features);
-            if feature.is_null() {
-                return None;
-            }
+                ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), self.n_features as u32);
+            assert!(!feature.is_null());
 
             Some(CStr::from_ptr(feature).to_str().unwrap())
+        }
+    }
+
+    fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.n_features.overflowing_sub(n);
+        if end <= self.idx || overflow {
+            self.idx = self.n_features;
+            None
+        } else {
+            unsafe {
+                self.n_features = end - 1;
+                let feature = ffi::gst_caps_features_get_nth(
+                    self.caps_features.as_ptr(),
+                    self.n_features as u32,
+                );
+                assert!(!feature.is_null());
+
+                Some(CStr::from_ptr(feature).to_str().unwrap())
+            }
         }
     }
 }
 
 impl<'a> ExactSizeIterator for Iter<'a> {}
+
+impl<'a> std::iter::FusedIterator for Iter<'a> {}
 
 impl<'a> IntoIterator for &'a CapsFeaturesRef {
     type IntoIter = Iter<'a>;

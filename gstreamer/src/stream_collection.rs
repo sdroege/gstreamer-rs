@@ -13,8 +13,8 @@ use std::mem::transmute;
 #[derive(Debug)]
 pub struct Iter<'a> {
     collection: &'a StreamCollection,
-    idx: u32,
-    size: u32,
+    idx: usize,
+    size: usize,
 }
 
 impl<'a> Iter<'a> {
@@ -23,7 +23,7 @@ impl<'a> Iter<'a> {
         Iter {
             collection,
             idx: 0,
-            size: collection.len() as u32,
+            size: collection.len() as usize,
         }
     }
 }
@@ -36,20 +36,39 @@ impl<'a> Iterator for Iter<'a> {
             return None;
         }
 
-        let item = self.collection.stream(self.idx);
+        let item = self.collection.stream(self.idx as u32).unwrap();
         self.idx += 1;
 
-        item
+        Some(item)
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
-        if self.idx == self.size {
-            return (0, Some(0));
-        }
-
-        let remaining = (self.size - self.idx) as usize;
+        let remaining = self.size - self.idx;
 
         (remaining, Some(remaining))
+    }
+
+    fn count(self) -> usize {
+        self.size - self.idx
+    }
+
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.idx.overflowing_add(n);
+        if end >= self.size || overflow {
+            self.idx = self.size;
+            None
+        } else {
+            self.idx = end + 1;
+            Some(self.collection.stream(end as u32).unwrap())
+        }
+    }
+
+    fn last(self) -> Option<Self::Item> {
+        if self.idx == self.size {
+            None
+        } else {
+            Some(self.collection.stream(self.size as u32 - 1).unwrap())
+        }
     }
 }
 
@@ -60,11 +79,24 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
         }
 
         self.size -= 1;
-        self.collection.stream(self.size)
+        Some(self.collection.stream(self.size as u32).unwrap())
+    }
+
+    fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.size.overflowing_sub(n);
+        if end <= self.idx || overflow {
+            self.idx = self.size;
+            None
+        } else {
+            self.size = end - 1;
+            Some(self.collection.stream(self.size as u32).unwrap())
+        }
     }
 }
 
 impl<'a> ExactSizeIterator for Iter<'a> {}
+
+impl<'a> std::iter::FusedIterator for Iter<'a> {}
 
 #[derive(Debug, Clone)]
 #[must_use = "The builder must be built to be used"]

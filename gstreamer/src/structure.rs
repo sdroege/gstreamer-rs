@@ -852,8 +852,8 @@ impl glib::value::ToValueOptional for StructureRef {
 #[derive(Debug)]
 pub struct FieldIterator<'a> {
     structure: &'a StructureRef,
-    idx: u32,
-    n_fields: u32,
+    idx: usize,
+    n_fields: usize,
 }
 
 impl<'a> FieldIterator<'a> {
@@ -864,7 +864,7 @@ impl<'a> FieldIterator<'a> {
         FieldIterator {
             structure,
             idx: 0,
-            n_fields,
+            n_fields: n_fields as usize,
         }
     }
 }
@@ -877,20 +877,14 @@ impl<'a> Iterator for FieldIterator<'a> {
             return None;
         }
 
-        if let Some(field_name) = self.structure.nth_field_name(self.idx) {
-            self.idx += 1;
-            Some(field_name)
-        } else {
-            None
-        }
+        let field_name = self.structure.nth_field_name(self.idx as u32).unwrap();
+        self.idx += 1;
+
+        Some(field_name)
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
-        if self.idx == self.n_fields {
-            return (0, Some(0));
-        }
-
-        let remaining = (self.n_fields - self.idx) as usize;
+        let remaining = self.n_fields - self.idx;
 
         (remaining, Some(remaining))
     }
@@ -903,11 +897,13 @@ impl<'a> DoubleEndedIterator for FieldIterator<'a> {
         }
 
         self.n_fields -= 1;
-        self.structure.nth_field_name(self.n_fields)
+        Some(self.structure.nth_field_name(self.n_fields as u32).unwrap())
     }
 }
 
 impl<'a> ExactSizeIterator for FieldIterator<'a> {}
+
+impl<'a> std::iter::FusedIterator for FieldIterator<'a> {}
 
 #[derive(Debug)]
 pub struct Iter<'a> {
@@ -927,31 +923,50 @@ impl<'a> Iterator for Iter<'a> {
     type Item = (&'static str, &'a SendValue);
 
     fn next(&mut self) -> Option<Self::Item> {
-        if let Some(f) = self.iter.next() {
-            let v = self.iter.structure.value(f);
-            Some((f, v.unwrap()))
-        } else {
-            None
-        }
+        let f = self.iter.next()?;
+        let v = self.iter.structure.value(f);
+        Some((f, v.unwrap()))
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
         self.iter.size_hint()
     }
+
+    fn count(self) -> usize {
+        self.iter.count()
+    }
+
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        let f = self.iter.nth(n)?;
+        let v = self.iter.structure.value(f);
+        Some((f, v.unwrap()))
+    }
+
+    fn last(self) -> Option<Self::Item> {
+        let structure = self.iter.structure;
+        let f = self.iter.last()?;
+        let v = structure.value(f);
+        Some((f, v.unwrap()))
+    }
 }
 
 impl<'a> DoubleEndedIterator for Iter<'a> {
     fn next_back(&mut self) -> Option<Self::Item> {
-        if let Some(f) = self.iter.next_back() {
-            let v = self.iter.structure.value(f);
-            Some((f, v.unwrap()))
-        } else {
-            None
-        }
+        let f = self.iter.next_back()?;
+        let v = self.iter.structure.value(f);
+        Some((f, v.unwrap()))
+    }
+
+    fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+        let f = self.iter.nth_back(n)?;
+        let v = self.iter.structure.value(f);
+        Some((f, v.unwrap()))
     }
 }
 
 impl<'a> ExactSizeIterator for Iter<'a> {}
+
+impl<'a> std::iter::FusedIterator for Iter<'a> {}
 
 impl<'a> IntoIterator for &'a StructureRef {
     type IntoIter = Iter<'a>;

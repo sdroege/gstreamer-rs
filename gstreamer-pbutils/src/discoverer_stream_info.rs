@@ -44,3 +44,5 @@ impl DiscovererStreamInfo {
         }
     }
 }
+
+impl std::iter::FusedIterator for Iter {}

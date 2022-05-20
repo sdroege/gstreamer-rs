@@ -816,6 +816,8 @@ macro_rules! define_meta_iter(
             }
         }
     }
+
+    impl<'a, T: MetaAPI> std::iter::FusedIterator for $name<'a, T> { }
     }
 );
 
@@ -838,8 +840,8 @@ macro_rules! define_iter(
     ($name:ident, $typ:ty, $mtyp:ty, $get_item:expr) => {
     pub struct $name<'a> {
         buffer: $typ,
-        idx: u32,
-        n_memory: u32,
+        idx: usize,
+        n_memory: usize,
     }
 
     impl<'a> fmt::Debug for $name<'a> {
@@ -861,7 +863,7 @@ macro_rules! define_iter(
             $name {
                 buffer,
                 idx: 0,
-                n_memory,
+                n_memory: n_memory as usize,
             }
         }
     }
@@ -876,20 +878,45 @@ macro_rules! define_iter(
 
             #[allow(unused_unsafe)]
             unsafe {
-                let item = $get_item(self.buffer, self.idx)?;
+                let item = $get_item(self.buffer, self.idx as u32).unwrap();
                 self.idx += 1;
                 Some(item)
             }
         }
 
         fn size_hint(&self) -> (usize, Option<usize>) {
-            if self.idx == self.n_memory {
-                return (0, Some(0));
-            }
-
-            let remaining = (self.n_memory - self.idx) as usize;
+            let remaining = self.n_memory - self.idx;
 
             (remaining, Some(remaining))
+        }
+
+        fn count(self) -> usize {
+            self.n_memory - self.idx
+        }
+
+        fn nth(&mut self, n: usize) -> Option<Self::Item> {
+            let (end, overflow) = self.idx.overflowing_add(n);
+            if end >= self.n_memory || overflow {
+                self.idx = self.n_memory;
+                None
+            } else {
+                #[allow(unused_unsafe)]
+                unsafe {
+                    self.idx = end + 1;
+                    Some($get_item(self.buffer, end as u32).unwrap())
+                }
+            }
+        }
+
+        fn last(self) -> Option<Self::Item> {
+            if self.idx == self.n_memory {
+                None
+            } else {
+                #[allow(unused_unsafe)]
+                unsafe {
+                    Some($get_item(self.buffer, self.n_memory as u32 - 1).unwrap())
+                }
+            }
         }
     }
 
@@ -899,16 +926,31 @@ macro_rules! define_iter(
                 return None;
             }
 
-            self.n_memory -= 1;
-
             #[allow(unused_unsafe)]
             unsafe {
-                $get_item(self.buffer, self.n_memory)
+                self.n_memory -= 1;
+                Some($get_item(self.buffer, self.n_memory as u32).unwrap())
+            }
+        }
+
+        fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+            let (end, overflow) = self.n_memory.overflowing_sub(n);
+            if end <= self.idx || overflow {
+                self.idx = self.n_memory;
+                None
+            } else {
+                #[allow(unused_unsafe)]
+                unsafe {
+                    self.n_memory = end - 1;
+                    Some($get_item(self.buffer, self.n_memory as u32).unwrap())
+                }
             }
         }
     }
 
     impl<'a> ExactSizeIterator for $name<'a> {}
+
+    impl<'a> std::iter::FusedIterator for $name<'a> {}
     }
 );
 

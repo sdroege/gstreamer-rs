@@ -328,7 +328,7 @@ impl VideoOverlayCompositionRef {
         Iter {
             composition: self,
             idx: 0,
-            len: self.n_rectangles(),
+            len: self.n_rectangles() as usize,
         }
     }
 }
@@ -390,32 +390,51 @@ impl<'a> std::iter::FromIterator<&'a VideoOverlayRectangle> for VideoOverlayComp
 
 pub struct Iter<'a> {
     composition: &'a VideoOverlayCompositionRef,
-    idx: u32,
-    len: u32,
+    idx: usize,
+    len: usize,
 }
 
 impl<'a> Iterator for Iter<'a> {
     type Item = VideoOverlayRectangle;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.idx == self.len {
+        if self.idx >= self.len {
             return None;
         }
 
-        let rect = self.composition.rectangle(self.idx).unwrap();
+        let rect = self.composition.rectangle(self.idx as u32).unwrap();
         self.idx += 1;
 
         Some(rect)
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
-        if self.idx == self.len {
-            return (0, Some(0));
-        }
-
-        let remaining = (self.len - self.idx) as usize;
+        let remaining = self.len - self.idx;
 
         (remaining, Some(remaining))
+    }
+
+    fn count(self) -> usize {
+        self.len - self.idx
+    }
+
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.idx.overflowing_add(n);
+        if end >= self.len || overflow {
+            self.idx = self.len;
+            None
+        } else {
+            self.idx = end + 1;
+            Some(self.composition.rectangle(end as u32).unwrap())
+        }
+    }
+
+    fn last(self) -> Option<Self::Item> {
+        if self.idx == self.len {
+            None
+        } else {
+            Some(self.composition.rectangle(self.len as u32 - 1).unwrap())
+        }
     }
 }
 
@@ -427,10 +446,21 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 
         self.len -= 1;
 
-        let rect = self.composition.rectangle(self.len).unwrap();
+        Some(self.composition.rectangle(self.len as u32).unwrap())
+    }
 
-        Some(rect)
+    fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.len.overflowing_sub(n);
+        if end <= self.idx || overflow {
+            self.idx = self.len;
+            None
+        } else {
+            self.len = end - 1;
+            Some(self.composition.rectangle(self.len as u32).unwrap())
+        }
     }
 }
 
 impl<'a> ExactSizeIterator for Iter<'a> {}
+
+impl<'a> std::iter::FusedIterator for Iter<'a> {}

@@ -215,8 +215,8 @@ macro_rules! define_iter(
     #[derive(Debug)]
     pub struct $name<'a> {
         list: &'a BufferListRef,
-        idx: u32,
-        size: u32,
+        idx: usize,
+        size: usize,
     }
 
     impl<'a> $name<'a> {
@@ -225,7 +225,7 @@ macro_rules! define_iter(
             $name {
                 list,
                 idx: 0,
-                size: list.len() as u32,
+                size: list.len() as usize,
             }
         }
     }
@@ -238,20 +238,39 @@ macro_rules! define_iter(
                 return None;
             }
 
-            let item = $get_item(self.list, self.idx)?;
+            let item = $get_item(self.list, self.idx as u32).unwrap();
             self.idx += 1;
 
             Some(item)
         }
 
         fn size_hint(&self) -> (usize, Option<usize>) {
-            if self.idx == self.size {
-                return (0, Some(0));
-            }
-
-            let remaining = (self.size - self.idx) as usize;
+            let remaining = self.size - self.idx;
 
             (remaining, Some(remaining))
+        }
+
+        fn count(self) -> usize {
+            self.size - self.idx
+        }
+
+        fn nth(&mut self, n: usize) -> Option<Self::Item> {
+            let (end, overflow) = self.idx.overflowing_add(n);
+            if end >= self.size || overflow {
+                self.idx = self.size;
+                None
+            } else {
+                self.idx = end + 1;
+                Some($get_item(self.list, end as u32).unwrap())
+            }
+        }
+
+        fn last(self) -> Option<Self::Item> {
+            if self.idx == self.size {
+                None
+            } else {
+                Some($get_item(self.list, self.size as u32 - 1).unwrap())
+            }
         }
     }
 
@@ -262,11 +281,23 @@ macro_rules! define_iter(
             }
 
             self.size -= 1;
-            $get_item(self.list, self.size)
+            Some($get_item(self.list, self.size as u32).unwrap())
+        }
+
+        fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+            let (end, overflow) = self.size.overflowing_sub(n);
+            if end <= self.idx || overflow {
+                self.idx = self.size;
+                None
+            } else {
+                self.size = end - 1;
+                Some($get_item(self.list, self.size as u32).unwrap())
+            }
         }
     }
 
     impl<'a> ExactSizeIterator for $name<'a> {}
+    impl<'a> std::iter::FusedIterator for $name<'a> {}
     }
 );
 
