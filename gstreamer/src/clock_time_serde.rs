@@ -5,7 +5,7 @@ use serde::ser::{Serialize, Serializer};
 
 use crate::ClockTime;
 
-impl<'a> Serialize for ClockTime {
+impl Serialize for ClockTime {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         self.0.serialize(serializer)
     }

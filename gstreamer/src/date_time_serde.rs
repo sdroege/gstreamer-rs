@@ -56,7 +56,7 @@ impl StaticType for Date {
     }
 }
 
-impl<'a> Serialize for Date {
+impl Serialize for Date {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         DateTimeVariants::YMD(
             self.0.year() as i32,
@@ -67,7 +67,7 @@ impl<'a> Serialize for Date {
     }
 }
 
-impl<'a> Serialize for DateTime {
+impl Serialize for DateTime {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let variant = if self.has_second() {
             DateTimeVariants::YMDhmsTz(

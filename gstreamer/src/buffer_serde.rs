@@ -13,7 +13,7 @@ use crate::ClockTime;
 // TODO: try `Either<ByteBuf, Bytes>` to merge the base reprensentations for ser and de
 // while avoiding unneeded copy
 
-impl<'a> Serialize for BufferRef {
+impl Serialize for BufferRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let mut buffer = serializer.serialize_struct("Buffer", 6)?;
         buffer.serialize_field("pts", &self.pts())?;
@@ -32,7 +32,7 @@ impl<'a> Serialize for BufferRef {
     }
 }
 
-impl<'a> Serialize for Buffer {
+impl Serialize for Buffer {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         self.as_ref().serialize(serializer)
     }

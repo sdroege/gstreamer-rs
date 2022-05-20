@@ -11,7 +11,7 @@ use crate::SampleRef;
 use crate::Segment;
 use crate::Structure;
 
-impl<'a> Serialize for SampleRef {
+impl Serialize for SampleRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let mut sample = serializer.serialize_struct("Sample", 5)?;
         sample.serialize_field("buffer", &self.buffer())?;
@@ -23,7 +23,7 @@ impl<'a> Serialize for SampleRef {
     }
 }
 
-impl<'a> Serialize for Sample {
+impl Serialize for Sample {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         self.as_ref().serialize(serializer)
     }

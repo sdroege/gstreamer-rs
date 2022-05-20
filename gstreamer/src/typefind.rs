@@ -206,18 +206,20 @@ impl<T: AsRef<[u8]>> TypeFindImpl for SliceTypeFind<T> {
         let len = data.len();
 
         let offset = if offset >= 0 {
-            offset as usize
+            usize::try_from(offset).ok()?
         } else {
-            if len < offset.abs() as usize {
+            let offset = usize::try_from(offset.unsigned_abs()).ok()?;
+            if len < offset {
                 return None;
             }
 
-            len - (offset.abs() as usize)
+            len - offset
         };
 
-        let size = size as usize;
-        if offset + size <= len {
-            Some(&data[offset..(offset + size)])
+        let size = usize::try_from(size).ok()?;
+        let end_offset = offset.checked_add(size)?;
+        if end_offset <= len {
+            Some(&data[offset..end_offset])
         } else {
             None
         }
