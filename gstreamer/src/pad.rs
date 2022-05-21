@@ -47,6 +47,12 @@ impl FromGlib<libc::c_ulong> for PadProbeId {
     }
 }
 
+impl PadProbeId {
+    pub fn as_raw(&self) -> libc::c_ulong {
+        self.0.get() as libc::c_ulong
+    }
+}
+
 #[doc(alias = "GstPadProbeInfo")]
 #[derive(Debug)]
 pub struct PadProbeInfo<'a> {
