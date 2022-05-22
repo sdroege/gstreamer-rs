@@ -574,11 +574,13 @@ impl StructureRef {
     #[doc(alias = "get_nth_field_name")]
     #[doc(alias = "gst_structure_nth_field_name")]
     pub fn nth_field_name<'a>(&self, idx: u32) -> Option<&'a str> {
+        if idx >= self.n_fields() {
+            return None;
+        }
+
         unsafe {
             let field_name = ffi::gst_structure_nth_field_name(&self.0, idx);
-            if field_name.is_null() {
-                return None;
-            }
+            assert!(!field_name.is_null());
 
             Some(CStr::from_ptr(field_name).to_str().unwrap())
         }
