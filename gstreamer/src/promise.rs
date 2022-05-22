@@ -182,6 +182,12 @@ impl std::future::Future for PromiseFuture {
     }
 }
 
+impl futures_core::future::FusedFuture for PromiseFuture {
+    fn is_terminated(&self) -> bool {
+        self.1.is_terminated()
+    }
+}
+
 impl Deref for PromiseReply {
     type Target = StructureRef;
 
