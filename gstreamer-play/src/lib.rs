@@ -35,7 +35,7 @@ mod play_signal_adapter;
 mod play_video_overlay_video_renderer;
 mod play_visualization;
 
-pub mod play_message;
+mod play_message;
 pub use crate::play_message::PlayMessage;
 
 // Re-export all the traits in a prelude module, so that applications
