@@ -451,7 +451,9 @@ coverage:
     paths:
       - 'coverage'
     reports:
-      cobertura: coverage.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
 
 doc-stripping:
   variables:
