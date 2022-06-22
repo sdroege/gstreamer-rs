@@ -41,6 +41,9 @@ mod flag_serde;
 
 mod navigation;
 
+mod caps;
+pub use crate::caps::VideoCapsBuilder;
+
 mod caps_features;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
