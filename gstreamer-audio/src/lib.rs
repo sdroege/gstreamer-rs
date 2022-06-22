@@ -36,6 +36,9 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use crate::auto::*;
 
+mod caps;
+pub use crate::caps::AudioCapsBuilder;
+
 #[cfg(feature = "ser_de")]
 mod flag_serde;
 
