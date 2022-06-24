@@ -20,6 +20,7 @@ bitflags = "1.0"
 ffi = { package = "gstreamer-base-sys", version = "0.18", path = "sys", features = ["v1_8"] }
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.15", version = "0.15" }
 gst = { package = "gstreamer", version = "0.18", path = "../gstreamer" }
+atomic_refcell = "0.1"
 
 [dev-dependencies]
 gir-format-check = "0.1"

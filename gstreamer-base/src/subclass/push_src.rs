@@ -3,12 +3,14 @@
 use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
+use gst::prelude::*;
 
 use gst::{gst_debug, gst_error};
 
 use std::ptr;
 
 use super::base_src::{BaseSrcImpl, CreateSuccess};
+use crate::prelude::BaseSrcExtManual;
 use crate::PushSrc;
 
 pub trait PushSrcImpl: PushSrcImplExt + BaseSrcImpl {
@@ -113,13 +115,42 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
                     // FIXME: Wrong signature in -sys bindings
                     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
                     let buffer_ref = &mut buffer_ptr as *mut _ as *mut gst::ffi::GstBuffer;
+                    let instance_data = self.instance_data::<super::base_src::InstanceData>(crate::BaseSrc::static_type()).unwrap();
 
-                    gst::FlowSuccess::try_from_glib(
+                    if let Err(err) = gst::FlowSuccess::try_from_glib(
                         f(
                             element.unsafe_cast_ref::<PushSrc>().to_glib_none().0,
                             buffer_ref,
                         )
-                    )?;
+                    ) {
+                        *instance_data.pending_buffer_list.borrow_mut() = None;
+                        return Err(err);
+                    }
+
+                    let pending_buffer_list = instance_data.pending_buffer_list.borrow_mut().take();
+                    if pending_buffer_list.is_some() &&
+                        (buffer.is_some() || element.unsafe_cast_ref::<PushSrc>().src_pad().mode() == gst::PadMode::Pull) {
+                        panic!("Buffer lists can only be returned in push mode");
+                    }
+
+                    let pending_buffer_list = instance_data.pending_buffer_list.borrow_mut().take();
+                    if buffer_ptr.is_null() && pending_buffer_list.is_none() {
+                        gst_error!(
+                            gst::CAT_RUST,
+                            obj: element.unsafe_cast_ref::<PushSrc>(),
+                            "No buffer and no buffer list returned"
+                        );
+                        return Err(gst::FlowError::Error);
+                    }
+
+                    if !buffer_ptr.is_null() && pending_buffer_list.is_some() {
+                        gst_error!(
+                            gst::CAT_RUST,
+                            obj: element.unsafe_cast_ref::<PushSrc>(),
+                            "Both buffer and buffer list returned"
+                        );
+                        return Err(gst::FlowError::Error);
+                    }
 
                     if let Some(passed_buffer) = buffer {
                         if buffer_ptr != orig_buffer_ptr {
@@ -164,6 +195,16 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
                             }
                         } else {
                             Ok(CreateSuccess::FilledBuffer)
+                        }
+                    } else if let Some(buffer_list) = pending_buffer_list {
+                        #[cfg(feature = "v1_14")]
+                        {
+                            Ok(CreateSuccess::NewBufferList(buffer_list))
+                        }
+                        #[cfg(not(feature = "v1_14"))]
+                        {
+                            let _ = buffer_list;
+                            unreachable!()
                         }
                     } else {
                         Ok(CreateSuccess::NewBuffer(from_glib_full(buffer_ptr)))
@@ -240,9 +281,16 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
         Some(gst::BufferRef::from_mut_ptr(*buffer_ptr))
     };
 
-    gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
+    let instance_data = imp
+        .instance_data::<super::base_src::InstanceData>(crate::BaseSrc::static_type())
+        .unwrap();
+
+    let res = gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
         match PushSrcImpl::create(imp, wrap.unsafe_cast_ref(), buffer.as_deref_mut()) {
             Ok(CreateSuccess::NewBuffer(new_buffer)) => {
+                // Clear any pending buffer list
+                *instance_data.pending_buffer_list.borrow_mut() = None;
+
                 if let Some(passed_buffer) = buffer {
                     if passed_buffer.as_ptr() != new_buffer.as_ptr() {
                         gst_debug!(
@@ -295,9 +343,32 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
                     gst::FlowReturn::Ok
                 }
             }
-            Ok(CreateSuccess::FilledBuffer) => gst::FlowReturn::Ok,
+            #[cfg(any(feature = "v1_14", feature = "dox"))]
+            Ok(CreateSuccess::NewBufferList(new_buffer_list)) => {
+                if buffer.is_some()
+                    || wrap.unsafe_cast_ref::<PushSrc>().src_pad().mode() == gst::PadMode::Pull
+                {
+                    panic!("Buffer lists can only be returned in push mode");
+                }
+
+                *buffer_ptr = ptr::null_mut();
+
+                // Store it in the instance data so that in the end base_src_create() can
+                // submit it.
+                *instance_data.pending_buffer_list.borrow_mut() = Some(new_buffer_list);
+
+                gst::FlowReturn::Ok
+            }
+            Ok(CreateSuccess::FilledBuffer) => {
+                // Clear any pending buffer list
+                *instance_data.pending_buffer_list.borrow_mut() = None;
+
+                gst::FlowReturn::Ok
+            }
             Err(err) => gst::FlowReturn::from(err),
         }
     })
-    .into_glib()
+    .into_glib();
+
+    res
 }
