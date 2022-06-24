@@ -414,7 +414,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
                     if let Some(passed_buffer) = buffer {
                         if buffer_ptr != orig_buffer_ptr {
-                            let new_buffer = gst::BufferRef::from_ptr(buffer_ptr);
+                            let new_buffer = gst::Buffer::from_glib_full(buffer_ptr);
 
                             gst_debug!(
                                 gst::CAT_PERFORMANCE,
