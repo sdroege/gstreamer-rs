@@ -182,7 +182,7 @@ mod tests {
         let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64).unwrap();
         let res = ron::ser::to_string_pretty(&datetime, pretty_config.clone());
         assert_eq!(
-            Ok("YMDhmsTz(2018, 5, 28, 16, 6, 42.123456, 2)".to_owned()),
+            Ok("YMDhmsTz(2018, 5, 28, 16, 6, 42.123456, 2.0)".to_owned()),
             res,
         );
 
@@ -194,7 +194,7 @@ mod tests {
 
         let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, None).unwrap();
         let res = ron::ser::to_string_pretty(&datetime, pretty_config.clone());
-        assert_eq!(Ok("YMDhmTz(2018, 5, 28, 16, 6, 2)".to_owned()), res,);
+        assert_eq!(Ok("YMDhmTz(2018, 5, 28, 16, 6, 2.0)".to_owned()), res,);
 
         let datetime = DateTime::from_ymd(2018, 5, 28).unwrap();
         let res = ron::ser::to_string_pretty(&datetime, pretty_config.clone());
