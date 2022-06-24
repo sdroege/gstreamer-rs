@@ -139,7 +139,7 @@ mod tests {
             Ok(concat!(
                 "(",
                 "    flags: \"reset+segment\",",
-                "    rate: 1,",
+                "    rate: 1.0,",
                 "    applied_rate: 0.9,",
                 "    format: Time,",
                 "    base: 123,",

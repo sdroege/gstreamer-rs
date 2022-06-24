@@ -199,7 +199,7 @@ mod tests {
                 r#"    ("f3", "i32", 123),"#,
                 r#"    ("fraction", "Fraction", (1, 2)),"#,
                 r#"    ("date", "Date", Some(YMD(2019, 8, 19))),"#,
-                r#"    ("date_time", "DateTime", Some(YMDhmsTz(2019, 8, 19, 13, 34, 42, 2))),"#,
+                r#"    ("date_time", "DateTime", Some(YMDhmsTz(2019, 8, 19, 13, 34, 42.0, 2.0))),"#,
                 r#"    ("array", "Array", ["#,
                 r#"        ("i32", 1),"#,
                 r#"        ("i32", 2),"#,
