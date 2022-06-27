@@ -14,10 +14,18 @@ pub use paste;
 
 use glib::translate::{from_glib, from_glib_full};
 
+#[doc(hidden)]
+pub static INITIALIZED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { ffi::gst_is_initialized() } != glib::ffi::GTRUE {
-            panic!("GStreamer has not been initialized. Call `gst::init` first.");
+        if !crate::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
+            #[allow(unused_unsafe)]
+            if unsafe { ffi::gst_is_initialized() } != glib::ffi::GTRUE {
+                panic!("GStreamer has not been initialized. Call `gst::init` first.");
+            } else {
+                crate::INITIALIZED.store(true, std::sync::atomic::Ordering::SeqCst);
+            }
         }
     };
 }
@@ -263,6 +271,7 @@ pub fn init() -> Result<(), glib::Error> {
             ptr::null_mut(),
             &mut error,
         )) {
+            crate::INITIALIZED.store(true, std::sync::atomic::Ordering::SeqCst);
             Ok(())
         } else {
             Err(from_glib_full(error))
@@ -278,6 +287,7 @@ pub fn init() -> Result<(), glib::Error> {
 /// This must only be called once during the lifetime of the process, once no GStreamer threads
 /// are running anymore and all GStreamer resources are released.
 pub unsafe fn deinit() {
+    crate::INITIALIZED.store(false, std::sync::atomic::Ordering::SeqCst);
     ffi::gst_deinit();
 }
 
