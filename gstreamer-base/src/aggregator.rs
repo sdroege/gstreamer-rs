@@ -245,7 +245,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
             let f: &F = &*(f as *const F);
             f(
                 Aggregator::from_glib_borrow(this).unsafe_cast_ref(),
-                &gst::Segment::from_glib_borrow(segment),
+                gst::Segment::from_ptr(segment),
                 from_glib(pts),
                 from_glib(dts),
                 from_glib(duration),

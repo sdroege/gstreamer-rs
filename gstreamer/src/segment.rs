@@ -18,6 +18,11 @@ pub type Segment = FormattedSegment<GenericFormattedValue>;
 pub struct FormattedSegment<T: FormattedValueIntrinsic>(ffi::GstSegment, PhantomData<T>);
 
 impl Segment {
+    pub unsafe fn from_ptr<'a>(ptr: *const ffi::GstSegment) -> &'a Segment {
+        assert!(!ptr.is_null());
+        &*(ptr as *const Self)
+    }
+
     pub fn reset_with_format(&mut self, format: Format) {
         unsafe {
             ffi::gst_segment_init(self.to_glib_none_mut().0, format.into_glib());
@@ -645,6 +650,18 @@ unsafe impl<'a> glib::value::FromValue<'a> for Segment {
         skip_assert_initialized!();
         from_glib_none(
             glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstSegment
+        )
+    }
+}
+
+#[doc(hidden)]
+unsafe impl<'a> glib::value::FromValue<'a> for &'a Segment {
+    type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        Segment::from_ptr(
+            glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *const ffi::GstSegment
         )
     }
 }

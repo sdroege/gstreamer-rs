@@ -173,7 +173,7 @@ impl SampleRef {
             if ptr.is_null() {
                 None
             } else {
-                Some(&*(ptr as *const crate::Segment))
+                Some(crate::Segment::from_ptr(ptr))
             }
         }
     }
