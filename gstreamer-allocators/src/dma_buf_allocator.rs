@@ -46,7 +46,7 @@ impl DmaBufMemoryRef {
 impl DmaBufAllocator {
     #[doc(alias = "gst_dmabuf_allocator_alloc")]
     pub unsafe fn alloc<A: IntoRawFd>(&self, fd: A, size: usize) -> gst::Memory {
-        assert_initialized_main_thread_unsafe!();
+        assert_initialized_main_thread!();
         from_glib_full(ffi::gst_dmabuf_allocator_alloc(
             self.unsafe_cast_ref::<gst::Allocator>().to_glib_none().0,
             fd.into_raw_fd(),
@@ -63,7 +63,7 @@ impl DmaBufAllocator {
         size: usize,
         flags: FdMemoryFlags,
     ) -> gst::Memory {
-        assert_initialized_main_thread_unsafe!();
+        assert_initialized_main_thread!();
         from_glib_full(ffi::gst_dmabuf_allocator_alloc_with_flags(
             self.unsafe_cast_ref::<gst::Allocator>().to_glib_none().0,
             fd,

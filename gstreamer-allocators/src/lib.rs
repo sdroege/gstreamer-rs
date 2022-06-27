@@ -11,15 +11,8 @@ pub use gst;
 
 macro_rules! assert_initialized_main_thread {
     () => {
+        #[allow(unused_unsafe)]
         if unsafe { gst::ffi::gst_is_initialized() } != glib::ffi::GTRUE {
-            panic!("GStreamer has not been initialized. Call `gst::init` first.");
-        }
-    };
-}
-
-macro_rules! assert_initialized_main_thread_unsafe {
-    () => {
-        if gst::ffi::gst_is_initialized() != glib::ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
     };

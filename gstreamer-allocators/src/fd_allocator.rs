@@ -48,7 +48,7 @@ impl FdMemoryRef {
 impl FdAllocator {
     #[doc(alias = "gst_fd_allocator_alloc")]
     pub unsafe fn alloc(&self, fd: RawFd, size: usize, flags: FdMemoryFlags) -> gst::Memory {
-        assert_initialized_main_thread_unsafe!();
+        assert_initialized_main_thread!();
         from_glib_full(ffi::gst_fd_allocator_alloc(
             self.unsafe_cast_ref::<gst::Allocator>().to_glib_none().0,
             fd,
