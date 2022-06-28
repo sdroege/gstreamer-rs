@@ -608,8 +608,8 @@ final_type = true
 
     [[object.function]]
     name = "post"
-        [object.function.return]
-        bool_return_is_error = "Failed to post message"
+    # transfer ownership of the message
+    manual = true
 
 [[object]]
 name = "Gst.Caps"

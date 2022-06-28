@@ -76,16 +76,6 @@ impl Bus {
         unsafe { from_glib_full(ffi::gst_bus_pop(self.to_glib_none().0)) }
     }
 
-    #[doc(alias = "gst_bus_post")]
-    pub fn post(&self, message: &Message) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib::result_from_gboolean!(
-                ffi::gst_bus_post(self.to_glib_none().0, message.to_glib_full()),
-                "Failed to post message"
-            )
-        }
-    }
-
     #[doc(alias = "gst_bus_remove_signal_watch")]
     pub fn remove_signal_watch(&self) {
         unsafe {

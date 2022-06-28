@@ -302,6 +302,16 @@ impl Bus {
             future::ready(message_types.contains(&message_type))
         })
     }
+
+    #[doc(alias = "gst_bus_post")]
+    pub fn post(&self, message: crate::Message) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_bus_post(self.to_glib_none().0, message.into_glib_ptr()),
+                "Failed to post message"
+            )
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -382,7 +392,7 @@ mod tests {
             BusSyncReply::Pass
         });
 
-        bus.post(&crate::message::Eos::new()).unwrap();
+        bus.post(crate::message::Eos::new()).unwrap();
 
         let msgs = msgs.lock().unwrap();
         assert_eq!(msgs.len(), 1);
@@ -400,7 +410,7 @@ mod tests {
         let bus_stream = bus.stream();
 
         let eos_message = crate::message::Eos::new();
-        bus.post(&eos_message).unwrap();
+        bus.post(eos_message).unwrap();
 
         let bus_future = bus_stream.into_future();
         let (message, _) = futures_executor::block_on(bus_future);
