@@ -14,7 +14,9 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
     fn bin_add_pre(&self, ts: u64, bin: &Bin, element: &Element) {}
     fn bin_remove_post(&self, ts: u64, bin: &Bin, success: bool) {}
     fn bin_remove_pre(&self, ts: u64, bin: &Bin, element: &Element) {}
+    fn element_new(&self, ts: u64, element: &Element) {}
     fn element_add_pad(&self, ts: u64, element: &Element, pad: &Pad) {}
+    fn element_remove_pad(&self, ts: u64, element: &Element, pad: &Pad) {}
     fn element_change_state_post(
         &self,
         ts: u64,
@@ -24,12 +26,10 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
     ) {
     }
     fn element_change_state_pre(&self, ts: u64, element: &Element, change: StateChange) {}
-    fn element_new(&self, ts: u64, element: &Element) {}
     fn element_post_message_post(&self, ts: u64, element: &Element, success: bool) {}
     fn element_post_message_pre(&self, ts: u64, element: &Element, message: &Message) {}
     fn element_query_post(&self, ts: u64, element: &Element, query: &Query, success: bool) {}
     fn element_query_pre(&self, ts: u64, element: &Element, query: &Query) {}
-    fn element_remove_pad(&self, ts: u64, element: &Element, pad: &Pad) {}
     // rustdoc-stripper-ignore-next
     /// Hook to be called before the GstMiniObject has been fully initialized.
     fn mini_object_created(&self, ts: u64, object: std::ptr::NonNull<ffi::GstMiniObject>) {}
@@ -129,10 +129,19 @@ define_tracer_hooks! {
         let e = Element::from_glib_borrow(e);
         this.bin_remove_pre(ts, &b, &e)
     };
+    ElementNew("element-new") = |this, ts, e: *mut ffi::GstElement| {
+        let e = Element::from_glib_borrow(e);
+        this.element_new(ts, &e)
+    };
     ElementAddPad("element-add-pad") = |this, ts, e: *mut ffi::GstElement, p: *mut ffi::GstPad| {
         let e = Element::from_glib_borrow(e);
         let p = Pad::from_glib_borrow(p);
         this.element_add_pad(ts, &e, &p)
+    };
+    ElementRemovePad("element-remove-pad") = |this, ts, e: *mut ffi::GstElement, p: *mut ffi::GstPad| {
+        let e = Element::from_glib_borrow(e);
+        let p = Pad::from_glib_borrow(p);
+        this.element_remove_pad(ts, &e, &p)
     };
     ElementChangeStatePost("element-change-state-post") = |this, ts, e: *mut ffi::GstElement, c: ffi::GstStateChange, r: ffi::GstStateChangeReturn| {
         let e = Element::from_glib_borrow(e);
@@ -141,10 +150,6 @@ define_tracer_hooks! {
     ElementChangeStatePre("element-change-state-pre") = |this, ts, e: *mut ffi::GstElement, c: ffi::GstStateChange| {
         let e = Element::from_glib_borrow(e);
         this.element_change_state_pre(ts, &e, StateChange::from_glib(c))
-    };
-    ElementNew("element-new") = |this, ts, e: *mut ffi::GstElement| {
-        let e = Element::from_glib_borrow(e);
-        this.element_new(ts, &e)
     };
     ElementPostMessagePost("element-post-message-post") = |this, ts, e: *mut ffi::GstElement, r: glib::ffi::gboolean| {
         let e = Element::from_glib_borrow(e);
@@ -164,11 +169,6 @@ define_tracer_hooks! {
         let e = Element::from_glib_borrow(e);
         let q = Query::from_glib_borrow(q);
         this.element_query_pre(ts, &e, &q)
-    };
-    ElementRemovePad("element-remove-pad") = |this, ts, e: *mut ffi::GstElement, p: *mut ffi::GstPad| {
-        let e = Element::from_glib_borrow(e);
-        let p = Pad::from_glib_borrow(p);
-        this.element_remove_pad(ts, &e, &p)
     };
     // TODO: unclear what to do here as the `GstMiniObject` here is not fully initialized yet…
     MiniObjectCreated("mini-object-created") = |this, ts, o: *mut ffi::GstMiniObject| {
