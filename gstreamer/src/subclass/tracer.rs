@@ -58,6 +58,9 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
     fn pad_query_pre(&self, ts: u64, pad: &Pad, query: &Query) {}
     fn pad_unlink_post(&self, ts: u64, src: &Pad, sink: &Pad, success: bool) {}
     fn pad_unlink_pre(&self, ts: u64, src: &Pad, sink: &Pad) {}
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn plugin_feature_loaded(&self, ts: u64, feature: &crate::PluginFeature) {}
 }
 
 unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {}
@@ -71,15 +74,15 @@ pub trait TracerImplExt: ObjectSubclass {
 }
 
 macro_rules! define_tracer_hooks {
-    ($($name: ident($quark: literal) = |$this: ident, $ts: ident, $($cb_arg: ident: $cb_arg_ty: ty),*| $impl: block;)*) => {
+    ($($(#[$attr:meta])* $name: ident($quark: literal) = |$this: ident, $ts: ident, $($cb_arg: ident: $cb_arg_ty: ty),*| $impl: block;)*) => {
         pub enum TracerHook {
-            $($name),*
+            $($(#[$attr])* $name),*
         }
         impl<T: TracerImpl> TracerImplExt for T {
             fn register_hook(&self, hook: TracerHook) {
                 use TracerHook::*;
                 let (hook_type, callback) = match hook {
-                    $($name => {
+                    $($(#[$attr])* $name => {
                         #[allow(non_snake_case)]
                         unsafe extern "C" fn callback<T: TracerImpl>(
                             $this: *mut ffi::GstTracer,
@@ -267,5 +270,11 @@ define_tracer_hooks! {
         let src = Pad::from_glib_borrow(src);
         let sink = Pad::from_glib_borrow(sink);
         this.pad_unlink_pre(ts, &src, &sink)
+    };
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    PluginFeatureLoaded("plugin-feature-loaded") = |this, ts, feature: *mut ffi::GstPluginFeature| {
+        let feature = crate::PluginFeature::from_glib_borrow(feature);
+        this.plugin_feature_loaded(ts, &feature)
     };
 }
