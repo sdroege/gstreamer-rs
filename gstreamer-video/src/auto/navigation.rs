@@ -20,7 +20,7 @@ impl Navigation {
     pub const NONE: Option<&'static Navigation> = None;
 
     //#[doc(alias = "gst_navigation_query_set_commands")]
-    //pub fn query_set_commands(query: &gst::Query, n_cmds: i32, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
+    //pub fn query_set_commands(query: &gst::Query, n_cmds: i32, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
     //    unsafe { TODO: call ffi:gst_navigation_query_set_commands() }
     //}
 

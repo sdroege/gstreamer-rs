@@ -29,7 +29,7 @@ impl Clock {
     pub const NONE: Option<&'static Clock> = None;
 
     //#[doc(alias = "gst_clock_id_compare_func")]
-    //pub fn id_compare_func(id1: /*Unimplemented*/Option<Fundamental: Pointer>, id2: /*Unimplemented*/Option<Fundamental: Pointer>) -> i32 {
+    //pub fn id_compare_func(id1: /*Unimplemented*/Option<Basic: Pointer>, id2: /*Unimplemented*/Option<Basic: Pointer>) -> i32 {
     //    unsafe { TODO: call ffi:gst_clock_id_compare_func() }
     //}
 
@@ -73,7 +73,7 @@ impl Clock {
     //}
 
     //#[doc(alias = "gst_clock_id_wait_async")]
-    //pub fn id_wait_async(id: /*Unimplemented*/ClockID, func: /*Unimplemented*/Fn(&Clock, impl Into<Option<ClockTime>>, /*Unimplemented*/ClockID) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Result<ClockSuccess, ClockError> {
+    //pub fn id_wait_async(id: /*Unimplemented*/ClockID, func: /*Unimplemented*/Fn(&Clock, impl Into<Option<ClockTime>>, /*Unimplemented*/ClockID) -> bool, user_data: /*Unimplemented*/Option<Basic: Pointer>) -> Result<ClockSuccess, ClockError> {
     //    unsafe { TODO: call ffi:gst_clock_id_wait_async() }
     //}
 }

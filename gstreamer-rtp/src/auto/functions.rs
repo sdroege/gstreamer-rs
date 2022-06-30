@@ -53,11 +53,11 @@ pub fn rtp_get_header_extension_list() -> Vec<gst::ElementFactory> {
 }
 
 //#[doc(alias = "gst_rtp_hdrext_set_ntp_56")]
-//pub fn rtp_hdrext_set_ntp_56(data: /*Unimplemented*/Option<Fundamental: Pointer>, size: u32, ntptime: u64) -> bool {
+//pub fn rtp_hdrext_set_ntp_56(data: /*Unimplemented*/Option<Basic: Pointer>, size: u32, ntptime: u64) -> bool {
 //    unsafe { TODO: call ffi:gst_rtp_hdrext_set_ntp_56() }
 //}
 
 //#[doc(alias = "gst_rtp_hdrext_set_ntp_64")]
-//pub fn rtp_hdrext_set_ntp_64(data: /*Unimplemented*/Option<Fundamental: Pointer>, size: u32, ntptime: u64) -> bool {
+//pub fn rtp_hdrext_set_ntp_64(data: /*Unimplemented*/Option<Basic: Pointer>, size: u32, ntptime: u64) -> bool {
 //    unsafe { TODO: call ffi:gst_rtp_hdrext_set_ntp_64() }
 //}

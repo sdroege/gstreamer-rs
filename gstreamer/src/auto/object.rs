@@ -99,7 +99,7 @@ pub trait GstObjectExt: 'static {
 
     //#[doc(alias = "gst_object_get_value_array")]
     //#[doc(alias = "get_value_array")]
-    //fn is_value_array(&self, property_name: &str, timestamp: impl Into<Option<ClockTime>>, interval: impl Into<Option<ClockTime>>, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool;
+    //fn is_value_array(&self, property_name: &str, timestamp: impl Into<Option<ClockTime>>, interval: impl Into<Option<ClockTime>>, n_values: u32, values: /*Unimplemented*/Option<Basic: Pointer>) -> bool;
 
     #[doc(alias = "gst_object_has_active_control_bindings")]
     fn has_active_control_bindings(&self) -> bool;
@@ -217,7 +217,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    //fn is_value_array(&self, property_name: &str, timestamp: impl Into<Option<ClockTime>>, interval: impl Into<Option<ClockTime>>, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
+    //fn is_value_array(&self, property_name: &str, timestamp: impl Into<Option<ClockTime>>, interval: impl Into<Option<ClockTime>>, n_values: u32, values: /*Unimplemented*/Option<Basic: Pointer>) -> bool {
     //    unsafe { TODO: call ffi:gst_object_get_value_array() }
     //}
 

@@ -35,7 +35,7 @@ pub trait ChildProxyExt: 'static {
     fn child_removed(&self, child: &impl IsA<glib::Object>, name: &str);
 
     //#[doc(alias = "gst_child_proxy_get")]
-    //fn get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
+    //fn get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs);
 
     #[doc(alias = "gst_child_proxy_get_child_by_index")]
     #[doc(alias = "get_child_by_index")]
@@ -54,7 +54,7 @@ pub trait ChildProxyExt: 'static {
     //fn valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
     //#[doc(alias = "gst_child_proxy_set")]
-    //fn set(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
+    //fn set(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs);
 
     //#[doc(alias = "gst_child_proxy_set_valist")]
     //fn set_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
@@ -93,7 +93,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         }
     }
 
-    //fn get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
+    //fn get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
     //    unsafe { TODO: call ffi:gst_child_proxy_get() }
     //}
 
@@ -123,7 +123,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
     //    unsafe { TODO: call ffi:gst_child_proxy_get_valist() }
     //}
 
-    //fn set(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
+    //fn set(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
     //    unsafe { TODO: call ffi:gst_child_proxy_set() }
     //}
 

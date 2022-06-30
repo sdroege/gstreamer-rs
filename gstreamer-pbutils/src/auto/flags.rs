@@ -91,6 +91,10 @@ bitflags! {
         const TAG = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_TAG as u32;
         #[doc(alias = "GST_PBUTILS_CAPS_DESCRIPTION_FLAG_GENERIC")]
         const GENERIC = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_GENERIC as u32;
+        #[cfg(any(feature = "v1_22", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+        #[doc(alias = "GST_PBUTILS_CAPS_DESCRIPTION_FLAG_METADATA")]
+        const METADATA = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_METADATA as u32;
     }
 }
 

@@ -1720,7 +1720,7 @@ impl VideoFormat {
 
     //#[doc(alias = "gst_video_format_get_palette")]
     //#[doc(alias = "get_palette")]
-    //pub fn palette(self) -> (/*Unimplemented*/Option<Fundamental: Pointer>, usize) {
+    //pub fn palette(self) -> (/*Unimplemented*/Option<Basic: Pointer>, usize) {
     //    unsafe { TODO: call ffi:gst_video_format_get_palette() }
     //}
 

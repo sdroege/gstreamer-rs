@@ -48,7 +48,7 @@ unsafe impl Sync for RTSPMediaFactory {}
 
 pub trait RTSPMediaFactoryExt: 'static {
     //#[doc(alias = "gst_rtsp_media_factory_add_role")]
-    //fn add_role(&self, role: &str, fieldname: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
+    //fn add_role(&self, role: &str, fieldname: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs);
 
     #[doc(alias = "gst_rtsp_media_factory_construct")]
     fn construct(&self, url: &gst_rtsp::RTSPUrl) -> Result<RTSPMedia, glib::BoolError>;
@@ -341,7 +341,7 @@ pub trait RTSPMediaFactoryExt: 'static {
 }
 
 impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
-    //fn add_role(&self, role: &str, fieldname: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
+    //fn add_role(&self, role: &str, fieldname: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
     //    unsafe { TODO: call ffi:gst_rtsp_media_factory_add_role() }
     //}
 

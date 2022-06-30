@@ -77,7 +77,7 @@ pub trait TimelineElementExt: 'static {
 
     //#[doc(alias = "ges_timeline_element_get_child_properties")]
     //#[doc(alias = "get_child_properties")]
-    //fn child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
+    //fn child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs);
 
     #[doc(alias = "ges_timeline_element_get_child_property")]
     #[doc(alias = "get_child_property")]
@@ -170,7 +170,7 @@ pub trait TimelineElementExt: 'static {
     fn roll_start(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError>;
 
     //#[doc(alias = "ges_timeline_element_set_child_properties")]
-    //fn set_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
+    //fn set_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs);
 
     #[doc(alias = "ges_timeline_element_set_child_property")]
     fn set_child_property(
@@ -339,7 +339,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    //fn child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
+    //fn child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
     //    unsafe { TODO: call ffi:ges_timeline_element_get_child_properties() }
     //}
 
@@ -535,7 +535,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    //fn set_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
+    //fn set_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
     //    unsafe { TODO: call ffi:ges_timeline_element_set_child_properties() }
     //}
 

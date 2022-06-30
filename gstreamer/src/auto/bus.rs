@@ -37,7 +37,7 @@ impl Bus {
     }
 
     //#[doc(alias = "gst_bus_async_signal_func")]
-    //pub fn async_signal_func(&self, message: &Message, data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
+    //pub fn async_signal_func(&self, message: &Message, data: /*Unimplemented*/Option<Basic: Pointer>) -> bool {
     //    unsafe { TODO: call ffi:gst_bus_async_signal_func() }
     //}
 
@@ -101,7 +101,7 @@ impl Bus {
     }
 
     //#[doc(alias = "gst_bus_sync_signal_handler")]
-    //pub fn sync_signal_handler(&self, message: &Message, data: /*Unimplemented*/Option<Fundamental: Pointer>) -> BusSyncReply {
+    //pub fn sync_signal_handler(&self, message: &Message, data: /*Unimplemented*/Option<Basic: Pointer>) -> BusSyncReply {
     //    unsafe { TODO: call ffi:gst_bus_sync_signal_handler() }
     //}
 

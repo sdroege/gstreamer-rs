@@ -116,7 +116,7 @@ pub trait RTSPClientExt: 'static {
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //#[doc(alias = "gst_rtsp_client_set_send_messages_func")]
-    //fn set_send_messages_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, u32, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
+    //fn set_send_messages_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, u32, bool) -> bool, user_data: /*Unimplemented*/Option<Basic: Pointer>);
 
     #[doc(alias = "gst_rtsp_client_set_session_pool")]
     fn set_session_pool(&self, pool: Option<&impl IsA<RTSPSessionPool>>);
@@ -463,7 +463,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    //fn set_send_messages_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, u32, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //fn set_send_messages_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, u32, bool) -> bool, user_data: /*Unimplemented*/Option<Basic: Pointer>) {
     //    unsafe { TODO: call ffi:gst_rtsp_client_set_send_messages_func() }
     //}
 

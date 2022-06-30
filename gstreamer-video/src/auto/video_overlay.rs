@@ -32,7 +32,7 @@ pub trait VideoOverlayExt: 'static {
     fn expose(&self);
 
     //#[doc(alias = "gst_video_overlay_got_window_handle")]
-    //fn got_window_handle(&self, handle: /*Unimplemented*/Fundamental: UIntPtr);
+    //fn got_window_handle(&self, handle: /*Unimplemented*/Basic: UIntPtr);
 
     #[doc(alias = "gst_video_overlay_handle_events")]
     fn handle_events(&self, handle_events: bool);
@@ -57,7 +57,7 @@ impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
         }
     }
 
-    //fn got_window_handle(&self, handle: /*Unimplemented*/Fundamental: UIntPtr) {
+    //fn got_window_handle(&self, handle: /*Unimplemented*/Basic: UIntPtr) {
     //    unsafe { TODO: call ffi:gst_video_overlay_got_window_handle() }
     //}
 

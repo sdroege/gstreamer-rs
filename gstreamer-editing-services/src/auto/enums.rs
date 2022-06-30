@@ -692,6 +692,10 @@ pub enum VideoStandardTransitionType {
     WindshieldH,
     #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_CROSSFADE")]
     Crossfade,
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_FADE_IN")]
+    FadeIn,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -774,6 +778,8 @@ impl IntoGlib for VideoStandardTransitionType {
             Self::WindshieldV => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_V,
             Self::WindshieldH => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_H,
             Self::Crossfade => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_CROSSFADE,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            Self::FadeIn => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_FADE_IN,
             Self::__Unknown(value) => value,
         }
     }
@@ -856,6 +862,8 @@ impl FromGlib<ffi::GESVideoStandardTransitionType> for VideoStandardTransitionTy
             ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_V => Self::WindshieldV,
             ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_H => Self::WindshieldH,
             ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_CROSSFADE => Self::Crossfade,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_FADE_IN => Self::FadeIn,
             value => Self::__Unknown(value),
         }
     }

@@ -51,13 +51,13 @@ impl GLShader {
     }
 
     //#[doc(alias = "gst_gl_shader_new_link_with_stages")]
-    //pub fn new_link_with_stages(context: &impl IsA<GLContext>, error: &mut glib::Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
+    //pub fn new_link_with_stages(context: &impl IsA<GLContext>, error: &mut glib::Error, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) -> GLShader {
     //    unsafe { TODO: call ffi:gst_gl_shader_new_link_with_stages() }
     //}
 
     //#[doc(alias = "gst_gl_shader_new_with_stages")]
     //#[doc(alias = "new_with_stages")]
-    //pub fn with_stages(context: &impl IsA<GLContext>, error: &mut glib::Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
+    //pub fn with_stages(context: &impl IsA<GLContext>, error: &mut glib::Error, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) -> GLShader {
     //    unsafe { TODO: call ffi:gst_gl_shader_new_with_stages() }
     //}
 

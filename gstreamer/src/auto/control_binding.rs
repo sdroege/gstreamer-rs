@@ -32,7 +32,7 @@ pub trait ControlBindingExt: 'static {
 
     //#[doc(alias = "gst_control_binding_get_value_array")]
     //#[doc(alias = "get_value_array")]
-    //fn is_value_array(&self, timestamp: impl Into<Option<ClockTime>>, interval: impl Into<Option<ClockTime>>, values: /*Unimplemented*/&[&Fundamental: Pointer]) -> bool;
+    //fn is_value_array(&self, timestamp: impl Into<Option<ClockTime>>, interval: impl Into<Option<ClockTime>>, values: /*Unimplemented*/&[&Basic: Pointer]) -> bool;
 
     #[doc(alias = "gst_control_binding_is_disabled")]
     fn is_disabled(&self) -> bool;
@@ -61,7 +61,7 @@ impl<O: IsA<ControlBinding>> ControlBindingExt for O {
         }
     }
 
-    //fn is_value_array(&self, timestamp: impl Into<Option<ClockTime>>, interval: impl Into<Option<ClockTime>>, values: /*Unimplemented*/&[&Fundamental: Pointer]) -> bool {
+    //fn is_value_array(&self, timestamp: impl Into<Option<ClockTime>>, interval: impl Into<Option<ClockTime>>, values: /*Unimplemented*/&[&Basic: Pointer]) -> bool {
     //    unsafe { TODO: call ffi:gst_control_binding_get_value_array() }
     //}
 

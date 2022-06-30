@@ -60,7 +60,7 @@ pub trait PadExt: 'static {
     ) -> glib::GString;
 
     //#[doc(alias = "gst_pad_create_stream_id_printf")]
-    //fn create_stream_id_printf(&self, parent: &impl IsA<Element>, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> glib::GString;
+    //fn create_stream_id_printf(&self, parent: &impl IsA<Element>, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) -> glib::GString;
 
     //#[doc(alias = "gst_pad_create_stream_id_printf_valist")]
     //fn create_stream_id_printf_valist(&self, parent: &impl IsA<Element>, stream_id: Option<&str>, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> glib::GString;
@@ -82,7 +82,7 @@ pub trait PadExt: 'static {
 
     //#[doc(alias = "gst_pad_get_element_private")]
     //#[doc(alias = "get_element_private")]
-    //fn element_private(&self) -> /*Unimplemented*/Option<Fundamental: Pointer>;
+    //fn element_private(&self) -> /*Unimplemented*/Option<Basic: Pointer>;
 
     #[doc(alias = "gst_pad_get_last_flow_return")]
     #[doc(alias = "get_last_flow_return")]
@@ -194,7 +194,7 @@ pub trait PadExt: 'static {
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError>;
 
     //#[doc(alias = "gst_pad_set_element_private")]
-    //fn set_element_private(&self, priv_: /*Unimplemented*/Option<Fundamental: Pointer>);
+    //fn set_element_private(&self, priv_: /*Unimplemented*/Option<Basic: Pointer>);
 
     #[doc(alias = "gst_pad_set_offset")]
     fn set_offset(&self, offset: i64);
@@ -272,7 +272,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    //fn create_stream_id_printf(&self, parent: &impl IsA<Element>, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> glib::GString {
+    //fn create_stream_id_printf(&self, parent: &impl IsA<Element>, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) -> glib::GString {
     //    unsafe { TODO: call ffi:gst_pad_create_stream_id_printf() }
     //}
 
@@ -322,7 +322,7 @@ impl<O: IsA<Pad>> PadExt for O {
         unsafe { from_glib(ffi::gst_pad_get_direction(self.as_ref().to_glib_none().0)) }
     }
 
-    //fn element_private(&self) -> /*Unimplemented*/Option<Fundamental: Pointer> {
+    //fn element_private(&self) -> /*Unimplemented*/Option<Basic: Pointer> {
     //    unsafe { TODO: call ffi:gst_pad_get_element_private() }
     //}
 
@@ -540,7 +540,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    //fn set_element_private(&self, priv_: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //fn set_element_private(&self, priv_: /*Unimplemented*/Option<Basic: Pointer>) {
     //    unsafe { TODO: call ffi:gst_pad_set_element_private() }
     //}
 

@@ -90,7 +90,7 @@ pub trait GLDisplayExt: 'static {
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //#[doc(alias = "gst_gl_display_retrieve_window")]
-    //fn retrieve_window(&self, data: /*Unimplemented*/Option<Fundamental: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Fundamental: Pointer>, /*Unimplemented*/Option<Fundamental: Pointer>) -> i32) -> Option<GLWindow>;
+    //fn retrieve_window(&self, data: /*Unimplemented*/Option<Basic: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Basic: Pointer>, /*Unimplemented*/Option<Basic: Pointer>) -> i32) -> Option<GLWindow>;
 
     #[doc(alias = "create-context")]
     fn connect_create_context<F: Fn(&Self, &GLContext) -> GLContext + Send + Sync + 'static>(
@@ -198,7 +198,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //fn retrieve_window(&self, data: /*Unimplemented*/Option<Fundamental: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Fundamental: Pointer>, /*Unimplemented*/Option<Fundamental: Pointer>) -> i32) -> Option<GLWindow> {
+    //fn retrieve_window(&self, data: /*Unimplemented*/Option<Basic: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Basic: Pointer>, /*Unimplemented*/Option<Basic: Pointer>) -> i32) -> Option<GLWindow> {
     //    unsafe { TODO: call ffi:gst_gl_display_retrieve_window() }
     //}
 

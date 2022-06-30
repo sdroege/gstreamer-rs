@@ -89,7 +89,7 @@ pub trait RTSPStreamTransportExt: 'static {
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //#[doc(alias = "gst_rtsp_stream_transport_set_list_callbacks")]
-    //fn set_list_callbacks(&self, send_rtp_list: /*Unimplemented*/Fn(/*Ignored*/gst::BufferList, u8) -> bool, send_rtcp_list: /*Unimplemented*/Fn(/*Ignored*/gst::BufferList, u8) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
+    //fn set_list_callbacks(&self, send_rtp_list: /*Unimplemented*/Fn(/*Ignored*/gst::BufferList, u8) -> bool, send_rtcp_list: /*Unimplemented*/Fn(/*Ignored*/gst::BufferList, u8) -> bool, user_data: /*Unimplemented*/Option<Basic: Pointer>);
 
     #[doc(alias = "gst_rtsp_stream_transport_set_message_sent")]
     fn set_message_sent<P: Fn() + 'static>(&self, message_sent: P);
@@ -251,7 +251,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    //fn set_list_callbacks(&self, send_rtp_list: /*Unimplemented*/Fn(/*Ignored*/gst::BufferList, u8) -> bool, send_rtcp_list: /*Unimplemented*/Fn(/*Ignored*/gst::BufferList, u8) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //fn set_list_callbacks(&self, send_rtp_list: /*Unimplemented*/Fn(/*Ignored*/gst::BufferList, u8) -> bool, send_rtcp_list: /*Unimplemented*/Fn(/*Ignored*/gst::BufferList, u8) -> bool, user_data: /*Unimplemented*/Option<Basic: Pointer>) {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_transport_set_list_callbacks() }
     //}
 
