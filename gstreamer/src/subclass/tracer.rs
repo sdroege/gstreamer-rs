@@ -50,6 +50,18 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
     fn pad_pull_range_pre(&self, ts: u64, pad: &Pad, offset: u64, size: u32) {}
     fn pad_push_event_post(&self, ts: u64, pad: &Pad, success: bool) {}
     fn pad_push_event_pre(&self, ts: u64, pad: &Pad, event: &Event) {}
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    fn pad_chain_list_post(&self, ts: u64, pad: &Pad, result: FlowReturn) {}
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    fn pad_chain_list_pre(&self, ts: u64, pad: &Pad, buffer_list: &BufferList) {}
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    fn pad_chain_post(&self, ts: u64, pad: &Pad, result: FlowReturn) {}
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    fn pad_chain_pre(&self, ts: u64, pad: &Pad, buffer: &Buffer) {}
     fn pad_push_list_post(&self, ts: u64, pad: &Pad, result: FlowReturn) {}
     fn pad_push_list_pre(&self, ts: u64, pad: &Pad, buffer_list: &BufferList) {}
     fn pad_push_post(&self, ts: u64, pad: &Pad, result: FlowReturn) {}
@@ -250,6 +262,32 @@ define_tracer_hooks! {
         let p = Pad::from_glib_borrow(p);
         let b = Buffer::from_glib_borrow(b);
         this.pad_push_pre(ts, &p, &b)
+    };
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    PadChainListPost("pad-chain-list-post") = |this, ts, p: *mut ffi::GstPad, r: ffi::GstFlowReturn| {
+        let p = Pad::from_glib_borrow(p);
+        this.pad_chain_list_post(ts, &p, FlowReturn::from_glib(r))
+    };
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    PadChainListPre("pad-chain-list-pre") = |this, ts, p: *mut ffi::GstPad, bl: *mut ffi::GstBufferList| {
+        let p = Pad::from_glib_borrow(p);
+        let bl = BufferList::from_glib_borrow(bl);
+        this.pad_chain_list_pre(ts, &p, &bl)
+    };
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    PadChainPost("pad-chain-post") = |this, ts, p: *mut ffi::GstPad, r: ffi::GstFlowReturn| {
+        let p = Pad::from_glib_borrow(p);
+        this.pad_chain_post(ts, &p, FlowReturn::from_glib(r))
+    };
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    PadChainPre("pad-chain-pre") = |this, ts, p: *mut ffi::GstPad, b: *mut ffi::GstBuffer| {
+        let p = Pad::from_glib_borrow(p);
+        let b = Buffer::from_glib_borrow(b);
+        this.pad_chain_pre(ts, &p, &b)
     };
     PadQueryPost("pad-query-post") = |this, ts, p: *mut ffi::GstPad, q: *mut ffi::GstQuery, r: glib::ffi::gboolean| {
         let p = Pad::from_glib_borrow(p);
