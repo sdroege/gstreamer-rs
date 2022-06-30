@@ -196,6 +196,22 @@ pub fn guess_framerate(duration: gst::ClockTime) -> Option<gst::Fraction> {
     }
 }
 
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[doc(alias = "gst_video_is_common_aspect_ratio")]
+pub fn is_common_aspect_ratio(width: u32, height: u32, par: gst::Fraction) -> bool {
+    skip_assert_initialized!();
+
+    unsafe {
+        from_glib(ffi::gst_video_is_common_aspect_ratio(
+            width as i32,
+            height as i32,
+            par.numer(),
+            par.denom(),
+        ))
+    }
+}
+
 pub fn video_make_raw_caps(
     formats: &[crate::VideoFormat],
 ) -> gst::caps::Builder<gst::caps::NoFeature> {
