@@ -36,7 +36,12 @@ mod tests {
         gst::init().unwrap();
 
         check_serialize!(crate::DiscovererSerializeFlags::all(), "\"caps+tags+misc\"");
-        #[cfg(feature = "v1_20")]
+        #[cfg(feature = "v1_22")]
+        check_serialize!(
+            crate::PbUtilsCapsDescriptionFlags::all(),
+            "\"container+audio+video+image+subtitle+tag+generic+metadata\""
+        );
+        #[cfg(all(feature = "v1_20", not(feature = "v1_22")))]
         check_serialize!(
             crate::PbUtilsCapsDescriptionFlags::all(),
             "\"container+audio+video+image+subtitle+tag+generic\""
@@ -52,7 +57,13 @@ mod tests {
             crate::DiscovererSerializeFlags::all(),
             "\"caps+tags+misc\""
         );
-        #[cfg(feature = "v1_20")]
+        #[cfg(feature = "v1_22")]
+        check_deserialize!(
+            crate::PbUtilsCapsDescriptionFlags,
+            crate::PbUtilsCapsDescriptionFlags::all(),
+            "\"container+audio+video+image+subtitle+tag+generic+metadata\""
+        );
+        #[cfg(all(feature = "v1_20", not(feature = "v1_22")))]
         check_deserialize!(
             crate::PbUtilsCapsDescriptionFlags,
             crate::PbUtilsCapsDescriptionFlags::all(),
