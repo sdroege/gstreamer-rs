@@ -275,7 +275,7 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
         .instance_data::<super::base_src::InstanceData>(crate::BaseSrc::static_type())
         .unwrap();
 
-    let res = gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
         match PushSrcImpl::create(imp, wrap.unsafe_cast_ref(), buffer.as_deref_mut()) {
             Ok(CreateSuccess::NewBuffer(new_buffer)) => {
                 // Clear any pending buffer list
@@ -357,7 +357,5 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
             Err(err) => gst::FlowReturn::from(err),
         }
     })
-    .into_glib();
-
-    res
+    .into_glib()
 }

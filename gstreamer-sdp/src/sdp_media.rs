@@ -68,13 +68,13 @@ impl ops::DerefMut for SDPMedia {
 
 impl fmt::Debug for SDPMedia {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <SDPMediaRef as fmt::Debug>::fmt(&*self, f)
+        <SDPMediaRef as fmt::Debug>::fmt(self, f)
     }
 }
 
 impl fmt::Display for SDPMedia {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <SDPMediaRef as fmt::Display>::fmt(&*self, f)
+        <SDPMediaRef as fmt::Display>::fmt(self, f)
     }
 }
 
@@ -629,7 +629,7 @@ impl SDPMediaRef {
 
 impl Borrow<SDPMediaRef> for SDPMedia {
     fn borrow(&self) -> &SDPMediaRef {
-        &*self
+        self
     }
 }
 

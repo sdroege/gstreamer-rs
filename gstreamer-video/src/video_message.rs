@@ -177,7 +177,7 @@ impl NavigationEventMessage {
     }
 }
 
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Clone, PartialEq, Eq, Debug)]
 pub enum NavigationMessage {
     Event(NavigationEventMessage),
 }
@@ -197,12 +197,10 @@ impl NavigationMessage {
 
         match event_type {
             NavigationMessageType::Event => NavigationEventMessage::parse(msg).map(Self::Event),
-            _ => {
-                return Err(glib::bool_error!(
-                    "Unsupported navigation msg {:?}",
-                    event_type
-                ))
-            }
+            _ => Err(glib::bool_error!(
+                "Unsupported navigation msg {:?}",
+                event_type
+            )),
         }
     }
 }

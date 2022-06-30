@@ -9,6 +9,7 @@ use std::sync::Arc;
 use glib::prelude::*;
 use glib::translate::*;
 
+#[allow(clippy::type_complexity)]
 pub struct TaskBuilder<F: FnMut(&Task) + Send + 'static> {
     func: Box<(F, *mut ffi::GstTask)>,
     lock: Option<TaskLock>,
@@ -65,6 +66,7 @@ impl<F: FnMut(&Task) + Send + 'static> TaskBuilder<F> {
             callback(&from_glib_borrow(task));
         }
 
+        #[allow(clippy::type_complexity)]
         unsafe extern "C" fn destroy_callback(data: glib::ffi::gpointer) {
             let _callback: Box<Box<dyn FnMut(&Task) + Send + 'static>> =
                 Box::from_raw(data as *mut _);

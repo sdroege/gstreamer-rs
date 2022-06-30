@@ -61,13 +61,13 @@ impl ops::DerefMut for SDPMessage {
 
 impl fmt::Debug for SDPMessage {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <SDPMessageRef as fmt::Debug>::fmt(&*self, f)
+        <SDPMessageRef as fmt::Debug>::fmt(self, f)
     }
 }
 
 impl fmt::Display for SDPMessage {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <SDPMessageRef as fmt::Display>::fmt(&*self, f)
+        <SDPMessageRef as fmt::Display>::fmt(self, f)
     }
 }
 
@@ -935,7 +935,7 @@ impl SDPMessageRef {
 
 impl Borrow<SDPMessageRef> for SDPMessage {
     fn borrow(&self) -> &SDPMessageRef {
-        &*self
+        self
     }
 }
 

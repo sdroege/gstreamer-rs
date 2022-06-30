@@ -99,7 +99,7 @@ impl ParamSpecFraction {
     }
 
     pub fn upcast_ref(&self) -> &ParamSpec {
-        &*self
+        self
     }
 }
 
@@ -255,7 +255,7 @@ impl ParamSpecArray {
     }
 
     pub fn upcast_ref(&self) -> &ParamSpec {
-        &*self
+        self
     }
 }
 
