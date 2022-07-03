@@ -4,7 +4,6 @@ use crate::BaseParse;
 use crate::BaseParseFrame;
 use glib::prelude::*;
 use glib::translate::*;
-use gst::FormattedValue;
 use std::mem;
 
 pub trait BaseParseExtManual: 'static {
@@ -14,18 +13,18 @@ pub trait BaseParseExtManual: 'static {
     fn src_pad(&self) -> &gst::Pad;
 
     #[doc(alias = "gst_base_parse_set_duration")]
-    fn set_duration<V: Into<gst::GenericFormattedValue>>(&self, duration: V, interval: u32);
+    fn set_duration(&self, duration: impl gst::FormattedValue, interval: u32);
     #[doc(alias = "gst_base_parse_set_frame_rate")]
     fn set_frame_rate(&self, fps: gst::Fraction, lead_in: u32, lead_out: u32);
 
     #[doc(alias = "gst_base_parse_convert_default")]
-    fn convert_default<V: Into<gst::GenericFormattedValue>, U: gst::SpecificFormattedValue>(
+    fn convert_default<U: gst::SpecificFormattedValueFullRange>(
         &self,
-        src_val: V,
+        src_val: impl gst::FormattedValue,
     ) -> Option<U>;
-    fn convert_default_generic<V: Into<gst::GenericFormattedValue>>(
+    fn convert_default_generic(
         &self,
-        src_val: V,
+        src_val: impl gst::FormattedValue,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue>;
 
@@ -52,13 +51,12 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         }
     }
 
-    fn set_duration<V: Into<gst::GenericFormattedValue>>(&self, duration: V, interval: u32) {
-        let duration = duration.into();
+    fn set_duration(&self, duration: impl gst::FormattedValue, interval: u32) {
         unsafe {
             ffi::gst_base_parse_set_duration(
                 self.as_ref().to_glib_none().0,
                 duration.format().into_glib(),
-                duration.value(),
+                duration.into_raw_value(),
                 interval as i32,
             );
         }
@@ -77,11 +75,10 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         }
     }
 
-    fn convert_default<V: Into<gst::GenericFormattedValue>, U: gst::SpecificFormattedValue>(
+    fn convert_default<U: gst::SpecificFormattedValueFullRange>(
         &self,
-        src_val: V,
+        src_val: impl gst::FormattedValue,
     ) -> Option<U> {
-        let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_base_parse_convert_default(
@@ -99,12 +96,11 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         }
     }
 
-    fn convert_default_generic<V: Into<gst::GenericFormattedValue>>(
+    fn convert_default_generic(
         &self,
-        src_val: V,
+        src_val: impl gst::FormattedValue,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
-        let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_base_parse_convert_default(

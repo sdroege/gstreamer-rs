@@ -55,7 +55,7 @@ pub trait AggregatorExtManual: 'static {
     #[doc(alias = "gst_aggregator_update_segment")]
     fn update_segment<F: gst::FormattedValueIntrinsic>(&self, segment: &gst::FormattedSegment<F>);
 
-    fn set_position<V: FormattedValue>(&self, position: V);
+    fn set_position(&self, position: impl FormattedValue);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -167,7 +167,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         }
     }
 
-    fn set_position<V: FormattedValue>(&self, position: V) {
+    fn set_position(&self, position: impl FormattedValue) {
         unsafe {
             let ptr: *mut ffi::GstAggregator = self.as_ref().to_glib_none().0;
             let ptr = &mut *ptr;

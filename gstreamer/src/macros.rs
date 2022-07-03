@@ -375,6 +375,8 @@ macro_rules! impl_common_ops_for_newtype_uint(
 macro_rules! impl_format_value_traits(
     ($name:ident, $format:ident, $format_value:ident, $inner_type:ty) => {
         impl FormattedValue for Option<$name> {
+            type FullRange = Option<$name>;
+
             fn default_format() -> Format {
                 Format::$format
             }
@@ -383,13 +385,15 @@ macro_rules! impl_format_value_traits(
                 Format::$format
             }
 
+            unsafe fn into_raw_value(self) -> i64 {
+                IntoGlib::into_glib(self) as i64
+            }
+        }
+
+        impl FormattedValueFullRange for Option<$name> {
             unsafe fn from_raw(format: Format, value: i64) -> Option<$name> {
                 debug_assert_eq!(format, Format::$format);
                 FromGlib::from_glib(value as u64)
-            }
-
-            unsafe fn into_raw_value(self) -> i64 {
-                IntoGlib::into_glib(self) as i64
             }
         }
 
@@ -406,10 +410,27 @@ macro_rules! impl_format_value_traits(
                 Self::$format_value(Some(v))
             }
         }
+        impl FormattedValue for $name {
+            type FullRange = Option<$name>;
 
-        impl FormattedValueIntrinsic for $name {
-            type FormattedValueType = Option<$name>;
+            fn default_format() -> Format {
+                Format::$format
+            }
+
+            fn format(&self) -> Format {
+                Format::$format
+            }
+
+            unsafe fn into_raw_value(self) -> i64 {
+                IntoGlib::into_glib(self) as i64
+            }
         }
+
+        impl SpecificFormattedValue for Option<$name> {}
+        impl SpecificFormattedValueFullRange for Option<$name> {}
+        impl SpecificFormattedValue for $name {}
+        impl FormattedValueIntrinsic for $name {}
+        impl SpecificFormattedValueIntrinsic for $name {}
 
         impl TryFrom<GenericFormattedValue> for Option<$name> {
             type Error = TryFromGenericFormattedValueError;
@@ -441,9 +462,6 @@ macro_rules! impl_format_value_traits(
                 <$name as TryFromGlib<u64>>::try_from_glib(val as u64)
             }
         }
-
-        impl SpecificFormattedValue for Option<$name> {}
-        impl SpecificFormattedValueIntrinsic for $name {}
 
         impl ops::Deref for $name {
             type Target = $inner_type;

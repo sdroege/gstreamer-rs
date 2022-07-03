@@ -6,9 +6,6 @@ use crate::Event;
 use crate::FlowError;
 use crate::FlowReturn;
 use crate::FlowSuccess;
-use crate::Format;
-use crate::FormattedValue;
-use crate::GenericFormattedValue;
 use crate::LoggableError;
 use crate::Pad;
 use crate::PadFlags;
@@ -17,7 +14,10 @@ use crate::PadProbeType;
 use crate::Query;
 use crate::QueryRef;
 use crate::StaticPadTemplate;
-use crate::{SpecificFormattedValue, SpecificFormattedValueIntrinsic};
+use crate::{
+    Format, FormattedValue, GenericFormattedValue, SpecificFormattedValueFullRange,
+    SpecificFormattedValueIntrinsic,
+};
 
 use std::mem;
 use std::num::NonZeroU64;
@@ -272,14 +272,14 @@ pub trait PadExtManual: 'static {
     fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> Result<(), glib::BoolError>;
 
     #[doc(alias = "gst_pad_peer_query_convert")]
-    fn peer_query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
+    fn peer_query_convert<U: SpecificFormattedValueFullRange>(
         &self,
-        src_val: V,
+        src_val: impl FormattedValue,
     ) -> Option<U>;
     #[doc(alias = "gst_pad_peer_query_convert")]
-    fn peer_query_convert_generic<V: Into<GenericFormattedValue>>(
+    fn peer_query_convert_generic(
         &self,
-        src_val: V,
+        src_val: impl FormattedValue,
         dest_format: Format,
     ) -> Option<GenericFormattedValue>;
 
@@ -294,14 +294,14 @@ pub trait PadExtManual: 'static {
     fn peer_query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_pad_query_convert")]
-    fn query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
+    fn query_convert<U: SpecificFormattedValueFullRange>(
         &self,
-        src_val: V,
+        src_val: impl FormattedValue,
     ) -> Option<U>;
     #[doc(alias = "gst_pad_query_convert")]
-    fn query_convert_generic<V: Into<GenericFormattedValue>>(
+    fn query_convert_generic(
         &self,
-        src_val: V,
+        src_val: impl FormattedValue,
         dest_format: Format,
     ) -> Option<GenericFormattedValue>;
 
@@ -781,11 +781,10 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn peer_query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
+    fn peer_query_convert<U: SpecificFormattedValueFullRange>(
         &self,
-        src_val: V,
+        src_val: impl FormattedValue,
     ) -> Option<U> {
-        let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_convert(
@@ -803,12 +802,11 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn peer_query_convert_generic<V: Into<GenericFormattedValue>>(
+    fn peer_query_convert_generic(
         &self,
-        src_val: V,
+        src_val: impl FormattedValue,
         dest_format: Format,
     ) -> Option<GenericFormattedValue> {
-        let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_convert(
@@ -834,7 +832,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_duration(
                 self.as_ref().to_glib_none().0,
-                T::FormattedValueType::default_format().into_glib(),
+                T::default_format().into_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
@@ -866,7 +864,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_position(
                 self.as_ref().to_glib_none().0,
-                T::FormattedValueType::default_format().into_glib(),
+                T::default_format().into_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {
@@ -893,12 +891,10 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
+    fn query_convert<U: SpecificFormattedValueFullRange>(
         &self,
-        src_val: V,
+        src_val: impl FormattedValue,
     ) -> Option<U> {
-        let src_val = src_val.into();
-
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_convert(
@@ -916,19 +912,17 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn query_convert_generic<V: Into<GenericFormattedValue>>(
+    fn query_convert_generic(
         &self,
-        src_val: V,
+        src_val: impl FormattedValue,
         dest_format: Format,
     ) -> Option<GenericFormattedValue> {
-        let src_val = src_val.into();
-
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_convert(
                 self.as_ref().to_glib_none().0,
                 src_val.format().into_glib(),
-                src_val.value(),
+                src_val.into_raw_value(),
                 dest_format.into_glib(),
                 dest_val.as_mut_ptr(),
             ));
@@ -948,7 +942,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_duration(
                 self.as_ref().to_glib_none().0,
-                T::FormattedValueType::default_format().into_glib(),
+                T::default_format().into_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
@@ -980,7 +974,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_position(
                 self.as_ref().to_glib_none().0,
-                T::FormattedValueType::default_format().into_glib(),
+                T::default_format().into_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {

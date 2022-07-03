@@ -36,10 +36,10 @@ pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
         self.parent_handle_frame(element, frame)
     }
 
-    fn convert<V: Into<gst::GenericFormattedValue>>(
+    fn convert(
         &self,
         element: &Self::Type,
-        src_val: V,
+        src_val: impl gst::FormattedValue,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
         self.parent_convert(element, src_val, dest_format)
@@ -63,10 +63,10 @@ pub trait BaseParseImplExt: ObjectSubclass {
         frame: BaseParseFrame,
     ) -> Result<(gst::FlowSuccess, u32), gst::FlowError>;
 
-    fn parent_convert<V: Into<gst::GenericFormattedValue>>(
+    fn parent_convert(
         &self,
         element: &Self::Type,
-        src_val: V,
+        src_val: impl gst::FormattedValue,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue>;
 }
@@ -159,16 +159,15 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
         }
     }
 
-    fn parent_convert<V: Into<gst::GenericFormattedValue>>(
+    fn parent_convert(
         &self,
         element: &Self::Type,
-        src_val: V,
+        src_val: impl gst::FormattedValue,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
-            let src_val = src_val.into();
             let res = (*parent_class).convert.map(|f| {
                 let mut dest_val = mem::MaybeUninit::uninit();
 

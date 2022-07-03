@@ -8,16 +8,13 @@ use crate::prelude::*;
 use crate::ClockTime;
 use crate::ElementFlags;
 use crate::Event;
-use crate::Format;
-use crate::FormattedValue;
-use crate::GenericFormattedValue;
 use crate::Pad;
 use crate::PadTemplate;
 use crate::Plugin;
 use crate::QueryRef;
 use crate::Rank;
-use crate::SpecificFormattedValue;
 use crate::State;
+use crate::{Format, FormattedValue, GenericFormattedValue, SpecificFormattedValueFullRange};
 
 use glib::translate::*;
 
@@ -208,13 +205,13 @@ pub trait ElementExtManual: 'static {
     fn remove_property_notify_watch(&self, watch_id: NotifyWatchId);
 
     #[doc(alias = "gst_element_query_convert")]
-    fn query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
+    fn query_convert<U: SpecificFormattedValueFullRange>(
         &self,
-        src_val: V,
+        src_val: impl FormattedValue,
     ) -> Option<U>;
-    fn query_convert_generic<V: Into<GenericFormattedValue>>(
+    fn query_convert_generic(
         &self,
-        src_val: V,
+        src_val: impl FormattedValue,
         dest_format: Format,
     ) -> Option<GenericFormattedValue>;
 
@@ -229,7 +226,7 @@ pub trait ElementExtManual: 'static {
     fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_element_seek")]
-    fn seek<V: Into<GenericFormattedValue>>(
+    fn seek<V: FormattedValue>(
         &self,
         rate: f64,
         flags: crate::SeekFlags,
@@ -239,10 +236,10 @@ pub trait ElementExtManual: 'static {
         stop: V,
     ) -> Result<(), glib::error::BoolError>;
     #[doc(alias = "gst_element_seek_simple")]
-    fn seek_simple<V: Into<GenericFormattedValue>>(
+    fn seek_simple(
         &self,
         seek_flags: crate::SeekFlags,
-        seek_pos: V,
+        seek_pos: impl FormattedValue,
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_element_call_async")]
@@ -553,11 +550,10 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
+    fn query_convert<U: SpecificFormattedValueFullRange>(
         &self,
-        src_val: V,
+        src_val: impl FormattedValue,
     ) -> Option<U> {
-        let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_convert(
@@ -575,18 +571,17 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn query_convert_generic<V: Into<GenericFormattedValue>>(
+    fn query_convert_generic(
         &self,
-        src_val: V,
+        src_val: impl FormattedValue,
         dest_format: Format,
     ) -> Option<GenericFormattedValue> {
-        let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_convert(
                 self.as_ref().to_glib_none().0,
                 src_val.format().into_glib(),
-                src_val.value(),
+                src_val.into_raw_value(),
                 dest_format.into_glib(),
                 dest_val.as_mut_ptr(),
             ));
@@ -606,7 +601,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_duration(
                 self.as_ref().to_glib_none().0,
-                T::FormattedValueType::default_format().into_glib(),
+                T::default_format().into_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
@@ -638,7 +633,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_position(
                 self.as_ref().to_glib_none().0,
-                T::FormattedValueType::default_format().into_glib(),
+                T::default_format().into_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {
@@ -665,7 +660,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn seek<V: Into<GenericFormattedValue>>(
+    fn seek<V: FormattedValue>(
         &self,
         rate: f64,
         flags: crate::SeekFlags,
@@ -674,9 +669,6 @@ impl<O: IsA<Element>> ElementExtManual for O {
         stop_type: crate::SeekType,
         stop: V,
     ) -> Result<(), glib::error::BoolError> {
-        let start = start.into();
-        let stop = stop.into();
-
         assert_eq!(stop.format(), start.format());
 
         unsafe {
@@ -687,28 +679,27 @@ impl<O: IsA<Element>> ElementExtManual for O {
                     start.format().into_glib(),
                     flags.into_glib(),
                     start_type.into_glib(),
-                    start.value(),
+                    start.into_raw_value(),
                     stop_type.into_glib(),
-                    stop.value(),
+                    stop.into_raw_value(),
                 ),
                 "Failed to seek",
             )
         }
     }
 
-    fn seek_simple<V: Into<GenericFormattedValue>>(
+    fn seek_simple(
         &self,
         seek_flags: crate::SeekFlags,
-        seek_pos: V,
+        seek_pos: impl FormattedValue,
     ) -> Result<(), glib::error::BoolError> {
-        let seek_pos = seek_pos.into();
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_element_seek_simple(
                     self.as_ref().to_glib_none().0,
                     seek_pos.format().into_glib(),
                     seek_flags.into_glib(),
-                    seek_pos.value(),
+                    seek_pos.into_raw_value(),
                 ),
                 "Failed to seek",
             )

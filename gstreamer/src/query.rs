@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use crate::structure::*;
-use crate::GenericFormattedValue;
+use crate::{FormattedValue, GenericFormattedValue};
 
 use std::borrow::{Borrow, BorrowMut};
 use std::ffi::CStr;
@@ -319,11 +319,14 @@ impl Position {
     }
 
     #[doc(alias = "gst_query_set_position")]
-    pub fn set<V: Into<GenericFormattedValue>>(&mut self, pos: V) {
-        let pos = pos.into();
+    pub fn set(&mut self, pos: impl FormattedValue) {
         assert_eq!(pos.format(), self.format());
         unsafe {
-            ffi::gst_query_set_position(self.as_mut_ptr(), pos.format().into_glib(), pos.value());
+            ffi::gst_query_set_position(
+                self.as_mut_ptr(),
+                pos.format().into_glib(),
+                pos.into_raw_value(),
+            );
         }
     }
 }
@@ -364,11 +367,14 @@ impl Duration {
     }
 
     #[doc(alias = "gst_query_set_duration")]
-    pub fn set<V: Into<GenericFormattedValue>>(&mut self, dur: V) {
-        let dur = dur.into();
+    pub fn set(&mut self, dur: impl FormattedValue) {
         assert_eq!(dur.format(), self.format());
         unsafe {
-            ffi::gst_query_set_duration(self.as_mut_ptr(), dur.format().into_glib(), dur.value());
+            ffi::gst_query_set_duration(
+                self.as_mut_ptr(),
+                dur.format().into_glib(),
+                dur.into_raw_value(),
+            );
         }
     }
 }
@@ -482,10 +488,7 @@ impl Seeking {
     }
 
     #[doc(alias = "gst_query_set_seeking")]
-    pub fn set<V: Into<GenericFormattedValue>>(&mut self, seekable: bool, start: V, end: V) {
-        let start = start.into();
-        let end = end.into();
-
+    pub fn set<V: FormattedValue>(&mut self, seekable: bool, start: V, end: V) {
         assert_eq!(self.format(), start.format());
         assert_eq!(start.format(), end.format());
 
@@ -494,8 +497,8 @@ impl Seeking {
                 self.as_mut_ptr(),
                 start.format().into_glib(),
                 seekable.into_glib(),
-                start.value(),
-                end.value(),
+                start.into_raw_value(),
+                end.into_raw_value(),
             );
         }
     }
@@ -553,10 +556,7 @@ impl Segment {
     }
 
     #[doc(alias = "gst_query_set_segment")]
-    pub fn set<V: Into<GenericFormattedValue>>(&mut self, rate: f64, start: V, stop: V) {
-        let start = start.into();
-        let stop = stop.into();
-
+    pub fn set<V: FormattedValue>(&mut self, rate: f64, start: V, stop: V) {
         assert_eq!(start.format(), stop.format());
 
         unsafe {
@@ -564,8 +564,8 @@ impl Segment {
                 self.as_mut_ptr(),
                 rate,
                 start.format().into_glib(),
-                start.value(),
-                stop.value(),
+                start.into_raw_value(),
+                stop.into_raw_value(),
             );
         }
     }
@@ -574,13 +574,12 @@ impl Segment {
 declare_concrete_query!(Convert, T);
 impl Convert<Query> {
     #[doc(alias = "gst_query_new_convert")]
-    pub fn new<V: Into<GenericFormattedValue>>(value: V, dest_fmt: crate::Format) -> Self {
+    pub fn new(value: impl FormattedValue, dest_fmt: crate::Format) -> Self {
         assert_initialized_main_thread!();
-        let value = value.into();
         unsafe {
             Self(from_glib_full(ffi::gst_query_new_convert(
                 value.format().into_glib(),
-                value.value(),
+                value.into_raw_value(),
                 dest_fmt.into_glib(),
             )))
         }
@@ -633,17 +632,14 @@ impl Convert {
     }
 
     #[doc(alias = "gst_query_set_convert")]
-    pub fn set<V: Into<GenericFormattedValue>>(&mut self, src: V, dest: V) {
-        let src = src.into();
-        let dest = dest.into();
-
+    pub fn set(&mut self, src: impl FormattedValue, dest: impl FormattedValue) {
         unsafe {
             ffi::gst_query_set_convert(
                 self.as_mut_ptr(),
                 src.format().into_glib(),
-                src.value(),
+                src.into_raw_value(),
                 dest.format().into_glib(),
-                dest.value(),
+                dest.into_raw_value(),
             );
         }
     }
@@ -840,15 +836,7 @@ impl Buffering {
     }
 
     #[doc(alias = "gst_query_set_buffering_range")]
-    pub fn set_range<V: Into<GenericFormattedValue>>(
-        &mut self,
-        start: V,
-        stop: V,
-        estimated_total: i64,
-    ) {
-        let start = start.into();
-        let stop = stop.into();
-
+    pub fn set_range<V: FormattedValue>(&mut self, start: V, stop: V, estimated_total: i64) {
         assert_eq!(self.format(), start.format());
         assert_eq!(start.format(), stop.format());
 
@@ -856,8 +844,8 @@ impl Buffering {
             ffi::gst_query_set_buffering_range(
                 self.as_mut_ptr(),
                 start.format().into_glib(),
-                start.value(),
-                stop.value(),
+                start.into_raw_value(),
+                stop.into_raw_value(),
                 estimated_total,
             );
         }
@@ -884,19 +872,18 @@ impl Buffering {
     }
 
     #[doc(alias = "gst_query_add_buffering_range")]
-    pub fn add_buffering_ranges<V: Into<GenericFormattedValue> + Copy>(
-        &mut self,
-        ranges: &[(V, V)],
-    ) {
+    pub fn add_buffering_ranges<V: FormattedValue + Copy>(&mut self, ranges: &[(V, V)]) {
         unsafe {
             let fmt = self.format();
 
             for &(start, stop) in ranges {
-                let start = start.into();
-                let stop = stop.into();
                 assert_eq!(start.format(), fmt);
                 assert_eq!(stop.format(), fmt);
-                ffi::gst_query_add_buffering_range(self.as_mut_ptr(), start.value(), stop.value());
+                ffi::gst_query_add_buffering_range(
+                    self.as_mut_ptr(),
+                    start.into_raw_value(),
+                    stop.into_raw_value(),
+                );
             }
         }
     }

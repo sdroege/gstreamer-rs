@@ -673,32 +673,24 @@ declare_concrete_message!(StepDone, T);
 impl StepDone {
     #[doc(alias = "gst_message_new_step_done")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new<V: Into<GenericFormattedValue>>(
-        amount: V,
+    pub fn new(
+        amount: impl FormattedValue,
         rate: f64,
         flush: bool,
         intermediate: bool,
-        duration: V,
+        duration: impl Into<Option<crate::ClockTime>>,
         eos: bool,
     ) -> Message {
         skip_assert_initialized!();
-        Self::builder(
-            amount.into(),
-            rate,
-            flush,
-            intermediate,
-            duration.into(),
-            eos,
-        )
-        .build()
+        Self::builder(amount, rate, flush, intermediate, duration, eos).build()
     }
 
-    pub fn builder<'a, V: Into<GenericFormattedValue>>(
-        amount: V,
+    pub fn builder<'a>(
+        amount: impl FormattedValue,
         rate: f64,
         flush: bool,
         intermediate: bool,
-        duration: V,
+        duration: impl Into<Option<crate::ClockTime>>,
         eos: bool,
     ) -> StepDoneBuilder<'a> {
         assert_initialized_main_thread!();
@@ -720,7 +712,7 @@ impl StepDone {
         f64,
         bool,
         bool,
-        GenericFormattedValue,
+        Option<crate::ClockTime>,
         bool,
     ) {
         unsafe {
@@ -751,10 +743,7 @@ impl StepDone {
                 rate.assume_init(),
                 from_glib(flush.assume_init()),
                 from_glib(intermediate.assume_init()),
-                GenericFormattedValue::new(
-                    from_glib(format.assume_init()),
-                    duration.assume_init() as i64,
-                ),
+                from_glib(duration.assume_init()),
                 from_glib(eos.assume_init()),
             )
         }
@@ -970,15 +959,14 @@ declare_concrete_message!(SegmentStart, T);
 impl SegmentStart {
     #[doc(alias = "gst_message_new_segment_start")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new<V: Into<GenericFormattedValue>>(position: V) -> Message {
+    pub fn new(position: impl FormattedValue) -> Message {
         skip_assert_initialized!();
         Self::builder(position).build()
     }
 
-    pub fn builder<'a, V: Into<GenericFormattedValue>>(position: V) -> SegmentStartBuilder<'a> {
+    pub fn builder<'a>(position: impl FormattedValue) -> SegmentStartBuilder<'a> {
         assert_initialized_main_thread!();
-        let position = position.into();
-        SegmentStartBuilder::new(position)
+        SegmentStartBuilder::new(position.into())
     }
 
     #[doc(alias = "gst_message_parse_segment_start")]
@@ -1002,15 +990,14 @@ declare_concrete_message!(SegmentDone, T);
 impl SegmentDone {
     #[doc(alias = "gst_message_new_segment_done")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new<V: Into<GenericFormattedValue>>(position: V) -> Message {
+    pub fn new(position: impl FormattedValue) -> Message {
         skip_assert_initialized!();
         Self::builder(position).build()
     }
 
-    pub fn builder<'a, V: Into<GenericFormattedValue>>(position: V) -> SegmentDoneBuilder<'a> {
+    pub fn builder<'a>(position: impl FormattedValue) -> SegmentDoneBuilder<'a> {
         assert_initialized_main_thread!();
-        let position = position.into();
-        SegmentDoneBuilder::new(position)
+        SegmentDoneBuilder::new(position.into())
     }
 
     #[doc(alias = "gst_message_parse_segment_done")]
@@ -1133,20 +1120,20 @@ declare_concrete_message!(StepStart, T);
 impl StepStart {
     #[doc(alias = "gst_message_new_step_start")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new<V: Into<GenericFormattedValue>>(
+    pub fn new(
         active: bool,
-        amount: V,
+        amount: impl FormattedValue,
         rate: f64,
         flush: bool,
         intermediate: bool,
     ) -> Message {
         skip_assert_initialized!();
-        Self::builder(active, amount.into(), rate, flush, intermediate).build()
+        Self::builder(active, amount, rate, flush, intermediate).build()
     }
 
-    pub fn builder<'a, V: Into<GenericFormattedValue>>(
+    pub fn builder<'a>(
         active: bool,
-        amount: V,
+        amount: impl FormattedValue,
         rate: f64,
         flush: bool,
         intermediate: bool,
@@ -2168,7 +2155,7 @@ pub struct StepDoneBuilder<'a> {
     rate: f64,
     flush: bool,
     intermediate: bool,
-    duration: GenericFormattedValue,
+    duration: Option<crate::ClockTime>,
     eos: bool,
 }
 
@@ -2178,7 +2165,7 @@ impl<'a> StepDoneBuilder<'a> {
         rate: f64,
         flush: bool,
         intermediate: bool,
-        duration: GenericFormattedValue,
+        duration: Option<crate::ClockTime>,
         eos: bool,
     ) -> Self {
         skip_assert_initialized!();
@@ -2201,7 +2188,7 @@ impl<'a> StepDoneBuilder<'a> {
         s.rate,
         s.flush.into_glib(),
         s.intermediate.into_glib(),
-        s.duration.value() as u64,
+        s.duration.into_raw_value() as u64,
         s.eos.into_glib(),
     ));
 }
@@ -2613,12 +2600,10 @@ impl<'a> QosBuilder<'a> {
         }
     }
 
-    pub fn stats<V: Into<GenericFormattedValue>>(self, processed: V, dropped: V) -> Self {
-        let processed = processed.into();
-        let dropped = dropped.into();
+    pub fn stats<V: FormattedValue>(self, processed: V, dropped: V) -> Self {
         assert_eq!(processed.format(), dropped.format());
         Self {
-            stats: Some((processed, dropped)),
+            stats: Some((processed.into(), dropped.into())),
             ..self
         }
     }

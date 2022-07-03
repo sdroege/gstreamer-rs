@@ -100,7 +100,7 @@ impl<'de, T: SpecificFormattedValueIntrinsic> Deserialize<'de> for FormattedSegm
                 de::Error::custom(format!(
                     "failed to convert segment with format {:?} to {:?}",
                     segment.format(),
-                    T::FormattedValueType::default_format(),
+                    T::default_format(),
                 ))
             })
         })

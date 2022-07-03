@@ -23,21 +23,19 @@ unsafe impl Sync for AudioClippingMeta {}
 
 impl AudioClippingMeta {
     #[doc(alias = "gst_buffer_add_audio_clipping_meta")]
-    pub fn add<V: Into<gst::GenericFormattedValue>>(
+    pub fn add<V: gst::FormattedValue>(
         buffer: &mut gst::BufferRef,
         start: V,
         end: V,
     ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
         skip_assert_initialized!();
-        let start = start.into();
-        let end = end.into();
         assert_eq!(start.format(), end.format());
         unsafe {
             let meta = ffi::gst_buffer_add_audio_clipping_meta(
                 buffer.as_mut_ptr(),
                 start.format().into_glib(),
-                start.value() as u64,
-                end.value() as u64,
+                start.into_raw_value() as u64,
+                end.into_raw_value() as u64,
             );
 
             Self::from_mut_ptr(buffer, meta)

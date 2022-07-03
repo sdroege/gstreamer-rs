@@ -226,8 +226,8 @@ mod typefind_factory;
 
 pub mod format;
 pub use crate::format::{
-    FormattedValue, FormattedValueIntrinsic, GenericFormattedValue, SpecificFormattedValue,
-    SpecificFormattedValueIntrinsic,
+    FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic, GenericFormattedValue,
+    SpecificFormattedValue, SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic,
 };
 #[cfg(feature = "ser_de")]
 mod format_serde;
@@ -344,8 +344,8 @@ pub mod prelude {
     pub use muldiv::MulDiv;
 
     pub use crate::format::{
-        FormattedValue, FormattedValueIntrinsic, SpecificFormattedValue,
-        SpecificFormattedValueIntrinsic,
+        FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic, SpecificFormattedValue,
+        SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic,
     };
     pub use crate::utils::Displayable;
 

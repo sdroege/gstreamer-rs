@@ -730,13 +730,11 @@ impl VideoInfo {
     }
 
     #[doc(alias = "gst_video_info_convert")]
-    pub fn convert<V: Into<gst::GenericFormattedValue>, U: gst::SpecificFormattedValue>(
+    pub fn convert<U: gst::SpecificFormattedValueFullRange>(
         &self,
-        src_val: V,
+        src_val: impl gst::FormattedValue,
     ) -> Option<U> {
         skip_assert_initialized!();
-
-        let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
             if from_glib(ffi::gst_video_info_convert(
@@ -753,14 +751,12 @@ impl VideoInfo {
         }
     }
 
-    pub fn convert_generic<V: Into<gst::GenericFormattedValue>>(
+    pub fn convert_generic(
         &self,
-        src_val: V,
+        src_val: impl gst::FormattedValue,
         dest_fmt: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
         skip_assert_initialized!();
-
-        let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
             if from_glib(ffi::gst_video_info_convert(

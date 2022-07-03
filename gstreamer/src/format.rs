@@ -77,13 +77,29 @@ impl fmt::Display for GenericFormattedValue {
 pub struct TryFromGenericFormattedValueError(());
 
 pub trait FormattedValue: Copy + Clone + Sized + Into<GenericFormattedValue> + 'static {
+    // rustdoc-stripper-ignore-next
+    /// Type which allows building a `FormattedValue` of this format from any raw value.
+    type FullRange: FormattedValueFullRange + From<Self>;
+
     #[doc(alias = "get_default_format")]
     fn default_format() -> Format;
+
     #[doc(alias = "get_format")]
     fn format(&self) -> Format;
 
-    unsafe fn from_raw(format: Format, value: i64) -> Self;
     unsafe fn into_raw_value(self) -> i64;
+}
+
+// rustdoc-stripper-ignore-next
+/// A [`FormattedValue`] which can be built from any raw value.
+///
+/// # Examples:
+///
+/// - `GenericFormattedValue` is the `FormattedValueFullRange` type for `GenericFormattedValue`.
+/// - `Undefined` is the `FormattedValueFullRange` type for `Undefined`.
+/// - `Option<Percent>` is the `FormattedValueFullRange` type for `Percent`.
+pub trait FormattedValueFullRange: FormattedValue + TryFrom<GenericFormattedValue> {
+    unsafe fn from_raw(format: Format, value: i64) -> Self;
 }
 
 // rustdoc-stripper-ignore-next
@@ -94,11 +110,11 @@ pub trait FormattedValue: Copy + Clone + Sized + Into<GenericFormattedValue> + '
 /// - `GenericFormattedValue` is the intrinsic type for `GenericFormattedValue`.
 /// - `Undefined` is the intrinsic type for `Undefined`.
 /// - `Bytes` is the intrinsic type for `Option<Bytes>`.
-pub trait FormattedValueIntrinsic: Copy + Clone + Sized + 'static {
-    type FormattedValueType: FormattedValue;
-}
+pub trait FormattedValueIntrinsic: FormattedValue {}
 
-pub trait SpecificFormattedValue: FormattedValue + TryFrom<GenericFormattedValue> {}
+pub trait SpecificFormattedValue: FormattedValue {}
+
+pub trait SpecificFormattedValueFullRange: FormattedValueFullRange {}
 
 // rustdoc-stripper-ignore-next
 /// A trait implemented on the intrinsic type of a `SpecificFormattedValue`.
@@ -110,6 +126,8 @@ pub trait SpecificFormattedValue: FormattedValue + TryFrom<GenericFormattedValue
 pub trait SpecificFormattedValueIntrinsic: TryFromGlib<i64> + FormattedValueIntrinsic {}
 
 impl FormattedValue for GenericFormattedValue {
+    type FullRange = GenericFormattedValue;
+
     fn default_format() -> Format {
         Format::Undefined
     }
@@ -118,12 +136,14 @@ impl FormattedValue for GenericFormattedValue {
         self.format()
     }
 
-    unsafe fn from_raw(format: Format, value: i64) -> Self {
-        GenericFormattedValue::new(format, value)
-    }
-
     unsafe fn into_raw_value(self) -> i64 {
         self.value()
+    }
+}
+
+impl FormattedValueFullRange for GenericFormattedValue {
+    unsafe fn from_raw(format: Format, value: i64) -> Self {
+        GenericFormattedValue::new(format, value)
     }
 }
 
@@ -136,7 +156,9 @@ impl GenericFormattedValue {
             Format::Bytes => Self::Bytes(unsafe { FromGlib::from_glib(value as u64) }),
             Format::Time => Self::Time(unsafe { FromGlib::from_glib(value as u64) }),
             Format::Buffers => Self::Buffers(unsafe { FromGlib::from_glib(value as u64) }),
-            Format::Percent => Self::Percent(unsafe { FormattedValue::from_raw(format, value) }),
+            Format::Percent => {
+                Self::Percent(unsafe { FormattedValueFullRange::from_raw(format, value) })
+            }
             Format::__Unknown(_) => Self::Other(format, value),
         }
     }
@@ -170,9 +192,7 @@ impl GenericFormattedValue {
     }
 }
 
-impl FormattedValueIntrinsic for GenericFormattedValue {
-    type FormattedValueType = GenericFormattedValue;
-}
+impl FormattedValueIntrinsic for GenericFormattedValue {}
 
 impl_common_ops_for_newtype_uint!(Default, u64);
 impl_format_value_traits!(Default, Default, Default, u64);
@@ -192,6 +212,8 @@ option_glib_newtype_from_to!(Buffers, Buffers::OFFSET_NONE);
 option_glib_newtype_display!(Buffers, "buffers");
 
 impl FormattedValue for Undefined {
+    type FullRange = Undefined;
+
     fn default_format() -> Format {
         Format::Undefined
     }
@@ -200,13 +222,15 @@ impl FormattedValue for Undefined {
         Format::Undefined
     }
 
+    unsafe fn into_raw_value(self) -> i64 {
+        self.0
+    }
+}
+
+impl FormattedValueFullRange for Undefined {
     unsafe fn from_raw(format: Format, value: i64) -> Self {
         debug_assert_eq!(format, Format::Undefined);
         Undefined(value)
-    }
-
-    unsafe fn into_raw_value(self) -> i64 {
-        self.0
     }
 }
 
@@ -230,13 +254,7 @@ impl TryFrom<GenericFormattedValue> for Undefined {
     }
 }
 
-impl FormattedValueIntrinsic for Undefined {
-    type FormattedValueType = Undefined;
-}
-
-impl SpecificFormattedValue for Undefined {}
-
-impl SpecificFormattedValueIntrinsic for Undefined {}
+impl FormattedValueIntrinsic for Undefined {}
 
 impl TryFromGlib<i64> for Undefined {
     type Error = std::convert::Infallible;
@@ -298,6 +316,8 @@ impl_common_ops_for_newtype_uint!(Percent, u32);
 option_glib_newtype_display!(Percent, "%");
 
 impl FormattedValue for Option<Percent> {
+    type FullRange = Option<Percent>;
+
     fn default_format() -> Format {
         Format::Percent
     }
@@ -306,13 +326,15 @@ impl FormattedValue for Option<Percent> {
         Format::Percent
     }
 
+    unsafe fn into_raw_value(self) -> i64 {
+        self.map_or(-1, |v| v.0 as i64)
+    }
+}
+
+impl FormattedValueFullRange for Option<Percent> {
     unsafe fn from_raw(format: Format, value: i64) -> Self {
         debug_assert_eq!(format, Format::Percent);
         Percent::try_from_glib(value as i64).ok()
-    }
-
-    unsafe fn into_raw_value(self) -> i64 {
-        self.map_or(-1, |v| v.0 as i64)
     }
 }
 
@@ -329,6 +351,23 @@ impl From<Percent> for GenericFormattedValue {
         GenericFormattedValue::Percent(Some(v))
     }
 }
+
+impl FormattedValue for Percent {
+    type FullRange = Option<Percent>;
+
+    fn default_format() -> Format {
+        Format::Percent
+    }
+
+    fn format(&self) -> Format {
+        Format::Percent
+    }
+
+    unsafe fn into_raw_value(self) -> i64 {
+        self.0 as i64
+    }
+}
+
 impl TryFrom<u64> for Percent {
     type Error = GlibNoneError;
 
@@ -366,12 +405,9 @@ impl TryFrom<GenericFormattedValue> for Option<Percent> {
     }
 }
 
-impl FormattedValueIntrinsic for Percent {
-    type FormattedValueType = Option<Percent>;
-}
-
+impl FormattedValueIntrinsic for Percent {}
 impl SpecificFormattedValue for Option<Percent> {}
-
+impl SpecificFormattedValueFullRange for Option<Percent> {}
 impl SpecificFormattedValueIntrinsic for Percent {}
 
 impl ops::Deref for Percent {

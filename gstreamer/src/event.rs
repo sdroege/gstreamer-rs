@@ -2,7 +2,7 @@
 
 use crate::structure::*;
 use crate::ClockTime;
-use crate::GenericFormattedValue;
+use crate::{FormattedValue, GenericFormattedValue};
 
 use std::borrow::Borrow;
 use std::cmp;
@@ -642,22 +642,20 @@ declare_concrete_event!(@sticky Buffersize, T);
 impl Buffersize<Event> {
     #[doc(alias = "gst_event_new_buffer_size")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new<V: Into<GenericFormattedValue>>(minsize: V, maxsize: V, r#async: bool) -> Event {
+    pub fn new<V: FormattedValue>(minsize: V, maxsize: V, r#async: bool) -> Event {
         skip_assert_initialized!();
         Self::builder(minsize, maxsize, r#async).build()
     }
 
-    pub fn builder<'a, V: Into<GenericFormattedValue>>(
+    pub fn builder<'a, V: FormattedValue>(
         minsize: V,
         maxsize: V,
         r#async: bool,
     ) -> BuffersizeBuilder<'a> {
         assert_initialized_main_thread!();
-        let minsize = minsize.into();
-        let maxsize = maxsize.into();
         assert_eq!(minsize.format(), maxsize.format());
 
-        BuffersizeBuilder::new(minsize, maxsize, r#async)
+        BuffersizeBuilder::new(minsize.into(), maxsize.into(), r#async)
     }
 }
 
@@ -858,15 +856,14 @@ declare_concrete_event!(SegmentDone, T);
 impl SegmentDone<Event> {
     #[doc(alias = "gst_event_new_segment_done")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new<V: Into<GenericFormattedValue>>(position: V) -> Event {
+    pub fn new(position: impl FormattedValue) -> Event {
         skip_assert_initialized!();
         Self::builder(position).build()
     }
 
-    pub fn builder<'a, V: Into<GenericFormattedValue>>(position: V) -> SegmentDoneBuilder<'a> {
+    pub fn builder<'a>(position: impl FormattedValue) -> SegmentDoneBuilder<'a> {
         assert_initialized_main_thread!();
-        let position = position.into();
-        SegmentDoneBuilder::new(position)
+        SegmentDoneBuilder::new(position.into())
     }
 }
 
@@ -1030,7 +1027,7 @@ declare_concrete_event!(Seek, T);
 impl Seek<Event> {
     #[doc(alias = "gst_event_new_seek")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new<V: Into<GenericFormattedValue>>(
+    pub fn new<V: FormattedValue>(
         rate: f64,
         flags: crate::SeekFlags,
         start_type: crate::SeekType,
@@ -1042,7 +1039,7 @@ impl Seek<Event> {
         Self::builder(rate, flags, start_type, start, stop_type, stop).build()
     }
 
-    pub fn builder<'a, V: Into<GenericFormattedValue>>(
+    pub fn builder<'a, V: FormattedValue>(
         rate: f64,
         flags: crate::SeekFlags,
         start_type: crate::SeekType,
@@ -1051,11 +1048,16 @@ impl Seek<Event> {
         stop: V,
     ) -> SeekBuilder<'a> {
         assert_initialized_main_thread!();
-        let start = start.into();
-        let stop = stop.into();
         assert_eq!(start.format(), stop.format());
 
-        SeekBuilder::new(rate, flags, start_type, start, stop_type, stop)
+        SeekBuilder::new(
+            rate,
+            flags,
+            start_type,
+            start.into(),
+            stop_type,
+            stop.into(),
+        )
     }
 }
 
@@ -1168,18 +1170,13 @@ declare_concrete_event!(Step, T);
 impl Step<Event> {
     #[doc(alias = "gst_event_new_step")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new<V: Into<GenericFormattedValue>>(
-        amount: V,
-        rate: f64,
-        flush: bool,
-        intermediate: bool,
-    ) -> Event {
+    pub fn new(amount: impl FormattedValue, rate: f64, flush: bool, intermediate: bool) -> Event {
         skip_assert_initialized!();
-        Self::builder(amount.into(), rate, flush, intermediate).build()
+        Self::builder(amount, rate, flush, intermediate).build()
     }
 
-    pub fn builder<'a, V: Into<GenericFormattedValue>>(
-        amount: V,
+    pub fn builder<'a>(
+        amount: impl FormattedValue,
         rate: f64,
         flush: bool,
         intermediate: bool,
