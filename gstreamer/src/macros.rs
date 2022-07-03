@@ -433,14 +433,14 @@ macro_rules! impl_format_value_traits(
         impl SpecificFormattedValueIntrinsic for $name {}
 
         impl TryFrom<GenericFormattedValue> for Option<$name> {
-            type Error = TryFromGenericFormattedValueError;
+            type Error = FormattedValueError;
 
             fn try_from(v: GenericFormattedValue) -> Result<Option<$name>, Self::Error> {
                 skip_assert_initialized!();
                 if let GenericFormattedValue::$format_value(v) = v {
                     Ok(v)
                 } else {
-                    Err(TryFromGenericFormattedValueError(()))
+                    Err(FormattedValueError(v.format()))
                 }
             }
         }

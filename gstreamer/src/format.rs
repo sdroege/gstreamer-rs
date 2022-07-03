@@ -73,8 +73,8 @@ impl fmt::Display for GenericFormattedValue {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Error)]
-#[error("invalid generic value format")]
-pub struct TryFromGenericFormattedValueError(());
+#[error("invalid formatted value format {:?}", .0)]
+pub struct FormattedValueError(Format);
 
 pub trait FormattedValue: Copy + Clone + Sized + Into<GenericFormattedValue> + 'static {
     // rustdoc-stripper-ignore-next
@@ -124,6 +124,201 @@ pub trait SpecificFormattedValueFullRange: FormattedValueFullRange {}
 /// - `Undefined` is the intrinsic type for `Undefined`.
 /// - `Bytes` is the intrinsic type for `Option<Bytes>`.
 pub trait SpecificFormattedValueIntrinsic: TryFromGlib<i64> + FormattedValueIntrinsic {}
+
+// rustdoc-stripper-ignore-next
+/// A trait implemented on types which can hold [`FormattedValue`]s compatible with parameter `F`.
+///
+/// This trait is auto-implemented based on [`FormattedValue`]s additional traits
+/// such as [`SpecificFormattedValue`].
+///
+/// # Example:
+///
+/// Consider the following function:
+///
+/// ```rust
+/// # use gstreamer::{ClockTime, CompatibleFormattedValue, FormattedValue, GenericFormattedValue};
+/// fn with_compatible_formats<V: FormattedValue>(
+///     arg1: V,
+///     arg2: impl CompatibleFormattedValue<V>,
+/// ) {
+///     // This is required to access arg2 as a FormattedValue:
+///     let _arg2 = arg2.try_into_checked(arg1).unwrap();
+/// }
+///
+/// // This is Ok because arg1 is a ClockTime and arg2 is
+/// // an Option<ClockTime> which are compatible format-wise.
+/// with_compatible_formats(ClockTime::ZERO, ClockTime::NONE);
+///
+/// // This is Ok because arg1 is a ClockTime and arg2 is
+/// // a GenericFormattedValue which are compatible format-wise.
+/// with_compatible_formats(
+///     ClockTime::ZERO,
+///     GenericFormattedValue::Time(None),
+/// );
+/// ```
+///
+/// Users are able to call the function with arguments:
+///
+/// 1. of the same type (e.g. `ClockTime`),
+/// 2. of different types, but able to hold a value of the same [`Format`]
+///    (e.g. `ClockTime` and `Option<ClockTime>`).
+/// 3. One of a Formatted Value (specific or generic), the other being
+///    a `GenericFormattedValue`.
+///
+/// Format compatibility for cases 1 and 2 is enforced by
+/// the type system, while case 3 will be checked at runtime time.
+///
+/// ```compile_fail
+/// # use gstreamer::{ClockTime, CompatibleFormattedValue, FormattedValue, format::Bytes};
+/// # fn with_compatible_formats<V: FormattedValue>(
+/// #     arg1: V,
+/// #     arg2: impl CompatibleFormattedValue<V>,
+/// # ) {}
+/// // This doesn't compile because the arguments are not compatible:
+/// let _ = with_compatible_formats(ClockTime::ZERO, Bytes(Some(42)));
+/// ```
+///
+/// Note: users will not be able use `arg2` directly unless format
+/// check succeeds:
+///
+/// ```compile_fail
+/// # use gstreamer::{CompatibleFormattedValue, FormattedValue};
+/// fn with_compatible_formats<V: FormattedValue>(
+///     arg1: V,
+///     arg2: impl CompatibleFormattedValue<V>,
+/// ) {
+///     // This doesn't compile because arg2 hasn't been checked:
+///     let _format = arg2.format();
+/// }
+/// ```
+pub trait CompatibleFormattedValue<V: FormattedValue> {
+    type Original: FormattedValue;
+
+    // rustdoc-stripper-ignore-next
+    /// Returns `Ok(self)` with its type restored if it is compatible with the format of `other`.
+    ///
+    /// When used with compatible [`SpecificFormattedValue`]s, checks
+    /// are enforced by the type system, no runtime checks are performed.
+    ///
+    /// When used with [`FormattedValue`] / [`GenericFormattedValue`] and
+    /// vice versa, a runtime format check is performed. If the check fails,
+    /// `Err(FormattedValueError)` is returned.
+    fn try_into_checked(self, other: V) -> Result<Self::Original, FormattedValueError>;
+
+    // rustdoc-stripper-ignore-next
+    /// Returns `Ok(self)` with its type restored if it is compatible with the format of `V`.
+    ///
+    /// When possible, prefer using [`Self::try_into_checked`] which
+    /// reduces the risk of missuse.
+    ///
+    /// When used with compatible [`SpecificFormattedValue`]s, checks
+    /// are enforced by the type system, no runtime checks are performed.
+    ///
+    /// When used with [`SpecificFormattedValue`] as a parameter and
+    /// a [`GenericFormattedValue`] as `Self`, a runtime check is perfomed
+    /// against the default format of the parameter. If the check fails,
+    /// `Err(FormattedValueError)` is returned.
+    ///
+    /// When used with [`GenericFormattedValue`] as a parameter and
+    /// a [`SpecificFormattedValue`] as `Self`, the `format` argument
+    /// used. If the check fails, `Err(FormattedValueError)` is returned.
+    fn try_into_checked_explicit(
+        self,
+        format: Format,
+    ) -> Result<Self::Original, FormattedValueError>;
+}
+
+impl<T, V> CompatibleFormattedValue<V> for T
+where
+    V: SpecificFormattedValue,
+    T: SpecificFormattedValue<FullRange = V::FullRange>,
+{
+    type Original = Self;
+    fn try_into_checked(self, _other: V) -> Result<Self, FormattedValueError> {
+        skip_assert_initialized!();
+        Ok(self)
+    }
+
+    fn try_into_checked_explicit(
+        self,
+        _format: Format,
+    ) -> Result<Self::Original, FormattedValueError> {
+        skip_assert_initialized!();
+        Ok(self)
+    }
+}
+
+impl<T: SpecificFormattedValue> CompatibleFormattedValue<GenericFormattedValue> for T {
+    type Original = Self;
+    fn try_into_checked(self, other: GenericFormattedValue) -> Result<Self, FormattedValueError> {
+        skip_assert_initialized!();
+        if self.format() == other.format() {
+            Ok(self)
+        } else {
+            Err(FormattedValueError(self.format()))
+        }
+    }
+
+    fn try_into_checked_explicit(
+        self,
+        format: Format,
+    ) -> Result<Self::Original, FormattedValueError> {
+        skip_assert_initialized!();
+        if self.format() == format {
+            Ok(self)
+        } else {
+            Err(FormattedValueError(self.format()))
+        }
+    }
+}
+
+impl<V: SpecificFormattedValue> CompatibleFormattedValue<V> for GenericFormattedValue {
+    type Original = Self;
+    fn try_into_checked(self, _other: V) -> Result<Self, FormattedValueError> {
+        skip_assert_initialized!();
+        if self.format() == V::default_format() {
+            Ok(self)
+        } else {
+            Err(FormattedValueError(self.format()))
+        }
+    }
+
+    fn try_into_checked_explicit(
+        self,
+        _format: Format,
+    ) -> Result<Self::Original, FormattedValueError> {
+        skip_assert_initialized!();
+        if self.format() == V::default_format() {
+            Ok(self)
+        } else {
+            Err(FormattedValueError(self.format()))
+        }
+    }
+}
+
+impl CompatibleFormattedValue<GenericFormattedValue> for GenericFormattedValue {
+    type Original = Self;
+    fn try_into_checked(self, other: GenericFormattedValue) -> Result<Self, FormattedValueError> {
+        skip_assert_initialized!();
+        if self.format() == other.format() {
+            Ok(self)
+        } else {
+            Err(FormattedValueError(self.format()))
+        }
+    }
+
+    fn try_into_checked_explicit(
+        self,
+        format: Format,
+    ) -> Result<Self::Original, FormattedValueError> {
+        skip_assert_initialized!();
+        if self.format() == format {
+            Ok(self)
+        } else {
+            Err(FormattedValueError(self.format()))
+        }
+    }
+}
 
 impl FormattedValue for GenericFormattedValue {
     type FullRange = GenericFormattedValue;
@@ -242,14 +437,14 @@ impl From<Undefined> for GenericFormattedValue {
 }
 
 impl TryFrom<GenericFormattedValue> for Undefined {
-    type Error = TryFromGenericFormattedValueError;
+    type Error = FormattedValueError;
 
-    fn try_from(v: GenericFormattedValue) -> Result<Undefined, TryFromGenericFormattedValueError> {
+    fn try_from(v: GenericFormattedValue) -> Result<Undefined, Self::Error> {
         skip_assert_initialized!();
         if let GenericFormattedValue::Undefined(v) = v {
             Ok(v)
         } else {
-            Err(TryFromGenericFormattedValueError(()))
+            Err(FormattedValueError(v.format()))
         }
     }
 }
@@ -391,16 +586,14 @@ impl TryFromGlib<i64> for Percent {
 }
 
 impl TryFrom<GenericFormattedValue> for Option<Percent> {
-    type Error = TryFromGenericFormattedValueError;
+    type Error = FormattedValueError;
 
-    fn try_from(
-        v: GenericFormattedValue,
-    ) -> Result<Option<Percent>, TryFromGenericFormattedValueError> {
+    fn try_from(v: GenericFormattedValue) -> Result<Option<Percent>, Self::Error> {
         skip_assert_initialized!();
         if let GenericFormattedValue::Percent(v) = v {
             Ok(v)
         } else {
-            Err(TryFromGenericFormattedValueError(()))
+            Err(FormattedValueError(v.format()))
         }
     }
 }
@@ -467,5 +660,119 @@ impl TryFrom<f32> for Percent {
                 (v * ffi::GST_FORMAT_PERCENT_SCALE as f32).round() as u32
             ))
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{
+        Buffers, CompatibleFormattedValue, Format, FormattedValue, FormattedValueError,
+        GenericFormattedValue,
+    };
+    use crate::ClockTime;
+
+    fn with_compatible_formats<V1, V2>(
+        arg1: V1,
+        arg2: V2,
+    ) -> Result<V2::Original, FormattedValueError>
+    where
+        V1: FormattedValue,
+        V2: CompatibleFormattedValue<V1>,
+    {
+        skip_assert_initialized!();
+        arg2.try_into_checked(arg1)
+    }
+
+    #[test]
+    fn compatible() {
+        assert_eq!(
+            with_compatible_formats(ClockTime::ZERO, ClockTime::ZERO),
+            Ok(ClockTime::ZERO),
+        );
+        assert_eq!(
+            with_compatible_formats(ClockTime::ZERO, ClockTime::NONE),
+            Ok(ClockTime::NONE),
+        );
+        assert_eq!(
+            with_compatible_formats(ClockTime::NONE, ClockTime::ZERO),
+            Ok(ClockTime::ZERO),
+        );
+        assert_eq!(
+            with_compatible_formats(
+                ClockTime::ZERO,
+                GenericFormattedValue::Time(Some(ClockTime::ZERO)),
+            ),
+            Ok(GenericFormattedValue::Time(Some(ClockTime::ZERO))),
+        );
+        assert_eq!(
+            with_compatible_formats(
+                GenericFormattedValue::Time(Some(ClockTime::ZERO)),
+                ClockTime::NONE,
+            ),
+            Ok(ClockTime::NONE),
+        );
+    }
+
+    #[test]
+    fn incompatible() {
+        with_compatible_formats(
+            ClockTime::ZERO,
+            GenericFormattedValue::Buffers(Some(Buffers(42))),
+        )
+        .unwrap_err();
+        with_compatible_formats(
+            GenericFormattedValue::Buffers(Some(Buffers(42))),
+            ClockTime::NONE,
+        )
+        .unwrap_err();
+    }
+
+    fn with_compatible_explicit<T, V>(arg: V, f: Format) -> Result<V::Original, FormattedValueError>
+    where
+        T: FormattedValue,
+        V: CompatibleFormattedValue<T>,
+    {
+        skip_assert_initialized!();
+        arg.try_into_checked_explicit(f)
+    }
+
+    #[test]
+    fn compatible_explicit() {
+        assert_eq!(
+            with_compatible_explicit::<ClockTime, _>(ClockTime::ZERO, Format::Time),
+            Ok(ClockTime::ZERO),
+        );
+        assert_eq!(
+            with_compatible_explicit::<ClockTime, _>(ClockTime::NONE, Format::Time),
+            Ok(ClockTime::NONE),
+        );
+        assert_eq!(
+            with_compatible_explicit::<ClockTime, _>(ClockTime::ZERO, Format::Time),
+            Ok(ClockTime::ZERO),
+        );
+        assert_eq!(
+            with_compatible_explicit::<ClockTime, _>(
+                GenericFormattedValue::Time(None),
+                Format::Time
+            ),
+            Ok(GenericFormattedValue::Time(None)),
+        );
+        assert_eq!(
+            with_compatible_explicit::<GenericFormattedValue, _>(ClockTime::NONE, Format::Time),
+            Ok(ClockTime::NONE),
+        );
+    }
+
+    #[test]
+    fn incompatible_explicit() {
+        with_compatible_explicit::<Buffers, _>(GenericFormattedValue::Time(None), Format::Buffers)
+            .unwrap_err();
+        with_compatible_explicit::<GenericFormattedValue, _>(Buffers::ZERO, Format::Time)
+            .unwrap_err();
+        with_compatible_explicit::<GenericFormattedValue, _>(
+            GenericFormattedValue::Time(None),
+            Format::Buffers,
+        )
+        .unwrap_err();
     }
 }
