@@ -64,6 +64,12 @@ impl Caps {
         caps
     }
 
+    #[doc(alias = "gst_caps_new_empty_simple")]
+    pub fn new_empty_simple(name: &str) -> Self {
+        skip_assert_initialized!();
+        Self::new_simple(name, &[])
+    }
+
     #[doc(alias = "gst_caps_fixate")]
     pub fn fixate(&mut self) {
         skip_assert_initialized!();
