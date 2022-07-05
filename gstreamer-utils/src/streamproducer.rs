@@ -210,6 +210,11 @@ impl StreamProducer {
             let _ = consumer.post_message(msg_builder.build());
         }
     }
+
+    /// The last sample produced by this producer.
+    pub fn last_sample(&self) -> Option<gst::Sample> {
+        self.appsink.property("last-sample")
+    }
 }
 
 impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
@@ -611,6 +616,8 @@ mod tests {
             .expect("Couldn't set producer pipeline state");
         consumers.push(consumer);
 
+        assert!(producer.last_sample().is_none());
+
         for i in 0..10 {
             let caps = gst::Caps::from_str(&format!("test,n={}", i)).unwrap();
             producer_src.set_caps(Some(&caps));
@@ -638,6 +645,8 @@ mod tests {
                 consumers.get(0).unwrap().disconnect(&producer);
             }
         }
+
+        assert!(producer.last_sample().is_some());
 
         assert_eq!(link1.pushed(), 6);
         assert_eq!(link1.dropped(), 0);
