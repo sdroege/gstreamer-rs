@@ -26,7 +26,7 @@ enum Command {
 
 fn send_seek_event(pipeline: &Element, rate: f64) -> bool {
     // Obtain the current position, needed for the seek event
-    let position = match pipeline.query_position() {
+    let position = match pipeline.query_position::<gst::ClockTime>() {
         Some(pos) => pos,
         None => {
             eprintln!("Unable to retrieve current position...\r");

@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use crate::structure::*;
-use crate::{FormattedValue, GenericFormattedValue};
+use crate::{CompatibleFormattedValue, FormattedValue, GenericFormattedValue};
 
 use std::borrow::{Borrow, BorrowMut};
 use std::ffi::CStr;
@@ -488,9 +488,14 @@ impl Seeking {
     }
 
     #[doc(alias = "gst_query_set_seeking")]
-    pub fn set<V: FormattedValue>(&mut self, seekable: bool, start: V, end: V) {
+    pub fn set<V: FormattedValue>(
+        &mut self,
+        seekable: bool,
+        start: V,
+        end: impl CompatibleFormattedValue<V>,
+    ) {
         assert_eq!(self.format(), start.format());
-        assert_eq!(start.format(), end.format());
+        let end = end.try_into_checked(start).unwrap();
 
         unsafe {
             ffi::gst_query_set_seeking(
@@ -556,8 +561,13 @@ impl Segment {
     }
 
     #[doc(alias = "gst_query_set_segment")]
-    pub fn set<V: FormattedValue>(&mut self, rate: f64, start: V, stop: V) {
-        assert_eq!(start.format(), stop.format());
+    pub fn set<V: FormattedValue>(
+        &mut self,
+        rate: f64,
+        start: V,
+        stop: impl CompatibleFormattedValue<V>,
+    ) {
+        let stop = stop.try_into_checked(start).unwrap();
 
         unsafe {
             ffi::gst_query_set_segment(
@@ -836,9 +846,14 @@ impl Buffering {
     }
 
     #[doc(alias = "gst_query_set_buffering_range")]
-    pub fn set_range<V: FormattedValue>(&mut self, start: V, stop: V, estimated_total: i64) {
+    pub fn set_range<V: FormattedValue>(
+        &mut self,
+        start: V,
+        stop: impl CompatibleFormattedValue<V>,
+        estimated_total: i64,
+    ) {
         assert_eq!(self.format(), start.format());
-        assert_eq!(start.format(), stop.format());
+        let stop = stop.try_into_checked(start).unwrap();
 
         unsafe {
             ffi::gst_query_set_buffering_range(
@@ -872,13 +887,16 @@ impl Buffering {
     }
 
     #[doc(alias = "gst_query_add_buffering_range")]
-    pub fn add_buffering_ranges<V: FormattedValue + Copy>(&mut self, ranges: &[(V, V)]) {
+    pub fn add_buffering_ranges<V: FormattedValue, U: CompatibleFormattedValue<V> + Copy>(
+        &mut self,
+        ranges: &[(V, U)],
+    ) {
         unsafe {
             let fmt = self.format();
 
             for &(start, stop) in ranges {
                 assert_eq!(start.format(), fmt);
-                assert_eq!(stop.format(), fmt);
+                let stop = stop.try_into_checked(start).unwrap();
                 ffi::gst_query_add_buffering_range(
                     self.as_mut_ptr(),
                     start.into_raw_value(),

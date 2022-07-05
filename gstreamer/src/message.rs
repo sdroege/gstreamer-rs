@@ -2600,8 +2600,12 @@ impl<'a> QosBuilder<'a> {
         }
     }
 
-    pub fn stats<V: FormattedValue>(self, processed: V, dropped: V) -> Self {
-        assert_eq!(processed.format(), dropped.format());
+    pub fn stats<V: FormattedValue>(
+        self,
+        processed: V,
+        dropped: impl CompatibleFormattedValue<V>,
+    ) -> Self {
+        let dropped = dropped.try_into_checked(processed).unwrap();
         Self {
             stats: Some((processed.into(), dropped.into())),
             ..self

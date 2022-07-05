@@ -14,7 +14,10 @@ use crate::Plugin;
 use crate::QueryRef;
 use crate::Rank;
 use crate::State;
-use crate::{Format, FormattedValue, GenericFormattedValue, SpecificFormattedValueFullRange};
+use crate::{
+    CompatibleFormattedValue, Format, FormattedValue, GenericFormattedValue,
+    SpecificFormattedValueFullRange,
+};
 
 use glib::translate::*;
 
@@ -233,7 +236,7 @@ pub trait ElementExtManual: 'static {
         start_type: crate::SeekType,
         start: V,
         stop_type: crate::SeekType,
-        stop: V,
+        stop: impl CompatibleFormattedValue<V>,
     ) -> Result<(), glib::error::BoolError>;
     #[doc(alias = "gst_element_seek_simple")]
     fn seek_simple(
@@ -667,9 +670,9 @@ impl<O: IsA<Element>> ElementExtManual for O {
         start_type: crate::SeekType,
         start: V,
         stop_type: crate::SeekType,
-        stop: V,
+        stop: impl CompatibleFormattedValue<V>,
     ) -> Result<(), glib::error::BoolError> {
-        assert_eq!(stop.format(), start.format());
+        let stop = stop.try_into_checked(start).unwrap();
 
         unsafe {
             glib::result_from_gboolean!(

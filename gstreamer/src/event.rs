@@ -2,7 +2,7 @@
 
 use crate::structure::*;
 use crate::ClockTime;
-use crate::{FormattedValue, GenericFormattedValue};
+use crate::{CompatibleFormattedValue, FormattedValue, GenericFormattedValue};
 
 use std::borrow::Borrow;
 use std::cmp;
@@ -642,18 +642,22 @@ declare_concrete_event!(@sticky Buffersize, T);
 impl Buffersize<Event> {
     #[doc(alias = "gst_event_new_buffer_size")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new<V: FormattedValue>(minsize: V, maxsize: V, r#async: bool) -> Event {
+    pub fn new<V: FormattedValue>(
+        minsize: V,
+        maxsize: impl CompatibleFormattedValue<V>,
+        r#async: bool,
+    ) -> Event {
         skip_assert_initialized!();
         Self::builder(minsize, maxsize, r#async).build()
     }
 
     pub fn builder<'a, V: FormattedValue>(
         minsize: V,
-        maxsize: V,
+        maxsize: impl CompatibleFormattedValue<V>,
         r#async: bool,
     ) -> BuffersizeBuilder<'a> {
         assert_initialized_main_thread!();
-        assert_eq!(minsize.format(), maxsize.format());
+        let maxsize = maxsize.try_into_checked(minsize).unwrap();
 
         BuffersizeBuilder::new(minsize.into(), maxsize.into(), r#async)
     }
@@ -1033,7 +1037,7 @@ impl Seek<Event> {
         start_type: crate::SeekType,
         start: V,
         stop_type: crate::SeekType,
-        stop: V,
+        stop: impl CompatibleFormattedValue<V>,
     ) -> Event {
         skip_assert_initialized!();
         Self::builder(rate, flags, start_type, start, stop_type, stop).build()
@@ -1045,10 +1049,10 @@ impl Seek<Event> {
         start_type: crate::SeekType,
         start: V,
         stop_type: crate::SeekType,
-        stop: V,
+        stop: impl CompatibleFormattedValue<V>,
     ) -> SeekBuilder<'a> {
         assert_initialized_main_thread!();
-        assert_eq!(start.format(), stop.format());
+        let stop = stop.try_into_checked(start).unwrap();
 
         SeekBuilder::new(
             rate,

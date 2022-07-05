@@ -4,7 +4,9 @@ use crate::Format;
 use crate::GenericFormattedValue;
 use crate::SeekFlags;
 use crate::SeekType;
-use crate::{FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic};
+use crate::{
+    CompatibleFormattedValue, FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic,
+};
 use glib::translate::*;
 use glib::StaticType;
 use std::fmt;
@@ -92,18 +94,13 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     }
 
     #[doc(alias = "gst_segment_clip")]
-    pub fn clip<V: Into<T::FullRange>>(
+    pub fn clip(
         &self,
-        start: V,
-        stop: V,
+        start: impl CompatibleFormattedValue<T>,
+        stop: impl CompatibleFormattedValue<T>,
     ) -> Option<(T::FullRange, T::FullRange)> {
-        let start = start.into();
-        let stop = stop.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), start.format());
-            assert_eq!(self.format(), stop.format());
-        }
+        let start = start.try_into_checked_explicit(self.format()).unwrap();
+        let stop = stop.try_into_checked_explicit(self.format()).unwrap();
 
         unsafe {
             let mut clip_start = mem::MaybeUninit::uninit();
@@ -129,23 +126,18 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
 
     #[allow(clippy::too_many_arguments)]
     #[doc(alias = "gst_segment_do_seek")]
-    pub fn do_seek<V: Into<T::FullRange>>(
+    pub fn do_seek(
         &mut self,
         rate: f64,
         flags: SeekFlags,
         start_type: SeekType,
-        start: V,
+        start: impl CompatibleFormattedValue<T>,
         stop_type: SeekType,
-        stop: V,
+        stop: impl CompatibleFormattedValue<T>,
     ) -> Option<bool> {
         skip_assert_initialized!();
-        let start = start.into();
-        let stop = stop.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), start.format());
-            assert_eq!(self.format(), stop.format());
-        }
+        let start = start.try_into_checked_explicit(self.format()).unwrap();
+        let stop = stop.try_into_checked_explicit(self.format()).unwrap();
 
         unsafe {
             let mut update = mem::MaybeUninit::uninit();
@@ -183,15 +175,13 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     }
 
     #[doc(alias = "gst_segment_position_from_running_time")]
-    pub fn position_from_running_time<V: Into<T::FullRange>>(
+    pub fn position_from_running_time(
         &self,
-        running_time: V,
+        running_time: impl CompatibleFormattedValue<T>,
     ) -> T::FullRange {
-        let running_time = running_time.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), running_time.format());
-        }
+        let running_time = running_time
+            .try_into_checked_explicit(self.format())
+            .unwrap();
 
         unsafe {
             T::FullRange::from_raw(
@@ -206,15 +196,13 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     }
 
     #[doc(alias = "gst_segment_position_from_running_time_full")]
-    pub fn position_from_running_time_full<V: Into<T::FullRange>>(
+    pub fn position_from_running_time_full(
         &self,
-        running_time: V,
+        running_time: impl CompatibleFormattedValue<T>,
     ) -> (i32, T::FullRange) {
-        let running_time = running_time.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), running_time.format());
-        }
+        let running_time = running_time
+            .try_into_checked_explicit(self.format())
+            .unwrap();
 
         unsafe {
             let mut position = mem::MaybeUninit::uninit();
@@ -232,12 +220,13 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     }
 
     #[doc(alias = "gst_segment_position_from_stream_time")]
-    pub fn position_from_stream_time<V: Into<T::FullRange>>(&self, stream_time: V) -> T::FullRange {
-        let stream_time = stream_time.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), stream_time.format());
-        }
+    pub fn position_from_stream_time(
+        &self,
+        stream_time: impl CompatibleFormattedValue<T>,
+    ) -> T::FullRange {
+        let stream_time = stream_time
+            .try_into_checked_explicit(self.format())
+            .unwrap();
 
         unsafe {
             T::FullRange::from_raw(
@@ -252,15 +241,13 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     }
 
     #[doc(alias = "gst_segment_position_from_stream_time_full")]
-    pub fn position_from_stream_time_full<V: Into<T::FullRange>>(
+    pub fn position_from_stream_time_full(
         &self,
-        stream_time: V,
+        stream_time: impl CompatibleFormattedValue<T>,
     ) -> (i32, T::FullRange) {
-        let stream_time = stream_time.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), stream_time.format());
-        }
+        let stream_time = stream_time
+            .try_into_checked_explicit(self.format())
+            .unwrap();
 
         unsafe {
             let mut position = mem::MaybeUninit::uninit();
@@ -278,15 +265,13 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     }
 
     #[doc(alias = "gst_segment_set_running_time")]
-    pub fn set_running_time<V: Into<T::FullRange>>(
+    pub fn set_running_time(
         &mut self,
-        running_time: V,
+        running_time: impl CompatibleFormattedValue<T>,
     ) -> Result<(), glib::BoolError> {
-        let running_time = running_time.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), running_time.format());
-        }
+        let running_time = running_time
+            .try_into_checked_explicit(self.format())
+            .unwrap();
 
         unsafe {
             glib::result_from_gboolean!(
@@ -301,12 +286,8 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     }
 
     #[doc(alias = "gst_segment_to_running_time")]
-    pub fn to_running_time<V: Into<T::FullRange>>(&self, position: V) -> T::FullRange {
-        let position = position.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), position.format());
-        }
+    pub fn to_running_time(&self, position: impl CompatibleFormattedValue<T>) -> T::FullRange {
+        let position = position.try_into_checked_explicit(self.format()).unwrap();
 
         unsafe {
             T::FullRange::from_raw(
@@ -321,12 +302,11 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     }
 
     #[doc(alias = "gst_segment_to_running_time_full")]
-    pub fn to_running_time_full<V: Into<T::FullRange>>(&self, position: V) -> (i32, T::FullRange) {
-        let position = position.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), position.format());
-        }
+    pub fn to_running_time_full(
+        &self,
+        position: impl CompatibleFormattedValue<T>,
+    ) -> (i32, T::FullRange) {
+        let position = position.try_into_checked_explicit(self.format()).unwrap();
 
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
@@ -344,12 +324,8 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     }
 
     #[doc(alias = "gst_segment_to_stream_time")]
-    pub fn to_stream_time<V: Into<T::FullRange>>(&self, position: V) -> T::FullRange {
-        let position = position.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), position.format());
-        }
+    pub fn to_stream_time(&self, position: impl CompatibleFormattedValue<T>) -> T::FullRange {
+        let position = position.try_into_checked_explicit(self.format()).unwrap();
 
         unsafe {
             T::FullRange::from_raw(
@@ -364,12 +340,11 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     }
 
     #[doc(alias = "gst_segment_to_stream_time_full")]
-    pub fn to_stream_time_full<V: Into<T::FullRange>>(&self, position: V) -> (i32, T::FullRange) {
-        let position = position.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), position.format());
-        }
+    pub fn to_stream_time_full(
+        &self,
+        position: impl CompatibleFormattedValue<T>,
+    ) -> (i32, T::FullRange) {
+        let position = position.try_into_checked_explicit(self.format()).unwrap();
 
         unsafe {
             let mut stream_time = mem::MaybeUninit::uninit();
@@ -427,13 +402,8 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
         unsafe { T::FullRange::from_raw(self.format(), self.0.base as i64) }
     }
 
-    pub fn set_base<V: Into<T::FullRange>>(&mut self, base: V) {
-        let base = base.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), base.format());
-        }
-
+    pub fn set_base(&mut self, base: impl CompatibleFormattedValue<T>) {
+        let base = base.try_into_checked_explicit(self.format()).unwrap();
         self.0.base = unsafe { base.into_raw_value() } as u64;
     }
 
@@ -442,13 +412,8 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
         unsafe { T::FullRange::from_raw(self.format(), self.0.offset as i64) }
     }
 
-    pub fn set_offset<V: Into<T::FullRange>>(&mut self, offset: V) {
-        let offset = offset.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), offset.format());
-        }
-
+    pub fn set_offset(&mut self, offset: impl CompatibleFormattedValue<T>) {
+        let offset = offset.try_into_checked_explicit(self.format()).unwrap();
         self.0.offset = unsafe { offset.into_raw_value() } as u64;
     }
 
@@ -457,13 +422,8 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
         unsafe { T::FullRange::from_raw(self.format(), self.0.start as i64) }
     }
 
-    pub fn set_start<V: Into<T::FullRange>>(&mut self, start: V) {
-        let start = start.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), start.format());
-        }
-
+    pub fn set_start(&mut self, start: impl CompatibleFormattedValue<T>) {
+        let start = start.try_into_checked_explicit(self.format()).unwrap();
         self.0.start = unsafe { start.into_raw_value() } as u64;
     }
 
@@ -472,13 +432,8 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
         unsafe { T::FullRange::from_raw(self.format(), self.0.stop as i64) }
     }
 
-    pub fn set_stop<V: Into<T::FullRange>>(&mut self, stop: V) {
-        let stop = stop.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), stop.format());
-        }
-
+    pub fn set_stop(&mut self, stop: impl CompatibleFormattedValue<T>) {
+        let stop = stop.try_into_checked_explicit(self.format()).unwrap();
         self.0.stop = unsafe { stop.into_raw_value() } as u64;
     }
 
@@ -487,13 +442,8 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
         unsafe { T::FullRange::from_raw(self.format(), self.0.time as i64) }
     }
 
-    pub fn set_time<V: Into<T::FullRange>>(&mut self, time: V) {
-        let time = time.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), time.format());
-        }
-
+    pub fn set_time(&mut self, time: impl CompatibleFormattedValue<T>) {
+        let time = time.try_into_checked_explicit(self.format()).unwrap();
         self.0.time = unsafe { time.into_raw_value() } as u64;
     }
 
@@ -502,13 +452,8 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
         unsafe { T::FullRange::from_raw(self.format(), self.0.position as i64) }
     }
 
-    pub fn set_position<V: Into<T::FullRange>>(&mut self, position: V) {
-        let position = position.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), position.format());
-        }
-
+    pub fn set_position(&mut self, position: impl CompatibleFormattedValue<T>) {
+        let position = position.try_into_checked_explicit(self.format()).unwrap();
         self.0.position = unsafe { position.into_raw_value() } as u64;
     }
 
@@ -517,13 +462,8 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
         unsafe { T::FullRange::from_raw(self.format(), self.0.duration as i64) }
     }
 
-    pub fn set_duration<V: Into<T::FullRange>>(&mut self, duration: V) {
-        let duration = duration.into();
-
-        if T::default_format() == Format::Undefined {
-            assert_eq!(self.format(), duration.format());
-        }
-
+    pub fn set_duration(&mut self, duration: impl CompatibleFormattedValue<T>) {
+        let duration = duration.try_into_checked_explicit(self.format()).unwrap();
         self.0.duration = unsafe { duration.into_raw_value() } as u64;
     }
 }
