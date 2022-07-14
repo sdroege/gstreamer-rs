@@ -4,7 +4,7 @@ version = "0.19.0"
 license = "MIT"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 edition = "2021"
-rust-version = "1.57"
+rust-version = "1.60"
 
 [dependencies]
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }
