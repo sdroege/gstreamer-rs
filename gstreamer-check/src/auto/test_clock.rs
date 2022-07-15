@@ -55,12 +55,11 @@ impl TestClock {
 
     #[doc(alias = "gst_test_clock_get_next_entry_time")]
     #[doc(alias = "get_next_entry_time")]
-    pub fn next_entry_time(&self) -> gst::ClockTime {
+    pub fn next_entry_time(&self) -> Option<gst::ClockTime> {
         unsafe {
-            try_from_glib(ffi::gst_test_clock_get_next_entry_time(
+            from_glib(ffi::gst_test_clock_get_next_entry_time(
                 self.to_glib_none().0,
             ))
-            .expect("mandatory glib value is None")
         }
     }
 
