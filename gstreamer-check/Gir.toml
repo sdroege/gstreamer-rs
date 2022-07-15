@@ -79,11 +79,6 @@ name = "GstCheck.TestClock"
 status = "generate"
 final_type = true
     [[object.function]]
-    name = "get_next_entry_time"
-        [object.function.return]
-        mandatory = true
-
-    [[object.function]]
     name = "new_with_start_time"
         [[object.function.parameter]]
         name = "start_time"
