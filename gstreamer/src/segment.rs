@@ -199,23 +199,21 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     pub fn position_from_running_time_full(
         &self,
         running_time: impl CompatibleFormattedValue<T>,
-    ) -> (i32, T::FullRange) {
+    ) -> <T::FullRange as FormattedValue>::Signed {
         let running_time = running_time
             .try_into_checked_explicit(self.format())
             .unwrap();
 
         unsafe {
             let mut position = mem::MaybeUninit::uninit();
-            let ret = ffi::gst_segment_position_from_running_time_full(
+            let sign = ffi::gst_segment_position_from_running_time_full(
                 &self.0,
                 self.format().into_glib(),
                 running_time.into_raw_value() as u64,
                 position.as_mut_ptr(),
             );
-            (
-                ret,
-                T::FullRange::from_raw(self.format(), position.assume_init() as i64),
-            )
+
+            T::FullRange::from_raw(self.format(), position.assume_init() as i64).into_signed(sign)
         }
     }
 
@@ -244,23 +242,21 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     pub fn position_from_stream_time_full(
         &self,
         stream_time: impl CompatibleFormattedValue<T>,
-    ) -> (i32, T::FullRange) {
+    ) -> <T::FullRange as FormattedValue>::Signed {
         let stream_time = stream_time
             .try_into_checked_explicit(self.format())
             .unwrap();
 
         unsafe {
             let mut position = mem::MaybeUninit::uninit();
-            let ret = ffi::gst_segment_position_from_stream_time_full(
+            let sign = ffi::gst_segment_position_from_stream_time_full(
                 &self.0,
                 self.format().into_glib(),
                 stream_time.into_raw_value() as u64,
                 position.as_mut_ptr(),
             );
-            (
-                ret,
-                T::FullRange::from_raw(self.format(), position.assume_init() as i64),
-            )
+
+            T::FullRange::from_raw(self.format(), position.assume_init() as i64).into_signed(sign)
         }
     }
 
@@ -305,21 +301,20 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     pub fn to_running_time_full(
         &self,
         position: impl CompatibleFormattedValue<T>,
-    ) -> (i32, T::FullRange) {
+    ) -> <T::FullRange as FormattedValue>::Signed {
         let position = position.try_into_checked_explicit(self.format()).unwrap();
 
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
-            let ret = ffi::gst_segment_to_running_time_full(
+            let sign = ffi::gst_segment_to_running_time_full(
                 &self.0,
                 self.format().into_glib(),
                 position.into_raw_value() as u64,
                 running_time.as_mut_ptr(),
             );
-            (
-                ret,
-                T::FullRange::from_raw(self.format(), running_time.assume_init() as i64),
-            )
+
+            T::FullRange::from_raw(self.format(), running_time.assume_init() as i64)
+                .into_signed(sign)
         }
     }
 
@@ -343,21 +338,20 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     pub fn to_stream_time_full(
         &self,
         position: impl CompatibleFormattedValue<T>,
-    ) -> (i32, T::FullRange) {
+    ) -> <T::FullRange as FormattedValue>::Signed {
         let position = position.try_into_checked_explicit(self.format()).unwrap();
 
         unsafe {
             let mut stream_time = mem::MaybeUninit::uninit();
-            let ret = ffi::gst_segment_to_stream_time_full(
+            let sign = ffi::gst_segment_to_stream_time_full(
                 &self.0,
                 self.format().into_glib(),
                 position.into_raw_value() as u64,
                 stream_time.as_mut_ptr(),
             );
-            (
-                ret,
-                T::FullRange::from_raw(self.format(), stream_time.assume_init() as i64),
-            )
+
+            T::FullRange::from_raw(self.format(), stream_time.assume_init() as i64)
+                .into_signed(sign)
         }
     }
 
