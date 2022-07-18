@@ -515,8 +515,6 @@ pub enum CoreError {
     Clock,
     #[doc(alias = "GST_CORE_ERROR_DISABLED")]
     Disabled,
-    #[doc(alias = "GST_CORE_ERROR_NUM_ERRORS")]
-    NumErrors,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -541,7 +539,6 @@ impl IntoGlib for CoreError {
             Self::MissingPlugin => ffi::GST_CORE_ERROR_MISSING_PLUGIN,
             Self::Clock => ffi::GST_CORE_ERROR_CLOCK,
             Self::Disabled => ffi::GST_CORE_ERROR_DISABLED,
-            Self::NumErrors => ffi::GST_CORE_ERROR_NUM_ERRORS,
             Self::__Unknown(value) => value,
         }
     }
@@ -566,7 +563,6 @@ impl FromGlib<ffi::GstCoreError> for CoreError {
             ffi::GST_CORE_ERROR_MISSING_PLUGIN => Self::MissingPlugin,
             ffi::GST_CORE_ERROR_CLOCK => Self::Clock,
             ffi::GST_CORE_ERROR_DISABLED => Self::Disabled,
-            ffi::GST_CORE_ERROR_NUM_ERRORS => Self::NumErrors,
             value => Self::__Unknown(value),
         }
     }
@@ -600,7 +596,6 @@ impl ErrorDomain for CoreError {
             ffi::GST_CORE_ERROR_MISSING_PLUGIN => Some(Self::MissingPlugin),
             ffi::GST_CORE_ERROR_CLOCK => Some(Self::Clock),
             ffi::GST_CORE_ERROR_DISABLED => Some(Self::Disabled),
-            ffi::GST_CORE_ERROR_NUM_ERRORS => Some(Self::NumErrors),
             _ => Some(Self::Failed),
         }
     }
@@ -661,8 +656,6 @@ pub enum DebugLevel {
     Trace,
     #[doc(alias = "GST_LEVEL_MEMDUMP")]
     Memdump,
-    #[doc(alias = "GST_LEVEL_COUNT")]
-    Count,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -703,7 +696,6 @@ impl IntoGlib for DebugLevel {
             Self::Log => ffi::GST_LEVEL_LOG,
             Self::Trace => ffi::GST_LEVEL_TRACE,
             Self::Memdump => ffi::GST_LEVEL_MEMDUMP,
-            Self::Count => ffi::GST_LEVEL_COUNT,
             Self::__Unknown(value) => value,
         }
     }
@@ -723,7 +715,6 @@ impl FromGlib<ffi::GstDebugLevel> for DebugLevel {
             ffi::GST_LEVEL_LOG => Self::Log,
             ffi::GST_LEVEL_TRACE => Self::Trace,
             ffi::GST_LEVEL_MEMDUMP => Self::Memdump,
-            ffi::GST_LEVEL_COUNT => Self::Count,
             value => Self::__Unknown(value),
         }
     }
@@ -1245,8 +1236,6 @@ pub enum LibraryError {
     Settings,
     #[doc(alias = "GST_LIBRARY_ERROR_ENCODE")]
     Encode,
-    #[doc(alias = "GST_LIBRARY_ERROR_NUM_ERRORS")]
-    NumErrors,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -1263,7 +1252,6 @@ impl IntoGlib for LibraryError {
             Self::Shutdown => ffi::GST_LIBRARY_ERROR_SHUTDOWN,
             Self::Settings => ffi::GST_LIBRARY_ERROR_SETTINGS,
             Self::Encode => ffi::GST_LIBRARY_ERROR_ENCODE,
-            Self::NumErrors => ffi::GST_LIBRARY_ERROR_NUM_ERRORS,
             Self::__Unknown(value) => value,
         }
     }
@@ -1280,7 +1268,6 @@ impl FromGlib<ffi::GstLibraryError> for LibraryError {
             ffi::GST_LIBRARY_ERROR_SHUTDOWN => Self::Shutdown,
             ffi::GST_LIBRARY_ERROR_SETTINGS => Self::Settings,
             ffi::GST_LIBRARY_ERROR_ENCODE => Self::Encode,
-            ffi::GST_LIBRARY_ERROR_NUM_ERRORS => Self::NumErrors,
             value => Self::__Unknown(value),
         }
     }
@@ -1306,7 +1293,6 @@ impl ErrorDomain for LibraryError {
             ffi::GST_LIBRARY_ERROR_SHUTDOWN => Some(Self::Shutdown),
             ffi::GST_LIBRARY_ERROR_SETTINGS => Some(Self::Settings),
             ffi::GST_LIBRARY_ERROR_ENCODE => Some(Self::Encode),
-            ffi::GST_LIBRARY_ERROR_NUM_ERRORS => Some(Self::NumErrors),
             _ => Some(Self::Failed),
         }
     }
@@ -2327,8 +2313,6 @@ pub enum ResourceError {
     NoSpaceLeft,
     #[doc(alias = "GST_RESOURCE_ERROR_NOT_AUTHORIZED")]
     NotAuthorized,
-    #[doc(alias = "GST_RESOURCE_ERROR_NUM_ERRORS")]
-    NumErrors,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -2354,7 +2338,6 @@ impl IntoGlib for ResourceError {
             Self::Settings => ffi::GST_RESOURCE_ERROR_SETTINGS,
             Self::NoSpaceLeft => ffi::GST_RESOURCE_ERROR_NO_SPACE_LEFT,
             Self::NotAuthorized => ffi::GST_RESOURCE_ERROR_NOT_AUTHORIZED,
-            Self::NumErrors => ffi::GST_RESOURCE_ERROR_NUM_ERRORS,
             Self::__Unknown(value) => value,
         }
     }
@@ -2380,7 +2363,6 @@ impl FromGlib<ffi::GstResourceError> for ResourceError {
             ffi::GST_RESOURCE_ERROR_SETTINGS => Self::Settings,
             ffi::GST_RESOURCE_ERROR_NO_SPACE_LEFT => Self::NoSpaceLeft,
             ffi::GST_RESOURCE_ERROR_NOT_AUTHORIZED => Self::NotAuthorized,
-            ffi::GST_RESOURCE_ERROR_NUM_ERRORS => Self::NumErrors,
             value => Self::__Unknown(value),
         }
     }
@@ -2415,7 +2397,6 @@ impl ErrorDomain for ResourceError {
             ffi::GST_RESOURCE_ERROR_SETTINGS => Some(Self::Settings),
             ffi::GST_RESOURCE_ERROR_NO_SPACE_LEFT => Some(Self::NoSpaceLeft),
             ffi::GST_RESOURCE_ERROR_NOT_AUTHORIZED => Some(Self::NotAuthorized),
-            ffi::GST_RESOURCE_ERROR_NUM_ERRORS => Some(Self::NumErrors),
             _ => Some(Self::Failed),
         }
     }
@@ -2843,8 +2824,6 @@ pub enum StreamError {
     Decrypt,
     #[doc(alias = "GST_STREAM_ERROR_DECRYPT_NOKEY")]
     DecryptNokey,
-    #[doc(alias = "GST_STREAM_ERROR_NUM_ERRORS")]
-    NumErrors,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -2868,7 +2847,6 @@ impl IntoGlib for StreamError {
             Self::Format => ffi::GST_STREAM_ERROR_FORMAT,
             Self::Decrypt => ffi::GST_STREAM_ERROR_DECRYPT,
             Self::DecryptNokey => ffi::GST_STREAM_ERROR_DECRYPT_NOKEY,
-            Self::NumErrors => ffi::GST_STREAM_ERROR_NUM_ERRORS,
             Self::__Unknown(value) => value,
         }
     }
@@ -2892,7 +2870,6 @@ impl FromGlib<ffi::GstStreamError> for StreamError {
             ffi::GST_STREAM_ERROR_FORMAT => Self::Format,
             ffi::GST_STREAM_ERROR_DECRYPT => Self::Decrypt,
             ffi::GST_STREAM_ERROR_DECRYPT_NOKEY => Self::DecryptNokey,
-            ffi::GST_STREAM_ERROR_NUM_ERRORS => Self::NumErrors,
             value => Self::__Unknown(value),
         }
     }
@@ -2925,7 +2902,6 @@ impl ErrorDomain for StreamError {
             ffi::GST_STREAM_ERROR_FORMAT => Some(Self::Format),
             ffi::GST_STREAM_ERROR_DECRYPT => Some(Self::Decrypt),
             ffi::GST_STREAM_ERROR_DECRYPT_NOKEY => Some(Self::DecryptNokey),
-            ffi::GST_STREAM_ERROR_NUM_ERRORS => Some(Self::NumErrors),
             _ => Some(Self::Failed),
         }
     }
@@ -3136,8 +3112,6 @@ pub enum TagFlag {
     Encoded,
     #[doc(alias = "GST_TAG_FLAG_DECODED")]
     Decoded,
-    #[doc(alias = "GST_TAG_FLAG_COUNT")]
-    Count,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -3152,7 +3126,6 @@ impl IntoGlib for TagFlag {
             Self::Meta => ffi::GST_TAG_FLAG_META,
             Self::Encoded => ffi::GST_TAG_FLAG_ENCODED,
             Self::Decoded => ffi::GST_TAG_FLAG_DECODED,
-            Self::Count => ffi::GST_TAG_FLAG_COUNT,
             Self::__Unknown(value) => value,
         }
     }
@@ -3167,7 +3140,6 @@ impl FromGlib<ffi::GstTagFlag> for TagFlag {
             ffi::GST_TAG_FLAG_META => Self::Meta,
             ffi::GST_TAG_FLAG_ENCODED => Self::Encoded,
             ffi::GST_TAG_FLAG_DECODED => Self::Decoded,
-            ffi::GST_TAG_FLAG_COUNT => Self::Count,
             value => Self::__Unknown(value),
         }
     }
@@ -3224,8 +3196,6 @@ pub enum TagMergeMode {
     Keep,
     #[doc(alias = "GST_TAG_MERGE_KEEP_ALL")]
     KeepAll,
-    #[doc(alias = "GST_TAG_MERGE_COUNT")]
-    Count,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -3243,7 +3213,6 @@ impl IntoGlib for TagMergeMode {
             Self::Prepend => ffi::GST_TAG_MERGE_PREPEND,
             Self::Keep => ffi::GST_TAG_MERGE_KEEP,
             Self::KeepAll => ffi::GST_TAG_MERGE_KEEP_ALL,
-            Self::Count => ffi::GST_TAG_MERGE_COUNT,
             Self::__Unknown(value) => value,
         }
     }
@@ -3261,7 +3230,6 @@ impl FromGlib<ffi::GstTagMergeMode> for TagMergeMode {
             ffi::GST_TAG_MERGE_PREPEND => Self::Prepend,
             ffi::GST_TAG_MERGE_KEEP => Self::Keep,
             ffi::GST_TAG_MERGE_KEEP_ALL => Self::KeepAll,
-            ffi::GST_TAG_MERGE_COUNT => Self::Count,
             value => Self::__Unknown(value),
         }
     }

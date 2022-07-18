@@ -21,13 +21,10 @@ generate = [
     "Gst.CapsIntersectMode",
     "Gst.ClockEntryType",
     "Gst.ClockTimeDiff",
-    "Gst.CoreError",
     "Gst.DebugColorFlags",
     "Gst.DebugGraphDetails",
-    "Gst.DebugLevel",
     "Gst.EventTypeFlags",
     "Gst.GapFlags",
-    "Gst.LibraryError",
     "Gst.PadMode",
     "Gst.PadProbeReturn",
     "Gst.ParseError",
@@ -37,18 +34,14 @@ generate = [
     "Gst.ProgressType",
     "Gst.PromiseResult",
     "Gst.QOSType",
-    "Gst.ResourceError",
     "Gst.SchedulingFlags",
     "Gst.SeekType",
     "Gst.SerializeFlags",
     "Gst.StateChange",
-    "Gst.StreamError",
     "Gst.StreamStatusType",
     "Gst.StreamType",
     "Gst.StructureChangeType",
     "Gst.SystemClock",
-    "Gst.TagFlag",
-    "Gst.TagMergeMode",
     "Gst.TaskState",
     "Gst.TocSetter",
     "Gst.URIError",
@@ -837,6 +830,13 @@ generate_builder = true
     manual = true
 
 [[object]]
+name = "Gst.CoreError"
+status = "generate"
+    [[object.member]]
+    name = "num_errors"
+    ignore = true
+
+[[object]]
 name = "Gst.DateTime"
 status = "generate"
     [[object.derive]]
@@ -952,6 +952,13 @@ status = "generate"
     name = "new_from_unix_epoch_utc_usecs"
         [object.function.return]
         nullable_return_is_error = "Can't create DateTime from UNIX epoch"
+
+[[object]]
+name = "Gst.DebugLevel"
+status = "generate"
+    [[object.member]]
+    name = "count"
+    ignore = true
 
 [[object]]
 name = "Gst.Device"
@@ -1429,6 +1436,13 @@ status = "generate"
     name = "internal_activate_mode_default"
     # wrong instance type
     manual = true
+
+[[object]]
+name = "Gst.LibraryError"
+status = "generate"
+    [[object.member]]
+    name = "num_errors"
+    ignore = true
 
 [[object]]
 name = "Gst.Memory"
@@ -2053,6 +2067,13 @@ final_type = true
     manual = true
 
 [[object]]
+name = "Gst.ResourceError"
+status = "generate"
+    [[object.member]]
+    name = "num_errors"
+    ignore = true
+
+[[object]]
 name = "Gst.Sample"
 status = "manual"
 ref_mode = "ref"
@@ -2127,6 +2148,13 @@ final_type = true
     [[object.property]]
     name = "upstream-id"
     generate = ["get"]
+
+[[object]]
+name = "Gst.StreamError"
+status = "generate"
+    [[object.member]]
+    name = "num_errors"
+    ignore = true
 
 [[object]]
 name = "Gst.StreamFlags"
@@ -2243,9 +2271,23 @@ ref_mode = "ref"
     ignore = true
 
 [[object]]
+name = "Gst.TagFlag"
+status = "generate"
+    [[object.member]]
+    name = "count"
+    ignore = true
+
+[[object]]
 name = "Gst.TagList"
 status = "manual"
 ref_mode = "ref"
+
+[[object]]
+name = "Gst.TagMergeMode"
+status = "generate"
+    [[object.member]]
+    name = "count"
+    ignore = true
 
 [[object]]
 name = "Gst.TagScope"
