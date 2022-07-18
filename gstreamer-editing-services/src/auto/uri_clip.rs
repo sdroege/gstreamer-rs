@@ -61,9 +61,6 @@ pub trait UriClipExt: 'static {
 
     #[doc(alias = "mute")]
     fn connect_mute_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "supported-formats")]
-    fn connect_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<UriClip>> UriClipExt for O {
@@ -129,31 +126,6 @@ impl<O: IsA<UriClip>> UriClipExt for O {
                 b"notify::mute\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_mute_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    fn connect_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_supported_formats_trampoline<
-            P: IsA<UriClip>,
-            F: Fn(&P) + 'static,
-        >(
-            this: *mut ffi::GESUriClip,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(UriClip::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::supported-formats\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_supported_formats_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

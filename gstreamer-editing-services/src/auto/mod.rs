@@ -219,7 +219,6 @@ pub mod traits {
     pub use super::effect_clip::EffectClipExt;
     pub use super::extractable::ExtractableExt;
     pub use super::formatter::FormatterExt;
-    pub use super::group::GroupExt;
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     pub use super::image_source::ImageSourceExt;
     pub use super::layer::LayerExt;

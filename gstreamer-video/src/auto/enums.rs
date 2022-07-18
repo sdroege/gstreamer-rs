@@ -1135,6 +1135,19 @@ impl VideoColorPrimaries {
     //    unsafe { TODO: call ffi:gst_video_color_primaries_get_info() }
     //}
 
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "gst_video_color_primaries_is_equivalent")]
+    pub fn is_equivalent(self, other: VideoColorPrimaries) -> bool {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib(ffi::gst_video_color_primaries_is_equivalent(
+                self.into_glib(),
+                other.into_glib(),
+            ))
+        }
+    }
+
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_color_primaries_to_iso")]
