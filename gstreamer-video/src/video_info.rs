@@ -121,6 +121,20 @@ impl VideoColorimetry {
     pub fn primaries(&self) -> crate::VideoColorPrimaries {
         unsafe { from_glib(self.0.primaries) }
     }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "gst_video_colorimetry_is_equivalent")]
+    pub fn is_equivalent(&self, bitdepth: u32, other: &Self, other_bitdepth: u32) -> bool {
+        unsafe {
+            from_glib(ffi::gst_video_colorimetry_is_equivalent(
+                &self.0,
+                bitdepth,
+                &other.0,
+                other_bitdepth,
+            ))
+        }
+    }
 }
 
 impl PartialEq for VideoColorimetry {
