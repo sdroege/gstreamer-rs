@@ -376,6 +376,7 @@ macro_rules! impl_format_value_traits(
     ($name:ident, $format:ident, $format_value:ident, $inner_type:ty) => {
         impl FormattedValue for Option<$name> {
             type FullRange = Option<$name>;
+            type Signed = Option<Signed<$name>>;
 
             fn default_format() -> Format {
                 Format::$format
@@ -387,6 +388,14 @@ macro_rules! impl_format_value_traits(
 
             unsafe fn into_raw_value(self) -> i64 {
                 IntoGlib::into_glib(self) as i64
+            }
+
+            fn into_positive(self) -> Option<Signed<$name>> {
+                Some(Signed::Positive(self?))
+            }
+
+            fn into_negative(self) -> Option<Signed<$name>> {
+                Some(Signed::Negative(self?))
             }
         }
 
@@ -412,6 +421,7 @@ macro_rules! impl_format_value_traits(
         }
         impl FormattedValue for $name {
             type FullRange = Option<$name>;
+            type Signed = Signed<$name>;
 
             fn default_format() -> Format {
                 Format::$format
@@ -423,6 +433,14 @@ macro_rules! impl_format_value_traits(
 
             unsafe fn into_raw_value(self) -> i64 {
                 IntoGlib::into_glib(self) as i64
+            }
+
+            fn into_positive(self) -> Signed<$name> {
+                Signed::Positive(self)
+            }
+
+            fn into_negative(self) -> Signed<$name> {
+                Signed::Negative(self)
             }
         }
 

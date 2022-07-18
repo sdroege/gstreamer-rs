@@ -227,7 +227,7 @@ mod typefind_factory;
 pub mod format;
 pub use crate::format::{
     CompatibleFormattedValue, FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic,
-    GenericFormattedValue, SpecificFormattedValue, SpecificFormattedValueFullRange,
+    GenericFormattedValue, Signed, SpecificFormattedValue, SpecificFormattedValueFullRange,
     SpecificFormattedValueIntrinsic,
 };
 #[cfg(feature = "ser_de")]

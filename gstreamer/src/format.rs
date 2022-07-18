@@ -10,6 +10,83 @@ use std::fmt;
 use std::ops;
 use thiserror::Error;
 
+// rustdoc-stripper-ignore-next
+/// A signed wrapper.
+///
+/// This wrapper allows representing a signed value from a type
+/// which is originaly unsigned. In C APIs, this is represented
+/// by a tuple with a signed integer positive or negative and
+/// the absolute value.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum Signed<T> {
+    Negative(T),
+    Positive(T),
+}
+
+impl<T> Signed<T> {
+    pub fn is_positive(self) -> bool {
+        matches!(self, Signed::Positive(_))
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Transforms the `Signed<T>` into a `Result<T, E>`,
+    /// mapping `Positive(v)` to `Ok(v)` and `Negative(_)` to `Err(err)`.
+    pub fn positive_or<E>(self, err: E) -> Result<T, E> {
+        match self {
+            Signed::Positive(val) => Ok(val),
+            Signed::Negative(_) => Err(err),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Transforms the `Signed<T>` into a `Result<T, E>`,
+    /// mapping `Positive(v)` to `Ok(v)` and `Negative(v)` to `Err(err(v))`.
+    pub fn positive_or_else<E, F: FnOnce(T) -> E>(self, err: F) -> Result<T, E> {
+        match self {
+            Signed::Positive(val) => Ok(val),
+            Signed::Negative(val) => Err(err(val)),
+        }
+    }
+
+    pub fn is_negative(self) -> bool {
+        matches!(self, Signed::Negative(_))
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Transforms the `Signed<T>` into a `Result<T, E>`,
+    /// mapping `Negative(v)` to `Ok(v)` and `Positive(_)` to `Err(err)`.
+    pub fn negative_or<E>(self, err: E) -> Result<T, E> {
+        match self {
+            Signed::Negative(val) => Ok(val),
+            Signed::Positive(_) => Err(err),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Transforms the `Signed<T>` into a `Result<T, E>`,
+    /// mapping `Negative(v)` to `Ok(v)` and `Positive(_)` to `Err(err(v))`.
+    pub fn negative_or_else<E, F: FnOnce(T) -> E>(self, err: F) -> Result<T, E> {
+        match self {
+            Signed::Negative(val) => Ok(val),
+            Signed::Positive(val) => Err(err(val)),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Returns the multiplication factor for this `Signed`.
+    ///
+    /// Returns:
+    ///
+    /// - `1` if the value must be considered as positive.
+    /// - `-1` if the value must be considered as negative.
+    pub fn factor(self) -> i32 {
+        match self {
+            Signed::Positive(_) => 1i32,
+            Signed::Negative(_) => -1i32,
+        }
+    }
+}
+
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 #[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
 pub enum GenericFormattedValue {
@@ -81,6 +158,10 @@ pub trait FormattedValue: Copy + Clone + Sized + Into<GenericFormattedValue> + '
     /// Type which allows building a `FormattedValue` of this format from any raw value.
     type FullRange: FormattedValueFullRange + From<Self>;
 
+    // rustdoc-stripper-ignore-next
+    /// The `Signed` type for this `FormattedValue`.
+    type Signed;
+
     #[doc(alias = "get_default_format")]
     fn default_format() -> Format;
 
@@ -88,6 +169,17 @@ pub trait FormattedValue: Copy + Clone + Sized + Into<GenericFormattedValue> + '
     fn format(&self) -> Format;
 
     unsafe fn into_raw_value(self) -> i64;
+
+    fn into_positive(self) -> Self::Signed;
+    fn into_negative(self) -> Self::Signed;
+
+    fn into_signed(self, sign: i32) -> Self::Signed {
+        if sign < 0 {
+            self.into_negative()
+        } else {
+            self.into_positive()
+        }
+    }
 }
 
 // rustdoc-stripper-ignore-next
@@ -323,6 +415,11 @@ impl CompatibleFormattedValue<GenericFormattedValue> for GenericFormattedValue {
 impl FormattedValue for GenericFormattedValue {
     type FullRange = GenericFormattedValue;
 
+    // The intrinsic value for `GenericFormattedValue` is also
+    // `GenericFormattedValue`. We can't dissociate the `Option`
+    // from the variants' inner type since they are not all `Option`s.
+    type Signed = Signed<GenericFormattedValue>;
+
     fn default_format() -> Format {
         Format::Undefined
     }
@@ -333,6 +430,14 @@ impl FormattedValue for GenericFormattedValue {
 
     unsafe fn into_raw_value(self) -> i64 {
         self.value()
+    }
+
+    fn into_positive(self) -> Signed<GenericFormattedValue> {
+        Signed::Positive(self)
+    }
+
+    fn into_negative(self) -> Signed<GenericFormattedValue> {
+        Signed::Negative(self)
     }
 }
 
@@ -385,6 +490,30 @@ impl GenericFormattedValue {
             }
         }
     }
+
+    pub fn is_some(&self) -> bool {
+        match *self {
+            Self::Undefined(_) => true,
+            Self::Default(v) => v.is_some(),
+            Self::Bytes(v) => v.is_some(),
+            Self::Time(v) => v.is_some(),
+            Self::Buffers(v) => v.is_some(),
+            Self::Percent(v) => v.is_some(),
+            Self::Other(..) => true,
+        }
+    }
+
+    pub fn is_none(&self) -> bool {
+        match *self {
+            Self::Undefined(_) => false,
+            Self::Default(v) => v.is_none(),
+            Self::Bytes(v) => v.is_none(),
+            Self::Time(v) => v.is_none(),
+            Self::Buffers(v) => v.is_none(),
+            Self::Percent(v) => v.is_none(),
+            Self::Other(..) => false,
+        }
+    }
 }
 
 impl FormattedValueIntrinsic for GenericFormattedValue {}
@@ -408,6 +537,7 @@ option_glib_newtype_display!(Buffers, "buffers");
 
 impl FormattedValue for Undefined {
     type FullRange = Undefined;
+    type Signed = Signed<Undefined>;
 
     fn default_format() -> Format {
         Format::Undefined
@@ -419,6 +549,14 @@ impl FormattedValue for Undefined {
 
     unsafe fn into_raw_value(self) -> i64 {
         self.0
+    }
+
+    fn into_positive(self) -> Signed<Undefined> {
+        Signed::Positive(self)
+    }
+
+    fn into_negative(self) -> Signed<Undefined> {
+        Signed::Negative(self)
     }
 }
 
@@ -512,6 +650,7 @@ option_glib_newtype_display!(Percent, "%");
 
 impl FormattedValue for Option<Percent> {
     type FullRange = Option<Percent>;
+    type Signed = Option<Signed<Percent>>;
 
     fn default_format() -> Format {
         Format::Percent
@@ -523,6 +662,14 @@ impl FormattedValue for Option<Percent> {
 
     unsafe fn into_raw_value(self) -> i64 {
         self.map_or(-1, |v| v.0 as i64)
+    }
+
+    fn into_positive(self) -> Option<Signed<Percent>> {
+        Some(Signed::Positive(self?))
+    }
+
+    fn into_negative(self) -> Option<Signed<Percent>> {
+        Some(Signed::Negative(self?))
     }
 }
 
@@ -549,6 +696,7 @@ impl From<Percent> for GenericFormattedValue {
 
 impl FormattedValue for Percent {
     type FullRange = Option<Percent>;
+    type Signed = Signed<Percent>;
 
     fn default_format() -> Format {
         Format::Percent
@@ -560,6 +708,14 @@ impl FormattedValue for Percent {
 
     unsafe fn into_raw_value(self) -> i64 {
         self.0 as i64
+    }
+
+    fn into_positive(self) -> Signed<Percent> {
+        Signed::Positive(self)
+    }
+
+    fn into_negative(self) -> Signed<Percent> {
+        Signed::Negative(self)
     }
 }
 
@@ -665,10 +821,7 @@ impl TryFrom<f32> for Percent {
 
 #[cfg(test)]
 mod tests {
-    use super::{
-        Buffers, CompatibleFormattedValue, Format, FormattedValue, FormattedValueError,
-        GenericFormattedValue,
-    };
+    use super::*;
     use crate::ClockTime;
 
     fn with_compatible_formats<V1, V2>(
@@ -774,5 +927,113 @@ mod tests {
             Format::Buffers,
         )
         .unwrap_err();
+    }
+
+    #[test]
+    fn signed_optional() {
+        let ct_1 = Some(ClockTime::SECOND);
+
+        let signed = ct_1.into_positive().unwrap();
+        assert_eq!(signed, Signed::Positive(ClockTime::SECOND));
+        assert!(signed.is_positive());
+        assert_eq!(signed.positive_or(()).unwrap(), ClockTime::SECOND);
+        assert_eq!(signed.positive_or_else(|_| ()).unwrap(), ClockTime::SECOND);
+        signed.negative_or(()).unwrap_err();
+        assert_eq!(
+            signed.negative_or_else(|val| val).unwrap_err(),
+            ClockTime::SECOND
+        );
+
+        let signed = ct_1.into_negative().unwrap();
+        assert_eq!(signed, Signed::Negative(ClockTime::SECOND));
+        assert!(signed.is_negative());
+        assert_eq!(signed.negative_or(()).unwrap(), ClockTime::SECOND);
+        assert_eq!(signed.negative_or_else(|_| ()).unwrap(), ClockTime::SECOND);
+        signed.positive_or(()).unwrap_err();
+        assert_eq!(
+            signed.positive_or_else(|val| val).unwrap_err(),
+            ClockTime::SECOND
+        );
+
+        let ct_none = ClockTime::NONE;
+        assert!(ct_none.into_positive().is_none());
+        assert!(ct_none.into_negative().is_none());
+    }
+
+    #[test]
+    fn signed_mandatory() {
+        let ct_1 = ClockTime::SECOND;
+
+        let signed = ct_1.into_positive();
+        assert_eq!(signed, Signed::Positive(ct_1));
+        assert!(signed.is_positive());
+
+        let signed = ct_1.into_negative();
+        assert_eq!(signed, Signed::Negative(ct_1));
+        assert!(signed.is_negative());
+
+        let und = Undefined(1);
+
+        let signed = und.into_positive();
+        assert_eq!(signed, Signed::Positive(und));
+        assert!(signed.is_positive());
+
+        let signed = und.into_negative();
+        assert_eq!(signed, Signed::Negative(und));
+        assert!(signed.is_negative());
+    }
+
+    #[test]
+    fn signed_generic() {
+        let ct_1 = GenericFormattedValue::Time(Some(ClockTime::SECOND));
+        assert!(ct_1.is_some());
+
+        let signed = ct_1.into_positive();
+        assert_eq!(signed, Signed::Positive(ct_1));
+        assert!(signed.is_positive());
+
+        let signed = ct_1.into_negative();
+        assert_eq!(signed, Signed::Negative(ct_1));
+        assert!(signed.is_negative());
+
+        let ct_none = GenericFormattedValue::Time(ClockTime::NONE);
+        assert!(ct_none.is_none());
+
+        let signed = ct_none.into_positive();
+        assert_eq!(signed, Signed::Positive(ct_none));
+        assert!(signed.is_positive());
+
+        let signed = ct_none.into_negative();
+        assert_eq!(signed, Signed::Negative(ct_none));
+        assert!(signed.is_negative());
+    }
+
+    #[test]
+    fn signed_roundtrip() {
+        let ct_1 = Some(ClockTime::SECOND);
+        let raw_ct_1 = unsafe { ct_1.into_raw_value() };
+
+        let signed = unsafe { Option::<ClockTime>::from_raw(Format::Time, raw_ct_1) }
+            .into_signed(1)
+            .unwrap();
+        assert_eq!(signed, Signed::Positive(ClockTime::SECOND));
+        assert!(signed.is_positive());
+
+        let signed = unsafe { Option::<ClockTime>::from_raw(Format::Time, raw_ct_1) }
+            .into_signed(-1)
+            .unwrap();
+        assert_eq!(signed, Signed::Negative(ClockTime::SECOND));
+        assert!(signed.is_negative());
+
+        let ct_none = ClockTime::NONE;
+        let raw_ct_none = unsafe { ct_none.into_raw_value() };
+
+        let signed =
+            unsafe { Option::<ClockTime>::from_raw(Format::Time, raw_ct_none) }.into_signed(1);
+        assert!(signed.is_none());
+
+        let signed =
+            unsafe { Option::<ClockTime>::from_raw(Format::Time, raw_ct_none) }.into_signed(-1);
+        assert!(signed.is_none());
     }
 }
