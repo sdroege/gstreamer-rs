@@ -245,7 +245,12 @@ fn previous_fraction(fraction: gst::Fraction) -> gst::Fraction {
     skip_assert_initialized!();
     let num = fraction.numer();
     let den = fraction.denom();
-    let (new_num, new_den, _, _) = farey_neighbours(num, den);
+    let (new_num, new_den);
+    if num < den {
+        (new_num, new_den, _, _) = farey_neighbours(num, den);
+    } else {
+        (_, _, new_den, new_num) = farey_neighbours(den, num);
+    }
     gst::Fraction::new(new_num, new_den)
 }
 
@@ -253,6 +258,50 @@ fn next_fraction(fraction: gst::Fraction) -> gst::Fraction {
     skip_assert_initialized!();
     let num = fraction.numer();
     let den = fraction.denom();
-    let (_, _, new_num, new_den) = farey_neighbours(num, den);
+    let (new_num, new_den);
+    if num < den {
+        (_, _, new_num, new_den) = farey_neighbours(num, den);
+    } else {
+        (new_den, new_num, _, _) = farey_neighbours(den, num);
+    }
     gst::Fraction::new(new_num, new_den)
+}
+
+#[test]
+fn test_0_1_fraction() {
+    gst::init().unwrap();
+    let zero_over_one = gst::Fraction::new(0, 1);
+    let prev = previous_fraction(zero_over_one);
+    assert_eq!(prev.numer(), -1);
+    assert_eq!(prev.denom(), i32::MAX);
+    let next = next_fraction(zero_over_one);
+    assert_eq!(next.numer(), 1);
+    assert_eq!(next.denom(), i32::MAX);
+}
+
+#[test]
+fn test_25_1() {
+    gst::init().unwrap();
+    let twentyfive = gst::Fraction::new(25, 1);
+    let next = next_fraction(twentyfive);
+    //25.000000011641532
+    assert_eq!(next.numer(), 2147483626);
+    assert_eq!(next.denom(), 85899345);
+    let prev = previous_fraction(twentyfive);
+    //24.999999988358468
+    assert_eq!(prev.numer(), 2147483624);
+    assert_eq!(prev.denom(), 85899345);
+}
+#[test]
+fn test_1_25() {
+    gst::init().unwrap();
+    let twentyfive = gst::Fraction::new(1, 25);
+    let next = next_fraction(twentyfive);
+    //0.040000000018626
+    assert_eq!(next.numer(), 85899345);
+    assert_eq!(next.denom(), 2147483624);
+    let prev = previous_fraction(twentyfive);
+    //0.039999999981374
+    assert_eq!(prev.numer(), 85899345);
+    assert_eq!(prev.denom(), 2147483626);
 }
