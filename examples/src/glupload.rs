@@ -335,7 +335,7 @@ impl App {
             .bus()
             .expect("Pipeline without bus. Shouldn't happen!");
 
-        let event_loop = glutin::event_loop::EventLoop::with_user_event();
+        let event_loop = glutin::event_loop::EventLoopBuilder::with_user_event().build();
         let window = glutin::window::WindowBuilder::new().with_title("GL rendering");
         let windowed_context = glutin::ContextBuilder::new()
             .with_vsync(true)
