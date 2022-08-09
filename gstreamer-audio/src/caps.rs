@@ -11,7 +11,12 @@ pub struct AudioCapsBuilder<T> {
 impl AudioCapsBuilder<gst::caps::NoFeature> {
     pub fn new() -> Self {
         let builder = Caps::builder("audio/x-raw");
-        AudioCapsBuilder { builder }
+        let builder = AudioCapsBuilder { builder };
+        builder
+            .rate_range(..)
+            .channels_range(..)
+            .layout_list([AudioLayout::Interleaved, AudioLayout::NonInterleaved])
+            .format_list(AudioFormat::iter_raw())
     }
 
     pub fn any_features(self) -> AudioCapsBuilder<gst::caps::HasFeatures> {

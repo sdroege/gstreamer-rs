@@ -11,7 +11,12 @@ pub struct VideoCapsBuilder<T> {
 impl VideoCapsBuilder<gst::caps::NoFeature> {
     pub fn new() -> Self {
         let builder = Caps::builder("video/x-raw");
-        VideoCapsBuilder { builder }
+        let builder = VideoCapsBuilder { builder };
+        builder
+            .format_list(VideoFormat::iter_raw())
+            .width_range(..)
+            .height_range(..)
+            .framerate_range(..)
     }
 
     pub fn any_features(self) -> VideoCapsBuilder<gst::caps::HasFeatures> {
