@@ -252,7 +252,7 @@ impl ops::Deref for AudioBufferPtr {
 
     fn deref(&self) -> &Self::Target {
         match self {
-            Self::Owned(ref b) => &*b,
+            Self::Owned(ref b) => b,
             Self::Borrowed(ref b) => unsafe { b.as_ref() },
         }
     }
