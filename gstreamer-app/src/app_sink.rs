@@ -264,7 +264,7 @@ unsafe extern "C" fn trampoline_new_event(
 }
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
-    Box::<AppSinkCallbacks>::from_raw(ptr as *mut _);
+    let _ = Box::<AppSinkCallbacks>::from_raw(ptr as *mut _);
 }
 
 impl AppSink {

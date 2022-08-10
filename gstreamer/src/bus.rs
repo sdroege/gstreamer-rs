@@ -31,7 +31,7 @@ unsafe extern "C" fn destroy_closure_watch<
 >(
     ptr: gpointer,
 ) {
-    Box::<F>::from_raw(ptr as *mut _);
+    let _ = Box::<F>::from_raw(ptr as *mut _);
 }
 
 fn into_raw_watch<F: FnMut(&Bus, &Message) -> Continue + Send + 'static>(func: F) -> gpointer {
@@ -53,7 +53,7 @@ unsafe extern "C" fn trampoline_watch_local<F: FnMut(&Bus, &Message) -> Continue
 unsafe extern "C" fn destroy_closure_watch_local<F: FnMut(&Bus, &Message) -> Continue + 'static>(
     ptr: gpointer,
 ) {
-    Box::<glib::thread_guard::ThreadGuard<F>>::from_raw(ptr as *mut _);
+    let _ = Box::<glib::thread_guard::ThreadGuard<F>>::from_raw(ptr as *mut _);
 }
 
 fn into_raw_watch_local<F: FnMut(&Bus, &Message) -> Continue + 'static>(func: F) -> gpointer {
@@ -85,7 +85,7 @@ unsafe extern "C" fn destroy_closure_sync<
 >(
     ptr: gpointer,
 ) {
-    Box::<F>::from_raw(ptr as *mut _);
+    let _ = Box::<F>::from_raw(ptr as *mut _);
 }
 
 fn into_raw_sync<F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>(

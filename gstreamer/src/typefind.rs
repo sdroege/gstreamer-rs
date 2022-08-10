@@ -125,7 +125,7 @@ unsafe extern "C" fn type_find_trampoline<F: Fn(&mut TypeFind) + Send + Sync + '
 unsafe extern "C" fn type_find_closure_drop<F: Fn(&mut TypeFind) + Send + Sync + 'static>(
     data: glib::ffi::gpointer,
 ) {
-    Box::<F>::from_raw(data as *mut _);
+    let _ = Box::<F>::from_raw(data as *mut _);
 }
 
 unsafe extern "C" fn type_find_peek(

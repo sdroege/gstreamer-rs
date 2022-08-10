@@ -201,7 +201,7 @@ unsafe extern "C" fn trampoline_seek_data(
 }
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
-    Box::<AppSrcCallbacks>::from_raw(ptr as *mut _);
+    let _ = Box::<AppSrcCallbacks>::from_raw(ptr as *mut _);
 }
 
 impl AppSrc {

@@ -20,7 +20,7 @@ unsafe extern "C" fn destroy_closure_watch<
 >(
     ptr: gpointer,
 ) {
-    Box::<F>::from_raw(ptr as *mut _);
+    let _ = Box::<F>::from_raw(ptr as *mut _);
 }
 
 fn into_raw_watch<F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static>(func: F) -> gpointer {

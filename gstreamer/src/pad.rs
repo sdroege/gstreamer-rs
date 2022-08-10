@@ -1592,7 +1592,7 @@ unsafe extern "C" fn trampoline_unlink_function<
 }
 
 unsafe extern "C" fn destroy_closure<F>(ptr: gpointer) {
-    Box::<F>::from_raw(ptr as *mut _);
+    let _ = Box::<F>::from_raw(ptr as *mut _);
 }
 
 unsafe extern "C" fn trampoline_pad_task<F: FnMut() + Send + 'static>(func: gpointer) {
@@ -1607,7 +1607,7 @@ fn into_raw_pad_task<F: FnMut() + Send + 'static>(func: F) -> gpointer {
 }
 
 unsafe extern "C" fn destroy_closure_pad_task<F>(ptr: gpointer) {
-    Box::<F>::from_raw(ptr as *mut _);
+    let _ = Box::<F>::from_raw(ptr as *mut _);
 }
 
 impl Pad {

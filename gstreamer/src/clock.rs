@@ -169,7 +169,7 @@ impl SingleShotClockId {
         >(
             ptr: gpointer,
         ) {
-            Box::<Option<F>>::from_raw(ptr as *mut _);
+            let _ = Box::<Option<F>>::from_raw(ptr as *mut _);
         }
 
         let func: Box<Option<F>> = Box::new(Some(func));
@@ -286,7 +286,7 @@ impl PeriodicClockId {
         >(
             ptr: gpointer,
         ) {
-            Box::<F>::from_raw(ptr as *mut _);
+            let _ = Box::<F>::from_raw(ptr as *mut _);
         }
 
         let func: Box<F> = Box::new(func);
