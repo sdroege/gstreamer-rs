@@ -125,27 +125,6 @@ impl<'a> ParamSpecFractionBuilder<'a> {
     }
 
     // rustdoc-stripper-ignore-next
-    /// Default: `self.name`
-    pub fn nick(mut self, nick: &'a str) -> Self {
-        self.nick = Some(nick);
-        self
-    }
-
-    // rustdoc-stripper-ignore-next
-    /// Default: `self.name`
-    pub fn blurb(mut self, blurb: &'a str) -> Self {
-        self.blurb = Some(blurb);
-        self
-    }
-
-    // rustdoc-stripper-ignore-next
-    /// Default: `glib::ParamFlags::READWRITE`
-    pub fn flags(mut self, flags: glib::ParamFlags) -> Self {
-        self.flags = flags;
-        self
-    }
-
-    // rustdoc-stripper-ignore-next
     /// Default: `-i32::MAX/1`
     pub fn minimum(mut self, minimum: crate::Fraction) -> Self {
         self.minimum = Some(minimum);
@@ -180,6 +159,21 @@ impl<'a> ParamSpecFractionBuilder<'a> {
                 .unwrap_or_else(|| crate::Fraction::new(0, 1)),
             self.flags,
         )
+    }
+}
+
+impl<'a> glib::prelude::ParamSpecBuilderExt<'a> for ParamSpecFractionBuilder<'a> {
+    fn set_nick(&mut self, nick: Option<&'a str>) {
+        self.nick = nick;
+    }
+    fn set_blurb(&mut self, blurb: Option<&'a str>) {
+        self.blurb = blurb;
+    }
+    fn set_flags(&mut self, flags: glib::ParamFlags) {
+        self.flags = flags;
+    }
+    fn current_flags(&self) -> glib::ParamFlags {
+        self.flags
     }
 }
 
@@ -279,27 +273,6 @@ impl<'a> ParamSpecArrayBuilder<'a> {
     }
 
     // rustdoc-stripper-ignore-next
-    /// Default: `self.name`
-    pub fn nick(mut self, nick: &'a str) -> Self {
-        self.nick = Some(nick);
-        self
-    }
-
-    // rustdoc-stripper-ignore-next
-    /// Default: `self.name`
-    pub fn blurb(mut self, blurb: &'a str) -> Self {
-        self.blurb = Some(blurb);
-        self
-    }
-
-    // rustdoc-stripper-ignore-next
-    /// Default: `glib::ParamFlags::READWRITE`
-    pub fn flags(mut self, flags: glib::ParamFlags) -> Self {
-        self.flags = flags;
-        self
-    }
-
-    // rustdoc-stripper-ignore-next
     /// Default: `None`
     pub fn element_spec(mut self, element_spec: &'a glib::ParamSpec) -> Self {
         self.element_spec = Some(element_spec);
@@ -318,9 +291,25 @@ impl<'a> ParamSpecArrayBuilder<'a> {
     }
 }
 
+impl<'a> glib::prelude::ParamSpecBuilderExt<'a> for ParamSpecArrayBuilder<'a> {
+    fn set_nick(&mut self, nick: Option<&'a str>) {
+        self.nick = nick;
+    }
+    fn set_blurb(&mut self, blurb: Option<&'a str>) {
+        self.blurb = blurb;
+    }
+    fn set_flags(&mut self, flags: glib::ParamFlags) {
+        self.flags = flags;
+    }
+    fn current_flags(&self) -> glib::ParamFlags {
+        self.flags
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use glib::prelude::*;
 
     #[test]
     fn test_trait() {
@@ -335,5 +324,14 @@ mod tests {
             (1, 1).into(),
             glib::ParamFlags::READWRITE,
         );
+
+        let _pspec = ParamSpecFraction::builder("foo")
+            .nick("Foo")
+            .blurb("Foo Bar")
+            .minimum((0, 1).into())
+            .maximum((100, 1).into())
+            .default_value((1, 1).into())
+            .readwrite()
+            .build();
     }
 }
