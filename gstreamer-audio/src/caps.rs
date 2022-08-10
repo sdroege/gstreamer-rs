@@ -19,6 +19,10 @@ impl AudioCapsBuilder<gst::caps::NoFeature> {
             .format_list(AudioFormat::iter_raw())
     }
 
+    pub fn new_interleaved() -> Self {
+        AudioCapsBuilder::new().layout(AudioLayout::Interleaved)
+    }
+
     pub fn any_features(self) -> AudioCapsBuilder<gst::caps::HasFeatures> {
         AudioCapsBuilder {
             builder: self.builder.any_features(),
