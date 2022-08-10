@@ -342,6 +342,8 @@ pub mod prelude {
 
     pub use crate::tags::{CustomTag, Tag};
 
+    pub use crate::param_spec::GstParamSpecBuilderExt;
+
     pub use muldiv::MulDiv;
 
     pub use crate::format::{

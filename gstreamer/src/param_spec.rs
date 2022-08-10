@@ -306,6 +306,54 @@ impl<'a> glib::prelude::ParamSpecBuilderExt<'a> for ParamSpecArrayBuilder<'a> {
     }
 }
 
+pub trait GstParamSpecBuilderExt<'a>: glib::prelude::ParamSpecBuilderExt<'a> {
+    // rustdoc-stripper-ignore-next
+    /// Mark the property as controllable
+    fn controllable(self) -> Self {
+        let flags = self.current_flags() | crate::PARAM_FLAG_CONTROLLABLE;
+        self.flags(flags)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Mark the property as mutable in ready state
+    fn mutable_ready(self) -> Self {
+        let flags = self.current_flags() | crate::PARAM_FLAG_MUTABLE_READY;
+        self.flags(flags)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Mark the property as mutable in paused state
+    fn mutable_paused(self) -> Self {
+        let flags = self.current_flags() | crate::PARAM_FLAG_MUTABLE_PAUSED;
+        self.flags(flags)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Mark the property as mutable in playing state
+    fn mutable_playing(self) -> Self {
+        let flags = self.current_flags() | crate::PARAM_FLAG_MUTABLE_PLAYING;
+        self.flags(flags)
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    // rustdoc-stripper-ignore-next
+    /// Mark the property for showing the default value in the docs
+    fn doc_show_default(self) -> Self {
+        let flags = self.current_flags() | crate::PARAM_FLAG_DOC_SHOW_DEFAULT;
+        self.flags(flags)
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    // rustdoc-stripper-ignore-next
+    /// Mark the property for being only conditionally available
+    fn conditionally_available(self) -> Self {
+        let flags = self.current_flags() | crate::PARAM_FLAG_CONDITIONALLY_AVAILABLE;
+        self.flags(flags)
+    }
+}
+
+impl<'a, T: glib::prelude::ParamSpecBuilderExt<'a>> GstParamSpecBuilderExt<'a> for T {}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -332,6 +380,7 @@ mod tests {
             .maximum((100, 1).into())
             .default_value((1, 1).into())
             .readwrite()
+            .mutable_playing()
             .build();
     }
 }
