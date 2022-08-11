@@ -758,6 +758,13 @@ impl BufferRef {
     ) -> Result<BufferRefCursor<&mut BufferRef>, glib::BoolError> {
         BufferRefCursor::new_writable(self)
     }
+
+    // rustdoc-stripper-ignore-next
+    /// Returns `true` if the two [`BufferRef`] point to the same buffer.
+    pub fn ptr_eq(this: &BufferRef, other: &BufferRef) -> bool {
+        skip_assert_initialized!();
+        this.as_ptr() == other.as_ptr()
+    }
 }
 
 macro_rules! define_meta_iter(
@@ -1520,5 +1527,15 @@ mod tests {
         });
 
         assert_eq!(&[ClockTime::ZERO][..], &res[..]);
+    }
+
+    #[test]
+    fn test_ptr_eq() {
+        crate::init().unwrap();
+
+        let buffer1 = Buffer::new();
+        assert!(BufferRef::ptr_eq(&buffer1, &buffer1));
+        let buffer2 = Buffer::new();
+        assert!(!BufferRef::ptr_eq(&buffer1, &buffer2));
     }
 }
