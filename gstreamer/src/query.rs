@@ -125,7 +125,7 @@ impl fmt::Debug for Query {
 impl fmt::Debug for QueryRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Query")
-            .field("ptr", unsafe { &self.as_ptr() })
+            .field("ptr", &self.as_ptr())
             .field("type", &unsafe {
                 let type_ = ffi::gst_query_type_get_name((*self.as_ptr()).type_);
                 CStr::from_ptr(type_).to_str().unwrap()
@@ -1647,9 +1647,7 @@ mod tests {
                 QueryView::Position(p) => {
                     let pos = p.result();
                     assert_eq!(pos.try_into(), Ok(Some(3 * ClockTime::SECOND)));
-                    unsafe {
-                        assert!(!p.as_mut_ptr().is_null());
-                    }
+                    assert!(!p.as_mut_ptr().is_null());
                 }
                 _ => panic!("Wrong concrete Query in Query"),
             }
@@ -1701,8 +1699,6 @@ mod tests {
         crate::init().unwrap();
 
         let p = Position::new(crate::Format::Time);
-        unsafe {
-            assert!(!p.as_mut_ptr().is_null());
-        }
+        assert!(!p.as_mut_ptr().is_null());
     }
 }

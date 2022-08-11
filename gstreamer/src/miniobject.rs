@@ -149,7 +149,7 @@ macro_rules! mini_object_wrapper (
             type Storage = &'a Self;
 
             fn to_glib_none(&'a self) -> $crate::glib::translate::Stash<'a, *const $ffi_name, Self> {
-                $crate::glib::translate::Stash(unsafe { self.as_ptr() }, self)
+                $crate::glib::translate::Stash( self.as_ptr() , self)
             }
 
             fn to_glib_full(&self) -> *const $ffi_name {
@@ -164,7 +164,7 @@ macro_rules! mini_object_wrapper (
             type Storage = &'a Self;
 
             fn to_glib_none(&'a self) -> $crate::glib::translate::Stash<'a, *mut $ffi_name, Self> {
-                $crate::glib::translate::Stash(unsafe { self.as_mut_ptr() }, self)
+                $crate::glib::translate::Stash( self.as_mut_ptr() , self)
             }
 
             fn to_glib_full(&self) -> *mut $ffi_name {
@@ -180,7 +180,7 @@ macro_rules! mini_object_wrapper (
 
             fn to_glib_none_mut(&'a mut self) -> $crate::glib::translate::StashMut<*mut $ffi_name, Self> {
                 self.make_mut();
-                $crate::glib::translate::StashMut(unsafe { self.as_mut_ptr() }, self)
+                $crate::glib::translate::StashMut( self.as_mut_ptr() , self)
             }
         }
 
@@ -389,11 +389,11 @@ macro_rules! mini_object_wrapper (
         }
 
         impl $ref_name {
-            pub unsafe fn as_ptr(&self) -> *const $ffi_name {
+            pub fn as_ptr(&self) -> *const $ffi_name {
                 self as *const Self as *const $ffi_name
             }
 
-            pub unsafe fn as_mut_ptr(&self) -> *mut $ffi_name {
+            pub fn as_mut_ptr(&self) -> *mut $ffi_name {
                 self as *const Self as *mut $ffi_name
             }
 
@@ -567,7 +567,7 @@ impl fmt::Debug for MiniObject {
 impl fmt::Debug for MiniObjectRef {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("MiniObject")
-            .field("ptr", unsafe { &self.as_ptr() })
+            .field("ptr", &self.as_ptr())
             .field("type", &self.type_())
             .finish()
     }

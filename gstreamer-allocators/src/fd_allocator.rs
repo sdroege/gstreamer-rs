@@ -24,7 +24,7 @@ impl fmt::Debug for FdMemory {
 impl fmt::Debug for FdMemoryRef {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("FdMemory")
-            .field("ptr", unsafe { &self.as_ptr() })
+            .field("ptr", &self.as_ptr())
             .field("allocator", &self.allocator())
             .field("parent", &self.parent())
             .field("maxsize", &self.maxsize())

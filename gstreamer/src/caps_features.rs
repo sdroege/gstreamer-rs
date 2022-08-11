@@ -304,11 +304,11 @@ impl CapsFeaturesRef {
         &mut *(ptr as *mut CapsFeaturesRef)
     }
 
-    pub unsafe fn as_ptr(&self) -> *const ffi::GstCapsFeatures {
+    pub fn as_ptr(&self) -> *const ffi::GstCapsFeatures {
         self as *const Self as *const ffi::GstCapsFeatures
     }
 
-    pub unsafe fn as_mut_ptr(&self) -> *mut ffi::GstCapsFeatures {
+    pub fn as_mut_ptr(&self) -> *mut ffi::GstCapsFeatures {
         self as *const Self as *mut ffi::GstCapsFeatures
     }
 

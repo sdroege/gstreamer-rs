@@ -271,7 +271,7 @@ impl fmt::Debug for Event {
 impl fmt::Debug for EventRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Event")
-            .field("ptr", unsafe { &self.as_ptr() })
+            .field("ptr", &self.as_ptr())
             .field("type", &self.type_().name())
             .field("seqnum", &self.seqnum())
             .field("structure", &self.structure())

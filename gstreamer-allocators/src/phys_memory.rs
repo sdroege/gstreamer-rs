@@ -22,7 +22,7 @@ impl fmt::Debug for PhysMemory {
 impl fmt::Debug for PhysMemoryRef {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("FdMemory")
-            .field("ptr", unsafe { &self.as_ptr() })
+            .field("ptr", &self.as_ptr())
             .field("allocator", &self.allocator())
             .field("parent", &self.parent())
             .field("maxsize", &self.maxsize())

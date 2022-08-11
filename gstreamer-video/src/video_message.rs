@@ -138,7 +138,7 @@ pub struct NavigationEventMessage {
 
 impl PartialEq for NavigationEventMessage {
     fn eq(&self, other: &Self) -> bool {
-        unsafe { self.event.as_ptr() == other.event.as_ptr() }
+        self.event.as_ptr() == other.event.as_ptr()
     }
 }
 

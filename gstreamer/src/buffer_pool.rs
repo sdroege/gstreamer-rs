@@ -64,11 +64,11 @@ impl BufferPoolConfigRef {
         &mut *(ptr as *mut StructureRef as *mut BufferPoolConfigRef)
     }
 
-    pub unsafe fn as_ptr(&self) -> *const ffi::GstStructure {
+    pub fn as_ptr(&self) -> *const ffi::GstStructure {
         self as *const Self as *const ffi::GstStructure
     }
 
-    pub unsafe fn as_mut_ptr(&self) -> *mut ffi::GstStructure {
+    pub fn as_mut_ptr(&self) -> *mut ffi::GstStructure {
         self as *const Self as *mut ffi::GstStructure
     }
 }

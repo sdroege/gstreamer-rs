@@ -201,7 +201,7 @@ impl fmt::Debug for BufferListRef {
             .unwrap_or((ClockTime::NONE, ClockTime::NONE));
 
         f.debug_struct("BufferList")
-            .field("ptr", unsafe { &self.as_ptr() })
+            .field("ptr", &self.as_ptr())
             .field("buffers", &self.len())
             .field("pts", &pts.display())
             .field("dts", &dts.display())

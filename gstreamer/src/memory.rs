@@ -38,7 +38,7 @@ impl fmt::Debug for Memory {
 impl fmt::Debug for MemoryRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Memory")
-            .field("ptr", unsafe { &self.as_ptr() })
+            .field("ptr", &self.as_ptr())
             .field("allocator", &self.allocator())
             .field("parent", &self.parent())
             .field("maxsize", &self.maxsize())

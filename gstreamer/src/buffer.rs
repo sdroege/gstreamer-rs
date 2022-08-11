@@ -1051,7 +1051,7 @@ impl fmt::Debug for BufferRef {
         }
 
         f.debug_struct("Buffer")
-            .field("ptr", unsafe { &self.as_ptr() })
+            .field("ptr", &self.as_ptr())
             .field("pts", &self.pts().display())
             .field("dts", &self.dts().display())
             .field("duration", &self.duration().display())
@@ -1306,15 +1306,11 @@ mod tests {
         let mut buffer2 = buffer.clone();
         assert_eq!(buffer.get_mut(), None);
 
-        unsafe {
-            assert_eq!(buffer2.as_ptr(), buffer.as_ptr());
-        }
+        assert_eq!(buffer2.as_ptr(), buffer.as_ptr());
 
         {
             let buffer2 = buffer2.make_mut();
-            unsafe {
-                assert_ne!(buffer2.as_ptr(), buffer.as_ptr());
-            }
+            assert_ne!(buffer2.as_ptr(), buffer.as_ptr());
 
             buffer2.set_pts(Some(2 * ClockTime::NSECOND));
 

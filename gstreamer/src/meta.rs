@@ -681,9 +681,7 @@ mod tests {
         let parent = crate::Buffer::new();
         {
             let meta = ParentBufferMeta::add(buffer.get_mut().unwrap(), &parent);
-            unsafe {
-                assert_eq!(meta.parent().as_ptr(), parent.as_ptr());
-            }
+            assert_eq!(meta.parent().as_ptr(), parent.as_ptr());
         }
 
         {
@@ -697,9 +695,7 @@ mod tests {
         {
             let metas = buffer.iter_meta::<ParentBufferMeta>().collect::<Vec<_>>();
             assert_eq!(metas.len(), 1);
-            unsafe {
-                assert_eq!(metas[0].parent().as_ptr(), parent.as_ptr());
-            }
+            assert_eq!(metas[0].parent().as_ptr(), parent.as_ptr());
         }
         {
             let metas = buffer
@@ -708,9 +704,7 @@ mod tests {
                 .iter_meta_mut::<ParentBufferMeta>()
                 .collect::<Vec<_>>();
             assert_eq!(metas.len(), 1);
-            unsafe {
-                assert_eq!(metas[0].parent().as_ptr(), parent.as_ptr());
-            }
+            assert_eq!(metas[0].parent().as_ptr(), parent.as_ptr());
         }
 
         {
@@ -719,9 +713,7 @@ mod tests {
                 .unwrap()
                 .meta_mut::<ParentBufferMeta>()
                 .unwrap();
-            unsafe {
-                assert_eq!(meta.parent().as_ptr(), parent.as_ptr());
-            }
+            assert_eq!(meta.parent().as_ptr(), parent.as_ptr());
             meta.remove().unwrap();
         }
 

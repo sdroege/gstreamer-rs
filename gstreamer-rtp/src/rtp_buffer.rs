@@ -416,11 +416,11 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
-    pub unsafe fn as_ptr(&self) -> *const ffi::GstRTPBuffer {
+    pub fn as_ptr(&self) -> *const ffi::GstRTPBuffer {
         &self.rtp_buffer as *const ffi::GstRTPBuffer
     }
 
-    pub unsafe fn as_mut_ptr(&self) -> *mut ffi::GstRTPBuffer {
+    pub fn as_mut_ptr(&self) -> *mut ffi::GstRTPBuffer {
         &self.rtp_buffer as *const ffi::GstRTPBuffer as *mut ffi::GstRTPBuffer
     }
 }
