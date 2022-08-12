@@ -431,6 +431,11 @@ macro_rules! mini_object_wrapper (
                     &mut *(self.as_mut_ptr() as *mut $crate::miniobject::MiniObjectRef)
                 }
             }
+
+            pub fn ptr_eq(this: &$ref_name, other: &$ref_name) -> bool {
+                skip_assert_initialized!();
+                this.as_ptr() == other.as_ptr()
+            }
         }
 
         impl $crate::glib::translate::GlibPtrDefault for $ref_name {
