@@ -25,6 +25,7 @@ manual = [
     "GLib.Source",
     "GLib.Type",
     "GObject.Object",
+    "GObject.ParamSpec",
     "GObject.Value",
     "Gst.Bin",
     "Gst.ChildProxy",
@@ -410,6 +411,16 @@ manual_traits = ["TimelineElementExtManual"]
         bool_return_is_error = "Failed to set name"
 
     [[object.function]]
+    name = "add_child_property"
+        [object.function.return]
+        bool_return_is_error = "Failed to add child property"
+
+    [[object.function]]
+    name = "remove_child_property"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove child property"
+
+    [[object.function]]
     name = "set_child_property"
         [object.function.return]
         bool_return_is_error = "Failed to set child property"
@@ -469,6 +480,20 @@ status = "generate"
     name = "remove_control_binding"
         [object.function.return]
         bool_return_is_error = "Failed to remove control binding"
+
+    [[object.function]]
+    name = "set_child_property"
+        [[object.function.parameter]]
+        name = "value"
+        const = true
+        [object.function.return]
+        bool_return_is_error = "Failed to set child property"
+
+    [[object.function]]
+    name = "set_child_property_by_pspec"
+        [[object.function.parameter]]
+        name = "value"
+        const = true
 
 [[object]]
 name = "GES.TrackType"

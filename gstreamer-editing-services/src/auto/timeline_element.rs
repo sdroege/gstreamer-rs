@@ -24,12 +24,8 @@ use glib::translate::*;
 use glib::StaticType;
 use glib::ToValue;
 use std::boxed::Box as Box_;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::mem;
 use std::mem::transmute;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::ptr;
 
 glib::wrapper! {
@@ -46,8 +42,12 @@ impl TimelineElement {
 }
 
 pub trait TimelineElementExt: 'static {
-    //#[doc(alias = "ges_timeline_element_add_child_property")]
-    //fn add_child_property(&self, pspec: /*Ignored*/&glib::ParamSpec, child: &impl IsA<glib::Object>) -> bool;
+    #[doc(alias = "ges_timeline_element_add_child_property")]
+    fn add_child_property(
+        &self,
+        pspec: impl AsRef<glib::ParamSpec>,
+        child: &impl IsA<glib::Object>,
+    ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_timeline_element_copy")]
     fn copy(&self, deep: bool) -> Result<TimelineElement, glib::BoolError>;
@@ -83,9 +83,9 @@ pub trait TimelineElementExt: 'static {
     #[doc(alias = "get_child_property")]
     fn child_property(&self, property_name: &str) -> Option<glib::Value>;
 
-    //#[doc(alias = "ges_timeline_element_get_child_property_by_pspec")]
-    //#[doc(alias = "get_child_property_by_pspec")]
-    //fn child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec) -> glib::Value;
+    #[doc(alias = "ges_timeline_element_get_child_property_by_pspec")]
+    #[doc(alias = "get_child_property_by_pspec")]
+    fn child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>) -> glib::Value;
 
     //#[doc(alias = "ges_timeline_element_get_child_property_valist")]
     //#[doc(alias = "get_child_property_valist")]
@@ -145,17 +145,20 @@ pub trait TimelineElementExt: 'static {
     #[doc(alias = "get_track_types")]
     fn track_types(&self) -> TrackType;
 
-    //#[doc(alias = "ges_timeline_element_list_children_properties")]
-    //fn list_children_properties(&self) -> /*Ignored*/Vec<glib::ParamSpec>;
+    #[doc(alias = "ges_timeline_element_list_children_properties")]
+    fn list_children_properties(&self) -> Vec<glib::ParamSpec>;
 
-    //#[doc(alias = "ges_timeline_element_lookup_child")]
-    //fn lookup_child(&self, prop_name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<glib::Object>;
+    #[doc(alias = "ges_timeline_element_lookup_child")]
+    fn lookup_child(&self, prop_name: &str) -> Option<(glib::Object, glib::ParamSpec)>;
 
     #[doc(alias = "ges_timeline_element_paste")]
     fn paste(&self, paste_position: gst::ClockTime) -> Result<TimelineElement, glib::BoolError>;
 
-    //#[doc(alias = "ges_timeline_element_remove_child_property")]
-    //fn remove_child_property(&self, pspec: /*Ignored*/&glib::ParamSpec) -> bool;
+    #[doc(alias = "ges_timeline_element_remove_child_property")]
+    fn remove_child_property(
+        &self,
+        pspec: impl AsRef<glib::ParamSpec>,
+    ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_timeline_element_ripple")]
     fn ripple(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError>;
@@ -179,8 +182,8 @@ pub trait TimelineElementExt: 'static {
         value: &glib::Value,
     ) -> Result<(), glib::error::BoolError>;
 
-    //#[doc(alias = "ges_timeline_element_set_child_property_by_pspec")]
-    //fn set_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: &glib::Value);
+    #[doc(alias = "ges_timeline_element_set_child_property_by_pspec")]
+    fn set_child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>, value: &glib::Value);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -232,18 +235,28 @@ pub trait TimelineElementExt: 'static {
 
     fn set_serialize(&self, serialize: bool);
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //#[doc(alias = "child-property-added")]
-    //fn connect_child_property_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "child-property-added")]
+    fn connect_child_property_added<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //#[doc(alias = "child-property-removed")]
-    //fn connect_child_property_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "child-property-removed")]
+    fn connect_child_property_removed<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    //#[doc(alias = "deep-notify")]
-    //fn connect_deep_notify<Unsupported or ignored types>(&self, detail: Option<&str>, f: F) -> SignalHandlerId;
+    #[doc(alias = "deep-notify")]
+    fn connect_deep_notify<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
+        &self,
+        detail: Option<&str>,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -275,9 +288,22 @@ pub trait TimelineElementExt: 'static {
 }
 
 impl<O: IsA<TimelineElement>> TimelineElementExt for O {
-    //fn add_child_property(&self, pspec: /*Ignored*/&glib::ParamSpec, child: &impl IsA<glib::Object>) -> bool {
-    //    unsafe { TODO: call ffi:ges_timeline_element_add_child_property() }
-    //}
+    fn add_child_property(
+        &self,
+        pspec: impl AsRef<glib::ParamSpec>,
+        child: &impl IsA<glib::Object>,
+    ) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::ges_timeline_element_add_child_property(
+                    self.as_ref().to_glib_none().0,
+                    pspec.as_ref().to_glib_none().0,
+                    child.as_ref().to_glib_none().0
+                ),
+                "Failed to add child property"
+            )
+        }
+    }
 
     fn copy(&self, deep: bool) -> Result<TimelineElement, glib::BoolError> {
         unsafe {
@@ -359,9 +385,17 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    //fn child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec) -> glib::Value {
-    //    unsafe { TODO: call ffi:ges_timeline_element_get_child_property_by_pspec() }
-    //}
+    fn child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>) -> glib::Value {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            ffi::ges_timeline_element_get_child_property_by_pspec(
+                self.as_ref().to_glib_none().0,
+                pspec.as_ref().to_glib_none().0,
+                value.to_glib_none_mut().0,
+            );
+            value
+        }
+    }
 
     //fn child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi:ges_timeline_element_get_child_property_valist() }
@@ -471,13 +505,37 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    //fn list_children_properties(&self) -> /*Ignored*/Vec<glib::ParamSpec> {
-    //    unsafe { TODO: call ffi:ges_timeline_element_list_children_properties() }
-    //}
+    fn list_children_properties(&self) -> Vec<glib::ParamSpec> {
+        unsafe {
+            let mut n_properties = mem::MaybeUninit::uninit();
+            let ret = FromGlibContainer::from_glib_full_num(
+                ffi::ges_timeline_element_list_children_properties(
+                    self.as_ref().to_glib_none().0,
+                    n_properties.as_mut_ptr(),
+                ),
+                n_properties.assume_init() as usize,
+            );
+            ret
+        }
+    }
 
-    //fn lookup_child(&self, prop_name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<glib::Object> {
-    //    unsafe { TODO: call ffi:ges_timeline_element_lookup_child() }
-    //}
+    fn lookup_child(&self, prop_name: &str) -> Option<(glib::Object, glib::ParamSpec)> {
+        unsafe {
+            let mut child = ptr::null_mut();
+            let mut pspec = ptr::null_mut();
+            let ret = from_glib(ffi::ges_timeline_element_lookup_child(
+                self.as_ref().to_glib_none().0,
+                prop_name.to_glib_none().0,
+                &mut child,
+                &mut pspec,
+            ));
+            if ret {
+                Some((from_glib_full(child), from_glib_full(pspec)))
+            } else {
+                None
+            }
+        }
+    }
 
     fn paste(&self, paste_position: gst::ClockTime) -> Result<TimelineElement, glib::BoolError> {
         unsafe {
@@ -489,9 +547,20 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    //fn remove_child_property(&self, pspec: /*Ignored*/&glib::ParamSpec) -> bool {
-    //    unsafe { TODO: call ffi:ges_timeline_element_remove_child_property() }
-    //}
+    fn remove_child_property(
+        &self,
+        pspec: impl AsRef<glib::ParamSpec>,
+    ) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::ges_timeline_element_remove_child_property(
+                    self.as_ref().to_glib_none().0,
+                    pspec.as_ref().to_glib_none().0
+                ),
+                "Failed to remove child property"
+            )
+        }
+    }
 
     fn ripple(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
@@ -556,9 +625,15 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    //fn set_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: &glib::Value) {
-    //    unsafe { TODO: call ffi:ges_timeline_element_set_child_property_by_pspec() }
-    //}
+    fn set_child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>, value: &glib::Value) {
+        unsafe {
+            ffi::ges_timeline_element_set_child_property_by_pspec(
+                self.as_ref().to_glib_none().0,
+                pspec.as_ref().to_glib_none().0,
+                value.to_glib_none().0,
+            );
+        }
+    }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -694,21 +769,113 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "serialize", &serialize)
     }
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //fn connect_child_property_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored prop: GObject.ParamSpec
-    //}
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    fn connect_child_property_added<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn child_property_added_trampoline<
+            P: IsA<TimelineElement>,
+            F: Fn(&P, &glib::Object, &glib::ParamSpec) + 'static,
+        >(
+            this: *mut ffi::GESTimelineElement,
+            prop_object: *mut glib::gobject_ffi::GObject,
+            prop: *mut glib::gobject_ffi::GParamSpec,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(
+                TimelineElement::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(prop_object),
+                &from_glib_borrow(prop),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"child-property-added\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    child_property_added_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //fn connect_child_property_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored prop: GObject.ParamSpec
-    //}
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    fn connect_child_property_removed<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn child_property_removed_trampoline<
+            P: IsA<TimelineElement>,
+            F: Fn(&P, &glib::Object, &glib::ParamSpec) + 'static,
+        >(
+            this: *mut ffi::GESTimelineElement,
+            prop_object: *mut glib::gobject_ffi::GObject,
+            prop: *mut glib::gobject_ffi::GParamSpec,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(
+                TimelineElement::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(prop_object),
+                &from_glib_borrow(prop),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"child-property-removed\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    child_property_removed_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 
-    //fn connect_deep_notify<Unsupported or ignored types>(&self, detail: Option<&str>, f: F) -> SignalHandlerId {
-    //    Ignored prop: GObject.ParamSpec
-    //}
+    fn connect_deep_notify<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
+        &self,
+        detail: Option<&str>,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn deep_notify_trampoline<
+            P: IsA<TimelineElement>,
+            F: Fn(&P, &glib::Object, &glib::ParamSpec) + 'static,
+        >(
+            this: *mut ffi::GESTimelineElement,
+            prop_object: *mut glib::gobject_ffi::GObject,
+            prop: *mut glib::gobject_ffi::GParamSpec,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(
+                TimelineElement::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(prop_object),
+                &from_glib_borrow(prop),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            let detailed_signal_name = detail.map(|name| format!("deep-notify::{}\0", name));
+            let signal_name: &[u8] = detailed_signal_name
+                .as_ref()
+                .map_or(&b"deep-notify\0"[..], |n| n.as_bytes());
+            connect_raw(
+                self.as_ptr() as *mut _,
+                signal_name.as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    deep_notify_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_trampoline<

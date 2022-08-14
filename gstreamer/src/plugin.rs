@@ -33,9 +33,6 @@ impl Plugin {
 pub trait GstPluginExtManual: 'static {
     #[doc(alias = "get_plugin_flags")]
     fn plugin_flags(&self) -> PluginFlags;
-
-    #[doc(alias = "get_plugin_name")]
-    fn plugin_name(&self) -> glib::GString;
 }
 
 impl<O: IsA<crate::Plugin>> GstPluginExtManual for O {
@@ -45,9 +42,5 @@ impl<O: IsA<crate::Plugin>> GstPluginExtManual for O {
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
             from_glib((*ptr).flags)
         }
-    }
-
-    fn plugin_name(&self) -> glib::GString {
-        unsafe { from_glib_none(ffi::gst_plugin_get_name(self.as_ref().to_glib_none().0)) }
     }
 }

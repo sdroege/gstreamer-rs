@@ -1871,6 +1871,21 @@ status = "generate"
         name = "delay"
         mandatory = true
 
+    [[object.function]]
+    name = "get_clock"
+    # useless function that is equal to the GstElement one
+    ignore = true
+
+    [[object.function]]
+    name = "set_clock"
+    # useless function that is equal to the GstElement one
+    ignore = true
+
+    [[object.function]]
+    name = "get_bus"
+    # useless function that is equal to the GstElement one
+    ignore = true
+
 [[object]]
 name = "Gst.PipelineFlags"
 status = "generate"
@@ -1912,6 +1927,10 @@ final_type = true
     name = "load_by_name"
         [object.function.return]
         nullable_return_is_error = "Failed to load plugin"
+
+    [[object.function]]
+    name = "get_name"
+    rename = "plugin_name"
 
 [[object]]
 name = "Gst.PluginDependencyFlags"

@@ -13,6 +13,12 @@ mod web_rtc_data_channel;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 pub use self::web_rtc_data_channel::WebRTCDataChannel;
 
+mod web_rtcice;
+pub use self::web_rtcice::WebRTCICE;
+
+mod web_rtcice_stream;
+pub use self::web_rtcice_stream::WebRTCICEStream;
+
 mod web_rtcice_transport;
 pub use self::web_rtcice_transport::WebRTCICETransport;
 
@@ -71,3 +77,9 @@ pub use self::enums::WebRTCSCTPTransportState;
 pub use self::enums::WebRTCSDPType;
 pub use self::enums::WebRTCSignalingState;
 pub use self::enums::WebRTCStatsType;
+
+#[doc(hidden)]
+pub mod traits {
+    pub use super::web_rtcice::WebRTCICEExt;
+    pub use super::web_rtcice_stream::WebRTCICEStreamExt;
+}

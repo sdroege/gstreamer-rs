@@ -17,7 +17,9 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use std::boxed::Box as Box_;
+use std::mem;
 use std::mem::transmute;
+use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GESTrackElement")]
@@ -67,6 +69,22 @@ pub trait TrackElementExt: 'static {
     #[doc(alias = "get_auto_clamp_control_sources")]
     fn is_auto_clamp_control_sources(&self) -> bool;
 
+    //#[doc(alias = "ges_track_element_get_child_properties")]
+    //#[doc(alias = "get_child_properties")]
+    //fn child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs);
+
+    #[doc(alias = "ges_track_element_get_child_property")]
+    #[doc(alias = "get_child_property")]
+    fn child_property(&self, property_name: &str) -> Option<glib::Value>;
+
+    #[doc(alias = "ges_track_element_get_child_property_by_pspec")]
+    #[doc(alias = "get_child_property_by_pspec")]
+    fn child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>) -> glib::Value;
+
+    //#[doc(alias = "ges_track_element_get_child_property_valist")]
+    //#[doc(alias = "get_child_property_valist")]
+    //fn child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
+
     #[doc(alias = "ges_track_element_get_control_binding")]
     #[doc(alias = "get_control_binding")]
     fn control_binding(&self, property_name: &str) -> Option<gst::ControlBinding>;
@@ -104,8 +122,11 @@ pub trait TrackElementExt: 'static {
     #[doc(alias = "ges_track_element_is_core")]
     fn is_core(&self) -> bool;
 
-    //#[doc(alias = "ges_track_element_lookup_child")]
-    //fn lookup_child(&self, prop_name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<gst::Element>;
+    #[doc(alias = "ges_track_element_list_children_properties")]
+    fn list_children_properties(&self) -> Vec<glib::ParamSpec>;
+
+    #[doc(alias = "ges_track_element_lookup_child")]
+    fn lookup_child(&self, prop_name: &str) -> Option<(gst::Element, glib::ParamSpec)>;
 
     #[doc(alias = "ges_track_element_remove_control_binding")]
     fn remove_control_binding(&self, property_name: &str) -> Result<(), glib::error::BoolError>;
@@ -117,6 +138,22 @@ pub trait TrackElementExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_element_set_auto_clamp_control_sources")]
     fn set_auto_clamp_control_sources(&self, auto_clamp: bool);
+
+    //#[doc(alias = "ges_track_element_set_child_properties")]
+    //fn set_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs);
+
+    #[doc(alias = "ges_track_element_set_child_property")]
+    fn set_child_property(
+        &self,
+        property_name: &str,
+        value: &glib::Value,
+    ) -> Result<(), glib::error::BoolError>;
+
+    #[doc(alias = "ges_track_element_set_child_property_by_pspec")]
+    fn set_child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>, value: &glib::Value);
+
+    //#[doc(alias = "ges_track_element_set_child_property_valist")]
+    //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
     #[doc(alias = "ges_track_element_set_control_source")]
     fn set_control_source(
@@ -234,6 +271,42 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    //fn child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
+    //    unsafe { TODO: call ffi:ges_track_element_get_child_properties() }
+    //}
+
+    fn child_property(&self, property_name: &str) -> Option<glib::Value> {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            let ret = from_glib(ffi::ges_track_element_get_child_property(
+                self.as_ref().to_glib_none().0,
+                property_name.to_glib_none().0,
+                value.to_glib_none_mut().0,
+            ));
+            if ret {
+                Some(value)
+            } else {
+                None
+            }
+        }
+    }
+
+    fn child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>) -> glib::Value {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            ffi::ges_track_element_get_child_property_by_pspec(
+                self.as_ref().to_glib_none().0,
+                pspec.as_ref().to_glib_none().0,
+                value.to_glib_none_mut().0,
+            );
+            value
+        }
+    }
+
+    //fn child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
+    //    unsafe { TODO: call ffi:ges_track_element_get_child_property_valist() }
+    //}
+
     fn control_binding(&self, property_name: &str) -> Option<gst::ControlBinding> {
         unsafe {
             from_glib_none(ffi::ges_track_element_get_control_binding(
@@ -311,9 +384,37 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    //fn lookup_child(&self, prop_name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<gst::Element> {
-    //    unsafe { TODO: call ffi:ges_track_element_lookup_child() }
-    //}
+    fn list_children_properties(&self) -> Vec<glib::ParamSpec> {
+        unsafe {
+            let mut n_properties = mem::MaybeUninit::uninit();
+            let ret = FromGlibContainer::from_glib_full_num(
+                ffi::ges_track_element_list_children_properties(
+                    self.as_ref().to_glib_none().0,
+                    n_properties.as_mut_ptr(),
+                ),
+                n_properties.assume_init() as usize,
+            );
+            ret
+        }
+    }
+
+    fn lookup_child(&self, prop_name: &str) -> Option<(gst::Element, glib::ParamSpec)> {
+        unsafe {
+            let mut element = ptr::null_mut();
+            let mut pspec = ptr::null_mut();
+            let ret = from_glib(ffi::ges_track_element_lookup_child(
+                self.as_ref().to_glib_none().0,
+                prop_name.to_glib_none().0,
+                &mut element,
+                &mut pspec,
+            ));
+            if ret {
+                Some((from_glib_full(element), from_glib_full(pspec)))
+            } else {
+                None
+            }
+        }
+    }
 
     fn remove_control_binding(&self, property_name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
@@ -346,6 +447,41 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
             );
         }
     }
+
+    //fn set_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
+    //    unsafe { TODO: call ffi:ges_track_element_set_child_properties() }
+    //}
+
+    fn set_child_property(
+        &self,
+        property_name: &str,
+        value: &glib::Value,
+    ) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::ges_track_element_set_child_property(
+                    self.as_ref().to_glib_none().0,
+                    property_name.to_glib_none().0,
+                    mut_override(value.to_glib_none().0)
+                ),
+                "Failed to set child property"
+            )
+        }
+    }
+
+    fn set_child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>, value: &glib::Value) {
+        unsafe {
+            ffi::ges_track_element_set_child_property_by_pspec(
+                self.as_ref().to_glib_none().0,
+                pspec.as_ref().to_glib_none().0,
+                mut_override(value.to_glib_none().0),
+            );
+        }
+    }
+
+    //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
+    //    unsafe { TODO: call ffi:ges_track_element_set_child_property_valist() }
+    //}
 
     fn set_control_source(
         &self,

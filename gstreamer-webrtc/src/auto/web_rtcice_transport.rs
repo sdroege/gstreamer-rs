@@ -24,6 +24,45 @@ glib::wrapper! {
 }
 
 impl WebRTCICETransport {
+    #[doc(alias = "gst_webrtc_ice_transport_connection_state_change")]
+    pub fn connection_state_change(&self, new_state: WebRTCICEConnectionState) {
+        unsafe {
+            ffi::gst_webrtc_ice_transport_connection_state_change(
+                self.to_glib_none().0,
+                new_state.into_glib(),
+            );
+        }
+    }
+
+    #[doc(alias = "gst_webrtc_ice_transport_gathering_state_change")]
+    pub fn gathering_state_change(&self, new_state: WebRTCICEGatheringState) {
+        unsafe {
+            ffi::gst_webrtc_ice_transport_gathering_state_change(
+                self.to_glib_none().0,
+                new_state.into_glib(),
+            );
+        }
+    }
+
+    #[doc(alias = "gst_webrtc_ice_transport_new_candidate")]
+    pub fn new_candidate(&self, stream_id: u32, component: WebRTCICEComponent, attr: &str) {
+        unsafe {
+            ffi::gst_webrtc_ice_transport_new_candidate(
+                self.to_glib_none().0,
+                stream_id,
+                component.into_glib(),
+                attr.to_glib_none().0,
+            );
+        }
+    }
+
+    #[doc(alias = "gst_webrtc_ice_transport_selected_pair_change")]
+    pub fn selected_pair_change(&self) {
+        unsafe {
+            ffi::gst_webrtc_ice_transport_selected_pair_change(self.to_glib_none().0);
+        }
+    }
+
     pub fn component(&self) -> WebRTCICEComponent {
         glib::ObjectExt::property(self, "component")
     }

@@ -6,6 +6,7 @@
 use crate::Object;
 use crate::PluginDependencyFlags;
 use glib::translate::*;
+use std::fmt;
 use std::ptr;
 
 glib::wrapper! {
@@ -72,6 +73,12 @@ impl Plugin {
     #[doc(alias = "get_license")]
     pub fn license(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_license(self.to_glib_none().0)) }
+    }
+
+    #[doc(alias = "gst_plugin_get_name")]
+    #[doc(alias = "get_name")]
+    pub fn plugin_name(&self) -> glib::GString {
+        unsafe { from_glib_none(ffi::gst_plugin_get_name(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_plugin_get_origin")]
@@ -142,6 +149,13 @@ impl Plugin {
                 Err(from_glib_full(error))
             }
         }
+    }
+}
+
+impl fmt::Display for Plugin {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.plugin_name())
     }
 }
 
