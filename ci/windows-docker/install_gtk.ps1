@@ -11,7 +11,7 @@ if (!$?) {
 
 Set-Location C:\gtk
 
-$env:MESON_ARGS = ""
+$env:MESON_ARGS = "--prefix=C:\gst-install\"
 
 Write-Output "Building gtk"
 cmd.exe /C "C:\BuildTools\Common7\Tools\VsDevCmd.bat -host_arch=amd64 -arch=amd64 && meson _build $env:MESON_ARGS && meson compile -C _build && ninja -C _build install"

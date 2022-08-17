@@ -26,7 +26,8 @@ if (!$?) {
   Exit 1
 }
 
-$env:MESON_ARGS = "-Dglib:installed_tests=false " +
+$env:MESON_ARGS = "--prefix=C:\gst-install\ " +
+    "-Dglib:installed_tests=false " +
     "-Dlibnice:tests=disabled " +
     "-Dlibnice:examples=disabled " +
     "-Dffmpeg:tests=disabled " +

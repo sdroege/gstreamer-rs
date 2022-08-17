@@ -1,6 +1,6 @@
 # Add the precompiled gst binaries to the path
-$env:Path += ';C:\bin\'
-$env:PKG_CONFIG_PATH = "C:/lib/pkgconfig"
+$env:Path += ';C:/gst-install/bin\'
+$env:PKG_CONFIG_PATH = "C:/gst-install/lib/pkgconfig"
 
 # List of all the crates we want to build
 # We need to do this manually to avoid trying
