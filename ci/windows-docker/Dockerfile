@@ -1,6 +1,6 @@
 # escape=`
 
-FROM "registry.freedesktop.org/gstreamer/gstreamer/amd64/windows:2022-05-16.1-main"
+FROM "registry.freedesktop.org/gstreamer/gstreamer/amd64/windows:2022-08-18.0-main"
 
 # Make sure any failure in PowerShell is fatal
 ENV ErrorActionPreference='Stop'
