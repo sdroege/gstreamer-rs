@@ -3,14 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+use crate::WebRTCICECandidateStats;
 use crate::WebRTCICEComponent;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
 use crate::WebRTCICEStream;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
 use crate::WebRTCICETransport;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -18,14 +13,11 @@ use glib::object::ObjectExt;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 use glib::StaticType;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GstWebRTCICE")]
@@ -38,36 +30,21 @@ glib::wrapper! {
 
 impl WebRTCICE {
     pub const NONE: Option<&'static WebRTCICE> = None;
-
-    //#[cfg(any(feature = "v1_22", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    //#[doc(alias = "gst_webrtc_ice_candidate_stats_free")]
-    //pub fn candidate_stats_free(stats: /*Ignored*/&mut WebRTCICECandidateStats) {
-    //    unsafe { TODO: call ffi:gst_webrtc_ice_candidate_stats_free() }
-    //}
 }
 
 unsafe impl Send for WebRTCICE {}
 unsafe impl Sync for WebRTCICE {}
 
 pub trait WebRTCICEExt: 'static {
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_add_candidate")]
     fn add_candidate(&self, stream: &impl IsA<WebRTCICEStream>, candidate: &str);
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_add_stream")]
     fn add_stream(&self, session_id: u32) -> Option<WebRTCICEStream>;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_add_turn_server")]
     fn add_turn_server(&self, uri: &str) -> bool;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_find_transport")]
     fn find_transport(
         &self,
@@ -75,59 +52,43 @@ pub trait WebRTCICEExt: 'static {
         component: WebRTCICEComponent,
     ) -> Option<WebRTCICETransport>;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_gather_candidates")]
     fn gather_candidates(&self, stream: &impl IsA<WebRTCICEStream>) -> bool;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_get_is_controller")]
     #[doc(alias = "get_is_controller")]
     fn is_controller(&self) -> bool;
 
-    //#[cfg(any(feature = "v1_22", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    //#[doc(alias = "gst_webrtc_ice_get_local_candidates")]
-    //#[doc(alias = "get_local_candidates")]
-    //fn local_candidates(&self, stream: &impl IsA<WebRTCICEStream>) -> /*Unknown conversion*//*Unimplemented*/Array TypeId { ns_id: 1, id: 12 };
+    #[doc(alias = "gst_webrtc_ice_get_local_candidates")]
+    #[doc(alias = "get_local_candidates")]
+    fn local_candidates(&self, stream: &impl IsA<WebRTCICEStream>) -> Vec<WebRTCICECandidateStats>;
 
-    //#[cfg(any(feature = "v1_22", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    //#[doc(alias = "gst_webrtc_ice_get_remote_candidates")]
-    //#[doc(alias = "get_remote_candidates")]
-    //fn remote_candidates(&self, stream: &impl IsA<WebRTCICEStream>) -> /*Unknown conversion*//*Unimplemented*/Array TypeId { ns_id: 1, id: 12 };
+    #[doc(alias = "gst_webrtc_ice_get_remote_candidates")]
+    #[doc(alias = "get_remote_candidates")]
+    fn remote_candidates(&self, stream: &impl IsA<WebRTCICEStream>)
+        -> Vec<WebRTCICECandidateStats>;
 
-    //#[cfg(any(feature = "v1_22", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    //#[doc(alias = "gst_webrtc_ice_get_selected_pair")]
-    //#[doc(alias = "get_selected_pair")]
-    //fn is_selected_pair(&self, stream: &impl IsA<WebRTCICEStream>, local_stats: /*Ignored*/&mut WebRTCICECandidateStats, remote_stats: /*Ignored*/&mut WebRTCICECandidateStats) -> bool;
+    #[doc(alias = "gst_webrtc_ice_get_selected_pair")]
+    #[doc(alias = "get_selected_pair")]
+    fn selected_pair(
+        &self,
+        stream: &impl IsA<WebRTCICEStream>,
+    ) -> Option<(WebRTCICECandidateStats, WebRTCICECandidateStats)>;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_get_stun_server")]
     #[doc(alias = "get_stun_server")]
     fn stun_server(&self) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_get_turn_server")]
     #[doc(alias = "get_turn_server")]
     fn turn_server(&self) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_set_force_relay")]
     fn set_force_relay(&self, force_relay: bool);
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_set_is_controller")]
     fn set_is_controller(&self, controller: bool);
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_set_local_credentials")]
     fn set_local_credentials(
         &self,
@@ -136,13 +97,9 @@ pub trait WebRTCICEExt: 'static {
         pwd: &str,
     ) -> bool;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_set_on_ice_candidate")]
     fn set_on_ice_candidate<P: Fn(&WebRTCICE, u32, &str) + Send + Sync + 'static>(&self, func: P);
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_set_remote_credentials")]
     fn set_remote_credentials(
         &self,
@@ -151,18 +108,12 @@ pub trait WebRTCICEExt: 'static {
         pwd: &str,
     ) -> bool;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_set_stun_server")]
     fn set_stun_server(&self, uri: &str);
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_set_tos")]
     fn set_tos(&self, stream: &impl IsA<WebRTCICEStream>, tos: u32);
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_set_turn_server")]
     fn set_turn_server(&self, uri: &str);
 
@@ -212,8 +163,6 @@ pub trait WebRTCICEExt: 'static {
 }
 
 impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn add_candidate(&self, stream: &impl IsA<WebRTCICEStream>, candidate: &str) {
         unsafe {
             ffi::gst_webrtc_ice_add_candidate(
@@ -224,8 +173,6 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn add_stream(&self, session_id: u32) -> Option<WebRTCICEStream> {
         unsafe {
             from_glib_full(ffi::gst_webrtc_ice_add_stream(
@@ -235,8 +182,6 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn add_turn_server(&self, uri: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_webrtc_ice_add_turn_server(
@@ -246,8 +191,6 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn find_transport(
         &self,
         stream: &impl IsA<WebRTCICEStream>,
@@ -262,8 +205,6 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn gather_candidates(&self, stream: &impl IsA<WebRTCICEStream>) -> bool {
         unsafe {
             from_glib(ffi::gst_webrtc_ice_gather_candidates(
@@ -273,8 +214,6 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn is_controller(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_webrtc_ice_get_is_controller(
@@ -283,26 +222,48 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v1_22", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    //fn local_candidates(&self, stream: &impl IsA<WebRTCICEStream>) -> /*Unknown conversion*//*Unimplemented*/Array TypeId { ns_id: 1, id: 12 } {
-    //    unsafe { TODO: call ffi:gst_webrtc_ice_get_local_candidates() }
-    //}
+    fn local_candidates(&self, stream: &impl IsA<WebRTCICEStream>) -> Vec<WebRTCICECandidateStats> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_webrtc_ice_get_local_candidates(
+                self.as_ref().to_glib_none().0,
+                stream.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
-    //#[cfg(any(feature = "v1_22", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    //fn remote_candidates(&self, stream: &impl IsA<WebRTCICEStream>) -> /*Unknown conversion*//*Unimplemented*/Array TypeId { ns_id: 1, id: 12 } {
-    //    unsafe { TODO: call ffi:gst_webrtc_ice_get_remote_candidates() }
-    //}
+    fn remote_candidates(
+        &self,
+        stream: &impl IsA<WebRTCICEStream>,
+    ) -> Vec<WebRTCICECandidateStats> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_webrtc_ice_get_remote_candidates(
+                self.as_ref().to_glib_none().0,
+                stream.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
-    //#[cfg(any(feature = "v1_22", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    //fn is_selected_pair(&self, stream: &impl IsA<WebRTCICEStream>, local_stats: /*Ignored*/&mut WebRTCICECandidateStats, remote_stats: /*Ignored*/&mut WebRTCICECandidateStats) -> bool {
-    //    unsafe { TODO: call ffi:gst_webrtc_ice_get_selected_pair() }
-    //}
+    fn selected_pair(
+        &self,
+        stream: &impl IsA<WebRTCICEStream>,
+    ) -> Option<(WebRTCICECandidateStats, WebRTCICECandidateStats)> {
+        unsafe {
+            let mut local_stats = ptr::null_mut();
+            let mut remote_stats = ptr::null_mut();
+            let ret = from_glib(ffi::gst_webrtc_ice_get_selected_pair(
+                self.as_ref().to_glib_none().0,
+                stream.as_ref().to_glib_none().0,
+                &mut local_stats,
+                &mut remote_stats,
+            ));
+            if ret {
+                Some((from_glib_full(local_stats), from_glib_full(remote_stats)))
+            } else {
+                None
+            }
+        }
+    }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn stun_server(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_webrtc_ice_get_stun_server(
@@ -311,8 +272,6 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn turn_server(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_webrtc_ice_get_turn_server(
@@ -321,8 +280,6 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn set_force_relay(&self, force_relay: bool) {
         unsafe {
             ffi::gst_webrtc_ice_set_force_relay(
@@ -332,8 +289,6 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn set_is_controller(&self, controller: bool) {
         unsafe {
             ffi::gst_webrtc_ice_set_is_controller(
@@ -343,8 +298,6 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn set_local_credentials(
         &self,
         stream: &impl IsA<WebRTCICEStream>,
@@ -361,8 +314,6 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn set_on_ice_candidate<P: Fn(&WebRTCICE, u32, &str) + Send + Sync + 'static>(&self, func: P) {
         let func_data: Box_<P> = Box_::new(func);
         unsafe extern "C" fn func_func<P: Fn(&WebRTCICE, u32, &str) + Send + Sync + 'static>(
@@ -394,8 +345,6 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn set_remote_credentials(
         &self,
         stream: &impl IsA<WebRTCICEStream>,
@@ -412,8 +361,6 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn set_stun_server(&self, uri: &str) {
         unsafe {
             ffi::gst_webrtc_ice_set_stun_server(
@@ -423,8 +370,6 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn set_tos(&self, stream: &impl IsA<WebRTCICEStream>, tos: u32) {
         unsafe {
             ffi::gst_webrtc_ice_set_tos(
@@ -435,8 +380,6 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn set_turn_server(&self, uri: &str) {
         unsafe {
             ffi::gst_webrtc_ice_set_turn_server(

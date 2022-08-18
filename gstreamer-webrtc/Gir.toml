@@ -24,6 +24,7 @@ generate = [
     "GstWebRTC.WebRTCError",
     "GstWebRTC.WebRTCFECType",
     "GstWebRTC.WebRTCICE",
+    "GstWebRTC.WebRTCICECandidateStats",
     "GstWebRTC.WebRTCICEComponent",
     "GstWebRTC.WebRTCICEConnectionState",
     "GstWebRTC.WebRTCICEGatheringState",

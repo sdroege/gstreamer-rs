@@ -3,11 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
 use crate::WebRTCICEComponent;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
 use crate::WebRTCICETransport;
 use glib::object::IsA;
 use glib::translate::*;
@@ -30,13 +26,9 @@ unsafe impl Send for WebRTCICEStream {}
 unsafe impl Sync for WebRTCICEStream {}
 
 pub trait WebRTCICEStreamExt: 'static {
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_stream_find_transport")]
     fn find_transport(&self, component: WebRTCICEComponent) -> Option<WebRTCICETransport>;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_ice_stream_gather_candidates")]
     fn gather_candidates(&self) -> bool;
 
@@ -45,8 +37,6 @@ pub trait WebRTCICEStreamExt: 'static {
 }
 
 impl<O: IsA<WebRTCICEStream>> WebRTCICEStreamExt for O {
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn find_transport(&self, component: WebRTCICEComponent) -> Option<WebRTCICETransport> {
         unsafe {
             from_glib_full(ffi::gst_webrtc_ice_stream_find_transport(
@@ -56,8 +46,6 @@ impl<O: IsA<WebRTCICEStream>> WebRTCICEStreamExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn gather_candidates(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_webrtc_ice_stream_gather_candidates(

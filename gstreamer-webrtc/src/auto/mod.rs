@@ -13,10 +13,18 @@ mod web_rtc_data_channel;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 pub use self::web_rtc_data_channel::WebRTCDataChannel;
 
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
 mod web_rtcice;
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
 pub use self::web_rtcice::WebRTCICE;
 
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
 mod web_rtcice_stream;
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
 pub use self::web_rtcice_stream::WebRTCICEStream;
 
 mod web_rtcice_transport;
@@ -37,6 +45,13 @@ mod web_rtcsctp_transport;
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 pub use self::web_rtcsctp_transport::WebRTCSCTPTransport;
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+mod web_rtcice_candidate_stats;
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+pub use self::web_rtcice_candidate_stats::WebRTCICECandidateStats;
 
 mod web_rtc_session_description;
 pub use self::web_rtc_session_description::WebRTCSessionDescription;
@@ -80,6 +95,10 @@ pub use self::enums::WebRTCStatsType;
 
 #[doc(hidden)]
 pub mod traits {
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     pub use super::web_rtcice::WebRTCICEExt;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     pub use super::web_rtcice_stream::WebRTCICEStreamExt;
 }
