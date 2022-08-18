@@ -1,7 +1,5 @@
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
 
-$env:Path += ";C:\gst-install\bin\"
-
 # Download gstreamer and all its subprojects
 git clone -b gtk-4-6 --depth 1 https://gitlab.gnome.org/gnome/gtk.git C:\gtk
 if (!$?) {

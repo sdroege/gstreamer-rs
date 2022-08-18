@@ -10,6 +10,9 @@ ARG DEFAULT_BRANCH="main"
 ARG RUST_VERSION="invalid"
 
 RUN choco install -y pkgconfiglite
+
+# https://stackoverflow.com/a/50716450
+RUN setx PATH '%PATH%;C:\gst-install\bin'
 ENV PKG_CONFIG_PATH="C:\gst-install\lib\pkgconfig"
 
 COPY install_gst.ps1 install_gtk.ps1 C:\
