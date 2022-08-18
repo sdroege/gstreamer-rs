@@ -918,6 +918,14 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoInfo> for VideoInfo 
 }
 
 #[doc(hidden)]
+impl glib::translate::FromGlibPtrNone<*const ffi::GstVideoInfo> for VideoInfo {
+    #[inline]
+    unsafe fn from_glib_none(ptr: *const ffi::GstVideoInfo) -> Self {
+        Self(ptr::read(ptr))
+    }
+}
+
+#[doc(hidden)]
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstVideoInfo> for VideoInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstVideoInfo) -> Self {

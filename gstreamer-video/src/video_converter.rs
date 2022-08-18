@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{IntoGlibPtr, ToGlibPtr};
+use glib::translate::*;
 
 use std::ops;
 use std::ptr;
@@ -70,6 +70,22 @@ impl VideoConverter {
         unsafe {
             ffi::gst_video_converter_set_config(self.0.as_ptr(), config.0.into_glib_ptr());
         }
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "get_in_info")]
+    #[doc(alias = "gst_video_converter_get_in_info")]
+    pub fn in_info(&self) -> crate::VideoInfo {
+        unsafe { from_glib_none(ffi::gst_video_converter_get_in_info(self.0.as_ptr())) }
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "get_out_info")]
+    #[doc(alias = "gst_video_converter_get_out_info")]
+    pub fn out_info(&self) -> crate::VideoInfo {
+        unsafe { from_glib_none(ffi::gst_video_converter_get_out_info(self.0.as_ptr())) }
     }
 
     #[doc(alias = "gst_video_converter_frame")]
