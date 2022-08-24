@@ -139,7 +139,7 @@ impl Drop for Structure {
 
 impl fmt::Debug for Structure {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("Structure").field(&self.to_string()).finish()
+        f.debug_tuple("Structure").field(self.as_ref()).finish()
     }
 }
 
@@ -792,7 +792,24 @@ impl fmt::Display for StructureRef {
 
 impl fmt::Debug for StructureRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.to_string())
+        let mut debug = f.debug_struct(self.name());
+
+        for (id, field) in self.iter() {
+            if field.type_() == Structure::static_type() {
+                let s = field.get::<Structure>().unwrap();
+                debug.field(id, &s);
+            } else if field.type_() == crate::Array::static_type() {
+                let arr = field.get::<crate::Array>().unwrap();
+                debug.field(id, &arr);
+            } else if field.type_() == crate::List::static_type() {
+                let list = field.get::<crate::List>().unwrap();
+                debug.field(id, &list);
+            } else {
+                debug.field(id, &field);
+            }
+        }
+
+        debug.finish()
     }
 }
 
@@ -1145,5 +1162,24 @@ mod tests {
         assert_eq!(s2.get::<&str>("f1"), Ok("abc"));
         assert!(s2.get::<&str>("f2").is_err());
         assert!(s2.get::<&str>("f3").is_err());
+    }
+
+    #[test]
+    fn test_debug() {
+        crate::init().unwrap();
+
+        let s = Structure::builder("test")
+            .field("f1", "abc")
+            .field("f2", &String::from("bcd"))
+            .field("f3", 123i32)
+            .field(
+                "f4",
+                Structure::builder("nested").field("badger", &true).build(),
+            )
+            .field("f5", &crate::Array::new(["a", "b", "c"]))
+            .field("f6", &crate::List::new(["d", "e", "f"]))
+            .build();
+
+        assert_eq!(format!("{:?}", s), "Structure(test { f1: (gchararray) \"abc\", f2: (gchararray) \"bcd\", f3: (gint) 123, f4: Structure(nested { badger: (gboolean) TRUE }), f5: Array([(gchararray) \"a\", (gchararray) \"b\", (gchararray) \"c\"]), f6: List([(gchararray) \"d\", (gchararray) \"e\", (gchararray) \"f\"]) })");
     }
 }
