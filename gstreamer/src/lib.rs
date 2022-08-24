@@ -261,6 +261,9 @@ pub use crate::functions::*;
 
 mod utils;
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+mod gtype;
+
 use std::ptr;
 
 #[doc(alias = "gst_init_check")]
@@ -326,6 +329,8 @@ pub mod prelude {
     pub use crate::device_provider::DeviceProviderExtManual;
     pub use crate::element::{ElementClassExt, ElementExtManual};
     pub use crate::gobject::GObjectExtManualGst;
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub use crate::gtype::PluginApiExt;
     pub use crate::message::MessageErrorDomain;
     pub use crate::object::GstObjectExtManual;
     pub use crate::pad::PadExtManual;

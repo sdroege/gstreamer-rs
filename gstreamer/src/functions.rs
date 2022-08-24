@@ -171,28 +171,6 @@ pub fn calculate_linear_regression(
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-#[doc(alias = "gst_type_is_plugin_api")]
-pub fn type_is_plugin_api(type_: glib::types::Type) -> Option<crate::PluginAPIFlags> {
-    assert_initialized_main_thread!();
-    unsafe {
-        use std::mem;
-
-        let mut flags = mem::MaybeUninit::uninit();
-        let ret = from_glib(ffi::gst_type_is_plugin_api(
-            type_.into_glib(),
-            flags.as_mut_ptr(),
-        ));
-        let flags = flags.assume_init();
-        if ret {
-            Some(from_glib(flags))
-        } else {
-            None
-        }
-    }
-}
-
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(alias = "gst_tracing_get_active_tracers")]
 pub fn active_tracers() -> glib::List<Tracer> {
     assert_initialized_main_thread!();

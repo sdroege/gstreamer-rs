@@ -372,7 +372,7 @@ status = "generate"
 
     [[object.function]]
     name = "type_is_plugin_api"
-    # confusing return type
+    # We implement it in an extension Trait
     ignore = true
 
     [[object.function]]
