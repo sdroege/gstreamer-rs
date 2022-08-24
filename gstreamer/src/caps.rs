@@ -13,6 +13,7 @@ use glib::translate::{
     from_glib, from_glib_full, FromGlibPtrFull, IntoGlib, IntoGlibPtr, ToGlibPtr,
 };
 use glib::value::ToSendValue;
+use glib::StaticType;
 
 mini_object_wrapper!(Caps, CapsRef, ffi::GstCaps, || { ffi::gst_caps_get_type() });
 
@@ -807,7 +808,51 @@ impl Eq for Caps {}
 
 impl fmt::Debug for CapsRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("Caps").field(&self.to_string()).finish()
+        if self.is_any() {
+            f.debug_tuple("Caps(\"ANY\")").finish()
+        } else if self.is_empty() {
+            f.debug_tuple("Caps(\"EMPTY\")").finish()
+        } else {
+            let mut debug = f.debug_tuple("Caps");
+
+            for (structure, features) in self.iter_with_features() {
+                struct WithFeatures<'a> {
+                    features: &'a CapsFeaturesRef,
+                    structure: &'a StructureRef,
+                }
+
+                impl<'a> fmt::Debug for WithFeatures<'a> {
+                    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                        let name = format!("{}({})", self.structure.name(), self.features);
+                        let mut debug = f.debug_struct(&name);
+
+                        for (id, field) in self.structure.iter() {
+                            if field.type_() == Structure::static_type() {
+                                let s = field.get::<Structure>().unwrap();
+                                debug.field(id, &s);
+                            } else if field.type_() == crate::Array::static_type() {
+                                let arr = field.get::<crate::Array>().unwrap();
+                                debug.field(id, &arr);
+                            } else if field.type_() == crate::List::static_type() {
+                                let list = field.get::<crate::List>().unwrap();
+                                debug.field(id, &list);
+                            } else {
+                                debug.field(id, &field);
+                            }
+                        }
+
+                        debug.finish()
+                    }
+                }
+
+                debug.field(&WithFeatures {
+                    structure,
+                    features,
+                });
+            }
+
+            debug.finish()
+        }
     }
 }
 
@@ -1168,5 +1213,50 @@ mod tests {
             .map(|(s, c)| (s.to_owned(), c.to_owned()))
             .collect::<Caps>();
         assert_eq!(audio.to_string(), "audio/x-raw(ANY)");
+    }
+
+    #[test]
+    fn test_debug() {
+        crate::init().unwrap();
+
+        let caps = Caps::new_any();
+        assert_eq!(format!("{:?}", caps), "Caps(\"ANY\")");
+
+        let caps = Caps::new_empty();
+        assert_eq!(format!("{:?}", caps), "Caps(\"EMPTY\")");
+
+        let caps = Caps::builder_full_with_any_features()
+            .structure(Structure::builder("audio/x-raw").build())
+            .build();
+        assert_eq!(format!("{:?}", caps), "Caps(audio/x-raw(ANY))");
+
+        let caps = Caps::builder_full_with_features(CapsFeatures::new(&["foo:bla"]))
+            .structure(
+                Structure::builder("audio/x-raw")
+                    .field(
+                        "struct",
+                        Structure::builder("nested").field("badger", &true).build(),
+                    )
+                    .build(),
+            )
+            .structure(
+                Structure::builder("video/x-raw")
+                    .field("width", &800u32)
+                    .build(),
+            )
+            .build();
+
+        assert_eq!(format!("{:?}", caps), "Caps(audio/x-raw(foo:bla) { struct: Structure(nested { badger: (gboolean) TRUE }) }, video/x-raw(foo:bla) { width: (guint) 800 })");
+
+        let caps = Caps::builder_full()
+            .structure(
+                Structure::builder("video/x-raw")
+                    .field("array", &crate::Array::new(["a", "b", "c"]))
+                    .field("list", &crate::List::new(["d", "e", "f"]))
+                    .build(),
+            )
+            .build();
+
+        assert_eq!(format!("{:?}", caps), "Caps(video/x-raw(memory:SystemMemory) { array: Array([(gchararray) \"a\", (gchararray) \"b\", (gchararray) \"c\"]), list: List([(gchararray) \"d\", (gchararray) \"e\", (gchararray) \"f\"]) })");
     }
 }
