@@ -586,7 +586,13 @@ impl Eq for TagList {}
 
 impl fmt::Debug for TagListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("TagList").field(&self.to_string()).finish()
+        let mut debug = f.debug_struct("TagList");
+
+        for (key, value) in self.iter() {
+            debug.field(key, &value);
+        }
+
+        debug.finish()
     }
 }
 
@@ -1352,5 +1358,22 @@ mod tests {
         crate::init().unwrap();
 
         format!("{}", TagList::new());
+    }
+
+    #[test]
+    fn test_debug() {
+        crate::init().unwrap();
+
+        let mut tags = TagList::new();
+        assert_eq!(format!("{:?}", tags), "TagList");
+        {
+            let tags = tags.get_mut().unwrap();
+            tags.add::<Title>(&"some title", TagMergeMode::Append);
+            tags.add::<Duration>(&(ClockTime::SECOND * 120), TagMergeMode::Append);
+        }
+        assert_eq!(
+            format!("{:?}", tags),
+            "TagList { title: (gchararray) \"some title\", duration: (guint64) 120000000000 }"
+        );
     }
 }
