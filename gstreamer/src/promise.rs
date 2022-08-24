@@ -150,7 +150,6 @@ unsafe impl Sync for Promise {}
 #[derive(Debug)]
 pub struct PromiseFuture(Promise, futures_channel::oneshot::Receiver<()>);
 
-#[derive(Debug)]
 pub struct PromiseReply(Promise);
 
 impl std::future::Future for PromiseFuture {
@@ -193,6 +192,18 @@ impl Deref for PromiseReply {
 
     fn deref(&self) -> &StructureRef {
         self.0.get_reply().expect("Promise without reply")
+    }
+}
+
+impl std::fmt::Debug for PromiseReply {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut debug = f.debug_tuple("PromiseReply");
+
+        match self.0.get_reply() {
+            Some(reply) => debug.field(reply),
+            None => debug.field(&"<no reply>"),
+        }
+        .finish()
     }
 }
 
