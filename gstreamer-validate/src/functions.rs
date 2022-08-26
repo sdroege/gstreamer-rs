@@ -4,9 +4,9 @@ use glib::translate::*;
 
 #[doc(alias = "gst_validate_init")]
 pub fn init() {
-    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_validate_init();
+        crate::INITIALIZED.store(true, std::sync::atomic::Ordering::SeqCst);
     }
 }
 
@@ -26,5 +26,15 @@ pub fn setup_test_file(test_file: &str, use_fakesinks: bool) -> gst::Structure {
             test_file.to_glib_none().0,
             use_fakesinks as i32,
         ))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn test_init() {
+        gst::init().unwrap();
+        crate::init();
     }
 }
