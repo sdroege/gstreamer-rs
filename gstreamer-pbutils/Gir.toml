@@ -393,6 +393,11 @@ status = "generate"
         [object.function.return]
         nullable = false
 
+    [[object.function]]
+    name = "get_element_properties"
+    # Use custom wrapper types
+    manual = true
+
     [[object.property]]
     name = "restriction-caps"
     # encodingprofile is immutable after constructed

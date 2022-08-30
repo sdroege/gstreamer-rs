@@ -43,6 +43,11 @@ mod auto;
 pub use crate::auto::functions::*;
 pub use crate::auto::*;
 
+#[cfg(feature = "v1_20")]
+mod element_properties;
+#[cfg(feature = "v1_20")]
+pub use crate::element_properties::ElementProperties;
+
 #[cfg(feature = "serde")]
 mod flag_serde;
 
@@ -70,7 +75,7 @@ pub mod prelude {
     pub use crate::audio_visualizer::*;
     pub use crate::auto::traits::*;
     pub use crate::encoding_profile::{
-        EncodingProfileBuilder, EncodingProfileHasRestrictionGetter,
+        EncodingProfileBuilder, EncodingProfileExtManual, EncodingProfileHasRestrictionGetter,
     };
 
     pub use crate::functions::CodecTag;

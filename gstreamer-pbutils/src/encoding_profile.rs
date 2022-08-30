@@ -8,6 +8,30 @@ use crate::auto::EncodingContainerProfile;
 use crate::auto::EncodingProfile;
 use crate::auto::EncodingVideoProfile;
 
+#[cfg(feature = "v1_20")]
+use crate::ElementProperties;
+
+pub trait EncodingProfileExtManual {
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_encoding_profile_get_element_properties")]
+    #[doc(alias = "get_element_properties")]
+    fn element_properties(&self) -> Option<ElementProperties>;
+}
+
+impl<O: IsA<EncodingProfile>> EncodingProfileExtManual for O {
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn element_properties(&self) -> Option<ElementProperties> {
+        unsafe {
+            from_glib_full::<_, Option<_>>(ffi::gst_encoding_profile_get_element_properties(
+                self.as_ref().to_glib_none().0,
+            ))
+            .map(ElementProperties)
+        }
+    }
+}
+
 trait EncodingProfileBuilderCommon {
     fn set_allow_dynamic_output(&self, allow_dynamic_output: bool);
 
@@ -27,6 +51,9 @@ trait EncodingProfileBuilderCommon {
 
     #[cfg(feature = "v1_18")]
     fn set_single_segment(&self, single_segment: bool);
+
+    #[cfg(feature = "v1_20")]
+    fn set_element_properties(&self, element_properties: ElementProperties);
 }
 
 impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
@@ -112,6 +139,17 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
             ffi::gst_encoding_profile_set_single_segment(
                 self.as_ref().to_glib_none().0,
                 single_segment.into_glib(),
+            );
+        }
+    }
+
+    // checker-ignore-item
+    #[cfg(feature = "v1_20")]
+    fn set_element_properties(&self, element_properties: ElementProperties) {
+        unsafe {
+            ffi::gst_encoding_profile_set_element_properties(
+                self.as_ref().to_glib_none().0,
+                element_properties.into_inner().into_glib_ptr(),
             );
         }
     }
@@ -294,6 +332,8 @@ struct EncodingProfileBuilderCommonData<'a> {
     enabled: bool,
     #[cfg(feature = "v1_18")]
     single_segment: bool,
+    #[cfg(feature = "v1_20")]
+    element_properties: Option<ElementProperties>,
 }
 
 impl<'a> EncodingProfileBuilderCommonData<'a> {
@@ -310,6 +350,8 @@ impl<'a> EncodingProfileBuilderCommonData<'a> {
             enabled: true,
             #[cfg(feature = "v1_18")]
             single_segment: false,
+            #[cfg(feature = "v1_20")]
+            element_properties: None,
         }
     }
 }
@@ -340,6 +382,10 @@ pub trait EncodingProfileBuilder<'a>: Sized {
     #[doc(alias = "gst_encoding_profile_set_single_segment")]
     #[must_use]
     fn single_segment(self, single_segment: bool) -> Self;
+    #[cfg(feature = "v1_20")]
+    #[doc(alias = "gst_encoding_profile_set_element_properties")]
+    #[must_use]
+    fn element_properties(self, element_properties: ElementProperties) -> Self;
 }
 
 macro_rules! declare_encoding_profile_builder_common(
@@ -385,6 +431,12 @@ macro_rules! declare_encoding_profile_builder_common(
                 self.base.single_segment = single_segment;
                 self
             }
+
+            #[cfg(feature = "v1_20")]
+            fn element_properties(mut self, element_properties: ElementProperties) -> $name<'a> {
+                self.base.element_properties = Some(element_properties);
+                self
+            }
         }
     }
 );
@@ -404,6 +456,12 @@ fn set_common_fields<T: EncodingProfileBuilderCommon>(
     #[cfg(feature = "v1_18")]
     {
         profile.set_single_segment(base_data.single_segment);
+    }
+    #[cfg(feature = "v1_20")]
+    {
+        if let Some(ref element_properties) = base_data.element_properties {
+            profile.set_element_properties(element_properties.clone());
+        }
     }
 }
 

@@ -80,12 +80,6 @@ pub trait EncodingProfileExt: 'static {
     #[doc(alias = "get_description")]
     fn description(&self) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_encoding_profile_get_element_properties")]
-    #[doc(alias = "get_element_properties")]
-    fn element_properties(&self) -> Option<gst::Structure>;
-
     #[doc(alias = "gst_encoding_profile_get_file_extension")]
     #[doc(alias = "get_file_extension")]
     fn file_extension(&self) -> Option<glib::GString>;
@@ -159,16 +153,6 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
     fn description(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_description(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    fn element_properties(&self) -> Option<gst::Structure> {
-        unsafe {
-            from_glib_full(ffi::gst_encoding_profile_get_element_properties(
                 self.as_ref().to_glib_none().0,
             ))
         }
