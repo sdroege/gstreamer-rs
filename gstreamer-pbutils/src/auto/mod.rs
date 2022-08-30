@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+mod audio_visualizer;
+pub use self::audio_visualizer::AudioVisualizer;
+
 mod discoverer;
 pub use self::discoverer::Discoverer;
 
@@ -40,6 +43,7 @@ mod encoding_video_profile;
 pub use self::encoding_video_profile::EncodingVideoProfile;
 
 mod enums;
+pub use self::enums::AudioVisualizerShader;
 pub use self::enums::DiscovererResult;
 
 mod flags;
@@ -52,6 +56,7 @@ pub mod functions;
 
 #[doc(hidden)]
 pub mod traits {
+    pub use super::audio_visualizer::AudioVisualizerExt;
     pub use super::discoverer_stream_info::DiscovererStreamInfoExt;
     pub use super::encoding_profile::EncodingProfileExt;
 }

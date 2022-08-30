@@ -57,12 +57,17 @@ pub mod encoding_profile;
 pub mod functions;
 pub use crate::functions::*;
 
+pub mod subclass;
+
+pub mod audio_visualizer;
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_pbutils::prelude::*" without getting conflicts
 pub mod prelude {
     #[doc(hidden)]
     pub use gst::prelude::*;
 
+    pub use crate::audio_visualizer::*;
     pub use crate::auto::traits::*;
     pub use crate::encoding_profile::{
         EncodingProfileBuilder, EncodingProfileHasRestrictionGetter,

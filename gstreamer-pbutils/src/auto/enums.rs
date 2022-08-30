@@ -11,6 +11,108 @@ use glib::Type;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstAudioVisualizerShader")]
+pub enum AudioVisualizerShader {
+    #[doc(alias = "GST_AUDIO_VISUALIZER_SHADER_NONE")]
+    None,
+    #[doc(alias = "GST_AUDIO_VISUALIZER_SHADER_FADE")]
+    Fade,
+    #[doc(alias = "GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_UP")]
+    FadeAndMoveUp,
+    #[doc(alias = "GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_DOWN")]
+    FadeAndMoveDown,
+    #[doc(alias = "GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_LEFT")]
+    FadeAndMoveLeft,
+    #[doc(alias = "GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_RIGHT")]
+    FadeAndMoveRight,
+    #[doc(alias = "GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_HORIZ_OUT")]
+    FadeAndMoveHorizOut,
+    #[doc(alias = "GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_HORIZ_IN")]
+    FadeAndMoveHorizIn,
+    #[doc(alias = "GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_VERT_OUT")]
+    FadeAndMoveVertOut,
+    #[doc(alias = "GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_VERT_IN")]
+    FadeAndMoveVertIn,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl IntoGlib for AudioVisualizerShader {
+    type GlibType = ffi::GstAudioVisualizerShader;
+
+    fn into_glib(self) -> ffi::GstAudioVisualizerShader {
+        match self {
+            Self::None => ffi::GST_AUDIO_VISUALIZER_SHADER_NONE,
+            Self::Fade => ffi::GST_AUDIO_VISUALIZER_SHADER_FADE,
+            Self::FadeAndMoveUp => ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_UP,
+            Self::FadeAndMoveDown => ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_DOWN,
+            Self::FadeAndMoveLeft => ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_LEFT,
+            Self::FadeAndMoveRight => ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_RIGHT,
+            Self::FadeAndMoveHorizOut => ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_HORIZ_OUT,
+            Self::FadeAndMoveHorizIn => ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_HORIZ_IN,
+            Self::FadeAndMoveVertOut => ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_VERT_OUT,
+            Self::FadeAndMoveVertIn => ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_VERT_IN,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstAudioVisualizerShader> for AudioVisualizerShader {
+    unsafe fn from_glib(value: ffi::GstAudioVisualizerShader) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GST_AUDIO_VISUALIZER_SHADER_NONE => Self::None,
+            ffi::GST_AUDIO_VISUALIZER_SHADER_FADE => Self::Fade,
+            ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_UP => Self::FadeAndMoveUp,
+            ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_DOWN => Self::FadeAndMoveDown,
+            ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_LEFT => Self::FadeAndMoveLeft,
+            ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_RIGHT => Self::FadeAndMoveRight,
+            ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_HORIZ_OUT => Self::FadeAndMoveHorizOut,
+            ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_HORIZ_IN => Self::FadeAndMoveHorizIn,
+            ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_VERT_OUT => Self::FadeAndMoveVertOut,
+            ffi::GST_AUDIO_VISUALIZER_SHADER_FADE_AND_MOVE_VERT_IN => Self::FadeAndMoveVertIn,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for AudioVisualizerShader {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_audio_visualizer_shader_get_type()) }
+    }
+}
+
+impl glib::value::ValueType for AudioVisualizerShader {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for AudioVisualizerShader {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for AudioVisualizerShader {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 #[doc(alias = "GstDiscovererResult")]
 pub enum DiscovererResult {
     #[doc(alias = "GST_DISCOVERER_OK")]
