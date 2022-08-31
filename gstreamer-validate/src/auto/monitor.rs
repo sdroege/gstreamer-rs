@@ -31,14 +31,14 @@ impl Monitor {
     pub fn factory_create(
         target: &impl IsA<gst::Object>,
         runner: &impl IsA<Runner>,
-        parent: &impl IsA<Monitor>,
+        parent: Option<&impl IsA<Monitor>>,
     ) -> Option<Monitor> {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(ffi::gst_validate_monitor_factory_create(
+            from_glib_full(ffi::gst_validate_monitor_factory_create(
                 target.as_ref().to_glib_none().0,
                 runner.as_ref().to_glib_none().0,
-                parent.as_ref().to_glib_none().0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
             ))
         }
     }
@@ -117,7 +117,7 @@ impl<O: IsA<Monitor>> MonitorExt for O {
 
     fn pipeline(&self) -> Option<gst::Pipeline> {
         unsafe {
-            from_glib_none(ffi::gst_validate_monitor_get_pipeline(
+            from_glib_full(ffi::gst_validate_monitor_get_pipeline(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -125,7 +125,7 @@ impl<O: IsA<Monitor>> MonitorExt for O {
 
     fn target(&self) -> Option<gst::Object> {
         unsafe {
-            from_glib_none(ffi::gst_validate_monitor_get_target(
+            from_glib_full(ffi::gst_validate_monitor_get_target(
                 self.as_ref().to_glib_none().0,
             ))
         }

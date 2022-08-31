@@ -44,7 +44,7 @@ impl Scenario {
     ) -> Option<Scenario> {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(ffi::gst_validate_scenario_factory_create(
+            from_glib_full(ffi::gst_validate_scenario_factory_create(
                 runner.as_ref().to_glib_none().0,
                 pipeline.as_ref().to_glib_none().0,
                 scenario_name.to_glib_none().0,
@@ -57,9 +57,9 @@ pub trait ScenarioExt: 'static {
     //#[doc(alias = "gst_validate_scenario_execute_seek")]
     //fn execute_seek(&self, action: &Action, rate: f64, format: gst::Format, flags: gst::SeekFlags, start_type: gst::SeekType, start: /*Ignored*/gst::ClockTime, stop_type: gst::SeekType, stop: /*Ignored*/gst::ClockTime) -> i32;
 
-    //#[doc(alias = "gst_validate_scenario_get_actions")]
-    //#[doc(alias = "get_actions")]
-    //fn actions(&self) -> /*Unimplemented*/Vec<Basic: Pointer>;
+    #[doc(alias = "gst_validate_scenario_get_actions")]
+    #[doc(alias = "get_actions")]
+    fn actions(&self) -> Vec<Action>;
 
     #[doc(alias = "gst_validate_scenario_get_pipeline")]
     #[doc(alias = "get_pipeline")]
@@ -96,13 +96,17 @@ impl<O: IsA<Scenario>> ScenarioExt for O {
     //    unsafe { TODO: call ffi:gst_validate_scenario_execute_seek() }
     //}
 
-    //fn actions(&self) -> /*Unimplemented*/Vec<Basic: Pointer> {
-    //    unsafe { TODO: call ffi:gst_validate_scenario_get_actions() }
-    //}
+    fn actions(&self) -> Vec<Action> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_validate_scenario_get_actions(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
     fn pipeline(&self) -> Option<gst::Element> {
         unsafe {
-            from_glib_none(ffi::gst_validate_scenario_get_pipeline(
+            from_glib_full(ffi::gst_validate_scenario_get_pipeline(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -134,13 +138,13 @@ impl<O: IsA<Scenario>> ScenarioExt for O {
             F: Fn(&P, &Action) + 'static,
         >(
             this: *mut ffi::GstValidateScenario,
-            object: *mut ffi::GstValidateAction,
+            action: *mut ffi::GstValidateAction,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(
                 Scenario::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(object),
+                &from_glib_borrow(action),
             )
         }
         unsafe {

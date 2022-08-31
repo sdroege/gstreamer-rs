@@ -3,6 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::Report;
 use crate::ReportingDetails;
 use crate::Runner;
 use glib::object::IsA;
@@ -42,9 +43,9 @@ pub trait ReporterExt: 'static {
     #[doc(alias = "get_reporting_level")]
     fn reporting_level(&self) -> ReportingDetails;
 
-    //#[doc(alias = "gst_validate_reporter_get_reports")]
-    //#[doc(alias = "get_reports")]
-    //fn reports(&self) -> /*Unimplemented*/Vec<Basic: Pointer>;
+    #[doc(alias = "gst_validate_reporter_get_reports")]
+    #[doc(alias = "get_reports")]
+    fn reports(&self) -> Vec<Report>;
 
     #[doc(alias = "gst_validate_reporter_get_reports_count")]
     #[doc(alias = "get_reports_count")]
@@ -87,7 +88,7 @@ impl<O: IsA<Reporter>> ReporterExt for O {
 
     fn pipeline(&self) -> Option<gst::Pipeline> {
         unsafe {
-            from_glib_none(ffi::gst_validate_reporter_get_pipeline(
+            from_glib_full(ffi::gst_validate_reporter_get_pipeline(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -105,9 +106,13 @@ impl<O: IsA<Reporter>> ReporterExt for O {
         }
     }
 
-    //fn reports(&self) -> /*Unimplemented*/Vec<Basic: Pointer> {
-    //    unsafe { TODO: call ffi:gst_validate_reporter_get_reports() }
-    //}
+    fn reports(&self) -> Vec<Report> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_validate_reporter_get_reports(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
     fn reports_count(&self) -> i32 {
         unsafe { ffi::gst_validate_reporter_get_reports_count(self.as_ref().to_glib_none().0) }
@@ -115,7 +120,7 @@ impl<O: IsA<Reporter>> ReporterExt for O {
 
     fn runner(&self) -> Option<Runner> {
         unsafe {
-            from_glib_none(ffi::gst_validate_reporter_get_runner(
+            from_glib_full(ffi::gst_validate_reporter_get_runner(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -147,7 +152,7 @@ impl<O: IsA<Reporter>> ReporterExt for O {
         unsafe {
             ffi::gst_validate_reporter_set_name(
                 self.as_ref().to_glib_none().0,
-                name.to_glib_none().0,
+                name.to_glib_full(),
             );
         }
     }

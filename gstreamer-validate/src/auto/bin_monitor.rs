@@ -33,14 +33,14 @@ impl BinMonitor {
     pub fn new(
         bin: &impl IsA<gst::Bin>,
         runner: &impl IsA<Runner>,
-        parent: &impl IsA<Monitor>,
+        parent: Option<&impl IsA<Monitor>>,
     ) -> BinMonitor {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(ffi::gst_validate_bin_monitor_new(
+            from_glib_full(ffi::gst_validate_bin_monitor_new(
                 bin.as_ref().to_glib_none().0,
                 runner.as_ref().to_glib_none().0,
-                parent.as_ref().to_glib_none().0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
             ))
         }
     }
@@ -67,7 +67,7 @@ pub trait BinMonitorExt: 'static {
 impl<O: IsA<BinMonitor>> BinMonitorExt for O {
     fn scenario(&self) -> Option<Scenario> {
         unsafe {
-            from_glib_none(ffi::gst_validate_bin_monitor_get_scenario(
+            from_glib_full(ffi::gst_validate_bin_monitor_get_scenario(
                 self.as_ref().to_glib_none().0,
             ))
         }

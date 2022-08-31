@@ -25,14 +25,14 @@ impl ElementMonitor {
     pub fn new(
         element: &impl IsA<gst::Element>,
         runner: &impl IsA<Runner>,
-        parent: &impl IsA<Monitor>,
+        parent: Option<&impl IsA<Monitor>>,
     ) -> ElementMonitor {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(ffi::gst_validate_element_monitor_new(
+            from_glib_full(ffi::gst_validate_element_monitor_new(
                 element.as_ref().to_glib_none().0,
                 runner.as_ref().to_glib_none().0,
-                parent.as_ref().to_glib_none().0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
             ))
         }
     }

@@ -93,7 +93,7 @@ impl Report {
     #[doc(alias = "gst_validate_report_get_reporter")]
     #[doc(alias = "get_reporter")]
     pub fn reporter(&self) -> Option<Reporter> {
-        unsafe { from_glib_none(ffi::gst_validate_report_get_reporter(self.to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::gst_validate_report_get_reporter(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_validate_report_get_reporter_name")]
