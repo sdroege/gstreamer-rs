@@ -19,14 +19,14 @@ glib::wrapper! {
 
 impl Action {
     //#[doc(alias = "gst_validate_action_new")]
-    //pub fn new(scenario: Option<&impl IsA<Scenario>>, action_type: /*Ignored*/&mut ActionType, structure: &mut gst::Structure, add_to_lists: bool) -> Action {
+    //pub fn new(scenario: &impl IsA<Scenario>, action_type: /*Ignored*/&mut ActionType, structure: &mut gst::Structure, add_to_lists: bool) -> Action {
     //    unsafe { TODO: call ffi:gst_validate_action_new() }
     //}
 
     #[doc(alias = "gst_validate_action_get_scenario")]
     #[doc(alias = "get_scenario")]
     pub fn scenario(&self) -> Option<Scenario> {
-        unsafe { from_glib_full(ffi::gst_validate_action_get_scenario(self.to_glib_none().0)) }
+        unsafe { from_glib_none(ffi::gst_validate_action_get_scenario(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_validate_action_set_done")]
@@ -38,7 +38,7 @@ impl Action {
 
     //#[doc(alias = "gst_validate_action_get_clocktime")]
     //#[doc(alias = "get_clocktime")]
-    //pub fn clocktime(scenario: &impl IsA<Scenario>, action: &Action, name: &str) -> Option</*Ignored*/gst::ClockTime> {
+    //pub fn is_clocktime(scenario: &impl IsA<Scenario>, action: &Action, name: &str, retval: /*Ignored*/gst::ClockTime) -> bool {
     //    unsafe { TODO: call ffi:gst_validate_action_get_clocktime() }
     //}
 }

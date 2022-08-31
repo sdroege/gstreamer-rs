@@ -26,14 +26,14 @@ impl PadMonitor {
     pub fn new(
         pad: &impl IsA<gst::Pad>,
         runner: &impl IsA<Runner>,
-        parent: Option<&impl IsA<ElementMonitor>>,
+        parent: &impl IsA<ElementMonitor>,
     ) -> PadMonitor {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gst_validate_pad_monitor_new(
+            from_glib_none(ffi::gst_validate_pad_monitor_new(
                 pad.as_ref().to_glib_none().0,
                 runner.as_ref().to_glib_none().0,
-                parent.map(|p| p.as_ref()).to_glib_none().0,
+                parent.as_ref().to_glib_none().0,
             ))
         }
     }

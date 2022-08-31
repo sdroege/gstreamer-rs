@@ -10,8 +10,6 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -69,10 +67,6 @@ pub trait RunnerExt: 'static {
     #[doc(alias = "gst_validate_runner_printf")]
     fn printf(&self) -> i32;
 
-    fn params(&self) -> Option<glib::GString>;
-
-    fn set_params(&self, params: Option<&str>);
-
     #[doc(alias = "report-added")]
     fn connect_report_added<F: Fn(&Self, &Report) + Send + Sync + 'static>(
         &self,
@@ -81,9 +75,6 @@ pub trait RunnerExt: 'static {
 
     #[doc(alias = "stopping")]
     fn connect_stopping<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "params")]
-    fn connect_params_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Runner>> RunnerExt for O {
@@ -135,14 +126,6 @@ impl<O: IsA<Runner>> RunnerExt for O {
         unsafe { ffi::gst_validate_runner_printf(self.as_ref().to_glib_none().0) }
     }
 
-    fn params(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self.as_ref(), "params")
-    }
-
-    fn set_params(&self, params: Option<&str>) {
-        glib::ObjectExt::set_property(self.as_ref(), "params", &params)
-    }
-
     fn connect_report_added<F: Fn(&Self, &Report) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -192,31 +175,6 @@ impl<O: IsA<Runner>> RunnerExt for O {
                 b"stopping\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     stopping_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    fn connect_params_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_params_trampoline<
-            P: IsA<Runner>,
-            F: Fn(&P) + Send + Sync + 'static,
-        >(
-            this: *mut ffi::GstValidateRunner,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(Runner::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::params\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_params_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

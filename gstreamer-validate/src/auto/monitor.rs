@@ -31,14 +31,14 @@ impl Monitor {
     pub fn factory_create(
         target: &impl IsA<gst::Object>,
         runner: &impl IsA<Runner>,
-        parent: Option<&impl IsA<Monitor>>,
+        parent: &impl IsA<Monitor>,
     ) -> Option<Monitor> {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gst_validate_monitor_factory_create(
+            from_glib_none(ffi::gst_validate_monitor_factory_create(
                 target.as_ref().to_glib_none().0,
                 runner.as_ref().to_glib_none().0,
-                parent.map(|p| p.as_ref()).to_glib_none().0,
+                parent.as_ref().to_glib_none().0,
             ))
         }
     }
@@ -59,6 +59,10 @@ pub trait MonitorExt: 'static {
     #[doc(alias = "get_element_name")]
     fn element_name(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "gst_validate_monitor_get_pipeline")]
+    #[doc(alias = "get_pipeline")]
+    fn pipeline(&self) -> Option<gst::Pipeline>;
+
     #[doc(alias = "gst_validate_monitor_get_target")]
     #[doc(alias = "get_target")]
     fn target(&self) -> Option<gst::Object>;
@@ -72,9 +76,6 @@ pub trait MonitorExt: 'static {
 
     #[doc(alias = "validate-parent")]
     fn validate_parent(&self) -> Option<Monitor>;
-
-    #[doc(alias = "validate-runner")]
-    fn validate_runner(&self) -> Option<Runner>;
 
     //fn verbosity(&self) -> /*Ignored*/VerbosityFlags;
 
@@ -114,9 +115,17 @@ impl<O: IsA<Monitor>> MonitorExt for O {
         }
     }
 
+    fn pipeline(&self) -> Option<gst::Pipeline> {
+        unsafe {
+            from_glib_none(ffi::gst_validate_monitor_get_pipeline(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     fn target(&self) -> Option<gst::Object> {
         unsafe {
-            from_glib_full(ffi::gst_validate_monitor_get_target(
+            from_glib_none(ffi::gst_validate_monitor_get_target(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -136,10 +145,6 @@ impl<O: IsA<Monitor>> MonitorExt for O {
 
     fn validate_parent(&self) -> Option<Monitor> {
         glib::ObjectExt::property(self.as_ref(), "validate-parent")
-    }
-
-    fn validate_runner(&self) -> Option<Runner> {
-        glib::ObjectExt::property(self.as_ref(), "validate-runner")
     }
 
     //fn verbosity(&self) -> /*Ignored*/VerbosityFlags {

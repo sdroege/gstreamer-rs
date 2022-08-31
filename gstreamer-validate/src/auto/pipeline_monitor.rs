@@ -27,14 +27,14 @@ impl PipelineMonitor {
     pub fn new(
         pipeline: &impl IsA<gst::Pipeline>,
         runner: &impl IsA<Runner>,
-        parent: Option<&impl IsA<Monitor>>,
+        parent: &impl IsA<Monitor>,
     ) -> PipelineMonitor {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gst_validate_pipeline_monitor_new(
+            from_glib_none(ffi::gst_validate_pipeline_monitor_new(
                 pipeline.as_ref().to_glib_none().0,
                 runner.as_ref().to_glib_none().0,
-                parent.map(|p| p.as_ref()).to_glib_none().0,
+                parent.as_ref().to_glib_none().0,
             ))
         }
     }
