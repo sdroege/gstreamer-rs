@@ -472,6 +472,7 @@ gir-checks:
     - job: 'build-stable'
       artifacts: false
   script:
+    - git submodule update --checkout
     - python3 ci/gir-checks.py
 
 outdated:
