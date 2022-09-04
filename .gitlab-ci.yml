@@ -529,6 +529,19 @@ doc-stripping:
     - PATH=~/.cargo/bin/:$PATH ./generator.py --gir-files-directories gir-files gst-gir-files --strip-docs
     - git diff --quiet || (echo 'Files changed after running `rustdoc-stripper -s`, make sure all documentation is protected with `// rustdoc-stripper-ignore-next`!'; git diff; false)
 
+regen-check:
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+  extends: .img-nightly
+  stage: 'extras'
+  needs:
+    - job: 'build-nightly'
+      artifacts: false
+  script:
+    - git submodule update --checkout
+    - PATH=~/.cargo/bin/:$PATH ./generator.py --gir-files-directories gir-files gst-gir-files --yes
+    - git diff --quiet || (echo 'Files changed after running `generator.py`, make sure all submodules and generated files are in the correct version!'; git diff; false)
+
 docs:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
