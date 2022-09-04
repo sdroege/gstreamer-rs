@@ -33,6 +33,8 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
 fi
 
 if [ "$RUST_VERSION" = "nightly" ]; then
+  rustup component add rustfmt --toolchain nightly
+
   # Documentation tools
   cargo install --force rustdoc-stripper
 fi
