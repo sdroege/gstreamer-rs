@@ -44,10 +44,10 @@ impl ParamSpecFraction {
 
     #[allow(clippy::new_ret_no_self)]
     #[doc(alias = "gst_param_spec_fraction")]
-    pub fn new(
+    pub fn new<'a>(
         name: &str,
-        nick: &str,
-        blurb: &str,
+        nick: impl Into<Option<&'a str>>,
+        blurb: impl Into<Option<&'a str>>,
         min: crate::Fraction,
         max: crate::Fraction,
         default: crate::Fraction,
@@ -57,8 +57,8 @@ impl ParamSpecFraction {
         unsafe {
             from_glib_none(ffi::gst_param_spec_fraction(
                 name.to_glib_none().0,
-                nick.to_glib_none().0,
-                blurb.to_glib_none().0,
+                nick.into().to_glib_none().0,
+                blurb.into().to_glib_none().0,
                 min.numer(),
                 min.denom(),
                 max.numer(),
@@ -217,10 +217,10 @@ impl ParamSpecArray {
 
     #[allow(clippy::new_ret_no_self)]
     #[doc(alias = "gst_param_spec_array")]
-    pub fn new(
+    pub fn new<'a>(
         name: &str,
-        nick: &str,
-        blurb: &str,
+        nick: impl Into<Option<&'a str>>,
+        blurb: impl Into<Option<&'a str>>,
         element_spec: Option<&glib::ParamSpec>,
         flags: glib::ParamFlags,
     ) -> glib::ParamSpec {
@@ -228,8 +228,8 @@ impl ParamSpecArray {
         unsafe {
             from_glib_none(ffi::gst_param_spec_array(
                 name.to_glib_none().0,
-                nick.to_glib_none().0,
-                blurb.to_glib_none().0,
+                nick.into().to_glib_none().0,
+                blurb.into().to_glib_none().0,
                 element_spec.to_glib_none().0,
                 flags.into_glib(),
             ))
@@ -274,8 +274,8 @@ impl<'a> ParamSpecArrayBuilder<'a> {
 
     // rustdoc-stripper-ignore-next
     /// Default: `None`
-    pub fn element_spec(mut self, element_spec: &'a glib::ParamSpec) -> Self {
-        self.element_spec = Some(element_spec);
+    pub fn element_spec(mut self, element_spec: impl Into<Option<&'a glib::ParamSpec>>) -> Self {
+        self.element_spec = element_spec.into();
         self
     }
 
