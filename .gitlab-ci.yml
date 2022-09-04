@@ -524,6 +524,7 @@ doc-stripping:
     - job: 'build-nightly'
       artifacts: false
   script:
+    - git submodule update --checkout
     - PATH=~/.cargo/bin/:$PATH ./generator.py --gir-files-directories gir-files gst-gir-files --strip-docs --no-fmt
     - git diff --quiet || (echo 'Files changed after running `rustdoc-stripper -s`, make sure all documentation is protected with `// rustdoc-stripper-ignore-next`!'; git diff; false)
 
@@ -536,6 +537,7 @@ docs:
     - job: 'build-nightly'
       artifacts: false
   script:
+    - git submodule update --checkout
     - curl --proto '=https' --tlsv1.2 -sSf -o gir-rustdoc.py
         https://gitlab.gnome.org/World/Rust/gir-rustdoc/-/raw/main/gir-rustdoc.py
     - chmod +x gir-rustdoc.py
