@@ -525,7 +525,8 @@ doc-stripping:
       artifacts: false
   script:
     - git submodule update --checkout
-    - PATH=~/.cargo/bin/:$PATH ./generator.py --gir-files-directories gir-files gst-gir-files --strip-docs --no-fmt
+    - PATH=~/.cargo/bin/:$PATH ./generator.py --gir-files-directories gir-files gst-gir-files --embed-docs
+    - PATH=~/.cargo/bin/:$PATH ./generator.py --gir-files-directories gir-files gst-gir-files --strip-docs
     - git diff --quiet || (echo 'Files changed after running `rustdoc-stripper -s`, make sure all documentation is protected with `// rustdoc-stripper-ignore-next`!'; git diff; false)
 
 docs:
