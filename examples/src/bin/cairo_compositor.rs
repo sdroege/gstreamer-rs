@@ -62,15 +62,11 @@ mod cairo_compositor {
             // composition.
             fn properties() -> &'static [glib::ParamSpec] {
                 static PROPERTIES: Lazy<Vec<glib::ParamSpec>> = Lazy::new(|| {
-                    vec![glib::ParamSpecUInt::new(
-                        "background-color",
-                        "Background Color",
-                        "Background color as 0xRRGGBB",
-                        0,
-                        u32::MAX,
-                        Settings::default().background_color,
-                        glib::ParamFlags::READWRITE,
-                    )]
+                    vec![glib::ParamSpecUInt::builder("background-color")
+                        .nick("Background Color")
+                        .blurb("Background color as 0xRRGGBB")
+                        .default_value(Settings::default().background_color)
+                        .build()]
                 });
 
                 &*PROPERTIES
@@ -484,51 +480,41 @@ mod cairo_compositor {
             fn properties() -> &'static [glib::ParamSpec] {
                 static PROPERTIES: Lazy<Vec<glib::ParamSpec>> = Lazy::new(|| {
                     vec![
-                        glib::ParamSpecDouble::new(
-                            "alpha",
-                            "Alpha",
-                            "Alpha value of the input",
-                            0.0,
-                            1.0,
-                            Settings::default().alpha,
-                            glib::ParamFlags::READWRITE,
-                        ),
-                        glib::ParamSpecDouble::new(
-                            "scale",
-                            "Scale",
-                            "Scale factor of the input",
-                            0.0,
-                            f64::MAX,
-                            Settings::default().scale,
-                            glib::ParamFlags::READWRITE,
-                        ),
-                        glib::ParamSpecDouble::new(
-                            "rotate",
-                            "Rotate",
-                            "Rotation of the input",
-                            0.0,
-                            360.0,
-                            Settings::default().rotate,
-                            glib::ParamFlags::READWRITE,
-                        ),
-                        glib::ParamSpecDouble::new(
-                            "xpos",
-                            "X Position",
-                            "Horizontal position of the input",
-                            0.0,
-                            f64::MAX,
-                            Settings::default().xpos,
-                            glib::ParamFlags::READWRITE,
-                        ),
-                        glib::ParamSpecDouble::new(
-                            "ypos",
-                            "Y Position",
-                            "Vertical position of the input",
-                            0.0,
-                            f64::MAX,
-                            Settings::default().ypos,
-                            glib::ParamFlags::READWRITE,
-                        ),
+                        glib::ParamSpecDouble::builder("alpha")
+                            .nick("Alpha")
+                            .blurb("Alpha value of the input")
+                            .minimum(0.0)
+                            .maximum(1.0)
+                            .default_value(Settings::default().alpha)
+                            .build(),
+                        glib::ParamSpecDouble::builder("scale")
+                            .nick("Scale")
+                            .blurb("Scale factor of the input")
+                            .minimum(0.0)
+                            .maximum(f64::MAX)
+                            .default_value(Settings::default().scale)
+                            .build(),
+                        glib::ParamSpecDouble::builder("rotate")
+                            .nick("Rotate")
+                            .blurb("Rotation of the input")
+                            .minimum(0.0)
+                            .maximum(360.0)
+                            .default_value(Settings::default().rotate)
+                            .build(),
+                        glib::ParamSpecDouble::builder("xpos")
+                            .nick("X Position")
+                            .blurb("Horizontal position of the input")
+                            .minimum(0.0)
+                            .maximum(f64::MAX)
+                            .default_value(Settings::default().xpos)
+                            .build(),
+                        glib::ParamSpecDouble::builder("ypos")
+                            .nick("Y Position")
+                            .blurb("Vertical position of the input")
+                            .minimum(0.0)
+                            .maximum(f64::MAX)
+                            .default_value(Settings::default().ypos)
+                            .build(),
                     ]
                 });
 
