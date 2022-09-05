@@ -47,7 +47,7 @@ impl<'a> AudioInfoBuilder<'a> {
                     return Err(glib::bool_error!("Invalid positions length"));
                 }
 
-                let positions: [ffi::GstAudioChannelPosition; 64] = array_init::array_init(|i| {
+                let positions: [ffi::GstAudioChannelPosition; 64] = std::array::from_fn(|i| {
                     if i >= self.channels as usize {
                         ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
                     } else {
@@ -96,7 +96,7 @@ impl<'a> AudioInfoBuilder<'a> {
                 info.layout = layout.into_glib();
             }
 
-            let positions = array_init::array_init(|i| from_glib(info.position[i]));
+            let positions = std::array::from_fn(|i| from_glib(info.position[i]));
             Ok(AudioInfo(info, positions))
         }
     }
@@ -156,7 +156,7 @@ impl AudioInfo {
                 caps.as_ptr(),
             )) {
                 let info = info.assume_init();
-                let positions = array_init::array_init(|i| from_glib(info.position[i]));
+                let positions = std::array::from_fn(|i| from_glib(info.position[i]));
                 Ok(Self(info, positions))
             } else {
                 Err(glib::bool_error!("Failed to create AudioInfo from caps"))
@@ -407,7 +407,7 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstAudioInfo> for AudioInfo {
     unsafe fn from_glib_none(ptr: *mut ffi::GstAudioInfo) -> Self {
         Self(
             ptr::read(ptr),
-            array_init::array_init(|i| from_glib((*ptr).position[i])),
+            std::array::from_fn(|i| from_glib((*ptr).position[i])),
         )
     }
 }
