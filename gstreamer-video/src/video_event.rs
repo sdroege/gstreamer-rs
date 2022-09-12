@@ -601,8 +601,8 @@ nav_event_builder!(
 );
 
 const NAVIGATION_EVENT_NAME: &str = "application/x-gst-navigation";
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
-#[cfg_attr(feature = "ser_de", serde(tag = "event"))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(tag = "event"))]
 #[derive(Clone, PartialEq, Debug)]
 pub enum NavigationEvent {
     KeyPress {
@@ -1266,7 +1266,7 @@ impl NavigationEvent {
 #[cfg(test)]
 mod tests {
     #[test]
-    #[cfg(feature = "ser_de")]
+    #[cfg(feature = "serde")]
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn serialize_navigation_events() {

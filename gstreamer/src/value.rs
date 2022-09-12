@@ -282,7 +282,7 @@ impl glib::value::ToValue for Fraction {
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct IntRange<T> {
     min: T,
     max: T,
@@ -466,7 +466,7 @@ impl glib::value::ToValue for IntRange<i64> {
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct FractionRange {
     min: Fraction,
     max: Fraction,
@@ -549,7 +549,7 @@ impl glib::value::ToValue for FractionRange {
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Bitmask(pub u64);
 
 impl Bitmask {

@@ -39,7 +39,7 @@ pub use crate::auto::*;
 mod caps;
 pub use crate::caps::AudioCapsBuilder;
 
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod flag_serde;
 
 mod audio_format;

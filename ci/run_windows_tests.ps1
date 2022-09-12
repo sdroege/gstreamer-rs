@@ -45,7 +45,7 @@ foreach($crate in $crates)
     # Or when we want to build without default features
     if ($env:LocalFeatures -and ($env:LocalFeatures -ne '--no-default-features')) {
         if ($crate -eq 'gstreamer') {
-            $env:LocalFeatures += "ser_de,"
+            $env:LocalFeatures += "serde,"
         }
 
         if ($crate -eq 'examples') {

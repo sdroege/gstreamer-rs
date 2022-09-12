@@ -88,7 +88,7 @@ impl<T> Signed<T> {
 }
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum GenericFormattedValue {
     Undefined(Undefined),
     Default(Option<Default>),

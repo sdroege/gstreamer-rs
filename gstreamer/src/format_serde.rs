@@ -7,7 +7,7 @@ use crate::format::{Buffers, Bytes, Default, Percent, Undefined};
 
 // Manual implementation for some types that would otherwise yield representations such as:
 // "Default((Some(42)))"
-macro_rules! impl_ser_de(
+macro_rules! impl_serde(
     ($t:ident) => {
         impl Serialize for $t {
             fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -25,9 +25,9 @@ macro_rules! impl_ser_de(
     }
 );
 
-impl_ser_de!(Buffers);
-impl_ser_de!(Bytes);
-impl_ser_de!(Default);
+impl_serde!(Buffers);
+impl_serde!(Bytes);
+impl_serde!(Default);
 
 impl Serialize for Undefined {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {

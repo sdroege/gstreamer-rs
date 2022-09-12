@@ -21,7 +21,7 @@ enum DateTimeVariants {
 }
 
 // Note: ser / de for `glib::Date` should be implemented in the `glib` crate
-// However, there is no `ser_de` feature in `glib` right now. The limitation is that
+// However, there is no `serde` feature in `glib` right now. The limitation is that
 // `Date` fields can only be ser / de when they are used in `Value`s (which implies
 // `Array`s, `List`s, `Structure` fields and `Tag`s)
 pub(crate) struct Date(glib::Date);

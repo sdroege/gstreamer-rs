@@ -43,7 +43,7 @@ mod auto;
 pub use crate::auto::functions::*;
 pub use crate::auto::*;
 
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod flag_serde;
 
 mod discoverer;

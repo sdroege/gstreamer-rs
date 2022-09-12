@@ -232,7 +232,7 @@ plugins-update-nightly:
         crate=$1
         case "$crate" in
           gstreamer-audio|gstreamer-editing-services|gstreamer-gl|gstreamer-pbutils|gstreamer-rtp|gstreamer-rtsp|gstreamer-video|gstreamer)
-            echo "--features=ser_de,v1_22"
+            echo "--features=serde,v1_22"
             ;;
           gstreamer-validate)
             echo ""
@@ -428,7 +428,7 @@ clippy:
         crate=$1
         case "$crate" in
           gstreamer-audio|gstreamer-editing-services|gstreamer-gl|gstreamer-pbutils|gstreamer-rtp|gstreamer-rtsp|gstreamer-video|gstreamer)
-            echo "--features=ser_de,v1_22"
+            echo "--features=serde,v1_22"
             ;;
           gstreamer-validate)
             echo ""

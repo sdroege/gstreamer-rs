@@ -1387,7 +1387,7 @@ name = "Gst.Format"
 status = "generate"
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
+    cfg_condition = "feature = \"serde\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
     [[object.function]]
@@ -1748,7 +1748,7 @@ name = "Gst.PadDirection"
 status = "generate"
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
+    cfg_condition = "feature = \"serde\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
@@ -1780,7 +1780,7 @@ name = "Gst.PadPresence"
 status = "generate"
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
+    cfg_condition = "feature = \"serde\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
@@ -2032,7 +2032,7 @@ name = "Gst.Rank"
 status = "generate"
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
+    cfg_condition = "feature = \"serde\""
     [[object.derive]]
     name = "Debug"
 
@@ -2132,7 +2132,7 @@ name = "Gst.State"
 status = "generate"
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
+    cfg_condition = "feature = \"serde\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
@@ -2313,7 +2313,7 @@ name = "Gst.TagScope"
 status = "generate"
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
+    cfg_condition = "feature = \"serde\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
@@ -2408,7 +2408,7 @@ name = "Gst.TocEntryType"
 status = "generate"
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
+    cfg_condition = "feature = \"serde\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
@@ -2417,7 +2417,7 @@ name = "Gst.TocLoopType"
 status = "generate"
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
+    cfg_condition = "feature = \"serde\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
@@ -2426,7 +2426,7 @@ name = "Gst.TocScope"
 status = "generate"
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
+    cfg_condition = "feature = \"serde\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
@@ -2475,6 +2475,6 @@ name = "Gst.URIType"
 status = "generate"
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
+    cfg_condition = "feature = \"serde\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"

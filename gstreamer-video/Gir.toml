@@ -287,7 +287,7 @@ name = "GstVideo.NavigationCommand"
 status = "generate"
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"ser_de\""
+    cfg_condition = "feature = \"serde\""
     [[object.derive]]
     name = "Debug, Eq, PartialEq, Ord, PartialOrd, Hash"
 

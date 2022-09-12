@@ -50,9 +50,9 @@ pub use crate::auto::*;
 mod macros;
 
 #[macro_use]
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod serde_macros;
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 pub use crate::serde_macros::*;
 
 #[macro_use]
@@ -73,28 +73,28 @@ mod value;
 pub use crate::value::{
     Array, ArrayRef, Bitmask, Fraction, FractionRange, IntRange, List, ListRef,
 };
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 #[macro_use]
 mod value_serde;
 
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod flag_serde;
 
 pub mod structure;
 pub use crate::structure::{Structure, StructureRef};
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod structure_serde;
 
 pub mod caps;
 pub use crate::caps::{Caps, CapsFilterMapAction, CapsRef};
 mod caps_features;
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod caps_serde;
 pub use crate::caps_features::{
     CapsFeatures, CapsFeaturesRef, CAPS_FEATURES_MEMORY_SYSTEM_MEMORY,
     CAPS_FEATURE_MEMORY_SYSTEM_MEMORY,
 };
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod caps_features_serde;
 
 pub mod tags;
@@ -102,7 +102,7 @@ pub use crate::tags::{
     tag_exists, tag_get_description, tag_get_flag, tag_get_nick, tag_get_type, Tag, TagList,
     TagListRef,
 };
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod tags_serde;
 
 pub mod meta;
@@ -119,17 +119,17 @@ mod buffer_cursor;
 pub use crate::buffer_cursor::{BufferCursor, BufferRefCursor};
 pub mod memory;
 pub use crate::memory::{MappedMemory, Memory, MemoryMap, MemoryRef};
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod buffer_serde;
 
 pub mod sample;
 pub use crate::sample::{Sample, SampleRef};
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod sample_serde;
 
 pub mod bufferlist;
 pub use crate::bufferlist::{BufferList, BufferListRef};
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod bufferlist_serde;
 
 pub mod query;
@@ -171,10 +171,10 @@ mod bus_windows;
 
 mod child_proxy;
 mod clock_time;
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod clock_time_serde;
 mod date_time;
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod date_time_serde;
 mod device_monitor;
 mod device_provider;
@@ -230,17 +230,17 @@ pub use crate::format::{
     GenericFormattedValue, Signed, SpecificFormattedValue, SpecificFormattedValueFullRange,
     SpecificFormattedValueIntrinsic,
 };
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod format_serde;
 
 mod segment;
 pub use crate::segment::*;
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod segment_serde;
 
 pub mod toc;
 pub use crate::toc::{Toc, TocEntry, TocEntryRef, TocRef};
-#[cfg(feature = "ser_de")]
+#[cfg(feature = "serde")]
 mod toc_serde;
 
 mod clock;
