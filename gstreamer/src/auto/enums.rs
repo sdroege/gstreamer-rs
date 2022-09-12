@@ -1100,7 +1100,7 @@ impl ToValue for FlowReturn {
     }
 }
 
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstFormat")]
@@ -1331,7 +1331,7 @@ impl ToValue for LibraryError {
     }
 }
 
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstPadDirection")]
@@ -1592,7 +1592,7 @@ impl ToValue for PadMode {
     }
 }
 
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstPadPresence")]
@@ -2200,7 +2200,7 @@ impl ToValue for QOSType {
     }
 }
 
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstRank")]
@@ -2509,7 +2509,7 @@ impl ToValue for SeekType {
     }
 }
 
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstState")]
@@ -3268,7 +3268,7 @@ impl ToValue for TagMergeMode {
     }
 }
 
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstTagScope")]
@@ -3413,7 +3413,7 @@ impl ToValue for TaskState {
     }
 }
 
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstTocEntryType")]
@@ -3518,7 +3518,7 @@ impl ToValue for TocEntryType {
     }
 }
 
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstTocLoopType")]
@@ -3597,7 +3597,7 @@ impl ToValue for TocLoopType {
     }
 }
 
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstTocScope")]
@@ -3855,7 +3855,7 @@ impl ToValue for URIError {
     }
 }
 
-#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstURIType")]
