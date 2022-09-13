@@ -214,6 +214,64 @@ impl DebugCategory {
         }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Logs without checking the log level.
+    #[inline]
+    #[doc(alias = "gst_debug_log")]
+    #[doc(alias = "gst_debug_log_literal")]
+    pub fn log_unfiltered<O: IsA<glib::Object>>(
+        self,
+        obj: Option<&O>,
+        level: crate::DebugLevel,
+        file: &str,
+        module: &str,
+        line: u32,
+        args: fmt::Arguments,
+    ) {
+        let cat = match self.0 {
+            Some(cat) => cat,
+            None => return,
+        };
+
+        let obj_ptr = match obj {
+            Some(obj) => obj.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+            None => ptr::null_mut(),
+        };
+
+        let mut w = glib::GStringBuilder::default();
+
+        // Can't really happen but better safe than sorry
+        if fmt::write(&mut w, args).is_err() {
+            return;
+        }
+
+        #[cfg(feature = "v1_20")]
+        unsafe {
+            ffi::gst_debug_log_literal(
+                cat.as_ptr(),
+                level.into_glib(),
+                file.to_glib_none().0,
+                module.to_glib_none().0,
+                line as i32,
+                obj_ptr,
+                w.into_string().to_glib_none().0,
+            );
+        }
+        #[cfg(not(feature = "v1_20"))]
+        unsafe {
+            ffi::gst_debug_log(
+                cat.as_ptr(),
+                level.into_glib(),
+                file.to_glib_none().0,
+                module.to_glib_none().0,
+                line as i32,
+                obj_ptr,
+                b"%s\0".as_ptr() as *const _,
+                ToGlibPtr::<*const i8>::to_glib_none(&w.into_string()).0,
+            );
+        }
+    }
+
     #[doc(alias = "get_all_categories")]
     #[doc(alias = "gst_debug_get_all_categories")]
     pub fn all_categories() -> glib::SList<DebugCategory> {
@@ -406,12 +464,20 @@ macro_rules! memdump(
 #[macro_export]
 macro_rules! log_with_level(
     ($cat:expr, level: $level:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::DebugCategory::log($cat.clone(), Some($obj), $level, file!(),
-            module_path!(), line!(), format_args!($($args)*))
+        // Check the log level before using `format_args!` otherwise
+        // formatted arguments are evaluated even if we end up not logging.
+        if $level <= $cat.threshold() {
+            $crate::DebugCategory::log_unfiltered($cat.clone(), Some($obj),
+                $level, file!(), module_path!(), line!(), format_args!($($args)*))
+        }
     }};
     ($cat:expr, level: $level:expr, $($args:tt)*) => { {
-        $crate::DebugCategory::log($cat.clone(), None as Option<&$crate::glib::Object>, $level, file!(),
-            module_path!(), line!(), format_args!($($args)*))
+        // Check the log level before using `format_args!` otherwise
+        // formatted arguments are evaluated even if we end up not logging.
+        if $level <= $cat.threshold() {
+            $crate::DebugCategory::log_unfiltered($cat.clone(), None as Option<&$crate::glib::Object>,
+                $level, file!(), module_path!(), line!(), format_args!($($args)*))
+        }
     }};
 );
 
