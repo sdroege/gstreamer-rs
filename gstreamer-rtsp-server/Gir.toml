@@ -275,6 +275,14 @@ status="generate"
         [object.function.return]
         nullable_return_is_error = "Failed to manage media"
 
+    [[object.function]]
+    name = "get_media"
+    # Map to dup_media if new enough as get_media is not thread-safe
+    manual = true
+    [[object.function]]
+    name = "dup_media"
+    ignore = true
+
 [[object]]
 name = "GstRtspServer.RTSPSessionMedia"
 status = "generate"

@@ -51,6 +51,7 @@ mod rtsp_media;
 mod rtsp_media_factory;
 mod rtsp_onvif_media_factory;
 mod rtsp_server;
+mod rtsp_session;
 mod rtsp_session_pool;
 mod rtsp_thread;
 mod rtsp_token;
@@ -140,5 +141,6 @@ pub mod prelude {
     pub use crate::rtsp_media_factory::RTSPMediaFactoryExtManual;
     pub use crate::rtsp_onvif_media_factory::RTSPOnvifMediaFactoryExtManual;
     pub use crate::rtsp_server::RTSPServerExtManual;
+    pub use crate::rtsp_session::RTSPSessionExtManual;
     pub use crate::rtsp_session_pool::RTSPSessionPoolExtManual;
 }

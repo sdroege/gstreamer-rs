@@ -396,6 +396,11 @@ pub trait RTSPStreamExt: 'static {
     #[doc(alias = "gst_rtsp_stream_unblock_linked")]
     fn unblock_linked(&self) -> Result<(), glib::error::BoolError>;
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_rtsp_stream_unblock_rtcp")]
+    fn unblock_rtcp(&self);
+
     #[doc(alias = "gst_rtsp_stream_update_crypto")]
     fn update_crypto(
         &self,
@@ -1203,6 +1208,14 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
                 ffi::gst_rtsp_stream_unblock_linked(self.as_ref().to_glib_none().0),
                 "Failed to unblock the dataflow"
             )
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn unblock_rtcp(&self) {
+        unsafe {
+            ffi::gst_rtsp_stream_unblock_rtcp(self.as_ref().to_glib_none().0);
         }
     }
 

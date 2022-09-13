@@ -14,7 +14,6 @@ use glib::translate::*;
 use glib::StaticType;
 use glib::ToValue;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
 
 glib::wrapper! {
@@ -52,10 +51,6 @@ pub trait RTSPSessionExt: 'static {
     #[doc(alias = "gst_rtsp_session_get_header")]
     #[doc(alias = "get_header")]
     fn header(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_rtsp_session_get_media")]
-    #[doc(alias = "get_media")]
-    fn media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32);
 
     #[doc(alias = "gst_rtsp_session_get_sessionid")]
     #[doc(alias = "get_sessionid")]
@@ -181,18 +176,6 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
             from_glib_full(ffi::gst_rtsp_session_get_header(
                 self.as_ref().to_glib_none().0,
             ))
-        }
-    }
-
-    fn media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32) {
-        unsafe {
-            let mut matched = mem::MaybeUninit::uninit();
-            let ret = from_glib_none(ffi::gst_rtsp_session_get_media(
-                self.as_ref().to_glib_none().0,
-                path.to_glib_none().0,
-                matched.as_mut_ptr(),
-            ));
-            (ret, matched.assume_init())
         }
     }
 
