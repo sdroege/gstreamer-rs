@@ -85,7 +85,301 @@ impl<T> Signed<T> {
             Signed::Negative(_) => -1i32,
         }
     }
+
+    // rustdoc-stripper-ignore-next
+    /// Returns the absolute value of `self`.
+    pub fn abs(self) -> T {
+        match self {
+            Signed::Positive(val) | Signed::Negative(val) => val,
+        }
+    }
 }
+
+impl<T> std::ops::Neg for Signed<T> {
+    type Output = Signed<T>;
+
+    fn neg(self) -> Self {
+        match self {
+            Signed::Positive(val) => Signed::Negative(val),
+            Signed::Negative(val) => Signed::Positive(val),
+        }
+    }
+}
+
+impl Signed<ClockTime> {
+    // rustdoc-stripper-ignore-next
+    /// Returns the `self` in nanoseconds.
+    pub fn nseconds(self) -> Signed<u64> {
+        match self {
+            Signed::Positive(val) => Signed::Positive(val.nseconds()),
+            Signed::Negative(val) => Signed::Negative(val.nseconds()),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates new value from nanoseconds.
+    pub fn from_nseconds(val: Signed<u64>) -> Self {
+        skip_assert_initialized!();
+        match val {
+            Signed::Positive(val) => Signed::Positive(ClockTime::from_nseconds(val)),
+            Signed::Negative(val) => Signed::Negative(ClockTime::from_nseconds(val)),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Returns the `self` in microseconds.
+    pub fn useconds(self) -> Signed<u64> {
+        match self {
+            Signed::Positive(val) => Signed::Positive(val.useconds()),
+            Signed::Negative(val) => Signed::Negative(val.useconds()),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates new value from microseconds.
+    pub fn from_useconds(val: Signed<u64>) -> Self {
+        skip_assert_initialized!();
+        match val {
+            Signed::Positive(val) => Signed::Positive(ClockTime::from_useconds(val)),
+            Signed::Negative(val) => Signed::Negative(ClockTime::from_useconds(val)),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Returns the `self` in milliseconds.
+    pub fn mseconds(self) -> Signed<u64> {
+        match self {
+            Signed::Positive(val) => Signed::Positive(val.mseconds()),
+            Signed::Negative(val) => Signed::Negative(val.mseconds()),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates new value from milliseconds.
+    pub fn from_mseconds(val: Signed<u64>) -> Self {
+        skip_assert_initialized!();
+        match val {
+            Signed::Positive(val) => Signed::Positive(ClockTime::from_mseconds(val)),
+            Signed::Negative(val) => Signed::Negative(ClockTime::from_mseconds(val)),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Returns the `self` in seconds.
+    pub fn seconds(self) -> Signed<u64> {
+        match self {
+            Signed::Positive(val) => Signed::Positive(val.seconds()),
+            Signed::Negative(val) => Signed::Negative(val.seconds()),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates new value from seconds.
+    pub fn from_seconds(val: Signed<u64>) -> Self {
+        skip_assert_initialized!();
+        match val {
+            Signed::Positive(val) => Signed::Positive(ClockTime::from_seconds(val)),
+            Signed::Negative(val) => Signed::Negative(ClockTime::from_seconds(val)),
+        }
+    }
+}
+
+macro_rules! impl_signed_ops(
+    ($type:ty, $zero:expr) => {
+        impl Signed<$type> {
+            // rustdoc-stripper-ignore-next
+            /// Returns the signum for this `Signed`.
+            ///
+            /// Returns:
+            ///
+            /// - `0` if the number is zero.
+            /// - `1` if the value must be considered as positive.
+            /// - `-1` if the value must be considered as negative.
+            pub fn signum(self) -> i32 {
+                match self {
+                    Signed::Positive(val) | Signed::Negative(val) if val == $zero => 0i32,
+                    Signed::Positive(_) => 1i32,
+                    Signed::Negative(_) => -1i32,
+                }
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the checked subtraction `self - other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn checked_sub(self, other: Self) -> Option<Self> {
+                match (self, other) {
+                    (Signed::Positive(a), Signed::Positive(b)) if a >= b => Some(Signed::Positive(a - b)),
+                    (Signed::Positive(a), Signed::Positive(b)) => Some(Signed::Negative(b - a)),
+                    (Signed::Negative(a), Signed::Negative(b)) if a >= b => Some(Signed::Negative(a - b)),
+                    (Signed::Negative(a), Signed::Negative(b)) => Some(Signed::Positive(b - a)),
+                    (Signed::Positive(a), Signed::Negative(b)) => a.checked_add(b).map(Signed::Positive),
+                    (Signed::Negative(a), Signed::Positive(b)) => a.checked_sub(b).map(Signed::Negative),
+                }
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the checked subtraction `self - other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn checked_sub_unsigned(self, other: $type) -> Option<Self> {
+                self.checked_sub(Signed::Positive(other))
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the checked addition `self + other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn checked_add(self, other: Self) -> Option<Self> {
+                match (self, other) {
+                    (Signed::Positive(a), Signed::Positive(b)) => a.checked_add(b).map(Signed::Positive),
+                    (Signed::Negative(a), Signed::Negative(b)) => a.checked_add(b).map(Signed::Negative),
+                    (Signed::Positive(_), Signed::Negative(_)) => self.checked_sub(-other),
+                    (Signed::Negative(_), Signed::Positive(_)) => Some(-((-self).checked_sub(other)?))
+                }
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the checked addition `self + other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn checked_add_unsigned(self, other: $type) -> Option<Self> {
+                self.checked_add(Signed::Positive(other))
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the saturating subtraction `self - other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn saturating_sub(self, other: Self) -> Self {
+                match (self, other) {
+                    (Signed::Positive(a), Signed::Positive(b)) if a >= b => Signed::Positive(a - b),
+                    (Signed::Positive(a), Signed::Positive(b)) => Signed::Negative(b - a),
+                    (Signed::Negative(a), Signed::Negative(b)) if a >= b => Signed::Negative(a - b),
+                    (Signed::Negative(a), Signed::Negative(b)) => Signed::Positive(b - a),
+                    (Signed::Positive(a), Signed::Negative(b)) => Signed::Positive(a.saturating_add(b)),
+                    (Signed::Negative(a), Signed::Positive(b)) => Signed::Negative(a.saturating_sub(b)),
+                }
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the saturating subtraction `self - other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn saturating_sub_unsigned(self, other: $type) -> Self {
+                self.saturating_sub(Signed::Positive(other))
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the saturating addition `self + other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn saturating_add(self, other: Self) -> Self {
+                match (self, other) {
+                    (Signed::Positive(a), Signed::Positive(b)) => Signed::Positive(a.saturating_add(b)),
+                    (Signed::Negative(a), Signed::Negative(b)) => Signed::Negative(a.saturating_add(b)),
+                    (Signed::Positive(_), Signed::Negative(_)) => self.saturating_sub(-other),
+                    (Signed::Negative(_), Signed::Positive(_)) => -((-other).saturating_sub(other)),
+                }
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the saturating addition `self + other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn saturating_add_unsigned(self, other: $type) -> Self {
+                self.saturating_add(Signed::Positive(other))
+            }
+        }
+
+        impl std::ops::Add<Signed<$type>> for Signed<$type> {
+            type Output = Signed<$type>;
+
+            fn add(self, other: Signed<$type>) -> Signed<$type> {
+                self.checked_add(other).expect("Overflowing addition")
+            }
+        }
+
+        impl std::ops::AddAssign<Signed<$type>> for Signed<$type> {
+            fn add_assign(&mut self, other: Signed<$type>) {
+                *self = self.checked_add(other).expect("Overflowing addition")
+            }
+        }
+
+        impl std::ops::Sub<Signed<$type>> for Signed<$type> {
+            type Output = Signed<$type>;
+
+            fn sub(self, other: Signed<$type>) -> Signed<$type> {
+                self.checked_sub(other).expect("Overflowing subtraction")
+            }
+        }
+
+        impl std::ops::SubAssign<Signed<$type>> for Signed<$type> {
+            fn sub_assign(&mut self, other: Signed<$type>) {
+                *self = self.checked_sub(other).expect("Overflowing subtraction")
+            }
+        }
+
+        impl std::ops::Add<$type> for Signed<$type> {
+            type Output = Signed<$type>;
+
+            fn add(self, other: $type) -> Signed<$type> {
+                self.checked_add(Signed::Positive(other)).expect("Overflowing addition")
+            }
+        }
+
+        impl std::ops::AddAssign<$type> for Signed<$type> {
+            fn add_assign(&mut self, other: $type) {
+                *self = self.checked_add(Signed::Positive(other)).expect("Overflowing addition")
+            }
+        }
+
+        impl std::ops::Sub<$type> for Signed<$type> {
+            type Output = Signed<$type>;
+
+            fn sub(self, other: $type) -> Signed<$type> {
+                self.checked_sub(Signed::Positive(other)).expect("Overflowing subtraction")
+            }
+        }
+
+        impl std::ops::SubAssign<$type> for Signed<$type> {
+            fn sub_assign(&mut self, other: $type) {
+                *self = self.checked_sub(Signed::Positive(other)).expect("Overflowing subtraction")
+            }
+        }
+
+        impl From<$type> for Signed<$type> {
+            fn from(val: $type) -> Self {
+                skip_assert_initialized!();
+                Signed::Positive(val)
+            }
+        }
+
+        impl PartialOrd<Signed<$type>> for Signed<$type> {
+            fn partial_cmp(&self, other: &Signed<$type>) -> Option<std::cmp::Ordering> {
+                Some(self.cmp(other))
+            }
+        }
+
+        impl PartialEq<$type> for Signed<$type> {
+            fn eq(&self, other: &$type) -> bool {
+                self.eq(&Signed::Positive(*other))
+            }
+        }
+
+        impl PartialOrd<$type> for Signed<$type> {
+            fn partial_cmp(&self, other: &$type) -> Option<std::cmp::Ordering> {
+                Some(self.cmp(&Signed::Positive(*other)))
+            }
+        }
+
+        impl Ord for Signed<$type> {
+            fn cmp(&self, other: &Signed<$type>) -> std::cmp::Ordering {
+                match (self, other) {
+                    (Signed::Positive(a), Signed::Positive(b)) => a.cmp(b),
+                    (Signed::Negative(a), Signed::Negative(b)) => a.cmp(b),
+                    (Signed::Positive(_), Signed::Negative(_)) => std::cmp::Ordering::Greater,
+                    (Signed::Negative(_), Signed::Positive(_)) => std::cmp::Ordering::Less,
+                }
+            }
+        }
+    };
+);
+
+impl_signed_ops!(u64, 0);
+impl_signed_ops!(ClockTime, ClockTime::ZERO);
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
