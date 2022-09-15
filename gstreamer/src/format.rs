@@ -29,6 +29,16 @@ impl<T> Signed<T> {
     }
 
     // rustdoc-stripper-ignore-next
+    /// Returns `Some(value)`, where `value` is the inner value,
+    /// if `self` is positive.
+    pub fn positive(self) -> Option<T> {
+        match self {
+            Signed::Positive(val) => Some(val),
+            Signed::Negative(_) => None,
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
     /// Transforms the `Signed<T>` into a `Result<T, E>`,
     /// mapping `Positive(v)` to `Ok(v)` and `Negative(_)` to `Err(err)`.
     pub fn positive_or<E>(self, err: E) -> Result<T, E> {
@@ -50,6 +60,16 @@ impl<T> Signed<T> {
 
     pub fn is_negative(self) -> bool {
         matches!(self, Signed::Negative(_))
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Returns `Some(value)`, where `value` is the inner value,
+    /// if `self` is negative.
+    pub fn negative(self) -> Option<T> {
+        match self {
+            Signed::Negative(val) => Some(val),
+            Signed::Positive(_) => None,
+        }
     }
 
     // rustdoc-stripper-ignore-next
@@ -1261,20 +1281,32 @@ mod tests {
         let signed = ct_1.into_positive();
         assert_eq!(signed, Signed::Positive(ct_1));
         assert!(signed.is_positive());
+        assert_eq!(signed.positive(), Some(ct_1));
+        assert!(!signed.is_negative());
+        assert!(signed.negative().is_none());
 
         let signed = ct_1.into_negative();
         assert_eq!(signed, Signed::Negative(ct_1));
         assert!(signed.is_negative());
+        assert_eq!(signed.negative(), Some(ct_1));
+        assert!(!signed.is_positive());
+        assert!(signed.positive().is_none());
 
         let und = Undefined(1);
 
         let signed = und.into_positive();
         assert_eq!(signed, Signed::Positive(und));
         assert!(signed.is_positive());
+        assert_eq!(signed.positive(), Some(und));
+        assert!(!signed.is_negative());
+        assert!(signed.negative().is_none());
 
         let signed = und.into_negative();
         assert_eq!(signed, Signed::Negative(und));
         assert!(signed.is_negative());
+        assert_eq!(signed.negative(), Some(und));
+        assert!(!signed.is_positive());
+        assert!(signed.positive().is_none());
     }
 
     #[test]
@@ -1285,10 +1317,12 @@ mod tests {
         let signed = ct_1.into_positive();
         assert_eq!(signed, Signed::Positive(ct_1));
         assert!(signed.is_positive());
+        assert_eq!(signed.positive(), Some(ct_1));
 
         let signed = ct_1.into_negative();
         assert_eq!(signed, Signed::Negative(ct_1));
         assert!(signed.is_negative());
+        assert_eq!(signed.negative(), Some(ct_1));
 
         let ct_none = GenericFormattedValue::Time(ClockTime::NONE);
         assert!(ct_none.is_none());
