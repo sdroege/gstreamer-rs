@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-macro_rules! impl_op_same(
+macro_rules! impl_trait_op_same(
     ($name:ident, $op:ident, $op_name:ident, $op_assign:ident, $op_assign_name:ident) => {
         impl<RHS: Borrow<$name>> ops::$op<RHS> for $name {
             type Output = Self;
@@ -26,7 +26,85 @@ macro_rules! impl_op_same(
     };
 );
 
-macro_rules! impl_op_inner_type(
+macro_rules! impl_non_trait_op_same(
+    ($name:ident, $inner_type:ty) => {
+        impl $name {
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub const fn checked_add(self, rhs: Self) -> Option<Self> {
+                match self.0.checked_add(rhs.0) {
+                    Some(res) if res <= Self::MAX.0 => Some(Self(res)),
+                    _ => None,
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub const fn saturating_add(self, rhs: Self) -> Self {
+                let res = self.0.saturating_add(rhs.0);
+                if res < Self::MAX.0 {
+                    Self(res)
+                } else {
+                    Self::MAX
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub fn overflowing_add(self, rhs: Self) -> (Self, bool) {
+                let self_u128 = self.0 as u128;
+                let rhs_128 = rhs.0 as u128;
+                let res_u128 = self_u128 + rhs_128;
+                if res_u128 <= Self::MAX.0 as u128 {
+                    (Self(<$inner_type>::try_from(res_u128).unwrap()), false)
+                } else {
+                    (Self(<$inner_type>::try_from((res_u128 - Self::MAX.0 as u128 - 1) as u64).unwrap()), true)
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub fn wrapping_add(self, rhs: Self) -> Self {
+                self.overflowing_add(rhs).0
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            // FIXME Can't use `map` in a `const fn` as of rustc 1.53.0-beta.2
+            #[allow(clippy::manual_map)]
+            pub const fn checked_sub(self, rhs: Self) -> Option<Self> {
+                match self.0.checked_sub(rhs.0) {
+                    Some(res) => Some(Self(res)),
+                    None => None,
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub const fn saturating_sub(self, rhs: Self) -> Self {
+                Self(self.0.saturating_sub(rhs.0))
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub const fn overflowing_sub(self, rhs: Self) -> (Self, bool) {
+                if self.0 >= rhs.0 {
+                    (Self(self.0 - rhs.0), false)
+                } else {
+                    (Self(Self::MAX.0 - rhs.0 + self.0 + 1), true)
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub const fn wrapping_sub(self, rhs: Self) -> Self {
+                self.overflowing_sub(rhs).0
+            }
+        }
+    };
+);
+
+macro_rules! impl_trait_op_inner_type(
     ($name:ident, $inner_type:ty, $op:ident, $op_name:ident, $op_assign:ident, $op_assign_name:ident) => {
         impl ops::$op<$inner_type> for $name {
             type Output = $name;
@@ -68,55 +146,9 @@ macro_rules! impl_op_inner_type(
     };
 );
 
-macro_rules! impl_common_ops_for_newtype_uint(
+macro_rules! impl_non_trait_op_inner_type(
     ($name:ident, $inner_type:ty) => {
         impl $name {
-            pub const ZERO: Self = Self(0);
-            pub const NONE: Option<Self> = None;
-
-            pub const fn is_zero(self) -> bool {
-                self.0 == Self::ZERO.0
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub const fn checked_add(self, rhs: Self) -> Option<Self> {
-                match self.0.checked_add(rhs.0) {
-                    Some(res) if res <= Self::MAX.0 => Some(Self(res)),
-                    _ => None,
-                }
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub const fn saturating_add(self, rhs: Self) -> Self {
-                let res = self.0.saturating_add(rhs.0);
-                if res < Self::MAX.0 {
-                    Self(res)
-                } else {
-                    Self::MAX
-                }
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub fn overflowing_add(self, rhs: Self) -> (Self, bool) {
-                let self_u128 = self.0 as u128;
-                let rhs_128 = rhs.0 as u128;
-                let res_u128 = self_u128 + rhs_128;
-                if res_u128 <= Self::MAX.0 as u128 {
-                    (Self(<$inner_type>::try_from(res_u128).unwrap()), false)
-                } else {
-                    (Self(<$inner_type>::try_from((res_u128 - Self::MAX.0 as u128 - 1) as u64).unwrap()), true)
-                }
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub fn wrapping_add(self, rhs: Self) -> Self {
-                self.overflowing_add(rhs).0
-            }
-
             #[must_use = "this returns the result of the operation, without modifying the original"]
             #[inline]
             pub const fn checked_div(self, rhs: $inner_type) -> Option<Self> {
@@ -173,50 +205,34 @@ macro_rules! impl_common_ops_for_newtype_uint(
                     None => None,
                 }
             }
+        }
+    };
+);
 
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            // FIXME Can't use `map` in a `const fn` as of rustc 1.53.0-beta.2
-            #[allow(clippy::manual_map)]
-            pub const fn checked_sub(self, rhs: Self) -> Option<Self> {
-                match self.0.checked_sub(rhs.0) {
-                    Some(res) => Some(Self(res)),
-                    None => None,
-                }
-            }
+macro_rules! impl_common_ops_for_newtype_uint(
+    ($name:ident, $inner_type:ty) => {
+        impl $name {
+            pub const ZERO: Self = Self(0);
+            pub const NONE: Option<Self> = None;
 
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub const fn saturating_sub(self, rhs: Self) -> Self {
-                Self(self.0.saturating_sub(rhs.0))
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub const fn overflowing_sub(self, rhs: Self) -> (Self, bool) {
-                if self.0 >= rhs.0 {
-                    (Self(self.0 - rhs.0), false)
-                } else {
-                    (Self(Self::MAX.0 - rhs.0 + self.0 + 1), true)
-                }
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub const fn wrapping_sub(self, rhs: Self) -> Self {
-                self.overflowing_sub(rhs).0
+            pub const fn is_zero(self) -> bool {
+                self.0 == Self::ZERO.0
             }
         }
 
-        impl_op_same!($name, Add, add, AddAssign, add_assign);
-        impl_op_same!($name, Sub, sub, SubAssign, sub_assign);
-        impl_op_same!($name, Mul, mul, MulAssign, mul_assign);
-        impl_op_same!($name, Div, div, DivAssign, div_assign);
-        impl_op_same!($name, Rem, rem, RemAssign, rem_assign);
+        impl_trait_op_same!($name, Add, add, AddAssign, add_assign);
+        impl_trait_op_same!($name, Sub, sub, SubAssign, sub_assign);
+        impl_trait_op_same!($name, Mul, mul, MulAssign, mul_assign);
+        impl_trait_op_same!($name, Div, div, DivAssign, div_assign);
+        impl_trait_op_same!($name, Rem, rem, RemAssign, rem_assign);
 
-        impl_op_inner_type!($name, $inner_type, Mul, mul, MulAssign, mul_assign);
-        impl_op_inner_type!($name, $inner_type, Div, div, DivAssign, div_assign);
-        impl_op_inner_type!($name, $inner_type, Rem, rem, RemAssign, rem_assign);
+        impl_non_trait_op_same!($name, $inner_type);
+
+        impl_trait_op_inner_type!($name, $inner_type, Mul, mul, MulAssign, mul_assign);
+        impl_trait_op_inner_type!($name, $inner_type, Div, div, DivAssign, div_assign);
+        impl_trait_op_inner_type!($name, $inner_type, Rem, rem, RemAssign, rem_assign);
+
+        impl_non_trait_op_inner_type!($name, $inner_type);
 
         impl<ND: Borrow<$inner_type>> MulDiv<ND> for $name {
             type Output = $name;
