@@ -28,6 +28,7 @@ include:
 
 workflow:
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_MERGE_REQUEST_IID
     # don't create a pipeline if its a commit pipeline, on a branch and that branch has
     # open merge requests (bc we will get a MR build instead)
