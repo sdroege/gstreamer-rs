@@ -1,5 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use crate::utils::Displayable;
 use crate::ClockTime;
 use crate::Format;
 use glib::translate::{FromGlib, GlibNoneError, IntoGlib, OptionIntoGlib, TryFromGlib};
@@ -449,8 +450,6 @@ impl Percent {
 
 impl fmt::Display for GenericFormattedValue {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        use crate::utils::Displayable;
-
         match self {
             Self::Undefined(val) => val.fmt(f),
             Self::Default(val) => val.display().fmt(f),
@@ -835,19 +834,29 @@ impl FormattedValueIntrinsic for GenericFormattedValue {}
 impl_common_ops_for_newtype_uint!(Default, u64);
 impl_format_value_traits!(Default, Default, Default, u64);
 option_glib_newtype_from_to!(Default, u64::MAX);
-option_glib_newtype_display!(Default, "(Default)");
+glib_newtype_display!(
+    Default,
+    DisplayableDefault,
+    DisplayableOptionDefault,
+    "(Default)"
+);
 
 impl_common_ops_for_newtype_uint!(Bytes, u64);
 impl_format_value_traits!(Bytes, Bytes, Bytes, u64);
 option_glib_newtype_from_to!(Bytes, u64::MAX);
-option_glib_newtype_display!(Bytes, "bytes");
+glib_newtype_display!(Bytes, DisplayableBytes, DisplayableOptionBytes, "bytes");
 
 impl_format_value_traits!(ClockTime, Time, Time, u64);
 
 impl_common_ops_for_newtype_uint!(Buffers, u64);
 impl_format_value_traits!(Buffers, Buffers, Buffers, u64);
 option_glib_newtype_from_to!(Buffers, Buffers::OFFSET_NONE);
-option_glib_newtype_display!(Buffers, "buffers");
+glib_newtype_display!(
+    Buffers,
+    DisplayableBuffers,
+    DisplayableOptionBuffers,
+    "buffers"
+);
 
 impl FormattedValue for Undefined {
     type FullRange = Undefined;
@@ -945,22 +954,10 @@ impl AsMut<i64> for Undefined {
     }
 }
 
-impl fmt::Display for Undefined {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{} (Undefined)", self.0)
-    }
-}
-
-impl crate::utils::Displayable for Undefined {
-    type DisplayImpl = Undefined;
-
-    fn display(self) -> Undefined {
-        self
-    }
-}
+glib_newtype_display!(Undefined, DisplayableUndefined, "(Undefined)");
 
 impl_common_ops_for_newtype_uint!(Percent, u32);
-option_glib_newtype_display!(Percent, "%");
+glib_newtype_display!(Percent, DisplayablePercent, DisplayableOptionPercent, "%");
 
 impl FormattedValue for Option<Percent> {
     type FullRange = Option<Percent>;
@@ -1363,5 +1360,22 @@ mod tests {
         let signed =
             unsafe { Option::<ClockTime>::from_raw(Format::Time, raw_ct_none) }.into_signed(-1);
         assert!(signed.is_none());
+    }
+
+    #[test]
+    fn display_new_types() {
+        let bytes = Bytes(42);
+        assert_eq!(&format!("{bytes}"), "42 bytes");
+        assert_eq!(&format!("{}", bytes.display()), "42 bytes");
+
+        assert_eq!(&format!("{}", Some(bytes).display()), "42 bytes");
+        assert_eq!(&format!("{}", Bytes::NONE.display()), "undef. bytes");
+
+        let gv_1 = GenericFormattedValue::Percent(Some(Percent(42)));
+        assert_eq!(&format!("{gv_1}"), "42 %");
+        assert_eq!(
+            &format!("{}", GenericFormattedValue::Percent(None)),
+            "undef. %"
+        );
     }
 }

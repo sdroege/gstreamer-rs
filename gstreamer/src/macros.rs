@@ -541,25 +541,53 @@ macro_rules! option_glib_newtype_from_to {
     };
 }
 
-macro_rules! option_glib_newtype_display {
-    ($name:ident, $unit:expr) => {
-        impl crate::utils::Displayable for Option<$name> {
-            type DisplayImpl = String;
+// FIXME we could automatically build `$displayable_name` and
+// `$displayable_option_name` if `concat_idents!` was stable.
+// See: https://doc.rust-lang.org/std/macro.concat_idents.html
+macro_rules! glib_newtype_display {
+    ($name:ident, $displayable_name:ident, $unit:expr) => {
+        pub struct $displayable_name($name);
 
-            fn display(self) -> String {
-                if let Some(val) = self {
-                    val.display()
-                } else {
-                    format!("undef. {}", $unit)
-                }
+        impl std::fmt::Display for $name {
+            fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+                use std::fmt::Write;
+
+                std::fmt::Display::fmt(&self.0, f)?;
+                f.write_char(' ')?;
+                f.write_str($unit)
             }
         }
 
         impl crate::utils::Displayable for $name {
-            type DisplayImpl = String;
+            type DisplayImpl = $name;
 
-            fn display(self) -> String {
-                format!("{} {}", self.0, $unit)
+            fn display(self) -> $name {
+                self
+            }
+        }
+    };
+
+    ($name:ident, $displayable_name:ident, $displayable_option_name:ident, $unit:expr) => {
+        glib_newtype_display!($name, $displayable_name, $unit);
+
+        pub struct $displayable_option_name(Option<$name>);
+
+        impl std::fmt::Display for $displayable_option_name {
+            fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+                if let Some(val) = self.0.as_ref() {
+                    std::fmt::Display::fmt(val, f)
+                } else {
+                    f.write_str("undef. ")?;
+                    f.write_str($unit)
+                }
+            }
+        }
+
+        impl crate::utils::Displayable for Option<$name> {
+            type DisplayImpl = $displayable_option_name;
+
+            fn display(self) -> Self::DisplayImpl {
+                $displayable_option_name(self)
             }
         }
     };
