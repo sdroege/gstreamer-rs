@@ -127,6 +127,89 @@ impl<T> std::ops::Neg for Signed<T> {
     }
 }
 
+impl<T> fmt::Display for Signed<T>
+where
+    T: fmt::Display + FormattedValueIntrinsic,
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        use std::fmt::Write;
+
+        let (sign, val) = match self {
+            Signed::Positive(val) => ('+', val),
+            Signed::Negative(val) => ('-', val),
+        };
+
+        f.write_char(sign)?;
+        fmt::Display::fmt(&val, f)
+    }
+}
+
+impl<T> Displayable for Signed<T>
+where
+    T: fmt::Display + FormattedValueIntrinsic,
+{
+    type DisplayImpl = Signed<T>;
+
+    fn display(self) -> Self::DisplayImpl {
+        self
+    }
+}
+
+impl<T> Signed<Option<T>> {
+    // rustdoc-stripper-ignore-next
+    /// Transposes a `Signed` `Option` into an `Option` of a `Signed`.
+    ///
+    /// Note that if the inner value was `None`, the sign is lost.
+    pub fn transpose(self) -> Option<Signed<T>> {
+        use Signed::*;
+
+        match self {
+            Positive(Some(val)) => Some(Positive(val)),
+            Negative(Some(val)) => Some(Negative(val)),
+            _ => None,
+        }
+    }
+}
+
+pub struct DisplayableOptionSigned<T>(Option<Signed<T>>);
+
+impl<T> fmt::Display for DisplayableOptionSigned<T>
+where
+    T: fmt::Display + FormattedValueIntrinsic,
+    Option<T>: Displayable,
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self.0 {
+            Some(ref signed) => fmt::Display::fmt(signed, f),
+            None => fmt::Display::fmt(&Option::<T>::None.display(), f),
+        }
+    }
+}
+
+impl<T> Displayable for Option<Signed<T>>
+where
+    T: fmt::Display + FormattedValueIntrinsic,
+    Option<T>: Displayable,
+{
+    type DisplayImpl = DisplayableOptionSigned<T>;
+
+    fn display(self) -> Self::DisplayImpl {
+        DisplayableOptionSigned(self)
+    }
+}
+
+impl<T> Displayable for Signed<Option<T>>
+where
+    T: fmt::Display + FormattedValueIntrinsic,
+    Option<T>: Displayable,
+{
+    type DisplayImpl = DisplayableOptionSigned<T>;
+
+    fn display(self) -> Self::DisplayImpl {
+        DisplayableOptionSigned(self.transpose())
+    }
+}
+
 impl Signed<ClockTime> {
     // rustdoc-stripper-ignore-next
     /// Returns the `self` in nanoseconds.
@@ -1377,5 +1460,36 @@ mod tests {
             &format!("{}", GenericFormattedValue::Percent(None)),
             "undef. %"
         );
+    }
+
+    #[test]
+    fn display_signed() {
+        let p_bytes = Bytes(42).into_positive();
+        assert_eq!(&format!("{p_bytes}"), "+42 bytes");
+        assert_eq!(&format!("{}", p_bytes.display()), "+42 bytes");
+
+        let some_p_bytes = Some(p_bytes);
+        assert_eq!(&format!("{}", some_p_bytes.display()), "+42 bytes");
+
+        let p_some_bytes = Signed::Positive(Some(Bytes(42)));
+        assert_eq!(&format!("{}", p_some_bytes.display()), "+42 bytes");
+
+        let n_bytes = Bytes(42).into_negative();
+        assert_eq!(&format!("{n_bytes}"), "-42 bytes");
+        assert_eq!(&format!("{}", n_bytes.display()), "-42 bytes");
+
+        let some_n_bytes = Some(n_bytes);
+        assert_eq!(&format!("{}", some_n_bytes.display()), "-42 bytes");
+
+        let n_some_bytes = Signed::Negative(Some(Bytes(42)));
+        assert_eq!(&format!("{}", n_some_bytes.display()), "-42 bytes");
+
+        let p_none_bytes = Signed::Positive(Bytes::NONE);
+        assert_eq!(&format!("{}", p_none_bytes.display()), "undef. bytes");
+        let n_none_bytes = Signed::Negative(Bytes::NONE);
+        assert_eq!(&format!("{}", n_none_bytes.display()), "undef. bytes");
+
+        let none_s_bytes = Option::<Signed<Bytes>>::None;
+        assert_eq!(&format!("{}", none_s_bytes.display()), "undef. bytes");
     }
 }
