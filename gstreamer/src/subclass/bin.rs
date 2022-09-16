@@ -20,6 +20,10 @@ pub trait BinImpl: BinImplExt + ElementImpl {
         self.parent_remove_element(bin, element)
     }
 
+    fn do_latency(&self, bin: &Self::Type) -> Result<(), LoggableError> {
+        self.parent_do_latency(bin)
+    }
+
     fn handle_message(&self, bin: &Self::Type, message: Message) {
         self.parent_handle_message(bin, message)
     }
@@ -33,6 +37,8 @@ pub trait BinImplExt: ObjectSubclass {
         bin: &Self::Type,
         element: &Element,
     ) -> Result<(), LoggableError>;
+
+    fn parent_do_latency(&self, bin: &Self::Type) -> Result<(), LoggableError>;
 
     fn parent_handle_message(&self, bin: &Self::Type, message: Message);
 }
@@ -84,6 +90,24 @@ impl<T: BinImpl> BinImplExt for T {
         }
     }
 
+    fn parent_do_latency(&self, bin: &Self::Type) -> Result<(), LoggableError> {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBinClass;
+            let f = (*parent_class).do_latency.ok_or_else(|| {
+                loggable_error!(
+                    crate::CAT_RUST,
+                    "Parent function `do_latency` is not defined"
+                )
+            })?;
+            result_from_gboolean!(
+                f(bin.unsafe_cast_ref::<crate::Bin>().to_glib_none().0,),
+                crate::CAT_RUST,
+                "Failed to update latency using the parent function"
+            )
+        }
+    }
+
     fn parent_handle_message(&self, bin: &Self::Type, message: Message) {
         unsafe {
             let data = Self::type_data();
@@ -104,6 +128,7 @@ unsafe impl<T: BinImpl> IsSubclassable<T> for Bin {
         let klass = klass.as_mut();
         klass.add_element = Some(bin_add_element::<T>);
         klass.remove_element = Some(bin_remove_element::<T>);
+        klass.do_latency = Some(bin_do_latency::<T>);
         klass.handle_message = Some(bin_handle_message::<T>);
     }
 }
@@ -147,6 +172,23 @@ unsafe extern "C" fn bin_remove_element<T: BinImpl>(
 
     panic_to_error!(&wrap, imp.panicked(), false, {
         match imp.remove_element(wrap.unsafe_cast_ref(), &from_glib_none(element)) {
+            Ok(()) => true,
+            Err(err) => {
+                err.log_with_object(&*wrap);
+                false
+            }
+        }
+    })
+    .into_glib()
+}
+
+unsafe extern "C" fn bin_do_latency<T: BinImpl>(ptr: *mut ffi::GstBin) -> glib::ffi::gboolean {
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.imp();
+    let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
+
+    panic_to_error!(&wrap, imp.panicked(), false, {
+        match imp.do_latency(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&*wrap);
