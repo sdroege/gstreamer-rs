@@ -98,14 +98,14 @@ impl TypeFind {
 
 impl TypeFindFactory {
     #[doc(alias = "gst_type_find_factory_call_function")]
-    pub fn call_function(&self, find: &mut dyn TypeFindImpl) {
+    pub fn call_function<T: TypeFindImpl + ?Sized>(&self, mut find: &mut T) {
         unsafe {
-            let find_ptr = &find as *const &mut dyn TypeFindImpl as glib::ffi::gpointer;
+            let find_ptr = &mut find as *mut &mut T as glib::ffi::gpointer;
             let mut find = ffi::GstTypeFind {
-                peek: Some(type_find_peek),
-                suggest: Some(type_find_suggest),
+                peek: Some(type_find_peek::<T>),
+                suggest: Some(type_find_suggest::<T>),
                 data: find_ptr,
-                get_length: Some(type_find_get_length),
+                get_length: Some(type_find_get_length::<T>),
                 _gst_reserved: [ptr::null_mut(); 4],
             };
 
@@ -128,31 +128,33 @@ unsafe extern "C" fn type_find_closure_drop<F: Fn(&mut TypeFind) + Send + Sync +
     let _ = Box::<F>::from_raw(data as *mut _);
 }
 
-unsafe extern "C" fn type_find_peek(
+unsafe extern "C" fn type_find_peek<T: TypeFindImpl + ?Sized>(
     data: glib::ffi::gpointer,
     offset: i64,
     size: u32,
 ) -> *const u8 {
-    let find: &mut &mut dyn TypeFindImpl = &mut *(data as *mut &mut dyn TypeFindImpl);
+    let find = &mut *(data as *mut &mut T);
     match find.peek(offset, size) {
         None => ptr::null(),
         Some(data) => data.as_ptr(),
     }
 }
 
-unsafe extern "C" fn type_find_suggest(
+unsafe extern "C" fn type_find_suggest<T: TypeFindImpl + ?Sized>(
     data: glib::ffi::gpointer,
     probability: u32,
     caps: *mut ffi::GstCaps,
 ) {
-    let find: &mut &mut dyn TypeFindImpl = &mut *(data as *mut &mut dyn TypeFindImpl);
+    let find = &mut *(data as *mut &mut T);
     find.suggest(from_glib(probability as i32), &from_glib_borrow(caps));
 }
 
-unsafe extern "C" fn type_find_get_length(data: glib::ffi::gpointer) -> u64 {
+unsafe extern "C" fn type_find_get_length<T: TypeFindImpl + ?Sized>(
+    data: glib::ffi::gpointer,
+) -> u64 {
     use std::u64;
 
-    let find: &mut &mut dyn TypeFindImpl = &mut *(data as *mut &mut dyn TypeFindImpl);
+    let find = &*(data as *mut &mut T);
     find.length().unwrap_or(u64::MAX)
 }
 
