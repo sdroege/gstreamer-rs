@@ -50,23 +50,68 @@ impl ClockTime {
         self.0
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `ClockTime` which value is the given number of seconds.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the resulting duration in nanoseconds exceeds the `u64` range.
+    #[track_caller]
     pub const fn from_seconds(seconds: u64) -> Self {
         skip_assert_initialized!();
-        ClockTime(seconds * Self::SECOND.0)
+        // `Option::expect` is not `const` as of rustc 1.63.0.
+        ClockTime(match seconds.checked_mul(Self::SECOND.0) {
+            Some(res) => res,
+            None => panic!("Out of `ClockTime` range"),
+        })
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `ClockTime` which value is the given number of milliseconds.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the resulting duration in nanoseconds exceeds the `u64` range.
+    #[track_caller]
     pub const fn from_mseconds(mseconds: u64) -> Self {
         skip_assert_initialized!();
-        ClockTime(mseconds * Self::MSECOND.0)
+        // `Option::expect` is not `const` as of rustc 1.63.0.
+        ClockTime(match mseconds.checked_mul(Self::MSECOND.0) {
+            Some(res) => res,
+            None => panic!("Out of `ClockTime` range"),
+        })
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `ClockTime` which value is the given number of microseconds.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the resulting duration in nanoseconds exceeds the `u64` range.
+    #[track_caller]
     pub const fn from_useconds(useconds: u64) -> Self {
         skip_assert_initialized!();
-        ClockTime(useconds * Self::USECOND.0)
+        // `Option::expect` is not `const` as of rustc 1.63.0.
+        ClockTime(match useconds.checked_mul(Self::USECOND.0) {
+            Some(res) => res,
+            None => panic!("Out of `ClockTime` range"),
+        })
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `ClockTime` which value is the given number of nanoseconds.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the requested duration equals `GST_CLOCK_TIME_NONE`
+    /// (`u64::MAX`).
+    #[track_caller]
     pub const fn from_nseconds(nseconds: u64) -> Self {
         skip_assert_initialized!();
+        assert!(
+            nseconds != ffi::GST_CLOCK_TIME_NONE,
+            "Attempt to build a `ClockTime` with value `GST_CLOCK_TIME_NONE`",
+        );
         ClockTime(nseconds * Self::NSECOND.0)
     }
 }
@@ -113,7 +158,7 @@ impl glib::value::ToValue for ClockTime {
         if gct == ffi::GST_CLOCK_TIME_NONE {
             crate::warning!(
                 crate::CAT_RUST,
-                "converting a defined `ClockTime` with value `ffi::GST_CLOCK_TIME_NONE` to `Value`, this is probably not what you wanted.",
+                "converting a defined `ClockTime` with value `GST_CLOCK_TIME_NONE` to `Value`, this is probably not what you wanted.",
             );
         }
         unsafe { glib::gobject_ffi::g_value_set_uint64(value.to_glib_none_mut().0, gct) }
@@ -863,5 +908,17 @@ mod tests {
             .into_iter()
             .sum();
         assert_eq!(s, ClockTime::from_seconds(3));
+    }
+
+    #[test]
+    #[should_panic]
+    fn attempt_to_build_from_clock_time_none() {
+        let _ = ClockTime::from_nseconds(ffi::GST_CLOCK_TIME_NONE);
+    }
+
+    #[test]
+    #[should_panic]
+    fn attempt_to_build_from_u64max() {
+        let _ = ClockTime::from_nseconds(u64::MAX);
     }
 }
