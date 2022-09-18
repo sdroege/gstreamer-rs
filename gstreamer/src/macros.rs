@@ -234,6 +234,8 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl_non_trait_op_inner_type!($name, $inner_type);
 
+        impl_signed_ops!($name, $name::ZERO);
+
         impl<ND: Borrow<$inner_type>> MulDiv<ND> for $name {
             type Output = $name;
 
@@ -388,11 +390,211 @@ macro_rules! impl_common_ops_for_newtype_uint(
     };
 );
 
+macro_rules! impl_signed_ops(
+    ($type:ty, $zero:expr) => {
+        impl crate::Signed<$type> {
+            // rustdoc-stripper-ignore-next
+            /// Returns the signum for this `Signed`.
+            ///
+            /// Returns:
+            ///
+            /// - `0` if the number is zero.
+            /// - `1` if the value must be considered as positive.
+            /// - `-1` if the value must be considered as negative.
+            pub fn signum(self) -> i32 {
+                use crate::Signed::*;
+                match self {
+                    Positive(val) | Negative(val) if val == $zero => 0i32,
+                    Positive(_) => 1i32,
+                    Negative(_) => -1i32,
+                }
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the checked subtraction `self - other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn checked_sub(self, other: Self) -> Option<Self> {
+                use crate::Signed::*;
+                match (self, other) {
+                    (Positive(a), Positive(b)) if a >= b => Some(Positive(a - b)),
+                    (Positive(a), Positive(b)) => Some(Negative(b - a)),
+                    (Negative(a), Negative(b)) if a >= b => Some(Negative(a - b)),
+                    (Negative(a), Negative(b)) => Some(Positive(b - a)),
+                    (Positive(a), Negative(b)) => a.checked_add(b).map(Positive),
+                    (Negative(a), Positive(b)) => a.checked_add(b).map(Negative),
+                }
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the checked subtraction `self - other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn checked_sub_unsigned(self, other: $type) -> Option<Self> {
+                self.checked_sub(crate::Signed::Positive(other))
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the checked addition `self + other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn checked_add(self, other: Self) -> Option<Self> {
+                use crate::Signed::*;
+                match (self, other) {
+                    (Positive(a), Positive(b)) => a.checked_add(b).map(Positive),
+                    (Negative(a), Negative(b)) => a.checked_add(b).map(Negative),
+                    (Positive(_), Negative(_)) => self.checked_sub(-other),
+                    (Negative(_), Positive(_)) => Some(-((-self).checked_sub(other)?))
+                }
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the checked addition `self + other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn checked_add_unsigned(self, other: $type) -> Option<Self> {
+                self.checked_add(crate::Signed::Positive(other))
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the saturating subtraction `self - other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn saturating_sub(self, other: Self) -> Self {
+                use crate::Signed::*;
+                match (self, other) {
+                    (Positive(a), Positive(b)) if a >= b => Positive(a - b),
+                    (Positive(a), Positive(b)) => Negative(b - a),
+                    (Negative(a), Negative(b)) if a >= b => Negative(a - b),
+                    (Negative(a), Negative(b)) => Positive(b - a),
+                    (Positive(a), Negative(b)) => Positive(a.saturating_add(b)),
+                    (Negative(a), Positive(b)) => Negative(a.saturating_add(b)),
+                }
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the saturating subtraction `self - other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn saturating_sub_unsigned(self, other: $type) -> Self {
+                self.saturating_sub(crate::Signed::Positive(other))
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the saturating addition `self + other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn saturating_add(self, other: Self) -> Self {
+                use crate::Signed::*;
+                match (self, other) {
+                    (Positive(a), Positive(b)) => Positive(a.saturating_add(b)),
+                    (Negative(a), Negative(b)) => Negative(a.saturating_add(b)),
+                    (Positive(_), Negative(_)) => self.saturating_sub(-other),
+                    (Negative(_), Positive(_)) => -((-self).saturating_sub(other)),
+                }
+            }
+
+            // rustdoc-stripper-ignore-next
+            /// Returns the saturating addition `self + other`.
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn saturating_add_unsigned(self, other: $type) -> Self {
+                self.saturating_add(crate::Signed::Positive(other))
+            }
+        }
+
+        impl std::ops::Add<crate::Signed<$type>> for crate::Signed<$type> {
+            type Output = crate::Signed<$type>;
+
+            fn add(self, other: crate::Signed<$type>) -> crate::Signed<$type> {
+                self.checked_add(other).expect("Overflowing addition")
+            }
+        }
+
+        impl std::ops::AddAssign<crate::Signed<$type>> for crate::Signed<$type> {
+            fn add_assign(&mut self, other: crate::Signed<$type>) {
+                *self = self.checked_add(other).expect("Overflowing addition")
+            }
+        }
+
+        impl std::ops::Sub<crate::Signed<$type>> for crate::Signed<$type> {
+            type Output = crate::Signed<$type>;
+
+            fn sub(self, other: crate::Signed<$type>) -> crate::Signed<$type> {
+                self.checked_sub(other).expect("Overflowing subtraction")
+            }
+        }
+
+        impl std::ops::SubAssign<crate::Signed<$type>> for crate::Signed<$type> {
+            fn sub_assign(&mut self, other: crate::Signed<$type>) {
+                *self = self.checked_sub(other).expect("Overflowing subtraction")
+            }
+        }
+
+        impl std::ops::Add<$type> for crate::Signed<$type> {
+            type Output = crate::Signed<$type>;
+
+            fn add(self, other: $type) -> crate::Signed<$type> {
+                self.checked_add(crate::Signed::Positive(other)).expect("Overflowing addition")
+            }
+        }
+
+        impl std::ops::AddAssign<$type> for crate::Signed<$type> {
+            fn add_assign(&mut self, other: $type) {
+                *self = self.checked_add(crate::Signed::Positive(other)).expect("Overflowing addition")
+            }
+        }
+
+        impl std::ops::Sub<$type> for crate::Signed<$type> {
+            type Output = crate::Signed<$type>;
+
+            fn sub(self, other: $type) -> crate::Signed<$type> {
+                self.checked_sub(crate::Signed::Positive(other)).expect("Overflowing subtraction")
+            }
+        }
+
+        impl std::ops::SubAssign<$type> for crate::Signed<$type> {
+            fn sub_assign(&mut self, other: $type) {
+                *self = self.checked_sub(crate::Signed::Positive(other)).expect("Overflowing subtraction")
+            }
+        }
+
+        impl From<$type> for crate::Signed<$type> {
+            fn from(val: $type) -> Self {
+                skip_assert_initialized!();
+                crate::Signed::Positive(val)
+            }
+        }
+
+        impl PartialOrd<crate::Signed<$type>> for crate::Signed<$type> {
+            fn partial_cmp(&self, other: &crate::Signed<$type>) -> Option<std::cmp::Ordering> {
+                Some(self.cmp(other))
+            }
+        }
+
+        impl PartialEq<$type> for crate::Signed<$type> {
+            fn eq(&self, other: &$type) -> bool {
+                self.eq(&crate::Signed::Positive(*other))
+            }
+        }
+
+        impl PartialOrd<$type> for crate::Signed<$type> {
+            fn partial_cmp(&self, other: &$type) -> Option<std::cmp::Ordering> {
+                Some(self.cmp(&crate::Signed::Positive(*other)))
+            }
+        }
+
+        impl Ord for crate::Signed<$type> {
+            fn cmp(&self, other: &crate::Signed<$type>) -> std::cmp::Ordering {
+                use crate::Signed::*;
+                match (self, other) {
+                    (Positive(a), Positive(b)) => a.cmp(b),
+                    (Negative(a), Negative(b)) => b.cmp(a),
+                    (Positive(_), Negative(_)) => std::cmp::Ordering::Greater,
+                    (Negative(_), Positive(_)) => std::cmp::Ordering::Less,
+                }
+            }
+        }
+    };
+);
+
 macro_rules! impl_format_value_traits(
     ($name:ident, $format:ident, $format_value:ident, $inner_type:ty) => {
         impl FormattedValue for Option<$name> {
             type FullRange = Option<$name>;
-            type Signed = Option<Signed<$name>>;
+            type Signed = Option<crate::Signed<$name>>;
 
             fn default_format() -> Format {
                 Format::$format
@@ -406,12 +608,12 @@ macro_rules! impl_format_value_traits(
                 IntoGlib::into_glib(self) as i64
             }
 
-            fn into_positive(self) -> Option<Signed<$name>> {
-                Some(Signed::Positive(self?))
+            fn into_positive(self) -> Option<crate::Signed<$name>> {
+                Some(crate::Signed::Positive(self?))
             }
 
-            fn into_negative(self) -> Option<Signed<$name>> {
-                Some(Signed::Negative(self?))
+            fn into_negative(self) -> Option<crate::Signed<$name>> {
+                Some(crate::Signed::Negative(self?))
             }
         }
 
@@ -437,7 +639,7 @@ macro_rules! impl_format_value_traits(
         }
         impl FormattedValue for $name {
             type FullRange = Option<$name>;
-            type Signed = Signed<$name>;
+            type Signed = crate::Signed<$name>;
 
             fn default_format() -> Format {
                 Format::$format
@@ -451,12 +653,12 @@ macro_rules! impl_format_value_traits(
                 IntoGlib::into_glib(self) as i64
             }
 
-            fn into_positive(self) -> Signed<$name> {
-                Signed::Positive(self)
+            fn into_positive(self) -> crate::Signed<$name> {
+                crate::Signed::Positive(self)
             }
 
-            fn into_negative(self) -> Signed<$name> {
-                Signed::Negative(self)
+            fn into_negative(self) -> crate::Signed<$name> {
+                crate::Signed::Negative(self)
             }
         }
 
