@@ -745,4 +745,23 @@ mod tests {
         info!(cat, obj: &obj, "meh2");
         assert!(receiver.recv().is_err());
     }
+
+    #[test]
+    fn no_argument_evaluation() {
+        crate::init().unwrap();
+
+        let cat = DebugCategory::new(
+            "no_argument_evaluation",
+            crate::DebugColorFlags::empty(),
+            Some("No Argument Evaluation debug category"),
+        );
+
+        let mut arg_evaluated = false;
+        trace!(cat, "{}", {
+            arg_evaluated = true;
+            "trace log"
+        });
+
+        assert!(!arg_evaluated);
+    }
 }
