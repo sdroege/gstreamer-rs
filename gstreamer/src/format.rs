@@ -317,7 +317,7 @@ macro_rules! impl_signed_ops(
                     (Signed::Negative(a), Signed::Negative(b)) if a >= b => Some(Signed::Negative(a - b)),
                     (Signed::Negative(a), Signed::Negative(b)) => Some(Signed::Positive(b - a)),
                     (Signed::Positive(a), Signed::Negative(b)) => a.checked_add(b).map(Signed::Positive),
-                    (Signed::Negative(a), Signed::Positive(b)) => a.checked_sub(b).map(Signed::Negative),
+                    (Signed::Negative(a), Signed::Positive(b)) => a.checked_add(b).map(Signed::Negative),
                 }
             }
 
@@ -357,7 +357,7 @@ macro_rules! impl_signed_ops(
                     (Signed::Negative(a), Signed::Negative(b)) if a >= b => Signed::Negative(a - b),
                     (Signed::Negative(a), Signed::Negative(b)) => Signed::Positive(b - a),
                     (Signed::Positive(a), Signed::Negative(b)) => Signed::Positive(a.saturating_add(b)),
-                    (Signed::Negative(a), Signed::Positive(b)) => Signed::Negative(a.saturating_sub(b)),
+                    (Signed::Negative(a), Signed::Positive(b)) => Signed::Negative(a.saturating_add(b)),
                 }
             }
 
@@ -376,7 +376,7 @@ macro_rules! impl_signed_ops(
                     (Signed::Positive(a), Signed::Positive(b)) => Signed::Positive(a.saturating_add(b)),
                     (Signed::Negative(a), Signed::Negative(b)) => Signed::Negative(a.saturating_add(b)),
                     (Signed::Positive(_), Signed::Negative(_)) => self.saturating_sub(-other),
-                    (Signed::Negative(_), Signed::Positive(_)) => -((-other).saturating_sub(other)),
+                    (Signed::Negative(_), Signed::Positive(_)) => -((-self).saturating_sub(other)),
                 }
             }
 
@@ -473,7 +473,7 @@ macro_rules! impl_signed_ops(
             fn cmp(&self, other: &Signed<$type>) -> std::cmp::Ordering {
                 match (self, other) {
                     (Signed::Positive(a), Signed::Positive(b)) => a.cmp(b),
-                    (Signed::Negative(a), Signed::Negative(b)) => a.cmp(b),
+                    (Signed::Negative(a), Signed::Negative(b)) => b.cmp(a),
                     (Signed::Positive(_), Signed::Negative(_)) => std::cmp::Ordering::Greater,
                     (Signed::Negative(_), Signed::Positive(_)) => std::cmp::Ordering::Less,
                 }
