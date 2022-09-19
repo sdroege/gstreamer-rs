@@ -160,6 +160,12 @@ macro_rules! impl_non_trait_op_inner_type(
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
             #[inline]
+            pub const fn saturating_div(self, rhs: $inner_type) -> Self {
+                Self(self.0.saturating_div(rhs))
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub const fn checked_mul(self, rhs: $inner_type) -> Option<Self> {
                 match self.0.checked_mul(rhs) {
                     Some(res) if res <= Self::MAX.0 => Some(Self(res)),
@@ -266,7 +272,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
         impl_non_trait_op_inner_type!($name, $inner_type);
 
         impl_unsigned_int_into_signed!($name);
-        impl_signed_ops!($name, $name::ZERO);
+        impl_signed_ops!($name, $inner_type, $name::ZERO);
 
         impl<ND: Borrow<$inner_type>> MulDiv<ND> for $name {
             type Output = $name;
@@ -423,7 +429,19 @@ macro_rules! impl_common_ops_for_newtype_uint(
 );
 
 macro_rules! impl_signed_ops(
-    ($type:ty, $zero:expr) => {
+    (u64) => {
+        impl_signed_ops!(u64, u64, 0);
+    };
+
+    (usize) => {
+        impl_signed_ops!(usize, usize, 0);
+    };
+
+    (u32) => {
+        impl_signed_ops!(u32, u32, 0);
+    };
+
+    ($type:ty, $inner_type:ty, $zero:expr) => {
         impl crate::Signed<$type> {
             // rustdoc-stripper-ignore-next
             /// Returns the signum for this `Signed`.
@@ -610,6 +628,248 @@ macro_rules! impl_signed_ops(
                     (Positive(_), Negative(_)) => std::cmp::Ordering::Greater,
                     (Negative(_), Positive(_)) => std::cmp::Ordering::Less,
                 }
+            }
+        }
+    };
+);
+
+macro_rules! impl_signed_div_mul(
+    (u64) => {
+        impl_signed_div_mul!(u64, u64, i64);
+    };
+
+    (usize) => {
+        impl_signed_div_mul!(usize, usize, isize);
+    };
+
+    (u32) => {
+        impl_signed_div_mul!(u32, u32, i32);
+    };
+
+    ($type:ty, u64) => {
+        impl_signed_div_mul!($type, u64, i64);
+    };
+
+    ($type:ty, usize) => {
+        impl_signed_div_mul!($type, usize, isize);
+    };
+
+    ($type:ty, u32) => {
+        impl_signed_div_mul!($type, u32, i32);
+    };
+
+    ($type:ty, $inner_type:ty, $signed_rhs:ty) => {
+        impl crate::Signed<$type> {
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn checked_div(self, rhs:$signed_rhs) -> Option<Self> {
+                use crate::UnsignedIntoSigned;
+                use crate::Signed::*;
+                match self {
+                    Positive(lhs) => {
+                        if rhs.is_positive() {
+                            lhs.checked_div(rhs as $inner_type).map(<$type>::into_positive)
+                        } else {
+                            lhs.checked_div(-rhs as $inner_type).map(<$type>::into_negative)
+                        }
+                    }
+                    Negative(lhs) => {
+                        if rhs.is_positive() {
+                            lhs.checked_div(rhs as $inner_type).map(<$type>::into_negative)
+                        } else {
+                            lhs.checked_div(-rhs as $inner_type).map(<$type>::into_positive)
+                        }
+                    }
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn checked_div_unsigned(self, rhs:$inner_type) -> Option<Self> {
+                use crate::UnsignedIntoSigned;
+                use crate::Signed::*;
+                match self {
+                    Positive(lhs) => lhs.checked_div(rhs).map(<$type>::into_positive),
+                    Negative(lhs) => lhs.checked_div(rhs).map(<$type>::into_negative),
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn checked_rem(self, rhs:$signed_rhs) -> Option<Self> {
+                use crate::UnsignedIntoSigned;
+                use crate::Signed::*;
+                match self {
+                    Positive(lhs) => {
+                        if rhs.is_positive() {
+                            lhs.checked_rem(rhs as $inner_type).map(<$type>::into_positive)
+                        } else {
+                            lhs.checked_rem(-rhs as $inner_type).map(<$type>::into_positive)
+                        }
+                    }
+                    Negative(lhs) => {
+                        if rhs.is_positive() {
+                            lhs.checked_rem(rhs as $inner_type).map(<$type>::into_negative)
+                        } else {
+                            lhs.checked_rem(-rhs as $inner_type).map(<$type>::into_negative)
+                        }
+                    }
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn checked_rem_unsigned(self, rhs:$inner_type) -> Option<Self> {
+                use crate::UnsignedIntoSigned;
+                use crate::Signed::*;
+                match self {
+                    Positive(lhs) => lhs.checked_rem(rhs).map(<$type>::into_positive),
+                    Negative(lhs) => lhs.checked_rem(rhs).map(<$type>::into_negative),
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn checked_mul(self, rhs:$signed_rhs) -> Option<Self> {
+                use crate::UnsignedIntoSigned;
+                use crate::Signed::*;
+                match self {
+                    Positive(lhs) => {
+                        if rhs.is_positive() {
+                            lhs.checked_mul(rhs as $inner_type).map(<$type>::into_positive)
+                        } else {
+                            lhs.checked_mul(-rhs as $inner_type).map(<$type>::into_negative)
+                        }
+                    }
+                    Negative(lhs) => {
+                        if rhs.is_positive() {
+                            lhs.checked_mul(rhs as $inner_type).map(<$type>::into_negative)
+                        } else {
+                            lhs.checked_mul(-rhs as $inner_type).map(<$type>::into_positive)
+                        }
+                    }
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn checked_mul_unsigned(self, rhs:$inner_type) -> Option<Self> {
+                use crate::UnsignedIntoSigned;
+                use crate::Signed::*;
+                match self {
+                    Positive(lhs) => lhs.checked_mul(rhs).map(<$type>::into_positive),
+                    Negative(lhs) => lhs.checked_mul(rhs).map(<$type>::into_negative),
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn saturating_mul(self, rhs:$signed_rhs) -> Self {
+                use crate::UnsignedIntoSigned;
+                use crate::Signed::*;
+                match self {
+                    Positive(lhs) => {
+                        if rhs.is_positive() {
+                            lhs.saturating_mul(rhs as $inner_type).into_positive()
+                        } else {
+                            lhs.saturating_mul(-rhs as $inner_type).into_negative()
+                        }
+                    }
+                    Negative(lhs) => {
+                        if rhs.is_positive() {
+                            lhs.saturating_mul(rhs as $inner_type).into_negative()
+                        } else {
+                            lhs.saturating_mul(-rhs as $inner_type).into_positive()
+                        }
+                    }
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub fn saturating_mul_unsigned(self, rhs:$inner_type) -> Self {
+                use crate::UnsignedIntoSigned;
+                use crate::Signed::*;
+                match self {
+                    Positive(lhs) => lhs.saturating_mul(rhs).into_positive(),
+                    Negative(lhs) => lhs.saturating_mul(rhs).into_negative(),
+                }
+            }
+        }
+
+        impl std::ops::Div<$signed_rhs> for crate::Signed<$type> {
+            type Output = crate::Signed<$type>;
+
+            fn div(self, rhs: $signed_rhs) -> crate::Signed<$type> {
+                self.checked_div(rhs).expect("division overflowed")
+            }
+        }
+
+        impl std::ops::DivAssign<$signed_rhs> for crate::Signed<$type> {
+            fn div_assign(&mut self, rhs: $signed_rhs) {
+                *self = std::ops::Div::div(*self, rhs);
+            }
+        }
+
+        impl std::ops::Div<$inner_type> for crate::Signed<$type> {
+            type Output = crate::Signed<$type>;
+
+            fn div(self, rhs: $inner_type) -> crate::Signed<$type> {
+                self.checked_div_unsigned(rhs).expect("division overflowed")
+            }
+        }
+
+        impl std::ops::DivAssign<$inner_type> for crate::Signed<$type> {
+            fn div_assign(&mut self, rhs: $inner_type) {
+                *self = std::ops::Div::div(*self, rhs);
+            }
+        }
+
+        impl std::ops::Rem<$signed_rhs> for crate::Signed<$type> {
+            type Output = crate::Signed<$type>;
+
+            fn rem(self, rhs: $signed_rhs) -> crate::Signed<$type> {
+                self.checked_rem(rhs).expect("division overflowed")
+            }
+        }
+
+        impl std::ops::RemAssign<$signed_rhs> for crate::Signed<$type> {
+            fn rem_assign(&mut self, rhs: $signed_rhs) {
+                *self = std::ops::Rem::rem(*self, rhs);
+            }
+        }
+
+        impl std::ops::Rem<$inner_type> for crate::Signed<$type> {
+            type Output = crate::Signed<$type>;
+
+            fn rem(self, rhs: $inner_type) -> crate::Signed<$type> {
+                self.checked_rem_unsigned(rhs).expect("division overflowed")
+            }
+        }
+
+        impl std::ops::RemAssign<$inner_type> for crate::Signed<$type> {
+            fn rem_assign(&mut self, rhs: $inner_type) {
+                *self = std::ops::Rem::rem(*self, rhs);
+            }
+        }
+
+        impl std::ops::Mul<$signed_rhs> for crate::Signed<$type> {
+            type Output = crate::Signed<$type>;
+
+            fn mul(self, rhs: $signed_rhs) -> crate::Signed<$type> {
+                self.checked_mul(rhs).expect("multiplication overflowed")
+            }
+        }
+
+        impl std::ops::MulAssign<$signed_rhs> for crate::Signed<$type> {
+            fn mul_assign(&mut self, rhs: $signed_rhs) {
+                *self = std::ops::Mul::mul(*self, rhs);
+            }
+        }
+
+        impl std::ops::Mul<$inner_type> for crate::Signed<$type> {
+            type Output = crate::Signed<$type>;
+
+            fn mul(self, rhs: $inner_type) -> crate::Signed<$type> {
+                self.checked_mul_unsigned(rhs).expect("multiplication overflowed")
+            }
+        }
+
+        impl std::ops::MulAssign<$inner_type> for crate::Signed<$type> {
+            fn mul_assign(&mut self, rhs: $inner_type) {
+                *self = std::ops::Mul::mul(*self, rhs);
             }
         }
     };

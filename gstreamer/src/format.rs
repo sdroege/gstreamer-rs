@@ -235,13 +235,16 @@ pub trait UnsignedIntoSigned: Copy + Sized {
 }
 
 impl_unsigned_int_into_signed!(u64);
-impl_signed_ops!(u64, 0);
+impl_signed_ops!(u64);
+impl_signed_div_mul!(u64);
 
 impl_unsigned_int_into_signed!(usize);
-impl_signed_ops!(usize, 0);
+impl_signed_ops!(usize);
+impl_signed_div_mul!(usize);
 
 impl_unsigned_int_into_signed!(u32);
-impl_signed_ops!(u32, 0);
+impl_signed_ops!(u32);
+impl_signed_div_mul!(u32);
 
 impl From<i64> for Signed<u64> {
     fn from(val: i64) -> Signed<u64> {
@@ -796,6 +799,7 @@ impl UnsignedIntoSigned for GenericFormattedValue {
 }
 
 impl_common_ops_for_newtype_uint!(Default, u64);
+impl_signed_div_mul!(Default, u64);
 impl_format_value_traits!(Default, Default, Default, u64);
 option_glib_newtype_from_to!(Default, u64::MAX);
 glib_newtype_display!(
@@ -806,6 +810,7 @@ glib_newtype_display!(
 );
 
 impl_common_ops_for_newtype_uint!(Bytes, u64);
+impl_signed_div_mul!(Bytes, u64);
 impl_format_value_traits!(Bytes, Bytes, Bytes, u64);
 option_glib_newtype_from_to!(Bytes, u64::MAX);
 glib_newtype_display!(Bytes, DisplayableBytes, DisplayableOptionBytes, "bytes");
@@ -813,6 +818,7 @@ glib_newtype_display!(Bytes, DisplayableBytes, DisplayableOptionBytes, "bytes");
 impl_format_value_traits!(ClockTime, Time, Time, u64);
 
 impl_common_ops_for_newtype_uint!(Buffers, u64);
+impl_signed_div_mul!(Buffers, u64);
 impl_format_value_traits!(Buffers, Buffers, Buffers, u64);
 option_glib_newtype_from_to!(Buffers, Buffers::OFFSET_NONE);
 glib_newtype_display!(
@@ -919,6 +925,7 @@ impl From<Undefined> for Signed<u64> {
 glib_newtype_display!(Undefined, DisplayableUndefined, "(Undefined)");
 
 impl_common_ops_for_newtype_uint!(Percent, u32);
+impl_signed_div_mul!(Percent, u32);
 glib_newtype_display!(Percent, DisplayablePercent, DisplayableOptionPercent, "%");
 
 impl FormattedValue for Option<Percent> {

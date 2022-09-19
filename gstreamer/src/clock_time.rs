@@ -225,6 +225,7 @@ impl From<ClockTime> for Duration {
 }
 
 impl_common_ops_for_newtype_uint!(ClockTime, u64);
+impl_signed_div_mul!(ClockTime, u64);
 
 // rustdoc-stripper-ignore-next
 /// Tell [`pad_clocktime`] what kind of time we're formatting
@@ -492,7 +493,30 @@ mod tests {
         assert_eq!(P_CT_2 - N_CT_1, P_CT_3);
         assert_eq!(N_CT_2 - P_CT_1, N_CT_3);
         assert_eq!(N_CT_3 - N_CT_1, N_CT_2);
-        assert_eq!(N_CT_2 - N_CT_3, P_CT_1);
+
+        assert_eq!(P_CT_1 * 2i64, P_CT_2);
+        assert_eq!(P_CT_1 * -2i64, N_CT_2);
+        assert_eq!(N_CT_1 * 2i64, N_CT_2);
+        assert_eq!(N_CT_1 * -2i64, P_CT_2);
+
+        assert_eq!(P_CT_1 * 2u64, P_CT_2);
+        assert_eq!(N_CT_1 * 2u64, N_CT_2);
+
+        assert_eq!(P_CT_2 / 2i64, P_CT_1);
+        assert_eq!(P_CT_2 / -2i64, N_CT_1);
+        assert_eq!(N_CT_2 / 2i64, N_CT_1);
+        assert_eq!(N_CT_2 / -2i64, P_CT_1);
+
+        assert_eq!(P_CT_2 / 2u64, P_CT_1);
+        assert_eq!(N_CT_2 / 2u64, N_CT_1);
+
+        assert_eq!(P_CT_3 % 2i64, P_CT_1);
+        assert_eq!(P_CT_3 % -2i64, P_CT_1);
+        assert_eq!(N_CT_3 % 2i64, N_CT_1);
+        assert_eq!(N_CT_3 % -2i64, N_CT_1);
+
+        assert_eq!(P_CT_3 % 2u64, P_CT_1);
+        assert_eq!(N_CT_3 % 2u64, N_CT_1);
     }
 
     #[test]
@@ -537,6 +561,24 @@ mod tests {
             Some(CT_1).opt_checked_sub(CT_2),
             Err(opt_ops::Error::Overflow)
         );
+
+        assert_eq!(CT_1.checked_mul(2), Some(CT_2));
+        assert_eq!(P_CT_1.checked_mul(2), Some(P_CT_2));
+        assert_eq!(P_CT_1.checked_mul(-2), Some(N_CT_2));
+        assert_eq!(N_CT_1.checked_mul(2), Some(N_CT_2));
+        assert_eq!(N_CT_1.checked_mul(-2), Some(P_CT_2));
+
+        assert_eq!(P_CT_1.checked_mul_unsigned(2u64), Some(P_CT_2));
+        assert_eq!(N_CT_1.checked_mul_unsigned(2u64), Some(N_CT_2));
+
+        assert_eq!(CT_3.checked_div(3), Some(CT_1));
+        assert_eq!(P_CT_3.checked_div(3), Some(P_CT_1));
+        assert_eq!(P_CT_3.checked_div(-3), Some(N_CT_1));
+        assert_eq!(N_CT_3.checked_div(3), Some(N_CT_1));
+        assert_eq!(N_CT_3.checked_div(-3), Some(P_CT_1));
+
+        assert_eq!(P_CT_3.checked_div_unsigned(3u64), Some(P_CT_1));
+        assert_eq!(N_CT_3.checked_div_unsigned(3u64), Some(N_CT_1));
     }
 
     #[test]
@@ -584,6 +626,7 @@ mod tests {
     #[test]
     fn saturating_ops() {
         let p_ct_max: Signed<ClockTime> = ClockTime::MAX.into_positive();
+        let n_ct_max: Signed<ClockTime> = ClockTime::MAX.into_negative();
 
         assert_eq!(CT_1.saturating_add(CT_2), CT_3);
         assert_eq!(P_CT_1.saturating_add(P_CT_2), P_CT_3);
@@ -625,6 +668,20 @@ mod tests {
 
         assert_eq!(CT_1.saturating_mul(2), CT_2);
         assert_eq!(ClockTime::MAX.saturating_mul(2), ClockTime::MAX);
+
+        assert_eq!(P_CT_1.saturating_mul(2), P_CT_2);
+        assert_eq!(P_CT_1.saturating_mul(-2), N_CT_2);
+        assert_eq!(N_CT_1.saturating_mul(2), N_CT_2);
+        assert_eq!(N_CT_1.saturating_mul(-2), P_CT_2);
+
+        assert_eq!(P_CT_1.saturating_mul_unsigned(2u64), P_CT_2);
+        assert_eq!(N_CT_1.saturating_mul_unsigned(2u64), N_CT_2);
+
+        assert_eq!(p_ct_max.saturating_mul(2), p_ct_max);
+        assert_eq!(n_ct_max.saturating_mul(2), n_ct_max);
+
+        assert_eq!(p_ct_max.saturating_mul_unsigned(2u64), p_ct_max);
+        assert_eq!(n_ct_max.saturating_mul_unsigned(2u64), n_ct_max);
     }
 
     #[test]
