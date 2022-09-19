@@ -1,6 +1,6 @@
 use gst::prelude::*;
 
-use std::ops::Deref;
+use std::ops::{Deref, DerefMut};
 
 // rustdoc-stripper-ignore-next
 /// Wrapper around `gst::Structure` for `element-properties`
@@ -17,11 +17,11 @@ use std::ops::Deref;
 /// ```
 ///
 /// ```rust
-/// # use gstreamer_pbutils::ElementProperties;
+/// # use gstreamer_pbutils::{ElementProperties, ElementPropertiesMapItem};
 /// # gst::init().unwrap();
 /// ElementProperties::builder_map()
 ///     .item(
-///         gst::Structure::builder("vp8enc")
+///         ElementPropertiesMapItem::builder("vp8enc")
 ///             .field("max-quantizer", 17)
 ///             .field("buffer-size", 20000)
 ///             .field("threads", 16)
@@ -41,7 +41,7 @@ impl Default for ElementProperties {
 impl Deref for ElementProperties {
     type Target = gst::StructureRef;
 
-    fn deref(&self) -> &gst::StructureRef {
+    fn deref(&self) -> &Self::Target {
         self.0.as_ref()
     }
 }
@@ -102,9 +102,9 @@ impl ElementProperties {
     }
 
     // rustdoc-stripper-ignore-next
-    /// Returns the inner list of `gst::Structure` if self is_general()
-    /// or `None` if self is_map().
-    pub fn map(&self) -> Option<Vec<gst::Structure>> {
+    /// Returns the inner vec of `ElementPropertiesMapItem` if self is_map()
+    /// or `None` if self is_general().
+    pub fn map(&self) -> Option<Vec<ElementPropertiesMapItem>> {
         if !self.is_map() {
             return None;
         }
@@ -115,7 +115,9 @@ impl ElementProperties {
                 .unwrap()
                 .as_slice()
                 .iter()
-                .map(|props_map| props_map.get::<gst::Structure>().unwrap())
+                .map(|props_map| {
+                    ElementPropertiesMapItem(props_map.get::<gst::Structure>().unwrap())
+                })
                 .collect::<Vec<_>>(),
         )
     }
@@ -140,6 +142,11 @@ impl ElementPropertiesGeneralBuilder {
         self
     }
 
+    pub fn field_value(mut self, property_name: &str, value: glib::SendValue) -> Self {
+        self.structure.set_value(property_name, value);
+        self
+    }
+
     pub fn build(self) -> ElementProperties {
         ElementProperties(self.structure)
     }
@@ -152,13 +159,8 @@ pub struct ElementPropertiesMapBuilder {
 }
 
 impl ElementPropertiesMapBuilder {
-    // rustdoc-stripper-ignore-next
-    /// Insert a new `element-properties-map` map item.
-    ///
-    /// The `structure`s name is the element factory's name
-    /// and each field corresponds to a property-value pair.
-    pub fn item(mut self, structure: gst::Structure) -> Self {
-        self.map.push(structure.to_send_value());
+    pub fn item(mut self, item: ElementPropertiesMapItem) -> Self {
+        self.map.push(item.into_inner().to_send_value());
         self
     }
 
@@ -168,6 +170,88 @@ impl ElementPropertiesMapBuilder {
                 .field("map", gst::List::from(self.map))
                 .build(),
         )
+    }
+}
+
+// rustdoc-stripper-ignore-next
+/// Wrapper around `gst::Structure` for `element-properties-map` map item.
+///
+/// # Examples
+///
+/// ```rust
+/// # use gstreamer_pbutils::{ElementProperties, ElementPropertiesMapItem};
+/// # gst::init().unwrap();
+/// ElementProperties::builder_map()
+///     .item(
+///         ElementPropertiesMapItem::builder("vp8enc")
+///             .field("max-quantizer", 17)
+///             .field("buffer-size", 20000)
+///             .field("threads", 16)
+///             .build(),
+///     )
+///     .build();
+/// ```
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ElementPropertiesMapItem(gst::Structure);
+
+impl Deref for ElementPropertiesMapItem {
+    type Target = gst::StructureRef;
+
+    fn deref(&self) -> &Self::Target {
+        self.0.as_ref()
+    }
+}
+
+impl DerefMut for ElementPropertiesMapItem {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.0.deref_mut()
+    }
+}
+
+impl From<ElementPropertiesMapItem> for gst::Structure {
+    fn from(e: ElementPropertiesMapItem) -> Self {
+        skip_assert_initialized!();
+
+        e.into_inner()
+    }
+}
+
+impl ElementPropertiesMapItem {
+    pub fn builder(factory_name: &str) -> ElementPropertiesMapItemBuilder {
+        assert_initialized_main_thread!();
+
+        ElementPropertiesMapItemBuilder {
+            structure: gst::Structure::new_empty(factory_name),
+        }
+    }
+
+    pub fn into_inner(self) -> gst::Structure {
+        self.0
+    }
+}
+
+#[must_use = "The builder must be built to be used"]
+#[derive(Debug, Clone)]
+pub struct ElementPropertiesMapItemBuilder {
+    structure: gst::Structure,
+}
+
+impl ElementPropertiesMapItemBuilder {
+    pub fn field<T>(mut self, property_name: &str, value: T) -> Self
+    where
+        T: ToSendValue + Sync,
+    {
+        self.structure.set(property_name, value);
+        self
+    }
+
+    pub fn field_value(mut self, property_name: &str, value: glib::SendValue) -> Self {
+        self.structure.set_value(property_name, value);
+        self
+    }
+
+    pub fn build(self) -> ElementPropertiesMapItem {
+        ElementPropertiesMapItem(self.structure)
     }
 }
 
@@ -187,7 +271,7 @@ mod test {
         assert!(!elem_props_general.is_map());
         assert_eq!(elem_props_general.map(), None);
 
-        let elem_factory_props_map = gst::Structure::builder("vp8enc")
+        let elem_factory_props_map = ElementPropertiesMapItem::builder("vp8enc")
             .field("cq-level", 13)
             .field("resize-allowed", false)
             .build();
@@ -217,7 +301,7 @@ mod test {
     fn element_properties_map_builder() {
         gst::init().unwrap();
 
-        let props_map = gst::Structure::builder("vp8enc")
+        let props_map = ElementPropertiesMapItem::builder("vp8enc")
             .field("cq-level", 13)
             .field("resize-allowed", false)
             .build();
