@@ -635,30 +635,31 @@ macro_rules! impl_signed_ops(
 
 macro_rules! impl_signed_div_mul(
     (u64) => {
-        impl_signed_div_mul!(u64, u64, i64);
+        impl_signed_div_mul!(u64, u64, i64, |val: u64| val);
+        impl_signed_div_mul_trait!(u64, u64, i64, |val: u64| val);
     };
 
     (usize) => {
-        impl_signed_div_mul!(usize, usize, isize);
+        impl_signed_div_mul!(usize, usize, isize, |val: usize| val);
+        // `MulDiv` not available for usize
     };
 
     (u32) => {
-        impl_signed_div_mul!(u32, u32, i32);
+        impl_signed_div_mul!(u32, u32, i32, |val: u32| val);
+        impl_signed_div_mul_trait!(u32, u32, i32, |val: u32| val);
     };
 
-    ($type:ty, u64) => {
-        impl_signed_div_mul!($type, u64, i64);
+    ($new_type:ty, u64) => {
+        impl_signed_div_mul!($new_type, u64, i64, |val: $new_type| *val);
+        impl_signed_div_mul_trait!($new_type, u64, i64, |val: $new_type| *val);
     };
 
-    ($type:ty, usize) => {
-        impl_signed_div_mul!($type, usize, isize);
+    ($new_type:ty, u32) => {
+        impl_signed_div_mul!($new_type, u32, i32, |val: $new_type| *val);
+        impl_signed_div_mul_trait!($new_type, u32, i32, |val: $new_type| *val);
     };
 
-    ($type:ty, u32) => {
-        impl_signed_div_mul!($type, u32, i32);
-    };
-
-    ($type:ty, $inner_type:ty, $signed_rhs:ty) => {
+    ($type:ty, $inner_type:ty, $signed_rhs:ty, $into_inner:expr) => {
         impl crate::Signed<$type> {
             #[must_use = "this returns the result of the operation, without modifying the original"]
             pub fn checked_div(self, rhs:$signed_rhs) -> Option<Self> {
@@ -870,6 +871,137 @@ macro_rules! impl_signed_div_mul(
         impl std::ops::MulAssign<$inner_type> for crate::Signed<$type> {
             fn mul_assign(&mut self, rhs: $inner_type) {
                 *self = std::ops::Mul::mul(*self, rhs);
+            }
+        }
+    };
+);
+
+macro_rules! impl_signed_div_mul_trait(
+    ($type:ty, $inner_type:ty, $signed_rhs:ty, $into_inner:expr) => {
+        impl crate::Signed<$type> {
+            fn signed_from_inner(val: $inner_type, sign: $signed_rhs) -> Option<crate::Signed<$type>> {
+                skip_assert_initialized!();
+                if sign.is_positive() {
+                    Self::positive_from_inner(val)
+                } else {
+                    Self::negative_from_inner(val)
+                }
+            }
+
+            fn positive_from_inner(val: $inner_type) -> Option<crate::Signed<$type>> {
+                skip_assert_initialized!();
+                use crate::UnsignedIntoSigned;
+                <$type>::try_from(val).ok().map(<$type>::into_positive)
+            }
+
+            fn negative_from_inner(val: $inner_type) -> Option<crate::Signed<$type>> {
+                skip_assert_initialized!();
+                use crate::UnsignedIntoSigned;
+                <$type>::try_from(val).ok().map(<$type>::into_negative)
+            }
+        }
+
+        impl MulDiv<$signed_rhs> for crate::Signed<$type> {
+            type Output = crate::Signed<$type>;
+
+            fn mul_div_floor(self, num: $signed_rhs, denom: $signed_rhs) -> Option<Self::Output> {
+                use crate::Signed::*;
+                match self {
+                    Positive(lhs) => {
+                        $into_inner(lhs)
+                            .mul_div_floor(num.abs() as $inner_type, denom.abs() as $inner_type)
+                            .and_then(|val| Self::signed_from_inner(val, num.signum() * denom.signum()))
+                    }
+                    Negative(lhs) => {
+                        $into_inner(lhs)
+                            .mul_div_floor(num.abs() as $inner_type, denom.abs() as $inner_type)
+                            .and_then(|val| Self::signed_from_inner(val, -num.signum() * denom.signum()))
+                    }
+                }
+            }
+
+            fn mul_div_round(self, num: $signed_rhs, denom: $signed_rhs) -> Option<Self::Output> {
+                use crate::Signed::*;
+                match self {
+                    Positive(lhs) => {
+                        $into_inner(lhs)
+                            .mul_div_round(num.abs() as $inner_type, denom.abs() as $inner_type)
+                            .and_then(|val| Self::signed_from_inner(val, num.signum() * denom.signum()))
+                    }
+                    Negative(lhs) => {
+                        $into_inner(lhs)
+                            .mul_div_round(num.abs() as $inner_type, denom.abs() as $inner_type)
+                            .and_then(|val| Self::signed_from_inner(val, -num.signum() * denom.signum()))
+                    }
+                }
+            }
+
+            fn mul_div_ceil(self, num: $signed_rhs, denom: $signed_rhs) -> Option<Self::Output> {
+                use crate::Signed::*;
+                match self {
+                    Positive(lhs) => {
+                        $into_inner(lhs)
+                            .mul_div_ceil(num.abs() as $inner_type, denom.abs() as $inner_type)
+                            .and_then(|val| Self::signed_from_inner(val, num.signum() * denom.signum()))
+                    }
+                    Negative(lhs) => {
+                        $into_inner(lhs)
+                            .mul_div_ceil(num.abs() as $inner_type, denom.abs() as $inner_type)
+                            .and_then(|val| Self::signed_from_inner(val, -num.signum() * denom.signum()))
+                    }
+                }
+            }
+        }
+
+        impl MulDiv<$inner_type> for crate::Signed<$type> {
+            type Output = crate::Signed<$type>;
+
+            fn mul_div_floor(self, num: $inner_type, denom: $inner_type) -> Option<Self::Output> {
+                use crate::Signed::*;
+                match self {
+                    Positive(lhs) => {
+                        $into_inner(lhs)
+                            .mul_div_floor(num, denom)
+                            .and_then(Self::positive_from_inner)
+                    }
+                    Negative(lhs) => {
+                        $into_inner(lhs)
+                            .mul_div_floor(num, denom)
+                            .and_then(Self::negative_from_inner)
+                    }
+                }
+            }
+
+            fn mul_div_round(self, num: $inner_type, denom: $inner_type) -> Option<Self::Output> {
+                use crate::Signed::*;
+                match self {
+                    Positive(lhs) => {
+                        $into_inner(lhs)
+                            .mul_div_round(num, denom)
+                            .and_then(Self::positive_from_inner)
+                    }
+                    Negative(lhs) => {
+                        $into_inner(lhs)
+                            .mul_div_round(num, denom)
+                            .and_then(Self::negative_from_inner)
+                    }
+                }
+            }
+
+            fn mul_div_ceil(self, num: $inner_type, denom: $inner_type) -> Option<Self::Output> {
+                use crate::Signed::*;
+                match self {
+                    Positive(lhs) => {
+                        $into_inner(lhs)
+                            .mul_div_ceil(num, denom)
+                            .and_then(Self::positive_from_inner)
+                    }
+                    Negative(lhs) => {
+                        $into_inner(lhs)
+                            .mul_div_ceil(num, denom)
+                            .and_then(Self::negative_from_inner)
+                    }
+                }
             }
         }
     };

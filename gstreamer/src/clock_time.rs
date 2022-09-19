@@ -712,6 +712,48 @@ mod tests {
     }
 
     #[test]
+    fn mul_div_ops() {
+        assert_eq!(CT_1.mul_div_floor(7, 3), Some(CT_2));
+
+        assert_eq!(P_CT_1.mul_div_floor(7u64, 3), Some(P_CT_2));
+        assert_eq!(P_CT_1.mul_div_floor(-7i64, 3), Some(N_CT_2));
+        assert_eq!(P_CT_1.mul_div_floor(7i64, -3), Some(N_CT_2));
+        assert_eq!(P_CT_1.mul_div_floor(-7i64, -3), Some(P_CT_2));
+
+        assert_eq!(N_CT_1.mul_div_floor(7u64, 3), Some(N_CT_2));
+        assert_eq!(N_CT_1.mul_div_floor(-7i64, 3), Some(P_CT_2));
+        assert_eq!(N_CT_1.mul_div_floor(7i64, -3), Some(P_CT_2));
+        assert_eq!(N_CT_1.mul_div_floor(-7i64, -3), Some(N_CT_2));
+
+        assert_eq!(CT_1.mul_div_round(10, 3), Some(CT_3));
+        assert_eq!(CT_1.mul_div_round(8, 3), Some(CT_3));
+
+        assert_eq!(P_CT_1.mul_div_round(10u64, 3), Some(P_CT_3));
+        assert_eq!(P_CT_1.mul_div_round(8u64, 3), Some(P_CT_3));
+        assert_eq!(P_CT_1.mul_div_round(-10i64, 3), Some(N_CT_3));
+        assert_eq!(P_CT_1.mul_div_round(-8i64, 3), Some(N_CT_3));
+        assert_eq!(P_CT_1.mul_div_round(10i64, -3), Some(N_CT_3));
+        assert_eq!(P_CT_1.mul_div_round(-10i64, -3), Some(P_CT_3));
+
+        assert_eq!(N_CT_1.mul_div_round(10u64, 3), Some(N_CT_3));
+        assert_eq!(N_CT_1.mul_div_round(-10i64, 3), Some(P_CT_3));
+        assert_eq!(N_CT_1.mul_div_round(10i64, -3), Some(P_CT_3));
+        assert_eq!(N_CT_1.mul_div_round(-10i64, -3), Some(N_CT_3));
+
+        assert_eq!(CT_1.mul_div_ceil(7, 3), Some(CT_3));
+
+        assert_eq!(P_CT_1.mul_div_ceil(7u64, 3), Some(P_CT_3));
+        assert_eq!(P_CT_1.mul_div_ceil(-7i64, 3), Some(N_CT_3));
+        assert_eq!(P_CT_1.mul_div_ceil(7i64, -3), Some(N_CT_3));
+        assert_eq!(P_CT_1.mul_div_ceil(-7i64, -3), Some(P_CT_3));
+
+        assert_eq!(N_CT_1.mul_div_ceil(7u64, 3), Some(N_CT_3));
+        assert_eq!(N_CT_1.mul_div_ceil(-7i64, 3), Some(P_CT_3));
+        assert_eq!(N_CT_1.mul_div_ceil(7i64, -3), Some(P_CT_3));
+        assert_eq!(N_CT_1.mul_div_ceil(-7i64, -3), Some(N_CT_3));
+    }
+
+    #[test]
     #[allow(clippy::nonminimal_bool)]
     fn comp() {
         assert!(ClockTime::ZERO < CT_2);

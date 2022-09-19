@@ -1003,6 +1003,19 @@ impl TryFromGlib<i64> for Percent {
     }
 }
 
+impl TryFrom<u32> for Percent {
+    type Error = FormattedValueError;
+
+    fn try_from(value: u32) -> Result<Self, Self::Error> {
+        skip_assert_initialized!();
+        if value > ffi::GST_FORMAT_PERCENT_MAX as u32 {
+            Err(FormattedValueError(Format::Percent))
+        } else {
+            Ok(Percent(value))
+        }
+    }
+}
+
 impl TryFrom<GenericFormattedValue> for Option<Percent> {
     type Error = FormattedValueError;
 
