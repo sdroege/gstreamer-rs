@@ -228,7 +228,7 @@ pub mod format;
 pub use crate::format::{
     CompatibleFormattedValue, FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic,
     GenericFormattedValue, Signed, SpecificFormattedValue, SpecificFormattedValueFullRange,
-    SpecificFormattedValueIntrinsic,
+    SpecificFormattedValueIntrinsic, UnsignedIntoSigned,
 };
 #[cfg(feature = "serde")]
 mod format_serde;
@@ -354,6 +354,7 @@ pub mod prelude {
     pub use crate::format::{
         CompatibleFormattedValue, FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic,
         SpecificFormattedValue, SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic,
+        UnsignedIntoSigned,
     };
     pub use crate::utils::Displayable;
 

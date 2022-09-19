@@ -435,8 +435,7 @@ impl std::iter::Sum for ClockTime {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::format::FormattedValue;
-    use crate::Signed;
+    use crate::{Signed, UnsignedIntoSigned};
 
     const CT_1: ClockTime = ClockTime::from_nseconds(1);
     const CT_2: ClockTime = ClockTime::from_nseconds(2);

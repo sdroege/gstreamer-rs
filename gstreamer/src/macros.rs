@@ -209,11 +209,42 @@ macro_rules! impl_non_trait_op_inner_type(
     };
 );
 
+macro_rules! impl_unsigned_int_into_signed(
+    ($name:ident) => {
+        impl crate::UnsignedIntoSigned for $name {
+            type Signed = crate::Signed<$name>;
+
+            fn into_positive(self) -> Self::Signed {
+                crate::Signed::Positive(self)
+            }
+
+            fn into_negative(self) -> Self::Signed {
+                crate::Signed::Negative(self)
+            }
+        }
+
+        impl crate::UnsignedIntoSigned for Option<$name> {
+            type Signed = Option<crate::Signed<$name>>;
+
+            fn into_positive(self) -> Self::Signed {
+                Some(self?.into_positive())
+            }
+
+            fn into_negative(self) -> Self::Signed {
+                Some(self?.into_negative())
+            }
+        }
+    };
+);
+
 macro_rules! impl_common_ops_for_newtype_uint(
     ($name:ident, $inner_type:ty) => {
         impl $name {
             pub const ZERO: Self = Self(0);
             pub const NONE: Option<Self> = None;
+
+            pub const MAX_SIGNED: crate::Signed::<$name> = crate::Signed::Positive(Self::MAX);
+            pub const MIN_SIGNED: crate::Signed::<$name> = crate::Signed::Negative(Self::MAX);
 
             pub const fn is_zero(self) -> bool {
                 self.0 == Self::ZERO.0
@@ -234,6 +265,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl_non_trait_op_inner_type!($name, $inner_type);
 
+        impl_unsigned_int_into_signed!($name);
         impl_signed_ops!($name, $name::ZERO);
 
         impl<ND: Borrow<$inner_type>> MulDiv<ND> for $name {
@@ -551,13 +583,6 @@ macro_rules! impl_signed_ops(
             }
         }
 
-        impl From<$type> for crate::Signed<$type> {
-            fn from(val: $type) -> Self {
-                skip_assert_initialized!();
-                crate::Signed::Positive(val)
-            }
-        }
-
         impl PartialOrd<crate::Signed<$type>> for crate::Signed<$type> {
             fn partial_cmp(&self, other: &crate::Signed<$type>) -> Option<std::cmp::Ordering> {
                 Some(self.cmp(other))
@@ -594,7 +619,6 @@ macro_rules! impl_format_value_traits(
     ($name:ident, $format:ident, $format_value:ident, $inner_type:ty) => {
         impl FormattedValue for Option<$name> {
             type FullRange = Option<$name>;
-            type Signed = Option<crate::Signed<$name>>;
 
             fn default_format() -> Format {
                 Format::$format
@@ -606,14 +630,6 @@ macro_rules! impl_format_value_traits(
 
             unsafe fn into_raw_value(self) -> i64 {
                 IntoGlib::into_glib(self) as i64
-            }
-
-            fn into_positive(self) -> Option<crate::Signed<$name>> {
-                Some(crate::Signed::Positive(self?))
-            }
-
-            fn into_negative(self) -> Option<crate::Signed<$name>> {
-                Some(crate::Signed::Negative(self?))
             }
         }
 
@@ -639,7 +655,6 @@ macro_rules! impl_format_value_traits(
         }
         impl FormattedValue for $name {
             type FullRange = Option<$name>;
-            type Signed = crate::Signed<$name>;
 
             fn default_format() -> Format {
                 Format::$format
@@ -651,14 +666,6 @@ macro_rules! impl_format_value_traits(
 
             unsafe fn into_raw_value(self) -> i64 {
                 IntoGlib::into_glib(self) as i64
-            }
-
-            fn into_positive(self) -> crate::Signed<$name> {
-                crate::Signed::Positive(self)
-            }
-
-            fn into_negative(self) -> crate::Signed<$name> {
-                crate::Signed::Negative(self)
             }
         }
 

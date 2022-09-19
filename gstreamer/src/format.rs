@@ -210,6 +210,79 @@ where
     }
 }
 
+// rustdoc-stripper-ignore-next
+/// A trait implemented on unsigned types which can be converted into [`crate::Signed`]s.
+pub trait UnsignedIntoSigned: Copy + Sized {
+    type Signed;
+
+    // rustdoc-stripper-ignore-next
+    /// Converts `self` into a `Signed` matching the given `sign`.
+    fn into_signed(self, sign: i32) -> Self::Signed {
+        if sign.is_positive() {
+            self.into_positive()
+        } else {
+            self.into_negative()
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Converts `self` into a `Signed::Positive`.
+    fn into_positive(self) -> Self::Signed;
+
+    // rustdoc-stripper-ignore-next
+    /// Converts `self` into a `Signed::Negative`.
+    fn into_negative(self) -> Self::Signed;
+}
+
+impl_unsigned_int_into_signed!(u64);
+impl_signed_ops!(u64, 0);
+
+impl_unsigned_int_into_signed!(usize);
+impl_signed_ops!(usize, 0);
+
+impl_unsigned_int_into_signed!(u32);
+impl_signed_ops!(u32, 0);
+
+impl From<i64> for Signed<u64> {
+    fn from(val: i64) -> Signed<u64> {
+        skip_assert_initialized!();
+        match val {
+            positive if positive.is_positive() => Signed::Positive(positive as u64),
+            i64::MIN => {
+                // `i64::MIN.abs()` can't be represented as an `i64`
+                Signed::Negative((-(i64::MIN as i128)) as u64)
+            }
+            negative => Signed::Negative((-negative) as u64),
+        }
+    }
+}
+
+impl From<isize> for Signed<usize> {
+    fn from(val: isize) -> Signed<usize> {
+        skip_assert_initialized!();
+        match val {
+            positive if positive.is_positive() => Signed::Positive(positive as usize),
+            isize::MIN => {
+                // `isize::MIN.abs()` can't be represented as an `isize`
+                Signed::Negative((-(isize::MIN as i128)) as usize)
+            }
+            negative => Signed::Negative((-negative) as usize),
+        }
+    }
+}
+
+// `i32::MIN.abs()` can't be represented as an `i32`
+impl From<i32> for Signed<u32> {
+    fn from(val: i32) -> Signed<u32> {
+        skip_assert_initialized!();
+        if val.is_positive() {
+            Signed::Positive(val as u32)
+        } else {
+            Signed::Negative((-(val as i64)) as u32)
+        }
+    }
+}
+
 impl Signed<ClockTime> {
     // rustdoc-stripper-ignore-next
     /// Returns the `self` in nanoseconds.
@@ -288,8 +361,6 @@ impl Signed<ClockTime> {
     }
 }
 
-impl_signed_ops!(u64, 0);
-
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum GenericFormattedValue {
@@ -359,10 +430,6 @@ pub trait FormattedValue: Copy + Clone + Sized + Into<GenericFormattedValue> + '
     /// Type which allows building a `FormattedValue` of this format from any raw value.
     type FullRange: FormattedValueFullRange + From<Self>;
 
-    // rustdoc-stripper-ignore-next
-    /// The `Signed` type for this `FormattedValue`.
-    type Signed;
-
     #[doc(alias = "get_default_format")]
     fn default_format() -> Format;
 
@@ -370,17 +437,6 @@ pub trait FormattedValue: Copy + Clone + Sized + Into<GenericFormattedValue> + '
     fn format(&self) -> Format;
 
     unsafe fn into_raw_value(self) -> i64;
-
-    fn into_positive(self) -> Self::Signed;
-    fn into_negative(self) -> Self::Signed;
-
-    fn into_signed(self, sign: i32) -> Self::Signed {
-        if sign < 0 {
-            self.into_negative()
-        } else {
-            self.into_positive()
-        }
-    }
 }
 
 // rustdoc-stripper-ignore-next
@@ -614,12 +670,10 @@ impl CompatibleFormattedValue<GenericFormattedValue> for GenericFormattedValue {
 }
 
 impl FormattedValue for GenericFormattedValue {
-    type FullRange = GenericFormattedValue;
-
     // The intrinsic value for `GenericFormattedValue` is also
     // `GenericFormattedValue`. We can't dissociate the `Option`
     // from the variants' inner type since they are not all `Option`s.
-    type Signed = Signed<GenericFormattedValue>;
+    type FullRange = GenericFormattedValue;
 
     fn default_format() -> Format {
         Format::Undefined
@@ -631,14 +685,6 @@ impl FormattedValue for GenericFormattedValue {
 
     unsafe fn into_raw_value(self) -> i64 {
         self.value()
-    }
-
-    fn into_positive(self) -> Signed<GenericFormattedValue> {
-        Signed::Positive(self)
-    }
-
-    fn into_negative(self) -> Signed<GenericFormattedValue> {
-        Signed::Negative(self)
     }
 }
 
@@ -719,6 +765,36 @@ impl GenericFormattedValue {
 
 impl FormattedValueIntrinsic for GenericFormattedValue {}
 
+impl UnsignedIntoSigned for GenericFormattedValue {
+    type Signed = Signed<GenericFormattedValue>;
+
+    #[track_caller]
+    fn into_positive(self) -> Signed<GenericFormattedValue> {
+        match self {
+            GenericFormattedValue::Undefined(_) => {
+                unimplemented!("`GenericFormattedValue::Undefined` is already signed")
+            }
+            GenericFormattedValue::Other(..) => {
+                unimplemented!("`GenericFormattedValue::Other` is already signed")
+            }
+            unsigned_inner => Signed::Positive(unsigned_inner),
+        }
+    }
+
+    #[track_caller]
+    fn into_negative(self) -> Signed<GenericFormattedValue> {
+        match self {
+            GenericFormattedValue::Undefined(_) => {
+                unimplemented!("`GenericFormattedValue::Undefined` is already signed")
+            }
+            GenericFormattedValue::Other(..) => {
+                unimplemented!("`GenericFormattedValue::Other` is already signed")
+            }
+            unsigned_inner => Signed::Negative(unsigned_inner),
+        }
+    }
+}
+
 impl_common_ops_for_newtype_uint!(Default, u64);
 impl_format_value_traits!(Default, Default, Default, u64);
 option_glib_newtype_from_to!(Default, u64::MAX);
@@ -748,7 +824,6 @@ glib_newtype_display!(
 
 impl FormattedValue for Undefined {
     type FullRange = Undefined;
-    type Signed = Signed<Undefined>;
 
     fn default_format() -> Format {
         Format::Undefined
@@ -760,14 +835,6 @@ impl FormattedValue for Undefined {
 
     unsafe fn into_raw_value(self) -> i64 {
         self.0
-    }
-
-    fn into_positive(self) -> Signed<Undefined> {
-        Signed::Positive(self)
-    }
-
-    fn into_negative(self) -> Signed<Undefined> {
-        Signed::Negative(self)
     }
 }
 
@@ -842,6 +909,13 @@ impl AsMut<i64> for Undefined {
     }
 }
 
+impl From<Undefined> for Signed<u64> {
+    fn from(val: Undefined) -> Signed<u64> {
+        skip_assert_initialized!();
+        val.0.into()
+    }
+}
+
 glib_newtype_display!(Undefined, DisplayableUndefined, "(Undefined)");
 
 impl_common_ops_for_newtype_uint!(Percent, u32);
@@ -849,7 +923,6 @@ glib_newtype_display!(Percent, DisplayablePercent, DisplayableOptionPercent, "%"
 
 impl FormattedValue for Option<Percent> {
     type FullRange = Option<Percent>;
-    type Signed = Option<Signed<Percent>>;
 
     fn default_format() -> Format {
         Format::Percent
@@ -861,14 +934,6 @@ impl FormattedValue for Option<Percent> {
 
     unsafe fn into_raw_value(self) -> i64 {
         self.map_or(-1, |v| v.0 as i64)
-    }
-
-    fn into_positive(self) -> Option<Signed<Percent>> {
-        Some(Signed::Positive(self?))
-    }
-
-    fn into_negative(self) -> Option<Signed<Percent>> {
-        Some(Signed::Negative(self?))
     }
 }
 
@@ -895,7 +960,6 @@ impl From<Percent> for GenericFormattedValue {
 
 impl FormattedValue for Percent {
     type FullRange = Option<Percent>;
-    type Signed = Signed<Percent>;
 
     fn default_format() -> Format {
         Format::Percent
@@ -907,14 +971,6 @@ impl FormattedValue for Percent {
 
     unsafe fn into_raw_value(self) -> i64 {
         self.0 as i64
-    }
-
-    fn into_positive(self) -> Signed<Percent> {
-        Signed::Positive(self)
-    }
-
-    fn into_negative(self) -> Signed<Percent> {
-        Signed::Negative(self)
     }
 }
 
@@ -1177,19 +1233,19 @@ mod tests {
         assert!(!signed.is_positive());
         assert!(signed.positive().is_none());
 
-        let und = Undefined(1);
+        let def = Default(1);
 
-        let signed = und.into_positive();
-        assert_eq!(signed, Signed::Positive(und));
+        let signed = def.into_positive();
+        assert_eq!(signed, Signed::Positive(def));
         assert!(signed.is_positive());
-        assert_eq!(signed.positive(), Some(und));
+        assert_eq!(signed.positive(), Some(def));
         assert!(!signed.is_negative());
         assert!(signed.negative().is_none());
 
-        let signed = und.into_negative();
-        assert_eq!(signed, Signed::Negative(und));
+        let signed = def.into_negative();
+        assert_eq!(signed, Signed::Negative(def));
         assert!(signed.is_negative());
-        assert_eq!(signed.negative(), Some(und));
+        assert_eq!(signed.negative(), Some(def));
         assert!(!signed.is_positive());
         assert!(signed.positive().is_none());
     }
