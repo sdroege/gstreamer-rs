@@ -630,6 +630,46 @@ macro_rules! impl_signed_ops(
                 }
             }
         }
+
+        impl OptionOperations for crate::Signed<$type> {}
+
+        impl OptionCheckedAdd for crate::Signed<$type> {
+            type Output = Self;
+            fn opt_checked_add(
+                self,
+                rhs: Self,
+            ) -> Result<Option<Self::Output>, opt_ops::Error> {
+                self.checked_add(rhs)
+                    .ok_or(opt_ops::Error::Overflow)
+                    .map(Some)
+            }
+        }
+
+        impl OptionSaturatingAdd for crate::Signed<$type> {
+            type Output = Self;
+            fn opt_saturating_add(self, rhs: Self) -> Option<Self::Output> {
+                Some(self.saturating_add(rhs))
+            }
+        }
+
+        impl OptionCheckedSub for crate::Signed<$type> {
+            type Output = Self;
+            fn opt_checked_sub(
+                self,
+                rhs: Self,
+            ) -> Result<Option<Self::Output>, opt_ops::Error> {
+                self.checked_sub(rhs)
+                    .ok_or(opt_ops::Error::Overflow)
+                    .map(Some)
+            }
+        }
+
+        impl OptionSaturatingSub for crate::Signed<$type> {
+            type Output = Self;
+            fn opt_saturating_sub(self, rhs: Self) -> Option<Self::Output> {
+                Some(self.saturating_sub(rhs))
+            }
+        }
     };
 );
 
@@ -871,6 +911,86 @@ macro_rules! impl_signed_div_mul(
         impl std::ops::MulAssign<$inner_type> for crate::Signed<$type> {
             fn mul_assign(&mut self, rhs: $inner_type) {
                 *self = std::ops::Mul::mul(*self, rhs);
+            }
+        }
+
+        impl OptionCheckedDiv<$signed_rhs> for crate::Signed<$type> {
+            type Output = Self;
+            fn opt_checked_div(self, rhs: $signed_rhs) -> Result<Option<Self::Output>, opt_ops::Error> {
+                if rhs == 0 {
+                    return Err(opt_ops::Error::DivisionByZero);
+                }
+                self.checked_div(rhs)
+                    .ok_or(opt_ops::Error::Overflow)
+                    .map(Some)
+            }
+        }
+
+        impl OptionCheckedMul<$signed_rhs> for crate::Signed<$type> {
+            type Output = Self;
+            fn opt_checked_mul(self, rhs: $signed_rhs) -> Result<Option<Self::Output>, opt_ops::Error> {
+                self.checked_mul(rhs)
+                    .ok_or(opt_ops::Error::Overflow)
+                    .map(Some)
+            }
+        }
+
+        impl OptionSaturatingMul<$signed_rhs> for crate::Signed<$type> {
+            type Output = Self;
+            fn opt_saturating_mul(self, rhs: $signed_rhs) -> Option<Self::Output> {
+                Some(self.saturating_mul(rhs))
+            }
+        }
+
+        impl OptionCheckedRem<$signed_rhs> for crate::Signed<$type> {
+            type Output = Self;
+            fn opt_checked_rem(self, rhs: $signed_rhs) -> Result<Option<Self::Output>, opt_ops::Error> {
+                if rhs == 0 {
+                    return Err(opt_ops::Error::DivisionByZero);
+                }
+                self.checked_rem(rhs)
+                    .ok_or(opt_ops::Error::Overflow)
+                    .map(Some)
+            }
+        }
+
+        impl OptionCheckedDiv<$inner_type> for crate::Signed<$type> {
+            type Output = Self;
+            fn opt_checked_div(self, rhs: $inner_type) -> Result<Option<Self::Output>, opt_ops::Error> {
+                if rhs == 0 {
+                    return Err(opt_ops::Error::DivisionByZero);
+                }
+                self.checked_div_unsigned(rhs)
+                    .ok_or(opt_ops::Error::Overflow)
+                    .map(Some)
+            }
+        }
+
+        impl OptionCheckedMul<$inner_type> for crate::Signed<$type> {
+            type Output = Self;
+            fn opt_checked_mul(self, rhs: $inner_type) -> Result<Option<Self::Output>, opt_ops::Error> {
+                self.checked_mul_unsigned(rhs)
+                    .ok_or(opt_ops::Error::Overflow)
+                    .map(Some)
+            }
+        }
+
+        impl OptionSaturatingMul<$inner_type> for crate::Signed<$type> {
+            type Output = Self;
+            fn opt_saturating_mul(self, rhs: $inner_type) -> Option<Self::Output> {
+                Some(self.saturating_mul_unsigned(rhs))
+            }
+        }
+
+        impl OptionCheckedRem<$inner_type> for crate::Signed<$type> {
+            type Output = Self;
+            fn opt_checked_rem(self, rhs: $inner_type) -> Result<Option<Self::Output>, opt_ops::Error> {
+                if rhs == 0 {
+                    return Err(opt_ops::Error::DivisionByZero);
+                }
+                self.checked_rem_unsigned(rhs)
+                    .ok_or(opt_ops::Error::Overflow)
+                    .map(Some)
             }
         }
     };

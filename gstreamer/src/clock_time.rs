@@ -541,6 +541,17 @@ mod tests {
             Err(opt_ops::Error::Overflow)
         );
 
+        assert_eq!(P_CT_1.opt_checked_add(P_CT_1), Ok(Some(P_CT_2)));
+        assert_eq!(P_CT_1.opt_checked_add(Some(N_CT_2)), Ok(Some(N_CT_1)));
+        assert_eq!(Some(P_CT_1).opt_checked_add(Some(P_CT_1)), Ok(Some(P_CT_2)));
+        assert_eq!(P_CT_1.opt_checked_add(None), Ok(None));
+        assert_eq!(Some(N_CT_1).opt_checked_add(None), Ok(None));
+
+        assert_eq!(
+            ClockTime::MAX.into_positive().opt_checked_add(Some(P_CT_1)),
+            Err(opt_ops::Error::Overflow)
+        );
+
         assert_eq!(CT_2.checked_sub(CT_1), Some(CT_1));
         assert_eq!(P_CT_3.checked_sub(P_CT_2), Some(P_CT_1));
         assert_eq!(P_CT_2.checked_sub(P_CT_3), Some(N_CT_1));
@@ -562,11 +573,17 @@ mod tests {
             Err(opt_ops::Error::Overflow)
         );
 
+        assert_eq!(P_CT_2.opt_checked_sub(Some(N_CT_1)), Ok(Some(P_CT_3)));
+        assert_eq!(Some(N_CT_2).opt_checked_sub(P_CT_1), Ok(Some(N_CT_3)));
+
         assert_eq!(CT_1.checked_mul(2), Some(CT_2));
         assert_eq!(P_CT_1.checked_mul(2), Some(P_CT_2));
         assert_eq!(P_CT_1.checked_mul(-2), Some(N_CT_2));
         assert_eq!(N_CT_1.checked_mul(2), Some(N_CT_2));
         assert_eq!(N_CT_1.checked_mul(-2), Some(P_CT_2));
+
+        assert_eq!(Some(P_CT_1).opt_checked_mul(-2i64), Ok(Some(N_CT_2)));
+        assert_eq!(N_CT_1.opt_checked_mul(2u64), Ok(Some(N_CT_2)));
 
         assert_eq!(P_CT_1.checked_mul_unsigned(2u64), Some(P_CT_2));
         assert_eq!(N_CT_1.checked_mul_unsigned(2u64), Some(N_CT_2));
@@ -576,6 +593,9 @@ mod tests {
         assert_eq!(P_CT_3.checked_div(-3), Some(N_CT_1));
         assert_eq!(N_CT_3.checked_div(3), Some(N_CT_1));
         assert_eq!(N_CT_3.checked_div(-3), Some(P_CT_1));
+
+        assert_eq!(Some(P_CT_3).opt_checked_div(-3i64), Ok(Some(N_CT_1)));
+        assert_eq!(N_CT_3.opt_checked_div(3u64), Ok(Some(N_CT_1)));
 
         assert_eq!(P_CT_3.checked_div_unsigned(3u64), Some(P_CT_1));
         assert_eq!(N_CT_3.checked_div_unsigned(3u64), Some(N_CT_1));
