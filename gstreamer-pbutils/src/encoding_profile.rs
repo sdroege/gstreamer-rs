@@ -443,7 +443,7 @@ macro_rules! declare_encoding_profile_builder_common(
 
 fn set_common_fields<T: EncodingProfileBuilderCommon>(
     profile: &T,
-    base_data: &EncodingProfileBuilderCommonData,
+    base_data: EncodingProfileBuilderCommonData,
 ) {
     skip_assert_initialized!();
     profile.set_name(base_data.name);
@@ -459,8 +459,9 @@ fn set_common_fields<T: EncodingProfileBuilderCommon>(
     }
     #[cfg(feature = "v1_20")]
     {
-        if let Some(ref element_properties) = base_data.element_properties {
-            profile.set_element_properties(element_properties.clone());
+        let mut base_data = base_data;
+        if let Some(element_properties) = base_data.element_properties.take() {
+            profile.set_element_properties(element_properties);
         }
     }
 }
@@ -498,7 +499,7 @@ impl<'a> EncodingAudioProfileBuilder<'a> {
             self.base.presence,
         );
 
-        set_common_fields(&profile, &self.base);
+        set_common_fields(&profile, self.base);
 
         profile
     }
@@ -556,7 +557,7 @@ impl<'a> EncodingVideoProfileBuilder<'a> {
         video_profile.set_pass(self.pass);
         video_profile.set_variableframerate(self.variable_framerate);
 
-        set_common_fields(&video_profile, &self.base);
+        set_common_fields(&video_profile, self.base);
 
         video_profile
     }
@@ -593,7 +594,7 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
             container_profile.add_profile(&profile);
         }
 
-        set_common_fields(&container_profile, &self.base);
+        set_common_fields(&container_profile, self.base);
 
         container_profile
     }
