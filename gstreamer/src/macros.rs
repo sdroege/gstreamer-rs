@@ -2,25 +2,17 @@
 
 macro_rules! impl_trait_op_same(
     ($name:ident, $op:ident, $op_name:ident, $op_assign:ident, $op_assign_name:ident) => {
-        impl<RHS: Borrow<$name>> ops::$op<RHS> for $name {
+        impl ops::$op<$name> for $name {
             type Output = Self;
 
-            fn $op_name(self, rhs: RHS) -> Self::Output {
-                Self(self.0.$op_name(rhs.borrow().0))
+            fn $op_name(self, rhs: $name) -> Self::Output {
+                Self(self.0.$op_name(rhs.0))
             }
         }
 
-        impl<RHS: Borrow<$name>> ops::$op<RHS> for &$name {
-            type Output = $name;
-
-            fn $op_name(self, rhs: RHS) -> Self::Output {
-                (*self).$op_name(rhs)
-            }
-        }
-
-        impl<RHS: Borrow<$name>> ops::$op_assign<RHS> for $name {
-            fn $op_assign_name(&mut self, rhs: RHS) {
-                self.0.$op_assign_name(rhs.borrow().0)
+        impl ops::$op_assign<$name> for $name {
+            fn $op_assign_name(&mut self, rhs: $name) {
+                self.0.$op_assign_name(rhs.0)
             }
         }
     };
@@ -114,27 +106,11 @@ macro_rules! impl_trait_op_inner_type(
             }
         }
 
-        impl ops::$op<$inner_type> for &$name {
-            type Output = $name;
-
-            fn $op_name(self, rhs: $inner_type) -> Self::Output {
-                (*self).$op_name(rhs)
-            }
-        }
-
         impl ops::$op<$name> for $inner_type {
             type Output = $name;
 
             fn $op_name(self, rhs: $name) -> $name {
                 $name(self.$op_name(rhs.0))
-            }
-        }
-
-        impl ops::$op<&$name> for $inner_type {
-            type Output = $name;
-
-            fn $op_name(self, rhs: &$name) -> $name {
-                self.$op_name(*rhs)
             }
         }
 
@@ -274,24 +250,24 @@ macro_rules! impl_common_ops_for_newtype_uint(
         impl_unsigned_int_into_signed!($name);
         impl_signed_ops!($name, $inner_type, $name::ZERO);
 
-        impl<ND: Borrow<$inner_type>> MulDiv<ND> for $name {
+        impl MulDiv<$inner_type> for $name {
             type Output = $name;
 
-            fn mul_div_floor(self, num: ND, denom: ND) -> Option<Self::Output> {
+            fn mul_div_floor(self, num: $inner_type, denom: $inner_type) -> Option<Self::Output> {
                 self.0
-                    .mul_div_floor(*num.borrow(), *denom.borrow())
+                    .mul_div_floor(num, denom)
                     .map($name)
             }
 
-            fn mul_div_round(self, num: ND, denom: ND) -> Option<Self::Output> {
+            fn mul_div_round(self, num: $inner_type, denom: $inner_type) -> Option<Self::Output> {
                 self.0
-                    .mul_div_round(*num.borrow(), *denom.borrow())
+                    .mul_div_round(num, denom)
                     .map($name)
             }
 
-            fn mul_div_ceil(self, num: ND, denom: ND) -> Option<Self::Output> {
+            fn mul_div_ceil(self, num: $inner_type, denom: $inner_type) -> Option<Self::Output> {
                 self.0
-                    .mul_div_ceil(*num.borrow(), *denom.borrow())
+                    .mul_div_ceil(num, denom)
                     .map($name)
             }
         }

@@ -5,7 +5,6 @@ use glib::StaticType;
 use muldiv::MulDiv;
 use num_integer::div_rem;
 use opt_ops::prelude::*;
-use std::borrow::Borrow;
 use std::io::{self, prelude::*};
 use std::ops;
 use std::time::Duration;
@@ -472,13 +471,10 @@ mod tests {
     #[allow(clippy::eq_op, clippy::op_ref)]
     fn ops() {
         assert_eq!(CT_10 + CT_20, CT_30);
-        assert_eq!(CT_10 + &CT_20, CT_30);
-        assert_eq!(&CT_10 + &CT_20, CT_30);
         assert_eq!(CT_30 - CT_20, CT_10);
         assert_eq!(CT_30 - CT_30, ClockTime::ZERO);
         assert_eq!(CT_10 * 3, CT_30);
         assert_eq!(3 * CT_10, CT_30);
-        assert_eq!(3 * &CT_10, CT_30);
         assert_eq!(CT_30.nseconds(), 30);
 
         assert_eq!(P_CT_1 + P_CT_2, P_CT_3);

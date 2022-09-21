@@ -6,7 +6,6 @@ use crate::Format;
 use glib::translate::{FromGlib, GlibNoneError, IntoGlib, OptionIntoGlib, TryFromGlib};
 use muldiv::MulDiv;
 use opt_ops::prelude::*;
-use std::borrow::Borrow;
 use std::fmt;
 use std::ops;
 use thiserror::Error;
