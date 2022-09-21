@@ -1140,6 +1140,10 @@ macro_rules! impl_format_value_traits(
                 Format::$format
             }
 
+            fn is_some(&self) -> bool {
+                Option::is_some(self)
+            }
+
             unsafe fn into_raw_value(self) -> i64 {
                 IntoGlib::into_glib(self) as i64
             }
@@ -1149,6 +1153,12 @@ macro_rules! impl_format_value_traits(
             unsafe fn from_raw(format: Format, value: i64) -> Option<$name> {
                 debug_assert_eq!(format, Format::$format);
                 FromGlib::from_glib(value as u64)
+            }
+        }
+
+        impl FormattedValueNoneBuilder for Option<$name> {
+            fn none() -> Option<$name> {
+                None
             }
         }
 
@@ -1165,6 +1175,7 @@ macro_rules! impl_format_value_traits(
                 Self::$format_value(Some(v))
             }
         }
+
         impl FormattedValue for $name {
             type FullRange = Option<$name>;
 
@@ -1174,6 +1185,10 @@ macro_rules! impl_format_value_traits(
 
             fn format(&self) -> Format {
                 Format::$format
+            }
+
+            fn is_some(&self) -> bool {
+                true
             }
 
             unsafe fn into_raw_value(self) -> i64 {

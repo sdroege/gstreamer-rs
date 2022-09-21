@@ -6,7 +6,7 @@ use crate::SeekFlags;
 use crate::SeekType;
 use crate::{
     CompatibleFormattedValue, FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic,
-    UnsignedIntoSigned,
+    FormattedValueNoneBuilder, NoneSignedBuilder, UnsignedIntoSigned,
 };
 use glib::translate::*;
 use glib::StaticType;
@@ -175,48 +175,6 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
         }
     }
 
-    #[doc(alias = "gst_segment_position_from_running_time")]
-    pub fn position_from_running_time(
-        &self,
-        running_time: impl CompatibleFormattedValue<T>,
-    ) -> T::FullRange {
-        let running_time = running_time
-            .try_into_checked_explicit(self.format())
-            .unwrap();
-
-        unsafe {
-            T::FullRange::from_raw(
-                self.format(),
-                ffi::gst_segment_position_from_running_time(
-                    &self.0,
-                    self.format().into_glib(),
-                    running_time.into_raw_value() as u64,
-                ) as i64,
-            )
-        }
-    }
-
-    #[doc(alias = "gst_segment_position_from_stream_time")]
-    pub fn position_from_stream_time(
-        &self,
-        stream_time: impl CompatibleFormattedValue<T>,
-    ) -> T::FullRange {
-        let stream_time = stream_time
-            .try_into_checked_explicit(self.format())
-            .unwrap();
-
-        unsafe {
-            T::FullRange::from_raw(
-                self.format(),
-                ffi::gst_segment_position_from_stream_time(
-                    &self.0,
-                    self.format().into_glib(),
-                    stream_time.into_raw_value() as u64,
-                ) as i64,
-            )
-        }
-    }
-
     #[doc(alias = "gst_segment_set_running_time")]
     pub fn set_running_time(
         &mut self,
@@ -234,38 +192,6 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
                     running_time.into_raw_value() as u64,
                 ),
                 "Running time is not in the segment"
-            )
-        }
-    }
-
-    #[doc(alias = "gst_segment_to_running_time")]
-    pub fn to_running_time(&self, position: impl CompatibleFormattedValue<T>) -> T::FullRange {
-        let position = position.try_into_checked_explicit(self.format()).unwrap();
-
-        unsafe {
-            T::FullRange::from_raw(
-                self.format(),
-                ffi::gst_segment_to_running_time(
-                    &self.0,
-                    self.format().into_glib(),
-                    position.into_raw_value() as u64,
-                ) as i64,
-            )
-        }
-    }
-
-    #[doc(alias = "gst_segment_to_stream_time")]
-    pub fn to_stream_time(&self, position: impl CompatibleFormattedValue<T>) -> T::FullRange {
-        let position = position.try_into_checked_explicit(self.format()).unwrap();
-
-        unsafe {
-            T::FullRange::from_raw(
-                self.format(),
-                ffi::gst_segment_to_stream_time(
-                    &self.0,
-                    self.format().into_glib(),
-                    position.into_raw_value() as u64,
-                ) as i64,
             )
         }
     }
@@ -388,7 +314,100 @@ impl<T: FormattedValueIntrinsic> PartialEq for FormattedSegment<T> {
 impl<T> FormattedSegment<T>
 where
     T: FormattedValueIntrinsic,
-    <T as FormattedValue>::FullRange: UnsignedIntoSigned,
+    T::FullRange: FormattedValueNoneBuilder,
+{
+    #[doc(alias = "gst_segment_position_from_running_time")]
+    pub fn position_from_running_time(
+        &self,
+        running_time: impl CompatibleFormattedValue<T>,
+    ) -> T::FullRange {
+        let running_time = running_time
+            .try_into_checked_explicit(self.format())
+            .unwrap();
+        if running_time.is_none() {
+            return T::FullRange::none_for_format(self.format());
+        }
+
+        unsafe {
+            T::FullRange::from_raw(
+                self.format(),
+                ffi::gst_segment_position_from_running_time(
+                    &self.0,
+                    self.format().into_glib(),
+                    running_time.into_raw_value() as u64,
+                ) as i64,
+            )
+        }
+    }
+
+    #[doc(alias = "gst_segment_position_from_stream_time")]
+    pub fn position_from_stream_time(
+        &self,
+        stream_time: impl CompatibleFormattedValue<T>,
+    ) -> T::FullRange {
+        let stream_time = stream_time
+            .try_into_checked_explicit(self.format())
+            .unwrap();
+        if stream_time.is_none() {
+            return T::FullRange::none_for_format(self.format());
+        }
+
+        unsafe {
+            T::FullRange::from_raw(
+                self.format(),
+                ffi::gst_segment_position_from_stream_time(
+                    &self.0,
+                    self.format().into_glib(),
+                    stream_time.into_raw_value() as u64,
+                ) as i64,
+            )
+        }
+    }
+
+    #[doc(alias = "gst_segment_to_running_time")]
+    pub fn to_running_time(&self, position: impl CompatibleFormattedValue<T>) -> T::FullRange {
+        let position = position.try_into_checked_explicit(self.format()).unwrap();
+        if position.is_none() {
+            return T::FullRange::none_for_format(self.format());
+        }
+
+        unsafe {
+            T::FullRange::from_raw(
+                self.format(),
+                ffi::gst_segment_to_running_time(
+                    &self.0,
+                    self.format().into_glib(),
+                    position.into_raw_value() as u64,
+                ) as i64,
+            )
+        }
+    }
+
+    #[doc(alias = "gst_segment_to_stream_time")]
+    pub fn to_stream_time(&self, position: impl CompatibleFormattedValue<T>) -> T::FullRange {
+        let position = position.try_into_checked_explicit(self.format()).unwrap();
+        if position.is_none() {
+            return T::FullRange::none_for_format(self.format());
+        }
+
+        unsafe {
+            T::FullRange::from_raw(
+                self.format(),
+                ffi::gst_segment_to_stream_time(
+                    &self.0,
+                    self.format().into_glib(),
+                    position.into_raw_value() as u64,
+                ) as i64,
+            )
+        }
+    }
+}
+
+impl<T> FormattedSegment<T>
+where
+    T: FormattedValueIntrinsic,
+    T::FullRange: UnsignedIntoSigned,
+    T::FullRange: NoneSignedBuilder<Signed = <T::FullRange as UnsignedIntoSigned>::Signed>,
 {
     #[doc(alias = "gst_segment_position_from_running_time_full")]
     pub fn position_from_running_time_full(
@@ -398,6 +417,9 @@ where
         let running_time = running_time
             .try_into_checked_explicit(self.format())
             .unwrap();
+        if running_time.is_none() {
+            return T::FullRange::none_signed_for_format(self.format());
+        }
 
         unsafe {
             let mut position = mem::MaybeUninit::uninit();
@@ -420,6 +442,9 @@ where
         let stream_time = stream_time
             .try_into_checked_explicit(self.format())
             .unwrap();
+        if stream_time.is_none() {
+            return T::FullRange::none_signed_for_format(self.format());
+        }
 
         unsafe {
             let mut position = mem::MaybeUninit::uninit();
@@ -440,6 +465,9 @@ where
         position: impl CompatibleFormattedValue<T>,
     ) -> <T::FullRange as UnsignedIntoSigned>::Signed {
         let position = position.try_into_checked_explicit(self.format()).unwrap();
+        if position.is_none() {
+            return T::FullRange::none_signed_for_format(self.format());
+        }
 
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
@@ -461,6 +489,9 @@ where
         position: impl CompatibleFormattedValue<T>,
     ) -> <T::FullRange as UnsignedIntoSigned>::Signed {
         let position = position.try_into_checked_explicit(self.format()).unwrap();
+        if position.is_none() {
+            return T::FullRange::none_signed_for_format(self.format());
+        }
 
         unsafe {
             let mut stream_time = mem::MaybeUninit::uninit();

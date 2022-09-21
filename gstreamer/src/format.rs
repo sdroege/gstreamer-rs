@@ -439,6 +439,16 @@ pub trait FormattedValue: Copy + Clone + Sized + Into<GenericFormattedValue> + '
     #[doc(alias = "get_format")]
     fn format(&self) -> Format;
 
+    // rustdoc-stripper-ignore-next
+    /// Returns `true` if this `FormattedValue` represents a defined value.
+    fn is_some(&self) -> bool;
+
+    // rustdoc-stripper-ignore-next
+    /// Returns `true` if this `FormattedValue` represents an undefined value.
+    fn is_none(&self) -> bool {
+        !self.is_some()
+    }
+
     unsafe fn into_raw_value(self) -> i64;
 }
 
@@ -476,6 +486,87 @@ pub trait SpecificFormattedValueFullRange: FormattedValueFullRange {}
 /// - `Undefined` is the intrinsic type for `Undefined`.
 /// - `Bytes` is the intrinsic type for `Option<Bytes>`.
 pub trait SpecificFormattedValueIntrinsic: TryFromGlib<i64> + FormattedValueIntrinsic {}
+
+pub trait FormattedValueNoneBuilder: FormattedValueFullRange {
+    // rustdoc-stripper-ignore-next
+    /// Returns the `None` value for `Self` as a `FullRange` if such a value can be represented.
+    ///
+    /// - For `SpecificFormattedValue`s, this results in `Option::<FormattedValueIntrinsic>::None`.
+    /// - For `GenericFormattedValue`, this can only be obtained using [`Self::none_for_format`]
+    ///   because the `None` is an inner value of some of the variants.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `Self` is `GenericFormattedValue` in which case, the `Format` must be known.
+    fn none() -> Self;
+
+    // rustdoc-stripper-ignore-next
+    /// Returns the `None` value for `Self` if such a value can be represented.
+    ///
+    /// - For `SpecificFormattedValue`s, this is the same as `Self::none()`
+    ///   if the `format` matches the `SpecificFormattedValue`'s format.
+    /// - For `GenericFormattedValue` this is the variant for the specified `format`,
+    ///   initialized with `None` as a value, if the `format` can represent that value.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `None` can't be represented by `Self` for `format` or by the requested
+    /// `GenericFormattedValue` variant.
+    #[track_caller]
+    fn none_for_format(format: Format) -> Self {
+        skip_assert_initialized!();
+        // This is the default impl. `GenericFormattedValue` must override.
+        if Self::default_format() != format {
+            panic!(
+                "Expected: {:?}, requested {format:?}",
+                Self::default_format()
+            );
+        }
+
+        Self::none()
+    }
+}
+
+pub trait NoneSignedBuilder: FormattedValueNoneBuilder {
+    type Signed;
+
+    // rustdoc-stripper-ignore-next
+    /// Returns the `None` value for `Self` as a `Signed<FullRange>` if such a value can be represented.
+    ///
+    /// See details in [`FormattedValueNoneBuilder::none`].
+    ///
+    /// # Panics
+    ///
+    /// Panics if `Self` is `GenericFormattedValue` in which case, the `Format` must be known.
+    fn none_signed() -> Self::Signed;
+
+    // rustdoc-stripper-ignore-next
+    /// Returns the `None` value for `Self` as a `Signed<FullRange>`, if such a value can be represented.
+    ///
+    /// See details in [`FormattedValueNoneBuilder::none_for_format`].
+    ///
+    /// # Panics
+    ///
+    /// Panics if `None` can't be represented by `Self` for `format` or by the requested
+    /// `GenericFormattedValue` variant.
+    fn none_signed_for_format(format: Format) -> Self::Signed;
+}
+
+impl<T> NoneSignedBuilder for T
+where
+    T: UnsignedIntoSigned + FormattedValueNoneBuilder,
+{
+    type Signed = <T as UnsignedIntoSigned>::Signed;
+
+    fn none_signed() -> Self::Signed {
+        Self::none().into_positive()
+    }
+
+    fn none_signed_for_format(format: Format) -> Self::Signed {
+        skip_assert_initialized!();
+        Self::none_for_format(format).into_positive()
+    }
+}
 
 // rustdoc-stripper-ignore-next
 /// A trait implemented on types which can hold [`FormattedValue`]s compatible with parameter `F`.
@@ -686,6 +777,18 @@ impl FormattedValue for GenericFormattedValue {
         self.format()
     }
 
+    fn is_some(&self) -> bool {
+        match self {
+            Self::Undefined(_) => true,
+            Self::Default(v) => v.is_some(),
+            Self::Bytes(v) => v.is_some(),
+            Self::Time(v) => v.is_some(),
+            Self::Buffers(v) => v.is_some(),
+            Self::Percent(v) => v.is_some(),
+            Self::Other(..) => true,
+        }
+    }
+
     unsafe fn into_raw_value(self) -> i64 {
         self.value()
     }
@@ -694,6 +797,30 @@ impl FormattedValue for GenericFormattedValue {
 impl FormattedValueFullRange for GenericFormattedValue {
     unsafe fn from_raw(format: Format, value: i64) -> Self {
         GenericFormattedValue::new(format, value)
+    }
+}
+
+impl FormattedValueNoneBuilder for GenericFormattedValue {
+    #[track_caller]
+    fn none() -> Self {
+        panic!(concat!(
+            "`GenericFormattedValue` can't build `None` without knowing",
+            "the target format. Use `GenericFormattedValue::none_for_format`",
+        ));
+    }
+
+    #[track_caller]
+    fn none_for_format(format: Format) -> Self {
+        skip_assert_initialized!();
+        match format {
+            Format::Undefined => panic!("`None` can't be represented by `Undefined`"),
+            Format::Default => Self::Default(None),
+            Format::Bytes => Self::Bytes(None),
+            Format::Time => Self::Time(None),
+            Format::Buffers => Self::Buffers(None),
+            Format::Percent => Self::Percent(None),
+            Format::__Unknown(_) => panic!("`None` can't be represented by `__Unknown`"),
+        }
     }
 }
 
@@ -738,30 +865,6 @@ impl GenericFormattedValue {
                 Self::Percent(v) => v.into_raw_value(),
                 Self::Other(_, v) => v,
             }
-        }
-    }
-
-    pub fn is_some(&self) -> bool {
-        match *self {
-            Self::Undefined(_) => true,
-            Self::Default(v) => v.is_some(),
-            Self::Bytes(v) => v.is_some(),
-            Self::Time(v) => v.is_some(),
-            Self::Buffers(v) => v.is_some(),
-            Self::Percent(v) => v.is_some(),
-            Self::Other(..) => true,
-        }
-    }
-
-    pub fn is_none(&self) -> bool {
-        match *self {
-            Self::Undefined(_) => false,
-            Self::Default(v) => v.is_none(),
-            Self::Bytes(v) => v.is_none(),
-            Self::Time(v) => v.is_none(),
-            Self::Buffers(v) => v.is_none(),
-            Self::Percent(v) => v.is_none(),
-            Self::Other(..) => false,
         }
     }
 }
@@ -837,6 +940,10 @@ impl FormattedValue for Undefined {
 
     fn format(&self) -> Format {
         Format::Undefined
+    }
+
+    fn is_some(&self) -> bool {
+        true
     }
 
     unsafe fn into_raw_value(self) -> i64 {
@@ -939,6 +1046,10 @@ impl FormattedValue for Option<Percent> {
         Format::Percent
     }
 
+    fn is_some(&self) -> bool {
+        Option::is_some(self)
+    }
+
     unsafe fn into_raw_value(self) -> i64 {
         self.map_or(-1, |v| v.0 as i64)
     }
@@ -974,6 +1085,10 @@ impl FormattedValue for Percent {
 
     fn format(&self) -> Format {
         Format::Percent
+    }
+
+    fn is_some(&self) -> bool {
+        true
     }
 
     unsafe fn into_raw_value(self) -> i64 {
@@ -1033,6 +1148,11 @@ impl FormattedValueIntrinsic for Percent {}
 impl SpecificFormattedValue for Option<Percent> {}
 impl SpecificFormattedValueFullRange for Option<Percent> {}
 impl SpecificFormattedValueIntrinsic for Percent {}
+impl FormattedValueNoneBuilder for Option<Percent> {
+    fn none() -> Option<Percent> {
+        None
+    }
+}
 
 impl ops::Deref for Percent {
     type Target = u32;
@@ -1202,6 +1322,48 @@ mod tests {
             Format::Buffers,
         )
         .unwrap_err();
+    }
+
+    #[test]
+    fn none_builder() {
+        let ct_none: Option<ClockTime> = Option::<ClockTime>::none();
+        assert!(ct_none.is_none());
+
+        let ct_none: Option<ClockTime> = Option::<ClockTime>::none_for_format(Format::Time);
+        assert!(ct_none.is_none());
+
+        let gen_ct_none: GenericFormattedValue =
+            GenericFormattedValue::none_for_format(Format::Time);
+        assert!(gen_ct_none.is_none());
+
+        assert!(ClockTime::ZERO.is_some());
+        assert!(!ClockTime::ZERO.is_none());
+    }
+
+    #[test]
+    #[should_panic]
+    fn none_for_inconsistent_format() {
+        let _ = Option::<ClockTime>::none_for_format(Format::Percent);
+    }
+
+    #[test]
+    #[should_panic]
+    fn none_for_unsupported_format() {
+        let _ = GenericFormattedValue::none_for_format(Format::Undefined);
+    }
+
+    #[test]
+    fn none_signed_builder() {
+        let ct_none: Option<Signed<ClockTime>> = Option::<ClockTime>::none_signed();
+        assert!(ct_none.is_none());
+
+        let ct_none: Option<Signed<ClockTime>> =
+            Option::<ClockTime>::none_signed_for_format(Format::Time);
+        assert!(ct_none.is_none());
+
+        let gen_ct_none: Signed<GenericFormattedValue> =
+            GenericFormattedValue::none_signed_for_format(Format::Time);
+        assert!(gen_ct_none.abs().is_none());
     }
 
     #[test]
