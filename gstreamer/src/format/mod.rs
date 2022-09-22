@@ -1,7 +1,16 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+#[macro_use]
+mod macros;
+
 use crate::utils::Displayable;
-use crate::ClockTime;
+
+mod clock_time;
+pub use clock_time::ClockTime;
+
+#[cfg(feature = "serde")]
+mod clock_time_serde;
+
 use crate::Format;
 use glib::translate::{FromGlib, GlibNoneError, IntoGlib, OptionIntoGlib, TryFromGlib};
 use muldiv::MulDiv;

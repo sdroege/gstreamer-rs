@@ -47,9 +47,6 @@ pub use crate::auto::functions::*;
 pub use crate::auto::*;
 
 #[macro_use]
-mod macros;
-
-#[macro_use]
 #[cfg(feature = "serde")]
 mod serde_macros;
 #[cfg(feature = "serde")]
@@ -170,9 +167,6 @@ mod bus_unix;
 mod bus_windows;
 
 mod child_proxy;
-mod clock_time;
-#[cfg(feature = "serde")]
-mod clock_time_serde;
 mod date_time;
 #[cfg(feature = "serde")]
 mod date_time_serde;
@@ -207,7 +201,6 @@ pub use crate::element::{
 pub use crate::task_pool::{TaskHandle, TaskPoolTaskHandle};
 
 pub use self::iterator::{Iterator, IteratorError, IteratorImpl, StdIterator};
-pub use crate::clock_time::ClockTime;
 pub use crate::device_monitor::DeviceMonitorFilterId;
 pub use crate::enums::{
     ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, PadLinkSuccess,
@@ -226,10 +219,10 @@ mod typefind_factory;
 
 pub mod format;
 pub use crate::format::{
-    CompatibleFormattedValue, FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic,
-    FormattedValueNoneBuilder, GenericFormattedValue, NoneSignedBuilder, Signed,
-    SpecificFormattedValue, SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic,
-    UnsignedIntoSigned,
+    ClockTime, CompatibleFormattedValue, FormattedValue, FormattedValueFullRange,
+    FormattedValueIntrinsic, FormattedValueNoneBuilder, GenericFormattedValue, NoneSignedBuilder,
+    Signed, SpecificFormattedValue, SpecificFormattedValueFullRange,
+    SpecificFormattedValueIntrinsic, UnsignedIntoSigned,
 };
 #[cfg(feature = "serde")]
 mod format_serde;

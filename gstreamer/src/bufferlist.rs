@@ -191,8 +191,8 @@ impl fmt::Debug for BufferList {
 
 impl fmt::Debug for BufferListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        use crate::clock_time::ClockTime;
         use crate::utils::Displayable;
+        use crate::ClockTime;
 
         let size = self.iter().map(|b| b.size()).sum::<usize>();
         let (pts, dts) = self
