@@ -2,13 +2,16 @@
 
 use glib::translate::*;
 use glib::StaticType;
-use muldiv::MulDiv;
-use num_integer::div_rem;
-use opt_ops::prelude::*;
+
+use std::fmt;
 use std::io::{self, prelude::*};
-use std::ops;
 use std::time::Duration;
-use std::{cmp, fmt, str};
+
+use super::{Format, FormattedValueError, GenericFormattedValue, Signed};
+use super::{
+    FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic, FormattedValueNoneBuilder,
+    SpecificFormattedValue, SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic,
+};
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Default)]
 pub struct ClockTime(pub(crate) u64);
@@ -115,6 +118,85 @@ impl ClockTime {
     }
 }
 
+impl Signed<ClockTime> {
+    // rustdoc-stripper-ignore-next
+    /// Returns the `self` in nanoseconds.
+    pub fn nseconds(self) -> Signed<u64> {
+        match self {
+            Signed::Positive(val) => Signed::Positive(val.nseconds()),
+            Signed::Negative(val) => Signed::Negative(val.nseconds()),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates new value from nanoseconds.
+    pub fn from_nseconds(val: Signed<u64>) -> Self {
+        skip_assert_initialized!();
+        match val {
+            Signed::Positive(val) => Signed::Positive(ClockTime::from_nseconds(val)),
+            Signed::Negative(val) => Signed::Negative(ClockTime::from_nseconds(val)),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Returns the `self` in microseconds.
+    pub fn useconds(self) -> Signed<u64> {
+        match self {
+            Signed::Positive(val) => Signed::Positive(val.useconds()),
+            Signed::Negative(val) => Signed::Negative(val.useconds()),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates new value from microseconds.
+    pub fn from_useconds(val: Signed<u64>) -> Self {
+        skip_assert_initialized!();
+        match val {
+            Signed::Positive(val) => Signed::Positive(ClockTime::from_useconds(val)),
+            Signed::Negative(val) => Signed::Negative(ClockTime::from_useconds(val)),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Returns the `self` in milliseconds.
+    pub fn mseconds(self) -> Signed<u64> {
+        match self {
+            Signed::Positive(val) => Signed::Positive(val.mseconds()),
+            Signed::Negative(val) => Signed::Negative(val.mseconds()),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates new value from milliseconds.
+    pub fn from_mseconds(val: Signed<u64>) -> Self {
+        skip_assert_initialized!();
+        match val {
+            Signed::Positive(val) => Signed::Positive(ClockTime::from_mseconds(val)),
+            Signed::Negative(val) => Signed::Negative(ClockTime::from_mseconds(val)),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Returns the `self` in seconds.
+    pub fn seconds(self) -> Signed<u64> {
+        match self {
+            Signed::Positive(val) => Signed::Positive(val.seconds()),
+            Signed::Negative(val) => Signed::Negative(val.seconds()),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates new value from seconds.
+    pub fn from_seconds(val: Signed<u64>) -> Self {
+        skip_assert_initialized!();
+        match val {
+            Signed::Positive(val) => Signed::Positive(ClockTime::from_seconds(val)),
+            Signed::Negative(val) => Signed::Negative(ClockTime::from_seconds(val)),
+        }
+    }
+}
+
+impl_format_value_traits!(ClockTime, Time, Time, u64);
 option_glib_newtype_from_to!(ClockTime, ffi::GST_CLOCK_TIME_NONE);
 
 impl glib::value::ValueType for ClockTime {
@@ -324,13 +406,13 @@ fn write_clocktime<W: io::Write>(
     precision: usize,
 ) -> io::Result<()> {
     skip_assert_initialized!();
-    let precision = cmp::min(9, precision);
+    let precision = std::cmp::min(9, precision);
 
     if let Some(ns) = clocktime.map(ClockTime::nseconds) {
         // Split the time into parts
-        let (s, ns) = div_rem(ns, 1_000_000_000);
-        let (m, s) = div_rem(s, 60);
-        let (h, m) = div_rem(m, 60);
+        let (s, ns) = num_integer::div_rem(ns, 1_000_000_000);
+        let (m, s) = num_integer::div_rem(s, 60);
+        let (h, m) = num_integer::div_rem(m, 60);
 
         // Write HH:MM:SS
         write!(writer, "{}:{:02}:{:02}", h, m, s)?;
@@ -340,7 +422,7 @@ fn write_clocktime<W: io::Write>(
             // The value is zero-padded so always 9 digits long
             let mut buf = [0u8; 9];
             write!(&mut buf[..], "{:09}", ns).unwrap();
-            let buf_str = str::from_utf8(&buf[..]).unwrap();
+            let buf_str = std::str::from_utf8(&buf[..]).unwrap();
 
             // Write decimal point and a prefix of the nanoseconds for more precision
             write!(writer, ".{:.p$}", buf_str, p = precision)?;
@@ -372,7 +454,7 @@ fn fmt_opt_clock_time(ct: Option<ClockTime>, f: &mut fmt::Formatter) -> fmt::Res
     let mut cursor = io::Cursor::new(&mut buf[..]);
     write_clocktime(&mut cursor, ct, precision).unwrap();
     let pos = cursor.position() as usize;
-    let buf_str = str::from_utf8(&buf[..pos]).unwrap();
+    let buf_str = std::str::from_utf8(&buf[..pos]).unwrap();
 
     let sign = if ct.is_some() {
         Sign::NonNegative
@@ -436,6 +518,7 @@ impl std::iter::Sum for ClockTime {
 mod tests {
     use super::*;
     use crate::{Signed, UnsignedIntoSigned};
+    use opt_ops::prelude::*;
 
     const CT_1: ClockTime = ClockTime::from_nseconds(1);
     const CT_2: ClockTime = ClockTime::from_nseconds(2);
@@ -729,6 +812,8 @@ mod tests {
 
     #[test]
     fn mul_div_ops() {
+        use muldiv::MulDiv;
+
         assert_eq!(CT_1.mul_div_floor(7, 3), Some(CT_2));
 
         assert_eq!(P_CT_1.mul_div_floor(7u64, 3), Some(P_CT_2));
