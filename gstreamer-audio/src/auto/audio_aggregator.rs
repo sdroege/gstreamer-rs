@@ -42,16 +42,6 @@ pub trait AudioAggregatorExt: 'static {
     #[doc(alias = "discont-wait")]
     fn set_discont_wait(&self, discont_wait: u64);
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "ignore-inactive-pads")]
-    fn ignores_inactive_pads(&self) -> bool;
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "ignore-inactive-pads")]
-    fn set_ignore_inactive_pads(&self, ignore_inactive_pads: bool);
-
     #[doc(alias = "output-buffer-duration")]
     fn output_buffer_duration(&self) -> u64;
 
@@ -66,14 +56,6 @@ pub trait AudioAggregatorExt: 'static {
 
     #[doc(alias = "discont-wait")]
     fn connect_discont_wait_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "ignore-inactive-pads")]
-    fn connect_ignore_inactive_pads_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -100,18 +82,6 @@ impl<O: IsA<AudioAggregator>> AudioAggregatorExt for O {
 
     fn set_discont_wait(&self, discont_wait: u64) {
         glib::ObjectExt::set_property(self.as_ref(), "discont-wait", &discont_wait)
-    }
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    fn ignores_inactive_pads(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "ignore-inactive-pads")
-    }
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    fn set_ignore_inactive_pads(&self, ignore_inactive_pads: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "ignore-inactive-pads", &ignore_inactive_pads)
     }
 
     fn output_buffer_duration(&self) -> u64 {
@@ -176,36 +146,6 @@ impl<O: IsA<AudioAggregator>> AudioAggregatorExt for O {
                 b"notify::discont-wait\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_discont_wait_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    fn connect_ignore_inactive_pads_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_ignore_inactive_pads_trampoline<
-            P: IsA<AudioAggregator>,
-            F: Fn(&P) + Send + Sync + 'static,
-        >(
-            this: *mut ffi::GstAudioAggregator,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(AudioAggregator::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::ignore-inactive-pads\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_ignore_inactive_pads_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -89,6 +89,11 @@ status = "generate"
     # fraction
     manual = true
 
+    [[object.property]]
+    name = "ignore-inactive-pads"
+    # getter/setter exists in base class
+    ignore = true
+
 [[object]]
 name = "GstAudio.AudioBaseSink"
 status = "generate"
