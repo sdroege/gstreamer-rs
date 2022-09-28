@@ -4,6 +4,10 @@ use std::fmt;
 use std::marker::PhantomData;
 use std::ops;
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use std::ptr;
+
 use crate::Buffer;
 use crate::BufferRef;
 use crate::Caps;
@@ -533,13 +537,28 @@ unsafe impl Sync for CustomMeta {}
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl CustomMeta {
     #[doc(alias = "gst_meta_register_custom")]
-    pub fn register<
+    pub fn register(name: &str, tags: &[&str]) {
+        assert_initialized_main_thread!();
+        unsafe {
+            ffi::gst_meta_register_custom(
+                name.to_glib_none().0,
+                tags.to_glib_none().0,
+                None,
+                ptr::null_mut(),
+                None,
+            );
+        }
+    }
+
+    #[doc(alias = "gst_meta_register_custom")]
+    pub fn register_with_transform<
         F: Fn(&mut BufferRef, &CustomMeta, &BufferRef, glib::Quark) -> bool + Send + Sync + 'static,
     >(
         name: &str,
         tags: &[&str],
         transform_func: F,
     ) {
+        assert_initialized_main_thread!();
         unsafe extern "C" fn transform_func_trampoline<
             F: Fn(&mut BufferRef, &CustomMeta, &BufferRef, glib::Quark) -> bool
                 + Send
