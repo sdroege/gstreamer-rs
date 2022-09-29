@@ -135,11 +135,11 @@ fn tutorial_main() -> Result<(), Error> {
                 } else {
                     Percent::ZERO
                 } / Percent::MAX;
-                if start.is_zero() && stop.is_zero() {
+                if start == 0 && stop == 0 {
                     continue;
                 }
-                let start_ = *((start * GRAPH_LENGTH as u32) / (stop - start));
-                let stop_ = *((stop * GRAPH_LENGTH as u32) / (stop - start));
+                let start_ = (start * GRAPH_LENGTH as u32) / (stop - start);
+                let stop_ = (stop * GRAPH_LENGTH as u32) / (stop - start);
                 for j in start_..stop_ {
                     graph[j as usize] = b'-';
                 }

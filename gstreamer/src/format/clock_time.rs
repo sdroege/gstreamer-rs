@@ -288,7 +288,7 @@ impl TryFrom<Duration> for ClockTime {
 
         let nanos = d.as_nanos();
 
-        // Note: `std::u64::MAX` is `ClockTime::None`.
+        // Note: `std::u64::MAX` is `ClockTime::NONE`.
         if nanos >= std::u64::MAX as u128 {
             return Err(DurationError);
         }
@@ -527,6 +527,8 @@ mod tests {
     const CT_20: ClockTime = ClockTime::from_nseconds(20);
     const CT_30: ClockTime = ClockTime::from_nseconds(30);
 
+    const P_CT_0: Signed<ClockTime> = Signed::Positive(ClockTime::ZERO);
+    const P_CT_NONE: Option<Signed<ClockTime>> = None;
     const P_CT_1: Signed<ClockTime> = Signed::Positive(ClockTime::from_nseconds(1));
     const P_CT_2: Signed<ClockTime> = Signed::Positive(ClockTime::from_nseconds(2));
     const P_CT_3: Signed<ClockTime> = Signed::Positive(ClockTime::from_nseconds(3));
@@ -558,6 +560,8 @@ mod tests {
         assert_eq!(CT_30 - CT_30, ClockTime::ZERO);
         assert_eq!(CT_10 * 3, CT_30);
         assert_eq!(3 * CT_10, CT_30);
+        assert_eq!(CT_20 / 2, CT_10);
+        assert_eq!(CT_20 / CT_2, 10);
         assert_eq!(CT_30.nseconds(), 30);
 
         assert_eq!(P_CT_1 + P_CT_2, P_CT_3);
@@ -567,16 +571,29 @@ mod tests {
         assert_eq!(N_CT_2 + P_CT_3, P_CT_1);
         assert_eq!(N_CT_2 + N_CT_1, N_CT_3);
 
+        assert_eq!(CT_1 + P_CT_2, P_CT_3);
+        assert_eq!(P_CT_1 + CT_2, P_CT_3);
+        assert_eq!(CT_3 + N_CT_1, P_CT_2);
+        assert_eq!(N_CT_1 + CT_2, P_CT_1);
+
         assert_eq!(P_CT_3 - P_CT_2, P_CT_1);
         assert_eq!(P_CT_2 - P_CT_3, N_CT_1);
         assert_eq!(P_CT_2 - N_CT_1, P_CT_3);
         assert_eq!(N_CT_2 - P_CT_1, N_CT_3);
         assert_eq!(N_CT_3 - N_CT_1, N_CT_2);
 
+        assert_eq!(CT_3 - P_CT_2, P_CT_1);
+        assert_eq!(P_CT_3 - CT_2, P_CT_1);
+        assert_eq!(N_CT_2 - CT_1, N_CT_3);
+        assert_eq!(CT_2 - N_CT_1, P_CT_3);
+
         assert_eq!(P_CT_1 * 2i64, P_CT_2);
         assert_eq!(P_CT_1 * -2i64, N_CT_2);
         assert_eq!(N_CT_1 * 2i64, N_CT_2);
         assert_eq!(N_CT_1 * -2i64, P_CT_2);
+
+        assert_eq!(2i64 * P_CT_1, P_CT_2);
+        assert_eq!(-2i64 * P_CT_1, N_CT_2);
 
         assert_eq!(P_CT_1 * 2u64, P_CT_2);
         assert_eq!(N_CT_1 * 2u64, N_CT_2);
@@ -586,6 +603,8 @@ mod tests {
         assert_eq!(N_CT_2 / 2i64, N_CT_1);
         assert_eq!(N_CT_2 / -2i64, P_CT_1);
 
+        assert_eq!(P_CT_2 / N_CT_2, Signed::Negative(1));
+
         assert_eq!(P_CT_2 / 2u64, P_CT_1);
         assert_eq!(N_CT_2 / 2u64, N_CT_1);
 
@@ -593,6 +612,8 @@ mod tests {
         assert_eq!(P_CT_3 % -2i64, P_CT_1);
         assert_eq!(N_CT_3 % 2i64, N_CT_1);
         assert_eq!(N_CT_3 % -2i64, N_CT_1);
+
+        assert_eq!(N_CT_3 % N_CT_2, N_CT_1);
 
         assert_eq!(P_CT_3 % 2u64, P_CT_1);
         assert_eq!(N_CT_3 % 2u64, N_CT_1);
@@ -611,8 +632,11 @@ mod tests {
         assert_eq!(CT_1.opt_checked_add(CT_1), Ok(Some(CT_2)));
         assert_eq!(CT_1.opt_checked_add(Some(CT_1)), Ok(Some(CT_2)));
         assert_eq!(Some(CT_1).opt_checked_add(Some(CT_1)), Ok(Some(CT_2)));
-        assert_eq!(CT_1.opt_checked_add(None), Ok(None));
-        assert_eq!(Some(CT_1).opt_checked_add(None), Ok(None));
+        assert_eq!(CT_1.opt_checked_add(ClockTime::NONE), Ok(None));
+        assert_eq!(Some(CT_1).opt_checked_add(ClockTime::NONE), Ok(None));
+
+        assert_eq!(CT_1.opt_checked_add(P_CT_1), Ok(Some(P_CT_2)));
+        assert_eq!(N_CT_3.opt_checked_add(CT_1), Ok(Some(N_CT_2)));
 
         assert!(ClockTime::MAX.checked_add(CT_1).is_none());
         assert_eq!(
@@ -623,8 +647,8 @@ mod tests {
         assert_eq!(P_CT_1.opt_checked_add(P_CT_1), Ok(Some(P_CT_2)));
         assert_eq!(P_CT_1.opt_checked_add(Some(N_CT_2)), Ok(Some(N_CT_1)));
         assert_eq!(Some(P_CT_1).opt_checked_add(Some(P_CT_1)), Ok(Some(P_CT_2)));
-        assert_eq!(P_CT_1.opt_checked_add(None), Ok(None));
-        assert_eq!(Some(N_CT_1).opt_checked_add(None), Ok(None));
+        assert_eq!(P_CT_1.opt_checked_add(ClockTime::NONE), Ok(None));
+        assert_eq!(Some(N_CT_1).opt_checked_add(ClockTime::NONE), Ok(None));
 
         assert_eq!(
             ClockTime::MAX.into_positive().opt_checked_add(Some(P_CT_1)),
@@ -643,8 +667,11 @@ mod tests {
         assert_eq!(CT_2.opt_checked_sub(Some(CT_1)), Ok(Some(CT_1)));
         assert_eq!(Some(CT_2).opt_checked_sub(CT_1), Ok(Some(CT_1)));
         assert_eq!(Some(CT_2).opt_checked_sub(Some(CT_1)), Ok(Some(CT_1)));
-        assert_eq!(CT_2.opt_checked_sub(None), Ok(None));
-        assert_eq!(Some(CT_2).opt_checked_sub(None), Ok(None));
+        assert_eq!(CT_2.opt_checked_sub(ClockTime::NONE), Ok(None));
+        assert_eq!(Some(CT_2).opt_checked_sub(ClockTime::NONE), Ok(None));
+
+        assert_eq!(P_CT_2.opt_checked_sub(CT_1), Ok(Some(P_CT_1)));
+        assert_eq!(N_CT_2.opt_checked_sub(CT_1), Ok(Some(N_CT_3)));
 
         assert!(CT_1.checked_sub(CT_2).is_none());
         assert_eq!(
@@ -656,6 +683,8 @@ mod tests {
         assert_eq!(Some(N_CT_2).opt_checked_sub(P_CT_1), Ok(Some(N_CT_3)));
 
         assert_eq!(CT_1.checked_mul(2), Some(CT_2));
+        assert_eq!(Some(CT_1).opt_checked_mul(2), Ok(Some(CT_2)));
+        assert_eq!(1u64.opt_checked_mul(Some(CT_2)), Ok(Some(CT_2)));
         assert_eq!(P_CT_1.checked_mul(2), Some(P_CT_2));
         assert_eq!(P_CT_1.checked_mul(-2), Some(N_CT_2));
         assert_eq!(N_CT_1.checked_mul(2), Some(N_CT_2));
@@ -663,6 +692,8 @@ mod tests {
 
         assert_eq!(Some(P_CT_1).opt_checked_mul(-2i64), Ok(Some(N_CT_2)));
         assert_eq!(N_CT_1.opt_checked_mul(2u64), Ok(Some(N_CT_2)));
+
+        assert_eq!((-2i64).opt_checked_mul(Some(P_CT_1)), Ok(Some(N_CT_2)));
 
         assert_eq!(P_CT_1.checked_mul_unsigned(2u64), Some(P_CT_2));
         assert_eq!(N_CT_1.checked_mul_unsigned(2u64), Some(N_CT_2));
@@ -672,6 +703,8 @@ mod tests {
         assert_eq!(P_CT_3.checked_div(-3), Some(N_CT_1));
         assert_eq!(N_CT_3.checked_div(3), Some(N_CT_1));
         assert_eq!(N_CT_3.checked_div(-3), Some(P_CT_1));
+
+        assert_eq!(Some(CT_3).opt_checked_div(CT_3), Ok(Some(1)));
 
         assert_eq!(Some(P_CT_3).opt_checked_div(-3i64), Ok(Some(N_CT_1)));
         assert_eq!(N_CT_3.opt_checked_div(3u64), Ok(Some(N_CT_1)));
@@ -689,6 +722,7 @@ mod tests {
             Some(CT_1).opt_overflowing_add(Some(CT_2)),
             Some((CT_3, false))
         );
+
         assert_eq!(ClockTime::NONE.opt_overflowing_add(CT_2), None);
         assert_eq!(CT_1.opt_overflowing_add(ClockTime::NONE), None);
 
@@ -737,7 +771,10 @@ mod tests {
 
         assert_eq!(CT_1.opt_saturating_add(Some(CT_2)), Some(CT_3));
         assert_eq!(Some(CT_1).opt_saturating_add(Some(CT_2)), Some(CT_3));
-        assert_eq!(Some(CT_1).opt_saturating_add(None), None);
+        assert_eq!(Some(CT_1).opt_saturating_add(ClockTime::NONE), None);
+
+        assert_eq!(P_CT_1.opt_saturating_add(Some(CT_2)), Some(P_CT_3));
+        assert_eq!(Some(CT_1).opt_saturating_add(P_CT_2), Some(P_CT_3));
 
         assert_eq!(ClockTime::MAX.saturating_add(CT_1), ClockTime::MAX);
         assert_eq!(
@@ -756,7 +793,10 @@ mod tests {
 
         assert_eq!(CT_3.opt_saturating_sub(Some(CT_2)), Some(CT_1));
         assert_eq!(Some(CT_3).opt_saturating_sub(Some(CT_2)), Some(CT_1));
-        assert_eq!(Some(CT_3).opt_saturating_sub(None), None);
+        assert_eq!(Some(CT_3).opt_saturating_sub(ClockTime::NONE), None);
+
+        assert_eq!(P_CT_2.opt_saturating_sub(Some(CT_3)), Some(N_CT_1));
+        assert_eq!(Some(CT_3).opt_saturating_sub(P_CT_2), Some(P_CT_1));
 
         assert!(CT_1.saturating_sub(CT_2).is_zero());
         assert_eq!(P_CT_1.saturating_sub(P_CT_2), N_CT_1);
@@ -773,11 +813,17 @@ mod tests {
         assert_eq!(N_CT_1.saturating_mul(2), N_CT_2);
         assert_eq!(N_CT_1.saturating_mul(-2), P_CT_2);
 
+        assert_eq!(Some(N_CT_1).opt_saturating_mul(-2i64), Some(P_CT_2));
+        assert_eq!((-2i64).opt_saturating_mul(Some(N_CT_1)), Some(P_CT_2));
+
         assert_eq!(P_CT_1.saturating_mul_unsigned(2u64), P_CT_2);
         assert_eq!(N_CT_1.saturating_mul_unsigned(2u64), N_CT_2);
 
         assert_eq!(p_ct_max.saturating_mul(2), p_ct_max);
         assert_eq!(n_ct_max.saturating_mul(2), n_ct_max);
+
+        assert_eq!(Some(2i64).opt_saturating_mul(p_ct_max), Some(p_ct_max));
+        assert_eq!(2u64.opt_saturating_mul(Some(n_ct_max)), Some(n_ct_max));
 
         assert_eq!(p_ct_max.saturating_mul_unsigned(2u64), p_ct_max);
         assert_eq!(n_ct_max.saturating_mul_unsigned(2u64), n_ct_max);
@@ -801,7 +847,7 @@ mod tests {
         assert_eq!(CT_3.opt_wrapping_sub(CT_2), Some(CT_1));
         assert_eq!(Some(CT_3).opt_wrapping_sub(CT_2), Some(CT_1));
         assert_eq!(Some(CT_3).opt_wrapping_sub(Some(CT_2)), Some(CT_1));
-        assert_eq!(Some(CT_3).opt_wrapping_sub(None), None);
+        assert_eq!(Some(CT_3).opt_wrapping_sub(ClockTime::NONE), None);
 
         assert_eq!(CT_1.wrapping_sub(CT_2), ClockTime::MAX);
         assert_eq!(
@@ -864,6 +910,9 @@ mod tests {
         assert!(ClockTime::ZERO < CT_3);
         assert!(Some(ClockTime::ZERO) < Some(CT_3));
 
+        assert_eq!(CT_2, CT_2);
+        assert_ne!(CT_3, CT_2);
+
         assert!(ClockTime::ZERO.into_positive() < P_CT_1);
         assert!(ClockTime::ZERO.into_positive() > N_CT_1);
         assert!(P_CT_1 < P_CT_2);
@@ -871,10 +920,34 @@ mod tests {
         assert!(N_CT_1 < P_CT_2);
         assert!(N_CT_3 < N_CT_2);
 
+        assert!(P_CT_1 < CT_2);
+        assert!(CT_1 < P_CT_2);
+        assert!(N_CT_2 < CT_1);
+        assert!(CT_1 > N_CT_2);
+
+        assert_eq!(CT_2, P_CT_2);
+        assert_ne!(N_CT_3, CT_3);
+
         assert_eq!(Some(CT_2).opt_lt(Some(CT_3)), Some(true));
         assert_eq!(Some(CT_3).opt_lt(CT_2), Some(false));
         assert_eq!(Some(CT_2).opt_le(Some(CT_3)), Some(true));
         assert_eq!(Some(CT_3).opt_le(CT_3), Some(true));
+
+        assert_eq!(Some(P_CT_2).opt_lt(Some(P_CT_3)), Some(true));
+        assert_eq!(Some(P_CT_3).opt_lt(P_CT_2), Some(false));
+        assert_eq!(Some(P_CT_2).opt_le(Some(P_CT_3)), Some(true));
+        assert_eq!(Some(P_CT_3).opt_le(P_CT_3), Some(true));
+
+        assert_eq!(Some(P_CT_0).opt_lt(P_CT_NONE), None);
+        assert_eq!(P_CT_NONE.opt_lt(P_CT_0), None);
+
+        assert_eq!(Some(N_CT_3).opt_lt(Some(N_CT_2)), Some(true));
+        assert_eq!(Some(N_CT_2).opt_lt(N_CT_3), Some(false));
+        assert_eq!(Some(N_CT_3).opt_le(Some(N_CT_2)), Some(true));
+        assert_eq!(Some(N_CT_3).opt_le(N_CT_3), Some(true));
+
+        assert_eq!(Some(P_CT_2).opt_lt(N_CT_3), Some(false));
+        assert_eq!(Some(N_CT_3).opt_lt(Some(P_CT_2)), Some(true));
 
         assert!(CT_3 > CT_2);
         assert!(Some(CT_3) > Some(CT_2));
@@ -890,6 +963,20 @@ mod tests {
         assert_eq!(Some(CT_3).opt_gt(Some(CT_2)), Some(true));
         assert_eq!(Some(CT_3).opt_ge(Some(CT_2)), Some(true));
         assert_eq!(Some(CT_3).opt_ge(CT_3), Some(true));
+
+        assert_eq!(Some(P_CT_3).opt_gt(Some(P_CT_2)), Some(true));
+        assert_eq!(Some(P_CT_3).opt_ge(Some(P_CT_2)), Some(true));
+        assert_eq!(Some(P_CT_3).opt_ge(P_CT_3), Some(true));
+
+        assert_eq!(Some(P_CT_0).opt_gt(P_CT_NONE), None);
+        assert_eq!(P_CT_NONE.opt_gt(P_CT_0), None);
+
+        assert_eq!(Some(N_CT_3).opt_gt(Some(N_CT_2)), Some(false));
+        assert_eq!(Some(N_CT_3).opt_ge(Some(N_CT_2)), Some(false));
+        assert_eq!(Some(N_CT_3).opt_ge(N_CT_3), Some(true));
+
+        assert_eq!(Some(P_CT_2).opt_gt(N_CT_3), Some(true));
+        assert_eq!(Some(N_CT_3).opt_gt(Some(P_CT_2)), Some(false));
 
         assert!(!(ClockTime::NONE < None));
         assert!(!(ClockTime::NONE > None));
@@ -914,11 +1001,23 @@ mod tests {
         assert_eq!(ClockTime::NONE.opt_min(Some(CT_2)), None);
         assert_eq!(Some(CT_3).opt_min(ClockTime::NONE), None);
 
+        assert_eq!(P_CT_3.opt_min(P_CT_2), Some(P_CT_2));
+        assert_eq!(P_CT_2.opt_min(P_CT_3), Some(P_CT_2));
+        assert_eq!(N_CT_3.opt_min(N_CT_2), Some(N_CT_3));
+        assert_eq!(N_CT_2.opt_min(N_CT_3), Some(N_CT_3));
+        assert_eq!(P_CT_2.opt_min(N_CT_3), Some(N_CT_3));
+
         assert_eq!(CT_3.opt_max(CT_2), Some(CT_3));
         assert_eq!(CT_3.opt_max(Some(CT_2)), Some(CT_3));
         assert_eq!(Some(CT_3).opt_max(Some(CT_2)), Some(CT_3));
         assert_eq!(ClockTime::NONE.opt_max(Some(CT_2)), None);
         assert_eq!(Some(CT_3).opt_max(ClockTime::NONE), None);
+
+        assert_eq!(P_CT_3.opt_max(P_CT_2), Some(P_CT_3));
+        assert_eq!(P_CT_2.opt_max(P_CT_3), Some(P_CT_3));
+        assert_eq!(N_CT_3.opt_max(N_CT_2), Some(N_CT_2));
+        assert_eq!(N_CT_2.opt_max(N_CT_3), Some(N_CT_2));
+        assert_eq!(P_CT_2.opt_max(N_CT_3), Some(P_CT_2));
     }
 
     #[test]

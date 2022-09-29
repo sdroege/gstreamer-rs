@@ -232,10 +232,6 @@ impl_unsigned_int_into_signed!(u64);
 impl_signed_ops!(u64);
 impl_signed_div_mul!(u64);
 
-impl_unsigned_int_into_signed!(usize);
-impl_signed_ops!(usize);
-impl_signed_div_mul!(usize);
-
 impl_unsigned_int_into_signed!(u32);
 impl_signed_ops!(u32);
 impl_signed_div_mul!(u32);
