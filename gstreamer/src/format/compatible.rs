@@ -9,7 +9,7 @@ use super::{FormattedValue, SpecificFormattedValue};
 /// This trait is auto-implemented based on [`FormattedValue`]s additional traits
 /// such as [`SpecificFormattedValue`].
 ///
-/// # Example:
+/// # Example
 ///
 /// Consider the following function:
 ///
