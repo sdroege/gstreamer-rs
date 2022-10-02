@@ -46,7 +46,8 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
     fn object_unreffed(&self, ts: u64, object: &Object, new_refcount: i32) {}
     fn pad_link_post(&self, ts: u64, src: &Pad, sink: &Pad, result: PadLinkReturn) {}
     fn pad_link_pre(&self, ts: u64, src: &Pad, sink: &Pad) {}
-    fn pad_pull_range_post(&self, ts: u64, pad: &Pad, buffer: &Buffer, result: FlowReturn) {}
+    fn pad_pull_range_post(&self, ts: u64, pad: &Pad, buffer: Option<&Buffer>, result: FlowReturn) {
+    }
     fn pad_pull_range_pre(&self, ts: u64, pad: &Pad, offset: u64, size: u32) {}
     fn pad_push_event_post(&self, ts: u64, pad: &Pad, success: bool) {}
     fn pad_push_event_pre(&self, ts: u64, pad: &Pad, event: &Event) {}
@@ -229,8 +230,8 @@ define_tracer_hooks! {
     };
     PadPullRangePost("pad-pull-range-post") = |this, ts, p: *mut ffi::GstPad, b: *mut ffi::GstBuffer, r: ffi::GstFlowReturn| {
         let p = Pad::from_glib_borrow(p);
-        let b = Buffer::from_glib_borrow(b);
-        this.pad_pull_range_post(ts, &p, &b, FlowReturn::from_glib(r))
+        let b = Option::<Buffer>::from_glib_borrow(b);
+        this.pad_pull_range_post(ts, &p, b.as_ref().as_ref(), FlowReturn::from_glib(r))
     };
     PadPullRangePre("pad-pull-range-pre") = |this, ts, p: *mut ffi::GstPad, o: u64, s: libc::c_uint| {
         let p = Pad::from_glib_borrow(p);
