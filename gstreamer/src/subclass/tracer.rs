@@ -1,10 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use super::prelude::*;
-use crate::ffi;
 use crate::{
-    Bin, Buffer, BufferList, Element, Event, FlowReturn, Message, MiniObject, Object, Pad,
-    PadLinkReturn, Query, StateChange, StateChangeReturn, Tracer,
+    ffi, Bin, Buffer, BufferList, Element, Event, FlowError, FlowSuccess, Message, MiniObject,
+    Object, Pad, PadLinkError, PadLinkSuccess, Query, StateChange, StateChangeError,
+    StateChangeSuccess, Tracer,
 };
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
@@ -22,7 +22,7 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
         ts: u64,
         element: &Element,
         change: StateChange,
-        result: StateChangeReturn,
+        result: Result<StateChangeSuccess, StateChangeError>,
     ) {
     }
     fn element_change_state_pre(&self, ts: u64, element: &Element, change: StateChange) {}
@@ -44,28 +44,34 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
     fn object_destroyed(&self, ts: u64, object: std::ptr::NonNull<ffi::GstObject>) {}
     fn object_reffed(&self, ts: u64, object: &Object, new_refcount: i32) {}
     fn object_unreffed(&self, ts: u64, object: &Object, new_refcount: i32) {}
-    fn pad_link_post(&self, ts: u64, src: &Pad, sink: &Pad, result: PadLinkReturn) {}
-    fn pad_link_pre(&self, ts: u64, src: &Pad, sink: &Pad) {}
-    fn pad_pull_range_post(&self, ts: u64, pad: &Pad, buffer: Option<&Buffer>, result: FlowReturn) {
+    fn pad_link_post(
+        &self,
+        ts: u64,
+        src: &Pad,
+        sink: &Pad,
+        result: Result<PadLinkSuccess, PadLinkError>,
+    ) {
     }
+    fn pad_link_pre(&self, ts: u64, src: &Pad, sink: &Pad) {}
+    fn pad_pull_range_post(&self, ts: u64, pad: &Pad, result: Result<&Buffer, FlowError>) {}
     fn pad_pull_range_pre(&self, ts: u64, pad: &Pad, offset: u64, size: u32) {}
     fn pad_push_event_post(&self, ts: u64, pad: &Pad, success: bool) {}
     fn pad_push_event_pre(&self, ts: u64, pad: &Pad, event: &Event) {}
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    fn pad_chain_list_post(&self, ts: u64, pad: &Pad, result: FlowReturn) {}
+    fn pad_chain_list_post(&self, ts: u64, pad: &Pad, result: Result<FlowSuccess, FlowError>) {}
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn pad_chain_list_pre(&self, ts: u64, pad: &Pad, buffer_list: &BufferList) {}
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    fn pad_chain_post(&self, ts: u64, pad: &Pad, result: FlowReturn) {}
+    fn pad_chain_post(&self, ts: u64, pad: &Pad, result: Result<FlowSuccess, FlowError>) {}
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     fn pad_chain_pre(&self, ts: u64, pad: &Pad, buffer: &Buffer) {}
-    fn pad_push_list_post(&self, ts: u64, pad: &Pad, result: FlowReturn) {}
+    fn pad_push_list_post(&self, ts: u64, pad: &Pad, result: Result<FlowSuccess, FlowError>) {}
     fn pad_push_list_pre(&self, ts: u64, pad: &Pad, buffer_list: &BufferList) {}
-    fn pad_push_post(&self, ts: u64, pad: &Pad, result: FlowReturn) {}
+    fn pad_push_post(&self, ts: u64, pad: &Pad, result: Result<FlowSuccess, FlowError>) {}
     fn pad_push_pre(&self, ts: u64, pad: &Pad, buffer: &Buffer) {}
     fn pad_query_post(&self, ts: u64, pad: &Pad, query: &Query, success: bool) {}
     fn pad_query_pre(&self, ts: u64, pad: &Pad, query: &Query) {}
@@ -161,7 +167,7 @@ define_tracer_hooks! {
     };
     ElementChangeStatePost("element-change-state-post") = |this, ts, e: *mut ffi::GstElement, c: ffi::GstStateChange, r: ffi::GstStateChangeReturn| {
         let e = Element::from_glib_borrow(e);
-        this.element_change_state_post(ts, &e, StateChange::from_glib(c), StateChangeReturn::from_glib(r))
+        this.element_change_state_post(ts, &e, StateChange::from_glib(c), try_from_glib(r))
     };
     ElementChangeStatePre("element-change-state-pre") = |this, ts, e: *mut ffi::GstElement, c: ffi::GstStateChange| {
         let e = Element::from_glib_borrow(e);
@@ -221,7 +227,7 @@ define_tracer_hooks! {
     PadLinkPost("pad-link-post") = |this, ts, src: *mut ffi::GstPad, sink: *mut ffi::GstPad, r: ffi::GstPadLinkReturn| {
         let src = Pad::from_glib_borrow(src);
         let sink = Pad::from_glib_borrow(sink);
-        this.pad_link_post(ts, &src, &sink, PadLinkReturn::from_glib(r))
+        this.pad_link_post(ts, &src, &sink, try_from_glib(r))
     };
     PadLinkPre("pad-link-pre") = |this, ts, src: *mut ffi::GstPad, sink: *mut ffi::GstPad| {
         let src = Pad::from_glib_borrow(src);
@@ -230,8 +236,15 @@ define_tracer_hooks! {
     };
     PadPullRangePost("pad-pull-range-post") = |this, ts, p: *mut ffi::GstPad, b: *mut ffi::GstBuffer, r: ffi::GstFlowReturn| {
         let p = Pad::from_glib_borrow(p);
-        let b = Option::<Buffer>::from_glib_borrow(b);
-        this.pad_pull_range_post(ts, &p, b.as_ref().as_ref(), FlowReturn::from_glib(r))
+        let res: Result::<FlowSuccess, FlowError> = try_from_glib(r);
+        match res {
+            Ok(_) => {
+                this.pad_pull_range_post(ts, &p, Ok(&from_glib_borrow(b)))
+            }
+            Err(err) => {
+                this.pad_pull_range_post(ts, &p, Err(err))
+            }
+        }
     };
     PadPullRangePre("pad-pull-range-pre") = |this, ts, p: *mut ffi::GstPad, o: u64, s: libc::c_uint| {
         let p = Pad::from_glib_borrow(p);
@@ -248,7 +261,7 @@ define_tracer_hooks! {
     };
     PadPushListPost("pad-push-list-post") = |this, ts, p: *mut ffi::GstPad, r: ffi::GstFlowReturn| {
         let p = Pad::from_glib_borrow(p);
-        this.pad_push_list_post(ts, &p, FlowReturn::from_glib(r))
+        this.pad_push_list_post(ts, &p, try_from_glib(r))
     };
     PadPushListPre("pad-push-list-pre") = |this, ts, p: *mut ffi::GstPad, bl: *mut ffi::GstBufferList| {
         let p = Pad::from_glib_borrow(p);
@@ -257,7 +270,7 @@ define_tracer_hooks! {
     };
     PadPushPost("pad-push-post") = |this, ts, p: *mut ffi::GstPad, r: ffi::GstFlowReturn| {
         let p = Pad::from_glib_borrow(p);
-        this.pad_push_post(ts, &p, FlowReturn::from_glib(r))
+        this.pad_push_post(ts, &p, try_from_glib(r))
     };
     PadPushPre("pad-push-pre") = |this, ts, p: *mut ffi::GstPad, b: *mut ffi::GstBuffer| {
         let p = Pad::from_glib_borrow(p);
@@ -268,7 +281,7 @@ define_tracer_hooks! {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     PadChainListPost("pad-chain-list-post") = |this, ts, p: *mut ffi::GstPad, r: ffi::GstFlowReturn| {
         let p = Pad::from_glib_borrow(p);
-        this.pad_chain_list_post(ts, &p, FlowReturn::from_glib(r))
+        this.pad_chain_list_post(ts, &p, try_from_glib(r))
     };
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
@@ -281,7 +294,7 @@ define_tracer_hooks! {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     PadChainPost("pad-chain-post") = |this, ts, p: *mut ffi::GstPad, r: ffi::GstFlowReturn| {
         let p = Pad::from_glib_borrow(p);
-        this.pad_chain_post(ts, &p, FlowReturn::from_glib(r))
+        this.pad_chain_post(ts, &p, try_from_glib(r))
     };
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
