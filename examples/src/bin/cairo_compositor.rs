@@ -422,7 +422,7 @@ mod cairo_compositor {
     impl CairoCompositor {
         // Creates a new instance of our compositor with the given name.
         pub fn new(name: Option<&str>) -> Self {
-            glib::Object::new(&[("name", &name)]).expect("Failed to create cairo compositor")
+            glib::Object::new(&[("name", &name)])
         }
     }
 

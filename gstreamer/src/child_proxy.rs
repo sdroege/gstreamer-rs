@@ -15,32 +15,11 @@ pub trait ChildProxyExtManual: 'static {
     #[doc(alias = "get_child_property")]
     #[doc(alias = "gst_child_proxy_get")]
     fn child_property_value(&self, name: &str) -> glib::Value;
-    #[doc(alias = "get_child_property")]
-    #[doc(alias = "gst_child_proxy_get")]
-    fn try_child_property<V: for<'b> glib::value::FromValue<'b> + 'static>(
-        &self,
-        name: &str,
-    ) -> Result<V, glib::BoolError>;
-    #[doc(alias = "get_child_property")]
-    #[doc(alias = "gst_child_proxy_get")]
-    fn try_child_property_value(&self, name: &str) -> Result<glib::Value, glib::BoolError>;
 
     #[doc(alias = "gst_child_proxy_set")]
     fn set_child_property<V: glib::ToValue>(&self, name: &str, value: V);
     #[doc(alias = "gst_child_proxy_set_property")]
     fn set_child_property_from_value(&self, name: &str, value: &glib::Value);
-    #[doc(alias = "gst_child_proxy_set")]
-    fn try_set_child_property<V: glib::ToValue>(
-        &self,
-        name: &str,
-        value: V,
-    ) -> Result<(), glib::BoolError>;
-    #[doc(alias = "gst_child_proxy_set_property")]
-    fn try_set_child_property_from_value(
-        &self,
-        name: &str,
-        value: &glib::Value,
-    ) -> Result<(), glib::BoolError>;
 }
 
 impl<O: IsA<ChildProxy>> ChildProxyExtManual for O {
@@ -62,54 +41,27 @@ impl<O: IsA<ChildProxy>> ChildProxyExtManual for O {
         }
     }
 
+    #[track_caller]
     fn child_property<V: for<'b> glib::value::FromValue<'b> + 'static>(&self, name: &str) -> V {
         let (child, pspec) = self.lookup(name).unwrap();
         child.property(pspec.name())
     }
 
+    #[track_caller]
     fn child_property_value(&self, name: &str) -> glib::Value {
         let (child, pspec) = self.lookup(name).unwrap();
         child.property_value(pspec.name())
     }
 
-    fn try_child_property<V: for<'b> glib::value::FromValue<'b> + 'static>(
-        &self,
-        name: &str,
-    ) -> Result<V, glib::BoolError> {
-        let (child, pspec) = self.lookup(name)?;
-        child.try_property(pspec.name())
-    }
-
-    fn try_child_property_value(&self, name: &str) -> Result<glib::Value, glib::BoolError> {
-        let (child, pspec) = self.lookup(name)?;
-        child.try_property_value(pspec.name())
-    }
-
+    #[track_caller]
     fn set_child_property<V: glib::ToValue>(&self, name: &str, value: V) {
         let (child, pspec) = self.lookup(name).unwrap();
         child.set_property(pspec.name(), value)
     }
 
+    #[track_caller]
     fn set_child_property_from_value(&self, name: &str, value: &glib::Value) {
         let (child, pspec) = self.lookup(name).unwrap();
         child.set_property_from_value(pspec.name(), value)
-    }
-
-    fn try_set_child_property<V: glib::ToValue>(
-        &self,
-        name: &str,
-        value: V,
-    ) -> Result<(), glib::BoolError> {
-        let (child, pspec) = self.lookup(name)?;
-        child.try_set_property(pspec.name(), value)
-    }
-
-    fn try_set_child_property_from_value(
-        &self,
-        name: &str,
-        value: &glib::Value,
-    ) -> Result<(), glib::BoolError> {
-        let (child, pspec) = self.lookup(name)?;
-        child.try_set_property_from_value(pspec.name(), value)
     }
 }

@@ -223,7 +223,7 @@ mod fir_filter {
     impl FirFilter {
         // Creates a new instance of our filter with the given name
         pub fn new(name: Option<&str>) -> FirFilter {
-            glib::Object::new(&[("name", &name)]).expect("Failed to create fir filter")
+            glib::Object::new(&[("name", &name)])
         }
 
         // Sets the coefficients by getting access to the private

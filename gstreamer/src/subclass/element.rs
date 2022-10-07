@@ -782,7 +782,7 @@ mod tests {
 
     impl TestElement {
         pub fn new(name: Option<&str>) -> Self {
-            glib::Object::new(&[("name", &name)]).unwrap()
+            glib::Object::new(&[("name", &name)])
         }
     }
 

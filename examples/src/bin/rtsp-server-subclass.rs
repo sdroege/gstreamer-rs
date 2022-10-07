@@ -153,7 +153,7 @@ mod media_factory {
     impl Default for Factory {
         // Creates a new instance of our factory
         fn default() -> Factory {
-            glib::Object::new(&[]).expect("Failed to create factory")
+            glib::Object::new(&[])
         }
     }
 }
@@ -265,7 +265,7 @@ mod server {
     impl Default for Server {
         // Creates a new instance of our factory
         fn default() -> Server {
-            glib::Object::new(&[]).expect("Failed to create server")
+            glib::Object::new(&[])
         }
     }
 }
@@ -313,7 +313,7 @@ mod client {
     impl Default for Client {
         // Creates a new instance of our factory
         fn default() -> Client {
-            glib::Object::new(&[]).expect("Failed to create client")
+            glib::Object::new(&[])
         }
     }
 }
@@ -361,7 +361,7 @@ mod mount_points {
     impl Default for MountPoints {
         // Creates a new instance of our factory
         fn default() -> Self {
-            glib::Object::new(&[]).expect("Failed to create mount points")
+            glib::Object::new(&[])
         }
     }
 }

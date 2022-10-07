@@ -52,7 +52,7 @@ mod mirror {
 
     impl GLMirrorFilter {
         pub fn new(name: Option<&str>) -> Self {
-            glib::Object::new(&[("name", &name)]).expect("Failed to create GL Mirror Filter Object")
+            glib::Object::new(&[("name", &name)])
         }
     }
 

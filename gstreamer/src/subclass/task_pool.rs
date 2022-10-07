@@ -313,7 +313,7 @@ mod tests {
 
     impl Default for TestPool {
         fn default() -> Self {
-            glib::Object::new(&[]).unwrap()
+            glib::Object::new(&[])
         }
     }
 

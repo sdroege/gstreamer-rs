@@ -52,7 +52,7 @@ fn create_receiver_pipeline(
 
     let pipeline = gst::Pipeline::new(None);
     let src = gst::ElementFactory::make("appsrc", None).map_err(|_| MissingElement("appsrc"))?;
-    let filter = video_filter::FdMemoryFadeInVideoFilter::new()?.upcast::<gst::Element>();
+    let filter = video_filter::FdMemoryFadeInVideoFilter::default().upcast::<gst::Element>();
     let convert = gst::ElementFactory::make("videoconvert", None)
         .map_err(|_| MissingElement("videoconvert"))?;
     let queue = gst::ElementFactory::make("queue", None).map_err(|_| MissingElement("queue"))?;
@@ -376,15 +376,13 @@ fn main() {
 // The purpose of this custom video filter is to demonstrate how
 // the file descriptor of a FdMemory can be accessed.
 mod video_filter {
-    use anyhow::Error;
-
     glib::wrapper! {
         pub struct FdMemoryFadeInVideoFilter(ObjectSubclass<imp::FdMemoryFadeInVideoFilter>) @extends gst_video::VideoFilter, gst_base::BaseTransform, gst::Element, gst::Object;
     }
 
-    impl FdMemoryFadeInVideoFilter {
-        pub fn new() -> Result<Self, Error> {
-            Ok(glib::Object::builder().build()?)
+    impl Default for FdMemoryFadeInVideoFilter {
+        fn default() -> Self {
+            glib::Object::builder().build()
         }
     }
     mod imp {
