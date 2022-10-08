@@ -151,7 +151,7 @@ impl<T: ClockImpl> ClockImplExt for T {
                         .map(|f| {
                             f(
                                 clock.unsafe_cast_ref::<Clock>().to_glib_none().0,
-                                id.to_glib_none().0 as *mut ffi::GstClockEntry,
+                                id.as_ptr() as *mut ffi::GstClockEntry,
                                 &mut jitter,
                             )
                         })
@@ -176,7 +176,7 @@ impl<T: ClockImpl> ClockImplExt for T {
                     .map(|f| {
                         f(
                             clock.unsafe_cast_ref::<Clock>().to_glib_none().0,
-                            id.to_glib_none().0 as *mut ffi::GstClockEntry,
+                            id.as_ptr() as *mut ffi::GstClockEntry,
                         )
                     })
                     .unwrap_or(ffi::GST_CLOCK_UNSUPPORTED),
@@ -191,7 +191,7 @@ impl<T: ClockImpl> ClockImplExt for T {
             if let Some(func) = (*parent_class).unschedule {
                 func(
                     clock.unsafe_cast_ref::<Clock>().to_glib_none().0,
-                    id.to_glib_none().0 as *mut ffi::GstClockEntry,
+                    id.as_ptr() as *mut ffi::GstClockEntry,
                 );
             }
         }
@@ -209,14 +209,14 @@ impl<T: ClockImpl> ClockImplExt for T {
                 assert!(id.uses_clock(&clock));
             } else {
                 unsafe {
-                    let ptr: *mut ffi::GstClockEntry = id.to_glib_none().0 as *mut _;
+                    let ptr = id.as_ptr() as *mut ffi::GstClockEntry;
                     assert_eq!((*ptr).clock, clock.as_ref().to_glib_none().0);
                 }
             }
         }
 
         unsafe {
-            let ptr: *mut ffi::GstClockEntry = id.to_glib_none().0 as *mut _;
+            let ptr = id.as_ptr() as *mut ffi::GstClockEntry;
             if let Some(func) = (*ptr).func {
                 func(
                     clock.as_ref().to_glib_none().0,

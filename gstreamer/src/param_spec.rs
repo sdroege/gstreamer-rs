@@ -72,7 +72,7 @@ impl ParamSpecFraction {
 
     pub fn minimum(&self) -> crate::Fraction {
         unsafe {
-            let ptr = self.to_glib_none().0;
+            let ptr = self.as_ptr();
 
             crate::Fraction::new((*ptr).min_num, (*ptr).min_den)
         }
@@ -80,7 +80,7 @@ impl ParamSpecFraction {
 
     pub fn maximum(&self) -> crate::Fraction {
         unsafe {
-            let ptr = self.to_glib_none().0;
+            let ptr = self.as_ptr();
 
             crate::Fraction::new((*ptr).max_num, (*ptr).max_den)
         }
@@ -88,14 +88,19 @@ impl ParamSpecFraction {
 
     pub fn default_value(&self) -> crate::Fraction {
         unsafe {
-            let ptr = self.to_glib_none().0;
+            let ptr = self.as_ptr();
 
             crate::Fraction::new((*ptr).def_num, (*ptr).def_den)
         }
     }
 
     pub fn upcast(self) -> ParamSpec {
-        unsafe { from_glib_full(self.to_glib_full() as *mut gobject_ffi::GParamSpec) }
+        unsafe {
+            from_glib_full(
+                IntoGlibPtr::<*mut ffi::GstParamSpecFraction>::into_glib_ptr(self)
+                    as *mut gobject_ffi::GParamSpec,
+            )
+        }
     }
 
     pub fn upcast_ref(&self) -> &ParamSpec {
@@ -238,14 +243,19 @@ impl ParamSpecArray {
 
     pub fn element_spec(&self) -> Option<ParamSpec> {
         unsafe {
-            let ptr = self.to_glib_none().0;
+            let ptr = self.as_ptr();
 
             from_glib_none((*ptr).element_spec)
         }
     }
 
     pub fn upcast(self) -> ParamSpec {
-        unsafe { from_glib_full(self.to_glib_full() as *mut gobject_ffi::GParamSpec) }
+        unsafe {
+            from_glib_full(
+                IntoGlibPtr::<*mut ffi::GstParamSpecArray>::into_glib_ptr(self)
+                    as *mut gobject_ffi::GParamSpec,
+            )
+        }
     }
 
     pub fn upcast_ref(&self) -> &ParamSpec {

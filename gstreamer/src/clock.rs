@@ -88,7 +88,7 @@ impl ClockId {
     #[doc(alias = "GST_CLOCK_ENTRY_TYPE")]
     pub fn type_(&self) -> ClockEntryType {
         unsafe {
-            let ptr: *mut ffi::GstClockEntry = self.to_glib_none().0 as *mut _;
+            let ptr = self.as_ptr() as *mut ffi::GstClockEntry;
             from_glib((*ptr).type_)
         }
     }
@@ -97,7 +97,7 @@ impl ClockId {
     #[doc(alias = "GST_CLOCK_ENTRY_STATUS")]
     pub fn status(&self) -> &AtomicClockReturn {
         unsafe {
-            let ptr: *mut ffi::GstClockEntry = self.to_glib_none().0 as *mut _;
+            let ptr = self.as_ptr() as *mut ffi::GstClockEntry;
             &*((&(*ptr).status) as *const i32 as *const AtomicClockReturn)
         }
     }
@@ -249,7 +249,7 @@ impl PeriodicClockId {
     #[doc(alias = "GST_CLOCK_ENTRY_INTERVAL")]
     pub fn interval(&self) -> ClockTime {
         unsafe {
-            let ptr: *mut ffi::GstClockEntry = self.to_glib_none().0 as *mut _;
+            let ptr = self.as_ptr() as *mut ffi::GstClockEntry;
             try_from_glib((*ptr).interval).expect("undefined interval")
         }
     }
