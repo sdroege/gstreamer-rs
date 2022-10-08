@@ -13,37 +13,34 @@ use crate::VideoAggregator;
 use crate::VideoAggregatorPad;
 
 pub trait VideoAggregatorPadImpl: VideoAggregatorPadImplExt + AggregatorPadImpl {
-    fn update_conversion_info(&self, pad: &Self::Type) {
-        self.parent_update_conversion_info(pad)
+    fn update_conversion_info(&self) {
+        self.parent_update_conversion_info()
     }
 
     fn prepare_frame(
         &self,
-        pad: &Self::Type,
         aggregator: &crate::VideoAggregator,
         token: &AggregateFramesToken,
         buffer: &gst::Buffer,
     ) -> Option<crate::VideoFrame<crate::video_frame::Readable>> {
-        self.parent_prepare_frame(pad, aggregator, token, buffer)
+        self.parent_prepare_frame(aggregator, token, buffer)
     }
 
     fn clean_frame(
         &self,
-        pad: &Self::Type,
         aggregator: &crate::VideoAggregator,
         token: &AggregateFramesToken,
         frame: Option<crate::VideoFrame<crate::video_frame::Readable>>,
     ) {
-        self.parent_clean_frame(pad, aggregator, token, frame)
+        self.parent_clean_frame(aggregator, token, frame)
     }
 }
 
 pub trait VideoAggregatorPadImplExt: ObjectSubclass {
-    fn parent_update_conversion_info(&self, pad: &Self::Type);
+    fn parent_update_conversion_info(&self);
 
     fn parent_prepare_frame(
         &self,
-        pad: &Self::Type,
         aggregator: &crate::VideoAggregator,
         token: &AggregateFramesToken,
         buffer: &gst::Buffer,
@@ -51,7 +48,6 @@ pub trait VideoAggregatorPadImplExt: ObjectSubclass {
 
     fn parent_clean_frame(
         &self,
-        pad: &Self::Type,
         aggregator: &crate::VideoAggregator,
         token: &AggregateFramesToken,
         frame: Option<crate::VideoFrame<crate::video_frame::Readable>>,
@@ -59,19 +55,22 @@ pub trait VideoAggregatorPadImplExt: ObjectSubclass {
 }
 
 impl<T: VideoAggregatorPadImpl> VideoAggregatorPadImplExt for T {
-    fn parent_update_conversion_info(&self, pad: &Self::Type) {
+    fn parent_update_conversion_info(&self) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoAggregatorPadClass;
             if let Some(f) = (*parent_class).update_conversion_info {
-                f(pad.unsafe_cast_ref::<VideoAggregatorPad>().to_glib_none().0);
+                f(self
+                    .instance()
+                    .unsafe_cast_ref::<VideoAggregatorPad>()
+                    .to_glib_none()
+                    .0);
             }
         }
     }
 
     fn parent_prepare_frame(
         &self,
-        pad: &Self::Type,
         aggregator: &crate::VideoAggregator,
         token: &AggregateFramesToken,
         buffer: &gst::Buffer,
@@ -88,7 +87,10 @@ impl<T: VideoAggregatorPadImpl> VideoAggregatorPadImplExt for T {
                 let mut prepared_frame = mem::MaybeUninit::zeroed();
 
                 f(
-                    pad.unsafe_cast_ref::<VideoAggregatorPad>().to_glib_none().0,
+                    self.instance()
+                        .unsafe_cast_ref::<VideoAggregatorPad>()
+                        .to_glib_none()
+                        .0,
                     aggregator.to_glib_none().0,
                     buffer.as_mut_ptr(),
                     prepared_frame.as_mut_ptr(),
@@ -108,7 +110,6 @@ impl<T: VideoAggregatorPadImpl> VideoAggregatorPadImplExt for T {
 
     fn parent_clean_frame(
         &self,
-        pad: &Self::Type,
         aggregator: &crate::VideoAggregator,
         token: &AggregateFramesToken,
         frame: Option<crate::VideoFrame<crate::video_frame::Readable>>,
@@ -129,7 +130,10 @@ impl<T: VideoAggregatorPadImpl> VideoAggregatorPadImplExt for T {
                 };
 
                 f(
-                    pad.unsafe_cast_ref::<VideoAggregatorPad>().to_glib_none().0,
+                    self.instance()
+                        .unsafe_cast_ref::<VideoAggregatorPad>()
+                        .to_glib_none()
+                        .0,
                     aggregator.to_glib_none().0,
                     &mut prepared_frame,
                 );
@@ -154,9 +158,8 @@ unsafe extern "C" fn video_aggregator_pad_update_conversion_info<T: VideoAggrega
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<VideoAggregatorPad> = from_glib_borrow(ptr);
 
-    imp.update_conversion_info(wrap.unsafe_cast_ref());
+    imp.update_conversion_info();
 }
 
 unsafe extern "C" fn video_aggregator_pad_prepare_frame<T: VideoAggregatorPadImpl>(
@@ -167,17 +170,11 @@ unsafe extern "C" fn video_aggregator_pad_prepare_frame<T: VideoAggregatorPadImp
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<VideoAggregatorPad> = from_glib_borrow(ptr);
     let aggregator: Borrowed<VideoAggregator> = from_glib_borrow(aggregator);
 
     let token = AggregateFramesToken(&*aggregator);
 
-    match imp.prepare_frame(
-        wrap.unsafe_cast_ref(),
-        &aggregator,
-        &token,
-        &from_glib_borrow(buffer),
-    ) {
+    match imp.prepare_frame(&aggregator, &token, &from_glib_borrow(buffer)) {
         Some(frame) => {
             *prepared_frame = frame.into_raw();
         }
@@ -196,7 +193,6 @@ unsafe extern "C" fn video_aggregator_pad_clean_frame<T: VideoAggregatorPadImpl>
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<VideoAggregatorPad> = from_glib_borrow(ptr);
     let aggregator: Borrowed<VideoAggregator> = from_glib_borrow(aggregator);
 
     let token = AggregateFramesToken(&*aggregator);
@@ -209,5 +205,5 @@ unsafe extern "C" fn video_aggregator_pad_clean_frame<T: VideoAggregatorPadImpl>
         Some(frame)
     };
 
-    imp.clean_frame(wrap.unsafe_cast_ref(), &aggregator, &token, frame);
+    imp.clean_frame(&aggregator, &token, frame);
 }

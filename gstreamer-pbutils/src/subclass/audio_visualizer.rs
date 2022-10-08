@@ -10,61 +10,45 @@ use crate::AudioVisualizer;
 pub struct AudioVisualizerSetupToken<'a>(pub(crate) &'a AudioVisualizer);
 
 pub trait AudioVisualizerImpl: AudioVisualizerImplExt + ElementImpl {
-    fn setup(
-        &self,
-        element: &Self::Type,
-        token: &AudioVisualizerSetupToken,
-    ) -> Result<(), LoggableError> {
-        self.parent_setup(element, token)
+    fn setup(&self, token: &AudioVisualizerSetupToken) -> Result<(), LoggableError> {
+        self.parent_setup(token)
     }
 
     fn render(
         &self,
-        element: &Self::Type,
         audio_buffer: &gst::BufferRef,
         video_frame: &mut gst_video::VideoFrameRef<&mut gst::BufferRef>,
     ) -> Result<(), LoggableError> {
-        self.parent_render(element, audio_buffer, video_frame)
+        self.parent_render(audio_buffer, video_frame)
     }
 
     fn decide_allocation(
         &self,
-        element: &Self::Type,
         query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError> {
-        self.parent_decide_allocation(element, query)
+        self.parent_decide_allocation(query)
     }
 }
 
 pub trait AudioVisualizerImplExt: ObjectSubclass {
-    fn parent_setup(
-        &self,
-        element: &Self::Type,
-        token: &AudioVisualizerSetupToken,
-    ) -> Result<(), LoggableError>;
+    fn parent_setup(&self, token: &AudioVisualizerSetupToken) -> Result<(), LoggableError>;
 
     fn parent_render(
         &self,
-        element: &Self::Type,
         audio_buffer: &gst::BufferRef,
         video_frame: &mut gst_video::VideoFrameRef<&mut gst::BufferRef>,
     ) -> Result<(), LoggableError>;
 
     fn parent_decide_allocation(
         &self,
-        element: &Self::Type,
         query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError>;
 }
 
 impl<T: AudioVisualizerImpl> AudioVisualizerImplExt for T {
-    fn parent_setup(
-        &self,
-        element: &Self::Type,
-        token: &AudioVisualizerSetupToken,
-    ) -> Result<(), LoggableError> {
+    fn parent_setup(&self, token: &AudioVisualizerSetupToken) -> Result<(), LoggableError> {
         assert_eq!(
-            element.as_ptr() as *mut ffi::GstAudioVisualizer,
+            self.instance().as_ptr() as *mut ffi::GstAudioVisualizer,
             token.0.as_ptr() as *mut ffi::GstAudioVisualizer
         );
 
@@ -75,7 +59,8 @@ impl<T: AudioVisualizerImpl> AudioVisualizerImplExt for T {
                 .setup
                 .map(|f| {
                     result_from_gboolean!(
-                        f(element
+                        f(self
+                            .instance()
                             .unsafe_cast_ref::<AudioVisualizer>()
                             .to_glib_none()
                             .0,),
@@ -89,7 +74,6 @@ impl<T: AudioVisualizerImpl> AudioVisualizerImplExt for T {
 
     fn parent_render(
         &self,
-        element: &Self::Type,
         audio_buffer: &gst::BufferRef,
         video_frame: &mut gst_video::VideoFrameRef<&mut gst::BufferRef>,
     ) -> Result<(), LoggableError> {
@@ -101,7 +85,7 @@ impl<T: AudioVisualizerImpl> AudioVisualizerImplExt for T {
                 .map(|f| {
                     result_from_gboolean!(
                         f(
-                            element
+                            self.instance()
                                 .unsafe_cast_ref::<AudioVisualizer>()
                                 .to_glib_none()
                                 .0,
@@ -118,7 +102,6 @@ impl<T: AudioVisualizerImpl> AudioVisualizerImplExt for T {
 
     fn parent_decide_allocation(
         &self,
-        element: &Self::Type,
         query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
@@ -129,7 +112,7 @@ impl<T: AudioVisualizerImpl> AudioVisualizerImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            element
+                            self.instance()
                                 .unsafe_cast_ref::<AudioVisualizer>()
                                 .to_glib_none()
                                 .0,
@@ -159,15 +142,16 @@ unsafe extern "C" fn audio_visualizer_setup<T: AudioVisualizerImpl>(
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<AudioVisualizer> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        let token = AudioVisualizerSetupToken(&*wrap);
+    gst::panic_to_error!(imp, false, {
+        let instance = imp.instance();
+        let instance = instance.unsafe_cast_ref::<AudioVisualizer>();
+        let token = AudioVisualizerSetupToken(instance);
 
-        match imp.setup(wrap.unsafe_cast_ref(), &token) {
+        match imp.setup(&token) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -182,18 +166,16 @@ unsafe extern "C" fn audio_visualizer_render<T: AudioVisualizerImpl>(
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<AudioVisualizer> = from_glib_borrow(ptr);
     let buffer = gst::BufferRef::from_ptr(audio_buffer);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
+    gst::panic_to_error!(imp, false, {
         match imp.render(
-            wrap.unsafe_cast_ref(),
             buffer,
             &mut gst_video::VideoFrameRef::from_glib_borrow_mut(video_frame),
         ) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -207,17 +189,16 @@ unsafe extern "C" fn audio_visualizer_decide_allocation<T: AudioVisualizerImpl>(
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<AudioVisualizer> = from_glib_borrow(ptr);
     let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
         gst::QueryViewMut::Allocation(allocation) => allocation,
         _ => unreachable!(),
     };
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.decide_allocation(wrap.unsafe_cast_ref(), query) {
+    gst::panic_to_error!(imp, false, {
+        match imp.decide_allocation(query) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }

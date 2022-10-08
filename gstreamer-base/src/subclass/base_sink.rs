@@ -10,146 +10,119 @@ use std::ptr;
 use crate::BaseSink;
 
 pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl {
-    fn start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
-        self.parent_start(element)
+    fn start(&self) -> Result<(), gst::ErrorMessage> {
+        self.parent_start()
     }
 
-    fn stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
-        self.parent_stop(element)
+    fn stop(&self) -> Result<(), gst::ErrorMessage> {
+        self.parent_stop()
     }
 
-    fn render(
-        &self,
-        element: &Self::Type,
-        buffer: &gst::Buffer,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        self.parent_render(element, buffer)
+    fn render(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
+        self.parent_render(buffer)
     }
 
-    fn prepare(
-        &self,
-        element: &Self::Type,
-        buffer: &gst::Buffer,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        self.parent_prepare(element, buffer)
+    fn prepare(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
+        self.parent_prepare(buffer)
     }
 
-    fn render_list(
-        &self,
-        element: &Self::Type,
-        list: &gst::BufferList,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        self.parent_render_list(element, list)
+    fn render_list(&self, list: &gst::BufferList) -> Result<gst::FlowSuccess, gst::FlowError> {
+        self.parent_render_list(list)
     }
 
-    fn prepare_list(
-        &self,
-        element: &Self::Type,
-        list: &gst::BufferList,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        self.parent_prepare_list(element, list)
+    fn prepare_list(&self, list: &gst::BufferList) -> Result<gst::FlowSuccess, gst::FlowError> {
+        self.parent_prepare_list(list)
     }
 
-    fn query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
-        BaseSinkImplExt::parent_query(self, element, query)
+    fn query(&self, query: &mut gst::QueryRef) -> bool {
+        BaseSinkImplExt::parent_query(self, query)
     }
 
-    fn event(&self, element: &Self::Type, event: gst::Event) -> bool {
-        self.parent_event(element, event)
+    fn event(&self, event: gst::Event) -> bool {
+        self.parent_event(event)
     }
 
-    fn caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
-        self.parent_caps(element, filter)
+    fn caps(&self, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
+        self.parent_caps(filter)
     }
 
-    fn set_caps(&self, element: &Self::Type, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
-        self.parent_set_caps(element, caps)
+    fn set_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
+        self.parent_set_caps(caps)
     }
 
-    fn fixate(&self, element: &Self::Type, caps: gst::Caps) -> gst::Caps {
-        self.parent_fixate(element, caps)
+    fn fixate(&self, caps: gst::Caps) -> gst::Caps {
+        self.parent_fixate(caps)
     }
 
-    fn unlock(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
-        self.parent_unlock(element)
+    fn unlock(&self) -> Result<(), gst::ErrorMessage> {
+        self.parent_unlock()
     }
 
-    fn unlock_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
-        self.parent_unlock_stop(element)
+    fn unlock_stop(&self) -> Result<(), gst::ErrorMessage> {
+        self.parent_unlock_stop()
     }
 
     fn propose_allocation(
         &self,
-        element: &Self::Type,
         query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError> {
-        self.parent_propose_allocation(element, query)
+        self.parent_propose_allocation(query)
     }
 }
 
 pub trait BaseSinkImplExt: ObjectSubclass {
-    fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
+    fn parent_start(&self) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
+    fn parent_stop(&self) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_render(
-        &self,
-        element: &Self::Type,
-        buffer: &gst::Buffer,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+    fn parent_render(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    fn parent_prepare(
-        &self,
-        element: &Self::Type,
-        buffer: &gst::Buffer,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+    fn parent_prepare(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_render_list(
         &self,
-        element: &Self::Type,
         list: &gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_prepare_list(
         &self,
-        element: &Self::Type,
         list: &gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    fn parent_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool;
+    fn parent_query(&self, query: &mut gst::QueryRef) -> bool;
 
-    fn parent_event(&self, element: &Self::Type, event: gst::Event) -> bool;
+    fn parent_event(&self, event: gst::Event) -> bool;
 
-    fn parent_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> Option<gst::Caps>;
+    fn parent_caps(&self, filter: Option<&gst::Caps>) -> Option<gst::Caps>;
 
-    fn parent_set_caps(
-        &self,
-        element: &Self::Type,
-        caps: &gst::Caps,
-    ) -> Result<(), gst::LoggableError>;
+    fn parent_set_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError>;
 
-    fn parent_fixate(&self, element: &Self::Type, caps: gst::Caps) -> gst::Caps;
+    fn parent_fixate(&self, caps: gst::Caps) -> gst::Caps;
 
-    fn parent_unlock(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
+    fn parent_unlock(&self) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_unlock_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
+    fn parent_unlock_stop(&self) -> Result<(), gst::ErrorMessage>;
 
     fn parent_propose_allocation(
         &self,
-        element: &Self::Type,
         query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError>;
 }
 
 impl<T: BaseSinkImpl> BaseSinkImplExt for T {
-    fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
+    fn parent_start(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .start
                 .map(|f| {
-                    if from_glib(f(element.unsafe_cast_ref::<BaseSink>().to_glib_none().0)) {
+                    if from_glib(f(self
+                        .instance()
+                        .unsafe_cast_ref::<BaseSink>()
+                        .to_glib_none()
+                        .0))
+                    {
                         Ok(())
                     } else {
                         Err(gst::error_msg!(
@@ -162,14 +135,19 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         }
     }
 
-    fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
+    fn parent_stop(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .stop
                 .map(|f| {
-                    if from_glib(f(element.unsafe_cast_ref::<BaseSink>().to_glib_none().0)) {
+                    if from_glib(f(self
+                        .instance()
+                        .unsafe_cast_ref::<BaseSink>()
+                        .to_glib_none()
+                        .0))
+                    {
                         Ok(())
                     } else {
                         Err(gst::error_msg!(
@@ -182,11 +160,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         }
     }
 
-    fn parent_render(
-        &self,
-        element: &Self::Type,
-        buffer: &gst::Buffer,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+    fn parent_render(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
@@ -194,7 +168,10 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .render
                 .map(|f| {
                     try_from_glib(f(
-                        element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<BaseSink>()
+                            .to_glib_none()
+                            .0,
                         buffer.to_glib_none().0,
                     ))
                 })
@@ -202,11 +179,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         }
     }
 
-    fn parent_prepare(
-        &self,
-        element: &Self::Type,
-        buffer: &gst::Buffer,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+    fn parent_prepare(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
@@ -214,7 +187,10 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .prepare
                 .map(|f| {
                     try_from_glib(f(
-                        element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<BaseSink>()
+                            .to_glib_none()
+                            .0,
                         buffer.to_glib_none().0,
                     ))
                 })
@@ -224,7 +200,6 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
 
     fn parent_render_list(
         &self,
-        element: &Self::Type,
         list: &gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
@@ -234,13 +209,16 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .render_list
                 .map(|f| {
                     try_from_glib(f(
-                        element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<BaseSink>()
+                            .to_glib_none()
+                            .0,
                         list.to_glib_none().0,
                     ))
                 })
                 .unwrap_or_else(|| {
                     for buffer in list.iter() {
-                        self.render(element, &from_glib_borrow(buffer.as_ptr()))?;
+                        self.render(&from_glib_borrow(buffer.as_ptr()))?;
                     }
                     Ok(gst::FlowSuccess::Ok)
                 })
@@ -249,7 +227,6 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
 
     fn parent_prepare_list(
         &self,
-        element: &Self::Type,
         list: &gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
@@ -259,20 +236,23 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .prepare_list
                 .map(|f| {
                     try_from_glib(f(
-                        element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<BaseSink>()
+                            .to_glib_none()
+                            .0,
                         list.to_glib_none().0,
                     ))
                 })
                 .unwrap_or_else(|| {
                     for buffer in list.iter() {
-                        self.prepare(element, &from_glib_borrow(buffer.as_ptr()))?;
+                        self.prepare(&from_glib_borrow(buffer.as_ptr()))?;
                     }
                     Ok(gst::FlowSuccess::Ok)
                 })
         }
     }
 
-    fn parent_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
+    fn parent_query(&self, query: &mut gst::QueryRef) -> bool {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
@@ -280,7 +260,10 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .query
                 .map(|f| {
                     from_glib(f(
-                        element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<BaseSink>()
+                            .to_glib_none()
+                            .0,
                         query.as_mut_ptr(),
                     ))
                 })
@@ -288,7 +271,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         }
     }
 
-    fn parent_event(&self, element: &Self::Type, event: gst::Event) -> bool {
+    fn parent_event(&self, event: gst::Event) -> bool {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
@@ -296,7 +279,10 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .event
                 .map(|f| {
                     from_glib(f(
-                        element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<BaseSink>()
+                            .to_glib_none()
+                            .0,
                         event.into_glib_ptr(),
                     ))
                 })
@@ -304,7 +290,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         }
     }
 
-    fn parent_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
+    fn parent_caps(&self, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
@@ -313,7 +299,10 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .get_caps
                 .map(|f| {
                     from_glib_full(f(
-                        element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<BaseSink>()
+                            .to_glib_none()
+                            .0,
                         filter.to_glib_none().0,
                     ))
                 })
@@ -321,11 +310,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         }
     }
 
-    fn parent_set_caps(
-        &self,
-        element: &Self::Type,
-        caps: &gst::Caps,
-    ) -> Result<(), gst::LoggableError> {
+    fn parent_set_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
@@ -334,7 +319,10 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
+                            self.instance()
+                                .unsafe_cast_ref::<BaseSink>()
+                                .to_glib_none()
+                                .0,
                             caps.to_glib_none().0
                         ),
                         gst::CAT_RUST,
@@ -345,14 +333,17 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         }
     }
 
-    fn parent_fixate(&self, element: &Self::Type, caps: gst::Caps) -> gst::Caps {
+    fn parent_fixate(&self, caps: gst::Caps) -> gst::Caps {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
 
             match (*parent_class).fixate {
                 Some(fixate) => from_glib_full(fixate(
-                    element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
+                    self.instance()
+                        .unsafe_cast_ref::<BaseSink>()
+                        .to_glib_none()
+                        .0,
                     caps.into_glib_ptr(),
                 )),
                 None => caps,
@@ -360,14 +351,19 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         }
     }
 
-    fn parent_unlock(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
+    fn parent_unlock(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .unlock
                 .map(|f| {
-                    if from_glib(f(element.unsafe_cast_ref::<BaseSink>().to_glib_none().0)) {
+                    if from_glib(f(self
+                        .instance()
+                        .unsafe_cast_ref::<BaseSink>()
+                        .to_glib_none()
+                        .0))
+                    {
                         Ok(())
                     } else {
                         Err(gst::error_msg!(
@@ -380,14 +376,19 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         }
     }
 
-    fn parent_unlock_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
+    fn parent_unlock_stop(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .unlock_stop
                 .map(|f| {
-                    if from_glib(f(element.unsafe_cast_ref::<BaseSink>().to_glib_none().0)) {
+                    if from_glib(f(self
+                        .instance()
+                        .unsafe_cast_ref::<BaseSink>()
+                        .to_glib_none()
+                        .0))
+                    {
                         Ok(())
                     } else {
                         Err(gst::error_msg!(
@@ -402,7 +403,6 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
 
     fn parent_propose_allocation(
         &self,
-        element: &Self::Type,
         query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
@@ -413,7 +413,10 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
+                            self.instance()
+                                .unsafe_cast_ref::<BaseSink>()
+                                .to_glib_none()
+                                .0,
                             query.as_mut_ptr(),
                         ),
                         gst::CAT_RUST,
@@ -451,13 +454,12 @@ unsafe extern "C" fn base_sink_start<T: BaseSinkImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.start(wrap.unsafe_cast_ref()) {
+    gst::panic_to_error!(imp, false, {
+        match imp.start() {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(err);
+                imp.post_error_message(err);
                 false
             }
         }
@@ -470,13 +472,12 @@ unsafe extern "C" fn base_sink_stop<T: BaseSinkImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.stop(wrap.unsafe_cast_ref()) {
+    gst::panic_to_error!(imp, false, {
+        match imp.stop() {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(err);
+                imp.post_error_message(err);
                 false
             }
         }
@@ -490,13 +491,9 @@ unsafe extern "C" fn base_sink_render<T: BaseSinkImpl>(
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let buffer = from_glib_borrow(buffer);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
-        imp.render(wrap.unsafe_cast_ref(), &buffer).into()
-    })
-    .into_glib()
+    gst::panic_to_error!(imp, gst::FlowReturn::Error, { imp.render(&buffer).into() }).into_glib()
 }
 
 unsafe extern "C" fn base_sink_prepare<T: BaseSinkImpl>(
@@ -505,13 +502,9 @@ unsafe extern "C" fn base_sink_prepare<T: BaseSinkImpl>(
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let buffer = from_glib_borrow(buffer);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
-        imp.prepare(wrap.unsafe_cast_ref(), &buffer).into()
-    })
-    .into_glib()
+    gst::panic_to_error!(imp, gst::FlowReturn::Error, { imp.prepare(&buffer).into() }).into_glib()
 }
 
 unsafe extern "C" fn base_sink_render_list<T: BaseSinkImpl>(
@@ -520,11 +513,10 @@ unsafe extern "C" fn base_sink_render_list<T: BaseSinkImpl>(
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let list = from_glib_borrow(list);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
-        imp.render_list(wrap.unsafe_cast_ref(), &list).into()
+    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        imp.render_list(&list).into()
     })
     .into_glib()
 }
@@ -535,11 +527,10 @@ unsafe extern "C" fn base_sink_prepare_list<T: BaseSinkImpl>(
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let list = from_glib_borrow(list);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
-        imp.prepare_list(wrap.unsafe_cast_ref(), &list).into()
+    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        imp.prepare_list(&list).into()
     })
     .into_glib()
 }
@@ -550,13 +541,9 @@ unsafe extern "C" fn base_sink_query<T: BaseSinkImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query_ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        BaseSinkImpl::query(imp, wrap.unsafe_cast_ref(), query)
-    })
-    .into_glib()
+    gst::panic_to_error!(imp, false, { BaseSinkImpl::query(imp, query) }).into_glib()
 }
 
 unsafe extern "C" fn base_sink_event<T: BaseSinkImpl>(
@@ -565,12 +552,8 @@ unsafe extern "C" fn base_sink_event<T: BaseSinkImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        imp.event(wrap.unsafe_cast_ref(), from_glib_full(event_ptr))
-    })
-    .into_glib()
+    gst::panic_to_error!(imp, false, { imp.event(from_glib_full(event_ptr)) }).into_glib()
 }
 
 unsafe extern "C" fn base_sink_get_caps<T: BaseSinkImpl>(
@@ -579,14 +562,11 @@ unsafe extern "C" fn base_sink_get_caps<T: BaseSinkImpl>(
 ) -> *mut gst::ffi::GstCaps {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let filter = Option::<gst::Caps>::from_glib_borrow(filter);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), None, {
-        imp.caps(wrap.unsafe_cast_ref(), filter.as_ref().as_ref())
-    })
-    .map(|caps| caps.into_glib_ptr())
-    .unwrap_or(ptr::null_mut())
+    gst::panic_to_error!(imp, None, { imp.caps(filter.as_ref().as_ref()) })
+        .map(|caps| caps.into_glib_ptr())
+        .unwrap_or(ptr::null_mut())
 }
 
 unsafe extern "C" fn base_sink_set_caps<T: BaseSinkImpl>(
@@ -595,14 +575,13 @@ unsafe extern "C" fn base_sink_set_caps<T: BaseSinkImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let caps = from_glib_borrow(caps);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.set_caps(wrap.unsafe_cast_ref(), &caps) {
+    gst::panic_to_error!(imp, false, {
+        match imp.set_caps(&caps) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -616,13 +595,9 @@ unsafe extern "C" fn base_sink_fixate<T: BaseSinkImpl>(
 ) -> *mut gst::ffi::GstCaps {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let caps = from_glib_full(caps);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), gst::Caps::new_empty(), {
-        imp.fixate(wrap.unsafe_cast_ref(), caps)
-    })
-    .into_glib_ptr()
+    gst::panic_to_error!(imp, gst::Caps::new_empty(), { imp.fixate(caps) }).into_glib_ptr()
 }
 
 unsafe extern "C" fn base_sink_unlock<T: BaseSinkImpl>(
@@ -630,13 +605,12 @@ unsafe extern "C" fn base_sink_unlock<T: BaseSinkImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.unlock(wrap.unsafe_cast_ref()) {
+    gst::panic_to_error!(imp, false, {
+        match imp.unlock() {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(err);
+                imp.post_error_message(err);
                 false
             }
         }
@@ -649,13 +623,12 @@ unsafe extern "C" fn base_sink_unlock_stop<T: BaseSinkImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.unlock_stop(wrap.unsafe_cast_ref()) {
+    gst::panic_to_error!(imp, false, {
+        match imp.unlock_stop() {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(err);
+                imp.post_error_message(err);
                 false
             }
         }
@@ -669,17 +642,16 @@ unsafe extern "C" fn base_sink_propose_allocation<T: BaseSinkImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
         gst::QueryViewMut::Allocation(allocation) => allocation,
         _ => unreachable!(),
     };
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.propose_allocation(wrap.unsafe_cast_ref(), query) {
+    gst::panic_to_error!(imp, false, {
+        match imp.propose_allocation(query) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }

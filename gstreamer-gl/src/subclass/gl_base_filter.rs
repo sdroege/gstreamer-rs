@@ -11,44 +11,29 @@ use gst_base::subclass::prelude::*;
 use crate::GLBaseFilter;
 
 pub trait GLBaseFilterImpl: GLBaseFilterImplExt + BaseTransformImpl {
-    fn gl_set_caps(
-        &self,
-        filter: &Self::Type,
-        incaps: &Caps,
-        outcaps: &Caps,
-    ) -> Result<(), LoggableError> {
-        self.parent_gl_set_caps(filter, incaps, outcaps)
+    fn gl_set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError> {
+        self.parent_gl_set_caps(incaps, outcaps)
     }
 
-    fn gl_start(&self, filter: &Self::Type) -> Result<(), LoggableError> {
-        self.parent_gl_start(filter)
+    fn gl_start(&self) -> Result<(), LoggableError> {
+        self.parent_gl_start()
     }
 
-    fn gl_stop(&self, filter: &Self::Type) {
-        self.parent_gl_stop(filter)
+    fn gl_stop(&self) {
+        self.parent_gl_stop()
     }
 }
 
 pub trait GLBaseFilterImplExt: ObjectSubclass {
-    fn parent_gl_set_caps(
-        &self,
-        filter: &Self::Type,
-        incaps: &Caps,
-        outcaps: &Caps,
-    ) -> Result<(), LoggableError>;
+    fn parent_gl_set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError>;
 
-    fn parent_gl_start(&self, filter: &Self::Type) -> Result<(), LoggableError>;
+    fn parent_gl_start(&self) -> Result<(), LoggableError>;
 
-    fn parent_gl_stop(&self, filter: &Self::Type);
+    fn parent_gl_stop(&self);
 }
 
 impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {
-    fn parent_gl_set_caps(
-        &self,
-        filter: &Self::Type,
-        incaps: &Caps,
-        outcaps: &Caps,
-    ) -> Result<(), LoggableError> {
+    fn parent_gl_set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstGLBaseFilterClass;
@@ -58,7 +43,10 @@ impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {
                 .map(|f| {
                     result_from_gboolean!(
                         f(
-                            filter.unsafe_cast_ref::<GLBaseFilter>().to_glib_none().0,
+                            self.instance()
+                                .unsafe_cast_ref::<GLBaseFilter>()
+                                .to_glib_none()
+                                .0,
                             incaps.to_glib_none().0,
                             outcaps.to_glib_none().0,
                         ),
@@ -70,7 +58,7 @@ impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {
         }
     }
 
-    fn parent_gl_start(&self, filter: &Self::Type) -> Result<(), LoggableError> {
+    fn parent_gl_start(&self) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstGLBaseFilterClass;
@@ -79,7 +67,11 @@ impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {
                 .gl_start
                 .map(|f| {
                     result_from_gboolean!(
-                        f(filter.unsafe_cast_ref::<GLBaseFilter>().to_glib_none().0),
+                        f(self
+                            .instance()
+                            .unsafe_cast_ref::<GLBaseFilter>()
+                            .to_glib_none()
+                            .0),
                         CAT_RUST,
                         "Parent function `gl_start` failed",
                     )
@@ -88,13 +80,17 @@ impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {
         }
     }
 
-    fn parent_gl_stop(&self, filter: &Self::Type) {
+    fn parent_gl_stop(&self) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstGLBaseFilterClass;
 
             if let Some(f) = (*parent_class).gl_stop {
-                f(filter.unsafe_cast_ref::<GLBaseFilter>().to_glib_none().0)
+                f(self
+                    .instance()
+                    .unsafe_cast_ref::<GLBaseFilter>()
+                    .to_glib_none()
+                    .0)
             }
         }
     }
@@ -117,17 +113,12 @@ unsafe extern "C" fn gl_set_caps<T: GLBaseFilterImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<GLBaseFilter> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.gl_set_caps(
-            wrap.unsafe_cast_ref(),
-            &from_glib_borrow(incaps),
-            &from_glib_borrow(outcaps),
-        ) {
+    gst::panic_to_error!(imp, false, {
+        match imp.gl_set_caps(&from_glib_borrow(incaps), &from_glib_borrow(outcaps)) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -140,13 +131,12 @@ unsafe extern "C" fn gl_start<T: GLBaseFilterImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<GLBaseFilter> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.gl_start(wrap.unsafe_cast_ref()) {
+    gst::panic_to_error!(imp, false, {
+        match imp.gl_start() {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -157,9 +147,6 @@ unsafe extern "C" fn gl_start<T: GLBaseFilterImpl>(
 unsafe extern "C" fn gl_stop<T: GLBaseFilterImpl>(ptr: *mut GstGLBaseFilter) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<GLBaseFilter> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), (), {
-        imp.gl_stop(wrap.unsafe_cast_ref())
-    })
+    gst::panic_to_error!(imp, (), { imp.gl_stop() })
 }

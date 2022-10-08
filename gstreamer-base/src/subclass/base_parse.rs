@@ -12,74 +12,67 @@ use crate::BaseParse;
 use crate::BaseParseFrame;
 
 pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
-    fn start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
-        self.parent_start(element)
+    fn start(&self) -> Result<(), gst::ErrorMessage> {
+        self.parent_start()
     }
 
-    fn stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
-        self.parent_stop(element)
+    fn stop(&self) -> Result<(), gst::ErrorMessage> {
+        self.parent_stop()
     }
 
-    fn set_sink_caps(
+    fn set_sink_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
+        self.parent_set_sink_caps(caps)
+    }
+
+    fn handle_frame(
         &self,
-        element: &Self::Type,
-        caps: &gst::Caps,
-    ) -> Result<(), gst::LoggableError> {
-        self.parent_set_sink_caps(element, caps)
-    }
-
-    fn handle_frame<'a>(
-        &'a self,
-        element: &Self::Type,
         frame: BaseParseFrame,
     ) -> Result<(gst::FlowSuccess, u32), gst::FlowError> {
-        self.parent_handle_frame(element, frame)
+        self.parent_handle_frame(frame)
     }
 
     fn convert(
         &self,
-        element: &Self::Type,
         src_val: impl gst::FormattedValue,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
-        self.parent_convert(element, src_val, dest_format)
+        self.parent_convert(src_val, dest_format)
     }
 }
 
 pub trait BaseParseImplExt: ObjectSubclass {
-    fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
+    fn parent_start(&self) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
+    fn parent_stop(&self) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_set_sink_caps(
+    fn parent_set_sink_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError>;
+
+    fn parent_handle_frame(
         &self,
-        element: &Self::Type,
-        caps: &gst::Caps,
-    ) -> Result<(), gst::LoggableError>;
-
-    fn parent_handle_frame<'a>(
-        &'a self,
-        element: &Self::Type,
         frame: BaseParseFrame,
     ) -> Result<(gst::FlowSuccess, u32), gst::FlowError>;
 
     fn parent_convert(
         &self,
-        element: &Self::Type,
         src_val: impl gst::FormattedValue,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue>;
 }
 
 impl<T: BaseParseImpl> BaseParseImplExt for T {
-    fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
+    fn parent_start(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
             (*parent_class)
                 .start
                 .map(|f| {
-                    if from_glib(f(element.unsafe_cast_ref::<BaseParse>().to_glib_none().0)) {
+                    if from_glib(f(self
+                        .instance()
+                        .unsafe_cast_ref::<BaseParse>()
+                        .to_glib_none()
+                        .0))
+                    {
                         Ok(())
                     } else {
                         Err(gst::error_msg!(
@@ -92,14 +85,19 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
         }
     }
 
-    fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
+    fn parent_stop(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
             (*parent_class)
                 .stop
                 .map(|f| {
-                    if from_glib(f(element.unsafe_cast_ref::<BaseParse>().to_glib_none().0)) {
+                    if from_glib(f(self
+                        .instance()
+                        .unsafe_cast_ref::<BaseParse>()
+                        .to_glib_none()
+                        .0))
+                    {
                         Ok(())
                     } else {
                         Err(gst::error_msg!(
@@ -112,11 +110,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
         }
     }
 
-    fn parent_set_sink_caps(
-        &self,
-        element: &Self::Type,
-        caps: &gst::Caps,
-    ) -> Result<(), gst::LoggableError> {
+    fn parent_set_sink_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
@@ -125,7 +119,10 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            element.unsafe_cast_ref::<BaseParse>().to_glib_none().0,
+                            self.instance()
+                                .unsafe_cast_ref::<BaseParse>()
+                                .to_glib_none()
+                                .0,
                             caps.to_glib_none().0,
                         ),
                         gst::CAT_RUST,
@@ -136,9 +133,8 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
         }
     }
 
-    fn parent_handle_frame<'a>(
-        &'a self,
-        element: &'a Self::Type,
+    fn parent_handle_frame(
+        &self,
         frame: BaseParseFrame,
     ) -> Result<(gst::FlowSuccess, u32), gst::FlowError> {
         unsafe {
@@ -149,7 +145,10 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
                 .handle_frame
                 .map(|f| {
                     let res = try_from_glib(f(
-                        element.unsafe_cast_ref::<BaseParse>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<BaseParse>()
+                            .to_glib_none()
+                            .0,
                         frame.to_glib_none().0,
                         &mut skipsize,
                     ));
@@ -161,7 +160,6 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
 
     fn parent_convert(
         &self,
-        element: &Self::Type,
         src_val: impl gst::FormattedValue,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
@@ -172,7 +170,10 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
                 let mut dest_val = mem::MaybeUninit::uninit();
 
                 let res = from_glib(f(
-                    element.unsafe_cast_ref::<BaseParse>().to_glib_none().0,
+                    self.instance()
+                        .unsafe_cast_ref::<BaseParse>()
+                        .to_glib_none()
+                        .0,
                     src_val.format().into_glib(),
                     src_val.into_raw_value(),
                     dest_format.into_glib(),
@@ -209,13 +210,12 @@ unsafe extern "C" fn base_parse_start<T: BaseParseImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.start(wrap.unsafe_cast_ref()) {
+    gst::panic_to_error!(imp, false, {
+        match imp.start() {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(err);
+                imp.post_error_message(err);
                 false
             }
         }
@@ -228,13 +228,12 @@ unsafe extern "C" fn base_parse_stop<T: BaseParseImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.stop(wrap.unsafe_cast_ref()) {
+    gst::panic_to_error!(imp, false, {
+        match imp.stop() {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(err);
+                imp.post_error_message(err);
                 false
             }
         }
@@ -248,14 +247,13 @@ unsafe extern "C" fn base_parse_set_sink_caps<T: BaseParseImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let caps: Borrowed<gst::Caps> = from_glib_borrow(caps);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.set_sink_caps(wrap.unsafe_cast_ref(), &caps) {
+    gst::panic_to_error!(imp, false, {
+        match imp.set_sink_caps(&caps) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -270,11 +268,12 @@ unsafe extern "C" fn base_parse_handle_frame<T: BaseParseImpl>(
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
-    let wrap_frame = BaseParseFrame::new(frame, &wrap);
+    let instance = imp.instance();
+    let instance = instance.unsafe_cast_ref::<BaseParse>();
+    let wrap_frame = BaseParseFrame::new(frame, instance);
 
-    let res = gst::panic_to_error!(&wrap, imp.panicked(), Err(gst::FlowError::Error), {
-        imp.handle_frame(wrap.unsafe_cast_ref(), wrap_frame)
+    let res = gst::panic_to_error!(imp, Err(gst::FlowError::Error), {
+        imp.handle_frame(wrap_frame)
     });
 
     match res {
@@ -296,12 +295,9 @@ unsafe extern "C" fn base_parse_convert<T: BaseParseImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let source = gst::GenericFormattedValue::new(from_glib(source_format), source_value);
 
-    let res = gst::panic_to_error!(&wrap, imp.panicked(), None, {
-        imp.convert(wrap.unsafe_cast_ref(), source, from_glib(dest_format))
-    });
+    let res = gst::panic_to_error!(imp, None, { imp.convert(source, from_glib(dest_format)) });
 
     match res {
         Some(dest) => {

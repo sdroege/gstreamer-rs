@@ -8,29 +8,17 @@ use gst_base::subclass::prelude::*;
 use crate::VideoSink;
 
 pub trait VideoSinkImpl: VideoSinkImplExt + BaseSinkImpl + ElementImpl {
-    fn show_frame(
-        &self,
-        element: &Self::Type,
-        buffer: &gst::Buffer,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        self.parent_show_frame(element, buffer)
+    fn show_frame(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
+        self.parent_show_frame(buffer)
     }
 }
 
 pub trait VideoSinkImplExt: ObjectSubclass {
-    fn parent_show_frame(
-        &self,
-        element: &Self::Type,
-        buffer: &gst::Buffer,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+    fn parent_show_frame(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
 }
 
 impl<T: VideoSinkImpl> VideoSinkImplExt for T {
-    fn parent_show_frame(
-        &self,
-        element: &Self::Type,
-        buffer: &gst::Buffer,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+    fn parent_show_frame(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoSinkClass;
@@ -38,7 +26,10 @@ impl<T: VideoSinkImpl> VideoSinkImplExt for T {
                 .show_frame
                 .map(|f| {
                     try_from_glib(f(
-                        element.unsafe_cast_ref::<VideoSink>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<VideoSink>()
+                            .to_glib_none()
+                            .0,
                         buffer.to_glib_none().0,
                     ))
                 })
@@ -61,11 +52,10 @@ unsafe extern "C" fn video_sink_show_frame<T: VideoSinkImpl>(
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<VideoSink> = from_glib_borrow(ptr);
     let buffer = from_glib_borrow(buffer);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
-        imp.show_frame(wrap.unsafe_cast_ref(), &buffer).into()
+    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        imp.show_frame(&buffer).into()
     })
     .into_glib()
 }

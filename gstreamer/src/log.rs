@@ -491,7 +491,7 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         if $level <= $cat.threshold() {
-            $crate::DebugCategory::log_unfiltered($cat.clone(), Some($obj),
+            $crate::DebugCategory::log_unfiltered($cat.clone(), Some(&*$obj),
                 $level, file!(), module_path!(), line!(), format_args!($($args)*))
         }
     }};

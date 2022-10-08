@@ -389,16 +389,9 @@ mod video_filter {
         use std::{cmp, mem::ManuallyDrop, os::unix::prelude::FromRawFd};
 
         use anyhow::Error;
-        use glib::subclass::{object::ObjectImpl, types::ObjectSubclass};
-        use gst::{
-            subclass::prelude::{ElementImpl, GstObjectImpl},
-            PadDirection, PadPresence, PadTemplate,
-        };
+        use gst::{subclass::prelude::*, PadDirection, PadPresence, PadTemplate};
         use gst_app::gst_base::subclass::BaseTransformMode;
-        use gst_video::{
-            subclass::prelude::{BaseTransformImpl, VideoFilterImpl},
-            VideoFrameRef,
-        };
+        use gst_video::{subclass::prelude::*, VideoFrameRef};
         use memmap2::MmapMut;
         use once_cell::sync::Lazy;
 
@@ -490,11 +483,10 @@ mod video_filter {
         impl VideoFilterImpl for FdMemoryFadeInVideoFilter {
             fn transform_frame_ip(
                 &self,
-                element: &Self::Type,
                 frame: &mut VideoFrameRef<&mut gst::BufferRef>,
             ) -> Result<gst::FlowSuccess, gst::FlowError> {
                 self.transform_fd_mem_ip(frame).map_err(|err| {
-                    gst::error!(CAT, obj: element, "Failed to transform frame`: {}", err);
+                    gst::error!(CAT, imp: self, "Failed to transform frame`: {}", err);
                     gst::FlowError::Error
                 })?;
 

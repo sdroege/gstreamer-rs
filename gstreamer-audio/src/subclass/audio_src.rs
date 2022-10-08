@@ -13,63 +13,50 @@ use crate::AudioRingBufferSpec;
 use crate::AudioSrc;
 
 pub trait AudioSrcImpl: AudioSrcImplExt + AudioBaseSrcImpl {
-    fn close(&self, src: &Self::Type) -> Result<(), LoggableError> {
-        self.parent_close(src)
+    fn close(&self) -> Result<(), LoggableError> {
+        self.parent_close()
     }
 
-    fn delay(&self, src: &Self::Type) -> u32 {
-        self.parent_delay(src)
+    fn delay(&self) -> u32 {
+        self.parent_delay()
     }
 
-    fn open(&self, src: &Self::Type) -> Result<(), LoggableError> {
-        self.parent_open(src)
+    fn open(&self) -> Result<(), LoggableError> {
+        self.parent_open()
     }
 
-    fn prepare(
-        &self,
-        src: &Self::Type,
-        spec: &mut AudioRingBufferSpec,
-    ) -> Result<(), LoggableError> {
-        AudioSrcImplExt::parent_prepare(self, src, spec)
+    fn prepare(&self, spec: &mut AudioRingBufferSpec) -> Result<(), LoggableError> {
+        AudioSrcImplExt::parent_prepare(self, spec)
     }
 
-    fn unprepare(&self, src: &Self::Type) -> Result<(), LoggableError> {
-        self.parent_unprepare(src)
+    fn unprepare(&self) -> Result<(), LoggableError> {
+        self.parent_unprepare()
     }
 
-    fn read(
-        &self,
-        src: &Self::Type,
-        audio_data: &mut [u8],
-    ) -> Result<(u32, Option<gst::ClockTime>), LoggableError> {
-        self.parent_read(src, audio_data)
+    fn read(&self, audio_data: &mut [u8]) -> Result<(u32, Option<gst::ClockTime>), LoggableError> {
+        self.parent_read(audio_data)
     }
 
-    fn reset(&self, src: &Self::Type) {
-        self.parent_reset(src)
+    fn reset(&self) {
+        self.parent_reset()
     }
 }
 
 pub trait AudioSrcImplExt: ObjectSubclass {
-    fn parent_close(&self, src: &Self::Type) -> Result<(), LoggableError>;
-    fn parent_delay(&self, src: &Self::Type) -> u32;
-    fn parent_open(&self, src: &Self::Type) -> Result<(), LoggableError>;
-    fn parent_prepare(
-        &self,
-        src: &Self::Type,
-        spec: &mut AudioRingBufferSpec,
-    ) -> Result<(), LoggableError>;
-    fn parent_unprepare(&self, src: &Self::Type) -> Result<(), LoggableError>;
+    fn parent_close(&self) -> Result<(), LoggableError>;
+    fn parent_delay(&self) -> u32;
+    fn parent_open(&self) -> Result<(), LoggableError>;
+    fn parent_prepare(&self, spec: &mut AudioRingBufferSpec) -> Result<(), LoggableError>;
+    fn parent_unprepare(&self) -> Result<(), LoggableError>;
     fn parent_read(
         &self,
-        src: &Self::Type,
         audio_data: &mut [u8],
     ) -> Result<(u32, Option<gst::ClockTime>), LoggableError>;
-    fn parent_reset(&self, src: &Self::Type);
+    fn parent_reset(&self);
 }
 
 impl<T: AudioSrcImpl> AudioSrcImplExt for T {
-    fn parent_close(&self, src: &Self::Type) -> Result<(), LoggableError> {
+    fn parent_close(&self) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
@@ -78,14 +65,18 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
                 Some(f) => f,
             };
             gst::result_from_gboolean!(
-                f(src.unsafe_cast_ref::<AudioSrc>().to_glib_none().0),
+                f(self
+                    .instance()
+                    .unsafe_cast_ref::<AudioSrc>()
+                    .to_glib_none()
+                    .0),
                 gst::CAT_RUST,
                 "Failed to close element using the parent function"
             )
         }
     }
 
-    fn parent_delay(&self, src: &Self::Type) -> u32 {
+    fn parent_delay(&self) -> u32 {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
@@ -93,11 +84,15 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
                 Some(f) => f,
                 None => return 0,
             };
-            f(src.unsafe_cast_ref::<AudioSrc>().to_glib_none().0)
+            f(self
+                .instance()
+                .unsafe_cast_ref::<AudioSrc>()
+                .to_glib_none()
+                .0)
         }
     }
 
-    fn parent_open(&self, src: &Self::Type) -> Result<(), LoggableError> {
+    fn parent_open(&self) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
@@ -106,18 +101,18 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
                 None => return Ok(()),
             };
             gst::result_from_gboolean!(
-                f(src.unsafe_cast_ref::<AudioSrc>().to_glib_none().0),
+                f(self
+                    .instance()
+                    .unsafe_cast_ref::<AudioSrc>()
+                    .to_glib_none()
+                    .0),
                 gst::CAT_RUST,
                 "Failed to open element using the parent function"
             )
         }
     }
 
-    fn parent_prepare(
-        &self,
-        src: &Self::Type,
-        spec: &mut AudioRingBufferSpec,
-    ) -> Result<(), LoggableError> {
+    fn parent_prepare(&self, spec: &mut AudioRingBufferSpec) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
@@ -127,7 +122,10 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
             };
             gst::result_from_gboolean!(
                 f(
-                    src.unsafe_cast_ref::<AudioSrc>().to_glib_none().0,
+                    self.instance()
+                        .unsafe_cast_ref::<AudioSrc>()
+                        .to_glib_none()
+                        .0,
                     &mut spec.0
                 ),
                 gst::CAT_RUST,
@@ -136,7 +134,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
         }
     }
 
-    fn parent_unprepare(&self, src: &Self::Type) -> Result<(), LoggableError> {
+    fn parent_unprepare(&self) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
@@ -150,7 +148,11 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
                 }
             };
             gst::result_from_gboolean!(
-                f(src.unsafe_cast_ref::<AudioSrc>().to_glib_none().0),
+                f(self
+                    .instance()
+                    .unsafe_cast_ref::<AudioSrc>()
+                    .to_glib_none()
+                    .0),
                 gst::CAT_RUST,
                 "Failed to unprepare element using the parent function"
             )
@@ -159,7 +161,6 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
 
     fn parent_read(
         &self,
-        src: &Self::Type,
         buffer: &mut [u8],
     ) -> Result<(u32, Option<gst::ClockTime>), LoggableError> {
         unsafe {
@@ -172,7 +173,10 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
             let buffer_ptr = buffer.as_mut_ptr() as *mut _;
             let mut timestamp = mem::MaybeUninit::uninit();
             let ret = f(
-                src.unsafe_cast_ref::<AudioSrc>().to_glib_none().0,
+                self.instance()
+                    .unsafe_cast_ref::<AudioSrc>()
+                    .to_glib_none()
+                    .0,
                 buffer_ptr,
                 buffer.len() as u32,
                 timestamp.as_mut_ptr(),
@@ -188,12 +192,16 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
         }
     }
 
-    fn parent_reset(&self, src: &Self::Type) {
+    fn parent_reset(&self) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
             if let Some(f) = (*parent_class).reset {
-                f(src.unsafe_cast_ref::<AudioSrc>().to_glib_none().0)
+                f(self
+                    .instance()
+                    .unsafe_cast_ref::<AudioSrc>()
+                    .to_glib_none()
+                    .0)
             }
         }
     }
@@ -218,13 +226,12 @@ unsafe extern "C" fn audiosrc_close<T: AudioSrcImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.close(wrap.unsafe_cast_ref()) {
+    gst::panic_to_error!(imp, false, {
+        match imp.close() {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -235,11 +242,8 @@ unsafe extern "C" fn audiosrc_close<T: AudioSrcImpl>(
 unsafe extern "C" fn audiosrc_delay<T: AudioSrcImpl>(ptr: *mut ffi::GstAudioSrc) -> u32 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), 0, {
-        imp.delay(wrap.unsafe_cast_ref())
-    })
+    gst::panic_to_error!(imp, 0, { imp.delay() })
 }
 
 unsafe extern "C" fn audiosrc_open<T: AudioSrcImpl>(
@@ -247,13 +251,12 @@ unsafe extern "C" fn audiosrc_open<T: AudioSrcImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.open(wrap.unsafe_cast_ref()) {
+    gst::panic_to_error!(imp, false, {
+        match imp.open() {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -267,15 +270,14 @@ unsafe extern "C" fn audiosrc_prepare<T: AudioSrcImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
     let spec = &mut *(spec as *mut AudioRingBufferSpec);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match AudioSrcImpl::prepare(imp, wrap.unsafe_cast_ref(), spec) {
+    gst::panic_to_error!(imp, false, {
+        match AudioSrcImpl::prepare(imp, spec) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -288,13 +290,12 @@ unsafe extern "C" fn audiosrc_unprepare<T: AudioSrcImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.unprepare(wrap.unsafe_cast_ref()) {
+    gst::panic_to_error!(imp, false, {
+        match imp.unprepare() {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -310,17 +311,14 @@ unsafe extern "C" fn audiosrc_read<T: AudioSrcImpl>(
 ) -> u32 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
     let data_slice = if length == 0 {
         &mut []
     } else {
         std::slice::from_raw_parts_mut(data as *mut u8, length as usize)
     };
 
-    gst::panic_to_error!(&wrap, imp.panicked(), 0, {
-        let (res, timestamp_res) = imp
-            .read(wrap.unsafe_cast_ref(), data_slice)
-            .unwrap_or((0, gst::ClockTime::NONE));
+    gst::panic_to_error!(imp, 0, {
+        let (res, timestamp_res) = imp.read(data_slice).unwrap_or((0, gst::ClockTime::NONE));
         *timestamp = timestamp_res.into_glib();
 
         res
@@ -330,9 +328,8 @@ unsafe extern "C" fn audiosrc_read<T: AudioSrcImpl>(
 unsafe extern "C" fn audiosrc_reset<T: AudioSrcImpl>(ptr: *mut ffi::GstAudioSrc) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), (), {
-        imp.reset(wrap.unsafe_cast_ref());
+    gst::panic_to_error!(imp, (), {
+        imp.reset();
     });
 }

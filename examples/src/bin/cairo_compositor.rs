@@ -73,13 +73,7 @@ mod cairo_compositor {
             }
 
             // Called by the application whenever the value of a property should be changed.
-            fn set_property(
-                &self,
-                _obj: &Self::Type,
-                _id: usize,
-                value: &glib::Value,
-                pspec: &glib::ParamSpec,
-            ) {
+            fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
                 let mut settings = self.settings.lock().unwrap();
 
                 match pspec.name() {
@@ -91,12 +85,7 @@ mod cairo_compositor {
             }
 
             // Called by the application whenever the value of a property should be retrieved.
-            fn property(
-                &self,
-                _obj: &Self::Type,
-                _id: usize,
-                pspec: &glib::ParamSpec,
-            ) -> glib::Value {
+            fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
                 let settings = self.settings.lock().unwrap();
 
                 match pspec.name() {
@@ -180,19 +169,20 @@ mod cairo_compositor {
             // Notify via the child proxy interface whenever a new pad is added or removed.
             fn request_new_pad(
                 &self,
-                element: &Self::Type,
                 templ: &gst::PadTemplate,
                 name: Option<String>,
                 caps: Option<&gst::Caps>,
             ) -> Option<gst::Pad> {
-                let pad = self.parent_request_new_pad(element, templ, name, caps)?;
+                let element = self.instance();
+                let pad = self.parent_request_new_pad(templ, name, caps)?;
                 element.child_added(&pad, &pad.name());
                 Some(pad)
             }
 
-            fn release_pad(&self, element: &Self::Type, pad: &gst::Pad) {
+            fn release_pad(&self, pad: &gst::Pad) {
+                let element = self.instance();
                 element.child_removed(pad, &pad.name());
-                self.parent_release_pad(element, pad);
+                self.parent_release_pad(pad);
             }
         }
 
@@ -201,7 +191,6 @@ mod cairo_compositor {
             // Called whenever a query arrives at the given sink pad of the compositor.
             fn sink_query(
                 &self,
-                aggregator: &Self::Type,
                 aggregator_pad: &gst_base::AggregatorPad,
                 query: &mut gst::QueryRef,
             ) -> bool {
@@ -232,7 +221,7 @@ mod cairo_compositor {
 
                         true
                     }
-                    _ => self.parent_sink_query(aggregator, aggregator_pad, query),
+                    _ => self.parent_sink_query(aggregator_pad, query),
                 }
             }
         }
@@ -242,7 +231,6 @@ mod cairo_compositor {
             // Called by videoaggregator whenever the output format should be determined.
             fn find_best_format(
                 &self,
-                _element: &Self::Type,
                 _downstream_caps: &gst::Caps,
             ) -> Option<(gst_video::VideoInfo, bool)> {
                 // Let videoaggregator select whatever format downstream wants.
@@ -257,10 +245,10 @@ mod cairo_compositor {
             // time.
             fn aggregate_frames(
                 &self,
-                element: &Self::Type,
                 token: &gst_video::subclass::AggregateFramesToken,
                 outbuf: &mut gst::BufferRef,
             ) -> Result<gst::FlowSuccess, gst::FlowError> {
+                let element = self.instance();
                 let pads = element.sink_pads();
 
                 // Map the output frame writable.
@@ -326,11 +314,13 @@ mod cairo_compositor {
         //
         // This allows accessing the pads and their properties from e.g. gst-launch.
         impl ChildProxyImpl for CairoCompositor {
-            fn children_count(&self, object: &Self::Type) -> u32 {
+            fn children_count(&self) -> u32 {
+                let object = self.instance();
                 object.num_pads() as u32
             }
 
-            fn child_by_name(&self, object: &Self::Type, name: &str) -> Option<glib::Object> {
+            fn child_by_name(&self, name: &str) -> Option<glib::Object> {
+                let object = self.instance();
                 object
                     .pads()
                     .into_iter()
@@ -338,7 +328,8 @@ mod cairo_compositor {
                     .map(|p| p.upcast())
             }
 
-            fn child_by_index(&self, object: &Self::Type, index: u32) -> Option<glib::Object> {
+            fn child_by_index(&self, index: u32) -> Option<glib::Object> {
+                let object = self.instance();
                 object
                     .pads()
                     .into_iter()
@@ -522,13 +513,7 @@ mod cairo_compositor {
             }
 
             // Called by the application whenever the value of a property should be changed.
-            fn set_property(
-                &self,
-                _obj: &Self::Type,
-                _id: usize,
-                value: &glib::Value,
-                pspec: &glib::ParamSpec,
-            ) {
+            fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
                 let mut settings = self.settings.lock().unwrap();
 
                 match pspec.name() {
@@ -552,12 +537,7 @@ mod cairo_compositor {
             }
 
             // Called by the application whenever the value of a property should be retrieved.
-            fn property(
-                &self,
-                _obj: &Self::Type,
-                _id: usize,
-                pspec: &glib::ParamSpec,
-            ) -> glib::Value {
+            fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
                 let settings = self.settings.lock().unwrap();
 
                 match pspec.name() {

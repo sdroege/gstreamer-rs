@@ -7,7 +7,7 @@ use glib::subclass::prelude::*;
 use glib::translate::*;
 
 pub trait PlayVideoRendererImpl: ObjectImpl {
-    fn create_video_sink(&self, video_renderer: &Self::Type, play: &Play) -> gst::Element;
+    fn create_video_sink(&self, play: &Play) -> gst::Element;
 }
 
 unsafe impl<T: PlayVideoRendererImpl> IsImplementable<T> for PlayVideoRenderer {
@@ -19,11 +19,11 @@ unsafe impl<T: PlayVideoRendererImpl> IsImplementable<T> for PlayVideoRenderer {
 }
 
 pub trait PlayVideoRendererImplExt: ObjectSubclass {
-    fn parent_create_video_sink(&self, video_renderer: &Self::Type, play: &Play) -> gst::Element;
+    fn parent_create_video_sink(&self, play: &Play) -> gst::Element;
 }
 
 impl<T: PlayVideoRendererImpl> PlayVideoRendererImplExt for T {
-    fn parent_create_video_sink(&self, video_renderer: &Self::Type, play: &Play) -> gst::Element {
+    fn parent_create_video_sink(&self, play: &Play) -> gst::Element {
         unsafe {
             let type_data = Self::type_data();
             let parent_iface = type_data.as_ref().parent_interface::<PlayVideoRenderer>()
@@ -33,7 +33,7 @@ impl<T: PlayVideoRendererImpl> PlayVideoRendererImplExt for T {
                 .create_video_sink
                 .expect("no parent \"create_video_sink\" implementation");
             let ret = func(
-                video_renderer
+                self.instance()
                     .unsafe_cast_ref::<PlayVideoRenderer>()
                     .to_glib_none()
                     .0,
@@ -55,10 +55,7 @@ unsafe extern "C" fn video_renderer_create_video_sink<T: PlayVideoRendererImpl>(
     let instance = &*(video_renderer as *mut T::Instance);
     let imp = instance.imp();
 
-    let sink = imp.create_video_sink(
-        from_glib_borrow::<_, PlayVideoRenderer>(video_renderer).unsafe_cast_ref(),
-        &Play::from_glib_borrow(play),
-    );
+    let sink = imp.create_video_sink(&Play::from_glib_borrow(play));
 
     let sink_ptr: *mut gst::ffi::GstElement = sink.to_glib_none().0;
 

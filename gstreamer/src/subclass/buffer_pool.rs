@@ -13,92 +13,86 @@ use crate::{BufferPool, BufferPoolAcquireParams, BufferPoolConfigRef};
 pub trait BufferPoolImpl: BufferPoolImplExt + GstObjectImpl + Send + Sync {
     fn acquire_buffer(
         &self,
-        buffer_pool: &Self::Type,
         params: Option<&BufferPoolAcquireParams>,
     ) -> Result<crate::Buffer, crate::FlowError> {
-        self.parent_acquire_buffer(buffer_pool, params)
+        self.parent_acquire_buffer(params)
     }
 
     fn alloc_buffer(
         &self,
-        buffer_pool: &Self::Type,
         params: Option<&BufferPoolAcquireParams>,
     ) -> Result<crate::Buffer, crate::FlowError> {
-        self.parent_alloc_buffer(buffer_pool, params)
+        self.parent_alloc_buffer(params)
     }
 
-    fn flush_start(&self, buffer_pool: &Self::Type) {
-        self.parent_flush_start(buffer_pool)
+    fn flush_start(&self) {
+        self.parent_flush_start()
     }
 
-    fn flush_stop(&self, buffer_pool: &Self::Type) {
-        self.parent_flush_stop(buffer_pool)
+    fn flush_stop(&self) {
+        self.parent_flush_stop()
     }
 
-    fn free_buffer(&self, buffer_pool: &Self::Type, buffer: crate::Buffer) {
-        self.parent_free_buffer(buffer_pool, buffer)
+    fn free_buffer(&self, buffer: crate::Buffer) {
+        self.parent_free_buffer(buffer)
     }
 
-    fn release_buffer(&self, buffer_pool: &Self::Type, buffer: crate::Buffer) {
-        self.parent_release_buffer(buffer_pool, buffer)
+    fn release_buffer(&self, buffer: crate::Buffer) {
+        self.parent_release_buffer(buffer)
     }
 
-    fn reset_buffer(&self, buffer_pool: &Self::Type, buffer: &mut crate::BufferRef) {
-        self.parent_reset_buffer(buffer_pool, buffer)
+    fn reset_buffer(&self, buffer: &mut crate::BufferRef) {
+        self.parent_reset_buffer(buffer)
     }
 
-    fn start(&self, buffer_pool: &Self::Type) -> bool {
-        self.parent_start(buffer_pool)
+    fn start(&self) -> bool {
+        self.parent_start()
     }
 
-    fn stop(&self, buffer_pool: &Self::Type) -> bool {
-        self.parent_stop(buffer_pool)
+    fn stop(&self) -> bool {
+        self.parent_stop()
     }
 
     fn options() -> &'static [&'static str] {
         &[]
     }
 
-    fn set_config(&self, buffer_pool: &Self::Type, config: &mut BufferPoolConfigRef) -> bool {
-        self.parent_set_config(buffer_pool, config)
+    fn set_config(&self, config: &mut BufferPoolConfigRef) -> bool {
+        self.parent_set_config(config)
     }
 }
 
 pub trait BufferPoolImplExt: ObjectSubclass {
     fn parent_acquire_buffer(
         &self,
-        buffer_pool: &Self::Type,
         params: Option<&BufferPoolAcquireParams>,
     ) -> Result<crate::Buffer, crate::FlowError>;
 
     fn parent_alloc_buffer(
         &self,
-        buffer_pool: &Self::Type,
         params: Option<&BufferPoolAcquireParams>,
     ) -> Result<crate::Buffer, crate::FlowError>;
 
-    fn parent_free_buffer(&self, buffer_pool: &Self::Type, buffer: crate::Buffer);
+    fn parent_free_buffer(&self, buffer: crate::Buffer);
 
-    fn parent_release_buffer(&self, buffer_pool: &Self::Type, buffer: crate::Buffer);
+    fn parent_release_buffer(&self, buffer: crate::Buffer);
 
-    fn parent_reset_buffer(&self, buffer_pool: &Self::Type, buffer: &mut crate::BufferRef);
+    fn parent_reset_buffer(&self, buffer: &mut crate::BufferRef);
 
-    fn parent_start(&self, buffer_pool: &Self::Type) -> bool;
+    fn parent_start(&self) -> bool;
 
-    fn parent_stop(&self, buffer_pool: &Self::Type) -> bool;
+    fn parent_stop(&self) -> bool;
 
-    fn parent_set_config(&self, buffer_pool: &Self::Type, config: &mut BufferPoolConfigRef)
-        -> bool;
+    fn parent_set_config(&self, config: &mut BufferPoolConfigRef) -> bool;
 
-    fn parent_flush_start(&self, _buffer_pool: &Self::Type);
+    fn parent_flush_start(&self);
 
-    fn parent_flush_stop(&self, _buffer_pool: &Self::Type);
+    fn parent_flush_stop(&self);
 }
 
 impl<T: BufferPoolImpl> BufferPoolImplExt for T {
     fn parent_acquire_buffer(
         &self,
-        buffer_pool: &Self::Type,
         params: Option<&BufferPoolAcquireParams>,
     ) -> Result<crate::Buffer, crate::FlowError> {
         unsafe {
@@ -109,7 +103,7 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
                 let mut buffer = std::ptr::null_mut();
 
                 let result = f(
-                    buffer_pool
+                    self.instance()
                         .unsafe_cast_ref::<crate::BufferPool>()
                         .to_glib_none()
                         .0,
@@ -126,7 +120,6 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
 
     fn parent_alloc_buffer(
         &self,
-        buffer_pool: &Self::Type,
         params: Option<&BufferPoolAcquireParams>,
     ) -> Result<crate::Buffer, crate::FlowError> {
         unsafe {
@@ -137,7 +130,7 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
                 let mut buffer = std::ptr::null_mut();
 
                 let result = f(
-                    buffer_pool
+                    self.instance()
                         .unsafe_cast_ref::<crate::BufferPool>()
                         .to_glib_none()
                         .0,
@@ -152,13 +145,13 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
         }
     }
 
-    fn parent_free_buffer(&self, buffer_pool: &Self::Type, buffer: crate::Buffer) {
+    fn parent_free_buffer(&self, buffer: crate::Buffer) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).free_buffer {
                 f(
-                    buffer_pool
+                    self.instance()
                         .unsafe_cast_ref::<crate::BufferPool>()
                         .to_glib_none()
                         .0,
@@ -168,13 +161,13 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
         }
     }
 
-    fn parent_release_buffer(&self, buffer_pool: &Self::Type, buffer: crate::Buffer) {
+    fn parent_release_buffer(&self, buffer: crate::Buffer) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).release_buffer {
                 f(
-                    buffer_pool
+                    self.instance()
                         .unsafe_cast_ref::<crate::BufferPool>()
                         .to_glib_none()
                         .0,
@@ -184,13 +177,13 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
         }
     }
 
-    fn parent_reset_buffer(&self, buffer_pool: &Self::Type, buffer: &mut crate::BufferRef) {
+    fn parent_reset_buffer(&self, buffer: &mut crate::BufferRef) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).reset_buffer {
                 f(
-                    buffer_pool
+                    self.instance()
                         .unsafe_cast_ref::<crate::BufferPool>()
                         .to_glib_none()
                         .0,
@@ -200,12 +193,13 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
         }
     }
 
-    fn parent_start(&self, buffer_pool: &Self::Type) -> bool {
+    fn parent_start(&self) -> bool {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).start {
-                let result = f(buffer_pool
+                let result = f(self
+                    .instance()
                     .unsafe_cast_ref::<crate::BufferPool>()
                     .to_glib_none()
                     .0);
@@ -217,12 +211,13 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
         }
     }
 
-    fn parent_stop(&self, buffer_pool: &Self::Type) -> bool {
+    fn parent_stop(&self) -> bool {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).stop {
-                let result = f(buffer_pool
+                let result = f(self
+                    .instance()
                     .unsafe_cast_ref::<crate::BufferPool>()
                     .to_glib_none()
                     .0);
@@ -234,17 +229,13 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
         }
     }
 
-    fn parent_set_config(
-        &self,
-        buffer_pool: &Self::Type,
-        config: &mut BufferPoolConfigRef,
-    ) -> bool {
+    fn parent_set_config(&self, config: &mut BufferPoolConfigRef) -> bool {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).set_config {
                 let result = f(
-                    buffer_pool
+                    self.instance()
                         .unsafe_cast_ref::<crate::BufferPool>()
                         .to_glib_none()
                         .0,
@@ -258,12 +249,13 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
         }
     }
 
-    fn parent_flush_start(&self, buffer_pool: &Self::Type) {
+    fn parent_flush_start(&self) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).flush_start {
-                f(buffer_pool
+                f(self
+                    .instance()
                     .unsafe_cast_ref::<crate::BufferPool>()
                     .to_glib_none()
                     .0)
@@ -271,12 +263,13 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
         }
     }
 
-    fn parent_flush_stop(&self, buffer_pool: &Self::Type) {
+    fn parent_flush_stop(&self) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).flush_stop {
-                f(buffer_pool
+                f(self
+                    .instance()
                     .unsafe_cast_ref::<crate::BufferPool>()
                     .to_glib_none()
                     .0)
@@ -331,10 +324,9 @@ unsafe extern "C" fn buffer_pool_acquire_buffer<T: BufferPoolImpl>(
 ) -> ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BufferPool> = from_glib_borrow(ptr);
     let params: Option<BufferPoolAcquireParams> = from_glib_none(params);
 
-    match imp.acquire_buffer(wrap.unsafe_cast_ref(), params.as_ref()) {
+    match imp.acquire_buffer(params.as_ref()) {
         Ok(b) => {
             *buffer = b.into_glib_ptr();
             ffi::GST_FLOW_OK
@@ -350,10 +342,9 @@ unsafe extern "C" fn buffer_pool_alloc_buffer<T: BufferPoolImpl>(
 ) -> ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BufferPool> = from_glib_borrow(ptr);
     let params: Option<BufferPoolAcquireParams> = from_glib_none(params);
 
-    match imp.alloc_buffer(wrap.unsafe_cast_ref(), params.as_ref()) {
+    match imp.alloc_buffer(params.as_ref()) {
         Ok(b) => {
             *buffer = b.into_glib_ptr();
             ffi::GST_FLOW_OK
@@ -374,8 +365,7 @@ unsafe extern "C" fn buffer_pool_flush_start<T: BufferPoolImpl>(ptr: *mut ffi::G
 
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BufferPool> = from_glib_borrow(ptr);
-    imp.flush_start(wrap.unsafe_cast_ref());
+    imp.flush_start();
 }
 
 unsafe extern "C" fn buffer_pool_flush_stop<T: BufferPoolImpl>(ptr: *mut ffi::GstBufferPool) {
@@ -390,8 +380,7 @@ unsafe extern "C" fn buffer_pool_flush_stop<T: BufferPoolImpl>(ptr: *mut ffi::Gs
 
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BufferPool> = from_glib_borrow(ptr);
-    imp.flush_stop(wrap.unsafe_cast_ref());
+    imp.flush_stop();
 }
 
 unsafe extern "C" fn buffer_pool_free_buffer<T: BufferPoolImpl>(
@@ -417,8 +406,7 @@ unsafe extern "C" fn buffer_pool_free_buffer<T: BufferPoolImpl>(
 
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BufferPool> = from_glib_borrow(ptr);
-    imp.free_buffer(wrap.unsafe_cast_ref(), from_glib_full(buffer));
+    imp.free_buffer(from_glib_full(buffer));
 }
 
 unsafe extern "C" fn buffer_pool_release_buffer<T: BufferPoolImpl>(
@@ -427,8 +415,7 @@ unsafe extern "C" fn buffer_pool_release_buffer<T: BufferPoolImpl>(
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BufferPool> = from_glib_borrow(ptr);
-    imp.release_buffer(wrap.unsafe_cast_ref(), from_glib_full(buffer));
+    imp.release_buffer(from_glib_full(buffer));
 }
 
 unsafe extern "C" fn buffer_pool_reset_buffer<T: BufferPoolImpl>(
@@ -437,11 +424,7 @@ unsafe extern "C" fn buffer_pool_reset_buffer<T: BufferPoolImpl>(
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BufferPool> = from_glib_borrow(ptr);
-    imp.reset_buffer(
-        wrap.unsafe_cast_ref(),
-        crate::BufferRef::from_mut_ptr(buffer),
-    );
+    imp.reset_buffer(crate::BufferRef::from_mut_ptr(buffer));
 }
 
 unsafe extern "C" fn buffer_pool_start<T: BufferPoolImpl>(
@@ -449,8 +432,7 @@ unsafe extern "C" fn buffer_pool_start<T: BufferPoolImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BufferPool> = from_glib_borrow(ptr);
-    imp.start(wrap.unsafe_cast_ref()).into_glib()
+    imp.start().into_glib()
 }
 
 unsafe extern "C" fn buffer_pool_stop<T: BufferPoolImpl>(
@@ -478,8 +460,7 @@ unsafe extern "C" fn buffer_pool_stop<T: BufferPoolImpl>(
 
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BufferPool> = from_glib_borrow(ptr);
-    imp.stop(wrap.unsafe_cast_ref()).into_glib()
+    imp.stop().into_glib()
 }
 
 unsafe extern "C" fn buffer_pool_get_options<T: BufferPoolImpl>(
@@ -498,12 +479,8 @@ unsafe extern "C" fn buffer_pool_set_config<T: BufferPoolImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<BufferPool> = from_glib_borrow(ptr);
-    imp.set_config(
-        wrap.unsafe_cast_ref(),
-        BufferPoolConfigRef::from_glib_borrow_mut(config),
-    )
-    .into_glib()
+    imp.set_config(BufferPoolConfigRef::from_glib_borrow_mut(config))
+        .into_glib()
 }
 
 #[cfg(test)]
@@ -529,14 +506,10 @@ mod tests {
                 &["TEST_OPTION"]
             }
 
-            fn set_config(
-                &self,
-                buffer_pool: &Self::Type,
-                config: &mut BufferPoolConfigRef,
-            ) -> bool {
+            fn set_config(&self, config: &mut BufferPoolConfigRef) -> bool {
                 let (caps, size, min_buffers, max_buffers) = config.params().unwrap();
                 config.set_params(caps.as_ref(), size * 2, min_buffers, max_buffers);
-                self.parent_set_config(buffer_pool, config)
+                self.parent_set_config(config)
             }
         }
 

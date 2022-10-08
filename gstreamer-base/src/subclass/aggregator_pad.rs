@@ -9,45 +9,23 @@ use crate::Aggregator;
 use crate::AggregatorPad;
 
 pub trait AggregatorPadImpl: AggregatorPadImplExt + PadImpl {
-    fn flush(
-        &self,
-        aggregator_pad: &Self::Type,
-        aggregator: &Aggregator,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        self.parent_flush(aggregator_pad, aggregator)
+    fn flush(&self, aggregator: &Aggregator) -> Result<gst::FlowSuccess, gst::FlowError> {
+        self.parent_flush(aggregator)
     }
 
-    fn skip_buffer(
-        &self,
-        aggregator_pad: &Self::Type,
-        aggregator: &Aggregator,
-        buffer: &gst::Buffer,
-    ) -> bool {
-        self.parent_skip_buffer(aggregator_pad, aggregator, buffer)
+    fn skip_buffer(&self, aggregator: &Aggregator, buffer: &gst::Buffer) -> bool {
+        self.parent_skip_buffer(aggregator, buffer)
     }
 }
 
 pub trait AggregatorPadImplExt: ObjectSubclass {
-    fn parent_flush(
-        &self,
-        aggregator_pad: &Self::Type,
-        aggregator: &Aggregator,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+    fn parent_flush(&self, aggregator: &Aggregator) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    fn parent_skip_buffer(
-        &self,
-        aggregator_pad: &Self::Type,
-        aggregator: &Aggregator,
-        buffer: &gst::Buffer,
-    ) -> bool;
+    fn parent_skip_buffer(&self, aggregator: &Aggregator, buffer: &gst::Buffer) -> bool;
 }
 
 impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
-    fn parent_flush(
-        &self,
-        aggregator_pad: &Self::Type,
-        aggregator: &Aggregator,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+    fn parent_flush(&self, aggregator: &Aggregator) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorPadClass;
@@ -55,7 +33,7 @@ impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
                 .flush
                 .map(|f| {
                     try_from_glib(f(
-                        aggregator_pad
+                        self.instance()
                             .unsafe_cast_ref::<AggregatorPad>()
                             .to_glib_none()
                             .0,
@@ -66,12 +44,7 @@ impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
         }
     }
 
-    fn parent_skip_buffer(
-        &self,
-        aggregator_pad: &Self::Type,
-        aggregator: &Aggregator,
-        buffer: &gst::Buffer,
-    ) -> bool {
+    fn parent_skip_buffer(&self, aggregator: &Aggregator, buffer: &gst::Buffer) -> bool {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorPadClass;
@@ -79,7 +52,7 @@ impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
                 .skip_buffer
                 .map(|f| {
                     from_glib(f(
-                        aggregator_pad
+                        self.instance()
                             .unsafe_cast_ref::<AggregatorPad>()
                             .to_glib_none()
                             .0,
@@ -106,11 +79,8 @@ unsafe extern "C" fn aggregator_pad_flush<T: AggregatorPadImpl>(
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<AggregatorPad> = from_glib_borrow(ptr);
 
-    let res: gst::FlowReturn = imp
-        .flush(wrap.unsafe_cast_ref(), &from_glib_borrow(aggregator))
-        .into();
+    let res: gst::FlowReturn = imp.flush(&from_glib_borrow(aggregator)).into();
     res.into_glib()
 }
 
@@ -121,12 +91,7 @@ unsafe extern "C" fn aggregator_pad_skip_buffer<T: AggregatorPadImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<AggregatorPad> = from_glib_borrow(ptr);
 
-    imp.skip_buffer(
-        wrap.unsafe_cast_ref(),
-        &from_glib_borrow(aggregator),
-        &from_glib_borrow(buffer),
-    )
-    .into_glib()
+    imp.skip_buffer(&from_glib_borrow(aggregator), &from_glib_borrow(buffer))
+        .into_glib()
 }

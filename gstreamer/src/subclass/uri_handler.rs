@@ -13,14 +13,14 @@ use std::ptr;
 pub trait URIHandlerImpl: super::element::ElementImpl {
     const URI_TYPE: URIType;
     fn protocols() -> &'static [&'static str];
-    fn uri(&self, element: &Self::Type) -> Option<String>;
-    fn set_uri(&self, element: &Self::Type, uri: &str) -> Result<(), glib::Error>;
+    fn uri(&self) -> Option<String>;
+    fn set_uri(&self, uri: &str) -> Result<(), glib::Error>;
 }
 
 pub trait URIHandlerImplExt: ObjectSubclass {
     fn parent_protocols() -> Vec<String>;
-    fn parent_uri(&self, element: &Self::Type) -> Option<String>;
-    fn parent_set_uri(&self, element: &Self::Type, uri: &str) -> Result<(), glib::Error>;
+    fn parent_uri(&self) -> Option<String>;
+    fn parent_set_uri(&self, uri: &str) -> Result<(), glib::Error>;
 }
 
 impl<T: URIHandlerImpl> URIHandlerImplExt for T {
@@ -38,7 +38,7 @@ impl<T: URIHandlerImpl> URIHandlerImplExt for T {
         }
     }
 
-    fn parent_uri(&self, element: &Self::Type) -> Option<String> {
+    fn parent_uri(&self) -> Option<String> {
         unsafe {
             let type_data = Self::type_data();
             let parent_iface = type_data.as_ref().parent_interface::<URIHandler>()
@@ -47,12 +47,17 @@ impl<T: URIHandlerImpl> URIHandlerImplExt for T {
             let func = (*parent_iface)
                 .get_uri
                 .expect("no parent \"uri\" implementation");
-            let ret = func(element.unsafe_cast_ref::<URIHandler>().to_glib_none().0);
+            let ret = func(
+                self.instance()
+                    .unsafe_cast_ref::<URIHandler>()
+                    .to_glib_none()
+                    .0,
+            );
             from_glib_full(ret)
         }
     }
 
-    fn parent_set_uri(&self, element: &Self::Type, uri: &str) -> Result<(), glib::Error> {
+    fn parent_set_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let type_data = Self::type_data();
             let parent_iface = type_data.as_ref().parent_interface::<URIHandler>()
@@ -64,7 +69,10 @@ impl<T: URIHandlerImpl> URIHandlerImplExt for T {
 
             let mut err = ptr::null_mut();
             func(
-                element.unsafe_cast_ref::<URIHandler>().to_glib_none().0,
+                self.instance()
+                    .unsafe_cast_ref::<URIHandler>()
+                    .to_glib_none()
+                    .0,
                 uri.to_glib_none().0,
                 &mut err,
             );
@@ -126,8 +134,7 @@ unsafe extern "C" fn uri_handler_get_uri<T: URIHandlerImpl>(
     let instance = &*(uri_handler as *mut T::Instance);
     let imp = instance.imp();
 
-    imp.uri(from_glib_borrow::<_, URIHandler>(uri_handler).unsafe_cast_ref())
-        .to_glib_full()
+    imp.uri().to_glib_full()
 }
 
 unsafe extern "C" fn uri_handler_set_uri<T: URIHandlerImpl>(
@@ -138,10 +145,7 @@ unsafe extern "C" fn uri_handler_set_uri<T: URIHandlerImpl>(
     let instance = &*(uri_handler as *mut T::Instance);
     let imp = instance.imp();
 
-    match imp.set_uri(
-        from_glib_borrow::<_, URIHandler>(uri_handler).unsafe_cast_ref(),
-        glib::GString::from_glib_borrow(uri).as_str(),
-    ) {
+    match imp.set_uri(glib::GString::from_glib_borrow(uri).as_str()) {
         Ok(()) => true.into_glib(),
         Err(error) => {
             if !err.is_null() {

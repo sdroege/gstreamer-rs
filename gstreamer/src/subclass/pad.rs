@@ -8,23 +8,23 @@ use glib::translate::*;
 use crate::Pad;
 
 pub trait PadImpl: PadImplExt + GstObjectImpl + Send + Sync {
-    fn linked(&self, pad: &Self::Type, peer: &Pad) {
-        self.parent_linked(pad, peer)
+    fn linked(&self, peer: &Pad) {
+        self.parent_linked(peer)
     }
 
-    fn unlinked(&self, pad: &Self::Type, peer: &Pad) {
-        self.parent_unlinked(pad, peer)
+    fn unlinked(&self, peer: &Pad) {
+        self.parent_unlinked(peer)
     }
 }
 
 pub trait PadImplExt: ObjectSubclass {
-    fn parent_linked(&self, pad: &Self::Type, peer: &Pad);
+    fn parent_linked(&self, peer: &Pad);
 
-    fn parent_unlinked(&self, pad: &Self::Type, peer: &Pad);
+    fn parent_unlinked(&self, peer: &Pad);
 }
 
 impl<T: PadImpl> PadImplExt for T {
-    fn parent_linked(&self, pad: &Self::Type, peer: &Pad) {
+    fn parent_linked(&self, peer: &Pad) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstPadClass;
@@ -33,7 +33,7 @@ impl<T: PadImpl> PadImplExt for T {
                 .linked
                 .map(|f| {
                     f(
-                        pad.unsafe_cast_ref::<Pad>().to_glib_none().0,
+                        self.instance().unsafe_cast_ref::<Pad>().to_glib_none().0,
                         peer.to_glib_none().0,
                     )
                 })
@@ -41,7 +41,7 @@ impl<T: PadImpl> PadImplExt for T {
         }
     }
 
-    fn parent_unlinked(&self, pad: &Self::Type, peer: &Pad) {
+    fn parent_unlinked(&self, peer: &Pad) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstPadClass;
@@ -50,7 +50,7 @@ impl<T: PadImpl> PadImplExt for T {
                 .unlinked
                 .map(|f| {
                     f(
-                        pad.unsafe_cast_ref::<Pad>().to_glib_none().0,
+                        self.instance().unsafe_cast_ref::<Pad>().to_glib_none().0,
                         peer.to_glib_none().0,
                     )
                 })
@@ -71,17 +71,15 @@ unsafe impl<T: PadImpl> IsSubclassable<T> for Pad {
 unsafe extern "C" fn pad_linked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut ffi::GstPad) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Pad> = from_glib_borrow(ptr);
 
-    imp.linked(wrap.unsafe_cast_ref(), &from_glib_borrow(peer))
+    imp.linked(&from_glib_borrow(peer))
 }
 
 unsafe extern "C" fn pad_unlinked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut ffi::GstPad) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Pad> = from_glib_borrow(ptr);
 
-    imp.unlinked(wrap.unsafe_cast_ref(), &from_glib_borrow(peer))
+    imp.unlinked(&from_glib_borrow(peer))
 }
 
 #[cfg(test)]
@@ -113,14 +111,14 @@ mod tests {
         impl GstObjectImpl for TestPad {}
 
         impl PadImpl for TestPad {
-            fn linked(&self, pad: &Self::Type, peer: &Pad) {
+            fn linked(&self, peer: &Pad) {
                 self.linked.store(true, atomic::Ordering::SeqCst);
-                self.parent_linked(pad, peer)
+                self.parent_linked(peer)
             }
 
-            fn unlinked(&self, pad: &Self::Type, peer: &Pad) {
+            fn unlinked(&self, peer: &Pad) {
                 self.unlinked.store(true, atomic::Ordering::SeqCst);
-                self.parent_unlinked(pad, peer)
+                self.parent_unlinked(peer)
             }
         }
     }

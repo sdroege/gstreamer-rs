@@ -85,79 +85,75 @@ pub trait ElementImpl: ElementImplExt + GstObjectImpl + Send + Sync {
 
     fn change_state(
         &self,
-        element: &Self::Type,
         transition: StateChange,
     ) -> Result<StateChangeSuccess, StateChangeError> {
-        self.parent_change_state(element, transition)
+        self.parent_change_state(transition)
     }
 
     fn request_new_pad(
         &self,
-        element: &Self::Type,
         templ: &crate::PadTemplate,
         name: Option<String>,
         caps: Option<&crate::Caps>,
     ) -> Option<crate::Pad> {
-        self.parent_request_new_pad(element, templ, name, caps)
+        self.parent_request_new_pad(templ, name, caps)
     }
 
-    fn release_pad(&self, element: &Self::Type, pad: &crate::Pad) {
-        self.parent_release_pad(element, pad)
+    fn release_pad(&self, pad: &crate::Pad) {
+        self.parent_release_pad(pad)
     }
 
-    fn send_event(&self, element: &Self::Type, event: Event) -> bool {
-        self.parent_send_event(element, event)
+    fn send_event(&self, event: Event) -> bool {
+        self.parent_send_event(event)
     }
 
-    fn query(&self, element: &Self::Type, query: &mut QueryRef) -> bool {
-        self.parent_query(element, query)
+    fn query(&self, query: &mut QueryRef) -> bool {
+        self.parent_query(query)
     }
 
-    fn set_context(&self, element: &Self::Type, context: &crate::Context) {
-        self.parent_set_context(element, context)
+    fn set_context(&self, context: &crate::Context) {
+        self.parent_set_context(context)
     }
 
-    fn set_clock(&self, element: &Self::Type, clock: Option<&crate::Clock>) -> bool {
-        self.parent_set_clock(element, clock)
+    fn set_clock(&self, clock: Option<&crate::Clock>) -> bool {
+        self.parent_set_clock(clock)
     }
 
-    fn provide_clock(&self, element: &Self::Type) -> Option<crate::Clock> {
-        self.parent_provide_clock(element)
+    fn provide_clock(&self) -> Option<crate::Clock> {
+        self.parent_provide_clock()
     }
 
-    fn post_message(&self, element: &Self::Type, msg: crate::Message) -> bool {
-        self.parent_post_message(element, msg)
+    fn post_message(&self, msg: crate::Message) -> bool {
+        self.parent_post_message(msg)
     }
 }
 
 pub trait ElementImplExt: ObjectSubclass {
     fn parent_change_state(
         &self,
-        element: &Self::Type,
         transition: StateChange,
     ) -> Result<StateChangeSuccess, StateChangeError>;
 
     fn parent_request_new_pad(
         &self,
-        element: &Self::Type,
         templ: &crate::PadTemplate,
         name: Option<String>,
         caps: Option<&crate::Caps>,
     ) -> Option<crate::Pad>;
 
-    fn parent_release_pad(&self, element: &Self::Type, pad: &crate::Pad);
+    fn parent_release_pad(&self, pad: &crate::Pad);
 
-    fn parent_send_event(&self, element: &Self::Type, event: Event) -> bool;
+    fn parent_send_event(&self, event: Event) -> bool;
 
-    fn parent_query(&self, element: &Self::Type, query: &mut QueryRef) -> bool;
+    fn parent_query(&self, query: &mut QueryRef) -> bool;
 
-    fn parent_set_context(&self, element: &Self::Type, context: &crate::Context);
+    fn parent_set_context(&self, context: &crate::Context);
 
-    fn parent_set_clock(&self, element: &Self::Type, clock: Option<&crate::Clock>) -> bool;
+    fn parent_set_clock(&self, clock: Option<&crate::Clock>) -> bool;
 
-    fn parent_provide_clock(&self, element: &Self::Type) -> Option<crate::Clock>;
+    fn parent_provide_clock(&self) -> Option<crate::Clock>;
 
-    fn parent_post_message(&self, element: &Self::Type, msg: crate::Message) -> bool;
+    fn parent_post_message(&self, msg: crate::Message) -> bool;
 
     fn panicked(&self) -> &atomic::AtomicBool;
 
@@ -168,7 +164,7 @@ pub trait ElementImplExt: ObjectSubclass {
         f: F,
     ) -> R;
 
-    fn catch_panic_pad_function<R, F: FnOnce(&Self, &Self::Type) -> R, G: FnOnce() -> R>(
+    fn catch_panic_pad_function<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R>(
         parent: Option<&crate::Object>,
         fallback: G,
         f: F,
@@ -180,7 +176,6 @@ pub trait ElementImplExt: ObjectSubclass {
 impl<T: ElementImpl> ElementImplExt for T {
     fn parent_change_state(
         &self,
-        element: &Self::Type,
         transition: StateChange,
     ) -> Result<StateChangeSuccess, StateChangeError> {
         unsafe {
@@ -191,7 +186,10 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .change_state
                 .expect("Missing parent function `change_state`");
             try_from_glib(f(
-                element.unsafe_cast_ref::<Element>().to_glib_none().0,
+                self.instance()
+                    .unsafe_cast_ref::<Element>()
+                    .to_glib_none()
+                    .0,
                 transition.into_glib(),
             ))
         }
@@ -199,7 +197,6 @@ impl<T: ElementImpl> ElementImplExt for T {
 
     fn parent_request_new_pad(
         &self,
-        element: &Self::Type,
         templ: &crate::PadTemplate,
         name: Option<String>,
         caps: Option<&crate::Caps>,
@@ -212,7 +209,10 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .request_new_pad
                 .map(|f| {
                     from_glib_none(f(
-                        element.unsafe_cast_ref::<Element>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<Element>()
+                            .to_glib_none()
+                            .0,
                         templ.to_glib_none().0,
                         name.to_glib_full(),
                         caps.to_glib_none().0,
@@ -222,7 +222,7 @@ impl<T: ElementImpl> ElementImplExt for T {
         }
     }
 
-    fn parent_release_pad(&self, element: &Self::Type, pad: &crate::Pad) {
+    fn parent_release_pad(&self, pad: &crate::Pad) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
@@ -231,7 +231,10 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .release_pad
                 .map(|f| {
                     f(
-                        element.unsafe_cast_ref::<Element>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<Element>()
+                            .to_glib_none()
+                            .0,
                         pad.to_glib_none().0,
                     )
                 })
@@ -239,7 +242,7 @@ impl<T: ElementImpl> ElementImplExt for T {
         }
     }
 
-    fn parent_send_event(&self, element: &Self::Type, event: Event) -> bool {
+    fn parent_send_event(&self, event: Event) -> bool {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
@@ -248,7 +251,10 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .send_event
                 .map(|f| {
                     from_glib(f(
-                        element.unsafe_cast_ref::<Element>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<Element>()
+                            .to_glib_none()
+                            .0,
                         event.into_glib_ptr(),
                     ))
                 })
@@ -256,7 +262,7 @@ impl<T: ElementImpl> ElementImplExt for T {
         }
     }
 
-    fn parent_query(&self, element: &Self::Type, query: &mut QueryRef) -> bool {
+    fn parent_query(&self, query: &mut QueryRef) -> bool {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
@@ -265,7 +271,10 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .query
                 .map(|f| {
                     from_glib(f(
-                        element.unsafe_cast_ref::<Element>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<Element>()
+                            .to_glib_none()
+                            .0,
                         query.as_mut_ptr(),
                     ))
                 })
@@ -273,7 +282,7 @@ impl<T: ElementImpl> ElementImplExt for T {
         }
     }
 
-    fn parent_set_context(&self, element: &Self::Type, context: &crate::Context) {
+    fn parent_set_context(&self, context: &crate::Context) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
@@ -282,7 +291,10 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .set_context
                 .map(|f| {
                     f(
-                        element.unsafe_cast_ref::<Element>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<Element>()
+                            .to_glib_none()
+                            .0,
                         context.to_glib_none().0,
                     )
                 })
@@ -290,7 +302,7 @@ impl<T: ElementImpl> ElementImplExt for T {
         }
     }
 
-    fn parent_set_clock(&self, element: &Self::Type, clock: Option<&crate::Clock>) -> bool {
+    fn parent_set_clock(&self, clock: Option<&crate::Clock>) -> bool {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
@@ -299,7 +311,10 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .set_clock
                 .map(|f| {
                     from_glib(f(
-                        element.unsafe_cast_ref::<Element>().to_glib_none().0,
+                        self.instance()
+                            .unsafe_cast_ref::<Element>()
+                            .to_glib_none()
+                            .0,
                         clock.to_glib_none().0,
                     ))
                 })
@@ -307,26 +322,35 @@ impl<T: ElementImpl> ElementImplExt for T {
         }
     }
 
-    fn parent_provide_clock(&self, element: &Self::Type) -> Option<crate::Clock> {
+    fn parent_provide_clock(&self) -> Option<crate::Clock> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
 
             (*parent_class)
                 .provide_clock
-                .map(|f| from_glib_none(f(element.unsafe_cast_ref::<Element>().to_glib_none().0)))
+                .map(|f| {
+                    from_glib_none(f(self
+                        .instance()
+                        .unsafe_cast_ref::<Element>()
+                        .to_glib_none()
+                        .0))
+                })
                 .unwrap_or(None)
         }
     }
 
-    fn parent_post_message(&self, element: &Self::Type, msg: crate::Message) -> bool {
+    fn parent_post_message(&self, msg: crate::Message) -> bool {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
 
             if let Some(f) = (*parent_class).post_message {
                 from_glib(f(
-                    element.unsafe_cast_ref::<Element>().to_glib_none().0,
+                    self.instance()
+                        .unsafe_cast_ref::<Element>()
+                        .to_glib_none()
+                        .0,
                     msg.into_glib_ptr(),
                 ))
             } else {
@@ -352,11 +376,11 @@ impl<T: ElementImpl> ElementImplExt for T {
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.imp();
 
-            panic_to_error!(element, imp.panicked(), fallback(), { f(imp) })
+            panic_to_error!(imp, fallback(), { f(imp) })
         }
     }
 
-    fn catch_panic_pad_function<R, F: FnOnce(&Self, &Self::Type) -> R, G: FnOnce() -> R>(
+    fn catch_panic_pad_function<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R>(
         parent: Option<&crate::Object>,
         fallback: G,
         f: F,
@@ -368,9 +392,7 @@ impl<T: ElementImpl> ElementImplExt for T {
             let instance = &*(ptr as *mut Self::Instance);
             let imp = instance.imp();
 
-            panic_to_error!(wrap, imp.panicked(), fallback(), {
-                f(imp, wrap.unsafe_cast_ref())
-            })
+            panic_to_error!(imp, fallback(), { f(imp) })
         }
     }
 
@@ -435,7 +457,6 @@ unsafe extern "C" fn element_change_state<T: ElementImpl>(
 ) -> ffi::GstStateChangeReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     // *Never* fail downwards state changes, this causes bugs in GStreamer
     // and leads to crashes and deadlocks.
@@ -447,10 +468,7 @@ unsafe extern "C" fn element_change_state<T: ElementImpl>(
         _ => StateChangeReturn::Failure,
     };
 
-    panic_to_error!(&wrap, imp.panicked(), fallback, {
-        imp.change_state(wrap.unsafe_cast_ref(), transition).into()
-    })
-    .into_glib()
+    panic_to_error!(imp, fallback, { imp.change_state(transition).into() }).into_glib()
 }
 
 unsafe extern "C" fn element_request_new_pad<T: ElementImpl>(
@@ -461,15 +479,13 @@ unsafe extern "C" fn element_request_new_pad<T: ElementImpl>(
 ) -> *mut ffi::GstPad {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     let caps = Option::<crate::Caps>::from_glib_borrow(caps);
 
     // XXX: This is effectively unsafe but the best we can do
     // See https://bugzilla.gnome.org/show_bug.cgi?id=791193
-    let pad = panic_to_error!(&wrap, imp.panicked(), None, {
+    let pad = panic_to_error!(imp, None, {
         imp.request_new_pad(
-            wrap.unsafe_cast_ref(),
             &from_glib_borrow(templ),
             from_glib_none(name),
             caps.as_ref().as_ref(),
@@ -495,7 +511,6 @@ unsafe extern "C" fn element_release_pad<T: ElementImpl>(
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     // If we get a floating reference passed simply return here. It can't be stored inside this
     // element, and if we continued to use it we would take ownership of this floating reference.
@@ -505,9 +520,7 @@ unsafe extern "C" fn element_release_pad<T: ElementImpl>(
         return;
     }
 
-    panic_to_error!(&wrap, imp.panicked(), (), {
-        imp.release_pad(wrap.unsafe_cast_ref(), &from_glib_none(pad))
-    })
+    panic_to_error!(imp, (), { imp.release_pad(&from_glib_none(pad)) })
 }
 
 unsafe extern "C" fn element_send_event<T: ElementImpl>(
@@ -516,12 +529,8 @@ unsafe extern "C" fn element_send_event<T: ElementImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
-    panic_to_error!(&wrap, imp.panicked(), false, {
-        imp.send_event(wrap.unsafe_cast_ref(), from_glib_full(event))
-    })
-    .into_glib()
+    panic_to_error!(imp, false, { imp.send_event(from_glib_full(event)) }).into_glib()
 }
 
 unsafe extern "C" fn element_query<T: ElementImpl>(
@@ -530,13 +539,9 @@ unsafe extern "C" fn element_query<T: ElementImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
     let query = QueryRef::from_mut_ptr(query);
 
-    panic_to_error!(&wrap, imp.panicked(), false, {
-        imp.query(wrap.unsafe_cast_ref(), query)
-    })
-    .into_glib()
+    panic_to_error!(imp, false, { imp.query(query) }).into_glib()
 }
 
 unsafe extern "C" fn element_set_context<T: ElementImpl>(
@@ -545,11 +550,8 @@ unsafe extern "C" fn element_set_context<T: ElementImpl>(
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
-    panic_to_error!(&wrap, imp.panicked(), (), {
-        imp.set_context(wrap.unsafe_cast_ref(), &from_glib_borrow(context))
-    })
+    panic_to_error!(imp, (), { imp.set_context(&from_glib_borrow(context)) })
 }
 
 unsafe extern "C" fn element_set_clock<T: ElementImpl>(
@@ -558,14 +560,10 @@ unsafe extern "C" fn element_set_clock<T: ElementImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     let clock = Option::<crate::Clock>::from_glib_borrow(clock);
 
-    panic_to_error!(&wrap, imp.panicked(), false, {
-        imp.set_clock(wrap.unsafe_cast_ref(), clock.as_ref().as_ref())
-    })
-    .into_glib()
+    panic_to_error!(imp, false, { imp.set_clock(clock.as_ref().as_ref()) }).into_glib()
 }
 
 unsafe extern "C" fn element_provide_clock<T: ElementImpl>(
@@ -573,12 +571,8 @@ unsafe extern "C" fn element_provide_clock<T: ElementImpl>(
 ) -> *mut ffi::GstClock {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
-    panic_to_error!(&wrap, imp.panicked(), None, {
-        imp.provide_clock(wrap.unsafe_cast_ref())
-    })
-    .to_glib_full()
+    panic_to_error!(imp, None, { imp.provide_clock() }).to_glib_full()
 }
 
 unsafe extern "C" fn element_post_message<T: ElementImpl>(
@@ -587,12 +581,10 @@ unsafe extern "C" fn element_post_message<T: ElementImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     // Can't catch panics here as posting the error message would cause
     // this code to be called again recursively forever.
-    imp.post_message(wrap.unsafe_cast_ref(), from_glib_full(msg))
-        .into_glib()
+    imp.post_message(from_glib_full(msg)).into_glib()
 }
 
 #[cfg(test)]
@@ -616,46 +608,25 @@ mod tests {
             fn sink_chain(
                 &self,
                 _pad: &crate::Pad,
-                _element: &super::TestElement,
                 buffer: crate::Buffer,
             ) -> Result<crate::FlowSuccess, crate::FlowError> {
                 self.n_buffers.fetch_add(1, atomic::Ordering::SeqCst);
                 self.srcpad.push(buffer)
             }
 
-            fn sink_event(
-                &self,
-                _pad: &crate::Pad,
-                _element: &super::TestElement,
-                event: crate::Event,
-            ) -> bool {
+            fn sink_event(&self, _pad: &crate::Pad, event: crate::Event) -> bool {
                 self.srcpad.push_event(event)
             }
 
-            fn sink_query(
-                &self,
-                _pad: &crate::Pad,
-                _element: &super::TestElement,
-                query: &mut crate::QueryRef,
-            ) -> bool {
+            fn sink_query(&self, _pad: &crate::Pad, query: &mut crate::QueryRef) -> bool {
                 self.srcpad.peer_query(query)
             }
 
-            fn src_event(
-                &self,
-                _pad: &crate::Pad,
-                _element: &super::TestElement,
-                event: crate::Event,
-            ) -> bool {
+            fn src_event(&self, _pad: &crate::Pad, event: crate::Event) -> bool {
                 self.sinkpad.push_event(event)
             }
 
-            fn src_query(
-                &self,
-                _pad: &crate::Pad,
-                _element: &super::TestElement,
-                query: &mut crate::QueryRef,
-            ) -> bool {
+            fn src_query(&self, _pad: &crate::Pad, query: &mut crate::QueryRef) -> bool {
                 self.sinkpad.peer_query(query)
             }
         }
@@ -673,21 +644,21 @@ mod tests {
                         TestElement::catch_panic_pad_function(
                             parent,
                             || Err(crate::FlowError::Error),
-                            |identity, element| identity.sink_chain(pad, element, buffer),
+                            |identity| identity.sink_chain(pad, buffer),
                         )
                     })
                     .event_function(|pad, parent, event| {
                         TestElement::catch_panic_pad_function(
                             parent,
                             || false,
-                            |identity, element| identity.sink_event(pad, element, event),
+                            |identity| identity.sink_event(pad, event),
                         )
                     })
                     .query_function(|pad, parent, query| {
                         TestElement::catch_panic_pad_function(
                             parent,
                             || false,
-                            |identity, element| identity.sink_query(pad, element, query),
+                            |identity| identity.sink_query(pad, query),
                         )
                     })
                     .build();
@@ -698,14 +669,14 @@ mod tests {
                         TestElement::catch_panic_pad_function(
                             parent,
                             || false,
-                            |identity, element| identity.src_event(pad, element, event),
+                            |identity| identity.src_event(pad, event),
                         )
                     })
                     .query_function(|pad, parent, query| {
                         TestElement::catch_panic_pad_function(
                             parent,
                             || false,
-                            |identity, element| identity.src_query(pad, element, query),
+                            |identity| identity.src_query(pad, query),
                         )
                     })
                     .build();
@@ -720,9 +691,10 @@ mod tests {
         }
 
         impl ObjectImpl for TestElement {
-            fn constructed(&self, element: &Self::Type) {
-                self.parent_constructed(element);
+            fn constructed(&self) {
+                self.parent_constructed();
 
+                let element = self.instance();
                 element.add_pad(&self.sinkpad).unwrap();
                 element.add_pad(&self.srcpad).unwrap();
             }
@@ -772,10 +744,9 @@ mod tests {
 
             fn change_state(
                 &self,
-                element: &Self::Type,
                 transition: crate::StateChange,
             ) -> Result<crate::StateChangeSuccess, crate::StateChangeError> {
-                let res = self.parent_change_state(element, transition)?;
+                let res = self.parent_change_state(transition)?;
 
                 if transition == crate::StateChange::PausedToPlaying {
                     self.reached_playing.store(true, atomic::Ordering::SeqCst);

@@ -8,29 +8,17 @@ use gst_rtsp::ffi::GstRTSPUrl;
 use crate::RTSPMountPoints;
 
 pub trait RTSPMountPointsImpl: RTSPMountPointsImplExt + ObjectImpl + Send + Sync {
-    fn make_path(
-        &self,
-        mount_points: &Self::Type,
-        url: &gst_rtsp::RTSPUrl,
-    ) -> Option<glib::GString> {
-        self.parent_make_path(mount_points, url)
+    fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString> {
+        self.parent_make_path(url)
     }
 }
 
 pub trait RTSPMountPointsImplExt: ObjectSubclass {
-    fn parent_make_path(
-        &self,
-        mount_points: &Self::Type,
-        url: &gst_rtsp::RTSPUrl,
-    ) -> Option<glib::GString>;
+    fn parent_make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString>;
 }
 
 impl<T: RTSPMountPointsImpl> RTSPMountPointsImplExt for T {
-    fn parent_make_path(
-        &self,
-        mount_points: &Self::Type,
-        url: &gst_rtsp::RTSPUrl,
-    ) -> Option<glib::GString> {
+    fn parent_make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPMountPointsClass;
@@ -38,7 +26,7 @@ impl<T: RTSPMountPointsImpl> RTSPMountPointsImplExt for T {
                 .make_path
                 .expect("No `make_path` virtual method implementation in parent class");
             from_glib_full(f(
-                mount_points
+                self.instance()
                     .unsafe_cast_ref::<RTSPMountPoints>()
                     .to_glib_none()
                     .0,
@@ -62,8 +50,6 @@ unsafe extern "C" fn mount_points_make_path<T: RTSPMountPointsImpl>(
 ) -> *mut std::os::raw::c_char {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<RTSPMountPoints> = from_glib_borrow(ptr);
 
-    imp.make_path(wrap.unsafe_cast_ref(), &from_glib_borrow(url))
-        .to_glib_full()
+    imp.make_path(&from_glib_borrow(url)).to_glib_full()
 }

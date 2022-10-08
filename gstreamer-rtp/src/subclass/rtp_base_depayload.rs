@@ -9,51 +9,41 @@ use crate::RTPBaseDepayload;
 use std::ptr;
 
 pub trait RTPBaseDepayloadImpl: RTPBaseDepayloadImplExt + ElementImpl {
-    fn set_caps(&self, element: &Self::Type, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
-        self.parent_set_caps(element, caps)
+    fn set_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
+        self.parent_set_caps(caps)
     }
 
-    fn handle_event(&self, element: &Self::Type, event: gst::Event) -> bool {
-        self.parent_handle_event(element, event)
+    fn handle_event(&self, event: gst::Event) -> bool {
+        self.parent_handle_event(event)
     }
 
-    fn packet_lost(&self, element: &Self::Type, event: &gst::EventRef) -> bool {
-        self.parent_packet_lost(element, event)
+    fn packet_lost(&self, event: &gst::EventRef) -> bool {
+        self.parent_packet_lost(event)
     }
 
     fn process_rtp_packet(
         &self,
-        element: &Self::Type,
         rtp_buffer: &crate::RTPBuffer<crate::rtp_buffer::Readable>,
     ) -> Option<gst::Buffer> {
-        self.parent_process_rtp_packet(element, rtp_buffer)
+        self.parent_process_rtp_packet(rtp_buffer)
     }
 }
 
 pub trait RTPBaseDepayloadImplExt: ObjectSubclass {
-    fn parent_set_caps(
-        &self,
-        element: &Self::Type,
-        caps: &gst::Caps,
-    ) -> Result<(), gst::LoggableError>;
+    fn parent_set_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError>;
 
-    fn parent_handle_event(&self, element: &Self::Type, event: gst::Event) -> bool;
+    fn parent_handle_event(&self, event: gst::Event) -> bool;
 
-    fn parent_packet_lost(&self, element: &Self::Type, event: &gst::EventRef) -> bool;
+    fn parent_packet_lost(&self, event: &gst::EventRef) -> bool;
 
     fn parent_process_rtp_packet(
         &self,
-        element: &Self::Type,
         rtp_buffer: &crate::RTPBuffer<crate::rtp_buffer::Readable>,
     ) -> Option<gst::Buffer>;
 }
 
 impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
-    fn parent_set_caps(
-        &self,
-        element: &Self::Type,
-        caps: &gst::Caps,
-    ) -> Result<(), gst::LoggableError> {
+    fn parent_set_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTPBaseDepayloadClass;
@@ -62,7 +52,7 @@ impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            element
+                            self.instance()
                                 .unsafe_cast_ref::<RTPBaseDepayload>()
                                 .to_glib_none()
                                 .0,
@@ -76,7 +66,7 @@ impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
         }
     }
 
-    fn parent_handle_event(&self, element: &Self::Type, event: gst::Event) -> bool {
+    fn parent_handle_event(&self, event: gst::Event) -> bool {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTPBaseDepayloadClass;
@@ -84,7 +74,7 @@ impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
                 .handle_event
                 .map(|f| {
                     from_glib(f(
-                        element
+                        self.instance()
                             .unsafe_cast_ref::<RTPBaseDepayload>()
                             .to_glib_none()
                             .0,
@@ -95,7 +85,7 @@ impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
         }
     }
 
-    fn parent_packet_lost(&self, element: &Self::Type, event: &gst::EventRef) -> bool {
+    fn parent_packet_lost(&self, event: &gst::EventRef) -> bool {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTPBaseDepayloadClass;
@@ -103,7 +93,7 @@ impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
                 .packet_lost
                 .map(|f| {
                     from_glib(f(
-                        element
+                        self.instance()
                             .unsafe_cast_ref::<RTPBaseDepayload>()
                             .to_glib_none()
                             .0,
@@ -116,7 +106,6 @@ impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
 
     fn parent_process_rtp_packet(
         &self,
-        element: &Self::Type,
         rtp_buffer: &crate::RTPBuffer<crate::rtp_buffer::Readable>,
     ) -> Option<gst::Buffer> {
         unsafe {
@@ -128,7 +117,7 @@ impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
                 .expect("no parent \"process\" implementation");
 
             from_glib_full(f(
-                element
+                self.instance()
                     .unsafe_cast_ref::<crate::RTPBaseDepayload>()
                     .to_glib_none()
                     .0,
@@ -157,14 +146,13 @@ unsafe extern "C" fn rtp_base_depayload_set_caps<T: RTPBaseDepayloadImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<RTPBaseDepayload> = from_glib_borrow(ptr);
     let caps = from_glib_borrow(caps);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.set_caps(wrap.unsafe_cast_ref(), &caps) {
+    gst::panic_to_error!(imp, false, {
+        match imp.set_caps(&caps) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -178,12 +166,8 @@ unsafe extern "C" fn rtp_base_depayload_handle_event<T: RTPBaseDepayloadImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<RTPBaseDepayload> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        imp.handle_event(wrap.unsafe_cast_ref(), from_glib_full(event))
-    })
-    .into_glib()
+    gst::panic_to_error!(imp, false, { imp.handle_event(from_glib_full(event)) }).into_glib()
 }
 
 unsafe extern "C" fn rtp_base_depayload_packet_lost<T: RTPBaseDepayloadImpl>(
@@ -192,10 +176,9 @@ unsafe extern "C" fn rtp_base_depayload_packet_lost<T: RTPBaseDepayloadImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<RTPBaseDepayload> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        imp.packet_lost(wrap.unsafe_cast_ref(), gst::EventRef::from_ptr(event))
+    gst::panic_to_error!(imp, false, {
+        imp.packet_lost(gst::EventRef::from_ptr(event))
     })
     .into_glib()
 }
@@ -206,12 +189,11 @@ unsafe extern "C" fn rtp_base_depayload_process_rtp_packet<T: RTPBaseDepayloadIm
 ) -> *mut gst::ffi::GstBuffer {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<crate::RTPBaseDepayload> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), ptr::null_mut(), {
+    gst::panic_to_error!(imp, ptr::null_mut(), {
         let bufwrap = crate::RTPBuffer::<crate::rtp_buffer::Readable>::from_glib_borrow(rtp_packet);
 
-        imp.process_rtp_packet(wrap.unsafe_cast_ref(), &bufwrap)
+        imp.process_rtp_packet(&bufwrap)
             .map(|buffer| buffer.into_glib_ptr())
             .unwrap_or(ptr::null_mut())
     })

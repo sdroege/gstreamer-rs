@@ -8,7 +8,6 @@ use std::ptr;
 use std::sync::{Arc, Mutex};
 
 use glib::ffi::gpointer;
-use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
@@ -25,7 +24,7 @@ pub trait TaskPoolImpl: GstObjectImpl + Send + Sync {
     /// Prepare the task pool to accept tasks.
     ///
     /// This defaults to doing nothing.
-    fn prepare(&self, _task_pool: &Self::Type) -> Result<(), glib::Error> {
+    fn prepare(&self) -> Result<(), glib::Error> {
         Ok(())
     }
 
@@ -34,7 +33,7 @@ pub trait TaskPoolImpl: GstObjectImpl + Send + Sync {
     ///
     /// This is mainly used internally to ensure proper cleanup of internal data structures in test
     /// suites.
-    fn cleanup(&self, _task_pool: &Self::Type) {}
+    fn cleanup(&self) {}
 
     // rustdoc-stripper-ignore-next
     /// Deliver a task to the pool.
@@ -42,11 +41,7 @@ pub trait TaskPoolImpl: GstObjectImpl + Send + Sync {
     /// If returning `Ok`, you need to call the `func` eventually.
     ///
     /// If returning `Err`, the `func` must be dropped without calling it.
-    fn push(
-        &self,
-        task_pool: &Self::Type,
-        func: TaskPoolFunction,
-    ) -> Result<Option<Self::Handle>, glib::Error>;
+    fn push(&self, func: TaskPoolFunction) -> Result<Option<Self::Handle>, glib::Error>;
 }
 
 unsafe impl<T: TaskPoolImpl> IsSubclassable<T> for TaskPool {
@@ -71,9 +66,8 @@ unsafe extern "C" fn task_pool_prepare<T: TaskPoolImpl>(
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<TaskPool> = from_glib_borrow(ptr);
 
-    match imp.prepare(wrap.unsafe_cast_ref()) {
+    match imp.prepare() {
         Ok(()) => {}
         Err(err) => {
             if !error.is_null() {
@@ -86,9 +80,8 @@ unsafe extern "C" fn task_pool_prepare<T: TaskPoolImpl>(
 unsafe extern "C" fn task_pool_cleanup<T: TaskPoolImpl>(ptr: *mut ffi::GstTaskPool) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<TaskPool> = from_glib_borrow(ptr);
 
-    imp.cleanup(wrap.unsafe_cast_ref());
+    imp.cleanup();
 }
 
 unsafe extern "C" fn task_pool_push<T: TaskPoolImpl>(
@@ -99,11 +92,10 @@ unsafe extern "C" fn task_pool_push<T: TaskPoolImpl>(
 ) -> gpointer {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<TaskPool> = from_glib_borrow(ptr);
 
     let func = TaskPoolFunction::new(func.expect("Tried to push null func"), user_data);
 
-    match imp.push(wrap.unsafe_cast_ref(), func.clone()) {
+    match imp.push(func.clone()) {
         Ok(None) => ptr::null_mut(),
         Ok(Some(handle)) => Box::into_raw(Box::new(handle)) as gpointer,
         Err(err) => {
@@ -117,9 +109,8 @@ unsafe extern "C" fn task_pool_push<T: TaskPoolImpl>(
 }
 
 unsafe extern "C" fn task_pool_join<T: TaskPoolImpl>(ptr: *mut ffi::GstTaskPool, id: gpointer) {
-    let wrap: Borrowed<TaskPool> = from_glib_borrow(ptr);
-
     if id.is_null() {
+        let wrap: Borrowed<TaskPool> = from_glib_borrow(ptr);
         crate::warning!(crate::CAT_RUST, obj: wrap.as_ref(), "Tried to join null handle");
         return;
     }
@@ -134,9 +125,8 @@ unsafe extern "C" fn task_pool_dispose_handle<T: TaskPoolImpl>(
     ptr: *mut ffi::GstTaskPool,
     id: gpointer,
 ) {
-    let wrap: Borrowed<TaskPool> = from_glib_borrow(ptr);
-
     if id.is_null() {
+        let wrap: Borrowed<TaskPool> = from_glib_borrow(ptr);
         crate::warning!(crate::CAT_RUST, obj: wrap.as_ref(), "Tried to dispose null handle");
         return;
     }
@@ -270,20 +260,16 @@ mod tests {
         impl TaskPoolImpl for TestPool {
             type Handle = TestHandle;
 
-            fn prepare(&self, _task_pool: &Self::Type) -> Result<(), glib::Error> {
+            fn prepare(&self) -> Result<(), glib::Error> {
                 self.prepared.store(true, atomic::Ordering::SeqCst);
                 Ok(())
             }
 
-            fn cleanup(&self, _task_pool: &Self::Type) {
+            fn cleanup(&self) {
                 self.cleaned_up.store(true, atomic::Ordering::SeqCst);
             }
 
-            fn push(
-                &self,
-                _task_pool: &Self::Type,
-                func: TaskPoolFunction,
-            ) -> Result<Option<Self::Handle>, glib::Error> {
+            fn push(&self, func: TaskPoolFunction) -> Result<Option<Self::Handle>, glib::Error> {
                 let handle = thread::spawn(move || func.call());
                 Ok(Some(TestHandle(handle)))
             }

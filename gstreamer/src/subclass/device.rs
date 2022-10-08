@@ -12,49 +12,29 @@ use crate::LoggableError;
 use std::ptr;
 
 pub trait DeviceImpl: DeviceImplExt + GstObjectImpl + Send + Sync {
-    fn create_element(
-        &self,
-        device: &Self::Type,
-        name: Option<&str>,
-    ) -> Result<Element, LoggableError> {
-        self.parent_create_element(device, name)
+    fn create_element(&self, name: Option<&str>) -> Result<Element, LoggableError> {
+        self.parent_create_element(name)
     }
 
-    fn reconfigure_element(
-        &self,
-        device: &Self::Type,
-        element: &Element,
-    ) -> Result<(), LoggableError> {
-        self.parent_reconfigure_element(device, element)
+    fn reconfigure_element(&self, element: &Element) -> Result<(), LoggableError> {
+        self.parent_reconfigure_element(element)
     }
 }
 
 pub trait DeviceImplExt: ObjectSubclass {
-    fn parent_create_element(
-        &self,
-        device: &Self::Type,
-        name: Option<&str>,
-    ) -> Result<Element, LoggableError>;
+    fn parent_create_element(&self, name: Option<&str>) -> Result<Element, LoggableError>;
 
-    fn parent_reconfigure_element(
-        &self,
-        device: &Self::Type,
-        element: &Element,
-    ) -> Result<(), LoggableError>;
+    fn parent_reconfigure_element(&self, element: &Element) -> Result<(), LoggableError>;
 }
 
 impl<T: DeviceImpl> DeviceImplExt for T {
-    fn parent_create_element(
-        &self,
-        device: &Self::Type,
-        name: Option<&str>,
-    ) -> Result<Element, LoggableError> {
+    fn parent_create_element(&self, name: Option<&str>) -> Result<Element, LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstDeviceClass;
             if let Some(f) = (*parent_class).create_element {
                 let ptr = f(
-                    device.unsafe_cast_ref::<Device>().to_glib_none().0,
+                    self.instance().unsafe_cast_ref::<Device>().to_glib_none().0,
                     name.to_glib_none().0,
                 );
 
@@ -74,11 +54,7 @@ impl<T: DeviceImpl> DeviceImplExt for T {
         }
     }
 
-    fn parent_reconfigure_element(
-        &self,
-        device: &Self::Type,
-        element: &Element,
-    ) -> Result<(), LoggableError> {
+    fn parent_reconfigure_element(&self, element: &Element) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstDeviceClass;
@@ -90,7 +66,7 @@ impl<T: DeviceImpl> DeviceImplExt for T {
             })?;
             result_from_gboolean!(
                 f(
-                    device.unsafe_cast_ref::<Device>().to_glib_none().0,
+                    self.instance().unsafe_cast_ref::<Device>().to_glib_none().0,
                     element.to_glib_none().0
                 ),
                 crate::CAT_RUST,
@@ -115,10 +91,8 @@ unsafe extern "C" fn device_create_element<T: DeviceImpl>(
 ) -> *mut ffi::GstElement {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Device> = from_glib_borrow(ptr);
 
     match imp.create_element(
-        wrap.unsafe_cast_ref(),
         Option::<glib::GString>::from_glib_borrow(name)
             .as_ref()
             .as_ref()
@@ -136,7 +110,7 @@ unsafe extern "C" fn device_create_element<T: DeviceImpl>(
             element_ptr
         }
         Err(err) => {
-            err.log_with_object(&*wrap);
+            err.log_with_imp(imp);
             ptr::null_mut()
         }
     }
@@ -148,12 +122,11 @@ unsafe extern "C" fn device_reconfigure_element<T: DeviceImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Device> = from_glib_borrow(ptr);
 
-    match imp.reconfigure_element(wrap.unsafe_cast_ref(), &from_glib_borrow(element)) {
+    match imp.reconfigure_element(&from_glib_borrow(element)) {
         Ok(()) => true,
         Err(err) => {
-            err.log_with_object(&*wrap);
+            err.log_with_imp(imp);
             false
         }
     }

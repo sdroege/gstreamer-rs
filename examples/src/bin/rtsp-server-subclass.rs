@@ -105,9 +105,10 @@ mod media_factory {
 
         // Implementation of glib::Object virtual methods
         impl ObjectImpl for Factory {
-            fn constructed(&self, factory: &Self::Type) {
-                self.parent_constructed(factory);
+            fn constructed(&self) {
+                self.parent_constructed();
 
+                let factory = self.instance();
                 // All media created by this factory are our custom media type. This would
                 // not require a media factory subclass and can also be called on the normal
                 // RTSPMediaFactory.
@@ -117,11 +118,7 @@ mod media_factory {
 
         // Implementation of gst_rtsp_server::RTSPMediaFactory virtual methods
         impl RTSPMediaFactoryImpl for Factory {
-            fn create_element(
-                &self,
-                _factory: &Self::Type,
-                _url: &gst_rtsp::RTSPUrl,
-            ) -> Option<gst::Element> {
+            fn create_element(&self, _url: &gst_rtsp::RTSPUrl) -> Option<gst::Element> {
                 // Create a simple VP8 videotestsrc input
                 let bin = gst::Bin::new(None);
                 let src = gst::ElementFactory::make("videotestsrc", None).unwrap();
@@ -187,11 +184,10 @@ mod media {
         impl RTSPMediaImpl for Media {
             fn setup_sdp(
                 &self,
-                media: &Self::Type,
                 sdp: &mut gst_sdp::SDPMessageRef,
                 info: &gst_rtsp_server::subclass::SDPInfo,
             ) -> Result<(), gst::LoggableError> {
-                self.parent_setup_sdp(media, sdp, info)?;
+                self.parent_setup_sdp(sdp, info)?;
 
                 sdp.add_attribute("my-custom-attribute", Some("has-a-value"));
 
@@ -237,7 +233,8 @@ mod server {
 
         // Implementation of gst_rtsp_server::RTSPServer virtual methods
         impl RTSPServerImpl for Server {
-            fn create_client(&self, server: &Self::Type) -> Option<gst_rtsp_server::RTSPClient> {
+            fn create_client(&self) -> Option<gst_rtsp_server::RTSPClient> {
+                let server = self.instance();
                 let client = super::client::Client::default();
 
                 // Duplicated from the default implementation
@@ -249,8 +246,8 @@ mod server {
                 Some(client.upcast())
             }
 
-            fn client_connected(&self, server: &Self::Type, client: &gst_rtsp_server::RTSPClient) {
-                self.parent_client_connected(server, client);
+            fn client_connected(&self, client: &gst_rtsp_server::RTSPClient) {
+                self.parent_client_connected(client);
                 println!("Client {:?} connected", client);
             }
         }
@@ -297,8 +294,9 @@ mod client {
 
         // Implementation of gst_rtsp_server::RTSPClient virtual methods
         impl RTSPClientImpl for Client {
-            fn closed(&self, client: &Self::Type) {
-                self.parent_closed(client);
+            fn closed(&self) {
+                let client = self.instance();
+                self.parent_closed();
                 println!("Client {:?} closed", client);
             }
         }
@@ -343,13 +341,9 @@ mod mount_points {
 
         // Implementation of gst_rtsp_server::RTSPClient virtual methods
         impl RTSPMountPointsImpl for MountPoints {
-            fn make_path(
-                &self,
-                mount_points: &Self::Type,
-                url: &gst_rtsp::RTSPUrl,
-            ) -> Option<glib::GString> {
+            fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString> {
                 println!("Make path called for {:?} ", url);
-                self.parent_make_path(mount_points, url)
+                self.parent_make_path(url)
             }
         }
     }

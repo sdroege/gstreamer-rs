@@ -14,65 +14,47 @@ use crate::ClockTime;
 use crate::ClockTimeDiff;
 
 pub trait ClockImpl: ClockImplExt + GstObjectImpl + Send + Sync {
-    fn change_resolution(
-        &self,
-        clock: &Self::Type,
-        old_resolution: ClockTime,
-        new_resolution: ClockTime,
-    ) -> ClockTime {
-        self.parent_change_resolution(clock, old_resolution, new_resolution)
+    fn change_resolution(&self, old_resolution: ClockTime, new_resolution: ClockTime) -> ClockTime {
+        self.parent_change_resolution(old_resolution, new_resolution)
     }
 
-    fn resolution(&self, clock: &Self::Type) -> ClockTime {
-        self.parent_resolution(clock)
+    fn resolution(&self) -> ClockTime {
+        self.parent_resolution()
     }
 
-    fn internal_time(&self, clock: &Self::Type) -> ClockTime {
-        self.parent_internal_time(clock)
+    fn internal_time(&self) -> ClockTime {
+        self.parent_internal_time()
     }
 
-    fn wait(
-        &self,
-        clock: &Self::Type,
-        id: &ClockId,
-    ) -> (Result<ClockSuccess, ClockError>, ClockTimeDiff) {
-        self.parent_wait(clock, id)
+    fn wait(&self, id: &ClockId) -> (Result<ClockSuccess, ClockError>, ClockTimeDiff) {
+        self.parent_wait(id)
     }
 
-    fn wait_async(&self, clock: &Self::Type, id: &ClockId) -> Result<ClockSuccess, ClockError> {
-        self.parent_wait_async(clock, id)
+    fn wait_async(&self, id: &ClockId) -> Result<ClockSuccess, ClockError> {
+        self.parent_wait_async(id)
     }
 
-    fn unschedule(&self, clock: &Self::Type, id: &ClockId) {
-        self.parent_unschedule(clock, id)
+    fn unschedule(&self, id: &ClockId) {
+        self.parent_unschedule(id)
     }
 }
 
 pub trait ClockImplExt: ObjectSubclass {
     fn parent_change_resolution(
         &self,
-        clock: &Self::Type,
         old_resolution: ClockTime,
         new_resolution: ClockTime,
     ) -> ClockTime;
 
-    fn parent_resolution(&self, clock: &Self::Type) -> ClockTime;
+    fn parent_resolution(&self) -> ClockTime;
 
-    fn parent_internal_time(&self, clock: &Self::Type) -> ClockTime;
+    fn parent_internal_time(&self) -> ClockTime;
 
-    fn parent_wait(
-        &self,
-        clock: &Self::Type,
-        id: &ClockId,
-    ) -> (Result<ClockSuccess, ClockError>, ClockTimeDiff);
+    fn parent_wait(&self, id: &ClockId) -> (Result<ClockSuccess, ClockError>, ClockTimeDiff);
 
-    fn parent_wait_async(
-        &self,
-        clock: &Self::Type,
-        id: &ClockId,
-    ) -> Result<ClockSuccess, ClockError>;
+    fn parent_wait_async(&self, id: &ClockId) -> Result<ClockSuccess, ClockError>;
 
-    fn parent_unschedule(&self, clock: &Self::Type, id: &ClockId);
+    fn parent_unschedule(&self, id: &ClockId);
 
     fn wake_id(&self, id: &ClockId)
     where
@@ -83,7 +65,6 @@ pub trait ClockImplExt: ObjectSubclass {
 impl<T: ClockImpl> ClockImplExt for T {
     fn parent_change_resolution(
         &self,
-        clock: &Self::Type,
         old_resolution: ClockTime,
         new_resolution: ClockTime,
     ) -> ClockTime {
@@ -93,18 +74,18 @@ impl<T: ClockImpl> ClockImplExt for T {
 
             if let Some(func) = (*parent_class).change_resolution {
                 try_from_glib(func(
-                    clock.unsafe_cast_ref::<Clock>().to_glib_none().0,
+                    self.instance().unsafe_cast_ref::<Clock>().to_glib_none().0,
                     old_resolution.into_glib(),
                     new_resolution.into_glib(),
                 ))
                 .expect("undefined resolution")
             } else {
-                self.resolution(clock)
+                self.resolution()
             }
         }
     }
 
-    fn parent_resolution(&self, clock: &Self::Type) -> ClockTime {
+    fn parent_resolution(&self) -> ClockTime {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
@@ -112,14 +93,14 @@ impl<T: ClockImpl> ClockImplExt for T {
             try_from_glib(
                 (*parent_class)
                     .get_resolution
-                    .map(|f| f(clock.unsafe_cast_ref::<Clock>().to_glib_none().0))
+                    .map(|f| f(self.instance().unsafe_cast_ref::<Clock>().to_glib_none().0))
                     .unwrap_or(1),
             )
             .expect("undefined resolution")
         }
     }
 
-    fn parent_internal_time(&self, clock: &Self::Type) -> ClockTime {
+    fn parent_internal_time(&self) -> ClockTime {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
@@ -127,18 +108,14 @@ impl<T: ClockImpl> ClockImplExt for T {
             try_from_glib(
                 (*parent_class)
                     .get_internal_time
-                    .map(|f| f(clock.unsafe_cast_ref::<Clock>().to_glib_none().0))
+                    .map(|f| f(self.instance().unsafe_cast_ref::<Clock>().to_glib_none().0))
                     .unwrap_or(0),
             )
             .expect("undefined internal_time")
         }
     }
 
-    fn parent_wait(
-        &self,
-        clock: &Self::Type,
-        id: &ClockId,
-    ) -> (Result<ClockSuccess, ClockError>, ClockTimeDiff) {
+    fn parent_wait(&self, id: &ClockId) -> (Result<ClockSuccess, ClockError>, ClockTimeDiff) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
@@ -150,7 +127,7 @@ impl<T: ClockImpl> ClockImplExt for T {
                         .wait
                         .map(|f| {
                             f(
-                                clock.unsafe_cast_ref::<Clock>().to_glib_none().0,
+                                self.instance().unsafe_cast_ref::<Clock>().to_glib_none().0,
                                 id.as_ptr() as *mut ffi::GstClockEntry,
                                 &mut jitter,
                             )
@@ -162,11 +139,7 @@ impl<T: ClockImpl> ClockImplExt for T {
         }
     }
 
-    fn parent_wait_async(
-        &self,
-        clock: &Self::Type,
-        id: &ClockId,
-    ) -> Result<ClockSuccess, ClockError> {
+    fn parent_wait_async(&self, id: &ClockId) -> Result<ClockSuccess, ClockError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
@@ -175,7 +148,7 @@ impl<T: ClockImpl> ClockImplExt for T {
                     .wait_async
                     .map(|f| {
                         f(
-                            clock.unsafe_cast_ref::<Clock>().to_glib_none().0,
+                            self.instance().unsafe_cast_ref::<Clock>().to_glib_none().0,
                             id.as_ptr() as *mut ffi::GstClockEntry,
                         )
                     })
@@ -184,13 +157,13 @@ impl<T: ClockImpl> ClockImplExt for T {
         }
     }
 
-    fn parent_unschedule(&self, clock: &Self::Type, id: &ClockId) {
+    fn parent_unschedule(&self, id: &ClockId) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
             if let Some(func) = (*parent_class).unschedule {
                 func(
-                    clock.unsafe_cast_ref::<Clock>().to_glib_none().0,
+                    self.instance().unsafe_cast_ref::<Clock>().to_glib_none().0,
                     id.as_ptr() as *mut ffi::GstClockEntry,
                 );
             }
@@ -203,14 +176,15 @@ impl<T: ClockImpl> ClockImplExt for T {
         <Self as ObjectSubclass>::Type: IsA<Clock>,
     {
         let clock = self.instance();
+        let clock = unsafe { clock.unsafe_cast_ref::<Clock>() };
 
         cfg_if::cfg_if! {
             if #[cfg(feature = "v1_16")] {
-                assert!(id.uses_clock(&clock));
+                assert!(id.uses_clock(clock));
             } else {
                 unsafe {
                     let ptr = id.as_ptr() as *mut ffi::GstClockEntry;
-                    assert_eq!((*ptr).clock, clock.as_ref().to_glib_none().0);
+                    assert_eq!((*ptr).clock, clock.to_glib_none().0);
                 }
             }
         }
@@ -219,7 +193,7 @@ impl<T: ClockImpl> ClockImplExt for T {
             let ptr = id.as_ptr() as *mut ffi::GstClockEntry;
             if let Some(func) = (*ptr).func {
                 func(
-                    clock.as_ref().to_glib_none().0,
+                    clock.to_glib_none().0,
                     (*ptr).time,
                     ptr as ffi::GstClockID,
                     (*ptr).user_data,
@@ -252,7 +226,6 @@ unsafe extern "C" fn clock_change_resolution<T: ClockImpl>(
 ) -> ffi::GstClockTime {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
     let old_resolution = match from_glib(old_resolution) {
         Some(old_resolution) => old_resolution,
@@ -263,7 +236,7 @@ unsafe extern "C" fn clock_change_resolution<T: ClockImpl>(
         None => return ffi::GST_CLOCK_TIME_NONE,
     };
 
-    imp.change_resolution(wrap.unsafe_cast_ref(), old_resolution, new_resolution)
+    imp.change_resolution(old_resolution, new_resolution)
         .into_glib()
 }
 
@@ -272,9 +245,8 @@ unsafe extern "C" fn clock_get_resolution<T: ClockImpl>(
 ) -> ffi::GstClockTime {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
-    imp.resolution(wrap.unsafe_cast_ref()).into_glib()
+    imp.resolution().into_glib()
 }
 
 unsafe extern "C" fn clock_get_internal_time<T: ClockImpl>(
@@ -282,9 +254,8 @@ unsafe extern "C" fn clock_get_internal_time<T: ClockImpl>(
 ) -> ffi::GstClockTime {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
-    imp.internal_time(wrap.unsafe_cast_ref()).into_glib()
+    imp.internal_time().into_glib()
 }
 
 unsafe extern "C" fn clock_wait<T: ClockImpl>(
@@ -294,12 +265,8 @@ unsafe extern "C" fn clock_wait<T: ClockImpl>(
 ) -> ffi::GstClockReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
-    let (res, j) = imp.wait(
-        wrap.unsafe_cast_ref(),
-        &from_glib_borrow(id as ffi::GstClockID),
-    );
+    let (res, j) = imp.wait(&from_glib_borrow(id as ffi::GstClockID));
     if !jitter.is_null() {
         *jitter = j;
     }
@@ -313,13 +280,8 @@ unsafe extern "C" fn clock_wait_async<T: ClockImpl>(
 ) -> ffi::GstClockReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
-    ClockReturn::from(imp.wait_async(
-        wrap.unsafe_cast_ref(),
-        &from_glib_borrow(id as ffi::GstClockID),
-    ))
-    .into_glib()
+    ClockReturn::from(imp.wait_async(&from_glib_borrow(id as ffi::GstClockID))).into_glib()
 }
 
 unsafe extern "C" fn clock_unschedule<T: ClockImpl>(
@@ -328,10 +290,6 @@ unsafe extern "C" fn clock_unschedule<T: ClockImpl>(
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
-    imp.unschedule(
-        wrap.unsafe_cast_ref(),
-        &from_glib_borrow(id as ffi::GstClockID),
-    );
+    imp.unschedule(&from_glib_borrow(id as ffi::GstClockID));
 }

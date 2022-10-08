@@ -11,14 +11,13 @@ use crate::AudioAggregator;
 use crate::AudioAggregatorPad;
 
 pub trait AudioAggregatorImpl: AudioAggregatorImplExt + AggregatorImpl {
-    fn create_output_buffer(&self, element: &Self::Type, num_frames: u32) -> Option<gst::Buffer> {
-        self.parent_create_output_buffer(element, num_frames)
+    fn create_output_buffer(&self, num_frames: u32) -> Option<gst::Buffer> {
+        self.parent_create_output_buffer(num_frames)
     }
 
     #[allow(clippy::too_many_arguments)]
     fn aggregate_one_buffer(
         &self,
-        element: &Self::Type,
         pad: &AudioAggregatorPad,
         inbuf: &gst::BufferRef,
         in_offset: u32,
@@ -26,23 +25,16 @@ pub trait AudioAggregatorImpl: AudioAggregatorImplExt + AggregatorImpl {
         out_offset: u32,
         num_frames: u32,
     ) -> bool {
-        self.parent_aggregate_one_buffer(
-            element, pad, inbuf, in_offset, outbuf, out_offset, num_frames,
-        )
+        self.parent_aggregate_one_buffer(pad, inbuf, in_offset, outbuf, out_offset, num_frames)
     }
 }
 
 pub trait AudioAggregatorImplExt: ObjectSubclass {
-    fn parent_create_output_buffer(
-        &self,
-        element: &Self::Type,
-        num_frames: u32,
-    ) -> Option<gst::Buffer>;
+    fn parent_create_output_buffer(&self, num_frames: u32) -> Option<gst::Buffer>;
 
     #[allow(clippy::too_many_arguments)]
     fn parent_aggregate_one_buffer(
         &self,
-        element: &Self::Type,
         pad: &AudioAggregatorPad,
         inbuf: &gst::BufferRef,
         in_offset: u32,
@@ -53,11 +45,7 @@ pub trait AudioAggregatorImplExt: ObjectSubclass {
 }
 
 impl<T: AudioAggregatorImpl> AudioAggregatorImplExt for T {
-    fn parent_create_output_buffer(
-        &self,
-        element: &Self::Type,
-        num_frames: u32,
-    ) -> Option<gst::Buffer> {
+    fn parent_create_output_buffer(&self, num_frames: u32) -> Option<gst::Buffer> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioAggregatorClass;
@@ -66,7 +54,7 @@ impl<T: AudioAggregatorImpl> AudioAggregatorImplExt for T {
                 .expect("Missing parent function `create_output_buffer`");
 
             from_glib_full(f(
-                element
+                self.instance()
                     .unsafe_cast_ref::<AudioAggregator>()
                     .to_glib_none()
                     .0,
@@ -77,7 +65,6 @@ impl<T: AudioAggregatorImpl> AudioAggregatorImplExt for T {
 
     fn parent_aggregate_one_buffer(
         &self,
-        element: &Self::Type,
         pad: &AudioAggregatorPad,
         inbuf: &gst::BufferRef,
         in_offset: u32,
@@ -93,7 +80,7 @@ impl<T: AudioAggregatorImpl> AudioAggregatorImplExt for T {
                 .expect("Missing parent function `aggregate_one_buffer`");
 
             from_glib(f(
-                element
+                self.instance()
                     .unsafe_cast_ref::<AudioAggregator>()
                     .to_glib_none()
                     .0,
@@ -124,13 +111,10 @@ unsafe extern "C" fn audio_aggregator_create_output_buffer<T: AudioAggregatorImp
 ) -> *mut gst::ffi::GstBuffer {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<AudioAggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), None, {
-        imp.create_output_buffer(wrap.unsafe_cast_ref(), num_frames)
-    })
-    .map(|buffer| buffer.into_glib_ptr())
-    .unwrap_or(ptr::null_mut())
+    gst::panic_to_error!(imp, None, { imp.create_output_buffer(num_frames) })
+        .map(|buffer| buffer.into_glib_ptr())
+        .unwrap_or(ptr::null_mut())
 }
 
 unsafe extern "C" fn audio_aggregator_aggregate_one_buffer<T: AudioAggregatorImpl>(
@@ -144,11 +128,9 @@ unsafe extern "C" fn audio_aggregator_aggregate_one_buffer<T: AudioAggregatorImp
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<AudioAggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), true, {
+    gst::panic_to_error!(imp, true, {
         imp.aggregate_one_buffer(
-            wrap.unsafe_cast_ref(),
             &from_glib_borrow(pad),
             gst::BufferRef::from_ptr(inbuf),
             in_offset,

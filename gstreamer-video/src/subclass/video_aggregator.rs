@@ -13,71 +13,46 @@ use crate::VideoAggregator;
 pub struct AggregateFramesToken<'a>(pub(crate) &'a VideoAggregator);
 
 pub trait VideoAggregatorImpl: VideoAggregatorImplExt + AggregatorImpl {
-    fn update_caps(
-        &self,
-        element: &Self::Type,
-        caps: &gst::Caps,
-    ) -> Result<gst::Caps, gst::LoggableError> {
-        self.parent_update_caps(element, caps)
+    fn update_caps(&self, caps: &gst::Caps) -> Result<gst::Caps, gst::LoggableError> {
+        self.parent_update_caps(caps)
     }
 
     fn aggregate_frames(
         &self,
-        element: &Self::Type,
         token: &AggregateFramesToken,
         outbuf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        self.parent_aggregate_frames(element, token, outbuf)
+        self.parent_aggregate_frames(token, outbuf)
     }
 
-    fn create_output_buffer(
-        &self,
-        element: &Self::Type,
-    ) -> Result<Option<gst::Buffer>, gst::FlowError> {
-        self.parent_create_output_buffer(element)
+    fn create_output_buffer(&self) -> Result<Option<gst::Buffer>, gst::FlowError> {
+        self.parent_create_output_buffer()
     }
 
-    fn find_best_format(
-        &self,
-        element: &Self::Type,
-        downstream_caps: &gst::Caps,
-    ) -> Option<(crate::VideoInfo, bool)> {
-        self.parent_find_best_format(element, downstream_caps)
+    fn find_best_format(&self, downstream_caps: &gst::Caps) -> Option<(crate::VideoInfo, bool)> {
+        self.parent_find_best_format(downstream_caps)
     }
 }
 
 pub trait VideoAggregatorImplExt: ObjectSubclass {
-    fn parent_update_caps(
-        &self,
-        element: &Self::Type,
-        caps: &gst::Caps,
-    ) -> Result<gst::Caps, gst::LoggableError>;
+    fn parent_update_caps(&self, caps: &gst::Caps) -> Result<gst::Caps, gst::LoggableError>;
 
     fn parent_aggregate_frames(
         &self,
-        element: &Self::Type,
         token: &AggregateFramesToken,
         outbuf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    fn parent_create_output_buffer(
-        &self,
-        element: &Self::Type,
-    ) -> Result<Option<gst::Buffer>, gst::FlowError>;
+    fn parent_create_output_buffer(&self) -> Result<Option<gst::Buffer>, gst::FlowError>;
 
     fn parent_find_best_format(
         &self,
-        element: &Self::Type,
         downstream_caps: &gst::Caps,
     ) -> Option<(crate::VideoInfo, bool)>;
 }
 
 impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
-    fn parent_update_caps(
-        &self,
-        element: &Self::Type,
-        caps: &gst::Caps,
-    ) -> Result<gst::Caps, gst::LoggableError> {
+    fn parent_update_caps(&self, caps: &gst::Caps) -> Result<gst::Caps, gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoAggregatorClass;
@@ -86,7 +61,7 @@ impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
                 .expect("Missing parent function `update_caps`");
 
             Option::<_>::from_glib_full(f(
-                element
+                self.instance()
                     .unsafe_cast_ref::<VideoAggregator>()
                     .to_glib_none()
                     .0,
@@ -100,12 +75,11 @@ impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
 
     fn parent_aggregate_frames(
         &self,
-        element: &Self::Type,
         token: &AggregateFramesToken,
         outbuf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         assert_eq!(
-            element.as_ptr() as *mut ffi::GstVideoAggregator,
+            self.instance().as_ptr() as *mut ffi::GstVideoAggregator,
             token.0.as_ptr() as *mut ffi::GstVideoAggregator
         );
 
@@ -117,7 +91,7 @@ impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
                 .expect("Missing parent function `aggregate_frames`");
 
             try_from_glib(f(
-                element
+                self.instance()
                     .unsafe_cast_ref::<VideoAggregator>()
                     .to_glib_none()
                     .0,
@@ -127,10 +101,7 @@ impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
         }
     }
 
-    fn parent_create_output_buffer(
-        &self,
-        element: &Self::Type,
-    ) -> Result<Option<gst::Buffer>, gst::FlowError> {
+    fn parent_create_output_buffer(&self) -> Result<Option<gst::Buffer>, gst::FlowError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoAggregatorClass;
@@ -140,7 +111,7 @@ impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
 
             let mut buffer = ptr::null_mut();
             try_from_glib(f(
-                element
+                self.instance()
                     .unsafe_cast_ref::<VideoAggregator>()
                     .to_glib_none()
                     .0,
@@ -152,7 +123,6 @@ impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
 
     fn parent_find_best_format(
         &self,
-        element: &Self::Type,
         downstream_caps: &gst::Caps,
     ) -> Option<(crate::VideoInfo, bool)> {
         unsafe {
@@ -166,7 +136,7 @@ impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
                 let mut at_least_one_alpha = glib::ffi::GFALSE;
 
                 f(
-                    element
+                    self.instance()
                         .unsafe_cast_ref::<VideoAggregator>()
                         .to_glib_none()
                         .0,
@@ -206,13 +176,12 @@ unsafe extern "C" fn video_aggregator_update_caps<T: VideoAggregatorImpl>(
 ) -> *mut gst::ffi::GstCaps {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<VideoAggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), ptr::null_mut(), {
-        match imp.update_caps(wrap.unsafe_cast_ref(), &from_glib_borrow(caps)) {
+    gst::panic_to_error!(imp, ptr::null_mut(), {
+        match imp.update_caps(&from_glib_borrow(caps)) {
             Ok(caps) => caps.into_glib_ptr(),
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 ptr::null_mut()
             }
         }
@@ -225,13 +194,13 @@ unsafe extern "C" fn video_aggregator_aggregate_frames<T: VideoAggregatorImpl>(
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<VideoAggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
-        let token = AggregateFramesToken(&*wrap);
+    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        let instance = imp.instance();
+        let instance = instance.unsafe_cast_ref::<VideoAggregator>();
+        let token = AggregateFramesToken(instance);
 
         imp.aggregate_frames(
-            wrap.unsafe_cast_ref(),
             &token,
             gst::BufferRef::from_mut_ptr(
                 // Wrong pointer type
@@ -249,10 +218,9 @@ unsafe extern "C" fn video_aggregator_create_output_buffer<T: VideoAggregatorImp
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<VideoAggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), gst::FlowReturn::Error, {
-        match imp.create_output_buffer(wrap.unsafe_cast_ref()) {
+    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        match imp.create_output_buffer() {
             Ok(buffer) => {
                 *outbuf = buffer.map(|b| b.into_glib_ptr()).unwrap_or(ptr::null_mut());
                 Ok(gst::FlowSuccess::Ok)
@@ -275,10 +243,9 @@ unsafe extern "C" fn video_aggregator_find_best_format<T: VideoAggregatorImpl>(
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<VideoAggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), (), {
-        match imp.find_best_format(wrap.unsafe_cast_ref(), &from_glib_borrow(downstream_caps)) {
+    gst::panic_to_error!(imp, (), {
+        match imp.find_best_format(&from_glib_borrow(downstream_caps)) {
             None => (),
             Some((info, alpha)) => {
                 *best_info = *info.to_glib_none().0;

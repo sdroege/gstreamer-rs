@@ -7,7 +7,7 @@ use glib::subclass::prelude::*;
 use glib::translate::*;
 
 pub trait PlayerVideoRendererImpl: ObjectImpl {
-    fn create_video_sink(&self, video_renderer: &Self::Type, player: &Player) -> gst::Element;
+    fn create_video_sink(&self, player: &Player) -> gst::Element;
 }
 
 unsafe impl<T: PlayerVideoRendererImpl> IsImplementable<T> for PlayerVideoRenderer {
@@ -19,19 +19,11 @@ unsafe impl<T: PlayerVideoRendererImpl> IsImplementable<T> for PlayerVideoRender
 }
 
 pub trait PlayerVideoRendererImplExt: ObjectSubclass {
-    fn parent_create_video_sink(
-        &self,
-        video_renderer: &Self::Type,
-        player: &Player,
-    ) -> gst::Element;
+    fn parent_create_video_sink(&self, player: &Player) -> gst::Element;
 }
 
 impl<T: PlayerVideoRendererImpl> PlayerVideoRendererImplExt for T {
-    fn parent_create_video_sink(
-        &self,
-        video_renderer: &Self::Type,
-        player: &Player,
-    ) -> gst::Element {
+    fn parent_create_video_sink(&self, player: &Player) -> gst::Element {
         unsafe {
             let type_data = Self::type_data();
             let parent_iface = type_data.as_ref().parent_interface::<PlayerVideoRenderer>()
@@ -41,7 +33,7 @@ impl<T: PlayerVideoRendererImpl> PlayerVideoRendererImplExt for T {
                 .create_video_sink
                 .expect("no parent \"create_video_sink\" implementation");
             let ret = func(
-                video_renderer
+                self.instance()
                     .unsafe_cast_ref::<PlayerVideoRenderer>()
                     .to_glib_none()
                     .0,
@@ -63,10 +55,7 @@ unsafe extern "C" fn video_renderer_create_video_sink<T: PlayerVideoRendererImpl
     let instance = &*(video_renderer as *mut T::Instance);
     let imp = instance.imp();
 
-    let sink = imp.create_video_sink(
-        from_glib_borrow::<_, PlayerVideoRenderer>(video_renderer).unsafe_cast_ref(),
-        &Player::from_glib_borrow(player),
-    );
+    let sink = imp.create_video_sink(&from_glib_borrow::<_, Player>(player));
 
     let sink_ptr: *mut gst::ffi::GstElement = sink.to_glib_none().0;
 

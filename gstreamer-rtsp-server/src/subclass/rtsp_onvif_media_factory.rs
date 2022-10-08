@@ -10,17 +10,17 @@ use crate::RTSPOnvifMediaFactory;
 pub trait RTSPOnvifMediaFactoryImpl:
     RTSPMediaFactoryImplExt + RTSPMediaFactoryImpl + Send + Sync
 {
-    fn has_backchannel_support(&self, factory: &Self::Type) -> bool {
-        self.parent_has_backchannel_support(factory)
+    fn has_backchannel_support(&self) -> bool {
+        self.parent_has_backchannel_support()
     }
 }
 
 pub trait RTSPOnvifMediaFactoryImplExt: ObjectSubclass {
-    fn parent_has_backchannel_support(&self, factory: &Self::Type) -> bool;
+    fn parent_has_backchannel_support(&self) -> bool;
 }
 
 impl<T: RTSPOnvifMediaFactoryImpl> RTSPOnvifMediaFactoryImplExt for T {
-    fn parent_has_backchannel_support(&self, factory: &Self::Type) -> bool {
+    fn parent_has_backchannel_support(&self) -> bool {
         unsafe {
             let data = Self::type_data();
             let parent_class =
@@ -28,7 +28,8 @@ impl<T: RTSPOnvifMediaFactoryImpl> RTSPOnvifMediaFactoryImplExt for T {
             (*parent_class)
                 .has_backchannel_support
                 .map(|f| {
-                    from_glib(f(factory
+                    from_glib(f(self
+                        .instance()
                         .unsafe_cast_ref::<RTSPOnvifMediaFactory>()
                         .to_glib_none()
                         .0))
@@ -51,8 +52,6 @@ unsafe extern "C" fn factory_has_backchannel_support<T: RTSPOnvifMediaFactoryImp
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<RTSPOnvifMediaFactory> = from_glib_borrow(ptr);
 
-    imp.has_backchannel_support(wrap.unsafe_cast_ref())
-        .into_glib()
+    imp.has_backchannel_support().into_glib()
 }

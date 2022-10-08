@@ -12,33 +12,29 @@ use crate::{GLBaseSrc, GLMemory, GLAPI};
 pub trait GLBaseSrcImpl: GLBaseSrcImplExt + PushSrcImpl {
     const SUPPORTED_GL_API: GLAPI;
 
-    fn gl_start(&self, element: &Self::Type) -> Result<(), LoggableError> {
-        self.parent_gl_start(element)
+    fn gl_start(&self) -> Result<(), LoggableError> {
+        self.parent_gl_start()
     }
 
-    fn gl_stop(&self, element: &Self::Type) {
-        self.parent_gl_stop(element)
+    fn gl_stop(&self) {
+        self.parent_gl_stop()
     }
 
-    fn fill_gl_memory(&self, element: &Self::Type, memory: &GLMemory) -> Result<(), LoggableError> {
-        self.parent_fill_gl_memory(element, memory)
+    fn fill_gl_memory(&self, memory: &GLMemory) -> Result<(), LoggableError> {
+        self.parent_fill_gl_memory(memory)
     }
 }
 
 pub trait GLBaseSrcImplExt: ObjectSubclass {
-    fn parent_gl_start(&self, element: &Self::Type) -> Result<(), LoggableError>;
+    fn parent_gl_start(&self) -> Result<(), LoggableError>;
 
-    fn parent_gl_stop(&self, element: &Self::Type);
+    fn parent_gl_stop(&self);
 
-    fn parent_fill_gl_memory(
-        &self,
-        element: &Self::Type,
-        memory: &GLMemory,
-    ) -> Result<(), LoggableError>;
+    fn parent_fill_gl_memory(&self, memory: &GLMemory) -> Result<(), LoggableError>;
 }
 
 impl<T: GLBaseSrcImpl> GLBaseSrcImplExt for T {
-    fn parent_gl_start(&self, element: &Self::Type) -> Result<(), LoggableError> {
+    fn parent_gl_start(&self) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstGLBaseSrcClass;
@@ -47,7 +43,11 @@ impl<T: GLBaseSrcImpl> GLBaseSrcImplExt for T {
                 .gl_start
                 .map(|f| {
                     result_from_gboolean!(
-                        f(element.unsafe_cast_ref::<GLBaseSrc>().to_glib_none().0),
+                        f(self
+                            .instance()
+                            .unsafe_cast_ref::<GLBaseSrc>()
+                            .to_glib_none()
+                            .0),
                         CAT_RUST,
                         "Parent function `gl_start` failed",
                     )
@@ -56,22 +56,22 @@ impl<T: GLBaseSrcImpl> GLBaseSrcImplExt for T {
         }
     }
 
-    fn parent_gl_stop(&self, element: &Self::Type) {
+    fn parent_gl_stop(&self) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstGLBaseSrcClass;
 
             if let Some(f) = (*parent_class).gl_stop {
-                f(element.unsafe_cast_ref::<GLBaseSrc>().to_glib_none().0)
+                f(self
+                    .instance()
+                    .unsafe_cast_ref::<GLBaseSrc>()
+                    .to_glib_none()
+                    .0)
             }
         }
     }
 
-    fn parent_fill_gl_memory(
-        &self,
-        element: &Self::Type,
-        memory: &GLMemory,
-    ) -> Result<(), LoggableError> {
+    fn parent_fill_gl_memory(&self, memory: &GLMemory) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstGLBaseSrcClass;
@@ -81,7 +81,10 @@ impl<T: GLBaseSrcImpl> GLBaseSrcImplExt for T {
                 .map(|f| {
                     result_from_gboolean!(
                         f(
-                            element.unsafe_cast_ref::<GLBaseSrc>().to_glib_none().0,
+                            self.instance()
+                                .unsafe_cast_ref::<GLBaseSrc>()
+                                .to_glib_none()
+                                .0,
                             mut_override(memory.to_glib_none().0),
                         ),
                         CAT_RUST,
@@ -107,13 +110,12 @@ unsafe impl<T: GLBaseSrcImpl> IsSubclassable<T> for GLBaseSrc {
 unsafe extern "C" fn gl_start<T: GLBaseSrcImpl>(ptr: *mut GstGLBaseSrc) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<GLBaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.gl_start(wrap.unsafe_cast_ref()) {
+    gst::panic_to_error!(imp, false, {
+        match imp.gl_start() {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -124,11 +126,8 @@ unsafe extern "C" fn gl_start<T: GLBaseSrcImpl>(ptr: *mut GstGLBaseSrc) -> glib:
 unsafe extern "C" fn gl_stop<T: GLBaseSrcImpl>(ptr: *mut GstGLBaseSrc) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<GLBaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), (), {
-        imp.gl_stop(wrap.unsafe_cast_ref())
-    })
+    gst::panic_to_error!(imp, (), { imp.gl_stop() })
 }
 
 unsafe extern "C" fn fill_gl_memory<T: GLBaseSrcImpl>(
@@ -137,13 +136,12 @@ unsafe extern "C" fn fill_gl_memory<T: GLBaseSrcImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<GLBaseSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.fill_gl_memory(wrap.unsafe_cast_ref(), &from_glib_borrow(memory)) {
+    gst::panic_to_error!(imp, false, {
+        match imp.fill_gl_memory(&from_glib_borrow(memory)) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }

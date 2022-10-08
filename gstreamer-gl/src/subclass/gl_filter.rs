@@ -24,75 +24,47 @@ pub trait GLFilterImpl: GLFilterImplExt + GLBaseFilterImpl {
     /// in [`GLFilter::class_init`] if [`true`].
     const ADD_RGBA_PAD_TEMPLATES: bool = true;
 
-    fn set_caps(
-        &self,
-        filter: &Self::Type,
-        incaps: &Caps,
-        outcaps: &Caps,
-    ) -> Result<(), LoggableError> {
-        GLFilterImplExt::parent_set_caps(self, filter, incaps, outcaps)
+    fn set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError> {
+        GLFilterImplExt::parent_set_caps(self, incaps, outcaps)
     }
 
-    fn filter(
-        &self,
-        filter: &Self::Type,
-        input: &Buffer,
-        output: &Buffer,
-    ) -> Result<(), LoggableError> {
-        self.parent_filter(filter, input, output)
+    fn filter(&self, input: &Buffer, output: &Buffer) -> Result<(), LoggableError> {
+        self.parent_filter(input, output)
     }
 
-    fn filter_texture(
-        &self,
-        filter: &Self::Type,
-        input: &GLMemory,
-        output: &GLMemory,
-    ) -> Result<(), LoggableError> {
-        self.parent_filter_texture(filter, input, output)
+    fn filter_texture(&self, input: &GLMemory, output: &GLMemory) -> Result<(), LoggableError> {
+        self.parent_filter_texture(input, output)
     }
 
-    fn init_fbo(&self, filter: &Self::Type) -> Result<(), LoggableError> {
-        self.parent_init_fbo(filter)
+    fn init_fbo(&self) -> Result<(), LoggableError> {
+        self.parent_init_fbo()
     }
 
     fn transform_internal_caps(
         &self,
-        filter: &Self::Type,
         direction: PadDirection,
         caps: &Caps,
         filter_caps: Option<&Caps>,
     ) -> Option<Caps> {
-        self.parent_transform_internal_caps(filter, direction, caps, filter_caps)
+        self.parent_transform_internal_caps(direction, caps, filter_caps)
     }
 }
 
 pub trait GLFilterImplExt: ObjectSubclass {
-    fn parent_set_caps(
-        &self,
-        filter: &Self::Type,
-        incaps: &Caps,
-        outcaps: &Caps,
-    ) -> Result<(), LoggableError>;
+    fn parent_set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError>;
 
-    fn parent_filter(
-        &self,
-        filter: &Self::Type,
-        input: &Buffer,
-        output: &Buffer,
-    ) -> Result<(), LoggableError>;
+    fn parent_filter(&self, input: &Buffer, output: &Buffer) -> Result<(), LoggableError>;
 
     fn parent_filter_texture(
         &self,
-        filter: &Self::Type,
         input: &GLMemory,
         output: &GLMemory,
     ) -> Result<(), LoggableError>;
 
-    fn parent_init_fbo(&self, filter: &Self::Type) -> Result<(), LoggableError>;
+    fn parent_init_fbo(&self) -> Result<(), LoggableError>;
 
     fn parent_transform_internal_caps(
         &self,
-        filter: &Self::Type,
         direction: PadDirection,
         caps: &Caps,
         filter_caps: Option<&Caps>,
@@ -100,12 +72,7 @@ pub trait GLFilterImplExt: ObjectSubclass {
 }
 
 impl<T: GLFilterImpl> GLFilterImplExt for T {
-    fn parent_set_caps(
-        &self,
-        filter: &Self::Type,
-        incaps: &Caps,
-        outcaps: &Caps,
-    ) -> Result<(), LoggableError> {
+    fn parent_set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut GstGLFilterClass;
@@ -115,7 +82,10 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
                 .map(|f| {
                     result_from_gboolean!(
                         f(
-                            filter.unsafe_cast_ref::<GLFilter>().to_glib_none().0,
+                            self.instance()
+                                .unsafe_cast_ref::<GLFilter>()
+                                .to_glib_none()
+                                .0,
                             incaps.to_glib_none().0,
                             outcaps.to_glib_none().0,
                         ),
@@ -127,12 +97,7 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
         }
     }
 
-    fn parent_filter(
-        &self,
-        filter: &Self::Type,
-        input: &Buffer,
-        output: &Buffer,
-    ) -> Result<(), LoggableError> {
+    fn parent_filter(&self, input: &Buffer, output: &Buffer) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut GstGLFilterClass;
@@ -142,7 +107,10 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
                 .map(|f| {
                     result_from_gboolean!(
                         f(
-                            filter.unsafe_cast_ref::<GLFilter>().to_glib_none().0,
+                            self.instance()
+                                .unsafe_cast_ref::<GLFilter>()
+                                .to_glib_none()
+                                .0,
                             input.to_glib_none().0,
                             output.to_glib_none().0,
                         ),
@@ -156,7 +124,6 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
 
     fn parent_filter_texture(
         &self,
-        filter: &Self::Type,
         input: &GLMemory,
         output: &GLMemory,
     ) -> Result<(), LoggableError> {
@@ -169,7 +136,10 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
                 .map(|f| {
                     result_from_gboolean!(
                         f(
-                            filter.unsafe_cast_ref::<GLFilter>().to_glib_none().0,
+                            self.instance()
+                                .unsafe_cast_ref::<GLFilter>()
+                                .to_glib_none()
+                                .0,
                             input.to_glib_none().0,
                             output.to_glib_none().0,
                         ),
@@ -181,7 +151,7 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
         }
     }
 
-    fn parent_init_fbo(&self, filter: &Self::Type) -> Result<(), LoggableError> {
+    fn parent_init_fbo(&self) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut GstGLFilterClass;
@@ -190,7 +160,11 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
                 .init_fbo
                 .map(|f| {
                     result_from_gboolean!(
-                        f(filter.unsafe_cast_ref::<GLFilter>().to_glib_none().0),
+                        f(self
+                            .instance()
+                            .unsafe_cast_ref::<GLFilter>()
+                            .to_glib_none()
+                            .0),
                         CAT_RUST,
                         "Parent function `init_fbo` failed"
                     )
@@ -200,7 +174,6 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
     }
     fn parent_transform_internal_caps(
         &self,
-        filter: &Self::Type,
         direction: PadDirection,
         caps: &Caps,
         filter_caps: Option<&Caps>,
@@ -214,7 +187,10 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
                 .expect("Missing parent function `transform_internal_caps`");
 
             from_glib_full(f(
-                filter.unsafe_cast_ref::<GLFilter>().to_glib_none().0,
+                self.instance()
+                    .unsafe_cast_ref::<GLFilter>()
+                    .to_glib_none()
+                    .0,
                 direction.into_glib(),
                 caps.to_glib_none().0,
                 filter_caps.to_glib_none().0,
@@ -255,17 +231,12 @@ unsafe extern "C" fn filter<T: GLFilterImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<GLFilter> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.filter(
-            wrap.unsafe_cast_ref(),
-            &from_glib_borrow(input),
-            &from_glib_borrow(output),
-        ) {
+    gst::panic_to_error!(imp, false, {
+        match imp.filter(&from_glib_borrow(input), &from_glib_borrow(output)) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -280,17 +251,12 @@ unsafe extern "C" fn filter_texture<T: GLFilterImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<GLFilter> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.filter_texture(
-            wrap.unsafe_cast_ref(),
-            &from_glib_borrow(input),
-            &from_glib_borrow(output),
-        ) {
+    gst::panic_to_error!(imp, false, {
+        match imp.filter_texture(&from_glib_borrow(input), &from_glib_borrow(output)) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -301,13 +267,12 @@ unsafe extern "C" fn filter_texture<T: GLFilterImpl>(
 unsafe extern "C" fn init_fbo<T: GLFilterImpl>(ptr: *mut GstGLFilter) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<GLFilter> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match imp.init_fbo(wrap.unsafe_cast_ref()) {
+    gst::panic_to_error!(imp, false, {
+        match imp.init_fbo() {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -322,18 +287,12 @@ unsafe extern "C" fn set_caps<T: GLFilterImpl>(
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<GLFilter> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), false, {
-        match GLFilterImpl::set_caps(
-            imp,
-            wrap.unsafe_cast_ref(),
-            &from_glib_borrow(incaps),
-            &from_glib_borrow(outcaps),
-        ) {
+    gst::panic_to_error!(imp, false, {
+        match GLFilterImpl::set_caps(imp, &from_glib_borrow(incaps), &from_glib_borrow(outcaps)) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&*wrap);
+                err.log_with_imp(imp);
                 false
             }
         }
@@ -349,13 +308,11 @@ unsafe extern "C" fn transform_internal_caps<T: GLFilterImpl>(
 ) -> *mut gst::ffi::GstCaps {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<GLFilter> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, imp.panicked(), None, {
+    gst::panic_to_error!(imp, None, {
         let filter_caps: Borrowed<Option<Caps>> = from_glib_borrow(filter_caps);
 
         imp.transform_internal_caps(
-            wrap.unsafe_cast_ref(),
             from_glib(direction),
             &from_glib_borrow(caps),
             filter_caps.as_ref().as_ref(),

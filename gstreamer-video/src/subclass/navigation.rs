@@ -8,31 +8,31 @@ use glib::subclass::prelude::*;
 use crate::Navigation;
 
 pub trait NavigationImpl: ObjectImpl {
-    fn send_event(&self, nav: &Self::Type, structure: gst::Structure);
+    fn send_event(&self, structure: gst::Structure);
 
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    fn send_event_simple(&self, nav: &Self::Type, event: gst::Event) {
+    fn send_event_simple(&self, event: gst::Event) {
         if let Some(structure) = event.structure() {
-            self.send_event(nav, structure.to_owned());
+            self.send_event(structure.to_owned());
         }
     }
 }
 
 pub trait NavigationImplExt: ObjectSubclass {
-    fn parent_send_event(&self, nav: &Self::Type, structure: gst::Structure);
+    fn parent_send_event(&self, structure: gst::Structure);
 
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    fn parent_send_event_simple(&self, nav: &Self::Type, event: gst::Event) {
+    fn parent_send_event_simple(&self, event: gst::Event) {
         if let Some(structure) = event.structure() {
-            self.parent_send_event(nav, structure.to_owned());
+            self.parent_send_event(structure.to_owned());
         }
     }
 }
 
 impl<T: NavigationImpl> NavigationImplExt for T {
-    fn parent_send_event(&self, nav: &Self::Type, structure: gst::Structure) {
+    fn parent_send_event(&self, structure: gst::Structure) {
         unsafe {
             let type_data = Self::type_data();
             let parent_iface = type_data.as_ref().parent_interface::<Navigation>()
@@ -44,7 +44,10 @@ impl<T: NavigationImpl> NavigationImplExt for T {
             };
 
             func(
-                nav.unsafe_cast_ref::<Navigation>().to_glib_none().0,
+                self.instance()
+                    .unsafe_cast_ref::<Navigation>()
+                    .to_glib_none()
+                    .0,
                 structure.into_glib_ptr(),
             );
         }
@@ -52,7 +55,7 @@ impl<T: NavigationImpl> NavigationImplExt for T {
 
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    fn parent_send_event_simple(&self, nav: &Self::Type, event: gst::Event) {
+    fn parent_send_event_simple(&self, event: gst::Event) {
         unsafe {
             let type_data = Self::type_data();
             let parent_iface = type_data.as_ref().parent_interface::<Navigation>()
@@ -64,7 +67,10 @@ impl<T: NavigationImpl> NavigationImplExt for T {
             };
 
             func(
-                nav.unsafe_cast_ref::<Navigation>().to_glib_none().0,
+                self.instance()
+                    .unsafe_cast_ref::<Navigation>()
+                    .to_glib_none()
+                    .0,
                 event.into_glib_ptr(),
             );
         }
@@ -96,10 +102,7 @@ unsafe extern "C" fn navigation_send_event<T: NavigationImpl>(
     let instance = &*(nav as *mut T::Instance);
     let imp = instance.imp();
 
-    imp.send_event(
-        from_glib_borrow::<_, Navigation>(nav).unsafe_cast_ref(),
-        from_glib_full(structure),
-    );
+    imp.send_event(from_glib_full(structure));
 }
 
 #[cfg(any(feature = "v1_22", feature = "dox"))]
@@ -111,8 +114,5 @@ unsafe extern "C" fn navigation_send_event_simple<T: NavigationImpl>(
     let instance = &*(nav as *mut T::Instance);
     let imp = instance.imp();
 
-    imp.send_event_simple(
-        from_glib_borrow::<_, Navigation>(nav).unsafe_cast_ref(),
-        from_glib_full(event),
-    );
+    imp.send_event_simple(from_glib_full(event));
 }

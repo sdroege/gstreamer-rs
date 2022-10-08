@@ -67,11 +67,7 @@ mod mirror {
         }
 
         impl GLMirrorFilter {
-            fn create_shader(
-                &self,
-                filter: &<Self as ObjectSubclass>::Type,
-                context: &GLContext,
-            ) -> Result<(), gst::LoggableError> {
+            fn create_shader(&self, context: &GLContext) -> Result<(), gst::LoggableError> {
                 let shader = GLShader::new(context);
 
                 let vertex = GLSLStage::new_default_vertex(context);
@@ -80,7 +76,7 @@ mod mirror {
 
                 gst::debug!(
                     CAT,
-                    obj: filter,
+                    imp: self,
                     "Compiling fragment shader {}",
                     FRAGMENT_SHADER
                 );
@@ -99,7 +95,7 @@ mod mirror {
 
                 gst::debug!(
                     CAT,
-                    obj: filter,
+                    imp: self,
                     "Successfully compiled and linked {:?}",
                     shader
                 );
@@ -127,12 +123,14 @@ mod mirror {
             const TRANSFORM_IP_ON_PASSTHROUGH: bool = false;
         }
         impl GLBaseFilterImpl for GLMirrorFilter {
-            fn gl_start(&self, filter: &Self::Type) -> Result<(), gst::LoggableError> {
+            fn gl_start(&self) -> Result<(), gst::LoggableError> {
+                let filter = self.instance();
+
                 // Create a shader when GL is started, knowing that the OpenGL context is
                 // available.
-                let context = GLBaseFilterExt::context(filter).unwrap();
-                self.create_shader(filter, &context)?;
-                self.parent_gl_start(filter)
+                let context = GLBaseFilterExt::context(&*filter).unwrap();
+                self.create_shader(&context)?;
+                self.parent_gl_start()
             }
         }
         impl GLFilterImpl for GLMirrorFilter {
@@ -140,10 +138,11 @@ mod mirror {
 
             fn filter_texture(
                 &self,
-                filter: &Self::Type,
                 input: &gst_gl::GLMemory,
                 output: &gst_gl::GLMemory,
             ) -> Result<(), gst::LoggableError> {
+                let filter = self.instance();
+
                 let shader = self.shader.lock().unwrap();
                 // Use the underlying filter implementation to transform the input texture into
                 // an output texture with the shader.
@@ -154,7 +153,7 @@ mod mirror {
                         .as_ref()
                         .expect("No shader, call `create_shader` first!"),
                 );
-                self.parent_filter_texture(filter, input, output)
+                self.parent_filter_texture(input, output)
             }
         }
     }
