@@ -72,7 +72,7 @@ impl fmt::Display for GenericFormattedValue {
 }
 
 impl Displayable for GenericFormattedValue {
-    type DisplayImpl = GenericFormattedValue;
+    type DisplayImpl = Self;
     fn display(self) -> Self {
         self
     }
@@ -186,25 +186,37 @@ impl FormattedValueNoneBuilder for GenericFormattedValue {
 }
 
 impl UnsignedIntoSigned for GenericFormattedValue {
-    type Signed = Signed<GenericFormattedValue>;
+    type Signed = GenericSignedFormattedValue;
 
     #[track_caller]
     fn into_positive(self) -> Self::Signed {
+        use Signed::Positive;
         match self {
-            GenericFormattedValue::Undefined(_) => {
+            Self::Undefined(_) => {
                 unimplemented!("`GenericFormattedValue::Undefined` is already signed")
             }
-            unsigned_inner => Signed::Positive(unsigned_inner),
+            Self::Default(val) => Self::Signed::Default(val.map(Positive)),
+            Self::Bytes(val) => Self::Signed::Bytes(val.map(Positive)),
+            Self::Time(val) => Self::Signed::Time(val.map(Positive)),
+            Self::Buffers(val) => Self::Signed::Buffers(val.map(Positive)),
+            Self::Percent(val) => Self::Signed::Percent(val.map(Positive)),
+            Self::Other(format, val) => Self::Signed::Other(format, val.map(Positive)),
         }
     }
 
     #[track_caller]
     fn into_negative(self) -> Self::Signed {
+        use Signed::Negative;
         match self {
-            GenericFormattedValue::Undefined(_) => {
+            Self::Undefined(_) => {
                 unimplemented!("`GenericFormattedValue::Undefined` is already signed")
             }
-            unsigned_inner => Signed::Negative(unsigned_inner),
+            Self::Default(val) => Self::Signed::Default(val.map(Negative)),
+            Self::Bytes(val) => Self::Signed::Bytes(val.map(Negative)),
+            Self::Time(val) => Self::Signed::Time(val.map(Negative)),
+            Self::Buffers(val) => Self::Signed::Buffers(val.map(Negative)),
+            Self::Percent(val) => Self::Signed::Percent(val.map(Negative)),
+            Self::Other(format, val) => Self::Signed::Other(format, val.map(Negative)),
         }
     }
 }
@@ -230,6 +242,136 @@ impl CompatibleFormattedValue<GenericFormattedValue> for GenericFormattedValue {
         } else {
             Err(FormattedValueError(self.format()))
         }
+    }
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum GenericSignedFormattedValue {
+    Default(Option<Signed<Default>>),
+    Bytes(Option<Signed<Bytes>>),
+    Time(Option<Signed<ClockTime>>),
+    Buffers(Option<Signed<Buffers>>),
+    Percent(Option<Signed<Percent>>),
+    Other(Format, Option<Signed<Other>>),
+}
+
+impl GenericSignedFormattedValue {
+    #[doc(alias = "get_format")]
+    pub fn format(&self) -> Format {
+        match *self {
+            Self::Default(_) => Format::Default,
+            Self::Bytes(_) => Format::Bytes,
+            Self::Time(_) => Format::Time,
+            Self::Buffers(_) => Format::Buffers,
+            Self::Percent(_) => Format::Percent,
+            Self::Other(format, _) => format,
+        }
+    }
+
+    pub fn abs(self) -> GenericFormattedValue {
+        use GenericFormattedValue as Unsigned;
+        match self {
+            Self::Default(opt_signed) => Unsigned::Default(opt_signed.map(Signed::abs)),
+            Self::Bytes(opt_signed) => Unsigned::Bytes(opt_signed.map(Signed::abs)),
+            Self::Time(opt_signed) => Unsigned::Time(opt_signed.map(Signed::abs)),
+            Self::Buffers(opt_signed) => Unsigned::Buffers(opt_signed.map(Signed::abs)),
+            Self::Percent(opt_signed) => Unsigned::Percent(opt_signed.map(Signed::abs)),
+            Self::Other(format, opt_signed) => Unsigned::Other(format, opt_signed.map(Signed::abs)),
+        }
+    }
+
+    pub fn is_some(&self) -> bool {
+        match self {
+            Self::Default(v) => v.is_some(),
+            Self::Bytes(v) => v.is_some(),
+            Self::Time(v) => v.is_some(),
+            Self::Buffers(v) => v.is_some(),
+            Self::Percent(v) => v.is_some(),
+            Self::Other(_, v) => v.is_some(),
+        }
+    }
+
+    pub fn is_none(&self) -> bool {
+        !self.is_some()
+    }
+
+    #[track_caller]
+    pub fn none_for_format(format: Format) -> Self {
+        skip_assert_initialized!();
+        match format {
+            Format::Default => Self::Default(None),
+            Format::Bytes => Self::Bytes(None),
+            Format::Time => Self::Time(None),
+            Format::Buffers => Self::Buffers(None),
+            Format::Percent => Self::Percent(None),
+            Format::Undefined => {
+                panic!("`Undefined` is already signed, use `GenericFormattedValue`")
+            }
+            other => Self::Other(other, None),
+        }
+    }
+}
+
+macro_rules! impl_gsfv_fn_opt_ret(
+    ($fn:ident(self) -> Option<$ret_ty:ty>) => {
+        pub fn $fn(self) -> Option<$ret_ty> {
+            match self {
+                Self::Default(opt_signed) => opt_signed.map(|signed| signed.$fn()),
+                Self::Bytes(opt_signed) => opt_signed.map(|signed| signed.$fn()),
+                Self::Time(opt_signed) => opt_signed.map(|signed| signed.$fn()),
+                Self::Buffers(opt_signed) => opt_signed.map(|signed| signed.$fn()),
+                Self::Percent(opt_signed) => opt_signed.map(|signed| signed.$fn()),
+                Self::Other(_, opt_signed) => opt_signed.map(|signed| signed.$fn()),
+            }
+        }
+    };
+);
+
+impl GenericSignedFormattedValue {
+    impl_gsfv_fn_opt_ret!(is_positive(self) -> Option<bool>);
+    impl_gsfv_fn_opt_ret!(is_negative(self) -> Option<bool>);
+    impl_gsfv_fn_opt_ret!(signum(self) -> Option<i32>);
+}
+
+impl std::ops::Neg for GenericSignedFormattedValue {
+    type Output = Self;
+
+    fn neg(self) -> Self {
+        use std::ops::Neg;
+        match self {
+            Self::Default(opt_signed) => Self::Default(opt_signed.map(Neg::neg)),
+            Self::Bytes(opt_signed) => Self::Bytes(opt_signed.map(Neg::neg)),
+            Self::Time(opt_signed) => Self::Time(opt_signed.map(Neg::neg)),
+            Self::Buffers(opt_signed) => Self::Buffers(opt_signed.map(Neg::neg)),
+            Self::Percent(opt_signed) => Self::Percent(opt_signed.map(Neg::neg)),
+            Self::Other(format, opt_signed) => Self::Other(format, opt_signed.map(Neg::neg)),
+        }
+    }
+}
+
+impl fmt::Display for GenericSignedFormattedValue {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Self::Default(opt_signed) => opt_signed.display().fmt(f),
+            Self::Bytes(opt_signed) => opt_signed.display().fmt(f),
+            Self::Time(opt_signed) => opt_signed.display().fmt(f),
+            Self::Buffers(opt_signed) => opt_signed.display().fmt(f),
+            Self::Percent(opt_signed) => opt_signed.display().fmt(f),
+            Self::Other(format, opt_signed) => {
+                opt_signed.display().fmt(f)?;
+                fmt::Write::write_char(f, ' ')?;
+                fmt::Display::fmt(&format, f)
+            }
+        }
+    }
+}
+
+impl Displayable for GenericSignedFormattedValue {
+    type DisplayImpl = Self;
+
+    fn display(self) -> Self::DisplayImpl {
+        self
     }
 }
 
@@ -282,6 +424,31 @@ mod tests {
         assert_eq!(
             gen_other_none,
             GenericFormattedValue::Other(Format::__Unknown(128), None)
+        );
+    }
+
+    #[test]
+    #[allow(clippy::eq_op, clippy::op_ref)]
+    fn generic_signed_other() {
+        let gen_other_42: GenericFormattedValue =
+            GenericFormattedValue::new(Format::__Unknown(128), 42);
+
+        let p_gen_other_42 = gen_other_42.into_positive();
+        assert_eq!(
+            p_gen_other_42,
+            GenericSignedFormattedValue::Other(
+                Format::__Unknown(128),
+                Some(Signed::Positive(Other(42))),
+            ),
+        );
+
+        let n_gen_other_42 = gen_other_42.into_negative();
+        assert_eq!(
+            n_gen_other_42,
+            GenericSignedFormattedValue::Other(
+                Format::__Unknown(128),
+                Some(Signed::Negative(Other(42))),
+            ),
         );
     }
 }

@@ -684,7 +684,7 @@ mod tests {
             Option::<ClockTime>::none_signed_for_format(Format::Time);
         assert!(ct_none.is_none());
 
-        let gen_ct_none: Signed<GenericFormattedValue> =
+        let gen_ct_none: GenericSignedFormattedValue =
             GenericFormattedValue::none_signed_for_format(Format::Time);
         assert!(gen_ct_none.abs().is_none());
     }
@@ -775,25 +775,49 @@ mod tests {
         assert!(ct_1.is_some());
 
         let signed = ct_1.into_positive();
-        assert_eq!(signed, Signed::Positive(ct_1));
-        assert!(signed.is_positive());
-        assert_eq!(signed.positive(), Some(ct_1));
+        assert_eq!(
+            signed,
+            GenericSignedFormattedValue::Time(Some(Signed::Positive(ClockTime::SECOND))),
+        );
+        assert_eq!(signed.is_positive(), Some(true));
+        assert_eq!(signed.is_negative(), Some(false));
+        assert_eq!(signed.signum(), Some(1));
 
         let signed = ct_1.into_negative();
-        assert_eq!(signed, Signed::Negative(ct_1));
-        assert!(signed.is_negative());
-        assert_eq!(signed.negative(), Some(ct_1));
+        assert_eq!(
+            signed,
+            GenericSignedFormattedValue::Time(Some(Signed::Negative(ClockTime::SECOND))),
+        );
+        assert_eq!(signed.is_negative(), Some(true));
+        assert_eq!(signed.is_positive(), Some(false));
+        assert_eq!(signed.signum(), Some(-1));
 
         let ct_none = GenericFormattedValue::Time(ClockTime::NONE);
         assert!(ct_none.is_none());
 
         let signed = ct_none.into_positive();
-        assert_eq!(signed, Signed::Positive(ct_none));
-        assert!(signed.is_positive());
+        assert_eq!(signed, GenericSignedFormattedValue::Time(None),);
+        assert!(signed.is_positive().is_none());
+        assert!(signed.is_negative().is_none());
+        assert!(signed.signum().is_none());
 
         let signed = ct_none.into_negative();
-        assert_eq!(signed, Signed::Negative(ct_none));
-        assert!(signed.is_negative());
+        assert_eq!(signed, GenericSignedFormattedValue::Time(None),);
+        assert!(signed.is_negative().is_none());
+        assert!(signed.is_positive().is_none());
+        assert!(signed.signum().is_none());
+
+        let ct_zero = GenericFormattedValue::Time(Some(ClockTime::ZERO));
+        assert!(ct_zero.is_some());
+
+        let signed = ct_zero.into_positive();
+        assert_eq!(
+            signed,
+            GenericSignedFormattedValue::Time(Some(Signed::Positive(ClockTime::ZERO))),
+        );
+        assert_eq!(signed.is_positive(), Some(true));
+        assert_eq!(signed.is_negative(), Some(false));
+        assert_eq!(signed.signum(), Some(0));
     }
 
     #[test]
