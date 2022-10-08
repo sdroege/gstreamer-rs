@@ -56,10 +56,7 @@ pub trait ClockImplExt: ObjectSubclass {
 
     fn parent_unschedule(&self, id: &ClockId);
 
-    fn wake_id(&self, id: &ClockId)
-    where
-        Self: ObjectSubclass,
-        <Self as ObjectSubclass>::Type: IsA<Clock>;
+    fn wake_id(&self, id: &ClockId);
 }
 
 impl<T: ClockImpl> ClockImplExt for T {
@@ -170,11 +167,7 @@ impl<T: ClockImpl> ClockImplExt for T {
         }
     }
 
-    fn wake_id(&self, id: &ClockId)
-    where
-        Self: ObjectSubclass,
-        <Self as ObjectSubclass>::Type: IsA<Clock>,
-    {
+    fn wake_id(&self, id: &ClockId) {
         let clock = self.instance();
         let clock = unsafe { clock.unsafe_cast_ref::<Clock>() };
 
