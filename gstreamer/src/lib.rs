@@ -224,8 +224,6 @@ pub use crate::format::{
     Signed, SpecificFormattedValue, SpecificFormattedValueFullRange,
     SpecificFormattedValueIntrinsic, UnsignedIntoSigned,
 };
-#[cfg(feature = "serde")]
-mod format_serde;
 
 mod segment;
 pub use crate::segment::*;

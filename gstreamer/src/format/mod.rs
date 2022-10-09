@@ -415,6 +415,9 @@ mod clock_time_serde;
 mod compatible;
 pub use compatible::*;
 
+#[cfg(feature = "serde")]
+mod format_serde;
+
 mod generic;
 pub use generic::*;
 
