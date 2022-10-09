@@ -183,6 +183,8 @@ macro_rules! impl_non_trait_op_inner_type(
 
 macro_rules! impl_unsigned_int_into_signed(
     ($typ:ty) => {
+        impl crate::format::SignedIntrinsic for $typ {}
+
         impl crate::UnsignedIntoSigned for $typ {
             type Signed = crate::Signed<$typ>;
 
@@ -236,6 +238,20 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
             pub const fn is_zero(self) -> bool {
                 self.0 == Self::ZERO.0
+            }
+        }
+
+        impl std::ops::Deref for $typ {
+            type Target = $inner;
+
+            fn deref(&self) -> &$inner {
+                &self.0
+            }
+        }
+
+        impl AsRef<$inner> for $typ {
+            fn as_ref(&self) -> &$inner {
+                &self.0
             }
         }
 
@@ -1467,7 +1483,7 @@ macro_rules! impl_format_value_traits(
 
         impl TryFrom<$inner> for $typ {
             type Error = GlibNoneError;
-            fn try_from(v: $inner) -> Result<$typ, GlibNoneError> {
+            fn try_from(v: $inner) -> Result<Self, GlibNoneError> {
                 skip_assert_initialized!();
                 unsafe { Self::try_from_glib(v as i64) }
             }
@@ -1479,32 +1495,6 @@ macro_rules! impl_format_value_traits(
             unsafe fn try_from_glib(val: i64) -> Result<Self, GlibNoneError> {
                 skip_assert_initialized!();
                 <$typ as TryFromGlib<u64>>::try_from_glib(val as u64)
-            }
-        }
-
-        impl std::ops::Deref for $typ {
-            type Target = $inner;
-
-            fn deref(&self) -> &$inner {
-                &self.0
-            }
-        }
-
-        impl std::ops::DerefMut for $typ {
-            fn deref_mut(&mut self) -> &mut $inner {
-                &mut self.0
-            }
-        }
-
-        impl AsRef<$inner> for $typ {
-            fn as_ref(&self) -> &$inner {
-                &self.0
-            }
-        }
-
-        impl AsMut<$inner> for $typ {
-            fn as_mut(&mut self) -> &mut $inner {
-                &mut self.0
             }
         }
     };
@@ -1545,16 +1535,12 @@ macro_rules! option_glib_newtype_from_to {
 // `$displayable_option_name` if `concat_idents!` was stable.
 // See: https://doc.rust-lang.org/std/macro.concat_idents.html
 macro_rules! glib_newtype_display {
-    ($typ:ty, $displayable_name:ident, $unit:expr) => {
+    ($typ:ty, $displayable_name:ident) => {
         pub struct $displayable_name($typ);
 
         impl std::fmt::Display for $typ {
             fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-                use std::fmt::Write;
-
-                std::fmt::Display::fmt(&self.0, f)?;
-                f.write_char(' ')?;
-                f.write_str($unit)
+                std::fmt::Display::fmt(&self.0, f)
             }
         }
 
@@ -1566,8 +1552,50 @@ macro_rules! glib_newtype_display {
         }
     };
 
-    ($typ:ty, $displayable_name:ident, $displayable_option_name:ident, $unit:expr) => {
-        glib_newtype_display!($typ, $displayable_name, $unit);
+    ($typ:ty, $displayable_name:ident, Format::$format:ident$(,)?) => {
+        pub struct $displayable_name($typ);
+
+        impl std::fmt::Display for $typ {
+            fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+                std::fmt::Display::fmt(&self.0, f)?;
+                std::fmt::Write::write_char(f, ' ')?;
+                std::fmt::Display::fmt(&Format::$format, f)
+            }
+        }
+
+        impl crate::utils::Displayable for $typ {
+            type DisplayImpl = $typ;
+            fn display(self) -> $typ {
+                self
+            }
+        }
+    };
+
+    ($typ:ty, $displayable_name:ident, $displayable_option_name:ident) => {
+        glib_newtype_display!($typ, $displayable_name);
+
+        pub struct $displayable_option_name(Option<$typ>);
+
+        impl std::fmt::Display for $displayable_option_name {
+            fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+                if let Some(val) = self.0.as_ref() {
+                    std::fmt::Display::fmt(val, f)
+                } else {
+                    f.write_str("undef.")
+                }
+            }
+        }
+
+        impl crate::utils::Displayable for Option<$typ> {
+            type DisplayImpl = $displayable_option_name;
+            fn display(self) -> Self::DisplayImpl {
+                $displayable_option_name(self)
+            }
+        }
+    };
+
+    ($typ:ty, $displayable_name:ident, $displayable_option_name:ident, Format::$format:ident$(,)?) => {
+        glib_newtype_display!($typ, $displayable_name, Format::$format);
 
         pub struct $displayable_option_name(Option<$typ>);
 
@@ -1577,7 +1605,7 @@ macro_rules! glib_newtype_display {
                     std::fmt::Display::fmt(val, f)
                 } else {
                     f.write_str("undef. ")?;
-                    f.write_str($unit)
+                    std::fmt::Display::fmt(&Format::$format, f)
                 }
             }
         }

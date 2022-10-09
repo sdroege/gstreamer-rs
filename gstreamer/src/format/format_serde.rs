@@ -3,31 +3,45 @@
 use serde::de::{Deserialize, Deserializer};
 use serde::ser::{Serialize, Serializer};
 
-use crate::format::{Buffers, Bytes, Default, Percent, Undefined};
+use crate::format::{Buffers, Bytes, Default, Other, Percent, Undefined};
 
+// FIXME: the ser/de impl assumed `GenericFormattedValue` was always used.
+// When serializing a `SpecificFormattedValue`, we loose the type and only
+// serialize the inner value in parenthesis.
 // Manual implementation for some types that would otherwise yield representations such as:
-// "Default((Some(42)))"
+// "Default(Some((42)))"
 macro_rules! impl_serde(
-    ($t:ident) => {
+    ($t:ident, $inner:ty) => {
         impl Serialize for $t {
             fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-                self.0.serialize(serializer)
+                use std::ops::Deref;
+                self.deref().serialize(serializer)
             }
         }
 
-
         impl<'de> Deserialize<'de> for $t {
             fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-	        skip_assert_initialized!();
-                u64::deserialize(deserializer).map($t)
+	            skip_assert_initialized!();
+                <$inner>::deserialize(deserializer)
+                    .and_then(|value| {
+                        $t::try_from(value).map_err(|_| {
+                            use serde::de::{Error, Unexpected};
+                            D::Error::invalid_value(
+                                Unexpected::Unsigned(value.into()),
+                                &concat!("valid ", stringify!($t)),
+                            )
+                        })
+                    })
             }
         }
     }
 );
 
-impl_serde!(Buffers);
-impl_serde!(Bytes);
-impl_serde!(Default);
+impl_serde!(Buffers, u64);
+impl_serde!(Bytes, u64);
+impl_serde!(Default, u64);
+impl_serde!(Other, u64);
+impl_serde!(Percent, u32);
 
 impl Serialize for Undefined {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -42,22 +56,9 @@ impl<'de> Deserialize<'de> for Undefined {
     }
 }
 
-impl Serialize for Percent {
-    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        self.0.serialize(serializer)
-    }
-}
-
-impl<'de> Deserialize<'de> for Percent {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        skip_assert_initialized!();
-        u32::deserialize(deserializer).map(Percent)
-    }
-}
-
 #[cfg(test)]
 mod tests {
-    use crate::format::{Buffers, Bytes, Default, Percent, Undefined};
+    use crate::format::{Buffers, Bytes, Default, Other, Percent, Undefined};
     use crate::ClockTime;
     use crate::Format;
     use crate::GenericFormattedValue;
@@ -110,15 +111,15 @@ mod tests {
         let res = serde_json::to_string(&value).unwrap();
         assert_eq!("{\"Percent\":4200}".to_owned(), res);
 
-        let value = GenericFormattedValue::Other(Format::Percent, 42);
+        let value = GenericFormattedValue::Other(Format::Percent, Other::try_from(42).ok());
         let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
-        assert_eq!(Ok("Other(Percent, 42)".to_owned()), res);
+        assert_eq!(Ok("Other(Percent, Some(42))".to_owned()), res);
         let res = serde_json::to_string(&value).unwrap();
         assert_eq!("{\"Other\":[\"Percent\",42]}".to_owned(), res);
 
-        let value = GenericFormattedValue::Other(Format::__Unknown(7), 42);
+        let value = GenericFormattedValue::new(Format::__Unknown(7), 42);
         let res = ron::ser::to_string_pretty(&value, pretty_config);
-        assert_eq!(Ok("Other(__Unknown(7), 42)".to_owned()), res);
+        assert_eq!(Ok("Other(__Unknown(7), Some(42))".to_owned()), res);
         let res = serde_json::to_string(&value).unwrap();
         assert_eq!("{\"Other\":[{\"__Unknown\":7},42]}".to_owned(), res);
     }
@@ -135,13 +136,15 @@ mod tests {
         let value_de: GenericFormattedValue = serde_json::from_str(value_json).unwrap();
         assert_eq!(value_de, GenericFormattedValue::from(Default(42)));
 
-        let value_ron = "Other(Percent, 42)";
+        let value_ron = "Other(Percent, Some(42))";
+        let gfv_value = GenericFormattedValue::Other(Format::Percent, Other::try_from(42).ok());
+
         let value_de: GenericFormattedValue = ron::de::from_str(value_ron).unwrap();
-        assert_eq!(value_de, GenericFormattedValue::Other(Format::Percent, 42));
+        assert_eq!(value_de, gfv_value);
 
         let value_json = "{\"Other\":[\"Percent\",42]}";
         let value_de: GenericFormattedValue = serde_json::from_str(value_json).unwrap();
-        assert_eq!(value_de, GenericFormattedValue::Other(Format::Percent, 42));
+        assert_eq!(value_de, gfv_value);
     }
 
     #[test]
@@ -166,7 +169,8 @@ mod tests {
         test_roundrip!(GenericFormattedValue::from(
             Percent::try_from(0.42).unwrap()
         ));
-        test_roundrip!(GenericFormattedValue::Other(Format::Percent, 42));
-        test_roundrip!(GenericFormattedValue::Other(Format::__Unknown(7), 42));
+        let gfv_value = GenericFormattedValue::Other(Format::Percent, Other::try_from(42).ok());
+        test_roundrip!(gfv_value);
+        test_roundrip!(GenericFormattedValue::new(Format::__Unknown(7), 42));
     }
 }

@@ -36,7 +36,7 @@ glib_newtype_display!(
     Buffers,
     DisplayableBuffers,
     DisplayableOptionBuffers,
-    "buffers"
+    Format::Buffers,
 );
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
@@ -49,7 +49,12 @@ impl_common_ops_for_newtype_uint!(Bytes, u64);
 impl_signed_div_mul!(Bytes, u64);
 impl_format_value_traits!(Bytes, Bytes, Bytes, u64);
 option_glib_newtype_from_to!(Bytes, u64::MAX);
-glib_newtype_display!(Bytes, DisplayableBytes, DisplayableOptionBytes, "bytes");
+glib_newtype_display!(
+    Bytes,
+    DisplayableBytes,
+    DisplayableOptionBytes,
+    Format::Bytes,
+);
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Default(pub u64);
@@ -65,7 +70,7 @@ glib_newtype_display!(
     Default,
     DisplayableDefault,
     DisplayableOptionDefault,
-    "(Default)"
+    Format::Default,
 );
 
 pub type Time = super::ClockTime;
@@ -81,7 +86,12 @@ impl Percent {
 
 impl_common_ops_for_newtype_uint!(Percent, u32);
 impl_signed_div_mul!(Percent, u32);
-glib_newtype_display!(Percent, DisplayablePercent, DisplayableOptionPercent, "%");
+glib_newtype_display!(
+    Percent,
+    DisplayablePercent,
+    DisplayableOptionPercent,
+    Format::Percent,
+);
 
 impl FormattedValue for Option<Percent> {
     type FullRange = Option<Percent>;
@@ -199,32 +209,6 @@ impl SpecificFormattedValueIntrinsic for Percent {}
 impl FormattedValueNoneBuilder for Option<Percent> {
     fn none() -> Option<Percent> {
         None
-    }
-}
-
-impl std::ops::Deref for Percent {
-    type Target = u32;
-
-    fn deref(&self) -> &u32 {
-        &self.0
-    }
-}
-
-impl std::ops::DerefMut for Percent {
-    fn deref_mut(&mut self) -> &mut u32 {
-        &mut self.0
-    }
-}
-
-impl AsRef<u32> for Percent {
-    fn as_ref(&self) -> &u32 {
-        &self.0
-    }
-}
-
-impl AsMut<u32> for Percent {
-    fn as_mut(&mut self) -> &mut u32 {
-        &mut self.0
     }
 }
 

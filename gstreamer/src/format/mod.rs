@@ -522,6 +522,21 @@ pub trait FormattedValueNoneBuilder: FormattedValueFullRange {
     }
 }
 
+use std::fmt;
+impl fmt::Display for Format {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Self::Undefined => f.write_str("undefined"),
+            Self::Default => f.write_str("default"),
+            Self::Bytes => f.write_str("bytes"),
+            Self::Time => f.write_str("time"),
+            Self::Buffers => f.write_str("buffers"),
+            Self::Percent => f.write_str("%"),
+            Self::__Unknown(format) => write!(f, "(format: {})", format),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -715,6 +730,7 @@ mod tests {
         assert_eq!(signed.positive(), Some(ct_1));
         assert!(!signed.is_negative());
         assert!(signed.negative().is_none());
+        assert_eq!(signed.signum(), 1);
 
         let signed = ct_1.into_negative();
         assert_eq!(signed, Signed::Negative(ct_1));
@@ -722,6 +738,7 @@ mod tests {
         assert_eq!(signed.negative(), Some(ct_1));
         assert!(!signed.is_positive());
         assert!(signed.positive().is_none());
+        assert_eq!(signed.signum(), -1);
 
         let def = Default(1);
 
@@ -731,6 +748,7 @@ mod tests {
         assert_eq!(signed.positive(), Some(def));
         assert!(!signed.is_negative());
         assert!(signed.negative().is_none());
+        assert_eq!(signed.signum(), 1);
 
         let signed = def.into_negative();
         assert_eq!(signed, Signed::Negative(def));
@@ -738,6 +756,17 @@ mod tests {
         assert_eq!(signed.negative(), Some(def));
         assert!(!signed.is_positive());
         assert!(signed.positive().is_none());
+        assert_eq!(signed.signum(), -1);
+
+        let ct_zero = ClockTime::ZERO;
+        let p_ct_zero = ct_zero.into_positive();
+        assert!(p_ct_zero.is_positive());
+        assert!(!p_ct_zero.is_negative());
+        assert_eq!(p_ct_zero.signum(), 0);
+        let n_ct_zero = ct_zero.into_negative();
+        assert!(n_ct_zero.is_negative());
+        assert!(!n_ct_zero.is_positive());
+        assert_eq!(n_ct_zero.signum(), 0);
     }
 
     #[test]
@@ -811,6 +840,20 @@ mod tests {
             &format!("{}", GenericFormattedValue::Percent(None)),
             "undef. %"
         );
+
+        let other: Other = 42.try_into().unwrap();
+        assert_eq!(&format!("{other}"), "42");
+
+        let g_other = GenericFormattedValue::new(Format::__Unknown(128), 42);
+        assert_eq!(&format!("{g_other}"), "42 (format: 128)");
+        assert_eq!(&format!("{}", g_other.display()), "42 (format: 128)");
+
+        let g_other_none = GenericFormattedValue::Other(Format::__Unknown(128), None);
+        assert_eq!(&format!("{g_other_none}"), "undef. (format: 128)");
+        assert_eq!(
+            &format!("{}", g_other_none.display()),
+            "undef. (format: 128)"
+        );
     }
 
     #[test]
@@ -842,5 +885,21 @@ mod tests {
 
         let none_s_bytes = Option::<Signed<Bytes>>::None;
         assert_eq!(&format!("{}", none_s_bytes.display()), "undef. bytes");
+
+        let ct_1 = 45_834_908_569_837 * ClockTime::NSECOND;
+        assert_eq!(&format!("{ct_1}"), "12:43:54.908569837");
+        assert_eq!(&format!("{}", ct_1.display()), "12:43:54.908569837");
+
+        let g_ct_1 = GenericFormattedValue::Time(Some(ct_1));
+        assert_eq!(&format!("{g_ct_1}"), "12:43:54.908569837");
+        assert_eq!(&format!("{}", g_ct_1.display()), "12:43:54.908569837");
+
+        let p_g_ct1 = g_ct_1.into_positive();
+        assert_eq!(&format!("{p_g_ct1}"), "+12:43:54.908569837");
+        assert_eq!(&format!("{}", p_g_ct1.display()), "+12:43:54.908569837");
+
+        let n_g_ct1 = g_ct_1.into_negative();
+        assert_eq!(&format!("{n_g_ct1}"), "-12:43:54.908569837");
+        assert_eq!(&format!("{}", n_g_ct1.display()), "-12:43:54.908569837");
     }
 }

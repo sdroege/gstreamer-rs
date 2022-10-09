@@ -2,7 +2,7 @@
 
 use std::fmt;
 
-use super::{Format, FormattedValueIntrinsic, FormattedValueNoneBuilder};
+use super::{Format, FormattedValueNoneBuilder};
 use crate::utils::Displayable;
 
 // rustdoc-stripper-ignore-next
@@ -12,7 +12,8 @@ use crate::utils::Displayable;
 /// which is originaly unsigned. In C APIs, this is represented
 /// by a tuple with a signed integer positive or negative and
 /// the absolute value.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum Signed<T> {
     Negative(T),
     Positive(T),
@@ -88,20 +89,6 @@ impl<T> Signed<T> {
     }
 
     // rustdoc-stripper-ignore-next
-    /// Returns the multiplication factor for this `Signed`.
-    ///
-    /// Returns:
-    ///
-    /// - `1` if the value must be considered as positive.
-    /// - `-1` if the value must be considered as negative.
-    pub fn factor(self) -> i32 {
-        match self {
-            Signed::Positive(_) => 1i32,
-            Signed::Negative(_) => -1i32,
-        }
-    }
-
-    // rustdoc-stripper-ignore-next
     /// Returns the absolute value of `self`.
     pub fn abs(self) -> T {
         match self {
@@ -121,9 +108,11 @@ impl<T> std::ops::Neg for Signed<T> {
     }
 }
 
+pub trait SignedIntrinsic {}
+
 impl<T> fmt::Display for Signed<T>
 where
-    T: fmt::Display + FormattedValueIntrinsic,
+    T: fmt::Display + SignedIntrinsic,
 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use std::fmt::Write;
@@ -140,7 +129,7 @@ where
 
 impl<T> Displayable for Signed<T>
 where
-    T: fmt::Display + FormattedValueIntrinsic,
+    T: fmt::Display + SignedIntrinsic,
 {
     type DisplayImpl = Signed<T>;
 
@@ -169,7 +158,7 @@ pub struct DisplayableOptionSigned<T>(Option<Signed<T>>);
 
 impl<T> fmt::Display for DisplayableOptionSigned<T>
 where
-    T: fmt::Display + FormattedValueIntrinsic,
+    T: fmt::Display + SignedIntrinsic,
     Option<T>: Displayable,
 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -182,7 +171,7 @@ where
 
 impl<T> Displayable for Option<Signed<T>>
 where
-    T: fmt::Display + FormattedValueIntrinsic,
+    T: fmt::Display + SignedIntrinsic,
     Option<T>: Displayable,
 {
     type DisplayImpl = DisplayableOptionSigned<T>;
@@ -194,7 +183,7 @@ where
 
 impl<T> Displayable for Signed<Option<T>>
 where
-    T: fmt::Display + FormattedValueIntrinsic,
+    T: fmt::Display + SignedIntrinsic,
     Option<T>: Displayable,
 {
     type DisplayImpl = DisplayableOptionSigned<T>;
