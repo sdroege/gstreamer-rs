@@ -72,6 +72,10 @@
 //!
 //! assert_eq!(format!("{}", time), "12:43:54.908569837");
 //! assert_eq!(format!("{:.0}", time), "12:43:54");
+//!
+//! let percent = gst::format::Percent::try_from(0.1234).unwrap();
+//! assert_eq!(format!("{}", percent), "12.34 %");
+//! assert_eq!(format!("{:5.1}", percent), " 12.3 %");
 //! ```
 //!
 //! ## Some operations available on specific formatted values
@@ -858,12 +862,16 @@ mod tests {
         assert_eq!(&format!("{}", Some(bytes).display()), "42 bytes");
         assert_eq!(&format!("{}", Bytes::NONE.display()), "undef. bytes");
 
-        let gv_1 = GenericFormattedValue::Percent(Some(Percent(42)));
+        let gv_1 = GenericFormattedValue::Percent(Percent::try_from(0.42).ok());
         assert_eq!(&format!("{gv_1}"), "42 %");
         assert_eq!(
             &format!("{}", GenericFormattedValue::Percent(None)),
             "undef. %"
         );
+
+        let percent = Percent::try_from(0.1234).unwrap();
+        assert_eq!(&format!("{percent}"), "12.34 %");
+        assert_eq!(&format!("{percent:5.1}"), " 12.3 %");
 
         let other: Other = 42.try_into().unwrap();
         assert_eq!(&format!("{other}"), "42");

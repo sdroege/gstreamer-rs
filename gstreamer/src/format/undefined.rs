@@ -108,4 +108,4 @@ impl From<Undefined> for Signed<u64> {
     }
 }
 
-glib_newtype_display!(Undefined, DisplayableUndefined, Format::Undefined);
+glib_newtype_display!(Undefined, Format::Undefined);

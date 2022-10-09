@@ -22,7 +22,7 @@ impl Other {
 impl_common_ops_for_newtype_uint!(Other, u64);
 impl_signed_div_mul!(Other, u64);
 option_glib_newtype_from_to!(Other, u64::MAX);
-glib_newtype_display!(Other, DisplayableOther, DisplayableOptionOther);
+glib_newtype_display!(Other, DisplayableOptionOther);
 
 impl TryFrom<u64> for Other {
     type Error = GlibNoneError;

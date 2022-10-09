@@ -32,12 +32,7 @@ impl_common_ops_for_newtype_uint!(Buffers, u64);
 impl_signed_div_mul!(Buffers, u64);
 impl_format_value_traits!(Buffers, Buffers, Buffers, u64);
 option_glib_newtype_from_to!(Buffers, Buffers::OFFSET_NONE);
-glib_newtype_display!(
-    Buffers,
-    DisplayableBuffers,
-    DisplayableOptionBuffers,
-    Format::Buffers,
-);
+glib_newtype_display!(Buffers, DisplayableOptionBuffers, Format::Buffers);
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Bytes(pub u64);
@@ -49,12 +44,7 @@ impl_common_ops_for_newtype_uint!(Bytes, u64);
 impl_signed_div_mul!(Bytes, u64);
 impl_format_value_traits!(Bytes, Bytes, Bytes, u64);
 option_glib_newtype_from_to!(Bytes, u64::MAX);
-glib_newtype_display!(
-    Bytes,
-    DisplayableBytes,
-    DisplayableOptionBytes,
-    Format::Bytes,
-);
+glib_newtype_display!(Bytes, DisplayableOptionBytes, Format::Bytes);
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Default(pub u64);
@@ -66,12 +56,7 @@ impl_common_ops_for_newtype_uint!(Default, u64);
 impl_signed_div_mul!(Default, u64);
 impl_format_value_traits!(Default, Default, Default, u64);
 option_glib_newtype_from_to!(Default, u64::MAX);
-glib_newtype_display!(
-    Default,
-    DisplayableDefault,
-    DisplayableOptionDefault,
-    Format::Default,
-);
+glib_newtype_display!(Default, DisplayableOptionDefault, Format::Default);
 
 pub type Time = super::ClockTime;
 
@@ -86,12 +71,6 @@ impl Percent {
 
 impl_common_ops_for_newtype_uint!(Percent, u32);
 impl_signed_div_mul!(Percent, u32);
-glib_newtype_display!(
-    Percent,
-    DisplayablePercent,
-    DisplayableOptionPercent,
-    Format::Percent,
-);
 
 impl FormattedValue for Option<Percent> {
     type FullRange = Option<Percent>;
@@ -243,5 +222,38 @@ impl TryFrom<f32> for Percent {
                 (v * ffi::GST_FORMAT_PERCENT_SCALE as f32).round() as u32
             ))
         }
+    }
+}
+
+impl std::fmt::Display for Percent {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        const ONE_PERCENT: f32 = Percent::SCALE as f32 / 100.0;
+        std::fmt::Display::fmt(&(self.0 as f32 / ONE_PERCENT), f)?;
+        f.write_str(" %")
+    }
+}
+
+impl crate::utils::Displayable for Percent {
+    type DisplayImpl = Self;
+    fn display(self) -> Self {
+        self
+    }
+}
+pub struct DisplayableOptionPercent(Option<Percent>);
+
+impl std::fmt::Display for DisplayableOptionPercent {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        if let Some(val) = self.0.as_ref() {
+            std::fmt::Display::fmt(val, f)
+        } else {
+            f.write_str("undef. %")
+        }
+    }
+}
+
+impl crate::utils::Displayable for Option<Percent> {
+    type DisplayImpl = DisplayableOptionPercent;
+    fn display(self) -> Self::DisplayImpl {
+        DisplayableOptionPercent(self)
     }
 }

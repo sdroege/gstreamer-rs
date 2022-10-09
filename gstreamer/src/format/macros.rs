@@ -1531,13 +1531,11 @@ macro_rules! option_glib_newtype_from_to {
     };
 }
 
-// FIXME we could automatically build `$displayable_name` and
-// `$displayable_option_name` if `concat_idents!` was stable.
+// FIXME we could automatically build `$displayable_option_name`
+// if `concat_idents!` was stable.
 // See: https://doc.rust-lang.org/std/macro.concat_idents.html
 macro_rules! glib_newtype_display {
-    ($typ:ty, $displayable_name:ident) => {
-        pub struct $displayable_name($typ);
-
+    ($typ:ty) => {
         impl std::fmt::Display for $typ {
             fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
                 std::fmt::Display::fmt(&self.0, f)
@@ -1545,16 +1543,14 @@ macro_rules! glib_newtype_display {
         }
 
         impl crate::utils::Displayable for $typ {
-            type DisplayImpl = $typ;
-            fn display(self) -> $typ {
+            type DisplayImpl = Self;
+            fn display(self) -> Self {
                 self
             }
         }
     };
 
-    ($typ:ty, $displayable_name:ident, Format::$format:ident$(,)?) => {
-        pub struct $displayable_name($typ);
-
+    ($typ:ty, Format::$format:ident) => {
         impl std::fmt::Display for $typ {
             fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
                 std::fmt::Display::fmt(&self.0, f)?;
@@ -1564,15 +1560,15 @@ macro_rules! glib_newtype_display {
         }
 
         impl crate::utils::Displayable for $typ {
-            type DisplayImpl = $typ;
-            fn display(self) -> $typ {
+            type DisplayImpl = Self;
+            fn display(self) -> Self {
                 self
             }
         }
     };
 
-    ($typ:ty, $displayable_name:ident, $displayable_option_name:ident) => {
-        glib_newtype_display!($typ, $displayable_name);
+    ($typ:ty, $displayable_option_name:ident) => {
+        glib_newtype_display!($typ);
 
         pub struct $displayable_option_name(Option<$typ>);
 
@@ -1594,8 +1590,8 @@ macro_rules! glib_newtype_display {
         }
     };
 
-    ($typ:ty, $displayable_name:ident, $displayable_option_name:ident, Format::$format:ident$(,)?) => {
-        glib_newtype_display!($typ, $displayable_name, Format::$format);
+    ($typ:ty, $displayable_option_name:ident, Format::$format:ident$(,)?) => {
+        glib_newtype_display!($typ, Format::$format);
 
         pub struct $displayable_option_name(Option<$typ>);
 
@@ -1604,8 +1600,7 @@ macro_rules! glib_newtype_display {
                 if let Some(val) = self.0.as_ref() {
                     std::fmt::Display::fmt(val, f)
                 } else {
-                    f.write_str("undef. ")?;
-                    std::fmt::Display::fmt(&Format::$format, f)
+                    write!(f, "undef. {}", Format::$format)
                 }
             }
         }
