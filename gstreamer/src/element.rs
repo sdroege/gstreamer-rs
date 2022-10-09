@@ -4,6 +4,10 @@ use crate::Element;
 
 use once_cell::sync::Lazy;
 
+use crate::format::{
+    CompatibleFormattedValue, FormattedValue, SpecificFormattedValueFullRange,
+    SpecificFormattedValueIntrinsic,
+};
 use crate::prelude::*;
 use crate::ClockTime;
 use crate::ElementFlags;
@@ -14,10 +18,7 @@ use crate::Plugin;
 use crate::QueryRef;
 use crate::Rank;
 use crate::State;
-use crate::{
-    CompatibleFormattedValue, Format, FormattedValue, GenericFormattedValue,
-    SpecificFormattedValueFullRange,
-};
+use crate::{Format, GenericFormattedValue};
 
 use glib::translate::*;
 

@@ -744,9 +744,9 @@ impl VideoInfo {
     }
 
     #[doc(alias = "gst_video_info_convert")]
-    pub fn convert<U: gst::SpecificFormattedValueFullRange>(
+    pub fn convert<U: gst::format::SpecificFormattedValueFullRange>(
         &self,
-        src_val: impl gst::FormattedValue,
+        src_val: impl gst::format::FormattedValue,
     ) -> Option<U> {
         skip_assert_initialized!();
         unsafe {
@@ -767,7 +767,7 @@ impl VideoInfo {
 
     pub fn convert_generic(
         &self,
-        src_val: impl gst::FormattedValue,
+        src_val: impl gst::format::FormattedValue,
         dest_fmt: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
         skip_assert_initialized!();

@@ -176,9 +176,9 @@ impl AudioInfo {
     }
 
     #[doc(alias = "gst_audio_info_convert")]
-    pub fn convert<U: gst::SpecificFormattedValueFullRange>(
+    pub fn convert<U: gst::format::SpecificFormattedValueFullRange>(
         &self,
-        src_val: impl gst::FormattedValue,
+        src_val: impl gst::format::FormattedValue,
     ) -> Option<U> {
         assert_initialized_main_thread!();
         unsafe {
@@ -199,7 +199,7 @@ impl AudioInfo {
 
     pub fn convert_generic(
         &self,
-        src_val: impl gst::FormattedValue,
+        src_val: impl gst::format::FormattedValue,
         dest_fmt: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
         assert_initialized_main_thread!();

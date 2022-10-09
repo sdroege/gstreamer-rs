@@ -23,7 +23,7 @@ unsafe impl Sync for AudioClippingMeta {}
 
 impl AudioClippingMeta {
     #[doc(alias = "gst_buffer_add_audio_clipping_meta")]
-    pub fn add<V: gst::FormattedValue>(
+    pub fn add<V: gst::format::FormattedValue>(
         buffer: &mut gst::BufferRef,
         start: V,
         end: V,

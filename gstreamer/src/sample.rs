@@ -5,6 +5,7 @@ use std::ptr;
 
 use glib::translate::{from_glib_full, from_glib_none, mut_override, IntoGlibPtr, ToGlibPtr};
 
+use crate::format::FormattedValueIntrinsic;
 use crate::Buffer;
 use crate::BufferList;
 use crate::BufferListRef;
@@ -12,7 +13,6 @@ use crate::BufferRef;
 use crate::Caps;
 use crate::CapsRef;
 use crate::FormattedSegment;
-use crate::FormattedValueIntrinsic;
 use crate::Segment;
 use crate::Structure;
 use crate::StructureRef;

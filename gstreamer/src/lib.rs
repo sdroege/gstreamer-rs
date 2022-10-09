@@ -218,12 +218,7 @@ pub use crate::typefind::*;
 mod typefind_factory;
 
 pub mod format;
-pub use crate::format::{
-    ClockTime, CompatibleFormattedValue, FormattedValue, FormattedValueFullRange,
-    FormattedValueIntrinsic, FormattedValueNoneBuilder, GenericFormattedValue, NoneSignedBuilder,
-    Signed, SpecificFormattedValue, SpecificFormattedValueFullRange,
-    SpecificFormattedValueIntrinsic, UnsignedIntoSigned,
-};
+pub use crate::format::{ClockTime, GenericFormattedValue, GenericSignedFormattedValue, Signed};
 
 mod segment;
 pub use crate::segment::*;
@@ -344,9 +339,7 @@ pub mod prelude {
     pub use muldiv::MulDiv;
 
     pub use crate::format::{
-        CompatibleFormattedValue, FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic,
-        FormattedValueNoneBuilder, NoneSignedBuilder, SpecificFormattedValue,
-        SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic, UnsignedIntoSigned,
+        FormattedValue, FormattedValueNoneBuilder, NoneSignedBuilder, UnsignedIntoSigned,
     };
     pub use crate::utils::Displayable;
 

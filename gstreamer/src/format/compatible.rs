@@ -14,7 +14,7 @@ use super::{FormattedValue, SpecificFormattedValue};
 /// Consider the following function:
 ///
 /// ```rust
-/// # use gstreamer::{ClockTime, CompatibleFormattedValue, FormattedValue, GenericFormattedValue};
+/// # use gstreamer::format::{ClockTime, CompatibleFormattedValue, FormattedValue, GenericFormattedValue};
 /// fn with_compatible_formats<V: FormattedValue>(
 ///     arg1: V,
 ///     arg2: impl CompatibleFormattedValue<V>,

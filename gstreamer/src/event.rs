@@ -1,8 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use crate::format::{
+    CompatibleFormattedValue, FormattedValue, FormattedValueIntrinsic, GenericFormattedValue,
+};
 use crate::structure::*;
 use crate::ClockTime;
-use crate::{CompatibleFormattedValue, FormattedValue, GenericFormattedValue};
 
 use std::borrow::Borrow;
 use std::cmp;
@@ -550,12 +552,12 @@ declare_concrete_event!(@sticky Segment, T);
 impl Segment<Event> {
     #[doc(alias = "gst_event_new_segment")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new<F: crate::FormattedValueIntrinsic>(segment: &crate::FormattedSegment<F>) -> Event {
+    pub fn new<F: FormattedValueIntrinsic>(segment: &crate::FormattedSegment<F>) -> Event {
         skip_assert_initialized!();
         Self::builder(segment).build()
     }
 
-    pub fn builder<F: crate::FormattedValueIntrinsic>(
+    pub fn builder<F: FormattedValueIntrinsic>(
         segment: &crate::FormattedSegment<F>,
     ) -> SegmentBuilder {
         assert_initialized_main_thread!();

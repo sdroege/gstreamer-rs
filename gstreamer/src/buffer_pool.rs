@@ -260,7 +260,7 @@ impl BufferPoolAcquireParams {
         })
     }
 
-    pub fn with_start_stop<T: crate::SpecificFormattedValue>(
+    pub fn with_start_stop<T: crate::format::SpecificFormattedValue>(
         start: T,
         stop: T,
         flags: crate::BufferPoolAcquireFlags,

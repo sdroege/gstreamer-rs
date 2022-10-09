@@ -49,7 +49,7 @@
 //!
 //! ```
 //! # use gstreamer as gst;
-//! # use gst::FormattedValue;
+//! # use gst::format::FormattedValue;
 //! # gst::init();
 //! # let segment = gst::FormattedSegment::<gst::ClockTime>::new().upcast();
 //! // Downcasting the generic `segment` for `gst::ClockTime` use.

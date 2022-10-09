@@ -1,13 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use crate::format::{
+    CompatibleFormattedValue, FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic,
+    FormattedValueNoneBuilder, NoneSignedBuilder, UnsignedIntoSigned,
+};
 use crate::Format;
 use crate::GenericFormattedValue;
 use crate::SeekFlags;
 use crate::SeekType;
-use crate::{
-    CompatibleFormattedValue, FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic,
-    FormattedValueNoneBuilder, NoneSignedBuilder, UnsignedIntoSigned,
-};
 use glib::translate::*;
 use glib::StaticType;
 use std::fmt;

@@ -185,7 +185,7 @@ macro_rules! impl_unsigned_int_into_signed(
     ($typ:ty) => {
         impl crate::format::SignedIntrinsic for $typ {}
 
-        impl crate::UnsignedIntoSigned for $typ {
+        impl crate::format::UnsignedIntoSigned for $typ {
             type Signed = crate::Signed<$typ>;
 
             fn into_positive(self) -> Self::Signed {
@@ -197,7 +197,7 @@ macro_rules! impl_unsigned_int_into_signed(
             }
         }
 
-        impl crate::UnsignedIntoSigned for Option<$typ> {
+        impl crate::format::UnsignedIntoSigned for Option<$typ> {
             type Signed = Option<crate::Signed<$typ>>;
 
             fn into_positive(self) -> Self::Signed {

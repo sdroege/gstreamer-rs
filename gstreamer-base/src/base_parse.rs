@@ -4,6 +4,7 @@ use crate::BaseParse;
 use crate::BaseParseFrame;
 use glib::prelude::*;
 use glib::translate::*;
+use gst::format::{FormattedValue, SpecificFormattedValueFullRange};
 use std::mem;
 
 pub trait BaseParseExtManual: 'static {
@@ -13,18 +14,18 @@ pub trait BaseParseExtManual: 'static {
     fn src_pad(&self) -> &gst::Pad;
 
     #[doc(alias = "gst_base_parse_set_duration")]
-    fn set_duration(&self, duration: impl gst::FormattedValue, interval: u32);
+    fn set_duration(&self, duration: impl FormattedValue, interval: u32);
     #[doc(alias = "gst_base_parse_set_frame_rate")]
     fn set_frame_rate(&self, fps: gst::Fraction, lead_in: u32, lead_out: u32);
 
     #[doc(alias = "gst_base_parse_convert_default")]
-    fn convert_default<U: gst::SpecificFormattedValueFullRange>(
+    fn convert_default<U: SpecificFormattedValueFullRange>(
         &self,
-        src_val: impl gst::FormattedValue,
+        src_val: impl FormattedValue,
     ) -> Option<U>;
     fn convert_default_generic(
         &self,
-        src_val: impl gst::FormattedValue,
+        src_val: impl FormattedValue,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue>;
 
@@ -51,7 +52,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         }
     }
 
-    fn set_duration(&self, duration: impl gst::FormattedValue, interval: u32) {
+    fn set_duration(&self, duration: impl FormattedValue, interval: u32) {
         unsafe {
             ffi::gst_base_parse_set_duration(
                 self.as_ref().to_glib_none().0,
@@ -75,9 +76,9 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         }
     }
 
-    fn convert_default<U: gst::SpecificFormattedValueFullRange>(
+    fn convert_default<U: SpecificFormattedValueFullRange>(
         &self,
-        src_val: impl gst::FormattedValue,
+        src_val: impl FormattedValue,
     ) -> Option<U> {
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
@@ -98,7 +99,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
 
     fn convert_default_generic(
         &self,
-        src_val: impl gst::FormattedValue,
+        src_val: impl FormattedValue,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
         unsafe {

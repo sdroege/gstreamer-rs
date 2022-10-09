@@ -4,14 +4,8 @@ use serde::de;
 use serde::de::{Deserialize, Deserializer};
 use serde::ser::{Serialize, Serializer};
 
-use crate::Format;
-use crate::FormattedSegment;
-use crate::FormattedValue;
-use crate::FormattedValueIntrinsic;
-use crate::GenericFormattedValue;
-use crate::Segment;
-use crate::SegmentFlags;
-use crate::SpecificFormattedValueIntrinsic;
+use crate::format::{FormattedValue, FormattedValueIntrinsic, SpecificFormattedValueIntrinsic};
+use crate::{Format, FormattedSegment, GenericFormattedValue, Segment, SegmentFlags};
 
 #[derive(serde::Serialize, serde::Deserialize)]
 struct FormattedSegmentSerde {

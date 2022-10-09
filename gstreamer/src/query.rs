@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use crate::format::{CompatibleFormattedValue, FormattedValue, GenericFormattedValue};
 use crate::structure::*;
-use crate::{CompatibleFormattedValue, FormattedValue, GenericFormattedValue};
 
 use std::borrow::{Borrow, BorrowMut};
 use std::ffi::CStr;

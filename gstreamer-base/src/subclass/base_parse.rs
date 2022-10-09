@@ -5,7 +5,6 @@ use std::mem;
 use crate::prelude::*;
 
 use glib::translate::*;
-
 use gst::subclass::prelude::*;
 
 use crate::BaseParse;
@@ -33,7 +32,7 @@ pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
 
     fn convert(
         &self,
-        src_val: impl gst::FormattedValue,
+        src_val: impl gst::format::FormattedValue,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
         self.parent_convert(src_val, dest_format)
@@ -54,7 +53,7 @@ pub trait BaseParseImplExt: ObjectSubclass {
 
     fn parent_convert(
         &self,
-        src_val: impl gst::FormattedValue,
+        src_val: impl gst::format::FormattedValue,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue>;
 }
@@ -160,7 +159,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
 
     fn parent_convert(
         &self,
-        src_val: impl gst::FormattedValue,
+        src_val: impl gst::format::FormattedValue,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
         unsafe {

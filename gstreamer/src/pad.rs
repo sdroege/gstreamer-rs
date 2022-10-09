@@ -1,5 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use crate::format::{
+    FormattedValue, SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic,
+};
 use crate::Buffer;
 use crate::BufferList;
 use crate::Event;
@@ -14,10 +17,7 @@ use crate::PadProbeType;
 use crate::Query;
 use crate::QueryRef;
 use crate::StaticPadTemplate;
-use crate::{
-    Format, FormattedValue, GenericFormattedValue, SpecificFormattedValueFullRange,
-    SpecificFormattedValueIntrinsic,
-};
+use crate::{Format, GenericFormattedValue};
 
 use std::mem;
 use std::num::NonZeroU64;

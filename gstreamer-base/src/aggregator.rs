@@ -6,7 +6,7 @@ use glib::prelude::*;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::signal::{connect_raw, SignalHandlerId};
 use glib::translate::*;
-use gst::FormattedValue;
+use gst::format::FormattedValue;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::boxed::Box as Box_;
@@ -53,7 +53,10 @@ pub trait AggregatorExtManual: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_aggregator_update_segment")]
-    fn update_segment<F: gst::FormattedValueIntrinsic>(&self, segment: &gst::FormattedSegment<F>);
+    fn update_segment<F: gst::format::FormattedValueIntrinsic>(
+        &self,
+        segment: &gst::FormattedSegment<F>,
+    );
 
     fn set_position(&self, position: impl FormattedValue);
 
@@ -158,7 +161,10 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     }
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn update_segment<F: gst::FormattedValueIntrinsic>(&self, segment: &gst::FormattedSegment<F>) {
+    fn update_segment<F: gst::format::FormattedValueIntrinsic>(
+        &self,
+        segment: &gst::FormattedSegment<F>,
+    ) {
         unsafe {
             ffi::gst_aggregator_update_segment(
                 self.as_ref().to_glib_none().0,
