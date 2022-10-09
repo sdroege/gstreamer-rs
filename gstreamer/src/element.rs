@@ -1347,6 +1347,243 @@ macro_rules! element_info(
     }};
 );
 
+#[doc(alias = "GST_ELEMENT_ERROR")]
+#[doc(alias = "GST_ELEMENT_ERROR_WITH_DETAILS")]
+#[macro_export]
+macro_rules! element_imp_error(
+    ($imp:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_error!(obj, $err, ($msg), [$debug]);
+    }};
+    ($imp:expr, $err:expr, ($msg:expr)) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_error!(obj, $err, ($msg));
+    }};
+    ($imp:expr, $err:expr, [$debug:expr]) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_error!(obj, $err, [$debug]);
+    }};
+    ($imp:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_error!(obj, $err, ($($msg)*), [$($debug)*]);
+    }};
+    ($imp:expr, $err:expr, ($($msg:tt)*)) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_error!(obj, $err, ($($msg)*));
+    }};
+    ($imp:expr, $err:expr, [$($debug:tt)*]) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_error!(obj, $err, [$($debug)*]);
+    }};
+
+    ($imp:expr, $err:expr, ($msg:expr), [$debug:expr], details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_error!(obj, $err, ($msg), [$debug], details: $details);
+    }};
+    ($imp:expr, $err:expr, ($msg:expr), details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_error!(obj, $err, ($msg), details: $details);
+    }};
+    ($imp:expr, $err:expr, [$debug:expr], details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_error!(obj, $err, [$debug], details: $details);
+    }};
+    ($imp:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_error!(obj, $err, ($($msg)*), [$($debug)*], details: $details);
+    }};
+    ($imp:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_error!(obj, $err, ($($msg)*), details: $details);
+    }};
+    ($imp:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_error!(obj, $err, [$($debug)*], details: $details);
+    }};
+);
+
+#[doc(alias = "GST_ELEMENT_WARNING")]
+#[doc(alias = "GST_ELEMENT_WARNING_WITH_DETAILS")]
+#[macro_export]
+macro_rules! element_imp_warning(
+    ($imp:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_warning!(obj, $err, ($msg), [$debug]);
+    }};
+    ($imp:expr, $err:expr, ($msg:expr)) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_warning!(obj, $err, ($msg));
+    }};
+    ($imp:expr, $err:expr, [$debug:expr]) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_warning!(obj, $err, [$debug]);
+    }};
+    ($imp:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_warning!(obj, $err, ($($msg)*), [$($debug)*]);
+    }};
+    ($imp:expr, $err:expr, ($($msg:tt)*)) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_warning!(obj, $err, ($($msg)*));
+    }};
+    ($imp:expr, $err:expr, [$($debug:tt)*]) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_warning!(obj, $err, [$($debug)*]);
+    }};
+
+    ($imp:expr, $err:expr, ($msg:expr), [$debug:expr], details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_warning!(obj, $err, ($msg), [$debug], details: $details);
+    }};
+    ($imp:expr, $err:expr, ($msg:expr), details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_warning!(obj, $err, ($msg), details: $details);
+    }};
+    ($imp:expr, $err:expr, [$debug:expr], details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_warning!(obj, $err, [$debug], details: $details);
+    }};
+    ($imp:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_warning!(obj, $err, ($($msg)*), [$($debug)*], details: $details);
+    }};
+    ($imp:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_warning!(obj, $err, ($($msg)*), details: $details);
+    }};
+    ($imp:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_warning!(obj, $err, [$($debug)*], details: $details);
+    }};
+);
+
+#[doc(alias = "GST_ELEMENT_INFO")]
+#[doc(alias = "GST_ELEMENT_INFO_WITH_DETAILS")]
+#[macro_export]
+macro_rules! element_imp_info(
+    ($imp:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_info!(obj, $err, ($msg), [$debug]);
+    }};
+    ($imp:expr, $err:expr, ($msg:expr)) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_info!(obj, $err, ($msg));
+    }};
+    ($imp:expr, $err:expr, [$debug:expr]) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_info!(obj, $err, [$debug]);
+    }};
+    ($imp:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_info!(obj, $err, ($($msg)*), [$($debug)*]);
+    }};
+    ($imp:expr, $err:expr, ($($msg:tt)*)) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_info!(obj, $err, ($($msg)*));
+    }};
+    ($imp:expr, $err:expr, [$($debug:tt)*]) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_info!(obj, $err, [$($debug)*]);
+    }};
+
+    ($imp:expr, $err:expr, ($msg:expr), [$debug:expr], details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_info!(obj, $err, ($msg), [$debug], details: $details);
+    }};
+    ($imp:expr, $err:expr, ($msg:expr), details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_info!(obj, $err, ($msg), details: $details);
+    }};
+    ($imp:expr, $err:expr, [$debug:expr], details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_info!(obj, $err, [$debug], details: $details);
+    }};
+    ($imp:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_info!(obj, $err, ($($msg)*), [$($debug)*], details: $details);
+    }};
+    ($imp:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_info!(obj, $err, ($($msg)*), details: $details);
+    }};
+    ($imp:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
+        use $crate::glib::Cast;
+        let obj = $imp.instance();
+        let obj = obj.dynamic_cast_ref::<$crate::Element>().unwrap();
+        $crate::element_info!(obj, $err, [$($debug)*], details: $details);
+    }};
+);
+
 #[cfg(test)]
 mod tests {
     use super::*;

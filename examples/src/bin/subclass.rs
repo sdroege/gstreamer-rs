@@ -156,19 +156,17 @@ mod fir_filter {
                 &self,
                 buf: &mut gst::BufferRef,
             ) -> Result<gst::FlowSuccess, gst::FlowError> {
-                let element = self.instance();
-
                 // Get coefficients and return directly if we have none
                 let coeffs = self.coeffs.lock().unwrap();
                 if coeffs.is_empty() {
-                    gst::trace!(CAT, obj: element, "No coefficients set -- passthrough");
+                    gst::trace!(CAT, imp: self, "No coefficients set -- passthrough");
                     return Ok(gst::FlowSuccess::Ok);
                 }
 
                 // Try mapping the input buffer as writable
                 let mut data = buf.map_writable().map_err(|_| {
-                    gst::element_error!(
-                        element,
+                    gst::element_imp_error!(
+                        self,
                         gst::CoreError::Failed,
                         ["Failed to map input buffer readable"]
                     );
@@ -177,8 +175,8 @@ mod fir_filter {
 
                 // And reinterprete it as a slice of f32
                 let samples = data.as_mut_slice_of::<f32>().map_err(|err| {
-                    gst::element_error!(
-                        element,
+                    gst::element_imp_error!(
+                        self,
                         gst::CoreError::Failed,
                         ["Failed to cast input buffer as f32 slice: {}", err]
                     );
@@ -189,7 +187,7 @@ mod fir_filter {
 
                 gst::trace!(
                     CAT,
-                    obj: element,
+                    imp: self,
                     "Transforming {} samples with filter of length {}",
                     samples.len(),
                     coeffs.len()
