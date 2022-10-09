@@ -1,8 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use crate::element::ElementExtManual;
 use crate::format::{
     FormattedValue, SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic,
 };
+use crate::prelude::PadExt;
 use crate::Buffer;
 use crate::BufferList;
 use crate::Event;
@@ -22,6 +24,7 @@ use crate::{Format, GenericFormattedValue};
 use std::mem;
 use std::num::NonZeroU64;
 use std::ops::ControlFlow;
+use std::panic::{self, AssertUnwindSafe};
 use std::ptr;
 
 use glib::ffi::gpointer;
@@ -709,12 +712,59 @@ impl<O: IsA<Pad>> PadExtManual for O {
     }
 
     fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> Result<(), glib::BoolError> {
+        unsafe extern "C" fn trampoline_pad_task<F: FnMut() + Send + 'static>(func: gpointer) {
+            let (func, pad) = &mut *(func as *mut (F, *mut ffi::GstPad));
+            let pad = Pad::from_glib_borrow(*pad);
+            let result = panic::catch_unwind(AssertUnwindSafe(func));
+
+            if let Err(err) = result {
+                let element = match pad.parent_element() {
+                    Some(element) => element,
+                    None => panic::resume_unwind(err),
+                };
+
+                let maybe_couldnt_stop = if pad.pause_task().is_err() {
+                    ", could not stop task"
+                } else {
+                    ""
+                };
+                let cause = if let Some(cause) = err.downcast_ref::<&str>() {
+                    cause
+                } else if let Some(cause) = err.downcast_ref::<String>() {
+                    cause
+                } else {
+                    "Panicked"
+                };
+                let _ = element.post_message(
+                    crate::message::Error::builder(
+                        crate::LibraryError::Failed,
+                        &format!("Panicked: {}{}", cause, maybe_couldnt_stop),
+                    )
+                    .src(&*pad)
+                    .build(),
+                );
+            }
+        }
+
+        fn into_raw_pad_task<F: FnMut() + Send + 'static>(
+            func: F,
+            pad: *mut ffi::GstPad,
+        ) -> gpointer {
+            #[allow(clippy::type_complexity)]
+            let func: Box<(F, *mut ffi::GstPad)> = Box::new((func, pad));
+            Box::into_raw(func) as gpointer
+        }
+
+        unsafe extern "C" fn destroy_closure_pad_task<F>(ptr: gpointer) {
+            let _ = Box::<(F, *mut ffi::GstPad)>::from_raw(ptr as *mut _);
+        }
+
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_pad_start_task(
                     self.as_ref().to_glib_none().0,
                     Some(trampoline_pad_task::<F>),
-                    into_raw_pad_task(func),
+                    into_raw_pad_task(func, self.upcast_ref().as_ptr()),
                     Some(destroy_closure_pad_task::<F>),
                 ),
                 "Failed to start pad task",
@@ -1533,21 +1583,6 @@ unsafe extern "C" fn trampoline_unlink_function<
 }
 
 unsafe extern "C" fn destroy_closure<F>(ptr: gpointer) {
-    let _ = Box::<F>::from_raw(ptr as *mut _);
-}
-
-unsafe extern "C" fn trampoline_pad_task<F: FnMut() + Send + 'static>(func: gpointer) {
-    let func: &mut F = &mut *(func as *mut F);
-    func()
-}
-
-fn into_raw_pad_task<F: FnMut() + Send + 'static>(func: F) -> gpointer {
-    #[allow(clippy::type_complexity)]
-    let func: Box<F> = Box::new(func);
-    Box::into_raw(func) as gpointer
-}
-
-unsafe extern "C" fn destroy_closure_pad_task<F>(ptr: gpointer) {
     let _ = Box::<F>::from_raw(ptr as *mut _);
 }
 
