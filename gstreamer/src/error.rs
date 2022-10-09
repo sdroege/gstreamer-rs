@@ -145,6 +145,19 @@ impl LoggableError {
         );
     }
 
+    pub fn log_with_imp<I: glib::subclass::prelude::ObjectSubclass>(&self, imp: &I) {
+        use glib::subclass::prelude::*;
+
+        self.category.log(
+            Some(unsafe { imp.instance().unsafe_cast_ref::<glib::Object>() }),
+            crate::DebugLevel::Error,
+            self.bool_error.filename,
+            self.bool_error.function,
+            self.bool_error.line,
+            format_args!("{}", self.bool_error.message),
+        );
+    }
+
     pub fn category(&self) -> crate::DebugCategory {
         self.category
     }

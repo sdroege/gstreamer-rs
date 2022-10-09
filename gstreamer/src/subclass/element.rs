@@ -173,6 +173,8 @@ pub trait ElementImplExt: ObjectSubclass {
         fallback: G,
         f: F,
     ) -> R;
+
+    fn post_error_message(&self, msg: crate::ErrorMessage);
 }
 
 impl<T: ElementImpl> ElementImplExt for T {
@@ -369,6 +371,14 @@ impl<T: ElementImpl> ElementImplExt for T {
             panic_to_error!(wrap, imp.panicked(), fallback(), {
                 f(imp, wrap.unsafe_cast_ref())
             })
+        }
+    }
+
+    fn post_error_message(&self, msg: crate::ErrorMessage) {
+        unsafe {
+            self.instance()
+                .unsafe_cast_ref::<Element>()
+                .post_error_message(msg)
         }
     }
 }
