@@ -10,6 +10,10 @@ use crate::Format;
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Undefined(pub i64);
 
+impl Undefined {
+    pub const ONE: Undefined = Undefined(1);
+}
+
 impl FormattedValue for Undefined {
     type FullRange = Undefined;
 

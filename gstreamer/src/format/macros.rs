@@ -229,9 +229,16 @@ macro_rules! impl_unsigned_int_into_signed(
 
 macro_rules! impl_common_ops_for_newtype_uint(
     ($typ:ty, $inner:ty) => {
+        impl_common_ops_for_newtype_uint!($typ, $inner, one: 1);
+    };
+
+    ($typ:ty, $inner:ty, one: $one:expr$(,)?) => {
         impl $typ {
             pub const ZERO: Self = Self(0);
             pub const NONE: Option<Self> = None;
+            // rustdoc-stripper-ignore-next
+            /// The unitary value.
+            pub const ONE: Self = Self($one);
 
             pub const MAX_SIGNED: crate::Signed::<$typ> = crate::Signed::Positive(Self::MAX);
             pub const MIN_SIGNED: crate::Signed::<$typ> = crate::Signed::Negative(Self::MAX);
@@ -1501,22 +1508,30 @@ macro_rules! impl_format_value_traits(
 );
 
 macro_rules! option_glib_newtype_from_to {
-    ($typ_:ident, $none_value:expr) => {
+    ($typ:ident, $none_value:expr) => {
         #[doc(hidden)]
-        impl IntoGlib for $typ_ {
+        impl IntoGlib for $typ {
             type GlibType = u64;
             fn into_glib(self) -> u64 {
+                assert_ne!(
+                    self.0, $none_value,
+                    concat!(
+                        "attempt to build a `None` glib variant",
+                        "from a non-`Option` type ",
+                        stringify!($typ),
+                    ),
+                );
                 self.0
             }
         }
 
         #[doc(hidden)]
-        impl OptionIntoGlib for $typ_ {
+        impl OptionIntoGlib for $typ {
             const GLIB_NONE: u64 = $none_value;
         }
 
         #[doc(hidden)]
-        impl TryFromGlib<u64> for $typ_ {
+        impl TryFromGlib<u64> for $typ {
             type Error = GlibNoneError;
             #[inline]
             unsafe fn try_from_glib(val: u64) -> Result<Self, GlibNoneError> {
@@ -1525,7 +1540,7 @@ macro_rules! option_glib_newtype_from_to {
                     return Err(GlibNoneError);
                 }
 
-                Ok($typ_(val))
+                Ok($typ(val))
             }
         }
     };

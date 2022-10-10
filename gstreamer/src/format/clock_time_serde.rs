@@ -7,14 +7,20 @@ use crate::ClockTime;
 
 impl Serialize for ClockTime {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        self.0.serialize(serializer)
+        use std::ops::Deref;
+        self.deref().serialize(serializer)
     }
 }
 
 impl<'de> Deserialize<'de> for ClockTime {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         skip_assert_initialized!();
-        u64::deserialize(deserializer).map(ClockTime::from_nseconds)
+        u64::deserialize(deserializer).and_then(|value| {
+            ClockTime::try_from(value).map_err(|_| {
+                use serde::de::{Error, Unexpected};
+                D::Error::invalid_value(Unexpected::Unsigned(value), &"valid `ClockTime`")
+            })
+        })
     }
 }
 

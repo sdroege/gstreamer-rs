@@ -17,7 +17,8 @@
 //! Specific formatted values are also guaranteed to always represent a valid value.
 //! For instance:
 //!
-//! - [`Percent`] only allows values in the range [0, 1_000_000].
+//! - [`Percent`] only allows values in the integer range [0, 1_000_000] or
+//!   float range [0.0, 1.0].
 //! - [`ClockTime`] can use all `u64` values except `u64::MAX` which is reserved by
 //!   the C constant `GST_CLOCK_TIME_NONE`.
 //!
@@ -58,6 +59,52 @@
 //! // This is enforced at compilation time.
 //! let start = time_segment.start();
 //! assert_eq!(start.format(), gst::Format::Time);
+//! ```
+//!
+//! ### Building a specific formatted value
+//!
+//! ```
+//! # use gstreamer as gst;
+//! use gst::format::{Buffers, Bytes, ClockTime, Default, Percent};
+//!
+//! // Specific formatted values implement the faillible `try_from` constructor:
+//! let default = Default::try_from(42).unwrap();
+//! assert_eq!(*default, 42);
+//! assert_eq!(Default::try_from(42), Ok(default));
+//! assert_eq!(Default::try_from(42).ok(), Some(default));
+//!
+//! // `ClockTime` provides specific constructors:
+//! let time = ClockTime::from_nseconds(45_834_908_569_837);
+//! let time = ClockTime::from_seconds(20);
+//!
+//! // This can be convenient:
+//! assert_eq!(
+//!     20 * ClockTime::MSECOND,
+//!     ClockTime::from_nseconds(20_000_000),
+//! );
+//! assert_eq!(
+//!     40 * ClockTime::SECOND,
+//!     ClockTime::from_nseconds(40_000_000_000),
+//! );
+//!
+//! // Specific formatted values provide the `ONE` value:
+//! assert_eq!(*(128 * Buffers::ONE), 128);
+//!
+//! // `ZERO` and `NONE` can also come in handy sometimes:
+//! assert_eq!(*Buffers::ZERO, 0);
+//! assert!(ClockTime::NONE.is_none());
+//!
+//! // `Bytes` also comes with usual multipliers:
+//! assert_eq!(*(512 * Bytes::K), 512 * 1024);
+//! assert_eq!(*(8 * Bytes::M), 8 * 1024 * 1024);
+//! assert_eq!(*(4 * Bytes::G), 4 * 1024 * 1024 * 1024);
+//!
+//! // `Percent` can be built from a float:
+//! let a_quarter = Percent::try_from(0.25).unwrap();
+//! // `Percent` has `SCALE` which represents 100%:
+//! assert_eq!(Percent::SCALE / 4, a_quarter);
+//! // ... and `ONE` which is 1%:
+//! assert_eq!(25 * Percent::ONE, a_quarter);
 //! ```
 //!
 //! ### Displaying a formatted value
@@ -334,7 +381,7 @@
 //! // Signed formatted values implement the `MulDiv` trait:
 //! # use gst::prelude::MulDiv;
 //! # let rate = 48000u64;
-//! let samples = gst::format::Default(1024).into_negative();
+//! let samples = (1024 * gst::format::Default::ONE).into_negative();
 //! let duration = samples
 //!     .mul_div_round(*gst::ClockTime::SECOND, rate)
 //!     .map(|signed_default| {
@@ -383,7 +430,7 @@
 //! # use gstreamer as gst;
 //! # use gst::prelude::{Displayable, ElementExtManual};
 //! # gst::init();
-//! # let event = gst::event::SegmentDone::new(gst::format::Buffers(512));
+//! # let event = gst::event::SegmentDone::new(512 * gst::format::Buffers::ONE);
 //! if let gst::EventView::SegmentDone(seg_done_evt) = event.view() {
 //!     use gst::GenericFormattedValue::*;
 //!     match seg_done_evt.get() {
@@ -592,11 +639,11 @@ mod tests {
     fn incompatible() {
         with_compatible_formats(
             ClockTime::ZERO,
-            GenericFormattedValue::Buffers(Some(Buffers(42))),
+            GenericFormattedValue::Buffers(Some(42 * Buffers::ONE)),
         )
         .unwrap_err();
         with_compatible_formats(
-            GenericFormattedValue::Buffers(Some(Buffers(42))),
+            GenericFormattedValue::Buffers(Some(42 * Buffers::ONE)),
             ClockTime::NONE,
         )
         .unwrap_err();
@@ -744,20 +791,18 @@ mod tests {
         assert!(signed.positive().is_none());
         assert_eq!(signed.signum(), -1);
 
-        let def = Default(1);
-
-        let signed = def.into_positive();
-        assert_eq!(signed, Signed::Positive(def));
+        let signed = Default::ONE.into_positive();
+        assert_eq!(signed, Signed::Positive(Default::ONE));
         assert!(signed.is_positive());
-        assert_eq!(signed.positive(), Some(def));
+        assert_eq!(signed.positive(), Some(Default::ONE));
         assert!(!signed.is_negative());
         assert!(signed.negative().is_none());
         assert_eq!(signed.signum(), 1);
 
-        let signed = def.into_negative();
-        assert_eq!(signed, Signed::Negative(def));
+        let signed = Default::ONE.into_negative();
+        assert_eq!(signed, Signed::Negative(Default::ONE));
         assert!(signed.is_negative());
-        assert_eq!(signed.negative(), Some(def));
+        assert_eq!(signed.negative(), Some(Default::ONE));
         assert!(!signed.is_positive());
         assert!(signed.positive().is_none());
         assert_eq!(signed.signum(), -1);
@@ -855,14 +900,14 @@ mod tests {
 
     #[test]
     fn display_new_types() {
-        let bytes = Bytes(42);
+        let bytes = 42 * Bytes::ONE;
         assert_eq!(&format!("{bytes}"), "42 bytes");
         assert_eq!(&format!("{}", bytes.display()), "42 bytes");
 
         assert_eq!(&format!("{}", Some(bytes).display()), "42 bytes");
         assert_eq!(&format!("{}", Bytes::NONE.display()), "undef. bytes");
 
-        let gv_1 = GenericFormattedValue::Percent(Percent::try_from(0.42).ok());
+        let gv_1 = GenericFormattedValue::Percent(Some(42 * Percent::ONE));
         assert_eq!(&format!("{gv_1}"), "42 %");
         assert_eq!(
             &format!("{}", GenericFormattedValue::Percent(None)),
@@ -890,24 +935,25 @@ mod tests {
 
     #[test]
     fn display_signed() {
-        let p_bytes = Bytes(42).into_positive();
+        let bytes_42 = 42 * Bytes::ONE;
+        let p_bytes = bytes_42.into_positive();
         assert_eq!(&format!("{p_bytes}"), "+42 bytes");
         assert_eq!(&format!("{}", p_bytes.display()), "+42 bytes");
 
         let some_p_bytes = Some(p_bytes);
         assert_eq!(&format!("{}", some_p_bytes.display()), "+42 bytes");
 
-        let p_some_bytes = Signed::Positive(Some(Bytes(42)));
+        let p_some_bytes = Signed::Positive(Some(bytes_42));
         assert_eq!(&format!("{}", p_some_bytes.display()), "+42 bytes");
 
-        let n_bytes = Bytes(42).into_negative();
+        let n_bytes = bytes_42.into_negative();
         assert_eq!(&format!("{n_bytes}"), "-42 bytes");
         assert_eq!(&format!("{}", n_bytes.display()), "-42 bytes");
 
         let some_n_bytes = Some(n_bytes);
         assert_eq!(&format!("{}", some_n_bytes.display()), "-42 bytes");
 
-        let n_some_bytes = Signed::Negative(Some(Bytes(42)));
+        let n_some_bytes = Signed::Negative(Some(bytes_42));
         assert_eq!(&format!("{}", n_some_bytes.display()), "-42 bytes");
 
         let p_none_bytes = Signed::Positive(Bytes::NONE);

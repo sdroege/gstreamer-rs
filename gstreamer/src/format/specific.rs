@@ -21,7 +21,7 @@ pub trait SpecificFormattedValueFullRange: FormattedValueFullRange {}
 pub trait SpecificFormattedValueIntrinsic: TryFromGlib<i64> + FormattedValueIntrinsic {}
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
-pub struct Buffers(pub u64);
+pub struct Buffers(u64);
 impl Buffers {
     #[doc(alias = "GST_BUFFER_OFFSET_NONE")]
     pub const OFFSET_NONE: u64 = ffi::GST_BUFFER_OFFSET_NONE;
@@ -35,8 +35,17 @@ option_glib_newtype_from_to!(Buffers, Buffers::OFFSET_NONE);
 glib_newtype_display!(Buffers, DisplayableOptionBuffers, Format::Buffers);
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
-pub struct Bytes(pub u64);
+pub struct Bytes(u64);
 impl Bytes {
+    // rustdoc-stripper-ignore-next
+    /// 1K Bytes (1024).
+    pub const K: Self = Self(1024);
+    // rustdoc-stripper-ignore-next
+    /// 1M Bytes (1024 * 1024).
+    pub const M: Self = Self(1024 * 1024);
+    // rustdoc-stripper-ignore-next
+    /// 1G Bytes (1024 * 1024 * 1024).
+    pub const G: Self = Self(1024 * 1024 * 1024);
     pub const MAX: Self = Self(u64::MAX - 1);
 }
 
@@ -47,7 +56,7 @@ option_glib_newtype_from_to!(Bytes, u64::MAX);
 glib_newtype_display!(Bytes, DisplayableOptionBytes, Format::Bytes);
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
-pub struct Default(pub u64);
+pub struct Default(u64);
 impl Default {
     pub const MAX: Self = Self(u64::MAX - 1);
 }
@@ -61,15 +70,19 @@ glib_newtype_display!(Default, DisplayableOptionDefault, Format::Default);
 pub type Time = super::ClockTime;
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
-pub struct Percent(pub u32);
+pub struct Percent(u32);
 impl Percent {
     #[doc(alias = "GST_FORMAT_PERCENT_MAX")]
     pub const MAX: Self = Self(ffi::GST_FORMAT_PERCENT_MAX as u32);
     #[doc(alias = "GST_FORMAT_PERCENT_SCALE")]
-    pub const SCALE: u32 = ffi::GST_FORMAT_PERCENT_SCALE as u32;
+    pub const SCALE: Self = Self(ffi::GST_FORMAT_PERCENT_SCALE as u32);
 }
 
-impl_common_ops_for_newtype_uint!(Percent, u32);
+impl_common_ops_for_newtype_uint!(
+    Percent,
+    u32,
+    one: ffi::GST_FORMAT_PERCENT_SCALE as u32 / 100,
+);
 impl_signed_div_mul!(Percent, u32);
 
 impl FormattedValue for Option<Percent> {
@@ -227,8 +240,7 @@ impl TryFrom<f32> for Percent {
 
 impl std::fmt::Display for Percent {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        const ONE_PERCENT: f32 = Percent::SCALE as f32 / 100.0;
-        std::fmt::Display::fmt(&(self.0 as f32 / ONE_PERCENT), f)?;
+        std::fmt::Display::fmt(&(self.0 as f32 / (*Percent::ONE) as f32), f)?;
         f.write_str(" %")
     }
 }

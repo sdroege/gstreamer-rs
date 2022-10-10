@@ -173,7 +173,7 @@ USAGE: Choose one of the following options, then press enter:
             Command::NextFrame => {
                 if let Some(video_sink) = pipeline.property::<Option<Element>>("video-sink") {
                     // Send the event
-                    let step = Step::new(gst::format::Buffers(1), rate.abs(), true, false);
+                    let step = Step::new(gst::format::Buffers::ONE, rate.abs(), true, false);
                     video_sink.send_event(step);
                     println!("Stepping one frame\r");
                 }

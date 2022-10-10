@@ -14,7 +14,7 @@ use super::{
 };
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Default)]
-pub struct ClockTime(pub(crate) u64);
+pub struct ClockTime(u64);
 
 impl ClockTime {
     #[doc(alias = "GST_SECOND")]

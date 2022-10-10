@@ -294,20 +294,19 @@ mod tests {
 
         let mut buffer = gst::Buffer::with_size(1024).unwrap();
 
+        let start = gst::format::Default::ONE;
+        let stop = 2 * gst::format::Default::ONE;
+
         {
-            let cmeta = AudioClippingMeta::add(
-                buffer.get_mut().unwrap(),
-                gst::format::Default(1),
-                gst::format::Default(2),
-            );
-            assert_eq!(cmeta.start().try_into(), Ok(Some(gst::format::Default(1))));
-            assert_eq!(cmeta.end().try_into(), Ok(Some(gst::format::Default(2))));
+            let cmeta = AudioClippingMeta::add(buffer.get_mut().unwrap(), start, stop);
+            assert_eq!(cmeta.start().try_into(), Ok(Some(start)));
+            assert_eq!(cmeta.end().try_into(), Ok(Some(stop)));
         }
 
         {
             let cmeta = buffer.meta::<AudioClippingMeta>().unwrap();
-            assert_eq!(cmeta.start().try_into(), Ok(Some(gst::format::Default(1))));
-            assert_eq!(cmeta.end().try_into(), Ok(Some(gst::format::Default(2))));
+            assert_eq!(cmeta.start().try_into(), Ok(Some(start)));
+            assert_eq!(cmeta.end().try_into(), Ok(Some(stop)));
         }
     }
 
