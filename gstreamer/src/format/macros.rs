@@ -1605,7 +1605,7 @@ macro_rules! glib_newtype_display {
         }
     };
 
-    ($typ:ty, $displayable_option_name:ident, Format::$format:ident$(,)?) => {
+    ($typ:ty, $displayable_option_name:ident, Format::$format:ident) => {
         glib_newtype_display!($typ, Format::$format);
 
         pub struct $displayable_option_name(Option<$typ>);

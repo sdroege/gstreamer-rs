@@ -28,6 +28,32 @@ impl Buffers {
     pub const MAX: Self = Self(Self::OFFSET_NONE - 1);
 }
 
+impl Buffers {
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Buffers` formatted value with the provided buffers count.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided count equals `u64::MAX`,
+    /// which is reserved for `None` in C.
+    #[track_caller]
+    pub fn from_u64(buffers: u64) -> Self {
+        Buffers::try_from(buffers).expect("`Buffers` value out of range")
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Buffers` formatted value with the provided buffers count.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided count equals `u64::MAX`,
+    /// which is reserved for `None` in C.
+    #[track_caller]
+    pub fn from_usize(buffers: usize) -> Self {
+        Buffers::from_u64(buffers.try_into().unwrap())
+    }
+}
+
 impl_common_ops_for_newtype_uint!(Buffers, u64);
 impl_signed_div_mul!(Buffers, u64);
 impl_format_value_traits!(Buffers, Buffers, Buffers, u64);
@@ -49,6 +75,32 @@ impl Bytes {
     pub const MAX: Self = Self(u64::MAX - 1);
 }
 
+impl Bytes {
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Bytes` formatted value with the provided bytes count.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided count equals `u64::MAX`,
+    /// which is reserved for `None` in C.
+    #[track_caller]
+    pub fn from_u64(bytes: u64) -> Self {
+        Bytes::try_from(bytes).expect("`Bytes` value out of range")
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Bytes` formatted value with the provided bytes count.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided count equals `u64::MAX`,
+    /// which is reserved for `None` in C.
+    #[track_caller]
+    pub fn from_usize(bytes: usize) -> Self {
+        Bytes::from_u64(bytes.try_into().unwrap())
+    }
+}
+
 impl_common_ops_for_newtype_uint!(Bytes, u64);
 impl_signed_div_mul!(Bytes, u64);
 impl_format_value_traits!(Bytes, Bytes, Bytes, u64);
@@ -59,6 +111,32 @@ glib_newtype_display!(Bytes, DisplayableOptionBytes, Format::Bytes);
 pub struct Default(u64);
 impl Default {
     pub const MAX: Self = Self(u64::MAX - 1);
+}
+
+impl Default {
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Default` formatted value with the provided quantity.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided quantity equals `u64::MAX`,
+    /// which is reserved for `None` in C.
+    #[track_caller]
+    pub fn from_u64(quantity: u64) -> Self {
+        Default::try_from(quantity).expect("`Default` value out of range")
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Default` formatted value with the provided quantity.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided quantity equals `u64::MAX`,
+    /// which is reserved for `None` in C.
+    #[track_caller]
+    pub fn from_usize(quantity: usize) -> Self {
+        Default::from_u64(quantity.try_into().unwrap())
+    }
 }
 
 impl_common_ops_for_newtype_uint!(Default, u64);
@@ -76,13 +154,42 @@ impl Percent {
     pub const MAX: Self = Self(ffi::GST_FORMAT_PERCENT_MAX as u32);
     #[doc(alias = "GST_FORMAT_PERCENT_SCALE")]
     pub const SCALE: Self = Self(ffi::GST_FORMAT_PERCENT_SCALE as u32);
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Percent` with the provided percent value.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided value is larger than 100.
+    #[track_caller]
+    pub fn from_percent(percent: u32) -> Self {
+        Percent::try_from(*Self::SCALE * percent).expect("`Percent` value out of range")
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Percent` with the provided parts per million value.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided value is larger than [`Self::MAX`].
+    #[track_caller]
+    pub fn from_ppm(ppm: u32) -> Self {
+        Percent::try_from(ppm).expect("`Percent` value out of range")
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Percent` with the provided ratio.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided radio is out of the range [0.0, 1.0].
+    #[track_caller]
+    pub fn from_ratio(ratio: f32) -> Self {
+        Percent::try_from(ratio).expect("`Percent` ratio out of range")
+    }
 }
 
-impl_common_ops_for_newtype_uint!(
-    Percent,
-    u32,
-    one: ffi::GST_FORMAT_PERCENT_SCALE as u32 / 100,
-);
+impl_common_ops_for_newtype_uint!(Percent, u32, one: ffi::GST_FORMAT_PERCENT_SCALE as u32);
 impl_signed_div_mul!(Percent, u32);
 
 impl FormattedValue for Option<Percent> {
@@ -217,7 +324,7 @@ impl TryFrom<f64> for Percent {
             Err(TryPercentFromFloatError(()))
         } else {
             Ok(Percent(
-                (v * ffi::GST_FORMAT_PERCENT_SCALE as f64).round() as u32
+                (v * ffi::GST_FORMAT_PERCENT_MAX as f64).round() as u32
             ))
         }
     }
@@ -232,7 +339,7 @@ impl TryFrom<f32> for Percent {
             Err(TryPercentFromFloatError(()))
         } else {
             Ok(Percent(
-                (v * ffi::GST_FORMAT_PERCENT_SCALE as f32).round() as u32
+                (v * ffi::GST_FORMAT_PERCENT_MAX as f32).round() as u32
             ))
         }
     }
@@ -240,7 +347,7 @@ impl TryFrom<f32> for Percent {
 
 impl std::fmt::Display for Percent {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        std::fmt::Display::fmt(&(self.0 as f32 / (*Percent::ONE) as f32), f)?;
+        std::fmt::Display::fmt(&(self.0 as f32 / (*Percent::SCALE) as f32), f)?;
         f.write_str(" %")
     }
 }

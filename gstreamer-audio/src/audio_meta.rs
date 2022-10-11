@@ -294,8 +294,8 @@ mod tests {
 
         let mut buffer = gst::Buffer::with_size(1024).unwrap();
 
-        let start = gst::format::Default::ONE;
-        let stop = 2 * gst::format::Default::ONE;
+        let start = gst::format::Default::from_u64(1);
+        let stop = gst::format::Default::from_u64(2);
 
         {
             let cmeta = AudioClippingMeta::add(buffer.get_mut().unwrap(), start, stop);

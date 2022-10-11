@@ -73,9 +73,16 @@
 //! assert_eq!(Default::try_from(42), Ok(default));
 //! assert_eq!(Default::try_from(42).ok(), Some(default));
 //!
-//! // `ClockTime` provides specific constructors:
+//! // `ClockTime` provides specific constructors,
+//! // which can panic if the requested value is out of range.
 //! let time = ClockTime::from_nseconds(45_834_908_569_837);
 //! let time = ClockTime::from_seconds(20);
+//!
+//! // Other formatted values also come with (panicking) constructors:
+//! let buffers_nb = Buffers::from_u64(512);
+//! let received = Bytes::from_u64(64);
+//! let sample_size = Bytes::from_usize([0u8; 4].len());
+//! let quantity = Default::from_u64(42);
 //!
 //! // This can be convenient:
 //! assert_eq!(
@@ -87,24 +94,32 @@
 //!     ClockTime::from_nseconds(40_000_000_000),
 //! );
 //!
-//! // Specific formatted values provide the `ONE` value:
-//! assert_eq!(*(128 * Buffers::ONE), 128);
-//!
-//! // `ZERO` and `NONE` can also come in handy sometimes:
+//! // `ZERO` and `NONE` can come in handy sometimes:
 //! assert_eq!(*Buffers::ZERO, 0);
 //! assert!(ClockTime::NONE.is_none());
+//!
+//! // Specific formatted values provide the `ONE` value:
+//! assert_eq!(*(128 * Buffers::ONE), 128);
 //!
 //! // `Bytes` also comes with usual multipliers:
 //! assert_eq!(*(512 * Bytes::K), 512 * 1024);
 //! assert_eq!(*(8 * Bytes::M), 8 * 1024 * 1024);
 //! assert_eq!(*(4 * Bytes::G), 4 * 1024 * 1024 * 1024);
 //!
-//! // `Percent` can be built from a float:
-//! let a_quarter = Percent::try_from(0.25).unwrap();
-//! // `Percent` has `SCALE` which represents 100%:
-//! assert_eq!(Percent::SCALE / 4, a_quarter);
-//! // ... and `ONE` which is 1%:
+//! // `Percent` can be built from a floating point ratio:
+//! let a_quarter_from_ratio = Percent::from_ratio(0.25);
+//! // ... from a percent integer value:
+//! let a_quarter = Percent::from_percent(25);
+//! assert_eq!(a_quarter, a_quarter_from_ratio);
+//! // ... from a part per million integer value:
+//! let a_quarter_from_ppm = Percent::from_ppm(25 * 10_000);
+//! assert_eq!(a_quarter, a_quarter_from_ppm);
+//! // ... `MAX` which represents 100%:
+//! assert_eq!(Percent::MAX / 4, a_quarter);
+//! // ... `ONE` which is 1%:
 //! assert_eq!(25 * Percent::ONE, a_quarter);
+//! // ... and `SCALE` which is 1% in ppm:
+//! assert_eq!(Percent::SCALE, Percent::from_ppm(10_000));
 //! ```
 //!
 //! ### Displaying a formatted value

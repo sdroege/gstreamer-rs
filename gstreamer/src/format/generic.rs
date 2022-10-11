@@ -19,6 +19,32 @@ impl Other {
     pub const MAX: Self = Self(u64::MAX - 1);
 }
 
+impl Other {
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Other` value with the provided quantity.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided quantity equals `u64::MAX`,
+    /// which is reserved for `None` in C.
+    #[track_caller]
+    pub fn from_u64(quantity: u64) -> Self {
+        Other::try_from(quantity).expect("`Other` value out of range")
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Other` value with the provided quantity.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided quantity equals `u64::MAX`,
+    /// which is reserved for `None` in C.
+    #[track_caller]
+    pub fn from_usize(quantity: usize) -> Self {
+        Other::from_u64(quantity.try_into().unwrap())
+    }
+}
+
 impl_common_ops_for_newtype_uint!(Other, u64);
 impl_signed_div_mul!(Other, u64);
 option_glib_newtype_from_to!(Other, u64::MAX);
@@ -82,7 +108,7 @@ impl GenericFormattedValue {
     pub fn new(format: Format, value: i64) -> Self {
         skip_assert_initialized!();
         match format {
-            Format::Undefined => Self::Undefined(Undefined(value)),
+            Format::Undefined => Self::Undefined(value.into()),
             Format::Default => Self::Default(unsafe { FromGlib::from_glib(value) }),
             Format::Bytes => Self::Bytes(unsafe { FromGlib::from_glib(value) }),
             Format::Time => Self::Time(unsafe { FromGlib::from_glib(value) }),
@@ -109,7 +135,7 @@ impl GenericFormattedValue {
     pub fn value(&self) -> i64 {
         unsafe {
             match *self {
-                Self::Undefined(v) => v.0,
+                Self::Undefined(v) => *v,
                 Self::Default(v) => v.into_raw_value(),
                 Self::Bytes(v) => v.into_raw_value(),
                 Self::Time(v) => v.into_raw_value(),
@@ -390,9 +416,9 @@ mod tests {
         let other_none: Option<Other> = Other::try_from(u64::MAX).ok();
         assert!(other_none.is_none());
 
-        let other_10 = Other::try_from(10).unwrap();
-        let other_20 = Other::try_from(20).unwrap();
-        let other_30 = Other::try_from(30).unwrap();
+        let other_10 = Other::from_u64(10);
+        let other_20 = Other::from_usize(20);
+        let other_30 = Other::from_u64(30);
 
         assert_eq!(other_10 + other_20, other_30);
         assert_eq!(other_30 - other_20, other_10);
@@ -409,7 +435,7 @@ mod tests {
             GenericFormattedValue::new(Format::__Unknown(128), 42);
         assert_eq!(
             gen_other_42,
-            GenericFormattedValue::Other(Format::__Unknown(128), Some(Other(42)))
+            GenericFormattedValue::Other(Format::__Unknown(128), Other::try_from(42).ok())
         );
         assert_eq!(gen_other_42.format(), Format::__Unknown(128));
         assert_eq!(gen_other_42.value(), 42);
@@ -438,7 +464,7 @@ mod tests {
             p_gen_other_42,
             GenericSignedFormattedValue::Other(
                 Format::__Unknown(128),
-                Some(Signed::Positive(Other(42))),
+                Some(Signed::Positive(Other::from_u64(42))),
             ),
         );
 
@@ -447,7 +473,7 @@ mod tests {
             n_gen_other_42,
             GenericSignedFormattedValue::Other(
                 Format::__Unknown(128),
-                Some(Signed::Negative(Other(42))),
+                Some(Signed::Negative(Other::from_u64(42))),
             ),
         );
     }
