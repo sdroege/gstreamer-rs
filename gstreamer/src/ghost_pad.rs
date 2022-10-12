@@ -5,7 +5,6 @@ use crate::FlowError;
 use crate::FlowSuccess;
 use crate::GhostPad;
 use crate::LoggableError;
-use crate::Object;
 use crate::Pad;
 use crate::PadBuilder;
 use crate::PadFlags;
@@ -16,9 +15,9 @@ use glib::translate::*;
 
 impl GhostPad {
     #[doc(alias = "gst_ghost_pad_activate_mode_default")]
-    pub fn activate_mode_default<P: IsA<GhostPad>, Q: IsA<Object>>(
+    pub fn activate_mode_default<P: IsA<GhostPad>>(
         pad: &P,
-        parent: Option<&Q>,
+        parent: Option<&impl IsA<crate::Object>>,
         mode: PadMode,
         active: bool,
     ) -> Result<(), glib::BoolError> {
@@ -37,9 +36,9 @@ impl GhostPad {
     }
 
     #[doc(alias = "gst_ghost_pad_internal_activate_mode_default")]
-    pub fn internal_activate_mode_default<P: IsA<GhostPad>, Q: IsA<Object>>(
+    pub fn internal_activate_mode_default<P: IsA<GhostPad>>(
         pad: &P,
-        parent: Option<&Q>,
+        parent: Option<&impl IsA<crate::Object>>,
         mode: PadMode,
         active: bool,
     ) -> Result<(), glib::BoolError> {

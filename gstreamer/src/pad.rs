@@ -143,22 +143,10 @@ pub trait PadExtManual: 'static {
     fn peer_query(&self, query: &mut QueryRef) -> bool;
     #[doc(alias = "gst_pad_query")]
     fn query(&self, query: &mut QueryRef) -> bool;
-    #[doc(alias = "gst_pad_query_default")]
-    fn query_default<P: IsA<crate::Object>>(
-        &self,
-        parent: Option<&P>,
-        query: &mut QueryRef,
-    ) -> bool;
     fn proxy_query_caps(&self, query: &mut QueryRef) -> bool;
     #[doc(alias = "gst_pad_proxy_query_accept_caps")]
     fn proxy_query_accept_caps(&self, query: &mut QueryRef) -> bool;
 
-    #[doc(alias = "gst_pad_event_default")]
-    fn event_default<P: IsA<crate::Object>>(
-        &self,
-        parent: Option<&P>,
-        event: impl Into<Event>,
-    ) -> bool;
     #[doc(alias = "gst_pad_push_event")]
     fn push_event(&self, event: impl Into<Event>) -> bool;
     #[doc(alias = "gst_pad_send_event")]
@@ -166,11 +154,6 @@ pub trait PadExtManual: 'static {
 
     #[doc(alias = "gst_pad_iterate_internal_links")]
     fn iterate_internal_links(&self) -> crate::Iterator<Pad>;
-    #[doc(alias = "gst_pad_iterate_internal_links_default")]
-    fn iterate_internal_links_default<P: IsA<crate::Object>>(
-        &self,
-        parent: Option<&P>,
-    ) -> crate::Iterator<Pad>;
 
     fn stream_lock(&self) -> StreamLock;
 
@@ -502,21 +485,6 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn query_default<P: IsA<crate::Object>>(
-        &self,
-        parent: Option<&P>,
-        query: &mut QueryRef,
-    ) -> bool {
-        skip_assert_initialized!();
-        unsafe {
-            from_glib(ffi::gst_pad_query_default(
-                self.as_ref().to_glib_none().0,
-                parent.map(|p| p.as_ref()).to_glib_none().0,
-                query.as_mut_ptr(),
-            ))
-        }
-    }
-
     fn proxy_query_accept_caps(&self, query: &mut QueryRef) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_proxy_query_accept_caps(
@@ -531,21 +499,6 @@ impl<O: IsA<Pad>> PadExtManual for O {
             from_glib(ffi::gst_pad_proxy_query_accept_caps(
                 self.as_ref().to_glib_none().0,
                 query.as_mut_ptr(),
-            ))
-        }
-    }
-
-    fn event_default<P: IsA<crate::Object>>(
-        &self,
-        parent: Option<&P>,
-        event: impl Into<Event>,
-    ) -> bool {
-        skip_assert_initialized!();
-        unsafe {
-            from_glib(ffi::gst_pad_event_default(
-                self.as_ref().to_glib_none().0,
-                parent.map(|p| p.as_ref()).to_glib_none().0,
-                event.into().into_glib_ptr(),
             ))
         }
     }
@@ -572,18 +525,6 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             from_glib_full(ffi::gst_pad_iterate_internal_links(
                 self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn iterate_internal_links_default<P: IsA<crate::Object>>(
-        &self,
-        parent: Option<&P>,
-    ) -> crate::Iterator<Pad> {
-        unsafe {
-            from_glib_full(ffi::gst_pad_iterate_internal_links_default(
-                self.as_ref().to_glib_none().0,
-                parent.map(|p| p.as_ref()).to_glib_none().0,
             ))
         }
     }
@@ -1651,6 +1592,52 @@ impl Pad {
     ) -> PadBuilder<Self> {
         skip_assert_initialized!();
         PadBuilder::from_template(templ, name)
+    }
+
+    #[doc(alias = "gst_pad_query_default")]
+    pub fn query_default<O: IsA<Pad>>(
+        pad: &O,
+        parent: Option<&impl IsA<crate::Object>>,
+        query: &mut QueryRef,
+    ) -> bool {
+        skip_assert_initialized!();
+        unsafe {
+            from_glib(ffi::gst_pad_query_default(
+                pad.as_ref().to_glib_none().0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
+                query.as_mut_ptr(),
+            ))
+        }
+    }
+
+    #[doc(alias = "gst_pad_event_default")]
+    pub fn event_default<O: IsA<Pad>>(
+        pad: &O,
+        parent: Option<&impl IsA<crate::Object>>,
+        event: impl Into<Event>,
+    ) -> bool {
+        skip_assert_initialized!();
+        unsafe {
+            from_glib(ffi::gst_pad_event_default(
+                pad.as_ref().to_glib_none().0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
+                event.into().into_glib_ptr(),
+            ))
+        }
+    }
+
+    #[doc(alias = "gst_pad_iterate_internal_links_default")]
+    pub fn iterate_internal_links_default<O: IsA<Pad>>(
+        pad: &O,
+        parent: Option<&impl IsA<crate::Object>>,
+    ) -> crate::Iterator<Pad> {
+        skip_assert_initialized!();
+        unsafe {
+            from_glib_full(ffi::gst_pad_iterate_internal_links_default(
+                pad.as_ref().to_glib_none().0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
+            ))
+        }
     }
 }
 

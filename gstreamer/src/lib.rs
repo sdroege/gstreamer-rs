@@ -324,7 +324,6 @@ pub mod prelude {
     pub use crate::pipeline::GstPipelineExtManual;
     pub use crate::plugin::GstPluginExtManual;
     pub use crate::plugin_feature::PluginFeatureExtManual;
-    pub use crate::proxy_pad::ProxyPadExtManual;
     pub use crate::tag_setter::TagSetterExtManual;
     pub use crate::task_pool::{TaskHandle, TaskPoolExtManual};
     pub use crate::typefind::TypeFindImpl;
