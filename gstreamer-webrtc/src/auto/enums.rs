@@ -389,6 +389,10 @@ pub enum WebRTCError {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GST_WEBRTC_ERROR_INVALID_MODIFICATION")]
     InvalidModification,
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "GST_WEBRTC_ERROR_TYPE_ERROR")]
+    TypeError,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -414,6 +418,8 @@ impl IntoGlib for WebRTCError {
             Self::InternalFailure => ffi::GST_WEBRTC_ERROR_INTERNAL_FAILURE,
             #[cfg(any(feature = "v1_22", feature = "dox"))]
             Self::InvalidModification => ffi::GST_WEBRTC_ERROR_INVALID_MODIFICATION,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            Self::TypeError => ffi::GST_WEBRTC_ERROR_TYPE_ERROR,
             Self::__Unknown(value) => value,
         }
     }
@@ -439,6 +445,8 @@ impl FromGlib<ffi::GstWebRTCError> for WebRTCError {
             ffi::GST_WEBRTC_ERROR_INTERNAL_FAILURE => Self::InternalFailure,
             #[cfg(any(feature = "v1_22", feature = "dox"))]
             ffi::GST_WEBRTC_ERROR_INVALID_MODIFICATION => Self::InvalidModification,
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            ffi::GST_WEBRTC_ERROR_TYPE_ERROR => Self::TypeError,
             value => Self::__Unknown(value),
         }
     }
@@ -473,6 +481,8 @@ impl ErrorDomain for WebRTCError {
             ffi::GST_WEBRTC_ERROR_INTERNAL_FAILURE => Some(Self::InternalFailure),
             #[cfg(any(feature = "v1_22", feature = "dox"))]
             ffi::GST_WEBRTC_ERROR_INVALID_MODIFICATION => Some(Self::InvalidModification),
+            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            ffi::GST_WEBRTC_ERROR_TYPE_ERROR => Some(Self::TypeError),
             value => Some(Self::__Unknown(value)),
         }
     }

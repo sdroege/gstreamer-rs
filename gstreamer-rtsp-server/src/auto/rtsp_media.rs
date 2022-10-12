@@ -345,6 +345,15 @@ pub trait RTSPMediaExt: 'static {
     #[doc(alias = "time-provider")]
     fn set_time_provider(&self, time_provider: bool);
 
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "handle-message")]
+    fn connect_handle_message<F: Fn(&Self, &gst::Message) -> bool + Send + Sync + 'static>(
+        &self,
+        detail: Option<&str>,
+        f: F,
+    ) -> SignalHandlerId;
+
     #[doc(alias = "new-state")]
     fn connect_new_state<F: Fn(&Self, i32) + Send + Sync + 'static>(&self, f: F)
         -> SignalHandlerId;
@@ -1059,6 +1068,45 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn set_time_provider(&self, time_provider: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "time-provider", &time_provider)
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    fn connect_handle_message<F: Fn(&Self, &gst::Message) -> bool + Send + Sync + 'static>(
+        &self,
+        detail: Option<&str>,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn handle_message_trampoline<
+            P: IsA<RTSPMedia>,
+            F: Fn(&P, &gst::Message) -> bool + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstRTSPMedia,
+            message: *mut gst::ffi::GstMessage,
+            f: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean {
+            let f: &F = &*(f as *const F);
+            f(
+                RTSPMedia::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(message),
+            )
+            .into_glib()
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            let detailed_signal_name = detail.map(|name| format!("handle-message::{}\0", name));
+            let signal_name: &[u8] = detailed_signal_name
+                .as_ref()
+                .map_or(&b"handle-message\0"[..], |n| n.as_bytes());
+            connect_raw(
+                self.as_ptr() as *mut _,
+                signal_name.as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    handle_message_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
     }
 
     fn connect_new_state<F: Fn(&Self, i32) + Send + Sync + 'static>(

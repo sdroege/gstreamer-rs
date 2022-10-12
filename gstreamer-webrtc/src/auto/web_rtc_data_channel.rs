@@ -14,6 +14,9 @@ use glib::StaticType;
 use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GstWebRTCDataChannel")]
@@ -39,10 +42,50 @@ impl WebRTCDataChannel {
         }
     }
 
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "gst_webrtc_data_channel_send_data_full")]
+    pub fn send_data_full(&self, data: Option<&glib::Bytes>) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let is_ok = ffi::gst_webrtc_data_channel_send_data_full(
+                self.to_glib_none().0,
+                data.to_glib_none().0,
+                &mut error,
+            );
+            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
+
     #[doc(alias = "gst_webrtc_data_channel_send_string")]
     pub fn send_string(&self, str: Option<&str>) {
         unsafe {
             ffi::gst_webrtc_data_channel_send_string(self.to_glib_none().0, str.to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "gst_webrtc_data_channel_send_string_full")]
+    pub fn send_string_full(&self, str: Option<&str>) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let is_ok = ffi::gst_webrtc_data_channel_send_string_full(
+                self.to_glib_none().0,
+                str.to_glib_none().0,
+                &mut error,
+            );
+            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
