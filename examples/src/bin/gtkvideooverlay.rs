@@ -43,7 +43,7 @@ fn set_window_handle(video_overlay: &gst_video::VideoOverlay, gdk_window: &gdk::
     // Check if we're using X11 or ...
     if display_type_name == "GdkX11Display" {
         extern "C" {
-            pub fn gdk_x11_window_get_xid(window: *mut glib::object::GObject) -> *mut c_void;
+            pub fn gdk_x11_window_get_xid(window: *mut glib::gobject_ffi::GObject) -> *mut c_void;
         }
 
         // This is unsafe because the "window handle" we pass here is basically like a raw pointer.
@@ -77,7 +77,7 @@ fn set_window_handle(video_overlay: &gst_video::VideoOverlay, gdk_window: &gdk::
 
     if display_type_name == "GdkQuartzDisplay" {
         extern "C" {
-            pub fn gdk_quartz_window_get_nsview(window: *mut glib::object::GObject) -> *mut c_void;
+            pub fn gdk_quartz_window_get_nsview(window: *mut glib::gobject_ffi::GObject) -> *mut c_void;
         }
 
         // This is unsafe because the "window handle" we pass here is basically like a raw pointer.

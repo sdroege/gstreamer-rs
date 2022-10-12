@@ -181,7 +181,7 @@ mod tutorial5 {
                 if display_type_name == "GdkX11Display" {
                     extern "C" {
                         pub fn gdk_x11_window_get_xid(
-                            window: *mut glib::object::GObject,
+                            window: *mut glib::gobject_ffi::GObject,
                         ) -> *mut c_void;
                     }
 
@@ -200,7 +200,7 @@ mod tutorial5 {
                 if display_type_name == "GdkQuartzDisplay" {
                     extern "C" {
                         pub fn gdk_quartz_window_get_nsview(
-                            window: *mut glib::object::GObject,
+                            window: *mut glib::gobject_ffi::GObject,
                         ) -> *mut c_void;
                     }
 
