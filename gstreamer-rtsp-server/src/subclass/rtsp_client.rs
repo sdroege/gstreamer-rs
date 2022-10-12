@@ -147,6 +147,16 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn pre_record_request(&self, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPStatusCode {
         self.parent_pre_record_request(ctx)
     }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    fn adjust_error_code(
+        &self,
+        ctx: &crate::RTSPContext,
+        status_code: gst_rtsp::RTSPStatusCode,
+    ) -> gst_rtsp::RTSPStatusCode {
+        self.parent_adjust_error_code(ctx, status_code)
+    }
 }
 
 pub trait RTSPClientImplExt: ObjectSubclass {
@@ -234,6 +244,14 @@ pub trait RTSPClientImplExt: ObjectSubclass {
     fn parent_pre_announce_request(&self, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPStatusCode;
 
     fn parent_pre_record_request(&self, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPStatusCode;
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    fn parent_adjust_error_code(
+        &self,
+        ctx: &crate::RTSPContext,
+        status_code: gst_rtsp::RTSPStatusCode,
+    ) -> gst_rtsp::RTSPStatusCode;
 }
 
 impl<T: RTSPClientImpl> RTSPClientImplExt for T {
@@ -786,6 +804,31 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             }
         }
     }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    fn parent_adjust_error_code(
+        &self,
+        ctx: &crate::RTSPContext,
+        status_code: gst_rtsp::RTSPStatusCode,
+    ) -> gst_rtsp::RTSPStatusCode {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
+            if let Some(f) = (*parent_class).adjust_error_code {
+                from_glib(f(
+                    self.instance()
+                        .unsafe_cast_ref::<RTSPClient>()
+                        .to_glib_none()
+                        .0,
+                    ctx.to_glib_none().0,
+                    status_code.into_glib(),
+                ))
+            } else {
+                gst_rtsp::RTSPStatusCode::Ok
+            }
+        }
+    }
 }
 unsafe impl<T: RTSPClientImpl> IsSubclassable<T> for RTSPClient {
     fn class_init(klass: &mut glib::Class<Self>) {
@@ -821,6 +864,11 @@ unsafe impl<T: RTSPClientImpl> IsSubclassable<T> for RTSPClient {
         klass.pre_get_parameter_request = Some(client_pre_get_parameter_request::<T>);
         klass.pre_announce_request = Some(client_pre_announce_request::<T>);
         klass.pre_record_request = Some(client_pre_record_request::<T>);
+        #[cfg(any(feature = "v1_22", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+        {
+            klass.adjust_error_code = Some(client_adjust_error_code::<T>);
+        }
     }
 }
 
@@ -1151,4 +1199,18 @@ unsafe extern "C" fn client_pre_record_request<T: RTSPClientImpl>(
     let imp = instance.imp();
 
     imp.pre_record_request(&from_glib_borrow(ctx)).into_glib()
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+unsafe extern "C" fn client_adjust_error_code<T: RTSPClientImpl>(
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
+    status_code: gst_rtsp::ffi::GstRTSPStatusCode,
+) -> gst_rtsp::ffi::GstRTSPStatusCode {
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.imp();
+
+    imp.adjust_error_code(&from_glib_borrow(ctx), from_glib(status_code))
+        .into_glib()
 }
