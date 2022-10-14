@@ -934,6 +934,10 @@ impl<T> Builder<T> {
             .append_structure_full(self.s, self.features);
         caps
     }
+
+    pub fn structure(&self) -> &crate::Structure {
+        &self.s
+    }
 }
 
 pub enum AnyFeatures {}
