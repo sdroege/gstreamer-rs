@@ -87,7 +87,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     src.set_property_from_str("pattern", "ball");
 
     // The PangoFontMap represents the set of fonts available for a particular rendering system.
-    let fontmap = pangocairo::FontMap::new().unwrap();
+    let fontmap = pangocairo::FontMap::new();
     // Create a new pango layouting context for the fontmap.
     let context = fontmap.create_context().unwrap();
     // Create a pango layout object. This object is a string of text we want to layout.
