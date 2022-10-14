@@ -472,7 +472,7 @@ mod tests {
             .format(crate::AudioFormat::S16le)
             .rate(48000)
             .channels(2)
-            .field("channel-mask", gst::Bitmask::new(0x3))
+            .fallback_channel_mask()
             .build();
         let info = AudioInfo::from_caps(&caps).unwrap();
         assert_eq!(info.format(), crate::AudioFormat::S16le);

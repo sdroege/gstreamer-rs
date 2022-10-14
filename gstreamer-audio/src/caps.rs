@@ -113,6 +113,27 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn channel_mask(self, channel_mask: u64) -> Self {
+        Self {
+            builder: self
+                .builder
+                .field("channel-mask", gst::Bitmask::new(channel_mask)),
+        }
+    }
+
+    pub fn fallback_channel_mask(self) -> Self {
+        let channels = self.builder.structure().get::<i32>("channels");
+        match channels {
+            Ok(channels) => Self {
+                builder: self.builder.field(
+                    "channel-mask",
+                    gst::Bitmask::new(crate::AudioChannelPosition::fallback_mask(channels as u32)),
+                ),
+            },
+            Err(e) => panic!("{:?}", e),
+        }
+    }
+
     pub fn field<V: ToSendValue + Sync>(self, name: &str, value: V) -> Self {
         Self {
             builder: self.builder.field(name, value),
