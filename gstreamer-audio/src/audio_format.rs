@@ -315,7 +315,7 @@ pub trait AudioFormatIteratorExt {
     fn into_audio_caps(
         self,
         layout: crate::AudioLayout,
-    ) -> Option<gst::caps::Builder<gst::caps::NoFeature>>;
+    ) -> Option<crate::AudioCapsBuilder<gst::caps::NoFeature>>;
 }
 
 impl<T> AudioFormatIteratorExt for T
@@ -325,7 +325,7 @@ where
     fn into_audio_caps(
         self,
         layout: crate::AudioLayout,
-    ) -> Option<gst::caps::Builder<gst::caps::NoFeature>> {
+    ) -> Option<crate::AudioCapsBuilder<gst::caps::NoFeature>> {
         let formats: Vec<crate::AudioFormat> = self.collect();
         if !formats.is_empty() {
             Some(crate::functions::audio_make_raw_caps(&formats, layout))
@@ -339,7 +339,7 @@ pub trait AudioFormatIteratorExtRef {
     fn into_audio_caps(
         self,
         layout: crate::AudioLayout,
-    ) -> Option<gst::caps::Builder<gst::caps::NoFeature>>;
+    ) -> Option<crate::AudioCapsBuilder<gst::caps::NoFeature>>;
 }
 
 impl<'a, T> AudioFormatIteratorExtRef for T
@@ -349,7 +349,7 @@ where
     fn into_audio_caps(
         self,
         layout: crate::AudioLayout,
-    ) -> Option<gst::caps::Builder<gst::caps::NoFeature>> {
+    ) -> Option<crate::AudioCapsBuilder<gst::caps::NoFeature>> {
         let formats: Vec<crate::AudioFormat> = self.copied().collect();
         if !formats.is_empty() {
             Some(crate::functions::audio_make_raw_caps(&formats, layout))
@@ -416,7 +416,7 @@ mod tests {
             .into_audio_caps(crate::AudioLayout::Interleaved)
             .unwrap()
             .build();
-        assert_eq!(caps.to_string(), "audio/x-raw, format=(string){ S16LE, S16BE }, rate=(int)[ 1, 2147483647 ], channels=(int)[ 1, 2147483647 ], layout=(string)interleaved");
+        assert_eq!(caps.to_string(), "audio/x-raw, rate=(int)[ 1, 2147483647 ], channels=(int)[ 1, 2147483647 ], layout=(string)interleaved, format=(string){ S16LE, S16BE }");
     }
 
     #[test]

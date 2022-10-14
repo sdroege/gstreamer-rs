@@ -16,7 +16,6 @@ use gst::prelude::*;
 use byte_slice_cast::*;
 
 use std::i16;
-use std::i32;
 
 use anyhow::Error;
 use derive_more::{Display, Error};
@@ -57,11 +56,9 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     // This can be set after linking the two objects, because format negotiation between
     // both elements will happen during pre-rolling of the pipeline.
     appsink.set_caps(Some(
-        &gst::Caps::builder("audio/x-raw")
-            .field("format", gst_audio::AUDIO_FORMAT_S16.to_str())
-            .field("layout", "interleaved")
-            .field("channels", 1i32)
-            .field("rate", gst::IntRange::<i32>::new(1, i32::MAX))
+        &gst_audio::AudioCapsBuilder::new_interleaved()
+            .format(gst_audio::AUDIO_FORMAT_S16)
+            .channels(1)
             .build(),
     ));
 

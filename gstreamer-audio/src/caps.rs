@@ -119,6 +119,7 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    #[must_use]
     pub fn build(self) -> gst::Caps {
         self.builder.build()
     }

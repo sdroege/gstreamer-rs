@@ -54,8 +54,8 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
     // This can be set after linking the two objects, because format negotiation between
     // both elements will happen during pre-rolling of the pipeline.
     appsink.set_caps(Some(
-        &gst::Caps::builder("video/x-raw")
-            .field("format", gst_video::VideoFormat::Rgbx.to_str())
+        &gst_video::VideoCapsBuilder::new()
+            .format(gst_video::VideoFormat::Rgbx)
             .build(),
     ));
 

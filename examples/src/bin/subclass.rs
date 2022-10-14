@@ -36,7 +36,6 @@ mod fir_filter {
     mod imp {
         use super::*;
         use std::collections::VecDeque;
-        use std::i32;
         use std::sync::Mutex;
 
         // This is the private data of our filter
@@ -86,11 +85,9 @@ mod fir_filter {
                     // GStreamer about all possible pads that could exist for this type.
 
                     // On both of pads we can only handle F32 mono at any sample rate.
-                    let caps = gst::Caps::builder("audio/x-raw")
-                        .field("format", gst_audio::AUDIO_FORMAT_F32.to_str())
-                        .field("rate", gst::IntRange::<i32>::new(1, i32::MAX))
-                        .field("channels", 1i32)
-                        .field("layout", "interleaved")
+                    let caps = gst_audio::AudioCapsBuilder::new_interleaved()
+                        .format(gst_audio::AUDIO_FORMAT_F32)
+                        .channels(1)
                         .build();
 
                     vec![

@@ -123,18 +123,9 @@ mod cairo_compositor {
                     // GStreamer about all possible pads that could exist for this type.
 
                     // On all pads we can only handle BGRx.
-                    let caps = gst::Caps::builder("video/x-raw")
-                        .field("format", gst_video::VideoFormat::Bgrx.to_str())
-                        .field("width", gst::IntRange::<i32>::new(1, i32::MAX))
-                        .field("height", gst::IntRange::<i32>::new(1, i32::MAX))
+                    let caps = gst_video::VideoCapsBuilder::new()
+                        .format(gst_video::VideoFormat::Bgrx)
                         .field("pixel-aspect-ratio", gst::Fraction::new(1, 1))
-                        .field(
-                            "framerate",
-                            gst::FractionRange::new(
-                                gst::Fraction::new(0, 1),
-                                gst::Fraction::new(i32::MAX, 1),
-                            ),
-                        )
                         .build();
 
                     vec![

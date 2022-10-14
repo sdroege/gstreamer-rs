@@ -459,8 +459,8 @@ mod video_filter {
         impl ElementImpl for FdMemoryFadeInVideoFilter {
             fn pad_templates() -> &'static [PadTemplate] {
                 static PAD_TEMPLATES: Lazy<Vec<PadTemplate>> = Lazy::new(|| {
-                    let caps = gst::Caps::builder("video/x-raw")
-                        .field("format", "BGRA")
+                    let caps = gst_video::VideoCapsBuilder::new()
+                        .format(gst_video::VideoFormat::Bgra)
                         .build();
                     vec![
                         PadTemplate::new("sink", PadDirection::Sink, PadPresence::Always, &caps)

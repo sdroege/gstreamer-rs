@@ -222,9 +222,9 @@ fn example_main() -> Result<(), Error> {
         .field("clock-rate", 90000i32)
         .build();
 
-    let video_caps = gst::Caps::builder("video/x-raw")
-        .field("width", 1920i32)
-        .field("height", 1080i32)
+    let video_caps = gst_video::VideoCapsBuilder::new()
+        .width(1920)
+        .height(1080)
         .build();
 
     src.set_property("address", "127.0.0.1");

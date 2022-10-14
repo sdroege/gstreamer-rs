@@ -1,7 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr};
-use glib::ToSendValue;
 
 use std::i32;
 use std::mem;
@@ -214,23 +213,16 @@ pub fn is_common_aspect_ratio(width: u32, height: u32, par: gst::Fraction) -> bo
 
 pub fn video_make_raw_caps(
     formats: &[crate::VideoFormat],
-) -> gst::caps::Builder<gst::caps::NoFeature> {
+) -> crate::VideoCapsBuilder<gst::caps::NoFeature> {
     assert_initialized_main_thread!();
 
-    let formats = formats.iter().map(|f| match f {
+    let formats = formats.iter().copied().map(|f| match f {
         crate::VideoFormat::Encoded => panic!("Invalid encoded format"),
         crate::VideoFormat::Unknown => panic!("Invalid unknown format"),
-        _ => f.to_string().to_send_value(),
+        _ => f,
     });
 
-    gst::caps::Caps::builder("video/x-raw")
-        .field("format", gst::List::from_values(formats))
-        .field("width", gst::IntRange::new(1, i32::MAX))
-        .field("height", gst::IntRange::new(1, i32::MAX))
-        .field(
-            "framerate",
-            gst::FractionRange::new(gst::Fraction::new(0, 1), gst::Fraction::new(i32::MAX, 1)),
-        )
+    crate::VideoCapsBuilder::new().format_list(formats)
 }
 
 #[cfg(test)]
@@ -321,9 +313,9 @@ mod tests {
         }
 
         let caps = video_make_raw_caps(&[crate::VideoFormat::Nv12, crate::VideoFormat::Nv16])
-            .field("width", 800)
-            .field("height", 600)
-            .field("framerate", gst::Fraction::new(30, 1))
+            .width(800)
+            .height(600)
+            .framerate(gst::Fraction::new(30, 1))
             .build();
         assert_eq!(caps.to_string(), "video/x-raw, format=(string){ NV12, NV16 }, width=(int)800, height=(int)600, framerate=(fraction)30/1");
     }

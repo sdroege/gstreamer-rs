@@ -407,14 +407,14 @@ impl DoubleEndedIterator for VideoFormatIterator {
     }
 }
 pub trait VideoFormatIteratorExt {
-    fn into_video_caps(self) -> Option<gst::caps::Builder<gst::caps::NoFeature>>;
+    fn into_video_caps(self) -> Option<crate::VideoCapsBuilder<gst::caps::NoFeature>>;
 }
 
 impl<T> VideoFormatIteratorExt for T
 where
     T: Iterator<Item = crate::VideoFormat>,
 {
-    fn into_video_caps(self) -> Option<gst::caps::Builder<gst::caps::NoFeature>> {
+    fn into_video_caps(self) -> Option<crate::VideoCapsBuilder<gst::caps::NoFeature>> {
         let formats: Vec<crate::VideoFormat> = self.collect();
         if !formats.is_empty() {
             Some(crate::functions::video_make_raw_caps(&formats))
@@ -425,14 +425,14 @@ where
 }
 
 pub trait VideoFormatIteratorExtRef {
-    fn into_video_caps(self) -> Option<gst::caps::Builder<gst::caps::NoFeature>>;
+    fn into_video_caps(self) -> Option<crate::VideoCapsBuilder<gst::caps::NoFeature>>;
 }
 
 impl<'a, T> VideoFormatIteratorExtRef for T
 where
     T: Iterator<Item = &'a crate::VideoFormat>,
 {
-    fn into_video_caps(self) -> Option<gst::caps::Builder<gst::caps::NoFeature>> {
+    fn into_video_caps(self) -> Option<crate::VideoCapsBuilder<gst::caps::NoFeature>> {
         let formats: Vec<crate::VideoFormat> = self.copied().collect();
         if !formats.is_empty() {
             Some(crate::functions::video_make_raw_caps(&formats))
