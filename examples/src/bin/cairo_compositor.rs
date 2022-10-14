@@ -125,7 +125,7 @@ mod cairo_compositor {
                     // On all pads we can only handle BGRx.
                     let caps = gst_video::VideoCapsBuilder::new()
                         .format(gst_video::VideoFormat::Bgrx)
-                        .field("pixel-aspect-ratio", gst::Fraction::new(1, 1))
+                        .pixel_aspect_ratio((1, 1).into())
                         .build();
 
                     vec![

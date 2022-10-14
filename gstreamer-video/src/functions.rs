@@ -315,7 +315,7 @@ mod tests {
         let caps = video_make_raw_caps(&[crate::VideoFormat::Nv12, crate::VideoFormat::Nv16])
             .width(800)
             .height(600)
-            .framerate(gst::Fraction::new(30, 1))
+            .framerate((30, 1).into())
             .build();
         assert_eq!(caps.to_string(), "video/x-raw, format=(string){ NV12, NV16 }, width=(int)800, height=(int)600, framerate=(fraction)30/1");
     }

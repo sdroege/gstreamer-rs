@@ -78,7 +78,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     let caps = gst_video::VideoCapsBuilder::new()
         .width(800)
         .height(800)
-        .framerate(gst::Fraction::new(15, 1))
+        .framerate((15, 1).into())
         .build();
     capsfilter.set_property("caps", &caps);
 
