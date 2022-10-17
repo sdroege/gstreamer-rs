@@ -199,6 +199,66 @@ impl Signed<ClockTime> {
 impl_format_value_traits!(ClockTime, Time, Time, u64);
 option_glib_newtype_from_to!(ClockTime, ffi::GST_CLOCK_TIME_NONE);
 
+// rustdoc-stripper-ignore-next
+/// `ClockTime` formatted value constructor trait.
+pub trait TimeFormatConstructor {
+    // rustdoc-stripper-ignore-next
+    /// Builds a `ClockTime` formatted value from `self` interpreted as nano seconds.
+    fn nseconds(self) -> ClockTime;
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a `ClockTime` formatted value from `self` interpreted as micro seconds.
+    fn useconds(self) -> ClockTime;
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a `ClockTime` formatted value from `self` interpreted as milli seconds.
+    fn mseconds(self) -> ClockTime;
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a `ClockTime` formatted value from `self` interpreted as seconds.
+    fn seconds(self) -> ClockTime;
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a `ClockTime` formatted value from `self` interpreted as minutes.
+    fn minutes(self) -> ClockTime;
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a `ClockTime` formatted value from `self` interpreted as hours.
+    fn hours(self) -> ClockTime;
+}
+
+impl TimeFormatConstructor for u64 {
+    #[track_caller]
+    fn nseconds(self) -> ClockTime {
+        ClockTime::from_nseconds(self)
+    }
+
+    #[track_caller]
+    fn useconds(self) -> ClockTime {
+        ClockTime::from_useconds(self)
+    }
+
+    #[track_caller]
+    fn mseconds(self) -> ClockTime {
+        ClockTime::from_mseconds(self)
+    }
+
+    #[track_caller]
+    fn seconds(self) -> ClockTime {
+        ClockTime::from_seconds(self)
+    }
+
+    #[track_caller]
+    fn minutes(self) -> ClockTime {
+        ClockTime::from_seconds(self * 60)
+    }
+
+    #[track_caller]
+    fn hours(self) -> ClockTime {
+        ClockTime::from_seconds(self * 60 * 60)
+    }
+}
+
 impl glib::value::ValueType for ClockTime {
     type Type = Self;
 }

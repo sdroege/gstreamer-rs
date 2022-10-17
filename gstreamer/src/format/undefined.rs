@@ -14,6 +14,21 @@ impl Undefined {
     pub const ONE: Undefined = Undefined(1);
 }
 
+// rustdoc-stripper-ignore-next
+/// `Undefined` formatted value constructor trait.
+pub trait UndefinedFormatConstructor {
+    // rustdoc-stripper-ignore-next
+    /// Builds an `Undefined` formatted value from `self`.
+    fn undefined_format(self) -> Undefined;
+}
+
+impl UndefinedFormatConstructor for i64 {
+    #[track_caller]
+    fn undefined_format(self) -> Undefined {
+        Undefined(self)
+    }
+}
+
 impl FormattedValue for Undefined {
     type FullRange = Undefined;
 

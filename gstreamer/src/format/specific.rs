@@ -60,18 +60,37 @@ impl_format_value_traits!(Buffers, Buffers, Buffers, u64);
 option_glib_newtype_from_to!(Buffers, Buffers::OFFSET_NONE);
 glib_newtype_display!(Buffers, DisplayableOptionBuffers, Format::Buffers);
 
+// rustdoc-stripper-ignore-next
+/// `Buffers` formatted value constructor trait.
+pub trait BuffersFormatConstructor {
+    // rustdoc-stripper-ignore-next
+    /// Builds a `Buffers` formatted value from `self`.
+    fn buffers(self) -> Buffers;
+}
+
+impl BuffersFormatConstructor for u64 {
+    #[track_caller]
+    fn buffers(self) -> Buffers {
+        Buffers::from_u64(self)
+    }
+}
+
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Bytes(u64);
 impl Bytes {
+    #[allow(non_upper_case_globals)]
     // rustdoc-stripper-ignore-next
-    /// 1K Bytes (1024).
-    pub const K: Self = Self(1024);
+    /// 1 kibibyte (1024).
+    #[allow(non_upper_case_globals)]
+    pub const KiB: Self = Self(1024);
     // rustdoc-stripper-ignore-next
-    /// 1M Bytes (1024 * 1024).
-    pub const M: Self = Self(1024 * 1024);
+    /// 1 mebibyte (1024 * 1024).
+    #[allow(non_upper_case_globals)]
+    pub const MiB: Self = Self(1024 * 1024);
     // rustdoc-stripper-ignore-next
-    /// 1G Bytes (1024 * 1024 * 1024).
-    pub const G: Self = Self(1024 * 1024 * 1024);
+    /// 1 gibibyte (1024 * 1024 * 1024).
+    #[allow(non_upper_case_globals)]
+    pub const GiB: Self = Self(1024 * 1024 * 1024);
     pub const MAX: Self = Self(u64::MAX - 1);
 }
 
@@ -106,6 +125,52 @@ impl_signed_div_mul!(Bytes, u64);
 impl_format_value_traits!(Bytes, Bytes, Bytes, u64);
 option_glib_newtype_from_to!(Bytes, u64::MAX);
 glib_newtype_display!(Bytes, DisplayableOptionBytes, Format::Bytes);
+
+// rustdoc-stripper-ignore-next
+/// `Bytes` formatted value constructor trait.
+///
+/// These constructors use the [unambiguous conventions] for byte units.
+///
+/// [unambiguous conventions]: https://en.wikipedia.org/wiki/Byte#Multiple-byte_units
+pub trait BytesFormatConstructor {
+    // rustdoc-stripper-ignore-next
+    /// Builds a `Bytes` formatted value from `self`.
+    fn bytes(self) -> Bytes;
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a `Bytes` formatted value from `self` interpreted as kibibytes (1024).
+    fn kibibytes(self) -> Bytes;
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a `Bytes` formatted value from `self` interpreted as mebibytes (1024²).
+    fn mebibytes(self) -> Bytes;
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a `Bytes` formatted value from `self` interpreted as gibibytes (1024³).
+    fn gibibytes(self) -> Bytes;
+}
+
+impl BytesFormatConstructor for u64 {
+    #[track_caller]
+    fn bytes(self) -> Bytes {
+        Bytes::from_u64(self)
+    }
+
+    #[track_caller]
+    fn kibibytes(self) -> Bytes {
+        Bytes::from_u64(self * 1024)
+    }
+
+    #[track_caller]
+    fn mebibytes(self) -> Bytes {
+        Bytes::from_u64(self * 1024 * 1024)
+    }
+
+    #[track_caller]
+    fn gibibytes(self) -> Bytes {
+        Bytes::from_u64(self * 1024 * 1024 * 1024)
+    }
+}
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Default(u64);
@@ -144,6 +209,21 @@ impl_signed_div_mul!(Default, u64);
 impl_format_value_traits!(Default, Default, Default, u64);
 option_glib_newtype_from_to!(Default, u64::MAX);
 glib_newtype_display!(Default, DisplayableOptionDefault, Format::Default);
+
+// rustdoc-stripper-ignore-next
+/// `Default` formatted value constructor trait.
+pub trait DefaultFormatConstructor {
+    // rustdoc-stripper-ignore-next
+    /// Builds a `Default` formatted value from `self`.
+    fn default_format(self) -> Default;
+}
+
+impl DefaultFormatConstructor for u64 {
+    #[track_caller]
+    fn default_format(self) -> Default {
+        Default::from_u64(self)
+    }
+}
 
 pub type Time = super::ClockTime;
 
@@ -342,6 +422,45 @@ impl TryFrom<f32> for Percent {
                 (v * ffi::GST_FORMAT_PERCENT_MAX as f32).round() as u32
             ))
         }
+    }
+}
+
+// rustdoc-stripper-ignore-next
+/// `Percent` formatted value from integer constructor trait.
+pub trait PercentFormatIntegerConstructor {
+    // rustdoc-stripper-ignore-next
+    /// Builds a `Percent` formatted value from `self` interpreted as a percent.
+    fn percent(self) -> Percent;
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a `Percent` formatted value from `self` interpreted as parts per million.
+    fn ppm(self) -> Percent;
+}
+
+impl PercentFormatIntegerConstructor for u32 {
+    #[track_caller]
+    fn percent(self) -> Percent {
+        Percent::from_percent(self)
+    }
+
+    #[track_caller]
+    fn ppm(self) -> Percent {
+        Percent::from_ppm(self)
+    }
+}
+
+// rustdoc-stripper-ignore-next
+/// `Percent` formatted value from float constructor trait.
+pub trait PercentFormatFloatConstructor {
+    // rustdoc-stripper-ignore-next
+    /// Builds a `Percent` formatted value from `self` interpreted as a ratio.
+    fn percent_ratio(self) -> Percent;
+}
+
+impl PercentFormatFloatConstructor for f32 {
+    #[track_caller]
+    fn percent_ratio(self) -> Percent {
+        Percent::try_from(self).unwrap()
     }
 }
 

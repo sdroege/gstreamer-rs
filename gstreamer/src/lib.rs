@@ -337,9 +337,7 @@ pub mod prelude {
 
     pub use muldiv::MulDiv;
 
-    pub use crate::format::{
-        FormattedValue, FormattedValueNoneBuilder, NoneSignedBuilder, UnsignedIntoSigned,
-    };
+    pub use crate::format::prelude::*;
     pub use crate::utils::Displayable;
 
     pub use crate::memory::MemoryType;

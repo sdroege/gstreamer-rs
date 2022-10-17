@@ -59,7 +59,8 @@ impl<'de> Deserialize<'de> for Undefined {
 
 #[cfg(test)]
 mod tests {
-    use crate::format::{Buffers, Bytes, Default, Other, Percent, Undefined};
+    use crate::format::prelude::*;
+    use crate::format::{Default, Other, Undefined};
     use crate::ClockTime;
     use crate::Format;
     use crate::GenericFormattedValue;
@@ -74,19 +75,19 @@ mod tests {
         let res = serde_json::to_string(&value).unwrap();
         assert_eq!("{\"Undefined\":42}".to_owned(), res);
 
-        let value = GenericFormattedValue::from(Default::from_u64(42));
+        let value = GenericFormattedValue::from(42.default_format());
         let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
         assert_eq!(Ok("Default(Some(42))".to_owned()), res);
         let res = serde_json::to_string(&value).unwrap();
         assert_eq!("{\"Default\":42}".to_owned(), res);
 
-        let value = GenericFormattedValue::from(Option::<Default>::None);
+        let value = GenericFormattedValue::from(Default::NONE);
         let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
         assert_eq!(Ok("Default(None)".to_owned()), res);
         let res = serde_json::to_string(&value).unwrap();
         assert_eq!("{\"Default\":null}".to_owned(), res);
 
-        let value = GenericFormattedValue::from(Bytes::from_usize(42));
+        let value = GenericFormattedValue::from(42.bytes());
         let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
         assert_eq!(Ok("Bytes(Some(42))".to_owned()), res);
         let res = serde_json::to_string(&value).unwrap();
@@ -98,13 +99,13 @@ mod tests {
         let res = serde_json::to_string(&value).unwrap();
         assert_eq!("{\"Time\":42123456789}".to_owned(), res);
 
-        let value = GenericFormattedValue::from(Buffers::from_u64(42));
+        let value = GenericFormattedValue::from(42.buffers());
         let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
         assert_eq!(Ok("Buffers(Some(42))".to_owned()), res);
         let res = serde_json::to_string(&value).unwrap();
         assert_eq!("{\"Buffers\":42}".to_owned(), res);
 
-        let percent = Percent::from_ratio(0.42);
+        let percent = 0.42.percent_ratio();
         let value = GenericFormattedValue::from(percent);
         let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
         assert_eq!(Ok("Percent(Some(420000))".to_owned()), res);
@@ -129,7 +130,7 @@ mod tests {
     fn test_deserialize() {
         let value_ron = "Default(Some(42))";
         let value_de: GenericFormattedValue = ron::de::from_str(value_ron).unwrap();
-        assert_eq!(value_de, GenericFormattedValue::from(Default::from_u64(42)));
+        assert_eq!(value_de, GenericFormattedValue::from(42.default_format()));
 
         let value_json = "{\"Default\":42}";
         let value_de: GenericFormattedValue = serde_json::from_str(value_json).unwrap();
@@ -158,12 +159,12 @@ mod tests {
 
         test_roundrip!(GenericFormattedValue::Undefined(Undefined::from(42)));
         test_roundrip!(GenericFormattedValue::from(Default::from_u64(42)));
-        test_roundrip!(GenericFormattedValue::from(Bytes::from_u64(42)));
+        test_roundrip!(GenericFormattedValue::from(42.bytes()));
         test_roundrip!(GenericFormattedValue::from(ClockTime::from_nseconds(
             42_123_456_789
         )));
-        test_roundrip!(GenericFormattedValue::from(Buffers::from_u64(42)));
-        test_roundrip!(GenericFormattedValue::from(Percent::from_percent(42)));
+        test_roundrip!(GenericFormattedValue::from(42.buffers()));
+        test_roundrip!(GenericFormattedValue::from(42.percent()));
         let gfv_value = GenericFormattedValue::Other(Format::Default, Other::try_from(42).ok());
         test_roundrip!(gfv_value);
         test_roundrip!(GenericFormattedValue::new(Format::__Unknown(7), 42));

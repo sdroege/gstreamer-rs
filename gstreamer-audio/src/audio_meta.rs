@@ -290,12 +290,14 @@ mod tests {
 
     #[test]
     fn test_add_get_audio_clipping_meta() {
+        use gst::prelude::*;
+
         gst::init().unwrap();
 
         let mut buffer = gst::Buffer::with_size(1024).unwrap();
 
-        let start = gst::format::Default::from_u64(1);
-        let stop = gst::format::Default::from_u64(2);
+        let start = 1.default_format();
+        let stop = 2.default_format();
 
         {
             let cmeta = AudioClippingMeta::add(buffer.get_mut().unwrap(), start, stop);

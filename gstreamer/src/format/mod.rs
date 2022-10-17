@@ -38,7 +38,7 @@
 //!
 //! ```
 //! # use gstreamer as gst;
-//! # use gst::prelude::ElementExtManual;
+//! # use gst::{format::prelude::*, prelude::ElementExtManual};
 //! # gst::init();
 //! # let pipeline = gst::Pipeline::new(None);
 //! # let seek_flags = gst::SeekFlags::FLUSH | gst::SeekFlags::KEY_UNIT;
@@ -65,6 +65,7 @@
 //!
 //! ```
 //! # use gstreamer as gst;
+//! use gst::prelude::*;
 //! use gst::format::{Buffers, Bytes, ClockTime, Default, Percent};
 //!
 //! // Specific formatted values implement the faillible `try_from` constructor:
@@ -81,45 +82,51 @@
 //! // Other formatted values also come with (panicking) constructors:
 //! let buffers_nb = Buffers::from_u64(512);
 //! let received = Bytes::from_u64(64);
-//! let sample_size = Bytes::from_usize([0u8; 4].len());
 //! let quantity = Default::from_u64(42);
+//!
+//! // `Bytes` can be built from an `usize` too:
+//! let sample_size = Bytes::from_usize([0u8; 4].len());
 //!
 //! // This can be convenient:
 //! assert_eq!(
-//!     20 * ClockTime::MSECOND,
-//!     ClockTime::from_nseconds(20_000_000),
-//! );
-//! assert_eq!(
-//!     40 * ClockTime::SECOND,
-//!     ClockTime::from_nseconds(40_000_000_000),
+//!     7.seconds() + 250.mseconds(),
+//!     ClockTime::from_nseconds(7_250_000_000),
 //! );
 //!
-//! // `ZERO` and `NONE` can come in handy sometimes:
+//! // Those too:
+//! assert_eq!(512.buffers(), Buffers::from_u64(512));
+//! assert_eq!(64.bytes(), Bytes::from_u64(64));
+//! assert_eq!(42.default_format(), Default::from_u64(42));
+//!
+//! // The `ZERO` and `NONE` constants can come in handy sometimes:
 //! assert_eq!(*Buffers::ZERO, 0);
 //! assert!(ClockTime::NONE.is_none());
 //!
-//! // Specific formatted values provide the `ONE` value:
-//! assert_eq!(*(128 * Buffers::ONE), 128);
+//! // Specific formatted values provide the constant `ONE` value:
+//! assert_eq!(*Buffers::ONE, 1);
 //!
 //! // `Bytes` also comes with usual multipliers:
-//! assert_eq!(*(512 * Bytes::K), 512 * 1024);
-//! assert_eq!(*(8 * Bytes::M), 8 * 1024 * 1024);
-//! assert_eq!(*(4 * Bytes::G), 4 * 1024 * 1024 * 1024);
+//! assert_eq!(*(512.kibibytes()), 512 * 1024);
+//! assert_eq!(*(8.mebibytes()), 8 * 1024 * 1024);
+//! assert_eq!(*(4.gibibytes()), 4 * 1024 * 1024 * 1024);
 //!
-//! // `Percent` can be built from a floating point ratio:
-//! let a_quarter_from_ratio = Percent::from_ratio(0.25);
-//! // ... from a percent integer value:
-//! let a_quarter = Percent::from_percent(25);
+//! // ... and the macthing constants:
+//! assert_eq!(512 * Bytes::KiB, 512.kibibytes());
+//!
+//! // `Percent` can be built from a percent integer value:
+//! let a_quarter = 25.percent();
+//! // ... from a floating point ratio:
+//! let a_quarter_from_ratio = 0.25.percent_ratio();
 //! assert_eq!(a_quarter, a_quarter_from_ratio);
 //! // ... from a part per million integer value:
-//! let a_quarter_from_ppm = Percent::from_ppm(25 * 10_000);
+//! let a_quarter_from_ppm = (25 * 10_000).ppm();
 //! assert_eq!(a_quarter, a_quarter_from_ppm);
 //! // ... `MAX` which represents 100%:
 //! assert_eq!(Percent::MAX / 4, a_quarter);
 //! // ... `ONE` which is 1%:
 //! assert_eq!(25 * Percent::ONE, a_quarter);
 //! // ... and `SCALE` which is 1% in ppm:
-//! assert_eq!(Percent::SCALE, Percent::from_ppm(10_000));
+//! assert_eq!(Percent::SCALE, 10_000.ppm());
 //! ```
 //!
 //! ### Displaying a formatted value
@@ -129,28 +136,29 @@
 //!
 //! ```
 //! # use gstreamer as gst;
-//! # use gst::prelude::Displayable;
-//! let time = gst::ClockTime::from_nseconds(45_834_908_569_837);
+//! # use gst::prelude::*;
+//! let time = 45_834_908_569_837.nseconds();
 //!
-//! assert_eq!(format!("{}", time), "12:43:54.908569837");
-//! assert_eq!(format!("{:.0}", time), "12:43:54");
+//! assert_eq!(format!("{time}"), "12:43:54.908569837");
+//! assert_eq!(format!("{time:.0}"), "12:43:54");
 //!
-//! let percent = gst::format::Percent::try_from(0.1234).unwrap();
-//! assert_eq!(format!("{}", percent), "12.34 %");
-//! assert_eq!(format!("{:5.1}", percent), " 12.3 %");
+//! let percent = 0.1234.percent_ratio();
+//! assert_eq!(format!("{percent}"), "12.34 %");
+//! assert_eq!(format!("{percent:5.1}"), " 12.3 %");
 //! ```
 //!
 //! ## Some operations available on specific formatted values
 //!
 //! ```
 //! # use gstreamer as gst;
+//! # use gst::prelude::*;
 //! let cur_pos = gst::ClockTime::ZERO;
 //!
 //! // All four arithmetic operations can be used:
-//! let fwd = cur_pos + 2 * gst::ClockTime::SECOND / 3 - gst::ClockTime::MSECOND;
+//! let fwd = cur_pos + 2.seconds() / 3 - 5.mseconds();
 //!
 //! // Examples of operations which make sure not to overflow:
-//! let bwd = cur_pos.saturating_sub(2 * gst::ClockTime::SECOND);
+//! let bwd = cur_pos.saturating_sub(2.seconds());
 //! let further = cur_pos.checked_mul(2).expect("Overflowed");
 //!
 //! // Specific formatted values can be compared:
@@ -172,7 +180,7 @@
 //!
 //! // Specific formatted values implement the `MulDiv` trait:
 //! # use gst::prelude::MulDiv;
-//! # let (samples, rate) = (1024u64, 48000u64);
+//! # let (samples, rate) = (1024u64, 48_000u64);
 //! let duration = samples
 //!     .mul_div_round(*gst::ClockTime::SECOND, rate)
 //!     .map(gst::ClockTime::from_nseconds);
@@ -196,7 +204,7 @@
 //! # Optional specific formatted values
 //!
 //! Optional specific formatted values are represented as a standard Rust
-//! `Option<F>`. This departs from the C APIs which uses a sentinel that must
+//! `Option<F>`. This departs from the C APIs which use a sentinel that must
 //! be checked in order to figure out whether the value is defined.
 //!
 //! Besides giving access to the usual `Option` features, this ensures the APIs
@@ -212,15 +220,16 @@
 //!
 //! ```
 //! # use gstreamer as gst;
+//! # use gst::format::prelude::*;
 //! # gst::init();
 //! # let seek_flags = gst::SeekFlags::FLUSH | gst::SeekFlags::KEY_UNIT;
 //! let seek_evt = gst::event::Seek::new(
 //!     1.0f64,
 //!     seek_flags,
 //!     gst::SeekType::Set,
-//!     10 * gst::ClockTime::SECOND, // start at 10s
+//!     10.seconds(),         // start at 10s
 //!     gst::SeekType::Set,
-//!     gst::ClockTime::NONE,        // stop is undefined
+//!     gst::ClockTime::NONE, // stop is undefined
 //! );
 //! ```
 //!
@@ -234,8 +243,8 @@
 //!
 //! ```
 //! # use gstreamer as gst;
-//! # use gst::prelude::Displayable;
-//! let opt_time = Some(45_834_908_569_837 * gst::ClockTime::NSECOND);
+//! # use gst::prelude::*;
+//! let opt_time = Some(45_834_908_569_837.nseconds());
 //!
 //! assert_eq!(format!("{}", opt_time.display()), "12:43:54.908569837");
 //! assert_eq!(format!("{:.0}", opt_time.display()), "12:43:54");
@@ -251,13 +260,13 @@
 //! assert!(pts.is_some());
 //!
 //! // All four arithmetic operations can be used. Ex.:
-//! let fwd = pts.opt_add(2 * gst::ClockTime::SECOND);
+//! let fwd = pts.opt_add(2.seconds());
 //! // `pts` is defined, so `fwd` will contain the addition result in `Some`,
 //! assert!(fwd.is_some());
 //! // otherwise `fwd` would be `None`.
 //!
 //! // Examples of operations which make sure not to overflow:
-//! let bwd = pts.opt_saturating_sub(2 * gst::ClockTime::SECOND);
+//! let bwd = pts.opt_saturating_sub(2.seconds());
 //! let further = pts.opt_checked_mul(2).expect("Overflowed");
 //!
 //! // Optional specific formatted values can be compared:
@@ -289,12 +298,13 @@
 //!
 //! ```
 //! # use gstreamer as gst;
+//! # use gst::prelude::*;
 //! # gst::init();
 //! # let segment = gst::FormattedSegment::<gst::ClockTime>::new();
 //! use gst::Signed::*;
-//! match segment.to_running_time_full(2 * gst::ClockTime::SECOND) {
-//!     Some(Positive(pos_rtime)) => println!("positive rtime {}", pos_rtime),
-//!     Some(Negative(pos_rtime)) => println!("negative rtime {}", pos_rtime),
+//! match segment.to_running_time_full(2.seconds()) {
+//!     Some(Positive(pos_rtime)) => println!("positive rtime {pos_rtime}"),
+//!     Some(Negative(neg_rtime)) => println!("negative rtime {neg_rtime}"),
 //!     None => println!("undefined rtime"),
 //! }
 //! ```
@@ -303,30 +313,31 @@
 //!
 //! ```
 //! # use gstreamer as gst;
-//! # use gst::prelude::UnsignedIntoSigned;
-//! let pos = gst::ClockTime::SECOND;
+//! # use gst::prelude::*;
+//! let step = 10.mseconds();
 //!
-//! let positive_one_sec = pos.into_positive();
-//! assert!(positive_one_sec.is_positive());
+//! let positive_step = step.into_positive();
+//! assert!(positive_step.is_positive());
 //!
-//! let negative_one_sec = pos.into_negative();
-//! assert!(negative_one_sec.is_negative());
+//! let negative_step = step.into_negative();
+//! assert!(negative_step.is_negative());
 //! ```
 //!
 //! ### Handling one sign only
 //!
 //! ```
 //! # use gstreamer as gst;
-//! # use gst::prelude::UnsignedIntoSigned;
+//! # use gst::prelude::*;
 //! # struct NegativeError;
-//! let p_one_sec = gst::ClockTime::SECOND.into_positive();
+//! let pos_step = 10.mseconds().into_positive();
+//! assert!(pos_step.is_positive());
 //!
-//! let one_sec = p_one_sec.positive().expect("positive");
-//! let one_sec_or_zero = p_one_sec.positive().unwrap_or(gst::ClockTime::ZERO);
+//! let abs_step_or_panic = pos_step.positive().expect("positive");
+//! let abs_step_or_zero = pos_step.positive().unwrap_or(gst::ClockTime::ZERO);
 //!
-//! let one_sec_or_err = p_one_sec.positive_or(NegativeError);
-//! let one_sec_or_else_err = p_one_sec.positive_or_else(|value| {
-//!     println!("{} is negative", value);
+//! let abs_step_or_err = pos_step.positive_or(NegativeError);
+//! let abs_step_or_else_err = pos_step.positive_or_else(|step| {
+//!     println!("{step} is negative");
 //!     NegativeError
 //! });
 //! ```
@@ -335,14 +346,14 @@
 //!
 //! ```
 //! # use gstreamer as gst;
-//! # use gst::prelude::Displayable;
+//! # use gst::prelude::*;
 //! # gst::init();
 //! # let mut segment = gst::FormattedSegment::<gst::ClockTime>::new();
-//! # segment.set_start(10 * gst::ClockTime::SECOND);
+//! # segment.set_start(10.seconds());
 //! let start = segment.start().unwrap();
-//! assert_eq!(format!("{:.0}", start), "0:00:10");
+//! assert_eq!(format!("{start:.0}"), "0:00:10");
 //!
-//! let p_rtime = segment.to_running_time_full(20 * gst::ClockTime::SECOND);
+//! let p_rtime = segment.to_running_time_full(20.seconds());
 //! // Use `display()` with optional signed values.
 //! assert_eq!(format!("{:.0}", p_rtime.display()), "+0:00:10");
 //!
@@ -360,9 +371,9 @@
 //!
 //! ```
 //! # use gstreamer as gst;
-//! # use gst::prelude::UnsignedIntoSigned;
+//! # use gst::prelude::*;
 //! let p_one_sec = gst::ClockTime::SECOND.into_positive();
-//! let p_two_sec = (2 * gst::ClockTime::SECOND).into_positive();
+//! let p_two_sec = 2.seconds().into_positive();
 //! let n_one_sec = gst::ClockTime::SECOND.into_negative();
 //!
 //! assert_eq!(p_one_sec + p_one_sec, p_two_sec);
@@ -394,9 +405,9 @@
 //! }
 //!
 //! // Signed formatted values implement the `MulDiv` trait:
-//! # use gst::prelude::MulDiv;
-//! # let rate = 48000u64;
-//! let samples = (1024 * gst::format::Default::ONE).into_negative();
+//! # use gst::prelude::*;
+//! # let rate = 48_000u64;
+//! let samples = 1024.default_format().into_negative();
 //! let duration = samples
 //!     .mul_div_round(*gst::ClockTime::SECOND, rate)
 //!     .map(|signed_default| {
@@ -415,9 +426,9 @@
 //! ```
 //! # use gstreamer as gst;
 //! # use gst::prelude::*;
-//! let p_one_sec = gst::ClockTime::SECOND.into_positive();
-//! let p_two_sec = (2 * gst::ClockTime::SECOND).into_positive();
-//! let n_one_sec = gst::ClockTime::SECOND.into_negative();
+//! let p_one_sec = 1.seconds().into_positive();
+//! let p_two_sec = 2.seconds().into_positive();
+//! let n_one_sec = 1.seconds().into_negative();
 //!
 //! // Signed `ClockTime` addition with optional and non-optional operands.
 //! assert_eq!(Some(p_one_sec).opt_add(p_one_sec), Some(p_two_sec));
@@ -443,9 +454,9 @@
 //!
 //! ```
 //! # use gstreamer as gst;
-//! # use gst::prelude::{Displayable, ElementExtManual};
+//! # use gst::prelude::*;
 //! # gst::init();
-//! # let event = gst::event::SegmentDone::new(512 * gst::format::Buffers::ONE);
+//! # let event = gst::event::SegmentDone::new(512.buffers());
 //! if let gst::EventView::SegmentDone(seg_done_evt) = event.view() {
 //!     use gst::GenericFormattedValue::*;
 //!     match seg_done_evt.get() {
@@ -474,7 +485,7 @@ use thiserror::Error;
 mod macros;
 
 mod clock_time;
-pub use clock_time::ClockTime;
+pub use clock_time::*;
 #[cfg(feature = "serde")]
 mod clock_time_serde;
 
@@ -495,6 +506,15 @@ pub use specific::*;
 
 mod undefined;
 pub use undefined::*;
+
+pub mod prelude {
+    pub use super::{
+        BuffersFormatConstructor, BytesFormatConstructor, DefaultFormatConstructor, FormattedValue,
+        FormattedValueNoneBuilder, NoneSignedBuilder, OtherFormatConstructor,
+        PercentFormatFloatConstructor, PercentFormatIntegerConstructor, TimeFormatConstructor,
+        UndefinedFormatConstructor, UnsignedIntoSigned,
+    };
+}
 
 use crate::Format;
 
@@ -654,11 +674,11 @@ mod tests {
     fn incompatible() {
         with_compatible_formats(
             ClockTime::ZERO,
-            GenericFormattedValue::Buffers(Some(42 * Buffers::ONE)),
+            GenericFormattedValue::Buffers(Some(42.buffers())),
         )
         .unwrap_err();
         with_compatible_formats(
-            GenericFormattedValue::Buffers(Some(42 * Buffers::ONE)),
+            GenericFormattedValue::Buffers(Some(42.buffers())),
             ClockTime::NONE,
         )
         .unwrap_err();
@@ -915,14 +935,14 @@ mod tests {
 
     #[test]
     fn display_new_types() {
-        let bytes = 42 * Bytes::ONE;
+        let bytes = 42.bytes();
         assert_eq!(&format!("{bytes}"), "42 bytes");
         assert_eq!(&format!("{}", bytes.display()), "42 bytes");
 
         assert_eq!(&format!("{}", Some(bytes).display()), "42 bytes");
         assert_eq!(&format!("{}", Bytes::NONE.display()), "undef. bytes");
 
-        let gv_1 = GenericFormattedValue::Percent(Some(42 * Percent::ONE));
+        let gv_1 = GenericFormattedValue::Percent(Some(42.percent()));
         assert_eq!(&format!("{gv_1}"), "42 %");
         assert_eq!(
             &format!("{}", GenericFormattedValue::Percent(None)),
@@ -950,7 +970,7 @@ mod tests {
 
     #[test]
     fn display_signed() {
-        let bytes_42 = 42 * Bytes::ONE;
+        let bytes_42 = 42.bytes();
         let p_bytes = bytes_42.into_positive();
         assert_eq!(&format!("{p_bytes}"), "+42 bytes");
         assert_eq!(&format!("{}", p_bytes.display()), "+42 bytes");

@@ -67,6 +67,21 @@ impl TryFromGlib<i64> for Other {
     }
 }
 
+// rustdoc-stripper-ignore-next
+/// `Other` formatted value constructor trait.
+pub trait OtherFormatConstructor {
+    // rustdoc-stripper-ignore-next
+    /// Builds an `Other` formatted value from `self`.
+    fn other_format(self) -> Other;
+}
+
+impl OtherFormatConstructor for u64 {
+    #[track_caller]
+    fn other_format(self) -> Other {
+        Other::from_u64(self)
+    }
+}
+
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum GenericFormattedValue {
@@ -418,7 +433,7 @@ mod tests {
 
         let other_10 = Other::from_u64(10);
         let other_20 = Other::from_usize(20);
-        let other_30 = Other::from_u64(30);
+        let other_30 = 30.other_format();
 
         assert_eq!(other_10 + other_20, other_30);
         assert_eq!(other_30 - other_20, other_10);
@@ -464,7 +479,7 @@ mod tests {
             p_gen_other_42,
             GenericSignedFormattedValue::Other(
                 Format::__Unknown(128),
-                Some(Signed::Positive(Other::from_u64(42))),
+                Some(Signed::Positive(42.other_format())),
             ),
         );
 
@@ -473,7 +488,7 @@ mod tests {
             n_gen_other_42,
             GenericSignedFormattedValue::Other(
                 Format::__Unknown(128),
-                Some(Signed::Negative(Other::from_u64(42))),
+                Some(Signed::Negative(42.other_format())),
             ),
         );
     }
