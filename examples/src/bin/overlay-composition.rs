@@ -89,7 +89,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     // The PangoFontMap represents the set of fonts available for a particular rendering system.
     let fontmap = pangocairo::FontMap::new();
     // Create a new pango layouting context for the fontmap.
-    let context = fontmap.create_context().unwrap();
+    let context = fontmap.create_context();
     // Create a pango layout object. This object is a string of text we want to layout.
     // It is wrapped in a LayoutWrapper (defined above) to be able to send it across threads.
     let layout = LayoutWrapper(pango::Layout::new(&context));
