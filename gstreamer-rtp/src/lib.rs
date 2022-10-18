@@ -43,7 +43,9 @@ mod flag_serde;
 pub mod subclass;
 
 pub mod rtp_buffer;
-pub use crate::rtp_buffer::{compare_seqnum, RTPBuffer};
+pub use crate::rtp_buffer::{
+    calc_header_len, calc_packet_len, calc_payload_len, compare_seqnum, ext_timestamp, RTPBuffer,
+};
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 pub mod rtp_header_extension;
