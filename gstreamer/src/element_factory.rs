@@ -22,54 +22,99 @@ impl ElementFactory {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_element_factory_create_with_properties")]
+    #[track_caller]
     pub fn create_with_properties(
         &self,
         properties: &[(&str, &dyn ToValue)],
     ) -> Result<Element, glib::BoolError> {
         assert_initialized_main_thread!();
-        let n = properties.len() as u32;
-        let names = properties.iter().map(|(name, _)| *name).collect::<Vec<_>>();
-        let values = properties
-            .iter()
-            .map(|(_, value)| value.to_value())
-            .collect::<Vec<_>>();
 
-        unsafe {
-            Option::<_>::from_glib_none(ffi::gst_element_factory_create_with_properties(
-                self.to_glib_none().0,
-                n,
-                names.to_glib_none().0,
-                values.as_ptr() as *const glib::gobject_ffi::GValue,
-            ))
-            .ok_or_else(|| glib::bool_error!("Failed to create element from factory"))
+        // The below is basically a reimplementation of the C function. We want to call
+        // glib::Object::with_type() ourselves here for checking properties and their values
+        // correctly and to provide consistent behaviour.
+        use crate::prelude::{
+            ElementExtManual, GstObjectExt, GstObjectExtManual, PluginFeatureExtManual,
+        };
+
+        let factory = self.load().map_err(|_| {
+            crate::warning!(crate::CAT_RUST, obj: self, "loading plugin returned None");
+            glib::bool_error!("Failed to create element from factory")
+        })?;
+
+        let element_type = factory.element_type();
+        if !element_type.is_valid() {
+            crate::warning!(crate::CAT_RUST, obj: self, "factory has no type");
+            return Err(glib::bool_error!("Failed to create element from factory"));
         }
+
+        let element = glib::Object::with_type(element_type, properties)
+            .downcast::<crate::Element>()
+            .unwrap();
+        unsafe {
+            use std::sync::atomic;
+
+            let klass = element.element_class();
+            let factory_ptr: &atomic::AtomicPtr<ffi::GstElementFactory> =
+                &*(&klass.as_ref().elementfactory as *const *mut ffi::GstElementFactory
+                    as *const atomic::AtomicPtr<ffi::GstElementFactory>);
+            if factory_ptr
+                .compare_exchange(
+                    std::ptr::null_mut(),
+                    factory.as_ptr(),
+                    atomic::Ordering::SeqCst,
+                    atomic::Ordering::SeqCst,
+                )
+                .is_ok()
+            {
+                factory.set_object_flags(crate::ObjectFlags::MAY_BE_LEAKED);
+            }
+
+            if glib::gobject_ffi::g_object_is_floating(factory.as_ptr() as *mut _)
+                != glib::ffi::GFALSE
+            {
+                glib::g_critical!(
+                    "GStreamer",
+                    "The created element should be floating, this is probably caused by faulty bindings",
+                );
+            }
+        }
+
+        crate::log!(
+            crate::CAT_RUST,
+            obj: self,
+            "created element \"{}\"",
+            factory.name()
+        );
+
+        Ok(element)
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_element_factory_make_with_properties")]
+    #[track_caller]
     pub fn make_with_properties(
         factoryname: &str,
         properties: &[(&str, &dyn ToValue)],
     ) -> Result<Element, glib::BoolError> {
         assert_initialized_main_thread!();
-        let n = properties.len() as u32;
-        let names = properties.iter().map(|(name, _)| *name).collect::<Vec<_>>();
-        let values = properties
-            .iter()
-            .map(|(_, value)| value.to_value())
-            .collect::<Vec<_>>();
 
-        assert_initialized_main_thread!();
-        unsafe {
-            Option::<_>::from_glib_none(ffi::gst_element_factory_make_with_properties(
-                factoryname.to_glib_none().0,
-                n,
-                names.to_glib_none().0,
-                values.as_ptr() as *const glib::gobject_ffi::GValue,
-            ))
-            .ok_or_else(|| glib::bool_error!("Failed to create element from factory name"))
-        }
+        crate::log!(
+            crate::CAT_RUST,
+            "gstelementfactory: make \"{}\"",
+            factoryname
+        );
+
+        let factory = Self::find(factoryname).ok_or_else(|| {
+            crate::warning!(
+                crate::CAT_RUST,
+                "gstelementfactory: make \"{}\"",
+                factoryname
+            );
+            glib::bool_error!("Failed to create element from factory name")
+        })?;
+
+        factory.create_with_properties(properties)
     }
 
     #[doc(alias = "gst_element_factory_get_static_pad_templates")]
