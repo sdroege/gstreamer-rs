@@ -156,9 +156,6 @@ final_type = true
     [[object.signal]]
     name = "error"
     concurrency = "send"
-        [[object.signal.parameter]]
-        name = "p0"
-        nullable = true
 
     [[object.signal]]
     name = "media-info-updated"
@@ -199,9 +196,6 @@ final_type = true
     [[object.signal]]
     name = "warning"
     concurrency = "send"
-        [[object.signal.parameter]]
-        name = "p0"
-        nullable = true
 
 [[object]]
 name = "GstPlay.PlaySubtitleInfo"

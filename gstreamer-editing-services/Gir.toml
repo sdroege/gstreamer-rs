@@ -7,6 +7,7 @@ work_mode = "normal"
 generate_safety_asserts = true
 single_version_file = true
 generate_display_trait = false
+trust_return_value_nullability = true
 
 external_libraries = [
     "Gio",
@@ -59,6 +60,9 @@ generate = [
     "GES.BaseXmlFormatter",
     "GES.ChildrenControlMode",
     "GES.ClipAsset",
+    "GES.CommandLineFormatter",
+    "GES.Edge",
+    "GES.EditMode",
     "GES.EffectAsset",
     "GES.EffectClip",
     "GES.Error",
@@ -88,6 +92,7 @@ generate = [
     "GES.TitleClip",
     "GES.TitleSource",
     "GES.TrackElementAsset",
+    "GES.TrackType",
     "GES.Transition",
     "GES.TransitionClip",
     "GES.UriClipAsset",
@@ -157,18 +162,6 @@ status = "generate"
         nullable_return_is_error = "Failed to split clip"
 
 [[object]]
-name = "GES.CommandLineFormatter"
-status = "generate"
-    [[object.function]]
-    name = "get_help"
-        [object.function.return]
-        nullable = false
-    [[object.function]]
-    name = "get_timeline_uri"
-        [object.function.return]
-        nullable = false
-
-[[object]]
 name = "GES.Container"
 status = "generate"
 trait_name = "GESContainerExt"
@@ -186,22 +179,6 @@ trait_name = "GESContainerExt"
     name = "edit"
         [object.function.return]
         bool_return_is_error = "Failed to edit container"
-
-[[object]]
-name = "GES.Edge"
-status = "generate"
-    [[object.function]]
-    name = "name"
-        [object.function.return]
-        nullable = false
-
-[[object]]
-name = "GES.EditMode"
-status = "generate"
-    [[object.function]]
-    name = "name"
-        [object.function.return]
-        nullable = false
 
 [[object]]
 name = "GES.Effect"
@@ -282,11 +259,6 @@ status = "generate"
 [[object]]
 name = "GES.Timeline"
 status = "generate"
-    [[object.function]]
-    name = "append_layer"
-        [object.function.return]
-        nullable = false
-
     [[object.function]]
     name = "get_duration"
         [object.function.return]
@@ -449,11 +421,6 @@ manual_traits = ["TimelineElementExtManual"]
         [object.function.return]
         bool_return_is_error = "Failed to trim"
 
-    [[object.function]]
-    name = "copy"
-        [object.function.return]
-        nullable_return_is_error = "Failed to copy timeline element"
-
 [[object]]
 name = "GES.Track"
 status = "generate"
@@ -494,14 +461,6 @@ status = "generate"
         [[object.function.parameter]]
         name = "value"
         const = true
-
-[[object]]
-name = "GES.TrackType"
-status = "generate"
-    [[object.function]]
-    name = "name"
-        [object.function.return]
-        nullable = false
 
 [[object]]
 name = "GES.UriClip"

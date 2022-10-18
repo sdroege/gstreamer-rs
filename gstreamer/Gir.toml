@@ -857,22 +857,16 @@ status = "generate"
     name = "new_y"
     # Needs manual checking of invariants
     manual = true
-        [object.function.return]
-        nullable = true
 
     [[object.function]]
     name = "new_ym"
     # Needs manual checking of invariants
     manual = true
-        [object.function.return]
-        nullable = true
 
     [[object.function]]
     name = "new_ymd"
     # Needs manual checking of invariants
     manual = true
-        [object.function.return]
-        nullable = true
 
     [[object.function]]
     name = "get_month"

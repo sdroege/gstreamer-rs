@@ -43,6 +43,10 @@ final_type = true
 name = "GstNet.NetTimeProvider"
 status = "generate"
 final_type = true
+    [[object.function]]
+    name = "new"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create NetTimeProvider"
 
 [[object]]
 name = "GstNet.NtpClock"

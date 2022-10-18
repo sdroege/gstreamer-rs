@@ -8,6 +8,7 @@ concurrency = "send+sync"
 generate_safety_asserts = true
 single_version_file = true
 generate_display_trait = false
+trust_return_value_nullability = true
 
 external_libraries = [
     "GLib",
@@ -496,11 +497,6 @@ manual_traits = ["VideoDecoderExtManual"]
     manual = true
 
     [[object.function]]
-    name = "proxy_getcaps"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
     name = "allocate_output_buffer"
         [object.function.return]
         nullable_return_is_error = "Failed to allocate output buffer"
@@ -562,16 +558,6 @@ manual_traits = ["VideoEncoderExtManual"]
     name = "get_allocator"
     manual = true
 
-    [[object.function]]
-    name = "proxy_getcaps"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "allocate_output_buffer"
-        [object.function.return]
-        nullable_return_is_error = "Failed to allocate output buffer"
-
 [[object]]
 name = "GstVideo.VideoFieldOrder"
 status = "generate"
@@ -580,8 +566,6 @@ status = "generate"
     name = "to_string"
     # This has an Unknown field that may return NULL or "UNKNOWN"
     manual = true
-        [object.function.return]
-        nullable = false
 
 [[object]]
 name = "GstVideo.VideoFlags"
@@ -665,8 +649,6 @@ status = "generate"
     name = "to_string"
     # This has an Unknown field that may return NULL or "UNKNOWN"
     manual = true
-        [object.function.return]
-        nullable = false
 
     [[object.function]]
     name = "get_info"
@@ -707,11 +689,6 @@ status = "generate"
     [[object.member]]
     name = "alternate"
     version = "1.16"
-
-    [[object.function]]
-    name = "to_string"
-        [object.function.return]
-        nullable = false
 
 [[object]]
 name = "GstVideo.VideoMultiviewFlags"

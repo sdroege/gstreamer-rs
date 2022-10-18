@@ -8,6 +8,7 @@ concurrency = "send+sync"
 generate_safety_asserts = true
 single_version_file = true
 generate_display_trait = false
+trust_return_value_nullability = true
 
 external_libraries = [
     "GLib",
@@ -139,12 +140,6 @@ final_type = true
     ignore = true
 
     [[object.function]]
-    name = "set_caps"
-        [[object.function.parameter]]
-        name = "caps"
-        nullable = true
-
-    [[object.function]]
     name = "pull_preroll"
         [object.function.return]
         nullable_return_is_error = "Failed to pull preroll sample"
@@ -233,9 +228,3 @@ final_type = true
     name = "get_latency"
     # ClockTime
     manual = true
-
-    [[object.function]]
-    name = "set_caps"
-        [[object.function.parameter]]
-            name = "caps"
-            nullable = true

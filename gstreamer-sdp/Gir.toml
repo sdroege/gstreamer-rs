@@ -8,6 +8,7 @@ concurrency = "send"
 generate_safety_asserts = true
 single_version_file = true
 generate_display_trait = false
+trust_return_value_nullability = true
 
 external_libraries = [
     "GLib",

@@ -8,6 +8,7 @@ concurrency = "send+sync"
 generate_safety_asserts = true
 single_version_file = true
 generate_display_trait = false
+trust_return_value_nullability = true
 
 external_libraries = [
     "Gio",
@@ -153,11 +154,6 @@ manual_traits = ["RTSPAuthExtManual"]
     manual = true
 
     [[object.function]]
-    name = "make_basic"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
     name = "set_default_token"
     # gir forgets mut
     manual = true
@@ -270,11 +266,6 @@ manual_traits = ["RTSPServerExtManual"]
 [[object]]
 name="GstRtspServer.RTSPSession"
 status="generate"
-    [[object.function]]
-    name = "manage_media"
-        [object.function.return]
-        nullable_return_is_error = "Failed to manage media"
-
     [[object.function]]
     name = "get_media"
     # Map to dup_media if new enough as get_media is not thread-safe

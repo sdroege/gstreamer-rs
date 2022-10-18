@@ -8,6 +8,7 @@ concurrency = "send+sync"
 generate_safety_asserts = true
 single_version_file = true
 generate_display_trait = false
+trust_return_value_nullability = true
 
 external_libraries = [
     "GLib",
@@ -230,11 +231,6 @@ status = "generate"
     name = "any"
     ignore = true
 
-    [[object.function]]
-    name = "to_string"
-        [object.function.return]
-        nullable = false
-
 [[object]]
 name = "GstGL.GLBuffer"
 status = "manual"
@@ -320,11 +316,6 @@ manual_traits = ["GLContextExtManual"]
     name = "activate"
         [object.function.return]
         bool_return_is_error = "Failed to activate OpenGL context"
-
-    [[object.function]]
-    name = "get_display"
-        [object.function.return]
-        nullable = false
 
     [[object.function]]
     name = "set_window"
@@ -434,11 +425,6 @@ status = "generate"
     name = "any"
     ignore = true
 
-    [[object.function]]
-    name = "to_string"
-        [object.function.return]
-        nullable = false
-
 [[object]]
 name = "GstGL.GLQuery"
 status = "manual"
@@ -544,11 +530,6 @@ final_type = true
     # fix mutability
     ignore = true
 
-    [[object.function]]
-    name = "get_input_template_caps"
-        [object.function.return]
-        nullable = false
-
 [[object]]
 name = "GstGL.GLVideoAllocationParams"
 status = "generate"
@@ -584,11 +565,6 @@ final_type = true
     name = "get_output"
     # Result<Buffer, FlowReturn>
     ignore = true
-
-    [[object.function]]
-    name = "transform_caps"
-        [object.function.return]
-        nullable = false
 
     [[object.function]]
     name = "submit_input_buffer"

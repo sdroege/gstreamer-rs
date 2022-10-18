@@ -8,6 +8,7 @@ concurrency = "send+sync"
 generate_safety_asserts = true
 single_version_file = true
 generate_display_trait = false
+trust_return_value_nullability = true
 
 external_libraries = [
     "GLib",
@@ -192,16 +193,6 @@ manual_traits = ["AudioDecoderExtManual"]
     name = "get_allocator"
     manual = true
 
-    [[object.function]]
-    name = "proxy_getcaps"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "allocate_output_buffer"
-        [object.function.return]
-        nullable_return_is_error = "Failed to allocate output buffer"
-
 [[object]]
 name = "GstAudio.AudioEncoder"
 status = "generate"
@@ -235,11 +226,6 @@ manual_traits = ["AudioEncoderExtManual"]
         mandatory = true
 
     [[object.function]]
-    name = "proxy_getcaps"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
     name = "set_latency"
         [[object.function.parameter]]
         name = "min"
@@ -250,11 +236,6 @@ manual_traits = ["AudioEncoderExtManual"]
         [[object.function.parameter]]
         name = "tolerance"
         mandatory = true
-
-    [[object.function]]
-    name = "allocate_output_buffer"
-        [object.function.return]
-        nullable_return_is_error = "Failed to allocate output buffer"
 
 [[object]]
 name = "GstAudio.AudioFlags"
@@ -344,8 +325,6 @@ status = "generate"
     name = "to_string"
     # This has an Unknown field that may return NULL or "UNKNOWN"
     manual = true
-        [object.function.return]
-        nullable = false
 
     [[object.function]]
     name = "fill_silence"
