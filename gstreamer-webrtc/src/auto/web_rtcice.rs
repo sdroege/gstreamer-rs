@@ -109,13 +109,13 @@ pub trait WebRTCICEExt: 'static {
     ) -> bool;
 
     #[doc(alias = "gst_webrtc_ice_set_stun_server")]
-    fn set_stun_server(&self, uri: &str);
+    fn set_stun_server(&self, uri: Option<&str>);
 
     #[doc(alias = "gst_webrtc_ice_set_tos")]
     fn set_tos(&self, stream: &impl IsA<WebRTCICEStream>, tos: u32);
 
     #[doc(alias = "gst_webrtc_ice_set_turn_server")]
-    fn set_turn_server(&self, uri: &str);
+    fn set_turn_server(&self, uri: Option<&str>);
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
@@ -319,7 +319,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         unsafe extern "C" fn func_func<P: Fn(&WebRTCICE, u32, &str) + Send + Sync + 'static>(
             ice: *mut ffi::GstWebRTCICE,
             stream_id: libc::c_uint,
-            candidate: *mut libc::c_char,
+            candidate: *const libc::c_char,
             user_data: glib::ffi::gpointer,
         ) {
             let ice = from_glib_borrow(ice);
@@ -361,7 +361,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    fn set_stun_server(&self, uri: &str) {
+    fn set_stun_server(&self, uri: Option<&str>) {
         unsafe {
             ffi::gst_webrtc_ice_set_stun_server(
                 self.as_ref().to_glib_none().0,
@@ -380,7 +380,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    fn set_turn_server(&self, uri: &str) {
+    fn set_turn_server(&self, uri: Option<&str>) {
         unsafe {
             ffi::gst_webrtc_ice_set_turn_server(
                 self.as_ref().to_glib_none().0,

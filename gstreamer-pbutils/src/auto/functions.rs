@@ -244,15 +244,12 @@ pub fn pb_utils_get_caps_description_flags(caps: &gst::Caps) -> PbUtilsCapsDescr
 }
 
 #[doc(alias = "gst_pb_utils_get_element_description")]
-pub fn pb_utils_get_element_description(
-    factory_name: &str,
-) -> Result<glib::GString, glib::BoolError> {
+pub fn pb_utils_get_element_description(factory_name: &str) -> glib::GString {
     assert_initialized_main_thread!();
     unsafe {
-        Option::<_>::from_glib_full(ffi::gst_pb_utils_get_element_description(
+        from_glib_full(ffi::gst_pb_utils_get_element_description(
             factory_name.to_glib_none().0,
         ))
-        .ok_or_else(|| glib::bool_error!("Failed to get element description"))
     }
 }
 
@@ -269,24 +266,22 @@ pub fn pb_utils_get_file_extension_from_caps(caps: &gst::Caps) -> Option<glib::G
 }
 
 #[doc(alias = "gst_pb_utils_get_sink_description")]
-pub fn pb_utils_get_sink_description(protocol: &str) -> Result<glib::GString, glib::BoolError> {
+pub fn pb_utils_get_sink_description(protocol: &str) -> glib::GString {
     assert_initialized_main_thread!();
     unsafe {
-        Option::<_>::from_glib_full(ffi::gst_pb_utils_get_sink_description(
+        from_glib_full(ffi::gst_pb_utils_get_sink_description(
             protocol.to_glib_none().0,
         ))
-        .ok_or_else(|| glib::bool_error!("Failed to get sink description"))
     }
 }
 
 #[doc(alias = "gst_pb_utils_get_source_description")]
-pub fn pb_utils_get_source_description(protocol: &str) -> Result<glib::GString, glib::BoolError> {
+pub fn pb_utils_get_source_description(protocol: &str) -> glib::GString {
     assert_initialized_main_thread!();
     unsafe {
-        Option::<_>::from_glib_full(ffi::gst_pb_utils_get_source_description(
+        from_glib_full(ffi::gst_pb_utils_get_source_description(
             protocol.to_glib_none().0,
         ))
-        .ok_or_else(|| glib::bool_error!("Failed to get source description"))
     }
 }
 

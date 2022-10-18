@@ -43,7 +43,7 @@ pub trait DiscovererStreamInfoExt: 'static {
 
     #[doc(alias = "gst_discoverer_stream_info_get_stream_id")]
     #[doc(alias = "get_stream_id")]
-    fn stream_id(&self) -> Option<glib::GString>;
+    fn stream_id(&self) -> glib::GString;
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
@@ -97,7 +97,7 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
         }
     }
 
-    fn stream_id(&self) -> Option<glib::GString> {
+    fn stream_id(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::gst_discoverer_stream_info_get_stream_id(
                 self.as_ref().to_glib_none().0,

@@ -70,7 +70,7 @@ impl GLUpload {
         direction: gst::PadDirection,
         caps: &gst::Caps,
         filter: &gst::Caps,
-    ) -> Option<gst::Caps> {
+    ) -> gst::Caps {
         unsafe {
             from_glib_full(ffi::gst_gl_upload_transform_caps(
                 self.to_glib_none().0,

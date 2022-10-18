@@ -31,11 +31,11 @@ unsafe impl Sync for AudioEncoder {}
 
 pub trait AudioEncoderExt: 'static {
     #[doc(alias = "gst_audio_encoder_allocate_output_buffer")]
-    fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError>;
+    fn allocate_output_buffer(&self, size: usize) -> gst::Buffer;
 
     #[doc(alias = "gst_audio_encoder_get_audio_info")]
     #[doc(alias = "get_audio_info")]
-    fn audio_info(&self) -> Option<AudioInfo>;
+    fn audio_info(&self) -> AudioInfo;
 
     #[doc(alias = "gst_audio_encoder_get_drainable")]
     #[doc(alias = "get_drainable")]
@@ -152,17 +152,16 @@ pub trait AudioEncoderExt: 'static {
 }
 
 impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
-    fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError> {
+    fn allocate_output_buffer(&self, size: usize) -> gst::Buffer {
         unsafe {
-            Option::<_>::from_glib_full(ffi::gst_audio_encoder_allocate_output_buffer(
+            from_glib_full(ffi::gst_audio_encoder_allocate_output_buffer(
                 self.as_ref().to_glib_none().0,
                 size,
             ))
-            .ok_or_else(|| glib::bool_error!("Failed to allocate output buffer"))
         }
     }
 
-    fn audio_info(&self) -> Option<AudioInfo> {
+    fn audio_info(&self) -> AudioInfo {
         unsafe {
             from_glib_none(ffi::gst_audio_encoder_get_audio_info(
                 self.as_ref().to_glib_none().0,

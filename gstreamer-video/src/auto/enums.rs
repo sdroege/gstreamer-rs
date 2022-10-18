@@ -810,7 +810,7 @@ impl VideoCaptionType {
     }
 
     #[doc(alias = "gst_video_caption_type_to_caps")]
-    pub fn to_caps(self) -> Option<gst::Caps> {
+    pub fn to_caps(self) -> gst::Caps {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_video_caption_type_to_caps(self.into_glib())) }
     }
@@ -1131,7 +1131,7 @@ impl VideoColorPrimaries {
 
     //#[doc(alias = "gst_video_color_primaries_get_info")]
     //#[doc(alias = "get_info")]
-    //pub fn info(self) -> /*Ignored*/Option<VideoColorPrimariesInfo> {
+    //pub fn info(self) -> /*Ignored*/VideoColorPrimariesInfo {
     //    unsafe { TODO: call ffi:gst_video_color_primaries_get_info() }
     //}
 

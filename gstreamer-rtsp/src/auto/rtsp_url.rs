@@ -30,7 +30,7 @@ impl RTSPUrl {
 
     #[doc(alias = "gst_rtsp_url_get_request_uri")]
     #[doc(alias = "get_request_uri")]
-    pub fn request_uri(&self) -> Option<glib::GString> {
+    pub fn request_uri(&self) -> glib::GString {
         unsafe { from_glib_full(ffi::gst_rtsp_url_get_request_uri(self.to_glib_none().0)) }
     }
 
@@ -38,7 +38,7 @@ impl RTSPUrl {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_url_get_request_uri_with_control")]
     #[doc(alias = "get_request_uri_with_control")]
-    pub fn request_uri_with_control(&self, control_path: &str) -> Option<glib::GString> {
+    pub fn request_uri_with_control(&self, control_path: &str) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_rtsp_url_get_request_uri_with_control(
                 self.to_glib_none().0,
@@ -53,7 +53,7 @@ impl RTSPUrl {
     }
 
     #[doc(alias = "gst_rtsp_url_parse")]
-    pub fn parse(urlstr: &str) -> (RTSPResult, RTSPUrl) {
+    pub fn parse(urlstr: &str) -> (RTSPResult, Option<RTSPUrl>) {
         assert_initialized_main_thread!();
         unsafe {
             let mut url = ptr::null_mut();

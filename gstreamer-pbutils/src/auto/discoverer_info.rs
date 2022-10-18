@@ -142,7 +142,7 @@ impl DiscovererInfo {
 
     #[doc(alias = "gst_discoverer_info_get_uri")]
     #[doc(alias = "get_uri")]
-    pub fn uri(&self) -> Option<glib::GString> {
+    pub fn uri(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_discoverer_info_get_uri(self.to_glib_none().0)) }
     }
 
@@ -157,27 +157,22 @@ impl DiscovererInfo {
     }
 
     #[doc(alias = "gst_discoverer_info_to_variant")]
-    pub fn to_variant(
-        &self,
-        flags: DiscovererSerializeFlags,
-    ) -> Result<glib::Variant, glib::BoolError> {
+    pub fn to_variant(&self, flags: DiscovererSerializeFlags) -> glib::Variant {
         unsafe {
-            Option::<_>::from_glib_full(ffi::gst_discoverer_info_to_variant(
+            from_glib_full(ffi::gst_discoverer_info_to_variant(
                 self.to_glib_none().0,
                 flags.into_glib(),
             ))
-            .ok_or_else(|| glib::bool_error!("Failed to serialize DiscovererInfo to Variant"))
         }
     }
 
     #[doc(alias = "gst_discoverer_info_from_variant")]
-    pub fn from_variant(variant: &glib::Variant) -> Result<DiscovererInfo, glib::BoolError> {
+    pub fn from_variant(variant: &glib::Variant) -> DiscovererInfo {
         assert_initialized_main_thread!();
         unsafe {
-            Option::<_>::from_glib_full(ffi::gst_discoverer_info_from_variant(
+            from_glib_full(ffi::gst_discoverer_info_from_variant(
                 variant.to_glib_none().0,
             ))
-            .ok_or_else(|| glib::bool_error!("Failed to deserialize DiscovererInfo from Variant"))
         }
     }
 }

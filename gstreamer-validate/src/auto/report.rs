@@ -68,7 +68,7 @@ impl Report {
 
     #[doc(alias = "gst_validate_report_get_issue")]
     #[doc(alias = "get_issue")]
-    pub fn issue(&self) -> Option<Issue> {
+    pub fn issue(&self) -> Issue {
         unsafe { from_glib_full(ffi::gst_validate_report_get_issue(self.to_glib_none().0)) }
     }
 
@@ -86,19 +86,19 @@ impl Report {
 
     #[doc(alias = "gst_validate_report_get_message")]
     #[doc(alias = "get_message")]
-    pub fn message(&self) -> Option<glib::GString> {
+    pub fn message(&self) -> glib::GString {
         unsafe { from_glib_full(ffi::gst_validate_report_get_message(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_validate_report_get_reporter")]
     #[doc(alias = "get_reporter")]
-    pub fn reporter(&self) -> Option<Reporter> {
+    pub fn reporter(&self) -> Reporter {
         unsafe { from_glib_full(ffi::gst_validate_report_get_reporter(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_validate_report_get_reporter_name")]
     #[doc(alias = "get_reporter_name")]
-    pub fn reporter_name(&self) -> Option<glib::GString> {
+    pub fn reporter_name(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_validate_report_get_reporter_name(
                 self.to_glib_none().0,

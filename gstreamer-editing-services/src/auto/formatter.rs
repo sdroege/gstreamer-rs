@@ -54,7 +54,7 @@ impl Formatter {
 
     #[doc(alias = "ges_formatter_get_default")]
     #[doc(alias = "get_default")]
-    pub fn default() -> Option<Asset> {
+    pub fn default() -> Asset {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_formatter_get_default()) }
     }

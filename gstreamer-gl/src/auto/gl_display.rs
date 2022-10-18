@@ -93,7 +93,9 @@ pub trait GLDisplayExt: 'static {
     //fn retrieve_window(&self, data: /*Unimplemented*/Option<Basic: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Basic: Pointer>, /*Unimplemented*/Option<Basic: Pointer>) -> i32) -> Option<GLWindow>;
 
     #[doc(alias = "create-context")]
-    fn connect_create_context<F: Fn(&Self, &GLContext) -> GLContext + Send + Sync + 'static>(
+    fn connect_create_context<
+        F: Fn(&Self, &GLContext) -> Option<GLContext> + Send + Sync + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -202,13 +204,15 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
     //    unsafe { TODO: call ffi:gst_gl_display_retrieve_window() }
     //}
 
-    fn connect_create_context<F: Fn(&Self, &GLContext) -> GLContext + Send + Sync + 'static>(
+    fn connect_create_context<
+        F: Fn(&Self, &GLContext) -> Option<GLContext> + Send + Sync + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn create_context_trampoline<
             P: IsA<GLDisplay>,
-            F: Fn(&P, &GLContext) -> GLContext + Send + Sync + 'static,
+            F: Fn(&P, &GLContext) -> Option<GLContext> + Send + Sync + 'static,
         >(
             this: *mut ffi::GstGLDisplay,
             context: *mut ffi::GstGLContext,

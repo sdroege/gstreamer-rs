@@ -18,9 +18,12 @@ impl GLDisplayX11 {
     pub const NONE: Option<&'static GLDisplayX11> = None;
 
     #[doc(alias = "gst_gl_display_x11_new")]
-    pub fn new(name: Option<&str>) -> GLDisplayX11 {
+    pub fn new(name: Option<&str>) -> Result<GLDisplayX11, glib::BoolError> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_gl_display_x11_new(name.to_glib_none().0)) }
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_gl_display_x11_new(name.to_glib_none().0))
+                .ok_or_else(|| glib::bool_error!("Failed to create X11 display"))
+        }
     }
 
     //#[doc(alias = "gst_gl_display_x11_new_with_display")]

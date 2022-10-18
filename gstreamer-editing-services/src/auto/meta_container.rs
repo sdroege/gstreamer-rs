@@ -91,7 +91,7 @@ pub trait MetaContainerExt: 'static {
     fn uint64(&self, meta_item: &str) -> Option<u64>;
 
     #[doc(alias = "ges_meta_container_metas_to_string")]
-    fn metas_to_string(&self) -> Option<glib::GString>;
+    fn metas_to_string(&self) -> glib::GString;
 
     #[doc(alias = "ges_meta_container_register_meta")]
     fn register_meta(&self, flags: MetaFlag, meta_item: &str, value: &glib::Value) -> bool;
@@ -416,7 +416,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
-    fn metas_to_string(&self) -> Option<glib::GString> {
+    fn metas_to_string(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::ges_meta_container_metas_to_string(
                 self.as_ref().to_glib_none().0,

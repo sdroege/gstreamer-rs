@@ -8,6 +8,7 @@ concurrency = "send+sync"
 generate_safety_asserts = true
 single_version_file = true
 generate_display_trait = false
+trust_return_value_nullability = true
 
 external_libraries = [
     "GLib",
@@ -18,9 +19,7 @@ external_libraries = [
     "GstVideo",
 ]
 
-generate = [
-    "GstGLEGL.GLDisplayEGL",
-]
+generate = []
 
 manual = [
     "GLib.Error",
@@ -52,3 +51,11 @@ ref_mode = "ref"
 name = "Gst.Structure"
 status = "manual"
 ref_mode = "ref"
+
+[[object]]
+name = "GstGLEGL.GLDisplayEGL"
+status = "generate"
+    [[object.function]]
+    name = "new"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create EGL display"

@@ -61,10 +61,10 @@ pub trait GESPipelineExt: 'static {
     fn preview_get_video_sink(&self) -> Option<gst::Element>;
 
     #[doc(alias = "ges_pipeline_preview_set_audio_sink")]
-    fn preview_set_audio_sink(&self, sink: &impl IsA<gst::Element>);
+    fn preview_set_audio_sink(&self, sink: Option<&impl IsA<gst::Element>>);
 
     #[doc(alias = "ges_pipeline_preview_set_video_sink")]
-    fn preview_set_video_sink(&self, sink: &impl IsA<gst::Element>);
+    fn preview_set_video_sink(&self, sink: Option<&impl IsA<gst::Element>>);
 
     #[doc(alias = "ges_pipeline_save_thumbnail")]
     fn save_thumbnail(
@@ -173,20 +173,20 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn preview_set_audio_sink(&self, sink: &impl IsA<gst::Element>) {
+    fn preview_set_audio_sink(&self, sink: Option<&impl IsA<gst::Element>>) {
         unsafe {
             ffi::ges_pipeline_preview_set_audio_sink(
                 self.as_ref().to_glib_none().0,
-                sink.as_ref().to_glib_none().0,
+                sink.map(|p| p.as_ref()).to_glib_none().0,
             );
         }
     }
 
-    fn preview_set_video_sink(&self, sink: &impl IsA<gst::Element>) {
+    fn preview_set_video_sink(&self, sink: Option<&impl IsA<gst::Element>>) {
         unsafe {
             ffi::ges_pipeline_preview_set_video_sink(
                 self.as_ref().to_glib_none().0,
-                sink.as_ref().to_glib_none().0,
+                sink.map(|p| p.as_ref()).to_glib_none().0,
             );
         }
     }

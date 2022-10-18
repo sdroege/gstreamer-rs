@@ -51,7 +51,7 @@ impl GLColorConvert {
         direction: gst::PadDirection,
         caps: &gst::Caps,
         filter: &gst::Caps,
-    ) -> Option<gst::Caps> {
+    ) -> gst::Caps {
         skip_assert_initialized!();
         unsafe {
             from_glib_full(ffi::gst_gl_color_convert_transform_caps(

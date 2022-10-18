@@ -22,7 +22,7 @@ impl GLMemoryAllocator {
 
     #[doc(alias = "gst_gl_memory_allocator_get_default")]
     #[doc(alias = "get_default")]
-    pub fn default(context: &impl IsA<GLContext>) -> Option<GLMemoryAllocator> {
+    pub fn default(context: &impl IsA<GLContext>) -> GLMemoryAllocator {
         skip_assert_initialized!();
         unsafe {
             from_glib_full(ffi::gst_gl_memory_allocator_get_default(

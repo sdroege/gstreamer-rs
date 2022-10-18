@@ -32,7 +32,7 @@ unsafe impl Sync for VideoEncoder {}
 
 pub trait VideoEncoderExt: 'static {
     #[doc(alias = "gst_video_encoder_allocate_output_buffer")]
-    fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError>;
+    fn allocate_output_buffer(&self, size: usize) -> gst::Buffer;
 
     #[doc(alias = "gst_video_encoder_get_max_encode_time")]
     #[doc(alias = "get_max_encode_time")]
@@ -84,13 +84,12 @@ pub trait VideoEncoderExt: 'static {
 }
 
 impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
-    fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError> {
+    fn allocate_output_buffer(&self, size: usize) -> gst::Buffer {
         unsafe {
-            Option::<_>::from_glib_full(ffi::gst_video_encoder_allocate_output_buffer(
+            from_glib_full(ffi::gst_video_encoder_allocate_output_buffer(
                 self.as_ref().to_glib_none().0,
                 size,
             ))
-            .ok_or_else(|| glib::bool_error!("Failed to allocate output buffer"))
         }
     }
 

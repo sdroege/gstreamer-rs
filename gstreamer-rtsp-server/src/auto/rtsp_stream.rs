@@ -123,7 +123,7 @@ pub trait RTSPStreamExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_stream_get_multicast_client_addresses")]
     #[doc(alias = "get_multicast_client_addresses")]
-    fn multicast_client_addresses(&self) -> Option<glib::GString>;
+    fn multicast_client_addresses(&self) -> glib::GString;
 
     #[doc(alias = "gst_rtsp_stream_get_multicast_iface")]
     #[doc(alias = "get_multicast_iface")]
@@ -561,7 +561,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn multicast_client_addresses(&self) -> Option<glib::GString> {
+    fn multicast_client_addresses(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_multicast_client_addresses(
                 self.as_ref().to_glib_none().0,

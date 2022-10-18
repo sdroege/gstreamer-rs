@@ -81,7 +81,7 @@ pub trait UriClipAssetExt: 'static {
 
     #[doc(alias = "ges_uri_clip_asset_get_info")]
     #[doc(alias = "get_info")]
-    fn info(&self) -> Option<gst_pbutils::DiscovererInfo>;
+    fn info(&self) -> gst_pbutils::DiscovererInfo;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -123,7 +123,7 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
-    fn info(&self) -> Option<gst_pbutils::DiscovererInfo> {
+    fn info(&self) -> gst_pbutils::DiscovererInfo {
         unsafe {
             from_glib_none(ffi::ges_uri_clip_asset_get_info(const_override(
                 self.as_ref().to_glib_none().0,

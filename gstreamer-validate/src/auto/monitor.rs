@@ -32,7 +32,7 @@ impl Monitor {
         target: &impl IsA<gst::Object>,
         runner: &impl IsA<Runner>,
         parent: Option<&impl IsA<Monitor>>,
-    ) -> Option<Monitor> {
+    ) -> Monitor {
         skip_assert_initialized!();
         unsafe {
             from_glib_full(ffi::gst_validate_monitor_factory_create(

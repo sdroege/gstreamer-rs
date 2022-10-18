@@ -66,13 +66,13 @@ pub trait TextOverlayExt: 'static {
     fn set_color(&self, color: u32);
 
     #[doc(alias = "ges_text_overlay_set_font_desc")]
-    fn set_font_desc(&self, font_desc: &str);
+    fn set_font_desc(&self, font_desc: Option<&str>);
 
     #[doc(alias = "ges_text_overlay_set_halignment")]
     fn set_halignment(&self, halign: TextHAlign);
 
     #[doc(alias = "ges_text_overlay_set_text")]
-    fn set_text(&self, text: &str);
+    fn set_text(&self, text: Option<&str>);
 
     #[doc(alias = "ges_text_overlay_set_valignment")]
     fn set_valignment(&self, valign: TextVAlign);
@@ -135,7 +135,7 @@ impl<O: IsA<TextOverlay>> TextOverlayExt for O {
         }
     }
 
-    fn set_font_desc(&self, font_desc: &str) {
+    fn set_font_desc(&self, font_desc: Option<&str>) {
         unsafe {
             ffi::ges_text_overlay_set_font_desc(
                 self.as_ref().to_glib_none().0,
@@ -153,7 +153,7 @@ impl<O: IsA<TextOverlay>> TextOverlayExt for O {
         }
     }
 
-    fn set_text(&self, text: &str) {
+    fn set_text(&self, text: Option<&str>) {
         unsafe {
             ffi::ges_text_overlay_set_text(self.as_ref().to_glib_none().0, text.to_glib_none().0);
         }

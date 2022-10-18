@@ -26,13 +26,13 @@ pub trait VideoAggregatorExt: 'static {
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     //#[doc(alias = "gst_video_aggregator_get_execution_task_pool")]
     //#[doc(alias = "get_execution_task_pool")]
-    //fn execution_task_pool(&self) -> /*Ignored*/Option<gst::TaskPool>;
+    //fn execution_task_pool(&self) -> /*Ignored*/gst::TaskPool;
 }
 
 impl<O: IsA<VideoAggregator>> VideoAggregatorExt for O {
     //#[cfg(any(feature = "v1_20", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    //fn execution_task_pool(&self) -> /*Ignored*/Option<gst::TaskPool> {
+    //fn execution_task_pool(&self) -> /*Ignored*/gst::TaskPool {
     //    unsafe { TODO: call ffi:gst_video_aggregator_get_execution_task_pool() }
     //}
 }

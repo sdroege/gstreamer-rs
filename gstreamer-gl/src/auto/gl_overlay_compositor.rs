@@ -75,7 +75,7 @@ impl GLOverlayCompositor {
     }
 
     #[doc(alias = "gst_gl_overlay_compositor_add_caps")]
-    pub fn add_caps(caps: &gst::Caps) -> Option<gst::Caps> {
+    pub fn add_caps(caps: &gst::Caps) -> gst::Caps {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_gl_overlay_compositor_add_caps(

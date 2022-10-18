@@ -39,12 +39,7 @@ pub trait RTPBasePayloadExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtp_base_payload_allocate_output_buffer")]
-    fn allocate_output_buffer(
-        &self,
-        payload_len: u32,
-        pad_len: u8,
-        csrc_count: u8,
-    ) -> Result<gst::Buffer, glib::BoolError>;
+    fn allocate_output_buffer(&self, payload_len: u32, pad_len: u8, csrc_count: u8) -> gst::Buffer;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -289,20 +284,14 @@ pub trait RTPBasePayloadExt: 'static {
 impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn allocate_output_buffer(
-        &self,
-        payload_len: u32,
-        pad_len: u8,
-        csrc_count: u8,
-    ) -> Result<gst::Buffer, glib::BoolError> {
+    fn allocate_output_buffer(&self, payload_len: u32, pad_len: u8, csrc_count: u8) -> gst::Buffer {
         unsafe {
-            Option::<_>::from_glib_full(ffi::gst_rtp_base_payload_allocate_output_buffer(
+            from_glib_full(ffi::gst_rtp_base_payload_allocate_output_buffer(
                 self.as_ref().to_glib_none().0,
                 payload_len,
                 pad_len,
                 csrc_count,
             ))
-            .ok_or_else(|| glib::bool_error!("Failed to allocate output buffer"))
         }
     }
 

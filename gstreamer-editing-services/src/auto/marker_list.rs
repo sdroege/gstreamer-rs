@@ -37,7 +37,7 @@ impl MarkerList {
     }
 
     #[doc(alias = "ges_marker_list_add")]
-    pub fn add(&self, position: impl Into<Option<gst::ClockTime>>) -> Option<Marker> {
+    pub fn add(&self, position: impl Into<Option<gst::ClockTime>>) -> Marker {
         unsafe {
             from_glib_none(ffi::ges_marker_list_add(
                 self.to_glib_none().0,

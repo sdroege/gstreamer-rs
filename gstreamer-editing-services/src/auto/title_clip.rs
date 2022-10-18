@@ -90,7 +90,7 @@ pub trait TitleClipExt: 'static {
 
     #[deprecated = "Since 1.6"]
     #[doc(alias = "ges_title_clip_set_font_desc")]
-    fn set_font_desc(&self, font_desc: &str);
+    fn set_font_desc(&self, font_desc: Option<&str>);
 
     #[deprecated = "Since 1.6"]
     #[doc(alias = "ges_title_clip_set_halignment")]
@@ -98,7 +98,7 @@ pub trait TitleClipExt: 'static {
 
     #[deprecated = "Since 1.6"]
     #[doc(alias = "ges_title_clip_set_text")]
-    fn set_text(&self, text: &str);
+    fn set_text(&self, text: Option<&str>);
 
     #[deprecated = "Since 1.6"]
     #[doc(alias = "ges_title_clip_set_valignment")]
@@ -158,7 +158,7 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
 
     fn font_desc(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::ges_title_clip_get_font_desc(
+            from_glib_full(ffi::ges_title_clip_get_font_desc(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -173,7 +173,7 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
     }
 
     fn text(&self) -> Option<glib::GString> {
-        unsafe { from_glib_none(ffi::ges_title_clip_get_text(self.as_ref().to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::ges_title_clip_get_text(self.as_ref().to_glib_none().0)) }
     }
 
     fn text_color(&self) -> u32 {
@@ -208,7 +208,7 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
         }
     }
 
-    fn set_font_desc(&self, font_desc: &str) {
+    fn set_font_desc(&self, font_desc: Option<&str>) {
         unsafe {
             ffi::ges_title_clip_set_font_desc(
                 self.as_ref().to_glib_none().0,
@@ -223,7 +223,7 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
         }
     }
 
-    fn set_text(&self, text: &str) {
+    fn set_text(&self, text: Option<&str>) {
         unsafe {
             ffi::ges_title_clip_set_text(self.as_ref().to_glib_none().0, text.to_glib_none().0);
         }

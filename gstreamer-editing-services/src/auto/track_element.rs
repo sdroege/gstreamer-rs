@@ -95,11 +95,11 @@ pub trait TrackElementExt: 'static {
 
     #[doc(alias = "ges_track_element_get_gnlobject")]
     #[doc(alias = "get_gnlobject")]
-    fn gnlobject(&self) -> Option<gst::Element>;
+    fn gnlobject(&self) -> gst::Element;
 
     #[doc(alias = "ges_track_element_get_nleobject")]
     #[doc(alias = "get_nleobject")]
-    fn nleobject(&self) -> Option<gst::Element>;
+    fn nleobject(&self) -> gst::Element;
 
     #[doc(alias = "ges_track_element_get_track")]
     #[doc(alias = "get_track")]
@@ -324,7 +324,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    fn gnlobject(&self) -> Option<gst::Element> {
+    fn gnlobject(&self) -> gst::Element {
         unsafe {
             from_glib_none(ffi::ges_track_element_get_gnlobject(
                 self.as_ref().to_glib_none().0,
@@ -332,7 +332,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    fn nleobject(&self) -> Option<gst::Element> {
+    fn nleobject(&self) -> gst::Element {
         unsafe {
             from_glib_none(ffi::ges_track_element_get_nleobject(
                 self.as_ref().to_glib_none().0,

@@ -68,7 +68,7 @@ pub trait ReporterExt: 'static {
     fn set_handle_g_logs(&self);
 
     #[doc(alias = "gst_validate_reporter_set_name")]
-    fn set_name(&self, name: &str);
+    fn set_name(&self, name: Option<&str>);
 
     #[doc(alias = "gst_validate_reporter_set_runner")]
     fn set_runner(&self, runner: &impl IsA<Runner>);
@@ -148,7 +148,7 @@ impl<O: IsA<Reporter>> ReporterExt for O {
         }
     }
 
-    fn set_name(&self, name: &str) {
+    fn set_name(&self, name: Option<&str>) {
         unsafe {
             ffi::gst_validate_reporter_set_name(
                 self.as_ref().to_glib_none().0,

@@ -116,7 +116,7 @@ pub trait EncodingProfileExt: 'static {
 
     #[doc(alias = "gst_encoding_profile_get_type_nick")]
     #[doc(alias = "get_type_nick")]
-    fn type_nick(&self) -> Option<glib::GString>;
+    fn type_nick(&self) -> glib::GString;
 
     #[doc(alias = "gst_encoding_profile_is_enabled")]
     fn is_enabled(&self) -> bool;
@@ -220,7 +220,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn type_nick(&self) -> Option<glib::GString> {
+    fn type_nick(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_type_nick(
                 self.as_ref().to_glib_none().0,

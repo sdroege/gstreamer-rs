@@ -24,14 +24,19 @@ glib::wrapper! {
 
 impl NetTimeProvider {
     #[doc(alias = "gst_net_time_provider_new")]
-    pub fn new(clock: &impl IsA<gst::Clock>, address: Option<&str>, port: i32) -> NetTimeProvider {
+    pub fn new(
+        clock: &impl IsA<gst::Clock>,
+        address: Option<&str>,
+        port: i32,
+    ) -> Result<NetTimeProvider, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_net_time_provider_new(
+            Option::<_>::from_glib_full(ffi::gst_net_time_provider_new(
                 clock.as_ref().to_glib_none().0,
                 address.to_glib_none().0,
                 port,
             ))
+            .ok_or_else(|| glib::bool_error!("Failed to create NetTimeProvider"))
         }
     }
 

@@ -109,7 +109,7 @@ pub trait RTSPAuthExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_auth_set_realm")]
-    fn set_realm(&self, realm: &str);
+    fn set_realm(&self, realm: Option<&str>);
 
     #[doc(alias = "gst_rtsp_auth_set_supported_methods")]
     fn set_supported_methods(&self, methods: gst_rtsp::RTSPAuthMethod);
@@ -229,7 +229,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn set_realm(&self, realm: &str) {
+    fn set_realm(&self, realm: Option<&str>) {
         unsafe {
             ffi::gst_rtsp_auth_set_realm(self.as_ref().to_glib_none().0, realm.to_glib_none().0);
         }

@@ -24,15 +24,16 @@ impl EncodingTarget {
         category: &str,
         description: &str,
         profiles: &[EncodingProfile],
-    ) -> EncodingTarget {
+    ) -> Result<EncodingTarget, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_encoding_target_new(
+            Option::<_>::from_glib_full(ffi::gst_encoding_target_new(
                 name.to_glib_none().0,
                 category.to_glib_none().0,
                 description.to_glib_none().0,
                 profiles.to_glib_none().0,
             ))
+            .ok_or_else(|| glib::bool_error!("Failed to create EncodingTarget"))
         }
     }
 
@@ -62,7 +63,7 @@ impl EncodingTarget {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_encoding_target_get_path")]
     #[doc(alias = "get_path")]
-    pub fn path(&self) -> Option<glib::GString> {
+    pub fn path(&self) -> Option<std::path::PathBuf> {
         unsafe { from_glib_none(ffi::gst_encoding_target_get_path(self.to_glib_none().0)) }
     }
 

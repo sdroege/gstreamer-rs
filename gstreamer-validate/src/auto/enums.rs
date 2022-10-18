@@ -8,6 +8,8 @@ use glib::value::FromValue;
 use glib::value::ToValue;
 use glib::StaticType;
 use glib::Type;
+use std::ffi::CStr;
+use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -42,11 +44,23 @@ impl ReportLevel {
         }
     }
 
-    #[doc(alias = "gst_validate_report_level_get_name")]
-    #[doc(alias = "get_name")]
-    pub fn name(self) -> Option<glib::GString> {
-        assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_validate_report_level_get_name(self.into_glib())) }
+    pub fn name<'a>(self) -> &'a str {
+        unsafe {
+            CStr::from_ptr(
+                ffi::gst_validate_report_level_get_name(self.into_glib())
+                    .as_ref()
+                    .expect("gst_validate_report_level_get_name returned NULL"),
+            )
+            .to_str()
+            .expect("gst_validate_report_level_get_name returned an invalid string")
+        }
+    }
+}
+
+impl fmt::Display for ReportLevel {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.name())
     }
 }
 

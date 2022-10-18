@@ -50,7 +50,8 @@ pub trait TimelineElementExt: 'static {
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_timeline_element_copy")]
-    fn copy(&self, deep: bool) -> Result<TimelineElement, glib::BoolError>;
+    #[must_use]
+    fn copy(&self, deep: bool) -> TimelineElement;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -139,7 +140,7 @@ pub trait TimelineElementExt: 'static {
     #[doc(alias = "ges_timeline_element_get_toplevel_parent")]
     #[doc(alias = "get_toplevel_parent")]
     #[must_use]
-    fn toplevel_parent(&self) -> Option<TimelineElement>;
+    fn toplevel_parent(&self) -> TimelineElement;
 
     #[doc(alias = "ges_timeline_element_get_track_types")]
     #[doc(alias = "get_track_types")]
@@ -305,13 +306,12 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn copy(&self, deep: bool) -> Result<TimelineElement, glib::BoolError> {
+    fn copy(&self, deep: bool) -> TimelineElement {
         unsafe {
-            Option::<_>::from_glib_none(ffi::ges_timeline_element_copy(
+            from_glib_none(ffi::ges_timeline_element_copy(
                 self.as_ref().to_glib_none().0,
                 deep.into_glib(),
             ))
-            .ok_or_else(|| glib::bool_error!("Failed to copy timeline element"))
         }
     }
 
@@ -489,7 +489,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn toplevel_parent(&self) -> Option<TimelineElement> {
+    fn toplevel_parent(&self) -> TimelineElement {
         unsafe {
             from_glib_full(ffi::ges_timeline_element_get_toplevel_parent(
                 self.as_ref().to_glib_none().0,

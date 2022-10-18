@@ -115,15 +115,15 @@ impl PlaySignalAdapter {
             F: Fn(&PlaySignalAdapter, &glib::Error, Option<&gst::Structure>) + Send + 'static,
         >(
             this: *mut ffi::GstPlaySignalAdapter,
-            object: *mut glib::ffi::GError,
-            p0: *mut gst::ffi::GstStructure,
+            error: *mut glib::ffi::GError,
+            details: *mut gst::ffi::GstStructure,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(
                 &from_glib_borrow(this),
-                &from_glib_borrow(object),
-                Option::<gst::Structure>::from_glib_borrow(p0)
+                &from_glib_borrow(error),
+                Option::<gst::Structure>::from_glib_borrow(details)
                     .as_ref()
                     .as_ref(),
             )
@@ -319,15 +319,15 @@ impl PlaySignalAdapter {
             F: Fn(&PlaySignalAdapter, &glib::Error, Option<&gst::Structure>) + Send + 'static,
         >(
             this: *mut ffi::GstPlaySignalAdapter,
-            object: *mut glib::ffi::GError,
-            p0: *mut gst::ffi::GstStructure,
+            error: *mut glib::ffi::GError,
+            details: *mut gst::ffi::GstStructure,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(
                 &from_glib_borrow(this),
-                &from_glib_borrow(object),
-                Option::<gst::Structure>::from_glib_borrow(p0)
+                &from_glib_borrow(error),
+                Option::<gst::Structure>::from_glib_borrow(details)
                     .as_ref()
                     .as_ref(),
             )

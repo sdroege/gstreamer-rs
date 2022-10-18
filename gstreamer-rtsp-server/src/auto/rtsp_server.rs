@@ -114,7 +114,7 @@ pub trait RTSPServerExt: 'static {
 
     #[doc(alias = "gst_rtsp_server_get_service")]
     #[doc(alias = "get_service")]
-    fn service(&self) -> Option<glib::GString>;
+    fn service(&self) -> glib::GString;
 
     #[doc(alias = "gst_rtsp_server_get_session_pool")]
     #[doc(alias = "get_session_pool")]
@@ -326,7 +326,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn service(&self) -> Option<glib::GString> {
+    fn service(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_service(
                 self.as_ref().to_glib_none().0,

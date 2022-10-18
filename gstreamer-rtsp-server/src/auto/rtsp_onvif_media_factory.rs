@@ -59,7 +59,7 @@ pub trait RTSPOnvifMediaFactoryExt: 'static {
     fn set_backchannel_bandwidth(&self, bandwidth: u32);
 
     #[doc(alias = "gst_rtsp_onvif_media_factory_set_backchannel_launch")]
-    fn set_backchannel_launch(&self, launch: &str);
+    fn set_backchannel_launch(&self, launch: Option<&str>);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -111,7 +111,7 @@ impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExt for O {
         }
     }
 
-    fn set_backchannel_launch(&self, launch: &str) {
+    fn set_backchannel_launch(&self, launch: Option<&str>) {
         unsafe {
             ffi::gst_rtsp_onvif_media_factory_set_backchannel_launch(
                 self.as_ref().to_glib_none().0,

@@ -52,7 +52,7 @@ impl Timeline {
 
     #[doc(alias = "ges_timeline_new_from_uri")]
     #[doc(alias = "new_from_uri")]
-    pub fn from_uri(uri: &str) -> Result<Option<Timeline>, glib::Error> {
+    pub fn from_uri(uri: &str) -> Result<Timeline, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
@@ -212,7 +212,7 @@ pub trait TimelineExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "select-element-track")]
-    fn connect_select_element_track<F: Fn(&Self, &Clip, &TrackElement) -> Track + 'static>(
+    fn connect_select_element_track<F: Fn(&Self, &Clip, &TrackElement) -> Option<Track> + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -646,13 +646,15 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_select_element_track<F: Fn(&Self, &Clip, &TrackElement) -> Track + 'static>(
+    fn connect_select_element_track<
+        F: Fn(&Self, &Clip, &TrackElement) -> Option<Track> + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn select_element_track_trampoline<
             P: IsA<Timeline>,
-            F: Fn(&P, &Clip, &TrackElement) -> Track + 'static,
+            F: Fn(&P, &Clip, &TrackElement) -> Option<Track> + 'static,
         >(
             this: *mut ffi::GESTimeline,
             clip: *mut ffi::GESClip,

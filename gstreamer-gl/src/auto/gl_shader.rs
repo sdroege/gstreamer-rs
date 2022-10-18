@@ -383,7 +383,7 @@ impl GLShader {
         context: &impl IsA<GLContext>,
         version: GLSLVersion,
         profile: GLSLProfile,
-    ) -> Option<glib::GString> {
+    ) -> glib::GString {
         skip_assert_initialized!();
         unsafe {
             from_glib_full(ffi::gst_gl_shader_string_fragment_external_oes_get_default(
@@ -401,7 +401,7 @@ impl GLShader {
         context: &impl IsA<GLContext>,
         version: GLSLVersion,
         profile: GLSLProfile,
-    ) -> Option<glib::GString> {
+    ) -> glib::GString {
         skip_assert_initialized!();
         unsafe {
             from_glib_full(ffi::gst_gl_shader_string_fragment_get_default(
@@ -419,7 +419,7 @@ impl GLShader {
         context: &impl IsA<GLContext>,
         version: GLSLVersion,
         profile: GLSLProfile,
-    ) -> Option<glib::GString> {
+    ) -> glib::GString {
         skip_assert_initialized!();
         unsafe {
             from_glib_none(ffi::gst_gl_shader_string_get_highest_precision(

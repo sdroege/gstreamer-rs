@@ -42,7 +42,7 @@ impl UriClip {
 pub trait UriClipExt: 'static {
     #[doc(alias = "ges_uri_clip_get_uri")]
     #[doc(alias = "get_uri")]
-    fn uri(&self) -> Option<glib::GString>;
+    fn uri(&self) -> glib::GString;
 
     #[doc(alias = "ges_uri_clip_is_image")]
     fn is_image(&self) -> bool;
@@ -64,7 +64,7 @@ pub trait UriClipExt: 'static {
 }
 
 impl<O: IsA<UriClip>> UriClipExt for O {
-    fn uri(&self) -> Option<glib::GString> {
+    fn uri(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::ges_uri_clip_get_uri(self.as_ref().to_glib_none().0)) }
     }
 

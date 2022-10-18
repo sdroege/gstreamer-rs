@@ -9,7 +9,7 @@ use glib::translate::*;
 //#[cfg(any(feature = "v1_16", feature = "dox"))]
 //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 //#[doc(alias = "gst_buffer_add_rtp_source_meta")]
-//pub fn buffer_add_rtp_source_meta(buffer: &gst::Buffer, ssrc: u32, csrc: u32, csrc_count: u32) -> /*Ignored*/Option<RTPSourceMeta> {
+//pub fn buffer_add_rtp_source_meta(buffer: &gst::Buffer, ssrc: u32, csrc: &[u32]) -> /*Ignored*/RTPSourceMeta {
 //    unsafe { TODO: call ffi:gst_buffer_add_rtp_source_meta() }
 //}
 
@@ -33,7 +33,7 @@ pub fn rtcp_sdes_name_to_type(name: &str) -> RTCPSDESType {
 }
 
 #[doc(alias = "gst_rtcp_sdes_type_to_name")]
-pub fn rtcp_sdes_type_to_name(type_: RTCPSDESType) -> Option<glib::GString> {
+pub fn rtcp_sdes_type_to_name(type_: RTCPSDESType) -> glib::GString {
     assert_initialized_main_thread!();
     unsafe { from_glib_none(ffi::gst_rtcp_sdes_type_to_name(type_.into_glib())) }
 }

@@ -58,7 +58,7 @@ pub trait RTSPMediaExt: 'static {
         &self,
         payloader: &impl IsA<gst::Element>,
         pad: &impl IsA<gst::Pad>,
-    ) -> Option<RTSPStream>;
+    ) -> RTSPStream;
 
     #[doc(alias = "gst_rtsp_media_find_stream")]
     fn find_stream(&self, control: &str) -> Option<RTSPStream>;
@@ -93,7 +93,7 @@ pub trait RTSPMediaExt: 'static {
 
     #[doc(alias = "gst_rtsp_media_get_element")]
     #[doc(alias = "get_element")]
-    fn element(&self) -> Option<gst::Element>;
+    fn element(&self) -> gst::Element;
 
     #[doc(alias = "gst_rtsp_media_get_latency")]
     #[doc(alias = "get_latency")]
@@ -480,7 +480,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         &self,
         payloader: &impl IsA<gst::Element>,
         pad: &impl IsA<gst::Pad>,
-    ) -> Option<RTSPStream> {
+    ) -> RTSPStream {
         unsafe {
             from_glib_none(ffi::gst_rtsp_media_create_stream(
                 self.as_ref().to_glib_none().0,
@@ -543,7 +543,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         unsafe { ffi::gst_rtsp_media_get_dscp_qos(self.as_ref().to_glib_none().0) }
     }
 
-    fn element(&self) -> Option<gst::Element> {
+    fn element(&self) -> gst::Element {
         unsafe {
             from_glib_full(ffi::gst_rtsp_media_get_element(
                 self.as_ref().to_glib_none().0,

@@ -18,9 +18,12 @@ impl GLDisplayWayland {
     pub const NONE: Option<&'static GLDisplayWayland> = None;
 
     #[doc(alias = "gst_gl_display_wayland_new")]
-    pub fn new(name: Option<&str>) -> GLDisplayWayland {
+    pub fn new(name: Option<&str>) -> Result<GLDisplayWayland, glib::BoolError> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_gl_display_wayland_new(name.to_glib_none().0)) }
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_gl_display_wayland_new(name.to_glib_none().0))
+                .ok_or_else(|| glib::bool_error!("Failed to create Wayland display"))
+        }
     }
 
     //#[doc(alias = "gst_gl_display_wayland_new_with_display")]

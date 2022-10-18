@@ -144,7 +144,7 @@ pub trait AssetExt: 'static {
 
     #[doc(alias = "ges_asset_get_id")]
     #[doc(alias = "get_id")]
-    fn id(&self) -> Option<glib::GString>;
+    fn id(&self) -> glib::GString;
 
     #[doc(alias = "ges_asset_get_proxy")]
     #[doc(alias = "get_proxy")]
@@ -197,7 +197,7 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
-    fn id(&self) -> Option<glib::GString> {
+    fn id(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::ges_asset_get_id(self.as_ref().to_glib_none().0)) }
     }
 

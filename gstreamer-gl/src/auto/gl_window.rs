@@ -47,7 +47,7 @@ pub trait GLWindowExt: 'static {
 
     #[doc(alias = "gst_gl_window_get_context")]
     #[doc(alias = "get_context")]
-    fn context(&self) -> Option<GLContext>;
+    fn context(&self) -> GLContext;
 
     #[doc(alias = "gst_gl_window_get_surface_dimensions")]
     #[doc(alias = "get_surface_dimensions")]
@@ -145,7 +145,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
-    fn context(&self) -> Option<GLContext> {
+    fn context(&self) -> GLContext {
         unsafe {
             from_glib_full(ffi::gst_gl_window_get_context(
                 self.as_ref().to_glib_none().0,

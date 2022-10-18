@@ -45,7 +45,7 @@ unsafe impl Sync for RTSPMediaFactoryURI {}
 pub trait RTSPMediaFactoryURIExt: 'static {
     #[doc(alias = "gst_rtsp_media_factory_uri_get_uri")]
     #[doc(alias = "get_uri")]
-    fn uri(&self) -> Option<glib::GString>;
+    fn uri(&self) -> glib::GString;
 
     #[doc(alias = "gst_rtsp_media_factory_uri_set_uri")]
     fn set_uri(&self, uri: &str);
@@ -67,7 +67,7 @@ pub trait RTSPMediaFactoryURIExt: 'static {
 }
 
 impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
-    fn uri(&self) -> Option<glib::GString> {
+    fn uri(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_rtsp_media_factory_uri_get_uri(
                 self.as_ref().to_glib_none().0,

@@ -73,13 +73,13 @@ pub trait TextOverlayClipExt: 'static {
     fn set_color(&self, color: u32);
 
     #[doc(alias = "ges_text_overlay_clip_set_font_desc")]
-    fn set_font_desc(&self, font_desc: &str);
+    fn set_font_desc(&self, font_desc: Option<&str>);
 
     #[doc(alias = "ges_text_overlay_clip_set_halign")]
     fn set_halign(&self, halign: TextHAlign);
 
     #[doc(alias = "ges_text_overlay_clip_set_text")]
-    fn set_text(&self, text: &str);
+    fn set_text(&self, text: Option<&str>);
 
     #[doc(alias = "ges_text_overlay_clip_set_valign")]
     fn set_valign(&self, valign: TextVAlign);
@@ -167,7 +167,7 @@ impl<O: IsA<TextOverlayClip>> TextOverlayClipExt for O {
         }
     }
 
-    fn set_font_desc(&self, font_desc: &str) {
+    fn set_font_desc(&self, font_desc: Option<&str>) {
         unsafe {
             ffi::ges_text_overlay_clip_set_font_desc(
                 self.as_ref().to_glib_none().0,
@@ -185,7 +185,7 @@ impl<O: IsA<TextOverlayClip>> TextOverlayClipExt for O {
         }
     }
 
-    fn set_text(&self, text: &str) {
+    fn set_text(&self, text: Option<&str>) {
         unsafe {
             ffi::ges_text_overlay_clip_set_text(
                 self.as_ref().to_glib_none().0,

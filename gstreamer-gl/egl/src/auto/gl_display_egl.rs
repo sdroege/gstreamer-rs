@@ -19,9 +19,12 @@ impl GLDisplayEGL {
     pub const NONE: Option<&'static GLDisplayEGL> = None;
 
     #[doc(alias = "gst_gl_display_egl_new")]
-    pub fn new() -> GLDisplayEGL {
+    pub fn new() -> Result<GLDisplayEGL, glib::BoolError> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_gl_display_egl_new()) }
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_gl_display_egl_new())
+                .ok_or_else(|| glib::bool_error!("Failed to create EGL display"))
+        }
     }
 
     //#[doc(alias = "gst_gl_display_egl_new_with_egl_display")]
@@ -45,12 +48,6 @@ impl GLDisplayEGL {
     //pub fn from_native(type_: /*Ignored*/gst_gl::GLDisplayType, display: /*Unimplemented*/Basic: UIntPtr) -> /*Unimplemented*/Option<Basic: Pointer> {
     //    unsafe { TODO: call ffi:gst_gl_display_egl_get_from_native() }
     //}
-}
-
-impl Default for GLDisplayEGL {
-    fn default() -> Self {
-        Self::new()
-    }
 }
 
 unsafe impl Send for GLDisplayEGL {}

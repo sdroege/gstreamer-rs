@@ -8,6 +8,7 @@ concurrency = "send+sync"
 generate_safety_asserts = true
 single_version_file = true
 generate_display_trait = false
+trust_return_value_nullability = true
 
 external_libraries = [
     "GLib",
@@ -18,9 +19,7 @@ external_libraries = [
     "GstVideo",
 ]
 
-generate = [
-    "GstGLX11.GLDisplayX11",
-]
+generate = []
 
 manual = [
     "GLib.Error",
@@ -51,3 +50,11 @@ ref_mode = "ref"
 name = "Gst.Structure"
 status = "manual"
 ref_mode = "ref"
+
+[[object]]
+name = "GstGLX11.GLDisplayX11"
+status = "generate"
+    [[object.function]]
+    name = "new"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create X11 display"

@@ -74,7 +74,7 @@ pub trait RTSPSessionMediaExt: 'static {
     fn set_state(&self, state: gst::State) -> Result<(), glib::error::BoolError>;
 
     //#[doc(alias = "gst_rtsp_session_media_set_transport")]
-    //fn set_transport(&self, stream: &impl IsA<RTSPStream>, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> Option<RTSPStreamTransport>;
+    //fn set_transport(&self, stream: &impl IsA<RTSPStream>, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> RTSPStreamTransport;
 }
 
 impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
@@ -159,7 +159,7 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
         }
     }
 
-    //fn set_transport(&self, stream: &impl IsA<RTSPStream>, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> Option<RTSPStreamTransport> {
+    //fn set_transport(&self, stream: &impl IsA<RTSPStream>, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> RTSPStreamTransport {
     //    unsafe { TODO: call ffi:gst_rtsp_session_media_set_transport() }
     //}
 }
