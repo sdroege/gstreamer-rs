@@ -41,9 +41,7 @@ fn print_tags(info: &DiscovererInfo) {
 
 fn print_stream_info(stream: &DiscovererStreamInfo) {
     println!("Stream: ");
-    if let Some(id) = stream.stream_id() {
-        println!("  Stream id: {}", id);
-    }
+    println!("  Stream id: {}", stream.stream_id());
     let caps_str = match stream.caps() {
         Some(caps) => caps.to_string(),
         None => String::from("--"),
@@ -52,10 +50,7 @@ fn print_stream_info(stream: &DiscovererStreamInfo) {
 }
 
 fn print_discoverer_info(info: &DiscovererInfo) -> Result<(), Error> {
-    let uri = info
-        .uri()
-        .ok_or(DiscovererError("URI should not be null"))?;
-    println!("URI: {}", uri);
+    println!("URI: {}", info.uri());
     println!("Duration: {}", info.duration().display());
     print_tags(info);
     print_stream_info(

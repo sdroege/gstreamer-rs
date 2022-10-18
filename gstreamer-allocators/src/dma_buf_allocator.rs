@@ -45,13 +45,18 @@ impl DmaBufMemoryRef {
 
 impl DmaBufAllocator {
     #[doc(alias = "gst_dmabuf_allocator_alloc")]
-    pub unsafe fn alloc<A: IntoRawFd>(&self, fd: A, size: usize) -> gst::Memory {
+    pub unsafe fn alloc<A: IntoRawFd>(
+        &self,
+        fd: A,
+        size: usize,
+    ) -> Result<gst::Memory, glib::BoolError> {
         assert_initialized_main_thread!();
-        from_glib_full(ffi::gst_dmabuf_allocator_alloc(
+        Option::<_>::from_glib_full(ffi::gst_dmabuf_allocator_alloc(
             self.unsafe_cast_ref::<gst::Allocator>().to_glib_none().0,
             fd.into_raw_fd(),
             size,
         ))
+        .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -62,13 +67,14 @@ impl DmaBufAllocator {
         fd: RawFd,
         size: usize,
         flags: FdMemoryFlags,
-    ) -> gst::Memory {
+    ) -> Result<gst::Memory, glib::BoolError> {
         assert_initialized_main_thread!();
-        from_glib_full(ffi::gst_dmabuf_allocator_alloc_with_flags(
+        Option::<_>::from_glib_full(ffi::gst_dmabuf_allocator_alloc_with_flags(
             self.unsafe_cast_ref::<gst::Allocator>().to_glib_none().0,
             fd,
             size,
             flags.into_glib(),
         ))
+        .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
     }
 }

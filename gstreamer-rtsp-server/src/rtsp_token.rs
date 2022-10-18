@@ -22,7 +22,7 @@ impl RTSPToken {
 
         {
             let token = token.get_mut().unwrap();
-            let structure = token.structure_mut().unwrap();
+            let structure = token.structure_mut();
 
             for &(f, v) in values {
                 structure.set_value(f, v.to_send_value());
@@ -62,14 +62,10 @@ impl RTSPTokenRef {
     }
 
     #[doc(alias = "get_mut_structure")]
-    pub fn structure_mut(&mut self) -> Option<&mut gst::StructureRef> {
+    pub fn structure_mut(&mut self) -> &mut gst::StructureRef {
         unsafe {
             let structure = ffi::gst_rtsp_token_writable_structure(self.as_mut_ptr());
-            if structure.is_null() {
-                None
-            } else {
-                Some(gst::StructureRef::from_glib_borrow_mut(structure))
-            }
+            gst::StructureRef::from_glib_borrow_mut(structure)
         }
     }
 }

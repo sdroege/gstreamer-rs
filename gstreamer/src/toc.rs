@@ -3,6 +3,7 @@
 use std::ffi::CStr;
 use std::fmt;
 use std::mem;
+use std::ptr;
 
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, IntoGlib, IntoGlibPtr,
@@ -57,16 +58,25 @@ impl TocRef {
     }
 
     #[doc(alias = "gst_toc_set_tags")]
-    pub fn set_tags(&mut self, tag_list: TagList) {
+    pub fn set_tags(&mut self, tag_list: Option<TagList>) {
         unsafe {
-            ffi::gst_toc_set_tags(self.as_mut_ptr(), tag_list.into_glib_ptr());
+            ffi::gst_toc_set_tags(
+                self.as_mut_ptr(),
+                tag_list
+                    .map(|t| t.into_glib_ptr())
+                    .unwrap_or(ptr::null_mut()),
+            );
         }
     }
 
     #[doc(alias = "gst_toc_merge_tags")]
-    pub fn merge_tags(&mut self, tag_list: &TagList, mode: TagMergeMode) {
+    pub fn merge_tags(&mut self, tag_list: Option<&TagList>, mode: TagMergeMode) {
         unsafe {
-            ffi::gst_toc_merge_tags(self.as_mut_ptr(), tag_list.as_mut_ptr(), mode.into_glib());
+            ffi::gst_toc_merge_tags(
+                self.as_mut_ptr(),
+                tag_list.map(|l| l.as_mut_ptr()).unwrap_or(ptr::null_mut()),
+                mode.into_glib(),
+            );
         }
     }
 
@@ -182,18 +192,23 @@ impl TocEntryRef {
     }
 
     #[doc(alias = "gst_toc_entry_set_tags")]
-    pub fn set_tags(&mut self, tag_list: TagList) {
+    pub fn set_tags(&mut self, tag_list: Option<TagList>) {
         unsafe {
-            ffi::gst_toc_entry_set_tags(self.as_mut_ptr(), tag_list.into_glib_ptr());
+            ffi::gst_toc_entry_set_tags(
+                self.as_mut_ptr(),
+                tag_list
+                    .map(|t| t.into_glib_ptr())
+                    .unwrap_or(ptr::null_mut()),
+            );
         }
     }
 
     #[doc(alias = "gst_toc_entry_merge_tags")]
-    pub fn merge_tags(&mut self, tag_list: &TagList, mode: TagMergeMode) {
+    pub fn merge_tags(&mut self, tag_list: Option<&TagList>, mode: TagMergeMode) {
         unsafe {
             ffi::gst_toc_entry_merge_tags(
                 self.as_mut_ptr(),
-                tag_list.as_mut_ptr(),
+                tag_list.map(|l| l.as_mut_ptr()).unwrap_or(ptr::null_mut()),
                 mode.into_glib(),
             );
         }

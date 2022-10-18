@@ -1027,16 +1027,11 @@ pub fn tag_get_type(name: &str) -> glib::Type {
 }
 
 #[doc(alias = "gst_tag_get_nick")]
-pub fn tag_get_nick<'b>(name: &str) -> Option<&'b str> {
+pub fn tag_get_nick(name: &str) -> &str {
     skip_assert_initialized!();
     unsafe {
         let ptr = ffi::gst_tag_get_nick(name.to_glib_none().0);
-
-        if ptr.is_null() {
-            None
-        } else {
-            Some(CStr::from_ptr(ptr).to_str().unwrap())
-        }
+        CStr::from_ptr(ptr).to_str().unwrap()
     }
 }
 
@@ -1324,10 +1319,7 @@ mod tests {
             tag_get_type(MyCustomTag::tag_name()),
             <MyCustomTag as Tag>::TagType::static_type()
         );
-        assert_eq!(
-            tag_get_nick(MyCustomTag::tag_name()),
-            Some(MyCustomTag::NICK)
-        );
+        assert_eq!(tag_get_nick(MyCustomTag::tag_name()), MyCustomTag::NICK);
         assert_eq!(
             tag_get_description(MyCustomTag::tag_name()),
             Some(MyCustomTag::DESCRIPTION)

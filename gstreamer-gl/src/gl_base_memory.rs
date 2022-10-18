@@ -7,7 +7,6 @@ use crate::GLBaseMemoryAllocator;
 
 use ffi::GstGLBaseMemory;
 use gst::MemoryRef;
-use gst::{result_from_gboolean, LoggableError, CAT_RUST};
 
 gst::memory_object_wrapper!(
     GLBaseMemory,
@@ -51,16 +50,15 @@ impl GLBaseMemoryRef {
         dest: &mut GLBaseMemory,
         offset: isize,
         size: isize,
-    ) -> Result<(), LoggableError> {
+    ) -> Result<(), glib::BoolError> {
         Self::init_once();
-        result_from_gboolean!(
+        glib::result_from_gboolean!(
             ffi::gst_gl_base_memory_memcpy(
                 mut_override(&self.0),
                 dest.to_glib_none_mut().0,
                 offset,
                 size,
             ),
-            CAT_RUST,
             "Failed to copy memory"
         )
     }
@@ -69,14 +67,15 @@ impl GLBaseMemoryRef {
     pub fn alloc<P: IsA<GLBaseMemoryAllocator>>(
         allocator: &P,
         params: &GLAllocationParams,
-    ) -> Option<GLBaseMemory> {
+    ) -> Result<GLBaseMemory, glib::BoolError> {
         skip_assert_initialized!();
         Self::init_once();
         unsafe {
-            from_glib_full(ffi::gst_gl_base_memory_alloc(
+            Option::<_>::from_glib_full(ffi::gst_gl_base_memory_alloc(
                 allocator.as_ref().to_glib_none().0,
                 mut_override(params.to_glib_none().0),
             ))
+            .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
         }
     }
 

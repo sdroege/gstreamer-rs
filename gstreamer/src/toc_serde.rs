@@ -57,9 +57,7 @@ impl From<TocDe> for Toc {
         let mut toc = Toc::new(toc_de.scope);
         {
             let toc = toc.get_mut().unwrap();
-            if let Some(tags) = toc_de.tags.take() {
-                toc.set_tags(tags);
-            }
+            toc.set_tags(toc_de.tags.take());
             let entry_iter = toc_de.entries.drain(..);
             for entry in entry_iter {
                 toc.append_entry(entry);
@@ -96,9 +94,7 @@ impl From<TocEntryDe> for TocEntry {
             if let Some(start_stop) = toc_entry_de.start_stop.take() {
                 toc_entry.set_start_stop_times(start_stop.0, start_stop.1);
             }
-            if let Some(tags) = toc_entry_de.tags.take() {
-                toc_entry.set_tags(tags);
-            }
+            toc_entry.set_tags(toc_entry_de.tags.take());
             if let Some(loop_) = toc_entry_de.loop_.take() {
                 toc_entry.set_loop(loop_.0, loop_.1);
             }
@@ -139,7 +135,7 @@ mod tests {
             tags.get_mut()
                 .unwrap()
                 .add::<Title>(&"toc", TagMergeMode::Append);
-            toc.set_tags(tags);
+            toc.set_tags(Some(tags));
 
             let mut toc_edition = TocEntry::new(TocEntryType::Edition, "edition");
             {
@@ -158,7 +154,7 @@ mod tests {
                         tags.get_mut()
                             .unwrap()
                             .add::<Title>(&"chapter 1.1", TagMergeMode::Append);
-                        toc_chap_1_1.set_tags(tags);
+                        toc_chap_1_1.set_tags(Some(tags));
                     }
                     toc_chap_1.append_sub_entry(toc_chap_1_1);
 
@@ -170,7 +166,7 @@ mod tests {
                         tags.get_mut()
                             .unwrap()
                             .add::<Title>(&"chapter 1.2", TagMergeMode::Append);
-                        toc_chap_1_2.set_tags(tags);
+                        toc_chap_1_2.set_tags(Some(tags));
                     }
                     toc_chap_1.append_sub_entry(toc_chap_1_2);
                 }
@@ -184,7 +180,7 @@ mod tests {
                     tags.get_mut()
                         .unwrap()
                         .add::<Title>(&"chapter 2", TagMergeMode::Append);
-                    toc_chap_2.set_tags(tags);
+                    toc_chap_2.set_tags(Some(tags));
                 }
                 toc_edition.append_sub_entry(toc_chap_2);
             }
@@ -419,7 +415,7 @@ mod tests {
             tags.get_mut()
                 .unwrap()
                 .add::<Title>(&"toc", TagMergeMode::Append);
-            toc.set_tags(tags);
+            toc.set_tags(Some(tags));
 
             let mut toc_edition = TocEntry::new(TocEntryType::Edition, "edition");
             {
@@ -438,7 +434,7 @@ mod tests {
                         tags.get_mut()
                             .unwrap()
                             .add::<Title>(&"chapter 1.1", TagMergeMode::Append);
-                        toc_chap_1_1.set_tags(tags);
+                        toc_chap_1_1.set_tags(Some(tags));
                     }
                     toc_chap_1.append_sub_entry(toc_chap_1_1);
 
@@ -450,7 +446,7 @@ mod tests {
                         tags.get_mut()
                             .unwrap()
                             .add::<Title>(&"chapter 1.2", TagMergeMode::Append);
-                        toc_chap_1_2.set_tags(tags);
+                        toc_chap_1_2.set_tags(Some(tags));
                     }
                     toc_chap_1.append_sub_entry(toc_chap_1_2);
                 }
@@ -464,7 +460,7 @@ mod tests {
                     tags.get_mut()
                         .unwrap()
                         .add::<Title>(&"chapter 2", TagMergeMode::Append);
-                    toc_chap_2.set_tags(tags);
+                    toc_chap_2.set_tags(Some(tags));
                 }
                 toc_edition.append_sub_entry(toc_chap_2);
             }

@@ -24,7 +24,6 @@ fn print_stream_info(info: &DiscovererStreamInfo, depth: usize) {
     let caps_str = if let Some(caps) = info.caps() {
         if caps.is_fixed() {
             gst_pbutils::pb_utils_get_codec_description(&caps)
-                .unwrap_or_else(|_| glib::GString::from("unknown codec"))
         } else {
             glib::GString::from(caps.to_string())
         }
@@ -82,7 +81,7 @@ fn on_discovered(
     discoverer_info: &DiscovererInfo,
     error: Option<&glib::Error>,
 ) {
-    let uri = discoverer_info.uri().unwrap();
+    let uri = discoverer_info.uri();
     match discoverer_info.result() {
         DiscovererResult::Ok => println!("Discovered {}", uri),
         DiscovererResult::UriInvalid => println!("Invalid uri {}", uri),

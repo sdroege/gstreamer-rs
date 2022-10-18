@@ -1532,14 +1532,17 @@ declare_concrete_message!(PropertyNotify, T);
 impl PropertyNotify {
     #[doc(alias = "gst_message_new_property_notify")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(property_name: &str) -> Message {
+    pub fn new(object: &impl IsA<crate::Object>, property_name: &str) -> Message {
         skip_assert_initialized!();
-        Self::builder(property_name).build()
+        Self::builder(object, property_name).build()
     }
 
-    pub fn builder(property_name: &str) -> PropertyNotifyBuilder {
+    pub fn builder<'a>(
+        object: &'a impl IsA<crate::Object>,
+        property_name: &'a str,
+    ) -> PropertyNotifyBuilder<'a> {
         assert_initialized_main_thread!();
-        PropertyNotifyBuilder::new(property_name)
+        PropertyNotifyBuilder::new(property_name).src(object)
     }
 
     #[doc(alias = "gst_message_parse_property_notify")]

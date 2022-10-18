@@ -939,7 +939,7 @@ impl Default for Uri<Query> {
 impl Uri {
     #[doc(alias = "get_uri")]
     #[doc(alias = "gst_query_parse_uri")]
-    pub fn uri(&self) -> Option<String> {
+    pub fn uri(&self) -> Option<glib::GString> {
         unsafe {
             let mut uri = ptr::null_mut();
             ffi::gst_query_parse_uri(self.as_mut_ptr(), &mut uri);
@@ -950,7 +950,7 @@ impl Uri {
     #[doc(alias = "get_redirection")]
     #[doc(alias = "gst_query_parse_uri_redirection")]
     #[doc(alias = "gst_query_parse_uri_redirection_permanent")]
-    pub fn redirection(&self) -> (Option<String>, bool) {
+    pub fn redirection(&self) -> (Option<glib::GString>, bool) {
         unsafe {
             let mut uri = ptr::null_mut();
             ffi::gst_query_parse_uri_redirection(self.as_mut_ptr(), &mut uri);
@@ -965,7 +965,7 @@ impl Uri {
     }
 
     #[doc(alias = "gst_query_set_uri")]
-    pub fn set_uri(&mut self, uri: &str) {
+    pub fn set_uri(&mut self, uri: Option<&str>) {
         unsafe {
             ffi::gst_query_set_uri(self.as_mut_ptr(), uri.to_glib_none().0);
         }
@@ -973,7 +973,7 @@ impl Uri {
 
     #[doc(alias = "gst_query_set_uri_redirection")]
     #[doc(alias = "gst_query_set_uri_redirection_permanent")]
-    pub fn set_redirection(&mut self, uri: &str, permanent: bool) {
+    pub fn set_redirection(&mut self, uri: Option<&str>, permanent: bool) {
         unsafe {
             ffi::gst_query_set_uri_redirection(self.as_mut_ptr(), uri.to_glib_none().0);
             ffi::gst_query_set_uri_redirection_permanent(
@@ -1453,9 +1453,13 @@ impl Caps {
     }
 
     #[doc(alias = "gst_query_set_caps_result")]
-    pub fn set_result(&mut self, caps: &crate::Caps) {
+    pub fn set_result(&mut self, caps: Option<&crate::Caps>) {
         unsafe {
-            ffi::gst_query_set_caps_result(self.as_mut_ptr(), caps.as_mut_ptr());
+            ffi::gst_query_set_caps_result(
+                self.as_mut_ptr(),
+                caps.map(|caps| caps.as_mut_ptr())
+                    .unwrap_or(ptr::null_mut()),
+            );
         }
     }
 }
@@ -1523,9 +1527,14 @@ impl Context {
     }
 
     #[doc(alias = "gst_query_set_context")]
-    pub fn set_context(&mut self, context: &crate::Context) {
+    pub fn set_context(&mut self, context: Option<&crate::Context>) {
         unsafe {
-            ffi::gst_query_set_context(self.as_mut_ptr(), context.as_mut_ptr());
+            ffi::gst_query_set_context(
+                self.as_mut_ptr(),
+                context
+                    .map(|context| context.as_mut_ptr())
+                    .unwrap_or(ptr::null_mut()),
+            );
         }
     }
 }

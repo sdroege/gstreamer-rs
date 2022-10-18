@@ -46,9 +46,8 @@ impl PluginApiExt for glib::Type {
                 self.into_glib(),
                 flags.as_mut_ptr(),
             ));
-            let flags = flags.assume_init();
             if ret {
-                Some(from_glib(flags))
+                Some(from_glib(flags.assume_init()))
             } else {
                 None
             }

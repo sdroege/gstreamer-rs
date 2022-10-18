@@ -39,6 +39,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::too_many_arguments)]
 #[allow(clippy::match_same_arms)]
 #[allow(non_snake_case)]
+#[allow(clippy::needless_borrow)]
 #[allow(clippy::use_self)]
 #[allow(unused_imports)]
 mod auto;

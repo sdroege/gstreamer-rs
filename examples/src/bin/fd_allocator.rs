@@ -107,11 +107,9 @@ fn create_receiver_pipeline(
                     // ownership of the passed file descriptor. The file descriptor
                     // will be closed when the memory is released.
                     let memory = unsafe {
-                        fd_allocator.alloc(
-                            *fd,
-                            video_info.size(),
-                            gst_allocators::FdMemoryFlags::NONE,
-                        )
+                        fd_allocator
+                            .alloc(*fd, video_info.size(), gst_allocators::FdMemoryFlags::NONE)
+                            .unwrap()
                     };
                     let mut buffer = gst::Buffer::new();
                     let buffer_mut = buffer.make_mut();
