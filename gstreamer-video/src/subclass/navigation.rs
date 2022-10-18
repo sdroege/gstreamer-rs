@@ -78,7 +78,7 @@ impl<T: NavigationImpl> NavigationImplExt for T {
 }
 
 unsafe impl<T: NavigationImpl> IsImplementable<T> for Navigation {
-    #[cfg(not(feature = "v1_22"))]
+    #[cfg(not(any(feature = "v1_22", feature = "dox")))]
     fn interface_init(iface: &mut glib::Interface<Self>) {
         let iface = iface.as_mut();
 

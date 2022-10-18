@@ -43,9 +43,9 @@ mod auto;
 pub use crate::auto::functions::*;
 pub use crate::auto::*;
 
-#[cfg(feature = "v1_20")]
+#[cfg(any(feature = "v1_20", feature = "dox"))]
 mod element_properties;
-#[cfg(feature = "v1_20")]
+#[cfg(any(feature = "v1_20", feature = "dox"))]
 pub use crate::element_properties::{ElementProperties, ElementPropertiesMapItem};
 
 #[cfg(feature = "serde")]

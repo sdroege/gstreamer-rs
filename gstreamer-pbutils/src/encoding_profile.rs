@@ -8,7 +8,7 @@ use crate::auto::EncodingContainerProfile;
 use crate::auto::EncodingProfile;
 use crate::auto::EncodingVideoProfile;
 
-#[cfg(feature = "v1_20")]
+#[cfg(any(feature = "v1_20", feature = "dox"))]
 use crate::ElementProperties;
 
 pub trait EncodingProfileExtManual {

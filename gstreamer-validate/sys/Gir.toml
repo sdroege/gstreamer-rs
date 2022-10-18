@@ -9,5 +9,7 @@ external_libraries = [
     "GLib",
     "Gio",
     "GObject",
-    "GStreamer",
 ]
+
+[external_libraries]
+gstreamer="Gst"

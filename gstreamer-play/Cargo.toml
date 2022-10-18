@@ -27,7 +27,7 @@ gir-format-check = "0.1"
 
 [features]
 v1_22 = ["gst/v1_22", "gst-video/v1_22", "ffi/v1_22"]
-dox = ["v1_22", "ffi/dox", "glib/dox", "gst/dox", "gst-video/dox"]
+dox = ["ffi/dox", "glib/dox", "gst/dox", "gst-video/dox"]
 
 [package.metadata.docs.rs]
 features = ["dox"]
