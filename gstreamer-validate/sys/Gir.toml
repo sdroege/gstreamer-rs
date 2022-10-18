@@ -4,6 +4,7 @@ library = "GstValidate"
 version = "1.0"
 min_cfg_version = "1.22"
 work_mode = "sys"
+single_version_file = true
 
 external_libraries = [
     "GLib",

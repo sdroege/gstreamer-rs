@@ -4,6 +4,7 @@ library = "GstWebRTC"
 version = "1.0"
 min_cfg_version = "1.14"
 work_mode = "sys"
+single_version_file = true
 
 extra_versions = [
     "1.20",
