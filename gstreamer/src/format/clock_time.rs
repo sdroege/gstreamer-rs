@@ -199,6 +199,7 @@ impl Signed<ClockTime> {
 impl_format_value_traits!(ClockTime, Time, Time, u64);
 option_glib_newtype_from_to!(ClockTime, ffi::GST_CLOCK_TIME_NONE);
 
+// FIXME `functions in traits cannot be const` (rustc 1.64.0)
 // rustdoc-stripper-ignore-next
 /// `ClockTime` formatted value constructor trait.
 pub trait TimeFormatConstructor {

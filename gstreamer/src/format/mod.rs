@@ -74,26 +74,26 @@
 //! assert_eq!(Default::try_from(42), Ok(default));
 //! assert_eq!(Default::try_from(42).ok(), Some(default));
 //!
-//! // `ClockTime` provides specific constructors,
+//! // `ClockTime` provides specific `const` constructors,
 //! // which can panic if the requested value is out of range.
 //! let time = ClockTime::from_nseconds(45_834_908_569_837);
 //! let time = ClockTime::from_seconds(20);
 //!
-//! // Other formatted values also come with (panicking) constructors:
+//! // Other formatted values also come with (panicking) `const` constructors:
 //! let buffers_nb = Buffers::from_u64(512);
 //! let received = Bytes::from_u64(64);
 //! let quantity = Default::from_u64(42);
 //!
-//! // `Bytes` can be built from an `usize` too:
+//! // `Bytes` can be built from an `usize` too (not `const`):
 //! let sample_size = Bytes::from_usize([0u8; 4].len());
 //!
-//! // This can be convenient:
+//! // This can be convenient (not `const`):
 //! assert_eq!(
 //!     7.seconds() + 250.mseconds(),
 //!     ClockTime::from_nseconds(7_250_000_000),
 //! );
 //!
-//! // Those too:
+//! // Those too (not `const`):
 //! assert_eq!(512.buffers(), Buffers::from_u64(512));
 //! assert_eq!(64.bytes(), Bytes::from_u64(64));
 //! assert_eq!(42.default_format(), Default::from_u64(42));
@@ -105,7 +105,7 @@
 //! // Specific formatted values provide the constant `ONE` value:
 //! assert_eq!(*Buffers::ONE, 1);
 //!
-//! // `Bytes` also comes with usual multipliers:
+//! // `Bytes` also comes with usual multipliers (not `const`):
 //! assert_eq!(*(512.kibibytes()), 512 * 1024);
 //! assert_eq!(*(8.mebibytes()), 8 * 1024 * 1024);
 //! assert_eq!(*(4.gibibytes()), 4 * 1024 * 1024 * 1024);

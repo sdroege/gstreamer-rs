@@ -37,8 +37,12 @@ impl Buffers {
     /// Panics if the provided count equals `u64::MAX`,
     /// which is reserved for `None` in C.
     #[track_caller]
-    pub fn from_u64(buffers: u64) -> Self {
-        Buffers::try_from(buffers).expect("`Buffers` value out of range")
+    pub const fn from_u64(buffers: u64) -> Self {
+        if buffers == ffi::GST_BUFFER_OFFSET_NONE {
+            panic!("`Buffers` value out of range");
+        }
+
+        Buffers(buffers)
     }
 
     // rustdoc-stripper-ignore-next
@@ -60,6 +64,7 @@ impl_format_value_traits!(Buffers, Buffers, Buffers, u64);
 option_glib_newtype_from_to!(Buffers, Buffers::OFFSET_NONE);
 glib_newtype_display!(Buffers, DisplayableOptionBuffers, Format::Buffers);
 
+// FIXME `functions in traits cannot be const` (rustc 1.64.0)
 // rustdoc-stripper-ignore-next
 /// `Buffers` formatted value constructor trait.
 pub trait BuffersFormatConstructor {
@@ -103,8 +108,12 @@ impl Bytes {
     /// Panics if the provided count equals `u64::MAX`,
     /// which is reserved for `None` in C.
     #[track_caller]
-    pub fn from_u64(bytes: u64) -> Self {
-        Bytes::try_from(bytes).expect("`Bytes` value out of range")
+    pub const fn from_u64(bytes: u64) -> Self {
+        if bytes == u64::MAX {
+            panic!("`Bytes` value out of range");
+        }
+
+        Bytes(bytes)
     }
 
     // rustdoc-stripper-ignore-next
@@ -116,6 +125,7 @@ impl Bytes {
     /// which is reserved for `None` in C.
     #[track_caller]
     pub fn from_usize(bytes: usize) -> Self {
+        // FIXME can't use `try_into` in `const` (rustc 1.64.0)
         Bytes::from_u64(bytes.try_into().unwrap())
     }
 }
@@ -126,6 +136,7 @@ impl_format_value_traits!(Bytes, Bytes, Bytes, u64);
 option_glib_newtype_from_to!(Bytes, u64::MAX);
 glib_newtype_display!(Bytes, DisplayableOptionBytes, Format::Bytes);
 
+// FIXME `functions in traits cannot be const` (rustc 1.64.0)
 // rustdoc-stripper-ignore-next
 /// `Bytes` formatted value constructor trait.
 ///
@@ -187,8 +198,12 @@ impl Default {
     /// Panics if the provided quantity equals `u64::MAX`,
     /// which is reserved for `None` in C.
     #[track_caller]
-    pub fn from_u64(quantity: u64) -> Self {
-        Default::try_from(quantity).expect("`Default` value out of range")
+    pub const fn from_u64(quantity: u64) -> Self {
+        if quantity == u64::MAX {
+            panic!("`Default` value out of range");
+        }
+
+        Default(quantity)
     }
 
     // rustdoc-stripper-ignore-next
@@ -200,6 +215,7 @@ impl Default {
     /// which is reserved for `None` in C.
     #[track_caller]
     pub fn from_usize(quantity: usize) -> Self {
+        // FIXME can't use `try_into` in `const` (rustc 1.64.0)
         Default::from_u64(quantity.try_into().unwrap())
     }
 }
@@ -210,6 +226,7 @@ impl_format_value_traits!(Default, Default, Default, u64);
 option_glib_newtype_from_to!(Default, u64::MAX);
 glib_newtype_display!(Default, DisplayableOptionDefault, Format::Default);
 
+// FIXME `functions in traits cannot be const` (rustc 1.64.0)
 // rustdoc-stripper-ignore-next
 /// `Default` formatted value constructor trait.
 pub trait DefaultFormatConstructor {
@@ -242,8 +259,12 @@ impl Percent {
     ///
     /// Panics if the provided value is larger than 100.
     #[track_caller]
-    pub fn from_percent(percent: u32) -> Self {
-        Percent::try_from(*Self::SCALE * percent).expect("`Percent` value out of range")
+    pub const fn from_percent(percent: u32) -> Self {
+        if percent > 100 {
+            panic!("`Percent` value out of range");
+        }
+
+        Percent(ffi::GST_FORMAT_PERCENT_SCALE as u32 * percent)
     }
 
     // rustdoc-stripper-ignore-next
@@ -253,8 +274,12 @@ impl Percent {
     ///
     /// Panics if the provided value is larger than [`Self::MAX`].
     #[track_caller]
-    pub fn from_ppm(ppm: u32) -> Self {
-        Percent::try_from(ppm).expect("`Percent` value out of range")
+    pub const fn from_ppm(ppm: u32) -> Self {
+        if ppm > ffi::GST_FORMAT_PERCENT_MAX as u32 {
+            panic!("`Percent` ppm value out of range");
+        }
+
+        Percent(ppm)
     }
 
     // rustdoc-stripper-ignore-next
@@ -265,6 +290,7 @@ impl Percent {
     /// Panics if the provided radio is out of the range [0.0, 1.0].
     #[track_caller]
     pub fn from_ratio(ratio: f32) -> Self {
+        // FIXME floating point arithmetic is not allowed in constant functions (rustc 1.64.0)
         Percent::try_from(ratio).expect("`Percent` ratio out of range")
     }
 }
@@ -425,6 +451,7 @@ impl TryFrom<f32> for Percent {
     }
 }
 
+// FIXME `functions in traits cannot be const` (rustc 1.64.0)
 // rustdoc-stripper-ignore-next
 /// `Percent` formatted value from integer constructor trait.
 pub trait PercentFormatIntegerConstructor {
@@ -449,6 +476,7 @@ impl PercentFormatIntegerConstructor for u32 {
     }
 }
 
+// FIXME `functions in traits cannot be const` (rustc 1.64.0)
 // rustdoc-stripper-ignore-next
 /// `Percent` formatted value from float constructor trait.
 pub trait PercentFormatFloatConstructor {

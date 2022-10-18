@@ -14,6 +14,7 @@ impl Undefined {
     pub const ONE: Undefined = Undefined(1);
 }
 
+// FIXME `functions in traits cannot be const` (rustc 1.64.0)
 // rustdoc-stripper-ignore-next
 /// `Undefined` formatted value constructor trait.
 pub trait UndefinedFormatConstructor {

@@ -28,8 +28,12 @@ impl Other {
     /// Panics if the provided quantity equals `u64::MAX`,
     /// which is reserved for `None` in C.
     #[track_caller]
-    pub fn from_u64(quantity: u64) -> Self {
-        Other::try_from(quantity).expect("`Other` value out of range")
+    pub const fn from_u64(quantity: u64) -> Self {
+        if quantity == u64::MAX {
+            panic!("`Other` value out of range");
+        }
+
+        Other(quantity)
     }
 
     // rustdoc-stripper-ignore-next
@@ -41,6 +45,7 @@ impl Other {
     /// which is reserved for `None` in C.
     #[track_caller]
     pub fn from_usize(quantity: usize) -> Self {
+        // FIXME can't use `try_into` in `const` (rustc 1.64.0)
         Other::from_u64(quantity.try_into().unwrap())
     }
 }
@@ -67,6 +72,7 @@ impl TryFromGlib<i64> for Other {
     }
 }
 
+// FIXME `functions in traits cannot be const` (rustc 1.64.0)
 // rustdoc-stripper-ignore-next
 /// `Other` formatted value constructor trait.
 pub trait OtherFormatConstructor {
