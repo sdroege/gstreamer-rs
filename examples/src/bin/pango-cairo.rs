@@ -25,10 +25,6 @@ use derive_more::{Display, Error};
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Missing element {}", _0)]
-struct MissingElement(#[error(not(source))] &'static str);
-
-#[derive(Debug, Display, Error)]
 #[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
 struct ErrorMessage {
     src: String,
@@ -61,19 +57,12 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     gst::init()?;
 
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("videotestsrc", None)
-        .map_err(|_| MissingElement("videotestsrc"))?;
-    let overlay = gst::ElementFactory::make("cairooverlay", None)
-        .map_err(|_| MissingElement("cairooverlay"))?;
-    let capsfilter =
-        gst::ElementFactory::make("capsfilter", None).map_err(|_| MissingElement("capsfilter"))?;
-    let videoconvert = gst::ElementFactory::make("videoconvert", None)
-        .map_err(|_| MissingElement("videoconvert"))?;
-    let sink = gst::ElementFactory::make("autovideosink", None)
-        .map_err(|_| MissingElement("autovideosink"))?;
-
-    pipeline.add_many(&[&src, &overlay, &capsfilter, &videoconvert, &sink])?;
-    gst::Element::link_many(&[&src, &overlay, &capsfilter, &videoconvert, &sink])?;
+    let src = gst::ElementFactory::make("videotestsrc")
+        // The videotestsrc supports multiple test patterns. In this example, we will use the
+        // pattern with a white ball moving around the video's center point.
+        .property_from_str("pattern", "ball")
+        .build()?;
+    let overlay = gst::ElementFactory::make("cairooverlay").build()?;
 
     // Plug in a capsfilter element that will force the videotestsrc and the cairooverlay to work
     // with images of the size 800x800.
@@ -81,11 +70,15 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
         .width(800)
         .height(800)
         .build();
-    capsfilter.set_property("caps", &caps);
+    let capsfilter = gst::ElementFactory::make("capsfilter")
+        .property("caps", &caps)
+        .build()?;
 
-    // The videotestsrc supports multiple test patterns. In this example, we will use the
-    // pattern with a white ball moving around the video's center point.
-    src.set_property_from_str("pattern", "ball");
+    let videoconvert = gst::ElementFactory::make("videoconvert").build()?;
+    let sink = gst::ElementFactory::make("autovideosink").build()?;
+
+    pipeline.add_many(&[&src, &overlay, &capsfilter, &videoconvert, &sink])?;
+    gst::Element::link_many(&[&src, &overlay, &capsfilter, &videoconvert, &sink])?;
 
     // The PangoFontMap represents the set of fonts available for a particular rendering system.
     let fontmap = pangocairo::FontMap::new();

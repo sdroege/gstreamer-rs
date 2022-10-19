@@ -7,14 +7,27 @@ fn tutorial_main() {
     // Initialize GStreamer
     gst::init().unwrap();
 
+    let uri =
+        "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
+
     // Create the elements
-    let source = gst::ElementFactory::make("uridecodebin", Some("source"))
+    let source = gst::ElementFactory::make("uridecodebin")
+        .name("source")
+        // Set the URI to play
+        .property("uri", uri)
+        .build()
         .expect("Could not create uridecodebin element.");
-    let convert = gst::ElementFactory::make("audioconvert", Some("convert"))
+    let convert = gst::ElementFactory::make("audioconvert")
+        .name("convert")
+        .build()
         .expect("Could not create convert element.");
-    let sink = gst::ElementFactory::make("autoaudiosink", Some("sink"))
+    let sink = gst::ElementFactory::make("autoaudiosink")
+        .name("sink")
+        .build()
         .expect("Could not create sink element.");
-    let resample = gst::ElementFactory::make("audioresample", Some("resample"))
+    let resample = gst::ElementFactory::make("audioresample")
+        .name("resample")
+        .build()
         .expect("Could not create resample element.");
 
     // Create the empty pipeline
@@ -26,11 +39,6 @@ fn tutorial_main() {
         .add_many(&[&source, &convert, &resample, &sink])
         .unwrap();
     gst::Element::link_many(&[&convert, &resample, &sink]).expect("Elements could not be linked.");
-
-    // Set the URI to play
-    let uri =
-        "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
-    source.set_property("uri", uri);
 
     // Connect the pad-added signal
     source.connect_pad_added(move |src, src_pad| {

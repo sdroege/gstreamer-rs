@@ -246,10 +246,20 @@ mod tests {
         crate::init().unwrap();
 
         let bin = crate::Bin::new(None);
-        bin.add(&crate::ElementFactory::make("identity", Some("identity0")).unwrap())
-            .unwrap();
-        bin.add(&crate::ElementFactory::make("identity", Some("identity1")).unwrap())
-            .unwrap();
+        bin.add(
+            &crate::ElementFactory::make("identity")
+                .name("identity0")
+                .build()
+                .unwrap(),
+        )
+        .unwrap();
+        bin.add(
+            &crate::ElementFactory::make("identity")
+                .name("identity1")
+                .build()
+                .unwrap(),
+        )
+        .unwrap();
 
         let mut child_names = bin
             .children()

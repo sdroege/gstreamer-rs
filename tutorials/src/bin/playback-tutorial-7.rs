@@ -14,11 +14,17 @@ fn tutorial_main() -> Result<(), Error> {
         "playbin uri=https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm")?;
 
     // Create elements that go inside the sink bin
-    let equalizer = gst::ElementFactory::make("equalizer-3bands", Some("equalizer"))
+    let equalizer = gst::ElementFactory::make("equalizer-3bands")
+        .name("equalizer")
+        .build()
         .expect("Could not create equalizer element.");
-    let convert = gst::ElementFactory::make("audioconvert", Some("convert"))
+    let convert = gst::ElementFactory::make("audioconvert")
+        .name("convert")
+        .build()
         .expect("Could not create audioconvert element.");
-    let sink = gst::ElementFactory::make("autoaudiosink", Some("audio_sink"))
+    let sink = gst::ElementFactory::make("autoaudiosink")
+        .name("audio_sink")
+        .build()
         .expect("Could not create autoaudiosink element.");
 
     // Create the sink bin, add the elements and link them

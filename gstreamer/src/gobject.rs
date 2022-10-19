@@ -21,11 +21,25 @@ impl<O: IsA<glib::Object>> GObjectExtManualGst for O {
             } else {
                 #[cfg(feature = "v1_20")]
                 {
-                    glib::Value::deserialize_with_pspec(value, &pspec).unwrap()
+                    glib::Value::deserialize_with_pspec(value, &pspec).unwrap_or_else(|_| {
+                        panic!(
+                            "property '{}' of type '{}' can't be set from string '{}'",
+                            name,
+                            self.type_(),
+                            value,
+                        )
+                    })
                 }
                 #[cfg(not(feature = "v1_20"))]
                 {
-                    glib::Value::deserialize(value, pspec.value_type()).unwrap()
+                    glib::Value::deserialize(value, pspec.value_type()).unwrap_or_else(|_| {
+                        panic!(
+                            "property '{}' of type '{}' can't be set from string '{}'",
+                            name,
+                            self.type_(),
+                            value,
+                        )
+                    })
                 }
             }
         };
@@ -42,7 +56,7 @@ mod tests {
     fn test_set_property_from_str() {
         crate::init().unwrap();
 
-        let fakesink = crate::ElementFactory::make("fakesink", None).unwrap();
+        let fakesink = crate::ElementFactory::make("fakesink").build().unwrap();
         fakesink.set_property_from_str("state-error", "ready-to-paused");
         let v = fakesink.property_value("state-error");
         let (_klass, e) = glib::EnumValue::from_value(&v).unwrap();

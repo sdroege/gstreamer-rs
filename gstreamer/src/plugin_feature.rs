@@ -55,6 +55,6 @@ mod tests {
         let factory = crate::ElementFactory::find("identity").unwrap();
         let loaded = factory.load().unwrap();
         assert_eq!(factory.type_(), loaded.type_());
-        let _element = loaded.create(None).unwrap();
+        let _element = loaded.create().build().unwrap();
     }
 }

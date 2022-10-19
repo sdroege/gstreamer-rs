@@ -232,10 +232,6 @@ mod fir_filter {
 }
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Missing element {}", _0)]
-struct MissingElement(#[error(not(source))] &'static str);
-
-#[derive(Debug, Display, Error)]
 #[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
 struct ErrorMessage {
     src: String,
@@ -249,20 +245,17 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
     // Create our pipeline with the custom element
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("audiotestsrc", None)
-        .map_err(|_| MissingElement("audiotestsrc"))?;
+    let src = gst::ElementFactory::make("audiotestsrc")
+        .property_from_str("wave", "white-noise")
+        .build()?;
     let filter = fir_filter::FirFilter::new(None);
-    let conv = gst::ElementFactory::make("audioconvert", None)
-        .map_err(|_| MissingElement("audioconvert"))?;
-    let sink = gst::ElementFactory::make("autoaudiosink", None)
-        .map_err(|_| MissingElement("autoaudiosink"))?;
+    let conv = gst::ElementFactory::make("audioconvert").build()?;
+    let sink = gst::ElementFactory::make("autoaudiosink").build()?;
 
     pipeline.add_many(&[&src, filter.upcast_ref(), &conv, &sink])?;
     src.link(&filter)?;
     filter.link(&conv)?;
     conv.link(&sink)?;
-
-    src.set_property_from_str("wave", "white-noise");
 
     // Create a windowed sinc lowpass filter at 1/64 sample rate,
     // i.e. 689Hz for 44.1kHz sample rate

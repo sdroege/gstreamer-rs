@@ -29,10 +29,6 @@ use derive_more::{Display, Error};
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Missing element {}", _0)]
-struct MissingElement(#[error(not(source))] &'static str);
-
-#[derive(Debug, Display, Error)]
 #[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
 struct ErrorMessage {
     src: String,
@@ -59,20 +55,18 @@ fn example_main() -> Result<(), Error> {
     let pipeline = gst::Pipeline::new(None);
     let src = gst::Element::make_from_uri(gst::URIType::Src, uri, None)
         .expect("We do not seem to support this uri");
-    let typefinder =
-        gst::ElementFactory::make("typefind", None).map_err(|_| MissingElement("typefind"))?;
-    let queue =
-        gst::ElementFactory::make("multiqueue", None).map_err(|_| MissingElement("multiqueue"))?;
-    let muxer = gst::ElementFactory::make("matroskamux", None)
-        .map_err(|_| MissingElement("matroskamux"))?;
-    let sink =
-        gst::ElementFactory::make("filesink", None).map_err(|_| MissingElement("filesink"))?;
+    let typefinder = gst::ElementFactory::make("typefind").build()?;
+    let queue = gst::ElementFactory::make("multiqueue")
+        .property("max-size-buffers", 0u32)
+        .property("max-size-time", 0u64)
+        .property("max-size-bytes", 1024u32 * 1024 * 100)
+        .build()?;
+    let muxer = gst::ElementFactory::make("matroskamux").build()?;
+    let sink = gst::ElementFactory::make("filesink")
+        .property("location", output_file)
+        .build()?;
 
-    sink.set_property("location", output_file);
     // Increase the queue capacity to 100MB to avoid a stalling pipeline
-    queue.set_property("max-size-buffers", 0u32);
-    queue.set_property("max-size-time", 0u64);
-    queue.set_property("max-size-bytes", 1024u32 * 1024 * 100);
 
     pipeline
         .add_many(&[&src, &typefinder, &queue, &muxer, &sink])
@@ -96,12 +90,12 @@ fn example_main() -> Result<(), Error> {
         let format_name = caps.structure(0).expect("Failed to get format name").name();
 
         let demuxer = match format_name {
-            "video/x-matroska" | "video/webm" => {
-                gst::ElementFactory::make("matroskademux", None).expect("matroskademux missing")
-            }
-            "video/quicktime" => {
-                gst::ElementFactory::make("qtdemux", None).expect("qtdemux missing")
-            }
+            "video/x-matroska" | "video/webm" => gst::ElementFactory::make("matroskademux")
+                .build()
+                .expect("matroskademux missing"),
+            "video/quicktime" => gst::ElementFactory::make("qtdemux")
+                .build()
+                .expect("qtdemux missing"),
             _ => {
                 eprintln!("Sorry, this format is not supported by this example.");
                 std::process::exit(-1);

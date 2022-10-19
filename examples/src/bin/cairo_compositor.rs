@@ -567,12 +567,17 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
     // Create our pipeline with the compositor and two input streams.
     let pipeline = gst::Pipeline::new(None);
-    let src1 = gst::ElementFactory::make("videotestsrc", None).context("Creating videotestsrc")?;
-    let src2 = gst::ElementFactory::make("videotestsrc", None).context("Creating videotestsrc")?;
+    let src1 = gst::ElementFactory::make("videotestsrc")
+        .property_from_str("pattern", "ball")
+        .build()?;
+    let src2 = gst::ElementFactory::make("videotestsrc")
+        .property_from_str("pattern", "smpte")
+        .build()?;
     let comp = cairo_compositor::CairoCompositor::new(None);
-    let conv = gst::ElementFactory::make("videoconvert", None).context("Creating videoconvert")?;
-    let sink =
-        gst::ElementFactory::make("autovideosink", None).context("Creating autovideosink")?;
+    let conv = gst::ElementFactory::make("videoconvert").build()?;
+    let sink = gst::ElementFactory::make("autovideosink").build()?;
+
+    comp.set_property("background-color", 0xff_33_33_33u32);
 
     pipeline.add_many(&[&src1, &src2, comp.upcast_ref(), &conv, &sink])?;
 
@@ -602,11 +607,6 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     )
     .context("Linking converter")?;
     conv.link(&sink).context("Linking sink")?;
-
-    src1.set_property_from_str("pattern", "ball");
-    src2.set_property_from_str("pattern", "smpte");
-
-    comp.set_property("background-color", 0xff_33_33_33u32);
 
     // Change positions etc of both inputs based on a timer
     let xmax = 1280.0 - 320.0f64;

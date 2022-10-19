@@ -19,8 +19,10 @@ fn tutorial_main() -> Result<(), Error> {
     // Build the pipeline
     let uri =
         "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
-    let pipeline = gst::ElementFactory::make("playbin", None)?;
-    pipeline.set_property("uri", uri);
+    let pipeline = gst::ElementFactory::make("playbin")
+        .name("playbin")
+        .property("uri", uri)
+        .build()?;
 
     // Set the download flag
     let flags = pipeline.property_value("flags");

@@ -27,10 +27,6 @@ use derive_more::{Display, Error};
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Missing element {}", _0)]
-struct MissingElement(#[error(not(source))] &'static str);
-
-#[derive(Debug, Display, Error)]
 #[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
 struct ErrorMessage {
     src: String,
@@ -90,15 +86,13 @@ fn example_main() -> Result<(), Error> {
     };
 
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("uridecodebin", None)
-        .map_err(|_| MissingElement("uridecodebin"))?;
-    let encodebin =
-        gst::ElementFactory::make("encodebin", None).map_err(|_| MissingElement("encodebin"))?;
-    let sink =
-        gst::ElementFactory::make("filesink", None).map_err(|_| MissingElement("filesink"))?;
-
-    src.set_property("uri", uri);
-    sink.set_property("location", output_file);
+    let src = gst::ElementFactory::make("uridecodebin")
+        .property("uri", uri)
+        .build()?;
+    let encodebin = gst::ElementFactory::make("encodebin").build()?;
+    let sink = gst::ElementFactory::make("filesink")
+        .property("location", output_file)
+        .build()?;
 
     // Configure the encodebin.
     // Here we tell the bin what format we expect it to create at its output.
@@ -157,12 +151,9 @@ fn example_main() -> Result<(), Error> {
 
         let link_to_encodebin = |is_audio, is_video| -> Result<(), Error> {
             if is_audio {
-                let queue = gst::ElementFactory::make("queue", None)
-                    .map_err(|_| MissingElement("queue"))?;
-                let convert = gst::ElementFactory::make("audioconvert", None)
-                    .map_err(|_| MissingElement("audioconvert"))?;
-                let resample = gst::ElementFactory::make("audioresample", None)
-                    .map_err(|_| MissingElement("audioresample"))?;
+                let queue = gst::ElementFactory::make("queue").build()?;
+                let convert = gst::ElementFactory::make("audioconvert").build()?;
+                let resample = gst::ElementFactory::make("audioresample").build()?;
 
                 let elements = &[&queue, &convert, &resample];
                 pipeline
@@ -188,12 +179,9 @@ fn example_main() -> Result<(), Error> {
                 let sink_pad = queue.static_pad("sink").expect("queue has no sinkpad");
                 dbin_src_pad.link(&sink_pad)?;
             } else if is_video {
-                let queue = gst::ElementFactory::make("queue", None)
-                    .map_err(|_| MissingElement("queue"))?;
-                let convert = gst::ElementFactory::make("videoconvert", None)
-                    .map_err(|_| MissingElement("videoconvert"))?;
-                let scale = gst::ElementFactory::make("videoscale", None)
-                    .map_err(|_| MissingElement("videoscale"))?;
+                let queue = gst::ElementFactory::make("queue").build()?;
+                let convert = gst::ElementFactory::make("videoconvert").build()?;
+                let scale = gst::ElementFactory::make("videoscale").build()?;
 
                 let elements = &[&queue, &convert, &scale];
                 pipeline

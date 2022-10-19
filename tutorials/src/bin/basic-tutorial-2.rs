@@ -8,9 +8,14 @@ fn tutorial_main() {
     gst::init().unwrap();
 
     // Create the elements
-    let source = gst::ElementFactory::make("videotestsrc", Some("source"))
+    let source = gst::ElementFactory::make("videotestsrc")
+        .name("source")
+        .property_from_str("pattern", "smpte")
+        .build()
         .expect("Could not create source element.");
-    let sink = gst::ElementFactory::make("autovideosink", Some("sink"))
+    let sink = gst::ElementFactory::make("autovideosink")
+        .name("sink")
+        .build()
         .expect("Could not create sink element");
 
     // Create the empty pipeline
@@ -19,9 +24,6 @@ fn tutorial_main() {
     // Build the pipeline
     pipeline.add_many(&[&source, &sink]).unwrap();
     source.link(&sink).expect("Elements could not be linked.");
-
-    // Modify the source's properties
-    source.set_property_from_str("pattern", "smpte");
 
     // Start playing
     pipeline

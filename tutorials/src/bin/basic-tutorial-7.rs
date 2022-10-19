@@ -10,23 +10,51 @@ fn tutorial_main() {
         return;
     }
 
-    let audio_source = gst::ElementFactory::make("audiotestsrc", Some("audio_source")).unwrap();
-    let tee = gst::ElementFactory::make("tee", Some("tee")).unwrap();
-    let audio_queue = gst::ElementFactory::make("queue", Some("audio_queue")).unwrap();
-    let audio_convert = gst::ElementFactory::make("audioconvert", Some("audio_convert")).unwrap();
-    let audio_resample =
-        gst::ElementFactory::make("audioresample", Some("audio_resample")).unwrap();
-    let audio_sink = gst::ElementFactory::make("autoaudiosink", Some("audio_sink")).unwrap();
-    let video_queue = gst::ElementFactory::make("queue", Some("video_queue")).unwrap();
-    let visual = gst::ElementFactory::make("wavescope", Some("visual")).unwrap();
-    let video_convert = gst::ElementFactory::make("videoconvert", Some("video_convert")).unwrap();
-    let video_sink = gst::ElementFactory::make("autovideosink", Some("video_sink")).unwrap();
+    let audio_source = gst::ElementFactory::make("audiotestsrc")
+        .name("audio_source")
+        .property("freq", 215.0)
+        .build()
+        .unwrap();
+    let tee = gst::ElementFactory::make("tee")
+        .name("tee")
+        .build()
+        .unwrap();
+    let audio_queue = gst::ElementFactory::make("queue")
+        .name("audio_queue")
+        .build()
+        .unwrap();
+    let audio_convert = gst::ElementFactory::make("audioconvert")
+        .name("audio_convert")
+        .build()
+        .unwrap();
+    let audio_resample = gst::ElementFactory::make("audioresample")
+        .name("audio_resample")
+        .build()
+        .unwrap();
+    let audio_sink = gst::ElementFactory::make("autoaudiosink")
+        .name("audio_sink")
+        .build()
+        .unwrap();
+    let video_queue = gst::ElementFactory::make("queue")
+        .name("video_queue")
+        .build()
+        .unwrap();
+    let visual = gst::ElementFactory::make("wavescope")
+        .name("visual")
+        .property_from_str("shader", "none")
+        .property_from_str("style", "lines")
+        .build()
+        .unwrap();
+    let video_convert = gst::ElementFactory::make("videoconvert")
+        .name("video_convert")
+        .build()
+        .unwrap();
+    let video_sink = gst::ElementFactory::make("autovideosink")
+        .name("video_sink")
+        .build()
+        .unwrap();
 
     let pipeline = gst::Pipeline::new(Some("test-pipeline"));
-
-    audio_source.set_property("freq", 215.0);
-    visual.set_property_from_str("shader", "none");
-    visual.set_property_from_str("style", "lines");
 
     pipeline
         .add_many(&[

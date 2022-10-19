@@ -1006,10 +1006,11 @@ mod tests {
     fn test_app_sink_stream() {
         gst::init().unwrap();
 
-        let videotestsrc = gst::ElementFactory::make("videotestsrc", None).unwrap();
-        let appsink = gst::ElementFactory::make("appsink", None).unwrap();
-
-        videotestsrc.set_property("num-buffers", 5);
+        let videotestsrc = gst::ElementFactory::make("videotestsrc")
+            .property("num-buffers", 5)
+            .build()
+            .unwrap();
+        let appsink = gst::ElementFactory::make("appsink").build().unwrap();
 
         let pipeline = gst::Pipeline::new(None);
         pipeline.add(&videotestsrc).unwrap();

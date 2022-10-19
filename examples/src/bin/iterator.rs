@@ -13,7 +13,7 @@ fn example_main() {
     // Create and use an identity element here.
     // This element does nothing, really. We also never add it to a pipeline.
     // We just want to iterate the identity element's pads.
-    let identity = gst::ElementFactory::make("identity", None).unwrap();
+    let identity = gst::ElementFactory::make("identity").build().unwrap();
     // Get an iterator over all pads of the identity-element.
     let mut iter = identity.iterate_pads();
     loop {

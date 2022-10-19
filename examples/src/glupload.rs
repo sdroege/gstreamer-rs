@@ -17,10 +17,6 @@ use anyhow::Error;
 use derive_more::{Display, Error};
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Missing element {}", _0)]
-struct MissingElement(#[error(not(source))] &'static str);
-
-#[derive(Debug, Display, Error)]
 #[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
 struct ErrorMessage {
     src: String,
@@ -535,18 +531,15 @@ impl App {
         gl_element: Option<&gst::Element>,
     ) -> Result<(gst::Pipeline, gst_app::AppSink, gst::Element), Error> {
         let pipeline = gst::Pipeline::new(None);
-        let src = gst::ElementFactory::make("videotestsrc", None)
-            .map_err(|_| MissingElement("videotestsrc"))?;
+        let src = gst::ElementFactory::make("videotestsrc").build()?;
 
-        let appsink = gst::ElementFactory::make("appsink", None)
-            .map_err(|_| MissingElement("appsink"))?
+        let appsink = gst::ElementFactory::make("appsink")
+            .build()?
             .dynamic_cast::<gst_app::AppSink>()
             .expect("Sink element is expected to be an appsink!");
 
-        appsink.set_property("enable-last-sample", false);
-        appsink.set_property("emit-signals", false);
-        appsink.set_property("max-buffers", 1u32);
-
+        appsink.set_enable_last_sample(true);
+        appsink.set_max_buffers(1);
         let caps = gst_video::VideoCapsBuilder::new()
             .features(&[&gst_gl::CAPS_FEATURE_MEMORY_GL_MEMORY])
             .format(gst_video::VideoFormat::Rgba)
@@ -555,8 +548,7 @@ impl App {
         appsink.set_caps(Some(&caps));
 
         if let Some(gl_element) = gl_element {
-            let glupload = gst::ElementFactory::make("glupload", None)
-                .map_err(|_| MissingElement("glupload"))?;
+            let glupload = gst::ElementFactory::make("glupload").build()?;
 
             pipeline.add_many(&[&src, &glupload])?;
             pipeline.add(gl_element)?;
@@ -568,10 +560,9 @@ impl App {
 
             Ok((pipeline, appsink, glupload))
         } else {
-            let sink = gst::ElementFactory::make("glsinkbin", None)
-                .map_err(|_| MissingElement("glsinkbin"))?;
-
-            sink.set_property("sink", &appsink);
+            let sink = gst::ElementFactory::make("glsinkbin")
+                .property("sink", &appsink)
+                .build()?;
 
             pipeline.add_many(&[&src, &sink])?;
             src.link(&sink)?;

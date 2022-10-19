@@ -10,10 +10,6 @@ use anyhow::Error;
 use derive_more::{Display, Error};
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Missing element {}", _0)]
-struct MissingElement(#[error(not(source))] &'static str);
-
-#[derive(Debug, Display, Error)]
 #[display(fmt = "No such pad {} in {}", _0, _1)]
 struct NoSuchPad(#[error(not(source))] &'static str, String);
 
@@ -34,17 +30,6 @@ struct ErrorMessage {
     source: glib::Error,
 }
 
-fn make_element(
-    factory_name: &'static str,
-    element_name: Option<&str>,
-) -> Result<gst::Element, Error> {
-    match gst::ElementFactory::make(factory_name, element_name) {
-        Ok(elem) => Ok(elem),
-        Err(_) => Err(Error::from(MissingElement(factory_name))),
-    }
-}
-
-#[doc(alias = "get_static_pad")]
 fn static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
     match element.static_pad(pad_name) {
         Some(pad) => Ok(pad),
@@ -55,7 +40,6 @@ fn static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad
     }
 }
 
-#[doc(alias = "get_request_pad")]
 fn request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
     match element.request_pad_simple(pad_name) {
         Some(pad) => Ok(pad),
@@ -83,11 +67,11 @@ fn connect_rtpbin_srcpad(src_pad: &gst::Pad, sink: &gst::Element) -> Result<(), 
 }
 
 fn make_fec_decoder(rtpbin: &gst::Element, sess_id: u32) -> Result<gst::Element, Error> {
-    let fecdec = make_element("rtpulpfecdec", None)?;
     let internal_storage = rtpbin.emit_by_name::<glib::Object>("get-internal-storage", &[&sess_id]);
-
-    fecdec.set_property("storage", &internal_storage);
-    fecdec.set_property("pt", 100u32);
+    let fecdec = gst::ElementFactory::make("rtpulpfecdec")
+        .property("storage", &internal_storage)
+        .property("pt", 100u32)
+        .build()?;
 
     Ok(fecdec)
 }
@@ -104,33 +88,54 @@ fn example_main() -> Result<(), Error> {
     let drop_probability = args[2].parse::<f32>()?;
 
     let pipeline = gst::Pipeline::new(None);
-    let src = make_element("udpsrc", None)?;
-    let netsim = make_element("netsim", None)?;
-    let rtpbin = make_element("rtpbin", None)?;
-    let depay = make_element("rtpvp8depay", None)?;
-    let dec = make_element("vp8dec", None)?;
-    let conv = make_element("videoconvert", None)?;
-    let scale = make_element("videoscale", None)?;
-    let filter = make_element("capsfilter", None)?;
+
+    let rtp_caps = gst::Caps::builder("application/x-rtp")
+        .field("clock-rate", 90000i32)
+        .build();
+
+    let video_caps = gst_video::VideoCapsBuilder::new()
+        .width(1920)
+        .height(1080)
+        .build();
+
+    let src = gst::ElementFactory::make("udpsrc")
+        .property("address", "127.0.0.1")
+        .property("caps", &rtp_caps)
+        .build()?;
+    let netsim = gst::ElementFactory::make("netsim")
+        .property("drop-probability", drop_probability)
+        .build()?;
+    let rtpbin = gst::ElementFactory::make("rtpbin")
+        .property("do-lost", true)
+        .build()?;
+    let depay = gst::ElementFactory::make("rtpvp8depay").build()?;
+    let dec = gst::ElementFactory::make("vp8dec").build()?;
+    let conv = gst::ElementFactory::make("videoconvert").build()?;
+    let scale = gst::ElementFactory::make("videoscale").build()?;
+    let filter = gst::ElementFactory::make("capsfilter")
+        .property("caps", &video_caps)
+        .build()?;
 
     pipeline.add_many(&[&src, &netsim, &rtpbin, &depay, &dec, &conv, &scale, &filter])?;
     gst::Element::link_many(&[&depay, &dec, &conv, &scale, &filter])?;
 
     match args[1].as_str() {
         "play" => {
-            let sink = make_element("autovideosink", None)?;
+            let sink = gst::ElementFactory::make("autovideosink").build()?;
             pipeline.add(&sink)?;
             filter.link(&sink)?;
         }
         "record" => {
-            let enc = make_element("x264enc", None)?;
-            let mux = make_element("matroskamux", None)?;
-            let sink = make_element("filesink", None)?;
+            let enc = gst::ElementFactory::make("x264enc")
+                .property_from_str("tune", "zerolatency")
+                .build()?;
+            let mux = gst::ElementFactory::make("matroskamux").build()?;
+            let sink = gst::ElementFactory::make("filesink")
+                .property("location", "out.mkv")
+                .build()?;
 
             pipeline.add_many(&[&enc, &mux, &sink])?;
             gst::Element::link_many(&[&filter, &enc, &mux, &sink])?;
-            sink.set_property("location", "out.mkv");
-            enc.set_property_from_str("tune", "zerolatency");
             eprintln!("Recording to out.mkv");
         }
         _ => return Err(Error::from(UsageError(args[0].clone()))),
@@ -217,21 +222,6 @@ fn example_main() -> Result<(), Error> {
             }
         }
     });
-
-    let rtp_caps = gst::Caps::builder("application/x-rtp")
-        .field("clock-rate", 90000i32)
-        .build();
-
-    let video_caps = gst_video::VideoCapsBuilder::new()
-        .width(1920)
-        .height(1080)
-        .build();
-
-    src.set_property("address", "127.0.0.1");
-    src.set_property("caps", &rtp_caps);
-    netsim.set_property("drop-probability", drop_probability);
-    rtpbin.set_property("do-lost", true);
-    filter.set_property("caps", &video_caps);
 
     let bus = pipeline
         .bus()

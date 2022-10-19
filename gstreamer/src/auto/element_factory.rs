@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use crate::Caps;
-use crate::Element;
 use crate::Object;
 use crate::PluginFeature;
 use crate::URIType;
@@ -57,17 +56,6 @@ impl ElementFactory {
                 self.to_glib_none().0,
                 caps.to_glib_none().0,
             ))
-        }
-    }
-
-    #[doc(alias = "gst_element_factory_create")]
-    pub fn create(&self, name: Option<&str>) -> Result<Element, glib::BoolError> {
-        unsafe {
-            Option::<_>::from_glib_none(ffi::gst_element_factory_create(
-                self.to_glib_none().0,
-                name.to_glib_none().0,
-            ))
-            .ok_or_else(|| glib::bool_error!("Failed to create element from factory"))
         }
     }
 
@@ -139,18 +127,6 @@ impl ElementFactory {
     pub fn find(name: &str) -> Option<ElementFactory> {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_element_factory_find(name.to_glib_none().0)) }
-    }
-
-    #[doc(alias = "gst_element_factory_make")]
-    pub fn make(factoryname: &str, name: Option<&str>) -> Result<Element, glib::BoolError> {
-        assert_initialized_main_thread!();
-        unsafe {
-            Option::<_>::from_glib_none(ffi::gst_element_factory_make(
-                factoryname.to_glib_none().0,
-                name.to_glib_none().0,
-            ))
-            .ok_or_else(|| glib::bool_error!("Failed to create element from factory name"))
-        }
     }
 }
 

@@ -10,10 +10,6 @@ use anyhow::Error;
 use derive_more::{Display, Error};
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Missing element {}", _0)]
-struct MissingElement(#[error(not(source))] &'static str);
-
-#[derive(Debug, Display, Error)]
 #[display(fmt = "No such pad {} in {}", _0, _1)]
 struct NoSuchPad(&'static str, String);
 
@@ -30,17 +26,6 @@ struct ErrorMessage {
     source: glib::Error,
 }
 
-fn make_element(
-    factory_name: &'static str,
-    element_name: Option<&str>,
-) -> Result<gst::Element, Error> {
-    match gst::ElementFactory::make(factory_name, element_name) {
-        Ok(elem) => Ok(elem),
-        Err(_) => Err(Error::from(MissingElement(factory_name))),
-    }
-}
-
-#[doc(alias = "get_static_pad")]
 fn static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
     match element.static_pad(pad_name) {
         Some(pad) => Ok(pad),
@@ -51,7 +36,6 @@ fn static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad
     }
 }
 
-#[doc(alias = "get_request_pad")]
 fn request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
     match element.request_pad_simple(pad_name) {
         Some(pad) => Ok(pad),
@@ -70,11 +54,11 @@ fn connect_decodebin_pad(src_pad: &gst::Pad, sink: &gst::Element) -> Result<(), 
 }
 
 fn make_fec_encoder(fec_percentage: u32) -> Result<gst::Element, Error> {
-    let fecenc = make_element("rtpulpfecenc", None)?;
-
-    fecenc.set_property("pt", 100u32);
-    fecenc.set_property("multipacket", true);
-    fecenc.set_property("percentage", fec_percentage);
+    let fecenc = gst::ElementFactory::make("rtpulpfecenc")
+        .property("pt", 100u32)
+        .property("multipacket", true)
+        .property("percentage", fec_percentage)
+        .build()?;
 
     Ok(fecenc)
 }
@@ -91,15 +75,31 @@ fn example_main() -> Result<(), Error> {
     let uri = &args[1];
     let fec_percentage = args[2].parse::<u32>()?;
 
+    let video_caps = gst::Caps::builder("video/x-raw").build();
+
     let pipeline = gst::Pipeline::new(None);
-    let src = make_element("uridecodebin", None)?;
-    let conv = make_element("videoconvert", None)?;
-    let q1 = make_element("queue", None)?;
-    let enc = make_element("vp8enc", None)?;
-    let q2 = make_element("queue", None)?;
-    let pay = make_element("rtpvp8pay", None)?;
-    let rtpbin = make_element("rtpbin", None)?;
-    let sink = make_element("udpsink", None)?;
+    let src = gst::ElementFactory::make("uridecodebin")
+        .property_from_str("pattern", "ball")
+        .property("expose-all-streams", false)
+        .property("caps", video_caps)
+        .property("uri", uri)
+        .build()?;
+    let conv = gst::ElementFactory::make("videoconvert").build()?;
+    let q1 = gst::ElementFactory::make("queue").build()?;
+    let enc = gst::ElementFactory::make("vp8enc")
+        .property("keyframe-max-dist", 30i32)
+        .property("threads", 12i32)
+        .property("cpu-used", -16i32)
+        .property("deadline", 1i64)
+        .property_from_str("error-resilient", "default")
+        .build()?;
+    let q2 = gst::ElementFactory::make("queue").build()?;
+    let pay = gst::ElementFactory::make("rtpvp8pay").build()?;
+    let rtpbin = gst::ElementFactory::make("rtpbin").build()?;
+    let sink = gst::ElementFactory::make("udpsink")
+        .property("host", "127.0.0.1")
+        .property("sync", true)
+        .build()?;
 
     pipeline.add_many(&[&src, &conv, &q1, &enc, &q2, &pay, &rtpbin, &sink])?;
 
@@ -148,20 +148,6 @@ fn example_main() -> Result<(), Error> {
             }
         },
     );
-
-    let video_caps = gst::Caps::builder("video/x-raw").build();
-
-    src.set_property_from_str("pattern", "ball");
-    sink.set_property("host", "127.0.0.1");
-    sink.set_property("sync", true);
-    enc.set_property("keyframe-max-dist", 30i32);
-    enc.set_property("threads", 12i32);
-    enc.set_property("cpu-used", -16i32);
-    enc.set_property("deadline", 1i64);
-    enc.set_property_from_str("error-resilient", "default");
-    src.set_property("expose-all-streams", false);
-    src.set_property("caps", video_caps);
-    src.set_property("uri", uri);
 
     let bus = pipeline
         .bus()

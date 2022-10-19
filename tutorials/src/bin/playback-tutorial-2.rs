@@ -109,19 +109,20 @@ fn tutorial_main() -> Result<(), Error> {
     // Initialize GStreamer
     gst::init()?;
 
-    // Create PlayBin element
-    let playbin = gst::ElementFactory::make("playbin", Some("playbin"))?;
-
-    // Set URI to play
     let uri =
         "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.ogv";
-    playbin.set_property("uri", uri);
-
-    // Set the subtitle URI and font description
     let subtitle_uri =
         "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer_gr.srt";
-    playbin.set_property("suburi", subtitle_uri);
-    playbin.set_property("subtitle-font-desc", "Sans, 18");
+
+    // Create PlayBin element
+    let playbin = gst::ElementFactory::make("playbin")
+        .name("playbin")
+        // Set URI to play
+        .property("uri", uri)
+        // Set the subtitle URI and font description
+        .property("suburi", subtitle_uri)
+        .property("subtitle-font-desc", "Sans, 18")
+        .build()?;
 
     // Set flags to show Audio, Video and Subtitles
     let flags = playbin.property_value("flags");

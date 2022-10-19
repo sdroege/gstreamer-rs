@@ -301,8 +301,10 @@ mod tutorial5 {
 
         let uri = "https://www.freedesktop.org/software/gstreamer-sdk/\
                    data/media/sintel_trailer-480p.webm";
-        let playbin = gst::ElementFactory::make("playbin", None).unwrap();
-        playbin.set_property("uri", uri);
+        let playbin = gst::ElementFactory::make("playbin")
+            .property("uri", uri)
+            .build()
+            .unwrap();
 
         playbin.connect("video-tags-changed", false, |args| {
             let pipeline = args[0]

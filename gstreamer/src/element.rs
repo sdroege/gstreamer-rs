@@ -1595,7 +1595,7 @@ mod tests {
     fn test_get_pads() {
         crate::init().unwrap();
 
-        let identity = crate::ElementFactory::make("identity", None).unwrap();
+        let identity = crate::ElementFactory::make("identity").build().unwrap();
 
         let mut pad_names = identity
             .pads()
@@ -1626,7 +1626,7 @@ mod tests {
     fn test_foreach_pad() {
         crate::init().unwrap();
 
-        let identity = crate::ElementFactory::make("identity", None).unwrap();
+        let identity = crate::ElementFactory::make("identity").build().unwrap();
 
         let mut pad_names = Vec::new();
         identity.foreach_pad(|_element, pad| {
@@ -1642,7 +1642,7 @@ mod tests {
     fn test_call_async() {
         crate::init().unwrap();
 
-        let identity = crate::ElementFactory::make("identity", None).unwrap();
+        let identity = crate::ElementFactory::make("identity").build().unwrap();
         let (sender, receiver) = channel();
 
         identity.call_async(move |_| {

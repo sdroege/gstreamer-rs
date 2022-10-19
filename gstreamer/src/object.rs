@@ -136,7 +136,10 @@ mod tests {
         crate::init().unwrap();
 
         let bin = crate::Bin::new(None);
-        let identity = crate::ElementFactory::make("identity", Some("id")).unwrap();
+        let identity = crate::ElementFactory::make("identity")
+            .name("id")
+            .build()
+            .unwrap();
         bin.add(&identity).unwrap();
 
         let notify = Arc::new(Mutex::new(None));

@@ -20,20 +20,22 @@ use std::cell::RefCell;
 
 fn create_ui(app: &gtk::Application) {
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("videotestsrc", None).unwrap();
+    let src = gst::ElementFactory::make("videotestsrc").build().unwrap();
     // Create the gtk sink and retrieve the widget from it. The sink element will be used
     // in the pipeline, and the widget will be embedded in our gui.
     // Gstreamer then displays frames in the gtk widget.
     // First, we try to use the OpenGL version - and if that fails, we fall back to non-OpenGL.
-    let (sink, widget) = if let Ok(gtkglsink) = gst::ElementFactory::make("gtkglsink", None) {
+    let (sink, widget) = if let Ok(gtkglsink) = gst::ElementFactory::make("gtkglsink").build() {
         // Using the OpenGL widget succeeded, so we are in for a nice playback experience with
         // low cpu usage. :)
         // The gtkglsink essentially allocates an OpenGL texture on the GPU, that it will display.
         // Now we create the glsinkbin element, which is responsible for conversions and for uploading
         // video frames to our texture (if they are not already in the GPU). Now we tell the OpenGL-sink
         // about our gtkglsink element, form where it will retrieve the OpenGL texture to fill.
-        let glsinkbin = gst::ElementFactory::make("glsinkbin", None).unwrap();
-        glsinkbin.set_property("sink", &gtkglsink);
+        let glsinkbin = gst::ElementFactory::make("glsinkbin")
+            .property("sink", &gtkglsink)
+            .build()
+            .unwrap();
         // The gtkglsink creates the gtk widget for us. This is accessible through a property.
         // So we get it and use it later to add it to our gui.
         let widget = gtkglsink.property::<gtk::Widget>("widget");
@@ -42,7 +44,7 @@ fn create_ui(app: &gtk::Application) {
         // Unfortunately, using the OpenGL widget didn't work out, so we will have to render
         // our frames manually, using the CPU. An example why this may fail is, when
         // the PC doesn't have proper graphics drivers installed.
-        let sink = gst::ElementFactory::make("gtksink", None).unwrap();
+        let sink = gst::ElementFactory::make("gtksink").build().unwrap();
         // The gtksink creates the gtk widget for us. This is accessible through a property.
         // So we get it and use it later to add it to our gui.
         let widget = sink.property::<gtk::Widget>("widget");

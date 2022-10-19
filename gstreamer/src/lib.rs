@@ -145,7 +145,7 @@ pub use promise::{Promise, PromiseError};
 
 pub mod bus;
 mod element;
-mod element_factory;
+pub mod element_factory;
 
 mod bin;
 

@@ -34,7 +34,7 @@ fn create_video_sink() -> gst::Element {
     // When we are on linux with the Xorg display server, we use the
     // X11 protocol's XV extension, which allows to overlay regions
     // with video streams. For this, we use the xvimagesink element.
-    gst::ElementFactory::make("xvimagesink", None).unwrap()
+    gst::ElementFactory::make("xvimagesink").build().unwrap()
 }
 #[cfg(all(target_os = "linux", feature = "gtkvideooverlay-x11"))]
 fn set_window_handle(video_overlay: &gst_video::VideoOverlay, gdk_window: &gdk::Window) {
@@ -68,7 +68,7 @@ fn set_window_handle(video_overlay: &gst_video::VideoOverlay, gdk_window: &gdk::
 fn create_video_sink() -> gst::Element {
     // On Mac, this is done by overlaying a window region with an
     // OpenGL-texture, using the glimagesink element.
-    gst::ElementFactory::make("glimagesink", None).unwrap()
+    gst::ElementFactory::make("glimagesink").build().unwrap()
 }
 
 #[cfg(all(target_os = "macos", feature = "gtkvideooverlay-quartz"))]
@@ -102,7 +102,7 @@ fn set_window_handle(video_overlay: &gst_video::VideoOverlay, gdk_window: &gdk::
 
 fn create_ui(app: &gtk::Application) {
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("videotestsrc", None).unwrap();
+    let src = gst::ElementFactory::make("videotestsrc").build().unwrap();
 
     // Since using the window system to overlay our gui window is making
     // direct contact with the windowing system, this is highly platform-

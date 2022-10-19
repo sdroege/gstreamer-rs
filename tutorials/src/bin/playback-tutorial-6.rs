@@ -43,7 +43,7 @@ fn tutorial_main() -> Result<(), Error> {
     // We have now selected a factory for the visualization element
     let name = vis_factory.longname();
     println!("Selected {}", name);
-    let vis_plugin = vis_factory.create(None).unwrap();
+    let vis_plugin = vis_factory.create().build().unwrap();
 
     // Build the pipeline
     let pipeline = gst::parse_launch("playbin uri=http://radio.hbr1.com:19800/ambient.ogg")?;

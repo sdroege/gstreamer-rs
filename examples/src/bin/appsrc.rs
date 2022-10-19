@@ -19,10 +19,6 @@ use derive_more::{Display, Error};
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Missing element {}", _0)]
-struct MissingElement(#[error(not(source))] &'static str);
-
-#[derive(Debug, Display, Error)]
 #[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
 struct ErrorMessage {
     src: String,
@@ -38,11 +34,9 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     gst::init()?;
 
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("appsrc", None).map_err(|_| MissingElement("appsrc"))?;
-    let videoconvert = gst::ElementFactory::make("videoconvert", None)
-        .map_err(|_| MissingElement("videoconvert"))?;
-    let sink = gst::ElementFactory::make("autovideosink", None)
-        .map_err(|_| MissingElement("autovideosink"))?;
+    let src = gst::ElementFactory::make("appsrc").build()?;
+    let videoconvert = gst::ElementFactory::make("videoconvert").build()?;
+    let sink = gst::ElementFactory::make("autovideosink").build()?;
 
     pipeline.add_many(&[&src, &videoconvert, &sink])?;
     gst::Element::link_many(&[&src, &videoconvert, &sink])?;

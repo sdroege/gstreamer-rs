@@ -24,14 +24,16 @@ fn tutorial_main() {
     // Initialize GStreamer
     gst::init().unwrap();
 
-    // Creat the playbin element
-    let playbin = gst::ElementFactory::make("playbin", Some("playbin"))
-        .expect("Failed to create playbin element");
-
-    // Set the URI to play
     let uri =
         "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
-    playbin.set_property("uri", uri);
+
+    // Creat the playbin element
+    let playbin = gst::ElementFactory::make("playbin")
+        .name("playbin")
+        // Set the URI to play
+        .property("uri", uri)
+        .build()
+        .expect("Failed to create playbin element");
 
     // Start playing
     playbin

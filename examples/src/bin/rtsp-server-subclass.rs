@@ -121,17 +121,22 @@ mod media_factory {
             fn create_element(&self, _url: &gst_rtsp::RTSPUrl) -> Option<gst::Element> {
                 // Create a simple VP8 videotestsrc input
                 let bin = gst::Bin::new(None);
-                let src = gst::ElementFactory::make("videotestsrc", None).unwrap();
-                let enc = gst::ElementFactory::make("vp8enc", None).unwrap();
+                let src = gst::ElementFactory::make("videotestsrc")
+                    // Configure the videotestsrc live
+                    .property("is-live", true)
+                    .build()
+                    .unwrap();
+                let enc = gst::ElementFactory::make("vp8enc")
+                    // Produce encoded data as fast as possible
+                    .property("deadline", 1i64)
+                    .build()
+                    .unwrap();
 
                 // The names of the payloaders must be payX
-                let pay = gst::ElementFactory::make("rtpvp8pay", Some("pay0")).unwrap();
-
-                // Configure the videotestsrc live
-                src.set_property("is-live", true);
-
-                // Produce encoded data as fast as possible
-                enc.set_property("deadline", 1i64);
+                let pay = gst::ElementFactory::make("rtpvp8pay")
+                    .name("pay0")
+                    .build()
+                    .unwrap();
 
                 bin.add_many(&[&src, &enc, &pay]).unwrap();
                 gst::Element::link_many(&[&src, &enc, &pay]).unwrap();

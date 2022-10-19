@@ -90,10 +90,14 @@ fn tutorial_main() {
 
     // Ask the factories to instantiate actual elements
     let source = source_factory
-        .create(Some("source"))
+        .create()
+        .name("source")
+        .build()
         .expect("Failed to create source element");
     let sink = sink_factory
-        .create(Some("sink"))
+        .create()
+        .name("sink")
+        .build()
         .expect("Failed to create sink element");
 
     // Create the empty pipeline

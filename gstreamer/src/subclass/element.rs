@@ -781,10 +781,11 @@ mod tests {
         );
 
         let pipeline = crate::Pipeline::new(None);
-        let src = ElementFactory::make("fakesrc", None).unwrap();
-        let sink = ElementFactory::make("fakesink", None).unwrap();
-
-        src.set_property("num-buffers", 100i32);
+        let src = ElementFactory::make("fakesrc")
+            .property("num-buffers", 100i32)
+            .build()
+            .unwrap();
+        let sink = ElementFactory::make("fakesink").build().unwrap();
 
         pipeline
             .add_many(&[&src, element.upcast_ref(), &sink])

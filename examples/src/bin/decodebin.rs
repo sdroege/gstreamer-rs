@@ -43,10 +43,6 @@ use derive_more::{Display, Error};
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Missing element {}", _0)]
-struct MissingElement(#[error(not(source))] &'static str);
-
-#[derive(Debug, Display, Error)]
 #[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
 struct ErrorMessage {
     src: String,
@@ -71,12 +67,10 @@ fn example_main() -> Result<(), Error> {
     };
 
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("filesrc", None).map_err(|_| MissingElement("filesrc"))?;
-    let decodebin =
-        gst::ElementFactory::make("decodebin", None).map_err(|_| MissingElement("decodebin"))?;
-
-    // Tell the filesrc what file to load
-    src.set_property("location", uri);
+    let src = gst::ElementFactory::make("filesrc")
+        .property("location", uri)
+        .build()?;
+    let decodebin = gst::ElementFactory::make("decodebin").build()?;
 
     pipeline.add_many(&[&src, &decodebin])?;
     gst::Element::link_many(&[&src, &decodebin])?;
@@ -135,14 +129,10 @@ fn example_main() -> Result<(), Error> {
             if is_audio {
                 // decodebin found a raw audiostream, so we build the follow-up pipeline to
                 // play it on the default audio playback device (using autoaudiosink).
-                let queue = gst::ElementFactory::make("queue", None)
-                    .map_err(|_| MissingElement("queue"))?;
-                let convert = gst::ElementFactory::make("audioconvert", None)
-                    .map_err(|_| MissingElement("audioconvert"))?;
-                let resample = gst::ElementFactory::make("audioresample", None)
-                    .map_err(|_| MissingElement("audioresample"))?;
-                let sink = gst::ElementFactory::make("autoaudiosink", None)
-                    .map_err(|_| MissingElement("autoaudiosink"))?;
+                let queue = gst::ElementFactory::make("queue").build()?;
+                let convert = gst::ElementFactory::make("audioconvert").build()?;
+                let resample = gst::ElementFactory::make("audioresample").build()?;
+                let sink = gst::ElementFactory::make("autoaudiosink").build()?;
 
                 let elements = &[&queue, &convert, &resample, &sink];
                 pipeline.add_many(elements)?;
@@ -163,14 +153,10 @@ fn example_main() -> Result<(), Error> {
             } else if is_video {
                 // decodebin found a raw videostream, so we build the follow-up pipeline to
                 // display it using the autovideosink.
-                let queue = gst::ElementFactory::make("queue", None)
-                    .map_err(|_| MissingElement("queue"))?;
-                let convert = gst::ElementFactory::make("videoconvert", None)
-                    .map_err(|_| MissingElement("videoconvert"))?;
-                let scale = gst::ElementFactory::make("videoscale", None)
-                    .map_err(|_| MissingElement("videoscale"))?;
-                let sink = gst::ElementFactory::make("autovideosink", None)
-                    .map_err(|_| MissingElement("autovideosink"))?;
+                let queue = gst::ElementFactory::make("queue").build()?;
+                let convert = gst::ElementFactory::make("videoconvert").build()?;
+                let scale = gst::ElementFactory::make("videoscale").build()?;
+                let sink = gst::ElementFactory::make("autovideosink").build()?;
 
                 let elements = &[&queue, &convert, &scale, &sink];
                 pipeline.add_many(elements)?;

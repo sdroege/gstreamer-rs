@@ -28,10 +28,11 @@ fn example_main() {
     };
 
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("filesrc", None).unwrap();
-    let decodebin = gst::ElementFactory::make("decodebin", None).unwrap();
-
-    src.set_property("location", uri);
+    let src = gst::ElementFactory::make("filesrc")
+        .property("location", uri)
+        .build()
+        .unwrap();
+    let decodebin = gst::ElementFactory::make("decodebin").build().unwrap();
 
     pipeline.add_many(&[&src, &decodebin]).unwrap();
     gst::Element::link_many(&[&src, &decodebin]).unwrap();
@@ -59,8 +60,8 @@ fn example_main() {
         // In this example, we are only interested about parsing the ToC, so
         // we simply pipe every encountered stream into a fakesink, essentially
         // throwing away the data.
-        let queue = gst::ElementFactory::make("queue", None).unwrap();
-        let sink = gst::ElementFactory::make("fakesink", None).unwrap();
+        let queue = gst::ElementFactory::make("queue").build().unwrap();
+        let sink = gst::ElementFactory::make("fakesink").build().unwrap();
 
         let elements = &[&queue, &sink];
         pipeline.add_many(elements).unwrap();

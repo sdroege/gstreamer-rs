@@ -32,10 +32,6 @@ use std::{
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Missing element {}", _0)]
-struct MissingElement(#[error(not(source))] &'static str);
-
-#[derive(Debug, Display, Error)]
 #[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
 struct ErrorMessage {
     src: String,
@@ -51,13 +47,11 @@ fn create_receiver_pipeline(
     let caps = video_info.to_caps()?;
 
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("appsrc", None).map_err(|_| MissingElement("appsrc"))?;
+    let src = gst::ElementFactory::make("appsrc").build()?;
     let filter = video_filter::FdMemoryFadeInVideoFilter::default().upcast::<gst::Element>();
-    let convert = gst::ElementFactory::make("videoconvert", None)
-        .map_err(|_| MissingElement("videoconvert"))?;
-    let queue = gst::ElementFactory::make("queue", None).map_err(|_| MissingElement("queue"))?;
-    let sink = gst::ElementFactory::make("autovideosink", None)
-        .map_err(|_| MissingElement("autovideosink"))?;
+    let convert = gst::ElementFactory::make("videoconvert").build()?;
+    let queue = gst::ElementFactory::make("queue").build()?;
+    let sink = gst::ElementFactory::make("autovideosink").build()?;
 
     src.downcast_ref::<gst_app::AppSrc>()
         .ok_or_else(|| anyhow::anyhow!("is not a appsrc"))?
@@ -131,11 +125,10 @@ fn create_sender_pipeline(
     let caps = video_info.to_caps()?;
 
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("videotestsrc", None)
-        .map_err(|_| MissingElement("videotestsrc"))?;
-    let sink = gst::ElementFactory::make("appsink", None).map_err(|_| MissingElement("appsink"))?;
-
-    src.set_property("num-buffers", 250i32);
+    let src = gst::ElementFactory::make("videotestsrc")
+        .property("num-buffers", 250i32)
+        .build()?;
+    let sink = gst::ElementFactory::make("appsink").build()?;
 
     sink.downcast_ref::<gst_app::AppSink>()
         .ok_or_else(|| anyhow::anyhow!("is not a appsink"))?

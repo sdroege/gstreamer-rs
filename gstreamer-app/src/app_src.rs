@@ -458,10 +458,11 @@ mod tests {
     fn test_app_src_sink() {
         gst::init().unwrap();
 
-        let appsrc = gst::ElementFactory::make("appsrc", None).unwrap();
-        let fakesink = gst::ElementFactory::make("fakesink", None).unwrap();
-
-        fakesink.set_property("signal-handoffs", true);
+        let appsrc = gst::ElementFactory::make("appsrc").build().unwrap();
+        let fakesink = gst::ElementFactory::make("fakesink")
+            .property("signal-handoffs", true)
+            .build()
+            .unwrap();
 
         let pipeline = gst::Pipeline::new(None);
         pipeline.add(&appsrc).unwrap();

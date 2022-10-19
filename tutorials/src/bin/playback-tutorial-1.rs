@@ -107,13 +107,17 @@ fn tutorial_main() -> Result<(), Error> {
     // Initialize GStreamer
     gst::init()?;
 
-    // Create PlayBin element
-    let playbin = gst::ElementFactory::make("playbin", Some("playbin"))?;
-
-    // Set URI to play
     let uri =
         "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_cropped_multilingual.webm";
-    playbin.set_property("uri", uri);
+
+    // Create PlayBin element
+    let playbin = gst::ElementFactory::make("playbin")
+        .name("playbin")
+        // Set URI to play
+        .property("uri", uri)
+        // Set connection speed. This will affect some internal decisions of playbin
+        .property("connection-speed", 56u64)
+        .build()?;
 
     // Set flags to show Audio and Video but ignore Subtitles
     let flags = playbin.property_value("flags");
@@ -128,9 +132,6 @@ fn tutorial_main() -> Result<(), Error> {
         .build()
         .unwrap();
     playbin.set_property_from_value("flags", &flags);
-
-    // Set connection speed. This will affect some internal decisions of playbin
-    playbin.set_property("connection-speed", 56u64);
 
     // Handle keyboard input
     let playbin_clone = playbin.clone();

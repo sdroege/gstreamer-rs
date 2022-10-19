@@ -1248,13 +1248,13 @@ status = "generate"
 final_type = true
     [[object.function]]
     name = "create"
-        [object.function.return]
-        nullable_return_is_error = "Failed to create element from factory"
+    rename = "create_with_name"
+    manual = true
 
     [[object.function]]
     name = "make"
-        [object.function.return]
-        nullable_return_is_error = "Failed to create element from factory name"
+    rename = "make_with_name"
+    manual = true
 
     [[object.function]]
     name = "create_full"
