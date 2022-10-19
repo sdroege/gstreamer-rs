@@ -8,19 +8,15 @@ use crate::ELEMENT_METADATA_KLASS;
 use crate::ELEMENT_METADATA_LONGNAME;
 use std::ffi::CStr;
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
 use crate::Element;
 use crate::ElementFactory;
 use crate::Rank;
 use crate::StaticPadTemplate;
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
 use glib::prelude::*;
 use glib::translate::*;
 
 impl ElementFactory {
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_element_factory_create_with_properties")]
     #[track_caller]
     pub fn create_with_properties(
@@ -89,8 +85,6 @@ impl ElementFactory {
         Ok(element)
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_element_factory_make_with_properties")]
     #[track_caller]
     pub fn make_with_properties(
