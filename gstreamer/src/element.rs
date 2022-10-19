@@ -39,7 +39,9 @@ impl Element {
                         e[0].as_ref().to_glib_none().0,
                         e[1].as_ref().to_glib_none().0,
                     ),
-                    "Failed to link elements"
+                    "Failed to link elements '{}' and '{}'",
+                    e[0].as_ref().name(),
+                    e[1].as_ref().name(),
                 )?;
             }
         }
@@ -268,6 +270,42 @@ pub trait ElementExtManual: 'static {
     #[doc(alias = "get_request_pad")]
     #[doc(alias = "gst_element_request_pad_simple")]
     fn request_pad_simple(&self, name: &str) -> Option<Pad>;
+
+    #[doc(alias = "gst_element_link")]
+    fn link(&self, dest: &impl IsA<Element>) -> Result<(), glib::error::BoolError>;
+
+    #[doc(alias = "gst_element_link_filtered")]
+    fn link_filtered(
+        &self,
+        dest: &impl IsA<Element>,
+        filter: &crate::Caps,
+    ) -> Result<(), glib::error::BoolError>;
+
+    #[doc(alias = "gst_element_link_pads")]
+    fn link_pads(
+        &self,
+        srcpadname: Option<&str>,
+        dest: &impl IsA<Element>,
+        destpadname: Option<&str>,
+    ) -> Result<(), glib::error::BoolError>;
+
+    #[doc(alias = "gst_element_link_pads_filtered")]
+    fn link_pads_filtered(
+        &self,
+        srcpadname: Option<&str>,
+        dest: &impl IsA<Element>,
+        destpadname: Option<&str>,
+        filter: &crate::Caps,
+    ) -> Result<(), glib::error::BoolError>;
+
+    #[doc(alias = "gst_element_link_pads_full")]
+    fn link_pads_full(
+        &self,
+        srcpadname: Option<&str>,
+        dest: &impl IsA<Element>,
+        destpadname: Option<&str>,
+        flags: crate::PadLinkCheck,
+    ) -> Result<(), glib::error::BoolError>;
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
@@ -791,6 +829,133 @@ impl<O: IsA<Element>> ElementExtManual for O {
                     name.to_glib_none().0,
                 ))
             }
+        }
+    }
+
+    fn link(&self, dest: &impl IsA<Element>) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_element_link(
+                    self.as_ref().to_glib_none().0,
+                    dest.as_ref().to_glib_none().0
+                ),
+                "Failed to link elements '{}' and '{}'",
+                self.as_ref().name(),
+                dest.as_ref().name(),
+            )
+        }
+    }
+
+    fn link_filtered(
+        &self,
+        dest: &impl IsA<Element>,
+        filter: &crate::Caps,
+    ) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_element_link_filtered(
+                    self.as_ref().to_glib_none().0,
+                    dest.as_ref().to_glib_none().0,
+                    filter.to_glib_none().0
+                ),
+                "Failed to link elements '{}' and '{}' with filter '{:?}'",
+                self.as_ref().name(),
+                dest.as_ref().name(),
+                filter,
+            )
+        }
+    }
+
+    fn link_pads(
+        &self,
+        srcpadname: Option<&str>,
+        dest: &impl IsA<Element>,
+        destpadname: Option<&str>,
+    ) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_element_link_pads(
+                    self.as_ref().to_glib_none().0,
+                    srcpadname.to_glib_none().0,
+                    dest.as_ref().to_glib_none().0,
+                    destpadname.to_glib_none().0
+                ),
+                "Failed to link pads '{}' and '{}'",
+                if let Some(srcpadname) = srcpadname {
+                    format!("{}:{}", self.as_ref().name(), srcpadname)
+                } else {
+                    format!("{}:*", self.as_ref().name())
+                },
+                if let Some(destpadname) = destpadname {
+                    format!("{}:{}", dest.as_ref().name(), destpadname)
+                } else {
+                    format!("{}:*", dest.as_ref().name())
+                },
+            )
+        }
+    }
+
+    fn link_pads_filtered(
+        &self,
+        srcpadname: Option<&str>,
+        dest: &impl IsA<Element>,
+        destpadname: Option<&str>,
+        filter: &crate::Caps,
+    ) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_element_link_pads_filtered(
+                    self.as_ref().to_glib_none().0,
+                    srcpadname.to_glib_none().0,
+                    dest.as_ref().to_glib_none().0,
+                    destpadname.to_glib_none().0,
+                    filter.to_glib_none().0
+                ),
+                "Failed to link pads '{}' and '{}' with filter '{:?}'",
+                if let Some(srcpadname) = srcpadname {
+                    format!("{}:{}", self.as_ref().name(), srcpadname)
+                } else {
+                    format!("{}:*", self.as_ref().name())
+                },
+                if let Some(destpadname) = destpadname {
+                    format!("{}:{}", dest.as_ref().name(), destpadname)
+                } else {
+                    format!("{}:*", dest.as_ref().name())
+                },
+                filter,
+            )
+        }
+    }
+
+    fn link_pads_full(
+        &self,
+        srcpadname: Option<&str>,
+        dest: &impl IsA<Element>,
+        destpadname: Option<&str>,
+        flags: crate::PadLinkCheck,
+    ) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_element_link_pads_full(
+                    self.as_ref().to_glib_none().0,
+                    srcpadname.to_glib_none().0,
+                    dest.as_ref().to_glib_none().0,
+                    destpadname.to_glib_none().0,
+                    flags.into_glib()
+                ),
+                "Failed to link pads '{}' and '{}' with flags '{:?}'",
+                if let Some(srcpadname) = srcpadname {
+                    format!("{}:{}", self.as_ref().name(), srcpadname)
+                } else {
+                    format!("{}:*", self.as_ref().name())
+                },
+                if let Some(destpadname) = destpadname {
+                    format!("{}:{}", dest.as_ref().name(), destpadname)
+                } else {
+                    format!("{}:*", dest.as_ref().name())
+                },
+                flags,
+            )
         }
     }
 }

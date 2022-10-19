@@ -1038,13 +1038,13 @@ manual_traits = ["ElementExtManual"]
     # but gir considers these methods on `ElementExtManual` in the docs.
     [[object.function]]
     name = "link_many"
-    ignore = true
+    manual = true
     [[object.function]]
     name = "unlink_many"
-    ignore = true
+    manual = true
     [[object.function]]
     name = "register"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "call_async"
@@ -1094,38 +1094,34 @@ manual_traits = ["ElementExtManual"]
         [object.function.return]
         bool_return_is_error = "Failed to remove pad"
 
+    # Manual implementations with better error reporting
     [[object.function]]
     name = "link"
-        [object.function.return]
-        bool_return_is_error = "Failed to link elements"
+    manual = true
 
     [[object.function]]
     name = "link_filtered"
+    manual = true
         [[object.function.parameter]]
         name = "filter"
         # Can use `link` instead
         nullable = false
-        [object.function.return]
-        bool_return_is_error = "Failed to link elements"
 
     [[object.function]]
     name = "link_pads"
-        [object.function.return]
-        bool_return_is_error = "Failed to link pads"
+    manual = true
 
     [[object.function]]
     name = "link_pads_filtered"
+    manual = true
         [[object.function.parameter]]
         name = "filter"
         # Can use `link` instead
         nullable = false
-        [object.function.return]
-        bool_return_is_error = "Failed to link pads"
 
     [[object.function]]
     name = "link_pads_full"
-        [object.function.return]
-        bool_return_is_error = "Failed to link pads"
+    manual = true
 
     [[object.function]]
     name = "set_clock"

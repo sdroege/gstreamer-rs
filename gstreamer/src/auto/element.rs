@@ -11,7 +11,6 @@ use crate::Context;
 use crate::ElementFactory;
 use crate::Object;
 use crate::Pad;
-use crate::PadLinkCheck;
 use crate::PadTemplate;
 use crate::State;
 use crate::StateChange;
@@ -146,42 +145,6 @@ pub trait ElementExt: 'static {
 
     #[doc(alias = "gst_element_is_locked_state")]
     fn is_locked_state(&self) -> bool;
-
-    #[doc(alias = "gst_element_link")]
-    fn link(&self, dest: &impl IsA<Element>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_element_link_filtered")]
-    fn link_filtered(
-        &self,
-        dest: &impl IsA<Element>,
-        filter: &Caps,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_element_link_pads")]
-    fn link_pads(
-        &self,
-        srcpadname: Option<&str>,
-        dest: &impl IsA<Element>,
-        destpadname: Option<&str>,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_element_link_pads_filtered")]
-    fn link_pads_filtered(
-        &self,
-        srcpadname: Option<&str>,
-        dest: &impl IsA<Element>,
-        destpadname: Option<&str>,
-        filter: &Caps,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_element_link_pads_full")]
-    fn link_pads_full(
-        &self,
-        srcpadname: Option<&str>,
-        dest: &impl IsA<Element>,
-        destpadname: Option<&str>,
-        flags: PadLinkCheck,
-    ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_element_lost_state")]
     fn lost_state(&self);
@@ -472,96 +435,6 @@ impl<O: IsA<Element>> ElementExt for O {
             from_glib(ffi::gst_element_is_locked_state(
                 self.as_ref().to_glib_none().0,
             ))
-        }
-    }
-
-    fn link(&self, dest: &impl IsA<Element>) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib::result_from_gboolean!(
-                ffi::gst_element_link(
-                    self.as_ref().to_glib_none().0,
-                    dest.as_ref().to_glib_none().0
-                ),
-                "Failed to link elements"
-            )
-        }
-    }
-
-    fn link_filtered(
-        &self,
-        dest: &impl IsA<Element>,
-        filter: &Caps,
-    ) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib::result_from_gboolean!(
-                ffi::gst_element_link_filtered(
-                    self.as_ref().to_glib_none().0,
-                    dest.as_ref().to_glib_none().0,
-                    filter.to_glib_none().0
-                ),
-                "Failed to link elements"
-            )
-        }
-    }
-
-    fn link_pads(
-        &self,
-        srcpadname: Option<&str>,
-        dest: &impl IsA<Element>,
-        destpadname: Option<&str>,
-    ) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib::result_from_gboolean!(
-                ffi::gst_element_link_pads(
-                    self.as_ref().to_glib_none().0,
-                    srcpadname.to_glib_none().0,
-                    dest.as_ref().to_glib_none().0,
-                    destpadname.to_glib_none().0
-                ),
-                "Failed to link pads"
-            )
-        }
-    }
-
-    fn link_pads_filtered(
-        &self,
-        srcpadname: Option<&str>,
-        dest: &impl IsA<Element>,
-        destpadname: Option<&str>,
-        filter: &Caps,
-    ) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib::result_from_gboolean!(
-                ffi::gst_element_link_pads_filtered(
-                    self.as_ref().to_glib_none().0,
-                    srcpadname.to_glib_none().0,
-                    dest.as_ref().to_glib_none().0,
-                    destpadname.to_glib_none().0,
-                    filter.to_glib_none().0
-                ),
-                "Failed to link pads"
-            )
-        }
-    }
-
-    fn link_pads_full(
-        &self,
-        srcpadname: Option<&str>,
-        dest: &impl IsA<Element>,
-        destpadname: Option<&str>,
-        flags: PadLinkCheck,
-    ) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib::result_from_gboolean!(
-                ffi::gst_element_link_pads_full(
-                    self.as_ref().to_glib_none().0,
-                    srcpadname.to_glib_none().0,
-                    dest.as_ref().to_glib_none().0,
-                    destpadname.to_glib_none().0,
-                    flags.into_glib()
-                ),
-                "Failed to link pads"
-            )
         }
     }
 
