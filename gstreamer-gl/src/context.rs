@@ -11,7 +11,7 @@ pub trait ContextGLExt {
     #[doc(alias = "gst_context_get_gl_display")]
     fn gl_display(&self) -> Option<GLDisplay>;
     #[doc(alias = "gst_context_set_gl_display")]
-    fn set_gl_display<T: IsA<GLDisplay>>(&self, display: Option<&T>);
+    fn set_gl_display<'a, T: IsA<GLDisplay>>(&self, display: impl Into<Option<&'a T>>);
 }
 
 impl ContextGLExt for ContextRef {
@@ -29,11 +29,11 @@ impl ContextGLExt for ContextRef {
         }
     }
 
-    fn set_gl_display<T: IsA<GLDisplay>>(&self, display: Option<&T>) {
+    fn set_gl_display<'a, T: IsA<GLDisplay>>(&self, display: impl Into<Option<&'a T>>) {
         unsafe {
             ffi::gst_context_set_gl_display(
                 self.as_mut_ptr(),
-                display.map(|d| d.as_ref()).to_glib_none().0,
+                display.into().map(|d| d.as_ref()).to_glib_none().0,
             );
         }
     }

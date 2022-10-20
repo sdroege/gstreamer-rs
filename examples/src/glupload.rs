@@ -424,7 +424,7 @@ impl App {
                                 msg.src().map(|s| s.downcast::<gst::Element>().unwrap())
                             {
                                 let context = gst::Context::new(context_type, true);
-                                context.set_gl_display(Some(&gl_display));
+                                context.set_gl_display(&gl_display);
                                 el.set_context(&context);
                             }
                         }

@@ -965,17 +965,29 @@ impl Uri {
     }
 
     #[doc(alias = "gst_query_set_uri")]
-    pub fn set_uri(&mut self, uri: Option<&str>) {
+    pub fn set_uri<'a, T>(&mut self, uri: impl Into<Option<&'a T>>)
+    where
+        T: 'a + AsRef<str> + ?Sized,
+    {
         unsafe {
-            ffi::gst_query_set_uri(self.as_mut_ptr(), uri.to_glib_none().0);
+            ffi::gst_query_set_uri(
+                self.as_mut_ptr(),
+                uri.into().map(AsRef::as_ref).to_glib_none().0,
+            );
         }
     }
 
     #[doc(alias = "gst_query_set_uri_redirection")]
     #[doc(alias = "gst_query_set_uri_redirection_permanent")]
-    pub fn set_redirection(&mut self, uri: Option<&str>, permanent: bool) {
+    pub fn set_redirection<'a, T>(&mut self, uri: impl Into<Option<&'a T>>, permanent: bool)
+    where
+        T: 'a + AsRef<str> + ?Sized,
+    {
         unsafe {
-            ffi::gst_query_set_uri_redirection(self.as_mut_ptr(), uri.to_glib_none().0);
+            ffi::gst_query_set_uri_redirection(
+                self.as_mut_ptr(),
+                uri.into().map(AsRef::as_ref).to_glib_none().0,
+            );
             ffi::gst_query_set_uri_redirection_permanent(
                 self.0.as_mut_ptr(),
                 permanent.into_glib(),
@@ -1453,11 +1465,12 @@ impl Caps {
     }
 
     #[doc(alias = "gst_query_set_caps_result")]
-    pub fn set_result(&mut self, caps: Option<&crate::Caps>) {
+    pub fn set_result<'a>(&mut self, caps: impl Into<Option<&'a crate::Caps>>) {
         unsafe {
             ffi::gst_query_set_caps_result(
                 self.as_mut_ptr(),
-                caps.map(|caps| caps.as_mut_ptr())
+                caps.into()
+                    .map(|caps| caps.as_mut_ptr())
                     .unwrap_or(ptr::null_mut()),
             );
         }
@@ -1527,11 +1540,12 @@ impl Context {
     }
 
     #[doc(alias = "gst_query_set_context")]
-    pub fn set_context(&mut self, context: Option<&crate::Context>) {
+    pub fn set_context<'a>(&mut self, context: impl Into<Option<&'a crate::Context>>) {
         unsafe {
             ffi::gst_query_set_context(
                 self.as_mut_ptr(),
                 context
+                    .into()
                     .map(|context| context.as_mut_ptr())
                     .unwrap_or(ptr::null_mut()),
             );
@@ -1709,5 +1723,54 @@ mod tests {
 
         let p = Position::new(crate::Format::Time);
         assert!(!p.as_mut_ptr().is_null());
+    }
+
+    #[test]
+    fn allocation_need_pool() {
+        crate::init().unwrap();
+
+        let mut a = Allocation::new(&crate::Caps::builder("foo/bar").build(), true);
+        let pool = crate::BufferPool::new();
+        a.add_allocation_pool(Some(&pool), 1024, 1, 4);
+    }
+
+    #[test]
+    fn allocation_do_not_need_pool() {
+        crate::init().unwrap();
+
+        let mut a = Allocation::new(&crate::Caps::builder("foo/bar").build(), false);
+        a.add_allocation_pool(crate::BufferPool::NONE, 1024, 1, 4);
+
+        // cannot infer type of the type parameter `T` declared on the enum `Option`
+        //a.add_allocation_pool(None, 1024, 1, 4);
+
+        // This would be possible if we moved the `crate::BufferPool`
+        // as a generic argument instead of using current arg type:
+        // - `pool: Option<&impl IsA<crate::BufferPool>>`
+        //a.add_allocation_pool::<crate::BufferPool>(None, 1024, 1, 4);
+    }
+
+    #[test]
+    fn set_uri() {
+        crate::init().unwrap();
+
+        let mut uri_q = Uri::new();
+        uri_q.set_uri("https://test.org");
+        uri_q.set_uri(&String::from("https://test.org"));
+
+        uri_q.set_uri(Some("https://test.org"));
+        uri_q.set_uri(Some(&String::from("https://test.org")));
+
+        // FIXME: this is commented out for now due to an inconsistent
+        //        assertion in `GStreamer` which results in critical logs.
+        /*
+        let none: Option<&str> = None;
+        uri_q.set_uri(none);
+
+        let none: Option<String> = None;
+        uri_q.set_uri(none.as_ref());
+
+        uri_q.set_uri::<str>(None);
+        */
     }
 }

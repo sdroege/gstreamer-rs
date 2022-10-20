@@ -200,7 +200,7 @@ mod cairo_compositor {
                             caps
                         };
 
-                        q.set_result(Some(&caps));
+                        q.set_result(&caps);
 
                         true
                     }

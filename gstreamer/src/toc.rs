@@ -58,11 +58,12 @@ impl TocRef {
     }
 
     #[doc(alias = "gst_toc_set_tags")]
-    pub fn set_tags(&mut self, tag_list: Option<TagList>) {
+    pub fn set_tags(&mut self, tag_list: impl Into<Option<TagList>>) {
         unsafe {
             ffi::gst_toc_set_tags(
                 self.as_mut_ptr(),
                 tag_list
+                    .into()
                     .map(|t| t.into_glib_ptr())
                     .unwrap_or(ptr::null_mut()),
             );
@@ -70,11 +71,14 @@ impl TocRef {
     }
 
     #[doc(alias = "gst_toc_merge_tags")]
-    pub fn merge_tags(&mut self, tag_list: Option<&TagList>, mode: TagMergeMode) {
+    pub fn merge_tags<'a>(&mut self, tag_list: impl Into<Option<&'a TagList>>, mode: TagMergeMode) {
         unsafe {
             ffi::gst_toc_merge_tags(
                 self.as_mut_ptr(),
-                tag_list.map(|l| l.as_mut_ptr()).unwrap_or(ptr::null_mut()),
+                tag_list
+                    .into()
+                    .map(|l| l.as_mut_ptr())
+                    .unwrap_or(ptr::null_mut()),
                 mode.into_glib(),
             );
         }
@@ -192,11 +196,12 @@ impl TocEntryRef {
     }
 
     #[doc(alias = "gst_toc_entry_set_tags")]
-    pub fn set_tags(&mut self, tag_list: Option<TagList>) {
+    pub fn set_tags(&mut self, tag_list: impl Into<Option<TagList>>) {
         unsafe {
             ffi::gst_toc_entry_set_tags(
                 self.as_mut_ptr(),
                 tag_list
+                    .into()
                     .map(|t| t.into_glib_ptr())
                     .unwrap_or(ptr::null_mut()),
             );
@@ -204,11 +209,14 @@ impl TocEntryRef {
     }
 
     #[doc(alias = "gst_toc_entry_merge_tags")]
-    pub fn merge_tags(&mut self, tag_list: Option<&TagList>, mode: TagMergeMode) {
+    pub fn merge_tags<'a>(&mut self, tag_list: impl Into<Option<&'a TagList>>, mode: TagMergeMode) {
         unsafe {
             ffi::gst_toc_entry_merge_tags(
                 self.as_mut_ptr(),
-                tag_list.map(|l| l.as_mut_ptr()).unwrap_or(ptr::null_mut()),
+                tag_list
+                    .into()
+                    .map(|l| l.as_mut_ptr())
+                    .unwrap_or(ptr::null_mut()),
                 mode.into_glib(),
             );
         }

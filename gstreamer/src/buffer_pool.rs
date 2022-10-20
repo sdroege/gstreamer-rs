@@ -413,7 +413,7 @@ mod tests {
     use crate::prelude::*;
 
     #[test]
-    fn test_pool() {
+    fn pool_with_params() {
         crate::init().unwrap();
 
         let pool = crate::BufferPool::new();
@@ -434,6 +434,20 @@ mod tests {
         drop(buf2);
         let _buf2 = pool.acquire_buffer(Some(&params)).unwrap();
 
+        pool.set_active(false).unwrap();
+    }
+
+    #[test]
+    fn pool_no_params() {
+        crate::init().unwrap();
+
+        let pool = crate::BufferPool::new();
+        let mut config = pool.config();
+        config.set_params(None, 1024, 0, 2);
+        pool.set_config(config).unwrap();
+
+        pool.set_active(true).unwrap();
+        let _buf1 = pool.acquire_buffer(None).unwrap();
         pool.set_active(false).unwrap();
     }
 }
