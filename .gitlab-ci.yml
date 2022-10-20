@@ -630,6 +630,7 @@ windows rust docker stable:
 
 windows rust docker msrv:
   extends: '.windows rust docker build'
+  when: 'manual'
   variables:
     RUST_IMAGE: !reference [variables, "WINDOWS_RUST_MINIMUM_IMAGE"]
     RUST_UPSTREAM_IMAGE: !reference [variables, "WINDOWS_RUST_MINIMUM_UPSTREAM_IMAGE"]
