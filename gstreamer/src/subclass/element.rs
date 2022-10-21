@@ -93,7 +93,7 @@ pub trait ElementImpl: ElementImplExt + GstObjectImpl + Send + Sync {
     fn request_new_pad(
         &self,
         templ: &crate::PadTemplate,
-        name: Option<String>,
+        name: Option<&str>,
         caps: Option<&crate::Caps>,
     ) -> Option<crate::Pad> {
         self.parent_request_new_pad(templ, name, caps)
@@ -137,7 +137,7 @@ pub trait ElementImplExt: ObjectSubclass {
     fn parent_request_new_pad(
         &self,
         templ: &crate::PadTemplate,
-        name: Option<String>,
+        name: Option<&str>,
         caps: Option<&crate::Caps>,
     ) -> Option<crate::Pad>;
 
@@ -198,7 +198,7 @@ impl<T: ElementImpl> ElementImplExt for T {
     fn parent_request_new_pad(
         &self,
         templ: &crate::PadTemplate,
-        name: Option<String>,
+        name: Option<&str>,
         caps: Option<&crate::Caps>,
     ) -> Option<crate::Pad> {
         unsafe {
@@ -481,13 +481,14 @@ unsafe extern "C" fn element_request_new_pad<T: ElementImpl>(
     let imp = instance.imp();
 
     let caps = Option::<crate::Caps>::from_glib_borrow(caps);
+    let name = Option::<String>::from_glib_none(name);
 
     // XXX: This is effectively unsafe but the best we can do
     // See https://bugzilla.gnome.org/show_bug.cgi?id=791193
     let pad = panic_to_error!(imp, None, {
         imp.request_new_pad(
             &from_glib_borrow(templ),
-            from_glib_none(name),
+            name.as_deref(),
             caps.as_ref().as_ref(),
         )
     });

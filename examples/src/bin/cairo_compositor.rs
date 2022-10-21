@@ -161,7 +161,7 @@ mod cairo_compositor {
             fn request_new_pad(
                 &self,
                 templ: &gst::PadTemplate,
-                name: Option<String>,
+                name: Option<&str>,
                 caps: Option<&gst::Caps>,
             ) -> Option<gst::Pad> {
                 let element = self.instance();
