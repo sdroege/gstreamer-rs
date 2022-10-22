@@ -5,6 +5,140 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.19.0] - 2022-10-22
+### Added
+- Builders for element construction. `gst::ElementFactory::make()` returns a
+  builder now that allows to easily set the name or any other property at
+  construction time. The old API is available as `make_with_name()`.
+- Builders for `Bin` and `Pipeline` as well as a `Default` trait
+  implementation to simplify object construction.
+- Builders for `appsrc` and `appsink`, which allow type-safe construction of
+  both elements while also allowing to easily set all their properties at
+  construction time.
+
+- Builders for the GStreamer-specific fraction/array param/property specs.
+
+- Infrastructure for casting between `gst::Memory` subtypes/supertypes, and
+  make use of it for GL memory.
+- Bindings for the `gstreamer-allocator` library with support for file
+  descriptor-based and DMABUF memory.
+
+- Complete bindings for `gst_video` `Navigation` events.
+
+- Constructors for error/warning/info messages with a pre-built `glib::Error`.
+  This also leads to some minor simplification of the existing API.
+
+- Accessors for static pads of various base classes for making accessing them
+  cheaper and less error-prone than getting them by name.
+
+- Builder for pad templates.
+
+- Static PTP clock API for statistics, initialization and deinitialization.
+
+- New `gstreamer-utils` crate that currently contains only a `StreamProducer`
+  API. This allows building 1:N bridges between live pipelines via `appsink` /
+  `appsrc` elements.
+
+- Bindings for the new `gstreamer-play` library that was added in 1.20.
+
+- `gst::Caps::new_empty_simple()` to create caps without fields and just a
+  name.
+
+- `gst_audio::AudioCapsBuilder` and `gst_video::VideoCapsBuilder` for building
+  (possibly) unfixed raw audio/videos caps with typed setters for the various
+  fields. This makes it impossible to mix up types and e.g. use an `u32`
+  instead of an `i32` for the width of video caps.
+
+- `gst::Buffer::ptr_eq()` to compare buffers by pointer instead of doing a
+  deep comparison, and also `ptr_eq()` on all other miniobject types.
+
+- Accessors for `gst_webrtc::WebRTCICECandidateStats` fields.
+
+- Bindings for the `gstreamer-validate` API.
+
+- Subclassing bindings for `gst_audio::AudioVisualizer` base class for easily
+  writing audio visualization elements.
+
+- `gst_pbutils::EncodingProfile` API for element properties.
+
+- Support for returning buffer lists from `BaseSrc` / `PushSrc` subclasses.
+
+- Support for implementing `gst::Bin::do_latency()`.
+
+- Minimal bindings for the `gstreamer-mpegts` library.
+
+### Fixed
+- Signature for `gst_base::Aggregator::connect_samples_selected()` to remove
+  unnecessary generic parameter and make it straightforward to use.
+
+- Various APIs had optional parameters/return types corrected to match the C
+  API more closely.
+
+- Logging does not evaluate its arguments anymore if the debug category is not
+  enabled or below the current threshold.
+
+- Registering custom metas is now possible without transform function.
+
+- `gst::subclass::ElementImpl::request_new_pad()` signature uses a `&str`
+  instead of an owned `String` now.
+
+### Removed
+- `fragile` dependency and instead use the same functionality from `glib`.
+
+- `gst_audio::AudioAggregator` `ignore_inactive_pads` property, which was
+  duplicated from the `Aggregator` base class.
+
+### Changed
+- Compatible with the 0.16 gtk-rs release.
+- Updated minimum supported GStreamer version from 1.8 to 1.14.
+- Updated to the latest GStreamer 1.22 APIs while still supporting up to
+  GStreamer 1.14. Any new 1.22 APIs might still change until the stable 1.22
+  release.
+- Updated minimum supported Rust version to 1.63.
+
+- In `EventView` / `QueryView`, getters that return references now return
+  references that can outlive the view and are only bound by the lifetime of
+  the corresponding event/query.
+- In addition `Query`, `Event` and `Message` views are implemented more
+  consistently now, which makes them easier to use and as a side effect allows
+  to pass e.g. more strongly typed queries to functions that only accept a
+  single query type.
+
+- Various improvements to `gst::ClockTime`, `gst::format::Bytes`, `gst::format::Signed`
+  and related types and their usage in the API, which should make its use from
+  applications easier and less error-prone. Check the `gst::format`
+  module-level documentation for details.
+
+- `gst::StreamsSelected` event builder takes the selected streams as iterator
+  instead of slice.
+
+- For consistency with other macros the `gst` prefix of the logging macros was
+  also removed.
+
+- Various iterator implementations were added and the existing ones were
+  optimized by implementing more specialized traits and custom implementations
+  for a couple of iterator functions.
+
+- GStreamer initialization safety checks were optimized.
+
+- `gst::Bus::post()` takes ownership of the passed messages like the C API.
+
+- Better and easier to read `Debug` impls for `Caps`, `TagList`,
+  `Structure` and `Promise`.
+
+- `ser_de` feature was renamed to `serde`.
+
+- `gst::Tracer` implementations get result enums passed as `Result`s now
+  instead of single enums.
+
+- `gst::Pad`, `ProxyPad`, `GhostPad` default functions are all associated
+  functions instead of methods now to avoid conflicts between multiple types
+  with the same method.
+
+- `Pad` tasks are catching panics from the task function and if the parent of
+  the pad is an element then the panic is converted into an error message and
+  the task is simply stopped. Otherwise the panic is rethrown.
+
 ## [0.18.8] - 2022-04-26
 ### Added
 - Bindings for `RTPBasePayload` and `RTPBaseDepayload`.
@@ -1236,6 +1370,9 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   The API of the two is incompatible.
 
 [Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.6...HEAD
+[0.19.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.8...0.19.0
+[0.18.8]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.7...0.18.8
+[0.18.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.6...0.18.7
 [0.18.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.5...0.18.6
 [0.18.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.4...0.18.5
 [0.18.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.3...0.18.4
