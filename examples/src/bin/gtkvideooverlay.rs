@@ -101,7 +101,7 @@ fn set_window_handle(video_overlay: &gst_video::VideoOverlay, gdk_window: &gdk::
 }
 
 fn create_ui(app: &gtk::Application) {
-    let pipeline = gst::Pipeline::new(None);
+    let pipeline = gst::Pipeline::default();
     let src = gst::ElementFactory::make("videotestsrc").build().unwrap();
 
     // Since using the window system to overlay our gui window is making

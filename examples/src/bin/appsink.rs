@@ -35,7 +35,7 @@ struct ErrorMessage {
 fn create_pipeline() -> Result<gst::Pipeline, Error> {
     gst::init()?;
 
-    let pipeline = gst::Pipeline::new(None);
+    let pipeline = gst::Pipeline::default();
     let src = gst::ElementFactory::make("audiotestsrc").build()?;
     let appsink = gst_app::AppSink::builder()
         // Tell the appsink what format we want. It will then be the audiotestsrc's job to

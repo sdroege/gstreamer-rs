@@ -85,7 +85,7 @@ fn example_main() -> Result<(), Error> {
         std::process::exit(-1)
     };
 
-    let pipeline = gst::Pipeline::new(None);
+    let pipeline = gst::Pipeline::default();
     let src = gst::ElementFactory::make("uridecodebin")
         .property("uri", uri)
         .build()?;

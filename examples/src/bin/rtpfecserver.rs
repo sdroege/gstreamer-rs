@@ -77,7 +77,7 @@ fn example_main() -> Result<(), Error> {
 
     let video_caps = gst::Caps::builder("video/x-raw").build();
 
-    let pipeline = gst::Pipeline::new(None);
+    let pipeline = gst::Pipeline::default();
     let src = gst::ElementFactory::make("uridecodebin")
         .property_from_str("pattern", "ball")
         .property("expose-all-streams", false)

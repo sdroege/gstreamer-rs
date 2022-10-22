@@ -31,7 +31,7 @@ fn tutorial_main() {
         .expect("Could not create resample element.");
 
     // Create the empty pipeline
-    let pipeline = gst::Pipeline::new(Some("test-pipeline"));
+    let pipeline = gst::Pipeline::builder().name("test-pipeline").build();
 
     // Build the pipeline Note that we are NOT linking the source at this
     // point. We will do it later.

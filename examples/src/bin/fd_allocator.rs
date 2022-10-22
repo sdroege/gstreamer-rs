@@ -46,7 +46,7 @@ fn create_receiver_pipeline(
 ) -> Result<gst::Pipeline, Error> {
     let caps = video_info.to_caps()?;
 
-    let pipeline = gst::Pipeline::new(None);
+    let pipeline = gst::Pipeline::default();
     let src = gst_app::AppSrc::builder()
         .caps(&caps)
         .do_timestamp(true)
@@ -117,7 +117,7 @@ fn create_sender_pipeline(
     let sender = Arc::new(Mutex::new(sender));
     let caps = video_info.to_caps()?;
 
-    let pipeline = gst::Pipeline::new(None);
+    let pipeline = gst::Pipeline::default();
     let src = gst::ElementFactory::make("videotestsrc")
         .property("num-buffers", 250i32)
         .build()?;

@@ -120,7 +120,7 @@ mod media_factory {
         impl RTSPMediaFactoryImpl for Factory {
             fn create_element(&self, _url: &gst_rtsp::RTSPUrl) -> Option<gst::Element> {
                 // Create a simple VP8 videotestsrc input
-                let bin = gst::Bin::new(None);
+                let bin = gst::Bin::default();
                 let src = gst::ElementFactory::make("videotestsrc")
                     // Configure the videotestsrc live
                     .property("is-live", true)

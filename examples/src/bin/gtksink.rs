@@ -19,7 +19,7 @@ use gtk::prelude::*;
 use std::cell::RefCell;
 
 fn create_ui(app: &gtk::Application) {
-    let pipeline = gst::Pipeline::new(None);
+    let pipeline = gst::Pipeline::default();
     let src = gst::ElementFactory::make("videotestsrc").build().unwrap();
     // Create the gtk sink and retrieve the widget from it. The sink element will be used
     // in the pipeline, and the widget will be embedded in our gui.

@@ -108,7 +108,7 @@ fn main() {
         .name("app_sink")
         .build();
 
-    let pipeline = gst::Pipeline::new(Some("test-pipeline"));
+    let pipeline = gst::Pipeline::builder().name("test-pipeline").build();
 
     pipeline
         .add_many(&[

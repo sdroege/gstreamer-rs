@@ -244,7 +244,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     gst::init()?;
 
     // Create our pipeline with the custom element
-    let pipeline = gst::Pipeline::new(None);
+    let pipeline = gst::Pipeline::default();
     let src = gst::ElementFactory::make("audiotestsrc")
         .property_from_str("wave", "white-noise")
         .build()?;

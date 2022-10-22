@@ -52,7 +52,7 @@ fn example_main() -> Result<(), Error> {
         std::process::exit(-1)
     };
 
-    let pipeline = gst::Pipeline::new(None);
+    let pipeline = gst::Pipeline::default();
     let src = gst::Element::make_from_uri(gst::URIType::Src, uri, None)
         .expect("We do not seem to support this uri");
     let typefinder = gst::ElementFactory::make("typefind").build()?;

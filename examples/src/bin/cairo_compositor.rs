@@ -566,7 +566,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     gst::init()?;
 
     // Create our pipeline with the compositor and two input streams.
-    let pipeline = gst::Pipeline::new(None);
+    let pipeline = gst::Pipeline::default();
     let src1 = gst::ElementFactory::make("videotestsrc")
         .property_from_str("pattern", "ball")
         .build()?;

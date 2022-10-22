@@ -87,7 +87,7 @@ fn example_main() -> Result<(), Error> {
 
     let drop_probability = args[2].parse::<f32>()?;
 
-    let pipeline = gst::Pipeline::new(None);
+    let pipeline = gst::Pipeline::default();
 
     let rtp_caps = gst::Caps::builder("application/x-rtp")
         .field("clock-rate", 90000i32)

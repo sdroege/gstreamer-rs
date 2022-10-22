@@ -28,7 +28,7 @@ fn tutorial_main() -> Result<(), Error> {
         .expect("Could not create autoaudiosink element.");
 
     // Create the sink bin, add the elements and link them
-    let bin = gst::Bin::new(Some("audio_sink_bin"));
+    let bin = gst::Bin::builder().name("audio_sink_bin").build();
     bin.add_many(&[&equalizer, &convert, &sink]).unwrap();
     gst::Element::link_many(&[&equalizer, &convert, &sink]).expect("Failed to link elements.");
 

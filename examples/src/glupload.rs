@@ -530,7 +530,7 @@ impl App {
     fn create_pipeline(
         gl_element: Option<&gst::Element>,
     ) -> Result<(gst::Pipeline, gst_app::AppSink, gst::Element), Error> {
-        let pipeline = gst::Pipeline::new(None);
+        let pipeline = gst::Pipeline::default();
         let src = gst::ElementFactory::make("videotestsrc").build()?;
 
         let caps = gst_video::VideoCapsBuilder::new()

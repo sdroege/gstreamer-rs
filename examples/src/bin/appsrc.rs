@@ -33,7 +33,7 @@ const HEIGHT: usize = 240;
 fn create_pipeline() -> Result<gst::Pipeline, Error> {
     gst::init()?;
 
-    let pipeline = gst::Pipeline::new(None);
+    let pipeline = gst::Pipeline::default();
 
     // Specify the format we want to provide as application into the pipeline
     // by creating a video info with the given format and creating caps from it for the appsrc element.

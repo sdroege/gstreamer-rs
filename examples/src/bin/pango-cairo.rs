@@ -56,7 +56,7 @@ unsafe impl Send for LayoutWrapper {}
 fn create_pipeline() -> Result<gst::Pipeline, Error> {
     gst::init()?;
 
-    let pipeline = gst::Pipeline::new(None);
+    let pipeline = gst::Pipeline::default();
     let src = gst::ElementFactory::make("videotestsrc")
         // The videotestsrc supports multiple test patterns. In this example, we will use the
         // pattern with a white ball moving around the video's center point.

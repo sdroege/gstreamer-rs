@@ -27,7 +27,7 @@ fn example_main() {
         std::process::exit(-1)
     };
 
-    let pipeline = gst::Pipeline::new(None);
+    let pipeline = gst::Pipeline::default();
     let src = gst::ElementFactory::make("filesrc")
         .property("location", uri)
         .build()
