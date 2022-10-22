@@ -26,7 +26,7 @@ glib::wrapper! {
 impl NetClientClock {
     #[doc(alias = "gst_net_client_clock_new")]
     pub fn new(
-        name: &str,
+        name: Option<&str>,
         remote_address: &str,
         remote_port: i32,
         base_time: impl Into<Option<gst::ClockTime>>,
