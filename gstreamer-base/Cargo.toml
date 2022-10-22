@@ -18,7 +18,7 @@ cfg-if = "1.0"
 libc = "0.2"
 bitflags = "1.0"
 ffi = { package = "gstreamer-base-sys", path = "sys" }
-glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }
+glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.16", version = "0.16" }
 gst = { package = "gstreamer", path = "../gstreamer" }
 atomic_refcell = "0.1"
 
