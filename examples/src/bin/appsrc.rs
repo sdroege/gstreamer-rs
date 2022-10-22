@@ -34,16 +34,6 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     gst::init()?;
 
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("appsrc").build()?;
-    let videoconvert = gst::ElementFactory::make("videoconvert").build()?;
-    let sink = gst::ElementFactory::make("autovideosink").build()?;
-
-    pipeline.add_many(&[&src, &videoconvert, &sink])?;
-    gst::Element::link_many(&[&src, &videoconvert, &sink])?;
-
-    let appsrc = src
-        .dynamic_cast::<gst_app::AppSrc>()
-        .expect("Source element is expected to be an appsrc!");
 
     // Specify the format we want to provide as application into the pipeline
     // by creating a video info with the given format and creating caps from it for the appsrc element.
@@ -53,8 +43,16 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             .build()
             .expect("Failed to create video info");
 
-    appsrc.set_caps(Some(&video_info.to_caps().unwrap()));
-    appsrc.set_format(gst::Format::Time);
+    let appsrc = gst_app::AppSrc::builder()
+        .caps(&video_info.to_caps().unwrap())
+        .format(gst::Format::Time)
+        .build();
+
+    let videoconvert = gst::ElementFactory::make("videoconvert").build()?;
+    let sink = gst::ElementFactory::make("autovideosink").build()?;
+
+    pipeline.add_many(&[appsrc.upcast_ref(), &videoconvert, &sink])?;
+    gst::Element::link_many(&[appsrc.upcast_ref(), &videoconvert, &sink])?;
 
     // Our frame counter, that is stored in the mutable environment
     // of the closure of the need-data callback

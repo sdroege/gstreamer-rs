@@ -533,19 +533,17 @@ impl App {
         let pipeline = gst::Pipeline::new(None);
         let src = gst::ElementFactory::make("videotestsrc").build()?;
 
-        let appsink = gst::ElementFactory::make("appsink")
-            .build()?
-            .dynamic_cast::<gst_app::AppSink>()
-            .expect("Sink element is expected to be an appsink!");
-
-        appsink.set_enable_last_sample(true);
-        appsink.set_max_buffers(1);
         let caps = gst_video::VideoCapsBuilder::new()
             .features(&[&gst_gl::CAPS_FEATURE_MEMORY_GL_MEMORY])
             .format(gst_video::VideoFormat::Rgba)
             .field("texture-target", "2D")
             .build();
-        appsink.set_caps(Some(&caps));
+
+        let appsink = gst_app::AppSink::builder()
+            .enable_last_sample(true)
+            .max_buffers(1)
+            .caps(&caps)
+            .build();
 
         if let Some(gl_element) = gl_element {
             let glupload = gst::ElementFactory::make("glupload").build()?;

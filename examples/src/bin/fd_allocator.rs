@@ -47,31 +47,24 @@ fn create_receiver_pipeline(
     let caps = video_info.to_caps()?;
 
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("appsrc").build()?;
+    let src = gst_app::AppSrc::builder()
+        .caps(&caps)
+        .do_timestamp(true)
+        .is_live(true)
+        .build();
     let filter = video_filter::FdMemoryFadeInVideoFilter::default().upcast::<gst::Element>();
     let convert = gst::ElementFactory::make("videoconvert").build()?;
     let queue = gst::ElementFactory::make("queue").build()?;
     let sink = gst::ElementFactory::make("autovideosink").build()?;
 
-    src.downcast_ref::<gst_app::AppSrc>()
-        .ok_or_else(|| anyhow::anyhow!("is not a appsrc"))?
-        .set_caps(Some(&caps));
-
-    pipeline.add_many(&[&src, &filter, &convert, &queue, &sink])?;
-    gst::Element::link_many(&[&src, &filter, &convert, &queue, &sink])?;
-
-    let appsrc = src
-        .downcast::<gst_app::AppSrc>()
-        .map_err(|_| anyhow::anyhow!("is not a appsrc"))?;
-
-    appsrc.set_do_timestamp(true);
-    appsrc.set_is_live(true);
+    pipeline.add_many(&[src.upcast_ref(), &filter, &convert, &queue, &sink])?;
+    gst::Element::link_many(&[src.upcast_ref(), &filter, &convert, &queue, &sink])?;
 
     let fd_allocator = gst_allocators::FdAllocator::new();
     let video_info = video_info.clone();
     let mut fd_buf = [-1; 253];
 
-    appsrc.set_callbacks(
+    src.set_callbacks(
         gst_app::AppSrcCallbacks::builder()
             .need_data(move |appsrc, _| {
                 // Read the next fds from the socket, if 0

@@ -37,25 +37,21 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
     let pipeline = gst::Pipeline::new(None);
     let src = gst::ElementFactory::make("audiotestsrc").build()?;
-    let sink = gst::ElementFactory::make("appsink").build()?;
+    let appsink = gst_app::AppSink::builder()
+        // Tell the appsink what format we want. It will then be the audiotestsrc's job to
+        // provide the format we request.
+        // This can be set after linking the two objects, because format negotiation between
+        // both elements will happen during pre-rolling of the pipeline.
+        .caps(
+            &gst_audio::AudioCapsBuilder::new_interleaved()
+                .format(gst_audio::AUDIO_FORMAT_S16)
+                .channels(1)
+                .build(),
+        )
+        .build();
 
-    pipeline.add_many(&[&src, &sink])?;
-    src.link(&sink)?;
-
-    let appsink = sink
-        .dynamic_cast::<gst_app::AppSink>()
-        .expect("Sink element is expected to be an appsink!");
-
-    // Tell the appsink what format we want. It will then be the audiotestsrc's job to
-    // provide the format we request.
-    // This can be set after linking the two objects, because format negotiation between
-    // both elements will happen during pre-rolling of the pipeline.
-    appsink.set_caps(Some(
-        &gst_audio::AudioCapsBuilder::new_interleaved()
-            .format(gst_audio::AUDIO_FORMAT_S16)
-            .channels(1)
-            .build(),
-    ));
+    pipeline.add_many(&[&src, appsink.upcast_ref()])?;
+    src.link(&appsink)?;
 
     // Getting data out of the appsink is done by setting callbacks on it.
     // The appsink will then call those handlers, as soon as data is available.

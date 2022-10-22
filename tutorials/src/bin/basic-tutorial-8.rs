@@ -47,10 +47,16 @@ fn main() {
         return;
     }
 
-    let appsrc = gst::ElementFactory::make("appsrc")
-        .name("audio_source")
+    let info = AudioInfo::builder(gst_audio::AudioFormat::S16le, SAMPLE_RATE, 1)
         .build()
         .unwrap();
+    let audio_caps = info.to_caps().unwrap();
+
+    let appsrc = gst_app::AppSrc::builder()
+        .name("audio_source")
+        .caps(&audio_caps)
+        .format(gst::Format::Time)
+        .build();
     let tee = gst::ElementFactory::make("tee")
         .name("tee")
         .build()
@@ -97,16 +103,16 @@ fn main() {
         .name("app_queue")
         .build()
         .unwrap();
-    let appsink = gst::ElementFactory::make("appsink")
+    let appsink = gst_app::AppSink::builder()
+        .caps(&audio_caps)
         .name("app_sink")
-        .build()
-        .unwrap();
+        .build();
 
     let pipeline = gst::Pipeline::new(Some("test-pipeline"));
 
     pipeline
         .add_many(&[
-            &appsrc,
+            appsrc.upcast_ref(),
             &tee,
             &audio_queue,
             &audio_convert1,
@@ -118,11 +124,11 @@ fn main() {
             &video_convert,
             &video_sink,
             &app_queue,
-            &appsink,
+            appsink.upcast_ref(),
         ])
         .unwrap();
 
-    gst::Element::link_many(&[&appsrc, &tee]).unwrap();
+    gst::Element::link_many(&[appsrc.upcast_ref(), &tee]).unwrap();
     gst::Element::link_many(&[&audio_queue, &audio_convert1, &audio_resample, &audio_sink])
         .unwrap();
     gst::Element::link_many(&[
@@ -133,7 +139,7 @@ fn main() {
         &video_sink,
     ])
     .unwrap();
-    gst::Element::link_many(&[&app_queue, &appsink]).unwrap();
+    gst::Element::link_many(&[&app_queue, appsink.upcast_ref()]).unwrap();
 
     let tee_audio_pad = tee.request_pad_simple("src_%u").unwrap();
     println!(
@@ -153,22 +159,6 @@ fn main() {
     let tee_app_pad = tee.request_pad_simple("src_%u").unwrap();
     let queue_app_pad = app_queue.static_pad("sink").unwrap();
     tee_app_pad.link(&queue_app_pad).unwrap();
-
-    // configure appsrc
-    let info = AudioInfo::builder(gst_audio::AudioFormat::S16le, SAMPLE_RATE, 1)
-        .build()
-        .unwrap();
-    let audio_caps = info.to_caps().unwrap();
-
-    let appsrc = appsrc
-        .dynamic_cast::<AppSrc>()
-        .expect("Source element is expected to be an appsrc!");
-    appsrc.set_caps(Some(&audio_caps));
-    appsrc.set_format(gst::Format::Time);
-
-    let appsink = appsink
-        .dynamic_cast::<AppSink>()
-        .expect("Sink element is expected to be an appsink!");
 
     let data: Arc<Mutex<CustomData>> = Arc::new(Mutex::new(CustomData::new(&appsrc, &appsink)));
 
@@ -249,9 +239,6 @@ fn main() {
             })
             .build(),
     );
-
-    // configure appsink
-    appsink.set_caps(Some(&audio_caps));
 
     let data_weak = Arc::downgrade(&data);
     appsink.set_callbacks(

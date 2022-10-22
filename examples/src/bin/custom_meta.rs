@@ -182,16 +182,8 @@ fn example_main() {
 
     // This creates a pipeline with appsrc and appsink.
     let pipeline = gst::Pipeline::new(None);
-    let appsrc = gst::ElementFactory::make("appsrc")
-        .build()
-        .unwrap()
-        .downcast::<gst_app::AppSrc>()
-        .unwrap();
-    let appsink = gst::ElementFactory::make("appsink")
-        .build()
-        .unwrap()
-        .downcast::<gst_app::AppSink>()
-        .unwrap();
+    let appsrc = gst_app::AppSrc::builder().build();
+    let appsink = gst_app::AppSink::builder().build();
 
     pipeline.add(&appsrc).unwrap();
     pipeline.add(&appsink).unwrap();

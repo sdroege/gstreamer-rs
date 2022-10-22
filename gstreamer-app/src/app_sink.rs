@@ -268,6 +268,14 @@ unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
 }
 
 impl AppSink {
+    // rustdoc-stripper-ignore-next
+    /// Creates a new builder-pattern struct instance to construct [`AppSink`] objects.
+    ///
+    /// This method returns an instance of [`AppSinkBuilder`](crate::builders::AppSinkBuilder) which can be used to create [`AppSink`] objects.
+    pub fn builder() -> AppSinkBuilder {
+        AppSinkBuilder::default()
+    }
+
     #[doc(alias = "gst_app_sink_set_callbacks")]
     pub fn set_callbacks(&self, callbacks: AppSinkCallbacks) {
         use once_cell::sync::Lazy;
@@ -911,6 +919,205 @@ impl AppSink {
 
     pub fn stream(&self) -> AppSinkStream {
         AppSinkStream::new(self)
+    }
+}
+
+#[derive(Default)]
+// rustdoc-stripper-ignore-next
+/// A [builder-pattern] type to construct [`AppSink`] objects.
+///
+/// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
+#[must_use = "The builder must be built to be used"]
+pub struct AppSinkBuilder {
+    async_: Option<bool>,
+    buffer_list: Option<bool>,
+    callbacks: Option<AppSinkCallbacks>,
+    caps: Option<gst::Caps>,
+    drop: Option<bool>,
+    drop_out_of_segment: Option<bool>,
+    enable_last_sample: Option<bool>,
+    max_bitrate: Option<u64>,
+    max_buffers: Option<u32>,
+    max_lateness: Option<i64>,
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    processing_deadline: Option<i64>,
+    qos: Option<bool>,
+    render_delay: Option<Option<gst::ClockTime>>,
+    sync: Option<bool>,
+    throttle_time: Option<u64>,
+    ts_offset: Option<gst::ClockTimeDiff>,
+    wait_on_eos: Option<bool>,
+    name: Option<String>,
+}
+
+impl AppSinkBuilder {
+    // rustdoc-stripper-ignore-next
+    /// Create a new [`AppSinkBuilder`].
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Build the [`AppSink`].
+    #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
+    pub fn build(self) -> AppSink {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref async_) = self.async_ {
+            properties.push(("async", async_));
+        }
+        if let Some(ref buffer_list) = self.buffer_list {
+            properties.push(("buffer-list", buffer_list));
+        }
+        if let Some(ref caps) = self.caps {
+            properties.push(("caps", caps));
+        }
+        if let Some(ref drop) = self.drop {
+            properties.push(("drop", drop));
+        }
+        if let Some(ref enable_last_sample) = self.enable_last_sample {
+            properties.push(("enable-last-sample", enable_last_sample));
+        }
+        if let Some(ref max_bitrate) = self.max_bitrate {
+            properties.push(("max-bitrate", max_bitrate));
+        }
+        if let Some(ref max_buffers) = self.max_buffers {
+            properties.push(("max-buffers", max_buffers));
+        }
+        if let Some(ref max_lateness) = self.max_lateness {
+            properties.push(("max-lateness", max_lateness));
+        }
+        #[cfg(any(feature = "v1_16", feature = "dox"))]
+        if let Some(ref processing_deadline) = self.processing_deadline {
+            properties.push(("processing-deadline", processing_deadline));
+        }
+        if let Some(ref qos) = self.qos {
+            properties.push(("qos", qos));
+        }
+        if let Some(ref render_delay) = self.render_delay {
+            properties.push(("render-delay", render_delay));
+        }
+        if let Some(ref sync) = self.sync {
+            properties.push(("sync", sync));
+        }
+        if let Some(ref throttle_time) = self.throttle_time {
+            properties.push(("throttle-time", throttle_time));
+        }
+        if let Some(ref ts_offset) = self.ts_offset {
+            properties.push(("ts-offset", ts_offset));
+        }
+        if let Some(ref qos) = self.qos {
+            properties.push(("qos", qos));
+        }
+        if let Some(ref wait_on_eos) = self.wait_on_eos {
+            properties.push(("wait-on-eos", wait_on_eos));
+        }
+        if let Some(ref name) = self.name {
+            properties.push(("name", name));
+        }
+
+        let appsink = glib::Object::new::<AppSink>(&properties);
+
+        if let Some(callbacks) = self.callbacks {
+            appsink.set_callbacks(callbacks);
+        }
+
+        if let Some(drop_out_of_segment) = self.drop_out_of_segment {
+            appsink.set_drop_out_of_segment(drop_out_of_segment);
+        }
+
+        appsink
+    }
+
+    pub fn async_(mut self, async_: bool) -> Self {
+        self.async_ = Some(async_);
+        self
+    }
+
+    pub fn buffer_list(mut self, buffer_list: bool) -> Self {
+        self.buffer_list = Some(buffer_list);
+        self
+    }
+
+    pub fn callbacks(mut self, callbacks: AppSinkCallbacks) -> Self {
+        self.callbacks = Some(callbacks);
+        self
+    }
+
+    pub fn caps(mut self, caps: &gst::Caps) -> Self {
+        self.caps = Some(caps.clone());
+        self
+    }
+
+    pub fn drop(mut self, drop: bool) -> Self {
+        self.drop = Some(drop);
+        self
+    }
+
+    pub fn drop_out_of_segment(mut self, drop_out_of_segment: bool) -> Self {
+        self.drop_out_of_segment = Some(drop_out_of_segment);
+        self
+    }
+
+    pub fn enable_last_sample(mut self, enable_last_sample: bool) -> Self {
+        self.enable_last_sample = Some(enable_last_sample);
+        self
+    }
+
+    pub fn max_bitrate(mut self, max_bitrate: u64) -> Self {
+        self.max_bitrate = Some(max_bitrate);
+        self
+    }
+
+    pub fn max_buffers(mut self, max_buffers: u32) -> Self {
+        self.max_buffers = Some(max_buffers);
+        self
+    }
+
+    pub fn max_lateness(mut self, max_lateness: i64) -> Self {
+        self.max_lateness = Some(max_lateness);
+        self
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    pub fn processing_deadline(mut self, processing_deadline: i64) -> Self {
+        self.processing_deadline = Some(processing_deadline);
+        self
+    }
+
+    pub fn qos(mut self, qos: bool) -> Self {
+        self.qos = Some(qos);
+        self
+    }
+
+    pub fn render_delay(mut self, render_delay: Option<gst::ClockTime>) -> Self {
+        self.render_delay = Some(render_delay);
+        self
+    }
+
+    pub fn sync(mut self, sync: bool) -> Self {
+        self.sync = Some(sync);
+        self
+    }
+
+    pub fn throttle_time(mut self, throttle_time: u64) -> Self {
+        self.throttle_time = Some(throttle_time);
+        self
+    }
+
+    pub fn ts_offset(mut self, ts_offset: gst::ClockTimeDiff) -> Self {
+        self.ts_offset = Some(ts_offset);
+        self
+    }
+
+    pub fn wait_on_eos(mut self, wait_on_eos: bool) -> Self {
+        self.wait_on_eos = Some(wait_on_eos);
+        self
+    }
+
+    pub fn name(mut self, name: &str) -> Self {
+        self.name = Some(name.to_string());
+        self
     }
 }
 
