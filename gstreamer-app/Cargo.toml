@@ -18,7 +18,7 @@ futures-core = "0.3"
 futures-sink = "0.3"
 bitflags = "1.0"
 libc = "0.2"
-ffi = { package = "gstreamer-app-sys", path = "sys" }
+ffi = { package = "gstreamer-app-sys", version = "0.19", path = "sys" }
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.16", version = "0.16" }
 gst = { package = "gstreamer", version = "0.19", path = "../gstreamer" }
 gst-base = { package = "gstreamer-base", version = "0.19", path = "../gstreamer-base" }

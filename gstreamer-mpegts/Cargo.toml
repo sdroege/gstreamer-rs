@@ -14,7 +14,7 @@ edition = "2021"
 rust-version = "1.63"
 
 [dependencies]
-ffi = { package = "gstreamer-mpegts-sys", path = "sys" }
+ffi = { package = "gstreamer-mpegts-sys", version = "0.19", path = "sys" }
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.16", version = "0.16" }
 gst = { package = "gstreamer", version = "0.19", path = "../gstreamer" }
 
