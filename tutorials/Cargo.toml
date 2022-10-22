@@ -17,7 +17,7 @@ gst-app = { package = "gstreamer-app", path = "../gstreamer-app" }
 gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils" }
 byte-slice-cast = "1"
 anyhow = "1"
-termion = { version = "1.5", optional = true }
+termion = { version = "2", optional = true }
 
 [target.'cfg(target_os = "macos")'.dependencies]
 cocoa = "0.24"
