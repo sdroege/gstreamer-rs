@@ -45,6 +45,7 @@ version = "0.16"
 
 [dependencies.gst_gl]
 package = "gstreamer-gl-sys"
+version = "0.19"
 path = "../../sys"
 
 [build-dependencies]

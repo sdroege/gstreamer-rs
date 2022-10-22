@@ -18,14 +18,17 @@ version = "0.16"
 
 [dependencies.gst_base]
 package = "gstreamer-base-sys"
+version = "0.19"
 path = "../../gstreamer-base/sys"
 
 [dependencies.gst]
 package = "gstreamer-sys"
+version = "0.19"
 path = "../../gstreamer/sys"
 
 [dependencies.gst_video]
 package = "gstreamer-video-sys"
+version = "0.19"
 path = "../../gstreamer-video/sys"
 
 [dev-dependencies]

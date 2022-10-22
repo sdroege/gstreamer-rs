@@ -18,6 +18,7 @@ package = "gobject-sys"
 
 [dependencies.gst]
 package = "gstreamer-sys"
+version = "0.19"
 path = "../../gstreamer/sys"
 
 [dev-dependencies]

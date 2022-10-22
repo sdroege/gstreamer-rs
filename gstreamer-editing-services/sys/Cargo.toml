@@ -24,10 +24,12 @@ version = "0.16"
 
 [dependencies.gst_pbutils]
 package = "gstreamer-pbutils-sys"
+version = "0.19"
 path = "../../gstreamer-pbutils/sys"
 
 [dependencies.gst]
 package = "gstreamer-sys"
+version = "0.19"
 path = "../../gstreamer/sys"
 
 [dev-dependencies]

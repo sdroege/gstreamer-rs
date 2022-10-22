@@ -24,18 +24,22 @@ version = "0.16"
 
 [dependencies.gst_net]
 package = "gstreamer-net-sys"
+version = "0.19"
 path = "../../gstreamer-net/sys"
 
 [dependencies.gst_rtsp]
 package = "gstreamer-rtsp-sys"
+version = "0.19"
 path = "../../gstreamer-rtsp/sys"
 
 [dependencies.gst_sdp]
 package = "gstreamer-sdp-sys"
+version = "0.19"
 path = "../../gstreamer-sdp/sys"
 
 [dependencies.gst]
 package = "gstreamer-sys"
+version = "0.19"
 path = "../../gstreamer/sys"
 
 [dev-dependencies]

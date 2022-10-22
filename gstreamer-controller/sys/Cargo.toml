@@ -19,6 +19,7 @@ version = "0.16"
 
 [dependencies.gst]
 package = "gstreamer-sys"
+version = "0.19"
 path = "../../gstreamer/sys"
 
 [dev-dependencies]

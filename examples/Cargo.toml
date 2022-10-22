@@ -8,23 +8,23 @@ rust-version = "1.63"
 
 [dependencies]
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.16", version = "0.16" }
-gst = { package = "gstreamer", path = "../gstreamer" }
-gst-gl = { package = "gstreamer-gl", path = "../gstreamer-gl", optional = true }
-gst-gl-egl = { package = "gstreamer-gl-egl", path = "../gstreamer-gl/egl", optional = true }
-gst-gl-wayland = { package = "gstreamer-gl-wayland", path = "../gstreamer-gl/wayland", optional = true }
-gst-gl-x11 = { package = "gstreamer-gl-x11", path = "../gstreamer-gl/x11", optional = true }
-gst-app = { package = "gstreamer-app", path = "../gstreamer-app" }
-gst-audio = { package = "gstreamer-audio", path = "../gstreamer-audio" }
-gst-base = { package = "gstreamer-base", path = "../gstreamer-base" }
-gst-video = { package = "gstreamer-video", path = "../gstreamer-video" }
-gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils" }
-gst-play = { package = "gstreamer-play", path = "../gstreamer-play", optional = true }
-gst-player = { package = "gstreamer-player", path = "../gstreamer-player", optional = true }
-ges = { package = "gstreamer-editing-services", path = "../gstreamer-editing-services", optional = true }
-gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp", optional = true }
-gst-rtsp = { package = "gstreamer-rtsp", path = "../gstreamer-rtsp", optional = true }
-gst-rtsp-server = { package = "gstreamer-rtsp-server", path = "../gstreamer-rtsp-server", optional = true }
-gst-allocators = { package = "gstreamer-allocators", path = "../gstreamer-allocators", optional = true }
+gst = { package = "gstreamer", version = "0.19", path = "../gstreamer" }
+gst-gl = { package = "gstreamer-gl", version = "0.19", path = "../gstreamer-gl", optional = true }
+gst-gl-egl = { package = "gstreamer-gl-egl", version = "0.19", path = "../gstreamer-gl/egl", optional = true }
+gst-gl-wayland = { package = "gstreamer-gl-wayland", version = "0.19", path = "../gstreamer-gl/wayland", optional = true }
+gst-gl-x11 = { package = "gstreamer-gl-x11", version = "0.19", path = "../gstreamer-gl/x11", optional = true }
+gst-app = { package = "gstreamer-app", version = "0.19", path = "../gstreamer-app" }
+gst-audio = { package = "gstreamer-audio", version = "0.19", path = "../gstreamer-audio" }
+gst-base = { package = "gstreamer-base", version = "0.19", path = "../gstreamer-base" }
+gst-video = { package = "gstreamer-video", version = "0.19", path = "../gstreamer-video" }
+gst-pbutils = { package = "gstreamer-pbutils", version = "0.19", path = "../gstreamer-pbutils" }
+gst-play = { package = "gstreamer-play", version = "0.19", path = "../gstreamer-play", optional = true }
+gst-player = { package = "gstreamer-player", version = "0.19", path = "../gstreamer-player", optional = true }
+ges = { package = "gstreamer-editing-services", version = "0.19", path = "../gstreamer-editing-services", optional = true }
+gst-sdp = { package = "gstreamer-sdp", version = "0.19", path = "../gstreamer-sdp", optional = true }
+gst-rtsp = { package = "gstreamer-rtsp", version = "0.19", path = "../gstreamer-rtsp", optional = true }
+gst-rtsp-server = { package = "gstreamer-rtsp-server", version = "0.19", path = "../gstreamer-rtsp-server", optional = true }
+gst-allocators = { package = "gstreamer-allocators", version = "0.19", path = "../gstreamer-allocators", optional = true }
 gtk = { git = "https://github.com/gtk-rs/gtk3-rs", branch = "0.16", version = "0.16", optional = true }
 gdk = { git = "https://github.com/gtk-rs/gtk3-rs", branch = "0.16", version = "0.16", optional = true }
 gio = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.16", version = "0.16", optional = true }
