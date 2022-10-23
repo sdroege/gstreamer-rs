@@ -97,7 +97,7 @@ impl<T: RTPHeaderExtensionImpl> RTPHeaderExtensionImplExt for T {
                 .get_supported_flags
                 .expect("no parent \"get_supported_flags\" implementation");
             from_glib(f(self
-                .instance()
+                .obj()
                 .unsafe_cast_ref::<crate::RTPHeaderExtension>()
                 .to_glib_none()
                 .0))
@@ -112,7 +112,7 @@ impl<T: RTPHeaderExtensionImpl> RTPHeaderExtensionImplExt for T {
                 .get_max_size
                 .expect("no parent \"get_max_size\" implementation");
             f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<crate::RTPHeaderExtension>()
                     .to_glib_none()
                     .0,
@@ -136,7 +136,7 @@ impl<T: RTPHeaderExtensionImpl> RTPHeaderExtensionImplExt for T {
                 .expect("no parent \"write\" implementation");
 
             let res = f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<crate::RTPHeaderExtension>()
                     .to_glib_none()
                     .0,
@@ -173,7 +173,7 @@ impl<T: RTPHeaderExtensionImpl> RTPHeaderExtensionImplExt for T {
 
             gst::result_from_gboolean!(
                 f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<crate::RTPHeaderExtension>()
                         .to_glib_none()
                         .0,
@@ -195,7 +195,7 @@ impl<T: RTPHeaderExtensionImpl> RTPHeaderExtensionImplExt for T {
             if let Some(f) = (*parent_class).set_non_rtp_sink_caps {
                 gst::result_from_gboolean!(
                     f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<crate::RTPHeaderExtension>()
                             .to_glib_none()
                             .0,
@@ -220,7 +220,7 @@ impl<T: RTPHeaderExtensionImpl> RTPHeaderExtensionImplExt for T {
             if let Some(f) = (*parent_class).update_non_rtp_src_caps {
                 gst::result_from_gboolean!(
                     f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<crate::RTPHeaderExtension>()
                             .to_glib_none()
                             .0,
@@ -246,7 +246,7 @@ impl<T: RTPHeaderExtensionImpl> RTPHeaderExtensionImplExt for T {
             if let Some(f) = (*parent_class).set_attributes {
                 gst::result_from_gboolean!(
                     f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<crate::RTPHeaderExtension>()
                             .to_glib_none()
                             .0,
@@ -275,7 +275,7 @@ impl<T: RTPHeaderExtensionImpl> RTPHeaderExtensionImplExt for T {
 
             gst::result_from_gboolean!(
                 f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<crate::RTPHeaderExtension>()
                         .to_glib_none()
                         .0,

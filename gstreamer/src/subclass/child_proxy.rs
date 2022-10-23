@@ -44,10 +44,7 @@ impl<T: ChildProxyImpl> ChildProxyImplExt for T {
                 .get_child_by_name
                 .expect("no parent \"child_by_name\" implementation");
             let ret = func(
-                self.instance()
-                    .unsafe_cast_ref::<ChildProxy>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<ChildProxy>().to_glib_none().0,
                 name.to_glib_none().0,
             );
             from_glib_full(ret)
@@ -64,10 +61,7 @@ impl<T: ChildProxyImpl> ChildProxyImplExt for T {
                 .get_child_by_index
                 .expect("no parent \"child_by_index\" implementation");
             let ret = func(
-                self.instance()
-                    .unsafe_cast_ref::<ChildProxy>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<ChildProxy>().to_glib_none().0,
                 index,
             );
             from_glib_full(ret)
@@ -83,12 +77,7 @@ impl<T: ChildProxyImpl> ChildProxyImplExt for T {
             let func = (*parent_iface)
                 .get_children_count
                 .expect("no parent \"children_count\" implementation");
-            func(
-                self.instance()
-                    .unsafe_cast_ref::<ChildProxy>()
-                    .to_glib_none()
-                    .0,
-            )
+            func(self.obj().unsafe_cast_ref::<ChildProxy>().to_glib_none().0)
         }
     }
 
@@ -100,10 +89,7 @@ impl<T: ChildProxyImpl> ChildProxyImplExt for T {
 
             if let Some(func) = (*parent_iface).child_added {
                 func(
-                    self.instance()
-                        .unsafe_cast_ref::<ChildProxy>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<ChildProxy>().to_glib_none().0,
                     child.to_glib_none().0,
                     name.to_glib_none().0,
                 );
@@ -119,10 +105,7 @@ impl<T: ChildProxyImpl> ChildProxyImplExt for T {
 
             if let Some(func) = (*parent_iface).child_removed {
                 func(
-                    self.instance()
-                        .unsafe_cast_ref::<ChildProxy>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<ChildProxy>().to_glib_none().0,
                     child.to_glib_none().0,
                     name.to_glib_none().0,
                 );

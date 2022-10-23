@@ -61,7 +61,7 @@ impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
                 .expect("Missing parent function `update_caps`");
 
             Option::<_>::from_glib_full(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<VideoAggregator>()
                     .to_glib_none()
                     .0,
@@ -79,7 +79,7 @@ impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
         outbuf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         assert_eq!(
-            self.instance().as_ptr() as *mut ffi::GstVideoAggregator,
+            self.obj().as_ptr() as *mut ffi::GstVideoAggregator,
             token.0.as_ptr() as *mut ffi::GstVideoAggregator
         );
 
@@ -91,7 +91,7 @@ impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
                 .expect("Missing parent function `aggregate_frames`");
 
             try_from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<VideoAggregator>()
                     .to_glib_none()
                     .0,
@@ -111,7 +111,7 @@ impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
 
             let mut buffer = ptr::null_mut();
             try_from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<VideoAggregator>()
                     .to_glib_none()
                     .0,
@@ -136,7 +136,7 @@ impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
                 let mut at_least_one_alpha = glib::ffi::GFALSE;
 
                 f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<VideoAggregator>()
                         .to_glib_none()
                         .0,
@@ -196,7 +196,7 @@ unsafe extern "C" fn video_aggregator_aggregate_frames<T: VideoAggregatorImpl>(
     let imp = instance.imp();
 
     gst::panic_to_error!(imp, gst::FlowReturn::Error, {
-        let instance = imp.instance();
+        let instance = imp.obj();
         let instance = instance.unsafe_cast_ref::<VideoAggregator>();
         let token = AggregateFramesToken(instance);
 

@@ -505,7 +505,7 @@ macro_rules! log_with_level(
         if $level <= $cat.threshold() {
             use $crate::glib::Cast;
 
-            let obj = $imp.instance();
+            let obj = $imp.obj();
             #[allow(unused_unsafe)]
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
             $crate::DebugCategory::log_unfiltered($cat.clone(), Some(obj),

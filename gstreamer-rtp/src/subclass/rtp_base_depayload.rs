@@ -52,7 +52,7 @@ impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
+                            self.obj()
                                 .unsafe_cast_ref::<RTPBaseDepayload>()
                                 .to_glib_none()
                                 .0,
@@ -74,7 +74,7 @@ impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
                 .handle_event
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<RTPBaseDepayload>()
                             .to_glib_none()
                             .0,
@@ -93,7 +93,7 @@ impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
                 .packet_lost
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<RTPBaseDepayload>()
                             .to_glib_none()
                             .0,
@@ -117,7 +117,7 @@ impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
                 .expect("no parent \"process\" implementation");
 
             from_glib_full(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<crate::RTPBaseDepayload>()
                     .to_glib_none()
                     .0,

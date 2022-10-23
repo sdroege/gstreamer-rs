@@ -109,7 +109,7 @@ macro_rules! define_tracer_hooks {
                             $($cb_arg: $cb_arg_ty),*
                         ) {
                             let $this = Tracer::from_glib_borrow($this);
-                            let $this = T::from_instance($this.unsafe_cast_ref());
+                            let $this = T::from_obj($this.unsafe_cast_ref());
                             $impl
                         }
                         (
@@ -119,7 +119,7 @@ macro_rules! define_tracer_hooks {
                     },)*
                 };
                 unsafe {
-                    let instance = self.instance();
+                    let instance = self.obj();
                     ffi::gst_tracing_register_hook(
                         instance.to_glib_none().0 as *mut ffi::GstTracer,
                         hook_type.as_ptr() as *const _,

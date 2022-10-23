@@ -186,10 +186,7 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .change_state
                 .expect("Missing parent function `change_state`");
             try_from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<Element>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<Element>().to_glib_none().0,
                 transition.into_glib(),
             ))
         }
@@ -209,10 +206,7 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .request_new_pad
                 .map(|f| {
                     from_glib_none(f(
-                        self.instance()
-                            .unsafe_cast_ref::<Element>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<Element>().to_glib_none().0,
                         templ.to_glib_none().0,
                         name.to_glib_full(),
                         caps.to_glib_none().0,
@@ -231,10 +225,7 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .release_pad
                 .map(|f| {
                     f(
-                        self.instance()
-                            .unsafe_cast_ref::<Element>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<Element>().to_glib_none().0,
                         pad.to_glib_none().0,
                     )
                 })
@@ -251,10 +242,7 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .send_event
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<Element>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<Element>().to_glib_none().0,
                         event.into_glib_ptr(),
                     ))
                 })
@@ -271,10 +259,7 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .query
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<Element>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<Element>().to_glib_none().0,
                         query.as_mut_ptr(),
                     ))
                 })
@@ -291,10 +276,7 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .set_context
                 .map(|f| {
                     f(
-                        self.instance()
-                            .unsafe_cast_ref::<Element>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<Element>().to_glib_none().0,
                         context.to_glib_none().0,
                     )
                 })
@@ -311,10 +293,7 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .set_clock
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<Element>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<Element>().to_glib_none().0,
                         clock.to_glib_none().0,
                     ))
                 })
@@ -330,11 +309,7 @@ impl<T: ElementImpl> ElementImplExt for T {
             (*parent_class)
                 .provide_clock
                 .map(|f| {
-                    from_glib_none(f(self
-                        .instance()
-                        .unsafe_cast_ref::<Element>()
-                        .to_glib_none()
-                        .0))
+                    from_glib_none(f(self.obj().unsafe_cast_ref::<Element>().to_glib_none().0))
                 })
                 .unwrap_or(None)
         }
@@ -347,10 +322,7 @@ impl<T: ElementImpl> ElementImplExt for T {
 
             if let Some(f) = (*parent_class).post_message {
                 from_glib(f(
-                    self.instance()
-                        .unsafe_cast_ref::<Element>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<Element>().to_glib_none().0,
                     msg.into_glib_ptr(),
                 ))
             } else {
@@ -398,7 +370,7 @@ impl<T: ElementImpl> ElementImplExt for T {
 
     fn post_error_message(&self, msg: crate::ErrorMessage) {
         unsafe {
-            self.instance()
+            self.obj()
                 .unsafe_cast_ref::<Element>()
                 .post_error_message(msg)
         }
@@ -695,7 +667,7 @@ mod tests {
             fn constructed(&self) {
                 self.parent_constructed();
 
-                let element = self.instance();
+                let element = self.obj();
                 element.add_pad(&self.sinkpad).unwrap();
                 element.add_pad(&self.srcpad).unwrap();
             }

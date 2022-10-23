@@ -103,7 +103,7 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
                 let mut buffer = std::ptr::null_mut();
 
                 let result = f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<crate::BufferPool>()
                         .to_glib_none()
                         .0,
@@ -130,7 +130,7 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
                 let mut buffer = std::ptr::null_mut();
 
                 let result = f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<crate::BufferPool>()
                         .to_glib_none()
                         .0,
@@ -151,7 +151,7 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).free_buffer {
                 f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<crate::BufferPool>()
                         .to_glib_none()
                         .0,
@@ -167,7 +167,7 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).release_buffer {
                 f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<crate::BufferPool>()
                         .to_glib_none()
                         .0,
@@ -183,7 +183,7 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).reset_buffer {
                 f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<crate::BufferPool>()
                         .to_glib_none()
                         .0,
@@ -199,7 +199,7 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).start {
                 let result = f(self
-                    .instance()
+                    .obj()
                     .unsafe_cast_ref::<crate::BufferPool>()
                     .to_glib_none()
                     .0);
@@ -217,7 +217,7 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).stop {
                 let result = f(self
-                    .instance()
+                    .obj()
                     .unsafe_cast_ref::<crate::BufferPool>()
                     .to_glib_none()
                     .0);
@@ -235,7 +235,7 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).set_config {
                 let result = f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<crate::BufferPool>()
                         .to_glib_none()
                         .0,
@@ -255,7 +255,7 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).flush_start {
                 f(self
-                    .instance()
+                    .obj()
                     .unsafe_cast_ref::<crate::BufferPool>()
                     .to_glib_none()
                     .0)
@@ -269,7 +269,7 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBufferPoolClass;
             if let Some(f) = (*parent_class).flush_stop {
                 f(self
-                    .instance()
+                    .obj()
                     .unsafe_cast_ref::<crate::BufferPool>()
                     .to_glib_none()
                     .0)

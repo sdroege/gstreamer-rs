@@ -124,7 +124,7 @@ mod mirror {
         }
         impl GLBaseFilterImpl for GLMirrorFilter {
             fn gl_start(&self) -> Result<(), gst::LoggableError> {
-                let filter = self.instance();
+                let filter = self.obj();
 
                 // Create a shader when GL is started, knowing that the OpenGL context is
                 // available.
@@ -141,7 +141,7 @@ mod mirror {
                 input: &gst_gl::GLMemory,
                 output: &gst_gl::GLMemory,
             ) -> Result<(), gst::LoggableError> {
-                let filter = self.instance();
+                let filter = self.obj();
 
                 let shader = self.shader.lock().unwrap();
                 // Use the underlying filter implementation to transform the input texture into

@@ -164,14 +164,14 @@ mod cairo_compositor {
                 name: Option<&str>,
                 caps: Option<&gst::Caps>,
             ) -> Option<gst::Pad> {
-                let element = self.instance();
+                let element = self.obj();
                 let pad = self.parent_request_new_pad(templ, name, caps)?;
                 element.child_added(&pad, &pad.name());
                 Some(pad)
             }
 
             fn release_pad(&self, pad: &gst::Pad) {
-                let element = self.instance();
+                let element = self.obj();
                 element.child_removed(pad, &pad.name());
                 self.parent_release_pad(pad);
             }
@@ -239,7 +239,7 @@ mod cairo_compositor {
                 token: &gst_video::subclass::AggregateFramesToken,
                 outbuf: &mut gst::BufferRef,
             ) -> Result<gst::FlowSuccess, gst::FlowError> {
-                let element = self.instance();
+                let element = self.obj();
                 let pads = element.sink_pads();
 
                 // Map the output frame writable.
@@ -306,12 +306,12 @@ mod cairo_compositor {
         // This allows accessing the pads and their properties from e.g. gst-launch.
         impl ChildProxyImpl for CairoCompositor {
             fn children_count(&self) -> u32 {
-                let object = self.instance();
+                let object = self.obj();
                 object.num_pads() as u32
             }
 
             fn child_by_name(&self, name: &str) -> Option<glib::Object> {
-                let object = self.instance();
+                let object = self.obj();
                 object
                     .pads()
                     .into_iter()
@@ -320,7 +320,7 @@ mod cairo_compositor {
             }
 
             fn child_by_index(&self, index: u32) -> Option<glib::Object> {
-                let object = self.instance();
+                let object = self.obj();
                 object
                     .pads()
                     .into_iter()

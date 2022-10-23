@@ -85,10 +85,7 @@ impl<T: VideoFilterImpl> VideoFilterImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
-                                .unsafe_cast_ref::<VideoFilter>()
-                                .to_glib_none()
-                                .0,
+                            self.obj().unsafe_cast_ref::<VideoFilter>().to_glib_none().0,
                             incaps.to_glib_none().0,
                             mut_override(in_info.to_glib_none().0),
                             outcaps.to_glib_none().0,
@@ -114,17 +111,14 @@ impl<T: VideoFilterImpl> VideoFilterImplExt for T {
                 .transform_frame
                 .map(|f| {
                     try_from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<VideoFilter>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<VideoFilter>().to_glib_none().0,
                         mut_override(inframe.as_ptr()),
                         outframe.as_mut_ptr(),
                     ))
                 })
                 .unwrap_or_else(|| {
                     if !self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<gst_base::BaseTransform>()
                         .is_in_place()
                     {
@@ -147,7 +141,7 @@ impl<T: VideoFilterImpl> VideoFilterImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoFilterClass;
             let f = (*parent_class).transform_frame_ip.unwrap_or_else(|| {
                 if self
-                    .instance()
+                    .obj()
                     .unsafe_cast_ref::<gst_base::BaseTransform>()
                     .is_in_place()
                 {
@@ -163,10 +157,7 @@ impl<T: VideoFilterImpl> VideoFilterImplExt for T {
             });
 
             try_from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<VideoFilter>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<VideoFilter>().to_glib_none().0,
                 frame.as_mut_ptr(),
             ))
         }
@@ -181,7 +172,7 @@ impl<T: VideoFilterImpl> VideoFilterImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoFilterClass;
             let f = (*parent_class).transform_frame_ip.unwrap_or_else(|| {
                 if self
-                    .instance()
+                    .obj()
                     .unsafe_cast_ref::<gst_base::BaseTransform>()
                     .is_in_place()
                 {
@@ -198,10 +189,7 @@ impl<T: VideoFilterImpl> VideoFilterImplExt for T {
             });
 
             try_from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<VideoFilter>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<VideoFilter>().to_glib_none().0,
                 mut_override(frame.as_ptr()),
             ))
         }

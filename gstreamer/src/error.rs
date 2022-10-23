@@ -149,7 +149,7 @@ impl LoggableError {
         use glib::subclass::prelude::*;
 
         self.category.log(
-            Some(unsafe { imp.instance().unsafe_cast_ref::<glib::Object>() }),
+            Some(unsafe { imp.obj().unsafe_cast_ref::<glib::Object>() }),
             crate::DebugLevel::Error,
             self.bool_error.filename,
             self.bool_error.function,

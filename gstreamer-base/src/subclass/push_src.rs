@@ -45,10 +45,7 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
                 .fill
                 .map(|f| {
                     try_from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<PushSrc>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<PushSrc>().to_glib_none().0,
                         buffer.as_mut_ptr(),
                     ))
                 })
@@ -70,10 +67,7 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
                     let buffer_ref = &mut buffer_ptr as *mut _ as *mut gst::ffi::GstBuffer;
 
                     gst::FlowSuccess::try_from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<PushSrc>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<PushSrc>().to_glib_none().0,
                         buffer_ref,
                     ))
                     .map(|_| from_glib_full(buffer_ref))
@@ -92,7 +86,7 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
             (*parent_class)
                 .create
                 .map(|f| {
-                    let instance = self.instance();
+                    let instance = self.obj();
                     let instance = instance.unsafe_cast_ref::<PushSrc>();
                     let orig_buffer_ptr = buffer
                         .as_mut()
@@ -322,8 +316,7 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
             }
             Ok(CreateSuccess::NewBufferList(new_buffer_list)) => {
                 if buffer.is_some()
-                    || imp.instance().unsafe_cast_ref::<PushSrc>().src_pad().mode()
-                        == gst::PadMode::Pull
+                    || imp.obj().unsafe_cast_ref::<PushSrc>().src_pad().mode() == gst::PadMode::Pull
                 {
                     panic!("Buffer lists can only be returned in push mode");
                 }

@@ -61,7 +61,7 @@ impl<T: VideoAggregatorPadImpl> VideoAggregatorPadImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoAggregatorPadClass;
             if let Some(f) = (*parent_class).update_conversion_info {
                 f(self
-                    .instance()
+                    .obj()
                     .unsafe_cast_ref::<VideoAggregatorPad>()
                     .to_glib_none()
                     .0);
@@ -87,7 +87,7 @@ impl<T: VideoAggregatorPadImpl> VideoAggregatorPadImplExt for T {
                 let mut prepared_frame = mem::MaybeUninit::zeroed();
 
                 f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<VideoAggregatorPad>()
                         .to_glib_none()
                         .0,
@@ -130,7 +130,7 @@ impl<T: VideoAggregatorPadImpl> VideoAggregatorPadImplExt for T {
                 };
 
                 f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<VideoAggregatorPad>()
                         .to_glib_none()
                         .0,

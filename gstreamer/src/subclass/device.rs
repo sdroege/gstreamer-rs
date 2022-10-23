@@ -34,7 +34,7 @@ impl<T: DeviceImpl> DeviceImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstDeviceClass;
             if let Some(f) = (*parent_class).create_element {
                 let ptr = f(
-                    self.instance().unsafe_cast_ref::<Device>().to_glib_none().0,
+                    self.obj().unsafe_cast_ref::<Device>().to_glib_none().0,
                     name.to_glib_none().0,
                 );
 
@@ -66,7 +66,7 @@ impl<T: DeviceImpl> DeviceImplExt for T {
             })?;
             result_from_gboolean!(
                 f(
-                    self.instance().unsafe_cast_ref::<Device>().to_glib_none().0,
+                    self.obj().unsafe_cast_ref::<Device>().to_glib_none().0,
                     element.to_glib_none().0
                 ),
                 crate::CAT_RUST,

@@ -43,11 +43,7 @@ impl<T: GLBaseSrcImpl> GLBaseSrcImplExt for T {
                 .gl_start
                 .map(|f| {
                     result_from_gboolean!(
-                        f(self
-                            .instance()
-                            .unsafe_cast_ref::<GLBaseSrc>()
-                            .to_glib_none()
-                            .0),
+                        f(self.obj().unsafe_cast_ref::<GLBaseSrc>().to_glib_none().0),
                         CAT_RUST,
                         "Parent function `gl_start` failed",
                     )
@@ -62,11 +58,7 @@ impl<T: GLBaseSrcImpl> GLBaseSrcImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstGLBaseSrcClass;
 
             if let Some(f) = (*parent_class).gl_stop {
-                f(self
-                    .instance()
-                    .unsafe_cast_ref::<GLBaseSrc>()
-                    .to_glib_none()
-                    .0)
+                f(self.obj().unsafe_cast_ref::<GLBaseSrc>().to_glib_none().0)
             }
         }
     }
@@ -81,10 +73,7 @@ impl<T: GLBaseSrcImpl> GLBaseSrcImplExt for T {
                 .map(|f| {
                     result_from_gboolean!(
                         f(
-                            self.instance()
-                                .unsafe_cast_ref::<GLBaseSrc>()
-                                .to_glib_none()
-                                .0,
+                            self.obj().unsafe_cast_ref::<GLBaseSrc>().to_glib_none().0,
                             mut_override(memory.to_glib_none().0),
                         ),
                         CAT_RUST,

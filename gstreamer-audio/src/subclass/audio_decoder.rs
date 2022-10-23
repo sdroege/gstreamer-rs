@@ -144,7 +144,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .open
                 .map(|f| {
                     if from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<AudioDecoder>()
                         .to_glib_none()
                         .0))
@@ -169,7 +169,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .close
                 .map(|f| {
                     if from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<AudioDecoder>()
                         .to_glib_none()
                         .0))
@@ -194,7 +194,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .start
                 .map(|f| {
                     if from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<AudioDecoder>()
                         .to_glib_none()
                         .0))
@@ -219,7 +219,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .stop
                 .map(|f| {
                     if from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<AudioDecoder>()
                         .to_glib_none()
                         .0))
@@ -245,7 +245,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
+                            self.obj()
                                 .unsafe_cast_ref::<AudioDecoder>()
                                 .to_glib_none()
                                 .0,
@@ -269,7 +269,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                     let mut offset = mem::MaybeUninit::uninit();
                     let mut len = mem::MaybeUninit::uninit();
                     gst::FlowSuccess::try_from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<AudioDecoder>()
                             .to_glib_none()
                             .0,
@@ -300,7 +300,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .handle_frame
                 .map(|f| {
                     try_from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<AudioDecoder>()
                             .to_glib_none()
                             .0,
@@ -320,7 +320,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
             if let Some(f) = (*parent_class).pre_push {
                 let mut buffer = buffer.into_glib_ptr();
                 gst::FlowSuccess::try_from_glib(f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<AudioDecoder>()
                         .to_glib_none()
                         .0,
@@ -341,7 +341,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .flush
                 .map(|f| {
                     f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<AudioDecoder>()
                             .to_glib_none()
                             .0,
@@ -361,7 +361,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(self
-                            .instance()
+                            .obj()
                             .unsafe_cast_ref::<AudioDecoder>()
                             .to_glib_none()
                             .0),
@@ -381,7 +381,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .getcaps
                 .map(|f| {
                     from_glib_full(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<AudioDecoder>()
                             .to_glib_none()
                             .0,
@@ -389,7 +389,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                     ))
                 })
                 .unwrap_or_else(|| {
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<AudioDecoder>()
                         .proxy_getcaps(None, filter)
                 })
@@ -404,7 +404,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .sink_event
                 .expect("Missing parent function `sink_event`");
             from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<AudioDecoder>()
                     .to_glib_none()
                     .0,
@@ -421,7 +421,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .sink_query
                 .expect("Missing parent function `sink_query`");
             from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<AudioDecoder>()
                     .to_glib_none()
                     .0,
@@ -438,7 +438,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .src_event
                 .expect("Missing parent function `src_event`");
             from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<AudioDecoder>()
                     .to_glib_none()
                     .0,
@@ -455,7 +455,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .src_query
                 .expect("Missing parent function `src_query`");
             from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<AudioDecoder>()
                     .to_glib_none()
                     .0,
@@ -476,7 +476,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
+                            self.obj()
                                 .unsafe_cast_ref::<AudioDecoder>()
                                 .to_glib_none()
                                 .0,
@@ -502,7 +502,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
+                            self.obj()
                                 .unsafe_cast_ref::<AudioDecoder>()
                                 .to_glib_none()
                                 .0,

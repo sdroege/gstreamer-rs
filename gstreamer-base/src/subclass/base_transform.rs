@@ -277,7 +277,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .start
                 .map(|f| {
                     if from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<BaseTransform>()
                         .to_glib_none()
                         .0))
@@ -302,7 +302,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .stop
                 .map(|f| {
                     if from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<BaseTransform>()
                         .to_glib_none()
                         .0))
@@ -332,7 +332,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .transform_caps
                 .map(|f| {
                     from_glib_full(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<BaseTransform>()
                             .to_glib_none()
                             .0,
@@ -356,7 +356,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             match (*parent_class).fixate_caps {
                 Some(f) => from_glib_full(f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<BaseTransform>()
                         .to_glib_none()
                         .0,
@@ -382,7 +382,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
+                            self.obj()
                                 .unsafe_cast_ref::<BaseTransform>()
                                 .to_glib_none()
                                 .0,
@@ -405,7 +405,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .accept_caps
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<BaseTransform>()
                             .to_glib_none()
                             .0,
@@ -425,7 +425,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .query
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<BaseTransform>()
                             .to_glib_none()
                             .0,
@@ -452,7 +452,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .map(|f| {
                     let mut othersize = mem::MaybeUninit::uninit();
                     let res: bool = from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<BaseTransform>()
                             .to_glib_none()
                             .0,
@@ -477,11 +477,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             let f = (*parent_class).get_unit_size.unwrap_or_else(|| {
-                if !self
-                    .instance()
-                    .unsafe_cast_ref::<BaseTransform>()
-                    .is_in_place()
-                {
+                if !self.obj().unsafe_cast_ref::<BaseTransform>().is_in_place() {
                     unimplemented!(concat!(
                         "Missing parent function `get_unit_size`. Required because ",
                         "transform doesn't operate in-place"
@@ -495,7 +491,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
             let mut size = mem::MaybeUninit::uninit();
             if from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<BaseTransform>()
                     .to_glib_none()
                     .0,
@@ -517,7 +513,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .sink_event
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<BaseTransform>()
                             .to_glib_none()
                             .0,
@@ -536,7 +532,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .src_event
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<BaseTransform>()
                             .to_glib_none()
                             .0,
@@ -564,7 +560,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                     let mut outbuf: *mut gst::ffi::GstBuffer = ptr::null_mut();
                     // FIXME: Wrong signature in FFI
                     gst::FlowSuccess::try_from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<BaseTransform>()
                             .to_glib_none()
                             .0,
@@ -595,7 +591,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .transform
                 .map(|f| {
                     try_from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<BaseTransform>()
                             .to_glib_none()
                             .0,
@@ -604,11 +600,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                     ))
                 })
                 .unwrap_or_else(|| {
-                    if !self
-                        .instance()
-                        .unsafe_cast_ref::<BaseTransform>()
-                        .is_in_place()
-                    {
+                    if !self.obj().unsafe_cast_ref::<BaseTransform>().is_in_place() {
                         Err(gst::FlowError::NotSupported)
                     } else {
                         unreachable!(concat!(
@@ -627,11 +619,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             let f = (*parent_class).transform_ip.unwrap_or_else(|| {
-                if self
-                    .instance()
-                    .unsafe_cast_ref::<BaseTransform>()
-                    .is_in_place()
-                {
+                if self.obj().unsafe_cast_ref::<BaseTransform>().is_in_place() {
                     panic!(concat!(
                         "Missing parent function `transform_ip`. Required because ",
                         "transform operates in-place"
@@ -644,7 +632,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             });
 
             try_from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<BaseTransform>()
                     .to_glib_none()
                     .0,
@@ -661,11 +649,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             let f = (*parent_class).transform_ip.unwrap_or_else(|| {
-                if self
-                    .instance()
-                    .unsafe_cast_ref::<BaseTransform>()
-                    .is_in_place()
-                {
+                if self.obj().unsafe_cast_ref::<BaseTransform>().is_in_place() {
                     panic!(concat!(
                         "Missing parent function `transform_ip`. Required because ",
                         "transform operates in-place (passthrough mode)"
@@ -681,7 +665,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             // FIXME: Wrong signature in FFI
             let buf: *mut gst::ffi::GstBuffer = buf.to_glib_none().0;
             try_from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<BaseTransform>()
                     .to_glib_none()
                     .0,
@@ -703,7 +687,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
+                            self.obj()
                                 .unsafe_cast_ref::<BaseTransform>()
                                 .to_glib_none()
                                 .0,
@@ -733,7 +717,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
+                            self.obj()
                                 .unsafe_cast_ref::<BaseTransform>()
                                 .to_glib_none()
                                 .0,
@@ -758,7 +742,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             if let Some(ref f) = (*parent_class).copy_metadata {
                 gst::result_from_gboolean!(
                     f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<BaseTransform>()
                             .to_glib_none()
                             .0,
@@ -787,7 +771,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .transform_meta
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<BaseTransform>()
                             .to_glib_none()
                             .0,
@@ -806,7 +790,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             if let Some(ref f) = (*parent_class).before_transform {
                 f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<BaseTransform>()
                         .to_glib_none()
                         .0,
@@ -829,7 +813,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .expect("Missing parent function `submit_input_buffer`");
 
             try_from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<BaseTransform>()
                     .to_glib_none()
                     .0,
@@ -849,7 +833,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
             let mut outbuf = ptr::null_mut();
             gst::FlowSuccess::try_from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<BaseTransform>()
                     .to_glib_none()
                     .0,
@@ -873,7 +857,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         <Self as ObjectSubclass>::ParentType: IsA<BaseTransform>,
     {
         unsafe {
-            let instance = self.instance();
+            let instance = self.obj();
             let ptr: *mut ffi::GstBaseTransform =
                 instance.unsafe_cast_ref::<BaseTransform>().to_glib_none().0;
             let sinkpad: Borrowed<gst::Pad> = from_glib_borrow((*ptr).sinkpad);
@@ -890,7 +874,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         <Self as ObjectSubclass>::ParentType: IsA<BaseTransform>,
     {
         unsafe {
-            let instance = self.instance();
+            let instance = self.obj();
             let ptr: *mut ffi::GstBaseTransform =
                 instance.unsafe_cast_ref::<BaseTransform>().to_glib_none().0;
             let sinkpad: Borrowed<gst::Pad> = from_glib_borrow((*ptr).sinkpad);
@@ -1328,7 +1312,7 @@ unsafe extern "C" fn base_transform_copy_metadata<T: BaseTransformImpl>(
     let imp = instance.imp();
 
     if gst::ffi::gst_mini_object_is_writable(outbuf as *mut _) == glib::ffi::GFALSE {
-        let instance = imp.instance();
+        let instance = imp.obj();
         let obj = instance.unsafe_cast_ref::<BaseTransform>();
         gst::warning!(gst::CAT_RUST, obj: obj, "buffer {:?} not writable", outbuf);
         return glib::ffi::GFALSE;
