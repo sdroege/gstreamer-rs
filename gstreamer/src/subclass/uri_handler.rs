@@ -47,12 +47,7 @@ impl<T: URIHandlerImpl> URIHandlerImplExt for T {
             let func = (*parent_iface)
                 .get_uri
                 .expect("no parent \"uri\" implementation");
-            let ret = func(
-                self.instance()
-                    .unsafe_cast_ref::<URIHandler>()
-                    .to_glib_none()
-                    .0,
-            );
+            let ret = func(self.obj().unsafe_cast_ref::<URIHandler>().to_glib_none().0);
             from_glib_full(ret)
         }
     }
@@ -69,10 +64,7 @@ impl<T: URIHandlerImpl> URIHandlerImplExt for T {
 
             let mut err = ptr::null_mut();
             func(
-                self.instance()
-                    .unsafe_cast_ref::<URIHandler>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<URIHandler>().to_glib_none().0,
                 uri.to_glib_none().0,
                 &mut err,
             );

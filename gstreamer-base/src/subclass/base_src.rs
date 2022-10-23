@@ -176,12 +176,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
             (*parent_class)
                 .start
                 .map(|f| {
-                    if from_glib(f(self
-                        .instance()
-                        .unsafe_cast_ref::<BaseSrc>()
-                        .to_glib_none()
-                        .0))
-                    {
+                    if from_glib(f(self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0)) {
                         Ok(())
                     } else {
                         Err(gst::error_msg!(
@@ -201,12 +196,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
             (*parent_class)
                 .stop
                 .map(|f| {
-                    if from_glib(f(self
-                        .instance()
-                        .unsafe_cast_ref::<BaseSrc>()
-                        .to_glib_none()
-                        .0))
-                    {
+                    if from_glib(f(self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0)) {
                         Ok(())
                     } else {
                         Err(gst::error_msg!(
@@ -225,13 +215,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .is_seekable
-                .map(|f| {
-                    from_glib(f(self
-                        .instance()
-                        .unsafe_cast_ref::<BaseSrc>()
-                        .to_glib_none()
-                        .0))
-                })
+                .map(|f| from_glib(f(self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0)))
                 .unwrap_or(false)
         }
     }
@@ -245,10 +229,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                 .map(|f| {
                     let mut size = mem::MaybeUninit::uninit();
                     if from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSrc>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                         size.as_mut_ptr(),
                     )) {
                         Some(size.assume_init())
@@ -273,10 +254,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                     let mut start = mem::MaybeUninit::uninit();
                     let mut stop = mem::MaybeUninit::uninit();
                     f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSrc>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                         buffer.as_mut_ptr(),
                         start.as_mut_ptr(),
                         stop.as_mut_ptr(),
@@ -303,10 +281,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                 .fill
                 .map(|f| {
                     try_from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSrc>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                         offset,
                         length,
                         buffer.as_mut_ptr(),
@@ -330,10 +305,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                     let buffer_ref = &mut buffer_ptr as *mut _ as *mut gst::ffi::GstBuffer;
 
                     gst::FlowSuccess::try_from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSrc>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                         offset,
                         length,
                         buffer_ref,
@@ -356,7 +328,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
             (*parent_class)
                 .create
                 .map(|f| {
-                    let instance = self.instance();
+                    let instance = self.obj();
                     let instance = instance.unsafe_cast_ref::<BaseSrc>();
                     let orig_buffer_ptr = buffer
                         .as_mut()
@@ -468,10 +440,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                 .do_seek
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSrc>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                         segment.to_glib_none_mut().0,
                     ))
                 })
@@ -487,10 +456,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                 .query
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSrc>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                         query.as_mut_ptr(),
                     ))
                 })
@@ -506,10 +472,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                 .event
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSrc>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                         event.to_glib_none().0,
                     ))
                 })
@@ -526,10 +489,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                 .get_caps
                 .map(|f| {
                     from_glib_full(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSrc>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                         filter.to_glib_none().0,
                     ))
                 })
@@ -545,11 +505,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                 .negotiate
                 .map(|f| {
                     gst::result_from_gboolean!(
-                        f(self
-                            .instance()
-                            .unsafe_cast_ref::<BaseSrc>()
-                            .to_glib_none()
-                            .0),
+                        f(self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0),
                         gst::CAT_RUST,
                         "Parent function `negotiate` failed"
                     )
@@ -567,10 +523,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
-                                .unsafe_cast_ref::<BaseSrc>()
-                                .to_glib_none()
-                                .0,
+                            self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                             caps.to_glib_none().0
                         ),
                         gst::CAT_RUST,
@@ -588,10 +541,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
             match (*parent_class).fixate {
                 Some(fixate) => from_glib_full(fixate(
-                    self.instance()
-                        .unsafe_cast_ref::<BaseSrc>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                     caps.into_glib_ptr(),
                 )),
                 None => caps,
@@ -606,12 +556,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
             (*parent_class)
                 .unlock
                 .map(|f| {
-                    if from_glib(f(self
-                        .instance()
-                        .unsafe_cast_ref::<BaseSrc>()
-                        .to_glib_none()
-                        .0))
-                    {
+                    if from_glib(f(self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0)) {
                         Ok(())
                     } else {
                         Err(gst::error_msg!(
@@ -631,12 +576,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
             (*parent_class)
                 .unlock_stop
                 .map(|f| {
-                    if from_glib(f(self
-                        .instance()
-                        .unsafe_cast_ref::<BaseSrc>()
-                        .to_glib_none()
-                        .0))
-                    {
+                    if from_glib(f(self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0)) {
                         Ok(())
                     } else {
                         Err(gst::error_msg!(
@@ -661,10 +601,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
-                                .unsafe_cast_ref::<BaseSrc>()
-                                .to_glib_none()
-                                .0,
+                            self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                             query.as_mut_ptr(),
                         ),
                         gst::CAT_RUST,
@@ -840,7 +777,7 @@ unsafe extern "C" fn base_src_create<T: BaseSrcImpl>(
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let instance = imp.instance();
+    let instance = imp.obj();
     let instance = instance.unsafe_cast_ref::<BaseSrc>();
     // FIXME: Wrong signature in -sys bindings
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3

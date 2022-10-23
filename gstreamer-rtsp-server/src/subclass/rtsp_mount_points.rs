@@ -26,7 +26,7 @@ impl<T: RTSPMountPointsImpl> RTSPMountPointsImplExt for T {
                 .make_path
                 .expect("No `make_path` virtual method implementation in parent class");
             from_glib_full(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<RTSPMountPoints>()
                     .to_glib_none()
                     .0,

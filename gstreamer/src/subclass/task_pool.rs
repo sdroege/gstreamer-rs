@@ -326,7 +326,7 @@ mod tests {
 
         pool.cleanup();
 
-        let imp = imp::TestPool::from_instance(&pool);
+        let imp = pool.imp();
         assert!(imp.prepared.load(atomic::Ordering::SeqCst));
         assert!(imp.cleaned_up.load(atomic::Ordering::SeqCst));
     }

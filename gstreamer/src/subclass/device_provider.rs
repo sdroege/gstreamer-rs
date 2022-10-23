@@ -101,7 +101,7 @@ impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstDeviceProviderClass;
             if let Some(f) = (*parent_class).probe {
                 FromGlibPtrContainer::from_glib_full(f(self
-                    .instance()
+                    .obj()
                     .unsafe_cast_ref::<DeviceProvider>()
                     .to_glib_none()
                     .0))
@@ -120,7 +120,7 @@ impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {
             })?;
             result_from_gboolean!(
                 f(self
-                    .instance()
+                    .obj()
                     .unsafe_cast_ref::<DeviceProvider>()
                     .to_glib_none()
                     .0),
@@ -136,7 +136,7 @@ impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstDeviceProviderClass;
             if let Some(f) = (*parent_class).stop {
                 f(self
-                    .instance()
+                    .obj()
                     .unsafe_cast_ref::<DeviceProvider>()
                     .to_glib_none()
                     .0);

@@ -44,7 +44,7 @@ impl<T: AudioAggregatorPadImpl> AudioAggregatorPadImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioAggregatorPadClass;
             if let Some(f) = (*parent_class).update_conversion_info {
                 f(self
-                    .instance()
+                    .obj()
                     .unsafe_cast_ref::<AudioAggregatorPad>()
                     .to_glib_none()
                     .0);
@@ -65,7 +65,7 @@ impl<T: AudioAggregatorPadImpl> AudioAggregatorPadImplExt for T {
                 .convert_buffer
                 .expect("Missing parent function `convert_buffer`");
             from_glib_full(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<AudioAggregatorPad>()
                     .to_glib_none()
                     .0,

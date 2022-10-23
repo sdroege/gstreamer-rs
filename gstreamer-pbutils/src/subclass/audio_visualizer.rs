@@ -48,7 +48,7 @@ pub trait AudioVisualizerImplExt: ObjectSubclass {
 impl<T: AudioVisualizerImpl> AudioVisualizerImplExt for T {
     fn parent_setup(&self, token: &AudioVisualizerSetupToken) -> Result<(), LoggableError> {
         assert_eq!(
-            self.instance().as_ptr() as *mut ffi::GstAudioVisualizer,
+            self.obj().as_ptr() as *mut ffi::GstAudioVisualizer,
             token.0.as_ptr() as *mut ffi::GstAudioVisualizer
         );
 
@@ -60,7 +60,7 @@ impl<T: AudioVisualizerImpl> AudioVisualizerImplExt for T {
                 .map(|f| {
                     result_from_gboolean!(
                         f(self
-                            .instance()
+                            .obj()
                             .unsafe_cast_ref::<AudioVisualizer>()
                             .to_glib_none()
                             .0,),
@@ -85,7 +85,7 @@ impl<T: AudioVisualizerImpl> AudioVisualizerImplExt for T {
                 .map(|f| {
                     result_from_gboolean!(
                         f(
-                            self.instance()
+                            self.obj()
                                 .unsafe_cast_ref::<AudioVisualizer>()
                                 .to_glib_none()
                                 .0,
@@ -112,7 +112,7 @@ impl<T: AudioVisualizerImpl> AudioVisualizerImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
+                            self.obj()
                                 .unsafe_cast_ref::<AudioVisualizer>()
                                 .to_glib_none()
                                 .0,
@@ -144,7 +144,7 @@ unsafe extern "C" fn audio_visualizer_setup<T: AudioVisualizerImpl>(
     let imp = instance.imp();
 
     gst::panic_to_error!(imp, false, {
-        let instance = imp.instance();
+        let instance = imp.obj();
         let instance = instance.unsafe_cast_ref::<AudioVisualizer>();
         let token = AudioVisualizerSetupToken(instance);
 

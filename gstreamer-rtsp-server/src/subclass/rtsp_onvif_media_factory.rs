@@ -29,7 +29,7 @@ impl<T: RTSPOnvifMediaFactoryImpl> RTSPOnvifMediaFactoryImplExt for T {
                 .has_backchannel_support
                 .map(|f| {
                     from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<RTSPOnvifMediaFactory>()
                         .to_glib_none()
                         .0))

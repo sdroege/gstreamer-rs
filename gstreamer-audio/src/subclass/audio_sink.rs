@@ -60,11 +60,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
                 Some(f) => f,
             };
             gst::result_from_gboolean!(
-                f(self
-                    .instance()
-                    .unsafe_cast_ref::<AudioSink>()
-                    .to_glib_none()
-                    .0),
+                f(self.obj().unsafe_cast_ref::<AudioSink>().to_glib_none().0),
                 gst::CAT_RUST,
                 "Failed to close element using the parent function"
             )
@@ -79,11 +75,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
                 Some(f) => f,
                 None => return 0,
             };
-            f(self
-                .instance()
-                .unsafe_cast_ref::<AudioSink>()
-                .to_glib_none()
-                .0)
+            f(self.obj().unsafe_cast_ref::<AudioSink>().to_glib_none().0)
         }
     }
 
@@ -96,11 +88,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
                 None => return Ok(()),
             };
             gst::result_from_gboolean!(
-                f(self
-                    .instance()
-                    .unsafe_cast_ref::<AudioSink>()
-                    .to_glib_none()
-                    .0),
+                f(self.obj().unsafe_cast_ref::<AudioSink>().to_glib_none().0),
                 gst::CAT_RUST,
                 "Failed to open element using the parent function"
             )
@@ -117,10 +105,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
             };
             gst::result_from_gboolean!(
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<AudioSink>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<AudioSink>().to_glib_none().0,
                     &mut spec.0
                 ),
                 gst::CAT_RUST,
@@ -143,11 +128,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
                 }
             };
             gst::result_from_gboolean!(
-                f(self
-                    .instance()
-                    .unsafe_cast_ref::<AudioSink>()
-                    .to_glib_none()
-                    .0),
+                f(self.obj().unsafe_cast_ref::<AudioSink>().to_glib_none().0),
                 gst::CAT_RUST,
                 "Failed to unprepare element using the parent function"
             )
@@ -164,10 +145,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
             };
             let buffer_ptr = buffer.as_ptr() as *const _ as *mut _;
             let ret = f(
-                self.instance()
-                    .unsafe_cast_ref::<AudioSink>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<AudioSink>().to_glib_none().0,
                 buffer_ptr,
                 buffer.len() as u32,
             );
@@ -187,11 +165,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSinkClass;
             if let Some(f) = (*parent_class).reset {
-                f(self
-                    .instance()
-                    .unsafe_cast_ref::<AudioSink>()
-                    .to_glib_none()
-                    .0)
+                f(self.obj().unsafe_cast_ref::<AudioSink>().to_glib_none().0)
             }
         }
     }

@@ -65,11 +65,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
                 Some(f) => f,
             };
             gst::result_from_gboolean!(
-                f(self
-                    .instance()
-                    .unsafe_cast_ref::<AudioSrc>()
-                    .to_glib_none()
-                    .0),
+                f(self.obj().unsafe_cast_ref::<AudioSrc>().to_glib_none().0),
                 gst::CAT_RUST,
                 "Failed to close element using the parent function"
             )
@@ -84,11 +80,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
                 Some(f) => f,
                 None => return 0,
             };
-            f(self
-                .instance()
-                .unsafe_cast_ref::<AudioSrc>()
-                .to_glib_none()
-                .0)
+            f(self.obj().unsafe_cast_ref::<AudioSrc>().to_glib_none().0)
         }
     }
 
@@ -101,11 +93,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
                 None => return Ok(()),
             };
             gst::result_from_gboolean!(
-                f(self
-                    .instance()
-                    .unsafe_cast_ref::<AudioSrc>()
-                    .to_glib_none()
-                    .0),
+                f(self.obj().unsafe_cast_ref::<AudioSrc>().to_glib_none().0),
                 gst::CAT_RUST,
                 "Failed to open element using the parent function"
             )
@@ -122,10 +110,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
             };
             gst::result_from_gboolean!(
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<AudioSrc>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<AudioSrc>().to_glib_none().0,
                     &mut spec.0
                 ),
                 gst::CAT_RUST,
@@ -148,11 +133,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
                 }
             };
             gst::result_from_gboolean!(
-                f(self
-                    .instance()
-                    .unsafe_cast_ref::<AudioSrc>()
-                    .to_glib_none()
-                    .0),
+                f(self.obj().unsafe_cast_ref::<AudioSrc>().to_glib_none().0),
                 gst::CAT_RUST,
                 "Failed to unprepare element using the parent function"
             )
@@ -173,10 +154,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
             let buffer_ptr = buffer.as_mut_ptr() as *mut _;
             let mut timestamp = mem::MaybeUninit::uninit();
             let ret = f(
-                self.instance()
-                    .unsafe_cast_ref::<AudioSrc>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<AudioSrc>().to_glib_none().0,
                 buffer_ptr,
                 buffer.len() as u32,
                 timestamp.as_mut_ptr(),
@@ -197,11 +175,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
             if let Some(f) = (*parent_class).reset {
-                f(self
-                    .instance()
-                    .unsafe_cast_ref::<AudioSrc>()
-                    .to_glib_none()
-                    .0)
+                f(self.obj().unsafe_cast_ref::<AudioSrc>().to_glib_none().0)
             }
         }
     }

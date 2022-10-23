@@ -67,7 +67,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
                 .start
                 .map(|f| {
                     if from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<BaseParse>()
                         .to_glib_none()
                         .0))
@@ -92,7 +92,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
                 .stop
                 .map(|f| {
                     if from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<BaseParse>()
                         .to_glib_none()
                         .0))
@@ -118,10 +118,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
-                                .unsafe_cast_ref::<BaseParse>()
-                                .to_glib_none()
-                                .0,
+                            self.obj().unsafe_cast_ref::<BaseParse>().to_glib_none().0,
                             caps.to_glib_none().0,
                         ),
                         gst::CAT_RUST,
@@ -144,10 +141,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
                 .handle_frame
                 .map(|f| {
                     let res = try_from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseParse>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseParse>().to_glib_none().0,
                         frame.to_glib_none().0,
                         &mut skipsize,
                     ));
@@ -169,10 +163,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
                 let mut dest_val = mem::MaybeUninit::uninit();
 
                 let res = from_glib(f(
-                    self.instance()
-                        .unsafe_cast_ref::<BaseParse>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<BaseParse>().to_glib_none().0,
                     src_val.format().into_glib(),
                     src_val.into_raw_value(),
                     dest_format.into_glib(),
@@ -267,7 +258,7 @@ unsafe extern "C" fn base_parse_handle_frame<T: BaseParseImpl>(
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let instance = imp.instance();
+    let instance = imp.obj();
     let instance = instance.unsafe_cast_ref::<BaseParse>();
     let wrap_frame = BaseParseFrame::new(frame, instance);
 

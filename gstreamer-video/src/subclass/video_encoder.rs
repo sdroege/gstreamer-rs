@@ -139,7 +139,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .open
                 .map(|f| {
                     if from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<VideoEncoder>()
                         .to_glib_none()
                         .0))
@@ -164,7 +164,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .close
                 .map(|f| {
                     if from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<VideoEncoder>()
                         .to_glib_none()
                         .0))
@@ -189,7 +189,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .start
                 .map(|f| {
                     if from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<VideoEncoder>()
                         .to_glib_none()
                         .0))
@@ -214,7 +214,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .stop
                 .map(|f| {
                     if from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<VideoEncoder>()
                         .to_glib_none()
                         .0))
@@ -239,7 +239,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .finish
                 .map(|f| {
                     try_from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<VideoEncoder>()
                         .to_glib_none()
                         .0))
@@ -260,7 +260,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
+                            self.obj()
                                 .unsafe_cast_ref::<VideoEncoder>()
                                 .to_glib_none()
                                 .0,
@@ -285,7 +285,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .handle_frame
                 .map(|f| {
                     try_from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<VideoEncoder>()
                             .to_glib_none()
                             .0,
@@ -304,7 +304,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .flush
                 .map(|f| {
                     from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<VideoEncoder>()
                         .to_glib_none()
                         .0))
@@ -322,7 +322,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(self
-                            .instance()
+                            .obj()
                             .unsafe_cast_ref::<VideoEncoder>()
                             .to_glib_none()
                             .0),
@@ -342,7 +342,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .getcaps
                 .map(|f| {
                     from_glib_full(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<VideoEncoder>()
                             .to_glib_none()
                             .0,
@@ -350,7 +350,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                     ))
                 })
                 .unwrap_or_else(|| {
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<VideoEncoder>()
                         .proxy_getcaps(None, filter)
                 })
@@ -365,7 +365,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .sink_event
                 .expect("Missing parent function `sink_event`");
             from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<VideoEncoder>()
                     .to_glib_none()
                     .0,
@@ -382,7 +382,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .sink_query
                 .expect("Missing parent function `sink_query`");
             from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<VideoEncoder>()
                     .to_glib_none()
                     .0,
@@ -399,7 +399,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .src_event
                 .expect("Missing parent function `src_event`");
             from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<VideoEncoder>()
                     .to_glib_none()
                     .0,
@@ -416,7 +416,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .src_query
                 .expect("Missing parent function `src_query`");
             from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<VideoEncoder>()
                     .to_glib_none()
                     .0,
@@ -437,7 +437,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
+                            self.obj()
                                 .unsafe_cast_ref::<VideoEncoder>()
                                 .to_glib_none()
                                 .0,
@@ -463,7 +463,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
+                            self.obj()
                                 .unsafe_cast_ref::<VideoEncoder>()
                                 .to_glib_none()
                                 .0,
@@ -609,7 +609,7 @@ unsafe extern "C" fn video_encoder_handle_frame<T: VideoEncoderImpl>(
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    let instance = imp.instance();
+    let instance = imp.obj();
     let instance = instance.unsafe_cast_ref::<VideoEncoder>();
     let wrap_frame = VideoCodecFrame::new(frame, instance);
 

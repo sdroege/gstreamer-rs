@@ -57,7 +57,7 @@ impl<T: RTPBasePayloadImpl> RTPBasePayloadImplExt for T {
                 .get_caps
                 .expect("Missing parent function `get_caps`");
             from_glib_full(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<RTPBasePayload>()
                     .to_glib_none()
                     .0,
@@ -76,7 +76,7 @@ impl<T: RTPBasePayloadImpl> RTPBasePayloadImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
+                            self.obj()
                                 .unsafe_cast_ref::<RTPBasePayload>()
                                 .to_glib_none()
                                 .0,
@@ -88,7 +88,7 @@ impl<T: RTPBasePayloadImpl> RTPBasePayloadImplExt for T {
                 })
                 .unwrap_or_else(|| {
                     // Trigger negotiation as the base class does
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<RTPBasePayload>()
                         .set_outcaps(None)
                         .map_err(|_| gst::loggable_error!(gst::CAT_RUST, "Failed to negotiate"))
@@ -107,7 +107,7 @@ impl<T: RTPBasePayloadImpl> RTPBasePayloadImplExt for T {
                 .handle_buffer
                 .map(|f| {
                     try_from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<RTPBasePayload>()
                             .to_glib_none()
                             .0,
@@ -126,7 +126,7 @@ impl<T: RTPBasePayloadImpl> RTPBasePayloadImplExt for T {
                 .query
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<RTPBasePayload>()
                             .to_glib_none()
                             .0,
@@ -146,7 +146,7 @@ impl<T: RTPBasePayloadImpl> RTPBasePayloadImplExt for T {
                 .sink_event
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<RTPBasePayload>()
                             .to_glib_none()
                             .0,
@@ -165,7 +165,7 @@ impl<T: RTPBasePayloadImpl> RTPBasePayloadImplExt for T {
                 .src_event
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<RTPBasePayload>()
                             .to_glib_none()
                             .0,

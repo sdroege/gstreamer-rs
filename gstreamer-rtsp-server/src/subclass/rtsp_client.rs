@@ -264,10 +264,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
                 .expect("No `create_rtpbin` virtual method implementation in parent class");
 
             from_glib_full(f(
-                self.instance()
-                    .unsafe_cast_ref::<RTSPClient>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                 media.to_glib_none().0,
             ))
         }
@@ -288,10 +285,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
             gst::result_from_gboolean!(
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     media.to_glib_none().0,
                     stream.to_glib_none().0,
                     ctx.to_glib_none().0
@@ -313,10 +307,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
                 .expect("No `params_set` virtual method implementation in parent class");
 
             from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<RTSPClient>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                 ctx.to_glib_none().0,
             ))
         }
@@ -331,10 +322,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
                 .expect("No `params_get` virtual method implementation in parent class");
 
             from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<RTSPClient>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                 ctx.to_glib_none().0,
             ))
         }
@@ -349,10 +337,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
                 .expect("No `make_path_from_uri` virtual method implementation in parent class");
 
             from_glib_full(f(
-                self.instance()
-                    .unsafe_cast_ref::<RTSPClient>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                 url.to_glib_none().0,
             ))
         }
@@ -363,11 +348,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).closed {
-                f(self
-                    .instance()
-                    .unsafe_cast_ref::<RTSPClient>()
-                    .to_glib_none()
-                    .0);
+                f(self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0);
             }
         }
     }
@@ -378,10 +359,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).new_session {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     session.to_glib_none().0,
                 );
             }
@@ -394,10 +372,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).options_request {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 );
             }
@@ -410,10 +385,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).describe_request {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 );
             }
@@ -426,10 +398,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).setup_request {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 );
             }
@@ -442,10 +411,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).play_request {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 );
             }
@@ -458,10 +424,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pause_request {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 );
             }
@@ -474,10 +437,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).teardown_request {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 );
             }
@@ -490,10 +450,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).set_parameter_request {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 );
             }
@@ -506,10 +463,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).get_parameter_request {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 );
             }
@@ -522,10 +476,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).announce_request {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 );
             }
@@ -538,10 +489,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).record_request {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 );
             }
@@ -554,10 +502,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).handle_response {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 );
             }
@@ -582,10 +527,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
             gst::result_from_gboolean!(
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                     media.to_glib_none().0,
                     sdp as *const _ as *mut _
@@ -606,10 +548,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).check_requirements {
                 from_glib_full(f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                     arr.to_glib_none().0,
                 ))
@@ -625,10 +564,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_options_request {
                 from_glib(f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 ))
             } else {
@@ -643,10 +579,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_describe_request {
                 from_glib(f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 ))
             } else {
@@ -661,10 +594,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_setup_request {
                 from_glib(f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 ))
             } else {
@@ -679,10 +609,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_play_request {
                 from_glib(f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 ))
             } else {
@@ -697,10 +624,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_pause_request {
                 from_glib(f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 ))
             } else {
@@ -715,10 +639,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_teardown_request {
                 from_glib(f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 ))
             } else {
@@ -736,10 +657,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_set_parameter_request {
                 from_glib(f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 ))
             } else {
@@ -757,10 +675,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_get_parameter_request {
                 from_glib(f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 ))
             } else {
@@ -775,10 +690,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_announce_request {
                 from_glib(f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 ))
             } else {
@@ -793,10 +705,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_record_request {
                 from_glib(f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                 ))
             } else {
@@ -817,10 +726,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).adjust_error_code {
                 from_glib(f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPClient>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
                     status_code.into_glib(),
                 ))

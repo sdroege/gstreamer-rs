@@ -54,7 +54,7 @@ impl<T: AudioAggregatorImpl> AudioAggregatorImplExt for T {
                 .expect("Missing parent function `create_output_buffer`");
 
             from_glib_full(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<AudioAggregator>()
                     .to_glib_none()
                     .0,
@@ -80,7 +80,7 @@ impl<T: AudioAggregatorImpl> AudioAggregatorImplExt for T {
                 .expect("Missing parent function `aggregate_one_buffer`");
 
             from_glib(f(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<AudioAggregator>()
                     .to_glib_none()
                     .0,

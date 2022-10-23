@@ -33,7 +33,7 @@ impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
                 .flush
                 .map(|f| {
                     try_from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<AggregatorPad>()
                             .to_glib_none()
                             .0,
@@ -52,7 +52,7 @@ impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
                 .skip_buffer
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<AggregatorPad>()
                             .to_glib_none()
                             .0,

@@ -31,7 +31,7 @@ impl<T: RTSPServerImpl> RTSPServerImplExt for T {
                 .create_client
                 .expect("No `create_client` virtual method implementation in parent class");
             from_glib_full(f(self
-                .instance()
+                .obj()
                 .unsafe_cast_ref::<RTSPServer>()
                 .to_glib_none()
                 .0))
@@ -44,10 +44,7 @@ impl<T: RTSPServerImpl> RTSPServerImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPServerClass;
             if let Some(f) = (*parent_class).client_connected {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<RTSPServer>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<RTSPServer>().to_glib_none().0,
                     client.to_glib_none().0,
                 )
             }

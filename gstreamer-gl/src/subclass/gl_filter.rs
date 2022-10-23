@@ -82,10 +82,7 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
                 .map(|f| {
                     result_from_gboolean!(
                         f(
-                            self.instance()
-                                .unsafe_cast_ref::<GLFilter>()
-                                .to_glib_none()
-                                .0,
+                            self.obj().unsafe_cast_ref::<GLFilter>().to_glib_none().0,
                             incaps.to_glib_none().0,
                             outcaps.to_glib_none().0,
                         ),
@@ -107,10 +104,7 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
                 .map(|f| {
                     result_from_gboolean!(
                         f(
-                            self.instance()
-                                .unsafe_cast_ref::<GLFilter>()
-                                .to_glib_none()
-                                .0,
+                            self.obj().unsafe_cast_ref::<GLFilter>().to_glib_none().0,
                             input.to_glib_none().0,
                             output.to_glib_none().0,
                         ),
@@ -136,10 +130,7 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
                 .map(|f| {
                     result_from_gboolean!(
                         f(
-                            self.instance()
-                                .unsafe_cast_ref::<GLFilter>()
-                                .to_glib_none()
-                                .0,
+                            self.obj().unsafe_cast_ref::<GLFilter>().to_glib_none().0,
                             input.to_glib_none().0,
                             output.to_glib_none().0,
                         ),
@@ -160,11 +151,7 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
                 .init_fbo
                 .map(|f| {
                     result_from_gboolean!(
-                        f(self
-                            .instance()
-                            .unsafe_cast_ref::<GLFilter>()
-                            .to_glib_none()
-                            .0),
+                        f(self.obj().unsafe_cast_ref::<GLFilter>().to_glib_none().0),
                         CAT_RUST,
                         "Parent function `init_fbo` failed"
                     )
@@ -187,10 +174,7 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
                 .expect("Missing parent function `transform_internal_caps`");
 
             from_glib_full(f(
-                self.instance()
-                    .unsafe_cast_ref::<GLFilter>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<GLFilter>().to_glib_none().0,
                 direction.into_glib(),
                 caps.to_glib_none().0,
                 filter_caps.to_glib_none().0,

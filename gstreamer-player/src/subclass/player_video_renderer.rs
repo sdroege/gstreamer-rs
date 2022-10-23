@@ -33,7 +33,7 @@ impl<T: PlayerVideoRendererImpl> PlayerVideoRendererImplExt for T {
                 .create_video_sink
                 .expect("no parent \"create_video_sink\" implementation");
             let ret = func(
-                self.instance()
+                self.obj()
                     .unsafe_cast_ref::<PlayerVideoRenderer>()
                     .to_glib_none()
                     .0,

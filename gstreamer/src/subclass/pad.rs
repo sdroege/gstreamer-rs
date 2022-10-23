@@ -33,7 +33,7 @@ impl<T: PadImpl> PadImplExt for T {
                 .linked
                 .map(|f| {
                     f(
-                        self.instance().unsafe_cast_ref::<Pad>().to_glib_none().0,
+                        self.obj().unsafe_cast_ref::<Pad>().to_glib_none().0,
                         peer.to_glib_none().0,
                     )
                 })
@@ -50,7 +50,7 @@ impl<T: PadImpl> PadImplExt for T {
                 .unlinked
                 .map(|f| {
                     f(
-                        self.instance().unsafe_cast_ref::<Pad>().to_glib_none().0,
+                        self.obj().unsafe_cast_ref::<Pad>().to_glib_none().0,
                         peer.to_glib_none().0,
                     )
                 })

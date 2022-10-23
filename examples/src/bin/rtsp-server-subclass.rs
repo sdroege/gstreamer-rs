@@ -108,7 +108,7 @@ mod media_factory {
             fn constructed(&self) {
                 self.parent_constructed();
 
-                let factory = self.instance();
+                let factory = self.obj();
                 // All media created by this factory are our custom media type. This would
                 // not require a media factory subclass and can also be called on the normal
                 // RTSPMediaFactory.
@@ -239,7 +239,7 @@ mod server {
         // Implementation of gst_rtsp_server::RTSPServer virtual methods
         impl RTSPServerImpl for Server {
             fn create_client(&self) -> Option<gst_rtsp_server::RTSPClient> {
-                let server = self.instance();
+                let server = self.obj();
                 let client = super::client::Client::default();
 
                 // Duplicated from the default implementation
@@ -300,7 +300,7 @@ mod client {
         // Implementation of gst_rtsp_server::RTSPClient virtual methods
         impl RTSPClientImpl for Client {
             fn closed(&self) {
-                let client = self.instance();
+                let client = self.obj();
                 self.parent_closed();
                 println!("Client {:?} closed", client);
             }

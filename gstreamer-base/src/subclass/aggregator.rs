@@ -238,7 +238,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .flush
                 .map(|f| {
                     try_from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<Aggregator>()
                         .to_glib_none()
                         .0))
@@ -258,10 +258,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
             match (*parent_class).clip {
                 None => Some(buffer),
                 Some(ref func) => from_glib_full(func(
-                    self.instance()
-                        .unsafe_cast_ref::<Aggregator>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                     aggregator_pad.to_glib_none().0,
                     buffer.into_glib_ptr(),
                 )),
@@ -280,10 +277,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .finish_buffer
                 .expect("Missing parent function `finish_buffer`");
             try_from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<Aggregator>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 buffer.into_glib_ptr(),
             ))
         }
@@ -302,10 +296,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .finish_buffer_list
                 .expect("Missing parent function `finish_buffer_list`");
             try_from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<Aggregator>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 buffer_list.into_glib_ptr(),
             ))
         }
@@ -319,10 +310,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .sink_event
                 .expect("Missing parent function `sink_event`");
             from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<Aggregator>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 aggregator_pad.to_glib_none().0,
                 event.into_glib_ptr(),
             ))
@@ -343,10 +331,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .sink_event_pre_queue
                 .expect("Missing parent function `sink_event_pre_queue`");
             try_from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<Aggregator>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 aggregator_pad.to_glib_none().0,
                 event.into_glib_ptr(),
             ))
@@ -361,10 +346,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .sink_query
                 .expect("Missing parent function `sink_query`");
             from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<Aggregator>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 aggregator_pad.to_glib_none().0,
                 query.as_mut_ptr(),
             ))
@@ -385,10 +367,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .sink_query_pre_queue
                 .expect("Missing parent function `sink_query`");
             from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<Aggregator>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 aggregator_pad.to_glib_none().0,
                 query.as_mut_ptr(),
             ))
@@ -403,10 +382,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .src_event
                 .expect("Missing parent function `src_event`");
             from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<Aggregator>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 event.into_glib_ptr(),
             ))
         }
@@ -420,10 +396,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .src_query
                 .expect("Missing parent function `src_query`");
             from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<Aggregator>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 query.as_mut_ptr(),
             ))
         }
@@ -441,10 +414,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 None => Ok(()),
                 Some(f) => gst::result_from_gboolean!(
                     f(
-                        self.instance()
-                            .unsafe_cast_ref::<Aggregator>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                         mode.into_glib(),
                         active.into_glib()
                     ),
@@ -463,10 +433,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .aggregate
                 .expect("Missing parent function `aggregate`");
             try_from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<Aggregator>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 timeout.into_glib(),
             ))
         }
@@ -480,7 +447,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .start
                 .map(|f| {
                     if from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<Aggregator>()
                         .to_glib_none()
                         .0))
@@ -505,7 +472,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .stop
                 .map(|f| {
                     if from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<Aggregator>()
                         .to_glib_none()
                         .0))
@@ -530,7 +497,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .get_next_time
                 .map(|f| {
                     from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<Aggregator>()
                         .to_glib_none()
                         .0))
@@ -552,10 +519,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .create_new_pad
                 .expect("Missing parent function `create_new_pad`");
             from_glib_full(f(
-                self.instance()
-                    .unsafe_cast_ref::<Aggregator>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 templ.to_glib_none().0,
                 req_name.to_glib_none().0,
                 caps.to_glib_none().0,
@@ -573,10 +537,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
 
             let mut out_caps = ptr::null_mut();
             gst::FlowSuccess::try_from_glib(f(
-                self.instance()
-                    .unsafe_cast_ref::<Aggregator>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 caps.as_mut_ptr(),
                 &mut out_caps,
             ))
@@ -593,10 +554,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .fixate_src_caps
                 .expect("Missing parent function `fixate_src_caps`");
             from_glib_full(f(
-                self.instance()
-                    .unsafe_cast_ref::<Aggregator>()
-                    .to_glib_none()
-                    .0,
+                self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 caps.into_glib_ptr(),
             ))
         }
@@ -611,10 +569,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
-                                .unsafe_cast_ref::<Aggregator>()
-                                .to_glib_none()
-                                .0,
+                            self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                             caps.to_glib_none().0
                         ),
                         gst::CAT_RUST,
@@ -639,10 +594,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
-                                .unsafe_cast_ref::<Aggregator>()
-                                .to_glib_none()
-                                .0,
+                            self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                             pad.to_glib_none().0,
                             decide_query
                                 .as_ref()
@@ -670,10 +622,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
-                                .unsafe_cast_ref::<Aggregator>()
-                                .to_glib_none()
-                                .0,
+                            self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                             query.as_mut_ptr(),
                         ),
                         gst::CAT_RUST,
@@ -694,7 +643,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .negotiate
                 .map(|f| {
                     from_glib(f(self
-                        .instance()
+                        .obj()
                         .unsafe_cast_ref::<Aggregator>()
                         .to_glib_none()
                         .0))
@@ -713,10 +662,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .peek_next_sample
                 .map(|f| {
                     from_glib_full(f(
-                        self.instance()
-                            .unsafe_cast_ref::<Aggregator>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                         pad.to_glib_none().0,
                     ))
                 })

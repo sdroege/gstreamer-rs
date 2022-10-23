@@ -26,10 +26,7 @@ impl<T: VideoSinkImpl> VideoSinkImplExt for T {
                 .show_frame
                 .map(|f| {
                     try_from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<VideoSink>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<VideoSink>().to_glib_none().0,
                         buffer.to_glib_none().0,
                     ))
                 })

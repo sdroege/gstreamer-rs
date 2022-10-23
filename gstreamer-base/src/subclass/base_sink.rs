@@ -117,12 +117,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .start
                 .map(|f| {
-                    if from_glib(f(self
-                        .instance()
-                        .unsafe_cast_ref::<BaseSink>()
-                        .to_glib_none()
-                        .0))
-                    {
+                    if from_glib(f(self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0)) {
                         Ok(())
                     } else {
                         Err(gst::error_msg!(
@@ -142,12 +137,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .stop
                 .map(|f| {
-                    if from_glib(f(self
-                        .instance()
-                        .unsafe_cast_ref::<BaseSink>()
-                        .to_glib_none()
-                        .0))
-                    {
+                    if from_glib(f(self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0)) {
                         Ok(())
                     } else {
                         Err(gst::error_msg!(
@@ -168,10 +158,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .render
                 .map(|f| {
                     try_from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSink>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         buffer.to_glib_none().0,
                     ))
                 })
@@ -187,10 +174,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .prepare
                 .map(|f| {
                     try_from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSink>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         buffer.to_glib_none().0,
                     ))
                 })
@@ -209,10 +193,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .render_list
                 .map(|f| {
                     try_from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSink>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         list.to_glib_none().0,
                     ))
                 })
@@ -236,10 +217,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .prepare_list
                 .map(|f| {
                     try_from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSink>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         list.to_glib_none().0,
                     ))
                 })
@@ -260,10 +238,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .query
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSink>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         query.as_mut_ptr(),
                     ))
                 })
@@ -279,10 +254,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .event
                 .map(|f| {
                     from_glib(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSink>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         event.into_glib_ptr(),
                     ))
                 })
@@ -299,10 +271,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .get_caps
                 .map(|f| {
                     from_glib_full(f(
-                        self.instance()
-                            .unsafe_cast_ref::<BaseSink>()
-                            .to_glib_none()
-                            .0,
+                        self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         filter.to_glib_none().0,
                     ))
                 })
@@ -319,10 +288,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
-                                .unsafe_cast_ref::<BaseSink>()
-                                .to_glib_none()
-                                .0,
+                            self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                             caps.to_glib_none().0
                         ),
                         gst::CAT_RUST,
@@ -340,10 +306,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
 
             match (*parent_class).fixate {
                 Some(fixate) => from_glib_full(fixate(
-                    self.instance()
-                        .unsafe_cast_ref::<BaseSink>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                     caps.into_glib_ptr(),
                 )),
                 None => caps,
@@ -358,12 +321,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .unlock
                 .map(|f| {
-                    if from_glib(f(self
-                        .instance()
-                        .unsafe_cast_ref::<BaseSink>()
-                        .to_glib_none()
-                        .0))
-                    {
+                    if from_glib(f(self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0)) {
                         Ok(())
                     } else {
                         Err(gst::error_msg!(
@@ -383,12 +341,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .unlock_stop
                 .map(|f| {
-                    if from_glib(f(self
-                        .instance()
-                        .unsafe_cast_ref::<BaseSink>()
-                        .to_glib_none()
-                        .0))
-                    {
+                    if from_glib(f(self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0)) {
                         Ok(())
                     } else {
                         Err(gst::error_msg!(
@@ -413,10 +366,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                 .map(|f| {
                     gst::result_from_gboolean!(
                         f(
-                            self.instance()
-                                .unsafe_cast_ref::<BaseSink>()
-                                .to_glib_none()
-                                .0,
+                            self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                             query.as_mut_ptr(),
                         ),
                         gst::CAT_RUST,

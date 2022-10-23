@@ -52,10 +52,7 @@ impl<T: BinImpl> BinImplExt for T {
             })?;
             result_from_gboolean!(
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<crate::Bin>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<crate::Bin>().to_glib_none().0,
                     element.to_glib_none().0
                 ),
                 crate::CAT_RUST,
@@ -76,10 +73,7 @@ impl<T: BinImpl> BinImplExt for T {
             })?;
             result_from_gboolean!(
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<crate::Bin>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<crate::Bin>().to_glib_none().0,
                     element.to_glib_none().0
                 ),
                 crate::CAT_RUST,
@@ -99,11 +93,7 @@ impl<T: BinImpl> BinImplExt for T {
                 )
             })?;
             result_from_gboolean!(
-                f(self
-                    .instance()
-                    .unsafe_cast_ref::<crate::Bin>()
-                    .to_glib_none()
-                    .0,),
+                f(self.obj().unsafe_cast_ref::<crate::Bin>().to_glib_none().0,),
                 crate::CAT_RUST,
                 "Failed to update latency using the parent function"
             )
@@ -116,10 +106,7 @@ impl<T: BinImpl> BinImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBinClass;
             if let Some(ref f) = (*parent_class).handle_message {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<crate::Bin>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<crate::Bin>().to_glib_none().0,
                     message.into_glib_ptr(),
                 );
             }

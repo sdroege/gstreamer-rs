@@ -62,7 +62,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
                 .gen_key
                 .map(|f| {
                     from_glib_full(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<RTSPMediaFactory>()
                             .to_glib_none()
                             .0,
@@ -81,7 +81,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
                 .create_element
                 .map(|f| {
                     from_glib_none(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<RTSPMediaFactory>()
                             .to_glib_none()
                             .0,
@@ -100,7 +100,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
                 .construct
                 .map(|f| {
                     from_glib_full(f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<RTSPMediaFactory>()
                             .to_glib_none()
                             .0,
@@ -119,7 +119,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
                 .create_pipeline
                 .map(|f| {
                     let ptr = f(
-                        self.instance()
+                        self.obj()
                             .unsafe_cast_ref::<RTSPMediaFactory>()
                             .to_glib_none()
                             .0,
@@ -142,7 +142,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             if let Some(f) = (*parent_class).configure {
                 f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<RTSPMediaFactory>()
                         .to_glib_none()
                         .0,
@@ -158,7 +158,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             if let Some(f) = (*parent_class).media_constructed {
                 f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<RTSPMediaFactory>()
                         .to_glib_none()
                         .0,
@@ -174,7 +174,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             if let Some(f) = (*parent_class).media_configure {
                 f(
-                    self.instance()
+                    self.obj()
                         .unsafe_cast_ref::<RTSPMediaFactory>()
                         .to_glib_none()
                         .0,

@@ -43,7 +43,7 @@ impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {
                 .map(|f| {
                     result_from_gboolean!(
                         f(
-                            self.instance()
+                            self.obj()
                                 .unsafe_cast_ref::<GLBaseFilter>()
                                 .to_glib_none()
                                 .0,
@@ -68,7 +68,7 @@ impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {
                 .map(|f| {
                     result_from_gboolean!(
                         f(self
-                            .instance()
+                            .obj()
                             .unsafe_cast_ref::<GLBaseFilter>()
                             .to_glib_none()
                             .0),
@@ -87,7 +87,7 @@ impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {
 
             if let Some(f) = (*parent_class).gl_stop {
                 f(self
-                    .instance()
+                    .obj()
                     .unsafe_cast_ref::<GLBaseFilter>()
                     .to_glib_none()
                     .0)
