@@ -491,7 +491,11 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         if $level <= $cat.threshold() {
-            $crate::DebugCategory::log_unfiltered($cat.clone(), Some(&*$obj),
+            use $crate::glib::Cast;
+
+            #[allow(unused_unsafe)]
+            let obj = unsafe { $obj.unsafe_cast_ref::<$crate::glib::Object>() };
+            $crate::DebugCategory::log_unfiltered($cat.clone(), Some(obj),
                 $level, file!(), module_path!(), line!(), format_args!($($args)*))
         }
     }};
@@ -502,8 +506,9 @@ macro_rules! log_with_level(
             use $crate::glib::Cast;
 
             let obj = $imp.instance();
+            #[allow(unused_unsafe)]
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
-            $crate::DebugCategory::log_unfiltered($cat.clone(), Some(&*obj),
+            $crate::DebugCategory::log_unfiltered($cat.clone(), Some(obj),
                 $level, file!(), module_path!(), line!(), format_args!($($args)*))
         }
     }};
@@ -724,6 +729,7 @@ mod tests {
         memdump!(cat, "meh");
 
         let obj = crate::Bin::new(Some("meh"));
+
         error!(cat, obj: &obj, "meh");
         warning!(cat, obj: &obj, "meh");
         fixme!(cat, obj: &obj, "meh");
@@ -732,6 +738,15 @@ mod tests {
         log!(cat, obj: &obj, "meh");
         trace!(cat, obj: &obj, "meh");
         memdump!(cat, obj: &obj, "meh");
+
+        error!(cat, obj: obj, "meh");
+        warning!(cat, obj: obj, "meh");
+        fixme!(cat, obj: obj, "meh");
+        info!(cat, obj: obj, "meh");
+        debug!(cat, obj: obj, "meh");
+        log!(cat, obj: obj, "meh");
+        trace!(cat, obj: obj, "meh");
+        memdump!(cat, obj: obj, "meh");
     }
 
     #[test]
