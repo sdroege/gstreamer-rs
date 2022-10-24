@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.19.1] - 2022-10-233404573
+### Changed
+- Make it possible to use objects not just as reference in the logging macros.
+
 ## [0.19.0] - 2022-10-22
 ### Added
 - Builders for element construction. `gst::ElementFactory::make()` returns a
@@ -1369,7 +1373,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.6...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.1...HEAD
+[0.19.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.0...0.19.1
 [0.19.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.8...0.19.0
 [0.18.8]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.7...0.18.8
 [0.18.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.6...0.18.7
