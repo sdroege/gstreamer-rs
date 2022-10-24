@@ -86,4 +86,11 @@ impl GLBaseMemoryRef {
             ffi::gst_gl_base_memory_init_once();
         }
     }
+
+    pub fn context(&self) -> &crate::GLContext {
+        unsafe {
+            &*(&(*self.as_ptr()).context as *const *mut ffi::GstGLContext
+                as *const crate::GLContext)
+        }
+    }
 }

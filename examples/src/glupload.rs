@@ -308,14 +308,13 @@ fn load(gl_context: &glutin::WindowedContext<glutin::PossiblyCurrent>) -> Gl {
 
 #[derive(Debug)]
 enum Message {
-    Sample(gst::Sample),
+    Frame(gst_video::VideoInfo, gst::Buffer),
     BusEvent,
 }
 
 pub(crate) struct App {
     pipeline: gst::Pipeline,
     appsink: gst_app::AppSink,
-    glupload: gst::Element,
     bus: gst::Bus,
     event_loop: glutin::event_loop::EventLoop<Message>,
     windowed_context: glutin::WindowedContext<glutin::PossiblyCurrent>,
@@ -326,7 +325,7 @@ impl App {
     pub(crate) fn new(gl_element: Option<&gst::Element>) -> Result<App, Error> {
         gst::init()?;
 
-        let (pipeline, appsink, glupload) = App::create_pipeline(gl_element)?;
+        let (pipeline, appsink) = App::create_pipeline(gl_element)?;
         let bus = pipeline
             .bus()
             .expect("Pipeline without bus. Shouldn't happen!");
@@ -458,7 +457,6 @@ impl App {
         Ok(App {
             pipeline,
             appsink,
-            glupload,
             bus,
             event_loop,
             windowed_context,
@@ -473,33 +471,49 @@ impl App {
                 .new_sample(move |appsink| {
                     let sample = appsink.pull_sample().map_err(|_| gst::FlowError::Eos)?;
 
-                    {
-                        let _buffer = sample.buffer().ok_or_else(|| {
+                    let info = sample
+                        .caps()
+                        .and_then(|caps| gst_video::VideoInfo::from_caps(caps).ok())
+                        .ok_or_else(|| {
                             element_error!(
                                 appsink,
                                 gst::ResourceError::Failed,
-                                ("Failed to get buffer from appsink")
+                                ("Failed to get video info from sample")
                             );
 
-                            gst::FlowError::Error
+                            gst::FlowError::NotNegotiated
                         })?;
 
-                        let _info = sample
-                            .caps()
-                            .and_then(|caps| gst_video::VideoInfo::from_caps(caps).ok())
-                            .ok_or_else(|| {
+                    let mut buffer = sample.buffer_owned().unwrap();
+                    {
+                        let context = match (buffer.n_memory() > 0)
+                            .then(|| buffer.peek_memory(0))
+                            .and_then(|m| m.downcast_memory_ref::<gst_gl::GLBaseMemory>())
+                            .map(|m| m.context())
+                        {
+                            Some(context) => context.clone(),
+                            None => {
                                 element_error!(
                                     appsink,
                                     gst::ResourceError::Failed,
-                                    ("Failed to get video info from sample")
+                                    ("Failed to get GL context from buffer")
                                 );
 
-                                gst::FlowError::Error
-                            })?;
+                                return Err(gst::FlowError::Error);
+                            }
+                        };
+
+                        if let Some(meta) = buffer.meta::<gst_gl::GLSyncMeta>() {
+                            meta.set_sync_point(&context);
+                        } else {
+                            let buffer = buffer.make_mut();
+                            let meta = gst_gl::GLSyncMeta::add(buffer, &context);
+                            meta.set_sync_point(&context);
+                        }
                     }
 
                     event_proxy
-                        .send_event(Message::Sample(sample))
+                        .send_event(Message::Frame(info, buffer))
                         .map(|()| gst::FlowSuccess::Ok)
                         .map_err(|e| {
                             element_error!(
@@ -529,7 +543,7 @@ impl App {
 
     fn create_pipeline(
         gl_element: Option<&gst::Element>,
-    ) -> Result<(gst::Pipeline, gst_app::AppSink, gst::Element), Error> {
+    ) -> Result<(gst::Pipeline, gst_app::AppSink), Error> {
         let pipeline = gst::Pipeline::default();
         let src = gst::ElementFactory::make("videotestsrc").build()?;
 
@@ -556,7 +570,7 @@ impl App {
             glupload.link(gl_element)?;
             gl_element.link(&appsink)?;
 
-            Ok((pipeline, appsink, glupload))
+            Ok((pipeline, appsink))
         } else {
             let sink = gst::ElementFactory::make("glsinkbin")
                 .property("sink", &appsink)
@@ -565,21 +579,7 @@ impl App {
             pipeline.add_many(&[&src, &sink])?;
             src.link(&sink)?;
 
-            // get the glupload element to extract later the used context in it
-            let mut iter = sink.downcast_ref::<gst::Bin>().unwrap().iterate_elements();
-            let glupload = loop {
-                match iter.next() {
-                    Ok(Some(element)) => {
-                        if element.factory().map_or(false, |f| f.name() == "glupload") {
-                            break Some(element);
-                        }
-                    }
-                    Err(gst::IteratorError::Resync) => iter.resync(),
-                    _ => break None,
-                }
-            };
-
-            Ok((pipeline, appsink, glupload.unwrap()))
+            Ok((pipeline, appsink))
         }
     }
 
@@ -620,12 +620,10 @@ pub(crate) fn main_loop(app: App) -> Result<(), Error> {
     let gl = load(&app.windowed_context);
 
     let mut curr_frame: Option<gst_video::VideoFrame<gst_video::video_frame::Readable>> = None;
-    let mut gst_gl_context: Option<gst_gl::GLContext> = None;
 
     let App {
         bus,
         event_loop,
-        glupload,
         pipeline,
         shared_context,
         windowed_context,
@@ -660,22 +658,7 @@ pub(crate) fn main_loop(app: App) -> Result<(), Error> {
             },
             glutin::event::Event::RedrawRequested(_) => needs_redraw = true,
             // Receive a frame
-            glutin::event::Event::UserEvent(Message::Sample(sample)) => {
-                let buffer = sample.buffer_owned().unwrap();
-                let info = sample
-                    .caps()
-                    .and_then(|caps| gst_video::VideoInfo::from_caps(caps).ok())
-                    .unwrap();
-
-                {
-                    if gst_gl_context.is_none() {
-                        gst_gl_context = glupload.property::<Option<gst_gl::GLContext>>("context");
-                    }
-
-                    let sync_meta = buffer.meta::<gst_gl::GLSyncMeta>().unwrap();
-                    sync_meta.set_sync_point(gst_gl_context.as_ref().unwrap());
-                }
-
+            glutin::event::Event::UserEvent(Message::Frame(info, buffer)) => {
                 if let Ok(frame) = gst_video::VideoFrame::from_buffer_readable_gl(buffer, &info) {
                     curr_frame = Some(frame);
                     needs_redraw = true;
