@@ -16,7 +16,7 @@ rust-version = "1.63"
 [dependencies]
 bitflags = "1.0"
 ffi = { package = "gstreamer-check-sys", version = "0.19", path = "sys" }
-glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.16", version = "0.16" }
+glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.16", version = "0.16.2" }
 gst = { package = "gstreamer", version = "0.19", path = "../gstreamer" }
 
 [dev-dependencies]
