@@ -566,11 +566,11 @@ impl App {
             src.link(&sink)?;
 
             // get the glupload element to extract later the used context in it
-            let mut iter = sink.dynamic_cast::<gst::Bin>().unwrap().iterate_elements();
+            let mut iter = sink.downcast_ref::<gst::Bin>().unwrap().iterate_elements();
             let glupload = loop {
                 match iter.next() {
                     Ok(Some(element)) => {
-                        if "glupload" == element.factory().unwrap().name() {
+                        if element.factory().map_or(false, |f| f.name() == "glupload") {
                             break Some(element);
                         }
                     }
