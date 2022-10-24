@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-editing-services"
-version = "0.19.0"
+version = "0.19.1"
 authors = ["Thibault Saunier <tsaunier@igalia.com>", "Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Editing Services"

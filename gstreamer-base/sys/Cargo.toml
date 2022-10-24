@@ -48,7 +48,7 @@ license = "MIT"
 name = "gstreamer-base-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
-version = "0.19.0"
+version = "0.19.1"
 edition = "2021"
 rust-version = "1.63"
 [package.metadata.docs.rs]
