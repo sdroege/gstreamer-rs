@@ -26,8 +26,8 @@ thread_local = "1.0.0"
 
 [dev-dependencies]
 tracing = "0.1.0"
-tracing-subscriber = "0.2.4"
-tracing-tracy = "0.7.0"
+tracing-subscriber = "0.3"
+tracing-tracy = "0.10"
 
 [package.metadata.docs.rs]
 rustdoc-args = ["--cfg", "tracing_gstreamer_docs"]
