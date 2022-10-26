@@ -10,7 +10,7 @@ readme = "README.mkd"
 description = "Bridge between gstreamer and the tracing ecosystem"
 keywords = ["tracing", "logging", "gstreamer", "multimedia"]
 categories = ["development-tools::debugging", "development-tools::profiling"]
-rust-version = "1.56.0"
+rust-version = "1.63"
 
 [lib]
 harness = false
