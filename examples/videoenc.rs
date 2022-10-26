@@ -5,7 +5,7 @@ fn main() {
     tracing_subscriber::fmt::init();
     tracing_gstreamer::integrate_events();
     gstreamer::debug_remove_default_log_function();
-    gstreamer::debug_set_default_threshold(gstreamer::DebugLevel::Count);
+    gstreamer::debug_set_default_threshold(gstreamer::DebugLevel::Memdump);
     gstreamer::init().expect("gst init");
     tracing_gstreamer::integrate_spans();
 

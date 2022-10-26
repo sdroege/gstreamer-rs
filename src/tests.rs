@@ -219,7 +219,7 @@ fn test_simple_error() {
         "test_simple_error",
         || {
             let cat = g::DebugCategory::new("test_error_cat", g::DebugColorFlags::empty(), None);
-            g::gst_error!(cat, "simple error");
+            g::error!(cat, "simple error");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "simple error",
@@ -236,7 +236,7 @@ fn test_simple_warning() {
         "test_simple_warning",
         || {
             let cat = g::DebugCategory::new("test_simple_cat", g::DebugColorFlags::empty(), None);
-            g::gst_warning!(cat, "simple warning");
+            g::warning!(cat, "simple warning");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "simple warning",
@@ -253,10 +253,10 @@ fn test_simple_events() {
         "test_simple_events",
         || {
             let cat = g::DebugCategory::new("test_simple_cat", g::DebugColorFlags::empty(), None);
-            g::gst_fixme!(cat, "simple fixme");
-            g::gst_info!(cat, "simple info");
-            g::gst_memdump!(cat, "simple memdump");
-            g::gst_trace!(cat, "simple trace");
+            g::fixme!(cat, "simple fixme");
+            g::info!(cat, "simple info");
+            g::memdump!(cat, "simple memdump");
+            g::trace!(cat, "simple trace");
         },
         vec![
             Expect::GstEvent(GstEvent {
@@ -295,7 +295,7 @@ fn test_with_object() {
         "test_with_object",
         move || {
             let cat = g::DebugCategory::new("test_object_cat", g::DebugColorFlags::empty(), None);
-            g::gst_error!(cat, obj: &p, "with object");
+            g::error!(cat, obj: &p, "with object");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "with object",
@@ -321,7 +321,7 @@ fn test_with_upcast_object() {
         "test_with_upcast_object",
         move || {
             let cat = g::DebugCategory::new("test_object_cat", g::DebugColorFlags::empty(), None);
-            g::gst_error!(cat, obj: &obj, "with upcast object");
+            g::error!(cat, obj: &obj, "with upcast object");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "with upcast object",
@@ -349,7 +349,7 @@ fn test_with_pad() {
         "test_with_pad",
         move || {
             let cat = g::DebugCategory::new("test_pad_cat", g::DebugColorFlags::empty(), None);
-            g::gst_error!(cat, obj: &pad, "with pad object");
+            g::error!(cat, obj: &pad, "with pad object");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "with pad object",
@@ -375,11 +375,11 @@ fn test_disintegration() {
         "test_disintegration",
         move || {
             let cat = g::DebugCategory::new("disintegration", g::DebugColorFlags::empty(), None);
-            g::gst_error!(cat, "apple");
+            g::error!(cat, "apple");
             disintegrate_events();
-            g::gst_error!(cat, "banana");
+            g::error!(cat, "banana");
             integrate_events();
-            g::gst_error!(cat, "chaenomeles");
+            g::error!(cat, "chaenomeles");
         },
         vec![
             Expect::GstEvent(GstEvent {
@@ -404,7 +404,7 @@ fn test_formatting() {
         "test_formatting",
         || {
             let cat = g::DebugCategory::new("ANSWERS", g::DebugColorFlags::empty(), None);
-            g::gst_warning!(cat, "the answer is believed to be {}.", 42);
+            g::warning!(cat, "the answer is believed to be {}.", 42);
         },
         vec![Expect::GstEvent(GstEvent {
             message: "the answer is believed to be 42.",
@@ -441,11 +441,11 @@ fn test_interests() {
     let dispatch = tracing::Dispatch::new(subscriber);
     tracing::dispatcher::with_default(&dispatch, move || {
         let cat = g::DebugCategory::new("INTERESTS", g::DebugColorFlags::empty(), None);
-        g::gst_warning!(cat, "warnings should be visible");
-        g::gst_error!(cat, "errors should be visible");
-        g::gst_info!(cat, "infos should NOT be visible");
-        g::gst_debug!(cat, "debugs should NOT be visible");
-        g::gst_trace!(cat, "traces should NOT be visible");
+        g::warning!(cat, "warnings should be visible");
+        g::error!(cat, "errors should be visible");
+        g::info!(cat, "infos should NOT be visible");
+        g::debug!(cat, "debugs should NOT be visible");
+        g::trace!(cat, "traces should NOT be visible");
     });
     let guard = expected.lock().expect("mutex lock");
     assert!(
@@ -460,7 +460,7 @@ fn test_interests() {
 pub(crate) fn run() {
     g::debug_remove_default_log_function();
     g::init().expect("gst init");
-    g::debug_set_default_threshold(g::DebugLevel::Count);
+    g::debug_set_default_threshold(g::DebugLevel::Memdump);
     integrate_events();
     test_simple_error();
     test_simple_warning();

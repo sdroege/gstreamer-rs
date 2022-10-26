@@ -5,7 +5,7 @@ use gstreamer::{
     prelude::PadExtManual,
     subclass::prelude::*,
     traits::{GstObjectExt, PadExt},
-    Buffer, FlowReturn, Object, Pad, Query, Tracer,
+    Buffer, FlowError, FlowSuccess, Object, Pad, Query, Tracer,
 };
 use std::cell::RefCell;
 use tracing::{span::Attributes, Callsite, Dispatch, Id};
@@ -103,8 +103,8 @@ impl ObjectSubclass for TracingTracerPriv {
 }
 
 impl ObjectImpl for TracingTracerPriv {
-    fn constructed(&self, obj: &Self::Type) {
-        self.parent_constructed(obj);
+    fn constructed(&self) {
+        self.parent_constructed();
         self.register_hook(TracerHook::PadPushPost);
         self.register_hook(TracerHook::PadPushPre);
         self.register_hook(TracerHook::PadPushListPost);
@@ -141,7 +141,7 @@ impl TracerImpl for TracingTracerPriv {
         self.pad_pre("pad_pull_range", pad);
     }
 
-    fn pad_pull_range_post(&self, _: u64, _: &Pad, _: &Buffer, _: FlowReturn) {
+    fn pad_pull_range_post(&self, _: u64, _: &Pad, _: Result<&Buffer, FlowError>) {
         self.pop_span();
     }
 
@@ -149,11 +149,11 @@ impl TracerImpl for TracingTracerPriv {
         self.pop_span();
     }
 
-    fn pad_push_list_post(&self, _: u64, _: &Pad, _: FlowReturn) {
+    fn pad_push_list_post(&self, _: u64, _: &Pad, _: Result<FlowSuccess, FlowError>) {
         self.pop_span();
     }
 
-    fn pad_push_post(&self, _: u64, _: &Pad, _: FlowReturn) {
+    fn pad_push_post(&self, _: u64, _: &Pad, _: Result<FlowSuccess, FlowError>) {
         self.pop_span();
     }
 

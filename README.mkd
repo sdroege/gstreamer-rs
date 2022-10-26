@@ -25,7 +25,7 @@ Keep in mind that both `GST_DEBUG` and tracing filters are in effect. The `gstre
 filters can be relaxed from code via:
 
 ```
-gstreamer::debug_set_default_threshold(gstreamer::DebugLevel::Count);
+gstreamer::debug_set_default_threshold(gstreamer::DebugLevel::Memdump);
 ```
 
 Similarly you can use `tracing` APIs to adjust the filters on the `tracing` side.
