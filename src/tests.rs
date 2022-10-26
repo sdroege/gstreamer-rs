@@ -127,7 +127,7 @@ impl MockSubscriber {
     fn new(filter: fn(&Metadata<'_>) -> bool, name: &'static str, expected: Vec<Expect>) -> Self {
         let expected = Arc::new(Mutex::new(expected.into()));
         MockSubscriber {
-            expected: expected.clone(),
+            expected,
             name,
             filter,
         }
