@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        rust_toolchain: [1.56.0, ""]
+        rust_toolchain: [1.63.0, ""]
         test_flags: ["", "--no-default-features", "--all-features"]
     timeout-minutes: 5
     steps:
