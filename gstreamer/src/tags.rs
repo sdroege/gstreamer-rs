@@ -1192,11 +1192,7 @@ mod tests {
                 .add_generic(&TAG_TITLE, "second title", TagMergeMode::Append)
                 .is_ok());
             assert!(tags
-                .add_generic(
-                    &TAG_DURATION,
-                    &(ClockTime::SECOND * 120),
-                    TagMergeMode::Append
-                )
+                .add_generic(&TAG_DURATION, ClockTime::SECOND * 120, TagMergeMode::Append)
                 .is_ok());
             assert!(tags
                 .add_generic(&TAG_TITLE, "third title", TagMergeMode::Append)

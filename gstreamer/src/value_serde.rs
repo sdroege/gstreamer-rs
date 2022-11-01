@@ -374,7 +374,7 @@ mod tests {
         let value_13 = Fraction::new(1, 3);
         let value_12 = Fraction::new(1, 2);
 
-        let array = Array::new(&[&value_13, &value_12]);
+        let array = Array::new([value_13, value_12]);
 
         let res = ron::ser::to_string_pretty(&array, pretty_config.clone());
         assert_eq!(
@@ -394,7 +394,7 @@ mod tests {
         // List
         let value_12 = Fraction::new(1, 2);
 
-        let list = List::new(&[&value_12]);
+        let list = List::new([value_12]);
 
         let res = ron::ser::to_string_pretty(&list, pretty_config);
         assert_eq!(
@@ -636,7 +636,7 @@ mod tests {
         let value_13 = Fraction::new(1, 3);
         let value_12 = Fraction::new(1, 2);
 
-        let array = Array::new(&[&value_13, &value_12]);
+        let array = Array::new([value_13, value_12]);
         let array_ser = ron::ser::to_string(&array).unwrap();
 
         let array_de: Array = ron::de::from_str(array_ser.as_str()).unwrap();
@@ -657,7 +657,7 @@ mod tests {
         // List
         let value_12 = Fraction::new(1, 2);
 
-        let list = List::new(&[&value_12]);
+        let list = List::new([value_12]);
         let list_ser = ron::ser::to_string(&list).unwrap();
 
         let list_de: List = ron::de::from_str(list_ser.as_str()).unwrap();

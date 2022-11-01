@@ -185,7 +185,7 @@ mod tests {
                 "date_time",
                 DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap(),
             )
-            .field("array", Array::new(&[&1, &2]))
+            .field("array", Array::new([1, 2]))
             .build();
 
         let pretty_config = ron::ser::PrettyConfig::new().new_line("".to_string());
@@ -241,7 +241,7 @@ mod tests {
                     DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap()
                 )
                 .field("fraction", Fraction::new(1, 2))
-                .field("array", Array::new(&[&1, &2]))
+                .field("array", Array::new([1, 2]))
                 .build()
                 .as_ref()
         );
@@ -261,7 +261,7 @@ mod tests {
                 "date_time",
                 DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap(),
             )
-            .field("array", Array::new(&[&1, &2]))
+            .field("array", Array::new([1, 2]))
             .build();
         let s_ser = ron::ser::to_string(&s).unwrap();
         let s_de: Structure = ron::de::from_str(s_ser.as_str()).unwrap();

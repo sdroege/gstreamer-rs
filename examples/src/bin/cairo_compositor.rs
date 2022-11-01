@@ -69,7 +69,7 @@ mod cairo_compositor {
                         .build()]
                 });
 
-                &*PROPERTIES
+                &PROPERTIES
             }
 
             // Called by the application whenever the value of a property should be changed.

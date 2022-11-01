@@ -180,7 +180,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_resampler_method(&mut self, v: crate::VideoResamplerMethod) {
-        self.0.set("GstVideoConverter.resampler-method", &v);
+        self.0.set("GstVideoConverter.resampler-method", v);
     }
 
     #[doc(alias = "get_resampler_method")]
@@ -192,7 +192,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_chroma_resampler_method(&mut self, v: crate::VideoResamplerMethod) {
-        self.0.set("GstVideoConverter.chroma-resampler-method", &v);
+        self.0.set("GstVideoConverter.chroma-resampler-method", v);
     }
 
     #[doc(alias = "get_chroma_resampler_method")]
@@ -204,7 +204,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_resampler_taps(&mut self, v: u32) {
-        self.0.set("GstVideoConverter.resampler-taps", &v);
+        self.0.set("GstVideoConverter.resampler-taps", v);
     }
 
     #[doc(alias = "get_resampler_taps")]
@@ -216,7 +216,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_dither_method(&mut self, v: crate::VideoDitherMethod) {
-        self.0.set("GstVideoConverter.dither-method", &v);
+        self.0.set("GstVideoConverter.dither-method", v);
     }
 
     #[doc(alias = "get_dither_method")]
@@ -228,7 +228,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_dither_quantization(&mut self, v: u32) {
-        self.0.set("GstVideoConverter.dither-quantization", &v);
+        self.0.set("GstVideoConverter.dither-quantization", v);
     }
 
     #[doc(alias = "get_dither_quantization")]
@@ -240,7 +240,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_src_x(&mut self, v: i32) {
-        self.0.set("GstVideoConverter.src-x", &v);
+        self.0.set("GstVideoConverter.src-x", v);
     }
 
     #[doc(alias = "get_src_x")]
@@ -252,7 +252,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_src_y(&mut self, v: i32) {
-        self.0.set("GstVideoConverter.src-y", &v);
+        self.0.set("GstVideoConverter.src-y", v);
     }
 
     #[doc(alias = "get_src_y")]
@@ -265,7 +265,7 @@ impl VideoConverterConfig {
 
     pub fn set_src_width(&mut self, v: Option<i32>) {
         if let Some(v) = v {
-            self.0.set("GstVideoConverter.src-width", &v);
+            self.0.set("GstVideoConverter.src-width", v);
         } else {
             self.0.remove_field("GstVideoConverter.src-width");
         }
@@ -280,7 +280,7 @@ impl VideoConverterConfig {
 
     pub fn set_src_height(&mut self, v: Option<i32>) {
         if let Some(v) = v {
-            self.0.set("GstVideoConverter.src-height", &v);
+            self.0.set("GstVideoConverter.src-height", v);
         } else {
             self.0.remove_field("GstVideoConverter.src-height");
         }
@@ -294,7 +294,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_dest_x(&mut self, v: i32) {
-        self.0.set("GstVideoConverter.dest-x", &v);
+        self.0.set("GstVideoConverter.dest-x", v);
     }
 
     #[doc(alias = "get_dest_x")]
@@ -306,7 +306,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_dest_y(&mut self, v: i32) {
-        self.0.set("GstVideoConverter.dest-y", &v);
+        self.0.set("GstVideoConverter.dest-y", v);
     }
 
     #[doc(alias = "get_dest_y")]
@@ -319,7 +319,7 @@ impl VideoConverterConfig {
 
     pub fn set_dest_width(&mut self, v: Option<i32>) {
         if let Some(v) = v {
-            self.0.set("GstVideoConverter.dest-width", &v);
+            self.0.set("GstVideoConverter.dest-width", v);
         } else {
             self.0.remove_field("GstVideoConverter.dest-width");
         }
@@ -334,7 +334,7 @@ impl VideoConverterConfig {
 
     pub fn set_dest_height(&mut self, v: Option<i32>) {
         if let Some(v) = v {
-            self.0.set("GstVideoConverter.dest-height", &v);
+            self.0.set("GstVideoConverter.dest-height", v);
         } else {
             self.0.remove_field("GstVideoConverter.dest-height");
         }
@@ -348,7 +348,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_fill_border(&mut self, v: bool) {
-        self.0.set("GstVideoConverter.fill-border", &v);
+        self.0.set("GstVideoConverter.fill-border", v);
     }
 
     #[doc(alias = "get_fill_border")]
@@ -360,7 +360,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_alpha_value(&mut self, v: f64) {
-        self.0.set("GstVideoConverter.alpha-value", &v);
+        self.0.set("GstVideoConverter.alpha-value", v);
     }
 
     #[doc(alias = "get_alpha_value")]
@@ -372,7 +372,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_alpha_mode(&mut self, v: crate::VideoAlphaMode) {
-        self.0.set("GstVideoConverter.alpha-mode", &v);
+        self.0.set("GstVideoConverter.alpha-mode", v);
     }
 
     #[doc(alias = "get_alpha_mode")]
@@ -384,7 +384,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_border_argb(&mut self, v: u32) {
-        self.0.set("GstVideoConverter.border-argb", &v);
+        self.0.set("GstVideoConverter.border-argb", v);
     }
 
     #[doc(alias = "get_border_argb")]
@@ -396,7 +396,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_chroma_mode(&mut self, v: crate::VideoChromaMode) {
-        self.0.set("GstVideoConverter.chroma-mode", &v);
+        self.0.set("GstVideoConverter.chroma-mode", v);
     }
 
     #[doc(alias = "get_chroma_mode")]
@@ -408,7 +408,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_matrix_mode(&mut self, v: crate::VideoMatrixMode) {
-        self.0.set("GstVideoConverter.matrix-mode", &v);
+        self.0.set("GstVideoConverter.matrix-mode", v);
     }
 
     #[doc(alias = "get_matrix_mode")]
@@ -420,7 +420,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_gamma_mode(&mut self, v: crate::VideoGammaMode) {
-        self.0.set("GstVideoConverter.gamma-mode", &v);
+        self.0.set("GstVideoConverter.gamma-mode", v);
     }
 
     #[doc(alias = "get_gamma_mode")]
@@ -432,7 +432,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_primaries_mode(&mut self, v: crate::VideoPrimariesMode) {
-        self.0.set("GstVideoConverter.primaries-mode", &v);
+        self.0.set("GstVideoConverter.primaries-mode", v);
     }
 
     #[doc(alias = "get_primaries_mode")]
@@ -444,7 +444,7 @@ impl VideoConverterConfig {
     }
 
     pub fn set_threads(&mut self, v: u32) {
-        self.0.set("GstVideoConverter.threads", &v);
+        self.0.set("GstVideoConverter.threads", v);
     }
 
     #[doc(alias = "get_threads")]

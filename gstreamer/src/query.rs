@@ -1680,7 +1680,7 @@ mod tests {
         let pos = p.result();
         assert_eq!(pos.try_into(), Ok(ClockTime::NONE));
 
-        p.structure_mut().set("check_mut", &true);
+        p.structure_mut().set("check_mut", true);
 
         // deref
         assert!(!p.is_serialized());
