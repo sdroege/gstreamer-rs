@@ -74,7 +74,7 @@ impl PlayConfig {
         assert_initialized_main_thread!();
         // FIXME: Work-around for
         // http://cgit.freedesktop.org/gstreamer/gst-plugins-bad/commit/?id=cc58bd6ae071dec4ea7b4be626034accd0372755
-        self.set("accurate-seek", &accurate);
+        self.set("accurate-seek", accurate);
     }
 
     #[doc(alias = "gst_play_config_set_user_agent")]

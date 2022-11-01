@@ -237,7 +237,7 @@ mod tests {
             .field("bool", true)
             .field("string", "bla")
             .field("fraction", Fraction::new(1, 2))
-            .field("array", Array::new(&[&1, &2]))
+            .field("array", Array::new([1, 2]))
             .build();
 
         let pretty_config = ron::ser::PrettyConfig::new().new_line("".to_string());
@@ -267,7 +267,7 @@ mod tests {
             .field("bool", true)
             .field("string", "bla")
             .field("fraction", Fraction::new(1, 2))
-            .field("array", Array::new(&[&1, &2]))
+            .field("array", Array::new([1, 2]))
             .features(&["foo:bar", "foo:baz"])
             .build();
 
@@ -301,7 +301,7 @@ mod tests {
             .field("bool", true)
             .field("string", "bla")
             .field("fraction", Fraction::new(1, 2))
-            .field("array", Array::new(&[&1, &2]))
+            .field("array", Array::new([1, 2]))
             .any_features()
             .build();
 
@@ -375,7 +375,7 @@ mod tests {
                 .field("bool", true)
                 .field("string", "bla")
                 .field("fraction", Fraction::new(1, 2))
-                .field("array", Array::new(&[&1, &2]))
+                .field("array", Array::new([1, 2]))
                 .build()
                 .as_ref()
         );
@@ -406,7 +406,7 @@ mod tests {
                 .field("bool", true)
                 .field("string", str_none)
                 .field("fraction", Fraction::new(1, 2))
-                .field("array", Array::new(&[&1, &2]))
+                .field("array", Array::new([1, 2]))
                 .build()
                 .as_ref()
         );
@@ -438,7 +438,7 @@ mod tests {
                 .field("bool", true)
                 .field("string", "bla")
                 .field("fraction", Fraction::new(1, 2))
-                .field("array", Array::new(&[&1, &2]))
+                .field("array", Array::new([1, 2]))
                 .build()
                 .as_ref()
         );
@@ -465,7 +465,7 @@ mod tests {
             .field("bool", true)
             .field("string", "bla")
             .field("fraction", Fraction::new(1, 2))
-            .field("array", Array::new(&[&1, &2]))
+            .field("array", Array::new([1, 2]))
             .build();
         let caps_ser = ron::ser::to_string(&caps).unwrap();
         let caps_de: Caps = ron::de::from_str(caps_ser.as_str()).unwrap();
@@ -476,7 +476,7 @@ mod tests {
             .field("bool", true)
             .field("string", "bla")
             .field("fraction", Fraction::new(1, 2))
-            .field("array", Array::new(&[&1, &2]))
+            .field("array", Array::new([1, 2]))
             .features(&["foo:bar", "foo:baz"])
             .build();
         let caps_ser = ron::ser::to_string(&caps).unwrap();
@@ -488,7 +488,7 @@ mod tests {
             .field("bool", true)
             .field("string", "bla")
             .field("fraction", Fraction::new(1, 2))
-            .field("array", Array::new(&[&1, &2]))
+            .field("array", Array::new([1, 2]))
             .any_features()
             .build();
         let caps_ser = ron::ser::to_string(&caps).unwrap();

@@ -1170,14 +1170,14 @@ mod tests {
 
         let s = Structure::builder("test")
             .field("f1", "abc")
-            .field("f2", &String::from("bcd"))
+            .field("f2", String::from("bcd"))
             .field("f3", 123i32)
             .field(
                 "f4",
-                Structure::builder("nested").field("badger", &true).build(),
+                Structure::builder("nested").field("badger", true).build(),
             )
-            .field("f5", &crate::Array::new(["a", "b", "c"]))
-            .field("f6", &crate::List::new(["d", "e", "f"]))
+            .field("f5", crate::Array::new(["a", "b", "c"]))
+            .field("f6", crate::List::new(["d", "e", "f"]))
             .build();
 
         assert_eq!(format!("{:?}", s), "Structure(test { f1: (gchararray) \"abc\", f2: (gchararray) \"bcd\", f3: (gint) 123, f4: Structure(nested { badger: (gboolean) TRUE }), f5: Array([(gchararray) \"a\", (gchararray) \"b\", (gchararray) \"c\"]), f6: List([(gchararray) \"d\", (gchararray) \"e\", (gchararray) \"f\"]) })");

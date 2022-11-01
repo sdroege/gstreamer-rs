@@ -172,7 +172,7 @@ unsafe extern "C" fn video_aggregator_pad_prepare_frame<T: VideoAggregatorPadImp
     let imp = instance.imp();
     let aggregator: Borrowed<VideoAggregator> = from_glib_borrow(aggregator);
 
-    let token = AggregateFramesToken(&*aggregator);
+    let token = AggregateFramesToken(&aggregator);
 
     match imp.prepare_frame(&aggregator, &token, &from_glib_borrow(buffer)) {
         Some(frame) => {
@@ -195,7 +195,7 @@ unsafe extern "C" fn video_aggregator_pad_clean_frame<T: VideoAggregatorPadImpl>
     let imp = instance.imp();
     let aggregator: Borrowed<VideoAggregator> = from_glib_borrow(aggregator);
 
-    let token = AggregateFramesToken(&*aggregator);
+    let token = AggregateFramesToken(&aggregator);
 
     let frame = if (*prepared_frame).buffer.is_null() {
         None

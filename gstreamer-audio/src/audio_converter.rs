@@ -74,7 +74,7 @@ impl AudioConverterConfig {
     }
 
     pub fn set_dither_method(&mut self, v: crate::AudioDitherMethod) {
-        self.0.set("GstAudioConverter.dither-method", &v);
+        self.0.set("GstAudioConverter.dither-method", v);
     }
 
     #[doc(alias = "get_dither_method")]
@@ -86,7 +86,7 @@ impl AudioConverterConfig {
     }
 
     pub fn set_noise_shaping_method(&mut self, v: crate::AudioNoiseShapingMethod) {
-        self.0.set("GstAudioConverter.noise-shaping-method", &v);
+        self.0.set("GstAudioConverter.noise-shaping-method", v);
     }
 
     #[doc(alias = "get_noise_shaping_method")]
@@ -98,7 +98,7 @@ impl AudioConverterConfig {
     }
 
     pub fn set_quantization(&mut self, v: u32) {
-        self.0.set("GstAudioConverter.quantization", &v);
+        self.0.set("GstAudioConverter.quantization", v);
     }
 
     #[doc(alias = "get_quantization")]
@@ -110,7 +110,7 @@ impl AudioConverterConfig {
     }
 
     pub fn set_resampler_method(&mut self, v: crate::AudioResamplerMethod) {
-        self.0.set("GstAudioConverter.resampler-method", &v);
+        self.0.set("GstAudioConverter.resampler-method", v);
     }
 
     #[doc(alias = "get_resampler_method")]
@@ -128,7 +128,7 @@ impl AudioConverterConfig {
             assert_eq!(val.len(), length);
             gst::Array::from_values(val.iter().map(|val| val.to_send_value())).to_send_value()
         }));
-        self.0.set("GstAudioConverter.mix-matrix", &array);
+        self.0.set("GstAudioConverter.mix-matrix", array);
     }
 
     #[doc(alias = "get_mix_matrix")]
@@ -157,7 +157,7 @@ impl AudioConverterConfig {
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     pub fn set_dither_threshold(&mut self, v: u32) {
-        self.0.set("GstAudioConverter.dither-threshold", &v);
+        self.0.set("GstAudioConverter.dither-threshold", v);
     }
 
     #[cfg(any(feature = "v1_22", feature = "dox"))]

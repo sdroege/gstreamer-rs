@@ -21,7 +21,7 @@ impl ExampleCustomEvent {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(send_eos: bool) -> gst::Event {
         let s = gst::Structure::builder(Self::EVENT_NAME)
-            .field("send_eos", &send_eos)
+            .field("send_eos", send_eos)
             .build();
         gst::event::CustomDownstream::new(s)
     }

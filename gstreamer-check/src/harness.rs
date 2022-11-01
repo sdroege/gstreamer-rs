@@ -820,7 +820,7 @@ impl<'a> ops::Deref for Ref<'a> {
     type Target = Harness;
 
     fn deref(&self) -> &Harness {
-        &*self.0
+        &self.0
     }
 }
 
@@ -831,13 +831,13 @@ impl<'a> ops::Deref for RefMut<'a> {
     type Target = Harness;
 
     fn deref(&self) -> &Harness {
-        &*self.0
+        &self.0
     }
 }
 
 impl<'a> ops::DerefMut for RefMut<'a> {
     fn deref_mut(&mut self) -> &mut Harness {
-        &mut *self.0
+        &mut self.0
     }
 }
 

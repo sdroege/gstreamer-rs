@@ -1049,7 +1049,7 @@ mod tests {
                 ("bool", &true),
                 ("string", &"bla"),
                 ("fraction", &Fraction::new(1, 2)),
-                ("array", &Array::new(&[&1, &2])),
+                ("array", &Array::new([1, 2])),
             ],
         );
         assert_eq!(
@@ -1068,7 +1068,7 @@ mod tests {
                         ("bool", &true),
                         ("string", &"bla"),
                         ("fraction", &Fraction::new(1, 2)),
-                        ("array", &Array::new(&[&1, &2])),
+                        ("array", &Array::new([1, 2])),
                     ],
                 )
                 .as_ref()
@@ -1098,7 +1098,7 @@ mod tests {
             .field("bool", true)
             .field("string", "bla")
             .field("fraction", Fraction::new(1, 2))
-            .field("array", Array::new(&[&1, &2]))
+            .field("array", Array::new([1, 2]))
             .build();
         assert_eq!(
             caps.to_string(),
@@ -1239,13 +1239,13 @@ mod tests {
                 Structure::builder("audio/x-raw")
                     .field(
                         "struct",
-                        Structure::builder("nested").field("badger", &true).build(),
+                        Structure::builder("nested").field("badger", true).build(),
                     )
                     .build(),
             )
             .structure(
                 Structure::builder("video/x-raw")
-                    .field("width", &800u32)
+                    .field("width", 800u32)
                     .build(),
             )
             .build();
@@ -1255,8 +1255,8 @@ mod tests {
         let caps = Caps::builder_full()
             .structure(
                 Structure::builder("video/x-raw")
-                    .field("array", &crate::Array::new(["a", "b", "c"]))
-                    .field("list", &crate::List::new(["d", "e", "f"]))
+                    .field("array", crate::Array::new(["a", "b", "c"]))
+                    .field("list", crate::List::new(["d", "e", "f"]))
                     .build(),
             )
             .build();

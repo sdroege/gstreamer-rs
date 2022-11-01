@@ -308,7 +308,7 @@ mod tests {
 
         let data = b"abcdefgh";
         let data = &data[..];
-        let (probability, caps) = SliceTypeFind::type_find(&data);
+        let (probability, caps) = SliceTypeFind::type_find(data);
 
         assert_eq!(caps, Some(Caps::builder("test/test").build()));
         assert_eq!(probability, TypeFindProbability::Likely);

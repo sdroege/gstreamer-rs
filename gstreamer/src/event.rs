@@ -2403,7 +2403,7 @@ mod tests {
         {
             let flush_start_evt = flush_start_evt.get_mut().unwrap();
             let structure = flush_start_evt.structure_mut();
-            structure.set("test", &42u32);
+            structure.set("test", 42u32);
         }
 
         let structure = flush_start_evt.structure().unwrap();

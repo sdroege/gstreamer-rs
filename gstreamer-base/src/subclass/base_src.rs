@@ -400,7 +400,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                                 }
                             };
 
-                            let copied_size = new_buffer.copy_to_slice(0, &mut *map);
+                            let copied_size = new_buffer.copy_to_slice(0, &mut map);
                             drop(map);
 
                             if let Err(copied_size) = copied_size {
@@ -821,7 +821,7 @@ unsafe extern "C" fn base_src_create<T: BaseSrcImpl>(
                             }
                         };
 
-                        let copied_size = new_buffer.copy_to_slice(0, &mut *map);
+                        let copied_size = new_buffer.copy_to_slice(0, &mut map);
                         drop(map);
 
                         if let Err(copied_size) = copied_size {
