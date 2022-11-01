@@ -416,7 +416,7 @@ clippy:
   extends: .img-stable
   stage: 'extras'
   variables:
-    CLIPPY_LINTS: -D warnings
+    CLIPPY_LINTS: -D warnings -W unknown-lints
   needs:
     - job: 'build-stable'
       artifacts: false
