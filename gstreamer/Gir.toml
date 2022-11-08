@@ -394,6 +394,10 @@ status = "generate"
 [[object]]
 name = "Gst.Allocator"
 status = "generate"
+    [[object.function]]
+    name = "register"
+    # Steals the string name in < 1.20.5
+    manual = true
 
     [[object.function]]
     name = "alloc"

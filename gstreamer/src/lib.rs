@@ -153,6 +153,7 @@ mod pipeline;
 
 mod allocation_params;
 pub use self::allocation_params::AllocationParams;
+mod allocator;
 
 mod element_factory_type;
 pub use element_factory_type::*;
