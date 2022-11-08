@@ -253,7 +253,7 @@ extern "C" {
     // GstNetTimePacket
     //=========================================================================
     pub fn gst_net_time_packet_get_type() -> GType;
-    pub fn gst_net_time_packet_new(buffer: *const u8) -> *mut GstNetTimePacket;
+    pub fn gst_net_time_packet_new(buffer: *const [u8; 16]) -> *mut GstNetTimePacket;
     pub fn gst_net_time_packet_copy(packet: *const GstNetTimePacket) -> *mut GstNetTimePacket;
     pub fn gst_net_time_packet_free(packet: *mut GstNetTimePacket);
     pub fn gst_net_time_packet_send(
@@ -262,7 +262,7 @@ extern "C" {
         dest_address: *mut gio::GSocketAddress,
         error: *mut *mut glib::GError,
     ) -> gboolean;
-    pub fn gst_net_time_packet_serialize(packet: *const GstNetTimePacket) -> *mut u8;
+    pub fn gst_net_time_packet_serialize(packet: *const GstNetTimePacket) -> *mut [u8; 16];
     pub fn gst_net_time_packet_receive(
         socket: *mut gio::GSocket,
         src_address: *mut *mut gio::GSocketAddress,

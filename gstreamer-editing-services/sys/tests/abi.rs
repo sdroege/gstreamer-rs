@@ -1126,7 +1126,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GES_TRACK_TYPE_UNKNOWN", "1"),
     ("(guint) GES_TRACK_TYPE_VIDEO", "4"),
     ("GES_VERSION_MAJOR", "1"),
-    ("GES_VERSION_MICRO", "1"),
+    ("GES_VERSION_MICRO", "2"),
     ("GES_VERSION_MINOR", "21"),
     ("GES_VERSION_NANO", "1"),
     (

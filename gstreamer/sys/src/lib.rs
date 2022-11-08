@@ -8723,6 +8723,12 @@ extern "C" {
         parent: *mut GstChildProxy,
         name: *const c_char,
     ) -> *mut gobject::GObject;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_child_proxy_get_child_by_name_recurse(
+        child_proxy: *mut GstChildProxy,
+        name: *const c_char,
+    ) -> *mut gobject::GObject;
     pub fn gst_child_proxy_get_children_count(parent: *mut GstChildProxy) -> c_uint;
     pub fn gst_child_proxy_get_property(
         object: *mut GstChildProxy,
