@@ -8,6 +8,7 @@ use crate::MemoryFlags;
 
 #[derive(Debug, Clone)]
 #[doc(alias = "GstAllocationParams")]
+#[repr(transparent)]
 pub struct AllocationParams(ffi::GstAllocationParams);
 
 unsafe impl Send for AllocationParams {}
@@ -36,7 +37,7 @@ impl AllocationParams {
 
     pub fn new(flags: MemoryFlags, align: usize, prefix: usize, padding: usize) -> Self {
         assert_initialized_main_thread!();
-        let allocationparams = unsafe {
+        let params = unsafe {
             ffi::GstAllocationParams {
                 flags: flags.into_glib(),
                 align,
@@ -46,7 +47,7 @@ impl AllocationParams {
             }
         };
 
-        AllocationParams(allocationparams)
+        params.into()
     }
 
     pub fn as_ptr(&self) -> *const ffi::GstAllocationParams {
@@ -74,6 +75,6 @@ impl FromGlib<ffi::GstAllocationParams> for AllocationParams {
     #[allow(unused_unsafe)]
     unsafe fn from_glib(value: ffi::GstAllocationParams) -> Self {
         assert_initialized_main_thread!();
-        AllocationParams(value)
+        Self::from(value)
     }
 }

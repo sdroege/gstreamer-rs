@@ -8,6 +8,7 @@ mod error;
 #[macro_use]
 mod plugin;
 
+mod allocator;
 mod bin;
 mod buffer_pool;
 mod child_proxy;
@@ -42,6 +43,7 @@ pub mod prelude {
     #[doc(hidden)]
     pub use glib::subclass::prelude::*;
 
+    pub use super::allocator::{AllocatorImpl, AllocatorImplExt};
     pub use super::bin::{BinImpl, BinImplExt};
     pub use super::buffer_pool::{BufferPoolImpl, BufferPoolImplExt};
     pub use super::child_proxy::{ChildProxyImpl, ChildProxyImplExt};
