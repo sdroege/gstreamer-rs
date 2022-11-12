@@ -3,9 +3,13 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::DiscovererAudioInfo;
+use crate::DiscovererContainerInfo;
 use crate::DiscovererResult;
 use crate::DiscovererSerializeFlags;
 use crate::DiscovererStreamInfo;
+use crate::DiscovererSubtitleInfo;
+use crate::DiscovererVideoInfo;
 use glib::translate::*;
 
 glib::wrapper! {
@@ -26,7 +30,7 @@ impl DiscovererInfo {
 
     #[doc(alias = "gst_discoverer_info_get_audio_streams")]
     #[doc(alias = "get_audio_streams")]
-    pub fn audio_streams(&self) -> Vec<DiscovererStreamInfo> {
+    pub fn audio_streams(&self) -> Vec<DiscovererAudioInfo> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_audio_streams(
                 self.to_glib_none().0,
@@ -36,7 +40,7 @@ impl DiscovererInfo {
 
     #[doc(alias = "gst_discoverer_info_get_container_streams")]
     #[doc(alias = "get_container_streams")]
-    pub fn container_streams(&self) -> Vec<DiscovererStreamInfo> {
+    pub fn container_streams(&self) -> Vec<DiscovererContainerInfo> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_container_streams(
                 self.to_glib_none().0,
@@ -119,7 +123,7 @@ impl DiscovererInfo {
 
     #[doc(alias = "gst_discoverer_info_get_subtitle_streams")]
     #[doc(alias = "get_subtitle_streams")]
-    pub fn subtitle_streams(&self) -> Vec<DiscovererStreamInfo> {
+    pub fn subtitle_streams(&self) -> Vec<DiscovererSubtitleInfo> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_subtitle_streams(
                 self.to_glib_none().0,
@@ -148,7 +152,7 @@ impl DiscovererInfo {
 
     #[doc(alias = "gst_discoverer_info_get_video_streams")]
     #[doc(alias = "get_video_streams")]
-    pub fn video_streams(&self) -> Vec<DiscovererStreamInfo> {
+    pub fn video_streams(&self) -> Vec<DiscovererVideoInfo> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_video_streams(
                 self.to_glib_none().0,

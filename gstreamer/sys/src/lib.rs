@@ -995,7 +995,7 @@ pub union GstControlBinding_ABI {
 
 impl ::std::fmt::Debug for GstControlBinding_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstControlBinding_ABI @ {:p}", self))
+        f.debug_struct(&format!("GstControlBinding_ABI @ {self:p}"))
             .field("abi", unsafe { &self.abi })
             .finish()
     }
@@ -1010,7 +1010,7 @@ pub union GstPadProbeInfo_ABI {
 
 impl ::std::fmt::Debug for GstPadProbeInfo_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPadProbeInfo_ABI @ {:p}", self))
+        f.debug_struct(&format!("GstPadProbeInfo_ABI @ {self:p}"))
             .field("_gst_reserved", unsafe { &self._gst_reserved })
             .field("abi", unsafe { &self.abi })
             .finish()
@@ -1026,7 +1026,7 @@ pub union GstPadTemplate_ABI {
 
 impl ::std::fmt::Debug for GstPadTemplate_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPadTemplate_ABI @ {:p}", self))
+        f.debug_struct(&format!("GstPadTemplate_ABI @ {self:p}"))
             .field("_gst_reserved", unsafe { &self._gst_reserved })
             .field("abi", unsafe { &self.abi })
             .finish()
@@ -1042,7 +1042,7 @@ pub union GstPad_ABI {
 
 impl ::std::fmt::Debug for GstPad_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPad_ABI @ {:p}", self))
+        f.debug_struct(&format!("GstPad_ABI @ {self:p}"))
             .field("_gst_reserved", unsafe { &self._gst_reserved })
             .field("abi", unsafe { &self.abi })
             .finish()
@@ -1225,7 +1225,7 @@ pub struct GstAllocationParams {
 
 impl ::std::fmt::Debug for GstAllocationParams {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAllocationParams @ {:p}", self))
+        f.debug_struct(&format!("GstAllocationParams @ {self:p}"))
             .field("flags", &self.flags)
             .field("align", &self.align)
             .field("prefix", &self.prefix)
@@ -1247,7 +1247,7 @@ pub struct GstAllocatorClass {
 
 impl ::std::fmt::Debug for GstAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAllocatorClass @ {:p}", self))
+        f.debug_struct(&format!("GstAllocatorClass @ {self:p}"))
             .field("object_class", &self.object_class)
             .field("alloc", &self.alloc)
             .field("free", &self.free)
@@ -1271,7 +1271,7 @@ pub struct GstAtomicQueue {
 
 impl ::std::fmt::Debug for GstAtomicQueue {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAtomicQueue @ {:p}", self))
+        f.debug_struct(&format!("GstAtomicQueue @ {self:p}"))
             .finish()
     }
 }
@@ -1295,7 +1295,7 @@ pub struct GstBinClass {
 
 impl ::std::fmt::Debug for GstBinClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBinClass @ {:p}", self))
+        f.debug_struct(&format!("GstBinClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("element_added", &self.element_added)
             .field("element_removed", &self.element_removed)
@@ -1331,7 +1331,7 @@ pub struct GstBuffer {
 
 impl ::std::fmt::Debug for GstBuffer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBuffer @ {:p}", self))
+        f.debug_struct(&format!("GstBuffer @ {self:p}"))
             .field("mini_object", &self.mini_object)
             .field("pool", &self.pool)
             .field("pts", &self.pts)
@@ -1351,7 +1351,7 @@ pub struct GstBufferList {
 
 impl ::std::fmt::Debug for GstBufferList {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBufferList @ {:p}", self))
+        f.debug_struct(&format!("GstBufferList @ {self:p}"))
             .finish()
     }
 }
@@ -1368,7 +1368,7 @@ pub struct GstBufferPoolAcquireParams {
 
 impl ::std::fmt::Debug for GstBufferPoolAcquireParams {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBufferPoolAcquireParams @ {:p}", self))
+        f.debug_struct(&format!("GstBufferPoolAcquireParams @ {self:p}"))
             .field("format", &self.format)
             .field("start", &self.start)
             .field("stop", &self.stop)
@@ -1409,7 +1409,7 @@ pub struct GstBufferPoolClass {
 
 impl ::std::fmt::Debug for GstBufferPoolClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBufferPoolClass @ {:p}", self))
+        f.debug_struct(&format!("GstBufferPoolClass @ {self:p}"))
             .field("object_class", &self.object_class)
             .field("get_options", &self.get_options)
             .field("set_config", &self.set_config)
@@ -1445,7 +1445,7 @@ pub struct GstBusClass {
 
 impl ::std::fmt::Debug for GstBusClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBusClass @ {:p}", self))
+        f.debug_struct(&format!("GstBusClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("message", &self.message)
             .field("sync_message", &self.sync_message)
@@ -1469,7 +1469,7 @@ pub struct GstCaps {
 
 impl ::std::fmt::Debug for GstCaps {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstCaps @ {:p}", self))
+        f.debug_struct(&format!("GstCaps @ {self:p}"))
             .field("mini_object", &self.mini_object)
             .finish()
     }
@@ -1483,7 +1483,7 @@ pub struct GstCapsFeatures {
 
 impl ::std::fmt::Debug for GstCapsFeatures {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstCapsFeatures @ {:p}", self))
+        f.debug_struct(&format!("GstCapsFeatures @ {self:p}"))
             .finish()
     }
 }
@@ -1506,7 +1506,7 @@ pub struct GstChildProxyInterface {
 
 impl ::std::fmt::Debug for GstChildProxyInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstChildProxyInterface @ {:p}", self))
+        f.debug_struct(&format!("GstChildProxyInterface @ {self:p}"))
             .field("parent", &self.parent)
             .field("get_child_by_name", &self.get_child_by_name)
             .field("get_child_by_index", &self.get_child_by_index)
@@ -1540,7 +1540,7 @@ pub struct GstClockClass {
 
 impl ::std::fmt::Debug for GstClockClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstClockClass @ {:p}", self))
+        f.debug_struct(&format!("GstClockClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("change_resolution", &self.change_resolution)
             .field("get_resolution", &self.get_resolution)
@@ -1571,7 +1571,7 @@ pub struct GstClockEntry {
 
 impl ::std::fmt::Debug for GstClockEntry {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstClockEntry @ {:p}", self))
+        f.debug_struct(&format!("GstClockEntry @ {self:p}"))
             .field("refcount", &self.refcount)
             .finish()
     }
@@ -1593,7 +1593,7 @@ pub struct GstContext {
 
 impl ::std::fmt::Debug for GstContext {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstContext @ {:p}", self)).finish()
+        f.debug_struct(&format!("GstContext @ {self:p}")).finish()
     }
 }
 
@@ -1634,7 +1634,7 @@ pub struct GstControlBindingClass {
 
 impl ::std::fmt::Debug for GstControlBindingClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstControlBindingClass @ {:p}", self))
+        f.debug_struct(&format!("GstControlBindingClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("sync_values", &self.sync_values)
             .field("get_value", &self.get_value)
@@ -1660,7 +1660,7 @@ pub struct GstControlBinding_ABI_abi {
 
 impl ::std::fmt::Debug for GstControlBinding_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstControlBinding_ABI_abi @ {:p}", self))
+        f.debug_struct(&format!("GstControlBinding_ABI_abi @ {self:p}"))
             .finish()
     }
 }
@@ -1674,7 +1674,7 @@ pub struct GstControlSourceClass {
 
 impl ::std::fmt::Debug for GstControlSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstControlSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GstControlSourceClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -1688,7 +1688,7 @@ pub struct GstCustomMeta {
 
 impl ::std::fmt::Debug for GstCustomMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstCustomMeta @ {:p}", self))
+        f.debug_struct(&format!("GstCustomMeta @ {self:p}"))
             .field("meta", &self.meta)
             .finish()
     }
@@ -1702,8 +1702,7 @@ pub struct GstDateTime {
 
 impl ::std::fmt::Debug for GstDateTime {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDateTime @ {:p}", self))
-            .finish()
+        f.debug_struct(&format!("GstDateTime @ {self:p}")).finish()
     }
 }
 
@@ -1718,7 +1717,7 @@ pub struct GstDebugCategory {
 
 impl ::std::fmt::Debug for GstDebugCategory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDebugCategory @ {:p}", self))
+        f.debug_struct(&format!("GstDebugCategory @ {self:p}"))
             .finish()
     }
 }
@@ -1744,7 +1743,7 @@ pub struct GstDeviceClass {
 
 impl ::std::fmt::Debug for GstDeviceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDeviceClass @ {:p}", self))
+        f.debug_struct(&format!("GstDeviceClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("create_element", &self.create_element)
             .field("reconfigure_element", &self.reconfigure_element)
@@ -1761,7 +1760,7 @@ pub struct GstDeviceMonitorClass {
 
 impl ::std::fmt::Debug for GstDeviceMonitorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDeviceMonitorClass @ {:p}", self))
+        f.debug_struct(&format!("GstDeviceMonitorClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -1797,7 +1796,7 @@ pub struct GstDeviceProviderClass {
 
 impl ::std::fmt::Debug for GstDeviceProviderClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDeviceProviderClass @ {:p}", self))
+        f.debug_struct(&format!("GstDeviceProviderClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("factory", &self.factory)
             .field("probe", &self.probe)
@@ -1876,7 +1875,7 @@ pub struct GstElementClass {
 
 impl ::std::fmt::Debug for GstElementClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstElementClass @ {:p}", self))
+        f.debug_struct(&format!("GstElementClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("metadata", &self.metadata)
             .field("elementfactory", &self.elementfactory)
@@ -1922,7 +1921,7 @@ pub struct GstEvent {
 
 impl ::std::fmt::Debug for GstEvent {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstEvent @ {:p}", self))
+        f.debug_struct(&format!("GstEvent @ {self:p}"))
             .field("mini_object", &self.mini_object)
             .field("type_", &self.type_)
             .field("timestamp", &self.timestamp)
@@ -1942,7 +1941,7 @@ pub struct GstFormatDefinition {
 
 impl ::std::fmt::Debug for GstFormatDefinition {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstFormatDefinition @ {:p}", self))
+        f.debug_struct(&format!("GstFormatDefinition @ {self:p}"))
             .field("value", &self.value)
             .field("nick", &self.nick)
             .field("description", &self.description)
@@ -1960,7 +1959,7 @@ pub struct GstGhostPadClass {
 
 impl ::std::fmt::Debug for GstGhostPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGhostPadClass @ {:p}", self))
+        f.debug_struct(&format!("GstGhostPadClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -1993,7 +1992,7 @@ pub struct GstIterator {
 
 impl ::std::fmt::Debug for GstIterator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstIterator @ {:p}", self))
+        f.debug_struct(&format!("GstIterator @ {self:p}"))
             .field("copy", &self.copy)
             .field("next", &self.next)
             .field("item", &self.item)
@@ -2023,7 +2022,7 @@ pub struct GstMapInfo {
 
 impl ::std::fmt::Debug for GstMapInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMapInfo @ {:p}", self))
+        f.debug_struct(&format!("GstMapInfo @ {self:p}"))
             .field("memory", &self.memory)
             .field("flags", &self.flags)
             .field("data", &self.data)
@@ -2048,7 +2047,7 @@ pub struct GstMemory {
 
 impl ::std::fmt::Debug for GstMemory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMemory @ {:p}", self))
+        f.debug_struct(&format!("GstMemory @ {self:p}"))
             .field("mini_object", &self.mini_object)
             .field("allocator", &self.allocator)
             .field("parent", &self.parent)
@@ -2074,7 +2073,7 @@ pub struct GstMessage {
 
 impl ::std::fmt::Debug for GstMessage {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMessage @ {:p}", self))
+        f.debug_struct(&format!("GstMessage @ {self:p}"))
             .field("mini_object", &self.mini_object)
             .field("type_", &self.type_)
             .field("timestamp", &self.timestamp)
@@ -2093,7 +2092,7 @@ pub struct GstMeta {
 
 impl ::std::fmt::Debug for GstMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMeta @ {:p}", self))
+        f.debug_struct(&format!("GstMeta @ {self:p}"))
             .field("flags", &self.flags)
             .field("info", &self.info)
             .finish()
@@ -2113,7 +2112,7 @@ pub struct GstMetaInfo {
 
 impl ::std::fmt::Debug for GstMetaInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMetaInfo @ {:p}", self))
+        f.debug_struct(&format!("GstMetaInfo @ {self:p}"))
             .field("api", &self.api)
             .field("type_", &self.type_)
             .field("size", &self.size)
@@ -2134,7 +2133,7 @@ pub struct GstMetaTransformCopy {
 
 impl ::std::fmt::Debug for GstMetaTransformCopy {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMetaTransformCopy @ {:p}", self))
+        f.debug_struct(&format!("GstMetaTransformCopy @ {self:p}"))
             .field("region", &self.region)
             .field("offset", &self.offset)
             .field("size", &self.size)
@@ -2158,7 +2157,7 @@ pub struct GstMiniObject {
 
 impl ::std::fmt::Debug for GstMiniObject {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMiniObject @ {:p}", self))
+        f.debug_struct(&format!("GstMiniObject @ {self:p}"))
             .field("type_", &self.type_)
             .field("refcount", &self.refcount)
             .field("lockstate", &self.lockstate)
@@ -2182,7 +2181,7 @@ pub struct GstObjectClass {
 
 impl ::std::fmt::Debug for GstObjectClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstObjectClass @ {:p}", self))
+        f.debug_struct(&format!("GstObjectClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("path_string_separator", &self.path_string_separator)
             .field("deep_notify", &self.deep_notify)
@@ -2201,7 +2200,7 @@ pub struct GstPadClass {
 
 impl ::std::fmt::Debug for GstPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPadClass @ {:p}", self))
+        f.debug_struct(&format!("GstPadClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("linked", &self.linked)
             .field("unlinked", &self.unlinked)
@@ -2230,7 +2229,7 @@ pub struct GstPadProbeInfo {
 
 impl ::std::fmt::Debug for GstPadProbeInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPadProbeInfo @ {:p}", self))
+        f.debug_struct(&format!("GstPadProbeInfo @ {self:p}"))
             .field("type_", &self.type_)
             .field("id", &self.id)
             .field("data", &self.data)
@@ -2249,7 +2248,7 @@ pub struct GstPadProbeInfo_ABI_abi {
 
 impl ::std::fmt::Debug for GstPadProbeInfo_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPadProbeInfo_ABI_abi @ {:p}", self))
+        f.debug_struct(&format!("GstPadProbeInfo_ABI_abi @ {self:p}"))
             .field("flow_ret", &self.flow_ret)
             .finish()
     }
@@ -2265,7 +2264,7 @@ pub struct GstPadTemplateClass {
 
 impl ::std::fmt::Debug for GstPadTemplateClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPadTemplateClass @ {:p}", self))
+        f.debug_struct(&format!("GstPadTemplateClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("pad_created", &self.pad_created)
             .finish()
@@ -2281,7 +2280,7 @@ pub struct GstPadTemplate_ABI_abi {
 
 impl ::std::fmt::Debug for GstPadTemplate_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPadTemplate_ABI_abi @ {:p}", self))
+        f.debug_struct(&format!("GstPadTemplate_ABI_abi @ {self:p}"))
             .field("gtype", &self.gtype)
             .field("documentation_caps", &self.documentation_caps)
             .finish()
@@ -2297,7 +2296,7 @@ pub struct GstPad_ABI_abi {
 
 impl ::std::fmt::Debug for GstPad_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPad_ABI_abi @ {:p}", self))
+        f.debug_struct(&format!("GstPad_ABI_abi @ {self:p}"))
             .field("last_flowret", &self.last_flowret)
             .field("eventfullfunc", &self.eventfullfunc)
             .finish()
@@ -2313,7 +2312,7 @@ pub struct GstParamSpecArray {
 
 impl ::std::fmt::Debug for GstParamSpecArray {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstParamSpecArray @ {:p}", self))
+        f.debug_struct(&format!("GstParamSpecArray @ {self:p}"))
             .field("parent_instance", &self.parent_instance)
             .field("element_spec", &self.element_spec)
             .finish()
@@ -2334,7 +2333,7 @@ pub struct GstParamSpecFraction {
 
 impl ::std::fmt::Debug for GstParamSpecFraction {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstParamSpecFraction @ {:p}", self))
+        f.debug_struct(&format!("GstParamSpecFraction @ {self:p}"))
             .field("parent_instance", &self.parent_instance)
             .field("min_num", &self.min_num)
             .field("min_den", &self.min_den)
@@ -2355,7 +2354,7 @@ pub struct GstParentBufferMeta {
 
 impl ::std::fmt::Debug for GstParentBufferMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstParentBufferMeta @ {:p}", self))
+        f.debug_struct(&format!("GstParentBufferMeta @ {self:p}"))
             .field("parent", &self.parent)
             .field("buffer", &self.buffer)
             .finish()
@@ -2370,7 +2369,7 @@ pub struct GstParseContext {
 
 impl ::std::fmt::Debug for GstParseContext {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstParseContext @ {:p}", self))
+        f.debug_struct(&format!("GstParseContext @ {self:p}"))
             .finish()
     }
 }
@@ -2384,7 +2383,7 @@ pub struct GstPipelineClass {
 
 impl ::std::fmt::Debug for GstPipelineClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPipelineClass @ {:p}", self))
+        f.debug_struct(&format!("GstPipelineClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -2425,7 +2424,7 @@ pub struct GstPluginDesc {
 
 impl ::std::fmt::Debug for GstPluginDesc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPluginDesc @ {:p}", self))
+        f.debug_struct(&format!("GstPluginDesc @ {self:p}"))
             .field("major_version", &self.major_version)
             .field("minor_version", &self.minor_version)
             .field("name", &self.name)
@@ -2466,7 +2465,7 @@ pub struct GstPollFD {
 
 impl ::std::fmt::Debug for GstPollFD {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPollFD @ {:p}", self))
+        f.debug_struct(&format!("GstPollFD @ {self:p}"))
             .field("fd", &self.fd)
             .finish()
     }
@@ -2504,7 +2503,7 @@ pub struct GstPresetInterface {
 
 impl ::std::fmt::Debug for GstPresetInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPresetInterface @ {:p}", self))
+        f.debug_struct(&format!("GstPresetInterface @ {self:p}"))
             .field("parent", &self.parent)
             .field("get_preset_names", &self.get_preset_names)
             .field("get_property_names", &self.get_property_names)
@@ -2526,7 +2525,7 @@ pub struct GstPromise {
 
 impl ::std::fmt::Debug for GstPromise {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPromise @ {:p}", self))
+        f.debug_struct(&format!("GstPromise @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2541,7 +2540,7 @@ pub struct GstProtectionMeta {
 
 impl ::std::fmt::Debug for GstProtectionMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstProtectionMeta @ {:p}", self))
+        f.debug_struct(&format!("GstProtectionMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("info", &self.info)
             .finish()
@@ -2557,7 +2556,7 @@ pub struct GstProxyPadClass {
 
 impl ::std::fmt::Debug for GstProxyPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstProxyPadClass @ {:p}", self))
+        f.debug_struct(&format!("GstProxyPadClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -2580,7 +2579,7 @@ pub struct GstQuery {
 
 impl ::std::fmt::Debug for GstQuery {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstQuery @ {:p}", self))
+        f.debug_struct(&format!("GstQuery @ {self:p}"))
             .field("mini_object", &self.mini_object)
             .field("type_", &self.type_)
             .finish()
@@ -2598,7 +2597,7 @@ pub struct GstReferenceTimestampMeta {
 
 impl ::std::fmt::Debug for GstReferenceTimestampMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstReferenceTimestampMeta @ {:p}", self))
+        f.debug_struct(&format!("GstReferenceTimestampMeta @ {self:p}"))
             .field("parent", &self.parent)
             .field("reference", &self.reference)
             .field("timestamp", &self.timestamp)
@@ -2615,7 +2614,7 @@ pub struct GstRegistryClass {
 
 impl ::std::fmt::Debug for GstRegistryClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRegistryClass @ {:p}", self))
+        f.debug_struct(&format!("GstRegistryClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -2637,7 +2636,7 @@ pub struct GstSample {
 
 impl ::std::fmt::Debug for GstSample {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSample @ {:p}", self)).finish()
+        f.debug_struct(&format!("GstSample @ {self:p}")).finish()
     }
 }
 
@@ -2660,7 +2659,7 @@ pub struct GstSegment {
 
 impl ::std::fmt::Debug for GstSegment {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSegment @ {:p}", self))
+        f.debug_struct(&format!("GstSegment @ {self:p}"))
             .field("flags", &self.flags)
             .field("rate", &self.rate)
             .field("applied_rate", &self.applied_rate)
@@ -2685,7 +2684,7 @@ pub struct GstSharedTaskPoolClass {
 
 impl ::std::fmt::Debug for GstSharedTaskPoolClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSharedTaskPoolClass @ {:p}", self))
+        f.debug_struct(&format!("GstSharedTaskPoolClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -2709,7 +2708,7 @@ pub struct GstStaticCaps {
 
 impl ::std::fmt::Debug for GstStaticCaps {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstStaticCaps @ {:p}", self))
+        f.debug_struct(&format!("GstStaticCaps @ {self:p}"))
             .field("caps", &self.caps)
             .field("string", &self.string)
             .finish()
@@ -2727,7 +2726,7 @@ pub struct GstStaticPadTemplate {
 
 impl ::std::fmt::Debug for GstStaticPadTemplate {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstStaticPadTemplate @ {:p}", self))
+        f.debug_struct(&format!("GstStaticPadTemplate @ {self:p}"))
             .field("name_template", &self.name_template)
             .field("direction", &self.direction)
             .field("presence", &self.presence)
@@ -2745,7 +2744,7 @@ pub struct GstStreamClass {
 
 impl ::std::fmt::Debug for GstStreamClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstStreamClass @ {:p}", self))
+        f.debug_struct(&format!("GstStreamClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -2763,7 +2762,7 @@ pub struct GstStreamCollectionClass {
 
 impl ::std::fmt::Debug for GstStreamCollectionClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstStreamCollectionClass @ {:p}", self))
+        f.debug_struct(&format!("GstStreamCollectionClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("stream_notify", &self.stream_notify)
             .finish()
@@ -2795,7 +2794,7 @@ pub struct GstStructure {
 
 impl ::std::fmt::Debug for GstStructure {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstStructure @ {:p}", self))
+        f.debug_struct(&format!("GstStructure @ {self:p}"))
             .field("type_", &self.type_)
             .finish()
     }
@@ -2810,7 +2809,7 @@ pub struct GstSystemClockClass {
 
 impl ::std::fmt::Debug for GstSystemClockClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSystemClockClass @ {:p}", self))
+        f.debug_struct(&format!("GstSystemClockClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -2832,7 +2831,7 @@ pub struct GstTagList {
 
 impl ::std::fmt::Debug for GstTagList {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTagList @ {:p}", self))
+        f.debug_struct(&format!("GstTagList @ {self:p}"))
             .field("mini_object", &self.mini_object)
             .finish()
     }
@@ -2846,7 +2845,7 @@ pub struct GstTagSetterInterface {
 
 impl ::std::fmt::Debug for GstTagSetterInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTagSetterInterface @ {:p}", self))
+        f.debug_struct(&format!("GstTagSetterInterface @ {self:p}"))
             .field("g_iface", &self.g_iface)
             .finish()
     }
@@ -2862,7 +2861,7 @@ pub struct GstTaskClass {
 
 impl ::std::fmt::Debug for GstTaskClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTaskClass @ {:p}", self))
+        f.debug_struct(&format!("GstTaskClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -2889,7 +2888,7 @@ pub struct GstTaskPoolClass {
 
 impl ::std::fmt::Debug for GstTaskPoolClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTaskPoolClass @ {:p}", self))
+        f.debug_struct(&format!("GstTaskPoolClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("prepare", &self.prepare)
             .field("cleanup", &self.cleanup)
@@ -2917,7 +2916,7 @@ pub struct GstTimedValue {
 
 impl ::std::fmt::Debug for GstTimedValue {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTimedValue @ {:p}", self))
+        f.debug_struct(&format!("GstTimedValue @ {self:p}"))
             .field("timestamp", &self.timestamp)
             .field("value", &self.value)
             .finish()
@@ -2932,7 +2931,7 @@ pub struct GstToc {
 
 impl ::std::fmt::Debug for GstToc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstToc @ {:p}", self)).finish()
+        f.debug_struct(&format!("GstToc @ {self:p}")).finish()
     }
 }
 
@@ -2944,8 +2943,7 @@ pub struct GstTocEntry {
 
 impl ::std::fmt::Debug for GstTocEntry {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTocEntry @ {:p}", self))
-            .finish()
+        f.debug_struct(&format!("GstTocEntry @ {self:p}")).finish()
     }
 }
 
@@ -2957,7 +2955,7 @@ pub struct GstTocSetterInterface {
 
 impl ::std::fmt::Debug for GstTocSetterInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTocSetterInterface @ {:p}", self))
+        f.debug_struct(&format!("GstTocSetterInterface @ {self:p}"))
             .field("g_iface", &self.g_iface)
             .finish()
     }
@@ -2972,7 +2970,7 @@ pub struct GstTracerClass {
 
 impl ::std::fmt::Debug for GstTracerClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTracerClass @ {:p}", self))
+        f.debug_struct(&format!("GstTracerClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -3014,7 +3012,7 @@ pub struct GstTypeFind {
 
 impl ::std::fmt::Debug for GstTypeFind {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTypeFind @ {:p}", self))
+        f.debug_struct(&format!("GstTypeFind @ {self:p}"))
             .field("peek", &self.peek)
             .field("suggest", &self.suggest)
             .field("data", &self.data)
@@ -3045,7 +3043,7 @@ pub struct GstURIHandlerInterface {
 
 impl ::std::fmt::Debug for GstURIHandlerInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstURIHandlerInterface @ {:p}", self))
+        f.debug_struct(&format!("GstURIHandlerInterface @ {self:p}"))
             .field("parent", &self.parent)
             .field("get_type", &self.get_type)
             .field("get_protocols", &self.get_protocols)
@@ -3063,7 +3061,7 @@ pub struct GstUri {
 
 impl ::std::fmt::Debug for GstUri {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstUri @ {:p}", self)).finish()
+        f.debug_struct(&format!("GstUri @ {self:p}")).finish()
     }
 }
 
@@ -3080,7 +3078,7 @@ pub struct GstValueTable {
 
 impl ::std::fmt::Debug for GstValueTable {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValueTable @ {:p}", self))
+        f.debug_struct(&format!("GstValueTable @ {self:p}"))
             .field("type_", &self.type_)
             .field("compare", &self.compare)
             .field("serialize", &self.serialize)
@@ -3109,7 +3107,7 @@ pub struct GstAllocator {
 
 impl ::std::fmt::Debug for GstAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAllocator @ {:p}", self))
+        f.debug_struct(&format!("GstAllocator @ {self:p}"))
             .field("object", &self.object)
             .field("mem_type", &self.mem_type)
             .field("mem_map", &self.mem_map)
@@ -3143,7 +3141,7 @@ pub struct GstBin {
 
 impl ::std::fmt::Debug for GstBin {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBin @ {:p}", self))
+        f.debug_struct(&format!("GstBin @ {self:p}"))
             .field("element", &self.element)
             .field("numchildren", &self.numchildren)
             .field("children", &self.children)
@@ -3167,7 +3165,7 @@ pub struct GstBitmask {
 
 impl ::std::fmt::Debug for GstBitmask {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBitmask @ {:p}", self)).finish()
+        f.debug_struct(&format!("GstBitmask @ {self:p}")).finish()
     }
 }
 
@@ -3182,7 +3180,7 @@ pub struct GstBufferPool {
 
 impl ::std::fmt::Debug for GstBufferPool {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBufferPool @ {:p}", self))
+        f.debug_struct(&format!("GstBufferPool @ {self:p}"))
             .field("object", &self.object)
             .field("flushing", &self.flushing)
             .finish()
@@ -3199,7 +3197,7 @@ pub struct GstBus {
 
 impl ::std::fmt::Debug for GstBus {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBus @ {:p}", self))
+        f.debug_struct(&format!("GstBus @ {self:p}"))
             .field("object", &self.object)
             .finish()
     }
@@ -3215,7 +3213,7 @@ pub struct GstClock {
 
 impl ::std::fmt::Debug for GstClock {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstClock @ {:p}", self))
+        f.debug_struct(&format!("GstClock @ {self:p}"))
             .field("object", &self.object)
             .finish()
     }
@@ -3234,7 +3232,7 @@ pub struct GstControlBinding {
 
 impl ::std::fmt::Debug for GstControlBinding {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstControlBinding @ {:p}", self))
+        f.debug_struct(&format!("GstControlBinding @ {self:p}"))
             .field("parent", &self.parent)
             .field("name", &self.name)
             .field("pspec", &self.pspec)
@@ -3254,7 +3252,7 @@ pub struct GstControlSource {
 
 impl ::std::fmt::Debug for GstControlSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstControlSource @ {:p}", self))
+        f.debug_struct(&format!("GstControlSource @ {self:p}"))
             .field("parent", &self.parent)
             .field("get_value", &self.get_value)
             .field("get_value_array", &self.get_value_array)
@@ -3272,7 +3270,7 @@ pub struct GstDevice {
 
 impl ::std::fmt::Debug for GstDevice {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDevice @ {:p}", self))
+        f.debug_struct(&format!("GstDevice @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -3288,7 +3286,7 @@ pub struct GstDeviceMonitor {
 
 impl ::std::fmt::Debug for GstDeviceMonitor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDeviceMonitor @ {:p}", self))
+        f.debug_struct(&format!("GstDeviceMonitor @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -3305,7 +3303,7 @@ pub struct GstDeviceProvider {
 
 impl ::std::fmt::Debug for GstDeviceProvider {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDeviceProvider @ {:p}", self))
+        f.debug_struct(&format!("GstDeviceProvider @ {self:p}"))
             .field("parent", &self.parent)
             .field("devices", &self.devices)
             .finish()
@@ -3320,7 +3318,7 @@ pub struct GstDeviceProviderFactory {
 
 impl ::std::fmt::Debug for GstDeviceProviderFactory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDeviceProviderFactory @ {:p}", self))
+        f.debug_struct(&format!("GstDeviceProviderFactory @ {self:p}"))
             .finish()
     }
 }
@@ -3333,7 +3331,7 @@ pub struct GstDoubleRange {
 
 impl ::std::fmt::Debug for GstDoubleRange {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDoubleRange @ {:p}", self))
+        f.debug_struct(&format!("GstDoubleRange @ {self:p}"))
             .finish()
     }
 }
@@ -3346,7 +3344,7 @@ pub struct GstDynamicTypeFactory {
 
 impl ::std::fmt::Debug for GstDynamicTypeFactory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDynamicTypeFactory @ {:p}", self))
+        f.debug_struct(&format!("GstDynamicTypeFactory @ {self:p}"))
             .finish()
     }
 }
@@ -3380,7 +3378,7 @@ pub struct GstElement {
 
 impl ::std::fmt::Debug for GstElement {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstElement @ {:p}", self))
+        f.debug_struct(&format!("GstElement @ {self:p}"))
             .field("object", &self.object)
             .field("state_lock", &self.state_lock)
             .field("state_cond", &self.state_cond)
@@ -3414,7 +3412,7 @@ pub struct GstElementFactory {
 
 impl ::std::fmt::Debug for GstElementFactory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstElementFactory @ {:p}", self))
+        f.debug_struct(&format!("GstElementFactory @ {self:p}"))
             .finish()
     }
 }
@@ -3427,7 +3425,7 @@ pub struct GstFlagSet {
 
 impl ::std::fmt::Debug for GstFlagSet {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstFlagSet @ {:p}", self)).finish()
+        f.debug_struct(&format!("GstFlagSet @ {self:p}")).finish()
     }
 }
 
@@ -3439,8 +3437,7 @@ pub struct GstFraction {
 
 impl ::std::fmt::Debug for GstFraction {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstFraction @ {:p}", self))
-            .finish()
+        f.debug_struct(&format!("GstFraction @ {self:p}")).finish()
     }
 }
 
@@ -3452,7 +3449,7 @@ pub struct GstFractionRange {
 
 impl ::std::fmt::Debug for GstFractionRange {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstFractionRange @ {:p}", self))
+        f.debug_struct(&format!("GstFractionRange @ {self:p}"))
             .finish()
     }
 }
@@ -3466,7 +3463,7 @@ pub struct GstGhostPad {
 
 impl ::std::fmt::Debug for GstGhostPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGhostPad @ {:p}", self))
+        f.debug_struct(&format!("GstGhostPad @ {self:p}"))
             .field("pad", &self.pad)
             .finish()
     }
@@ -3480,7 +3477,7 @@ pub struct GstInt64Range {
 
 impl ::std::fmt::Debug for GstInt64Range {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstInt64Range @ {:p}", self))
+        f.debug_struct(&format!("GstInt64Range @ {self:p}"))
             .finish()
     }
 }
@@ -3493,8 +3490,7 @@ pub struct GstIntRange {
 
 impl ::std::fmt::Debug for GstIntRange {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstIntRange @ {:p}", self))
-            .finish()
+        f.debug_struct(&format!("GstIntRange @ {self:p}")).finish()
     }
 }
 
@@ -3514,7 +3510,7 @@ pub struct GstObject {
 
 impl ::std::fmt::Debug for GstObject {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstObject @ {:p}", self))
+        f.debug_struct(&format!("GstObject @ {self:p}"))
             .field("object", &self.object)
             .field("lock", &self.lock)
             .field("name", &self.name)
@@ -3576,7 +3572,7 @@ pub struct GstPad {
 
 impl ::std::fmt::Debug for GstPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPad @ {:p}", self))
+        f.debug_struct(&format!("GstPad @ {self:p}"))
             .field("object", &self.object)
             .field("element_private", &self.element_private)
             .field("padtemplate", &self.padtemplate)
@@ -3599,7 +3595,7 @@ pub struct GstPadTemplate {
 
 impl ::std::fmt::Debug for GstPadTemplate {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPadTemplate @ {:p}", self))
+        f.debug_struct(&format!("GstPadTemplate @ {self:p}"))
             .field("object", &self.object)
             .field("name_template", &self.name_template)
             .field("direction", &self.direction)
@@ -3618,7 +3614,7 @@ pub struct GstParamArray {
 
 impl ::std::fmt::Debug for GstParamArray {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstParamArray @ {:p}", self))
+        f.debug_struct(&format!("GstParamArray @ {self:p}"))
             .finish()
     }
 }
@@ -3631,7 +3627,7 @@ pub struct GstParamFraction {
 
 impl ::std::fmt::Debug for GstParamFraction {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstParamFraction @ {:p}", self))
+        f.debug_struct(&format!("GstParamFraction @ {self:p}"))
             .finish()
     }
 }
@@ -3649,7 +3645,7 @@ pub struct GstPipeline {
 
 impl ::std::fmt::Debug for GstPipeline {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPipeline @ {:p}", self))
+        f.debug_struct(&format!("GstPipeline @ {self:p}"))
             .field("bin", &self.bin)
             .field("fixed_clock", &self.fixed_clock)
             .field("stream_time", &self.stream_time)
@@ -3666,7 +3662,7 @@ pub struct GstPlugin {
 
 impl ::std::fmt::Debug for GstPlugin {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlugin @ {:p}", self)).finish()
+        f.debug_struct(&format!("GstPlugin @ {self:p}")).finish()
     }
 }
 
@@ -3678,7 +3674,7 @@ pub struct GstPluginFeature {
 
 impl ::std::fmt::Debug for GstPluginFeature {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPluginFeature @ {:p}", self))
+        f.debug_struct(&format!("GstPluginFeature @ {self:p}"))
             .finish()
     }
 }
@@ -3692,7 +3688,7 @@ pub struct GstProxyPad {
 
 impl ::std::fmt::Debug for GstProxyPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstProxyPad @ {:p}", self))
+        f.debug_struct(&format!("GstProxyPad @ {self:p}"))
             .field("pad", &self.pad)
             .finish()
     }
@@ -3707,7 +3703,7 @@ pub struct GstRegistry {
 
 impl ::std::fmt::Debug for GstRegistry {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRegistry @ {:p}", self))
+        f.debug_struct(&format!("GstRegistry @ {self:p}"))
             .field("object", &self.object)
             .finish()
     }
@@ -3723,7 +3719,7 @@ pub struct GstSharedTaskPool {
 
 impl ::std::fmt::Debug for GstSharedTaskPool {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSharedTaskPool @ {:p}", self))
+        f.debug_struct(&format!("GstSharedTaskPool @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -3740,7 +3736,7 @@ pub struct GstStream {
 
 impl ::std::fmt::Debug for GstStream {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstStream @ {:p}", self))
+        f.debug_struct(&format!("GstStream @ {self:p}"))
             .field("stream_id", &self.stream_id)
             .finish()
     }
@@ -3757,7 +3753,7 @@ pub struct GstStreamCollection {
 
 impl ::std::fmt::Debug for GstStreamCollection {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstStreamCollection @ {:p}", self))
+        f.debug_struct(&format!("GstStreamCollection @ {self:p}"))
             .finish()
     }
 }
@@ -3772,7 +3768,7 @@ pub struct GstSystemClock {
 
 impl ::std::fmt::Debug for GstSystemClock {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSystemClock @ {:p}", self))
+        f.debug_struct(&format!("GstSystemClock @ {self:p}"))
             .field("clock", &self.clock)
             .finish()
     }
@@ -3796,7 +3792,7 @@ pub struct GstTask {
 
 impl ::std::fmt::Debug for GstTask {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTask @ {:p}", self))
+        f.debug_struct(&format!("GstTask @ {self:p}"))
             .field("object", &self.object)
             .field("state", &self.state)
             .field("cond", &self.cond)
@@ -3819,7 +3815,7 @@ pub struct GstTaskPool {
 
 impl ::std::fmt::Debug for GstTaskPool {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTaskPool @ {:p}", self))
+        f.debug_struct(&format!("GstTaskPool @ {self:p}"))
             .field("object", &self.object)
             .finish()
     }
@@ -3835,7 +3831,7 @@ pub struct GstTracer {
 
 impl ::std::fmt::Debug for GstTracer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTracer @ {:p}", self))
+        f.debug_struct(&format!("GstTracer @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -3849,7 +3845,7 @@ pub struct GstTracerFactory {
 
 impl ::std::fmt::Debug for GstTracerFactory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTracerFactory @ {:p}", self))
+        f.debug_struct(&format!("GstTracerFactory @ {self:p}"))
             .finish()
     }
 }
@@ -3862,7 +3858,7 @@ pub struct GstTracerRecord {
 
 impl ::std::fmt::Debug for GstTracerRecord {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTracerRecord @ {:p}", self))
+        f.debug_struct(&format!("GstTracerRecord @ {self:p}"))
             .finish()
     }
 }
@@ -3875,7 +3871,7 @@ pub struct GstTypeFindFactory {
 
 impl ::std::fmt::Debug for GstTypeFindFactory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTypeFindFactory @ {:p}", self))
+        f.debug_struct(&format!("GstTypeFindFactory @ {self:p}"))
             .finish()
     }
 }
@@ -3888,7 +3884,7 @@ pub struct GstValueArray {
 
 impl ::std::fmt::Debug for GstValueArray {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValueArray @ {:p}", self))
+        f.debug_struct(&format!("GstValueArray @ {self:p}"))
             .finish()
     }
 }
@@ -3901,8 +3897,7 @@ pub struct GstValueList {
 
 impl ::std::fmt::Debug for GstValueList {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValueList @ {:p}", self))
-            .finish()
+        f.debug_struct(&format!("GstValueList @ {self:p}")).finish()
     }
 }
 
@@ -3915,7 +3910,7 @@ pub struct GstChildProxy {
 
 impl ::std::fmt::Debug for GstChildProxy {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstChildProxy @ {:p}", self)
+        write!(f, "GstChildProxy @ {self:p}")
     }
 }
 
@@ -3927,7 +3922,7 @@ pub struct GstPreset {
 
 impl ::std::fmt::Debug for GstPreset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstPreset @ {:p}", self)
+        write!(f, "GstPreset @ {self:p}")
     }
 }
 
@@ -3939,7 +3934,7 @@ pub struct GstTagSetter {
 
 impl ::std::fmt::Debug for GstTagSetter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstTagSetter @ {:p}", self)
+        write!(f, "GstTagSetter @ {self:p}")
     }
 }
 
@@ -3951,7 +3946,7 @@ pub struct GstTocSetter {
 
 impl ::std::fmt::Debug for GstTocSetter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstTocSetter @ {:p}", self)
+        write!(f, "GstTocSetter @ {self:p}")
     }
 }
 
@@ -3963,7 +3958,7 @@ pub struct GstURIHandler {
 
 impl ::std::fmt::Debug for GstURIHandler {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstURIHandler @ {:p}", self)
+        write!(f, "GstURIHandler @ {self:p}")
     }
 }
 
@@ -8721,6 +8716,12 @@ extern "C" {
     ) -> *mut gobject::GObject;
     pub fn gst_child_proxy_get_child_by_name(
         parent: *mut GstChildProxy,
+        name: *const c_char,
+    ) -> *mut gobject::GObject;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_child_proxy_get_child_by_name_recurse(
+        child_proxy: *mut GstChildProxy,
         name: *const c_char,
     ) -> *mut gobject::GObject;
     pub fn gst_child_proxy_get_children_count(parent: *mut GstChildProxy) -> c_uint;

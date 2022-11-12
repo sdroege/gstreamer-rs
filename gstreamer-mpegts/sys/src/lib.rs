@@ -693,7 +693,7 @@ pub struct GstMpegtsAtscEIT {
 
 impl ::std::fmt::Debug for GstMpegtsAtscEIT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsAtscEIT @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsAtscEIT @ {self:p}"))
             .field("source_id", &self.source_id)
             .field("protocol_version", &self.protocol_version)
             .field("events", &self.events)
@@ -714,7 +714,7 @@ pub struct GstMpegtsAtscEITEvent {
 
 impl ::std::fmt::Debug for GstMpegtsAtscEITEvent {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsAtscEITEvent @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsAtscEITEvent @ {self:p}"))
             .field("event_id", &self.event_id)
             .field("start_time", &self.start_time)
             .field("etm_location", &self.etm_location)
@@ -736,7 +736,7 @@ pub struct GstMpegtsAtscETT {
 
 impl ::std::fmt::Debug for GstMpegtsAtscETT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsAtscETT @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsAtscETT @ {self:p}"))
             .field("ett_table_id_extension", &self.ett_table_id_extension)
             .field("protocol_version", &self.protocol_version)
             .field("etm_id", &self.etm_id)
@@ -756,7 +756,7 @@ pub struct GstMpegtsAtscMGT {
 
 impl ::std::fmt::Debug for GstMpegtsAtscMGT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsAtscMGT @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsAtscMGT @ {self:p}"))
             .field("protocol_version", &self.protocol_version)
             .field("tables_defined", &self.tables_defined)
             .field("tables", &self.tables)
@@ -777,7 +777,7 @@ pub struct GstMpegtsAtscMGTTable {
 
 impl ::std::fmt::Debug for GstMpegtsAtscMGTTable {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsAtscMGTTable @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsAtscMGTTable @ {self:p}"))
             .field("table_type", &self.table_type)
             .field("pid", &self.pid)
             .field("version_number", &self.version_number)
@@ -796,7 +796,7 @@ pub struct GstMpegtsAtscMultString {
 
 impl ::std::fmt::Debug for GstMpegtsAtscMultString {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsAtscMultString @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsAtscMultString @ {self:p}"))
             .field("iso_639_langcode", &self.iso_639_langcode)
             .field("segments", &self.segments)
             .finish()
@@ -815,7 +815,7 @@ pub struct GstMpegtsAtscRRT {
 
 impl ::std::fmt::Debug for GstMpegtsAtscRRT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsAtscRRT @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsAtscRRT @ {self:p}"))
             .field("protocol_version", &self.protocol_version)
             .field("names", &self.names)
             .field("dimensions_defined", &self.dimensions_defined)
@@ -836,7 +836,7 @@ pub struct GstMpegtsAtscRRTDimension {
 
 impl ::std::fmt::Debug for GstMpegtsAtscRRTDimension {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsAtscRRTDimension @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsAtscRRTDimension @ {self:p}"))
             .field("names", &self.names)
             .field("graduated_scale", &self.graduated_scale)
             .field("values_defined", &self.values_defined)
@@ -854,7 +854,7 @@ pub struct GstMpegtsAtscRRTDimensionValue {
 
 impl ::std::fmt::Debug for GstMpegtsAtscRRTDimensionValue {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsAtscRRTDimensionValue @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsAtscRRTDimensionValue @ {self:p}"))
             .field("abbrev_ratings", &self.abbrev_ratings)
             .field("ratings", &self.ratings)
             .finish()
@@ -876,7 +876,7 @@ pub struct GstMpegtsAtscSTT {
 
 impl ::std::fmt::Debug for GstMpegtsAtscSTT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsAtscSTT @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsAtscSTT @ {self:p}"))
             .field("protocol_version", &self.protocol_version)
             .field("system_time", &self.system_time)
             .field("gps_utc_offset", &self.gps_utc_offset)
@@ -901,7 +901,7 @@ pub struct GstMpegtsAtscStringSegment {
 
 impl ::std::fmt::Debug for GstMpegtsAtscStringSegment {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsAtscStringSegment @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsAtscStringSegment @ {self:p}"))
             .field("compression_type", &self.compression_type)
             .field("mode", &self.mode)
             .field("compressed_data_size", &self.compressed_data_size)
@@ -922,7 +922,7 @@ pub struct GstMpegtsAtscVCT {
 
 impl ::std::fmt::Debug for GstMpegtsAtscVCT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsAtscVCT @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsAtscVCT @ {self:p}"))
             .field("transport_stream_id", &self.transport_stream_id)
             .field("protocol_version", &self.protocol_version)
             .field("sources", &self.sources)
@@ -954,7 +954,7 @@ pub struct GstMpegtsAtscVCTSource {
 
 impl ::std::fmt::Debug for GstMpegtsAtscVCTSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsAtscVCTSource @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsAtscVCTSource @ {self:p}"))
             .field("short_name", &self.short_name)
             .field("major_channel_number", &self.major_channel_number)
             .field("minor_channel_number", &self.minor_channel_number)
@@ -994,26 +994,23 @@ pub struct GstMpegtsAudioPreselectionDescriptor {
 
 impl ::std::fmt::Debug for GstMpegtsAudioPreselectionDescriptor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!(
-            "GstMpegtsAudioPreselectionDescriptor @ {:p}",
-            self
-        ))
-        .field("preselection_id", &self.preselection_id)
-        .field(
-            "audio_rendering_indication",
-            &self.audio_rendering_indication,
-        )
-        .field("audio_description", &self.audio_description)
-        .field("spoken_subtitles", &self.spoken_subtitles)
-        .field("dialogue_enhancement", &self.dialogue_enhancement)
-        .field("interactivity_enabled", &self.interactivity_enabled)
-        .field("language_code_present", &self.language_code_present)
-        .field("text_label_present", &self.text_label_present)
-        .field("multi_stream_info_present", &self.multi_stream_info_present)
-        .field("future_extension", &self.future_extension)
-        .field("language_code", &self.language_code)
-        .field("message_id", &self.message_id)
-        .finish()
+        f.debug_struct(&format!("GstMpegtsAudioPreselectionDescriptor @ {self:p}"))
+            .field("preselection_id", &self.preselection_id)
+            .field(
+                "audio_rendering_indication",
+                &self.audio_rendering_indication,
+            )
+            .field("audio_description", &self.audio_description)
+            .field("spoken_subtitles", &self.spoken_subtitles)
+            .field("dialogue_enhancement", &self.dialogue_enhancement)
+            .field("interactivity_enabled", &self.interactivity_enabled)
+            .field("language_code_present", &self.language_code_present)
+            .field("text_label_present", &self.text_label_present)
+            .field("multi_stream_info_present", &self.multi_stream_info_present)
+            .field("future_extension", &self.future_extension)
+            .field("language_code", &self.language_code)
+            .field("message_id", &self.message_id)
+            .finish()
     }
 }
 
@@ -1026,7 +1023,7 @@ pub struct GstMpegtsBAT {
 
 impl ::std::fmt::Debug for GstMpegtsBAT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsBAT @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsBAT @ {self:p}"))
             .field("descriptors", &self.descriptors)
             .field("streams", &self.streams)
             .finish()
@@ -1043,7 +1040,7 @@ pub struct GstMpegtsBATStream {
 
 impl ::std::fmt::Debug for GstMpegtsBATStream {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsBATStream @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsBATStream @ {self:p}"))
             .field("transport_stream_id", &self.transport_stream_id)
             .field("original_network_id", &self.original_network_id)
             .field("descriptors", &self.descriptors)
@@ -1064,8 +1061,7 @@ pub struct GstMpegtsCableDeliverySystemDescriptor {
 impl ::std::fmt::Debug for GstMpegtsCableDeliverySystemDescriptor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!(
-            "GstMpegtsCableDeliverySystemDescriptor @ {:p}",
-            self
+            "GstMpegtsCableDeliverySystemDescriptor @ {self:p}"
         ))
         .field("frequency", &self.frequency)
         .field("outer_fec", &self.outer_fec)
@@ -1088,7 +1084,7 @@ pub struct GstMpegtsComponentDescriptor {
 
 impl ::std::fmt::Debug for GstMpegtsComponentDescriptor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsComponentDescriptor @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsComponentDescriptor @ {self:p}"))
             .field("stream_content", &self.stream_content)
             .field("component_type", &self.component_type)
             .field("component_tag", &self.component_tag)
@@ -1108,7 +1104,7 @@ pub struct GstMpegtsContent {
 
 impl ::std::fmt::Debug for GstMpegtsContent {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsContent @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsContent @ {self:p}"))
             .field("content_nibble_1", &self.content_nibble_1)
             .field("content_nibble_2", &self.content_nibble_2)
             .field("user_byte", &self.user_byte)
@@ -1130,7 +1126,7 @@ pub struct GstMpegtsDVBLinkageDescriptor {
 
 impl ::std::fmt::Debug for GstMpegtsDVBLinkageDescriptor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsDVBLinkageDescriptor @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsDVBLinkageDescriptor @ {self:p}"))
             .field("transport_stream_id", &self.transport_stream_id)
             .field("original_network_id", &self.original_network_id)
             .field("service_id", &self.service_id)
@@ -1151,7 +1147,7 @@ pub struct GstMpegtsDVBLinkageEvent {
 
 impl ::std::fmt::Debug for GstMpegtsDVBLinkageEvent {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsDVBLinkageEvent @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsDVBLinkageEvent @ {self:p}"))
             .field("target_event_id", &self.target_event_id)
             .field("target_listed", &self.target_listed)
             .field("event_simulcast", &self.event_simulcast)
@@ -1177,7 +1173,7 @@ pub struct GstMpegtsDVBLinkageExtendedEvent {
 
 impl ::std::fmt::Debug for GstMpegtsDVBLinkageExtendedEvent {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsDVBLinkageExtendedEvent @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsDVBLinkageExtendedEvent @ {self:p}"))
             .field("target_event_id", &self.target_event_id)
             .field("target_listed", &self.target_listed)
             .field("event_simulcast", &self.event_simulcast)
@@ -1210,7 +1206,7 @@ pub struct GstMpegtsDVBLinkageMobileHandOver {
 
 impl ::std::fmt::Debug for GstMpegtsDVBLinkageMobileHandOver {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsDVBLinkageMobileHandOver @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsDVBLinkageMobileHandOver @ {self:p}"))
             .field("hand_over_type", &self.hand_over_type)
             .field("origin_type", &self.origin_type)
             .field("network_id", &self.network_id)
@@ -1228,7 +1224,7 @@ pub struct GstMpegtsDVBParentalRatingItem {
 
 impl ::std::fmt::Debug for GstMpegtsDVBParentalRatingItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsDVBParentalRatingItem @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsDVBParentalRatingItem @ {self:p}"))
             .field("country_code", &self.country_code)
             .field("rating", &self.rating)
             .finish()
@@ -1244,7 +1240,7 @@ pub struct GstMpegtsDVBServiceListItem {
 
 impl ::std::fmt::Debug for GstMpegtsDVBServiceListItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsDVBServiceListItem @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsDVBServiceListItem @ {self:p}"))
             .field("service_id", &self.service_id)
             .field("type_", &self.type_)
             .finish()
@@ -1264,7 +1260,7 @@ pub struct GstMpegtsDataBroadcastDescriptor {
 
 impl ::std::fmt::Debug for GstMpegtsDataBroadcastDescriptor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsDataBroadcastDescriptor @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsDataBroadcastDescriptor @ {self:p}"))
             .field("data_broadcast_id", &self.data_broadcast_id)
             .field("component_tag", &self.component_tag)
             .field("length", &self.length)
@@ -1287,7 +1283,7 @@ pub struct GstMpegtsDescriptor {
 
 impl ::std::fmt::Debug for GstMpegtsDescriptor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsDescriptor @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsDescriptor @ {self:p}"))
             .field("tag", &self.tag)
             .field("tag_extension", &self.tag_extension)
             .field("length", &self.length)
@@ -1306,8 +1302,7 @@ pub struct GstMpegtsDvbMultilingualBouquetNameItem {
 impl ::std::fmt::Debug for GstMpegtsDvbMultilingualBouquetNameItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!(
-            "GstMpegtsDvbMultilingualBouquetNameItem @ {:p}",
-            self
+            "GstMpegtsDvbMultilingualBouquetNameItem @ {self:p}"
         ))
         .field("language_code", &self.language_code)
         .field("bouquet_name", &self.bouquet_name)
@@ -1324,13 +1319,10 @@ pub struct GstMpegtsDvbMultilingualComponentItem {
 
 impl ::std::fmt::Debug for GstMpegtsDvbMultilingualComponentItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!(
-            "GstMpegtsDvbMultilingualComponentItem @ {:p}",
-            self
-        ))
-        .field("language_code", &self.language_code)
-        .field("description", &self.description)
-        .finish()
+        f.debug_struct(&format!("GstMpegtsDvbMultilingualComponentItem @ {self:p}"))
+            .field("language_code", &self.language_code)
+            .field("description", &self.description)
+            .finish()
     }
 }
 
@@ -1344,8 +1336,7 @@ pub struct GstMpegtsDvbMultilingualNetworkNameItem {
 impl ::std::fmt::Debug for GstMpegtsDvbMultilingualNetworkNameItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!(
-            "GstMpegtsDvbMultilingualNetworkNameItem @ {:p}",
-            self
+            "GstMpegtsDvbMultilingualNetworkNameItem @ {self:p}"
         ))
         .field("language_code", &self.language_code)
         .field("network_name", &self.network_name)
@@ -1364,8 +1355,7 @@ pub struct GstMpegtsDvbMultilingualServiceNameItem {
 impl ::std::fmt::Debug for GstMpegtsDvbMultilingualServiceNameItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!(
-            "GstMpegtsDvbMultilingualServiceNameItem @ {:p}",
-            self
+            "GstMpegtsDvbMultilingualServiceNameItem @ {self:p}"
         ))
         .field("language_code", &self.language_code)
         .field("provider_name", &self.provider_name)
@@ -1388,7 +1378,7 @@ pub struct GstMpegtsEIT {
 
 impl ::std::fmt::Debug for GstMpegtsEIT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsEIT @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsEIT @ {self:p}"))
             .field("transport_stream_id", &self.transport_stream_id)
             .field("original_network_id", &self.original_network_id)
             .field(
@@ -1416,7 +1406,7 @@ pub struct GstMpegtsEITEvent {
 
 impl ::std::fmt::Debug for GstMpegtsEITEvent {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsEITEvent @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsEITEvent @ {self:p}"))
             .field("event_id", &self.event_id)
             .field("start_time", &self.start_time)
             .field("duration", &self.duration)
@@ -1439,7 +1429,7 @@ pub struct GstMpegtsExtendedEventDescriptor {
 
 impl ::std::fmt::Debug for GstMpegtsExtendedEventDescriptor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsExtendedEventDescriptor @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsExtendedEventDescriptor @ {self:p}"))
             .field("descriptor_number", &self.descriptor_number)
             .field("last_descriptor_number", &self.last_descriptor_number)
             .field("language_code", &self.language_code)
@@ -1458,7 +1448,7 @@ pub struct GstMpegtsExtendedEventItem {
 
 impl ::std::fmt::Debug for GstMpegtsExtendedEventItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsExtendedEventItem @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsExtendedEventItem @ {self:p}"))
             .field("item_description", &self.item_description)
             .field("item", &self.item)
             .finish()
@@ -1475,7 +1465,7 @@ pub struct GstMpegtsISO639LanguageDescriptor {
 
 impl ::std::fmt::Debug for GstMpegtsISO639LanguageDescriptor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsISO639LanguageDescriptor @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsISO639LanguageDescriptor @ {self:p}"))
             .field("nb_language", &self.nb_language)
             .finish()
     }
@@ -1491,7 +1481,7 @@ pub struct GstMpegtsLogicalChannel {
 
 impl ::std::fmt::Debug for GstMpegtsLogicalChannel {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsLogicalChannel @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsLogicalChannel @ {self:p}"))
             .field("service_id", &self.service_id)
             .field("visible_service", &self.visible_service)
             .field("logical_channel_number", &self.logical_channel_number)
@@ -1508,7 +1498,7 @@ pub struct GstMpegtsLogicalChannelDescriptor {
 
 impl ::std::fmt::Debug for GstMpegtsLogicalChannelDescriptor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsLogicalChannelDescriptor @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsLogicalChannelDescriptor @ {self:p}"))
             .field("nb_channels", &self.nb_channels)
             .finish()
     }
@@ -1525,7 +1515,7 @@ pub struct GstMpegtsNIT {
 
 impl ::std::fmt::Debug for GstMpegtsNIT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsNIT @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsNIT @ {self:p}"))
             .field("actual_network", &self.actual_network)
             .field("network_id", &self.network_id)
             .field("descriptors", &self.descriptors)
@@ -1544,7 +1534,7 @@ pub struct GstMpegtsNITStream {
 
 impl ::std::fmt::Debug for GstMpegtsNITStream {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsNITStream @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsNITStream @ {self:p}"))
             .field("transport_stream_id", &self.transport_stream_id)
             .field("original_network_id", &self.original_network_id)
             .field("descriptors", &self.descriptors)
@@ -1563,7 +1553,7 @@ pub struct GstMpegtsPMT {
 
 impl ::std::fmt::Debug for GstMpegtsPMT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsPMT @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsPMT @ {self:p}"))
             .field("pcr_pid", &self.pcr_pid)
             .field("program_number", &self.program_number)
             .field("descriptors", &self.descriptors)
@@ -1582,7 +1572,7 @@ pub struct GstMpegtsPMTStream {
 
 impl ::std::fmt::Debug for GstMpegtsPMTStream {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsPMTStream @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsPMTStream @ {self:p}"))
             .field("stream_type", &self.stream_type)
             .field("pid", &self.pid)
             .field("descriptors", &self.descriptors)
@@ -1599,7 +1589,7 @@ pub struct GstMpegtsPatProgram {
 
 impl ::std::fmt::Debug for GstMpegtsPatProgram {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsPatProgram @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsPatProgram @ {self:p}"))
             .field("program_number", &self.program_number)
             .field(
                 "network_or_program_map_PID",
@@ -1629,7 +1619,7 @@ pub struct GstMpegtsSCTESIT {
 
 impl ::std::fmt::Debug for GstMpegtsSCTESIT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsSCTESIT @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsSCTESIT @ {self:p}"))
             .field("encrypted_packet", &self.encrypted_packet)
             .field("encryption_algorithm", &self.encryption_algorithm)
             .field("pts_adjustment", &self.pts_adjustment)
@@ -1658,7 +1648,7 @@ pub struct GstMpegtsSCTESpliceComponent {
 
 impl ::std::fmt::Debug for GstMpegtsSCTESpliceComponent {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsSCTESpliceComponent @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsSCTESpliceComponent @ {self:p}"))
             .field("tag", &self.tag)
             .field("splice_time_specified", &self.splice_time_specified)
             .field("splice_time", &self.splice_time)
@@ -1690,7 +1680,7 @@ pub struct GstMpegtsSCTESpliceEvent {
 
 impl ::std::fmt::Debug for GstMpegtsSCTESpliceEvent {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsSCTESpliceEvent @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsSCTESpliceEvent @ {self:p}"))
             .field("insert_event", &self.insert_event)
             .field("splice_event_id", &self.splice_event_id)
             .field(
@@ -1731,7 +1721,7 @@ pub struct GstMpegtsSDT {
 
 impl ::std::fmt::Debug for GstMpegtsSDT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsSDT @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsSDT @ {self:p}"))
             .field("original_network_id", &self.original_network_id)
             .field("actual_ts", &self.actual_ts)
             .field("transport_stream_id", &self.transport_stream_id)
@@ -1753,7 +1743,7 @@ pub struct GstMpegtsSDTService {
 
 impl ::std::fmt::Debug for GstMpegtsSDTService {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsSDTService @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsSDTService @ {self:p}"))
             .field("service_id", &self.service_id)
             .field("EIT_schedule_flag", &self.EIT_schedule_flag)
             .field(
@@ -1776,7 +1766,7 @@ pub struct GstMpegtsSIT {
 
 impl ::std::fmt::Debug for GstMpegtsSIT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsSIT @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsSIT @ {self:p}"))
             .field("descriptors", &self.descriptors)
             .field("services", &self.services)
             .finish()
@@ -1793,7 +1783,7 @@ pub struct GstMpegtsSITService {
 
 impl ::std::fmt::Debug for GstMpegtsSITService {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsSITService @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsSITService @ {self:p}"))
             .field("service_id", &self.service_id)
             .field("running_status", &self.running_status)
             .field("descriptors", &self.descriptors)
@@ -1818,8 +1808,7 @@ pub struct GstMpegtsSatelliteDeliverySystemDescriptor {
 impl ::std::fmt::Debug for GstMpegtsSatelliteDeliverySystemDescriptor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!(
-            "GstMpegtsSatelliteDeliverySystemDescriptor @ {:p}",
-            self
+            "GstMpegtsSatelliteDeliverySystemDescriptor @ {self:p}"
         ))
         .field("frequency", &self.frequency)
         .field("orbital_position", &self.orbital_position)
@@ -1859,7 +1848,7 @@ pub struct GstMpegtsSection {
 
 impl ::std::fmt::Debug for GstMpegtsSection {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsSection @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsSection @ {self:p}"))
             .field("section_type", &self.section_type)
             .field("pid", &self.pid)
             .field("table_id", &self.table_id)
@@ -1883,7 +1872,7 @@ pub struct GstMpegtsT2DeliverySystemCell {
 
 impl ::std::fmt::Debug for GstMpegtsT2DeliverySystemCell {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsT2DeliverySystemCell @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsT2DeliverySystemCell @ {self:p}"))
             .field("cell_id", &self.cell_id)
             .field("centre_frequencies", &self.centre_frequencies)
             .field("sub_cells", &self.sub_cells)
@@ -1901,8 +1890,7 @@ pub struct GstMpegtsT2DeliverySystemCellExtension {
 impl ::std::fmt::Debug for GstMpegtsT2DeliverySystemCellExtension {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!(
-            "GstMpegtsT2DeliverySystemCellExtension @ {:p}",
-            self
+            "GstMpegtsT2DeliverySystemCellExtension @ {self:p}"
         ))
         .field("cell_id_extension", &self.cell_id_extension)
         .field("transposer_frequency", &self.transposer_frequency)
@@ -1926,7 +1914,7 @@ pub struct GstMpegtsT2DeliverySystemDescriptor {
 
 impl ::std::fmt::Debug for GstMpegtsT2DeliverySystemDescriptor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsT2DeliverySystemDescriptor @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsT2DeliverySystemDescriptor @ {self:p}"))
             .field("plp_id", &self.plp_id)
             .field("t2_system_id", &self.t2_system_id)
             .field("siso_miso", &self.siso_miso)
@@ -1949,7 +1937,7 @@ pub struct GstMpegtsTOT {
 
 impl ::std::fmt::Debug for GstMpegtsTOT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMpegtsTOT @ {:p}", self))
+        f.debug_struct(&format!("GstMpegtsTOT @ {self:p}"))
             .field("utc_time", &self.utc_time)
             .field("descriptors", &self.descriptors)
             .finish()
@@ -1976,8 +1964,7 @@ pub struct GstMpegtsTerrestrialDeliverySystemDescriptor {
 impl ::std::fmt::Debug for GstMpegtsTerrestrialDeliverySystemDescriptor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!(
-            "GstMpegtsTerrestrialDeliverySystemDescriptor @ {:p}",
-            self
+            "GstMpegtsTerrestrialDeliverySystemDescriptor @ {self:p}"
         ))
         .field("frequency", &self.frequency)
         .field("bandwidth", &self.bandwidth)

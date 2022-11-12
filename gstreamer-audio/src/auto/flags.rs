@@ -14,7 +14,7 @@ bitflags! {
     #[doc(alias = "GstAudioFlags")]
     pub struct AudioFlags: u32 {
         #[doc(alias = "GST_AUDIO_FLAG_UNPOSITIONED")]
-        const UNPOSITIONED = ffi::GST_AUDIO_FLAG_UNPOSITIONED as u32;
+        const UNPOSITIONED = ffi::GST_AUDIO_FLAG_UNPOSITIONED as _;
     }
 }
 
@@ -72,15 +72,15 @@ bitflags! {
     #[doc(alias = "GstAudioFormatFlags")]
     pub struct AudioFormatFlags: u32 {
         #[doc(alias = "GST_AUDIO_FORMAT_FLAG_INTEGER")]
-        const INTEGER = ffi::GST_AUDIO_FORMAT_FLAG_INTEGER as u32;
+        const INTEGER = ffi::GST_AUDIO_FORMAT_FLAG_INTEGER as _;
         #[doc(alias = "GST_AUDIO_FORMAT_FLAG_FLOAT")]
-        const FLOAT = ffi::GST_AUDIO_FORMAT_FLAG_FLOAT as u32;
+        const FLOAT = ffi::GST_AUDIO_FORMAT_FLAG_FLOAT as _;
         #[doc(alias = "GST_AUDIO_FORMAT_FLAG_SIGNED")]
-        const SIGNED = ffi::GST_AUDIO_FORMAT_FLAG_SIGNED as u32;
+        const SIGNED = ffi::GST_AUDIO_FORMAT_FLAG_SIGNED as _;
         #[doc(alias = "GST_AUDIO_FORMAT_FLAG_COMPLEX")]
-        const COMPLEX = ffi::GST_AUDIO_FORMAT_FLAG_COMPLEX as u32;
+        const COMPLEX = ffi::GST_AUDIO_FORMAT_FLAG_COMPLEX as _;
         #[doc(alias = "GST_AUDIO_FORMAT_FLAG_UNPACK")]
-        const UNPACK = ffi::GST_AUDIO_FORMAT_FLAG_UNPACK as u32;
+        const UNPACK = ffi::GST_AUDIO_FORMAT_FLAG_UNPACK as _;
     }
 }
 
@@ -138,7 +138,7 @@ bitflags! {
     #[doc(alias = "GstAudioPackFlags")]
     pub struct AudioPackFlags: u32 {
         #[doc(alias = "GST_AUDIO_PACK_FLAG_TRUNCATE_RANGE")]
-        const TRUNCATE_RANGE = ffi::GST_AUDIO_PACK_FLAG_TRUNCATE_RANGE as u32;
+        const TRUNCATE_RANGE = ffi::GST_AUDIO_PACK_FLAG_TRUNCATE_RANGE as _;
     }
 }
 

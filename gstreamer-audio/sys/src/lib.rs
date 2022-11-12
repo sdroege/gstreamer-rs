@@ -338,7 +338,7 @@ pub struct GstAudioAggregatorClass {
 
 impl ::std::fmt::Debug for GstAudioAggregatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioAggregatorClass @ {:p}", self))
+        f.debug_struct(&format!("GstAudioAggregatorClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("create_output_buffer", &self.create_output_buffer)
             .field("aggregate_one_buffer", &self.aggregate_one_buffer)
@@ -355,7 +355,7 @@ pub struct GstAudioAggregatorConvertPadClass {
 
 impl ::std::fmt::Debug for GstAudioAggregatorConvertPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioAggregatorConvertPadClass @ {:p}", self))
+        f.debug_struct(&format!("GstAudioAggregatorConvertPadClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -387,7 +387,7 @@ pub struct GstAudioAggregatorPadClass {
 
 impl ::std::fmt::Debug for GstAudioAggregatorPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioAggregatorPadClass @ {:p}", self))
+        f.debug_struct(&format!("GstAudioAggregatorPadClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("convert_buffer", &self.convert_buffer)
             .field("update_conversion_info", &self.update_conversion_info)
@@ -425,7 +425,7 @@ pub struct GstAudioBaseSinkClass {
 
 impl ::std::fmt::Debug for GstAudioBaseSinkClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioBaseSinkClass @ {:p}", self))
+        f.debug_struct(&format!("GstAudioBaseSinkClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("create_ringbuffer", &self.create_ringbuffer)
             .field("payload", &self.payload)
@@ -452,7 +452,7 @@ pub struct GstAudioBaseSrcClass {
 
 impl ::std::fmt::Debug for GstAudioBaseSrcClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioBaseSrcClass @ {:p}", self))
+        f.debug_struct(&format!("GstAudioBaseSrcClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("create_ringbuffer", &self.create_ringbuffer)
             .finish()
@@ -483,7 +483,7 @@ pub struct GstAudioBuffer {
 
 impl ::std::fmt::Debug for GstAudioBuffer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioBuffer @ {:p}", self))
+        f.debug_struct(&format!("GstAudioBuffer @ {self:p}"))
             .field("info", &self.info)
             .field("n_samples", &self.n_samples)
             .field("n_planes", &self.n_planes)
@@ -505,7 +505,7 @@ pub struct GstAudioCdSrcClass {
 
 impl ::std::fmt::Debug for GstAudioCdSrcClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioCdSrcClass @ {:p}", self))
+        f.debug_struct(&format!("GstAudioCdSrcClass @ {self:p}"))
             .field("pushsrc_class", &self.pushsrc_class)
             .field("open", &self.open)
             .field("close", &self.close)
@@ -536,7 +536,7 @@ pub struct GstAudioCdSrcTrack {
 
 impl ::std::fmt::Debug for GstAudioCdSrcTrack {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioCdSrcTrack @ {:p}", self))
+        f.debug_struct(&format!("GstAudioCdSrcTrack @ {self:p}"))
             .field("is_audio", &self.is_audio)
             .field("num", &self.num)
             .field("start", &self.start)
@@ -565,7 +565,7 @@ pub struct GstAudioClippingMeta {
 
 impl ::std::fmt::Debug for GstAudioClippingMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioClippingMeta @ {:p}", self))
+        f.debug_struct(&format!("GstAudioClippingMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("format", &self.format)
             .field("start", &self.start)
@@ -583,7 +583,7 @@ pub struct GstAudioClockClass {
 
 impl ::std::fmt::Debug for GstAudioClockClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioClockClass @ {:p}", self))
+        f.debug_struct(&format!("GstAudioClockClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -597,7 +597,7 @@ pub struct GstAudioConverter {
 
 impl ::std::fmt::Debug for GstAudioConverter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioConverter @ {:p}", self))
+        f.debug_struct(&format!("GstAudioConverter @ {self:p}"))
             .finish()
     }
 }
@@ -655,7 +655,7 @@ pub struct GstAudioDecoderClass {
 
 impl ::std::fmt::Debug for GstAudioDecoderClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioDecoderClass @ {:p}", self))
+        f.debug_struct(&format!("GstAudioDecoderClass @ {self:p}"))
             .field("element_class", &self.element_class)
             .field("start", &self.start)
             .field("stop", &self.stop)
@@ -700,7 +700,7 @@ pub struct GstAudioDownmixMeta {
 
 impl ::std::fmt::Debug for GstAudioDownmixMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioDownmixMeta @ {:p}", self))
+        f.debug_struct(&format!("GstAudioDownmixMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("from_position", &self.from_position)
             .field("to_position", &self.to_position)
@@ -756,7 +756,7 @@ pub struct GstAudioEncoderClass {
 
 impl ::std::fmt::Debug for GstAudioEncoderClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioEncoderClass @ {:p}", self))
+        f.debug_struct(&format!("GstAudioEncoderClass @ {self:p}"))
             .field("element_class", &self.element_class)
             .field("start", &self.start)
             .field("stop", &self.stop)
@@ -797,7 +797,7 @@ pub struct GstAudioFilterClass {
 
 impl ::std::fmt::Debug for GstAudioFilterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioFilterClass @ {:p}", self))
+        f.debug_struct(&format!("GstAudioFilterClass @ {self:p}"))
             .field("basetransformclass", &self.basetransformclass)
             .field("setup", &self.setup)
             .finish()
@@ -823,7 +823,7 @@ pub struct GstAudioFormatInfo {
 
 impl ::std::fmt::Debug for GstAudioFormatInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioFormatInfo @ {:p}", self))
+        f.debug_struct(&format!("GstAudioFormatInfo @ {self:p}"))
             .field("format", &self.format)
             .field("name", &self.name)
             .field("description", &self.description)
@@ -854,7 +854,7 @@ pub struct GstAudioInfo {
 
 impl ::std::fmt::Debug for GstAudioInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioInfo @ {:p}", self))
+        f.debug_struct(&format!("GstAudioInfo @ {self:p}"))
             .field("finfo", &self.finfo)
             .field("flags", &self.flags)
             .field("layout", &self.layout)
@@ -875,7 +875,7 @@ pub struct GstAudioLevelMeta {
 
 impl ::std::fmt::Debug for GstAudioLevelMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioLevelMeta @ {:p}", self))
+        f.debug_struct(&format!("GstAudioLevelMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("level", &self.level)
             .field("voice_activity", &self.voice_activity)
@@ -896,7 +896,7 @@ pub struct GstAudioMeta {
 
 impl ::std::fmt::Debug for GstAudioMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioMeta @ {:p}", self))
+        f.debug_struct(&format!("GstAudioMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("info", &self.info)
             .field("samples", &self.samples)
@@ -953,7 +953,7 @@ pub struct GstAudioRingBufferClass {
 
 impl ::std::fmt::Debug for GstAudioRingBufferClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioRingBufferClass @ {:p}", self))
+        f.debug_struct(&format!("GstAudioRingBufferClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("open_device", &self.open_device)
             .field("acquire", &self.acquire)
@@ -987,7 +987,7 @@ pub struct GstAudioRingBufferSpec {
 
 impl ::std::fmt::Debug for GstAudioRingBufferSpec {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioRingBufferSpec @ {:p}", self))
+        f.debug_struct(&format!("GstAudioRingBufferSpec @ {self:p}"))
             .field("caps", &self.caps)
             .field("type_", &self.type_)
             .field("info", &self.info)
@@ -1020,7 +1020,7 @@ pub struct GstAudioSinkClass {
 
 impl ::std::fmt::Debug for GstAudioSinkClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioSinkClass @ {:p}", self))
+        f.debug_struct(&format!("GstAudioSinkClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("open", &self.open)
             .field("prepare", &self.prepare)
@@ -1045,7 +1045,7 @@ pub struct GstAudioSinkClassExtension {
 
 impl ::std::fmt::Debug for GstAudioSinkClassExtension {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioSinkClassExtension @ {:p}", self))
+        f.debug_struct(&format!("GstAudioSinkClassExtension @ {self:p}"))
             .field("clear_all", &self.clear_all)
             .finish()
     }
@@ -1070,7 +1070,7 @@ pub struct GstAudioSrcClass {
 
 impl ::std::fmt::Debug for GstAudioSrcClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioSrcClass @ {:p}", self))
+        f.debug_struct(&format!("GstAudioSrcClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("open", &self.open)
             .field("prepare", &self.prepare)
@@ -1091,7 +1091,7 @@ pub struct GstAudioStreamAlign {
 
 impl ::std::fmt::Debug for GstAudioStreamAlign {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioStreamAlign @ {:p}", self))
+        f.debug_struct(&format!("GstAudioStreamAlign @ {self:p}"))
             .finish()
     }
 }
@@ -1104,7 +1104,7 @@ pub struct GstStreamVolumeInterface {
 
 impl ::std::fmt::Debug for GstStreamVolumeInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstStreamVolumeInterface @ {:p}", self))
+        f.debug_struct(&format!("GstStreamVolumeInterface @ {self:p}"))
             .field("iface", &self.iface)
             .finish()
     }
@@ -1122,7 +1122,7 @@ pub struct GstAudioAggregator {
 
 impl ::std::fmt::Debug for GstAudioAggregator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioAggregator @ {:p}", self))
+        f.debug_struct(&format!("GstAudioAggregator @ {self:p}"))
             .field("parent", &self.parent)
             .field("current_caps", &self.current_caps)
             .finish()
@@ -1139,7 +1139,7 @@ pub struct GstAudioAggregatorConvertPad {
 
 impl ::std::fmt::Debug for GstAudioAggregatorConvertPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioAggregatorConvertPad @ {:p}", self))
+        f.debug_struct(&format!("GstAudioAggregatorConvertPad @ {self:p}"))
             .finish()
     }
 }
@@ -1155,7 +1155,7 @@ pub struct GstAudioAggregatorPad {
 
 impl ::std::fmt::Debug for GstAudioAggregatorPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioAggregatorPad @ {:p}", self))
+        f.debug_struct(&format!("GstAudioAggregatorPad @ {self:p}"))
             .field("parent", &self.parent)
             .field("info", &self.info)
             .finish()
@@ -1178,7 +1178,7 @@ pub struct GstAudioBaseSink {
 
 impl ::std::fmt::Debug for GstAudioBaseSink {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioBaseSink @ {:p}", self))
+        f.debug_struct(&format!("GstAudioBaseSink @ {self:p}"))
             .field("element", &self.element)
             .field("ringbuffer", &self.ringbuffer)
             .field("buffer_time", &self.buffer_time)
@@ -1205,7 +1205,7 @@ pub struct GstAudioBaseSrc {
 
 impl ::std::fmt::Debug for GstAudioBaseSrc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioBaseSrc @ {:p}", self))
+        f.debug_struct(&format!("GstAudioBaseSrc @ {self:p}"))
             .field("element", &self.element)
             .field("ringbuffer", &self.ringbuffer)
             .field("buffer_time", &self.buffer_time)
@@ -1228,7 +1228,7 @@ pub struct GstAudioCdSrc {
 
 impl ::std::fmt::Debug for GstAudioCdSrc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioCdSrc @ {:p}", self))
+        f.debug_struct(&format!("GstAudioCdSrc @ {self:p}"))
             .field("pushsrc", &self.pushsrc)
             .field("tags", &self.tags)
             .finish()
@@ -1249,7 +1249,7 @@ pub struct GstAudioClock {
 
 impl ::std::fmt::Debug for GstAudioClock {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioClock @ {:p}", self))
+        f.debug_struct(&format!("GstAudioClock @ {self:p}"))
             .field("clock", &self.clock)
             .field("func", &self.func)
             .field("user_data", &self.user_data)
@@ -1273,7 +1273,7 @@ pub struct GstAudioDecoder {
 
 impl ::std::fmt::Debug for GstAudioDecoder {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioDecoder @ {:p}", self))
+        f.debug_struct(&format!("GstAudioDecoder @ {self:p}"))
             .field("element", &self.element)
             .field("sinkpad", &self.sinkpad)
             .field("srcpad", &self.srcpad)
@@ -1299,7 +1299,7 @@ pub struct GstAudioEncoder {
 
 impl ::std::fmt::Debug for GstAudioEncoder {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioEncoder @ {:p}", self))
+        f.debug_struct(&format!("GstAudioEncoder @ {self:p}"))
             .field("element", &self.element)
             .field("sinkpad", &self.sinkpad)
             .field("srcpad", &self.srcpad)
@@ -1320,7 +1320,7 @@ pub struct GstAudioFilter {
 
 impl ::std::fmt::Debug for GstAudioFilter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioFilter @ {:p}", self))
+        f.debug_struct(&format!("GstAudioFilter @ {self:p}"))
             .field("basetransform", &self.basetransform)
             .field("info", &self.info)
             .finish()
@@ -1357,7 +1357,7 @@ pub struct GstAudioRingBuffer {
 
 impl ::std::fmt::Debug for GstAudioRingBuffer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioRingBuffer @ {:p}", self))
+        f.debug_struct(&format!("GstAudioRingBuffer @ {self:p}"))
             .field("object", &self.object)
             .field("cond", &self.cond)
             .field("open", &self.open)
@@ -1385,7 +1385,7 @@ pub struct GstAudioSink {
 
 impl ::std::fmt::Debug for GstAudioSink {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioSink @ {:p}", self))
+        f.debug_struct(&format!("GstAudioSink @ {self:p}"))
             .field("element", &self.element)
             .finish()
     }
@@ -1401,7 +1401,7 @@ pub struct GstAudioSrc {
 
 impl ::std::fmt::Debug for GstAudioSrc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioSrc @ {:p}", self))
+        f.debug_struct(&format!("GstAudioSrc @ {self:p}"))
             .field("element", &self.element)
             .finish()
     }
@@ -1416,7 +1416,7 @@ pub struct GstStreamVolume {
 
 impl ::std::fmt::Debug for GstStreamVolume {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstStreamVolume @ {:p}", self)
+        write!(f, "GstStreamVolume @ {self:p}")
     }
 }
 

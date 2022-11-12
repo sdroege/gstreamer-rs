@@ -175,7 +175,7 @@ pub struct GstTagDemuxClass {
 
 impl ::std::fmt::Debug for GstTagDemuxClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTagDemuxClass @ {:p}", self))
+        f.debug_struct(&format!("GstTagDemuxClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("min_start_size", &self.min_start_size)
             .field("min_end_size", &self.min_end_size)
@@ -207,7 +207,7 @@ pub struct GstTagMuxClass {
 
 impl ::std::fmt::Debug for GstTagMuxClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTagMuxClass @ {:p}", self))
+        f.debug_struct(&format!("GstTagMuxClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("render_start_tag", &self.render_start_tag)
             .field("render_end_tag", &self.render_end_tag)
@@ -231,7 +231,7 @@ pub struct GstTagXmpWriterInterface {
 
 impl ::std::fmt::Debug for GstTagXmpWriterInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTagXmpWriterInterface @ {:p}", self))
+        f.debug_struct(&format!("GstTagXmpWriterInterface @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -248,7 +248,7 @@ pub struct GstTagDemux {
 
 impl ::std::fmt::Debug for GstTagDemux {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTagDemux @ {:p}", self))
+        f.debug_struct(&format!("GstTagDemux @ {self:p}"))
             .field("element", &self.element)
             .finish()
     }
@@ -264,7 +264,7 @@ pub struct GstTagMux {
 
 impl ::std::fmt::Debug for GstTagMux {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTagMux @ {:p}", self))
+        f.debug_struct(&format!("GstTagMux @ {self:p}"))
             .field("element", &self.element)
             .finish()
     }
@@ -279,7 +279,7 @@ pub struct GstTagXmpWriter {
 
 impl ::std::fmt::Debug for GstTagXmpWriter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstTagXmpWriter @ {:p}", self)
+        write!(f, "GstTagXmpWriter @ {self:p}")
     }
 }
 

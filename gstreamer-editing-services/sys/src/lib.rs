@@ -226,7 +226,7 @@ pub union GESClipClass_ABI {
 
 impl ::std::fmt::Debug for GESClipClass_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESClipClass_ABI @ {:p}", self))
+        f.debug_struct(&format!("GESClipClass_ABI @ {self:p}"))
             .field("_ges_reserved", unsafe { &self._ges_reserved })
             .field("abi", unsafe { &self.abi })
             .finish()
@@ -242,7 +242,7 @@ pub union GESTrackElementClass_ABI {
 
 impl ::std::fmt::Debug for GESTrackElementClass_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTrackElementClass_ABI @ {:p}", self))
+        f.debug_struct(&format!("GESTrackElementClass_ABI @ {self:p}"))
             .field("_ges_reserved", unsafe { &self._ges_reserved })
             .field("abi", unsafe { &self.abi })
             .finish()
@@ -258,7 +258,7 @@ pub union GESVideoSourceClass_ABI {
 
 impl ::std::fmt::Debug for GESVideoSourceClass_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESVideoSourceClass_ABI @ {:p}", self))
+        f.debug_struct(&format!("GESVideoSourceClass_ABI @ {self:p}"))
             .field("_ges_reserved", unsafe { &self._ges_reserved })
             .field("abi", unsafe { &self.abi })
             .finish()
@@ -329,7 +329,7 @@ pub struct GESAssetClass {
 
 impl ::std::fmt::Debug for GESAssetClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESAssetClass @ {:p}", self))
+        f.debug_struct(&format!("GESAssetClass @ {self:p}"))
             .field("parent", &self.parent)
             .field("start_loading", &self.start_loading)
             .field("extract", &self.extract)
@@ -359,7 +359,7 @@ pub struct GESAudioSourceClass {
 
 impl ::std::fmt::Debug for GESAudioSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESAudioSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GESAudioSourceClass @ {self:p}"))
             .field("create_source", &self.create_source)
             .finish()
     }
@@ -382,7 +382,7 @@ pub struct GESAudioTestSourceClass {
 
 impl ::std::fmt::Debug for GESAudioTestSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESAudioTestSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GESAudioTestSourceClass @ {self:p}"))
             .finish()
     }
 }
@@ -404,7 +404,7 @@ pub struct GESAudioTrackClass {
 
 impl ::std::fmt::Debug for GESAudioTrackClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESAudioTrackClass @ {:p}", self))
+        f.debug_struct(&format!("GESAudioTrackClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("_ges_reserved", &self._ges_reserved)
             .finish()
@@ -428,7 +428,7 @@ pub struct GESAudioTransitionClass {
 
 impl ::std::fmt::Debug for GESAudioTransitionClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESAudioTransitionClass @ {:p}", self))
+        f.debug_struct(&format!("GESAudioTransitionClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("_ges_reserved", &self._ges_reserved)
             .finish()
@@ -452,7 +452,7 @@ pub struct GESAudioUriSourceClass {
 
 impl ::std::fmt::Debug for GESAudioUriSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESAudioUriSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GESAudioUriSourceClass @ {self:p}"))
             .finish()
     }
 }
@@ -474,7 +474,7 @@ pub struct GESBaseEffectClass {
 
 impl ::std::fmt::Debug for GESBaseEffectClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESBaseEffectClass @ {:p}", self))
+        f.debug_struct(&format!("GESBaseEffectClass @ {self:p}"))
             .finish()
     }
 }
@@ -488,7 +488,7 @@ pub struct GESBaseEffectClipClass {
 
 impl ::std::fmt::Debug for GESBaseEffectClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESBaseEffectClipClass @ {:p}", self))
+        f.debug_struct(&format!("GESBaseEffectClipClass @ {self:p}"))
             .finish()
     }
 }
@@ -518,7 +518,7 @@ pub struct GESBaseTransitionClipClass {
 
 impl ::std::fmt::Debug for GESBaseTransitionClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESBaseTransitionClipClass @ {:p}", self))
+        f.debug_struct(&format!("GESBaseTransitionClipClass @ {self:p}"))
             .finish()
     }
 }
@@ -548,7 +548,7 @@ pub struct GESBaseXmlFormatterClass {
 
 impl ::std::fmt::Debug for GESBaseXmlFormatterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESBaseXmlFormatterClass @ {:p}", self))
+        f.debug_struct(&format!("GESBaseXmlFormatterClass @ {self:p}"))
             .field("parent", &self.parent)
             .field("content_parser", &self.content_parser)
             .field("save", &self.save)
@@ -576,7 +576,7 @@ pub struct GESClipAssetClass {
 
 impl ::std::fmt::Debug for GESClipAssetClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESClipAssetClass @ {:p}", self))
+        f.debug_struct(&format!("GESClipAssetClass @ {self:p}"))
             .field("parent", &self.parent)
             .field("get_natural_framerate", &self.get_natural_framerate)
             .field("_ges_reserved", &self._ges_reserved)
@@ -603,7 +603,7 @@ pub struct GESClipClass {
 
 impl ::std::fmt::Debug for GESClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESClipClass @ {:p}", self))
+        f.debug_struct(&format!("GESClipClass @ {self:p}"))
             .field("create_track_element", &self.create_track_element)
             .field("create_track_elements", &self.create_track_elements)
             .field("ABI", &self.ABI)
@@ -619,7 +619,7 @@ pub struct GESClipClass_ABI_abi {
 
 impl ::std::fmt::Debug for GESClipClass_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESClipClass_ABI_abi @ {:p}", self))
+        f.debug_struct(&format!("GESClipClass_ABI_abi @ {self:p}"))
             .field("can_add_effects", &self.can_add_effects)
             .finish()
     }
@@ -641,7 +641,7 @@ pub struct GESCommandLineFormatterClass {
 
 impl ::std::fmt::Debug for GESCommandLineFormatterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESCommandLineFormatterClass @ {:p}", self))
+        f.debug_struct(&format!("GESCommandLineFormatterClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -683,7 +683,7 @@ pub struct GESContainerClass {
 
 impl ::std::fmt::Debug for GESContainerClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESContainerClass @ {:p}", self))
+        f.debug_struct(&format!("GESContainerClass @ {self:p}"))
             .field("child_added", &self.child_added)
             .field("child_removed", &self.child_removed)
             .field("add_child", &self.add_child)
@@ -712,7 +712,7 @@ pub struct GESEffectAssetClass {
 
 impl ::std::fmt::Debug for GESEffectAssetClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESEffectAssetClass @ {:p}", self))
+        f.debug_struct(&format!("GESEffectAssetClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("_ges_reserved", &self._ges_reserved)
             .finish()
@@ -737,7 +737,7 @@ pub struct GESEffectClass {
 
 impl ::std::fmt::Debug for GESEffectClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESEffectClass @ {:p}", self))
+        f.debug_struct(&format!("GESEffectClass @ {self:p}"))
             .finish()
     }
 }
@@ -751,7 +751,7 @@ pub struct GESEffectClipClass {
 
 impl ::std::fmt::Debug for GESEffectClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESEffectClipClass @ {:p}", self))
+        f.debug_struct(&format!("GESEffectClipClass @ {self:p}"))
             .finish()
     }
 }
@@ -798,7 +798,7 @@ pub struct GESExtractableInterface {
 
 impl ::std::fmt::Debug for GESExtractableInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESExtractableInterface @ {:p}", self))
+        f.debug_struct(&format!("GESExtractableInterface @ {self:p}"))
             .field("parent", &self.parent)
             .field("asset_type", &self.asset_type)
             .field("check_id", &self.check_id)
@@ -832,7 +832,7 @@ pub struct GESFormatterClass {
 
 impl ::std::fmt::Debug for GESFormatterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESFormatterClass @ {:p}", self))
+        f.debug_struct(&format!("GESFormatterClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("can_load_uri", &self.can_load_uri)
             .field("load_from_uri", &self.load_from_uri)
@@ -858,7 +858,7 @@ pub struct GESGroupClass {
 
 impl ::std::fmt::Debug for GESGroupClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESGroupClass @ {:p}", self))
+        f.debug_struct(&format!("GESGroupClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("_ges_reserved", &self._ges_reserved)
             .finish()
@@ -882,7 +882,7 @@ pub struct GESImageSourceClass {
 
 impl ::std::fmt::Debug for GESImageSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESImageSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GESImageSourceClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("_ges_reserved", &self._ges_reserved)
             .finish()
@@ -909,7 +909,7 @@ pub struct GESLayerClass {
 
 impl ::std::fmt::Debug for GESLayerClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESLayerClass @ {:p}", self))
+        f.debug_struct(&format!("GESLayerClass @ {self:p}"))
             .field("get_objects", &self.get_objects)
             .field("object_added", &self.object_added)
             .field("object_removed", &self.object_removed)
@@ -933,7 +933,7 @@ pub struct GESMarkerClass {
 
 impl ::std::fmt::Debug for GESMarkerClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESMarkerClass @ {:p}", self))
+        f.debug_struct(&format!("GESMarkerClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -947,7 +947,7 @@ pub struct GESMarkerListClass {
 
 impl ::std::fmt::Debug for GESMarkerListClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESMarkerListClass @ {:p}", self))
+        f.debug_struct(&format!("GESMarkerListClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -962,7 +962,7 @@ pub struct GESMetaContainerInterface {
 
 impl ::std::fmt::Debug for GESMetaContainerInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESMetaContainerInterface @ {:p}", self))
+        f.debug_struct(&format!("GESMetaContainerInterface @ {self:p}"))
             .field("parent_iface", &self.parent_iface)
             .field("_ges_reserved", &self._ges_reserved)
             .finish()
@@ -978,7 +978,7 @@ pub struct GESMultiFileSourceClass {
 
 impl ::std::fmt::Debug for GESMultiFileSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESMultiFileSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GESMultiFileSourceClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("_ges_reserved", &self._ges_reserved)
             .finish()
@@ -1002,7 +1002,7 @@ pub struct GESOperationClass {
 
 impl ::std::fmt::Debug for GESOperationClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESOperationClass @ {:p}", self))
+        f.debug_struct(&format!("GESOperationClass @ {self:p}"))
             .finish()
     }
 }
@@ -1016,7 +1016,7 @@ pub struct GESOperationClipClass {
 
 impl ::std::fmt::Debug for GESOperationClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESOperationClipClass @ {:p}", self))
+        f.debug_struct(&format!("GESOperationClipClass @ {self:p}"))
             .finish()
     }
 }
@@ -1046,7 +1046,7 @@ pub struct GESOverlayClipClass {
 
 impl ::std::fmt::Debug for GESOverlayClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESOverlayClipClass @ {:p}", self))
+        f.debug_struct(&format!("GESOverlayClipClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -1069,7 +1069,7 @@ pub struct GESPipelineClass {
 
 impl ::std::fmt::Debug for GESPipelineClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESPipelineClass @ {:p}", self))
+        f.debug_struct(&format!("GESPipelineClass @ {self:p}"))
             .finish()
     }
 }
@@ -1091,7 +1091,7 @@ pub struct GESPitiviFormatterClass {
 
 impl ::std::fmt::Debug for GESPitiviFormatterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESPitiviFormatterClass @ {:p}", self))
+        f.debug_struct(&format!("GESPitiviFormatterClass @ {self:p}"))
             .finish()
     }
 }
@@ -1124,7 +1124,7 @@ pub struct GESProjectClass {
 
 impl ::std::fmt::Debug for GESProjectClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESProjectClass @ {:p}", self))
+        f.debug_struct(&format!("GESProjectClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("asset_added", &self.asset_added)
             .field("asset_loading", &self.asset_loading)
@@ -1157,7 +1157,7 @@ pub struct GESSourceClass {
 
 impl ::std::fmt::Debug for GESSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GESSourceClass @ {self:p}"))
             .field("select_pad", &self.select_pad)
             .field("create_source", &self.create_source)
             .finish()
@@ -1172,7 +1172,7 @@ pub struct GESSourceClipAssetClass {
 
 impl ::std::fmt::Debug for GESSourceClipAssetClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESSourceClipAssetClass @ {:p}", self))
+        f.debug_struct(&format!("GESSourceClipAssetClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -1187,7 +1187,7 @@ pub struct GESSourceClipClass {
 
 impl ::std::fmt::Debug for GESSourceClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESSourceClipClass @ {:p}", self))
+        f.debug_struct(&format!("GESSourceClipClass @ {self:p}"))
             .finish()
     }
 }
@@ -1217,7 +1217,7 @@ pub struct GESTestClipClass {
 
 impl ::std::fmt::Debug for GESTestClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTestClipClass @ {:p}", self))
+        f.debug_struct(&format!("GESTestClipClass @ {self:p}"))
             .finish()
     }
 }
@@ -1239,7 +1239,7 @@ pub struct GESTextOverlayClass {
 
 impl ::std::fmt::Debug for GESTextOverlayClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTextOverlayClass @ {:p}", self))
+        f.debug_struct(&format!("GESTextOverlayClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -1254,7 +1254,7 @@ pub struct GESTextOverlayClipClass {
 
 impl ::std::fmt::Debug for GESTextOverlayClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTextOverlayClipClass @ {:p}", self))
+        f.debug_struct(&format!("GESTextOverlayClipClass @ {self:p}"))
             .finish()
     }
 }
@@ -1291,7 +1291,7 @@ pub struct GESTimelineClass {
 
 impl ::std::fmt::Debug for GESTimelineClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTimelineClass @ {:p}", self))
+        f.debug_struct(&format!("GESTimelineClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("track_added", &self.track_added)
             .field("track_removed", &self.track_removed)
@@ -1368,7 +1368,7 @@ pub struct GESTimelineElementClass {
 
 impl ::std::fmt::Debug for GESTimelineElementClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTimelineElementClass @ {:p}", self))
+        f.debug_struct(&format!("GESTimelineElementClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("set_parent", &self.set_parent)
             .field("set_start", &self.set_start)
@@ -1420,7 +1420,7 @@ pub struct GESTitleClipClass {
 
 impl ::std::fmt::Debug for GESTitleClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTitleClipClass @ {:p}", self))
+        f.debug_struct(&format!("GESTitleClipClass @ {self:p}"))
             .finish()
     }
 }
@@ -1442,7 +1442,7 @@ pub struct GESTitleSourceClass {
 
 impl ::std::fmt::Debug for GESTitleSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTitleSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GESTitleSourceClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -1466,7 +1466,7 @@ pub struct GESTrackClass {
 
 impl ::std::fmt::Debug for GESTrackClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTrackClass @ {:p}", self))
+        f.debug_struct(&format!("GESTrackClass @ {self:p}"))
             .field("get_mixing_element", &self.get_mixing_element)
             .finish()
     }
@@ -1483,7 +1483,7 @@ pub struct GESTrackElementAssetClass {
 
 impl ::std::fmt::Debug for GESTrackElementAssetClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTrackElementAssetClass @ {:p}", self))
+        f.debug_struct(&format!("GESTrackElementAssetClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("get_natural_framerate", &self.get_natural_framerate)
             .field("_ges_reserved", &self._ges_reserved)
@@ -1525,7 +1525,7 @@ pub struct GESTrackElementClass {
 
 impl ::std::fmt::Debug for GESTrackElementClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTrackElementClass @ {:p}", self))
+        f.debug_struct(&format!("GESTrackElementClass @ {self:p}"))
             .field("nleobject_factorytype", &self.nleobject_factorytype)
             .field("create_gnl_object", &self.create_gnl_object)
             .field("create_element", &self.create_element)
@@ -1547,7 +1547,7 @@ pub struct GESTrackElementClass_ABI_abi {
 
 impl ::std::fmt::Debug for GESTrackElementClass_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTrackElementClass_ABI_abi @ {:p}", self))
+        f.debug_struct(&format!("GESTrackElementClass_ABI_abi @ {self:p}"))
             .field(
                 "default_has_internal_source",
                 &self.default_has_internal_source,
@@ -1582,7 +1582,7 @@ pub struct GESTransitionClass {
 
 impl ::std::fmt::Debug for GESTransitionClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTransitionClass @ {:p}", self))
+        f.debug_struct(&format!("GESTransitionClass @ {self:p}"))
             .finish()
     }
 }
@@ -1596,7 +1596,7 @@ pub struct GESTransitionClipClass {
 
 impl ::std::fmt::Debug for GESTransitionClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTransitionClipClass @ {:p}", self))
+        f.debug_struct(&format!("GESTransitionClipClass @ {self:p}"))
             .finish()
     }
 }
@@ -1636,7 +1636,7 @@ pub struct GESUriClipAssetClass {
 
 impl ::std::fmt::Debug for GESUriClipAssetClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESUriClipAssetClass @ {:p}", self))
+        f.debug_struct(&format!("GESUriClipAssetClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("discovered", &self.discovered)
             .finish()
@@ -1660,7 +1660,7 @@ pub struct GESUriClipClass {
 
 impl ::std::fmt::Debug for GESUriClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESUriClipClass @ {:p}", self))
+        f.debug_struct(&format!("GESUriClipClass @ {self:p}"))
             .finish()
     }
 }
@@ -1690,7 +1690,7 @@ pub struct GESUriSourceAssetClass {
 
 impl ::std::fmt::Debug for GESUriSourceAssetClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESUriSourceAssetClass @ {:p}", self))
+        f.debug_struct(&format!("GESUriSourceAssetClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("_ges_reserved", &self._ges_reserved)
             .finish()
@@ -1715,7 +1715,7 @@ pub struct GESVideoSourceClass {
 
 impl ::std::fmt::Debug for GESVideoSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESVideoSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GESVideoSourceClass @ {self:p}"))
             .field("create_source", &self.create_source)
             .field("ABI", &self.ABI)
             .finish()
@@ -1736,7 +1736,7 @@ pub struct GESVideoSourceClass_ABI_abi {
 
 impl ::std::fmt::Debug for GESVideoSourceClass_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESVideoSourceClass_ABI_abi @ {:p}", self))
+        f.debug_struct(&format!("GESVideoSourceClass_ABI_abi @ {self:p}"))
             .field(
                 "disable_scale_in_compositor",
                 &self.disable_scale_in_compositor,
@@ -1765,7 +1765,7 @@ pub struct GESVideoTestSourceClass {
 
 impl ::std::fmt::Debug for GESVideoTestSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESVideoTestSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GESVideoTestSourceClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("_ges_reserved", &self._ges_reserved)
             .finish()
@@ -1789,7 +1789,7 @@ pub struct GESVideoTrackClass {
 
 impl ::std::fmt::Debug for GESVideoTrackClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESVideoTrackClass @ {:p}", self))
+        f.debug_struct(&format!("GESVideoTrackClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("_ges_reserved", &self._ges_reserved)
             .finish()
@@ -1813,7 +1813,7 @@ pub struct GESVideoTransitionClass {
 
 impl ::std::fmt::Debug for GESVideoTransitionClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESVideoTransitionClass @ {:p}", self))
+        f.debug_struct(&format!("GESVideoTransitionClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -1836,7 +1836,7 @@ pub struct GESVideoUriSourceClass {
 
 impl ::std::fmt::Debug for GESVideoUriSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESVideoUriSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GESVideoUriSourceClass @ {self:p}"))
             .finish()
     }
 }
@@ -1858,7 +1858,7 @@ pub struct GESXmlFormatterClass {
 
 impl ::std::fmt::Debug for GESXmlFormatterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESXmlFormatterClass @ {:p}", self))
+        f.debug_struct(&format!("GESXmlFormatterClass @ {self:p}"))
             .field("parent", &self.parent)
             .field("_ges_reserved", &self._ges_reserved)
             .finish()
@@ -1884,7 +1884,7 @@ pub struct GESAsset {
 
 impl ::std::fmt::Debug for GESAsset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESAsset @ {:p}", self))
+        f.debug_struct(&format!("GESAsset @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1900,7 +1900,7 @@ pub struct GESAudioSource {
 
 impl ::std::fmt::Debug for GESAudioSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESAudioSource @ {:p}", self))
+        f.debug_struct(&format!("GESAudioSource @ {self:p}"))
             .finish()
     }
 }
@@ -1915,7 +1915,7 @@ pub struct GESAudioTestSource {
 
 impl ::std::fmt::Debug for GESAudioTestSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESAudioTestSource @ {:p}", self))
+        f.debug_struct(&format!("GESAudioTestSource @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1931,7 +1931,7 @@ pub struct GESAudioTrack {
 
 impl ::std::fmt::Debug for GESAudioTrack {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESAudioTrack @ {:p}", self))
+        f.debug_struct(&format!("GESAudioTrack @ {self:p}"))
             .field("parent_instance", &self.parent_instance)
             .finish()
     }
@@ -1947,7 +1947,7 @@ pub struct GESAudioTransition {
 
 impl ::std::fmt::Debug for GESAudioTransition {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESAudioTransition @ {:p}", self))
+        f.debug_struct(&format!("GESAudioTransition @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1964,7 +1964,7 @@ pub struct GESAudioUriSource {
 
 impl ::std::fmt::Debug for GESAudioUriSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESAudioUriSource @ {:p}", self))
+        f.debug_struct(&format!("GESAudioUriSource @ {self:p}"))
             .finish()
     }
 }
@@ -1979,7 +1979,7 @@ pub struct GESBaseEffect {
 
 impl ::std::fmt::Debug for GESBaseEffect {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESBaseEffect @ {:p}", self))
+        f.debug_struct(&format!("GESBaseEffect @ {self:p}"))
             .finish()
     }
 }
@@ -1994,7 +1994,7 @@ pub struct GESBaseEffectClip {
 
 impl ::std::fmt::Debug for GESBaseEffectClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESBaseEffectClip @ {:p}", self))
+        f.debug_struct(&format!("GESBaseEffectClip @ {self:p}"))
             .finish()
     }
 }
@@ -2009,7 +2009,7 @@ pub struct GESBaseTransitionClip {
 
 impl ::std::fmt::Debug for GESBaseTransitionClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESBaseTransitionClip @ {:p}", self))
+        f.debug_struct(&format!("GESBaseTransitionClip @ {self:p}"))
             .finish()
     }
 }
@@ -2025,7 +2025,7 @@ pub struct GESBaseXmlFormatter {
 
 impl ::std::fmt::Debug for GESBaseXmlFormatter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESBaseXmlFormatter @ {:p}", self))
+        f.debug_struct(&format!("GESBaseXmlFormatter @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2041,7 +2041,7 @@ pub struct GESClip {
 
 impl ::std::fmt::Debug for GESClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESClip @ {:p}", self))
+        f.debug_struct(&format!("GESClip @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2057,7 +2057,7 @@ pub struct GESClipAsset {
 
 impl ::std::fmt::Debug for GESClipAsset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESClipAsset @ {:p}", self))
+        f.debug_struct(&format!("GESClipAsset @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2072,7 +2072,7 @@ pub struct GESCommandLineFormatter {
 
 impl ::std::fmt::Debug for GESCommandLineFormatter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESCommandLineFormatter @ {:p}", self))
+        f.debug_struct(&format!("GESCommandLineFormatter @ {self:p}"))
             .field("parent_instance", &self.parent_instance)
             .field("priv_", &self.priv_)
             .finish()
@@ -2093,7 +2093,7 @@ pub struct GESContainer {
 
 impl ::std::fmt::Debug for GESContainer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESContainer @ {:p}", self))
+        f.debug_struct(&format!("GESContainer @ {self:p}"))
             .field("parent", &self.parent)
             .field("children", &self.children)
             .field("height", &self.height)
@@ -2113,7 +2113,7 @@ pub struct GESEffect {
 
 impl ::std::fmt::Debug for GESEffect {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESEffect @ {:p}", self)).finish()
+        f.debug_struct(&format!("GESEffect @ {self:p}")).finish()
     }
 }
 
@@ -2127,7 +2127,7 @@ pub struct GESEffectAsset {
 
 impl ::std::fmt::Debug for GESEffectAsset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESEffectAsset @ {:p}", self))
+        f.debug_struct(&format!("GESEffectAsset @ {self:p}"))
             .field("parent_instance", &self.parent_instance)
             .field("priv_", &self.priv_)
             .field("_ges_reserved", &self._ges_reserved)
@@ -2145,7 +2145,7 @@ pub struct GESEffectClip {
 
 impl ::std::fmt::Debug for GESEffectClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESEffectClip @ {:p}", self))
+        f.debug_struct(&format!("GESEffectClip @ {self:p}"))
             .finish()
     }
 }
@@ -2162,7 +2162,7 @@ pub struct GESFormatter {
 
 impl ::std::fmt::Debug for GESFormatter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESFormatter @ {:p}", self))
+        f.debug_struct(&format!("GESFormatter @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2178,7 +2178,7 @@ pub struct GESGroup {
 
 impl ::std::fmt::Debug for GESGroup {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESGroup @ {:p}", self))
+        f.debug_struct(&format!("GESGroup @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2195,7 +2195,7 @@ pub struct GESImageSource {
 
 impl ::std::fmt::Debug for GESImageSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESImageSource @ {:p}", self))
+        f.debug_struct(&format!("GESImageSource @ {self:p}"))
             .finish()
     }
 }
@@ -2213,7 +2213,7 @@ pub struct GESLayer {
 
 impl ::std::fmt::Debug for GESLayer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESLayer @ {:p}", self))
+        f.debug_struct(&format!("GESLayer @ {self:p}"))
             .field("parent", &self.parent)
             .field("timeline", &self.timeline)
             .field("min_nle_priority", &self.min_nle_priority)
@@ -2232,7 +2232,7 @@ pub struct GESMarker {
 
 impl ::std::fmt::Debug for GESMarker {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESMarker @ {:p}", self)).finish()
+        f.debug_struct(&format!("GESMarker @ {self:p}")).finish()
     }
 }
 
@@ -2244,7 +2244,7 @@ pub struct GESMarkerList {
 
 impl ::std::fmt::Debug for GESMarkerList {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESMarkerList @ {:p}", self))
+        f.debug_struct(&format!("GESMarkerList @ {self:p}"))
             .finish()
     }
 }
@@ -2260,7 +2260,7 @@ pub struct GESMultiFileSource {
 
 impl ::std::fmt::Debug for GESMultiFileSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESMultiFileSource @ {:p}", self))
+        f.debug_struct(&format!("GESMultiFileSource @ {self:p}"))
             .finish()
     }
 }
@@ -2275,8 +2275,7 @@ pub struct GESOperation {
 
 impl ::std::fmt::Debug for GESOperation {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESOperation @ {:p}", self))
-            .finish()
+        f.debug_struct(&format!("GESOperation @ {self:p}")).finish()
     }
 }
 
@@ -2290,7 +2289,7 @@ pub struct GESOperationClip {
 
 impl ::std::fmt::Debug for GESOperationClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESOperationClip @ {:p}", self))
+        f.debug_struct(&format!("GESOperationClip @ {self:p}"))
             .finish()
     }
 }
@@ -2305,7 +2304,7 @@ pub struct GESOverlayClip {
 
 impl ::std::fmt::Debug for GESOverlayClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESOverlayClip @ {:p}", self))
+        f.debug_struct(&format!("GESOverlayClip @ {self:p}"))
             .finish()
     }
 }
@@ -2320,8 +2319,7 @@ pub struct GESPipeline {
 
 impl ::std::fmt::Debug for GESPipeline {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESPipeline @ {:p}", self))
-            .finish()
+        f.debug_struct(&format!("GESPipeline @ {self:p}")).finish()
     }
 }
 
@@ -2335,7 +2333,7 @@ pub struct GESPitiviFormatter {
 
 impl ::std::fmt::Debug for GESPitiviFormatter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESPitiviFormatter @ {:p}", self))
+        f.debug_struct(&format!("GESPitiviFormatter @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2351,7 +2349,7 @@ pub struct GESProject {
 
 impl ::std::fmt::Debug for GESProject {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESProject @ {:p}", self))
+        f.debug_struct(&format!("GESProject @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2367,7 +2365,7 @@ pub struct GESSource {
 
 impl ::std::fmt::Debug for GESSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESSource @ {:p}", self)).finish()
+        f.debug_struct(&format!("GESSource @ {self:p}")).finish()
     }
 }
 
@@ -2381,7 +2379,7 @@ pub struct GESSourceClip {
 
 impl ::std::fmt::Debug for GESSourceClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESSourceClip @ {:p}", self))
+        f.debug_struct(&format!("GESSourceClip @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2395,7 +2393,7 @@ pub struct GESSourceClipAsset {
 
 impl ::std::fmt::Debug for GESSourceClipAsset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESSourceClipAsset @ {:p}", self))
+        f.debug_struct(&format!("GESSourceClipAsset @ {self:p}"))
             .field("parent_instance", &self.parent_instance)
             .finish()
     }
@@ -2411,7 +2409,7 @@ pub struct GESTestClip {
 
 impl ::std::fmt::Debug for GESTestClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTestClip @ {:p}", self))
+        f.debug_struct(&format!("GESTestClip @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2427,7 +2425,7 @@ pub struct GESTextOverlay {
 
 impl ::std::fmt::Debug for GESTextOverlay {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTextOverlay @ {:p}", self))
+        f.debug_struct(&format!("GESTextOverlay @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2443,7 +2441,7 @@ pub struct GESTextOverlayClip {
 
 impl ::std::fmt::Debug for GESTextOverlayClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTextOverlayClip @ {:p}", self))
+        f.debug_struct(&format!("GESTextOverlayClip @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2461,7 +2459,7 @@ pub struct GESTimeline {
 
 impl ::std::fmt::Debug for GESTimeline {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTimeline @ {:p}", self))
+        f.debug_struct(&format!("GESTimeline @ {self:p}"))
             .field("parent", &self.parent)
             .field("layers", &self.layers)
             .field("tracks", &self.tracks)
@@ -2488,7 +2486,7 @@ pub struct GESTimelineElement {
 
 impl ::std::fmt::Debug for GESTimelineElement {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTimelineElement @ {:p}", self))
+        f.debug_struct(&format!("GESTimelineElement @ {self:p}"))
             .field("parent_instance", &self.parent_instance)
             .field("parent", &self.parent)
             .field("asset", &self.asset)
@@ -2513,7 +2511,7 @@ pub struct GESTitleClip {
 
 impl ::std::fmt::Debug for GESTitleClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTitleClip @ {:p}", self))
+        f.debug_struct(&format!("GESTitleClip @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2529,7 +2527,7 @@ pub struct GESTitleSource {
 
 impl ::std::fmt::Debug for GESTitleSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTitleSource @ {:p}", self))
+        f.debug_struct(&format!("GESTitleSource @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2546,7 +2544,7 @@ pub struct GESTrack {
 
 impl ::std::fmt::Debug for GESTrack {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTrack @ {:p}", self))
+        f.debug_struct(&format!("GESTrack @ {self:p}"))
             .field("parent", &self.parent)
             .field("type_", &self.type_)
             .finish()
@@ -2565,7 +2563,7 @@ pub struct GESTrackElement {
 
 impl ::std::fmt::Debug for GESTrackElement {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTrackElement @ {:p}", self))
+        f.debug_struct(&format!("GESTrackElement @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2581,7 +2579,7 @@ pub struct GESTrackElementAsset {
 
 impl ::std::fmt::Debug for GESTrackElementAsset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTrackElementAsset @ {:p}", self))
+        f.debug_struct(&format!("GESTrackElementAsset @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2597,7 +2595,7 @@ pub struct GESTransition {
 
 impl ::std::fmt::Debug for GESTransition {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTransition @ {:p}", self))
+        f.debug_struct(&format!("GESTransition @ {self:p}"))
             .finish()
     }
 }
@@ -2613,7 +2611,7 @@ pub struct GESTransitionClip {
 
 impl ::std::fmt::Debug for GESTransitionClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTransitionClip @ {:p}", self))
+        f.debug_struct(&format!("GESTransitionClip @ {self:p}"))
             .field("vtype", &self.vtype)
             .finish()
     }
@@ -2629,7 +2627,7 @@ pub struct GESUriClip {
 
 impl ::std::fmt::Debug for GESUriClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESUriClip @ {:p}", self))
+        f.debug_struct(&format!("GESUriClip @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2645,7 +2643,7 @@ pub struct GESUriClipAsset {
 
 impl ::std::fmt::Debug for GESUriClipAsset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESUriClipAsset @ {:p}", self))
+        f.debug_struct(&format!("GESUriClipAsset @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2661,7 +2659,7 @@ pub struct GESUriSourceAsset {
 
 impl ::std::fmt::Debug for GESUriSourceAsset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESUriSourceAsset @ {:p}", self))
+        f.debug_struct(&format!("GESUriSourceAsset @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2677,7 +2675,7 @@ pub struct GESVideoSource {
 
 impl ::std::fmt::Debug for GESVideoSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESVideoSource @ {:p}", self))
+        f.debug_struct(&format!("GESVideoSource @ {self:p}"))
             .finish()
     }
 }
@@ -2692,7 +2690,7 @@ pub struct GESVideoTestSource {
 
 impl ::std::fmt::Debug for GESVideoTestSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESVideoTestSource @ {:p}", self))
+        f.debug_struct(&format!("GESVideoTestSource @ {self:p}"))
             .finish()
     }
 }
@@ -2707,7 +2705,7 @@ pub struct GESVideoTrack {
 
 impl ::std::fmt::Debug for GESVideoTrack {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESVideoTrack @ {:p}", self))
+        f.debug_struct(&format!("GESVideoTrack @ {self:p}"))
             .field("parent_instance", &self.parent_instance)
             .finish()
     }
@@ -2723,7 +2721,7 @@ pub struct GESVideoTransition {
 
 impl ::std::fmt::Debug for GESVideoTransition {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESVideoTransition @ {:p}", self))
+        f.debug_struct(&format!("GESVideoTransition @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -2740,7 +2738,7 @@ pub struct GESVideoUriSource {
 
 impl ::std::fmt::Debug for GESVideoUriSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESVideoUriSource @ {:p}", self))
+        f.debug_struct(&format!("GESVideoUriSource @ {self:p}"))
             .finish()
     }
 }
@@ -2755,7 +2753,7 @@ pub struct GESXmlFormatter {
 
 impl ::std::fmt::Debug for GESXmlFormatter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESXmlFormatter @ {:p}", self))
+        f.debug_struct(&format!("GESXmlFormatter @ {self:p}"))
             .field("parent", &self.parent)
             .field("priv_", &self.priv_)
             .field("_ges_reserved", &self._ges_reserved)
@@ -2772,7 +2770,7 @@ pub struct GESExtractable {
 
 impl ::std::fmt::Debug for GESExtractable {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GESExtractable @ {:p}", self)
+        write!(f, "GESExtractable @ {self:p}")
     }
 }
 
@@ -2784,7 +2782,7 @@ pub struct GESMetaContainer {
 
 impl ::std::fmt::Debug for GESMetaContainer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GESMetaContainer @ {:p}", self)
+        write!(f, "GESMetaContainer @ {self:p}")
     }
 }
 

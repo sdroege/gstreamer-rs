@@ -10,13 +10,13 @@ bitflags! {
     #[doc(alias = "GstFdMemoryFlags")]
     pub struct FdMemoryFlags: u32 {
         #[doc(alias = "GST_FD_MEMORY_FLAG_NONE")]
-        const NONE = ffi::GST_FD_MEMORY_FLAG_NONE as u32;
+        const NONE = ffi::GST_FD_MEMORY_FLAG_NONE as _;
         #[doc(alias = "GST_FD_MEMORY_FLAG_KEEP_MAPPED")]
-        const KEEP_MAPPED = ffi::GST_FD_MEMORY_FLAG_KEEP_MAPPED as u32;
+        const KEEP_MAPPED = ffi::GST_FD_MEMORY_FLAG_KEEP_MAPPED as _;
         #[doc(alias = "GST_FD_MEMORY_FLAG_MAP_PRIVATE")]
-        const MAP_PRIVATE = ffi::GST_FD_MEMORY_FLAG_MAP_PRIVATE as u32;
+        const MAP_PRIVATE = ffi::GST_FD_MEMORY_FLAG_MAP_PRIVATE as _;
         #[doc(alias = "GST_FD_MEMORY_FLAG_DONT_CLOSE")]
-        const DONT_CLOSE = ffi::GST_FD_MEMORY_FLAG_DONT_CLOSE as u32;
+        const DONT_CLOSE = ffi::GST_FD_MEMORY_FLAG_DONT_CLOSE as _;
     }
 }
 

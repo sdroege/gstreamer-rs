@@ -25,7 +25,7 @@ impl CommandLineFormatter {
     #[doc(alias = "get_help")]
     pub fn help(commands: &[&str]) -> glib::GString {
         assert_initialized_main_thread!();
-        let nargs = commands.len() as i32;
+        let nargs = commands.len() as _;
         unsafe {
             from_glib_full(ffi::ges_command_line_formatter_get_help(
                 nargs,

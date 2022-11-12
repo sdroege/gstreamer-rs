@@ -191,7 +191,7 @@ impl GLShader {
 
     #[doc(alias = "gst_gl_shader_set_uniform_1fv")]
     pub fn set_uniform_1fv(&self, name: &str, value: &[f32]) {
-        let count = value.len() as u32;
+        let count = value.len() as _;
         unsafe {
             ffi::gst_gl_shader_set_uniform_1fv(
                 self.to_glib_none().0,
@@ -211,7 +211,7 @@ impl GLShader {
 
     #[doc(alias = "gst_gl_shader_set_uniform_1iv")]
     pub fn set_uniform_1iv(&self, name: &str, value: &[i32]) {
-        let count = value.len() as u32;
+        let count = value.len() as _;
         unsafe {
             ffi::gst_gl_shader_set_uniform_1iv(
                 self.to_glib_none().0,
@@ -231,7 +231,7 @@ impl GLShader {
 
     #[doc(alias = "gst_gl_shader_set_uniform_2fv")]
     pub fn set_uniform_2fv(&self, name: &str, value: &[f32]) {
-        let count = value.len() as u32;
+        let count = value.len() as _;
         unsafe {
             ffi::gst_gl_shader_set_uniform_2fv(
                 self.to_glib_none().0,
@@ -251,7 +251,7 @@ impl GLShader {
 
     #[doc(alias = "gst_gl_shader_set_uniform_2iv")]
     pub fn set_uniform_2iv(&self, name: &str, value: &[i32]) {
-        let count = value.len() as u32;
+        let count = value.len() as _;
         unsafe {
             ffi::gst_gl_shader_set_uniform_2iv(
                 self.to_glib_none().0,
@@ -277,7 +277,7 @@ impl GLShader {
 
     #[doc(alias = "gst_gl_shader_set_uniform_3fv")]
     pub fn set_uniform_3fv(&self, name: &str, value: &[f32]) {
-        let count = value.len() as u32;
+        let count = value.len() as _;
         unsafe {
             ffi::gst_gl_shader_set_uniform_3fv(
                 self.to_glib_none().0,
@@ -303,7 +303,7 @@ impl GLShader {
 
     #[doc(alias = "gst_gl_shader_set_uniform_3iv")]
     pub fn set_uniform_3iv(&self, name: &str, value: &[i32]) {
-        let count = value.len() as u32;
+        let count = value.len() as _;
         unsafe {
             ffi::gst_gl_shader_set_uniform_3iv(
                 self.to_glib_none().0,
@@ -330,7 +330,7 @@ impl GLShader {
 
     #[doc(alias = "gst_gl_shader_set_uniform_4fv")]
     pub fn set_uniform_4fv(&self, name: &str, value: &[f32]) {
-        let count = value.len() as u32;
+        let count = value.len() as _;
         unsafe {
             ffi::gst_gl_shader_set_uniform_4fv(
                 self.to_glib_none().0,
@@ -357,7 +357,7 @@ impl GLShader {
 
     #[doc(alias = "gst_gl_shader_set_uniform_4iv")]
     pub fn set_uniform_4iv(&self, name: &str, value: &[i32]) {
-        let count = value.len() as u32;
+        let count = value.len() as _;
         unsafe {
             ffi::gst_gl_shader_set_uniform_4iv(
                 self.to_glib_none().0,

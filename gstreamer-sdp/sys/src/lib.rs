@@ -143,7 +143,7 @@ pub struct GstMIKEYMapSRTP {
 
 impl ::std::fmt::Debug for GstMIKEYMapSRTP {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMIKEYMapSRTP @ {:p}", self))
+        f.debug_struct(&format!("GstMIKEYMapSRTP @ {self:p}"))
             .field("policy", &self.policy)
             .field("ssrc", &self.ssrc)
             .field("roc", &self.roc)
@@ -167,7 +167,7 @@ pub struct GstMIKEYMessage {
 
 impl ::std::fmt::Debug for GstMIKEYMessage {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMIKEYMessage @ {:p}", self))
+        f.debug_struct(&format!("GstMIKEYMessage @ {self:p}"))
             .field("version", &self.version)
             .field("type_", &self.type_)
             .field("V", &self.V)
@@ -190,7 +190,7 @@ pub struct GstMIKEYPayload {
 
 impl ::std::fmt::Debug for GstMIKEYPayload {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMIKEYPayload @ {:p}", self))
+        f.debug_struct(&format!("GstMIKEYPayload @ {self:p}"))
             .field("type_", &self.type_)
             .field("len", &self.len)
             .finish()
@@ -208,7 +208,7 @@ pub struct GstMIKEYPayloadKEMAC {
 
 impl ::std::fmt::Debug for GstMIKEYPayloadKEMAC {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMIKEYPayloadKEMAC @ {:p}", self))
+        f.debug_struct(&format!("GstMIKEYPayloadKEMAC @ {self:p}"))
             .field("pt", &self.pt)
             .field("enc_alg", &self.enc_alg)
             .field("mac_alg", &self.mac_alg)
@@ -233,7 +233,7 @@ pub struct GstMIKEYPayloadKeyData {
 
 impl ::std::fmt::Debug for GstMIKEYPayloadKeyData {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMIKEYPayloadKeyData @ {:p}", self))
+        f.debug_struct(&format!("GstMIKEYPayloadKeyData @ {self:p}"))
             .field("pt", &self.pt)
             .field("key_type", &self.key_type)
             .field("key_len", &self.key_len)
@@ -258,7 +258,7 @@ pub struct GstMIKEYPayloadPKE {
 
 impl ::std::fmt::Debug for GstMIKEYPayloadPKE {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMIKEYPayloadPKE @ {:p}", self))
+        f.debug_struct(&format!("GstMIKEYPayloadPKE @ {self:p}"))
             .field("pt", &self.pt)
             .field("C", &self.C)
             .field("data_len", &self.data_len)
@@ -277,7 +277,7 @@ pub struct GstMIKEYPayloadRAND {
 
 impl ::std::fmt::Debug for GstMIKEYPayloadRAND {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMIKEYPayloadRAND @ {:p}", self))
+        f.debug_struct(&format!("GstMIKEYPayloadRAND @ {self:p}"))
             .field("pt", &self.pt)
             .field("len", &self.len)
             .field("rand", &self.rand)
@@ -296,7 +296,7 @@ pub struct GstMIKEYPayloadSP {
 
 impl ::std::fmt::Debug for GstMIKEYPayloadSP {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMIKEYPayloadSP @ {:p}", self))
+        f.debug_struct(&format!("GstMIKEYPayloadSP @ {self:p}"))
             .field("pt", &self.pt)
             .field("policy", &self.policy)
             .field("proto", &self.proto)
@@ -315,7 +315,7 @@ pub struct GstMIKEYPayloadSPParam {
 
 impl ::std::fmt::Debug for GstMIKEYPayloadSPParam {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMIKEYPayloadSPParam @ {:p}", self))
+        f.debug_struct(&format!("GstMIKEYPayloadSPParam @ {self:p}"))
             .field("type_", &self.type_)
             .field("len", &self.len)
             .field("val", &self.val)
@@ -333,7 +333,7 @@ pub struct GstMIKEYPayloadT {
 
 impl ::std::fmt::Debug for GstMIKEYPayloadT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstMIKEYPayloadT @ {:p}", self))
+        f.debug_struct(&format!("GstMIKEYPayloadT @ {self:p}"))
             .field("pt", &self.pt)
             .field("type_", &self.type_)
             .field("ts_value", &self.ts_value)
@@ -350,7 +350,7 @@ pub struct GstSDPAttribute {
 
 impl ::std::fmt::Debug for GstSDPAttribute {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSDPAttribute @ {:p}", self))
+        f.debug_struct(&format!("GstSDPAttribute @ {self:p}"))
             .field("key", &self.key)
             .field("value", &self.value)
             .finish()
@@ -366,7 +366,7 @@ pub struct GstSDPBandwidth {
 
 impl ::std::fmt::Debug for GstSDPBandwidth {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSDPBandwidth @ {:p}", self))
+        f.debug_struct(&format!("GstSDPBandwidth @ {self:p}"))
             .field("bwtype", &self.bwtype)
             .field("bandwidth", &self.bandwidth)
             .finish()
@@ -385,7 +385,7 @@ pub struct GstSDPConnection {
 
 impl ::std::fmt::Debug for GstSDPConnection {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSDPConnection @ {:p}", self))
+        f.debug_struct(&format!("GstSDPConnection @ {self:p}"))
             .field("nettype", &self.nettype)
             .field("addrtype", &self.addrtype)
             .field("address", &self.address)
@@ -404,7 +404,7 @@ pub struct GstSDPKey {
 
 impl ::std::fmt::Debug for GstSDPKey {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSDPKey @ {:p}", self))
+        f.debug_struct(&format!("GstSDPKey @ {self:p}"))
             .field("type_", &self.type_)
             .field("data", &self.data)
             .finish()
@@ -428,7 +428,7 @@ pub struct GstSDPMedia {
 
 impl ::std::fmt::Debug for GstSDPMedia {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSDPMedia @ {:p}", self))
+        f.debug_struct(&format!("GstSDPMedia @ {self:p}"))
             .field("media", &self.media)
             .field("port", &self.port)
             .field("num_ports", &self.num_ports)
@@ -464,7 +464,7 @@ pub struct GstSDPMessage {
 
 impl ::std::fmt::Debug for GstSDPMessage {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSDPMessage @ {:p}", self))
+        f.debug_struct(&format!("GstSDPMessage @ {self:p}"))
             .field("version", &self.version)
             .field("origin", &self.origin)
             .field("session_name", &self.session_name)
@@ -496,7 +496,7 @@ pub struct GstSDPOrigin {
 
 impl ::std::fmt::Debug for GstSDPOrigin {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSDPOrigin @ {:p}", self))
+        f.debug_struct(&format!("GstSDPOrigin @ {self:p}"))
             .field("username", &self.username)
             .field("sess_id", &self.sess_id)
             .field("sess_version", &self.sess_version)
@@ -517,7 +517,7 @@ pub struct GstSDPTime {
 
 impl ::std::fmt::Debug for GstSDPTime {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSDPTime @ {:p}", self))
+        f.debug_struct(&format!("GstSDPTime @ {self:p}"))
             .field("start", &self.start)
             .field("stop", &self.stop)
             .field("repeat", &self.repeat)
@@ -534,7 +534,7 @@ pub struct GstSDPZone {
 
 impl ::std::fmt::Debug for GstSDPZone {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSDPZone @ {:p}", self))
+        f.debug_struct(&format!("GstSDPZone @ {self:p}"))
             .field("time", &self.time)
             .field("typed_time", &self.typed_time)
             .finish()

@@ -46,7 +46,7 @@ pub union GstControlPoint_cache {
 
 impl ::std::fmt::Debug for GstControlPoint_cache {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstControlPoint_cache @ {:p}", self))
+        f.debug_struct(&format!("GstControlPoint_cache @ {self:p}"))
             .field("cubic", unsafe { &self.cubic })
             .field("cubic_monotonic", unsafe { &self.cubic_monotonic })
             .finish()
@@ -62,7 +62,7 @@ pub union GstDirectControlBinding_ABI {
 
 impl ::std::fmt::Debug for GstDirectControlBinding_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDirectControlBinding_ABI @ {:p}", self))
+        f.debug_struct(&format!("GstDirectControlBinding_ABI @ {self:p}"))
             .field("_gst_reserved", unsafe { &self._gst_reserved })
             .field("abi", unsafe { &self.abi })
             .finish()
@@ -85,7 +85,7 @@ pub struct GstARGBControlBindingClass {
 
 impl ::std::fmt::Debug for GstARGBControlBindingClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstARGBControlBindingClass @ {:p}", self))
+        f.debug_struct(&format!("GstARGBControlBindingClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -101,7 +101,7 @@ pub struct GstControlPoint {
 
 impl ::std::fmt::Debug for GstControlPoint {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstControlPoint @ {:p}", self))
+        f.debug_struct(&format!("GstControlPoint @ {self:p}"))
             .field("timestamp", &self.timestamp)
             .field("value", &self.value)
             .field("cache", &self.cache)
@@ -118,7 +118,7 @@ pub struct GstControlPoint_cache_cubic {
 
 impl ::std::fmt::Debug for GstControlPoint_cache_cubic {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstControlPoint_cache_cubic @ {:p}", self))
+        f.debug_struct(&format!("GstControlPoint_cache_cubic @ {self:p}"))
             .field("h", &self.h)
             .field("z", &self.z)
             .finish()
@@ -135,14 +135,11 @@ pub struct GstControlPoint_cache_cubic_monotonic {
 
 impl ::std::fmt::Debug for GstControlPoint_cache_cubic_monotonic {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!(
-            "GstControlPoint_cache_cubic_monotonic @ {:p}",
-            self
-        ))
-        .field("c1s", &self.c1s)
-        .field("c2s", &self.c2s)
-        .field("c3s", &self.c3s)
-        .finish()
+        f.debug_struct(&format!("GstControlPoint_cache_cubic_monotonic @ {self:p}"))
+            .field("c1s", &self.c1s)
+            .field("c2s", &self.c2s)
+            .field("c3s", &self.c3s)
+            .finish()
     }
 }
 
@@ -155,7 +152,7 @@ pub struct GstDirectControlBindingClass {
 
 impl ::std::fmt::Debug for GstDirectControlBindingClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDirectControlBindingClass @ {:p}", self))
+        f.debug_struct(&format!("GstDirectControlBindingClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -169,7 +166,7 @@ pub struct GstDirectControlBinding_ABI_abi {
 
 impl ::std::fmt::Debug for GstDirectControlBinding_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDirectControlBinding_ABI_abi @ {:p}", self))
+        f.debug_struct(&format!("GstDirectControlBinding_ABI_abi @ {self:p}"))
             .field("want_absolute", &self.want_absolute)
             .finish()
     }
@@ -184,7 +181,7 @@ pub struct GstInterpolationControlSourceClass {
 
 impl ::std::fmt::Debug for GstInterpolationControlSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstInterpolationControlSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GstInterpolationControlSourceClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -207,7 +204,7 @@ pub struct GstLFOControlSourceClass {
 
 impl ::std::fmt::Debug for GstLFOControlSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstLFOControlSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GstLFOControlSourceClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -230,7 +227,7 @@ pub struct GstProxyControlBindingClass {
 
 impl ::std::fmt::Debug for GstProxyControlBindingClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstProxyControlBindingClass @ {:p}", self))
+        f.debug_struct(&format!("GstProxyControlBindingClass @ {self:p}"))
             .finish()
     }
 }
@@ -244,7 +241,7 @@ pub struct GstTimedValueControlSourceClass {
 
 impl ::std::fmt::Debug for GstTimedValueControlSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTimedValueControlSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GstTimedValueControlSourceClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -267,7 +264,7 @@ pub struct GstTriggerControlSourceClass {
 
 impl ::std::fmt::Debug for GstTriggerControlSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTriggerControlSourceClass @ {:p}", self))
+        f.debug_struct(&format!("GstTriggerControlSourceClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -297,7 +294,7 @@ pub struct GstARGBControlBinding {
 
 impl ::std::fmt::Debug for GstARGBControlBinding {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstARGBControlBinding @ {:p}", self))
+        f.debug_struct(&format!("GstARGBControlBinding @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -318,7 +315,7 @@ pub struct GstDirectControlBinding {
 
 impl ::std::fmt::Debug for GstDirectControlBinding {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDirectControlBinding @ {:p}", self))
+        f.debug_struct(&format!("GstDirectControlBinding @ {self:p}"))
             .field("parent", &self.parent)
             .field("ABI", &self.ABI)
             .finish()
@@ -335,7 +332,7 @@ pub struct GstInterpolationControlSource {
 
 impl ::std::fmt::Debug for GstInterpolationControlSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstInterpolationControlSource @ {:p}", self))
+        f.debug_struct(&format!("GstInterpolationControlSource @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -352,7 +349,7 @@ pub struct GstLFOControlSource {
 
 impl ::std::fmt::Debug for GstLFOControlSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstLFOControlSource @ {:p}", self))
+        f.debug_struct(&format!("GstLFOControlSource @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -369,7 +366,7 @@ pub struct GstProxyControlBinding {
 
 impl ::std::fmt::Debug for GstProxyControlBinding {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstProxyControlBinding @ {:p}", self))
+        f.debug_struct(&format!("GstProxyControlBinding @ {self:p}"))
             .finish()
     }
 }
@@ -388,7 +385,7 @@ pub struct GstTimedValueControlSource {
 
 impl ::std::fmt::Debug for GstTimedValueControlSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTimedValueControlSource @ {:p}", self))
+        f.debug_struct(&format!("GstTimedValueControlSource @ {self:p}"))
             .field("parent", &self.parent)
             .field("lock", &self.lock)
             .field("values", &self.values)
@@ -408,7 +405,7 @@ pub struct GstTriggerControlSource {
 
 impl ::std::fmt::Debug for GstTriggerControlSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTriggerControlSource @ {:p}", self))
+        f.debug_struct(&format!("GstTriggerControlSource @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }

@@ -216,7 +216,7 @@ pub struct GstRTCPBuffer {
 
 impl ::std::fmt::Debug for GstRTCPBuffer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTCPBuffer @ {:p}", self))
+        f.debug_struct(&format!("GstRTCPBuffer @ {self:p}"))
             .field("buffer", &self.buffer)
             .field("map", &self.map)
             .finish()
@@ -239,7 +239,7 @@ pub struct GstRTCPPacket {
 
 impl ::std::fmt::Debug for GstRTCPPacket {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTCPPacket @ {:p}", self))
+        f.debug_struct(&format!("GstRTCPPacket @ {self:p}"))
             .field("rtcp", &self.rtcp)
             .field("offset", &self.offset)
             .finish()
@@ -255,7 +255,7 @@ pub struct GstRTPBaseAudioPayloadClass {
 
 impl ::std::fmt::Debug for GstRTPBaseAudioPayloadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTPBaseAudioPayloadClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTPBaseAudioPayloadClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -290,7 +290,7 @@ pub struct GstRTPBaseDepayloadClass {
 
 impl ::std::fmt::Debug for GstRTPBaseDepayloadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTPBaseDepayloadClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTPBaseDepayloadClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("set_caps", &self.set_caps)
             .field("process", &self.process)
@@ -341,7 +341,7 @@ pub struct GstRTPBasePayloadClass {
 
 impl ::std::fmt::Debug for GstRTPBasePayloadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTPBasePayloadClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTPBasePayloadClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("get_caps", &self.get_caps)
             .field("set_caps", &self.set_caps)
@@ -373,7 +373,7 @@ pub struct GstRTPBuffer {
 
 impl ::std::fmt::Debug for GstRTPBuffer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTPBuffer @ {:p}", self))
+        f.debug_struct(&format!("GstRTPBuffer @ {self:p}"))
             .field("buffer", &self.buffer)
             .field("state", &self.state)
             .field("data", &self.data)
@@ -428,7 +428,7 @@ pub struct GstRTPHeaderExtensionClass {
 
 impl ::std::fmt::Debug for GstRTPHeaderExtensionClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTPHeaderExtensionClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTPHeaderExtensionClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("get_supported_flags", &self.get_supported_flags)
             .field("get_max_size", &self.get_max_size)
@@ -456,7 +456,7 @@ pub struct GstRTPPayloadInfo {
 
 impl ::std::fmt::Debug for GstRTPPayloadInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTPPayloadInfo @ {:p}", self))
+        f.debug_struct(&format!("GstRTPPayloadInfo @ {self:p}"))
             .field("payload_type", &self.payload_type)
             .field("media", &self.media)
             .field("encoding_name", &self.encoding_name)
@@ -479,7 +479,7 @@ pub struct GstRTPSourceMeta {
 
 impl ::std::fmt::Debug for GstRTPSourceMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTPSourceMeta @ {:p}", self))
+        f.debug_struct(&format!("GstRTPSourceMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("ssrc", &self.ssrc)
             .field("ssrc_valid", &self.ssrc_valid)
@@ -504,7 +504,7 @@ pub struct GstRTPBaseAudioPayload {
 
 impl ::std::fmt::Debug for GstRTPBaseAudioPayload {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTPBaseAudioPayload @ {:p}", self))
+        f.debug_struct(&format!("GstRTPBaseAudioPayload @ {self:p}"))
             .field("payload", &self.payload)
             .field("priv_", &self.priv_)
             .field("base_ts", &self.base_ts)
@@ -530,7 +530,7 @@ pub struct GstRTPBaseDepayload {
 
 impl ::std::fmt::Debug for GstRTPBaseDepayload {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTPBaseDepayload @ {:p}", self))
+        f.debug_struct(&format!("GstRTPBaseDepayload @ {self:p}"))
             .field("parent", &self.parent)
             .field("sinkpad", &self.sinkpad)
             .field("srcpad", &self.srcpad)
@@ -572,7 +572,7 @@ pub struct GstRTPBasePayload {
 
 impl ::std::fmt::Debug for GstRTPBasePayload {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTPBasePayload @ {:p}", self))
+        f.debug_struct(&format!("GstRTPBasePayload @ {self:p}"))
             .field("element", &self.element)
             .finish()
     }
@@ -587,7 +587,7 @@ pub struct GstRTPHeaderExtension {
 
 impl ::std::fmt::Debug for GstRTPHeaderExtension {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTPHeaderExtension @ {:p}", self))
+        f.debug_struct(&format!("GstRTPHeaderExtension @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }

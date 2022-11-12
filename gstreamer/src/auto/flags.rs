@@ -16,9 +16,9 @@ bitflags! {
     #[doc(alias = "GstBinFlags")]
     pub struct BinFlags: u32 {
         #[doc(alias = "GST_BIN_FLAG_NO_RESYNC")]
-        const NO_RESYNC = ffi::GST_BIN_FLAG_NO_RESYNC as u32;
+        const NO_RESYNC = ffi::GST_BIN_FLAG_NO_RESYNC as _;
         #[doc(alias = "GST_BIN_FLAG_STREAMS_AWARE")]
-        const STREAMS_AWARE = ffi::GST_BIN_FLAG_STREAMS_AWARE as u32;
+        const STREAMS_AWARE = ffi::GST_BIN_FLAG_STREAMS_AWARE as _;
     }
 }
 
@@ -76,17 +76,17 @@ bitflags! {
     #[doc(alias = "GstBufferCopyFlags")]
     pub struct BufferCopyFlags: u32 {
         #[doc(alias = "GST_BUFFER_COPY_FLAGS")]
-        const FLAGS = ffi::GST_BUFFER_COPY_FLAGS as u32;
+        const FLAGS = ffi::GST_BUFFER_COPY_FLAGS as _;
         #[doc(alias = "GST_BUFFER_COPY_TIMESTAMPS")]
-        const TIMESTAMPS = ffi::GST_BUFFER_COPY_TIMESTAMPS as u32;
+        const TIMESTAMPS = ffi::GST_BUFFER_COPY_TIMESTAMPS as _;
         #[doc(alias = "GST_BUFFER_COPY_META")]
-        const META = ffi::GST_BUFFER_COPY_META as u32;
+        const META = ffi::GST_BUFFER_COPY_META as _;
         #[doc(alias = "GST_BUFFER_COPY_MEMORY")]
-        const MEMORY = ffi::GST_BUFFER_COPY_MEMORY as u32;
+        const MEMORY = ffi::GST_BUFFER_COPY_MEMORY as _;
         #[doc(alias = "GST_BUFFER_COPY_MERGE")]
-        const MERGE = ffi::GST_BUFFER_COPY_MERGE as u32;
+        const MERGE = ffi::GST_BUFFER_COPY_MERGE as _;
         #[doc(alias = "GST_BUFFER_COPY_DEEP")]
-        const DEEP = ffi::GST_BUFFER_COPY_DEEP as u32;
+        const DEEP = ffi::GST_BUFFER_COPY_DEEP as _;
     }
 }
 
@@ -144,31 +144,31 @@ bitflags! {
     #[doc(alias = "GstBufferFlags")]
     pub struct BufferFlags: u32 {
         #[doc(alias = "GST_BUFFER_FLAG_LIVE")]
-        const LIVE = ffi::GST_BUFFER_FLAG_LIVE as u32;
+        const LIVE = ffi::GST_BUFFER_FLAG_LIVE as _;
         #[doc(alias = "GST_BUFFER_FLAG_DECODE_ONLY")]
-        const DECODE_ONLY = ffi::GST_BUFFER_FLAG_DECODE_ONLY as u32;
+        const DECODE_ONLY = ffi::GST_BUFFER_FLAG_DECODE_ONLY as _;
         #[doc(alias = "GST_BUFFER_FLAG_DISCONT")]
-        const DISCONT = ffi::GST_BUFFER_FLAG_DISCONT as u32;
+        const DISCONT = ffi::GST_BUFFER_FLAG_DISCONT as _;
         #[doc(alias = "GST_BUFFER_FLAG_RESYNC")]
-        const RESYNC = ffi::GST_BUFFER_FLAG_RESYNC as u32;
+        const RESYNC = ffi::GST_BUFFER_FLAG_RESYNC as _;
         #[doc(alias = "GST_BUFFER_FLAG_CORRUPTED")]
-        const CORRUPTED = ffi::GST_BUFFER_FLAG_CORRUPTED as u32;
+        const CORRUPTED = ffi::GST_BUFFER_FLAG_CORRUPTED as _;
         #[doc(alias = "GST_BUFFER_FLAG_MARKER")]
-        const MARKER = ffi::GST_BUFFER_FLAG_MARKER as u32;
+        const MARKER = ffi::GST_BUFFER_FLAG_MARKER as _;
         #[doc(alias = "GST_BUFFER_FLAG_HEADER")]
-        const HEADER = ffi::GST_BUFFER_FLAG_HEADER as u32;
+        const HEADER = ffi::GST_BUFFER_FLAG_HEADER as _;
         #[doc(alias = "GST_BUFFER_FLAG_GAP")]
-        const GAP = ffi::GST_BUFFER_FLAG_GAP as u32;
+        const GAP = ffi::GST_BUFFER_FLAG_GAP as _;
         #[doc(alias = "GST_BUFFER_FLAG_DROPPABLE")]
-        const DROPPABLE = ffi::GST_BUFFER_FLAG_DROPPABLE as u32;
+        const DROPPABLE = ffi::GST_BUFFER_FLAG_DROPPABLE as _;
         #[doc(alias = "GST_BUFFER_FLAG_DELTA_UNIT")]
-        const DELTA_UNIT = ffi::GST_BUFFER_FLAG_DELTA_UNIT as u32;
+        const DELTA_UNIT = ffi::GST_BUFFER_FLAG_DELTA_UNIT as _;
         #[doc(alias = "GST_BUFFER_FLAG_TAG_MEMORY")]
-        const TAG_MEMORY = ffi::GST_BUFFER_FLAG_TAG_MEMORY as u32;
+        const TAG_MEMORY = ffi::GST_BUFFER_FLAG_TAG_MEMORY as _;
         #[doc(alias = "GST_BUFFER_FLAG_SYNC_AFTER")]
-        const SYNC_AFTER = ffi::GST_BUFFER_FLAG_SYNC_AFTER as u32;
+        const SYNC_AFTER = ffi::GST_BUFFER_FLAG_SYNC_AFTER as _;
         #[doc(alias = "GST_BUFFER_FLAG_NON_DROPPABLE")]
-        const NON_DROPPABLE = ffi::GST_BUFFER_FLAG_NON_DROPPABLE as u32;
+        const NON_DROPPABLE = ffi::GST_BUFFER_FLAG_NON_DROPPABLE as _;
     }
 }
 
@@ -226,11 +226,11 @@ bitflags! {
     #[doc(alias = "GstBufferPoolAcquireFlags")]
     pub struct BufferPoolAcquireFlags: u32 {
         #[doc(alias = "GST_BUFFER_POOL_ACQUIRE_FLAG_KEY_UNIT")]
-        const KEY_UNIT = ffi::GST_BUFFER_POOL_ACQUIRE_FLAG_KEY_UNIT as u32;
+        const KEY_UNIT = ffi::GST_BUFFER_POOL_ACQUIRE_FLAG_KEY_UNIT as _;
         #[doc(alias = "GST_BUFFER_POOL_ACQUIRE_FLAG_DONTWAIT")]
-        const DONTWAIT = ffi::GST_BUFFER_POOL_ACQUIRE_FLAG_DONTWAIT as u32;
+        const DONTWAIT = ffi::GST_BUFFER_POOL_ACQUIRE_FLAG_DONTWAIT as _;
         #[doc(alias = "GST_BUFFER_POOL_ACQUIRE_FLAG_DISCONT")]
-        const DISCONT = ffi::GST_BUFFER_POOL_ACQUIRE_FLAG_DISCONT as u32;
+        const DISCONT = ffi::GST_BUFFER_POOL_ACQUIRE_FLAG_DISCONT as _;
     }
 }
 
@@ -288,19 +288,19 @@ bitflags! {
     #[doc(alias = "GstClockFlags")]
     pub struct ClockFlags: u32 {
         #[doc(alias = "GST_CLOCK_FLAG_CAN_DO_SINGLE_SYNC")]
-        const CAN_DO_SINGLE_SYNC = ffi::GST_CLOCK_FLAG_CAN_DO_SINGLE_SYNC as u32;
+        const CAN_DO_SINGLE_SYNC = ffi::GST_CLOCK_FLAG_CAN_DO_SINGLE_SYNC as _;
         #[doc(alias = "GST_CLOCK_FLAG_CAN_DO_SINGLE_ASYNC")]
-        const CAN_DO_SINGLE_ASYNC = ffi::GST_CLOCK_FLAG_CAN_DO_SINGLE_ASYNC as u32;
+        const CAN_DO_SINGLE_ASYNC = ffi::GST_CLOCK_FLAG_CAN_DO_SINGLE_ASYNC as _;
         #[doc(alias = "GST_CLOCK_FLAG_CAN_DO_PERIODIC_SYNC")]
-        const CAN_DO_PERIODIC_SYNC = ffi::GST_CLOCK_FLAG_CAN_DO_PERIODIC_SYNC as u32;
+        const CAN_DO_PERIODIC_SYNC = ffi::GST_CLOCK_FLAG_CAN_DO_PERIODIC_SYNC as _;
         #[doc(alias = "GST_CLOCK_FLAG_CAN_DO_PERIODIC_ASYNC")]
-        const CAN_DO_PERIODIC_ASYNC = ffi::GST_CLOCK_FLAG_CAN_DO_PERIODIC_ASYNC as u32;
+        const CAN_DO_PERIODIC_ASYNC = ffi::GST_CLOCK_FLAG_CAN_DO_PERIODIC_ASYNC as _;
         #[doc(alias = "GST_CLOCK_FLAG_CAN_SET_RESOLUTION")]
-        const CAN_SET_RESOLUTION = ffi::GST_CLOCK_FLAG_CAN_SET_RESOLUTION as u32;
+        const CAN_SET_RESOLUTION = ffi::GST_CLOCK_FLAG_CAN_SET_RESOLUTION as _;
         #[doc(alias = "GST_CLOCK_FLAG_CAN_SET_MASTER")]
-        const CAN_SET_MASTER = ffi::GST_CLOCK_FLAG_CAN_SET_MASTER as u32;
+        const CAN_SET_MASTER = ffi::GST_CLOCK_FLAG_CAN_SET_MASTER as _;
         #[doc(alias = "GST_CLOCK_FLAG_NEEDS_STARTUP_SYNC")]
-        const NEEDS_STARTUP_SYNC = ffi::GST_CLOCK_FLAG_NEEDS_STARTUP_SYNC as u32;
+        const NEEDS_STARTUP_SYNC = ffi::GST_CLOCK_FLAG_NEEDS_STARTUP_SYNC as _;
     }
 }
 
@@ -358,41 +358,41 @@ bitflags! {
     #[doc(alias = "GstDebugColorFlags")]
     pub struct DebugColorFlags: u32 {
         #[doc(alias = "GST_DEBUG_FG_BLACK")]
-        const FG_BLACK = ffi::GST_DEBUG_FG_BLACK as u32;
+        const FG_BLACK = ffi::GST_DEBUG_FG_BLACK as _;
         #[doc(alias = "GST_DEBUG_FG_RED")]
-        const FG_RED = ffi::GST_DEBUG_FG_RED as u32;
+        const FG_RED = ffi::GST_DEBUG_FG_RED as _;
         #[doc(alias = "GST_DEBUG_FG_GREEN")]
-        const FG_GREEN = ffi::GST_DEBUG_FG_GREEN as u32;
+        const FG_GREEN = ffi::GST_DEBUG_FG_GREEN as _;
         #[doc(alias = "GST_DEBUG_FG_YELLOW")]
-        const FG_YELLOW = ffi::GST_DEBUG_FG_YELLOW as u32;
+        const FG_YELLOW = ffi::GST_DEBUG_FG_YELLOW as _;
         #[doc(alias = "GST_DEBUG_FG_BLUE")]
-        const FG_BLUE = ffi::GST_DEBUG_FG_BLUE as u32;
+        const FG_BLUE = ffi::GST_DEBUG_FG_BLUE as _;
         #[doc(alias = "GST_DEBUG_FG_MAGENTA")]
-        const FG_MAGENTA = ffi::GST_DEBUG_FG_MAGENTA as u32;
+        const FG_MAGENTA = ffi::GST_DEBUG_FG_MAGENTA as _;
         #[doc(alias = "GST_DEBUG_FG_CYAN")]
-        const FG_CYAN = ffi::GST_DEBUG_FG_CYAN as u32;
+        const FG_CYAN = ffi::GST_DEBUG_FG_CYAN as _;
         #[doc(alias = "GST_DEBUG_FG_WHITE")]
-        const FG_WHITE = ffi::GST_DEBUG_FG_WHITE as u32;
+        const FG_WHITE = ffi::GST_DEBUG_FG_WHITE as _;
         #[doc(alias = "GST_DEBUG_BG_BLACK")]
-        const BG_BLACK = ffi::GST_DEBUG_BG_BLACK as u32;
+        const BG_BLACK = ffi::GST_DEBUG_BG_BLACK as _;
         #[doc(alias = "GST_DEBUG_BG_RED")]
-        const BG_RED = ffi::GST_DEBUG_BG_RED as u32;
+        const BG_RED = ffi::GST_DEBUG_BG_RED as _;
         #[doc(alias = "GST_DEBUG_BG_GREEN")]
-        const BG_GREEN = ffi::GST_DEBUG_BG_GREEN as u32;
+        const BG_GREEN = ffi::GST_DEBUG_BG_GREEN as _;
         #[doc(alias = "GST_DEBUG_BG_YELLOW")]
-        const BG_YELLOW = ffi::GST_DEBUG_BG_YELLOW as u32;
+        const BG_YELLOW = ffi::GST_DEBUG_BG_YELLOW as _;
         #[doc(alias = "GST_DEBUG_BG_BLUE")]
-        const BG_BLUE = ffi::GST_DEBUG_BG_BLUE as u32;
+        const BG_BLUE = ffi::GST_DEBUG_BG_BLUE as _;
         #[doc(alias = "GST_DEBUG_BG_MAGENTA")]
-        const BG_MAGENTA = ffi::GST_DEBUG_BG_MAGENTA as u32;
+        const BG_MAGENTA = ffi::GST_DEBUG_BG_MAGENTA as _;
         #[doc(alias = "GST_DEBUG_BG_CYAN")]
-        const BG_CYAN = ffi::GST_DEBUG_BG_CYAN as u32;
+        const BG_CYAN = ffi::GST_DEBUG_BG_CYAN as _;
         #[doc(alias = "GST_DEBUG_BG_WHITE")]
-        const BG_WHITE = ffi::GST_DEBUG_BG_WHITE as u32;
+        const BG_WHITE = ffi::GST_DEBUG_BG_WHITE as _;
         #[doc(alias = "GST_DEBUG_BOLD")]
-        const BOLD = ffi::GST_DEBUG_BOLD as u32;
+        const BOLD = ffi::GST_DEBUG_BOLD as _;
         #[doc(alias = "GST_DEBUG_UNDERLINE")]
-        const UNDERLINE = ffi::GST_DEBUG_UNDERLINE as u32;
+        const UNDERLINE = ffi::GST_DEBUG_UNDERLINE as _;
     }
 }
 
@@ -450,19 +450,19 @@ bitflags! {
     #[doc(alias = "GstDebugGraphDetails")]
     pub struct DebugGraphDetails: u32 {
         #[doc(alias = "GST_DEBUG_GRAPH_SHOW_MEDIA_TYPE")]
-        const MEDIA_TYPE = ffi::GST_DEBUG_GRAPH_SHOW_MEDIA_TYPE as u32;
+        const MEDIA_TYPE = ffi::GST_DEBUG_GRAPH_SHOW_MEDIA_TYPE as _;
         #[doc(alias = "GST_DEBUG_GRAPH_SHOW_CAPS_DETAILS")]
-        const CAPS_DETAILS = ffi::GST_DEBUG_GRAPH_SHOW_CAPS_DETAILS as u32;
+        const CAPS_DETAILS = ffi::GST_DEBUG_GRAPH_SHOW_CAPS_DETAILS as _;
         #[doc(alias = "GST_DEBUG_GRAPH_SHOW_NON_DEFAULT_PARAMS")]
-        const NON_DEFAULT_PARAMS = ffi::GST_DEBUG_GRAPH_SHOW_NON_DEFAULT_PARAMS as u32;
+        const NON_DEFAULT_PARAMS = ffi::GST_DEBUG_GRAPH_SHOW_NON_DEFAULT_PARAMS as _;
         #[doc(alias = "GST_DEBUG_GRAPH_SHOW_STATES")]
-        const STATES = ffi::GST_DEBUG_GRAPH_SHOW_STATES as u32;
+        const STATES = ffi::GST_DEBUG_GRAPH_SHOW_STATES as _;
         #[doc(alias = "GST_DEBUG_GRAPH_SHOW_FULL_PARAMS")]
-        const FULL_PARAMS = ffi::GST_DEBUG_GRAPH_SHOW_FULL_PARAMS as u32;
+        const FULL_PARAMS = ffi::GST_DEBUG_GRAPH_SHOW_FULL_PARAMS as _;
         #[doc(alias = "GST_DEBUG_GRAPH_SHOW_ALL")]
-        const ALL = ffi::GST_DEBUG_GRAPH_SHOW_ALL as u32;
+        const ALL = ffi::GST_DEBUG_GRAPH_SHOW_ALL as _;
         #[doc(alias = "GST_DEBUG_GRAPH_SHOW_VERBOSE")]
-        const VERBOSE = ffi::GST_DEBUG_GRAPH_SHOW_VERBOSE as u32;
+        const VERBOSE = ffi::GST_DEBUG_GRAPH_SHOW_VERBOSE as _;
     }
 }
 
@@ -520,17 +520,17 @@ bitflags! {
     #[doc(alias = "GstElementFlags")]
     pub struct ElementFlags: u32 {
         #[doc(alias = "GST_ELEMENT_FLAG_LOCKED_STATE")]
-        const LOCKED_STATE = ffi::GST_ELEMENT_FLAG_LOCKED_STATE as u32;
+        const LOCKED_STATE = ffi::GST_ELEMENT_FLAG_LOCKED_STATE as _;
         #[doc(alias = "GST_ELEMENT_FLAG_SINK")]
-        const SINK = ffi::GST_ELEMENT_FLAG_SINK as u32;
+        const SINK = ffi::GST_ELEMENT_FLAG_SINK as _;
         #[doc(alias = "GST_ELEMENT_FLAG_SOURCE")]
-        const SOURCE = ffi::GST_ELEMENT_FLAG_SOURCE as u32;
+        const SOURCE = ffi::GST_ELEMENT_FLAG_SOURCE as _;
         #[doc(alias = "GST_ELEMENT_FLAG_PROVIDE_CLOCK")]
-        const PROVIDE_CLOCK = ffi::GST_ELEMENT_FLAG_PROVIDE_CLOCK as u32;
+        const PROVIDE_CLOCK = ffi::GST_ELEMENT_FLAG_PROVIDE_CLOCK as _;
         #[doc(alias = "GST_ELEMENT_FLAG_REQUIRE_CLOCK")]
-        const REQUIRE_CLOCK = ffi::GST_ELEMENT_FLAG_REQUIRE_CLOCK as u32;
+        const REQUIRE_CLOCK = ffi::GST_ELEMENT_FLAG_REQUIRE_CLOCK as _;
         #[doc(alias = "GST_ELEMENT_FLAG_INDEXABLE")]
-        const INDEXABLE = ffi::GST_ELEMENT_FLAG_INDEXABLE as u32;
+        const INDEXABLE = ffi::GST_ELEMENT_FLAG_INDEXABLE as _;
     }
 }
 
@@ -588,15 +588,15 @@ bitflags! {
     #[doc(alias = "GstEventTypeFlags")]
     pub struct EventTypeFlags: u32 {
         #[doc(alias = "GST_EVENT_TYPE_UPSTREAM")]
-        const UPSTREAM = ffi::GST_EVENT_TYPE_UPSTREAM as u32;
+        const UPSTREAM = ffi::GST_EVENT_TYPE_UPSTREAM as _;
         #[doc(alias = "GST_EVENT_TYPE_DOWNSTREAM")]
-        const DOWNSTREAM = ffi::GST_EVENT_TYPE_DOWNSTREAM as u32;
+        const DOWNSTREAM = ffi::GST_EVENT_TYPE_DOWNSTREAM as _;
         #[doc(alias = "GST_EVENT_TYPE_SERIALIZED")]
-        const SERIALIZED = ffi::GST_EVENT_TYPE_SERIALIZED as u32;
+        const SERIALIZED = ffi::GST_EVENT_TYPE_SERIALIZED as _;
         #[doc(alias = "GST_EVENT_TYPE_STICKY")]
-        const STICKY = ffi::GST_EVENT_TYPE_STICKY as u32;
+        const STICKY = ffi::GST_EVENT_TYPE_STICKY as _;
         #[doc(alias = "GST_EVENT_TYPE_STICKY_MULTI")]
-        const STICKY_MULTI = ffi::GST_EVENT_TYPE_STICKY_MULTI as u32;
+        const STICKY_MULTI = ffi::GST_EVENT_TYPE_STICKY_MULTI as _;
     }
 }
 
@@ -656,7 +656,7 @@ bitflags! {
     #[doc(alias = "GstGapFlags")]
     pub struct GapFlags: u32 {
         #[doc(alias = "GST_GAP_FLAG_MISSING_DATA")]
-        const DATA = ffi::GST_GAP_FLAG_MISSING_DATA as u32;
+        const DATA = ffi::GST_GAP_FLAG_MISSING_DATA as _;
     }
 }
 
@@ -726,17 +726,17 @@ bitflags! {
     #[doc(alias = "GstMemoryFlags")]
     pub struct MemoryFlags: u32 {
         #[doc(alias = "GST_MEMORY_FLAG_READONLY")]
-        const READONLY = ffi::GST_MEMORY_FLAG_READONLY as u32;
+        const READONLY = ffi::GST_MEMORY_FLAG_READONLY as _;
         #[doc(alias = "GST_MEMORY_FLAG_NO_SHARE")]
-        const NO_SHARE = ffi::GST_MEMORY_FLAG_NO_SHARE as u32;
+        const NO_SHARE = ffi::GST_MEMORY_FLAG_NO_SHARE as _;
         #[doc(alias = "GST_MEMORY_FLAG_ZERO_PREFIXED")]
-        const ZERO_PREFIXED = ffi::GST_MEMORY_FLAG_ZERO_PREFIXED as u32;
+        const ZERO_PREFIXED = ffi::GST_MEMORY_FLAG_ZERO_PREFIXED as _;
         #[doc(alias = "GST_MEMORY_FLAG_ZERO_PADDED")]
-        const ZERO_PADDED = ffi::GST_MEMORY_FLAG_ZERO_PADDED as u32;
+        const ZERO_PADDED = ffi::GST_MEMORY_FLAG_ZERO_PADDED as _;
         #[doc(alias = "GST_MEMORY_FLAG_PHYSICALLY_CONTIGUOUS")]
-        const PHYSICALLY_CONTIGUOUS = ffi::GST_MEMORY_FLAG_PHYSICALLY_CONTIGUOUS as u32;
+        const PHYSICALLY_CONTIGUOUS = ffi::GST_MEMORY_FLAG_PHYSICALLY_CONTIGUOUS as _;
         #[doc(alias = "GST_MEMORY_FLAG_NOT_MAPPABLE")]
-        const NOT_MAPPABLE = ffi::GST_MEMORY_FLAG_NOT_MAPPABLE as u32;
+        const NOT_MAPPABLE = ffi::GST_MEMORY_FLAG_NOT_MAPPABLE as _;
     }
 }
 
@@ -794,11 +794,11 @@ bitflags! {
     #[doc(alias = "GstMetaFlags")]
     pub struct MetaFlags: u32 {
         #[doc(alias = "GST_META_FLAG_READONLY")]
-        const READONLY = ffi::GST_META_FLAG_READONLY as u32;
+        const READONLY = ffi::GST_META_FLAG_READONLY as _;
         #[doc(alias = "GST_META_FLAG_POOLED")]
-        const POOLED = ffi::GST_META_FLAG_POOLED as u32;
+        const POOLED = ffi::GST_META_FLAG_POOLED as _;
         #[doc(alias = "GST_META_FLAG_LOCKED")]
-        const LOCKED = ffi::GST_META_FLAG_LOCKED as u32;
+        const LOCKED = ffi::GST_META_FLAG_LOCKED as _;
     }
 }
 
@@ -856,7 +856,7 @@ bitflags! {
     #[doc(alias = "GstObjectFlags")]
     pub struct ObjectFlags: u32 {
         #[doc(alias = "GST_OBJECT_FLAG_MAY_BE_LEAKED")]
-        const MAY_BE_LEAKED = ffi::GST_OBJECT_FLAG_MAY_BE_LEAKED as u32;
+        const MAY_BE_LEAKED = ffi::GST_OBJECT_FLAG_MAY_BE_LEAKED as _;
     }
 }
 
@@ -914,31 +914,31 @@ bitflags! {
     #[doc(alias = "GstPadFlags")]
     pub struct PadFlags: u32 {
         #[doc(alias = "GST_PAD_FLAG_BLOCKED")]
-        const BLOCKED = ffi::GST_PAD_FLAG_BLOCKED as u32;
+        const BLOCKED = ffi::GST_PAD_FLAG_BLOCKED as _;
         #[doc(alias = "GST_PAD_FLAG_FLUSHING")]
-        const FLUSHING = ffi::GST_PAD_FLAG_FLUSHING as u32;
+        const FLUSHING = ffi::GST_PAD_FLAG_FLUSHING as _;
         #[doc(alias = "GST_PAD_FLAG_EOS")]
-        const EOS = ffi::GST_PAD_FLAG_EOS as u32;
+        const EOS = ffi::GST_PAD_FLAG_EOS as _;
         #[doc(alias = "GST_PAD_FLAG_BLOCKING")]
-        const BLOCKING = ffi::GST_PAD_FLAG_BLOCKING as u32;
+        const BLOCKING = ffi::GST_PAD_FLAG_BLOCKING as _;
         #[doc(alias = "GST_PAD_FLAG_NEED_PARENT")]
-        const NEED_PARENT = ffi::GST_PAD_FLAG_NEED_PARENT as u32;
+        const NEED_PARENT = ffi::GST_PAD_FLAG_NEED_PARENT as _;
         #[doc(alias = "GST_PAD_FLAG_NEED_RECONFIGURE")]
-        const NEED_RECONFIGURE = ffi::GST_PAD_FLAG_NEED_RECONFIGURE as u32;
+        const NEED_RECONFIGURE = ffi::GST_PAD_FLAG_NEED_RECONFIGURE as _;
         #[doc(alias = "GST_PAD_FLAG_PENDING_EVENTS")]
-        const PENDING_EVENTS = ffi::GST_PAD_FLAG_PENDING_EVENTS as u32;
+        const PENDING_EVENTS = ffi::GST_PAD_FLAG_PENDING_EVENTS as _;
         #[doc(alias = "GST_PAD_FLAG_FIXED_CAPS")]
-        const FIXED_CAPS = ffi::GST_PAD_FLAG_FIXED_CAPS as u32;
+        const FIXED_CAPS = ffi::GST_PAD_FLAG_FIXED_CAPS as _;
         #[doc(alias = "GST_PAD_FLAG_PROXY_CAPS")]
-        const PROXY_CAPS = ffi::GST_PAD_FLAG_PROXY_CAPS as u32;
+        const PROXY_CAPS = ffi::GST_PAD_FLAG_PROXY_CAPS as _;
         #[doc(alias = "GST_PAD_FLAG_PROXY_ALLOCATION")]
-        const PROXY_ALLOCATION = ffi::GST_PAD_FLAG_PROXY_ALLOCATION as u32;
+        const PROXY_ALLOCATION = ffi::GST_PAD_FLAG_PROXY_ALLOCATION as _;
         #[doc(alias = "GST_PAD_FLAG_PROXY_SCHEDULING")]
-        const PROXY_SCHEDULING = ffi::GST_PAD_FLAG_PROXY_SCHEDULING as u32;
+        const PROXY_SCHEDULING = ffi::GST_PAD_FLAG_PROXY_SCHEDULING as _;
         #[doc(alias = "GST_PAD_FLAG_ACCEPT_INTERSECT")]
-        const ACCEPT_INTERSECT = ffi::GST_PAD_FLAG_ACCEPT_INTERSECT as u32;
+        const ACCEPT_INTERSECT = ffi::GST_PAD_FLAG_ACCEPT_INTERSECT as _;
         #[doc(alias = "GST_PAD_FLAG_ACCEPT_TEMPLATE")]
-        const ACCEPT_TEMPLATE = ffi::GST_PAD_FLAG_ACCEPT_TEMPLATE as u32;
+        const ACCEPT_TEMPLATE = ffi::GST_PAD_FLAG_ACCEPT_TEMPLATE as _;
     }
 }
 
@@ -996,15 +996,15 @@ bitflags! {
     #[doc(alias = "GstPadLinkCheck")]
     pub struct PadLinkCheck: u32 {
         #[doc(alias = "GST_PAD_LINK_CHECK_HIERARCHY")]
-        const HIERARCHY = ffi::GST_PAD_LINK_CHECK_HIERARCHY as u32;
+        const HIERARCHY = ffi::GST_PAD_LINK_CHECK_HIERARCHY as _;
         #[doc(alias = "GST_PAD_LINK_CHECK_TEMPLATE_CAPS")]
-        const TEMPLATE_CAPS = ffi::GST_PAD_LINK_CHECK_TEMPLATE_CAPS as u32;
+        const TEMPLATE_CAPS = ffi::GST_PAD_LINK_CHECK_TEMPLATE_CAPS as _;
         #[doc(alias = "GST_PAD_LINK_CHECK_CAPS")]
-        const CAPS = ffi::GST_PAD_LINK_CHECK_CAPS as u32;
+        const CAPS = ffi::GST_PAD_LINK_CHECK_CAPS as _;
         #[doc(alias = "GST_PAD_LINK_CHECK_NO_RECONFIGURE")]
-        const NO_RECONFIGURE = ffi::GST_PAD_LINK_CHECK_NO_RECONFIGURE as u32;
+        const NO_RECONFIGURE = ffi::GST_PAD_LINK_CHECK_NO_RECONFIGURE as _;
         #[doc(alias = "GST_PAD_LINK_CHECK_DEFAULT")]
-        const DEFAULT = ffi::GST_PAD_LINK_CHECK_DEFAULT as u32;
+        const DEFAULT = ffi::GST_PAD_LINK_CHECK_DEFAULT as _;
     }
 }
 
@@ -1062,47 +1062,47 @@ bitflags! {
     #[doc(alias = "GstPadProbeType")]
     pub struct PadProbeType: u32 {
         #[doc(alias = "GST_PAD_PROBE_TYPE_IDLE")]
-        const IDLE = ffi::GST_PAD_PROBE_TYPE_IDLE as u32;
+        const IDLE = ffi::GST_PAD_PROBE_TYPE_IDLE as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_BLOCK")]
-        const BLOCK = ffi::GST_PAD_PROBE_TYPE_BLOCK as u32;
+        const BLOCK = ffi::GST_PAD_PROBE_TYPE_BLOCK as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_BUFFER")]
-        const BUFFER = ffi::GST_PAD_PROBE_TYPE_BUFFER as u32;
+        const BUFFER = ffi::GST_PAD_PROBE_TYPE_BUFFER as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_BUFFER_LIST")]
-        const BUFFER_LIST = ffi::GST_PAD_PROBE_TYPE_BUFFER_LIST as u32;
+        const BUFFER_LIST = ffi::GST_PAD_PROBE_TYPE_BUFFER_LIST as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_EVENT_DOWNSTREAM")]
-        const EVENT_DOWNSTREAM = ffi::GST_PAD_PROBE_TYPE_EVENT_DOWNSTREAM as u32;
+        const EVENT_DOWNSTREAM = ffi::GST_PAD_PROBE_TYPE_EVENT_DOWNSTREAM as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_EVENT_UPSTREAM")]
-        const EVENT_UPSTREAM = ffi::GST_PAD_PROBE_TYPE_EVENT_UPSTREAM as u32;
+        const EVENT_UPSTREAM = ffi::GST_PAD_PROBE_TYPE_EVENT_UPSTREAM as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_EVENT_FLUSH")]
-        const EVENT_FLUSH = ffi::GST_PAD_PROBE_TYPE_EVENT_FLUSH as u32;
+        const EVENT_FLUSH = ffi::GST_PAD_PROBE_TYPE_EVENT_FLUSH as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_QUERY_DOWNSTREAM")]
-        const QUERY_DOWNSTREAM = ffi::GST_PAD_PROBE_TYPE_QUERY_DOWNSTREAM as u32;
+        const QUERY_DOWNSTREAM = ffi::GST_PAD_PROBE_TYPE_QUERY_DOWNSTREAM as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_QUERY_UPSTREAM")]
-        const QUERY_UPSTREAM = ffi::GST_PAD_PROBE_TYPE_QUERY_UPSTREAM as u32;
+        const QUERY_UPSTREAM = ffi::GST_PAD_PROBE_TYPE_QUERY_UPSTREAM as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_PUSH")]
-        const PUSH = ffi::GST_PAD_PROBE_TYPE_PUSH as u32;
+        const PUSH = ffi::GST_PAD_PROBE_TYPE_PUSH as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_PULL")]
-        const PULL = ffi::GST_PAD_PROBE_TYPE_PULL as u32;
+        const PULL = ffi::GST_PAD_PROBE_TYPE_PULL as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_BLOCKING")]
-        const BLOCKING = ffi::GST_PAD_PROBE_TYPE_BLOCKING as u32;
+        const BLOCKING = ffi::GST_PAD_PROBE_TYPE_BLOCKING as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_DATA_DOWNSTREAM")]
-        const DATA_DOWNSTREAM = ffi::GST_PAD_PROBE_TYPE_DATA_DOWNSTREAM as u32;
+        const DATA_DOWNSTREAM = ffi::GST_PAD_PROBE_TYPE_DATA_DOWNSTREAM as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_DATA_UPSTREAM")]
-        const DATA_UPSTREAM = ffi::GST_PAD_PROBE_TYPE_DATA_UPSTREAM as u32;
+        const DATA_UPSTREAM = ffi::GST_PAD_PROBE_TYPE_DATA_UPSTREAM as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_DATA_BOTH")]
-        const DATA_BOTH = ffi::GST_PAD_PROBE_TYPE_DATA_BOTH as u32;
+        const DATA_BOTH = ffi::GST_PAD_PROBE_TYPE_DATA_BOTH as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_BLOCK_DOWNSTREAM")]
-        const BLOCK_DOWNSTREAM = ffi::GST_PAD_PROBE_TYPE_BLOCK_DOWNSTREAM as u32;
+        const BLOCK_DOWNSTREAM = ffi::GST_PAD_PROBE_TYPE_BLOCK_DOWNSTREAM as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_BLOCK_UPSTREAM")]
-        const BLOCK_UPSTREAM = ffi::GST_PAD_PROBE_TYPE_BLOCK_UPSTREAM as u32;
+        const BLOCK_UPSTREAM = ffi::GST_PAD_PROBE_TYPE_BLOCK_UPSTREAM as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_EVENT_BOTH")]
-        const EVENT_BOTH = ffi::GST_PAD_PROBE_TYPE_EVENT_BOTH as u32;
+        const EVENT_BOTH = ffi::GST_PAD_PROBE_TYPE_EVENT_BOTH as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_QUERY_BOTH")]
-        const QUERY_BOTH = ffi::GST_PAD_PROBE_TYPE_QUERY_BOTH as u32;
+        const QUERY_BOTH = ffi::GST_PAD_PROBE_TYPE_QUERY_BOTH as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_ALL_BOTH")]
-        const ALL_BOTH = ffi::GST_PAD_PROBE_TYPE_ALL_BOTH as u32;
+        const ALL_BOTH = ffi::GST_PAD_PROBE_TYPE_ALL_BOTH as _;
         #[doc(alias = "GST_PAD_PROBE_TYPE_SCHEDULING")]
-        const SCHEDULING = ffi::GST_PAD_PROBE_TYPE_SCHEDULING as u32;
+        const SCHEDULING = ffi::GST_PAD_PROBE_TYPE_SCHEDULING as _;
     }
 }
 
@@ -1160,11 +1160,11 @@ bitflags! {
     #[doc(alias = "GstParseFlags")]
     pub struct ParseFlags: u32 {
         #[doc(alias = "GST_PARSE_FLAG_FATAL_ERRORS")]
-        const FATAL_ERRORS = ffi::GST_PARSE_FLAG_FATAL_ERRORS as u32;
+        const FATAL_ERRORS = ffi::GST_PARSE_FLAG_FATAL_ERRORS as _;
         #[doc(alias = "GST_PARSE_FLAG_NO_SINGLE_ELEMENT_BINS")]
-        const NO_SINGLE_ELEMENT_BINS = ffi::GST_PARSE_FLAG_NO_SINGLE_ELEMENT_BINS as u32;
+        const NO_SINGLE_ELEMENT_BINS = ffi::GST_PARSE_FLAG_NO_SINGLE_ELEMENT_BINS as _;
         #[doc(alias = "GST_PARSE_FLAG_PLACE_IN_BIN")]
-        const PLACE_IN_BIN = ffi::GST_PARSE_FLAG_PLACE_IN_BIN as u32;
+        const PLACE_IN_BIN = ffi::GST_PARSE_FLAG_PLACE_IN_BIN as _;
     }
 }
 
@@ -1222,7 +1222,7 @@ bitflags! {
     #[doc(alias = "GstPipelineFlags")]
     pub struct PipelineFlags: u32 {
         #[doc(alias = "GST_PIPELINE_FLAG_FIXED_CLOCK")]
-        const FIXED_CLOCK = ffi::GST_PIPELINE_FLAG_FIXED_CLOCK as u32;
+        const FIXED_CLOCK = ffi::GST_PIPELINE_FLAG_FIXED_CLOCK as _;
     }
 }
 
@@ -1282,7 +1282,7 @@ bitflags! {
     #[doc(alias = "GstPluginAPIFlags")]
     pub struct PluginAPIFlags: u32 {
         #[doc(alias = "GST_PLUGIN_API_FLAG_IGNORE_ENUM_MEMBERS")]
-        const MEMBERS = ffi::GST_PLUGIN_API_FLAG_IGNORE_ENUM_MEMBERS as u32;
+        const MEMBERS = ffi::GST_PLUGIN_API_FLAG_IGNORE_ENUM_MEMBERS as _;
     }
 }
 
@@ -1352,15 +1352,15 @@ bitflags! {
     #[doc(alias = "GstPluginDependencyFlags")]
     pub struct PluginDependencyFlags: u32 {
         #[doc(alias = "GST_PLUGIN_DEPENDENCY_FLAG_RECURSE")]
-        const RECURSE = ffi::GST_PLUGIN_DEPENDENCY_FLAG_RECURSE as u32;
+        const RECURSE = ffi::GST_PLUGIN_DEPENDENCY_FLAG_RECURSE as _;
         #[doc(alias = "GST_PLUGIN_DEPENDENCY_FLAG_PATHS_ARE_DEFAULT_ONLY")]
-        const PATHS_ARE_DEFAULT_ONLY = ffi::GST_PLUGIN_DEPENDENCY_FLAG_PATHS_ARE_DEFAULT_ONLY as u32;
+        const PATHS_ARE_DEFAULT_ONLY = ffi::GST_PLUGIN_DEPENDENCY_FLAG_PATHS_ARE_DEFAULT_ONLY as _;
         #[doc(alias = "GST_PLUGIN_DEPENDENCY_FLAG_FILE_NAME_IS_SUFFIX")]
-        const FILE_NAME_IS_SUFFIX = ffi::GST_PLUGIN_DEPENDENCY_FLAG_FILE_NAME_IS_SUFFIX as u32;
+        const FILE_NAME_IS_SUFFIX = ffi::GST_PLUGIN_DEPENDENCY_FLAG_FILE_NAME_IS_SUFFIX as _;
         #[doc(alias = "GST_PLUGIN_DEPENDENCY_FLAG_FILE_NAME_IS_PREFIX")]
-        const FILE_NAME_IS_PREFIX = ffi::GST_PLUGIN_DEPENDENCY_FLAG_FILE_NAME_IS_PREFIX as u32;
+        const FILE_NAME_IS_PREFIX = ffi::GST_PLUGIN_DEPENDENCY_FLAG_FILE_NAME_IS_PREFIX as _;
         #[doc(alias = "GST_PLUGIN_DEPENDENCY_FLAG_PATHS_ARE_RELATIVE_TO_EXE")]
-        const PATHS_ARE_RELATIVE_TO_EXE = ffi::GST_PLUGIN_DEPENDENCY_FLAG_PATHS_ARE_RELATIVE_TO_EXE as u32;
+        const PATHS_ARE_RELATIVE_TO_EXE = ffi::GST_PLUGIN_DEPENDENCY_FLAG_PATHS_ARE_RELATIVE_TO_EXE as _;
     }
 }
 
@@ -1418,9 +1418,9 @@ bitflags! {
     #[doc(alias = "GstPluginFlags")]
     pub struct PluginFlags: u32 {
         #[doc(alias = "GST_PLUGIN_FLAG_CACHED")]
-        const CACHED = ffi::GST_PLUGIN_FLAG_CACHED as u32;
+        const CACHED = ffi::GST_PLUGIN_FLAG_CACHED as _;
         #[doc(alias = "GST_PLUGIN_FLAG_BLACKLISTED")]
-        const BLACKLISTED = ffi::GST_PLUGIN_FLAG_BLACKLISTED as u32;
+        const BLACKLISTED = ffi::GST_PLUGIN_FLAG_BLACKLISTED as _;
     }
 }
 
@@ -1478,11 +1478,11 @@ bitflags! {
     #[doc(alias = "GstSchedulingFlags")]
     pub struct SchedulingFlags: u32 {
         #[doc(alias = "GST_SCHEDULING_FLAG_SEEKABLE")]
-        const SEEKABLE = ffi::GST_SCHEDULING_FLAG_SEEKABLE as u32;
+        const SEEKABLE = ffi::GST_SCHEDULING_FLAG_SEEKABLE as _;
         #[doc(alias = "GST_SCHEDULING_FLAG_SEQUENTIAL")]
-        const SEQUENTIAL = ffi::GST_SCHEDULING_FLAG_SEQUENTIAL as u32;
+        const SEQUENTIAL = ffi::GST_SCHEDULING_FLAG_SEQUENTIAL as _;
         #[doc(alias = "GST_SCHEDULING_FLAG_BANDWIDTH_LIMITED")]
-        const BANDWIDTH_LIMITED = ffi::GST_SCHEDULING_FLAG_BANDWIDTH_LIMITED as u32;
+        const BANDWIDTH_LIMITED = ffi::GST_SCHEDULING_FLAG_BANDWIDTH_LIMITED as _;
     }
 }
 
@@ -1540,35 +1540,35 @@ bitflags! {
     #[doc(alias = "GstSeekFlags")]
     pub struct SeekFlags: u32 {
         #[doc(alias = "GST_SEEK_FLAG_FLUSH")]
-        const FLUSH = ffi::GST_SEEK_FLAG_FLUSH as u32;
+        const FLUSH = ffi::GST_SEEK_FLAG_FLUSH as _;
         #[doc(alias = "GST_SEEK_FLAG_ACCURATE")]
-        const ACCURATE = ffi::GST_SEEK_FLAG_ACCURATE as u32;
+        const ACCURATE = ffi::GST_SEEK_FLAG_ACCURATE as _;
         #[doc(alias = "GST_SEEK_FLAG_KEY_UNIT")]
-        const KEY_UNIT = ffi::GST_SEEK_FLAG_KEY_UNIT as u32;
+        const KEY_UNIT = ffi::GST_SEEK_FLAG_KEY_UNIT as _;
         #[doc(alias = "GST_SEEK_FLAG_SEGMENT")]
-        const SEGMENT = ffi::GST_SEEK_FLAG_SEGMENT as u32;
+        const SEGMENT = ffi::GST_SEEK_FLAG_SEGMENT as _;
         #[doc(alias = "GST_SEEK_FLAG_TRICKMODE")]
-        const TRICKMODE = ffi::GST_SEEK_FLAG_TRICKMODE as u32;
+        const TRICKMODE = ffi::GST_SEEK_FLAG_TRICKMODE as _;
         #[doc(alias = "GST_SEEK_FLAG_SKIP")]
-        const SKIP = ffi::GST_SEEK_FLAG_SKIP as u32;
+        const SKIP = ffi::GST_SEEK_FLAG_SKIP as _;
         #[doc(alias = "GST_SEEK_FLAG_SNAP_BEFORE")]
-        const SNAP_BEFORE = ffi::GST_SEEK_FLAG_SNAP_BEFORE as u32;
+        const SNAP_BEFORE = ffi::GST_SEEK_FLAG_SNAP_BEFORE as _;
         #[doc(alias = "GST_SEEK_FLAG_SNAP_AFTER")]
-        const SNAP_AFTER = ffi::GST_SEEK_FLAG_SNAP_AFTER as u32;
+        const SNAP_AFTER = ffi::GST_SEEK_FLAG_SNAP_AFTER as _;
         #[doc(alias = "GST_SEEK_FLAG_SNAP_NEAREST")]
-        const SNAP_NEAREST = ffi::GST_SEEK_FLAG_SNAP_NEAREST as u32;
+        const SNAP_NEAREST = ffi::GST_SEEK_FLAG_SNAP_NEAREST as _;
         #[doc(alias = "GST_SEEK_FLAG_TRICKMODE_KEY_UNITS")]
-        const TRICKMODE_KEY_UNITS = ffi::GST_SEEK_FLAG_TRICKMODE_KEY_UNITS as u32;
+        const TRICKMODE_KEY_UNITS = ffi::GST_SEEK_FLAG_TRICKMODE_KEY_UNITS as _;
         #[doc(alias = "GST_SEEK_FLAG_TRICKMODE_NO_AUDIO")]
-        const TRICKMODE_NO_AUDIO = ffi::GST_SEEK_FLAG_TRICKMODE_NO_AUDIO as u32;
+        const TRICKMODE_NO_AUDIO = ffi::GST_SEEK_FLAG_TRICKMODE_NO_AUDIO as _;
         #[cfg(any(feature = "v1_18", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
         #[doc(alias = "GST_SEEK_FLAG_TRICKMODE_FORWARD_PREDICTED")]
-        const TRICKMODE_FORWARD_PREDICTED = ffi::GST_SEEK_FLAG_TRICKMODE_FORWARD_PREDICTED as u32;
+        const TRICKMODE_FORWARD_PREDICTED = ffi::GST_SEEK_FLAG_TRICKMODE_FORWARD_PREDICTED as _;
         #[cfg(any(feature = "v1_18", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
         #[doc(alias = "GST_SEEK_FLAG_INSTANT_RATE_CHANGE")]
-        const INSTANT_RATE_CHANGE = ffi::GST_SEEK_FLAG_INSTANT_RATE_CHANGE as u32;
+        const INSTANT_RATE_CHANGE = ffi::GST_SEEK_FLAG_INSTANT_RATE_CHANGE as _;
     }
 }
 
@@ -1626,21 +1626,21 @@ bitflags! {
     #[doc(alias = "GstSegmentFlags")]
     pub struct SegmentFlags: u32 {
         #[doc(alias = "GST_SEGMENT_FLAG_RESET")]
-        const RESET = ffi::GST_SEGMENT_FLAG_RESET as u32;
+        const RESET = ffi::GST_SEGMENT_FLAG_RESET as _;
         #[doc(alias = "GST_SEGMENT_FLAG_TRICKMODE")]
-        const TRICKMODE = ffi::GST_SEGMENT_FLAG_TRICKMODE as u32;
+        const TRICKMODE = ffi::GST_SEGMENT_FLAG_TRICKMODE as _;
         #[doc(alias = "GST_SEGMENT_FLAG_SKIP")]
-        const SKIP = ffi::GST_SEGMENT_FLAG_SKIP as u32;
+        const SKIP = ffi::GST_SEGMENT_FLAG_SKIP as _;
         #[doc(alias = "GST_SEGMENT_FLAG_SEGMENT")]
-        const SEGMENT = ffi::GST_SEGMENT_FLAG_SEGMENT as u32;
+        const SEGMENT = ffi::GST_SEGMENT_FLAG_SEGMENT as _;
         #[doc(alias = "GST_SEGMENT_FLAG_TRICKMODE_KEY_UNITS")]
-        const TRICKMODE_KEY_UNITS = ffi::GST_SEGMENT_FLAG_TRICKMODE_KEY_UNITS as u32;
+        const TRICKMODE_KEY_UNITS = ffi::GST_SEGMENT_FLAG_TRICKMODE_KEY_UNITS as _;
         #[cfg(any(feature = "v1_18", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
         #[doc(alias = "GST_SEGMENT_FLAG_TRICKMODE_FORWARD_PREDICTED")]
-        const TRICKMODE_FORWARD_PREDICTED = ffi::GST_SEGMENT_FLAG_TRICKMODE_FORWARD_PREDICTED as u32;
+        const TRICKMODE_FORWARD_PREDICTED = ffi::GST_SEGMENT_FLAG_TRICKMODE_FORWARD_PREDICTED as _;
         #[doc(alias = "GST_SEGMENT_FLAG_TRICKMODE_NO_AUDIO")]
-        const TRICKMODE_NO_AUDIO = ffi::GST_SEGMENT_FLAG_TRICKMODE_NO_AUDIO as u32;
+        const TRICKMODE_NO_AUDIO = ffi::GST_SEGMENT_FLAG_TRICKMODE_NO_AUDIO as _;
     }
 }
 
@@ -1700,9 +1700,9 @@ bitflags! {
     #[doc(alias = "GstSerializeFlags")]
     pub struct SerializeFlags: u32 {
         #[doc(alias = "GST_SERIALIZE_FLAG_NONE")]
-        const NONE = ffi::GST_SERIALIZE_FLAG_NONE as u32;
+        const NONE = ffi::GST_SERIALIZE_FLAG_NONE as _;
         #[doc(alias = "GST_SERIALIZE_FLAG_BACKWARD_COMPAT")]
-        const BACKWARD_COMPAT = ffi::GST_SERIALIZE_FLAG_BACKWARD_COMPAT as u32;
+        const BACKWARD_COMPAT = ffi::GST_SERIALIZE_FLAG_BACKWARD_COMPAT as _;
     }
 }
 
@@ -1772,7 +1772,7 @@ bitflags! {
     #[doc(alias = "GstStackTraceFlags")]
     pub struct StackTraceFlags: u32 {
         #[doc(alias = "GST_STACK_TRACE_SHOW_FULL")]
-        const FULL = ffi::GST_STACK_TRACE_SHOW_FULL as u32;
+        const FULL = ffi::GST_STACK_TRACE_SHOW_FULL as _;
     }
 }
 
@@ -1830,11 +1830,11 @@ bitflags! {
     #[doc(alias = "GstStreamFlags")]
     pub struct StreamFlags: u32 {
         #[doc(alias = "GST_STREAM_FLAG_SPARSE")]
-        const SPARSE = ffi::GST_STREAM_FLAG_SPARSE as u32;
+        const SPARSE = ffi::GST_STREAM_FLAG_SPARSE as _;
         #[doc(alias = "GST_STREAM_FLAG_SELECT")]
-        const SELECT = ffi::GST_STREAM_FLAG_SELECT as u32;
+        const SELECT = ffi::GST_STREAM_FLAG_SELECT as _;
         #[doc(alias = "GST_STREAM_FLAG_UNSELECT")]
-        const UNSELECT = ffi::GST_STREAM_FLAG_UNSELECT as u32;
+        const UNSELECT = ffi::GST_STREAM_FLAG_UNSELECT as _;
     }
 }
 
@@ -1892,15 +1892,15 @@ bitflags! {
     #[doc(alias = "GstStreamType")]
     pub struct StreamType: u32 {
         #[doc(alias = "GST_STREAM_TYPE_UNKNOWN")]
-        const UNKNOWN = ffi::GST_STREAM_TYPE_UNKNOWN as u32;
+        const UNKNOWN = ffi::GST_STREAM_TYPE_UNKNOWN as _;
         #[doc(alias = "GST_STREAM_TYPE_AUDIO")]
-        const AUDIO = ffi::GST_STREAM_TYPE_AUDIO as u32;
+        const AUDIO = ffi::GST_STREAM_TYPE_AUDIO as _;
         #[doc(alias = "GST_STREAM_TYPE_VIDEO")]
-        const VIDEO = ffi::GST_STREAM_TYPE_VIDEO as u32;
+        const VIDEO = ffi::GST_STREAM_TYPE_VIDEO as _;
         #[doc(alias = "GST_STREAM_TYPE_CONTAINER")]
-        const CONTAINER = ffi::GST_STREAM_TYPE_CONTAINER as u32;
+        const CONTAINER = ffi::GST_STREAM_TYPE_CONTAINER as _;
         #[doc(alias = "GST_STREAM_TYPE_TEXT")]
-        const TEXT = ffi::GST_STREAM_TYPE_TEXT as u32;
+        const TEXT = ffi::GST_STREAM_TYPE_TEXT as _;
     }
 }
 

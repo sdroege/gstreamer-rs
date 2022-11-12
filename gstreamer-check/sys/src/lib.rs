@@ -41,7 +41,7 @@ pub struct GstHarness {
 
 impl ::std::fmt::Debug for GstHarness {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstHarness @ {:p}", self))
+        f.debug_struct(&format!("GstHarness @ {self:p}"))
             .field("element", &self.element)
             .field("srcpad", &self.srcpad)
             .field("sinkpad", &self.sinkpad)
@@ -83,7 +83,7 @@ pub struct GstTestClockClass {
 
 impl ::std::fmt::Debug for GstTestClockClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTestClockClass @ {:p}", self))
+        f.debug_struct(&format!("GstTestClockClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -107,7 +107,7 @@ pub struct GstTestClock {
 
 impl ::std::fmt::Debug for GstTestClock {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTestClock @ {:p}", self))
+        f.debug_struct(&format!("GstTestClock @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }

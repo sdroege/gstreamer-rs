@@ -45,6 +45,12 @@ pub trait ChildProxyExt: 'static {
     #[doc(alias = "get_child_by_name")]
     fn child_by_name(&self, name: &str) -> Option<glib::Object>;
 
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "gst_child_proxy_get_child_by_name_recurse")]
+    #[doc(alias = "get_child_by_name_recurse")]
+    fn child_by_name_recurse(&self, name: &str) -> Option<glib::Object>;
+
     #[doc(alias = "gst_child_proxy_get_children_count")]
     #[doc(alias = "get_children_count")]
     fn children_count(&self) -> u32;
@@ -109,6 +115,17 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
     fn child_by_name(&self, name: &str) -> Option<glib::Object> {
         unsafe {
             from_glib_full(ffi::gst_child_proxy_get_child_by_name(
+                self.as_ref().to_glib_none().0,
+                name.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    fn child_by_name_recurse(&self, name: &str) -> Option<glib::Object> {
+        unsafe {
+            from_glib_full(ffi::gst_child_proxy_get_child_by_name_recurse(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
             ))

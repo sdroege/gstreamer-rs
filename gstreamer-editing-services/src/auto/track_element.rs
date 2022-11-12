@@ -392,7 +392,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
                     self.as_ref().to_glib_none().0,
                     n_properties.as_mut_ptr(),
                 ),
-                n_properties.assume_init() as usize,
+                n_properties.assume_init() as _,
             );
             ret
         }

@@ -44,7 +44,7 @@ pub struct GstDmaBufAllocatorClass {
 
 impl ::std::fmt::Debug for GstDmaBufAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDmaBufAllocatorClass @ {:p}", self))
+        f.debug_struct(&format!("GstDmaBufAllocatorClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -58,7 +58,7 @@ pub struct GstFdAllocatorClass {
 
 impl ::std::fmt::Debug for GstFdAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstFdAllocatorClass @ {:p}", self))
+        f.debug_struct(&format!("GstFdAllocatorClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -74,7 +74,7 @@ pub struct GstPhysMemoryAllocatorInterface {
 
 impl ::std::fmt::Debug for GstPhysMemoryAllocatorInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPhysMemoryAllocatorInterface @ {:p}", self))
+        f.debug_struct(&format!("GstPhysMemoryAllocatorInterface @ {self:p}"))
             .field("get_phys_addr", &self.get_phys_addr)
             .finish()
     }
@@ -90,7 +90,7 @@ pub struct GstDmaBufAllocator {
 
 impl ::std::fmt::Debug for GstDmaBufAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDmaBufAllocator @ {:p}", self))
+        f.debug_struct(&format!("GstDmaBufAllocator @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -104,7 +104,7 @@ pub struct GstFdAllocator {
 
 impl ::std::fmt::Debug for GstFdAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstFdAllocator @ {:p}", self))
+        f.debug_struct(&format!("GstFdAllocator @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -119,7 +119,7 @@ pub struct GstPhysMemoryAllocator {
 
 impl ::std::fmt::Debug for GstPhysMemoryAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstPhysMemoryAllocator @ {:p}", self)
+        write!(f, "GstPhysMemoryAllocator @ {self:p}")
     }
 }
 

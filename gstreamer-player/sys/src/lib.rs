@@ -98,7 +98,7 @@ pub struct GstPlayerSignalDispatcherInterface {
 
 impl ::std::fmt::Debug for GstPlayerSignalDispatcherInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlayerSignalDispatcherInterface @ {:p}", self))
+        f.debug_struct(&format!("GstPlayerSignalDispatcherInterface @ {self:p}"))
             .field("parent_iface", &self.parent_iface)
             .field("dispatch", &self.dispatch)
             .finish()
@@ -148,7 +148,7 @@ pub struct GstPlayerVideoRendererInterface {
 
 impl ::std::fmt::Debug for GstPlayerVideoRendererInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlayerVideoRendererInterface @ {:p}", self))
+        f.debug_struct(&format!("GstPlayerVideoRendererInterface @ {self:p}"))
             .field("parent_iface", &self.parent_iface)
             .field("create_video_sink", &self.create_video_sink)
             .finish()
@@ -164,7 +164,7 @@ pub struct GstPlayerVisualization {
 
 impl ::std::fmt::Debug for GstPlayerVisualization {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlayerVisualization @ {:p}", self))
+        f.debug_struct(&format!("GstPlayerVisualization @ {self:p}"))
             .field("name", &self.name)
             .field("description", &self.description)
             .finish()
@@ -180,7 +180,7 @@ pub struct GstPlayer {
 
 impl ::std::fmt::Debug for GstPlayer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlayer @ {:p}", self)).finish()
+        f.debug_struct(&format!("GstPlayer @ {self:p}")).finish()
     }
 }
 
@@ -192,7 +192,7 @@ pub struct GstPlayerAudioInfo {
 
 impl ::std::fmt::Debug for GstPlayerAudioInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlayerAudioInfo @ {:p}", self))
+        f.debug_struct(&format!("GstPlayerAudioInfo @ {self:p}"))
             .finish()
     }
 }
@@ -205,11 +205,8 @@ pub struct GstPlayerGMainContextSignalDispatcher {
 
 impl ::std::fmt::Debug for GstPlayerGMainContextSignalDispatcher {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!(
-            "GstPlayerGMainContextSignalDispatcher @ {:p}",
-            self
-        ))
-        .finish()
+        f.debug_struct(&format!("GstPlayerGMainContextSignalDispatcher @ {self:p}"))
+            .finish()
     }
 }
 
@@ -221,7 +218,7 @@ pub struct GstPlayerMediaInfo {
 
 impl ::std::fmt::Debug for GstPlayerMediaInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlayerMediaInfo @ {:p}", self))
+        f.debug_struct(&format!("GstPlayerMediaInfo @ {self:p}"))
             .finish()
     }
 }
@@ -234,7 +231,7 @@ pub struct GstPlayerStreamInfo {
 
 impl ::std::fmt::Debug for GstPlayerStreamInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlayerStreamInfo @ {:p}", self))
+        f.debug_struct(&format!("GstPlayerStreamInfo @ {self:p}"))
             .finish()
     }
 }
@@ -247,7 +244,7 @@ pub struct GstPlayerSubtitleInfo {
 
 impl ::std::fmt::Debug for GstPlayerSubtitleInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlayerSubtitleInfo @ {:p}", self))
+        f.debug_struct(&format!("GstPlayerSubtitleInfo @ {self:p}"))
             .finish()
     }
 }
@@ -260,7 +257,7 @@ pub struct GstPlayerVideoInfo {
 
 impl ::std::fmt::Debug for GstPlayerVideoInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlayerVideoInfo @ {:p}", self))
+        f.debug_struct(&format!("GstPlayerVideoInfo @ {self:p}"))
             .finish()
     }
 }
@@ -273,7 +270,7 @@ pub struct GstPlayerVideoOverlayVideoRenderer {
 
 impl ::std::fmt::Debug for GstPlayerVideoOverlayVideoRenderer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlayerVideoOverlayVideoRenderer @ {:p}", self))
+        f.debug_struct(&format!("GstPlayerVideoOverlayVideoRenderer @ {self:p}"))
             .finish()
     }
 }
@@ -287,7 +284,7 @@ pub struct GstPlayerSignalDispatcher {
 
 impl ::std::fmt::Debug for GstPlayerSignalDispatcher {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstPlayerSignalDispatcher @ {:p}", self)
+        write!(f, "GstPlayerSignalDispatcher @ {self:p}")
     }
 }
 
@@ -299,7 +296,7 @@ pub struct GstPlayerVideoRenderer {
 
 impl ::std::fmt::Debug for GstPlayerVideoRenderer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstPlayerVideoRenderer @ {:p}", self)
+        write!(f, "GstPlayerVideoRenderer @ {self:p}")
     }
 }
 

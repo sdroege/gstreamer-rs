@@ -283,7 +283,7 @@ pub union GstRTSPMessage_type_data {
 
 impl ::std::fmt::Debug for GstRTSPMessage_type_data {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMessage_type_data @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPMessage_type_data @ {self:p}"))
             .field("request", unsafe { &self.request })
             .field("response", unsafe { &self.response })
             .field("data", unsafe { &self.data })
@@ -312,7 +312,7 @@ pub struct GstRTSPAuthCredential {
 
 impl ::std::fmt::Debug for GstRTSPAuthCredential {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPAuthCredential @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPAuthCredential @ {self:p}"))
             .field("scheme", &self.scheme)
             .field("params", &self.params)
             .field("authorization", &self.authorization)
@@ -329,7 +329,7 @@ pub struct GstRTSPAuthParam {
 
 impl ::std::fmt::Debug for GstRTSPAuthParam {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPAuthParam @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPAuthParam @ {self:p}"))
             .field("name", &self.name)
             .field("value", &self.value)
             .finish()
@@ -394,7 +394,7 @@ pub struct GstRTSPExtensionInterface {
 
 impl ::std::fmt::Debug for GstRTSPExtensionInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPExtensionInterface @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPExtensionInterface @ {self:p}"))
             .field("parent", &self.parent)
             .field("detect_server", &self.detect_server)
             .field("before_send", &self.before_send)
@@ -424,7 +424,7 @@ pub struct GstRTSPMessage {
 
 impl ::std::fmt::Debug for GstRTSPMessage {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMessage @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPMessage @ {self:p}"))
             .field("type_", &self.type_)
             .field("type_data", &self.type_data)
             .finish()
@@ -439,7 +439,7 @@ pub struct GstRTSPMessage_type_data_data {
 
 impl ::std::fmt::Debug for GstRTSPMessage_type_data_data {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMessage_type_data_data @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPMessage_type_data_data @ {self:p}"))
             .field("channel", &self.channel)
             .finish()
     }
@@ -455,7 +455,7 @@ pub struct GstRTSPMessage_type_data_request {
 
 impl ::std::fmt::Debug for GstRTSPMessage_type_data_request {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMessage_type_data_request @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPMessage_type_data_request @ {self:p}"))
             .field("method", &self.method)
             .field("uri", &self.uri)
             .field("version", &self.version)
@@ -473,7 +473,7 @@ pub struct GstRTSPMessage_type_data_response {
 
 impl ::std::fmt::Debug for GstRTSPMessage_type_data_response {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMessage_type_data_response @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPMessage_type_data_response @ {self:p}"))
             .field("code", &self.code)
             .field("reason", &self.reason)
             .field("version", &self.version)
@@ -490,7 +490,7 @@ pub struct GstRTSPRange {
 
 impl ::std::fmt::Debug for GstRTSPRange {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPRange @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPRange @ {self:p}"))
             .field("min", &self.min)
             .field("max", &self.max)
             .finish()
@@ -506,7 +506,7 @@ pub struct GstRTSPTime {
 
 impl ::std::fmt::Debug for GstRTSPTime {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPTime @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPTime @ {self:p}"))
             .field("type_", &self.type_)
             .field("seconds", &self.seconds)
             .finish()
@@ -524,7 +524,7 @@ pub struct GstRTSPTime2 {
 
 impl ::std::fmt::Debug for GstRTSPTime2 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPTime2 @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPTime2 @ {self:p}"))
             .field("frames", &self.frames)
             .field("year", &self.year)
             .field("month", &self.month)
@@ -545,7 +545,7 @@ pub struct GstRTSPTimeRange {
 
 impl ::std::fmt::Debug for GstRTSPTimeRange {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPTimeRange @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPTimeRange @ {self:p}"))
             .field("unit", &self.unit)
             .field("min", &self.min)
             .field("max", &self.max)
@@ -578,7 +578,7 @@ pub struct GstRTSPTransport {
 
 impl ::std::fmt::Debug for GstRTSPTransport {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPTransport @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPTransport @ {self:p}"))
             .field("trans", &self.trans)
             .field("profile", &self.profile)
             .field("lower_transport", &self.lower_transport)
@@ -613,7 +613,7 @@ pub struct GstRTSPUrl {
 
 impl ::std::fmt::Debug for GstRTSPUrl {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPUrl @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPUrl @ {self:p}"))
             .field("transports", &self.transports)
             .field("family", &self.family)
             .field("user", &self.user)
@@ -671,7 +671,7 @@ pub struct GstRTSPWatchFuncs {
 
 impl ::std::fmt::Debug for GstRTSPWatchFuncs {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPWatchFuncs @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPWatchFuncs @ {self:p}"))
             .field("message_received", &self.message_received)
             .field("message_sent", &self.message_sent)
             .field("closed", &self.closed)
@@ -694,7 +694,7 @@ pub struct GstRTSPExtension {
 
 impl ::std::fmt::Debug for GstRTSPExtension {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstRTSPExtension @ {:p}", self)
+        write!(f, "GstRTSPExtension @ {self:p}")
     }
 }
 

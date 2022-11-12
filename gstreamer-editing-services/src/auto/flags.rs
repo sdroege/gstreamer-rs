@@ -18,9 +18,9 @@ bitflags! {
     #[doc(alias = "GESMarkerFlags")]
     pub struct MarkerFlags: u32 {
         #[doc(alias = "GES_MARKER_FLAG_NONE")]
-        const NONE = ffi::GES_MARKER_FLAG_NONE as u32;
+        const NONE = ffi::GES_MARKER_FLAG_NONE as _;
         #[doc(alias = "GES_MARKER_FLAG_SNAPPABLE")]
-        const SNAPPABLE = ffi::GES_MARKER_FLAG_SNAPPABLE as u32;
+        const SNAPPABLE = ffi::GES_MARKER_FLAG_SNAPPABLE as _;
     }
 }
 
@@ -90,11 +90,11 @@ bitflags! {
     #[doc(alias = "GESMetaFlag")]
     pub struct MetaFlag: u32 {
         #[doc(alias = "GES_META_READABLE")]
-        const READABLE = ffi::GES_META_READABLE as u32;
+        const READABLE = ffi::GES_META_READABLE as _;
         #[doc(alias = "GES_META_WRITABLE")]
-        const WRITABLE = ffi::GES_META_WRITABLE as u32;
+        const WRITABLE = ffi::GES_META_WRITABLE as _;
         #[doc(alias = "GES_META_READ_WRITE")]
-        const READWRITE = ffi::GES_META_READ_WRITE as u32;
+        const READWRITE = ffi::GES_META_READ_WRITE as _;
     }
 }
 
@@ -152,15 +152,15 @@ bitflags! {
     #[doc(alias = "GESPipelineFlags")]
     pub struct PipelineFlags: u32 {
         #[doc(alias = "GES_PIPELINE_MODE_PREVIEW_AUDIO")]
-        const AUDIO_PREVIEW = ffi::GES_PIPELINE_MODE_PREVIEW_AUDIO as u32;
+        const AUDIO_PREVIEW = ffi::GES_PIPELINE_MODE_PREVIEW_AUDIO as _;
         #[doc(alias = "GES_PIPELINE_MODE_PREVIEW_VIDEO")]
-        const VIDEO_PREVIEW = ffi::GES_PIPELINE_MODE_PREVIEW_VIDEO as u32;
+        const VIDEO_PREVIEW = ffi::GES_PIPELINE_MODE_PREVIEW_VIDEO as _;
         #[doc(alias = "GES_PIPELINE_MODE_PREVIEW")]
-        const FULL_PREVIEW = ffi::GES_PIPELINE_MODE_PREVIEW as u32;
+        const FULL_PREVIEW = ffi::GES_PIPELINE_MODE_PREVIEW as _;
         #[doc(alias = "GES_PIPELINE_MODE_RENDER")]
-        const RENDER = ffi::GES_PIPELINE_MODE_RENDER as u32;
+        const RENDER = ffi::GES_PIPELINE_MODE_RENDER as _;
         #[doc(alias = "GES_PIPELINE_MODE_SMART_RENDER")]
-        const SMART_RENDER = ffi::GES_PIPELINE_MODE_SMART_RENDER as u32;
+        const SMART_RENDER = ffi::GES_PIPELINE_MODE_SMART_RENDER as _;
     }
 }
 
@@ -218,15 +218,15 @@ bitflags! {
     #[doc(alias = "GESTrackType")]
     pub struct TrackType: u32 {
         #[doc(alias = "GES_TRACK_TYPE_UNKNOWN")]
-        const UNKNOWN = ffi::GES_TRACK_TYPE_UNKNOWN as u32;
+        const UNKNOWN = ffi::GES_TRACK_TYPE_UNKNOWN as _;
         #[doc(alias = "GES_TRACK_TYPE_AUDIO")]
-        const AUDIO = ffi::GES_TRACK_TYPE_AUDIO as u32;
+        const AUDIO = ffi::GES_TRACK_TYPE_AUDIO as _;
         #[doc(alias = "GES_TRACK_TYPE_VIDEO")]
-        const VIDEO = ffi::GES_TRACK_TYPE_VIDEO as u32;
+        const VIDEO = ffi::GES_TRACK_TYPE_VIDEO as _;
         #[doc(alias = "GES_TRACK_TYPE_TEXT")]
-        const TEXT = ffi::GES_TRACK_TYPE_TEXT as u32;
+        const TEXT = ffi::GES_TRACK_TYPE_TEXT as _;
         #[doc(alias = "GES_TRACK_TYPE_CUSTOM")]
-        const CUSTOM = ffi::GES_TRACK_TYPE_CUSTOM as u32;
+        const CUSTOM = ffi::GES_TRACK_TYPE_CUSTOM as _;
     }
 }
 

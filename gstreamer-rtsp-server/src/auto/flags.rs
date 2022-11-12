@@ -14,15 +14,15 @@ bitflags! {
     #[doc(alias = "GstRTSPAddressFlags")]
     pub struct RTSPAddressFlags: u32 {
         #[doc(alias = "GST_RTSP_ADDRESS_FLAG_IPV4")]
-        const IPV4 = ffi::GST_RTSP_ADDRESS_FLAG_IPV4 as u32;
+        const IPV4 = ffi::GST_RTSP_ADDRESS_FLAG_IPV4 as _;
         #[doc(alias = "GST_RTSP_ADDRESS_FLAG_IPV6")]
-        const IPV6 = ffi::GST_RTSP_ADDRESS_FLAG_IPV6 as u32;
+        const IPV6 = ffi::GST_RTSP_ADDRESS_FLAG_IPV6 as _;
         #[doc(alias = "GST_RTSP_ADDRESS_FLAG_EVEN_PORT")]
-        const EVEN_PORT = ffi::GST_RTSP_ADDRESS_FLAG_EVEN_PORT as u32;
+        const EVEN_PORT = ffi::GST_RTSP_ADDRESS_FLAG_EVEN_PORT as _;
         #[doc(alias = "GST_RTSP_ADDRESS_FLAG_MULTICAST")]
-        const MULTICAST = ffi::GST_RTSP_ADDRESS_FLAG_MULTICAST as u32;
+        const MULTICAST = ffi::GST_RTSP_ADDRESS_FLAG_MULTICAST as _;
         #[doc(alias = "GST_RTSP_ADDRESS_FLAG_UNICAST")]
-        const UNICAST = ffi::GST_RTSP_ADDRESS_FLAG_UNICAST as u32;
+        const UNICAST = ffi::GST_RTSP_ADDRESS_FLAG_UNICAST as _;
     }
 }
 
@@ -47,9 +47,9 @@ bitflags! {
     #[doc(alias = "GstRTSPTransportMode")]
     pub struct RTSPTransportMode: u32 {
         #[doc(alias = "GST_RTSP_TRANSPORT_MODE_PLAY")]
-        const PLAY = ffi::GST_RTSP_TRANSPORT_MODE_PLAY as u32;
+        const PLAY = ffi::GST_RTSP_TRANSPORT_MODE_PLAY as _;
         #[doc(alias = "GST_RTSP_TRANSPORT_MODE_RECORD")]
-        const RECORD = ffi::GST_RTSP_TRANSPORT_MODE_RECORD as u32;
+        const RECORD = ffi::GST_RTSP_TRANSPORT_MODE_RECORD as _;
     }
 }
 

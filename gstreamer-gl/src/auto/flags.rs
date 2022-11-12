@@ -15,13 +15,13 @@ bitflags! {
     #[doc(alias = "GstGLAPI")]
     pub struct GLAPI: u32 {
         #[doc(alias = "GST_GL_API_OPENGL")]
-        const OPENGL = ffi::GST_GL_API_OPENGL as u32;
+        const OPENGL = ffi::GST_GL_API_OPENGL as _;
         #[doc(alias = "GST_GL_API_OPENGL3")]
-        const OPENGL3 = ffi::GST_GL_API_OPENGL3 as u32;
+        const OPENGL3 = ffi::GST_GL_API_OPENGL3 as _;
         #[doc(alias = "GST_GL_API_GLES1")]
-        const GLES1 = ffi::GST_GL_API_GLES1 as u32;
+        const GLES1 = ffi::GST_GL_API_GLES1 as _;
         #[doc(alias = "GST_GL_API_GLES2")]
-        const GLES2 = ffi::GST_GL_API_GLES2 as u32;
+        const GLES2 = ffi::GST_GL_API_GLES2 as _;
     }
 }
 
@@ -103,13 +103,13 @@ bitflags! {
     #[doc(alias = "GstGLConfigSurfaceType")]
     pub struct GLConfigSurfaceType: u32 {
         #[doc(alias = "GST_GL_CONFIG_SURFACE_TYPE_NONE")]
-        const NONE = ffi::GST_GL_CONFIG_SURFACE_TYPE_NONE as u32;
+        const NONE = ffi::GST_GL_CONFIG_SURFACE_TYPE_NONE as _;
         #[doc(alias = "GST_GL_CONFIG_SURFACE_TYPE_WINDOW")]
-        const WINDOW = ffi::GST_GL_CONFIG_SURFACE_TYPE_WINDOW as u32;
+        const WINDOW = ffi::GST_GL_CONFIG_SURFACE_TYPE_WINDOW as _;
         #[doc(alias = "GST_GL_CONFIG_SURFACE_TYPE_PBUFFER")]
-        const PBUFFER = ffi::GST_GL_CONFIG_SURFACE_TYPE_PBUFFER as u32;
+        const PBUFFER = ffi::GST_GL_CONFIG_SURFACE_TYPE_PBUFFER as _;
         #[doc(alias = "GST_GL_CONFIG_SURFACE_TYPE_PIXMAP")]
-        const PIXMAP = ffi::GST_GL_CONFIG_SURFACE_TYPE_PIXMAP as u32;
+        const PIXMAP = ffi::GST_GL_CONFIG_SURFACE_TYPE_PIXMAP as _;
     }
 }
 
@@ -190,37 +190,37 @@ bitflags! {
     #[doc(alias = "GstGLDisplayType")]
     pub struct GLDisplayType: u32 {
         #[doc(alias = "GST_GL_DISPLAY_TYPE_X11")]
-        const X11 = ffi::GST_GL_DISPLAY_TYPE_X11 as u32;
+        const X11 = ffi::GST_GL_DISPLAY_TYPE_X11 as _;
         #[doc(alias = "GST_GL_DISPLAY_TYPE_WAYLAND")]
-        const WAYLAND = ffi::GST_GL_DISPLAY_TYPE_WAYLAND as u32;
+        const WAYLAND = ffi::GST_GL_DISPLAY_TYPE_WAYLAND as _;
         #[doc(alias = "GST_GL_DISPLAY_TYPE_COCOA")]
-        const COCOA = ffi::GST_GL_DISPLAY_TYPE_COCOA as u32;
+        const COCOA = ffi::GST_GL_DISPLAY_TYPE_COCOA as _;
         #[doc(alias = "GST_GL_DISPLAY_TYPE_WIN32")]
-        const WIN32 = ffi::GST_GL_DISPLAY_TYPE_WIN32 as u32;
+        const WIN32 = ffi::GST_GL_DISPLAY_TYPE_WIN32 as _;
         #[doc(alias = "GST_GL_DISPLAY_TYPE_DISPMANX")]
-        const DISPMANX = ffi::GST_GL_DISPLAY_TYPE_DISPMANX as u32;
+        const DISPMANX = ffi::GST_GL_DISPLAY_TYPE_DISPMANX as _;
         #[doc(alias = "GST_GL_DISPLAY_TYPE_EGL")]
-        const EGL = ffi::GST_GL_DISPLAY_TYPE_EGL as u32;
+        const EGL = ffi::GST_GL_DISPLAY_TYPE_EGL as _;
         #[doc(alias = "GST_GL_DISPLAY_TYPE_VIV_FB")]
-        const VIV_FB = ffi::GST_GL_DISPLAY_TYPE_VIV_FB as u32;
+        const VIV_FB = ffi::GST_GL_DISPLAY_TYPE_VIV_FB as _;
         #[doc(alias = "GST_GL_DISPLAY_TYPE_GBM")]
-        const GBM = ffi::GST_GL_DISPLAY_TYPE_GBM as u32;
+        const GBM = ffi::GST_GL_DISPLAY_TYPE_GBM as _;
         #[cfg(any(feature = "v1_18", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
         #[doc(alias = "GST_GL_DISPLAY_TYPE_EGL_DEVICE")]
-        const EGL_DEVICE = ffi::GST_GL_DISPLAY_TYPE_EGL_DEVICE as u32;
+        const EGL_DEVICE = ffi::GST_GL_DISPLAY_TYPE_EGL_DEVICE as _;
         #[cfg(any(feature = "v1_20", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
         #[doc(alias = "GST_GL_DISPLAY_TYPE_EAGL")]
-        const EAGL = ffi::GST_GL_DISPLAY_TYPE_EAGL as u32;
+        const EAGL = ffi::GST_GL_DISPLAY_TYPE_EAGL as _;
         #[cfg(any(feature = "v1_20", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
         #[doc(alias = "GST_GL_DISPLAY_TYPE_WINRT")]
-        const WINRT = ffi::GST_GL_DISPLAY_TYPE_WINRT as u32;
+        const WINRT = ffi::GST_GL_DISPLAY_TYPE_WINRT as _;
         #[cfg(any(feature = "v1_20", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
         #[doc(alias = "GST_GL_DISPLAY_TYPE_ANDROID")]
-        const ANDROID = ffi::GST_GL_DISPLAY_TYPE_ANDROID as u32;
+        const ANDROID = ffi::GST_GL_DISPLAY_TYPE_ANDROID as _;
     }
 }
 
@@ -278,15 +278,15 @@ bitflags! {
     #[doc(alias = "GstGLPlatform")]
     pub struct GLPlatform: u32 {
         #[doc(alias = "GST_GL_PLATFORM_EGL")]
-        const EGL = ffi::GST_GL_PLATFORM_EGL as u32;
+        const EGL = ffi::GST_GL_PLATFORM_EGL as _;
         #[doc(alias = "GST_GL_PLATFORM_GLX")]
-        const GLX = ffi::GST_GL_PLATFORM_GLX as u32;
+        const GLX = ffi::GST_GL_PLATFORM_GLX as _;
         #[doc(alias = "GST_GL_PLATFORM_WGL")]
-        const WGL = ffi::GST_GL_PLATFORM_WGL as u32;
+        const WGL = ffi::GST_GL_PLATFORM_WGL as _;
         #[doc(alias = "GST_GL_PLATFORM_CGL")]
-        const CGL = ffi::GST_GL_PLATFORM_CGL as u32;
+        const CGL = ffi::GST_GL_PLATFORM_CGL as _;
         #[doc(alias = "GST_GL_PLATFORM_EAGL")]
-        const EAGL = ffi::GST_GL_PLATFORM_EAGL as u32;
+        const EAGL = ffi::GST_GL_PLATFORM_EAGL as _;
     }
 }
 
@@ -370,11 +370,11 @@ bitflags! {
     #[doc(alias = "GstGLSLProfile")]
     pub struct GLSLProfile: u32 {
         #[doc(alias = "GST_GLSL_PROFILE_ES")]
-        const ES = ffi::GST_GLSL_PROFILE_ES as u32;
+        const ES = ffi::GST_GLSL_PROFILE_ES as _;
         #[doc(alias = "GST_GLSL_PROFILE_CORE")]
-        const CORE = ffi::GST_GLSL_PROFILE_CORE as u32;
+        const CORE = ffi::GST_GLSL_PROFILE_CORE as _;
         #[doc(alias = "GST_GLSL_PROFILE_COMPATIBILITY")]
-        const COMPATIBILITY = ffi::GST_GLSL_PROFILE_COMPATIBILITY as u32;
+        const COMPATIBILITY = ffi::GST_GLSL_PROFILE_COMPATIBILITY as _;
     }
 }
 
