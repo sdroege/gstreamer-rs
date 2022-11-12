@@ -14,11 +14,11 @@ bitflags! {
     #[doc(alias = "GstDiscovererSerializeFlags")]
     pub struct DiscovererSerializeFlags: u32 {
         #[doc(alias = "GST_DISCOVERER_SERIALIZE_CAPS")]
-        const CAPS = ffi::GST_DISCOVERER_SERIALIZE_CAPS as u32;
+        const CAPS = ffi::GST_DISCOVERER_SERIALIZE_CAPS as _;
         #[doc(alias = "GST_DISCOVERER_SERIALIZE_TAGS")]
-        const TAGS = ffi::GST_DISCOVERER_SERIALIZE_TAGS as u32;
+        const TAGS = ffi::GST_DISCOVERER_SERIALIZE_TAGS as _;
         #[doc(alias = "GST_DISCOVERER_SERIALIZE_MISC")]
-        const MISC = ffi::GST_DISCOVERER_SERIALIZE_MISC as u32;
+        const MISC = ffi::GST_DISCOVERER_SERIALIZE_MISC as _;
     }
 }
 
@@ -78,23 +78,23 @@ bitflags! {
     #[doc(alias = "GstPbUtilsCapsDescriptionFlags")]
     pub struct PbUtilsCapsDescriptionFlags: u32 {
         #[doc(alias = "GST_PBUTILS_CAPS_DESCRIPTION_FLAG_CONTAINER")]
-        const CONTAINER = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_CONTAINER as u32;
+        const CONTAINER = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_CONTAINER as _;
         #[doc(alias = "GST_PBUTILS_CAPS_DESCRIPTION_FLAG_AUDIO")]
-        const AUDIO = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_AUDIO as u32;
+        const AUDIO = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_AUDIO as _;
         #[doc(alias = "GST_PBUTILS_CAPS_DESCRIPTION_FLAG_VIDEO")]
-        const VIDEO = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_VIDEO as u32;
+        const VIDEO = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_VIDEO as _;
         #[doc(alias = "GST_PBUTILS_CAPS_DESCRIPTION_FLAG_IMAGE")]
-        const IMAGE = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_IMAGE as u32;
+        const IMAGE = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_IMAGE as _;
         #[doc(alias = "GST_PBUTILS_CAPS_DESCRIPTION_FLAG_SUBTITLE")]
-        const SUBTITLE = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_SUBTITLE as u32;
+        const SUBTITLE = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_SUBTITLE as _;
         #[doc(alias = "GST_PBUTILS_CAPS_DESCRIPTION_FLAG_TAG")]
-        const TAG = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_TAG as u32;
+        const TAG = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_TAG as _;
         #[doc(alias = "GST_PBUTILS_CAPS_DESCRIPTION_FLAG_GENERIC")]
-        const GENERIC = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_GENERIC as u32;
+        const GENERIC = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_GENERIC as _;
         #[cfg(any(feature = "v1_22", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
         #[doc(alias = "GST_PBUTILS_CAPS_DESCRIPTION_FLAG_METADATA")]
-        const METADATA = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_METADATA as u32;
+        const METADATA = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_METADATA as _;
     }
 }
 

@@ -45,7 +45,7 @@ pub struct GstAppSinkCallbacks {
 
 impl ::std::fmt::Debug for GstAppSinkCallbacks {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAppSinkCallbacks @ {:p}", self))
+        f.debug_struct(&format!("GstAppSinkCallbacks @ {self:p}"))
             .field("eos", &self.eos)
             .field("new_preroll", &self.new_preroll)
             .field("new_sample", &self.new_sample)
@@ -74,7 +74,7 @@ pub struct GstAppSinkClass {
 
 impl ::std::fmt::Debug for GstAppSinkClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAppSinkClass @ {:p}", self))
+        f.debug_struct(&format!("GstAppSinkClass @ {self:p}"))
             .field("basesink_class", &self.basesink_class)
             .field("eos", &self.eos)
             .field("new_preroll", &self.new_preroll)
@@ -107,7 +107,7 @@ pub struct GstAppSrcCallbacks {
 
 impl ::std::fmt::Debug for GstAppSrcCallbacks {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAppSrcCallbacks @ {:p}", self))
+        f.debug_struct(&format!("GstAppSrcCallbacks @ {self:p}"))
             .field("need_data", &self.need_data)
             .field("enough_data", &self.enough_data)
             .field("seek_data", &self.seek_data)
@@ -134,7 +134,7 @@ pub struct GstAppSrcClass {
 
 impl ::std::fmt::Debug for GstAppSrcClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAppSrcClass @ {:p}", self))
+        f.debug_struct(&format!("GstAppSrcClass @ {self:p}"))
             .field("basesrc_class", &self.basesrc_class)
             .field("need_data", &self.need_data)
             .field("enough_data", &self.enough_data)
@@ -166,7 +166,7 @@ pub struct GstAppSink {
 
 impl ::std::fmt::Debug for GstAppSink {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAppSink @ {:p}", self))
+        f.debug_struct(&format!("GstAppSink @ {self:p}"))
             .field("basesink", &self.basesink)
             .finish()
     }
@@ -182,7 +182,7 @@ pub struct GstAppSrc {
 
 impl ::std::fmt::Debug for GstAppSrc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAppSrc @ {:p}", self))
+        f.debug_struct(&format!("GstAppSrc @ {self:p}"))
             .field("basesrc", &self.basesrc)
             .finish()
     }

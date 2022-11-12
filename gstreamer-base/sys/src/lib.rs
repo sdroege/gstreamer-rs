@@ -64,7 +64,7 @@ pub union GstCollectData_ABI {
 
 impl ::std::fmt::Debug for GstCollectData_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstCollectData_ABI @ {:p}", self))
+        f.debug_struct(&format!("GstCollectData_ABI @ {self:p}"))
             .field("abi", unsafe { &self.abi })
             .finish()
     }
@@ -232,7 +232,7 @@ pub struct GstAggregatorClass {
 
 impl ::std::fmt::Debug for GstAggregatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAggregatorClass @ {:p}", self))
+        f.debug_struct(&format!("GstAggregatorClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("flush", &self.flush)
             .field("clip", &self.clip)
@@ -280,7 +280,7 @@ pub struct GstAggregatorPadClass {
 
 impl ::std::fmt::Debug for GstAggregatorPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAggregatorPadClass @ {:p}", self))
+        f.debug_struct(&format!("GstAggregatorPadClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("flush", &self.flush)
             .field("skip_buffer", &self.skip_buffer)
@@ -344,7 +344,7 @@ pub struct GstBaseParseClass {
 
 impl ::std::fmt::Debug for GstBaseParseClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBaseParseClass @ {:p}", self))
+        f.debug_struct(&format!("GstBaseParseClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("start", &self.start)
             .field("stop", &self.stop)
@@ -378,7 +378,7 @@ pub struct GstBaseParseFrame {
 
 impl ::std::fmt::Debug for GstBaseParseFrame {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBaseParseFrame @ {:p}", self))
+        f.debug_struct(&format!("GstBaseParseFrame @ {self:p}"))
             .field("buffer", &self.buffer)
             .field("out_buffer", &self.out_buffer)
             .field("flags", &self.flags)
@@ -441,7 +441,7 @@ pub struct GstBaseSinkClass {
 
 impl ::std::fmt::Debug for GstBaseSinkClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBaseSinkClass @ {:p}", self))
+        f.debug_struct(&format!("GstBaseSinkClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("get_caps", &self.get_caps)
             .field("set_caps", &self.set_caps)
@@ -534,7 +534,7 @@ pub struct GstBaseSrcClass {
 
 impl ::std::fmt::Debug for GstBaseSrcClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBaseSrcClass @ {:p}", self))
+        f.debug_struct(&format!("GstBaseSrcClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("get_caps", &self.get_caps)
             .field("negotiate", &self.negotiate)
@@ -694,7 +694,7 @@ pub struct GstBaseTransformClass {
 
 impl ::std::fmt::Debug for GstBaseTransformClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBaseTransformClass @ {:p}", self))
+        f.debug_struct(&format!("GstBaseTransformClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("passthrough_on_same_caps", &self.passthrough_on_same_caps)
             .field(
@@ -747,7 +747,7 @@ pub struct GstBitReader {
 
 impl ::std::fmt::Debug for GstBitReader {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBitReader @ {:p}", self))
+        f.debug_struct(&format!("GstBitReader @ {self:p}"))
             .field("data", &self.data)
             .field("size", &self.size)
             .field("byte", &self.byte)
@@ -769,7 +769,7 @@ pub struct GstBitWriter {
 
 impl ::std::fmt::Debug for GstBitWriter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBitWriter @ {:p}", self))
+        f.debug_struct(&format!("GstBitWriter @ {self:p}"))
             .field("data", &self.data)
             .field("bit_size", &self.bit_size)
             .finish()
@@ -787,7 +787,7 @@ pub struct GstByteReader {
 
 impl ::std::fmt::Debug for GstByteReader {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstByteReader @ {:p}", self))
+        f.debug_struct(&format!("GstByteReader @ {self:p}"))
             .field("data", &self.data)
             .field("size", &self.size)
             .field("byte", &self.byte)
@@ -807,7 +807,7 @@ pub struct GstByteWriter {
 
 impl ::std::fmt::Debug for GstByteWriter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstByteWriter @ {:p}", self))
+        f.debug_struct(&format!("GstByteWriter @ {self:p}"))
             .field("parent", &self.parent)
             .field("alloc_size", &self.alloc_size)
             .field("fixed", &self.fixed)
@@ -831,7 +831,7 @@ pub struct GstCollectData {
 
 impl ::std::fmt::Debug for GstCollectData {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstCollectData @ {:p}", self))
+        f.debug_struct(&format!("GstCollectData @ {self:p}"))
             .field("collect", &self.collect)
             .field("pad", &self.pad)
             .field("buffer", &self.buffer)
@@ -858,7 +858,7 @@ pub struct GstCollectData_ABI_abi {
 
 impl ::std::fmt::Debug for GstCollectData_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstCollectData_ABI_abi @ {:p}", self))
+        f.debug_struct(&format!("GstCollectData_ABI_abi @ {self:p}"))
             .field("dts", &self.dts)
             .finish()
     }
@@ -873,7 +873,7 @@ pub struct GstCollectPadsClass {
 
 impl ::std::fmt::Debug for GstCollectPadsClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstCollectPadsClass @ {:p}", self))
+        f.debug_struct(&format!("GstCollectPadsClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -898,7 +898,7 @@ pub struct GstDataQueueClass {
 
 impl ::std::fmt::Debug for GstDataQueueClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDataQueueClass @ {:p}", self))
+        f.debug_struct(&format!("GstDataQueueClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("empty", &self.empty)
             .field("full", &self.full)
@@ -920,7 +920,7 @@ pub struct GstDataQueueItem {
 
 impl ::std::fmt::Debug for GstDataQueueItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDataQueueItem @ {:p}", self))
+        f.debug_struct(&format!("GstDataQueueItem @ {self:p}"))
             .field("object", &self.object)
             .field("size", &self.size)
             .field("duration", &self.duration)
@@ -948,7 +948,7 @@ pub struct GstDataQueueSize {
 
 impl ::std::fmt::Debug for GstDataQueueSize {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDataQueueSize @ {:p}", self))
+        f.debug_struct(&format!("GstDataQueueSize @ {self:p}"))
             .field("visible", &self.visible)
             .field("bytes", &self.bytes)
             .field("time", &self.time)
@@ -964,7 +964,7 @@ pub struct GstFlowCombiner {
 
 impl ::std::fmt::Debug for GstFlowCombiner {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstFlowCombiner @ {:p}", self))
+        f.debug_struct(&format!("GstFlowCombiner @ {self:p}"))
             .finish()
     }
 }
@@ -984,7 +984,7 @@ pub struct GstPushSrcClass {
 
 impl ::std::fmt::Debug for GstPushSrcClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPushSrcClass @ {:p}", self))
+        f.debug_struct(&format!("GstPushSrcClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("create", &self.create)
             .field("alloc", &self.alloc)
@@ -1010,7 +1010,7 @@ pub struct GstAdapter {
 
 impl ::std::fmt::Debug for GstAdapter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAdapter @ {:p}", self)).finish()
+        f.debug_struct(&format!("GstAdapter @ {self:p}")).finish()
     }
 }
 
@@ -1025,7 +1025,7 @@ pub struct GstAggregator {
 
 impl ::std::fmt::Debug for GstAggregator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAggregator @ {:p}", self))
+        f.debug_struct(&format!("GstAggregator @ {self:p}"))
             .field("parent", &self.parent)
             .field("srcpad", &self.srcpad)
             .finish()
@@ -1043,7 +1043,7 @@ pub struct GstAggregatorPad {
 
 impl ::std::fmt::Debug for GstAggregatorPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAggregatorPad @ {:p}", self))
+        f.debug_struct(&format!("GstAggregatorPad @ {self:p}"))
             .field("parent", &self.parent)
             .field("segment", &self.segment)
             .finish()
@@ -1064,7 +1064,7 @@ pub struct GstBaseParse {
 
 impl ::std::fmt::Debug for GstBaseParse {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBaseParse @ {:p}", self))
+        f.debug_struct(&format!("GstBaseParse @ {self:p}"))
             .field("element", &self.element)
             .field("sinkpad", &self.sinkpad)
             .field("srcpad", &self.srcpad)
@@ -1102,7 +1102,7 @@ pub struct GstBaseSink {
 
 impl ::std::fmt::Debug for GstBaseSink {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBaseSink @ {:p}", self))
+        f.debug_struct(&format!("GstBaseSink @ {self:p}"))
             .field("element", &self.element)
             .field("sinkpad", &self.sinkpad)
             .field("pad_mode", &self.pad_mode)
@@ -1147,7 +1147,7 @@ pub struct GstBaseSrc {
 
 impl ::std::fmt::Debug for GstBaseSrc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBaseSrc @ {:p}", self))
+        f.debug_struct(&format!("GstBaseSrc @ {self:p}"))
             .field("element", &self.element)
             .field("srcpad", &self.srcpad)
             .field("live_lock", &self.live_lock)
@@ -1185,7 +1185,7 @@ pub struct GstBaseTransform {
 
 impl ::std::fmt::Debug for GstBaseTransform {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBaseTransform @ {:p}", self))
+        f.debug_struct(&format!("GstBaseTransform @ {self:p}"))
             .field("element", &self.element)
             .field("sinkpad", &self.sinkpad)
             .field("srcpad", &self.srcpad)
@@ -1208,7 +1208,7 @@ pub struct GstCollectPads {
 
 impl ::std::fmt::Debug for GstCollectPads {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstCollectPads @ {:p}", self))
+        f.debug_struct(&format!("GstCollectPads @ {self:p}"))
             .field("object", &self.object)
             .field("data", &self.data)
             .finish()
@@ -1225,7 +1225,7 @@ pub struct GstDataQueue {
 
 impl ::std::fmt::Debug for GstDataQueue {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDataQueue @ {:p}", self))
+        f.debug_struct(&format!("GstDataQueue @ {self:p}"))
             .field("object", &self.object)
             .finish()
     }
@@ -1240,7 +1240,7 @@ pub struct GstPushSrc {
 
 impl ::std::fmt::Debug for GstPushSrc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPushSrc @ {:p}", self))
+        f.debug_struct(&format!("GstPushSrc @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }

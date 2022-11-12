@@ -17,29 +17,29 @@ bitflags! {
     #[doc(alias = "GstNavigationModifierType")]
     pub struct NavigationModifierType: u32 {
         #[doc(alias = "GST_NAVIGATION_MODIFIER_SHIFT_MASK")]
-        const SHIFT_MASK = ffi::GST_NAVIGATION_MODIFIER_SHIFT_MASK as u32;
+        const SHIFT_MASK = ffi::GST_NAVIGATION_MODIFIER_SHIFT_MASK as _;
         #[doc(alias = "GST_NAVIGATION_MODIFIER_LOCK_MASK")]
-        const LOCK_MASK = ffi::GST_NAVIGATION_MODIFIER_LOCK_MASK as u32;
+        const LOCK_MASK = ffi::GST_NAVIGATION_MODIFIER_LOCK_MASK as _;
         #[doc(alias = "GST_NAVIGATION_MODIFIER_CONTROL_MASK")]
-        const CONTROL_MASK = ffi::GST_NAVIGATION_MODIFIER_CONTROL_MASK as u32;
+        const CONTROL_MASK = ffi::GST_NAVIGATION_MODIFIER_CONTROL_MASK as _;
         #[doc(alias = "GST_NAVIGATION_MODIFIER_ALT_MASK")]
-        const ALT_MASK = ffi::GST_NAVIGATION_MODIFIER_ALT_MASK as u32;
+        const ALT_MASK = ffi::GST_NAVIGATION_MODIFIER_ALT_MASK as _;
         #[doc(alias = "GST_NAVIGATION_MODIFIER_BUTTON1_MASK")]
-        const BUTTON1_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON1_MASK as u32;
+        const BUTTON1_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON1_MASK as _;
         #[doc(alias = "GST_NAVIGATION_MODIFIER_BUTTON2_MASK")]
-        const BUTTON2_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON2_MASK as u32;
+        const BUTTON2_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON2_MASK as _;
         #[doc(alias = "GST_NAVIGATION_MODIFIER_BUTTON3_MASK")]
-        const BUTTON3_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON3_MASK as u32;
+        const BUTTON3_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON3_MASK as _;
         #[doc(alias = "GST_NAVIGATION_MODIFIER_BUTTON4_MASK")]
-        const BUTTON4_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON4_MASK as u32;
+        const BUTTON4_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON4_MASK as _;
         #[doc(alias = "GST_NAVIGATION_MODIFIER_BUTTON5_MASK")]
-        const BUTTON5_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON5_MASK as u32;
+        const BUTTON5_MASK = ffi::GST_NAVIGATION_MODIFIER_BUTTON5_MASK as _;
         #[doc(alias = "GST_NAVIGATION_MODIFIER_SUPER_MASK")]
-        const SUPER_MASK = ffi::GST_NAVIGATION_MODIFIER_SUPER_MASK as u32;
+        const SUPER_MASK = ffi::GST_NAVIGATION_MODIFIER_SUPER_MASK as _;
         #[doc(alias = "GST_NAVIGATION_MODIFIER_HYPER_MASK")]
-        const HYPER_MASK = ffi::GST_NAVIGATION_MODIFIER_HYPER_MASK as u32;
+        const HYPER_MASK = ffi::GST_NAVIGATION_MODIFIER_HYPER_MASK as _;
         #[doc(alias = "GST_NAVIGATION_MODIFIER_META_MASK")]
-        const META_MASK = ffi::GST_NAVIGATION_MODIFIER_META_MASK as u32;
+        const META_MASK = ffi::GST_NAVIGATION_MODIFIER_META_MASK as _;
     }
 }
 
@@ -109,29 +109,29 @@ bitflags! {
     #[doc(alias = "GstVideoBufferFlags")]
     pub struct VideoBufferFlags: u32 {
         #[doc(alias = "GST_VIDEO_BUFFER_FLAG_INTERLACED")]
-        const INTERLACED = ffi::GST_VIDEO_BUFFER_FLAG_INTERLACED as u32;
+        const INTERLACED = ffi::GST_VIDEO_BUFFER_FLAG_INTERLACED as _;
         #[doc(alias = "GST_VIDEO_BUFFER_FLAG_TFF")]
-        const TFF = ffi::GST_VIDEO_BUFFER_FLAG_TFF as u32;
+        const TFF = ffi::GST_VIDEO_BUFFER_FLAG_TFF as _;
         #[doc(alias = "GST_VIDEO_BUFFER_FLAG_RFF")]
-        const RFF = ffi::GST_VIDEO_BUFFER_FLAG_RFF as u32;
+        const RFF = ffi::GST_VIDEO_BUFFER_FLAG_RFF as _;
         #[doc(alias = "GST_VIDEO_BUFFER_FLAG_ONEFIELD")]
-        const ONEFIELD = ffi::GST_VIDEO_BUFFER_FLAG_ONEFIELD as u32;
+        const ONEFIELD = ffi::GST_VIDEO_BUFFER_FLAG_ONEFIELD as _;
         #[doc(alias = "GST_VIDEO_BUFFER_FLAG_MULTIPLE_VIEW")]
-        const MULTIPLE_VIEW = ffi::GST_VIDEO_BUFFER_FLAG_MULTIPLE_VIEW as u32;
+        const MULTIPLE_VIEW = ffi::GST_VIDEO_BUFFER_FLAG_MULTIPLE_VIEW as _;
         #[doc(alias = "GST_VIDEO_BUFFER_FLAG_FIRST_IN_BUNDLE")]
-        const FIRST_IN_BUNDLE = ffi::GST_VIDEO_BUFFER_FLAG_FIRST_IN_BUNDLE as u32;
+        const FIRST_IN_BUNDLE = ffi::GST_VIDEO_BUFFER_FLAG_FIRST_IN_BUNDLE as _;
         #[cfg(any(feature = "v1_16", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
         #[doc(alias = "GST_VIDEO_BUFFER_FLAG_TOP_FIELD")]
-        const TOP_FIELD = ffi::GST_VIDEO_BUFFER_FLAG_TOP_FIELD as u32;
+        const TOP_FIELD = ffi::GST_VIDEO_BUFFER_FLAG_TOP_FIELD as _;
         #[cfg(any(feature = "v1_16", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
         #[doc(alias = "GST_VIDEO_BUFFER_FLAG_BOTTOM_FIELD")]
-        const BOTTOM_FIELD = ffi::GST_VIDEO_BUFFER_FLAG_BOTTOM_FIELD as u32;
+        const BOTTOM_FIELD = ffi::GST_VIDEO_BUFFER_FLAG_BOTTOM_FIELD as _;
         #[cfg(any(feature = "v1_18", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
         #[doc(alias = "GST_VIDEO_BUFFER_FLAG_MARKER")]
-        const MARKER = ffi::GST_VIDEO_BUFFER_FLAG_MARKER as u32;
+        const MARKER = ffi::GST_VIDEO_BUFFER_FLAG_MARKER as _;
     }
 }
 
@@ -189,21 +189,21 @@ bitflags! {
     #[doc(alias = "GstVideoChromaSite")]
     pub struct VideoChromaSite: u32 {
         #[doc(alias = "GST_VIDEO_CHROMA_SITE_NONE")]
-        const NONE = ffi::GST_VIDEO_CHROMA_SITE_NONE as u32;
+        const NONE = ffi::GST_VIDEO_CHROMA_SITE_NONE as _;
         #[doc(alias = "GST_VIDEO_CHROMA_SITE_H_COSITED")]
-        const H_COSITED = ffi::GST_VIDEO_CHROMA_SITE_H_COSITED as u32;
+        const H_COSITED = ffi::GST_VIDEO_CHROMA_SITE_H_COSITED as _;
         #[doc(alias = "GST_VIDEO_CHROMA_SITE_V_COSITED")]
-        const V_COSITED = ffi::GST_VIDEO_CHROMA_SITE_V_COSITED as u32;
+        const V_COSITED = ffi::GST_VIDEO_CHROMA_SITE_V_COSITED as _;
         #[doc(alias = "GST_VIDEO_CHROMA_SITE_ALT_LINE")]
-        const ALT_LINE = ffi::GST_VIDEO_CHROMA_SITE_ALT_LINE as u32;
+        const ALT_LINE = ffi::GST_VIDEO_CHROMA_SITE_ALT_LINE as _;
         #[doc(alias = "GST_VIDEO_CHROMA_SITE_COSITED")]
-        const COSITED = ffi::GST_VIDEO_CHROMA_SITE_COSITED as u32;
+        const COSITED = ffi::GST_VIDEO_CHROMA_SITE_COSITED as _;
         #[doc(alias = "GST_VIDEO_CHROMA_SITE_JPEG")]
-        const JPEG = ffi::GST_VIDEO_CHROMA_SITE_JPEG as u32;
+        const JPEG = ffi::GST_VIDEO_CHROMA_SITE_JPEG as _;
         #[doc(alias = "GST_VIDEO_CHROMA_SITE_MPEG2")]
-        const MPEG2 = ffi::GST_VIDEO_CHROMA_SITE_MPEG2 as u32;
+        const MPEG2 = ffi::GST_VIDEO_CHROMA_SITE_MPEG2 as _;
         #[doc(alias = "GST_VIDEO_CHROMA_SITE_DV")]
-        const DV = ffi::GST_VIDEO_CHROMA_SITE_DV as u32;
+        const DV = ffi::GST_VIDEO_CHROMA_SITE_DV as _;
     }
 }
 
@@ -278,17 +278,17 @@ bitflags! {
     #[doc(alias = "GstVideoCodecFrameFlags")]
     pub struct VideoCodecFrameFlags: u32 {
         #[doc(alias = "GST_VIDEO_CODEC_FRAME_FLAG_DECODE_ONLY")]
-        const DECODE_ONLY = ffi::GST_VIDEO_CODEC_FRAME_FLAG_DECODE_ONLY as u32;
+        const DECODE_ONLY = ffi::GST_VIDEO_CODEC_FRAME_FLAG_DECODE_ONLY as _;
         #[doc(alias = "GST_VIDEO_CODEC_FRAME_FLAG_SYNC_POINT")]
-        const SYNC_POINT = ffi::GST_VIDEO_CODEC_FRAME_FLAG_SYNC_POINT as u32;
+        const SYNC_POINT = ffi::GST_VIDEO_CODEC_FRAME_FLAG_SYNC_POINT as _;
         #[doc(alias = "GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME")]
-        const FORCE_KEYFRAME = ffi::GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME as u32;
+        const FORCE_KEYFRAME = ffi::GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME as _;
         #[doc(alias = "GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME_HEADERS")]
-        const FORCE_KEYFRAME_HEADERS = ffi::GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME_HEADERS as u32;
+        const FORCE_KEYFRAME_HEADERS = ffi::GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME_HEADERS as _;
         #[cfg(any(feature = "v1_20", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
         #[doc(alias = "GST_VIDEO_CODEC_FRAME_FLAG_CORRUPTED")]
-        const CORRUPTED = ffi::GST_VIDEO_CODEC_FRAME_FLAG_CORRUPTED as u32;
+        const CORRUPTED = ffi::GST_VIDEO_CODEC_FRAME_FLAG_CORRUPTED as _;
     }
 }
 
@@ -356,9 +356,9 @@ bitflags! {
     #[doc(alias = "GstVideoDecoderRequestSyncPointFlags")]
     pub struct VideoDecoderRequestSyncPointFlags: u32 {
         #[doc(alias = "GST_VIDEO_DECODER_REQUEST_SYNC_POINT_DISCARD_INPUT")]
-        const DISCARD_INPUT = ffi::GST_VIDEO_DECODER_REQUEST_SYNC_POINT_DISCARD_INPUT as u32;
+        const DISCARD_INPUT = ffi::GST_VIDEO_DECODER_REQUEST_SYNC_POINT_DISCARD_INPUT as _;
         #[doc(alias = "GST_VIDEO_DECODER_REQUEST_SYNC_POINT_CORRUPT_OUTPUT")]
-        const CORRUPT_OUTPUT = ffi::GST_VIDEO_DECODER_REQUEST_SYNC_POINT_CORRUPT_OUTPUT as u32;
+        const CORRUPT_OUTPUT = ffi::GST_VIDEO_DECODER_REQUEST_SYNC_POINT_CORRUPT_OUTPUT as _;
     }
 }
 
@@ -428,9 +428,9 @@ bitflags! {
     #[doc(alias = "GstVideoFlags")]
     pub struct VideoFlags: u32 {
         #[doc(alias = "GST_VIDEO_FLAG_VARIABLE_FPS")]
-        const VARIABLE_FPS = ffi::GST_VIDEO_FLAG_VARIABLE_FPS as u32;
+        const VARIABLE_FPS = ffi::GST_VIDEO_FLAG_VARIABLE_FPS as _;
         #[doc(alias = "GST_VIDEO_FLAG_PREMULTIPLIED_ALPHA")]
-        const PREMULTIPLIED_ALPHA = ffi::GST_VIDEO_FLAG_PREMULTIPLIED_ALPHA as u32;
+        const PREMULTIPLIED_ALPHA = ffi::GST_VIDEO_FLAG_PREMULTIPLIED_ALPHA as _;
     }
 }
 
@@ -488,27 +488,27 @@ bitflags! {
     #[doc(alias = "GstVideoFormatFlags")]
     pub struct VideoFormatFlags: u32 {
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_YUV")]
-        const YUV = ffi::GST_VIDEO_FORMAT_FLAG_YUV as u32;
+        const YUV = ffi::GST_VIDEO_FORMAT_FLAG_YUV as _;
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_RGB")]
-        const RGB = ffi::GST_VIDEO_FORMAT_FLAG_RGB as u32;
+        const RGB = ffi::GST_VIDEO_FORMAT_FLAG_RGB as _;
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_GRAY")]
-        const GRAY = ffi::GST_VIDEO_FORMAT_FLAG_GRAY as u32;
+        const GRAY = ffi::GST_VIDEO_FORMAT_FLAG_GRAY as _;
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_ALPHA")]
-        const ALPHA = ffi::GST_VIDEO_FORMAT_FLAG_ALPHA as u32;
+        const ALPHA = ffi::GST_VIDEO_FORMAT_FLAG_ALPHA as _;
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_LE")]
-        const LE = ffi::GST_VIDEO_FORMAT_FLAG_LE as u32;
+        const LE = ffi::GST_VIDEO_FORMAT_FLAG_LE as _;
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_PALETTE")]
-        const PALETTE = ffi::GST_VIDEO_FORMAT_FLAG_PALETTE as u32;
+        const PALETTE = ffi::GST_VIDEO_FORMAT_FLAG_PALETTE as _;
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_COMPLEX")]
-        const COMPLEX = ffi::GST_VIDEO_FORMAT_FLAG_COMPLEX as u32;
+        const COMPLEX = ffi::GST_VIDEO_FORMAT_FLAG_COMPLEX as _;
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_UNPACK")]
-        const UNPACK = ffi::GST_VIDEO_FORMAT_FLAG_UNPACK as u32;
+        const UNPACK = ffi::GST_VIDEO_FORMAT_FLAG_UNPACK as _;
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_TILED")]
-        const TILED = ffi::GST_VIDEO_FORMAT_FLAG_TILED as u32;
+        const TILED = ffi::GST_VIDEO_FORMAT_FLAG_TILED as _;
         #[cfg(any(feature = "v1_22", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_SUBTILES")]
-        const SUBTILES = ffi::GST_VIDEO_FORMAT_FLAG_SUBTILES as u32;
+        const SUBTILES = ffi::GST_VIDEO_FORMAT_FLAG_SUBTILES as _;
     }
 }
 
@@ -566,25 +566,25 @@ bitflags! {
     #[doc(alias = "GstVideoFrameFlags")]
     pub struct VideoFrameFlags: u32 {
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_INTERLACED")]
-        const INTERLACED = ffi::GST_VIDEO_FRAME_FLAG_INTERLACED as u32;
+        const INTERLACED = ffi::GST_VIDEO_FRAME_FLAG_INTERLACED as _;
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_TFF")]
-        const TFF = ffi::GST_VIDEO_FRAME_FLAG_TFF as u32;
+        const TFF = ffi::GST_VIDEO_FRAME_FLAG_TFF as _;
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_RFF")]
-        const RFF = ffi::GST_VIDEO_FRAME_FLAG_RFF as u32;
+        const RFF = ffi::GST_VIDEO_FRAME_FLAG_RFF as _;
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_ONEFIELD")]
-        const ONEFIELD = ffi::GST_VIDEO_FRAME_FLAG_ONEFIELD as u32;
+        const ONEFIELD = ffi::GST_VIDEO_FRAME_FLAG_ONEFIELD as _;
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_MULTIPLE_VIEW")]
-        const MULTIPLE_VIEW = ffi::GST_VIDEO_FRAME_FLAG_MULTIPLE_VIEW as u32;
+        const MULTIPLE_VIEW = ffi::GST_VIDEO_FRAME_FLAG_MULTIPLE_VIEW as _;
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_FIRST_IN_BUNDLE")]
-        const FIRST_IN_BUNDLE = ffi::GST_VIDEO_FRAME_FLAG_FIRST_IN_BUNDLE as u32;
+        const FIRST_IN_BUNDLE = ffi::GST_VIDEO_FRAME_FLAG_FIRST_IN_BUNDLE as _;
         #[cfg(any(feature = "v1_16", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_TOP_FIELD")]
-        const TOP_FIELD = ffi::GST_VIDEO_FRAME_FLAG_TOP_FIELD as u32;
+        const TOP_FIELD = ffi::GST_VIDEO_FRAME_FLAG_TOP_FIELD as _;
         #[cfg(any(feature = "v1_16", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_BOTTOM_FIELD")]
-        const BOTTOM_FIELD = ffi::GST_VIDEO_FRAME_FLAG_BOTTOM_FIELD as u32;
+        const BOTTOM_FIELD = ffi::GST_VIDEO_FRAME_FLAG_BOTTOM_FIELD as _;
     }
 }
 
@@ -642,19 +642,19 @@ bitflags! {
     #[doc(alias = "GstVideoMultiviewFlags")]
     pub struct VideoMultiviewFlags: u32 {
         #[doc(alias = "GST_VIDEO_MULTIVIEW_FLAGS_RIGHT_VIEW_FIRST")]
-        const RIGHT_VIEW_FIRST = ffi::GST_VIDEO_MULTIVIEW_FLAGS_RIGHT_VIEW_FIRST as u32;
+        const RIGHT_VIEW_FIRST = ffi::GST_VIDEO_MULTIVIEW_FLAGS_RIGHT_VIEW_FIRST as _;
         #[doc(alias = "GST_VIDEO_MULTIVIEW_FLAGS_LEFT_FLIPPED")]
-        const LEFT_FLIPPED = ffi::GST_VIDEO_MULTIVIEW_FLAGS_LEFT_FLIPPED as u32;
+        const LEFT_FLIPPED = ffi::GST_VIDEO_MULTIVIEW_FLAGS_LEFT_FLIPPED as _;
         #[doc(alias = "GST_VIDEO_MULTIVIEW_FLAGS_LEFT_FLOPPED")]
-        const LEFT_FLOPPED = ffi::GST_VIDEO_MULTIVIEW_FLAGS_LEFT_FLOPPED as u32;
+        const LEFT_FLOPPED = ffi::GST_VIDEO_MULTIVIEW_FLAGS_LEFT_FLOPPED as _;
         #[doc(alias = "GST_VIDEO_MULTIVIEW_FLAGS_RIGHT_FLIPPED")]
-        const RIGHT_FLIPPED = ffi::GST_VIDEO_MULTIVIEW_FLAGS_RIGHT_FLIPPED as u32;
+        const RIGHT_FLIPPED = ffi::GST_VIDEO_MULTIVIEW_FLAGS_RIGHT_FLIPPED as _;
         #[doc(alias = "GST_VIDEO_MULTIVIEW_FLAGS_RIGHT_FLOPPED")]
-        const RIGHT_FLOPPED = ffi::GST_VIDEO_MULTIVIEW_FLAGS_RIGHT_FLOPPED as u32;
+        const RIGHT_FLOPPED = ffi::GST_VIDEO_MULTIVIEW_FLAGS_RIGHT_FLOPPED as _;
         #[doc(alias = "GST_VIDEO_MULTIVIEW_FLAGS_HALF_ASPECT")]
-        const HALF_ASPECT = ffi::GST_VIDEO_MULTIVIEW_FLAGS_HALF_ASPECT as u32;
+        const HALF_ASPECT = ffi::GST_VIDEO_MULTIVIEW_FLAGS_HALF_ASPECT as _;
         #[doc(alias = "GST_VIDEO_MULTIVIEW_FLAGS_MIXED_MONO")]
-        const MIXED_MONO = ffi::GST_VIDEO_MULTIVIEW_FLAGS_MIXED_MONO as u32;
+        const MIXED_MONO = ffi::GST_VIDEO_MULTIVIEW_FLAGS_MIXED_MONO as _;
     }
 }
 
@@ -712,9 +712,9 @@ bitflags! {
     #[doc(alias = "GstVideoOverlayFormatFlags")]
     pub struct VideoOverlayFormatFlags: u32 {
         #[doc(alias = "GST_VIDEO_OVERLAY_FORMAT_FLAG_PREMULTIPLIED_ALPHA")]
-        const PREMULTIPLIED_ALPHA = ffi::GST_VIDEO_OVERLAY_FORMAT_FLAG_PREMULTIPLIED_ALPHA as u32;
+        const PREMULTIPLIED_ALPHA = ffi::GST_VIDEO_OVERLAY_FORMAT_FLAG_PREMULTIPLIED_ALPHA as _;
         #[doc(alias = "GST_VIDEO_OVERLAY_FORMAT_FLAG_GLOBAL_ALPHA")]
-        const GLOBAL_ALPHA = ffi::GST_VIDEO_OVERLAY_FORMAT_FLAG_GLOBAL_ALPHA as u32;
+        const GLOBAL_ALPHA = ffi::GST_VIDEO_OVERLAY_FORMAT_FLAG_GLOBAL_ALPHA as _;
     }
 }
 
@@ -780,9 +780,9 @@ bitflags! {
     #[doc(alias = "GstVideoPackFlags")]
     pub struct VideoPackFlags: u32 {
         #[doc(alias = "GST_VIDEO_PACK_FLAG_TRUNCATE_RANGE")]
-        const TRUNCATE_RANGE = ffi::GST_VIDEO_PACK_FLAG_TRUNCATE_RANGE as u32;
+        const TRUNCATE_RANGE = ffi::GST_VIDEO_PACK_FLAG_TRUNCATE_RANGE as _;
         #[doc(alias = "GST_VIDEO_PACK_FLAG_INTERLACED")]
-        const INTERLACED = ffi::GST_VIDEO_PACK_FLAG_INTERLACED as u32;
+        const INTERLACED = ffi::GST_VIDEO_PACK_FLAG_INTERLACED as _;
     }
 }
 
@@ -840,9 +840,9 @@ bitflags! {
     #[doc(alias = "GstVideoTimeCodeFlags")]
     pub struct VideoTimeCodeFlags: u32 {
         #[doc(alias = "GST_VIDEO_TIME_CODE_FLAGS_DROP_FRAME")]
-        const DROP_FRAME = ffi::GST_VIDEO_TIME_CODE_FLAGS_DROP_FRAME as u32;
+        const DROP_FRAME = ffi::GST_VIDEO_TIME_CODE_FLAGS_DROP_FRAME as _;
         #[doc(alias = "GST_VIDEO_TIME_CODE_FLAGS_INTERLACED")]
-        const INTERLACED = ffi::GST_VIDEO_TIME_CODE_FLAGS_INTERLACED as u32;
+        const INTERLACED = ffi::GST_VIDEO_TIME_CODE_FLAGS_INTERLACED as _;
     }
 }
 

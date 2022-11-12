@@ -711,7 +711,7 @@ pub union GstVideoCodecFrame_abidata {
 
 impl ::std::fmt::Debug for GstVideoCodecFrame_abidata {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoCodecFrame_abidata @ {:p}", self))
+        f.debug_struct(&format!("GstVideoCodecFrame_abidata @ {self:p}"))
             .field("ABI", unsafe { &self.ABI })
             .finish()
     }
@@ -726,7 +726,7 @@ pub union GstVideoInfo_ABI {
 
 impl ::std::fmt::Debug for GstVideoInfo_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoInfo_ABI @ {:p}", self))
+        f.debug_struct(&format!("GstVideoInfo_ABI @ {self:p}"))
             .field("abi", unsafe { &self.abi })
             .finish()
     }
@@ -776,7 +776,7 @@ pub struct GstColorBalanceChannelClass {
 
 impl ::std::fmt::Debug for GstColorBalanceChannelClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstColorBalanceChannelClass @ {:p}", self))
+        f.debug_struct(&format!("GstColorBalanceChannelClass @ {self:p}"))
             .field("parent", &self.parent)
             .field("value_changed", &self.value_changed)
             .finish()
@@ -800,7 +800,7 @@ pub struct GstColorBalanceInterface {
 
 impl ::std::fmt::Debug for GstColorBalanceInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstColorBalanceInterface @ {:p}", self))
+        f.debug_struct(&format!("GstColorBalanceInterface @ {self:p}"))
             .field("iface", &self.iface)
             .field("list_channels", &self.list_channels)
             .field("set_value", &self.set_value)
@@ -821,7 +821,7 @@ pub struct GstNavigationInterface {
 
 impl ::std::fmt::Debug for GstNavigationInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstNavigationInterface @ {:p}", self))
+        f.debug_struct(&format!("GstNavigationInterface @ {self:p}"))
             .field("iface", &self.iface)
             .field("send_event", &self.send_event)
             .field("send_event_simple", &self.send_event_simple)
@@ -840,7 +840,7 @@ pub struct GstVideoAFDMeta {
 
 impl ::std::fmt::Debug for GstVideoAFDMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoAFDMeta @ {:p}", self))
+        f.debug_struct(&format!("GstVideoAFDMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("field", &self.field)
             .field("spec", &self.spec)
@@ -858,7 +858,7 @@ pub struct GstVideoAffineTransformationMeta {
 
 impl ::std::fmt::Debug for GstVideoAffineTransformationMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoAffineTransformationMeta @ {:p}", self))
+        f.debug_struct(&format!("GstVideoAffineTransformationMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("matrix", &self.matrix)
             .finish()
@@ -897,7 +897,7 @@ pub struct GstVideoAggregatorClass {
 
 impl ::std::fmt::Debug for GstVideoAggregatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoAggregatorClass @ {:p}", self))
+        f.debug_struct(&format!("GstVideoAggregatorClass @ {self:p}"))
             .field("update_caps", &self.update_caps)
             .field("aggregate_frames", &self.aggregate_frames)
             .field("create_output_buffer", &self.create_output_buffer)
@@ -922,7 +922,7 @@ pub struct GstVideoAggregatorConvertPadClass {
 
 impl ::std::fmt::Debug for GstVideoAggregatorConvertPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoAggregatorConvertPadClass @ {:p}", self))
+        f.debug_struct(&format!("GstVideoAggregatorConvertPadClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("create_conversion_info", &self.create_conversion_info)
             .finish()
@@ -977,7 +977,7 @@ pub struct GstVideoAggregatorPadClass {
 
 impl ::std::fmt::Debug for GstVideoAggregatorPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoAggregatorPadClass @ {:p}", self))
+        f.debug_struct(&format!("GstVideoAggregatorPadClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("update_conversion_info", &self.update_conversion_info)
             .field("prepare_frame", &self.prepare_frame)
@@ -1007,8 +1007,7 @@ pub struct GstVideoAggregatorParallelConvertPadClass {
 impl ::std::fmt::Debug for GstVideoAggregatorParallelConvertPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!(
-            "GstVideoAggregatorParallelConvertPadClass @ {:p}",
-            self
+            "GstVideoAggregatorParallelConvertPadClass @ {self:p}"
         ))
         .field("parent_class", &self.parent_class)
         .finish()
@@ -1035,7 +1034,7 @@ pub struct GstVideoAlignment {
 
 impl ::std::fmt::Debug for GstVideoAlignment {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoAlignment @ {:p}", self))
+        f.debug_struct(&format!("GstVideoAlignment @ {self:p}"))
             .field("padding_top", &self.padding_top)
             .field("padding_bottom", &self.padding_bottom)
             .field("padding_left", &self.padding_left)
@@ -1057,7 +1056,7 @@ pub struct GstVideoAncillary {
 
 impl ::std::fmt::Debug for GstVideoAncillary {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoAncillary @ {:p}", self))
+        f.debug_struct(&format!("GstVideoAncillary @ {self:p}"))
             .field("DID", &self.DID)
             .field("SDID_block_number", &self.SDID_block_number)
             .field("data_count", &self.data_count)
@@ -1077,7 +1076,7 @@ pub struct GstVideoBarMeta {
 
 impl ::std::fmt::Debug for GstVideoBarMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoBarMeta @ {:p}", self))
+        f.debug_struct(&format!("GstVideoBarMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("field", &self.field)
             .field("is_letterbox", &self.is_letterbox)
@@ -1095,7 +1094,7 @@ pub struct GstVideoBufferPoolClass {
 
 impl ::std::fmt::Debug for GstVideoBufferPoolClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoBufferPoolClass @ {:p}", self))
+        f.debug_struct(&format!("GstVideoBufferPoolClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -1120,7 +1119,7 @@ pub struct GstVideoCaptionMeta {
 
 impl ::std::fmt::Debug for GstVideoCaptionMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoCaptionMeta @ {:p}", self))
+        f.debug_struct(&format!("GstVideoCaptionMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("caption_type", &self.caption_type)
             .field("data", &self.data)
@@ -1146,7 +1145,7 @@ pub struct GstVideoCodecAlphaMeta {
 
 impl ::std::fmt::Debug for GstVideoCodecAlphaMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoCodecAlphaMeta @ {:p}", self))
+        f.debug_struct(&format!("GstVideoCodecAlphaMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("buffer", &self.buffer)
             .finish()
@@ -1176,7 +1175,7 @@ pub struct GstVideoCodecFrame {
 
 impl ::std::fmt::Debug for GstVideoCodecFrame {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoCodecFrame @ {:p}", self))
+        f.debug_struct(&format!("GstVideoCodecFrame @ {self:p}"))
             .field("system_frame_number", &self.system_frame_number)
             .field("dts", &self.dts)
             .field("pts", &self.pts)
@@ -1201,7 +1200,7 @@ pub struct GstVideoCodecFrame_abidata_ABI {
 
 impl ::std::fmt::Debug for GstVideoCodecFrame_abidata_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoCodecFrame_abidata_ABI @ {:p}", self))
+        f.debug_struct(&format!("GstVideoCodecFrame_abidata_ABI @ {self:p}"))
             .finish()
     }
 }
@@ -1221,7 +1220,7 @@ pub struct GstVideoCodecState {
 
 impl ::std::fmt::Debug for GstVideoCodecState {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoCodecState @ {:p}", self))
+        f.debug_struct(&format!("GstVideoCodecState @ {self:p}"))
             .field("info", &self.info)
             .field("caps", &self.caps)
             .field("codec_data", &self.codec_data)
@@ -1248,7 +1247,7 @@ pub struct GstVideoColorPrimariesInfo {
 
 impl ::std::fmt::Debug for GstVideoColorPrimariesInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoColorPrimariesInfo @ {:p}", self))
+        f.debug_struct(&format!("GstVideoColorPrimariesInfo @ {self:p}"))
             .field("primaries", &self.primaries)
             .field("Wx", &self.Wx)
             .field("Wy", &self.Wy)
@@ -1273,7 +1272,7 @@ pub struct GstVideoColorimetry {
 
 impl ::std::fmt::Debug for GstVideoColorimetry {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoColorimetry @ {:p}", self))
+        f.debug_struct(&format!("GstVideoColorimetry @ {self:p}"))
             .field("range", &self.range)
             .field("matrix", &self.matrix)
             .field("transfer", &self.transfer)
@@ -1292,7 +1291,7 @@ pub struct GstVideoContentLightLevel {
 
 impl ::std::fmt::Debug for GstVideoContentLightLevel {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoContentLightLevel @ {:p}", self))
+        f.debug_struct(&format!("GstVideoContentLightLevel @ {self:p}"))
             .field("max_content_light_level", &self.max_content_light_level)
             .field(
                 "max_frame_average_light_level",
@@ -1322,7 +1321,7 @@ pub struct GstVideoCropMeta {
 
 impl ::std::fmt::Debug for GstVideoCropMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoCropMeta @ {:p}", self))
+        f.debug_struct(&format!("GstVideoCropMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("x", &self.x)
             .field("y", &self.y)
@@ -1391,7 +1390,7 @@ pub struct GstVideoDecoderClass {
 
 impl ::std::fmt::Debug for GstVideoDecoderClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoDecoderClass @ {:p}", self))
+        f.debug_struct(&format!("GstVideoDecoderClass @ {self:p}"))
             .field("open", &self.open)
             .field("close", &self.close)
             .field("start", &self.start)
@@ -1433,7 +1432,7 @@ pub struct GstVideoDirectionInterface {
 
 impl ::std::fmt::Debug for GstVideoDirectionInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoDirectionInterface @ {:p}", self))
+        f.debug_struct(&format!("GstVideoDirectionInterface @ {self:p}"))
             .field("iface", &self.iface)
             .finish()
     }
@@ -1493,7 +1492,7 @@ pub struct GstVideoEncoderClass {
 
 impl ::std::fmt::Debug for GstVideoEncoderClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoEncoderClass @ {:p}", self))
+        f.debug_struct(&format!("GstVideoEncoderClass @ {self:p}"))
             .field("open", &self.open)
             .field("close", &self.close)
             .field("start", &self.start)
@@ -1552,7 +1551,7 @@ pub struct GstVideoFilterClass {
 
 impl ::std::fmt::Debug for GstVideoFilterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoFilterClass @ {:p}", self))
+        f.debug_struct(&format!("GstVideoFilterClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("set_info", &self.set_info)
             .field("transform_frame", &self.transform_frame)
@@ -1590,7 +1589,7 @@ pub struct GstVideoFormatInfo {
 
 impl ::std::fmt::Debug for GstVideoFormatInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoFormatInfo @ {:p}", self))
+        f.debug_struct(&format!("GstVideoFormatInfo @ {self:p}"))
             .field("format", &self.format)
             .field("name", &self.name)
             .field("description", &self.description)
@@ -1631,7 +1630,7 @@ pub struct GstVideoFrame {
 
 impl ::std::fmt::Debug for GstVideoFrame {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoFrame @ {:p}", self))
+        f.debug_struct(&format!("GstVideoFrame @ {self:p}"))
             .field("info", &self.info)
             .field("flags", &self.flags)
             .field("buffer", &self.buffer)
@@ -1659,7 +1658,7 @@ pub struct GstVideoGLTextureUploadMeta {
 
 impl ::std::fmt::Debug for GstVideoGLTextureUploadMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoGLTextureUploadMeta @ {:p}", self))
+        f.debug_struct(&format!("GstVideoGLTextureUploadMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("texture_orientation", &self.texture_orientation)
             .field("n_textures", &self.n_textures)
@@ -1691,7 +1690,7 @@ pub struct GstVideoInfo {
 
 impl ::std::fmt::Debug for GstVideoInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoInfo @ {:p}", self))
+        f.debug_struct(&format!("GstVideoInfo @ {self:p}"))
             .field("finfo", &self.finfo)
             .field("interlace_mode", &self.interlace_mode)
             .field("flags", &self.flags)
@@ -1722,7 +1721,7 @@ pub struct GstVideoInfo_ABI_abi {
 
 impl ::std::fmt::Debug for GstVideoInfo_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoInfo_ABI_abi @ {:p}", self))
+        f.debug_struct(&format!("GstVideoInfo_ABI_abi @ {self:p}"))
             .field("multiview_mode", &self.multiview_mode)
             .field("multiview_flags", &self.multiview_flags)
             .field("field_order", &self.field_order)
@@ -1742,7 +1741,7 @@ pub struct GstVideoMasteringDisplayInfo {
 
 impl ::std::fmt::Debug for GstVideoMasteringDisplayInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoMasteringDisplayInfo @ {:p}", self))
+        f.debug_struct(&format!("GstVideoMasteringDisplayInfo @ {self:p}"))
             .field("display_primaries", &self.display_primaries)
             .field("white_point", &self.white_point)
             .field(
@@ -1767,8 +1766,7 @@ pub struct GstVideoMasteringDisplayInfoCoordinates {
 impl ::std::fmt::Debug for GstVideoMasteringDisplayInfoCoordinates {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!(
-            "GstVideoMasteringDisplayInfoCoordinates @ {:p}",
-            self
+            "GstVideoMasteringDisplayInfoCoordinates @ {self:p}"
         ))
         .field("x", &self.x)
         .field("y", &self.y)
@@ -1806,7 +1804,7 @@ pub struct GstVideoMeta {
 
 impl ::std::fmt::Debug for GstVideoMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoMeta @ {:p}", self))
+        f.debug_struct(&format!("GstVideoMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("buffer", &self.buffer)
             .field("flags", &self.flags)
@@ -1833,7 +1831,7 @@ pub struct GstVideoMetaTransform {
 
 impl ::std::fmt::Debug for GstVideoMetaTransform {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoMetaTransform @ {:p}", self))
+        f.debug_struct(&format!("GstVideoMetaTransform @ {self:p}"))
             .field("in_info", &self.in_info)
             .field("out_info", &self.out_info)
             .finish()
@@ -1856,7 +1854,7 @@ pub struct GstVideoOrientationInterface {
 
 impl ::std::fmt::Debug for GstVideoOrientationInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoOrientationInterface @ {:p}", self))
+        f.debug_struct(&format!("GstVideoOrientationInterface @ {self:p}"))
             .field("iface", &self.iface)
             .field("get_hflip", &self.get_hflip)
             .field("get_vflip", &self.get_vflip)
@@ -1878,7 +1876,7 @@ pub struct GstVideoOverlayComposition {
 
 impl ::std::fmt::Debug for GstVideoOverlayComposition {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoOverlayComposition @ {:p}", self))
+        f.debug_struct(&format!("GstVideoOverlayComposition @ {self:p}"))
             .finish()
     }
 }
@@ -1892,7 +1890,7 @@ pub struct GstVideoOverlayCompositionMeta {
 
 impl ::std::fmt::Debug for GstVideoOverlayCompositionMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoOverlayCompositionMeta @ {:p}", self))
+        f.debug_struct(&format!("GstVideoOverlayCompositionMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("overlay", &self.overlay)
             .finish()
@@ -1912,7 +1910,7 @@ pub struct GstVideoOverlayInterface {
 
 impl ::std::fmt::Debug for GstVideoOverlayInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoOverlayInterface @ {:p}", self))
+        f.debug_struct(&format!("GstVideoOverlayInterface @ {self:p}"))
             .field("iface", &self.iface)
             .field("expose", &self.expose)
             .field("handle_events", &self.handle_events)
@@ -1930,7 +1928,7 @@ pub struct GstVideoOverlayRectangle {
 
 impl ::std::fmt::Debug for GstVideoOverlayRectangle {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoOverlayRectangle @ {:p}", self))
+        f.debug_struct(&format!("GstVideoOverlayRectangle @ {self:p}"))
             .finish()
     }
 }
@@ -1946,7 +1944,7 @@ pub struct GstVideoRectangle {
 
 impl ::std::fmt::Debug for GstVideoRectangle {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoRectangle @ {:p}", self))
+        f.debug_struct(&format!("GstVideoRectangle @ {self:p}"))
             .field("x", &self.x)
             .field("y", &self.y)
             .field("w", &self.w)
@@ -1971,7 +1969,7 @@ pub struct GstVideoRegionOfInterestMeta {
 
 impl ::std::fmt::Debug for GstVideoRegionOfInterestMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoRegionOfInterestMeta @ {:p}", self))
+        f.debug_struct(&format!("GstVideoRegionOfInterestMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("roi_type", &self.roi_type)
             .field("id", &self.id)
@@ -2001,7 +1999,7 @@ pub struct GstVideoResampler {
 
 impl ::std::fmt::Debug for GstVideoResampler {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoResampler @ {:p}", self))
+        f.debug_struct(&format!("GstVideoResampler @ {self:p}"))
             .field("in_size", &self.in_size)
             .field("out_size", &self.out_size)
             .field("max_taps", &self.max_taps)
@@ -2025,7 +2023,7 @@ pub struct GstVideoSEIUserDataUnregisteredMeta {
 
 impl ::std::fmt::Debug for GstVideoSEIUserDataUnregisteredMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoSEIUserDataUnregisteredMeta @ {:p}", self))
+        f.debug_struct(&format!("GstVideoSEIUserDataUnregisteredMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("uuid", &self.uuid)
             .field("data", &self.data)
@@ -2056,7 +2054,7 @@ pub struct GstVideoSinkClass {
 
 impl ::std::fmt::Debug for GstVideoSinkClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoSinkClass @ {:p}", self))
+        f.debug_struct(&format!("GstVideoSinkClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("show_frame", &self.show_frame)
             .field("set_info", &self.set_info)
@@ -2085,7 +2083,7 @@ pub struct GstVideoTimeCode {
 
 impl ::std::fmt::Debug for GstVideoTimeCode {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoTimeCode @ {:p}", self))
+        f.debug_struct(&format!("GstVideoTimeCode @ {self:p}"))
             .field("config", &self.config)
             .field("hours", &self.hours)
             .field("minutes", &self.minutes)
@@ -2107,7 +2105,7 @@ pub struct GstVideoTimeCodeConfig {
 
 impl ::std::fmt::Debug for GstVideoTimeCodeConfig {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoTimeCodeConfig @ {:p}", self))
+        f.debug_struct(&format!("GstVideoTimeCodeConfig @ {self:p}"))
             .field("fps_n", &self.fps_n)
             .field("fps_d", &self.fps_d)
             .field("flags", &self.flags)
@@ -2127,7 +2125,7 @@ pub struct GstVideoTimeCodeInterval {
 
 impl ::std::fmt::Debug for GstVideoTimeCodeInterval {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoTimeCodeInterval @ {:p}", self))
+        f.debug_struct(&format!("GstVideoTimeCodeInterval @ {self:p}"))
             .field("hours", &self.hours)
             .field("minutes", &self.minutes)
             .field("seconds", &self.seconds)
@@ -2145,7 +2143,7 @@ pub struct GstVideoTimeCodeMeta {
 
 impl ::std::fmt::Debug for GstVideoTimeCodeMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoTimeCodeMeta @ {:p}", self))
+        f.debug_struct(&format!("GstVideoTimeCodeMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("tc", &self.tc)
             .finish()
@@ -2160,7 +2158,7 @@ pub struct GstVideoVBIEncoder {
 
 impl ::std::fmt::Debug for GstVideoVBIEncoder {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoVBIEncoder @ {:p}", self))
+        f.debug_struct(&format!("GstVideoVBIEncoder @ {self:p}"))
             .finish()
     }
 }
@@ -2173,7 +2171,7 @@ pub struct GstVideoVBIParser {
 
 impl ::std::fmt::Debug for GstVideoVBIParser {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoVBIParser @ {:p}", self))
+        f.debug_struct(&format!("GstVideoVBIParser @ {self:p}"))
             .finish()
     }
 }
@@ -2191,7 +2189,7 @@ pub struct GstColorBalanceChannel {
 
 impl ::std::fmt::Debug for GstColorBalanceChannel {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstColorBalanceChannel @ {:p}", self))
+        f.debug_struct(&format!("GstColorBalanceChannel @ {self:p}"))
             .field("parent", &self.parent)
             .field("label", &self.label)
             .field("min_value", &self.min_value)
@@ -2211,7 +2209,7 @@ pub struct GstVideoAggregator {
 
 impl ::std::fmt::Debug for GstVideoAggregator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoAggregator @ {:p}", self))
+        f.debug_struct(&format!("GstVideoAggregator @ {self:p}"))
             .field("aggregator", &self.aggregator)
             .field("info", &self.info)
             .finish()
@@ -2228,7 +2226,7 @@ pub struct GstVideoAggregatorConvertPad {
 
 impl ::std::fmt::Debug for GstVideoAggregatorConvertPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoAggregatorConvertPad @ {:p}", self))
+        f.debug_struct(&format!("GstVideoAggregatorConvertPad @ {self:p}"))
             .finish()
     }
 }
@@ -2244,7 +2242,7 @@ pub struct GstVideoAggregatorPad {
 
 impl ::std::fmt::Debug for GstVideoAggregatorPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoAggregatorPad @ {:p}", self))
+        f.debug_struct(&format!("GstVideoAggregatorPad @ {self:p}"))
             .field("parent", &self.parent)
             .field("info", &self.info)
             .finish()
@@ -2259,12 +2257,9 @@ pub struct GstVideoAggregatorParallelConvertPad {
 
 impl ::std::fmt::Debug for GstVideoAggregatorParallelConvertPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!(
-            "GstVideoAggregatorParallelConvertPad @ {:p}",
-            self
-        ))
-        .field("parent_instance", &self.parent_instance)
-        .finish()
+        f.debug_struct(&format!("GstVideoAggregatorParallelConvertPad @ {self:p}"))
+            .field("parent_instance", &self.parent_instance)
+            .finish()
     }
 }
 
@@ -2277,7 +2272,7 @@ pub struct GstVideoBufferPool {
 
 impl ::std::fmt::Debug for GstVideoBufferPool {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoBufferPool @ {:p}", self))
+        f.debug_struct(&format!("GstVideoBufferPool @ {self:p}"))
             .field("bufferpool", &self.bufferpool)
             .field("priv_", &self.priv_)
             .finish()
@@ -2299,7 +2294,7 @@ pub struct GstVideoDecoder {
 
 impl ::std::fmt::Debug for GstVideoDecoder {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoDecoder @ {:p}", self))
+        f.debug_struct(&format!("GstVideoDecoder @ {self:p}"))
             .finish()
     }
 }
@@ -2319,7 +2314,7 @@ pub struct GstVideoEncoder {
 
 impl ::std::fmt::Debug for GstVideoEncoder {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoEncoder @ {:p}", self))
+        f.debug_struct(&format!("GstVideoEncoder @ {self:p}"))
             .finish()
     }
 }
@@ -2336,7 +2331,7 @@ pub struct GstVideoFilter {
 
 impl ::std::fmt::Debug for GstVideoFilter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoFilter @ {:p}", self))
+        f.debug_struct(&format!("GstVideoFilter @ {self:p}"))
             .field("element", &self.element)
             .field("negotiated", &self.negotiated)
             .field("in_info", &self.in_info)
@@ -2353,7 +2348,7 @@ pub struct GstVideoMultiviewFlagsSet {
 
 impl ::std::fmt::Debug for GstVideoMultiviewFlagsSet {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoMultiviewFlagsSet @ {:p}", self))
+        f.debug_struct(&format!("GstVideoMultiviewFlagsSet @ {self:p}"))
             .finish()
     }
 }
@@ -2370,7 +2365,7 @@ pub struct GstVideoSink {
 
 impl ::std::fmt::Debug for GstVideoSink {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVideoSink @ {:p}", self))
+        f.debug_struct(&format!("GstVideoSink @ {self:p}"))
             .field("element", &self.element)
             .field("width", &self.width)
             .field("height", &self.height)
@@ -2387,7 +2382,7 @@ pub struct GstColorBalance {
 
 impl ::std::fmt::Debug for GstColorBalance {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstColorBalance @ {:p}", self)
+        write!(f, "GstColorBalance @ {self:p}")
     }
 }
 
@@ -2399,7 +2394,7 @@ pub struct GstNavigation {
 
 impl ::std::fmt::Debug for GstNavigation {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstNavigation @ {:p}", self)
+        write!(f, "GstNavigation @ {self:p}")
     }
 }
 
@@ -2411,7 +2406,7 @@ pub struct GstVideoDirection {
 
 impl ::std::fmt::Debug for GstVideoDirection {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstVideoDirection @ {:p}", self)
+        write!(f, "GstVideoDirection @ {self:p}")
     }
 }
 
@@ -2423,7 +2418,7 @@ pub struct GstVideoOrientation {
 
 impl ::std::fmt::Debug for GstVideoOrientation {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstVideoOrientation @ {:p}", self)
+        write!(f, "GstVideoOrientation @ {self:p}")
     }
 }
 
@@ -2435,7 +2430,7 @@ pub struct GstVideoOverlay {
 
 impl ::std::fmt::Debug for GstVideoOverlay {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstVideoOverlay @ {:p}", self)
+        write!(f, "GstVideoOverlay @ {self:p}")
     }
 }
 

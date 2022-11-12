@@ -47,7 +47,7 @@ pub struct GstNetAddressMeta {
 
 impl ::std::fmt::Debug for GstNetAddressMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstNetAddressMeta @ {:p}", self))
+        f.debug_struct(&format!("GstNetAddressMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("addr", &self.addr)
             .finish()
@@ -63,7 +63,7 @@ pub struct GstNetClientClockClass {
 
 impl ::std::fmt::Debug for GstNetClientClockClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstNetClientClockClass @ {:p}", self))
+        f.debug_struct(&format!("GstNetClientClockClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -86,7 +86,7 @@ pub struct GstNetControlMessageMeta {
 
 impl ::std::fmt::Debug for GstNetControlMessageMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstNetControlMessageMeta @ {:p}", self))
+        f.debug_struct(&format!("GstNetControlMessageMeta @ {self:p}"))
             .field("meta", &self.meta)
             .field("message", &self.message)
             .finish()
@@ -102,7 +102,7 @@ pub struct GstNetTimePacket {
 
 impl ::std::fmt::Debug for GstNetTimePacket {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstNetTimePacket @ {:p}", self))
+        f.debug_struct(&format!("GstNetTimePacket @ {self:p}"))
             .field("local_time", &self.local_time)
             .field("remote_time", &self.remote_time)
             .finish()
@@ -118,7 +118,7 @@ pub struct GstNetTimeProviderClass {
 
 impl ::std::fmt::Debug for GstNetTimeProviderClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstNetTimeProviderClass @ {:p}", self))
+        f.debug_struct(&format!("GstNetTimeProviderClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("_gst_reserved", &self._gst_reserved)
             .finish()
@@ -142,7 +142,7 @@ pub struct GstNtpClockClass {
 
 impl ::std::fmt::Debug for GstNtpClockClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstNtpClockClass @ {:p}", self))
+        f.debug_struct(&format!("GstNtpClockClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -157,7 +157,7 @@ pub struct GstPtpClockClass {
 
 impl ::std::fmt::Debug for GstPtpClockClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPtpClockClass @ {:p}", self))
+        f.debug_struct(&format!("GstPtpClockClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -182,7 +182,7 @@ pub struct GstNetClientClock {
 
 impl ::std::fmt::Debug for GstNetClientClock {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstNetClientClock @ {:p}", self))
+        f.debug_struct(&format!("GstNetClientClock @ {self:p}"))
             .field("clock", &self.clock)
             .finish()
     }
@@ -198,7 +198,7 @@ pub struct GstNetTimeProvider {
 
 impl ::std::fmt::Debug for GstNetTimeProvider {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstNetTimeProvider @ {:p}", self))
+        f.debug_struct(&format!("GstNetTimeProvider @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -214,7 +214,7 @@ pub struct GstNtpClock {
 
 impl ::std::fmt::Debug for GstNtpClock {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstNtpClock @ {:p}", self))
+        f.debug_struct(&format!("GstNtpClock @ {self:p}"))
             .field("clock", &self.clock)
             .finish()
     }
@@ -230,7 +230,7 @@ pub struct GstPtpClock {
 
 impl ::std::fmt::Debug for GstPtpClock {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPtpClock @ {:p}", self))
+        f.debug_struct(&format!("GstPtpClock @ {self:p}"))
             .field("clock", &self.clock)
             .finish()
     }

@@ -14,13 +14,13 @@ bitflags! {
     #[doc(alias = "GstValidateIssueFlags")]
     pub struct IssueFlags: u32 {
         #[doc(alias = "GST_VALIDATE_ISSUE_FLAGS_NONE")]
-        const NONE = ffi::GST_VALIDATE_ISSUE_FLAGS_NONE as u32;
+        const NONE = ffi::GST_VALIDATE_ISSUE_FLAGS_NONE as _;
         #[doc(alias = "GST_VALIDATE_ISSUE_FLAGS_FULL_DETAILS")]
-        const FULL_DETAILS = ffi::GST_VALIDATE_ISSUE_FLAGS_FULL_DETAILS as u32;
+        const FULL_DETAILS = ffi::GST_VALIDATE_ISSUE_FLAGS_FULL_DETAILS as _;
         #[doc(alias = "GST_VALIDATE_ISSUE_FLAGS_NO_BACKTRACE")]
-        const NO_BACKTRACE = ffi::GST_VALIDATE_ISSUE_FLAGS_NO_BACKTRACE as u32;
+        const NO_BACKTRACE = ffi::GST_VALIDATE_ISSUE_FLAGS_NO_BACKTRACE as _;
         #[doc(alias = "GST_VALIDATE_ISSUE_FLAGS_FORCE_BACKTRACE")]
-        const FORCE_BACKTRACE = ffi::GST_VALIDATE_ISSUE_FLAGS_FORCE_BACKTRACE as u32;
+        const FORCE_BACKTRACE = ffi::GST_VALIDATE_ISSUE_FLAGS_FORCE_BACKTRACE as _;
     }
 }
 

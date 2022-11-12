@@ -14,9 +14,9 @@ bitflags! {
     #[doc(alias = "GstRTPBufferFlags")]
     pub struct RTPBufferFlags: u32 {
         #[doc(alias = "GST_RTP_BUFFER_FLAG_RETRANSMISSION")]
-        const RETRANSMISSION = ffi::GST_RTP_BUFFER_FLAG_RETRANSMISSION as u32;
+        const RETRANSMISSION = ffi::GST_RTP_BUFFER_FLAG_RETRANSMISSION as _;
         #[doc(alias = "GST_RTP_BUFFER_FLAG_REDUNDANT")]
-        const REDUNDANT = ffi::GST_RTP_BUFFER_FLAG_REDUNDANT as u32;
+        const REDUNDANT = ffi::GST_RTP_BUFFER_FLAG_REDUNDANT as _;
     }
 }
 
@@ -74,7 +74,7 @@ bitflags! {
     #[doc(alias = "GstRTPBufferMapFlags")]
     pub struct RTPBufferMapFlags: u32 {
         #[doc(alias = "GST_RTP_BUFFER_MAP_FLAG_SKIP_PADDING")]
-        const SKIP_PADDING = ffi::GST_RTP_BUFFER_MAP_FLAG_SKIP_PADDING as u32;
+        const SKIP_PADDING = ffi::GST_RTP_BUFFER_MAP_FLAG_SKIP_PADDING as _;
     }
 }
 
@@ -134,15 +134,15 @@ bitflags! {
     #[doc(alias = "GstRTPHeaderExtensionDirection")]
     pub struct RTPHeaderExtensionDirection: u32 {
         #[doc(alias = "GST_RTP_HEADER_EXTENSION_DIRECTION_INACTIVE")]
-        const INACTIVE = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_INACTIVE as u32;
+        const INACTIVE = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_INACTIVE as _;
         #[doc(alias = "GST_RTP_HEADER_EXTENSION_DIRECTION_SENDONLY")]
-        const SENDONLY = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_SENDONLY as u32;
+        const SENDONLY = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_SENDONLY as _;
         #[doc(alias = "GST_RTP_HEADER_EXTENSION_DIRECTION_RECVONLY")]
-        const RECVONLY = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_RECVONLY as u32;
+        const RECVONLY = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_RECVONLY as _;
         #[doc(alias = "GST_RTP_HEADER_EXTENSION_DIRECTION_SENDRECV")]
-        const SENDRECV = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_SENDRECV as u32;
+        const SENDRECV = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_SENDRECV as _;
         #[doc(alias = "GST_RTP_HEADER_EXTENSION_DIRECTION_INHERITED")]
-        const INHERITED = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_INHERITED as u32;
+        const INHERITED = ffi::GST_RTP_HEADER_EXTENSION_DIRECTION_INHERITED as _;
     }
 }
 
@@ -214,9 +214,9 @@ bitflags! {
     #[doc(alias = "GstRTPHeaderExtensionFlags")]
     pub struct RTPHeaderExtensionFlags: u32 {
         #[doc(alias = "GST_RTP_HEADER_EXTENSION_ONE_BYTE")]
-        const ONE_BYTE = ffi::GST_RTP_HEADER_EXTENSION_ONE_BYTE as u32;
+        const ONE_BYTE = ffi::GST_RTP_HEADER_EXTENSION_ONE_BYTE as _;
         #[doc(alias = "GST_RTP_HEADER_EXTENSION_TWO_BYTE")]
-        const TWO_BYTE = ffi::GST_RTP_HEADER_EXTENSION_TWO_BYTE as u32;
+        const TWO_BYTE = ffi::GST_RTP_HEADER_EXTENSION_TWO_BYTE as _;
     }
 }
 

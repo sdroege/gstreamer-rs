@@ -171,7 +171,7 @@ pub struct GstValidateAction {
 
 impl ::std::fmt::Debug for GstValidateAction {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateAction @ {:p}", self))
+        f.debug_struct(&format!("GstValidateAction @ {self:p}"))
             .field("mini_object", &self.mini_object)
             .field("type_", &self.type_)
             .field("name", &self.name)
@@ -194,7 +194,7 @@ pub struct GstValidateActionParameter {
 
 impl ::std::fmt::Debug for GstValidateActionParameter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateActionParameter @ {:p}", self))
+        f.debug_struct(&format!("GstValidateActionParameter @ {self:p}"))
             .field("name", &self.name)
             .field("description", &self.description)
             .field("mandatory", &self.mandatory)
@@ -232,7 +232,7 @@ pub struct GstValidateActionType {
 
 impl ::std::fmt::Debug for GstValidateActionType {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateActionType @ {:p}", self))
+        f.debug_struct(&format!("GstValidateActionType @ {self:p}"))
             .field("mini_object", &self.mini_object)
             .field("name", &self.name)
             .field("implementer_namespace", &self.implementer_namespace)
@@ -265,7 +265,7 @@ pub struct GstValidateBinMonitorClass {
 
 impl ::std::fmt::Debug for GstValidateBinMonitorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateBinMonitorClass @ {:p}", self))
+        f.debug_struct(&format!("GstValidateBinMonitorClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -280,7 +280,7 @@ pub struct GstValidateElementMonitorClass {
 
 impl ::std::fmt::Debug for GstValidateElementMonitorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateElementMonitorClass @ {:p}", self))
+        f.debug_struct(&format!("GstValidateElementMonitorClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -302,7 +302,7 @@ pub struct GstValidateIssue {
 
 impl ::std::fmt::Debug for GstValidateIssue {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateIssue @ {:p}", self))
+        f.debug_struct(&format!("GstValidateIssue @ {self:p}"))
             .field("issue_id", &self.issue_id)
             .field("summary", &self.summary)
             .field("description", &self.description)
@@ -325,7 +325,7 @@ pub struct GstValidateMediaDescriptorClass {
 
 impl ::std::fmt::Debug for GstValidateMediaDescriptorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateMediaDescriptorClass @ {:p}", self))
+        f.debug_struct(&format!("GstValidateMediaDescriptorClass @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -340,12 +340,9 @@ pub struct GstValidateMediaDescriptorParserClass {
 
 impl ::std::fmt::Debug for GstValidateMediaDescriptorParserClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!(
-            "GstValidateMediaDescriptorParserClass @ {:p}",
-            self
-        ))
-        .field("parent", &self.parent)
-        .finish()
+        f.debug_struct(&format!("GstValidateMediaDescriptorParserClass @ {self:p}"))
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -374,12 +371,9 @@ pub struct GstValidateMediaDescriptorWriterClass {
 
 impl ::std::fmt::Debug for GstValidateMediaDescriptorWriterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!(
-            "GstValidateMediaDescriptorWriterClass @ {:p}",
-            self
-        ))
-        .field("parent", &self.parent)
-        .finish()
+        f.debug_struct(&format!("GstValidateMediaDescriptorWriterClass @ {self:p}"))
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -409,7 +403,7 @@ pub struct GstValidateMediaInfo {
 
 impl ::std::fmt::Debug for GstValidateMediaInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateMediaInfo @ {:p}", self))
+        f.debug_struct(&format!("GstValidateMediaInfo @ {self:p}"))
             .field("duration", &self.duration)
             .field("is_image", &self.is_image)
             .field("file_size", &self.file_size)
@@ -437,7 +431,7 @@ pub struct GstValidateMonitorClass {
 
 impl ::std::fmt::Debug for GstValidateMonitorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateMonitorClass @ {:p}", self))
+        f.debug_struct(&format!("GstValidateMonitorClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("setup", &self.setup)
             .field("get_element", &self.get_element)
@@ -458,7 +452,7 @@ pub struct GstValidateOverrideClass {
 
 impl ::std::fmt::Debug for GstValidateOverrideClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateOverrideClass @ {:p}", self))
+        f.debug_struct(&format!("GstValidateOverrideClass @ {self:p}"))
             .field("can_attach", &self.can_attach)
             .field("attached", &self.attached)
             .finish()
@@ -485,7 +479,7 @@ pub struct GstValidateOverrideRegistry {
 
 impl ::std::fmt::Debug for GstValidateOverrideRegistry {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateOverrideRegistry @ {:p}", self))
+        f.debug_struct(&format!("GstValidateOverrideRegistry @ {self:p}"))
             .field("mutex", &self.mutex)
             .field("name_overrides", &self.name_overrides)
             .field("gtype_overrides", &self.gtype_overrides)
@@ -503,7 +497,7 @@ pub struct GstValidatePadMonitorClass {
 
 impl ::std::fmt::Debug for GstValidatePadMonitorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidatePadMonitorClass @ {:p}", self))
+        f.debug_struct(&format!("GstValidatePadMonitorClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -526,7 +520,7 @@ pub struct GstValidatePipelineMonitorClass {
 
 impl ::std::fmt::Debug for GstValidatePipelineMonitorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidatePipelineMonitorClass @ {:p}", self))
+        f.debug_struct(&format!("GstValidatePipelineMonitorClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -554,7 +548,7 @@ pub struct GstValidateReport {
 
 impl ::std::fmt::Debug for GstValidateReport {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateReport @ {:p}", self))
+        f.debug_struct(&format!("GstValidateReport @ {self:p}"))
             .field("mini_object", &self.mini_object)
             .field("issue", &self.issue)
             .field("level", &self.level)
@@ -593,7 +587,7 @@ pub struct GstValidateReporterInterface {
 
 impl ::std::fmt::Debug for GstValidateReporterInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateReporterInterface @ {:p}", self))
+        f.debug_struct(&format!("GstValidateReporterInterface @ {self:p}"))
             .field("parent", &self.parent)
             .field("intercept_report", &self.intercept_report)
             .field("get_reporting_level", &self.get_reporting_level)
@@ -611,7 +605,7 @@ pub struct GstValidateRunnerClass {
 
 impl ::std::fmt::Debug for GstValidateRunnerClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateRunnerClass @ {:p}", self))
+        f.debug_struct(&format!("GstValidateRunnerClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -634,7 +628,7 @@ pub struct GstValidateScenarioClass {
 
 impl ::std::fmt::Debug for GstValidateScenarioClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateScenarioClass @ {:p}", self))
+        f.debug_struct(&format!("GstValidateScenarioClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -670,7 +664,7 @@ pub struct GstValidateBinMonitor {
 
 impl ::std::fmt::Debug for GstValidateBinMonitor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateBinMonitor @ {:p}", self))
+        f.debug_struct(&format!("GstValidateBinMonitor @ {self:p}"))
             .field("parent", &self.parent)
             .field("element_monitors", &self.element_monitors)
             .field("scenario", &self.scenario)
@@ -694,7 +688,7 @@ pub struct GstValidateElementMonitor {
 
 impl ::std::fmt::Debug for GstValidateElementMonitor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateElementMonitor @ {:p}", self))
+        f.debug_struct(&format!("GstValidateElementMonitor @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -711,7 +705,7 @@ pub struct GstValidateMediaDescriptor {
 
 impl ::std::fmt::Debug for GstValidateMediaDescriptor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateMediaDescriptor @ {:p}", self))
+        f.debug_struct(&format!("GstValidateMediaDescriptor @ {self:p}"))
             .field("parent", &self.parent)
             .field("lock", &self.lock)
             .finish()
@@ -728,7 +722,7 @@ pub struct GstValidateMediaDescriptorParser {
 
 impl ::std::fmt::Debug for GstValidateMediaDescriptorParser {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateMediaDescriptorParser @ {:p}", self))
+        f.debug_struct(&format!("GstValidateMediaDescriptorParser @ {self:p}"))
             .field("parent", &self.parent)
             .field("priv_", &self.priv_)
             .finish()
@@ -745,7 +739,7 @@ pub struct GstValidateMediaDescriptorWriter {
 
 impl ::std::fmt::Debug for GstValidateMediaDescriptorWriter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateMediaDescriptorWriter @ {:p}", self))
+        f.debug_struct(&format!("GstValidateMediaDescriptorWriter @ {self:p}"))
             .field("parent", &self.parent)
             .field("priv_", &self.priv_)
             .finish()
@@ -772,7 +766,7 @@ pub struct GstValidateMonitor {
 
 impl ::std::fmt::Debug for GstValidateMonitor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateMonitor @ {:p}", self))
+        f.debug_struct(&format!("GstValidateMonitor @ {self:p}"))
             .field("object", &self.object)
             .field("target", &self.target)
             .field("pipeline", &self.pipeline)
@@ -804,7 +798,7 @@ pub struct GstValidateOverride {
 
 impl ::std::fmt::Debug for GstValidateOverride {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateOverride @ {:p}", self))
+        f.debug_struct(&format!("GstValidateOverride @ {self:p}"))
             .field("parent", &self.parent)
             .field("buffer_handler", &self.buffer_handler)
             .field("event_handler", &self.event_handler)
@@ -868,7 +862,7 @@ pub struct GstValidatePadMonitor {
 
 impl ::std::fmt::Debug for GstValidatePadMonitor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidatePadMonitor @ {:p}", self))
+        f.debug_struct(&format!("GstValidatePadMonitor @ {self:p}"))
             .field("parent", &self.parent)
             .field("setup", &self.setup)
             .field("chain_func", &self.chain_func)
@@ -900,7 +894,7 @@ pub struct GstValidatePipelineMonitor {
 
 impl ::std::fmt::Debug for GstValidatePipelineMonitor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidatePipelineMonitor @ {:p}", self))
+        f.debug_struct(&format!("GstValidatePipelineMonitor @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -916,7 +910,7 @@ pub struct GstValidateRunner {
 
 impl ::std::fmt::Debug for GstValidateRunner {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateRunner @ {:p}", self))
+        f.debug_struct(&format!("GstValidateRunner @ {self:p}"))
             .field("object", &self.object)
             .finish()
     }
@@ -934,7 +928,7 @@ pub struct GstValidateScenario {
 
 impl ::std::fmt::Debug for GstValidateScenario {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstValidateScenario @ {:p}", self))
+        f.debug_struct(&format!("GstValidateScenario @ {self:p}"))
             .field("parent", &self.parent)
             .field("description", &self.description)
             .finish()
@@ -950,7 +944,7 @@ pub struct GstValidateReporter {
 
 impl ::std::fmt::Debug for GstValidateReporter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "GstValidateReporter @ {:p}", self)
+        write!(f, "GstValidateReporter @ {self:p}")
     }
 }
 

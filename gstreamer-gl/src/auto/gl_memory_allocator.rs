@@ -22,6 +22,7 @@ impl GLMemoryAllocator {
 
     #[doc(alias = "gst_gl_memory_allocator_get_default")]
     #[doc(alias = "get_default")]
+    #[allow(clippy::should_implement_trait)]
     pub fn default(context: &impl IsA<GLContext>) -> GLMemoryAllocator {
         skip_assert_initialized!();
         unsafe {

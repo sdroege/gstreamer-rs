@@ -193,7 +193,7 @@ pub struct GstWebRTCICECandidateStats {
 
 impl ::std::fmt::Debug for GstWebRTCICECandidateStats {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCICECandidateStats @ {:p}", self))
+        f.debug_struct(&format!("GstWebRTCICECandidateStats @ {self:p}"))
             .field("ipaddr", &self.ipaddr)
             .field("port", &self.port)
             .field("stream_id", &self.stream_id)
@@ -282,7 +282,7 @@ pub struct GstWebRTCICEClass {
 
 impl ::std::fmt::Debug for GstWebRTCICEClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCICEClass @ {:p}", self))
+        f.debug_struct(&format!("GstWebRTCICEClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("add_stream", &self.add_stream)
             .field("find_transport", &self.find_transport)
@@ -323,7 +323,7 @@ pub struct GstWebRTCICEStreamClass {
 
 impl ::std::fmt::Debug for GstWebRTCICEStreamClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCICEStreamClass @ {:p}", self))
+        f.debug_struct(&format!("GstWebRTCICEStreamClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("find_transport", &self.find_transport)
             .field("gather_candidates", &self.gather_candidates)
@@ -341,7 +341,7 @@ pub struct GstWebRTCICETransportClass {
 
 impl ::std::fmt::Debug for GstWebRTCICETransportClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCICETransportClass @ {:p}", self))
+        f.debug_struct(&format!("GstWebRTCICETransportClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("gather_candidates", &self.gather_candidates)
             .field("_padding", &self._padding)
@@ -390,7 +390,7 @@ pub struct GstWebRTCSessionDescription {
 
 impl ::std::fmt::Debug for GstWebRTCSessionDescription {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCSessionDescription @ {:p}", self))
+        f.debug_struct(&format!("GstWebRTCSessionDescription @ {self:p}"))
             .field("type_", &self.type_)
             .field("sdp", &self.sdp)
             .finish()
@@ -406,7 +406,7 @@ pub struct GstWebRTCDTLSTransport {
 
 impl ::std::fmt::Debug for GstWebRTCDTLSTransport {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCDTLSTransport @ {:p}", self))
+        f.debug_struct(&format!("GstWebRTCDTLSTransport @ {self:p}"))
             .finish()
     }
 }
@@ -419,7 +419,7 @@ pub struct GstWebRTCDataChannel {
 
 impl ::std::fmt::Debug for GstWebRTCDataChannel {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCDataChannel @ {:p}", self))
+        f.debug_struct(&format!("GstWebRTCDataChannel @ {self:p}"))
             .finish()
     }
 }
@@ -437,7 +437,7 @@ pub struct GstWebRTCICE {
 
 impl ::std::fmt::Debug for GstWebRTCICE {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCICE @ {:p}", self))
+        f.debug_struct(&format!("GstWebRTCICE @ {self:p}"))
             .field("parent", &self.parent)
             .field("ice_gathering_state", &self.ice_gathering_state)
             .field("ice_connection_state", &self.ice_connection_state)
@@ -457,7 +457,7 @@ pub struct GstWebRTCICEStream {
 
 impl ::std::fmt::Debug for GstWebRTCICEStream {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCICEStream @ {:p}", self))
+        f.debug_struct(&format!("GstWebRTCICEStream @ {self:p}"))
             .field("parent", &self.parent)
             .field("stream_id", &self.stream_id)
             .finish()
@@ -479,7 +479,7 @@ pub struct GstWebRTCICETransport {
 
 impl ::std::fmt::Debug for GstWebRTCICETransport {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCICETransport @ {:p}", self))
+        f.debug_struct(&format!("GstWebRTCICETransport @ {self:p}"))
             .field("parent", &self.parent)
             .field("role", &self.role)
             .field("component", &self.component)
@@ -500,7 +500,7 @@ pub struct GstWebRTCRTPReceiver {
 
 impl ::std::fmt::Debug for GstWebRTCRTPReceiver {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCRTPReceiver @ {:p}", self))
+        f.debug_struct(&format!("GstWebRTCRTPReceiver @ {self:p}"))
             .finish()
     }
 }
@@ -513,7 +513,7 @@ pub struct GstWebRTCRTPSender {
 
 impl ::std::fmt::Debug for GstWebRTCRTPSender {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCRTPSender @ {:p}", self))
+        f.debug_struct(&format!("GstWebRTCRTPSender @ {self:p}"))
             .finish()
     }
 }
@@ -526,7 +526,7 @@ pub struct GstWebRTCRTPTransceiver {
 
 impl ::std::fmt::Debug for GstWebRTCRTPTransceiver {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCRTPTransceiver @ {:p}", self))
+        f.debug_struct(&format!("GstWebRTCRTPTransceiver @ {self:p}"))
             .finish()
     }
 }
@@ -539,7 +539,7 @@ pub struct GstWebRTCSCTPTransport {
 
 impl ::std::fmt::Debug for GstWebRTCSCTPTransport {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCSCTPTransport @ {:p}", self))
+        f.debug_struct(&format!("GstWebRTCSCTPTransport @ {self:p}"))
             .finish()
     }
 }

@@ -31,7 +31,7 @@ pub struct GstGLDisplayWaylandClass {
 
 impl ::std::fmt::Debug for GstGLDisplayWaylandClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLDisplayWaylandClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLDisplayWaylandClass @ {self:p}"))
             .field("object_class", &self.object_class)
             .field("_padding", &self._padding)
             .finish()
@@ -54,7 +54,7 @@ pub struct GstGLDisplayWayland {
 
 impl ::std::fmt::Debug for GstGLDisplayWayland {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLDisplayWayland @ {:p}", self))
+        f.debug_struct(&format!("GstGLDisplayWayland @ {self:p}"))
             .field("parent", &self.parent)
             .field("display", &self.display)
             .field("registry", &self.registry)

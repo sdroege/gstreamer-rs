@@ -166,7 +166,7 @@ pub struct GstRTSPAddress {
 
 impl ::std::fmt::Debug for GstRTSPAddress {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPAddress @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPAddress @ {self:p}"))
             .field("pool", &self.pool)
             .field("address", &self.address)
             .field("port", &self.port)
@@ -185,7 +185,7 @@ pub struct GstRTSPAddressPoolClass {
 
 impl ::std::fmt::Debug for GstRTSPAddressPoolClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPAddressPoolClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPAddressPoolClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -223,7 +223,7 @@ pub struct GstRTSPAuthClass {
 
 impl ::std::fmt::Debug for GstRTSPAuthClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPAuthClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPAuthClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("authenticate", &self.authenticate)
             .field("check", &self.check)
@@ -408,7 +408,7 @@ pub struct GstRTSPClientClass {
 
 impl ::std::fmt::Debug for GstRTSPClientClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPClientClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPClientClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("create_sdp", &self.create_sdp)
             .field("configure_client_media", &self.configure_client_media)
@@ -484,7 +484,7 @@ pub struct GstRTSPContext {
 
 impl ::std::fmt::Debug for GstRTSPContext {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPContext @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPContext @ {self:p}"))
             .field("server", &self.server)
             .field("conn", &self.conn)
             .field("client", &self.client)
@@ -546,7 +546,7 @@ pub struct GstRTSPMediaClass {
 
 impl ::std::fmt::Debug for GstRTSPMediaClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMediaClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPMediaClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("handle_message", &self.handle_message)
             .field("prepare", &self.prepare)
@@ -601,7 +601,7 @@ pub struct GstRTSPMediaFactoryClass {
 
 impl ::std::fmt::Debug for GstRTSPMediaFactoryClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMediaFactoryClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPMediaFactoryClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("gen_key", &self.gen_key)
             .field("create_element", &self.create_element)
@@ -631,7 +631,7 @@ pub struct GstRTSPMediaFactoryURIClass {
 
 impl ::std::fmt::Debug for GstRTSPMediaFactoryURIClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMediaFactoryURIClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPMediaFactoryURIClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -665,7 +665,7 @@ pub struct GstRTSPMountPointsClass {
 
 impl ::std::fmt::Debug for GstRTSPMountPointsClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMountPointsClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPMountPointsClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("make_path", &self.make_path)
             .finish()
@@ -689,7 +689,7 @@ pub struct GstRTSPOnvifClientClass {
 
 impl ::std::fmt::Debug for GstRTSPOnvifClientClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPOnvifClientClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPOnvifClientClass @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -704,7 +704,7 @@ pub struct GstRTSPOnvifMediaClass {
 
 impl ::std::fmt::Debug for GstRTSPOnvifMediaClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPOnvifMediaClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPOnvifMediaClass @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -721,7 +721,7 @@ pub struct GstRTSPOnvifMediaFactoryClass {
 
 impl ::std::fmt::Debug for GstRTSPOnvifMediaFactoryClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPOnvifMediaFactoryClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPOnvifMediaFactoryClass @ {self:p}"))
             .field("parent", &self.parent)
             .field("has_backchannel_support", &self.has_backchannel_support)
             .finish()
@@ -753,7 +753,7 @@ pub struct GstRTSPOnvifServerClass {
 
 impl ::std::fmt::Debug for GstRTSPOnvifServerClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPOnvifServerClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPOnvifServerClass @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -767,7 +767,7 @@ pub struct GstRTSPPermissions {
 
 impl ::std::fmt::Debug for GstRTSPPermissions {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPPermissions @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPPermissions @ {self:p}"))
             .field("mini_object", &self.mini_object)
             .finish()
     }
@@ -784,7 +784,7 @@ pub struct GstRTSPServerClass {
 
 impl ::std::fmt::Debug for GstRTSPServerClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPServerClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPServerClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("create_client", &self.create_client)
             .field("client_connected", &self.client_connected)
@@ -809,7 +809,7 @@ pub struct GstRTSPSessionClass {
 
 impl ::std::fmt::Debug for GstRTSPSessionClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPSessionClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPSessionClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -824,7 +824,7 @@ pub struct GstRTSPSessionMediaClass {
 
 impl ::std::fmt::Debug for GstRTSPSessionMediaClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPSessionMediaClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPSessionMediaClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -851,7 +851,7 @@ pub struct GstRTSPSessionPoolClass {
 
 impl ::std::fmt::Debug for GstRTSPSessionPoolClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPSessionPoolClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPSessionPoolClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("create_session_id", &self.create_session_id)
             .field("create_session", &self.create_session)
@@ -885,7 +885,7 @@ pub struct GstRTSPStreamClass {
 
 impl ::std::fmt::Debug for GstRTSPStreamClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPStreamClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPStreamClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -908,7 +908,7 @@ pub struct GstRTSPStreamTransportClass {
 
 impl ::std::fmt::Debug for GstRTSPStreamTransportClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPStreamTransportClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPStreamTransportClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -933,7 +933,7 @@ pub struct GstRTSPThread {
 
 impl ::std::fmt::Debug for GstRTSPThread {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPThread @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPThread @ {self:p}"))
             .field("mini_object", &self.mini_object)
             .field("type_", &self.type_)
             .field("context", &self.context)
@@ -964,7 +964,7 @@ pub struct GstRTSPThreadPoolClass {
 
 impl ::std::fmt::Debug for GstRTSPThreadPoolClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPThreadPoolClass @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPThreadPoolClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("pool", &self.pool)
             .field("get_thread", &self.get_thread)
@@ -991,7 +991,7 @@ pub struct GstRTSPToken {
 
 impl ::std::fmt::Debug for GstRTSPToken {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPToken @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPToken @ {self:p}"))
             .field("mini_object", &self.mini_object)
             .finish()
     }
@@ -1006,7 +1006,7 @@ pub struct GstSDPInfo {
 
 impl ::std::fmt::Debug for GstSDPInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstSDPInfo @ {:p}", self))
+        f.debug_struct(&format!("GstSDPInfo @ {self:p}"))
             .field("is_ipv6", &self.is_ipv6)
             .field("server_ip", &self.server_ip)
             .finish()
@@ -1024,7 +1024,7 @@ pub struct GstRTSPAddressPool {
 
 impl ::std::fmt::Debug for GstRTSPAddressPool {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPAddressPool @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPAddressPool @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1040,7 +1040,7 @@ pub struct GstRTSPAuth {
 
 impl ::std::fmt::Debug for GstRTSPAuth {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPAuth @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPAuth @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1056,7 +1056,7 @@ pub struct GstRTSPClient {
 
 impl ::std::fmt::Debug for GstRTSPClient {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPClient @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPClient @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1072,7 +1072,7 @@ pub struct GstRTSPMedia {
 
 impl ::std::fmt::Debug for GstRTSPMedia {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMedia @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPMedia @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1088,7 +1088,7 @@ pub struct GstRTSPMediaFactory {
 
 impl ::std::fmt::Debug for GstRTSPMediaFactory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMediaFactory @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPMediaFactory @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1104,7 +1104,7 @@ pub struct GstRTSPMediaFactoryURI {
 
 impl ::std::fmt::Debug for GstRTSPMediaFactoryURI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMediaFactoryURI @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPMediaFactoryURI @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1120,7 +1120,7 @@ pub struct GstRTSPMountPoints {
 
 impl ::std::fmt::Debug for GstRTSPMountPoints {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMountPoints @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPMountPoints @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1135,7 +1135,7 @@ pub struct GstRTSPOnvifClient {
 
 impl ::std::fmt::Debug for GstRTSPOnvifClient {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPOnvifClient @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPOnvifClient @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1151,7 +1151,7 @@ pub struct GstRTSPOnvifMedia {
 
 impl ::std::fmt::Debug for GstRTSPOnvifMedia {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPOnvifMedia @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPOnvifMedia @ {self:p}"))
             .field("parent", &self.parent)
             .field("priv_", &self.priv_)
             .finish()
@@ -1168,7 +1168,7 @@ pub struct GstRTSPOnvifMediaFactory {
 
 impl ::std::fmt::Debug for GstRTSPOnvifMediaFactory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPOnvifMediaFactory @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPOnvifMediaFactory @ {self:p}"))
             .field("parent", &self.parent)
             .field("priv_", &self.priv_)
             .finish()
@@ -1184,7 +1184,7 @@ pub struct GstRTSPOnvifServer {
 
 impl ::std::fmt::Debug for GstRTSPOnvifServer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPOnvifServer @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPOnvifServer @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1200,7 +1200,7 @@ pub struct GstRTSPServer {
 
 impl ::std::fmt::Debug for GstRTSPServer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPServer @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPServer @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1216,7 +1216,7 @@ pub struct GstRTSPSession {
 
 impl ::std::fmt::Debug for GstRTSPSession {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPSession @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPSession @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1232,7 +1232,7 @@ pub struct GstRTSPSessionMedia {
 
 impl ::std::fmt::Debug for GstRTSPSessionMedia {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPSessionMedia @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPSessionMedia @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1248,7 +1248,7 @@ pub struct GstRTSPSessionPool {
 
 impl ::std::fmt::Debug for GstRTSPSessionPool {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPSessionPool @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPSessionPool @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1264,7 +1264,7 @@ pub struct GstRTSPStream {
 
 impl ::std::fmt::Debug for GstRTSPStream {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPStream @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPStream @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1280,7 +1280,7 @@ pub struct GstRTSPStreamTransport {
 
 impl ::std::fmt::Debug for GstRTSPStreamTransport {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPStreamTransport @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPStreamTransport @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1296,7 +1296,7 @@ pub struct GstRTSPThreadPool {
 
 impl ::std::fmt::Debug for GstRTSPThreadPool {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPThreadPool @ {:p}", self))
+        f.debug_struct(&format!("GstRTSPThreadPool @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }

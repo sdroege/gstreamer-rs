@@ -82,7 +82,7 @@ impl GLSLStage {
         str: &[&str],
     ) -> GLSLStage {
         skip_assert_initialized!();
-        let n_strings = str.len() as i32;
+        let n_strings = str.len() as _;
         unsafe {
             from_glib_none(ffi::gst_glsl_stage_new_with_strings(
                 context.as_ref().to_glib_none().0,
@@ -140,7 +140,7 @@ impl GLSLStage {
         profile: GLSLProfile,
         str: &[&str],
     ) -> Result<(), glib::error::BoolError> {
-        let n_strings = str.len() as i32;
+        let n_strings = str.len() as _;
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_glsl_stage_set_strings(

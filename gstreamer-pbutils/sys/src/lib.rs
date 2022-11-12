@@ -124,7 +124,7 @@ pub struct GstAudioVisualizerClass {
 
 impl ::std::fmt::Debug for GstAudioVisualizerClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioVisualizerClass @ {:p}", self))
+        f.debug_struct(&format!("GstAudioVisualizerClass @ {self:p}"))
             .field("setup", &self.setup)
             .field("render", &self.render)
             .field("decide_allocation", &self.decide_allocation)
@@ -155,7 +155,7 @@ pub struct GstDiscovererClass {
 
 impl ::std::fmt::Debug for GstDiscovererClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDiscovererClass @ {:p}", self))
+        f.debug_struct(&format!("GstDiscovererClass @ {self:p}"))
             .field("parentclass", &self.parentclass)
             .field("finished", &self.finished)
             .field("starting", &self.starting)
@@ -214,7 +214,7 @@ pub struct GstInstallPluginsContext {
 
 impl ::std::fmt::Debug for GstInstallPluginsContext {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstInstallPluginsContext @ {:p}", self))
+        f.debug_struct(&format!("GstInstallPluginsContext @ {self:p}"))
             .finish()
     }
 }
@@ -232,7 +232,7 @@ pub struct GstAudioVisualizer {
 
 impl ::std::fmt::Debug for GstAudioVisualizer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioVisualizer @ {:p}", self))
+        f.debug_struct(&format!("GstAudioVisualizer @ {self:p}"))
             .field("parent", &self.parent)
             .field("req_spf", &self.req_spf)
             .field("vinfo", &self.vinfo)
@@ -251,7 +251,7 @@ pub struct GstDiscoverer {
 
 impl ::std::fmt::Debug for GstDiscoverer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDiscoverer @ {:p}", self))
+        f.debug_struct(&format!("GstDiscoverer @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -265,7 +265,7 @@ pub struct GstDiscovererAudioInfo {
 
 impl ::std::fmt::Debug for GstDiscovererAudioInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDiscovererAudioInfo @ {:p}", self))
+        f.debug_struct(&format!("GstDiscovererAudioInfo @ {self:p}"))
             .finish()
     }
 }
@@ -278,7 +278,7 @@ pub struct GstDiscovererContainerInfo {
 
 impl ::std::fmt::Debug for GstDiscovererContainerInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDiscovererContainerInfo @ {:p}", self))
+        f.debug_struct(&format!("GstDiscovererContainerInfo @ {self:p}"))
             .finish()
     }
 }
@@ -291,7 +291,7 @@ pub struct GstDiscovererInfo {
 
 impl ::std::fmt::Debug for GstDiscovererInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDiscovererInfo @ {:p}", self))
+        f.debug_struct(&format!("GstDiscovererInfo @ {self:p}"))
             .finish()
     }
 }
@@ -304,7 +304,7 @@ pub struct GstDiscovererStreamInfo {
 
 impl ::std::fmt::Debug for GstDiscovererStreamInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDiscovererStreamInfo @ {:p}", self))
+        f.debug_struct(&format!("GstDiscovererStreamInfo @ {self:p}"))
             .finish()
     }
 }
@@ -317,7 +317,7 @@ pub struct GstDiscovererSubtitleInfo {
 
 impl ::std::fmt::Debug for GstDiscovererSubtitleInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDiscovererSubtitleInfo @ {:p}", self))
+        f.debug_struct(&format!("GstDiscovererSubtitleInfo @ {self:p}"))
             .finish()
     }
 }
@@ -330,7 +330,7 @@ pub struct GstDiscovererVideoInfo {
 
 impl ::std::fmt::Debug for GstDiscovererVideoInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDiscovererVideoInfo @ {:p}", self))
+        f.debug_struct(&format!("GstDiscovererVideoInfo @ {self:p}"))
             .finish()
     }
 }
@@ -343,7 +343,7 @@ pub struct GstEncodingAudioProfile {
 
 impl ::std::fmt::Debug for GstEncodingAudioProfile {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstEncodingAudioProfile @ {:p}", self))
+        f.debug_struct(&format!("GstEncodingAudioProfile @ {self:p}"))
             .finish()
     }
 }
@@ -356,7 +356,7 @@ pub struct GstEncodingContainerProfile {
 
 impl ::std::fmt::Debug for GstEncodingContainerProfile {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstEncodingContainerProfile @ {:p}", self))
+        f.debug_struct(&format!("GstEncodingContainerProfile @ {self:p}"))
             .finish()
     }
 }
@@ -369,7 +369,7 @@ pub struct GstEncodingProfile {
 
 impl ::std::fmt::Debug for GstEncodingProfile {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstEncodingProfile @ {:p}", self))
+        f.debug_struct(&format!("GstEncodingProfile @ {self:p}"))
             .finish()
     }
 }
@@ -382,7 +382,7 @@ pub struct GstEncodingTarget {
 
 impl ::std::fmt::Debug for GstEncodingTarget {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstEncodingTarget @ {:p}", self))
+        f.debug_struct(&format!("GstEncodingTarget @ {self:p}"))
             .finish()
     }
 }
@@ -395,7 +395,7 @@ pub struct GstEncodingVideoProfile {
 
 impl ::std::fmt::Debug for GstEncodingVideoProfile {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstEncodingVideoProfile @ {:p}", self))
+        f.debug_struct(&format!("GstEncodingVideoProfile @ {self:p}"))
             .finish()
     }
 }

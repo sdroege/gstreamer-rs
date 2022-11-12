@@ -31,7 +31,7 @@ pub struct GstGLDisplayX11Class {
 
 impl ::std::fmt::Debug for GstGLDisplayX11Class {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLDisplayX11Class @ {:p}", self))
+        f.debug_struct(&format!("GstGLDisplayX11Class @ {self:p}"))
             .field("object_class", &self.object_class)
             .field("_padding", &self._padding)
             .finish()
@@ -52,7 +52,7 @@ pub struct GstGLDisplayX11 {
 
 impl ::std::fmt::Debug for GstGLDisplayX11 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLDisplayX11 @ {:p}", self))
+        f.debug_struct(&format!("GstGLDisplayX11 @ {self:p}"))
             .finish()
     }
 }

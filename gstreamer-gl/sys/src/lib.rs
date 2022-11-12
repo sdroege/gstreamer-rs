@@ -282,7 +282,7 @@ pub struct GstGLAllocationParams {
 
 impl ::std::fmt::Debug for GstGLAllocationParams {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLAllocationParams @ {:p}", self))
+        f.debug_struct(&format!("GstGLAllocationParams @ {self:p}"))
             .field("struct_size", &self.struct_size)
             .field("copy", &self.copy)
             .field("free", &self.free)
@@ -317,7 +317,7 @@ pub struct GstGLAsyncDebug {
 
 impl ::std::fmt::Debug for GstGLAsyncDebug {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLAsyncDebug @ {:p}", self))
+        f.debug_struct(&format!("GstGLAsyncDebug @ {self:p}"))
             .finish()
     }
 }
@@ -341,7 +341,7 @@ pub struct GstGLBaseFilterClass {
 
 impl ::std::fmt::Debug for GstGLBaseFilterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBaseFilterClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLBaseFilterClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("supported_gl_api", &self.supported_gl_api)
             .field("gl_start", &self.gl_start)
@@ -379,7 +379,7 @@ pub struct GstGLBaseMemory {
 
 impl ::std::fmt::Debug for GstGLBaseMemory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBaseMemory @ {:p}", self))
+        f.debug_struct(&format!("GstGLBaseMemory @ {self:p}"))
             .field("mem", &self.mem)
             .field("context", &self.context)
             .field("lock", &self.lock)
@@ -407,7 +407,7 @@ pub struct GstGLBaseMemoryAllocatorClass {
 
 impl ::std::fmt::Debug for GstGLBaseMemoryAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBaseMemoryAllocatorClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLBaseMemoryAllocatorClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("alloc", &self.alloc)
             .field("create", &self.create)
@@ -433,7 +433,7 @@ pub struct GstGLBaseSrcClass {
 
 impl ::std::fmt::Debug for GstGLBaseSrcClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBaseSrcClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLBaseSrcClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("supported_gl_api", &self.supported_gl_api)
             .field("gl_start", &self.gl_start)
@@ -462,7 +462,7 @@ pub struct GstGLBuffer {
 
 impl ::std::fmt::Debug for GstGLBuffer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBuffer @ {:p}", self))
+        f.debug_struct(&format!("GstGLBuffer @ {self:p}"))
             .field("mem", &self.mem)
             .field("id", &self.id)
             .field("target", &self.target)
@@ -482,7 +482,7 @@ pub struct GstGLBufferAllocationParams {
 
 impl ::std::fmt::Debug for GstGLBufferAllocationParams {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBufferAllocationParams @ {:p}", self))
+        f.debug_struct(&format!("GstGLBufferAllocationParams @ {self:p}"))
             .field("parent", &self.parent)
             .field("gl_target", &self.gl_target)
             .field("gl_usage", &self.gl_usage)
@@ -499,7 +499,7 @@ pub struct GstGLBufferAllocatorClass {
 
 impl ::std::fmt::Debug for GstGLBufferAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBufferAllocatorClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLBufferAllocatorClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -514,7 +514,7 @@ pub struct GstGLBufferPoolClass {
 
 impl ::std::fmt::Debug for GstGLBufferPoolClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBufferPoolClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLBufferPoolClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -537,7 +537,7 @@ pub struct GstGLColorConvertClass {
 
 impl ::std::fmt::Debug for GstGLColorConvertClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLColorConvertClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLColorConvertClass @ {self:p}"))
             .finish()
     }
 }
@@ -583,7 +583,7 @@ pub struct GstGLContextClass {
 
 impl ::std::fmt::Debug for GstGLContextClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLContextClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLContextClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("get_current_context", &self.get_current_context)
             .field("get_gl_context", &self.get_gl_context)
@@ -622,7 +622,7 @@ pub struct GstGLDisplayClass {
 
 impl ::std::fmt::Debug for GstGLDisplayClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLDisplayClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLDisplayClass @ {self:p}"))
             .field("object_class", &self.object_class)
             .field("get_handle", &self.get_handle)
             .field("create_window", &self.create_window)
@@ -669,7 +669,7 @@ pub struct GstGLFilterClass {
 
 impl ::std::fmt::Debug for GstGLFilterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLFilterClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLFilterClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("set_caps", &self.set_caps)
             .field("filter", &self.filter)
@@ -689,7 +689,7 @@ pub struct GstGLFramebufferClass {
 
 impl ::std::fmt::Debug for GstGLFramebufferClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLFramebufferClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLFramebufferClass @ {self:p}"))
             .finish()
     }
 }
@@ -729,7 +729,7 @@ pub struct GstGLMemory {
 
 impl ::std::fmt::Debug for GstGLMemory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLMemory @ {:p}", self))
+        f.debug_struct(&format!("GstGLMemory @ {self:p}"))
             .field("mem", &self.mem)
             .field("tex_id", &self.tex_id)
             .field("tex_target", &self.tex_target)
@@ -757,7 +757,7 @@ pub struct GstGLMemoryAllocatorClass {
 
 impl ::std::fmt::Debug for GstGLMemoryAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLMemoryAllocatorClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLMemoryAllocatorClass @ {self:p}"))
             .field("map", &self.map)
             .field("copy", &self.copy)
             .field("unmap", &self.unmap)
@@ -775,7 +775,7 @@ pub struct GstGLMemoryPBO {
 
 impl ::std::fmt::Debug for GstGLMemoryPBO {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLMemoryPBO @ {:p}", self))
+        f.debug_struct(&format!("GstGLMemoryPBO @ {self:p}"))
             .finish()
     }
 }
@@ -789,7 +789,7 @@ pub struct GstGLMemoryPBOAllocatorClass {
 
 impl ::std::fmt::Debug for GstGLMemoryPBOAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLMemoryPBOAllocatorClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLMemoryPBOAllocatorClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -804,7 +804,7 @@ pub struct GstGLOverlayCompositorClass {
 
 impl ::std::fmt::Debug for GstGLOverlayCompositorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLOverlayCompositorClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLOverlayCompositorClass @ {self:p}"))
             .field("object_class", &self.object_class)
             .finish()
     }
@@ -824,7 +824,7 @@ pub struct GstGLQuery {
 
 impl ::std::fmt::Debug for GstGLQuery {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLQuery @ {:p}", self)).finish()
+        f.debug_struct(&format!("GstGLQuery @ {self:p}")).finish()
     }
 }
 
@@ -842,7 +842,7 @@ pub struct GstGLRenderbuffer {
 
 impl ::std::fmt::Debug for GstGLRenderbuffer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLRenderbuffer @ {:p}", self))
+        f.debug_struct(&format!("GstGLRenderbuffer @ {self:p}"))
             .field("renderbuffer_id", &self.renderbuffer_id)
             .field("renderbuffer_format", &self.renderbuffer_format)
             .field("width", &self.width)
@@ -864,7 +864,7 @@ pub struct GstGLRenderbufferAllocationParams {
 
 impl ::std::fmt::Debug for GstGLRenderbufferAllocationParams {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLRenderbufferAllocationParams @ {:p}", self))
+        f.debug_struct(&format!("GstGLRenderbufferAllocationParams @ {self:p}"))
             .field("renderbuffer_format", &self.renderbuffer_format)
             .field("width", &self.width)
             .field("height", &self.height)
@@ -881,7 +881,7 @@ pub struct GstGLRenderbufferAllocatorClass {
 
 impl ::std::fmt::Debug for GstGLRenderbufferAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLRenderbufferAllocatorClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLRenderbufferAllocatorClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -896,7 +896,7 @@ pub struct GstGLSLStageClass {
 
 impl ::std::fmt::Debug for GstGLSLStageClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLSLStageClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLSLStageClass @ {self:p}"))
             .finish()
     }
 }
@@ -917,7 +917,7 @@ pub struct GstGLShaderClass {
 
 impl ::std::fmt::Debug for GstGLShaderClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLShaderClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLShaderClass @ {self:p}"))
             .finish()
     }
 }
@@ -956,7 +956,7 @@ pub struct GstGLSyncMeta {
 
 impl ::std::fmt::Debug for GstGLSyncMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLSyncMeta @ {:p}", self))
+        f.debug_struct(&format!("GstGLSyncMeta @ {self:p}"))
             .field("parent", &self.parent)
             .field("context", &self.context)
             .field("data", &self.data)
@@ -982,7 +982,7 @@ pub struct GstGLUploadClass {
 
 impl ::std::fmt::Debug for GstGLUploadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLUploadClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLUploadClass @ {self:p}"))
             .field("object_class", &self.object_class)
             .finish()
     }
@@ -1010,7 +1010,7 @@ pub struct GstGLVideoAllocationParams {
 
 impl ::std::fmt::Debug for GstGLVideoAllocationParams {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLVideoAllocationParams @ {:p}", self))
+        f.debug_struct(&format!("GstGLVideoAllocationParams @ {self:p}"))
             .field("parent", &self.parent)
             .field("v_info", &self.v_info)
             .field("plane", &self.plane)
@@ -1030,7 +1030,7 @@ pub struct GstGLViewConvertClass {
 
 impl ::std::fmt::Debug for GstGLViewConvertClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLViewConvertClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLViewConvertClass @ {self:p}"))
             .finish()
     }
 }
@@ -1072,7 +1072,7 @@ pub struct GstGLWindowClass {
 
 impl ::std::fmt::Debug for GstGLWindowClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLWindowClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLWindowClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("get_display", &self.get_display)
             .field("set_window_handle", &self.set_window_handle)
@@ -1118,7 +1118,7 @@ pub struct GstGLBaseFilter {
 
 impl ::std::fmt::Debug for GstGLBaseFilter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBaseFilter @ {:p}", self))
+        f.debug_struct(&format!("GstGLBaseFilter @ {self:p}"))
             .field("parent", &self.parent)
             .field("display", &self.display)
             .field("context", &self.context)
@@ -1138,7 +1138,7 @@ pub struct GstGLBaseMemoryAllocator {
 
 impl ::std::fmt::Debug for GstGLBaseMemoryAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBaseMemoryAllocator @ {:p}", self))
+        f.debug_struct(&format!("GstGLBaseMemoryAllocator @ {self:p}"))
             .finish()
     }
 }
@@ -1158,7 +1158,7 @@ pub struct GstGLBaseSrc {
 
 impl ::std::fmt::Debug for GstGLBaseSrc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBaseSrc @ {:p}", self))
+        f.debug_struct(&format!("GstGLBaseSrc @ {self:p}"))
             .field("parent", &self.parent)
             .field("display", &self.display)
             .field("context", &self.context)
@@ -1178,7 +1178,7 @@ pub struct GstGLBufferAllocator {
 
 impl ::std::fmt::Debug for GstGLBufferAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBufferAllocator @ {:p}", self))
+        f.debug_struct(&format!("GstGLBufferAllocator @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1195,7 +1195,7 @@ pub struct GstGLBufferPool {
 
 impl ::std::fmt::Debug for GstGLBufferPool {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBufferPool @ {:p}", self))
+        f.debug_struct(&format!("GstGLBufferPool @ {self:p}"))
             .field("bufferpool", &self.bufferpool)
             .field("context", &self.context)
             .finish()
@@ -1221,7 +1221,7 @@ pub struct GstGLColorConvert {
 
 impl ::std::fmt::Debug for GstGLColorConvert {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLColorConvert @ {:p}", self))
+        f.debug_struct(&format!("GstGLColorConvert @ {self:p}"))
             .finish()
     }
 }
@@ -1239,7 +1239,7 @@ pub struct GstGLContext {
 
 impl ::std::fmt::Debug for GstGLContext {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLContext @ {:p}", self))
+        f.debug_struct(&format!("GstGLContext @ {self:p}"))
             .field("gl_vtable", &self.gl_vtable)
             .finish()
     }
@@ -1259,8 +1259,7 @@ pub struct GstGLDisplay {
 
 impl ::std::fmt::Debug for GstGLDisplay {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLDisplay @ {:p}", self))
-            .finish()
+        f.debug_struct(&format!("GstGLDisplay @ {self:p}")).finish()
     }
 }
 
@@ -1289,7 +1288,7 @@ pub struct GstGLFilter {
 
 impl ::std::fmt::Debug for GstGLFilter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLFilter @ {:p}", self))
+        f.debug_struct(&format!("GstGLFilter @ {self:p}"))
             .field("parent", &self.parent)
             .field("in_info", &self.in_info)
             .field("out_info", &self.out_info)
@@ -1314,7 +1313,7 @@ pub struct GstGLFramebuffer {
 
 impl ::std::fmt::Debug for GstGLFramebuffer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLFramebuffer @ {:p}", self))
+        f.debug_struct(&format!("GstGLFramebuffer @ {self:p}"))
             .finish()
     }
 }
@@ -1328,7 +1327,7 @@ pub struct GstGLMemoryAllocator {
 
 impl ::std::fmt::Debug for GstGLMemoryAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLMemoryAllocator @ {:p}", self))
+        f.debug_struct(&format!("GstGLMemoryAllocator @ {self:p}"))
             .finish()
     }
 }
@@ -1342,7 +1341,7 @@ pub struct GstGLMemoryPBOAllocator {
 
 impl ::std::fmt::Debug for GstGLMemoryPBOAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLMemoryPBOAllocator @ {:p}", self))
+        f.debug_struct(&format!("GstGLMemoryPBOAllocator @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1364,7 +1363,7 @@ pub struct GstGLOverlayCompositor {
 
 impl ::std::fmt::Debug for GstGLOverlayCompositor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLOverlayCompositor @ {:p}", self))
+        f.debug_struct(&format!("GstGLOverlayCompositor @ {self:p}"))
             .finish()
     }
 }
@@ -1378,7 +1377,7 @@ pub struct GstGLRenderbufferAllocator {
 
 impl ::std::fmt::Debug for GstGLRenderbufferAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLRenderbufferAllocator @ {:p}", self))
+        f.debug_struct(&format!("GstGLRenderbufferAllocator @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
@@ -1395,8 +1394,7 @@ pub struct GstGLSLStage {
 
 impl ::std::fmt::Debug for GstGLSLStage {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLSLStage @ {:p}", self))
-            .finish()
+        f.debug_struct(&format!("GstGLSLStage @ {self:p}")).finish()
     }
 }
 
@@ -1411,7 +1409,7 @@ pub struct GstGLShader {
 
 impl ::std::fmt::Debug for GstGLShader {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLShader @ {:p}", self))
+        f.debug_struct(&format!("GstGLShader @ {self:p}"))
             .field("parent", &self.parent)
             .field("context", &self.context)
             .finish()
@@ -1429,7 +1427,7 @@ pub struct GstGLUpload {
 
 impl ::std::fmt::Debug for GstGLUpload {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLUpload @ {:p}", self))
+        f.debug_struct(&format!("GstGLUpload @ {self:p}"))
             .field("parent", &self.parent)
             .field("context", &self.context)
             .finish()
@@ -1461,7 +1459,7 @@ pub struct GstGLViewConvert {
 
 impl ::std::fmt::Debug for GstGLViewConvert {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLViewConvert @ {:p}", self))
+        f.debug_struct(&format!("GstGLViewConvert @ {self:p}"))
             .field("object", &self.object)
             .field("context", &self.context)
             .field("shader", &self.shader)
@@ -1507,8 +1505,7 @@ pub struct GstGLWindow {
 
 impl ::std::fmt::Debug for GstGLWindow {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLWindow @ {:p}", self))
-            .finish()
+        f.debug_struct(&format!("GstGLWindow @ {self:p}")).finish()
     }
 }
 

@@ -513,7 +513,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
                     self.as_ref().to_glib_none().0,
                     n_properties.as_mut_ptr(),
                 ),
-                n_properties.assume_init() as usize,
+                n_properties.assume_init() as _,
             );
             ret
         }
@@ -862,7 +862,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            let detailed_signal_name = detail.map(|name| format!("deep-notify::{}\0", name));
+            let detailed_signal_name = detail.map(|name| format!("deep-notify::{name}\0"));
             let signal_name: &[u8] = detailed_signal_name
                 .as_ref()
                 .map_or(&b"deep-notify\0"[..], |n| n.as_bytes());

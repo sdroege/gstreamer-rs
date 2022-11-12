@@ -35,7 +35,7 @@ pub struct GstGLDisplayEGLClass {
 
 impl ::std::fmt::Debug for GstGLDisplayEGLClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLDisplayEGLClass @ {:p}", self))
+        f.debug_struct(&format!("GstGLDisplayEGLClass @ {self:p}"))
             .field("object_class", &self.object_class)
             .field("_padding", &self._padding)
             .finish()
@@ -54,7 +54,7 @@ pub struct GstGLDisplayEGL {
 
 impl ::std::fmt::Debug for GstGLDisplayEGL {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLDisplayEGL @ {:p}", self))
+        f.debug_struct(&format!("GstGLDisplayEGL @ {self:p}"))
             .field("parent", &self.parent)
             .finish()
     }
