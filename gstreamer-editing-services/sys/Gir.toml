@@ -18,6 +18,13 @@ external_libraries = [
     "Gio",
 ]
 
+ignore = [
+    "GES.VERSION_MAJOR",
+    "GES.VERSION_MINOR",
+    "GES.VERSION_MICRO",
+    "GES.VERSION_NANO",
+]
+
 [external_libraries]
 gstreamer="Gst"
 gstreamer_pbutils="GstPbutils"
