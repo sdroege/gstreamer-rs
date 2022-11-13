@@ -5,6 +5,24 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.19.2] - 2022-11-13
+### Added
+- Subclassing support for `gst::Allocator`.
+- `gst_gl::GLBaseMemory::context()` to retrieve the GL context used by the
+  memory.
+
+### Changed
+- Updated GStreamer .gir files to 1.22.2 release.
+
+### Fixed
+- `gst::Allocator::register()` does not cause use-after free with
+   GStreamer < 1.20.5 anymore.
+- Don't generate version constants in `gstreamer-editing-services-sys` as they
+  are useless and change with every update.
+
+### Changed
+- Fixed various new clippy warnings.
+
 ## [0.19.1] - 2022-10-24
 ### Changed
 - Make it possible to use objects not just as reference in the logging macros.
@@ -1373,7 +1391,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.1...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.2...HEAD
+[0.19.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.1...0.19.2
 [0.19.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.0...0.19.1
 [0.19.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.8...0.19.0
 [0.18.8]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.7...0.18.8
