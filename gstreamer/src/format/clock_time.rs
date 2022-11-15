@@ -368,6 +368,7 @@ impl From<ClockTime> for Duration {
 
 impl_common_ops_for_newtype_uint!(ClockTime, u64);
 impl_signed_div_mul!(ClockTime, u64);
+impl_signed_int_into_signed!(ClockTime, u64);
 
 // rustdoc-stripper-ignore-next
 /// Tell [`pad_clocktime`] what kind of time we're formatting
@@ -1341,5 +1342,38 @@ mod tests {
     #[should_panic]
     fn attempt_to_build_from_u64max() {
         let _ = ClockTime::from_nseconds(u64::MAX);
+    }
+
+    #[test]
+    fn try_into_signed() {
+        let time = crate::Signed::Positive(ClockTime::from_nseconds(0));
+        assert_eq!(i64::try_from(time), Ok(0));
+
+        let time = crate::Signed::Positive(ClockTime::from_nseconds(123));
+        assert_eq!(i64::try_from(time), Ok(123));
+
+        let time = crate::Signed::Positive(ClockTime::from_nseconds(u64::MAX - 1));
+        assert!(i64::try_from(time).is_err());
+
+        let time = crate::Signed::Positive(ClockTime::from_nseconds(u64::MAX >> 1));
+        assert_eq!(i64::MAX as i128, (u64::MAX >> 1) as i128);
+        assert_eq!(i64::try_from(time), Ok(i64::MAX));
+
+        let time = crate::Signed::Negative(ClockTime::from_nseconds(0));
+        assert_eq!(i64::try_from(time), Ok(0));
+
+        let time = crate::Signed::Negative(ClockTime::from_nseconds(123));
+        assert_eq!(i64::try_from(time), Ok(-123));
+
+        let time = crate::Signed::Negative(ClockTime::from_nseconds(u64::MAX - 1));
+        assert!(i64::try_from(time).is_err());
+
+        let time = crate::Signed::Negative(ClockTime::from_nseconds(u64::MAX >> 1));
+        assert_eq!(i64::MIN as i128 + 1, -((u64::MAX >> 1) as i128));
+        assert_eq!(i64::try_from(time), Ok(i64::MIN + 1));
+
+        let time = crate::Signed::Negative(ClockTime::from_nseconds((u64::MAX >> 1) + 1));
+        assert_eq!(i64::MIN as i128, -(((u64::MAX >> 1) + 1) as i128));
+        assert_eq!(i64::try_from(time), Ok(i64::MIN));
     }
 }

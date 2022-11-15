@@ -60,6 +60,7 @@ impl Buffers {
 
 impl_common_ops_for_newtype_uint!(Buffers, u64);
 impl_signed_div_mul!(Buffers, u64);
+impl_signed_int_into_signed!(Buffers, u64);
 impl_format_value_traits!(Buffers, Buffers, Buffers, u64);
 option_glib_newtype_from_to!(Buffers, Buffers::OFFSET_NONE);
 glib_newtype_display!(Buffers, DisplayableOptionBuffers, Format::Buffers);
@@ -132,6 +133,7 @@ impl Bytes {
 
 impl_common_ops_for_newtype_uint!(Bytes, u64);
 impl_signed_div_mul!(Bytes, u64);
+impl_signed_int_into_signed!(Bytes, u64);
 impl_format_value_traits!(Bytes, Bytes, Bytes, u64);
 option_glib_newtype_from_to!(Bytes, u64::MAX);
 glib_newtype_display!(Bytes, DisplayableOptionBytes, Format::Bytes);
@@ -222,6 +224,7 @@ impl Default {
 
 impl_common_ops_for_newtype_uint!(Default, u64);
 impl_signed_div_mul!(Default, u64);
+impl_signed_int_into_signed!(Default, u64);
 impl_format_value_traits!(Default, Default, Default, u64);
 option_glib_newtype_from_to!(Default, u64::MAX);
 glib_newtype_display!(Default, DisplayableOptionDefault, Format::Default);
@@ -297,6 +300,7 @@ impl Percent {
 
 impl_common_ops_for_newtype_uint!(Percent, u32, one: ffi::GST_FORMAT_PERCENT_SCALE as u32);
 impl_signed_div_mul!(Percent, u32);
+impl_signed_int_into_signed!(Percent, u32);
 
 impl FormattedValue for Option<Percent> {
     type FullRange = Option<Percent>;

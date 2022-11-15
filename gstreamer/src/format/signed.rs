@@ -220,50 +220,17 @@ pub trait UnsignedIntoSigned: Copy + Sized {
 impl_unsigned_int_into_signed!(u64);
 impl_signed_ops!(u64);
 impl_signed_div_mul!(u64);
+impl_signed_int_into_signed!(u64);
 
 impl_unsigned_int_into_signed!(u32);
 impl_signed_ops!(u32);
 impl_signed_div_mul!(u32);
+impl_signed_int_into_signed!(u32);
 
-impl From<i64> for Signed<u64> {
-    fn from(val: i64) -> Signed<u64> {
-        skip_assert_initialized!();
-        match val {
-            positive if positive.is_positive() => Signed::Positive(positive as u64),
-            i64::MIN => {
-                // `i64::MIN.abs()` can't be represented as an `i64`
-                Signed::Negative((-(i64::MIN as i128)) as u64)
-            }
-            negative => Signed::Negative((-negative) as u64),
-        }
-    }
-}
-
-impl From<isize> for Signed<usize> {
-    fn from(val: isize) -> Signed<usize> {
-        skip_assert_initialized!();
-        match val {
-            positive if positive.is_positive() => Signed::Positive(positive as usize),
-            isize::MIN => {
-                // `isize::MIN.abs()` can't be represented as an `isize`
-                Signed::Negative((-(isize::MIN as i128)) as usize)
-            }
-            negative => Signed::Negative((-negative) as usize),
-        }
-    }
-}
-
-// `i32::MIN.abs()` can't be represented as an `i32`
-impl From<i32> for Signed<u32> {
-    fn from(val: i32) -> Signed<u32> {
-        skip_assert_initialized!();
-        if val.is_positive() {
-            Signed::Positive(val as u32)
-        } else {
-            Signed::Negative((-(val as i64)) as u32)
-        }
-    }
-}
+impl_unsigned_int_into_signed!(usize);
+impl_signed_ops!(usize);
+impl_signed_div_mul!(usize);
+impl_signed_int_into_signed!(usize);
 
 pub trait NoneSignedBuilder: FormattedValueNoneBuilder {
     type Signed;

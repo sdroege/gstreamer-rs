@@ -517,6 +517,10 @@ macro_rules! impl_signed_ops(
         impl_signed_ops!(u32, u32, 0);
     };
 
+    (usize) => {
+        impl_signed_ops!(usize, usize, 0);
+    };
+
     ($typ:ty, $inner:ty, $zero:expr) => {
         impl crate::Signed<$typ> {
             // rustdoc-stripper-ignore-next
@@ -879,6 +883,26 @@ macro_rules! impl_signed_div_mul(
 
     ($typ:ty, $inner:ty, $signed_rhs:ty, $into_inner:expr) => {
         impl crate::Signed<$typ> {
+            #[allow(dead_code)]
+            fn signed_from_inner(val: $inner, sign: $signed_rhs) -> Option<crate::Signed<$typ>> {
+                skip_assert_initialized!();
+                if sign.is_positive() {
+                    Self::positive_from_inner(val)
+                } else {
+                    Self::negative_from_inner(val)
+                }
+            }
+
+            fn positive_from_inner(val: $inner) -> Option<Self> {
+                skip_assert_initialized!();
+                <$typ>::try_from(val).ok().map(crate::Signed::Positive)
+            }
+
+            fn negative_from_inner(val: $inner) -> Option<Self> {
+                skip_assert_initialized!();
+                <$typ>::try_from(val).ok().map(crate::Signed::Negative)
+            }
+
             #[must_use = "this returns the result of the operation, without modifying the original"]
             pub fn checked_div(self, rhs:$signed_rhs) -> Option<Self> {
                 use crate::Signed::*;
@@ -1274,27 +1298,6 @@ macro_rules! impl_signed_extra_div_mul(
 
 macro_rules! impl_signed_div_mul_trait(
     ($typ:ty, $inner:ty, $signed_rhs:ty, $into_inner:expr) => {
-        impl crate::Signed<$typ> {
-            fn signed_from_inner(val: $inner, sign: $signed_rhs) -> Option<crate::Signed<$typ>> {
-                skip_assert_initialized!();
-                if sign.is_positive() {
-                    Self::positive_from_inner(val)
-                } else {
-                    Self::negative_from_inner(val)
-                }
-            }
-
-            fn positive_from_inner(val: $inner) -> Option<Self> {
-                skip_assert_initialized!();
-                <$typ>::try_from(val).ok().map(crate::Signed::Positive)
-            }
-
-            fn negative_from_inner(val: $inner) -> Option<Self> {
-                skip_assert_initialized!();
-                <$typ>::try_from(val).ok().map(crate::Signed::Negative)
-            }
-        }
-
         impl muldiv::MulDiv<$signed_rhs> for crate::Signed<$typ> {
             type Output = Self;
 
@@ -1628,3 +1631,59 @@ macro_rules! glib_newtype_display {
         }
     };
 }
+
+macro_rules! impl_signed_int_into_signed(
+    (u64) => {
+        impl_signed_int_into_signed!(u64, u64, i64, |val: u64| val);
+    };
+
+    (usize) => {
+        impl_signed_int_into_signed!(usize, usize, isize, |val: usize| val);
+    };
+
+    (u32) => {
+        impl_signed_int_into_signed!(u32, u32, i32, |val: u32| val);
+    };
+
+    ($newtyp:ty, u64) => {
+        impl_signed_int_into_signed!($newtyp, u64, i64, |val: $newtyp| *val);
+    };
+
+    ($newtyp:ty, u32) => {
+        impl_signed_int_into_signed!($newtyp, u32, i32, |val: $newtyp| *val);
+    };
+
+    ($typ:ty, $inner:ty, $signed:ty, $into_inner:expr) => {
+        impl TryFrom<crate::Signed<$typ>> for $signed {
+            type Error = std::num::TryFromIntError;
+
+            fn try_from(value: crate::Signed<$typ>) -> Result<$signed, Self::Error> {
+                assert_eq!(::std::mem::size_of::<$inner>(), ::std::mem::size_of::<$signed>());
+
+                match value {
+                    crate::Signed::Positive(value) => <$signed>::try_from($into_inner(value)),
+                    crate::Signed::Negative(value) => {
+                        let inner = $into_inner(value);
+                        // `$signed::MIN.abs()` can't be represented as an `$signed`
+                        if inner == (<$inner>::MAX >> 1) + 1 {
+                            Ok(<$signed>::MIN)
+                        } else {
+                            Ok(-<$signed>::try_from(inner)?)
+                        }
+                    },
+                }
+            }
+        }
+
+        impl From<$signed> for crate::Signed<$typ> {
+            fn from(value: $signed) -> crate::Signed<$typ> {
+                let abs = value.unsigned_abs();
+                if value.signum() >= 0 {
+                    Self::positive_from_inner(abs).unwrap()
+                } else {
+                    Self::negative_from_inner(abs).unwrap()
+                }
+            }
+        }
+    };
+);
