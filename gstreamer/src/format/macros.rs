@@ -208,6 +208,12 @@ macro_rules! impl_unsigned_int_into_signed(
                 Some(self?.into_negative())
             }
         }
+
+        impl From<$typ> for crate::Signed<$typ> {
+            fn from(v: $typ) -> crate::Signed<$typ> {
+                crate::Signed::Positive(v)
+            }
+        }
     };
 
     ($typ:ty, $inner:ty) => {
