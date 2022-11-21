@@ -584,6 +584,18 @@ impl PartialEq for TagList {
 
 impl Eq for TagList {}
 
+impl PartialEq<TagListRef> for TagList {
+    fn eq(&self, other: &TagListRef) -> bool {
+        TagListRef::eq(self, other)
+    }
+}
+
+impl PartialEq<TagList> for TagListRef {
+    fn eq(&self, other: &TagList) -> bool {
+        TagListRef::eq(other, self)
+    }
+}
+
 impl fmt::Debug for TagListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut debug = f.debug_struct("TagList");

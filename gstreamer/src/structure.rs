@@ -153,17 +153,23 @@ impl fmt::Display for Structure {
 
 impl PartialEq for Structure {
     fn eq(&self, other: &Structure) -> bool {
-        self.as_ref().eq(other)
-    }
-}
-
-impl PartialEq<StructureRef> for Structure {
-    fn eq(&self, other: &StructureRef) -> bool {
-        self.as_ref().eq(other)
+        StructureRef::eq(self, other)
     }
 }
 
 impl Eq for Structure {}
+
+impl PartialEq<StructureRef> for Structure {
+    fn eq(&self, other: &StructureRef) -> bool {
+        StructureRef::eq(self, other)
+    }
+}
+
+impl PartialEq<Structure> for StructureRef {
+    fn eq(&self, other: &Structure) -> bool {
+        StructureRef::eq(other, self)
+    }
+}
 
 impl str::FromStr for Structure {
     type Err = glib::BoolError;

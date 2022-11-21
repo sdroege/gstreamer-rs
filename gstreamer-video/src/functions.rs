@@ -307,7 +307,7 @@ mod tests {
                         .map(|f| f.into_glib())
                         .collect();
                 let caps = ffi::gst_video_make_raw_caps(formats.as_ptr(), formats.len() as u32);
-                from_glib_full(caps)
+                gst::Caps::from_glib_full(caps)
             };
             assert_eq!(caps, c_caps);
         }
