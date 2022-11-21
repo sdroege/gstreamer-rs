@@ -95,6 +95,11 @@ status = "generate"
     # getter/setter exists in base class
     ignore = true
 
+    [[object.property]]
+    name = "force-live"
+    # getter/setter exists in base class
+    ignore = true
+
 [[object]]
 name = "GstAudio.AudioBaseSink"
 status = "generate"

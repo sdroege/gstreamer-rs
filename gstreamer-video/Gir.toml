@@ -25,7 +25,6 @@ generate = [
     "GstVideo.NavigationQueryType",
     "GstVideo.VideoAFDSpec",
     "GstVideo.VideoAFDValue",
-    "GstVideo.VideoAggregator",
     "GstVideo.VideoAggregatorParallelConvertPad",
     "GstVideo.VideoAlphaMode",
     "GstVideo.VideoBufferPool",
@@ -321,6 +320,15 @@ status = "generate"
     ignore = true
     [[object.member]]
     name = "mask"
+    ignore = true
+
+[[object]]
+name = "GstVideo.VideoAggregator"
+status = "generate"
+
+    [[object.property]]
+    name = "force-live"
+    # getter/setter exists in base class
     ignore = true
 
 [[object]]
