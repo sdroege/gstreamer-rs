@@ -101,3 +101,63 @@ pub fn type_find_helper_for_buffer_with_extension<P: IsA<gst::Object>>(
         }
     }
 }
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[doc(alias = "gst_type_find_helper_for_buffer_with_caps")]
+pub fn type_find_helper_for_buffer_with_caps(
+    obj: Option<&impl IsA<gst::Object>>,
+    buf: &gst::BufferRef,
+    caps: &gst::CapsRef,
+) -> (Option<gst::Caps>, gst::TypeFindProbability) {
+    assert_initialized_main_thread!();
+    unsafe {
+        let mut prob = mem::MaybeUninit::uninit();
+        let ret = from_glib_full(ffi::gst_type_find_helper_for_buffer_with_caps(
+            obj.map(|p| p.as_ref()).to_glib_none().0,
+            mut_override(buf.as_ptr()),
+            mut_override(caps.as_ptr()),
+            prob.as_mut_ptr(),
+        ));
+        (ret, from_glib(prob.assume_init()))
+    }
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[doc(alias = "gst_type_find_helper_for_data_with_caps")]
+pub fn type_find_helper_for_data_with_caps(
+    obj: Option<&impl IsA<gst::Object>>,
+    data: &[u8],
+    caps: &gst::CapsRef,
+) -> (Option<gst::Caps>, gst::TypeFindProbability) {
+    assert_initialized_main_thread!();
+    let size = data.len() as _;
+    unsafe {
+        let mut prob = mem::MaybeUninit::uninit();
+        let ret = from_glib_full(ffi::gst_type_find_helper_for_data_with_caps(
+            obj.map(|p| p.as_ref()).to_glib_none().0,
+            data.to_glib_none().0,
+            size,
+            mut_override(caps.as_ptr()),
+            prob.as_mut_ptr(),
+        ));
+        (ret, from_glib(prob.assume_init()))
+    }
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[doc(alias = "gst_type_find_list_factories_for_caps")]
+pub fn type_find_list_factories_for_caps(
+    obj: Option<&impl IsA<gst::Object>>,
+    caps: &gst::CapsRef,
+) -> glib::List<gst::TypeFindFactory> {
+    assert_initialized_main_thread!();
+    unsafe {
+        glib::collections::List::from_glib_full(ffi::gst_type_find_list_factories_for_caps(
+            obj.map(|p| p.as_ref()).to_glib_none().0,
+            mut_override(caps.as_ptr()),
+        ))
+    }
+}

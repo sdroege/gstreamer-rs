@@ -107,22 +107,37 @@ status = "generate"
     [[object.function]]
     name = "type_find_helper_for_data"
     # broken return value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "type_find_helper_for_data_with_extension"
     # broken return value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "type_find_helper_for_buffer"
     # broken return value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "type_find_helper_for_buffer_with_extension"
     # broken return value
-    ignore = true
+    manual = true
+
+    [[object.function]]
+    name = "type_find_helper_for_buffer_with_caps"
+    # broken return value
+    manual = true
+
+    [[object.function]]
+    name = "type_find_helper_for_data_with_caps"
+    # broken return value
+    manual = true
+
+    [[object.function]]
+    name = "type_find_list_factories_for_caps"
+    # broken return value
+    manual = true
 
     [[object.function]]
     name = "type_find_helper"
