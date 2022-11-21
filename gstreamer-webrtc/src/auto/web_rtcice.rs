@@ -55,6 +55,10 @@ pub trait WebRTCICEExt: 'static {
     #[doc(alias = "gst_webrtc_ice_gather_candidates")]
     fn gather_candidates(&self, stream: &impl IsA<WebRTCICEStream>) -> bool;
 
+    #[doc(alias = "gst_webrtc_ice_get_http_proxy")]
+    #[doc(alias = "get_http_proxy")]
+    fn http_proxy(&self) -> glib::GString;
+
     #[doc(alias = "gst_webrtc_ice_get_is_controller")]
     #[doc(alias = "get_is_controller")]
     fn is_controller(&self) -> bool;
@@ -85,6 +89,9 @@ pub trait WebRTCICEExt: 'static {
 
     #[doc(alias = "gst_webrtc_ice_set_force_relay")]
     fn set_force_relay(&self, force_relay: bool);
+
+    #[doc(alias = "gst_webrtc_ice_set_http_proxy")]
+    fn set_http_proxy(&self, uri: &str);
 
     #[doc(alias = "gst_webrtc_ice_set_is_controller")]
     fn set_is_controller(&self, controller: bool);
@@ -214,6 +221,14 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    fn http_proxy(&self) -> glib::GString {
+        unsafe {
+            from_glib_full(ffi::gst_webrtc_ice_get_http_proxy(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     fn is_controller(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_webrtc_ice_get_is_controller(
@@ -285,6 +300,15 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
             ffi::gst_webrtc_ice_set_force_relay(
                 self.as_ref().to_glib_none().0,
                 force_relay.into_glib(),
+            );
+        }
+    }
+
+    fn set_http_proxy(&self, uri: &str) {
+        unsafe {
+            ffi::gst_webrtc_ice_set_http_proxy(
+                self.as_ref().to_glib_none().0,
+                uri.to_glib_none().0,
             );
         }
     }

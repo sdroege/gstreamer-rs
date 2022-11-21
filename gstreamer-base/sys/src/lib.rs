@@ -1001,6 +1001,14 @@ pub struct _GstQueueArray {
 
 pub type GstQueueArray = *mut _GstQueueArray;
 
+#[repr(C)]
+pub struct _GstTypeFindData {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstTypeFindData = *mut _GstTypeFindData;
+
 // Classes
 #[repr(C)]
 pub struct GstAdapter {
@@ -1713,6 +1721,31 @@ extern "C" {
     ) -> *mut GstQueueArray;
 
     //=========================================================================
+    // GstTypeFindData
+    //=========================================================================
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_type_find_data_free(data: *mut GstTypeFindData);
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_type_find_data_get_caps(data: *mut GstTypeFindData) -> *mut gst::GstCaps;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_type_find_data_get_probability(
+        data: *mut GstTypeFindData,
+    ) -> gst::GstTypeFindProbability;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_type_find_data_get_typefind(data: *mut GstTypeFindData) -> *mut gst::GstTypeFind;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_type_find_data_new(
+        obj: *mut gst::GstObject,
+        data: *const u8,
+        size: size_t,
+    ) -> *mut GstTypeFindData;
+
+    //=========================================================================
     // GstAdapter
     //=========================================================================
     pub fn gst_adapter_get_type() -> GType;
@@ -1805,6 +1838,9 @@ extern "C" {
         params: *mut gst::GstAllocationParams,
     );
     pub fn gst_aggregator_get_buffer_pool(self_: *mut GstAggregator) -> *mut gst::GstBufferPool;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_aggregator_get_force_live(self_: *mut GstAggregator) -> gboolean;
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn gst_aggregator_get_ignore_inactive_pads(self_: *mut GstAggregator) -> gboolean;
@@ -1827,6 +1863,9 @@ extern "C" {
         duration: gst::GstClockTime,
         info: *mut gst::GstStructure,
     );
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_aggregator_set_force_live(self_: *mut GstAggregator, force_live: gboolean);
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn gst_aggregator_set_ignore_inactive_pads(self_: *mut GstAggregator, ignore: gboolean);
@@ -2233,6 +2272,14 @@ extern "C" {
         buf: *mut gst::GstBuffer,
         prob: *mut gst::GstTypeFindProbability,
     ) -> *mut gst::GstCaps;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_type_find_helper_for_buffer_with_caps(
+        obj: *mut gst::GstObject,
+        buf: *mut gst::GstBuffer,
+        caps: *mut gst::GstCaps,
+        prob: *mut gst::GstTypeFindProbability,
+    ) -> *mut gst::GstCaps;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn gst_type_find_helper_for_buffer_with_extension(
@@ -2245,6 +2292,15 @@ extern "C" {
         obj: *mut gst::GstObject,
         data: *const u8,
         size: size_t,
+        prob: *mut gst::GstTypeFindProbability,
+    ) -> *mut gst::GstCaps;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_type_find_helper_for_data_with_caps(
+        obj: *mut gst::GstObject,
+        data: *const u8,
+        size: size_t,
+        caps: *mut gst::GstCaps,
         prob: *mut gst::GstTypeFindProbability,
     ) -> *mut gst::GstCaps;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -2279,5 +2335,11 @@ extern "C" {
         caps: *mut *mut gst::GstCaps,
         prob: *mut gst::GstTypeFindProbability,
     ) -> gst::GstFlowReturn;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_type_find_list_factories_for_caps(
+        obj: *mut gst::GstObject,
+        caps: *mut gst::GstCaps,
+    ) -> *mut glib::GList;
 
 }
