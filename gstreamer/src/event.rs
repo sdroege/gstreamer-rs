@@ -112,8 +112,14 @@ impl PartialOrd for EventType {
             return None;
         }
 
-        let v1 = self.into_glib() as u32;
-        let v2 = other.into_glib() as u32;
+        // See gst_event_type_to_sticky_ordering() from 1.22
+        let fixup_event_ordering = |v| match v {
+            ffi::GST_EVENT_INSTANT_RATE_CHANGE => ffi::GST_EVENT_SEGMENT as u32 + 1,
+            _ => v as u32,
+        };
+
+        let v1 = fixup_event_ordering(self.into_glib());
+        let v2 = fixup_event_ordering(other.into_glib());
 
         let stream_start = ffi::GST_EVENT_STREAM_START as u32;
         let segment = ffi::GST_EVENT_SEGMENT as u32;
