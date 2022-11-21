@@ -827,6 +827,18 @@ impl PartialEq for Caps {
 
 impl Eq for Caps {}
 
+impl PartialEq<CapsRef> for Caps {
+    fn eq(&self, other: &CapsRef) -> bool {
+        CapsRef::eq(self, other)
+    }
+}
+
+impl PartialEq<Caps> for CapsRef {
+    fn eq(&self, other: &Caps) -> bool {
+        CapsRef::eq(other, self)
+    }
+}
+
 impl fmt::Debug for CapsRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         if self.is_any() {

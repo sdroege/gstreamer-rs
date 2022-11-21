@@ -1035,6 +1035,17 @@ impl PartialEq for Buffer {
 
 impl Eq for Buffer {}
 
+impl PartialEq<BufferRef> for Buffer {
+    fn eq(&self, other: &BufferRef) -> bool {
+        BufferRef::eq(self, other)
+    }
+}
+impl PartialEq<Buffer> for BufferRef {
+    fn eq(&self, other: &Buffer) -> bool {
+        BufferRef::eq(other, self)
+    }
+}
+
 impl fmt::Debug for BufferRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use crate::utils::Displayable;

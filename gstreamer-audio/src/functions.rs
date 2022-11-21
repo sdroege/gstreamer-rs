@@ -82,7 +82,7 @@ mod tests {
 
         #[cfg(feature = "v1_18")]
         {
-            use glib::translate::{from_glib_full, IntoGlib};
+            use glib::translate::IntoGlib;
 
             /* audio_make_raw_caps() is a re-implementation so ensure it returns the same caps as the C API */
             let c_caps = unsafe {
@@ -96,7 +96,7 @@ mod tests {
                     formats.len() as u32,
                     ffi::GST_AUDIO_LAYOUT_INTERLEAVED,
                 );
-                from_glib_full(caps)
+                gst::Caps::from_glib_full(caps)
             };
             assert_eq!(caps, c_caps);
         }
