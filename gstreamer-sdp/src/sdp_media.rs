@@ -610,15 +610,12 @@ impl SDPMediaRef {
 
     #[doc(alias = "gst_sdp_media_set_media_from_caps")]
     pub fn set_media_from_caps(
-        caps: &gst::Caps,
+        caps: &gst::CapsRef,
         media: &mut SDPMedia,
     ) -> Result<(), glib::BoolError> {
         assert_initialized_main_thread!();
         let result = unsafe {
-            ffi::gst_sdp_media_set_media_from_caps(
-                caps.to_glib_none().0,
-                media.to_glib_none_mut().0,
-            )
+            ffi::gst_sdp_media_set_media_from_caps(caps.as_ptr(), media.to_glib_none_mut().0)
         };
         match result {
             ffi::GST_SDP_OK => Ok(()),

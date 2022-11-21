@@ -147,11 +147,6 @@ status = "generate"
         nullable_return_is_error = "Unsupported caps"
 
     [[object.function]]
-    name = "codec_utils_opus_create_caps_from_header"
-        [object.function.return]
-        nullable_return_is_error = "Failed to create caps from Opus headers"
-
-    [[object.function]]
     name = "codec_utils_opus_create_caps"
     # Manual checks
     manual = true
@@ -169,6 +164,16 @@ status = "generate"
     [[object.function]]
     name = "codec_utils_opus_parse_header"
     # Manual checks
+    manual = true
+
+    [[object.function]]
+    name = "codec_utils_opus_create_caps_from_header"
+    # Use &CapsRef
+    manual = true
+
+    [[object.function]]
+    pattern = "(codec_utils_caps_get_mime_codec|pb_utils_get_caps_description_flags|pb_utils_get_file_extension_from_caps)"
+    # Use &CapsRef
     manual = true
 
     # Plugin installer API needs some manual impls

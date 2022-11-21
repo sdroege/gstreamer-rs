@@ -8,6 +8,7 @@ use crate::ELEMENT_METADATA_KLASS;
 use crate::ELEMENT_METADATA_LONGNAME;
 use std::ffi::CStr;
 
+use crate::CapsRef;
 use crate::Element;
 use crate::ElementFactory;
 use crate::Rank;
@@ -179,6 +180,46 @@ impl ElementFactory {
     #[doc(alias = "gst_element_factory_get_icon_name")]
     pub fn icon_name(&self) -> Option<&str> {
         self.metadata(&ELEMENT_METADATA_ICON_NAME)
+    }
+
+    #[doc(alias = "gst_element_factory_can_sink_all_caps")]
+    pub fn can_sink_all_caps(&self, caps: &CapsRef) -> bool {
+        unsafe {
+            from_glib(ffi::gst_element_factory_can_sink_all_caps(
+                self.to_glib_none().0,
+                caps.as_ptr(),
+            ))
+        }
+    }
+
+    #[doc(alias = "gst_element_factory_can_sink_any_caps")]
+    pub fn can_sink_any_caps(&self, caps: &CapsRef) -> bool {
+        unsafe {
+            from_glib(ffi::gst_element_factory_can_sink_any_caps(
+                self.to_glib_none().0,
+                caps.as_ptr(),
+            ))
+        }
+    }
+
+    #[doc(alias = "gst_element_factory_can_src_all_caps")]
+    pub fn can_src_all_caps(&self, caps: &CapsRef) -> bool {
+        unsafe {
+            from_glib(ffi::gst_element_factory_can_src_all_caps(
+                self.to_glib_none().0,
+                caps.as_ptr(),
+            ))
+        }
+    }
+
+    #[doc(alias = "gst_element_factory_can_src_any_caps")]
+    pub fn can_src_any_caps(&self, caps: &CapsRef) -> bool {
+        unsafe {
+            from_glib(ffi::gst_element_factory_can_src_any_caps(
+                self.to_glib_none().0,
+                caps.as_ptr(),
+            ))
+        }
     }
 }
 

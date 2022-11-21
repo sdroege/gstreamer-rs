@@ -4,9 +4,6 @@
 // DO NOT EDIT
 
 use crate::EncodingTarget;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-use crate::PbUtilsCapsDescriptionFlags;
 use glib::translate::*;
 use std::mem;
 
@@ -71,19 +68,6 @@ pub fn codec_utils_caps_from_mime_codec(codecs_field: &str) -> Option<gst::Caps>
         from_glib_full(ffi::gst_codec_utils_caps_from_mime_codec(
             codecs_field.to_glib_none().0,
         ))
-    }
-}
-
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-#[doc(alias = "gst_codec_utils_caps_get_mime_codec")]
-pub fn codec_utils_caps_get_mime_codec(caps: &gst::Caps) -> Result<glib::GString, glib::BoolError> {
-    assert_initialized_main_thread!();
-    unsafe {
-        Option::<_>::from_glib_full(ffi::gst_codec_utils_caps_get_mime_codec(
-            caps.to_glib_none().0,
-        ))
-        .ok_or_else(|| glib::bool_error!("Unsupported caps"))
     }
 }
 
@@ -200,21 +184,6 @@ pub fn codec_utils_mpeg4video_get_profile(
     }
 }
 
-#[doc(alias = "gst_codec_utils_opus_create_caps_from_header")]
-pub fn codec_utils_opus_create_caps_from_header(
-    header: &gst::Buffer,
-    comments: Option<&gst::Buffer>,
-) -> Result<gst::Caps, glib::BoolError> {
-    assert_initialized_main_thread!();
-    unsafe {
-        Option::<_>::from_glib_full(ffi::gst_codec_utils_opus_create_caps_from_header(
-            header.to_glib_none().0,
-            comments.to_glib_none().0,
-        ))
-        .ok_or_else(|| glib::bool_error!("Failed to create caps from Opus headers"))
-    }
-}
-
 #[doc(alias = "gst_encoding_list_all_targets")]
 pub fn encoding_list_all_targets(categoryname: Option<&str>) -> Vec<EncodingTarget> {
     assert_initialized_main_thread!();
@@ -231,36 +200,12 @@ pub fn encoding_list_available_categories() -> Vec<glib::GString> {
     unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_encoding_list_available_categories()) }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-#[doc(alias = "gst_pb_utils_get_caps_description_flags")]
-pub fn pb_utils_get_caps_description_flags(caps: &gst::Caps) -> PbUtilsCapsDescriptionFlags {
-    assert_initialized_main_thread!();
-    unsafe {
-        from_glib(ffi::gst_pb_utils_get_caps_description_flags(
-            caps.to_glib_none().0,
-        ))
-    }
-}
-
 #[doc(alias = "gst_pb_utils_get_element_description")]
 pub fn pb_utils_get_element_description(factory_name: &str) -> glib::GString {
     assert_initialized_main_thread!();
     unsafe {
         from_glib_full(ffi::gst_pb_utils_get_element_description(
             factory_name.to_glib_none().0,
-        ))
-    }
-}
-
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-#[doc(alias = "gst_pb_utils_get_file_extension_from_caps")]
-pub fn pb_utils_get_file_extension_from_caps(caps: &gst::Caps) -> Option<glib::GString> {
-    assert_initialized_main_thread!();
-    unsafe {
-        from_glib_full(ffi::gst_pb_utils_get_file_extension_from_caps(
-            caps.to_glib_none().0,
         ))
     }
 }

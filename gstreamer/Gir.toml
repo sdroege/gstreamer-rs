@@ -1313,6 +1313,26 @@ final_type = true
     # Use str as return type
     manual = true
 
+    [[object.function]]
+    name = "can_sink_all_caps"
+    # Use &CapsRef
+    manual = true
+
+    [[object.function]]
+    name = "can_src_all_caps"
+    # Use &CapsRef
+    manual = true
+
+    [[object.function]]
+    name = "can_sink_any_caps"
+    # Use &CapsRef
+    manual = true
+
+    [[object.function]]
+    name = "can_src_any_caps"
+    # Use &CapsRef
+    manual = true
+
 [[object]]
 name = "Gst.ElementFactoryListType"
 status = "manual"

@@ -36,6 +36,8 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use crate::auto::*;
 
+mod enums;
+
 #[cfg(feature = "serde")]
 mod flag_serde;
 

@@ -78,6 +78,22 @@ impl Player {
             )
         }
     }
+
+    #[doc(alias = "gst_player_get_video_snapshot")]
+    #[doc(alias = "get_video_snapshot")]
+    pub fn video_snapshot(
+        &self,
+        format: crate::PlayerSnapshotFormat,
+        config: Option<&gst::StructureRef>,
+    ) -> Option<gst::Sample> {
+        unsafe {
+            from_glib_full(ffi::gst_player_get_video_snapshot(
+                self.to_glib_none().0,
+                format.into_glib(),
+                mut_override(config.map(|c| c.as_ptr()).unwrap_or(std::ptr::null())),
+            ))
+        }
+    }
 }
 
 unsafe extern "C" fn duration_changed_trampoline<

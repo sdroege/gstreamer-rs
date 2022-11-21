@@ -3,7 +3,7 @@ use gst::prelude::*;
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;
 
-fn print_caps(caps: &gst::Caps, prefix: &str) {
+fn print_caps(caps: &gst::CapsRef, prefix: &str) {
     if caps.is_any() {
         println!("{}ANY", prefix);
         return;

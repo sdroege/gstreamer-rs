@@ -59,14 +59,14 @@ pub fn type_find_helper_for_data_with_extension(
 #[doc(alias = "gst_type_find_helper_for_buffer")]
 pub fn type_find_helper_for_buffer<P: IsA<gst::Object>>(
     obj: Option<&P>,
-    buf: &gst::Buffer,
+    buf: &gst::BufferRef,
 ) -> Result<(gst::Caps, gst::TypeFindProbability), glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
         let mut prob = mem::MaybeUninit::uninit();
         let ret = ffi::gst_type_find_helper_for_buffer(
             obj.map(|p| p.as_ref()).to_glib_none().0,
-            buf.to_glib_none().0,
+            mut_override(buf.as_ptr()),
             prob.as_mut_ptr(),
         );
         if ret.is_null() {
@@ -82,7 +82,7 @@ pub fn type_find_helper_for_buffer<P: IsA<gst::Object>>(
 #[doc(alias = "gst_type_find_helper_for_buffer_with_extension")]
 pub fn type_find_helper_for_buffer_with_extension<P: IsA<gst::Object>>(
     obj: Option<&P>,
-    buf: &gst::Buffer,
+    buf: &gst::BufferRef,
     extension: Option<&str>,
 ) -> Result<(gst::Caps, gst::TypeFindProbability), glib::error::BoolError> {
     assert_initialized_main_thread!();
@@ -90,7 +90,7 @@ pub fn type_find_helper_for_buffer_with_extension<P: IsA<gst::Object>>(
         let mut prob = mem::MaybeUninit::uninit();
         let ret = ffi::gst_type_find_helper_for_buffer_with_extension(
             obj.map(|p| p.as_ref()).to_glib_none().0,
-            buf.to_glib_none().0,
+            mut_override(buf.as_ptr()),
             extension.to_glib_none().0,
             prob.as_mut_ptr(),
         );

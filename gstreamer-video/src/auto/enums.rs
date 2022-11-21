@@ -803,12 +803,6 @@ pub enum VideoCaptionType {
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl VideoCaptionType {
-    #[doc(alias = "gst_video_caption_type_from_caps")]
-    pub fn from_caps(caps: &gst::Caps) -> VideoCaptionType {
-        assert_initialized_main_thread!();
-        unsafe { from_glib(ffi::gst_video_caption_type_from_caps(caps.to_glib_none().0)) }
-    }
-
     #[doc(alias = "gst_video_caption_type_to_caps")]
     pub fn to_caps(self) -> gst::Caps {
         assert_initialized_main_thread!();

@@ -176,6 +176,11 @@ final_type = true
     name = "subtitle-video-offset"
     version = "1.16"
 
+    [[object.function]]
+    name = "get_video_snapshot"
+    # Use &StructureRef
+    manual = true
+
 [[object]]
 name = "GstPlayer.PlayerAudioInfo"
 status = "generate"

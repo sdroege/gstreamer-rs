@@ -253,6 +253,23 @@ pub fn codec_utils_opus_create_caps(
     }
 }
 
+#[doc(alias = "gst_codec_utils_opus_create_caps_from_header")]
+pub fn codec_utils_opus_create_caps_from_header(
+    header: &gst::BufferRef,
+    comments: Option<&gst::BufferRef>,
+) -> Result<gst::Caps, glib::BoolError> {
+    assert_initialized_main_thread!();
+    unsafe {
+        Option::<_>::from_glib_full(ffi::gst_codec_utils_opus_create_caps_from_header(
+            mut_override(header.as_ptr()),
+            comments
+                .map(|b| mut_override(b.as_ptr()))
+                .unwrap_or(ptr::null_mut()),
+        ))
+        .ok_or_else(|| glib::bool_error!("Failed to create caps from Opus headers"))
+    }
+}
+
 #[doc(alias = "gst_codec_utils_opus_create_header")]
 #[allow(clippy::too_many_arguments)]
 pub fn codec_utils_opus_create_header(
@@ -297,7 +314,7 @@ pub fn codec_utils_opus_create_header(
 
 #[doc(alias = "gst_codec_utils_opus_parse_caps")]
 pub fn codec_utils_opus_parse_caps(
-    caps: &gst::Caps,
+    caps: &gst::CapsRef,
     channel_mapping: Option<&mut [u8; 256]>,
 ) -> Result<(u32, u8, u8, u8, u8), glib::BoolError> {
     assert_initialized_main_thread!();
@@ -340,7 +357,7 @@ pub fn codec_utils_opus_parse_caps(
 #[doc(alias = "gst_codec_utils_opus_parse_header")]
 #[allow(clippy::type_complexity)]
 pub fn codec_utils_opus_parse_header(
-    header: &gst::Buffer,
+    header: &gst::BufferRef,
     channel_mapping: Option<&mut [u8; 256]>,
 ) -> Result<(u32, u8, u8, u8, u8, u16, i16), glib::BoolError> {
     assert_initialized_main_thread!();
@@ -383,5 +400,42 @@ pub fn codec_utils_opus_parse_header(
         } else {
             Err(glib::bool_error!("Failed to parse Opus header"))
         }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(alias = "gst_codec_utils_caps_get_mime_codec")]
+pub fn codec_utils_caps_get_mime_codec(
+    caps: &gst::CapsRef,
+) -> Result<glib::GString, glib::BoolError> {
+    assert_initialized_main_thread!();
+    unsafe {
+        Option::<_>::from_glib_full(ffi::gst_codec_utils_caps_get_mime_codec(mut_override(
+            caps.as_ptr(),
+        )))
+        .ok_or_else(|| glib::bool_error!("Unsupported caps"))
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(alias = "gst_pb_utils_get_caps_description_flags")]
+pub fn pb_utils_get_caps_description_flags(
+    caps: &gst::CapsRef,
+) -> crate::PbUtilsCapsDescriptionFlags {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_pb_utils_get_caps_description_flags(caps.as_ptr())) }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(alias = "gst_pb_utils_get_file_extension_from_caps")]
+pub fn pb_utils_get_file_extension_from_caps(caps: &gst::CapsRef) -> Option<glib::GString> {
+    assert_initialized_main_thread!();
+    unsafe {
+        from_glib_full(ffi::gst_pb_utils_get_file_extension_from_caps(
+            caps.as_ptr(),
+        ))
     }
 }

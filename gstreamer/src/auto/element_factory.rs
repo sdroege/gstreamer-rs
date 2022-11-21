@@ -3,7 +3,6 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Caps;
 use crate::Object;
 use crate::PluginFeature;
 use crate::URIType;
@@ -19,46 +18,6 @@ glib::wrapper! {
 }
 
 impl ElementFactory {
-    #[doc(alias = "gst_element_factory_can_sink_all_caps")]
-    pub fn can_sink_all_caps(&self, caps: &Caps) -> bool {
-        unsafe {
-            from_glib(ffi::gst_element_factory_can_sink_all_caps(
-                self.to_glib_none().0,
-                caps.to_glib_none().0,
-            ))
-        }
-    }
-
-    #[doc(alias = "gst_element_factory_can_sink_any_caps")]
-    pub fn can_sink_any_caps(&self, caps: &Caps) -> bool {
-        unsafe {
-            from_glib(ffi::gst_element_factory_can_sink_any_caps(
-                self.to_glib_none().0,
-                caps.to_glib_none().0,
-            ))
-        }
-    }
-
-    #[doc(alias = "gst_element_factory_can_src_all_caps")]
-    pub fn can_src_all_caps(&self, caps: &Caps) -> bool {
-        unsafe {
-            from_glib(ffi::gst_element_factory_can_src_all_caps(
-                self.to_glib_none().0,
-                caps.to_glib_none().0,
-            ))
-        }
-    }
-
-    #[doc(alias = "gst_element_factory_can_src_any_caps")]
-    pub fn can_src_any_caps(&self, caps: &Caps) -> bool {
-        unsafe {
-            from_glib(ffi::gst_element_factory_can_src_any_caps(
-                self.to_glib_none().0,
-                caps.to_glib_none().0,
-            ))
-        }
-    }
-
     #[doc(alias = "gst_element_factory_get_element_type")]
     #[doc(alias = "get_element_type")]
     pub fn element_type(&self) -> glib::types::Type {

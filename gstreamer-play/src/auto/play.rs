@@ -6,7 +6,6 @@
 use crate::PlayAudioInfo;
 use crate::PlayColorBalanceType;
 use crate::PlayMediaInfo;
-use crate::PlaySnapshotFormat;
 use crate::PlaySubtitleInfo;
 use crate::PlayVideoInfo;
 use crate::PlayVideoRenderer;
@@ -155,22 +154,6 @@ impl Play {
     #[doc(alias = "get_uri")]
     pub fn uri(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::gst_play_get_uri(self.to_glib_none().0)) }
-    }
-
-    #[doc(alias = "gst_play_get_video_snapshot")]
-    #[doc(alias = "get_video_snapshot")]
-    pub fn video_snapshot(
-        &self,
-        format: PlaySnapshotFormat,
-        config: Option<&gst::Structure>,
-    ) -> Option<gst::Sample> {
-        unsafe {
-            from_glib_full(ffi::gst_play_get_video_snapshot(
-                self.to_glib_none().0,
-                format.into_glib(),
-                config.to_glib_none().0,
-            ))
-        }
     }
 
     #[doc(alias = "gst_play_get_volume")]

@@ -29,7 +29,6 @@ generate = [
     "GstVideo.VideoAggregatorParallelConvertPad",
     "GstVideo.VideoAlphaMode",
     "GstVideo.VideoBufferPool",
-    "GstVideo.VideoCaptionType",
     "GstVideo.VideoChromaMode",
     "GstVideo.VideoDecoderRequestSyncPointFlags",
     "GstVideo.VideoDitherMethod",
@@ -363,6 +362,14 @@ status = "generate"
     [[object.member]]
     name = "last"
     ignore = true
+
+[[object]]
+name = "GstVideo.VideoCaptionType"
+status = "generate"
+    [[object.function]]
+    name = "from_caps"
+    # Use &CapsRef
+    manual = true
 
 [[object]]
 name = "GstVideo.VideoChromaSite"
@@ -716,6 +723,11 @@ status = "generate"
     name = "set_vflip"
         [object.function.return]
         bool_return_is_error = "Failed to set vertical flipping"
+
+    [[object.function]]
+    name = "from_tag"
+    # Use &TagListRef and move to the enum
+    manual = true
 
 [[object]]
 name = "GstVideo.VideoOverlay"

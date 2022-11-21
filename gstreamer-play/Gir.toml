@@ -123,6 +123,11 @@ final_type = true
         [object.function.return]
         bool_return_is_error = "Failed to set visualization"
 
+    [[object.function]]
+    name = "get_video_snapshot"
+    # &StructureRef
+    manual = true
+
 [[object]]
 name = "GstPlay.PlayAudioInfo"
 status = "generate"
