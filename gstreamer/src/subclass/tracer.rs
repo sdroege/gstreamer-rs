@@ -3,7 +3,7 @@
 use super::prelude::*;
 use crate::{
     ffi, Bin, Buffer, BufferList, Element, Event, FlowError, FlowSuccess, Message, MiniObject,
-    Object, Pad, PadLinkError, PadLinkSuccess, Query, StateChange, StateChangeError,
+    Object, Pad, PadLinkError, PadLinkSuccess, QueryRef, StateChange, StateChangeError,
     StateChangeSuccess, Tracer,
 };
 use glib::{prelude::*, subclass::prelude::*, translate::*};
@@ -28,8 +28,8 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
     fn element_change_state_pre(&self, ts: u64, element: &Element, change: StateChange) {}
     fn element_post_message_post(&self, ts: u64, element: &Element, success: bool) {}
     fn element_post_message_pre(&self, ts: u64, element: &Element, message: &Message) {}
-    fn element_query_post(&self, ts: u64, element: &Element, query: &Query, success: bool) {}
-    fn element_query_pre(&self, ts: u64, element: &Element, query: &Query) {}
+    fn element_query_post(&self, ts: u64, element: &Element, query: &QueryRef, success: bool) {}
+    fn element_query_pre(&self, ts: u64, element: &Element, query: &QueryRef) {}
     // rustdoc-stripper-ignore-next
     /// Hook to be called before the GstMiniObject has been fully initialized.
     fn mini_object_created(&self, ts: u64, object: std::ptr::NonNull<ffi::GstMiniObject>) {}
@@ -73,8 +73,8 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
     fn pad_push_list_pre(&self, ts: u64, pad: &Pad, buffer_list: &BufferList) {}
     fn pad_push_post(&self, ts: u64, pad: &Pad, result: Result<FlowSuccess, FlowError>) {}
     fn pad_push_pre(&self, ts: u64, pad: &Pad, buffer: &Buffer) {}
-    fn pad_query_post(&self, ts: u64, pad: &Pad, query: &Query, success: bool) {}
-    fn pad_query_pre(&self, ts: u64, pad: &Pad, query: &Query) {}
+    fn pad_query_post(&self, ts: u64, pad: &Pad, query: &QueryRef, success: bool) {}
+    fn pad_query_pre(&self, ts: u64, pad: &Pad, query: &QueryRef) {}
     fn pad_unlink_post(&self, ts: u64, src: &Pad, sink: &Pad, success: bool) {}
     fn pad_unlink_pre(&self, ts: u64, src: &Pad, sink: &Pad) {}
     #[cfg(any(feature = "v1_20", feature = "dox"))]
@@ -184,13 +184,13 @@ define_tracer_hooks! {
     };
     ElementQueryPost("element-query-post") = |this, ts, e: *mut ffi::GstElement, q: *mut ffi::GstQuery, r: glib::ffi::gboolean| {
         let e = Element::from_glib_borrow(e);
-        let q = Query::from_glib_borrow(q);
-        this.element_query_post(ts, &e, &q, bool::from_glib(r))
+        let q = QueryRef::from_ptr(q);
+        this.element_query_post(ts, &e, q, bool::from_glib(r))
     };
     ElementQueryPre("element-query-pre") = |this, ts, e: *mut ffi::GstElement, q: *mut ffi::GstQuery| {
         let e = Element::from_glib_borrow(e);
-        let q = Query::from_glib_borrow(q);
-        this.element_query_pre(ts, &e, &q)
+        let q = QueryRef::from_ptr(q);
+        this.element_query_pre(ts, &e, q)
     };
     // TODO: unclear what to do here as the `GstMiniObject` here is not fully initialized yet…
     MiniObjectCreated("mini-object-created") = |this, ts, o: *mut ffi::GstMiniObject| {
@@ -305,13 +305,13 @@ define_tracer_hooks! {
     };
     PadQueryPost("pad-query-post") = |this, ts, p: *mut ffi::GstPad, q: *mut ffi::GstQuery, r: glib::ffi::gboolean| {
         let p = Pad::from_glib_borrow(p);
-        let q = Query::from_glib_borrow(q);
-        this.pad_query_post(ts, &p, &q, bool::from_glib(r))
+        let q = QueryRef::from_ptr(q);
+        this.pad_query_post(ts, &p, q, bool::from_glib(r))
     };
     PadQueryPre("pad-query-pre") = |this, ts, p: *mut ffi::GstPad, q: *mut ffi::GstQuery| {
         let p = Pad::from_glib_borrow(p);
-        let q = Query::from_glib_borrow(q);
-        this.pad_query_pre(ts, &p, &q)
+        let q = QueryRef::from_ptr(q);
+        this.pad_query_pre(ts, &p, q)
     };
     PadUnlinkPost("pad-unlink-post") = |this, ts, src: *mut ffi::GstPad, sink: *mut ffi::GstPad, r: glib::ffi::gboolean| {
         let src = Pad::from_glib_borrow(src);
