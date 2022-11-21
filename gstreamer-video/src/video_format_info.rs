@@ -89,10 +89,12 @@ impl VideoFormatInfo {
         unsafe { from_glib(self.0.tile_mode) }
     }
 
+    #[cfg_attr(feature = "v1_22", deprecated = "Since 1.22")]
     pub fn tile_ws(&self) -> u32 {
         self.0.tile_ws
     }
 
+    #[cfg_attr(feature = "v1_22", deprecated = "Since 1.22")]
     pub fn tile_hs(&self) -> u32 {
         self.0.tile_hs
     }
@@ -322,6 +324,8 @@ impl VideoFormatInfo {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_video_format_info_extrapolate_stride")]
     pub fn extrapolate_stride(&self, plane: u32, stride: u32) -> u32 {
+        assert!(plane < self.n_planes());
+
         unsafe {
             ffi::gst_video_format_info_extrapolate_stride(
                 self.to_glib_none().0,
@@ -333,20 +337,10 @@ impl VideoFormatInfo {
 
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    #[doc(alias = "gst_video_format_info_get_tile_sizes")]
-    pub fn tile_sizes(&self, plane: u32) -> (u32, (u32, u32)) {
-        unsafe {
-            let mut out_ws = std::mem::MaybeUninit::uninit();
-            let mut out_hs = std::mem::MaybeUninit::uninit();
-            let size = ffi::gst_video_format_info_get_tile_sizes(
-                self.to_glib_none().0,
-                plane,
-                out_ws.as_mut_ptr(),
-                out_hs.as_mut_ptr(),
-            );
+    pub fn tile_info(&self, plane: u32) -> &VideoTileInfo {
+        assert!(plane < self.n_planes());
 
-            (size, (out_ws.assume_init(), out_hs.assume_init()))
-        }
+        unsafe { &*(&self.0.tile_info[plane as usize] as *const _ as *const VideoTileInfo) }
     }
 }
 
@@ -451,9 +445,11 @@ impl Ord for VideoFormatInfo {
 }
 
 impl fmt::Debug for VideoFormatInfo {
+    #[allow(deprecated)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("VideoFormatInfo")
-            .field("format", &self.format())
+        let mut fmt = f.debug_struct("VideoFormatInfo");
+
+        fmt.field("format", &self.format())
             .field("name", &self.name())
             .field("description", &self.description())
             .field("flags", &self.flags())
@@ -471,8 +467,19 @@ impl fmt::Debug for VideoFormatInfo {
             .field("pack-lines", &self.pack_lines())
             .field("tile-mode", &self.tile_mode())
             .field("tile-ws", &self.tile_ws())
-            .field("tile-hs", &self.tile_hs())
-            .finish()
+            .field("tile-hs", &self.tile_hs());
+
+        #[cfg(any(feature = "v1_22", feature = "dox"))]
+        {
+            fmt.field(
+                "tile-info",
+                &(0..self.n_planes())
+                    .into_iter()
+                    .map(|plane| self.tile_info(plane)),
+            );
+        }
+
+        fmt.finish()
     }
 }
 
@@ -530,6 +537,45 @@ impl glib::translate::FromGlibPtrNone<*const ffi::GstVideoFormatInfo> for VideoF
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstVideoFormatInfo) -> Self {
         Self(&*ptr)
+    }
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[repr(transparent)]
+#[doc(alias = "GstVideoTileInfo")]
+pub struct VideoTileInfo(ffi::GstVideoTileInfo);
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+impl fmt::Debug for VideoTileInfo {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("VideoTileInfo")
+            .field("width", &self.width())
+            .field("height", &self.height())
+            .field("stride", &self.stride())
+            .field("size", &self.size())
+            .finish()
+    }
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+impl VideoTileInfo {
+    pub fn width(&self) -> u32 {
+        self.0.width
+    }
+
+    pub fn height(&self) -> u32 {
+        self.0.height
+    }
+
+    pub fn stride(&self) -> u32 {
+        self.0.stride
+    }
+
+    pub fn size(&self) -> u32 {
+        self.0.size
     }
 }
 
