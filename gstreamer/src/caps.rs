@@ -204,6 +204,21 @@ impl std::iter::FromIterator<(Structure, Option<CapsFeatures>)> for Caps {
     }
 }
 
+impl std::iter::FromIterator<Caps> for Caps {
+    fn from_iter<T: IntoIterator<Item = Caps>>(iter: T) -> Self {
+        assert_initialized_main_thread!();
+        let mut caps = Caps::new_empty();
+
+        {
+            let caps = caps.get_mut().unwrap();
+            iter.into_iter()
+                .for_each(|other_caps| caps.append(other_caps));
+        }
+
+        caps
+    }
+}
+
 impl std::iter::Extend<Structure> for CapsRef {
     fn extend<T: IntoIterator<Item = Structure>>(&mut self, iter: T) {
         iter.into_iter().for_each(|s| self.append_structure(s));
@@ -221,6 +236,12 @@ impl std::iter::Extend<(Structure, Option<CapsFeatures>)> for CapsRef {
     fn extend<T: IntoIterator<Item = (Structure, Option<CapsFeatures>)>>(&mut self, iter: T) {
         iter.into_iter()
             .for_each(|(s, f)| self.append_structure_full(s, f));
+    }
+}
+
+impl std::iter::Extend<Caps> for CapsRef {
+    fn extend<T: IntoIterator<Item = Caps>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|caps| self.append(caps));
     }
 }
 
