@@ -60,6 +60,7 @@ variables:
     0.18=0.18
 
 stages:
+  - "trigger"
   - "container-base"
   - "container-final"
   - "lint"
@@ -67,8 +68,29 @@ stages:
   - "extras"
   - "deploy"
 
+# This is an empty job that is used to trigger the pipeline.
+trigger:
+  image: alpine:latest
+  stage: 'trigger'
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - echo "Trigger job done, now running the pipeline."
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    # If the MR is assigned to the Merge bot, trigger the pipeline automatically
+    - if: '$CI_MERGE_REQUEST_ASSIGNEES == "gstreamer-merge-bot"'
+    # Require explicit action to trigger tests post merge
+    - if: '$CI_PROJECT_NAMESPACE == "gstreamer" && $CI_COMMIT_BRANCH == "main"'
+      when: 'manual'
+    # When the assignee isn't the merge bot, require an explicit action to trigger the pipeline
+    # to avoid wasting CI resources
+    - if: '$CI_MERGE_REQUEST_ASSIGNEES != "gstreamer-merge-bot"'
+      when: 'manual'
+      allow_failure: false
 
 .debian:11:
+  needs: []
   variables:
     FDO_DISTRIBUTION_VERSION: 'bullseye-slim'
   before_script:
@@ -273,6 +295,8 @@ test msrv:
     - '.cargo test'
     - .img-msrv
   needs:
+    - job: 'trigger'
+      artifacts: false
     - job: 'build-msrv'
       artifacts: false
 
@@ -281,6 +305,8 @@ test stable:
     - '.cargo test'
     - .img-stable
   needs:
+    - job: 'trigger'
+      artifacts: false
     - job: 'build-stable'
       artifacts: false
 
@@ -292,6 +318,8 @@ test stable all-features:
     - '.cargo test'
     - .img-stable
   needs:
+    - job: 'trigger'
+      artifacts: false
     - job: 'build-stable'
       artifacts: false
 
@@ -302,6 +330,8 @@ test nightly:
     - '.cargo test'
     - .img-nightly
   needs:
+    - job: 'trigger'
+      artifacts: false
     - job: 'build-nightly'
       artifacts: false
 
@@ -315,6 +345,8 @@ test nightly all-features:
     - '.cargo test'
     - .img-nightly
   needs:
+    - job: 'trigger'
+      artifacts: false
     - job: 'build-nightly'
       artifacts: false
 
@@ -374,6 +406,8 @@ test stable sys:
     - '.cargo test sys'
     - .img-stable
   needs:
+    - job: 'trigger'
+      artifacts: false
     - job: 'build-stable'
       artifacts: false
 
@@ -382,6 +416,8 @@ test msrv sys:
     - '.cargo test sys'
     - .img-msrv
   needs:
+    - job: 'trigger'
+      artifacts: false
     - job: 'build-msrv'
       artifacts: false
 
@@ -390,6 +426,8 @@ test nightly sys:
     - '.cargo test sys'
     - .img-nightly
   needs:
+    - job: 'trigger'
+      artifacts: false
     - job: 'build-nightly'
       artifacts: false
 
@@ -418,6 +456,8 @@ clippy:
   variables:
     CLIPPY_LINTS: -D warnings -W unknown-lints
   needs:
+    - job: 'trigger'
+      artifacts: false
     - job: 'build-stable'
       artifacts: false
   script:
@@ -493,6 +533,8 @@ coverage:
     - .img-stable
   stage: 'extras'
   needs:
+    - job: 'trigger'
+      artifacts: false
     - job: 'build-stable'
       artifacts: false
   variables:
@@ -596,6 +638,7 @@ pages:
 
 .windows rust docker build:
   stage: 'container-final'
+  needs: []
   variables:
     # Unlike the buildah/linux jobs, this file
     # needs to be relative to windows-docker/ subdir
@@ -668,12 +711,16 @@ windows rust docker msrv:
 test windows msrv:
   image: $WINDOWS_RUST_MINIMUM_IMAGE
   needs:
+    - job: 'trigger'
+      artifacts: false
     - job: 'windows rust docker msrv'
       artifacts: false
   extends: '.msvc2019 build'
 
 test windows stable:
   needs:
+    - job: 'trigger'
+      artifacts: false
     - job: 'windows rust docker stable'
       artifacts: false
   image: "$WINDOWS_RUST_STABLE_IMAGE"
