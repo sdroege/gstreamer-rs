@@ -472,7 +472,7 @@ impl StructureRef {
 
     #[doc(alias = "gst_structure_set")]
     pub fn set(&mut self, name: &str, value: impl Into<glib::Value> + Send) {
-        let value = unsafe { glib::SendValue::unsafe_from(value.into().into_raw()) };
+        let value = glib::SendValue::from_owned(value);
         self.set_value(name, value);
     }
 
@@ -489,7 +489,7 @@ impl StructureRef {
 
     #[doc(alias = "gst_structure_id_set")]
     pub fn set_by_quark(&mut self, name: glib::Quark, value: impl Into<glib::Value> + Send) {
-        let value = unsafe { glib::SendValue::unsafe_from(value.into().into_raw()) };
+        let value = glib::SendValue::from_owned(value);
         self.set_value_by_quark(name, value);
     }
 
