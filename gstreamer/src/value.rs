@@ -724,6 +724,31 @@ impl Array {
             }
         }
     }
+
+    pub fn append_value(&mut self, value: glib::SendValue) {
+        unsafe {
+            ffi::gst_value_array_append_and_take_value(
+                self.0.to_glib_none_mut().0,
+                &mut value.into_raw(),
+            );
+        }
+    }
+
+    pub fn append(&mut self, value: impl Into<glib::Value> + Send) {
+        self.append_value(glib::SendValue::from_owned(value));
+    }
+}
+
+impl Default for Array {
+    fn default() -> Self {
+        assert_initialized_main_thread!();
+
+        unsafe {
+            let value = glib::Value::for_value_type::<Array>();
+
+            Self(glib::SendValue::unsafe_from(value.into_raw()))
+        }
+    }
 }
 
 impl ops::Deref for Array {
@@ -744,6 +769,14 @@ impl std::iter::FromIterator<glib::SendValue> for Array {
     fn from_iter<T: IntoIterator<Item = glib::SendValue>>(iter: T) -> Self {
         assert_initialized_main_thread!();
         Self::from_values(iter)
+    }
+}
+
+impl std::iter::Extend<glib::SendValue> for Array {
+    fn extend<T: IntoIterator<Item = glib::SendValue>>(&mut self, iter: T) {
+        for v in iter.into_iter() {
+            self.append_value(v);
+        }
     }
 }
 
@@ -906,6 +939,31 @@ impl List {
             }
         }
     }
+
+    pub fn append_value(&mut self, value: glib::SendValue) {
+        unsafe {
+            ffi::gst_value_list_append_and_take_value(
+                self.0.to_glib_none_mut().0,
+                &mut value.into_raw(),
+            );
+        }
+    }
+
+    pub fn append(&mut self, value: impl Into<glib::Value> + Send) {
+        self.append_value(glib::SendValue::from_owned(value));
+    }
+}
+
+impl Default for List {
+    fn default() -> Self {
+        assert_initialized_main_thread!();
+
+        unsafe {
+            let value = glib::Value::for_value_type::<List>();
+
+            Self(glib::SendValue::unsafe_from(value.into_raw()))
+        }
+    }
 }
 
 impl ops::Deref for List {
@@ -926,6 +984,14 @@ impl std::iter::FromIterator<glib::SendValue> for List {
     fn from_iter<T: IntoIterator<Item = glib::SendValue>>(iter: T) -> Self {
         assert_initialized_main_thread!();
         Self::from_values(iter)
+    }
+}
+
+impl std::iter::Extend<glib::SendValue> for List {
+    fn extend<T: IntoIterator<Item = glib::SendValue>>(&mut self, iter: T) {
+        for v in iter.into_iter() {
+            self.append_value(v);
+        }
     }
 }
 
