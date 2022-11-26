@@ -362,6 +362,14 @@ impl glib::value::ToValue for AudioInfo {
 }
 
 #[doc(hidden)]
+impl From<AudioInfo> for glib::Value {
+    fn from(v: AudioInfo) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
+    }
+}
+
+#[doc(hidden)]
 impl glib::value::ToValueOptional for AudioInfo {
     fn to_value_optional(s: Option<&Self>) -> glib::Value {
         skip_assert_initialized!();

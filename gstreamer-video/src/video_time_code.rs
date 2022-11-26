@@ -485,6 +485,14 @@ macro_rules! generic_impl {
                 value
             }
         }
+
+        #[doc(hidden)]
+        impl From<$name> for glib::Value {
+            fn from(v: $name) -> glib::Value {
+                skip_assert_initialized!();
+                glib::value::ToValue::to_value(&v)
+            }
+        }
     };
 }
 

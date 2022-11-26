@@ -44,7 +44,7 @@ impl<O: IsA<glib::Object>> GObjectExtManualGst for O {
             }
         };
 
-        self.set_property_from_value(name, &value)
+        self.set_property(name, value)
     }
 }
 

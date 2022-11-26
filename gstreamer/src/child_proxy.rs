@@ -17,7 +17,7 @@ pub trait ChildProxyExtManual: 'static {
     fn child_property_value(&self, name: &str) -> glib::Value;
 
     #[doc(alias = "gst_child_proxy_set")]
-    fn set_child_property<V: glib::ToValue>(&self, name: &str, value: V);
+    fn set_child_property(&self, name: &str, value: impl Into<glib::Value>);
     #[doc(alias = "gst_child_proxy_set_property")]
     fn set_child_property_from_value(&self, name: &str, value: &glib::Value);
 }
@@ -54,7 +54,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExtManual for O {
     }
 
     #[track_caller]
-    fn set_child_property<V: glib::ToValue>(&self, name: &str, value: V) {
+    fn set_child_property(&self, name: &str, value: impl Into<glib::Value>) {
         let (child, pspec) = self.lookup(name).unwrap();
         child.set_property(pspec.name(), value)
     }

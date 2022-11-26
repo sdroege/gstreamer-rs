@@ -251,12 +251,12 @@ impl<'a> ElementBuilder<'a> {
 
     // rustdoc-stripper-ignore-next
     /// Set property `name` to the given value `value`.
-    pub fn property<T: glib::ToValue + 'a>(self, name: &'a str, value: T) -> Self {
+    pub fn property(self, name: &'a str, value: impl Into<glib::Value> + 'a) -> Self {
         Self {
             name_or_factory: self.name_or_factory,
             properties: {
                 let mut properties = self.properties;
-                properties.push((name, ValueOrStr::Value(value.to_value())));
+                properties.push((name, ValueOrStr::Value(value.into())));
                 properties
             },
         }

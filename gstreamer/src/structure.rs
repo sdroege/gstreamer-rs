@@ -349,6 +349,20 @@ impl glib::value::ToValueOptional for Structure {
     }
 }
 
+impl From<Structure> for glib::Value {
+    fn from(v: Structure) -> glib::Value {
+        skip_assert_initialized!();
+        let mut value = glib::Value::for_value_type::<Structure>();
+        unsafe {
+            glib::gobject_ffi::g_value_take_boxed(
+                value.to_glib_none_mut().0,
+                glib::translate::IntoGlibPtr::<*mut ffi::GstStructure>::into_glib_ptr(v) as *mut _,
+            )
+        }
+        value
+    }
+}
+
 impl GlibPtrDefault for Structure {
     type GlibType = *mut ffi::GstStructure;
 }
@@ -457,8 +471,8 @@ impl StructureRef {
     }
 
     #[doc(alias = "gst_structure_set")]
-    pub fn set<T: ToSendValue + Sync>(&mut self, name: &str, value: T) {
-        let value = value.to_send_value();
+    pub fn set(&mut self, name: &str, value: impl Into<glib::Value> + Send) {
+        let value = unsafe { glib::SendValue::unsafe_from(value.into().into_raw()) };
         self.set_value(name, value);
     }
 
@@ -474,8 +488,8 @@ impl StructureRef {
     }
 
     #[doc(alias = "gst_structure_id_set")]
-    pub fn set_by_quark<T: ToSendValue + Sync>(&mut self, name: glib::Quark, value: T) {
-        let value = value.to_send_value();
+    pub fn set_by_quark(&mut self, name: glib::Quark, value: impl Into<glib::Value> + Send) {
+        let value = unsafe { glib::SendValue::unsafe_from(value.into().into_raw()) };
         self.set_value_by_quark(name, value);
     }
 
@@ -1035,7 +1049,7 @@ impl Builder {
         }
     }
 
-    pub fn field<V: ToSendValue + Sync>(mut self, name: &str, value: V) -> Self {
+    pub fn field(mut self, name: &str, value: impl Into<glib::Value> + Send) -> Self {
         self.s.set(name, value);
         self
     }

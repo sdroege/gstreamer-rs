@@ -206,10 +206,7 @@ where
     }
 }
 
-impl<T> IntoGlibPtr<*mut ffi::GstIterator> for Iterator<T>
-where
-    for<'a> T: FromValue<'a> + 'static,
-{
+impl<T: 'static> IntoGlibPtr<*mut ffi::GstIterator> for Iterator<T> {
     unsafe fn into_glib_ptr(self) -> *mut ffi::GstIterator {
         let s = mem::ManuallyDrop::new(self);
         let it = s.to_glib_none().0;
@@ -546,6 +543,20 @@ impl<T: StaticType + 'static> glib::value::ToValueOptional for Iterator<T> {
             glib::gobject_ffi::g_value_set_boxed(
                 value.to_glib_none_mut().0,
                 s.to_glib_none().0 as *mut _,
+            )
+        }
+        value
+    }
+}
+
+impl<T: StaticType + 'static> From<Iterator<T>> for glib::Value {
+    fn from(v: Iterator<T>) -> glib::Value {
+        skip_assert_initialized!();
+        let mut value = glib::Value::for_value_type::<Iterator<T>>();
+        unsafe {
+            glib::gobject_ffi::g_value_take_boxed(
+                value.to_glib_none_mut().0,
+                v.into_glib_ptr() as *mut _,
             )
         }
         value

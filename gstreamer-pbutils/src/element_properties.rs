@@ -136,7 +136,7 @@ pub struct ElementPropertiesGeneralBuilder {
 impl ElementPropertiesGeneralBuilder {
     pub fn field<T>(mut self, property_name: &str, value: T) -> Self
     where
-        T: ToSendValue + Sync,
+        T: Into<glib::Value> + Send,
     {
         self.structure.set(property_name, value);
         self
@@ -167,7 +167,7 @@ impl ElementPropertiesMapBuilder {
     pub fn build(self) -> ElementProperties {
         ElementProperties(
             gst::Structure::builder("element-properties-map")
-                .field("map", gst::List::from(self.map))
+                .field("map", gst::List::new(self.map))
                 .build(),
         )
     }
@@ -239,7 +239,7 @@ pub struct ElementPropertiesMapItemBuilder {
 impl ElementPropertiesMapItemBuilder {
     pub fn field<T>(mut self, property_name: &str, value: T) -> Self
     where
-        T: ToSendValue + Sync,
+        T: Into<glib::Value> + Send,
     {
         self.structure.set(property_name, value);
         self

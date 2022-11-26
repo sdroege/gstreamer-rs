@@ -56,6 +56,13 @@ impl StaticType for Date {
     }
 }
 
+impl From<Date> for glib::Value {
+    fn from(v: Date) -> glib::Value {
+        skip_assert_initialized!();
+        v.0.into()
+    }
+}
+
 impl Serialize for Date {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         DateTimeVariants::YMD(

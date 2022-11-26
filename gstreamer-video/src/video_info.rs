@@ -83,6 +83,13 @@ impl ToValue for VideoColorRange {
     }
 }
 
+impl From<VideoColorRange> for glib::Value {
+    fn from(v: VideoColorRange) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
+    }
+}
+
 #[doc(alias = "GstVideoColorimetry")]
 #[derive(Copy, Clone)]
 pub struct VideoColorimetry(ffi::GstVideoColorimetry);
@@ -889,6 +896,14 @@ impl glib::value::ToValueOptional for VideoInfo {
             )
         }
         value
+    }
+}
+
+#[doc(hidden)]
+impl From<VideoInfo> for glib::Value {
+    fn from(v: VideoInfo) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
     }
 }
 

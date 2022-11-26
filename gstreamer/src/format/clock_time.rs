@@ -323,6 +323,12 @@ impl glib::value::ToValueOptional for ClockTime {
     }
 }
 
+impl From<ClockTime> for glib::Value {
+    fn from(v: ClockTime) -> glib::Value {
+        glib::value::ToValue::to_value(&v)
+    }
+}
+
 #[doc(hidden)]
 impl glib::StaticType for ClockTime {
     fn static_type() -> glib::Type {

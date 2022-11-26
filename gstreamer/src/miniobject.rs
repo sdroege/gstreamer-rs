@@ -531,6 +531,20 @@ macro_rules! mini_object_wrapper (
             }
         }
 
+        impl From<$name> for $crate::glib::Value {
+            fn from(v: $name) -> $crate::glib::Value {
+                skip_assert_initialized!();
+                let mut value = $crate::glib::Value::for_value_type::<$name>();
+                unsafe {
+                    $crate::glib::gobject_ffi::g_value_take_boxed(
+                        $crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(&mut value).0,
+                        $crate::glib::translate::IntoGlibPtr::<*mut $ffi_name>::into_glib_ptr(v) as *mut _,
+                    )
+                }
+                value
+            }
+        }
+
         unsafe impl<'a> $crate::glib::value::FromValue<'a> for &'a $ref_name {
             type Checker = $crate::glib::value::GenericValueTypeOrNoneChecker<Self>;
 

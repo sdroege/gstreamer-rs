@@ -17,6 +17,7 @@ use once_cell::sync::Lazy;
 
 use crate::Buffer;
 use crate::DateTime;
+use crate::List;
 use crate::Sample;
 use crate::Structure;
 
@@ -106,7 +107,7 @@ macro_rules! ser_value (
                 } else if *INT_RANGE_I64_OTHER_TYPE_ID == type_id {
                     ser_some_value!($value, IntRange<i64>, $ser_closure)
                 } else if *LIST_OTHER_TYPE_ID == type_id {
-                    ser_some_value!($value, List, $ser_closure)
+                    ser_some_value!($value, crate::List, $ser_closure)
                 } else if *SAMPLE_OTHER_TYPE_ID == type_id {
                     ser_opt_value!($value, Sample, $ser_closure)
                 } else if *BUFFER_OTHER_TYPE_ID == type_id {
@@ -523,48 +524,61 @@ mod tests {
     fn test_deserialize_collections() {
         crate::init().unwrap();
 
-        // Array
+        // Array of fractions
         let array_ron = r#"[
                 ("Fraction", (1, 3)),
                 ("Fraction", (1, 2)),
+            ]"#;
+        let array: Array = ron::de::from_str(array_ron).unwrap();
+        let slice = array.as_slice();
+        assert_eq!(2, slice.len());
+
+        let fraction = slice[0].get::<Fraction>().expect("slice[0]");
+        assert_eq!(fraction.0.numer(), &1);
+        assert_eq!(fraction.0.denom(), &3);
+
+        let fraction = slice[1].get::<Fraction>().expect("slice[1]");
+        assert_eq!(fraction.0.numer(), &1);
+        assert_eq!(fraction.0.denom(), &2);
+
+        // Array of strings
+        let array_ron = r#"[
                 ("String", Some("test str")),
                 ("String", None),
+            ]"#;
+        let array: Array = ron::de::from_str(array_ron).unwrap();
+        let slice = array.as_slice();
+        assert_eq!(2, slice.len());
+        assert_eq!(
+            "test str".to_owned(),
+            slice[0].get::<String>().expect("slice[0]")
+        );
+
+        assert!(slice[1]
+            .get::<Option<String>>()
+            .expect("slice[1]")
+            .is_none());
+
+        // Array of dates
+        let array_ron = r#"[
                 ("Date", Some(YMD(2019, 8, 19))),
                 ("Date", None),
             ]"#;
         let array: Array = ron::de::from_str(array_ron).unwrap();
         let slice = array.as_slice();
-        assert_eq!(6, slice.len());
-
-        let fraction = slice[0].get::<Fraction>().expect("slice[0]");
-        assert_eq!(fraction.0.numer(), &1);
-        assert_eq!(fraction.0.denom(), &3);
-
-        let fraction = slice[1].get::<Fraction>().expect("slice[1]");
-        assert_eq!(fraction.0.numer(), &1);
-        assert_eq!(fraction.0.denom(), &2);
-
-        assert_eq!(
-            "test str".to_owned(),
-            slice[2].get::<String>().expect("slice[2]")
-        );
-
-        assert!(slice[3]
-            .get::<Option<String>>()
-            .expect("slice[3]")
-            .is_none());
-
+        assert_eq!(2, slice.len());
         assert_eq!(
             Date::from_dmy(19, DateMonth::August, 2019).unwrap(),
-            slice[4].get::<Date>().expect("slice[4]")
+            slice[0].get::<Date>().expect("slice[0]")
         );
 
-        assert!(slice[5].get::<Option<Date>>().expect("slice[5]").is_none());
+        assert!(slice[1].get::<Option<Date>>().expect("slice[1]").is_none());
 
-        let array_json = r#"[["Fraction",[1,3]],["Fraction",[1,2]],["String","test str"],["String",null],["Date",{"YMD":[2019,8,19]}],["Date",null]]"#;
+        // Array of fractions
+        let array_json = r#"[["Fraction",[1,3]],["Fraction",[1,2]]]"#;
         let array: Array = serde_json::from_str(array_json).unwrap();
         let slice = array.as_slice();
-        assert_eq!(6, slice.len());
+        assert_eq!(2, slice.len());
 
         let fraction = slice[0].get::<Fraction>().expect("slice[0]");
         assert_eq!(fraction.0.numer(), &1);
@@ -574,57 +588,79 @@ mod tests {
         assert_eq!(fraction.0.numer(), &1);
         assert_eq!(fraction.0.denom(), &2);
 
+        // Array of strings
+        let array_json = r#"[["String","test str"],["String",null]]"#;
+        let array: Array = serde_json::from_str(array_json).unwrap();
+        let slice = array.as_slice();
+        assert_eq!(2, slice.len());
         assert_eq!(
             "test str".to_owned(),
-            slice[2].get::<String>().expect("slice[2]")
+            slice[0].get::<String>().expect("slice[0]")
         );
 
-        assert!(slice[3]
+        assert!(slice[1]
             .get::<Option<String>>()
-            .expect("slice[3]")
+            .expect("slice[1]")
             .is_none());
 
+        // Array of dates
+        let array_json = r#"[["Date",{"YMD":[2019,8,19]}],["Date",null]]"#;
+        let array: Array = serde_json::from_str(array_json).unwrap();
+        let slice = array.as_slice();
+        assert_eq!(2, slice.len());
         assert_eq!(
             Date::from_dmy(19, DateMonth::August, 2019).unwrap(),
-            slice[4].get::<Date>().expect("slice[4]")
+            slice[0].get::<Date>().expect("slice[0]")
         );
 
-        assert!(slice[5].get::<Option<Date>>().expect("slice[5]").is_none());
+        assert!(slice[1].get::<Option<Date>>().expect("slice[1]").is_none());
 
-        // List
+        // List of fractions
         let list_ron = r#"[
                 ("Fraction", (1, 2)),
+            ]"#;
+        let list: List = ron::de::from_str(list_ron).unwrap();
+        let slice = list.as_slice();
+        assert_eq!(1, slice.len());
+
+        let fraction = slice[0].get::<Fraction>().expect("slice[0]");
+        assert_eq!(fraction.0.numer(), &1);
+        assert_eq!(fraction.0.denom(), &2);
+
+        // List of strings
+        let list_ron = r#"[
                 ("String", Some("test str")),
                 ("String", None),
+            ]"#;
+        let list: List = ron::de::from_str(list_ron).unwrap();
+        let slice = list.as_slice();
+        assert_eq!(2, slice.len());
+        assert_eq!(
+            "test str".to_owned(),
+            slice[0].get::<String>().expect("slice[0]")
+        );
+
+        assert!(slice[1]
+            .get::<Option<String>>()
+            .expect("slice[1]")
+            .is_none());
+
+        // List of date times
+        let list_ron = r#"[
                 ("DateTime", Some(YMDhmsTz(2019, 8, 19, 13, 34, 42, 2))),
                 ("DateTime", None),
             ]"#;
         let list: List = ron::de::from_str(list_ron).unwrap();
         let slice = list.as_slice();
-        assert_eq!(5, slice.len());
-
-        let fraction = slice[0].get::<Fraction>().expect("slice[0]");
-        assert_eq!(fraction.0.numer(), &1);
-        assert_eq!(fraction.0.denom(), &2);
-
-        assert_eq!(
-            "test str".to_owned(),
-            slice[1].get::<String>().expect("slice[1]")
-        );
-
-        assert!(slice[2]
-            .get::<Option<String>>()
-            .expect("slice[2]")
-            .is_none());
-
+        assert_eq!(2, slice.len());
         assert_eq!(
             DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap(),
-            slice[3].get::<DateTime>().expect("slice[3]")
+            slice[0].get::<DateTime>().expect("slice[0]")
         );
 
-        assert!(slice[4]
+        assert!(slice[1]
             .get::<Option<DateTime>>()
-            .expect("slice[4]")
+            .expect("slice[1]")
             .is_none());
     }
 

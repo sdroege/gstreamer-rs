@@ -366,6 +366,14 @@ impl glib::value::ToValueOptional for AudioFormatInfo {
 }
 
 #[doc(hidden)]
+impl From<AudioFormatInfo> for glib::Value {
+    fn from(v: AudioFormatInfo) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
+    }
+}
+
+#[doc(hidden)]
 impl glib::translate::GlibPtrDefault for AudioFormatInfo {
     type GlibType = *mut ffi::GstAudioFormatInfo;
 }

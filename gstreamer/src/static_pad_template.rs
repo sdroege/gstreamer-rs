@@ -118,6 +118,13 @@ impl glib::value::ToValueOptional for StaticPadTemplate {
     }
 }
 
+impl From<StaticPadTemplate> for glib::Value {
+    fn from(v: StaticPadTemplate) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
+    }
+}
+
 #[doc(hidden)]
 impl glib::translate::GlibPtrDefault for StaticPadTemplate {
     type GlibType = *mut ffi::GstStaticPadTemplate;

@@ -281,6 +281,20 @@ impl glib::value::ToValueOptional for CapsFeatures {
     }
 }
 
+impl From<CapsFeatures> for glib::Value {
+    fn from(v: CapsFeatures) -> glib::Value {
+        skip_assert_initialized!();
+        let mut value = glib::Value::for_value_type::<CapsFeatures>();
+        unsafe {
+            glib::gobject_ffi::g_value_take_boxed(
+                value.to_glib_none_mut().0,
+                IntoGlibPtr::<*mut ffi::GstCapsFeatures>::into_glib_ptr(v) as *mut _,
+            )
+        }
+        value
+    }
+}
+
 impl GlibPtrDefault for CapsFeatures {
     type GlibType = *mut ffi::GstCapsFeatures;
 }

@@ -643,7 +643,14 @@ impl<T: FormattedValueIntrinsic> glib::value::ToValueOptional for FormattedSegme
         value
     }
 }
-#[doc(hidden)]
+
+impl<T: FormattedValueIntrinsic> From<FormattedSegment<T>> for glib::Value {
+    fn from(v: FormattedSegment<T>) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
+    }
+}
+
 #[doc(hidden)]
 impl<T: FormattedValueIntrinsic> glib::translate::GlibPtrDefault for FormattedSegment<T> {
     type GlibType = *mut ffi::GstSegment;

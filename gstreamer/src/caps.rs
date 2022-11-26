@@ -953,7 +953,7 @@ impl Builder<NoFeature> {
 }
 
 impl<T> Builder<T> {
-    pub fn field<V: ToSendValue + Sync>(mut self, name: &str, value: V) -> Self {
+    pub fn field(mut self, name: &str, value: impl Into<glib::Value> + Send) -> Self {
         self.s.set(name, value);
         self
     }

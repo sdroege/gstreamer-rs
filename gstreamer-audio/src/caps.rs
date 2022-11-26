@@ -1,5 +1,4 @@
 use crate::{AudioFormat, AudioLayout};
-use gst::prelude::*;
 use gst::Caps;
 use std::ops::Bound::*;
 use std::ops::RangeBounds;
@@ -134,7 +133,7 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
-    pub fn field<V: ToSendValue + Sync>(self, name: &str, value: V) -> Self {
+    pub fn field(self, name: &str, value: impl Into<glib::Value> + Send) -> Self {
         Self {
             builder: self.builder.field(name, value),
         }

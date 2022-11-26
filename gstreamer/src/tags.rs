@@ -7,9 +7,7 @@ use std::mem;
 
 use once_cell::sync::Lazy;
 
-use glib::translate::{
-    from_glib, from_glib_full, FromGlibPtrFull, IntoGlib, ToGlibPtr, ToGlibPtrMut,
-};
+use glib::translate::*;
 use glib::value::{FromValue, SendValue, ToSendValue, Value};
 use glib::StaticType;
 
@@ -376,14 +374,13 @@ impl TagListRef {
     }
 
     #[doc(alias = "gst_tag_list_add")]
-    pub fn add_generic<T: ToSendValue + Sync>(
+    pub fn add_generic(
         &mut self,
         tag_name: &str,
-        value: T,
+        value: impl ToSendValue,
         mode: TagMergeMode,
     ) -> Result<(), TagError> {
-        let v = value.to_send_value();
-        self.add_value(tag_name, &v, mode)
+        self.add_value(tag_name, &value.to_send_value(), mode)
     }
 
     #[doc(alias = "gst_tag_list_add_value")]
@@ -1107,8 +1104,6 @@ pub fn merge_use_first(src: &Value) -> Value {
     assert_eq!(src.type_(), crate::List::static_type());
 
     unsafe {
-        use glib::translate::Uninitialized;
-
         let mut res = Value::uninitialized();
         ffi::gst_tag_merge_use_first(res.to_glib_none_mut().0, src.to_glib_none().0);
         res
@@ -1121,8 +1116,6 @@ pub fn merge_strings_with_comma(src: &Value) -> Value {
     assert_eq!(src.type_(), crate::List::static_type());
 
     unsafe {
-        use glib::translate::Uninitialized;
-
         let mut res = Value::uninitialized();
         ffi::gst_tag_merge_strings_with_comma(res.to_glib_none_mut().0, src.to_glib_none().0);
         res

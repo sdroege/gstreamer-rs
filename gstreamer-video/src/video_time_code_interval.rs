@@ -255,3 +255,11 @@ impl glib::value::ToValueOptional for VideoTimeCodeInterval {
         value
     }
 }
+
+#[doc(hidden)]
+impl From<VideoTimeCodeInterval> for glib::Value {
+    fn from(v: VideoTimeCodeInterval) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
+    }
+}

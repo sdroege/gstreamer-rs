@@ -643,6 +643,13 @@ impl ToValue for MessageType {
     }
 }
 
+impl From<MessageType> for glib::Value {
+    fn from(v: MessageType) -> glib::Value {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 impl State {
     #[must_use]
     pub fn next(self, pending: Self) -> Self {

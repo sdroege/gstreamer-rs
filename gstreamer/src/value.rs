@@ -6,8 +6,7 @@ use std::fmt;
 use std::ops;
 use std::slice;
 
-use glib::translate::{from_glib, FromGlibPtrFull, ToGlibPtr, ToGlibPtrMut, Uninitialized};
-use glib::value::ToSendValue;
+use glib::translate::*;
 use glib::StaticType;
 
 #[derive(Copy, Clone, Debug, Ord, PartialOrd, Eq, PartialEq, Hash)]
@@ -281,6 +280,13 @@ impl glib::value::ToValue for Fraction {
     }
 }
 
+impl From<Fraction> for glib::Value {
+    fn from(v: Fraction) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
+    }
+}
+
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct IntRange<T> {
@@ -423,6 +429,13 @@ impl glib::value::ToValue for IntRange<i32> {
     }
 }
 
+impl From<IntRange<i32>> for glib::Value {
+    fn from(v: IntRange<i32>) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
+    }
+}
+
 impl glib::types::StaticType for IntRange<i64> {
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_int64_range_get_type()) }
@@ -462,6 +475,13 @@ impl glib::value::ToValue for IntRange<i64> {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<IntRange<i64>> for glib::Value {
+    fn from(v: IntRange<i64>) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
     }
 }
 
@@ -545,6 +565,13 @@ impl glib::value::ToValue for FractionRange {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<FractionRange> for glib::Value {
+    fn from(v: FractionRange) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
     }
 }
 
@@ -646,27 +673,56 @@ impl glib::value::ToValue for Bitmask {
     }
 }
 
-#[derive(Clone, Debug)]
-pub struct Array(Vec<glib::SendValue>);
+impl From<Bitmask> for glib::Value {
+    fn from(v: Bitmask) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
+    }
+}
+
+#[derive(Clone)]
+pub struct Array(glib::SendValue);
 
 unsafe impl Send for Array {}
 unsafe impl Sync for Array {}
 
+impl fmt::Debug for Array {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_tuple("Array").field(&self.as_slice()).finish()
+    }
+}
+
 impl Array {
-    pub fn new(values: impl IntoIterator<Item = impl ToSendValue + Send>) -> Self {
+    pub fn new(values: impl IntoIterator<Item = impl Into<glib::Value> + Send>) -> Self {
         assert_initialized_main_thread!();
 
-        Self(values.into_iter().map(|v| v.to_send_value()).collect())
+        unsafe {
+            let mut value = glib::Value::for_value_type::<Array>();
+            for v in values.into_iter() {
+                let mut v = v.into().into_raw();
+                ffi::gst_value_array_append_and_take_value(value.to_glib_none_mut().0, &mut v);
+            }
+
+            Self(glib::SendValue::unsafe_from(value.into_raw()))
+        }
     }
 
     pub fn from_values(values: impl IntoIterator<Item = glib::SendValue>) -> Self {
         assert_initialized_main_thread!();
 
-        Self(values.into_iter().collect())
+        Self::new(values)
     }
 
     pub fn as_slice(&self) -> &[glib::SendValue] {
-        self.0.as_slice()
+        unsafe {
+            let arr = (*self.0.as_ptr()).data[0].v_pointer as *const glib::ffi::GArray;
+            if arr.is_null() || (*arr).len == 0 {
+                &[]
+            } else {
+                #[allow(clippy::cast_ptr_alignment)]
+                slice::from_raw_parts((*arr).data as *const glib::SendValue, (*arr).len as usize)
+            }
+        }
     }
 }
 
@@ -691,14 +747,6 @@ impl std::iter::FromIterator<glib::SendValue> for Array {
     }
 }
 
-impl From<Vec<glib::SendValue>> for Array {
-    fn from(values: Vec<glib::SendValue>) -> Self {
-        assert_initialized_main_thread!();
-
-        Self(values)
-    }
-}
-
 impl glib::value::ValueType for Array {
     type Type = Self;
 }
@@ -708,33 +756,24 @@ unsafe impl<'a> glib::value::FromValue<'a> for Array {
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
-        let arr = (*value.to_glib_none().0).data[0].v_pointer as *const glib::ffi::GArray;
-        if arr.is_null() || (*arr).len == 0 {
-            Self(Vec::new())
-        } else {
-            #[allow(clippy::cast_ptr_alignment)]
-            Self::from_values(
-                slice::from_raw_parts((*arr).data as *const glib::SendValue, (*arr).len as usize)
-                    .iter()
-                    .cloned(),
-            )
-        }
+        Self(glib::SendValue::unsafe_from(value.clone().into_raw()))
     }
 }
 
 impl glib::value::ToValue for Array {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<Array>();
-        unsafe {
-            for v in self.as_slice() {
-                ffi::gst_value_array_append_value(value.to_glib_none_mut().0, v.to_glib_none().0);
-            }
-        }
-        value
+        self.0.clone().into()
     }
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<Array> for glib::Value {
+    fn from(v: Array) -> glib::Value {
+        skip_assert_initialized!();
+        v.0.into()
     }
 }
 
@@ -781,7 +820,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for ArrayRef<'a> {
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
-        let arr = (*value.to_glib_none().0).data[0].v_pointer as *const glib::ffi::GArray;
+        let arr = (*value.as_ptr()).data[0].v_pointer as *const glib::ffi::GArray;
         if arr.is_null() || (*arr).len == 0 {
             Self(&[])
         } else {
@@ -810,33 +849,62 @@ impl<'a> glib::value::ToValue for ArrayRef<'a> {
     }
 }
 
+impl<'a> From<ArrayRef<'a>> for glib::Value {
+    fn from(v: ArrayRef<'a>) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
+    }
+}
+
 impl<'a> glib::types::StaticType for ArrayRef<'a> {
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_value_array_get_type()) }
     }
 }
 
-#[derive(Clone, Debug)]
-pub struct List(Vec<glib::SendValue>);
+#[derive(Clone)]
+pub struct List(glib::SendValue);
 
 unsafe impl Send for List {}
 unsafe impl Sync for List {}
 
+impl fmt::Debug for List {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_tuple("List").field(&self.as_slice()).finish()
+    }
+}
+
 impl List {
-    pub fn new(values: impl IntoIterator<Item = impl ToSendValue + Send>) -> Self {
+    pub fn new(values: impl IntoIterator<Item = impl Into<glib::Value> + Send>) -> Self {
         assert_initialized_main_thread!();
 
-        Self(values.into_iter().map(|v| v.to_send_value()).collect())
+        unsafe {
+            let mut value = glib::Value::for_value_type::<List>();
+            for v in values.into_iter() {
+                let mut v = v.into().into_raw();
+                ffi::gst_value_list_append_and_take_value(value.to_glib_none_mut().0, &mut v);
+            }
+
+            Self(glib::SendValue::unsafe_from(value.into_raw()))
+        }
     }
 
     pub fn from_values(values: impl IntoIterator<Item = glib::SendValue>) -> Self {
         assert_initialized_main_thread!();
 
-        Self(values.into_iter().collect())
+        Self::new(values)
     }
 
     pub fn as_slice(&self) -> &[glib::SendValue] {
-        self.0.as_slice()
+        unsafe {
+            let arr = (*self.0.as_ptr()).data[0].v_pointer as *const glib::ffi::GArray;
+            if arr.is_null() || (*arr).len == 0 {
+                &[]
+            } else {
+                #[allow(clippy::cast_ptr_alignment)]
+                slice::from_raw_parts((*arr).data as *const glib::SendValue, (*arr).len as usize)
+            }
+        }
     }
 }
 
@@ -861,14 +929,6 @@ impl std::iter::FromIterator<glib::SendValue> for List {
     }
 }
 
-impl From<Vec<glib::SendValue>> for List {
-    fn from(values: Vec<glib::SendValue>) -> Self {
-        assert_initialized_main_thread!();
-
-        Self(values)
-    }
-}
-
 impl glib::value::ValueType for List {
     type Type = Self;
 }
@@ -878,33 +938,24 @@ unsafe impl<'a> glib::value::FromValue<'a> for List {
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
-        let arr = (*value.to_glib_none().0).data[0].v_pointer as *const glib::ffi::GArray;
-        if arr.is_null() || (*arr).len == 0 {
-            Self(Vec::new())
-        } else {
-            #[allow(clippy::cast_ptr_alignment)]
-            Self::from_values(
-                slice::from_raw_parts((*arr).data as *const glib::SendValue, (*arr).len as usize)
-                    .iter()
-                    .cloned(),
-            )
-        }
+        Self(glib::SendValue::unsafe_from(value.clone().into_raw()))
     }
 }
 
 impl glib::value::ToValue for List {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<List>();
-        unsafe {
-            for v in self.as_slice() {
-                ffi::gst_value_list_append_value(value.to_glib_none_mut().0, v.to_glib_none().0);
-            }
-        }
-        value
+        self.0.clone().into()
     }
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<List> for glib::Value {
+    fn from(v: List) -> glib::Value {
+        skip_assert_initialized!();
+        v.0.into()
     }
 }
 
@@ -951,7 +1002,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for ListRef<'a> {
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
-        let arr = (*value.to_glib_none().0).data[0].v_pointer as *const glib::ffi::GArray;
+        let arr = (*value.as_ptr()).data[0].v_pointer as *const glib::ffi::GArray;
         if arr.is_null() || (*arr).len == 0 {
             Self(&[])
         } else {
@@ -977,6 +1028,13 @@ impl<'a> glib::value::ToValue for ListRef<'a> {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl<'a> From<ListRef<'a>> for glib::Value {
+    fn from(v: ListRef<'a>) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
     }
 }
 

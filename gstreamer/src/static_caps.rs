@@ -72,6 +72,13 @@ impl glib::value::ToValue for StaticCaps {
     }
 }
 
+impl From<StaticCaps> for glib::Value {
+    fn from(v: StaticCaps) -> glib::Value {
+        skip_assert_initialized!();
+        glib::value::ToValue::to_value(&v)
+    }
+}
+
 #[doc(hidden)]
 impl glib::value::ToValueOptional for StaticCaps {
     fn to_value_optional(s: Option<&Self>) -> glib::Value {
