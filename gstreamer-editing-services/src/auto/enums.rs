@@ -204,6 +204,14 @@ impl ToValue for Edge {
     }
 }
 
+impl From<Edge> for glib::Value {
+    #[inline]
+    fn from(v: Edge) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GESEditMode")]
@@ -308,6 +316,14 @@ impl ToValue for EditMode {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<EditMode> for glib::Value {
+    #[inline]
+    fn from(v: EditMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -458,6 +474,14 @@ impl ToValue for TextHAlign {
     }
 }
 
+impl From<TextHAlign> for glib::Value {
+    #[inline]
+    fn from(v: TextHAlign) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GESTextVAlign")]
@@ -541,6 +565,14 @@ impl ToValue for TextVAlign {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<TextVAlign> for glib::Value {
+    #[inline]
+    fn from(v: TextVAlign) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -902,6 +934,14 @@ impl ToValue for VideoStandardTransitionType {
     }
 }
 
+impl From<VideoStandardTransitionType> for glib::Value {
+    #[inline]
+    fn from(v: VideoStandardTransitionType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GESVideoTestPattern")]
@@ -1033,5 +1073,13 @@ impl ToValue for VideoTestPattern {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoTestPattern> for glib::Value {
+    #[inline]
+    fn from(v: VideoTestPattern) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

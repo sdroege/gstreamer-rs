@@ -87,6 +87,14 @@ impl ToValue for InterpolationMode {
     }
 }
 
+impl From<InterpolationMode> for glib::Value {
+    #[inline]
+    fn from(v: InterpolationMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstLFOWaveform")]
@@ -166,5 +174,13 @@ impl ToValue for LFOWaveform {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<LFOWaveform> for glib::Value {
+    #[inline]
+    fn from(v: LFOWaveform) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

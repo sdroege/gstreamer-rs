@@ -109,6 +109,16 @@ impl ToValue for WebRTCBundlePolicy {
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl From<WebRTCBundlePolicy> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCBundlePolicy) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCDTLSSetup")]
@@ -184,6 +194,14 @@ impl ToValue for WebRTCDTLSSetup {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<WebRTCDTLSSetup> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCDTLSSetup) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -266,6 +284,14 @@ impl ToValue for WebRTCDTLSTransportState {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<WebRTCDTLSTransportState> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCDTLSTransportState) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -358,6 +384,16 @@ impl ToValue for WebRTCDataChannelState {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl From<WebRTCDataChannelState> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCDataChannelState) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -529,6 +565,16 @@ impl ToValue for WebRTCError {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl From<WebRTCError> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCError) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[cfg(any(feature = "v1_14_1", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
@@ -613,6 +659,16 @@ impl ToValue for WebRTCFECType {
     }
 }
 
+#[cfg(any(feature = "v1_14_1", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+impl From<WebRTCFECType> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCFECType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCICEComponent")]
@@ -680,6 +736,14 @@ impl ToValue for WebRTCICEComponent {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<WebRTCICEComponent> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCICEComponent) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -773,6 +837,14 @@ impl ToValue for WebRTCICEConnectionState {
     }
 }
 
+impl From<WebRTCICEConnectionState> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCICEConnectionState) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCICEGatheringState")]
@@ -847,6 +919,14 @@ impl ToValue for WebRTCICEGatheringState {
     }
 }
 
+impl From<WebRTCICEGatheringState> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCICEGatheringState) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCICERole")]
@@ -914,6 +994,14 @@ impl ToValue for WebRTCICERole {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<WebRTCICERole> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCICERole) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -998,6 +1086,16 @@ impl ToValue for WebRTCICETransportPolicy {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl From<WebRTCICETransportPolicy> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCICETransportPolicy) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1089,6 +1187,16 @@ impl ToValue for WebRTCKind {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl From<WebRTCKind> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCKind) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCPeerConnectionState")]
@@ -1172,6 +1280,14 @@ impl ToValue for WebRTCPeerConnectionState {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<WebRTCPeerConnectionState> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCPeerConnectionState) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1267,6 +1383,16 @@ impl ToValue for WebRTCPriorityType {
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl From<WebRTCPriorityType> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCPriorityType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCRTPTransceiverDirection")]
@@ -1346,6 +1472,14 @@ impl ToValue for WebRTCRTPTransceiverDirection {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<WebRTCRTPTransceiverDirection> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCRTPTransceiverDirection) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1438,6 +1572,16 @@ impl ToValue for WebRTCSCTPTransportState {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl From<WebRTCSCTPTransportState> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCSCTPTransportState) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1540,6 +1684,14 @@ impl ToValue for WebRTCSDPType {
     }
 }
 
+impl From<WebRTCSDPType> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCSDPType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCSignalingState")]
@@ -1623,6 +1775,14 @@ impl ToValue for WebRTCSignalingState {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<WebRTCSignalingState> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCSignalingState) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1741,5 +1901,13 @@ impl ToValue for WebRTCStatsType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<WebRTCStatsType> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCStatsType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

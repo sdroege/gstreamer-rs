@@ -226,6 +226,14 @@ impl ToValue for RTSPPublishClockMode {
     }
 }
 
+impl From<RTSPPublishClockMode> for glib::Value {
+    #[inline]
+    fn from(v: RTSPPublishClockMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstRTSPSuspendMode")]
@@ -297,6 +305,14 @@ impl ToValue for RTSPSuspendMode {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<RTSPSuspendMode> for glib::Value {
+    #[inline]
+    fn from(v: RTSPSuspendMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 

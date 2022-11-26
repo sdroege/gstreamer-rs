@@ -83,6 +83,14 @@ impl ToValue for RTSPAuthMethod {
     }
 }
 
+impl From<RTSPAuthMethod> for glib::Value {
+    #[inline]
+    fn from(v: RTSPAuthMethod) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstRTSPFamily")]
@@ -154,6 +162,14 @@ impl ToValue for RTSPFamily {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<RTSPFamily> for glib::Value {
+    #[inline]
+    fn from(v: RTSPFamily) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -579,6 +595,14 @@ impl ToValue for RTSPHeaderField {
     }
 }
 
+impl From<RTSPHeaderField> for glib::Value {
+    #[inline]
+    fn from(v: RTSPHeaderField) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstRTSPMsgType")]
@@ -665,6 +689,14 @@ impl ToValue for RTSPMsgType {
     }
 }
 
+impl From<RTSPMsgType> for glib::Value {
+    #[inline]
+    fn from(v: RTSPMsgType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstRTSPRangeUnit")]
@@ -744,6 +776,14 @@ impl ToValue for RTSPRangeUnit {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<RTSPRangeUnit> for glib::Value {
+    #[inline]
+    fn from(v: RTSPRangeUnit) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -881,6 +921,14 @@ impl ToValue for RTSPResult {
     }
 }
 
+impl From<RTSPResult> for glib::Value {
+    #[inline]
+    fn from(v: RTSPResult) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstRTSPState")]
@@ -964,6 +1012,14 @@ impl ToValue for RTSPState {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<RTSPState> for glib::Value {
+    #[inline]
+    fn from(v: RTSPState) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1221,6 +1277,14 @@ impl ToValue for RTSPStatusCode {
     }
 }
 
+impl From<RTSPStatusCode> for glib::Value {
+    #[inline]
+    fn from(v: RTSPStatusCode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstRTSPTimeType")]
@@ -1300,5 +1364,13 @@ impl ToValue for RTSPTimeType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<RTSPTimeType> for glib::Value {
+    #[inline]
+    fn from(v: RTSPTimeType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

@@ -114,6 +114,16 @@ impl ToValue for GLConfigCaveat {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl From<GLConfigCaveat> for glib::Value {
+    #[inline]
+    fn from(v: GLConfigCaveat) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstGLContextError")]
@@ -222,6 +232,14 @@ impl ToValue for GLContextError {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<GLContextError> for glib::Value {
+    #[inline]
+    fn from(v: GLContextError) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -420,6 +438,14 @@ impl ToValue for GLFormat {
     }
 }
 
+impl From<GLFormat> for glib::Value {
+    #[inline]
+    fn from(v: GLFormat) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstGLQueryType")]
@@ -491,6 +517,14 @@ impl ToValue for GLQueryType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<GLQueryType> for glib::Value {
+    #[inline]
+    fn from(v: GLQueryType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -587,6 +621,14 @@ impl ToValue for GLSLError {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<GLSLError> for glib::Value {
+    #[inline]
+    fn from(v: GLSLError) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -768,6 +810,14 @@ impl ToValue for GLSLVersion {
     }
 }
 
+impl From<GLSLVersion> for glib::Value {
+    #[inline]
+    fn from(v: GLSLVersion) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstGLStereoDownmix")]
@@ -839,6 +889,14 @@ impl ToValue for GLStereoDownmix {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<GLStereoDownmix> for glib::Value {
+    #[inline]
+    fn from(v: GLStereoDownmix) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -957,6 +1015,14 @@ impl ToValue for GLTextureTarget {
     }
 }
 
+impl From<GLTextureTarget> for glib::Value {
+    #[inline]
+    fn from(v: GLTextureTarget) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstGLUploadReturn")]
@@ -1036,6 +1102,14 @@ impl ToValue for GLUploadReturn {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<GLUploadReturn> for glib::Value {
+    #[inline]
+    fn from(v: GLUploadReturn) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1132,5 +1206,13 @@ impl ToValue for GLWindowError {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<GLWindowError> for glib::Value {
+    #[inline]
+    fn from(v: GLWindowError) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

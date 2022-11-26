@@ -111,6 +111,14 @@ impl ToValue for AudioVisualizerShader {
     }
 }
 
+impl From<AudioVisualizerShader> for glib::Value {
+    #[inline]
+    fn from(v: AudioVisualizerShader) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstDiscovererResult")]
@@ -194,5 +202,13 @@ impl ToValue for DiscovererResult {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<DiscovererResult> for glib::Value {
+    #[inline]
+    fn from(v: DiscovererResult) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

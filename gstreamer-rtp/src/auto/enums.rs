@@ -107,6 +107,14 @@ impl ToValue for RTCPFBType {
     }
 }
 
+impl From<RTCPFBType> for glib::Value {
+    #[inline]
+    fn from(v: RTCPFBType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstRTCPSDESType")]
@@ -265,6 +273,14 @@ impl ToValue for RTCPSDESType {
     }
 }
 
+impl From<RTCPSDESType> for glib::Value {
+    #[inline]
+    fn from(v: RTCPSDESType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstRTCPType")]
@@ -360,6 +376,14 @@ impl ToValue for RTCPType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<RTCPType> for glib::Value {
+    #[inline]
+    fn from(v: RTCPType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -468,6 +492,16 @@ impl ToValue for RTCPXRType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl From<RTCPXRType> for glib::Value {
+    #[inline]
+    fn from(v: RTCPXRType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -637,6 +671,14 @@ impl ToValue for RTPPayload {
     }
 }
 
+impl From<RTPPayload> for glib::Value {
+    #[inline]
+    fn from(v: RTPPayload) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstRTPProfile")]
@@ -716,5 +758,13 @@ impl ToValue for RTPProfile {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<RTPProfile> for glib::Value {
+    #[inline]
+    fn from(v: RTPProfile) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

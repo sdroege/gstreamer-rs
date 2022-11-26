@@ -70,6 +70,14 @@ impl ToValue for RTPBufferFlags {
     }
 }
 
+impl From<RTPBufferFlags> for glib::Value {
+    #[inline]
+    fn from(v: RTPBufferFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstRTPBufferMapFlags")]
     pub struct RTPBufferMapFlags: u32 {
@@ -125,6 +133,14 @@ impl ToValue for RTPBufferMapFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<RTPBufferMapFlags> for glib::Value {
+    #[inline]
+    fn from(v: RTPBufferMapFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -209,6 +225,16 @@ impl ToValue for RTPHeaderExtensionDirection {
 }
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl From<RTPHeaderExtensionDirection> for glib::Value {
+    #[inline]
+    fn from(v: RTPHeaderExtensionDirection) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
 bitflags! {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstRTPHeaderExtensionFlags")]
@@ -279,5 +305,15 @@ impl ToValue for RTPHeaderExtensionFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl From<RTPHeaderExtensionFlags> for glib::Value {
+    #[inline]
+    fn from(v: RTPHeaderExtensionFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

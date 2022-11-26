@@ -86,6 +86,16 @@ impl ToValue for MarkerFlags {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl From<MarkerFlags> for glib::Value {
+    #[inline]
+    fn from(v: MarkerFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GESMetaFlag")]
     pub struct MetaFlag: u32 {
@@ -145,6 +155,14 @@ impl ToValue for MetaFlag {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<MetaFlag> for glib::Value {
+    #[inline]
+    fn from(v: MetaFlag) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -211,6 +229,14 @@ impl ToValue for PipelineFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<PipelineFlags> for glib::Value {
+    #[inline]
+    fn from(v: PipelineFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -298,5 +324,13 @@ impl ToValue for TrackType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<TrackType> for glib::Value {
+    #[inline]
+    fn from(v: TrackType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

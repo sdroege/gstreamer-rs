@@ -68,6 +68,14 @@ impl ToValue for AudioFlags {
     }
 }
 
+impl From<AudioFlags> for glib::Value {
+    #[inline]
+    fn from(v: AudioFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstAudioFormatFlags")]
     pub struct AudioFormatFlags: u32 {
@@ -134,6 +142,14 @@ impl ToValue for AudioFormatFlags {
     }
 }
 
+impl From<AudioFormatFlags> for glib::Value {
+    #[inline]
+    fn from(v: AudioFormatFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstAudioPackFlags")]
     pub struct AudioPackFlags: u32 {
@@ -189,5 +205,13 @@ impl ToValue for AudioPackFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<AudioPackFlags> for glib::Value {
+    #[inline]
+    fn from(v: AudioPackFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

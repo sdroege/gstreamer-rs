@@ -115,6 +115,14 @@ impl ToValue for PlayColorBalanceType {
     }
 }
 
+impl From<PlayColorBalanceType> for glib::Value {
+    #[inline]
+    fn from(v: PlayColorBalanceType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstPlayError")]
@@ -219,6 +227,14 @@ impl ToValue for PlayError {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<PlayError> for glib::Value {
+    #[inline]
+    fn from(v: PlayError) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -483,6 +499,14 @@ impl ToValue for PlayMessage {
     }
 }
 
+impl From<PlayMessage> for glib::Value {
+    #[inline]
+    fn from(v: PlayMessage) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstPlaySnapshotFormat")]
@@ -628,5 +652,13 @@ impl ToValue for PlayState {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<PlayState> for glib::Value {
+    #[inline]
+    fn from(v: PlayState) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

@@ -72,6 +72,14 @@ impl ToValue for DiscovererSerializeFlags {
     }
 }
 
+impl From<DiscovererSerializeFlags> for glib::Value {
+    #[inline]
+    fn from(v: DiscovererSerializeFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 bitflags! {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
@@ -157,5 +165,15 @@ impl ToValue for PbUtilsCapsDescriptionFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl From<PbUtilsCapsDescriptionFlags> for glib::Value {
+    #[inline]
+    fn from(v: PbUtilsCapsDescriptionFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

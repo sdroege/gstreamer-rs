@@ -97,6 +97,14 @@ impl ToValue for GLAPI {
     }
 }
 
+impl From<GLAPI> for glib::Value {
+    #[inline]
+    fn from(v: GLAPI) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 bitflags! {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
@@ -186,6 +194,16 @@ impl ToValue for GLConfigSurfaceType {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl From<GLConfigSurfaceType> for glib::Value {
+    #[inline]
+    fn from(v: GLConfigSurfaceType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstGLDisplayType")]
     pub struct GLDisplayType: u32 {
@@ -271,6 +289,14 @@ impl ToValue for GLDisplayType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<GLDisplayType> for glib::Value {
+    #[inline]
+    fn from(v: GLDisplayType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -366,6 +392,14 @@ impl ToValue for GLPlatform {
     }
 }
 
+impl From<GLPlatform> for glib::Value {
+    #[inline]
+    fn from(v: GLPlatform) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstGLSLProfile")]
     pub struct GLSLProfile: u32 {
@@ -440,5 +474,13 @@ impl ToValue for GLSLProfile {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<GLSLProfile> for glib::Value {
+    #[inline]
+    fn from(v: GLSLProfile) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

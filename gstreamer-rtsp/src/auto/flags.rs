@@ -70,6 +70,14 @@ impl ToValue for RTSPEvent {
     }
 }
 
+impl From<RTSPEvent> for glib::Value {
+    #[inline]
+    fn from(v: RTSPEvent) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstRTSPLowerTrans")]
     pub struct RTSPLowerTrans: u32 {
@@ -133,6 +141,14 @@ impl ToValue for RTSPLowerTrans {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<RTSPLowerTrans> for glib::Value {
+    #[inline]
+    fn from(v: RTSPLowerTrans) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -226,6 +242,14 @@ impl ToValue for RTSPMethod {
     }
 }
 
+impl From<RTSPMethod> for glib::Value {
+    #[inline]
+    fn from(v: RTSPMethod) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstRTSPProfile")]
     pub struct RTSPProfile: u32 {
@@ -290,6 +314,14 @@ impl ToValue for RTSPProfile {
     }
 }
 
+impl From<RTSPProfile> for glib::Value {
+    #[inline]
+    fn from(v: RTSPProfile) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstRTSPTransMode")]
     pub struct RTSPTransMode: u32 {
@@ -347,5 +379,13 @@ impl ToValue for RTSPTransMode {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<RTSPTransMode> for glib::Value {
+    #[inline]
+    fn from(v: RTSPTransMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

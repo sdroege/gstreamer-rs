@@ -92,6 +92,14 @@ impl ToValue for BufferingMode {
     }
 }
 
+impl From<BufferingMode> for glib::Value {
+    #[inline]
+    fn from(v: BufferingMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstBusSyncReply")]
@@ -166,6 +174,14 @@ impl ToValue for BusSyncReply {
     }
 }
 
+impl From<BusSyncReply> for glib::Value {
+    #[inline]
+    fn from(v: BusSyncReply) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstCapsIntersectMode")]
@@ -236,6 +252,14 @@ impl ToValue for CapsIntersectMode {
     }
 }
 
+impl From<CapsIntersectMode> for glib::Value {
+    #[inline]
+    fn from(v: CapsIntersectMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstClockEntryType")]
@@ -303,6 +327,14 @@ impl ToValue for ClockEntryType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<ClockEntryType> for glib::Value {
+    #[inline]
+    fn from(v: ClockEntryType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -401,6 +433,14 @@ impl ToValue for ClockReturn {
     }
 }
 
+impl From<ClockReturn> for glib::Value {
+    #[inline]
+    fn from(v: ClockReturn) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstClockType")]
@@ -480,6 +520,14 @@ impl ToValue for ClockType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<ClockType> for glib::Value {
+    #[inline]
+    fn from(v: ClockType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -634,6 +682,14 @@ impl ToValue for CoreError {
     }
 }
 
+impl From<CoreError> for glib::Value {
+    #[inline]
+    fn from(v: CoreError) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstDebugLevel")]
@@ -750,6 +806,14 @@ impl ToValue for DebugLevel {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<DebugLevel> for glib::Value {
+    #[inline]
+    fn from(v: DebugLevel) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -985,6 +1049,14 @@ impl ToValue for EventType {
     }
 }
 
+impl From<EventType> for glib::Value {
+    #[inline]
+    fn from(v: EventType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[must_use]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -1097,6 +1169,14 @@ impl ToValue for FlowReturn {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<FlowReturn> for glib::Value {
+    #[inline]
+    fn from(v: FlowReturn) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1220,6 +1300,14 @@ impl ToValue for Format {
     }
 }
 
+impl From<Format> for glib::Value {
+    #[inline]
+    fn from(v: Format) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstLibraryError")]
@@ -1331,6 +1419,14 @@ impl ToValue for LibraryError {
     }
 }
 
+impl From<LibraryError> for glib::Value {
+    #[inline]
+    fn from(v: LibraryError) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -1403,6 +1499,14 @@ impl ToValue for PadDirection {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<PadDirection> for glib::Value {
+    #[inline]
+    fn from(v: PadDirection) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1494,6 +1598,14 @@ impl ToValue for PadLinkReturn {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<PadLinkReturn> for glib::Value {
+    #[inline]
+    fn from(v: PadLinkReturn) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1592,6 +1704,14 @@ impl ToValue for PadMode {
     }
 }
 
+impl From<PadMode> for glib::Value {
+    #[inline]
+    fn from(v: PadMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -1664,6 +1784,14 @@ impl ToValue for PadPresence {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<PadPresence> for glib::Value {
+    #[inline]
+    fn from(v: PadPresence) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1746,6 +1874,14 @@ impl ToValue for PadProbeReturn {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<PadProbeReturn> for glib::Value {
+    #[inline]
+    fn from(v: PadProbeReturn) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1870,6 +2006,14 @@ impl ToValue for ParseError {
     }
 }
 
+impl From<ParseError> for glib::Value {
+    #[inline]
+    fn from(v: ParseError) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstPluginError")]
@@ -1966,6 +2110,14 @@ impl ToValue for PluginError {
     }
 }
 
+impl From<PluginError> for glib::Value {
+    #[inline]
+    fn from(v: PluginError) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstProgressType")]
@@ -2048,6 +2200,14 @@ impl ToValue for ProgressType {
     }
 }
 
+impl From<ProgressType> for glib::Value {
+    #[inline]
+    fn from(v: ProgressType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstPromiseResult")]
@@ -2126,6 +2286,14 @@ impl ToValue for PromiseResult {
     }
 }
 
+impl From<PromiseResult> for glib::Value {
+    #[inline]
+    fn from(v: PromiseResult) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstQOSType")]
@@ -2197,6 +2365,14 @@ impl ToValue for QOSType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<QOSType> for glib::Value {
+    #[inline]
+    fn from(v: QOSType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -2276,6 +2452,14 @@ impl ToValue for Rank {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<Rank> for glib::Value {
+    #[inline]
+    fn from(v: Rank) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -2435,6 +2619,14 @@ impl ToValue for ResourceError {
     }
 }
 
+impl From<ResourceError> for glib::Value {
+    #[inline]
+    fn from(v: ResourceError) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstSeekType")]
@@ -2506,6 +2698,14 @@ impl ToValue for SeekType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<SeekType> for glib::Value {
+    #[inline]
+    fn from(v: SeekType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -2589,6 +2789,14 @@ impl ToValue for State {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<State> for glib::Value {
+    #[inline]
+    fn from(v: State) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -2715,6 +2923,14 @@ impl ToValue for StateChange {
     }
 }
 
+impl From<StateChange> for glib::Value {
+    #[inline]
+    fn from(v: StateChange) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[must_use]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -2791,6 +3007,14 @@ impl ToValue for StateChangeReturn {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<StateChangeReturn> for glib::Value {
+    #[inline]
+    fn from(v: StateChangeReturn) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -2940,6 +3164,14 @@ impl ToValue for StreamError {
     }
 }
 
+impl From<StreamError> for glib::Value {
+    #[inline]
+    fn from(v: StreamError) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstStreamStatusType")]
@@ -3030,6 +3262,14 @@ impl ToValue for StreamStatusType {
     }
 }
 
+impl From<StreamStatusType> for glib::Value {
+    #[inline]
+    fn from(v: StreamStatusType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstStructureChangeType")]
@@ -3097,6 +3337,14 @@ impl ToValue for StructureChangeType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<StructureChangeType> for glib::Value {
+    #[inline]
+    fn from(v: StructureChangeType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -3175,6 +3423,14 @@ impl ToValue for TagFlag {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<TagFlag> for glib::Value {
+    #[inline]
+    fn from(v: TagFlag) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -3268,6 +3524,14 @@ impl ToValue for TagMergeMode {
     }
 }
 
+impl From<TagMergeMode> for glib::Value {
+    #[inline]
+    fn from(v: TagMergeMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -3336,6 +3600,14 @@ impl ToValue for TagScope {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<TagScope> for glib::Value {
+    #[inline]
+    fn from(v: TagScope) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -3410,6 +3682,14 @@ impl ToValue for TaskState {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<TaskState> for glib::Value {
+    #[inline]
+    fn from(v: TaskState) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -3518,6 +3798,14 @@ impl ToValue for TocEntryType {
     }
 }
 
+impl From<TocEntryType> for glib::Value {
+    #[inline]
+    fn from(v: TocEntryType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -3597,6 +3885,14 @@ impl ToValue for TocLoopType {
     }
 }
 
+impl From<TocLoopType> for glib::Value {
+    #[inline]
+    fn from(v: TocLoopType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -3665,6 +3961,14 @@ impl ToValue for TocScope {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<TocScope> for glib::Value {
+    #[inline]
+    fn from(v: TocScope) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -3751,6 +4055,14 @@ impl ToValue for TypeFindProbability {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<TypeFindProbability> for glib::Value {
+    #[inline]
+    fn from(v: TypeFindProbability) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -3855,6 +4167,14 @@ impl ToValue for URIError {
     }
 }
 
+impl From<URIError> for glib::Value {
+    #[inline]
+    fn from(v: URIError) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -3927,5 +4247,13 @@ impl ToValue for URIType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<URIType> for glib::Value {
+    #[inline]
+    fn from(v: URIType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

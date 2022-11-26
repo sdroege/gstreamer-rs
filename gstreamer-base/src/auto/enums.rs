@@ -106,3 +106,13 @@ impl ToValue for AggregatorStartTimeSelection {
         Self::static_type()
     }
 }
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl From<AggregatorStartTimeSelection> for glib::Value {
+    #[inline]
+    fn from(v: AggregatorStartTimeSelection) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}

@@ -102,3 +102,11 @@ impl ToValue for RTSPTransportMode {
         Self::static_type()
     }
 }
+
+impl From<RTSPTransportMode> for glib::Value {
+    #[inline]
+    fn from(v: RTSPTransportMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}

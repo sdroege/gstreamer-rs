@@ -81,6 +81,14 @@ impl ToValue for ColorBalanceType {
     }
 }
 
+impl From<ColorBalanceType> for glib::Value {
+    #[inline]
+    fn from(v: ColorBalanceType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -201,6 +209,14 @@ impl ToValue for NavigationCommand {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<NavigationCommand> for glib::Value {
+    #[inline]
+    fn from(v: NavigationCommand) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -342,6 +358,14 @@ impl ToValue for NavigationEventType {
     }
 }
 
+impl From<NavigationEventType> for glib::Value {
+    #[inline]
+    fn from(v: NavigationEventType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstNavigationMessageType")]
@@ -424,6 +448,14 @@ impl ToValue for NavigationMessageType {
     }
 }
 
+impl From<NavigationMessageType> for glib::Value {
+    #[inline]
+    fn from(v: NavigationMessageType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstNavigationQueryType")]
@@ -495,6 +527,14 @@ impl ToValue for NavigationQueryType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<NavigationQueryType> for glib::Value {
+    #[inline]
+    fn from(v: NavigationQueryType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -583,6 +623,16 @@ impl ToValue for VideoAFDSpec {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl From<VideoAFDSpec> for glib::Value {
+    #[inline]
+    fn from(v: VideoAFDSpec) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -706,6 +756,16 @@ impl ToValue for VideoAFDValue {
     }
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl From<VideoAFDValue> for glib::Value {
+    #[inline]
+    fn from(v: VideoAFDValue) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoAlphaMode")]
@@ -777,6 +837,14 @@ impl ToValue for VideoAlphaMode {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoAlphaMode> for glib::Value {
+    #[inline]
+    fn from(v: VideoAlphaMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -886,6 +954,16 @@ impl ToValue for VideoCaptionType {
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl From<VideoCaptionType> for glib::Value {
+    #[inline]
+    fn from(v: VideoCaptionType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoChromaMode")]
@@ -961,6 +1039,14 @@ impl ToValue for VideoChromaMode {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoChromaMode> for glib::Value {
+    #[inline]
+    fn from(v: VideoChromaMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1069,6 +1155,14 @@ impl ToValue for VideoColorMatrix {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoColorMatrix> for glib::Value {
+    #[inline]
+    fn from(v: VideoColorMatrix) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1239,6 +1333,14 @@ impl ToValue for VideoColorPrimaries {
     }
 }
 
+impl From<VideoColorPrimaries> for glib::Value {
+    #[inline]
+    fn from(v: VideoColorPrimaries) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoDitherMethod")]
@@ -1318,6 +1420,14 @@ impl ToValue for VideoDitherMethod {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoDitherMethod> for glib::Value {
+    #[inline]
+    fn from(v: VideoDitherMethod) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1411,6 +1521,14 @@ impl ToValue for VideoFieldOrder {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoFieldOrder> for glib::Value {
+    #[inline]
+    fn from(v: VideoFieldOrder) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -2089,6 +2207,14 @@ impl ToValue for VideoFormat {
     }
 }
 
+impl From<VideoFormat> for glib::Value {
+    #[inline]
+    fn from(v: VideoFormat) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoGammaMode")]
@@ -2156,6 +2282,14 @@ impl ToValue for VideoGammaMode {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoGammaMode> for glib::Value {
+    #[inline]
+    fn from(v: VideoGammaMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -2276,6 +2410,14 @@ impl ToValue for VideoInterlaceMode {
     }
 }
 
+impl From<VideoInterlaceMode> for glib::Value {
+    #[inline]
+    fn from(v: VideoInterlaceMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoMatrixMode")]
@@ -2351,6 +2493,14 @@ impl ToValue for VideoMatrixMode {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoMatrixMode> for glib::Value {
+    #[inline]
+    fn from(v: VideoMatrixMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -2457,6 +2607,14 @@ impl ToValue for VideoMultiviewFramePacking {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoMultiviewFramePacking> for glib::Value {
+    #[inline]
+    fn from(v: VideoMultiviewFramePacking) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -2596,6 +2754,14 @@ impl ToValue for VideoMultiviewMode {
     }
 }
 
+impl From<VideoMultiviewMode> for glib::Value {
+    #[inline]
+    fn from(v: VideoMultiviewMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoOrientationMethod")]
@@ -2698,6 +2864,14 @@ impl ToValue for VideoOrientationMethod {
     }
 }
 
+impl From<VideoOrientationMethod> for glib::Value {
+    #[inline]
+    fn from(v: VideoOrientationMethod) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoPrimariesMode")]
@@ -2769,6 +2943,14 @@ impl ToValue for VideoPrimariesMode {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoPrimariesMode> for glib::Value {
+    #[inline]
+    fn from(v: VideoPrimariesMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -2854,6 +3036,14 @@ impl ToValue for VideoResamplerMethod {
     }
 }
 
+impl From<VideoResamplerMethod> for glib::Value {
+    #[inline]
+    fn from(v: VideoResamplerMethod) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoTileMode")]
@@ -2929,6 +3119,14 @@ impl ToValue for VideoTileMode {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoTileMode> for glib::Value {
+    #[inline]
+    fn from(v: VideoTileMode) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -3124,5 +3322,13 @@ impl ToValue for VideoTransferFunction {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoTransferFunction> for glib::Value {
+    #[inline]
+    fn from(v: VideoTransferFunction) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

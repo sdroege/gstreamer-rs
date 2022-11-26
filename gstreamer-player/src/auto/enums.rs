@@ -112,6 +112,14 @@ impl ToValue for PlayerColorBalanceType {
     }
 }
 
+impl From<PlayerColorBalanceType> for glib::Value {
+    #[inline]
+    fn from(v: PlayerColorBalanceType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstPlayerError")]
@@ -216,6 +224,14 @@ impl ToValue for PlayerError {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<PlayerError> for glib::Value {
+    #[inline]
+    fn from(v: PlayerError) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -364,5 +380,13 @@ impl ToValue for PlayerState {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<PlayerState> for glib::Value {
+    #[inline]
+    fn from(v: PlayerState) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

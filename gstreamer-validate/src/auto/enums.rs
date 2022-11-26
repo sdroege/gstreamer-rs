@@ -132,6 +132,14 @@ impl ToValue for ReportLevel {
     }
 }
 
+impl From<ReportLevel> for glib::Value {
+    #[inline]
+    fn from(v: ReportLevel) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstValidateReportingDetails")]
@@ -223,5 +231,13 @@ impl ToValue for ReportingDetails {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<ReportingDetails> for glib::Value {
+    #[inline]
+    fn from(v: ReportingDetails) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

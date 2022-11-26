@@ -73,3 +73,11 @@ impl ToValue for IssueFlags {
         Self::static_type()
     }
 }
+
+impl From<IssueFlags> for glib::Value {
+    #[inline]
+    fn from(v: IssueFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}

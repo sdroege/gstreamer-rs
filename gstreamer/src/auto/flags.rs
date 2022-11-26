@@ -72,6 +72,14 @@ impl ToValue for BinFlags {
     }
 }
 
+impl From<BinFlags> for glib::Value {
+    #[inline]
+    fn from(v: BinFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstBufferCopyFlags")]
     pub struct BufferCopyFlags: u32 {
@@ -137,6 +145,14 @@ impl ToValue for BufferCopyFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<BufferCopyFlags> for glib::Value {
+    #[inline]
+    fn from(v: BufferCopyFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -222,6 +238,14 @@ impl ToValue for BufferFlags {
     }
 }
 
+impl From<BufferFlags> for glib::Value {
+    #[inline]
+    fn from(v: BufferFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstBufferPoolAcquireFlags")]
     pub struct BufferPoolAcquireFlags: u32 {
@@ -281,6 +305,14 @@ impl ToValue for BufferPoolAcquireFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<BufferPoolAcquireFlags> for glib::Value {
+    #[inline]
+    fn from(v: BufferPoolAcquireFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -351,6 +383,14 @@ impl ToValue for ClockFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<ClockFlags> for glib::Value {
+    #[inline]
+    fn from(v: ClockFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -446,6 +486,14 @@ impl ToValue for DebugColorFlags {
     }
 }
 
+impl From<DebugColorFlags> for glib::Value {
+    #[inline]
+    fn from(v: DebugColorFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstDebugGraphDetails")]
     pub struct DebugGraphDetails: u32 {
@@ -513,6 +561,14 @@ impl ToValue for DebugGraphDetails {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<DebugGraphDetails> for glib::Value {
+    #[inline]
+    fn from(v: DebugGraphDetails) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -584,6 +640,14 @@ impl ToValue for ElementFlags {
     }
 }
 
+impl From<ElementFlags> for glib::Value {
+    #[inline]
+    fn from(v: ElementFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstEventTypeFlags")]
     pub struct EventTypeFlags: u32 {
@@ -647,6 +711,14 @@ impl ToValue for EventTypeFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<EventTypeFlags> for glib::Value {
+    #[inline]
+    fn from(v: EventTypeFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -722,6 +794,16 @@ impl ToValue for GapFlags {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl From<GapFlags> for glib::Value {
+    #[inline]
+    fn from(v: GapFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstMemoryFlags")]
     pub struct MemoryFlags: u32 {
@@ -790,6 +872,14 @@ impl ToValue for MemoryFlags {
     }
 }
 
+impl From<MemoryFlags> for glib::Value {
+    #[inline]
+    fn from(v: MemoryFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstMetaFlags")]
     pub struct MetaFlags: u32 {
@@ -852,6 +942,14 @@ impl ToValue for MetaFlags {
     }
 }
 
+impl From<MetaFlags> for glib::Value {
+    #[inline]
+    fn from(v: MetaFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstObjectFlags")]
     pub struct ObjectFlags: u32 {
@@ -907,6 +1005,14 @@ impl ToValue for ObjectFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<ObjectFlags> for glib::Value {
+    #[inline]
+    fn from(v: ObjectFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -992,6 +1098,14 @@ impl ToValue for PadFlags {
     }
 }
 
+impl From<PadFlags> for glib::Value {
+    #[inline]
+    fn from(v: PadFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstPadLinkCheck")]
     pub struct PadLinkCheck: u32 {
@@ -1055,6 +1169,14 @@ impl ToValue for PadLinkCheck {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<PadLinkCheck> for glib::Value {
+    #[inline]
+    fn from(v: PadLinkCheck) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1156,6 +1278,14 @@ impl ToValue for PadProbeType {
     }
 }
 
+impl From<PadProbeType> for glib::Value {
+    #[inline]
+    fn from(v: PadProbeType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstParseFlags")]
     pub struct ParseFlags: u32 {
@@ -1218,6 +1348,14 @@ impl ToValue for ParseFlags {
     }
 }
 
+impl From<ParseFlags> for glib::Value {
+    #[inline]
+    fn from(v: ParseFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstPipelineFlags")]
     pub struct PipelineFlags: u32 {
@@ -1273,6 +1411,14 @@ impl ToValue for PipelineFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<PipelineFlags> for glib::Value {
+    #[inline]
+    fn from(v: PipelineFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1348,6 +1494,16 @@ impl ToValue for PluginAPIFlags {
     }
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl From<PluginAPIFlags> for glib::Value {
+    #[inline]
+    fn from(v: PluginAPIFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstPluginDependencyFlags")]
     pub struct PluginDependencyFlags: u32 {
@@ -1414,6 +1570,14 @@ impl ToValue for PluginDependencyFlags {
     }
 }
 
+impl From<PluginDependencyFlags> for glib::Value {
+    #[inline]
+    fn from(v: PluginDependencyFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstPluginFlags")]
     pub struct PluginFlags: u32 {
@@ -1471,6 +1635,14 @@ impl ToValue for PluginFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<PluginFlags> for glib::Value {
+    #[inline]
+    fn from(v: PluginFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1533,6 +1705,14 @@ impl ToValue for SchedulingFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<SchedulingFlags> for glib::Value {
+    #[inline]
+    fn from(v: SchedulingFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1622,6 +1802,14 @@ impl ToValue for SeekFlags {
     }
 }
 
+impl From<SeekFlags> for glib::Value {
+    #[inline]
+    fn from(v: SeekFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstSegmentFlags")]
     pub struct SegmentFlags: u32 {
@@ -1691,6 +1879,14 @@ impl ToValue for SegmentFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<SegmentFlags> for glib::Value {
+    #[inline]
+    fn from(v: SegmentFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1768,6 +1964,16 @@ impl ToValue for SerializeFlags {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl From<SerializeFlags> for glib::Value {
+    #[inline]
+    fn from(v: SerializeFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstStackTraceFlags")]
     pub struct StackTraceFlags: u32 {
@@ -1823,6 +2029,14 @@ impl ToValue for StackTraceFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<StackTraceFlags> for glib::Value {
+    #[inline]
+    fn from(v: StackTraceFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1885,6 +2099,14 @@ impl ToValue for StreamFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<StreamFlags> for glib::Value {
+    #[inline]
+    fn from(v: StreamFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -1972,5 +2194,13 @@ impl ToValue for StreamType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<StreamType> for glib::Value {
+    #[inline]
+    fn from(v: StreamType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

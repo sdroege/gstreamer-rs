@@ -196,6 +196,14 @@ impl ToValue for AudioChannelPosition {
     }
 }
 
+impl From<AudioChannelPosition> for glib::Value {
+    #[inline]
+    fn from(v: AudioChannelPosition) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstAudioDitherMethod")]
@@ -271,6 +279,14 @@ impl ToValue for AudioDitherMethod {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<AudioDitherMethod> for glib::Value {
+    #[inline]
+    fn from(v: AudioDitherMethod) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -479,6 +495,14 @@ impl ToValue for AudioFormat {
     }
 }
 
+impl From<AudioFormat> for glib::Value {
+    #[inline]
+    fn from(v: AudioFormat) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstAudioLayout")]
@@ -546,6 +570,14 @@ impl ToValue for AudioLayout {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<AudioLayout> for glib::Value {
+    #[inline]
+    fn from(v: AudioLayout) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -631,6 +663,14 @@ impl ToValue for AudioNoiseShapingMethod {
     }
 }
 
+impl From<AudioNoiseShapingMethod> for glib::Value {
+    #[inline]
+    fn from(v: AudioNoiseShapingMethod) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstAudioResamplerMethod")]
@@ -710,6 +750,14 @@ impl ToValue for AudioResamplerMethod {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<AudioResamplerMethod> for glib::Value {
+    #[inline]
+    fn from(v: AudioResamplerMethod) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -832,6 +880,14 @@ impl ToValue for AudioRingBufferFormatType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<AudioRingBufferFormatType> for glib::Value {
+    #[inline]
+    fn from(v: AudioRingBufferFormatType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 

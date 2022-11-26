@@ -105,6 +105,16 @@ impl ToValue for NavigationModifierType {
     }
 }
 
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+impl From<NavigationModifierType> for glib::Value {
+    #[inline]
+    fn from(v: NavigationModifierType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstVideoBufferFlags")]
     pub struct VideoBufferFlags: u32 {
@@ -182,6 +192,14 @@ impl ToValue for VideoBufferFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoBufferFlags> for glib::Value {
+    #[inline]
+    fn from(v: VideoBufferFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -274,6 +292,14 @@ impl ToValue for VideoChromaSite {
     }
 }
 
+impl From<VideoChromaSite> for glib::Value {
+    #[inline]
+    fn from(v: VideoChromaSite) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstVideoCodecFrameFlags")]
     pub struct VideoCodecFrameFlags: u32 {
@@ -351,6 +377,16 @@ impl ToValue for VideoCodecFrameFlags {
 }
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl From<VideoCodecFrameFlags> for glib::Value {
+    #[inline]
+    fn from(v: VideoCodecFrameFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
 bitflags! {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstVideoDecoderRequestSyncPointFlags")]
@@ -424,6 +460,16 @@ impl ToValue for VideoDecoderRequestSyncPointFlags {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl From<VideoDecoderRequestSyncPointFlags> for glib::Value {
+    #[inline]
+    fn from(v: VideoDecoderRequestSyncPointFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstVideoFlags")]
     pub struct VideoFlags: u32 {
@@ -481,6 +527,14 @@ impl ToValue for VideoFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoFlags> for glib::Value {
+    #[inline]
+    fn from(v: VideoFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -562,6 +616,14 @@ impl ToValue for VideoFormatFlags {
     }
 }
 
+impl From<VideoFormatFlags> for glib::Value {
+    #[inline]
+    fn from(v: VideoFormatFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstVideoFrameFlags")]
     pub struct VideoFrameFlags: u32 {
@@ -638,6 +700,14 @@ impl ToValue for VideoFrameFlags {
     }
 }
 
+impl From<VideoFrameFlags> for glib::Value {
+    #[inline]
+    fn from(v: VideoFrameFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstVideoMultiviewFlags")]
     pub struct VideoMultiviewFlags: u32 {
@@ -705,6 +775,14 @@ impl ToValue for VideoMultiviewFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoMultiviewFlags> for glib::Value {
+    #[inline]
+    fn from(v: VideoMultiviewFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -776,6 +854,16 @@ impl ToValue for VideoOverlayFormatFlags {
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl From<VideoOverlayFormatFlags> for glib::Value {
+    #[inline]
+    fn from(v: VideoOverlayFormatFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstVideoPackFlags")]
     pub struct VideoPackFlags: u32 {
@@ -833,6 +921,14 @@ impl ToValue for VideoPackFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<VideoPackFlags> for glib::Value {
+    #[inline]
+    fn from(v: VideoPackFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
 
@@ -901,5 +997,15 @@ impl ToValue for VideoTimeCodeFlags {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl From<VideoTimeCodeFlags> for glib::Value {
+    #[inline]
+    fn from(v: VideoTimeCodeFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }

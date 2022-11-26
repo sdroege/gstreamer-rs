@@ -97,6 +97,16 @@ impl ToValue for AppLeakyType {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl From<AppLeakyType> for glib::Value {
+    #[inline]
+    fn from(v: AppLeakyType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstAppStreamType")]
@@ -168,5 +178,13 @@ impl ToValue for AppStreamType {
 
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<AppStreamType> for glib::Value {
+    #[inline]
+    fn from(v: AppStreamType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
     }
 }
