@@ -871,6 +871,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstVideoTileInfo",
+        Layout {
+            size: size_of::<GstVideoTileInfo>(),
+            alignment: align_of::<GstVideoTileInfo>(),
+        },
+    ),
+    (
         "GstVideoTileMode",
         Layout {
             size: size_of::<GstVideoTileMode>(),

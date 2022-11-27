@@ -40,6 +40,12 @@ pub trait AggregatorExt: 'static {
     #[doc(alias = "get_buffer_pool")]
     fn buffer_pool(&self) -> Option<gst::BufferPool>;
 
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "gst_aggregator_get_force_live")]
+    #[doc(alias = "get_force_live")]
+    fn is_force_live(&self) -> bool;
+
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_aggregator_get_ignore_inactive_pads")]
@@ -59,6 +65,11 @@ pub trait AggregatorExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_aggregator_peek_next_sample")]
     fn peek_next_sample(&self, pad: &impl IsA<AggregatorPad>) -> Option<gst::Sample>;
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "gst_aggregator_set_force_live")]
+    fn set_force_live(&self, force_live: bool);
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
@@ -142,6 +153,16 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    fn is_force_live(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_aggregator_get_force_live(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     fn ignores_inactive_pads(&self) -> bool {
@@ -178,6 +199,17 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
                 self.as_ref().to_glib_none().0,
                 pad.as_ref().to_glib_none().0,
             ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    fn set_force_live(&self, force_live: bool) {
+        unsafe {
+            ffi::gst_aggregator_set_force_live(
+                self.as_ref().to_glib_none().0,
+                force_live.into_glib(),
+            );
         }
     }
 

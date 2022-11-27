@@ -248,6 +248,8 @@ pub struct GstWebRTCICEClass {
     pub get_stun_server: Option<unsafe extern "C" fn(*mut GstWebRTCICE) -> *mut c_char>,
     pub set_turn_server: Option<unsafe extern "C" fn(*mut GstWebRTCICE, *const c_char)>,
     pub get_turn_server: Option<unsafe extern "C" fn(*mut GstWebRTCICE) -> *mut c_char>,
+    pub set_http_proxy: Option<unsafe extern "C" fn(*mut GstWebRTCICE, *const c_char)>,
+    pub get_http_proxy: Option<unsafe extern "C" fn(*mut GstWebRTCICE) -> *mut c_char>,
     pub set_tos: Option<unsafe extern "C" fn(*mut GstWebRTCICE, *mut GstWebRTCICEStream, c_uint)>,
     pub set_on_ice_candidate: Option<
         unsafe extern "C" fn(
@@ -298,6 +300,8 @@ impl ::std::fmt::Debug for GstWebRTCICEClass {
             .field("get_stun_server", &self.get_stun_server)
             .field("set_turn_server", &self.set_turn_server)
             .field("get_turn_server", &self.get_turn_server)
+            .field("set_http_proxy", &self.set_http_proxy)
+            .field("get_http_proxy", &self.get_http_proxy)
             .field("set_tos", &self.set_tos)
             .field("set_on_ice_candidate", &self.set_on_ice_candidate)
             .field("get_local_candidates", &self.get_local_candidates)
@@ -768,6 +772,9 @@ extern "C" {
     ) -> gboolean;
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_webrtc_ice_get_http_proxy(ice: *mut GstWebRTCICE) -> *mut c_char;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_get_is_controller(ice: *mut GstWebRTCICE) -> gboolean;
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
@@ -798,6 +805,9 @@ extern "C" {
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_set_force_relay(ice: *mut GstWebRTCICE, force_relay: gboolean);
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_webrtc_ice_set_http_proxy(ice: *mut GstWebRTCICE, uri: *const c_char);
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_set_is_controller(ice: *mut GstWebRTCICE, controller: gboolean);

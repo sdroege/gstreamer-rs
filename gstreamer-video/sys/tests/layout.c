@@ -104,6 +104,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstVideoScalerFlags", sizeof(GstVideoScalerFlags), alignof(GstVideoScalerFlags));
     printf("%s;%zu;%zu\n", "GstVideoSink", sizeof(GstVideoSink), alignof(GstVideoSink));
     printf("%s;%zu;%zu\n", "GstVideoSinkClass", sizeof(GstVideoSinkClass), alignof(GstVideoSinkClass));
+    printf("%s;%zu;%zu\n", "GstVideoTileInfo", sizeof(GstVideoTileInfo), alignof(GstVideoTileInfo));
     printf("%s;%zu;%zu\n", "GstVideoTileMode", sizeof(GstVideoTileMode), alignof(GstVideoTileMode));
     printf("%s;%zu;%zu\n", "GstVideoTileType", sizeof(GstVideoTileType), alignof(GstVideoTileType));
     printf("%s;%zu;%zu\n", "GstVideoTimeCode", sizeof(GstVideoTimeCode), alignof(GstVideoTimeCode));

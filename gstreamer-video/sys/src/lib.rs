@@ -1584,7 +1584,7 @@ pub struct GstVideoFormatInfo {
     pub tile_mode: GstVideoTileMode,
     pub tile_ws: c_uint,
     pub tile_hs: c_uint,
-    pub _gst_reserved: [gpointer; 4],
+    pub tile_info: [GstVideoTileInfo; 4],
 }
 
 impl ::std::fmt::Debug for GstVideoFormatInfo {
@@ -1611,6 +1611,7 @@ impl ::std::fmt::Debug for GstVideoFormatInfo {
             .field("tile_mode", &self.tile_mode)
             .field("tile_ws", &self.tile_ws)
             .field("tile_hs", &self.tile_hs)
+            .field("tile_info", &self.tile_info)
             .finish()
     }
 }
@@ -2069,6 +2070,27 @@ pub struct _GstVideoSinkPrivate {
 }
 
 pub type GstVideoSinkPrivate = *mut _GstVideoSinkPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstVideoTileInfo {
+    pub width: c_uint,
+    pub height: c_uint,
+    pub stride: c_uint,
+    pub size: c_uint,
+    pub padding: [u32; 4],
+}
+
+impl ::std::fmt::Debug for GstVideoTileInfo {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVideoTileInfo @ {self:p}"))
+            .field("width", &self.width)
+            .field("height", &self.height)
+            .field("stride", &self.stride)
+            .field("size", &self.size)
+            .finish()
+    }
+}
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -3031,14 +3053,6 @@ extern "C" {
         plane: c_int,
         stride: c_int,
     ) -> c_int;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    pub fn gst_video_format_info_get_tile_sizes(
-        finfo: *const GstVideoFormatInfo,
-        plane: c_uint,
-        out_ws: *mut c_uint,
-        out_hs: *mut c_uint,
-    ) -> c_uint;
 
     //=========================================================================
     // GstVideoFrame
