@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.19.3] - 2022-11-28
+### Added
+- `FromIterator<Caps>` and `Extend<Caps>` for `Caps`.
+- `PartialEq` impls between owned/borrowed miniobjects/structures.
+
+### Fixed
+- Sticky event ordering for instant-rate-change.
+
+### Changed
+- Updated GStreamer .gir files to post 1.22.2 release.
+
 ## [0.19.2] - 2022-11-13
 ### Added
 - Subclassing support for `gst::Allocator`.
@@ -1391,7 +1402,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.2...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.3...HEAD
+[0.19.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.2...0.19.3
 [0.19.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.1...0.19.2
 [0.19.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.0...0.19.1
 [0.19.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.18.8...0.19.0
