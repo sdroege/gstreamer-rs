@@ -57,7 +57,7 @@ license = "MIT"
 name = "gstreamer-editing-services-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
-version = "0.19.2"
+version = "0.19.3"
 edition = "2021"
 rust-version = "1.63"
 [package.metadata.docs.rs]
