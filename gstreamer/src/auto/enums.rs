@@ -918,14 +918,6 @@ impl EventType {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_event_type_to_quark(self.into_glib())) }
     }
-
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
-    #[doc(alias = "gst_event_type_to_sticky_ordering")]
-    pub fn to_sticky_ordering(self) -> u32 {
-        assert_initialized_main_thread!();
-        unsafe { ffi::gst_event_type_to_sticky_ordering(self.into_glib()) }
-    }
 }
 
 impl fmt::Display for EventType {

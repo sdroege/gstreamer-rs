@@ -1378,6 +1378,10 @@ ref_mode = "ref"
 [[object]]
 name = "Gst.EventType"
 status = "generate"
+    [[object.function]]
+    name = "to_sticky_ordering"
+    # handle this manually via the `PartialOrd` function
+    ignore = true
     [[object.derive]]
     name = "Debug, PartialEq, Eq, Hash"
     [[object.member]]
