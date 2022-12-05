@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::Asset;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -74,6 +75,7 @@ impl Default for Timeline {
 
 pub trait TimelineExt: 'static {
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_timeline_add_layer")]
     fn add_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError>;
 
@@ -89,6 +91,11 @@ pub trait TimelineExt: 'static {
     #[doc(alias = "ges_timeline_commit_sync")]
     fn commit_sync(&self) -> bool;
 
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "ges_timeline_disable_edit_apis")]
+    fn disable_edit_apis(&self, disable_edit_apis: bool);
+
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "ges_timeline_freeze_commit")]
@@ -101,6 +108,12 @@ pub trait TimelineExt: 'static {
     #[doc(alias = "ges_timeline_get_duration")]
     #[doc(alias = "get_duration")]
     fn duration(&self) -> gst::ClockTime;
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "ges_timeline_get_edit_apis_disabled")]
+    #[doc(alias = "get_edit_apis_disabled")]
+    fn is_edit_apis_disabled(&self) -> bool;
 
     #[doc(alias = "ges_timeline_get_element")]
     #[doc(alias = "get_element")]
@@ -249,6 +262,7 @@ pub trait TimelineExt: 'static {
 }
 
 impl<O: IsA<Timeline>> TimelineExt for O {
+    #[allow(deprecated)]
     fn add_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -293,6 +307,17 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    fn disable_edit_apis(&self, disable_edit_apis: bool) {
+        unsafe {
+            ffi::ges_timeline_disable_edit_apis(
+                self.as_ref().to_glib_none().0,
+                disable_edit_apis.into_glib(),
+            );
+        }
+    }
+
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     fn freeze_commit(&self) {
@@ -315,6 +340,16 @@ impl<O: IsA<Timeline>> TimelineExt for O {
                 self.as_ref().to_glib_none().0,
             ))
             .expect("mandatory glib value is None")
+        }
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    fn is_edit_apis_disabled(&self) -> bool {
+        unsafe {
+            from_glib(ffi::ges_timeline_get_edit_apis_disabled(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 

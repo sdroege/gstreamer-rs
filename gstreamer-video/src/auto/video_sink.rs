@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use glib::object::Cast;
 use glib::object::IsA;

@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::Edge;
 use crate::EditMode;
@@ -42,6 +43,7 @@ pub trait GESContainerExt: 'static {
     fn add(&self, child: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError>;
 
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_container_edit")]
     fn edit(
         &self,
@@ -93,6 +95,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
+    #[allow(deprecated)]
     fn edit(
         &self,
         layers: &[Layer],

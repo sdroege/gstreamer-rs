@@ -541,7 +541,7 @@ pub const GST_VIDEO_CONVERTER_OPT_SRC_Y: *const c_char =
     b"GstVideoConverter.src-y\0" as *const u8 as *const c_char;
 pub const GST_VIDEO_CONVERTER_OPT_THREADS: *const c_char =
     b"GstVideoConverter.threads\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_DECODER_MAX_ERRORS: c_int = 10;
+pub const GST_VIDEO_DECODER_MAX_ERRORS: c_int = -1;
 pub const GST_VIDEO_DECODER_SINK_NAME: *const c_char = b"sink\0" as *const u8 as *const c_char;
 pub const GST_VIDEO_DECODER_SRC_NAME: *const c_char = b"src\0" as *const u8 as *const c_char;
 pub const GST_VIDEO_ENCODER_SINK_NAME: *const c_char = b"sink\0" as *const u8 as *const c_char;

@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::DiscovererAudioInfo;
 use crate::DiscovererContainerInfo;
@@ -132,6 +133,7 @@ impl DiscovererInfo {
     }
 
     #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
+    #[allow(deprecated)]
     #[doc(alias = "gst_discoverer_info_get_tags")]
     #[doc(alias = "get_tags")]
     pub fn tags(&self) -> Option<gst::TagList> {

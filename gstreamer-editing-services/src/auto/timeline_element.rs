@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -214,6 +215,7 @@ pub trait TimelineElementExt: 'static {
     fn set_parent(&self, parent: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError>;
 
     #[deprecated = "Since 1.10"]
+    #[allow(deprecated)]
     #[doc(alias = "ges_timeline_element_set_priority")]
     fn set_priority(&self, priority: u32) -> bool;
 
@@ -714,6 +716,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[allow(deprecated)]
     fn set_priority(&self, priority: u32) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_priority(

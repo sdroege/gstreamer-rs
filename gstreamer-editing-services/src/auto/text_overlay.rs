@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::Extractable;
 use crate::MetaContainer;
@@ -26,6 +27,7 @@ impl TextOverlay {
     pub const NONE: Option<&'static TextOverlay> = None;
 
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_text_overlay_new")]
     pub fn new() -> Option<TextOverlay> {
         assert_initialized_main_thread!();

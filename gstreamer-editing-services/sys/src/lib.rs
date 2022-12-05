@@ -3514,11 +3514,17 @@ extern "C" {
     pub fn ges_timeline_append_layer(timeline: *mut GESTimeline) -> *mut GESLayer;
     pub fn ges_timeline_commit(timeline: *mut GESTimeline) -> gboolean;
     pub fn ges_timeline_commit_sync(timeline: *mut GESTimeline) -> gboolean;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn ges_timeline_disable_edit_apis(self_: *mut GESTimeline, disable_edit_apis: gboolean);
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn ges_timeline_freeze_commit(timeline: *mut GESTimeline);
     pub fn ges_timeline_get_auto_transition(timeline: *mut GESTimeline) -> gboolean;
     pub fn ges_timeline_get_duration(timeline: *mut GESTimeline) -> gst::GstClockTime;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn ges_timeline_get_edit_apis_disabled(self_: *mut GESTimeline) -> gboolean;
     pub fn ges_timeline_get_element(
         timeline: *mut GESTimeline,
         name: *const c_char,

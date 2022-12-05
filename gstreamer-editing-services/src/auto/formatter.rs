@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::Asset;
 use crate::Extractable;
@@ -63,10 +64,12 @@ impl Formatter {
 
 pub trait FormatterExt: 'static {
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_formatter_load_from_uri")]
     fn load_from_uri(&self, timeline: &impl IsA<Timeline>, uri: &str) -> Result<(), glib::Error>;
 
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_formatter_save_to_uri")]
     fn save_to_uri(
         &self,
@@ -77,6 +80,7 @@ pub trait FormatterExt: 'static {
 }
 
 impl<O: IsA<Formatter>> FormatterExt for O {
+    #[allow(deprecated)]
     fn load_from_uri(&self, timeline: &impl IsA<Timeline>, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -95,6 +99,7 @@ impl<O: IsA<Formatter>> FormatterExt for O {
         }
     }
 
+    #[allow(deprecated)]
     fn save_to_uri(
         &self,
         timeline: &impl IsA<Timeline>,

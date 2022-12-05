@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use glib::object::Cast;
 use glib::object::IsA;
@@ -54,6 +55,7 @@ pub trait BaseSrcExt: 'static {
     fn negotiate(&self) -> bool;
 
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
+    #[allow(deprecated)]
     #[doc(alias = "gst_base_src_new_seamless_segment")]
     fn new_seamless_segment(&self, start: i64, stop: i64, time: i64) -> bool;
 
@@ -160,6 +162,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         unsafe { from_glib(ffi::gst_base_src_negotiate(self.as_ref().to_glib_none().0)) }
     }
 
+    #[allow(deprecated)]
     fn new_seamless_segment(&self, start: i64, stop: i64, time: i64) -> bool {
         unsafe {
             from_glib(ffi::gst_base_src_new_seamless_segment(

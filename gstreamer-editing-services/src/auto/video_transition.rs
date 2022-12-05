@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::Extractable;
 use crate::MetaContainer;
@@ -47,6 +48,7 @@ impl Default for VideoTransition {
 
 pub trait VideoTransitionExt: 'static {
     #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_video_transition_get_border")]
     #[doc(alias = "get_border")]
     fn border(&self) -> i32;
@@ -56,14 +58,17 @@ pub trait VideoTransitionExt: 'static {
     fn transition_type(&self) -> VideoStandardTransitionType;
 
     #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_video_transition_is_inverted")]
     fn is_inverted(&self) -> bool;
 
     #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_video_transition_set_border")]
     fn set_border(&self, value: u32);
 
     #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_video_transition_set_inverted")]
     fn set_inverted(&self, inverted: bool);
 
@@ -88,6 +93,7 @@ pub trait VideoTransitionExt: 'static {
 }
 
 impl<O: IsA<VideoTransition>> VideoTransitionExt for O {
+    #[allow(deprecated)]
     fn border(&self) -> i32 {
         unsafe { ffi::ges_video_transition_get_border(self.as_ref().to_glib_none().0) }
     }
@@ -100,6 +106,7 @@ impl<O: IsA<VideoTransition>> VideoTransitionExt for O {
         }
     }
 
+    #[allow(deprecated)]
     fn is_inverted(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_video_transition_is_inverted(
@@ -108,12 +115,14 @@ impl<O: IsA<VideoTransition>> VideoTransitionExt for O {
         }
     }
 
+    #[allow(deprecated)]
     fn set_border(&self, value: u32) {
         unsafe {
             ffi::ges_video_transition_set_border(self.as_ref().to_glib_none().0, value);
         }
     }
 
+    #[allow(deprecated)]
     fn set_inverted(&self, inverted: bool) {
         unsafe {
             ffi::ges_video_transition_set_inverted(

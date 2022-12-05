@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::Extractable;
 use crate::MetaContainer;
@@ -33,6 +34,7 @@ pub trait TitleSourceExt: 'static {
     fn background_color(&self) -> u32;
 
     #[cfg_attr(feature = "v1_16", deprecated = "Since 1.16")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_title_source_get_font_desc")]
     #[doc(alias = "get_font_desc")]
     fn font_desc(&self) -> Option<glib::GString>;
@@ -42,6 +44,7 @@ pub trait TitleSourceExt: 'static {
     fn halignment(&self) -> TextHAlign;
 
     #[cfg_attr(feature = "v1_16", deprecated = "Since 1.16")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_title_source_get_text")]
     #[doc(alias = "get_text")]
     fn text(&self) -> Option<glib::GString>;
@@ -92,6 +95,7 @@ impl<O: IsA<TitleSource>> TitleSourceExt for O {
         unsafe { ffi::ges_title_source_get_background_color(self.as_ref().to_glib_none().0) }
     }
 
+    #[allow(deprecated)]
     fn font_desc(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::ges_title_source_get_font_desc(
@@ -108,6 +112,7 @@ impl<O: IsA<TitleSource>> TitleSourceExt for O {
         }
     }
 
+    #[allow(deprecated)]
     fn text(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::ges_title_source_get_text(

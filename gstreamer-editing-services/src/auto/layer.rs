@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::Asset;
 use crate::Clip;
@@ -128,6 +129,7 @@ pub trait LayerExt: 'static {
     fn set_auto_transition(&self, auto_transition: bool);
 
     #[cfg_attr(feature = "v1_16", deprecated = "Since 1.16")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_layer_set_priority")]
     fn set_priority(&self, priority: u32);
 
@@ -328,6 +330,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
+    #[allow(deprecated)]
     fn set_priority(&self, priority: u32) {
         unsafe {
             ffi::ges_layer_set_priority(self.as_ref().to_glib_none().0, priority);

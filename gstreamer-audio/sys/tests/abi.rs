@@ -3,6 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#![cfg(target_os = "linux")]
+
 use gstreamer_audio_sys::*;
 use std::env;
 use std::error::Error;
@@ -111,7 +113,6 @@ impl Results {
 }
 
 #[test]
-#[cfg(target_os = "linux")]
 fn cross_validate_constants_with_c() {
     let mut c_constants: Vec<(String, String)> = Vec::new();
 
@@ -146,7 +147,6 @@ fn cross_validate_constants_with_c() {
 }
 
 #[test]
-#[cfg(target_os = "linux")]
 fn cross_validate_layout_with_c() {
     let mut c_layouts = Vec::new();
 
@@ -718,7 +718,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
         "GST_AUDIO_CONVERTER_OPT_RESAMPLER_METHOD",
         "GstAudioConverter.resampler-method",
     ),
-    ("GST_AUDIO_DECODER_MAX_ERRORS", "10"),
+    ("GST_AUDIO_DECODER_MAX_ERRORS", "-1"),
     ("GST_AUDIO_DECODER_SINK_NAME", "sink"),
     ("GST_AUDIO_DECODER_SRC_NAME", "src"),
     ("GST_AUDIO_DEF_CHANNELS", "2"),
