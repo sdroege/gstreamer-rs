@@ -37,6 +37,21 @@ impl DebugMessage {
             }
         }
     }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "gst_debug_message_get_id")]
+    pub fn id(&self) -> Option<&str> {
+        unsafe {
+            let message = ffi::gst_debug_message_get_id(self.0.as_ptr());
+
+            if message.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(message).to_str().unwrap())
+            }
+        }
+    }
 }
 
 #[derive(PartialEq, Eq, Clone, Copy)]
@@ -268,6 +283,92 @@ impl DebugCategory {
         }
     }
 
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[inline]
+    #[doc(alias = "gst_debug_log_id")]
+    #[doc(alias = "gst_debug_log_id_literal")]
+    pub fn log_id(
+        self,
+        id: Option<&str>,
+        level: crate::DebugLevel,
+        file: &str,
+        module: &str,
+        line: u32,
+        args: fmt::Arguments,
+    ) {
+        let cat = match self.0 {
+            Some(cat) => cat,
+            None => return,
+        };
+
+        unsafe {
+            if level.into_glib() as i32 > cat.as_ref().threshold {
+                return;
+            }
+        }
+
+        let mut w = glib::GStringBuilder::default();
+
+        // Can't really happen but better safe than sorry
+        if fmt::write(&mut w, args).is_err() {
+            return;
+        }
+
+        unsafe {
+            ffi::gst_debug_log_id_literal(
+                cat.as_ptr(),
+                level.into_glib(),
+                file.to_glib_none().0,
+                module.to_glib_none().0,
+                line as i32,
+                id.to_glib_none().0,
+                w.into_string().to_glib_none().0,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    // rustdoc-stripper-ignore-next
+    /// Logs without checking the log level.
+    #[inline]
+    #[doc(alias = "gst_debug_log_id")]
+    #[doc(alias = "gst_debug_log_id_literal")]
+    pub fn log_id_unfiltered(
+        self,
+        id: Option<&str>,
+        level: crate::DebugLevel,
+        file: &str,
+        module: &str,
+        line: u32,
+        args: fmt::Arguments,
+    ) {
+        let cat = match self.0 {
+            Some(cat) => cat,
+            None => return,
+        };
+
+        let mut w = glib::GStringBuilder::default();
+
+        // Can't really happen but better safe than sorry
+        if fmt::write(&mut w, args).is_err() {
+            return;
+        }
+
+        unsafe {
+            ffi::gst_debug_log_id_literal(
+                cat.as_ptr(),
+                level.into_glib(),
+                file.to_glib_none().0,
+                module.to_glib_none().0,
+                line as i32,
+                id.to_glib_none().0,
+                w.into_string().to_glib_none().0,
+            );
+        }
+    }
+
     #[doc(alias = "get_all_categories")]
     #[doc(alias = "gst_debug_get_all_categories")]
     pub fn all_categories() -> glib::SList<DebugCategory> {
@@ -385,6 +486,9 @@ macro_rules! error(
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Error, imp: $imp, $($args)*)
     }};
+    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Error, id: $id, $($args)*)
+    }};
     ($cat:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Error, $($args)*)
     }};
@@ -397,6 +501,9 @@ macro_rules! warning(
     }};
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Warning, imp: $imp, $($args)*)
+    }};
+    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Warning, id: $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Warning, $($args)*)
@@ -411,6 +518,9 @@ macro_rules! fixme(
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Fixme, imp: $imp, $($args)*)
     }};
+    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Fixme, id: $id, $($args)*)
+    }};
     ($cat:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Fixme, $($args)*)
     }};
@@ -423,6 +533,9 @@ macro_rules! info(
     }};
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Info, imp: $imp, $($args)*)
+    }};
+    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Info, id: $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Info, $($args)*)
@@ -437,6 +550,9 @@ macro_rules! debug(
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Debug, imp: $imp, $($args)*)
     }};
+    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Debug, id: $id, $($args)*)
+    }};
     ($cat:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Debug, $($args)*)
     }};
@@ -449,6 +565,9 @@ macro_rules! log(
     }};
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Log, imp: $imp, $($args)*)
+    }};
+    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Log, id: $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Log, $($args)*)
@@ -463,6 +582,9 @@ macro_rules! trace(
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Trace, imp: $imp, $($args)*)
     }};
+    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Trace, id: $id, $($args)*)
+    }};
     ($cat:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Trace, $($args)*)
     }};
@@ -475,6 +597,9 @@ macro_rules! memdump(
     }};
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Memdump, imp: $imp, $($args)*)
+    }};
+    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Memdump, id: $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Memdump, $($args)*)
@@ -505,6 +630,14 @@ macro_rules! log_with_level(
             #[allow(unused_unsafe)]
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
             $crate::DebugCategory::log_unfiltered($cat.clone(), Some(obj),
+                $level, file!(), module_path!(), line!(), format_args!($($args)*))
+        }
+    }};
+    ($cat:expr, level: $level:expr, id: $id:expr, $($args:tt)*) => { {
+        // Check the log level before using `format_args!` otherwise
+        // formatted arguments are evaluated even if we end up not logging.
+        if $level <= $cat.threshold() {
+            $crate::DebugCategory::log_id_unfiltered($cat.clone(), Some($id),
                 $level, file!(), module_path!(), line!(), format_args!($($args)*))
         }
     }};
@@ -810,5 +943,20 @@ mod tests {
         });
 
         assert!(!arg_evaluated);
+    }
+
+    #[cfg(feature = "v1_22")]
+    #[test]
+    fn id_logging() {
+        crate::init().unwrap();
+
+        let cat = DebugCategory::new(
+            "log_with_id_test_category",
+            crate::DebugColorFlags::empty(),
+            Some("Blablabla"),
+        );
+
+        trace!(cat, id: "123", "test");
+        trace!(cat, id: &String::from("123"), "test");
     }
 }
