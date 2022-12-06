@@ -95,7 +95,7 @@ impl DebugCategory {
     #[doc(alias = "gst_debug_category_get_threshold")]
     pub fn threshold(self) -> crate::DebugLevel {
         match self.0 {
-            Some(cat) => unsafe { from_glib(ffi::gst_debug_category_get_threshold(cat.as_ptr())) },
+            Some(cat) => unsafe { from_glib(cat.as_ref().threshold) },
             None => crate::DebugLevel::None,
         }
     }
@@ -118,7 +118,7 @@ impl DebugCategory {
     #[doc(alias = "gst_debug_category_get_color")]
     pub fn color(self) -> crate::DebugColorFlags {
         match self.0 {
-            Some(cat) => unsafe { from_glib(ffi::gst_debug_category_get_color(cat.as_ptr())) },
+            Some(cat) => unsafe { from_glib(cat.as_ref().color) },
             None => crate::DebugColorFlags::empty(),
         }
     }
@@ -127,11 +127,7 @@ impl DebugCategory {
     #[doc(alias = "gst_debug_category_get_name")]
     pub fn name<'a>(self) -> &'a str {
         match self.0 {
-            Some(cat) => unsafe {
-                CStr::from_ptr(ffi::gst_debug_category_get_name(cat.as_ptr()))
-                    .to_str()
-                    .unwrap()
-            },
+            Some(cat) => unsafe { CStr::from_ptr(cat.as_ref().name).to_str().unwrap() },
             None => "",
         }
     }
@@ -142,7 +138,7 @@ impl DebugCategory {
         let cat = self.0?;
 
         unsafe {
-            let ptr = ffi::gst_debug_category_get_description(cat.as_ptr());
+            let ptr = cat.as_ref().description;
 
             if ptr.is_null() {
                 None
