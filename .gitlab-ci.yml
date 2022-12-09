@@ -152,16 +152,19 @@ build-base:
     - .debian:11-base
 
 build-stable:
+  needs: ["build-base"]
   extends:
     - .build-final-image
     - .debian:11-stable
 
 build-msrv:
+  needs: ["build-base"]
   extends:
     - .build-final-image
     - .debian:11-msrv
 
 build-nightly:
+  needs: ["build-base"]
   extends:
     - .build-final-image
     - .debian:11-nightly
