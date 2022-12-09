@@ -186,43 +186,7 @@ impl DebugCategory {
             }
         }
 
-        let obj_ptr = match obj {
-            Some(obj) => obj.as_ptr() as *mut glib::gobject_ffi::GObject,
-            None => ptr::null_mut(),
-        };
-
-        let mut w = glib::GStringBuilder::default();
-
-        // Can't really happen but better safe than sorry
-        if fmt::write(&mut w, args).is_err() {
-            return;
-        }
-
-        #[cfg(feature = "v1_20")]
-        unsafe {
-            ffi::gst_debug_log_literal(
-                cat.as_ptr(),
-                level.into_glib(),
-                file.to_glib_none().0,
-                module.to_glib_none().0,
-                line as i32,
-                obj_ptr,
-                w.into_string().to_glib_none().0,
-            );
-        }
-        #[cfg(not(feature = "v1_20"))]
-        unsafe {
-            ffi::gst_debug_log(
-                cat.as_ptr(),
-                level.into_glib(),
-                file.to_glib_none().0,
-                module.to_glib_none().0,
-                line as i32,
-                obj_ptr,
-                b"%s\0".as_ptr() as *const _,
-                ToGlibPtr::<*const i8>::to_glib_none(&w.into_string()).0,
-            );
-        }
+        self.log_unfiltered(obj, level, file, module, line, args)
     }
 
     // rustdoc-stripper-ignore-next
@@ -315,17 +279,7 @@ impl DebugCategory {
             return;
         }
 
-        unsafe {
-            ffi::gst_debug_log_id_literal(
-                cat.as_ptr(),
-                level.into_glib(),
-                file.to_glib_none().0,
-                module.to_glib_none().0,
-                line as i32,
-                id.to_glib_none().0,
-                w.into_string().to_glib_none().0,
-            );
-        }
+        self.log_id_unfiltered(id, level, file, module, line, args);
     }
 
     #[cfg(any(feature = "v1_22", feature = "dox"))]
