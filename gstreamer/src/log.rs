@@ -174,9 +174,9 @@ impl DebugCategory {
     #[inline]
     #[doc(alias = "gst_debug_log")]
     #[doc(alias = "gst_debug_log_literal")]
-    pub fn log<O: IsA<glib::Object>>(
+    pub fn log(
         self,
-        obj: Option<&O>,
+        obj: Option<&impl IsA<glib::Object>>,
         level: crate::DebugLevel,
         file: &glib::GStr,
         function: &glib::GStr,
@@ -192,9 +192,9 @@ impl DebugCategory {
 
     #[inline]
     #[doc(alias = "gst_debug_log_literal")]
-    pub fn log_literal<O: IsA<glib::Object>>(
+    pub fn log_literal(
         self,
-        obj: Option<&O>,
+        obj: Option<&impl IsA<glib::Object>>,
         level: crate::DebugLevel,
         file: &glib::GStr,
         function: &glib::GStr,
@@ -212,9 +212,9 @@ impl DebugCategory {
     /// Logs without checking the log level.
     #[inline]
     #[doc(alias = "gst_debug_log")]
-    pub fn log_unfiltered<O: IsA<glib::Object>>(
+    pub fn log_unfiltered(
         self,
-        obj: Option<&O>,
+        obj: Option<&impl IsA<glib::Object>>,
         level: crate::DebugLevel,
         file: &glib::GStr,
         function: &glib::GStr,
@@ -235,9 +235,9 @@ impl DebugCategory {
     /// Logs without checking the log level.
     #[inline]
     #[doc(alias = "gst_debug_log_literal")]
-    pub fn log_literal_unfiltered<O: IsA<glib::Object>>(
+    pub fn log_literal_unfiltered(
         self,
-        obj: Option<&O>,
+        obj: Option<&impl IsA<glib::Object>>,
         level: crate::DebugLevel,
         file: &glib::GStr,
         function: &glib::GStr,
