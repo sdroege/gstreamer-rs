@@ -637,13 +637,25 @@ macro_rules! log_with_level(
         if $cat.above_threshold($level) {
             use $crate::glib::Cast;
 
+            // FIXME: Once there's a function_name! macro that returns a string literal we can
+            // avoid this complication
+            let function_name = $crate::glib::function_name!();
+            let function_name_len = function_name.len();
+            let mut storage = [0u8; 256];
+            let function_name = if function_name_len < 256 {
+                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+            } else {
+                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
+            };
+
             let obj = unsafe { $obj.unsafe_cast_ref::<$crate::glib::Object>() };
             $crate::DebugCategory::log_literal_unfiltered(
                 $cat.clone(),
                 Some(obj),
                 $level,
                 unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(module_path!(), "\0").as_bytes()) },
+                function_name.as_ref(),
                 line!(),
                 $crate::glib::gstr!($msg),
             )
@@ -656,13 +668,25 @@ macro_rules! log_with_level(
         if $cat.above_threshold($level) {
             use $crate::glib::Cast;
 
+            // FIXME: Once there's a function_name! macro that returns a string literal we can
+            // avoid this complication
+            let function_name = $crate::glib::function_name!();
+            let function_name_len = function_name.len();
+            let mut storage = [0u8; 256];
+            let function_name = if function_name_len < 256 {
+                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+            } else {
+                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
+            };
+
             let obj = unsafe { $obj.unsafe_cast_ref::<$crate::glib::Object>() };
             $crate::DebugCategory::log_unfiltered(
                 $cat.clone(),
                 Some(obj),
                 $level,
                 unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(module_path!(), "\0").as_bytes()) },
+                function_name.as_ref(),
                 line!(),
                 format_args!($($args)*),
             )
@@ -675,6 +699,18 @@ macro_rules! log_with_level(
         if $cat.above_threshold($level) {
             use $crate::glib::Cast;
 
+            // FIXME: Once there's a function_name! macro that returns a string literal we can
+            // avoid this complication
+            let function_name = $crate::glib::function_name!();
+            let function_name_len = function_name.len();
+            let mut storage = [0u8; 256];
+            let function_name = if function_name_len < 256 {
+                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+            } else {
+                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
+            };
+
             let obj = $imp.obj();
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
             $crate::DebugCategory::log_literal_unfiltered(
@@ -682,7 +718,7 @@ macro_rules! log_with_level(
                 Some(obj),
                 $level,
                 unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(module_path!(), "\0").as_bytes()) },
+                function_name.as_ref(),
                 line!(),
                 $crate::glib::gstr!($msg),
             )
@@ -695,6 +731,18 @@ macro_rules! log_with_level(
         if $cat.above_threshold($level) {
             use $crate::glib::Cast;
 
+            // FIXME: Once there's a function_name! macro that returns a string literal we can
+            // avoid this complication
+            let function_name = $crate::glib::function_name!();
+            let function_name_len = function_name.len();
+            let mut storage = [0u8; 256];
+            let function_name = if function_name_len < 256 {
+                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+            } else {
+                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
+            };
+
             let obj = $imp.obj();
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
             $crate::DebugCategory::log_unfiltered(
@@ -702,7 +750,7 @@ macro_rules! log_with_level(
                 Some(obj),
                 $level,
                 unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(module_path!(), "\0").as_bytes()) },
+                function_name.as_ref(),
                 line!(),
                 format_args!($($args)*),
             )
@@ -713,12 +761,24 @@ macro_rules! log_with_level(
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         if $cat.above_threshold($level) {
+            // FIXME: Once there's a function_name! macro that returns a string literal we can
+            // avoid this complication
+            let function_name = $crate::glib::function_name!();
+            let function_name_len = function_name.len();
+            let mut storage = [0u8; 256];
+            let function_name = if function_name_len < 256 {
+                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+            } else {
+                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
+            };
+
             $crate::DebugCategory::log_id_literal_unfiltered(
                 $cat.clone(),
                 Some($crate::glib::gstr!($id)),
                 $level,
                 unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(module_path!(), "\0").as_bytes()) },
+                function_name.as_ref(),
                 line!(),
                 $crate::glib::gstr!($msg),
             )
@@ -729,12 +789,24 @@ macro_rules! log_with_level(
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         if $cat.above_threshold($level) {
+            // FIXME: Once there's a function_name! macro that returns a string literal we can
+            // avoid this complication
+            let function_name = $crate::glib::function_name!();
+            let function_name_len = function_name.len();
+            let mut storage = [0u8; 256];
+            let function_name = if function_name_len < 256 {
+                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+            } else {
+                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
+            };
+
             $crate::DebugCategory::log_id_unfiltered(
                 $cat.clone(),
                 Some($crate::glib::gstr!($id)),
                 $level,
                 unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(module_path!(), "\0").as_bytes()) },
+                function_name.as_ref(),
                 line!(),
                 format_args!($($args)*),
             )
@@ -745,12 +817,24 @@ macro_rules! log_with_level(
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         if $cat.above_threshold($level) {
+            // FIXME: Once there's a function_name! macro that returns a string literal we can
+            // avoid this complication
+            let function_name = $crate::glib::function_name!();
+            let function_name_len = function_name.len();
+            let mut storage = [0u8; 256];
+            let function_name = if function_name_len < 256 {
+                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+            } else {
+                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
+            };
+
             $crate::DebugCategory::log_id_literal_unfiltered(
                 $cat.clone(),
                 Some($id),
                 $level,
                 unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(module_path!(), "\0").as_bytes()) },
+                function_name.as_ref(),
                 line!(),
                 $crate::glib::gstr!($msg),
             )
@@ -761,12 +845,24 @@ macro_rules! log_with_level(
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         if $cat.above_threshold($level) {
+            // FIXME: Once there's a function_name! macro that returns a string literal we can
+            // avoid this complication
+            let function_name = $crate::glib::function_name!();
+            let function_name_len = function_name.len();
+            let mut storage = [0u8; 256];
+            let function_name = if function_name_len < 256 {
+                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+            } else {
+                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
+            };
+
             $crate::DebugCategory::log_id_unfiltered(
                 $cat.clone(),
                 Some($id),
                 $level,
                 unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(module_path!(), "\0").as_bytes()) },
+                function_name.as_ref(),
                 line!(),
                 format_args!($($args)*),
             )
@@ -777,12 +873,24 @@ macro_rules! log_with_level(
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         if $cat.above_threshold($level) {
+            // FIXME: Once there's a function_name! macro that returns a string literal we can
+            // avoid this complication
+            let function_name = $crate::glib::function_name!();
+            let function_name_len = function_name.len();
+            let mut storage = [0u8; 256];
+            let function_name = if function_name_len < 256 {
+                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+            } else {
+                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
+            };
+
             $crate::DebugCategory::log_literal_unfiltered(
                 $cat.clone(),
                 None as Option<&$crate::glib::Object>,
                 $level,
                 unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(module_path!(), "\0").as_bytes()) },
+                function_name.as_ref(),
                 line!(),
                 $crate::glib::gstr!($msg),
             )
@@ -793,12 +901,24 @@ macro_rules! log_with_level(
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         if $cat.above_threshold($level) {
+            // FIXME: Once there's a function_name! macro that returns a string literal we can
+            // avoid this complication
+            let function_name = $crate::glib::function_name!();
+            let function_name_len = function_name.len();
+            let mut storage = [0u8; 256];
+            let function_name = if function_name_len < 256 {
+                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+            } else {
+                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
+            };
+
             $crate::DebugCategory::log_unfiltered(
                 $cat.clone(),
                 None as Option<&$crate::glib::Object>,
                 $level,
                 unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(module_path!(), "\0").as_bytes()) },
+                function_name.as_ref(),
                 line!(),
                 format_args!($($args)*),
             )
