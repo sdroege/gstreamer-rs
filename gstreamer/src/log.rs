@@ -170,8 +170,8 @@ impl DebugCategory {
         self,
         obj: Option<&O>,
         level: crate::DebugLevel,
-        file: &str,
-        module: &str,
+        file: &glib::GStr,
+        module: &glib::GStr,
         line: u32,
         args: fmt::Arguments,
     ) {
@@ -198,8 +198,8 @@ impl DebugCategory {
         self,
         obj: Option<&O>,
         level: crate::DebugLevel,
-        file: &str,
-        module: &str,
+        file: &glib::GStr,
+        module: &glib::GStr,
         line: u32,
         args: fmt::Arguments,
     ) {
@@ -225,8 +225,8 @@ impl DebugCategory {
             ffi::gst_debug_log_literal(
                 cat.as_ptr(),
                 level.into_glib(),
-                file.to_glib_none().0,
-                module.to_glib_none().0,
+                file.as_ptr(),
+                module.as_ptr(),
                 line as i32,
                 obj_ptr,
                 w.into_string().to_glib_none().0,
@@ -237,8 +237,8 @@ impl DebugCategory {
             ffi::gst_debug_log(
                 cat.as_ptr(),
                 level.into_glib(),
-                file.to_glib_none().0,
-                module.to_glib_none().0,
+                file.as_ptr(),
+                module.as_ptr(),
                 line as i32,
                 obj_ptr,
                 b"%s\0".as_ptr() as *const _,
@@ -256,8 +256,8 @@ impl DebugCategory {
         self,
         id: Option<&str>,
         level: crate::DebugLevel,
-        file: &str,
-        module: &str,
+        file: &glib::GStr,
+        module: &glib::GStr,
         line: u32,
         args: fmt::Arguments,
     ) {
@@ -293,8 +293,8 @@ impl DebugCategory {
         self,
         id: Option<&str>,
         level: crate::DebugLevel,
-        file: &str,
-        module: &str,
+        file: &glib::GStr,
+        module: &glib::GStr,
         line: u32,
         args: fmt::Arguments,
     ) {
@@ -314,8 +314,8 @@ impl DebugCategory {
             ffi::gst_debug_log_id_literal(
                 cat.as_ptr(),
                 level.into_glib(),
-                file.to_glib_none().0,
-                module.to_glib_none().0,
+                file.as_ptr(),
+                module.as_ptr(),
                 line as i32,
                 id.to_glib_none().0,
                 w.into_string().to_glib_none().0,
@@ -565,42 +565,74 @@ macro_rules! log_with_level(
     ($cat:expr, level: $level:expr, obj: $obj:expr, $($args:tt)*) => { {
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
+        #[allow(unused_unsafe)]
         if $level <= $cat.threshold() {
             use $crate::glib::Cast;
 
             #[allow(unused_unsafe)]
             let obj = unsafe { $obj.unsafe_cast_ref::<$crate::glib::Object>() };
-            $crate::DebugCategory::log_unfiltered($cat.clone(), Some(obj),
-                $level, file!(), module_path!(), line!(), format_args!($($args)*))
+            $crate::DebugCategory::log_unfiltered(
+                $cat.clone(),
+                Some(obj),
+                $level,
+                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(module_path!(), "\0").as_bytes()) },
+                line!(),
+                format_args!($($args)*),
+            )
         }
     }};
     ($cat:expr, level: $level:expr, imp: $imp:expr, $($args:tt)*) => { {
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
+        #[allow(unused_unsafe)]
         if $level <= $cat.threshold() {
             use $crate::glib::Cast;
 
             let obj = $imp.obj();
             #[allow(unused_unsafe)]
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
-            $crate::DebugCategory::log_unfiltered($cat.clone(), Some(obj),
-                $level, file!(), module_path!(), line!(), format_args!($($args)*))
+            $crate::DebugCategory::log_unfiltered(
+                $cat.clone(),
+                Some(obj),
+                $level,
+                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(module_path!(), "\0").as_bytes()) },
+                line!(),
+                format_args!($($args)*),
+            )
         }
     }};
     ($cat:expr, level: $level:expr, id: $id:expr, $($args:tt)*) => { {
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
+        #[allow(unused_unsafe)]
         if $level <= $cat.threshold() {
-            $crate::DebugCategory::log_id_unfiltered($cat.clone(), Some($id),
-                $level, file!(), module_path!(), line!(), format_args!($($args)*))
+            $crate::DebugCategory::log_id_unfiltered(
+                $cat.clone(),
+                Some($id),
+                $level,
+                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(module_path!(), "\0").as_bytes()) },
+                line!(),
+                format_args!($($args)*),
+            )
         }
     }};
     ($cat:expr, level: $level:expr, $($args:tt)*) => { {
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
+        #[allow(unused_unsafe)]
         if $level <= $cat.threshold() {
-            $crate::DebugCategory::log_unfiltered($cat.clone(), None as Option<&$crate::glib::Object>,
-                $level, file!(), module_path!(), line!(), format_args!($($args)*))
+            $crate::DebugCategory::log_unfiltered(
+                $cat.clone(),
+                None as Option<&$crate::glib::Object>,
+                $level,
+                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(module_path!(), "\0").as_bytes()) },
+                line!(),
+                format_args!($($args)*),
+            )
         }
     }};
 );

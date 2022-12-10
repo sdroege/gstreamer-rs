@@ -127,8 +127,8 @@ impl LoggableError {
         self.category.log(
             None as Option<&glib::Object>,
             crate::DebugLevel::Error,
-            self.bool_error.filename,
-            self.bool_error.function,
+            glib::GString::from(self.bool_error.filename).as_gstr(),
+            glib::GString::from(self.bool_error.function).as_gstr(),
             self.bool_error.line,
             format_args!("{}", self.bool_error.message),
         );
@@ -138,8 +138,8 @@ impl LoggableError {
         self.category.log(
             Some(obj),
             crate::DebugLevel::Error,
-            self.bool_error.filename,
-            self.bool_error.function,
+            glib::GString::from(self.bool_error.filename).as_gstr(),
+            glib::GString::from(self.bool_error.function).as_gstr(),
             self.bool_error.line,
             format_args!("{}", self.bool_error.message),
         );
@@ -151,8 +151,8 @@ impl LoggableError {
         self.category.log(
             Some(unsafe { imp.obj().unsafe_cast_ref::<glib::Object>() }),
             crate::DebugLevel::Error,
-            self.bool_error.filename,
-            self.bool_error.function,
+            glib::GString::from(self.bool_error.filename).as_gstr(),
+            glib::GString::from(self.bool_error.function).as_gstr(),
             self.bool_error.line,
             format_args!("{}", self.bool_error.message),
         );
