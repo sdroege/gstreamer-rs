@@ -26,14 +26,14 @@ impl fmt::Debug for DebugMessage {
 
 impl DebugMessage {
     #[doc(alias = "gst_debug_message_get")]
-    pub fn get(&self) -> Option<Cow<str>> {
+    pub fn get(&self) -> Option<Cow<glib::GStr>> {
         unsafe {
             let message = ffi::gst_debug_message_get(self.0.as_ptr());
 
             if message.is_null() {
                 None
             } else {
-                Some(CStr::from_ptr(message).to_string_lossy())
+                Some(glib::GStr::from_ptr_lossy(message))
             }
         }
     }
@@ -41,14 +41,14 @@ impl DebugMessage {
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_debug_message_get_id")]
-    pub fn id(&self) -> Option<&str> {
+    pub fn id(&self) -> Option<&glib::GStr> {
         unsafe {
-            let message = ffi::gst_debug_message_get_id(self.0.as_ptr());
+            let id = ffi::gst_debug_message_get_id(self.0.as_ptr());
 
-            if message.is_null() {
+            if id.is_null() {
                 None
             } else {
-                Some(CStr::from_ptr(message).to_str().unwrap())
+                Some(glib::GStr::from_ptr(id))
             }
         }
     }
@@ -1103,7 +1103,7 @@ mod tests {
             }
 
             assert_eq!(level, DebugLevel::Info);
-            assert_eq!(&message.get().unwrap(), "meh");
+            assert_eq!(message.get().unwrap().as_ref(), "meh");
             let _ = sender.lock().unwrap().send(());
         };
 
