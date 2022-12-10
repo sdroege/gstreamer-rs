@@ -129,6 +129,14 @@ impl DebugCategory {
         }
     }
 
+    #[inline]
+    pub fn above_threshold(self, level: crate::DebugLevel) -> bool {
+        match self.0 {
+            Some(cat) => unsafe { cat.as_ref().threshold >= level.into_glib() },
+            None => false,
+        }
+    }
+
     #[doc(alias = "get_color")]
     #[doc(alias = "gst_debug_category_get_color")]
     pub fn color(self) -> crate::DebugColorFlags {
@@ -175,15 +183,8 @@ impl DebugCategory {
         line: u32,
         args: fmt::Arguments,
     ) {
-        let cat = match self.0 {
-            Some(cat) => cat,
-            None => return,
-        };
-
-        unsafe {
-            if level.into_glib() as i32 > cat.as_ref().threshold {
-                return;
-            }
+        if !self.above_threshold(level) {
+            return;
         }
 
         self.log_unfiltered(obj, level, file, function, line, args)
@@ -200,15 +201,8 @@ impl DebugCategory {
         line: u32,
         msg: &glib::GStr,
     ) {
-        let cat = match self.0 {
-            Some(cat) => cat,
-            None => return,
-        };
-
-        unsafe {
-            if level.into_glib() as i32 > cat.as_ref().threshold {
-                return;
-            }
+        if !self.above_threshold(level) {
+            return;
         }
 
         self.log_literal_unfiltered(obj, level, file, function, line, msg)
@@ -300,15 +294,8 @@ impl DebugCategory {
         line: u32,
         args: fmt::Arguments,
     ) {
-        let cat = match self.0 {
-            Some(cat) => cat,
-            None => return,
-        };
-
-        unsafe {
-            if level.into_glib() as i32 > cat.as_ref().threshold {
-                return;
-            }
+        if !self.above_threshold(level) {
+            return;
         }
 
         let mut w = glib::GStringBuilder::default();
@@ -334,15 +321,8 @@ impl DebugCategory {
         line: u32,
         msg: &glib::GStr,
     ) {
-        let cat = match self.0 {
-            Some(cat) => cat,
-            None => return,
-        };
-
-        unsafe {
-            if level.into_glib() as i32 > cat.as_ref().threshold {
-                return;
-            }
+        if !self.above_threshold(level) {
+            return;
         }
 
         self.log_id_literal_unfiltered(id, level, file, function, line, msg);
@@ -654,10 +634,9 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $level <= $cat.threshold() {
+        if $cat.above_threshold($level) {
             use $crate::glib::Cast;
 
-            #[allow(unused_unsafe)]
             let obj = unsafe { $obj.unsafe_cast_ref::<$crate::glib::Object>() };
             $crate::DebugCategory::log_literal_unfiltered(
                 $cat.clone(),
@@ -674,10 +653,9 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $level <= $cat.threshold() {
+        if $cat.above_threshold($level) {
             use $crate::glib::Cast;
 
-            #[allow(unused_unsafe)]
             let obj = unsafe { $obj.unsafe_cast_ref::<$crate::glib::Object>() };
             $crate::DebugCategory::log_unfiltered(
                 $cat.clone(),
@@ -694,11 +672,10 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $level <= $cat.threshold() {
+        if $cat.above_threshold($level) {
             use $crate::glib::Cast;
 
             let obj = $imp.obj();
-            #[allow(unused_unsafe)]
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
             $crate::DebugCategory::log_literal_unfiltered(
                 $cat.clone(),
@@ -715,11 +692,10 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $level <= $cat.threshold() {
+        if $cat.above_threshold($level) {
             use $crate::glib::Cast;
 
             let obj = $imp.obj();
-            #[allow(unused_unsafe)]
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
             $crate::DebugCategory::log_unfiltered(
                 $cat.clone(),
@@ -736,7 +712,7 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $level <= $cat.threshold() {
+        if $cat.above_threshold($level) {
             $crate::DebugCategory::log_id_literal_unfiltered(
                 $cat.clone(),
                 Some($crate::glib::gstr!($id)),
@@ -752,7 +728,7 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $level <= $cat.threshold() {
+        if $cat.above_threshold($level) {
             $crate::DebugCategory::log_id_unfiltered(
                 $cat.clone(),
                 Some($crate::glib::gstr!($id)),
@@ -768,7 +744,7 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $level <= $cat.threshold() {
+        if $cat.above_threshold($level) {
             $crate::DebugCategory::log_id_literal_unfiltered(
                 $cat.clone(),
                 Some($id),
@@ -784,7 +760,7 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $level <= $cat.threshold() {
+        if $cat.above_threshold($level) {
             $crate::DebugCategory::log_id_unfiltered(
                 $cat.clone(),
                 Some($id),
@@ -800,7 +776,7 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $level <= $cat.threshold() {
+        if $cat.above_threshold($level) {
             $crate::DebugCategory::log_literal_unfiltered(
                 $cat.clone(),
                 None as Option<&$crate::glib::Object>,
@@ -816,7 +792,7 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $level <= $cat.threshold() {
+        if $cat.above_threshold($level) {
             $crate::DebugCategory::log_unfiltered(
                 $cat.clone(),
                 None as Option<&$crate::glib::Object>,
