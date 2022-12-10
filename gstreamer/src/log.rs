@@ -423,8 +423,8 @@ impl DebugCategory {
     pub fn get_line(
         &self,
         level: crate::DebugLevel,
-        file: &str,
-        module: &str,
+        file: &glib::GStr,
+        function: &glib::GStr,
         line: u32,
         object: Option<&LoggedObject>,
         message: &DebugMessage,
@@ -435,8 +435,8 @@ impl DebugCategory {
             from_glib_full(ffi::gst_debug_log_get_line(
                 cat.as_ptr(),
                 level.into_glib(),
-                file.to_glib_none().0,
-                module.to_glib_none().0,
+                file.as_ptr(),
+                function.as_ptr(),
                 line as i32,
                 object.map(|o| o.as_ptr()).unwrap_or(ptr::null_mut()),
                 message.0.as_ptr(),
@@ -840,8 +840,15 @@ unsafe extern "C" fn log_handler<T>(
     message: *mut ffi::GstDebugMessage,
     user_data: gpointer,
 ) where
-    T: Fn(DebugCategory, DebugLevel, &str, &str, u32, Option<&LoggedObject>, &DebugMessage)
-        + Send
+    T: Fn(
+            DebugCategory,
+            DebugLevel,
+            &glib::GStr,
+            &glib::GStr,
+            u32,
+            Option<&LoggedObject>,
+            &DebugMessage,
+        ) + Send
         + Sync
         + 'static,
 {
@@ -850,8 +857,8 @@ unsafe extern "C" fn log_handler<T>(
     }
     let category = DebugCategory(Some(ptr::NonNull::new_unchecked(category)));
     let level = from_glib(level);
-    let file = CStr::from_ptr(file).to_string_lossy();
-    let function = CStr::from_ptr(function).to_string_lossy();
+    let file = glib::GStr::from_ptr(file);
+    let function = glib::GStr::from_ptr(function);
     let line = line as u32;
     let object = ptr::NonNull::new(object).map(LoggedObject);
     let message = DebugMessage(ptr::NonNull::new_unchecked(message));
@@ -859,8 +866,8 @@ unsafe extern "C" fn log_handler<T>(
     (handler)(
         category,
         level,
-        &file,
-        &function,
+        file,
+        function,
         line,
         object.as_ref(),
         &message,
@@ -961,8 +968,15 @@ impl fmt::Display for LoggedObject {
 #[doc(alias = "gst_debug_add_log_function")]
 pub fn debug_add_log_function<T>(function: T) -> DebugLogFunction
 where
-    T: Fn(DebugCategory, DebugLevel, &str, &str, u32, Option<&LoggedObject>, &DebugMessage)
-        + Send
+    T: Fn(
+            DebugCategory,
+            DebugLevel,
+            &glib::GStr,
+            &glib::GStr,
+            u32,
+            Option<&LoggedObject>,
+            &DebugMessage,
+        ) + Send
         + Sync
         + 'static,
 {
@@ -1075,8 +1089,8 @@ mod tests {
 
         let handler = move |category: DebugCategory,
                             level: DebugLevel,
-                            _file: &str,
-                            _function: &str,
+                            _file: &glib::GStr,
+                            _function: &glib::GStr,
                             _line: u32,
                             _object: Option<&LoggedObject>,
                             message: &DebugMessage| {
