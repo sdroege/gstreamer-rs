@@ -18,6 +18,7 @@ where
     T: Send + 'static,
 {
     use cocoa::appkit::NSApplication;
+    use objc::{msg_send, sel, sel_impl};
 
     use std::thread;
 
@@ -27,24 +28,7 @@ where
             let res = main();
 
             let app = cocoa::appkit::NSApp();
-            app.stop_(cocoa::base::nil);
-
-            // Stopping the event loop requires an actual event
-            let event = cocoa::appkit::NSEvent::otherEventWithType_location_modifierFlags_timestamp_windowNumber_context_subtype_data1_data2_(
-                cocoa::base::nil,
-                cocoa::appkit::NSEventType::NSApplicationDefined,
-                cocoa::foundation::NSPoint { x: 0.0, y: 0.0 },
-                cocoa::appkit::NSEventModifierFlags::empty(),
-                0.0,
-                0,
-                cocoa::base::nil,
-                cocoa::appkit::NSEventSubtype::NSApplicationActivatedEventType,
-                0,
-                0,
-            );
-            app.postEvent_atStart_(event, cocoa::base::YES);
-
-            std::process::exit(0);
+            let _: () = msg_send![app, terminate: cocoa::base::nil];
 
             res
         });
