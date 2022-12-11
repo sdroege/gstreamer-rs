@@ -634,6 +634,7 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
+        #[allow(clippy::redundant_closure_call)]
         if $cat.above_threshold($level) {
             use $crate::glib::Cast;
 
@@ -650,15 +651,33 @@ macro_rules! log_with_level(
             };
 
             let obj = unsafe { $obj.unsafe_cast_ref::<$crate::glib::Object>() };
-            $crate::DebugCategory::log_literal_unfiltered(
-                $cat.clone(),
-                Some(obj),
-                $level,
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                function_name.as_ref(),
-                line!(),
-                $crate::glib::gstr!($msg),
-            )
+
+            // Check if formatting is necessary or not
+            // FIXME: This needs to be a closure because the return value of format_args!() can't
+            // be assigned to a variable
+            (|args: std::fmt::Arguments| {
+                if args.as_str().is_some() {
+                    $crate::DebugCategory::log_literal_unfiltered(
+                        $cat.clone(),
+                        Some(obj),
+                        $level,
+                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        function_name.as_ref(),
+                        line!(),
+                        $crate::glib::gstr!($msg),
+                    )
+                } else {
+                    $crate::DebugCategory::log_unfiltered(
+                        $cat.clone(),
+                        Some(obj),
+                        $level,
+                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        function_name.as_ref(),
+                        line!(),
+                        args,
+                    )
+                }
+            })(format_args!($msg))
         }
     }};
     ($cat:expr, level: $level:expr, obj: $obj:expr, $($args:tt)*) => { {
@@ -696,6 +715,7 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
+        #[allow(clippy::redundant_closure_call)]
         if $cat.above_threshold($level) {
             use $crate::glib::Cast;
 
@@ -713,15 +733,33 @@ macro_rules! log_with_level(
 
             let obj = $imp.obj();
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
-            $crate::DebugCategory::log_literal_unfiltered(
-                $cat.clone(),
-                Some(obj),
-                $level,
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                function_name.as_ref(),
-                line!(),
-                $crate::glib::gstr!($msg),
-            )
+
+            // Check if formatting is necessary or not
+            // FIXME: This needs to be a closure because the return value of format_args!() can't
+            // be assigned to a variable
+            (|args: std::fmt::Arguments| {
+                if args.as_str().is_some() {
+                    $crate::DebugCategory::log_literal_unfiltered(
+                        $cat.clone(),
+                        Some(obj),
+                        $level,
+                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        function_name.as_ref(),
+                        line!(),
+                        $crate::glib::gstr!($msg),
+                    )
+                } else {
+                    $crate::DebugCategory::log_unfiltered(
+                        $cat.clone(),
+                        Some(obj),
+                        $level,
+                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        function_name.as_ref(),
+                        line!(),
+                        args,
+                    )
+                }
+            })(format_args!($msg))
         }
     }};
     ($cat:expr, level: $level:expr, imp: $imp:expr, $($args:tt)*) => { {
@@ -760,6 +798,7 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
+        #[allow(clippy::redundant_closure_call)]
         if $cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // avoid this complication
@@ -773,15 +812,32 @@ macro_rules! log_with_level(
                 ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
             };
 
-            $crate::DebugCategory::log_id_literal_unfiltered(
-                $cat.clone(),
-                Some($crate::glib::gstr!($id)),
-                $level,
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                function_name.as_ref(),
-                line!(),
-                $crate::glib::gstr!($msg),
-            )
+            // Check if formatting is necessary or not
+            // FIXME: This needs to be a closure because the return value of format_args!() can't
+            // be assigned to a variable
+            (|args: std::fmt::Arguments| {
+                if args.as_str().is_some() {
+                    $crate::DebugCategory::log_id_literal_unfiltered(
+                        $cat.clone(),
+                        Some($crate::glib::gstr!($id)),
+                        $level,
+                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        function_name.as_ref(),
+                        line!(),
+                        $crate::glib::gstr!($msg),
+                    )
+                } else {
+                    $crate::DebugCategory::log_id_unfiltered(
+                        $cat.clone(),
+                        Some($crate::glib::gstr!($id)),
+                        $level,
+                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        function_name.as_ref(),
+                        line!(),
+                        args,
+                    )
+                }
+            })(format_args!($msg))
         }
     }};
     ($cat:expr, level: $level:expr, id: $id:literal, $($args:tt)*) => { {
@@ -816,6 +872,7 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
+        #[allow(clippy::redundant_closure_call)]
         if $cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // avoid this complication
@@ -829,15 +886,32 @@ macro_rules! log_with_level(
                 ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
             };
 
-            $crate::DebugCategory::log_id_literal_unfiltered(
-                $cat.clone(),
-                Some($id),
-                $level,
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                function_name.as_ref(),
-                line!(),
-                $crate::glib::gstr!($msg),
-            )
+            // Check if formatting is necessary or not
+            // FIXME: This needs to be a closure because the return value of format_args!() can't
+            // be assigned to a variable
+            (|args: std::fmt::Arguments| {
+                if args.as_str().is_some() {
+                    $crate::DebugCategory::log_id_literal_unfiltered(
+                        $cat.clone(),
+                        Some($id),
+                        $level,
+                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        function_name.as_ref(),
+                        line!(),
+                        $crate::glib::gstr!($msg),
+                    )
+                } else {
+                    $crate::DebugCategory::log_id_unfiltered(
+                        $cat.clone(),
+                        Some($id),
+                        $level,
+                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        function_name.as_ref(),
+                        line!(),
+                        args,
+                    )
+                }
+            })(format_args!($msg))
         }
     }};
     ($cat:expr, level: $level:expr, id: $id:expr, $($args:tt)*) => { {
@@ -872,6 +946,7 @@ macro_rules! log_with_level(
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
+        #[allow(clippy::redundant_closure_call)]
         if $cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // avoid this complication
@@ -885,15 +960,32 @@ macro_rules! log_with_level(
                 ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
             };
 
-            $crate::DebugCategory::log_literal_unfiltered(
-                $cat.clone(),
-                None as Option<&$crate::glib::Object>,
-                $level,
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                function_name.as_ref(),
-                line!(),
-                $crate::glib::gstr!($msg),
-            )
+            // Check if formatting is necessary or not
+            // FIXME: This needs to be a closure because the return value of format_args!() can't
+            // be assigned to a variable
+            (|args: std::fmt::Arguments| {
+                if args.as_str().is_some() {
+                    $crate::DebugCategory::log_literal_unfiltered(
+                        $cat.clone(),
+                        None as Option<&$crate::glib::Object>,
+                        $level,
+                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        function_name.as_ref(),
+                        line!(),
+                        $crate::glib::gstr!($msg),
+                    )
+                } else {
+                    $crate::DebugCategory::log_unfiltered(
+                        $cat.clone(),
+                        None as Option<&$crate::glib::Object>,
+                        $level,
+                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        function_name.as_ref(),
+                        line!(),
+                        args,
+                    )
+                }
+            })(format_args!($msg))
         }
     }};
     ($cat:expr, level: $level:expr, $($args:tt)*) => { {
