@@ -204,7 +204,7 @@ pub const GST_AUDIO_CONVERTER_OPT_QUANTIZATION: *const c_char =
     b"GstAudioConverter.quantization\0" as *const u8 as *const c_char;
 pub const GST_AUDIO_CONVERTER_OPT_RESAMPLER_METHOD: *const c_char =
     b"GstAudioConverter.resampler-method\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_DECODER_MAX_ERRORS: c_int = 10;
+pub const GST_AUDIO_DECODER_MAX_ERRORS: c_int = -1;
 pub const GST_AUDIO_DECODER_SINK_NAME: *const c_char = b"sink\0" as *const u8 as *const c_char;
 pub const GST_AUDIO_DECODER_SRC_NAME: *const c_char = b"src\0" as *const u8 as *const c_char;
 pub const GST_AUDIO_DEF_CHANNELS: c_int = 2;

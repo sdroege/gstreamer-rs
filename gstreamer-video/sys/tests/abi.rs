@@ -1245,7 +1245,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
         "GST_VIDEO_CONVERTER_OPT_THREADS",
         "GstVideoConverter.threads",
     ),
-    ("GST_VIDEO_DECODER_MAX_ERRORS", "10"),
+    ("GST_VIDEO_DECODER_MAX_ERRORS", "-1"),
     (
         "(guint) GST_VIDEO_DECODER_REQUEST_SYNC_POINT_CORRUPT_OUTPUT",
         "2",

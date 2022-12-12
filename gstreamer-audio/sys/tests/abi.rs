@@ -718,7 +718,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
         "GST_AUDIO_CONVERTER_OPT_RESAMPLER_METHOD",
         "GstAudioConverter.resampler-method",
     ),
-    ("GST_AUDIO_DECODER_MAX_ERRORS", "10"),
+    ("GST_AUDIO_DECODER_MAX_ERRORS", "-1"),
     ("GST_AUDIO_DECODER_SINK_NAME", "sink"),
     ("GST_AUDIO_DECODER_SRC_NAME", "src"),
     ("GST_AUDIO_DEF_CHANNELS", "2"),

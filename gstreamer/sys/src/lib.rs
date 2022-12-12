@@ -4019,6 +4019,9 @@ extern "C" {
     pub fn gst_event_type_get_flags(type_: GstEventType) -> GstEventTypeFlags;
     pub fn gst_event_type_get_name(type_: GstEventType) -> *const c_char;
     pub fn gst_event_type_to_quark(type_: GstEventType) -> glib::GQuark;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_event_type_to_sticky_ordering(type_: GstEventType) -> c_uint;
 
     //=========================================================================
     // GstFlowReturn
@@ -4972,6 +4975,9 @@ extern "C" {
     // GstDebugMessage
     //=========================================================================
     pub fn gst_debug_message_get(message: *mut GstDebugMessage) -> *const c_char;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_debug_message_get_id(message: *mut GstDebugMessage) -> *const c_char;
 
     //=========================================================================
     // GstDeviceProviderClass
@@ -8935,6 +8941,32 @@ extern "C" {
         object: *mut gobject::GObject,
         message: *mut GstDebugMessage,
     ) -> *mut c_char;
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_debug_log_id(
+        category: *mut GstDebugCategory,
+        level: GstDebugLevel,
+        file: *const c_char,
+        function: *const c_char,
+        line: c_int,
+        id: *const c_char,
+        format: *const c_char,
+        ...
+    );
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub fn gst_debug_log_id_literal(
+        category: *mut GstDebugCategory,
+        level: GstDebugLevel,
+        file: *const c_char,
+        function: *const c_char,
+        line: c_int,
+        id: *const c_char,
+        message_string: *const c_char,
+    );
+    //#[cfg(any(feature = "v1_22", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    //pub fn gst_debug_log_id_valist(category: *mut GstDebugCategory, level: GstDebugLevel, file: *const c_char, function: *const c_char, line: c_int, id: *const c_char, format: *const c_char, args: /*Unimplemented*/va_list);
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn gst_debug_log_literal(
