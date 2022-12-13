@@ -9,6 +9,7 @@ mod audio_base_sink;
 mod audio_base_src;
 mod audio_decoder;
 mod audio_encoder;
+mod audio_filter;
 mod audio_sink;
 mod audio_src;
 
@@ -23,6 +24,7 @@ pub mod prelude {
     pub use super::audio_base_src::AudioBaseSrcImpl;
     pub use super::audio_decoder::{AudioDecoderImpl, AudioDecoderImplExt};
     pub use super::audio_encoder::{AudioEncoderImpl, AudioEncoderImplExt};
+    pub use super::audio_filter::{AudioFilterImpl, AudioFilterImplExt};
     pub use super::audio_sink::{AudioSinkImpl, AudioSinkImplExt};
     pub use super::audio_src::{AudioSrcImpl, AudioSrcImplExt};
 }

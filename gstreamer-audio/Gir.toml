@@ -23,6 +23,7 @@ generate = [
     "GstAudio.AudioBaseSrc",
     "GstAudio.AudioChannelPosition",
     "GstAudio.AudioDitherMethod",
+    "GstAudio.AudioFilter",
     "GstAudio.AudioFormatFlags",
     "GstAudio.AudioLayout",
     "GstAudio.AudioNoiseShapingMethod",
@@ -53,6 +54,7 @@ manual = [
     "GstBase.AggregatorPad",
     "GstBase.BaseSink",
     "GstBase.BaseSrc",
+    "GstBase.BaseTransform",
 ]
 
 [[object]]

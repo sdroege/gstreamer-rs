@@ -402,6 +402,17 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstAudioInfo> for AudioInfo 
 }
 
 #[doc(hidden)]
+impl glib::translate::FromGlibPtrNone<*const ffi::GstAudioInfo> for AudioInfo {
+    #[inline]
+    unsafe fn from_glib_none(ptr: *const ffi::GstAudioInfo) -> Self {
+        Self(
+            ptr::read(ptr),
+            std::array::from_fn(|i| from_glib((*ptr).position[i])),
+        )
+    }
+}
+
+#[doc(hidden)]
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstAudioInfo> for AudioInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstAudioInfo) -> Self {
