@@ -24,6 +24,9 @@ pub use self::audio_decoder::AudioDecoder;
 mod audio_encoder;
 pub use self::audio_encoder::AudioEncoder;
 
+mod audio_filter;
+pub use self::audio_filter::AudioFilter;
+
 mod audio_sink;
 pub use self::audio_sink::AudioSink;
 
