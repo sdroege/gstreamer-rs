@@ -1,7 +1,7 @@
 #[cfg(feature = "gl")]
 fn generate_gl_bindings() {
     let dest = std::path::PathBuf::from(&std::env::var("OUT_DIR").unwrap());
-    let mut file = std::fs::File::create(&dest.join("test_gl_bindings.rs")).unwrap();
+    let mut file = std::fs::File::create(dest.join("test_gl_bindings.rs")).unwrap();
     gl_generator::Registry::new(
         gl_generator::Api::Gles2,
         (3, 0),

@@ -23,7 +23,7 @@ impl<'a> Iter<'a> {
         Iter {
             collection,
             idx: 0,
-            size: collection.len() as usize,
+            size: collection.len(),
         }
     }
 }

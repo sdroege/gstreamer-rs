@@ -34,7 +34,7 @@ impl SDPBandwidth {
     }
 
     pub fn value(&self) -> u32 {
-        self.0.bandwidth as u32
+        self.0.bandwidth
     }
 }
 

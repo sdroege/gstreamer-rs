@@ -321,7 +321,7 @@ impl FormattedValue for Option<Percent> {
 impl FormattedValueFullRange for Option<Percent> {
     unsafe fn from_raw(format: Format, value: i64) -> Self {
         debug_assert_eq!(format, Format::Percent);
-        Percent::try_from_glib(value as i64).ok()
+        Percent::try_from_glib(value).ok()
     }
 }
 

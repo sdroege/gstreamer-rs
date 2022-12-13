@@ -370,7 +370,7 @@ mod video_filter {
         }
     }
     mod imp {
-        use std::{cmp, mem::ManuallyDrop, os::unix::prelude::FromRawFd};
+        use std::{mem::ManuallyDrop, os::unix::prelude::FromRawFd};
 
         use anyhow::Error;
         use gst::{subclass::prelude::*, PadDirection, PadPresence, PadTemplate};
@@ -430,9 +430,9 @@ mod video_filter {
                     let mut mmap = MmapMut::map_mut(mfd.as_file())?;
 
                     for pixel in mmap.chunks_exact_mut(4) {
-                        pixel[0] = cmp::max(0, cmp::min(255, (pixel[0] as f64 * factor) as u8));
-                        pixel[1] = cmp::max(0, cmp::min(255, (pixel[1] as f64 * factor) as u8));
-                        pixel[2] = cmp::max(0, cmp::min(255, (pixel[2] as f64 * factor) as u8));
+                        pixel[0] = (pixel[0] as f64 * factor).clamp(0.0, 255.0) as u8;
+                        pixel[1] = (pixel[1] as f64 * factor).clamp(0.0, 255.0) as u8;
+                        pixel[2] = (pixel[2] as f64 * factor).clamp(0.0, 255.0) as u8;
                     }
                 }
 

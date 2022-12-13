@@ -92,7 +92,7 @@ impl<T> AudioBuffer<T> {
     }
 
     pub fn plane_size(&self) -> usize {
-        (self.n_samples() as usize * self.sample_stride() as usize * self.channels() as usize)
+        (self.n_samples() * self.sample_stride() as usize * self.channels() as usize)
             / self.n_planes() as usize
     }
 
@@ -330,7 +330,7 @@ impl<T> AudioBufferRef<T> {
     }
 
     pub fn plane_size(&self) -> usize {
-        (self.n_samples() as usize * self.sample_stride() as usize * self.channels() as usize)
+        (self.n_samples() * self.sample_stride() as usize * self.channels() as usize)
             / self.n_planes() as usize
     }
 

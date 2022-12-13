@@ -265,7 +265,6 @@ impl<'a, T> RTPBuffer<'a, T> {
     pub fn payload_size(&self) -> u32 {
         unsafe {
             ffi::gst_rtp_buffer_get_payload_len(glib::translate::mut_override(&self.rtp_buffer))
-                as u32
         }
     }
 

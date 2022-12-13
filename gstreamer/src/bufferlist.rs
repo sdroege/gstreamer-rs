@@ -89,7 +89,7 @@ impl BufferListRef {
 
     #[doc(alias = "gst_buffer_list_calculate_size")]
     pub fn calculate_size(&self) -> usize {
-        unsafe { ffi::gst_buffer_list_calculate_size(self.as_mut_ptr()) as usize }
+        unsafe { ffi::gst_buffer_list_calculate_size(self.as_mut_ptr()) }
     }
 
     pub fn is_empty(&self) -> bool {

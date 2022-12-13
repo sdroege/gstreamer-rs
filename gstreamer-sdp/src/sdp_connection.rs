@@ -61,11 +61,11 @@ impl SDPConnection {
     }
 
     pub fn ttl(&self) -> u32 {
-        self.0.ttl as u32
+        self.0.ttl
     }
 
     pub fn addr_number(&self) -> u32 {
-        self.0.addr_number as u32
+        self.0.addr_number
     }
 }
 

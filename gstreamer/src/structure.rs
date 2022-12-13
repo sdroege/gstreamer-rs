@@ -1112,7 +1112,7 @@ mod tests {
 
         let s = Structure::builder("test")
             .field("f1", "abc")
-            .field("f2", &String::from("bcd"))
+            .field("f2", String::from("bcd"))
             .field("f3", 123i32)
             .build();
 
@@ -1153,7 +1153,7 @@ mod tests {
 
         let s = Structure::builder("test")
             .field("f1", "abc")
-            .field("f2", &String::from("bcd"))
+            .field("f2", String::from("bcd"))
             .field("f3", 123i32)
             .build();
 
