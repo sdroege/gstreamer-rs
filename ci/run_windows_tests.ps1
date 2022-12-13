@@ -35,11 +35,12 @@
     'examples'
 )
 
+# "" is the default build, no flags appended
 [string[]] $features_matrix = @(
-    "--no-default-features",
+    # "--no-default-features",
+    # "--features=v1_18,",
+    # "--features=v1_20,",
     "",
-    "--features=v1_18,",
-    "--features=v1_20,",
     "--features=v1_22,"
 )
 
