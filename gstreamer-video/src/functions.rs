@@ -186,8 +186,8 @@ pub fn guess_framerate(duration: gst::ClockTime) -> Option<gst::Fraction> {
         ));
         if res {
             Some(gst::Fraction::new(
-                dest_n.assume_init() as i32,
-                dest_d.assume_init() as i32,
+                dest_n.assume_init(),
+                dest_d.assume_init(),
             ))
         } else {
             None

@@ -67,7 +67,7 @@ impl Serialize for Date {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         DateTimeVariants::YMD(
             self.0.year() as i32,
-            self.0.month().into_glib() as i32,
+            self.0.month().into_glib(),
             self.0.day() as i32,
         )
         .serialize(serializer)

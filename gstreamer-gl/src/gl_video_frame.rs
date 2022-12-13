@@ -154,6 +154,6 @@ fn buffer_n_gl_memory(buffer: &gst::BufferRef) -> Option<u32> {
                 return None;
             }
         }
-        Some(num as u32)
+        Some(num)
     }
 }

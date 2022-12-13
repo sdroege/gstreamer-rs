@@ -16,7 +16,7 @@ impl PlayerVideoInfo {
                 fps_n.as_mut_ptr(),
                 fps_d.as_mut_ptr(),
             );
-            (fps_n.assume_init() as i32, fps_d.as_mut_ptr() as i32).into()
+            (fps_n.assume_init(), fps_d.assume_init()).into()
         }
     }
 

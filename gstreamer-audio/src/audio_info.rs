@@ -255,7 +255,7 @@ impl AudioInfo {
     }
 
     pub fn bps(&self) -> u32 {
-        (self.format_info().depth() as u32) >> 3
+        self.format_info().depth() >> 3
     }
 
     pub fn depth(&self) -> u32 {

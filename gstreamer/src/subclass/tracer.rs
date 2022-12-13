@@ -202,11 +202,11 @@ define_tracer_hooks! {
     };
     MiniObjectReffed("mini-object-reffed") = |this, ts, o: *mut ffi::GstMiniObject, rc: libc::c_int| {
         let o = MiniObject::from_glib_borrow(o);
-        this.mini_object_reffed(ts, &o, rc as i32)
+        this.mini_object_reffed(ts, &o, rc)
     };
     MiniObjectUnreffed("mini-object-unreffed") = |this, ts, o: *mut ffi::GstMiniObject, rc: libc::c_int| {
         let o = MiniObject::from_glib_borrow(o);
-        this.mini_object_unreffed(ts, &o, rc as i32)
+        this.mini_object_unreffed(ts, &o, rc)
     };
     ObjectCreated("object-created") = |this, ts, o: *mut ffi::GstObject| {
         let o = Object::from_glib_borrow(o);
@@ -218,11 +218,11 @@ define_tracer_hooks! {
     };
     ObjectReffed("object-reffed") = |this, ts, o: *mut ffi::GstObject, rc: libc::c_int| {
         let o = Object::from_glib_borrow(o);
-        this.object_reffed(ts, &o, rc as i32)
+        this.object_reffed(ts, &o, rc)
     };
     ObjectUnreffed("object-unreffed") = |this, ts, o: *mut ffi::GstObject, rc: libc::c_int| {
         let o = Object::from_glib_borrow(o);
-        this.object_unreffed(ts, &o, rc as i32)
+        this.object_unreffed(ts, &o, rc)
     };
     PadLinkPost("pad-link-post") = |this, ts, src: *mut ffi::GstPad, sink: *mut ffi::GstPad, r: ffi::GstPadLinkReturn| {
         let src = Pad::from_glib_borrow(src);
@@ -248,7 +248,7 @@ define_tracer_hooks! {
     };
     PadPullRangePre("pad-pull-range-pre") = |this, ts, p: *mut ffi::GstPad, o: u64, s: libc::c_uint| {
         let p = Pad::from_glib_borrow(p);
-        this.pad_pull_range_pre(ts, &p, o, s as u32)
+        this.pad_pull_range_pre(ts, &p, o, s)
     };
     PadPushEventPost("pad-push-event-post") = |this, ts, p: *mut ffi::GstPad, r: glib::ffi::gboolean| {
         let p = Pad::from_glib_borrow(p);

@@ -29,7 +29,7 @@ impl AudioChannelPosition {
         }
 
         let positions_raw: [ffi::GstAudioChannelPosition; 64] = std::array::from_fn(|i| {
-            if i >= len as usize {
+            if i >= len {
                 ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
             } else {
                 positions[i].into_glib()
@@ -95,7 +95,7 @@ impl AudioChannelPosition {
 
         let len = positions.len();
         let mut positions_raw: [ffi::GstAudioChannelPosition; 64] = std::array::from_fn(|i| {
-            if i >= len as usize {
+            if i >= len {
                 ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
             } else {
                 positions[i].into_glib()
@@ -139,7 +139,7 @@ impl AudioChannelPosition {
 
         let len = positions.len();
         let positions_raw: [ffi::GstAudioChannelPosition; 64] = std::array::from_fn(|i| {
-            if i >= len as usize {
+            if i >= len {
                 ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
             } else {
                 positions[i].into_glib()
@@ -174,7 +174,7 @@ pub fn buffer_reorder_channels(
     let to_len = to.len();
 
     let from_raw: [ffi::GstAudioChannelPosition; 64] = std::array::from_fn(|i| {
-        if i >= from_len as usize {
+        if i >= from_len {
             ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
             from[i].into_glib()
@@ -182,7 +182,7 @@ pub fn buffer_reorder_channels(
     });
 
     let to_raw: [ffi::GstAudioChannelPosition; 64] = std::array::from_fn(|i| {
-        if i >= to_len as usize {
+        if i >= to_len {
             ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
             to[i].into_glib()
@@ -224,7 +224,7 @@ pub fn reorder_channels(
     let to_len = to.len();
 
     let from_raw: [ffi::GstAudioChannelPosition; 64] = std::array::from_fn(|i| {
-        if i >= from_len as usize {
+        if i >= from_len {
             ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
             from[i].into_glib()
@@ -232,7 +232,7 @@ pub fn reorder_channels(
     });
 
     let to_raw: [ffi::GstAudioChannelPosition; 64] = std::array::from_fn(|i| {
-        if i >= to_len as usize {
+        if i >= to_len {
             ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
             to[i].into_glib()
@@ -274,7 +274,7 @@ pub fn channel_reorder_map(
     let to_len = to.len();
 
     let from_raw: [ffi::GstAudioChannelPosition; 64] = std::array::from_fn(|i| {
-        if i >= from_len as usize {
+        if i >= from_len {
             ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
             from[i].into_glib()
@@ -282,7 +282,7 @@ pub fn channel_reorder_map(
     });
 
     let to_raw: [ffi::GstAudioChannelPosition; 64] = std::array::from_fn(|i| {
-        if i >= to_len as usize {
+        if i >= to_len {
             ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
             to[i].into_glib()

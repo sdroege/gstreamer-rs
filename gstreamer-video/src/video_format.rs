@@ -350,7 +350,7 @@ impl Iterator for VideoFormatIterator {
             return (0, Some(0));
         }
 
-        let remaining = (self.len - self.idx) as usize;
+        let remaining = self.len - self.idx;
 
         (remaining, Some(remaining))
     }
