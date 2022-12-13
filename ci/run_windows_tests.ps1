@@ -35,47 +35,57 @@
     'examples'
 )
 
-foreach($crate in $crates)
-{
-    Write-Host "Building crate: $crate"
-    Write-Host "Features: $env:FEATURES"
-    $env:LocalFeatures = $env:FEATURES
+[string[]] $features_matrix = @(
+    "--no-default-features",
+    "",
+    "--features=v1_18,",
+    "--features=v1_20,",
+    "--features=v1_22,"
+)
 
-    # Don't append feature flags if the string is null/empty
-    # Or when we want to build without default features
-    if ($env:LocalFeatures -and ($env:LocalFeatures -ne '--no-default-features')) {
-        if ($crate -eq 'gstreamer') {
-            $env:LocalFeatures += "serde,"
+foreach($features in $features_matrix) {
+    foreach($crate in $crates)
+    {
+        Write-Host "Building crate: $crate"
+        Write-Host "Features: $features"
+        $env:LocalFeatures = $features
+
+        # Don't append feature flags if the string is null/empty
+        # Or when we want to build without default features
+        if ($env:LocalFeatures -and ($env:LocalFeatures -ne '--no-default-features')) {
+            if ($crate -eq 'gstreamer') {
+                $env:LocalFeatures += "serde,"
+            }
+
+            if ($crate -eq 'examples') {
+                # FIXME: We can do --all-features for examples once we have gtk installed in the image
+                $env:LocalFeatures = "--features=rtsp-server,rtsp-server-record,pango-cairo,overlay-composition"
+            }
+
+            if ($crate -eq 'tutorials') {
+                $env:LocalFeatures = ''
+            }
         }
 
-        if ($crate -eq 'examples') {
-            # FIXME: We can do --all-features for examples once we have gtk installed in the image
-            $env:LocalFeatures = "--features=rtsp-server,rtsp-server-record,pango-cairo,overlay-composition"
+        Write-Host "with features: $env:LocalFeatures"
+        cargo build --color=always --manifest-path $crate/Cargo.toml --all-targets $env:LocalFeatures
+
+        if (!$?) {
+            Write-Host "Failed to build crate: $crate"
+            Exit 1
         }
 
-        if ($crate -eq 'tutorials') {
-            $env:LocalFeatures = ''
+        if (($crate -eq "gstreamer-tag/sys") -or ($crate -eq "gstreamer-mpegts/sys")) {
+            Write-Host "Skipping tests for $crate"
+            continue
         }
-    }
 
-    Write-Host "with features: $env:LocalFeatures"
-    cargo build --color=always --manifest-path $crate/Cargo.toml --all-targets $env:LocalFeatures
+        $env:G_DEBUG="fatal_warnings"
+        cargo test --no-fail-fast --color=always --manifest-path $crate/Cargo.toml $env:LocalFeatures
 
-    if (!$?) {
-        Write-Host "Failed to build crate: $crate"
-        Exit 1
-    }
-
-    if (($crate -eq "gstreamer-tag/sys") -or ($crate -eq "gstreamer-mpegts/sys")) {
-        Write-Host "Skipping tests for $crate"
-        continue
-    }
-
-    $env:G_DEBUG="fatal_warnings"
-    cargo test --no-fail-fast --color=always --manifest-path $crate/Cargo.toml $env:LocalFeatures
-
-    if (!$?) {
-        Write-Host "Tests failed to for crate: $crate"
-        Exit 1
+        if (!$?) {
+            Write-Host "Tests failed to for crate: $crate"
+            Exit 1
+        }
     }
 }

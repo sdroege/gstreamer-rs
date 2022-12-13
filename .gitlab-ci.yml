@@ -687,17 +687,7 @@ windows rust docker msrv:
     - 'docker'
     - 'windows'
     - '2022'
-  parallel:
-    matrix:
-      - FEATURES:
-        - "--features=v1_18,"
-        - "--features=v1_20,"
-        - "--features=v1_22,"
-        - "--no-default-features"
-        - ""
   script:
-    - echo $env:FEATURES
-
     # Skip -sys tests as they don't work
     # https://github.com/gtk-rs/gtk3-rs/issues/54
     #
