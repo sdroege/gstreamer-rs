@@ -38,7 +38,7 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExtManual for O {
         data: &[u8],
         buffer: &mut gst::BufferRef,
     ) -> bool {
-        let size = data.len() as usize;
+        let size = data.len();
         unsafe {
             from_glib(ffi::gst_rtp_header_extension_read(
                 self.as_ref().to_glib_none().0,
@@ -57,7 +57,7 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExtManual for O {
         output: &mut gst::BufferRef,
         data: &mut [u8],
     ) -> Result<usize, glib::BoolError> {
-        let size = data.len() as usize;
+        let size = data.len();
         unsafe {
             let res = ffi::gst_rtp_header_extension_write(
                 self.as_ref().to_glib_none().0,
