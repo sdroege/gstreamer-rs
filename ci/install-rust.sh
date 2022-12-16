@@ -1,3 +1,5 @@
+#! /bin/bash
+
 source ./ci/env.sh
 
 set -e
