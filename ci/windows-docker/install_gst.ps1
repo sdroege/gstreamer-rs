@@ -48,7 +48,7 @@ $env:MESON_ARGS = "--prefix=C:\gst-install\ " +
     "-Dgst-plugins-good:lame=disabled "
 
 Write-Output "Building gst"
-cmd.exe /C "C:\BuildTools\Common7\Tools\VsDevCmd.bat -host_arch=amd64 -arch=amd64 && meson _build $env:MESON_ARGS && meson compile -C _build && ninja -C _build install"
+cmd.exe /C "C:\BuildTools\Common7\Tools\VsDevCmd.bat -host_arch=amd64 -arch=amd64 && meson setup _build $env:MESON_ARGS && meson compile -C _build && meson install -C _build"
 
 if (!$?) {
   Write-Host "Failed to build and install gst"
