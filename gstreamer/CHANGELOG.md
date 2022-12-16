@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.19.4] - 2022-12-16
+### Added
+- Subclassing bindings for `gst_audio::AudioFilter`.
+
+### Fixed
+- Various new clippy warnings.
+
+### Changed
+- Update GStreamer .gir files to 1.21.3 release.
+
 ## [0.19.3] - 2022-11-28
 ### Added
 - `FromIterator<Caps>` and `Extend<Caps>` for `Caps`.
