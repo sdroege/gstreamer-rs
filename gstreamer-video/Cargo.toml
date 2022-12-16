@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-video"
-version = "0.19.3"
+version = "0.19.4"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Video library"
