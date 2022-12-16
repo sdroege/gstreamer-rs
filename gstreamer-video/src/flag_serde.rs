@@ -49,9 +49,9 @@ mod tests {
         check_serialize!(
             crate::NavigationModifierType::all(),
             concat!(
-                "\"shift-mask+lock-mask+control-mask+alt-mask+button1-mask",
-                "+button2-mask+button3-mask+button4-mask+button5-mask",
-                "+super-mask+hyper-mask+meta-mask\""
+                "\"shift-mask+lock-mask+control-mask+mod1-mask+mod2-mask+mod3-mask",
+                "+mod4-mask+mod5-mask+button1-mask+button2-mask+button3-mask",
+                "+button4-mask+button5-mask+super-mask+hyper-mask+meta-mask\""
             )
         );
         #[cfg(feature = "v1_18")]
@@ -118,7 +118,8 @@ mod tests {
             crate::NavigationModifierType,
             crate::NavigationModifierType::all(),
             concat!(
-                "\"shift-mask+lock-mask+control-mask+alt-mask+button1-mask",
+                "\"shift-mask+lock-mask+control-mask+mod1-mask+mod2-mask",
+                "+mod3-mask+mod4-mask+mod5-mask+button1-mask",
                 "+button2-mask+button3-mask+button4-mask+button5-mask",
                 "+super-mask+hyper-mask+meta-mask\""
             )
