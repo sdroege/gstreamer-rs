@@ -22,7 +22,7 @@ PLUGINS="-D gst-plugins-base:ogg=enabled \
          -D gst-plugins-bad:opus=enabled \
          -D gst-plugins-ugly:x264=enabled"
 
-meson build \
+meson setup build \
     -D prefix=/usr/local \
     -D gpl=enabled \
     -D ugly=enabled \
@@ -33,8 +33,8 @@ meson build \
     -D python=disabled \
     -D vaapi=disabled \
     $PLUGINS
-ninja -C build
-ninja -C build install
+meson compile -C build
+meson install -C build
 
 cd ..
 rm -rf gstreamer/
