@@ -1,3 +1,5 @@
+#! /bin/bash
+
 set -e
 
 pip3 install meson==0.64.1
