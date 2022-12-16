@@ -134,7 +134,8 @@ trigger:
       ca-certificates ninja-build python3-pip flex bison libglib2.0-dev
       libx11-dev libx11-xcb-dev libsoup2.4-dev libvorbis-dev libogg-dev
       libtheora-dev libmatroska-dev libvpx-dev libopus-dev libgraphene-1.0-dev
-      libjpeg-dev libwayland-dev python3-gi
+      libjpeg-dev libwayland-dev python3-gi libavcodec-dev libavformat-dev
+      libavutil-dev libavfilter-dev libswscale-dev yasm libx264-dev
     FDO_DISTRIBUTION_EXEC: >-
       bash ci/install-gst.sh &&
       bash ci/install-gtk4.sh &&
