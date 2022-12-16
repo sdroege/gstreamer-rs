@@ -35,6 +35,7 @@ meson setup build \
     $PLUGINS
 meson compile -C build
 meson install -C build
+ldconfig
 
 cd ..
 rm -rf gstreamer/

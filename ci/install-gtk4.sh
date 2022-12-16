@@ -13,5 +13,6 @@ meson setup build \
     -Dwayland-protocols:tests=false
 meson compile -C build
 meson install -C build
+ldconfig
 cd ..
 rm -rf gtk/
