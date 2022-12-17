@@ -7,6 +7,7 @@ use glib::StaticType;
 
 use std::ffi::CStr;
 use std::fmt;
+use std::marker::PhantomData;
 use std::ptr;
 
 #[doc(alias = "GstStaticCaps")]
@@ -101,10 +102,10 @@ impl glib::translate::GlibPtrDefault for StaticCaps {
 
 #[doc(hidden)]
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticCaps> for StaticCaps {
-    type Storage = &'a StaticCaps;
+    type Storage = PhantomData<&'a StaticCaps>;
 
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstStaticCaps, Self> {
-        glib::translate::Stash(self.0.as_ptr(), self)
+        glib::translate::Stash(self.0.as_ptr(), PhantomData)
     }
 
     fn to_glib_full(&self) -> *const ffi::GstStaticCaps {

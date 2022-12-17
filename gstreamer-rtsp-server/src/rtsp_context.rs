@@ -1,6 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::translate::*;
+use std::marker::PhantomData;
 use std::ptr;
 
 #[derive(Debug, PartialEq, Eq)]
@@ -34,10 +35,10 @@ impl FromGlibPtrBorrow<*mut ffi::GstRTSPContext> for RTSPContext {
 
 #[doc(hidden)]
 impl<'a> ToGlibPtr<'a, *mut ffi::GstRTSPContext> for RTSPContext {
-    type Storage = &'a RTSPContext;
+    type Storage = PhantomData<&'a RTSPContext>;
 
     fn to_glib_none(&'a self) -> Stash<'a, *mut ffi::GstRTSPContext, Self> {
-        Stash(self.0.as_ptr(), self)
+        Stash(self.0.as_ptr(), PhantomData)
     }
 
     fn to_glib_full(&self) -> *mut ffi::GstRTSPContext {

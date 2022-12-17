@@ -3,6 +3,7 @@
 use std::borrow::{Borrow, BorrowMut, ToOwned};
 use std::ffi::CStr;
 use std::fmt;
+use std::marker::PhantomData;
 use std::mem;
 use std::ops::{Deref, DerefMut};
 use std::ptr;
@@ -219,10 +220,10 @@ impl glib::types::StaticType for Structure {
 }
 
 impl<'a> ToGlibPtr<'a, *const ffi::GstStructure> for Structure {
-    type Storage = &'a Self;
+    type Storage = PhantomData<&'a Self>;
 
     fn to_glib_none(&'a self) -> Stash<'a, *const ffi::GstStructure, Self> {
-        unsafe { Stash(self.0.as_ref(), self) }
+        unsafe { Stash(self.0.as_ref(), PhantomData) }
     }
 
     fn to_glib_full(&self) -> *const ffi::GstStructure {
@@ -231,13 +232,13 @@ impl<'a> ToGlibPtr<'a, *const ffi::GstStructure> for Structure {
 }
 
 impl<'a> ToGlibPtr<'a, *mut ffi::GstStructure> for Structure {
-    type Storage = &'a Self;
+    type Storage = PhantomData<&'a Self>;
 
     fn to_glib_none(&'a self) -> Stash<'a, *mut ffi::GstStructure, Self> {
         unsafe {
             Stash(
                 self.0.as_ref() as *const ffi::GstStructure as *mut ffi::GstStructure,
-                self,
+                PhantomData,
             )
         }
     }
@@ -248,10 +249,10 @@ impl<'a> ToGlibPtr<'a, *mut ffi::GstStructure> for Structure {
 }
 
 impl<'a> ToGlibPtrMut<'a, *mut ffi::GstStructure> for Structure {
-    type Storage = &'a mut Self;
+    type Storage = PhantomData<&'a mut Self>;
 
     fn to_glib_none_mut(&'a mut self) -> StashMut<*mut ffi::GstStructure, Self> {
-        unsafe { StashMut(self.0.as_mut(), self) }
+        unsafe { StashMut(self.0.as_mut(), PhantomData) }
     }
 }
 

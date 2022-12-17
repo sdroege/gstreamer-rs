@@ -4,6 +4,7 @@ use glib::prelude::*;
 use glib::translate::*;
 use std::cmp;
 use std::fmt;
+use std::marker::PhantomData;
 use std::mem;
 use std::ptr;
 use std::str;
@@ -137,11 +138,11 @@ impl GlibPtrDefault for VideoTimeCodeInterval {
 
 #[doc(hidden)]
 impl<'a> ToGlibPtr<'a, *const ffi::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
-    type Storage = &'a Self;
+    type Storage = PhantomData<&'a Self>;
 
     #[inline]
     fn to_glib_none(&'a self) -> Stash<'a, *const ffi::GstVideoTimeCodeInterval, Self> {
-        Stash(&self.0 as *const _, self)
+        Stash(&self.0 as *const _, PhantomData)
     }
 
     #[inline]
@@ -152,12 +153,12 @@ impl<'a> ToGlibPtr<'a, *const ffi::GstVideoTimeCodeInterval> for VideoTimeCodeIn
 
 #[doc(hidden)]
 impl<'a> ToGlibPtrMut<'a, *mut ffi::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
-    type Storage = &'a mut Self;
+    type Storage = PhantomData<&'a mut Self>;
 
     #[inline]
     fn to_glib_none_mut(&'a mut self) -> StashMut<'a, *mut ffi::GstVideoTimeCodeInterval, Self> {
         let ptr = &mut self.0 as *mut _;
-        StashMut(ptr, self)
+        StashMut(ptr, PhantomData)
     }
 }
 

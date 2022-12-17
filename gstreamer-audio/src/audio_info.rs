@@ -6,6 +6,7 @@ use glib::translate::{
 use gst::prelude::*;
 
 use std::fmt;
+use std::marker::PhantomData;
 use std::mem;
 use std::ptr;
 
@@ -398,10 +399,10 @@ impl glib::translate::GlibPtrDefault for AudioInfo {
 
 #[doc(hidden)]
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstAudioInfo> for AudioInfo {
-    type Storage = &'a Self;
+    type Storage = PhantomData<&'a Self>;
 
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstAudioInfo, Self> {
-        glib::translate::Stash(&self.0, self)
+        glib::translate::Stash(&self.0, PhantomData)
     }
 
     fn to_glib_full(&self) -> *const ffi::GstAudioInfo {

@@ -1,6 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use std::ffi::CStr;
+use std::marker::PhantomData;
 use std::mem;
 
 use glib::translate::*;
@@ -91,10 +92,10 @@ impl Eq for VideoAlignment {}
 
 #[doc(hidden)]
 impl<'a> ToGlibPtr<'a, *const ffi::GstVideoAlignment> for VideoAlignment {
-    type Storage = &'a Self;
+    type Storage = PhantomData<&'a Self>;
 
     fn to_glib_none(&'a self) -> Stash<*const ffi::GstVideoAlignment, Self> {
-        Stash(&self.0, self)
+        Stash(&self.0, PhantomData)
     }
 }
 

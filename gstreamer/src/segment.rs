@@ -660,10 +660,10 @@ impl<T: FormattedValueIntrinsic> glib::translate::GlibPtrDefault for FormattedSe
 impl<'a, T: FormattedValueIntrinsic> glib::translate::ToGlibPtr<'a, *const ffi::GstSegment>
     for FormattedSegment<T>
 {
-    type Storage = &'a FormattedSegment<T>;
+    type Storage = PhantomData<&'a FormattedSegment<T>>;
 
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstSegment, Self> {
-        glib::translate::Stash(&self.0, self)
+        glib::translate::Stash(&self.0, PhantomData)
     }
 
     fn to_glib_full(&self) -> *const ffi::GstSegment {
@@ -675,11 +675,11 @@ impl<'a, T: FormattedValueIntrinsic> glib::translate::ToGlibPtr<'a, *const ffi::
 impl<'a, T: FormattedValueIntrinsic> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstSegment>
     for FormattedSegment<T>
 {
-    type Storage = &'a mut FormattedSegment<T>;
+    type Storage = PhantomData<&'a mut FormattedSegment<T>>;
 
     #[inline]
     fn to_glib_none_mut(&'a mut self) -> glib::translate::StashMut<'a, *mut ffi::GstSegment, Self> {
-        glib::translate::StashMut(&mut self.0, self)
+        glib::translate::StashMut(&mut self.0, PhantomData)
     }
 }
 

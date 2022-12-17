@@ -146,10 +146,10 @@ macro_rules! mini_object_wrapper (
         }
 
         impl<'a> $crate::glib::translate::ToGlibPtr<'a, *const $ffi_name> for $name {
-            type Storage = &'a Self;
+            type Storage = std::marker::PhantomData<&'a Self>;
 
             fn to_glib_none(&'a self) -> $crate::glib::translate::Stash<'a, *const $ffi_name, Self> {
-                $crate::glib::translate::Stash( self.as_ptr() , self)
+                $crate::glib::translate::Stash(self.as_ptr(), std::marker::PhantomData)
             }
 
             fn to_glib_full(&self) -> *const $ffi_name {
@@ -161,10 +161,10 @@ macro_rules! mini_object_wrapper (
         }
 
         impl<'a> $crate::glib::translate::ToGlibPtr<'a, *mut $ffi_name> for $name {
-            type Storage = &'a Self;
+            type Storage = std::marker::PhantomData<&'a Self>;
 
             fn to_glib_none(&'a self) -> $crate::glib::translate::Stash<'a, *mut $ffi_name, Self> {
-                $crate::glib::translate::Stash( self.as_mut_ptr() , self)
+                $crate::glib::translate::Stash(self.as_mut_ptr(), std::marker::PhantomData)
             }
 
             fn to_glib_full(&self) -> *mut $ffi_name {
@@ -176,11 +176,11 @@ macro_rules! mini_object_wrapper (
         }
 
         impl<'a> $crate::glib::translate::ToGlibPtrMut<'a, *mut $ffi_name> for $name {
-            type Storage = &'a mut Self;
+            type Storage = std::marker::PhantomData<&'a mut Self>;
 
             fn to_glib_none_mut(&'a mut self) -> $crate::glib::translate::StashMut<*mut $ffi_name, Self> {
                 self.make_mut();
-                $crate::glib::translate::StashMut( self.as_mut_ptr() , self)
+                $crate::glib::translate::StashMut(self.as_mut_ptr(), std::marker::PhantomData)
             }
         }
 

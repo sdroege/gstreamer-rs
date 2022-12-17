@@ -9,6 +9,7 @@ use crate::StructureRef;
 use glib::prelude::*;
 use glib::translate::*;
 
+use std::marker::PhantomData;
 use std::mem;
 use std::ops;
 use std::ops::Deref;
@@ -306,23 +307,23 @@ impl Eq for BufferPoolAcquireParams {}
 
 #[doc(hidden)]
 impl<'a> ToGlibPtr<'a, *const ffi::GstBufferPoolAcquireParams> for BufferPoolAcquireParams {
-    type Storage = &'a Self;
+    type Storage = PhantomData<&'a Self>;
 
     fn to_glib_none(
         &'a self,
     ) -> glib::translate::Stash<'a, *const ffi::GstBufferPoolAcquireParams, Self> {
-        glib::translate::Stash(&self.0, self)
+        glib::translate::Stash(&self.0, PhantomData)
     }
 }
 
 #[doc(hidden)]
 impl<'a> ToGlibPtrMut<'a, *mut ffi::GstBufferPoolAcquireParams> for BufferPoolAcquireParams {
-    type Storage = &'a mut Self;
+    type Storage = PhantomData<&'a mut Self>;
 
     fn to_glib_none_mut(
         &'a mut self,
     ) -> glib::translate::StashMut<'a, *mut ffi::GstBufferPoolAcquireParams, Self> {
-        glib::translate::StashMut(&mut self.0, self)
+        glib::translate::StashMut(&mut self.0, PhantomData)
     }
 }
 

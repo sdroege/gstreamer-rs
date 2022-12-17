@@ -570,10 +570,10 @@ impl<T> glib::translate::GlibPtrDefault for Iterator<T> {
 
 #[doc(hidden)]
 impl<'a, T: 'static> glib::translate::ToGlibPtr<'a, *const ffi::GstIterator> for Iterator<T> {
-    type Storage = &'a Iterator<T>;
+    type Storage = PhantomData<&'a Iterator<T>>;
 
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstIterator, Self> {
-        glib::translate::Stash(self.iter.as_ptr(), self)
+        glib::translate::Stash(self.iter.as_ptr(), PhantomData)
     }
 
     fn to_glib_full(&self) -> *const ffi::GstIterator {
@@ -583,13 +583,13 @@ impl<'a, T: 'static> glib::translate::ToGlibPtr<'a, *const ffi::GstIterator> for
 
 #[doc(hidden)]
 impl<'a, T: 'static> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstIterator> for Iterator<T> {
-    type Storage = &'a mut Iterator<T>;
+    type Storage = PhantomData<&'a mut Iterator<T>>;
 
     #[inline]
     fn to_glib_none_mut(
         &'a mut self,
     ) -> glib::translate::StashMut<'a, *mut ffi::GstIterator, Self> {
-        glib::translate::StashMut(self.iter.as_ptr(), self)
+        glib::translate::StashMut(self.iter.as_ptr(), PhantomData)
     }
 }
 

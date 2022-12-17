@@ -4,6 +4,7 @@ use glib::translate::*;
 use gst::prelude::*;
 
 use std::fmt;
+use std::marker::PhantomData;
 use std::mem;
 use std::ptr;
 use std::str;
@@ -921,10 +922,10 @@ impl glib::translate::GlibPtrDefault for VideoInfo {
 
 #[doc(hidden)]
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoInfo> for VideoInfo {
-    type Storage = &'a Self;
+    type Storage = PhantomData<&'a Self>;
 
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstVideoInfo, Self> {
-        glib::translate::Stash(&self.0, self)
+        glib::translate::Stash(&self.0, PhantomData)
     }
 
     fn to_glib_full(&self) -> *const ffi::GstVideoInfo {

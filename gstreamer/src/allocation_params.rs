@@ -1,5 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::marker::PhantomData;
 use std::mem;
 
 use glib::translate::*;
@@ -64,10 +65,10 @@ impl From<ffi::GstAllocationParams> for AllocationParams {
 
 #[doc(hidden)]
 impl<'a> ToGlibPtr<'a, *const ffi::GstAllocationParams> for AllocationParams {
-    type Storage = &'a Self;
+    type Storage = PhantomData<&'a Self>;
 
     fn to_glib_none(&'a self) -> Stash<'a, *const ffi::GstAllocationParams, Self> {
-        Stash(&self.0, self)
+        Stash(&self.0, PhantomData)
     }
 }
 

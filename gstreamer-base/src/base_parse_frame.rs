@@ -51,10 +51,10 @@ impl FromGlib<i32> for Overhead {
 
 #[doc(hidden)]
 impl<'a> ::glib::translate::ToGlibPtr<'a, *mut ffi::GstBaseParseFrame> for BaseParseFrame<'a> {
-    type Storage = &'a Self;
+    type Storage = PhantomData<&'a Self>;
 
     fn to_glib_none(&'a self) -> ::glib::translate::Stash<*mut ffi::GstBaseParseFrame, Self> {
-        Stash(self.0.as_ptr(), self)
+        Stash(self.0.as_ptr(), PhantomData)
     }
 
     fn to_glib_full(&self) -> *mut ffi::GstBaseParseFrame {

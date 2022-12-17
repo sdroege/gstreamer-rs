@@ -4,6 +4,7 @@ use crate::utils::HasStreamLock;
 use crate::VideoCodecFrameFlags;
 use glib::translate::*;
 use std::fmt;
+use std::marker::PhantomData;
 use std::mem;
 
 pub struct VideoCodecFrame<'a> {
@@ -15,10 +16,10 @@ pub struct VideoCodecFrame<'a> {
 
 #[doc(hidden)]
 impl<'a> ::glib::translate::ToGlibPtr<'a, *mut ffi::GstVideoCodecFrame> for VideoCodecFrame<'a> {
-    type Storage = &'a Self;
+    type Storage = PhantomData<&'a Self>;
 
     fn to_glib_none(&'a self) -> ::glib::translate::Stash<'a, *mut ffi::GstVideoCodecFrame, Self> {
-        Stash(self.frame, self)
+        Stash(self.frame, PhantomData)
     }
 
     fn to_glib_full(&self) -> *mut ffi::GstVideoCodecFrame {

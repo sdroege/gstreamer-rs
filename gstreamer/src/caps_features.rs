@@ -3,6 +3,7 @@
 use std::borrow::{Borrow, BorrowMut, ToOwned};
 use std::ffi::CStr;
 use std::fmt;
+use std::marker::PhantomData;
 use std::mem;
 use std::ops::{Deref, DerefMut};
 use std::ptr;
@@ -164,10 +165,10 @@ impl glib::types::StaticType for CapsFeatures {
 }
 
 impl<'a> ToGlibPtr<'a, *const ffi::GstCapsFeatures> for CapsFeatures {
-    type Storage = &'a Self;
+    type Storage = PhantomData<&'a Self>;
 
     fn to_glib_none(&'a self) -> Stash<'a, *const ffi::GstCapsFeatures, Self> {
-        unsafe { Stash(self.0.as_ref(), self) }
+        unsafe { Stash(self.0.as_ref(), PhantomData) }
     }
 
     fn to_glib_full(&self) -> *const ffi::GstCapsFeatures {
@@ -176,13 +177,13 @@ impl<'a> ToGlibPtr<'a, *const ffi::GstCapsFeatures> for CapsFeatures {
 }
 
 impl<'a> ToGlibPtr<'a, *mut ffi::GstCapsFeatures> for CapsFeatures {
-    type Storage = &'a Self;
+    type Storage = PhantomData<&'a Self>;
 
     fn to_glib_none(&'a self) -> Stash<'a, *mut ffi::GstCapsFeatures, Self> {
         unsafe {
             Stash(
                 self.0.as_ref() as *const ffi::GstCapsFeatures as *mut ffi::GstCapsFeatures,
-                self,
+                PhantomData,
             )
         }
     }
@@ -193,10 +194,10 @@ impl<'a> ToGlibPtr<'a, *mut ffi::GstCapsFeatures> for CapsFeatures {
 }
 
 impl<'a> ToGlibPtrMut<'a, *mut ffi::GstCapsFeatures> for CapsFeatures {
-    type Storage = &'a mut Self;
+    type Storage = PhantomData<&'a mut Self>;
 
     fn to_glib_none_mut(&'a mut self) -> StashMut<*mut ffi::GstCapsFeatures, Self> {
-        unsafe { StashMut(self.0.as_mut(), self) }
+        unsafe { StashMut(self.0.as_mut(), PhantomData) }
     }
 }
 

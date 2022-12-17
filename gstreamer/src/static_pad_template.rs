@@ -8,6 +8,7 @@ use glib::StaticType;
 use std::ffi::CStr;
 
 use std::fmt;
+use std::marker::PhantomData;
 use std::ptr;
 
 #[doc(alias = "GstStaticPadTemplate")]
@@ -132,12 +133,12 @@ impl glib::translate::GlibPtrDefault for StaticPadTemplate {
 
 #[doc(hidden)]
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticPadTemplate> for StaticPadTemplate {
-    type Storage = &'a StaticPadTemplate;
+    type Storage = PhantomData<&'a StaticPadTemplate>;
 
     fn to_glib_none(
         &'a self,
     ) -> glib::translate::Stash<'a, *const ffi::GstStaticPadTemplate, Self> {
-        glib::translate::Stash(self.0.as_ptr(), self)
+        glib::translate::Stash(self.0.as_ptr(), PhantomData)
     }
 
     fn to_glib_full(&self) -> *const ffi::GstStaticPadTemplate {

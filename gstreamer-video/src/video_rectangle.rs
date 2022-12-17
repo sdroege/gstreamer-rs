@@ -1,6 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::translate::IntoGlib;
+use std::marker::PhantomData;
 use std::mem;
 
 #[repr(C)]
@@ -58,11 +59,11 @@ impl glib::translate::Uninitialized for VideoRectangle {
 
 #[doc(hidden)]
 impl<'a> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstVideoRectangle> for VideoRectangle {
-    type Storage = &'a mut Self;
+    type Storage = PhantomData<&'a mut Self>;
 
     fn to_glib_none_mut(
         &'a mut self,
     ) -> glib::translate::StashMut<*mut ffi::GstVideoRectangle, Self> {
-        glib::translate::StashMut(self as *mut _ as *mut _, self)
+        glib::translate::StashMut(self as *mut _ as *mut _, PhantomData)
     }
 }
