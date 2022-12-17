@@ -187,35 +187,34 @@ macro_rules! mini_object_wrapper (
         impl<'a> $crate::glib::translate::ToGlibContainerFromSlice<'a, *mut *mut $ffi_name> for $name {
             #[allow(clippy::type_complexity)]
             type Storage = (
-                Vec<$crate::glib::translate::Stash<'a, *mut $ffi_name, Self>>,
+                std::marker::PhantomData<&'a [$name]>,
                 Option<Vec<*mut $ffi_name>>,
             );
 
             fn to_glib_none_from_slice(t: &'a [$name]) -> (*mut *mut $ffi_name, Self::Storage) {
                 skip_assert_initialized!();
-                let v: Vec<_> = t.iter().map(|s| $crate::glib::translate::ToGlibPtr::to_glib_none(s)).collect();
-                let mut v_ptr: Vec<_> = v.iter().map(|s| s.0).collect();
-                v_ptr.push(std::ptr::null_mut() as *mut $ffi_name);
+                let mut v_ptr = Vec::with_capacity(t.len() + 1);
+                v_ptr.extend(t.iter().map(|t| t.as_mut_ptr()));
+                v_ptr.push(std::ptr::null_mut());
 
-                (v_ptr.as_ptr() as *mut *mut $ffi_name, (v, Some(v_ptr)))
+                (v_ptr.as_ptr() as *mut *mut $ffi_name, (std::marker::PhantomData, Some(v_ptr)))
             }
 
             fn to_glib_container_from_slice(t: &'a [$name]) -> (*mut *mut $ffi_name, Self::Storage) {
                 skip_assert_initialized!();
-                let v: Vec<_> = t.iter().map(|s| $crate::glib::translate::ToGlibPtr::to_glib_none(s)).collect();
 
                 let v_ptr = unsafe {
                     let v_ptr = $crate::glib::ffi::g_malloc0(std::mem::size_of::<*mut $ffi_name>() * t.len() + 1)
                         as *mut *mut $ffi_name;
 
-                    for (i, s) in v.iter().enumerate() {
-                        std::ptr::write(v_ptr.add(i), s.0);
+                    for (i, t) in t.iter().enumerate() {
+                        std::ptr::write(v_ptr.add(i), t.as_mut_ptr());
                     }
 
                     v_ptr
                 };
 
-                (v_ptr, (v, None))
+                (v_ptr, (std::marker::PhantomData, None))
             }
 
             fn to_glib_full_from_slice(t: &[$name]) -> *mut *mut $ffi_name {
@@ -238,7 +237,7 @@ macro_rules! mini_object_wrapper (
         {
             #[allow(clippy::type_complexity)]
             type Storage = (
-                Vec<$crate::glib::translate::Stash<'a, *mut $ffi_name, $name>>,
+                std::marker::PhantomData<&'a [$name]>,
                 Option<Vec<*mut $ffi_name>>,
             );
 
