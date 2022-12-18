@@ -12,12 +12,14 @@ pub struct DeviceMonitorFilterId(NonZeroU32);
 impl IntoGlib for DeviceMonitorFilterId {
     type GlibType = libc::c_uint;
 
+    #[inline]
     fn into_glib(self) -> libc::c_uint {
         self.0.get()
     }
 }
 
 impl FromGlib<libc::c_uint> for DeviceMonitorFilterId {
+    #[inline]
     unsafe fn from_glib(val: libc::c_uint) -> DeviceMonitorFilterId {
         skip_assert_initialized!();
         assert_ne!(val, 0);

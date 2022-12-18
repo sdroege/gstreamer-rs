@@ -20,6 +20,7 @@ pub struct Seqnum(pub(crate) NonZeroU32);
 
 impl Seqnum {
     #[doc(alias = "gst_util_seqnum_next")]
+    #[inline]
     pub fn next() -> Self {
         unsafe {
             let v = ffi::gst_util_seqnum_next();
@@ -35,18 +36,21 @@ impl Seqnum {
 impl IntoGlib for Seqnum {
     type GlibType = u32;
 
+    #[inline]
     fn into_glib(self) -> u32 {
         self.0.get()
     }
 }
 
 impl cmp::PartialOrd for Seqnum {
+    #[inline]
     fn partial_cmp(&self, other: &Seqnum) -> Option<cmp::Ordering> {
         Some(self.cmp(other))
     }
 }
 
 impl cmp::Ord for Seqnum {
+    #[inline]
     fn cmp(&self, other: &Seqnum) -> cmp::Ordering {
         unsafe {
             let ret = ffi::gst_util_seqnum_compare(self.0.get(), other.0.get());
@@ -60,6 +64,7 @@ pub struct GroupId(pub(crate) NonZeroU32);
 
 impl GroupId {
     #[doc(alias = "gst_util_group_id_next")]
+    #[inline]
     pub fn next() -> Self {
         unsafe {
             let v = ffi::gst_util_group_id_next();
@@ -74,26 +79,31 @@ impl GroupId {
 
 impl EventType {
     #[doc(alias = "GST_EVENT_IS_UPSTREAM")]
+    #[inline]
     pub fn is_upstream(self) -> bool {
         (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_UPSTREAM != 0
     }
 
     #[doc(alias = "GST_EVENT_IS_DOWNSTREAM")]
+    #[inline]
     pub fn is_downstream(self) -> bool {
         (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_DOWNSTREAM != 0
     }
 
     #[doc(alias = "GST_EVENT_IS_SERIALIZED")]
+    #[inline]
     pub fn is_serialized(self) -> bool {
         (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_SERIALIZED != 0
     }
 
     #[doc(alias = "GST_EVENT_IS_STICKY")]
+    #[inline]
     pub fn is_sticky(self) -> bool {
         (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY != 0
     }
 
     #[doc(alias = "GST_EVENT_IS_STICKY_MULTI")]
+    #[inline]
     pub fn is_sticky_multi(self) -> bool {
         (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY_MULTI != 0
     }
@@ -165,6 +175,7 @@ impl EventRef {
 
     #[doc(alias = "get_structure")]
     #[doc(alias = "gst_event_get_structure")]
+    #[inline]
     pub fn structure(&self) -> Option<&StructureRef> {
         unsafe {
             let structure = ffi::gst_event_get_structure(self.as_mut_ptr());
@@ -177,6 +188,7 @@ impl EventRef {
     }
 
     #[doc(alias = "gst_event_writable_structure")]
+    #[inline]
     pub fn structure_mut(&mut self) -> &mut StructureRef {
         unsafe {
             StructureRef::from_glib_borrow_mut(ffi::gst_event_writable_structure(self.as_mut_ptr()))
@@ -184,37 +196,44 @@ impl EventRef {
     }
 
     #[doc(alias = "GST_EVENT_IS_UPSTREAM")]
+    #[inline]
     pub fn is_upstream(&self) -> bool {
         self.type_().is_upstream()
     }
 
     #[doc(alias = "GST_EVENT_IS_DOWNSTREAM")]
+    #[inline]
     pub fn is_downstream(&self) -> bool {
         self.type_().is_downstream()
     }
 
     #[doc(alias = "GST_EVENT_IS_SERIALIZED")]
+    #[inline]
     pub fn is_serialized(&self) -> bool {
         self.type_().is_serialized()
     }
 
     #[doc(alias = "GST_EVENT_IS_STICKY")]
+    #[inline]
     pub fn is_sticky(&self) -> bool {
         self.type_().is_sticky()
     }
 
     #[doc(alias = "GST_EVENT_IS_STICKY_MULTI")]
+    #[inline]
     pub fn is_sticky_multi(&self) -> bool {
         self.type_().is_sticky_multi()
     }
 
     #[doc(alias = "get_type")]
     #[doc(alias = "GST_EVENT_TYPE")]
+    #[inline]
     pub fn type_(&self) -> EventType {
         unsafe { from_glib((*self.as_ptr()).type_) }
     }
 
     #[doc(alias = "gst_event_has_name")]
+    #[inline]
     pub fn has_name(&self, name: &str) -> bool {
         self.structure().map_or(false, |s| s.has_name(name))
     }
@@ -334,6 +353,7 @@ macro_rules! declare_concrete_event {
         impl StickyEventType for $name {
             const TYPE: EventType = EventType::$name;
 
+            #[inline]
             unsafe fn from_event(event: Event) -> Self::Owned {
                 $name::<Event>(event)
             }
@@ -345,10 +365,12 @@ macro_rules! declare_concrete_event {
         pub struct $name<$param = EventRef>($param);
 
         impl $name {
+            #[inline]
             pub fn event(&self) -> &EventRef {
                 unsafe { &*(self as *const Self as *const EventRef) }
             }
 
+            #[inline]
             unsafe fn view(event: &EventRef) -> EventView<'_> {
                 let event = &*(event as *const EventRef as *const Self);
                 EventView::$name(event)
@@ -358,6 +380,7 @@ macro_rules! declare_concrete_event {
         impl Deref for $name {
             type Target = EventRef;
 
+            #[inline]
             fn deref(&self) -> &Self::Target {
                 self.event()
             }
@@ -366,12 +389,14 @@ macro_rules! declare_concrete_event {
         impl ToOwned for $name {
             type Owned = $name<Event>;
 
+            #[inline]
             fn to_owned(&self) -> Self::Owned {
                 $name::<Event>(self.copy())
             }
         }
 
         impl $name<Event> {
+            #[inline]
             pub fn get_mut(&mut self) -> Option<&mut $name> {
                 self.0
                     .get_mut()
@@ -382,18 +407,21 @@ macro_rules! declare_concrete_event {
         impl Deref for $name<Event> {
             type Target = $name;
 
+            #[inline]
             fn deref(&self) -> &Self::Target {
                 unsafe { &*(self.0.as_ptr() as *const Self::Target) }
             }
         }
 
         impl Borrow<$name> for $name<Event> {
+            #[inline]
             fn borrow(&self) -> &$name {
                 &*self
             }
         }
 
         impl From<$name<Event>> for Event {
+            #[inline]
             fn from(concrete: $name<Event>) -> Self {
                 skip_assert_initialized!();
                 concrete.0

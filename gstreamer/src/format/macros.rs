@@ -4,12 +4,14 @@ macro_rules! impl_trait_op_same(
     ($typ:ty, $op:ident, $op_name:ident, $op_assign:ident, $op_assign_name:ident) => {
         impl std::ops::$op for $typ {
             type Output = Self;
+            #[inline]
             fn $op_name(self, rhs: $typ) -> Self {
                 Self(self.0.$op_name(rhs.0))
             }
         }
 
         impl std::ops::$op_assign for $typ {
+            #[inline]
             fn $op_assign_name(&mut self, rhs: $typ) {
                 self.0.$op_assign_name(rhs.0)
             }
@@ -99,12 +101,14 @@ macro_rules! impl_trait_op_inner_type(
     ($typ:ty, $inner:ty, $op:ident, $op_name:ident, $op_assign:ident, $op_assign_name:ident) => {
         impl std::ops::$op<$inner> for $typ {
             type Output = Self;
+            #[inline]
             fn $op_name(self, rhs: $inner) -> Self {
                 Self(self.0.$op_name(rhs))
             }
         }
 
         impl std::ops::$op_assign<$inner> for $typ {
+            #[inline]
             fn $op_assign_name(&mut self, rhs: $inner) {
                 self.0.$op_assign_name(rhs)
             }
@@ -188,10 +192,12 @@ macro_rules! impl_unsigned_int_into_signed(
         impl crate::format::UnsignedIntoSigned for $typ {
             type Signed = crate::Signed<$typ>;
 
+            #[inline]
             fn into_positive(self) -> Self::Signed {
                 crate::Signed::Positive(self)
             }
 
+            #[inline]
             fn into_negative(self) -> Self::Signed {
                 crate::Signed::Negative(self)
             }
@@ -200,16 +206,19 @@ macro_rules! impl_unsigned_int_into_signed(
         impl crate::format::UnsignedIntoSigned for Option<$typ> {
             type Signed = Option<crate::Signed<$typ>>;
 
+            #[inline]
             fn into_positive(self) -> Self::Signed {
                 Some(self?.into_positive())
             }
 
+            #[inline]
             fn into_negative(self) -> Self::Signed {
                 Some(self?.into_negative())
             }
         }
 
         impl From<$typ> for crate::Signed<$typ> {
+            #[inline]
             fn from(v: $typ) -> crate::Signed<$typ> {
                 crate::Signed::Positive(v)
             }
@@ -222,6 +231,7 @@ macro_rules! impl_unsigned_int_into_signed(
         impl crate::Signed<$typ> {
             // rustdoc-stripper-ignore-next
             /// Returns a `Signed` containing the inner type of `self`.
+            #[inline]
             pub fn into_inner_signed(self) -> crate::Signed<$inner> {
                 use crate::Signed::*;
                 match self {
@@ -249,6 +259,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
             pub const MAX_SIGNED: crate::Signed::<$typ> = crate::Signed::Positive(Self::MAX);
             pub const MIN_SIGNED: crate::Signed::<$typ> = crate::Signed::Negative(Self::MAX);
 
+            #[inline]
             pub const fn is_zero(self) -> bool {
                 self.0 == Self::ZERO.0
             }
@@ -257,12 +268,14 @@ macro_rules! impl_common_ops_for_newtype_uint(
         impl std::ops::Deref for $typ {
             type Target = $inner;
 
+            #[inline]
             fn deref(&self) -> &$inner {
                 &self.0
             }
         }
 
         impl AsRef<$inner> for $typ {
+            #[inline]
             fn as_ref(&self) -> &$inner {
                 &self.0
             }
@@ -272,12 +285,14 @@ macro_rules! impl_common_ops_for_newtype_uint(
         impl_trait_op_same!($typ, Sub, sub, SubAssign, sub_assign);
         impl std::ops::Div for $typ {
             type Output = $inner;
+            #[inline]
             fn div(self, rhs: $typ) -> $inner {
                 self.0.div(rhs.0)
             }
         }
         impl std::ops::Rem for $typ {
             type Output = Self;
+            #[inline]
             fn rem(self, rhs: Self) -> Self {
                 Self(self.0.rem(rhs.0))
             }
@@ -288,6 +303,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
         impl_trait_op_inner_type!($typ, $inner, Mul, mul, MulAssign, mul_assign);
         impl std::ops::Mul<$typ> for $inner {
             type Output = $typ;
+            #[inline]
             fn mul(self, rhs: $typ) -> $typ {
                 rhs.mul(self)
             }
@@ -305,18 +321,21 @@ macro_rules! impl_common_ops_for_newtype_uint(
         impl muldiv::MulDiv<$inner> for $typ {
             type Output = Self;
 
+            #[inline]
             fn mul_div_floor(self, num: $inner, denom: $inner) -> Option<Self> {
                 self.0
                     .mul_div_floor(num, denom)
                     .map(Self)
             }
 
+            #[inline]
             fn mul_div_round(self, num: $inner, denom: $inner) -> Option<Self> {
                 self.0
                     .mul_div_round(num, denom)
                     .map(Self)
             }
 
+            #[inline]
             fn mul_div_ceil(self, num: $inner, denom: $inner) -> Option<Self> {
                 self.0
                     .mul_div_ceil(num, denom)
@@ -328,6 +347,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionCheckedAdd for $typ {
             type Output = Self;
+            #[inline]
             fn opt_checked_add(
                 self,
                 rhs: Self,
@@ -340,6 +360,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionSaturatingAdd for $typ {
             type Output = Self;
+            #[inline]
             fn opt_saturating_add(self, rhs: Self) -> Option<Self> {
                 Some(self.saturating_add(rhs))
             }
@@ -347,6 +368,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionOverflowingAdd for $typ {
             type Output = Self;
+            #[inline]
             fn opt_overflowing_add(self, rhs: Self) -> Option<(Self, bool)> {
                 let res = self.overflowing_add(rhs);
                 Some((res.0, res.1))
@@ -355,6 +377,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionWrappingAdd for $typ {
             type Output = Self;
+            #[inline]
             fn opt_wrapping_add(self, rhs: Self) -> Option<Self> {
                 Some(self.wrapping_add(rhs))
             }
@@ -362,6 +385,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionCheckedDiv<$inner> for $typ {
             type Output = Self;
+            #[inline]
             fn opt_checked_div(self, rhs: $inner) -> Result<Option<Self>, opt_ops::Error> {
                 if rhs == 0 {
                     return Err(opt_ops::Error::DivisionByZero);
@@ -375,6 +399,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionCheckedDiv for $typ {
             type Output = $inner;
+            #[inline]
             fn opt_checked_div(self, rhs: Self) -> Result<Option<$inner>, opt_ops::Error> {
                 if rhs.0 == 0 {
                     return Err(opt_ops::Error::DivisionByZero);
@@ -388,6 +413,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionCheckedMul<$inner> for $typ {
             type Output = Self;
+            #[inline]
             fn opt_checked_mul(
                 self,
                 rhs: $inner,
@@ -400,6 +426,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionCheckedMul<$typ> for $inner {
             type Output = $typ;
+            #[inline]
             fn opt_checked_mul(
                 self,
                 rhs: $typ,
@@ -412,6 +439,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionSaturatingMul<$inner> for $typ {
             type Output = Self;
+            #[inline]
             fn opt_saturating_mul(self, rhs: $inner) -> Option<Self> {
                 Some(self.saturating_mul(rhs))
             }
@@ -419,6 +447,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionSaturatingMul<$typ> for $inner {
             type Output = $typ;
+            #[inline]
             fn opt_saturating_mul(self, rhs: $typ) -> Option<$typ> {
                 Some(rhs.saturating_mul(self))
             }
@@ -426,6 +455,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionOverflowingMul<$inner> for $typ {
             type Output = Self;
+            #[inline]
             fn opt_overflowing_mul(self, rhs: $inner) -> Option<(Self, bool)> {
                 let res = self.overflowing_mul(rhs);
                 Some((res.0, res.1))
@@ -434,6 +464,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionOverflowingMul<$typ> for $inner {
             type Output = $typ;
+            #[inline]
             fn opt_overflowing_mul(self, rhs: $typ) -> Option<($typ, bool)> {
                 let res = rhs.overflowing_mul(self);
                 Some((res.0, res.1))
@@ -442,6 +473,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionWrappingMul<$inner> for $typ {
             type Output = Self;
+            #[inline]
             fn opt_wrapping_mul(self, rhs: $inner) -> Option<Self> {
                 Some(self.wrapping_mul(rhs))
             }
@@ -449,6 +481,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionWrappingMul<$typ> for $inner {
             type Output = $typ;
+            #[inline]
             fn opt_wrapping_mul(self, rhs: $typ) -> Option<$typ> {
                 Some(rhs.wrapping_mul(self))
             }
@@ -456,6 +489,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionCheckedRem<$inner> for $typ {
             type Output = Self;
+            #[inline]
             fn opt_checked_rem(self, rhs: $inner) -> Result<Option<Self>, opt_ops::Error> {
                 if rhs == 0 {
                     return Err(opt_ops::Error::DivisionByZero);
@@ -468,6 +502,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionCheckedRem for $typ {
             type Output = Self;
+            #[inline]
             fn opt_checked_rem(self, rhs: Self) -> Result<Option<Self>, opt_ops::Error> {
                 if rhs.0 == 0 {
                     return Err(opt_ops::Error::DivisionByZero);
@@ -480,6 +515,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionCheckedSub for $typ {
             type Output = Self;
+            #[inline]
             fn opt_checked_sub(
                 self,
                 rhs: Self,
@@ -492,6 +528,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionSaturatingSub for $typ {
             type Output = Self;
+            #[inline]
             fn opt_saturating_sub(self, rhs: Self) -> Option<Self> {
                 Some(self.saturating_sub(rhs))
             }
@@ -499,6 +536,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionOverflowingSub for $typ {
             type Output = Self;
+            #[inline]
             fn opt_overflowing_sub(self, rhs: Self) -> Option<(Self, bool)> {
                 let res = self.overflowing_sub(rhs);
                 Some((res.0, res.1))
@@ -507,6 +545,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
 
         impl opt_ops::OptionWrappingSub for $typ {
             type Output = Self;
+            #[inline]
             fn opt_wrapping_sub(self, rhs: Self) -> Option<Self> {
                 Some(self.wrapping_sub(rhs))
             }
@@ -537,6 +576,7 @@ macro_rules! impl_signed_ops(
             /// - `0` if the number is zero.
             /// - `1` if the value must be considered as positive.
             /// - `-1` if the value must be considered as negative.
+            #[inline]
             pub fn signum(self) -> i32 {
                 use crate::Signed::*;
                 match self {
@@ -549,6 +589,7 @@ macro_rules! impl_signed_ops(
             // rustdoc-stripper-ignore-next
             /// Returns the checked subtraction `self - other`.
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn checked_sub(self, other: Self) -> Option<Self> {
                 use crate::Signed::*;
                 match (self, other) {
@@ -564,6 +605,7 @@ macro_rules! impl_signed_ops(
             // rustdoc-stripper-ignore-next
             /// Returns the checked subtraction `self - other`.
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn checked_sub_unsigned(self, other: $typ) -> Option<Self> {
                 self.checked_sub(crate::Signed::Positive(other))
             }
@@ -571,6 +613,7 @@ macro_rules! impl_signed_ops(
             // rustdoc-stripper-ignore-next
             /// Returns the checked addition `self + other`.
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn checked_add(self, other: Self) -> Option<Self> {
                 use crate::Signed::*;
                 match (self, other) {
@@ -584,6 +627,7 @@ macro_rules! impl_signed_ops(
             // rustdoc-stripper-ignore-next
             /// Returns the checked addition `self + other`.
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn checked_add_unsigned(self, other: $typ) -> Option<Self> {
                 self.checked_add(crate::Signed::Positive(other))
             }
@@ -591,6 +635,7 @@ macro_rules! impl_signed_ops(
             // rustdoc-stripper-ignore-next
             /// Returns the saturating subtraction `self - other`.
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn saturating_sub(self, other: Self) -> Self {
                 use crate::Signed::*;
                 match (self, other) {
@@ -606,6 +651,7 @@ macro_rules! impl_signed_ops(
             // rustdoc-stripper-ignore-next
             /// Returns the saturating subtraction `self - other`.
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn saturating_sub_unsigned(self, other: $typ) -> Self {
                 self.saturating_sub(crate::Signed::Positive(other))
             }
@@ -613,6 +659,7 @@ macro_rules! impl_signed_ops(
             // rustdoc-stripper-ignore-next
             /// Returns the saturating addition `self + other`.
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn saturating_add(self, other: Self) -> Self {
                 use crate::Signed::*;
                 match (self, other) {
@@ -626,6 +673,7 @@ macro_rules! impl_signed_ops(
             // rustdoc-stripper-ignore-next
             /// Returns the saturating addition `self + other`.
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn saturating_add_unsigned(self, other: $typ) -> Self {
                 self.saturating_add(crate::Signed::Positive(other))
             }
@@ -633,12 +681,14 @@ macro_rules! impl_signed_ops(
 
         impl std::ops::Add for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn add(self, other: Self) -> Self {
                 self.checked_add(other).expect("Overflowing addition")
             }
         }
 
         impl std::ops::AddAssign for crate::Signed<$typ> {
+            #[inline]
             fn add_assign(&mut self, other: Self) {
                 *self = self.checked_add(other).expect("Overflowing addition")
             }
@@ -646,12 +696,14 @@ macro_rules! impl_signed_ops(
 
         impl std::ops::Sub for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn sub(self, other: Self) -> Self {
                 self.checked_sub(other).expect("Overflowing subtraction")
             }
         }
 
         impl std::ops::SubAssign for crate::Signed<$typ> {
+            #[inline]
             fn sub_assign(&mut self, other: Self) {
                 *self = self.checked_sub(other).expect("Overflowing subtraction")
             }
@@ -659,12 +711,14 @@ macro_rules! impl_signed_ops(
 
         impl std::ops::Add<$typ> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn add(self, other: $typ) -> Self {
                 self.checked_add(crate::Signed::Positive(other)).expect("Overflowing addition")
             }
         }
 
         impl std::ops::AddAssign<$typ> for crate::Signed<$typ> {
+            #[inline]
             fn add_assign(&mut self, other: $typ) {
                 *self = self.checked_add(crate::Signed::Positive(other)).expect("Overflowing addition")
             }
@@ -673,12 +727,14 @@ macro_rules! impl_signed_ops(
         impl std::ops::Sub<$typ> for crate::Signed<$typ> {
             type Output = Self;
 
+            #[inline]
             fn sub(self, other: $typ) -> Self {
                 self.checked_sub(crate::Signed::Positive(other)).expect("Overflowing subtraction")
             }
         }
 
         impl std::ops::SubAssign<$typ> for crate::Signed<$typ> {
+            #[inline]
             fn sub_assign(&mut self, other: $typ) {
                 *self = self.checked_sub(crate::Signed::Positive(other)).expect("Overflowing subtraction")
             }
@@ -686,6 +742,7 @@ macro_rules! impl_signed_ops(
 
         impl std::ops::Add<crate::Signed<$typ>> for $typ {
             type Output = crate::Signed<$typ>;
+            #[inline]
             fn add(self, other: crate::Signed<$typ>) -> crate::Signed<$typ> {
                 crate::Signed::Positive(self).checked_add(other).expect("Overflowing addition")
             }
@@ -693,42 +750,49 @@ macro_rules! impl_signed_ops(
 
         impl std::ops::Sub<crate::Signed<$typ>> for $typ {
             type Output = crate::Signed<$typ>;
+            #[inline]
             fn sub(self, other: crate::Signed<$typ>) -> crate::Signed<$typ> {
                 crate::Signed::Positive(self).checked_sub(other).expect("Overflowing subtraction")
             }
         }
 
         impl std::cmp::PartialOrd for crate::Signed<$typ> {
+            #[inline]
             fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
                 Some(self.cmp(other))
             }
         }
 
         impl std::cmp::PartialEq<$typ> for crate::Signed<$typ> {
+            #[inline]
             fn eq(&self, other: &$typ) -> bool {
                 self.eq(&crate::Signed::Positive(*other))
             }
         }
 
         impl std::cmp::PartialEq<crate::Signed<$typ>> for $typ {
+            #[inline]
             fn eq(&self, other: &crate::Signed<$typ>) -> bool {
                 crate::Signed::Positive(*self).eq(other)
             }
         }
 
         impl std::cmp::PartialOrd<$typ> for crate::Signed<$typ> {
+            #[inline]
             fn partial_cmp(&self, other: &$typ) -> Option<std::cmp::Ordering> {
                 Some(self.cmp(&crate::Signed::Positive(*other)))
             }
         }
 
         impl std::cmp::PartialOrd<crate::Signed<$typ>> for $typ {
+            #[inline]
             fn partial_cmp(&self, other: &crate::Signed<$typ>) -> Option<std::cmp::Ordering> {
                 Some(crate::Signed::Positive(*self).cmp(other))
             }
         }
 
         impl std::cmp::Ord for crate::Signed<$typ> {
+            #[inline]
             fn cmp(&self, other: &Self) -> std::cmp::Ordering {
                 use crate::Signed::*;
                 match (self, other) {
@@ -744,6 +808,7 @@ macro_rules! impl_signed_ops(
 
         impl opt_ops::OptionCheckedAdd for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_checked_add(
                 self,
                 rhs: Self,
@@ -756,6 +821,7 @@ macro_rules! impl_signed_ops(
 
         impl opt_ops::OptionSaturatingAdd for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_saturating_add(self, rhs: Self) -> Option<Self> {
                 Some(self.saturating_add(rhs))
             }
@@ -763,6 +829,7 @@ macro_rules! impl_signed_ops(
 
         impl opt_ops::OptionCheckedSub for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_checked_sub(
                 self,
                 rhs: Self,
@@ -775,6 +842,7 @@ macro_rules! impl_signed_ops(
 
         impl opt_ops::OptionSaturatingSub for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_saturating_sub(self, rhs: Self) -> Option<Self> {
                 Some(self.saturating_sub(rhs))
             }
@@ -782,6 +850,7 @@ macro_rules! impl_signed_ops(
 
         impl opt_ops::OptionCheckedAdd<$typ> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_checked_add(
                 self,
                 rhs: $typ,
@@ -792,6 +861,7 @@ macro_rules! impl_signed_ops(
 
         impl opt_ops::OptionSaturatingAdd<$typ> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_saturating_add(self, rhs: $typ) -> Option<Self> {
                 self.opt_saturating_add(crate::Signed::Positive(rhs))
             }
@@ -799,6 +869,7 @@ macro_rules! impl_signed_ops(
 
         impl opt_ops::OptionCheckedSub<$typ> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_checked_sub(
                 self,
                 rhs: $typ,
@@ -809,6 +880,7 @@ macro_rules! impl_signed_ops(
 
         impl opt_ops::OptionSaturatingSub<$typ> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_saturating_sub(self, rhs: $typ) -> Option<Self> {
                 self.opt_saturating_sub(crate::Signed::Positive(rhs))
             }
@@ -816,6 +888,7 @@ macro_rules! impl_signed_ops(
 
         impl opt_ops::OptionCheckedAdd<crate::Signed<$typ>> for $typ {
             type Output = crate::Signed<$typ>;
+            #[inline]
             fn opt_checked_add(
                 self,
                 rhs: crate::Signed<$typ>,
@@ -826,6 +899,7 @@ macro_rules! impl_signed_ops(
 
         impl opt_ops::OptionSaturatingAdd<crate::Signed<$typ>> for $typ {
             type Output = crate::Signed<$typ>;
+            #[inline]
             fn opt_saturating_add(
                 self,
                 rhs: crate::Signed<$typ>
@@ -836,6 +910,7 @@ macro_rules! impl_signed_ops(
 
         impl opt_ops::OptionCheckedSub<crate::Signed<$typ>> for $typ {
             type Output = crate::Signed<$typ>;
+            #[inline]
             fn opt_checked_sub(
                 self,
                 rhs: crate::Signed<$typ>,
@@ -846,6 +921,7 @@ macro_rules! impl_signed_ops(
 
         impl opt_ops::OptionSaturatingSub<crate::Signed<$typ>> for $typ {
             type Output = crate::Signed<$typ>;
+            #[inline]
             fn opt_saturating_sub(
                 self,
                 rhs: crate::Signed<$typ>
@@ -890,6 +966,7 @@ macro_rules! impl_signed_div_mul(
     ($typ:ty, $inner:ty, $signed_rhs:ty, $into_inner:expr) => {
         impl crate::Signed<$typ> {
             #[allow(dead_code)]
+            #[inline]
             fn signed_from_inner(val: $inner, sign: $signed_rhs) -> Option<crate::Signed<$typ>> {
                 skip_assert_initialized!();
                 if sign.is_positive() {
@@ -899,17 +976,20 @@ macro_rules! impl_signed_div_mul(
                 }
             }
 
+            #[inline]
             fn positive_from_inner(val: $inner) -> Option<Self> {
                 skip_assert_initialized!();
                 <$typ>::try_from(val).ok().map(crate::Signed::Positive)
             }
 
+            #[inline]
             fn negative_from_inner(val: $inner) -> Option<Self> {
                 skip_assert_initialized!();
                 <$typ>::try_from(val).ok().map(crate::Signed::Negative)
             }
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn checked_div(self, rhs:$signed_rhs) -> Option<Self> {
                 use crate::Signed::*;
                 match self {
@@ -931,6 +1011,7 @@ macro_rules! impl_signed_div_mul(
             }
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn checked_div_unsigned(self, rhs:$inner) -> Option<Self> {
                 use crate::Signed::*;
                 match self {
@@ -940,6 +1021,7 @@ macro_rules! impl_signed_div_mul(
             }
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn checked_rem(self, rhs:$signed_rhs) -> Option<Self> {
                 use crate::Signed::*;
                 match self {
@@ -961,6 +1043,7 @@ macro_rules! impl_signed_div_mul(
             }
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn checked_rem_unsigned(self, rhs:$inner) -> Option<Self> {
                 use crate::Signed::*;
                 match self {
@@ -970,6 +1053,7 @@ macro_rules! impl_signed_div_mul(
             }
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn checked_mul(self, rhs:$signed_rhs) -> Option<Self> {
                 use crate::Signed::*;
                 match self {
@@ -991,6 +1075,7 @@ macro_rules! impl_signed_div_mul(
             }
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn checked_mul_unsigned(self, rhs:$inner) -> Option<Self> {
                 use crate::Signed::*;
                 match self {
@@ -1000,6 +1085,7 @@ macro_rules! impl_signed_div_mul(
             }
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn saturating_mul(self, rhs:$signed_rhs) -> Self {
                 use crate::Signed::*;
                 match self {
@@ -1021,6 +1107,7 @@ macro_rules! impl_signed_div_mul(
             }
 
             #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
             pub fn saturating_mul_unsigned(self, rhs:$inner) -> Self {
                 use crate::Signed::*;
                 match self {
@@ -1032,12 +1119,14 @@ macro_rules! impl_signed_div_mul(
 
         impl std::ops::Div<$signed_rhs> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn div(self, rhs: $signed_rhs) -> Self {
                 self.checked_div(rhs).expect("division overflowed")
             }
         }
 
         impl std::ops::DivAssign<$signed_rhs> for crate::Signed<$typ> {
+            #[inline]
             fn div_assign(&mut self, rhs: $signed_rhs) {
                 *self = std::ops::Div::div(*self, rhs);
             }
@@ -1045,12 +1134,14 @@ macro_rules! impl_signed_div_mul(
 
         impl std::ops::Div<$inner> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn div(self, rhs: $inner) -> Self {
                 self.checked_div_unsigned(rhs).expect("division overflowed")
             }
         }
 
         impl std::ops::DivAssign<$inner> for crate::Signed<$typ> {
+            #[inline]
             fn div_assign(&mut self, rhs: $inner) {
                 *self = std::ops::Div::div(*self, rhs);
             }
@@ -1058,12 +1149,14 @@ macro_rules! impl_signed_div_mul(
 
         impl std::ops::Rem<$signed_rhs> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn rem(self, rhs: $signed_rhs) -> Self {
                 self.checked_rem(rhs).expect("division overflowed")
             }
         }
 
         impl std::ops::RemAssign<$signed_rhs> for crate::Signed<$typ> {
+            #[inline]
             fn rem_assign(&mut self, rhs: $signed_rhs) {
                 *self = std::ops::Rem::rem(*self, rhs);
             }
@@ -1071,12 +1164,14 @@ macro_rules! impl_signed_div_mul(
 
         impl std::ops::Rem<$inner> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn rem(self, rhs: $inner) -> Self {
                 self.checked_rem_unsigned(rhs).expect("division overflowed")
             }
         }
 
         impl std::ops::RemAssign<$inner> for crate::Signed<$typ> {
+            #[inline]
             fn rem_assign(&mut self, rhs: $inner) {
                 *self = std::ops::Rem::rem(*self, rhs);
             }
@@ -1084,12 +1179,14 @@ macro_rules! impl_signed_div_mul(
 
         impl std::ops::Mul<$signed_rhs> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn mul(self, rhs: $signed_rhs) -> Self {
                 self.checked_mul(rhs).expect("multiplication overflowed")
             }
         }
 
         impl std::ops::MulAssign<$signed_rhs> for crate::Signed<$typ> {
+            #[inline]
             fn mul_assign(&mut self, rhs: $signed_rhs) {
                 *self = std::ops::Mul::mul(*self, rhs);
             }
@@ -1097,12 +1194,14 @@ macro_rules! impl_signed_div_mul(
 
         impl std::ops::Mul<$inner> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn mul(self, rhs: $inner) -> Self {
                 self.checked_mul_unsigned(rhs).expect("multiplication overflowed")
             }
         }
 
         impl std::ops::MulAssign<$inner> for crate::Signed<$typ> {
+            #[inline]
             fn mul_assign(&mut self, rhs: $inner) {
                 *self = std::ops::Mul::mul(*self, rhs);
             }
@@ -1110,6 +1209,7 @@ macro_rules! impl_signed_div_mul(
 
         impl opt_ops::OptionCheckedDiv<$signed_rhs> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_checked_div(self, rhs: $signed_rhs) -> Result<Option<Self>, opt_ops::Error> {
                 if rhs == 0 {
                     return Err(opt_ops::Error::DivisionByZero);
@@ -1122,6 +1222,7 @@ macro_rules! impl_signed_div_mul(
 
         impl opt_ops::OptionCheckedMul<$signed_rhs> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_checked_mul(self, rhs: $signed_rhs) -> Result<Option<Self>, opt_ops::Error> {
                 self.checked_mul(rhs)
                     .ok_or(opt_ops::Error::Overflow)
@@ -1131,6 +1232,7 @@ macro_rules! impl_signed_div_mul(
 
         impl opt_ops::OptionSaturatingMul<$signed_rhs> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_saturating_mul(self, rhs: $signed_rhs) -> Option<Self> {
                 Some(self.saturating_mul(rhs))
             }
@@ -1138,6 +1240,7 @@ macro_rules! impl_signed_div_mul(
 
         impl opt_ops::OptionCheckedRem<$signed_rhs> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_checked_rem(self, rhs: $signed_rhs) -> Result<Option<Self>, opt_ops::Error> {
                 if rhs == 0 {
                     return Err(opt_ops::Error::DivisionByZero);
@@ -1150,6 +1253,7 @@ macro_rules! impl_signed_div_mul(
 
         impl opt_ops::OptionCheckedDiv<$inner> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_checked_div(self, rhs: $inner) -> Result<Option<Self>, opt_ops::Error> {
                 if rhs == 0 {
                     return Err(opt_ops::Error::DivisionByZero);
@@ -1162,6 +1266,7 @@ macro_rules! impl_signed_div_mul(
 
         impl opt_ops::OptionCheckedMul<$inner> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_checked_mul(self, rhs: $inner) -> Result<Option<Self>, opt_ops::Error> {
                 self.checked_mul_unsigned(rhs)
                     .ok_or(opt_ops::Error::Overflow)
@@ -1171,6 +1276,7 @@ macro_rules! impl_signed_div_mul(
 
         impl opt_ops::OptionSaturatingMul<$inner> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_saturating_mul(self, rhs: $inner) -> Option<Self> {
                 Some(self.saturating_mul_unsigned(rhs))
             }
@@ -1178,6 +1284,7 @@ macro_rules! impl_signed_div_mul(
 
         impl opt_ops::OptionCheckedRem<$inner> for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_checked_rem(self, rhs: $inner) -> Result<Option<Self>, opt_ops::Error> {
                 if rhs == 0 {
                     return Err(opt_ops::Error::DivisionByZero);
@@ -1194,6 +1301,7 @@ macro_rules! impl_signed_extra_div_mul(
     ($typ:ty, $signed:ty) => {
         impl std::ops::Div for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn div(self, rhs: Self) -> Self {
                 match rhs {
                     crate::Signed::Positive(rhs) => self.div(rhs),
@@ -1204,6 +1312,7 @@ macro_rules! impl_signed_extra_div_mul(
 
         impl std::ops::Rem for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn rem(self, rhs: Self) -> Self {
                 self.rem(rhs.abs())
             }
@@ -1211,6 +1320,7 @@ macro_rules! impl_signed_extra_div_mul(
 
         impl opt_ops::OptionCheckedDiv for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_checked_div(self, rhs: Self) -> Result<Option<Self>, opt_ops::Error> {
                 match rhs {
                     crate::Signed::Positive(rhs) => self.opt_checked_div(rhs),
@@ -1224,6 +1334,7 @@ macro_rules! impl_signed_extra_div_mul(
 
         impl opt_ops::OptionCheckedRem for crate::Signed<$typ> {
             type Output = Self;
+            #[inline]
             fn opt_checked_rem(self, rhs: Self) -> Result<Option<Self>, opt_ops::Error> {
                 self.opt_checked_rem(rhs.abs())
             }
@@ -1232,6 +1343,7 @@ macro_rules! impl_signed_extra_div_mul(
     ($newtyp:ty, $inner:ty, $signed_inner:ty) => {
         impl std::ops::Div for crate::Signed<$newtyp> {
             type Output = crate::Signed<$inner>;
+            #[inline]
             fn div(self, rhs: Self) -> Self::Output {
                 self.into_inner_signed().div(rhs.into_inner_signed())
             }
@@ -1239,6 +1351,7 @@ macro_rules! impl_signed_extra_div_mul(
 
         impl std::ops::Rem for crate::Signed<$newtyp> {
             type Output = Self;
+            #[inline]
             fn rem(self, rhs: Self) -> Self {
                 self.rem(rhs.abs().0)
             }
@@ -1246,6 +1359,7 @@ macro_rules! impl_signed_extra_div_mul(
 
         impl std::ops::Mul<crate::Signed<$newtyp>> for $inner {
             type Output = crate::Signed<$newtyp>;
+            #[inline]
             fn mul(self, rhs: crate::Signed<$newtyp>) -> Self::Output {
                 rhs.mul(self)
             }
@@ -1253,6 +1367,7 @@ macro_rules! impl_signed_extra_div_mul(
 
         impl std::ops::Mul<crate::Signed<$newtyp>> for $signed_inner {
             type Output = crate::Signed<$newtyp>;
+            #[inline]
             fn mul(self, rhs: crate::Signed<$newtyp>) -> Self::Output {
                 rhs.mul(self)
             }
@@ -1260,6 +1375,7 @@ macro_rules! impl_signed_extra_div_mul(
 
         impl opt_ops::OptionCheckedDiv for crate::Signed<$newtyp> {
             type Output = crate::Signed<$inner>;
+            #[inline]
             fn opt_checked_div(self, rhs: Self) -> Result<Option<Self::Output>, opt_ops::Error> {
                 self.into_inner_signed().opt_checked_div(rhs.into_inner_signed())
             }
@@ -1267,6 +1383,7 @@ macro_rules! impl_signed_extra_div_mul(
 
         impl opt_ops::OptionCheckedRem for crate::Signed<$newtyp> {
             type Output = crate::Signed<$inner>;
+            #[inline]
             fn opt_checked_rem(self, rhs: Self) -> Result<Option<Self::Output>, opt_ops::Error> {
                 self.into_inner_signed().opt_checked_rem(rhs.abs().0)
             }
@@ -1274,6 +1391,7 @@ macro_rules! impl_signed_extra_div_mul(
 
         impl opt_ops::OptionCheckedMul<crate::Signed<$newtyp>> for $signed_inner {
             type Output = crate::Signed<$newtyp>;
+            #[inline]
             fn opt_checked_mul(self, rhs: crate::Signed<$newtyp>) -> Result<Option<Self::Output>, opt_ops::Error> {
                 rhs.opt_checked_mul(self)
             }
@@ -1281,6 +1399,7 @@ macro_rules! impl_signed_extra_div_mul(
 
         impl opt_ops::OptionSaturatingMul<crate::Signed<$newtyp>> for $signed_inner {
             type Output = crate::Signed<$newtyp>;
+            #[inline]
             fn opt_saturating_mul(self, rhs: crate::Signed<$newtyp>) -> Option<Self::Output> {
                 rhs.opt_saturating_mul(self)
             }
@@ -1288,6 +1407,7 @@ macro_rules! impl_signed_extra_div_mul(
 
         impl opt_ops::OptionCheckedMul<crate::Signed<$newtyp>> for $inner {
             type Output = crate::Signed<$newtyp>;
+            #[inline]
             fn opt_checked_mul(self, rhs: crate::Signed<$newtyp>) -> Result<Option<Self::Output>, opt_ops::Error> {
                 rhs.opt_checked_mul(self)
             }
@@ -1295,6 +1415,7 @@ macro_rules! impl_signed_extra_div_mul(
 
         impl opt_ops::OptionSaturatingMul<crate::Signed<$newtyp>> for $inner {
             type Output = crate::Signed<$newtyp>;
+            #[inline]
             fn opt_saturating_mul(self, rhs: crate::Signed<$newtyp>) -> Option<Self::Output> {
                 rhs.opt_saturating_mul(self)
             }
@@ -1307,6 +1428,7 @@ macro_rules! impl_signed_div_mul_trait(
         impl muldiv::MulDiv<$signed_rhs> for crate::Signed<$typ> {
             type Output = Self;
 
+            #[inline]
             fn mul_div_floor(self, num: $signed_rhs, denom: $signed_rhs) -> Option<Self> {
                 use crate::Signed::*;
                 match self {
@@ -1323,6 +1445,7 @@ macro_rules! impl_signed_div_mul_trait(
                 }
             }
 
+            #[inline]
             fn mul_div_round(self, num: $signed_rhs, denom: $signed_rhs) -> Option<Self> {
                 use crate::Signed::*;
                 match self {
@@ -1339,6 +1462,7 @@ macro_rules! impl_signed_div_mul_trait(
                 }
             }
 
+            #[inline]
             fn mul_div_ceil(self, num: $signed_rhs, denom: $signed_rhs) -> Option<Self> {
                 use crate::Signed::*;
                 match self {
@@ -1359,6 +1483,7 @@ macro_rules! impl_signed_div_mul_trait(
         impl muldiv::MulDiv<$inner> for crate::Signed<$typ> {
             type Output = Self;
 
+            #[inline]
             fn mul_div_floor(self, num: $inner, denom: $inner) -> Option<Self> {
                 use crate::Signed::*;
                 match self {
@@ -1375,6 +1500,7 @@ macro_rules! impl_signed_div_mul_trait(
                 }
             }
 
+            #[inline]
             fn mul_div_round(self, num: $inner, denom: $inner) -> Option<Self> {
                 use crate::Signed::*;
                 match self {
@@ -1391,6 +1517,7 @@ macro_rules! impl_signed_div_mul_trait(
                 }
             }
 
+            #[inline]
             fn mul_div_ceil(self, num: $inner, denom: $inner) -> Option<Self> {
                 use crate::Signed::*;
                 match self {
@@ -1415,24 +1542,29 @@ macro_rules! impl_format_value_traits(
         impl FormattedValue for Option<$typ> {
             type FullRange = Self;
 
+            #[inline]
             fn default_format() -> Format {
                 Format::$format
             }
 
+            #[inline]
             fn format(&self) -> Format {
                 Format::$format
             }
 
+            #[inline]
             fn is_some(&self) -> bool {
                 Option::is_some(self)
             }
 
+            #[inline]
             unsafe fn into_raw_value(self) -> i64 {
                 IntoGlib::into_glib(self) as i64
             }
         }
 
         impl FormattedValueFullRange for Option<$typ> {
+            #[inline]
             unsafe fn from_raw(format: Format, value: i64) -> Self {
                 debug_assert_eq!(format, Format::$format);
                 FromGlib::from_glib(value as u64)
@@ -1440,12 +1572,14 @@ macro_rules! impl_format_value_traits(
         }
 
         impl FormattedValueNoneBuilder for Option<$typ> {
+            #[inline]
             fn none() -> Option<$typ> {
                 None
             }
         }
 
         impl From<Option<$typ>> for GenericFormattedValue {
+            #[inline]
             fn from(v: Option<$typ>) -> Self {
                 skip_assert_initialized!();
                 Self::$format_value(v)
@@ -1453,6 +1587,7 @@ macro_rules! impl_format_value_traits(
         }
 
         impl From<$typ> for GenericFormattedValue {
+            #[inline]
             fn from(v: $typ) -> Self {
                 skip_assert_initialized!();
                 Self::$format_value(Some(v))
@@ -1462,18 +1597,22 @@ macro_rules! impl_format_value_traits(
         impl FormattedValue for $typ {
             type FullRange = Option<$typ>;
 
+            #[inline]
             fn default_format() -> Format {
                 Format::$format
             }
 
+            #[inline]
             fn format(&self) -> Format {
                 Format::$format
             }
 
+            #[inline]
             fn is_some(&self) -> bool {
                 true
             }
 
+            #[inline]
             unsafe fn into_raw_value(self) -> i64 {
                 IntoGlib::into_glib(self) as i64
             }
@@ -1487,6 +1626,7 @@ macro_rules! impl_format_value_traits(
 
         impl TryFrom<GenericFormattedValue> for Option<$typ> {
             type Error = FormattedValueError;
+            #[inline]
             fn try_from(v: GenericFormattedValue) -> Result<Self, Self::Error> {
                 skip_assert_initialized!();
                 if let GenericFormattedValue::$format_value(v) = v {
@@ -1499,6 +1639,7 @@ macro_rules! impl_format_value_traits(
 
         impl TryFrom<$inner> for $typ {
             type Error = GlibNoneError;
+            #[inline]
             fn try_from(v: $inner) -> Result<Self, GlibNoneError> {
                 skip_assert_initialized!();
                 unsafe { Self::try_from_glib(v as i64) }
@@ -1521,6 +1662,7 @@ macro_rules! option_glib_newtype_from_to {
         #[doc(hidden)]
         impl IntoGlib for $typ {
             type GlibType = u64;
+            #[inline]
             fn into_glib(self) -> u64 {
                 assert_ne!(
                     self.0, $none_value,
@@ -1663,6 +1805,7 @@ macro_rules! impl_signed_int_into_signed(
         impl TryFrom<crate::Signed<$typ>> for $signed {
             type Error = std::num::TryFromIntError;
 
+            #[inline]
             fn try_from(value: crate::Signed<$typ>) -> Result<$signed, Self::Error> {
                 assert_eq!(::std::mem::size_of::<$inner>(), ::std::mem::size_of::<$signed>());
 
@@ -1682,6 +1825,7 @@ macro_rules! impl_signed_int_into_signed(
         }
 
         impl From<$signed> for crate::Signed<$typ> {
+            #[inline]
             fn from(value: $signed) -> crate::Signed<$typ> {
                 let abs = value.unsigned_abs();
                 if value.signum() >= 0 {

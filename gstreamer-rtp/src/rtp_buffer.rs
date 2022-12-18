@@ -24,6 +24,7 @@ impl<'a, T> fmt::Debug for RTPBuffer<'a, T> {
 }
 
 impl<'a> RTPBuffer<'a, Readable> {
+    #[inline]
     pub fn from_buffer_readable(
         buffer: &'a gst::BufferRef,
     ) -> Result<RTPBuffer<Readable>, glib::BoolError> {
@@ -47,6 +48,7 @@ impl<'a> RTPBuffer<'a, Readable> {
         }
     }
 
+    #[inline]
     pub unsafe fn from_glib_borrow<'b>(
         rtp_buffer: *mut ffi::GstRTPBuffer,
     ) -> glib::translate::Borrowed<RTPBuffer<'b, Readable>> {
@@ -58,6 +60,7 @@ impl<'a> RTPBuffer<'a, Readable> {
 }
 
 impl<'a> RTPBuffer<'a, Writable> {
+    #[inline]
     pub fn from_buffer_writable(
         buffer: &'a mut gst::BufferRef,
     ) -> Result<RTPBuffer<Writable>, glib::BoolError> {
@@ -311,6 +314,7 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
+    #[inline]
     pub fn buffer(&self) -> &gst::BufferRef {
         unsafe {
             let ptr = self.rtp_buffer.buffer;
@@ -412,16 +416,19 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
+    #[inline]
     pub fn as_ptr(&self) -> *const ffi::GstRTPBuffer {
         &self.rtp_buffer as *const ffi::GstRTPBuffer
     }
 
+    #[inline]
     pub fn as_mut_ptr(&self) -> *mut ffi::GstRTPBuffer {
         &self.rtp_buffer as *const ffi::GstRTPBuffer as *mut ffi::GstRTPBuffer
     }
 }
 
 impl<'a, T> Drop for RTPBuffer<'a, T> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             ffi::gst_rtp_buffer_unmap(&mut self.rtp_buffer);

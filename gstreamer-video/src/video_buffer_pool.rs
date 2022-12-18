@@ -34,22 +34,27 @@ pub struct VideoAlignment(pub(crate) ffi::GstVideoAlignment);
 
 impl VideoAlignment {
     #[doc(alias = "get_padding_top")]
+    #[inline]
     pub fn padding_top(&self) -> u32 {
         self.0.padding_top
     }
     #[doc(alias = "get_padding_bottom")]
+    #[inline]
     pub fn padding_bottom(&self) -> u32 {
         self.0.padding_bottom
     }
     #[doc(alias = "get_padding_left")]
+    #[inline]
     pub fn padding_left(&self) -> u32 {
         self.0.padding_left
     }
     #[doc(alias = "get_padding_right")]
+    #[inline]
     pub fn padding_right(&self) -> u32 {
         self.0.padding_right
     }
     #[doc(alias = "get_stride_align")]
+    #[inline]
     pub fn stride_align(&self) -> &[u32; ffi::GST_VIDEO_MAX_PLANES as usize] {
         &self.0.stride_align
     }
@@ -76,6 +81,7 @@ impl VideoAlignment {
 }
 
 impl PartialEq for VideoAlignment {
+    #[inline]
     fn eq(&self, other: &Self) -> bool {
         self.padding_top() == other.padding_top()
             && self.padding_bottom() == other.padding_bottom()
@@ -91,6 +97,7 @@ impl Eq for VideoAlignment {}
 impl<'a> ToGlibPtr<'a, *const ffi::GstVideoAlignment> for VideoAlignment {
     type Storage = PhantomData<&'a Self>;
 
+    #[inline]
     fn to_glib_none(&'a self) -> Stash<*const ffi::GstVideoAlignment, Self> {
         Stash(&self.0, PhantomData)
     }

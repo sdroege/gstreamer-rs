@@ -60,6 +60,7 @@ bitflags! {
 impl IntoGlib for ElementFactoryType {
     type GlibType = ffi::GstElementFactoryListType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstElementFactoryListType {
         self.bits()
     }
@@ -67,6 +68,7 @@ impl IntoGlib for ElementFactoryType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstElementFactoryListType> for ElementFactoryType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstElementFactoryListType) -> ElementFactoryType {
         skip_assert_initialized!();
         ElementFactoryType::from_bits_truncate(value)

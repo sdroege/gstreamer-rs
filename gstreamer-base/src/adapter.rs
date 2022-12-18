@@ -423,6 +423,7 @@ impl UniqueAdapter {
 pub struct UniqueAdapterMap<'a>(&'a UniqueAdapter, &'a [u8]);
 
 impl<'a> Drop for UniqueAdapterMap<'a> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             ffi::gst_adapter_unmap((self.0).0.to_glib_none().0);
@@ -433,24 +434,28 @@ impl<'a> Drop for UniqueAdapterMap<'a> {
 impl<'a> ops::Deref for UniqueAdapterMap<'a> {
     type Target = [u8];
 
+    #[inline]
     fn deref(&self) -> &[u8] {
         self.1
     }
 }
 
 impl<'a> AsRef<[u8]> for UniqueAdapterMap<'a> {
+    #[inline]
     fn as_ref(&self) -> &[u8] {
         self.1
     }
 }
 
 impl Default for UniqueAdapter {
+    #[inline]
     fn default() -> Self {
         Self::new()
     }
 }
 
 impl io::Read for UniqueAdapter {
+    #[inline]
     fn read(&mut self, buf: &mut [u8]) -> Result<usize, io::Error> {
         self.0.read(buf)
     }

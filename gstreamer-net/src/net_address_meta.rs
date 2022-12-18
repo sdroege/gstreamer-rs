@@ -29,10 +29,12 @@ impl NetAddressMeta {
     }
 
     #[doc(alias = "get_addr")]
+    #[inline]
     pub fn addr(&self) -> gio::SocketAddress {
         unsafe { from_glib_none(self.0.addr) }
     }
 
+    #[inline]
     pub fn set_addr(&mut self, addr: impl IsA<gio::SocketAddress>) {
         #![allow(clippy::cast_ptr_alignment)]
         unsafe {
@@ -46,6 +48,7 @@ unsafe impl MetaAPI for NetAddressMeta {
     type GstType = ffi::GstNetAddressMeta;
 
     #[doc(alias = "gst_net_address_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_net_address_meta_api_get_type()) }
     }

@@ -16,21 +16,25 @@ unsafe impl Sync for AllocationParams {}
 
 impl AllocationParams {
     #[doc(alias = "get_flags")]
+    #[inline]
     pub fn flags(&self) -> MemoryFlags {
         unsafe { from_glib(self.0.flags) }
     }
 
     #[doc(alias = "get_align")]
+    #[inline]
     pub fn align(&self) -> usize {
         self.0.align
     }
 
     #[doc(alias = "get_prefix")]
+    #[inline]
     pub fn prefix(&self) -> usize {
         self.0.prefix
     }
 
     #[doc(alias = "get_padding")]
+    #[inline]
     pub fn padding(&self) -> usize {
         self.0.padding
     }
@@ -50,12 +54,14 @@ impl AllocationParams {
         params.into()
     }
 
+    #[inline]
     pub fn as_ptr(&self) -> *const ffi::GstAllocationParams {
         &self.0
     }
 }
 
 impl From<ffi::GstAllocationParams> for AllocationParams {
+    #[inline]
     fn from(params: ffi::GstAllocationParams) -> Self {
         skip_assert_initialized!();
         AllocationParams(params)
@@ -66,6 +72,7 @@ impl From<ffi::GstAllocationParams> for AllocationParams {
 impl<'a> ToGlibPtr<'a, *const ffi::GstAllocationParams> for AllocationParams {
     type Storage = PhantomData<&'a Self>;
 
+    #[inline]
     fn to_glib_none(&'a self) -> Stash<'a, *const ffi::GstAllocationParams, Self> {
         Stash(&self.0, PhantomData)
     }
@@ -73,6 +80,7 @@ impl<'a> ToGlibPtr<'a, *const ffi::GstAllocationParams> for AllocationParams {
 
 impl FromGlib<ffi::GstAllocationParams> for AllocationParams {
     #[allow(unused_unsafe)]
+    #[inline]
     unsafe fn from_glib(value: ffi::GstAllocationParams) -> Self {
         assert_initialized_main_thread!();
         Self::from(value)

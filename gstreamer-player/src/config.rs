@@ -10,24 +10,28 @@ pub struct PlayerConfig(gst::Structure);
 impl ops::Deref for PlayerConfig {
     type Target = gst::StructureRef;
 
+    #[inline]
     fn deref(&self) -> &gst::StructureRef {
         self.0.deref()
     }
 }
 
 impl ops::DerefMut for PlayerConfig {
+    #[inline]
     fn deref_mut(&mut self) -> &mut gst::StructureRef {
         self.0.deref_mut()
     }
 }
 
 impl AsRef<gst::StructureRef> for PlayerConfig {
+    #[inline]
     fn as_ref(&self) -> &gst::StructureRef {
         self.0.as_ref()
     }
 }
 
 impl AsMut<gst::StructureRef> for PlayerConfig {
+    #[inline]
     fn as_mut(&mut self) -> &mut gst::StructureRef {
         self.0.as_mut()
     }
@@ -93,6 +97,7 @@ impl PlayerConfig {
 }
 
 impl IntoGlibPtr<*mut gst::ffi::GstStructure> for PlayerConfig {
+    #[inline]
     unsafe fn into_glib_ptr(self) -> *mut gst::ffi::GstStructure {
         let mut s = mem::ManuallyDrop::new(self);
         s.0.to_glib_none_mut().0
@@ -100,6 +105,7 @@ impl IntoGlibPtr<*mut gst::ffi::GstStructure> for PlayerConfig {
 }
 
 impl FromGlibPtrFull<*mut gst::ffi::GstStructure> for PlayerConfig {
+    #[inline]
     unsafe fn from_glib_full(ptr: *mut gst::ffi::GstStructure) -> Self {
         PlayerConfig(from_glib_full(ptr))
     }

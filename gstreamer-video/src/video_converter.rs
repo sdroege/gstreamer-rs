@@ -9,6 +9,7 @@ use glib::translate::*;
 pub struct VideoConverter(ptr::NonNull<ffi::GstVideoConverter>);
 
 impl Drop for VideoConverter {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             ffi::gst_video_converter_free(self.0.as_ptr());
@@ -115,24 +116,28 @@ pub struct VideoConverterConfig(gst::Structure);
 impl ops::Deref for VideoConverterConfig {
     type Target = gst::StructureRef;
 
+    #[inline]
     fn deref(&self) -> &gst::StructureRef {
         self.0.deref()
     }
 }
 
 impl ops::DerefMut for VideoConverterConfig {
+    #[inline]
     fn deref_mut(&mut self) -> &mut gst::StructureRef {
         self.0.deref_mut()
     }
 }
 
 impl AsRef<gst::StructureRef> for VideoConverterConfig {
+    #[inline]
     fn as_ref(&self) -> &gst::StructureRef {
         self.0.as_ref()
     }
 }
 
 impl AsMut<gst::StructureRef> for VideoConverterConfig {
+    #[inline]
     fn as_mut(&mut self) -> &mut gst::StructureRef {
         self.0.as_mut()
     }

@@ -109,12 +109,14 @@ pub struct SingleShotClockId(ClockId);
 impl std::ops::Deref for SingleShotClockId {
     type Target = ClockId;
 
+    #[inline]
     fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
 
 impl From<SingleShotClockId> for ClockId {
+    #[inline]
     fn from(id: SingleShotClockId) -> ClockId {
         skip_assert_initialized!();
         id.0
@@ -124,6 +126,7 @@ impl From<SingleShotClockId> for ClockId {
 impl TryFrom<ClockId> for SingleShotClockId {
     type Error = glib::BoolError;
 
+    #[inline]
     fn try_from(id: ClockId) -> Result<SingleShotClockId, glib::BoolError> {
         skip_assert_initialized!();
         match id.type_() {
@@ -135,6 +138,7 @@ impl TryFrom<ClockId> for SingleShotClockId {
 
 impl SingleShotClockId {
     #[doc(alias = "gst_clock_id_compare_func")]
+    #[inline]
     pub fn compare_by_time(&self, other: &Self) -> cmp::Ordering {
         self.0.compare_by_time(&other.0)
     }
@@ -220,12 +224,14 @@ pub struct PeriodicClockId(ClockId);
 impl std::ops::Deref for PeriodicClockId {
     type Target = ClockId;
 
+    #[inline]
     fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
 
 impl From<PeriodicClockId> for ClockId {
+    #[inline]
     fn from(id: PeriodicClockId) -> ClockId {
         skip_assert_initialized!();
         id.0
@@ -235,6 +241,7 @@ impl From<PeriodicClockId> for ClockId {
 impl TryFrom<ClockId> for PeriodicClockId {
     type Error = glib::BoolError;
 
+    #[inline]
     fn try_from(id: ClockId) -> Result<PeriodicClockId, glib::BoolError> {
         skip_assert_initialized!();
         match id.type_() {
@@ -247,6 +254,7 @@ impl TryFrom<ClockId> for PeriodicClockId {
 impl PeriodicClockId {
     #[doc(alias = "get_interval")]
     #[doc(alias = "GST_CLOCK_ENTRY_INTERVAL")]
+    #[inline]
     pub fn interval(&self) -> ClockTime {
         unsafe {
             let ptr = self.as_ptr() as *mut ffi::GstClockEntry;
@@ -255,6 +263,7 @@ impl PeriodicClockId {
     }
 
     #[doc(alias = "gst_clock_id_compare_func")]
+    #[inline]
     pub fn compare_by_time(&self, other: &Self) -> cmp::Ordering {
         self.0.compare_by_time(&other.0)
     }
@@ -327,18 +336,22 @@ impl PeriodicClockId {
 pub struct AtomicClockReturn(AtomicI32);
 
 impl AtomicClockReturn {
+    #[inline]
     pub fn load(&self) -> ClockReturn {
         unsafe { from_glib(self.0.load(atomic::Ordering::SeqCst)) }
     }
 
+    #[inline]
     pub fn store(&self, val: ClockReturn) {
         self.0.store(val.into_glib(), atomic::Ordering::SeqCst)
     }
 
+    #[inline]
     pub fn swap(&self, val: ClockReturn) -> ClockReturn {
         unsafe { from_glib(self.0.swap(val.into_glib(), atomic::Ordering::SeqCst)) }
     }
 
+    #[inline]
     pub fn compare_exchange(
         &self,
         current: ClockReturn,

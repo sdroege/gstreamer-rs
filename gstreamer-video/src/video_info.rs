@@ -26,6 +26,7 @@ pub enum VideoColorRange {
 impl IntoGlib for VideoColorRange {
     type GlibType = ffi::GstVideoColorRange;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoColorRange {
         match self {
             Self::Unknown => ffi::GST_VIDEO_COLOR_RANGE_UNKNOWN,
@@ -38,6 +39,7 @@ impl IntoGlib for VideoColorRange {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoColorRange> for VideoColorRange {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoColorRange) -> Self {
         skip_assert_initialized!();
         match value {
@@ -50,6 +52,7 @@ impl FromGlib<ffi::GstVideoColorRange> for VideoColorRange {
 }
 
 impl StaticType for VideoColorRange {
+    #[inline]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_color_range_get_type()) }
     }
@@ -110,18 +113,22 @@ impl VideoColorimetry {
         Self(colorimetry)
     }
 
+    #[inline]
     pub fn range(&self) -> crate::VideoColorRange {
         unsafe { from_glib(self.0.range) }
     }
 
+    #[inline]
     pub fn matrix(&self) -> crate::VideoColorMatrix {
         unsafe { from_glib(self.0.matrix) }
     }
 
+    #[inline]
     pub fn transfer(&self) -> crate::VideoTransferFunction {
         unsafe { from_glib(self.0.transfer) }
     }
 
+    #[inline]
     pub fn primaries(&self) -> crate::VideoColorPrimaries {
         unsafe { from_glib(self.0.primaries) }
     }
@@ -235,6 +242,7 @@ impl str::FromStr for crate::VideoChromaSite {
 }
 
 impl From<crate::VideoMultiviewFramePacking> for crate::VideoMultiviewMode {
+    #[inline]
     fn from(v: crate::VideoMultiviewFramePacking) -> Self {
         skip_assert_initialized!();
         unsafe { from_glib(v.into_glib()) }
@@ -549,6 +557,7 @@ impl VideoInfo {
         }
     }
 
+    #[inline]
     pub fn is_valid(&self) -> bool {
         !self.0.finfo.is_null() && self.0.width > 0 && self.0.height > 0 && self.0.size > 0
     }
@@ -581,6 +590,7 @@ impl VideoInfo {
         }
     }
 
+    #[inline]
     pub fn format(&self) -> crate::VideoFormat {
         if self.0.finfo.is_null() {
             return crate::VideoFormat::Unknown;
@@ -589,24 +599,29 @@ impl VideoInfo {
         self.format_info().format()
     }
 
+    #[inline]
     pub fn format_info(&self) -> crate::VideoFormatInfo {
         unsafe { crate::VideoFormatInfo::from_ptr(self.0.finfo) }
     }
 
+    #[inline]
     pub fn name<'a>(&self) -> &'a str {
         self.format_info().name()
     }
 
+    #[inline]
     pub fn width(&self) -> u32 {
         self.0.width as u32
     }
 
+    #[inline]
     pub fn height(&self) -> u32 {
         self.0.height as u32
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[inline]
     pub fn field_height(&self) -> u32 {
         if self.0.interlace_mode == ffi::GST_VIDEO_INTERLACE_MODE_ALTERNATE {
             (self.0.height as u32 + 1) / 2
@@ -615,73 +630,90 @@ impl VideoInfo {
         }
     }
 
+    #[inline]
     pub fn interlace_mode(&self) -> crate::VideoInterlaceMode {
         unsafe { from_glib(self.0.interlace_mode) }
     }
 
+    #[inline]
     pub fn flags(&self) -> crate::VideoFlags {
         unsafe { from_glib(self.0.flags) }
     }
 
+    #[inline]
     pub fn size(&self) -> usize {
         self.0.size
     }
 
+    #[inline]
     pub fn views(&self) -> u32 {
         self.0.views as u32
     }
 
+    #[inline]
     pub fn chroma_site(&self) -> crate::VideoChromaSite {
         unsafe { from_glib(self.0.chroma_site) }
     }
 
+    #[inline]
     pub fn colorimetry(&self) -> VideoColorimetry {
         unsafe { VideoColorimetry(ptr::read(&self.0.colorimetry)) }
     }
 
+    #[inline]
     pub fn comp_depth(&self, component: u8) -> u32 {
         self.format_info().depth()[component as usize]
     }
 
+    #[inline]
     pub fn comp_height(&self, component: u8) -> u32 {
         self.format_info().scale_height(component, self.height())
     }
 
+    #[inline]
     pub fn comp_width(&self, component: u8) -> u32 {
         self.format_info().scale_width(component, self.width())
     }
 
+    #[inline]
     pub fn comp_offset(&self, component: u8) -> usize {
         self.offset()[self.format_info().plane()[component as usize] as usize]
             + self.format_info().poffset()[component as usize] as usize
     }
 
+    #[inline]
     pub fn comp_plane(&self, component: u8) -> u32 {
         self.format_info().plane()[component as usize]
     }
 
+    #[inline]
     pub fn comp_poffset(&self, component: u8) -> u32 {
         self.format_info().poffset()[component as usize]
     }
 
+    #[inline]
     pub fn comp_pstride(&self, component: u8) -> i32 {
         self.format_info().pixel_stride()[component as usize]
     }
 
+    #[inline]
     pub fn comp_stride(&self, component: u8) -> i32 {
         self.stride()[self.format_info().plane()[component as usize] as usize]
     }
 
+    #[inline]
     pub fn par(&self) -> gst::Fraction {
         gst::Fraction::new(self.0.par_n, self.0.par_d)
     }
 
+    #[inline]
     pub fn fps(&self) -> gst::Fraction {
         gst::Fraction::new(self.0.fps_n, self.0.fps_d)
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[inline]
     pub fn field_rate(&self) -> gst::Fraction {
         if self.interlace_mode() == crate::VideoInterlaceMode::Alternate {
             2 * self.fps()
@@ -690,14 +722,17 @@ impl VideoInfo {
         }
     }
 
+    #[inline]
     pub fn offset(&self) -> &[usize] {
         &self.0.offset[0..(self.format_info().n_planes() as usize)]
     }
 
+    #[inline]
     pub fn stride(&self) -> &[i32] {
         &self.0.stride[0..(self.format_info().n_planes() as usize)]
     }
 
+    #[inline]
     pub fn multiview_mode(&self) -> crate::VideoMultiviewMode {
         unsafe {
             let ptr = &self.0.ABI._gst_reserved as *const _ as *const i32;
@@ -705,6 +740,7 @@ impl VideoInfo {
         }
     }
 
+    #[inline]
     pub fn multiview_flags(&self) -> crate::VideoMultiviewFlags {
         unsafe {
             let ptr = &self.0.ABI._gst_reserved as *const _ as *const u32;
@@ -712,6 +748,7 @@ impl VideoInfo {
         }
     }
 
+    #[inline]
     pub fn field_order(&self) -> crate::VideoFieldOrder {
         unsafe {
             let ptr = &self.0.ABI._gst_reserved as *const _ as *const i32;
@@ -719,30 +756,37 @@ impl VideoInfo {
         }
     }
 
+    #[inline]
     pub fn has_alpha(&self) -> bool {
         self.format_info().has_alpha()
     }
 
+    #[inline]
     pub fn is_gray(&self) -> bool {
         self.format_info().is_gray()
     }
 
+    #[inline]
     pub fn is_rgb(&self) -> bool {
         self.format_info().is_rgb()
     }
 
+    #[inline]
     pub fn is_yuv(&self) -> bool {
         self.format_info().is_yuv()
     }
 
+    #[inline]
     pub fn is_interlaced(&self) -> bool {
         self.interlace_mode() != crate::VideoInterlaceMode::Progressive
     }
 
+    #[inline]
     pub fn n_planes(&self) -> u32 {
         self.format_info().n_planes()
     }
 
+    #[inline]
     pub fn n_components(&self) -> u32 {
         self.format_info().n_components()
     }
@@ -824,6 +868,7 @@ impl VideoInfo {
     }
 
     #[doc(alias = "gst_video_color_range_offsets")]
+    #[inline]
     pub fn range_offsets(&self, range: crate::VideoColorRange) -> ([i32; 4], [i32; 4]) {
         self.format_info().range_offsets(range)
     }
@@ -842,6 +887,7 @@ unsafe impl Send for VideoInfo {}
 unsafe impl Sync for VideoInfo {}
 
 impl glib::types::StaticType for VideoInfo {
+    #[inline]
     fn static_type() -> glib::types::Type {
         unsafe { glib::translate::from_glib(ffi::gst_video_info_get_type()) }
     }
@@ -906,6 +952,7 @@ impl From<VideoInfo> for glib::Value {
 
 #[doc(hidden)]
 impl glib::translate::Uninitialized for VideoInfo {
+    #[inline]
     unsafe fn uninitialized() -> Self {
         mem::zeroed()
     }
@@ -920,6 +967,7 @@ impl glib::translate::GlibPtrDefault for VideoInfo {
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoInfo> for VideoInfo {
     type Storage = PhantomData<&'a Self>;
 
+    #[inline]
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstVideoInfo, Self> {
         glib::translate::Stash(&self.0, PhantomData)
     }

@@ -22,6 +22,7 @@ mini_object_wrapper!(Query, QueryRef, ffi::GstQuery, || {
 impl QueryRef {
     #[doc(alias = "get_structure")]
     #[doc(alias = "gst_query_get_structure")]
+    #[inline]
     pub fn structure(&self) -> Option<&StructureRef> {
         unsafe {
             let structure = ffi::gst_query_get_structure(self.as_mut_ptr());
@@ -35,6 +36,7 @@ impl QueryRef {
 
     #[doc(alias = "get_mut_structure")]
     #[doc(alias = "gst_query_writable_structure")]
+    #[inline]
     pub fn structure_mut(&mut self) -> &mut StructureRef {
         unsafe {
             let structure = ffi::gst_query_writable_structure(self.as_mut_ptr());
@@ -43,16 +45,19 @@ impl QueryRef {
     }
 
     #[doc(alias = "GST_QUERY_IS_DOWNSTREAM")]
+    #[inline]
     pub fn is_downstream(&self) -> bool {
         unsafe { ((*self.as_ptr()).type_ as u32) & ffi::GST_QUERY_TYPE_DOWNSTREAM != 0 }
     }
 
     #[doc(alias = "GST_QUERY_IS_UPSTREAM")]
+    #[inline]
     pub fn is_upstream(&self) -> bool {
         unsafe { ((*self.as_ptr()).type_ as u32) & ffi::GST_QUERY_TYPE_UPSTREAM != 0 }
     }
 
     #[doc(alias = "GST_QUERY_IS_SERIALIZED")]
+    #[inline]
     pub fn is_serialized(&self) -> bool {
         unsafe { ((*self.as_ptr()).type_ as u32) & ffi::GST_QUERY_TYPE_SERIALIZED != 0 }
     }
@@ -200,19 +205,23 @@ macro_rules! declare_concrete_query(
         pub struct $name<$param = QueryRef>($param);
 
         impl $name {
+            #[inline]
             pub fn query(&self) -> &QueryRef {
                 unsafe { &*(self as *const Self as *const QueryRef) }
             }
 
+            #[inline]
             pub fn query_mut(&mut self) -> &mut QueryRef {
                 unsafe { &mut *(self as *mut Self as *mut QueryRef) }
             }
 
+            #[inline]
             unsafe fn view(query: &QueryRef) -> QueryView<'_> {
                 let query = &*(query as *const QueryRef as *const Self);
                 QueryView::$name(query)
             }
 
+            #[inline]
             unsafe fn view_mut(query: &mut QueryRef) -> QueryViewMut<'_> {
                 let query = &mut *(query as *mut QueryRef as *mut Self);
                 QueryViewMut::$name(query)
@@ -222,12 +231,14 @@ macro_rules! declare_concrete_query(
         impl Deref for $name {
             type Target = QueryRef;
 
+            #[inline]
             fn deref(&self) -> &Self::Target {
                 self.query()
             }
         }
 
         impl DerefMut for $name {
+            #[inline]
             fn deref_mut(&mut self) -> &mut Self::Target {
                 self.query_mut()
             }
@@ -236,12 +247,14 @@ macro_rules! declare_concrete_query(
         impl ToOwned for $name {
             type Owned = $name<Query>;
 
+            #[inline]
             fn to_owned(&self) -> Self::Owned {
                 $name::<Query>(self.copy())
             }
         }
 
         impl $name<Query> {
+            #[inline]
             pub fn get_mut(&mut self) -> Option<&mut $name> {
                 self.0
                     .get_mut()
@@ -252,12 +265,14 @@ macro_rules! declare_concrete_query(
         impl Deref for $name<Query> {
             type Target = $name;
 
+            #[inline]
             fn deref(&self) -> &Self::Target {
                 unsafe { &*(self.0.as_ptr() as *const Self::Target) }
             }
         }
 
         impl DerefMut for $name<Query> {
+            #[inline]
             fn deref_mut(&mut self) -> &mut Self::Target {
                 assert!(self.0.is_writable());
                 unsafe { &mut *(self.0.as_mut_ptr() as *mut Self::Target) }
@@ -265,18 +280,21 @@ macro_rules! declare_concrete_query(
         }
 
         impl Borrow<$name> for $name<Query> {
+            #[inline]
             fn borrow(&self) -> &$name {
                 &*self
             }
         }
 
         impl BorrowMut<$name> for $name<Query> {
+            #[inline]
             fn borrow_mut(&mut self) -> &mut $name {
                 &mut *self
             }
         }
 
         impl From<$name<Query>> for Query {
+            #[inline]
             fn from(concrete: $name<Query>) -> Self {
                 skip_assert_initialized!();
                 concrete.0

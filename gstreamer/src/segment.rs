@@ -28,16 +28,19 @@ glib::wrapper! {
 }
 
 impl Segment {
+    #[inline]
     pub fn reset_with_format(&mut self, format: Format) {
         unsafe {
             ffi::gst_segment_init(self.to_glib_none_mut().0, format.into_glib());
         }
     }
 
+    #[inline]
     pub fn set_format(&mut self, format: Format) {
         self.inner.format = format.into_glib();
     }
 
+    #[inline]
     pub fn downcast<T: FormattedValueIntrinsic>(self) -> Result<FormattedSegment<T>, Self> {
         if T::default_format() == Format::Undefined || T::default_format() == self.format() {
             Ok(FormattedSegment {
@@ -49,6 +52,7 @@ impl Segment {
         }
     }
 
+    #[inline]
     pub fn downcast_ref<T: FormattedValueIntrinsic>(&self) -> Option<&FormattedSegment<T>> {
         if T::default_format() == Format::Undefined || T::default_format() == self.format() {
             Some(unsafe {
@@ -60,6 +64,7 @@ impl Segment {
         }
     }
 
+    #[inline]
     pub fn downcast_mut<T: FormattedValueIntrinsic>(&mut self) -> Option<&mut FormattedSegment<T>> {
         if T::default_format() == Format::Undefined || T::default_format() == self.format() {
             Some(unsafe {
@@ -73,6 +78,7 @@ impl Segment {
 }
 
 impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
+    #[inline]
     pub fn new() -> Self {
         assert_initialized_main_thread!();
         let segment = unsafe {
@@ -86,6 +92,7 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
         }
     }
 
+    #[inline]
     pub fn upcast(self) -> Segment {
         FormattedSegment {
             inner: self.inner,
@@ -93,12 +100,14 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
         }
     }
 
+    #[inline]
     pub fn upcast_ref(&self) -> &Segment {
         unsafe {
             &*(self as *const FormattedSegment<T> as *const FormattedSegment<GenericFormattedValue>)
         }
     }
 
+    #[inline]
     pub fn reset(&mut self) {
         unsafe {
             ffi::gst_segment_init(&mut self.inner, T::default_format().into_glib());
@@ -173,6 +182,7 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     }
 
     #[doc(alias = "gst_segment_offset_running_time")]
+    #[inline]
     pub fn offset_running_time(&mut self, offset: i64) -> Result<(), glib::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -187,6 +197,7 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     }
 
     #[doc(alias = "gst_segment_set_running_time")]
+    #[inline]
     pub fn set_running_time(
         &mut self,
         running_time: impl CompatibleFormattedValue<T>,
@@ -208,106 +219,127 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     }
 
     #[doc(alias = "get_flags")]
+    #[inline]
     pub fn flags(&self) -> crate::SegmentFlags {
         unsafe { from_glib(self.inner.flags) }
     }
 
+    #[inline]
     pub fn set_flags(&mut self, flags: crate::SegmentFlags) {
         self.inner.flags = flags.into_glib();
     }
 
     #[doc(alias = "get_rate")]
+    #[inline]
     pub fn rate(&self) -> f64 {
         self.inner.rate
     }
 
     #[allow(clippy::float_cmp)]
+    #[inline]
     pub fn set_rate(&mut self, rate: f64) {
         assert_ne!(rate, 0.0);
         self.inner.rate = rate;
     }
 
     #[doc(alias = "get_applied_rate")]
+    #[inline]
     pub fn applied_rate(&self) -> f64 {
         self.inner.applied_rate
     }
 
     #[allow(clippy::float_cmp)]
+    #[inline]
     pub fn set_applied_rate(&mut self, applied_rate: f64) {
         assert_ne!(applied_rate, 0.0);
         self.inner.applied_rate = applied_rate;
     }
 
     #[doc(alias = "get_format")]
+    #[inline]
     pub fn format(&self) -> Format {
         unsafe { from_glib(self.inner.format) }
     }
 
     #[doc(alias = "get_base")]
+    #[inline]
     pub fn base(&self) -> T::FullRange {
         unsafe { T::FullRange::from_raw(self.format(), self.inner.base as i64) }
     }
 
+    #[inline]
     pub fn set_base(&mut self, base: impl CompatibleFormattedValue<T>) {
         let base = base.try_into_checked_explicit(self.format()).unwrap();
         self.inner.base = unsafe { base.into_raw_value() } as u64;
     }
 
     #[doc(alias = "get_offset")]
+    #[inline]
     pub fn offset(&self) -> T::FullRange {
         unsafe { T::FullRange::from_raw(self.format(), self.inner.offset as i64) }
     }
 
+    #[inline]
     pub fn set_offset(&mut self, offset: impl CompatibleFormattedValue<T>) {
         let offset = offset.try_into_checked_explicit(self.format()).unwrap();
         self.inner.offset = unsafe { offset.into_raw_value() } as u64;
     }
 
     #[doc(alias = "get_start")]
+    #[inline]
     pub fn start(&self) -> T::FullRange {
         unsafe { T::FullRange::from_raw(self.format(), self.inner.start as i64) }
     }
 
+    #[inline]
     pub fn set_start(&mut self, start: impl CompatibleFormattedValue<T>) {
         let start = start.try_into_checked_explicit(self.format()).unwrap();
         self.inner.start = unsafe { start.into_raw_value() } as u64;
     }
 
     #[doc(alias = "get_stop")]
+    #[inline]
     pub fn stop(&self) -> T::FullRange {
         unsafe { T::FullRange::from_raw(self.format(), self.inner.stop as i64) }
     }
 
+    #[inline]
     pub fn set_stop(&mut self, stop: impl CompatibleFormattedValue<T>) {
         let stop = stop.try_into_checked_explicit(self.format()).unwrap();
         self.inner.stop = unsafe { stop.into_raw_value() } as u64;
     }
 
     #[doc(alias = "get_time")]
+    #[inline]
     pub fn time(&self) -> T::FullRange {
         unsafe { T::FullRange::from_raw(self.format(), self.inner.time as i64) }
     }
 
+    #[inline]
     pub fn set_time(&mut self, time: impl CompatibleFormattedValue<T>) {
         let time = time.try_into_checked_explicit(self.format()).unwrap();
         self.inner.time = unsafe { time.into_raw_value() } as u64;
     }
 
     #[doc(alias = "get_position")]
+    #[inline]
     pub fn position(&self) -> T::FullRange {
         unsafe { T::FullRange::from_raw(self.format(), self.inner.position as i64) }
     }
 
+    #[inline]
     pub fn set_position(&mut self, position: impl CompatibleFormattedValue<T>) {
         let position = position.try_into_checked_explicit(self.format()).unwrap();
         self.inner.position = unsafe { position.into_raw_value() } as u64;
     }
 
     #[doc(alias = "get_duration")]
+    #[inline]
     pub fn duration(&self) -> T::FullRange {
         unsafe { T::FullRange::from_raw(self.format(), self.inner.duration as i64) }
     }
 
+    #[inline]
     pub fn set_duration(&mut self, duration: impl CompatibleFormattedValue<T>) {
         let duration = duration.try_into_checked_explicit(self.format()).unwrap();
         self.inner.duration = unsafe { duration.into_raw_value() } as u64;
@@ -525,6 +557,7 @@ unsafe impl<T: FormattedValueIntrinsic> Send for FormattedSegment<T> {}
 unsafe impl<T: FormattedValueIntrinsic> Sync for FormattedSegment<T> {}
 
 impl<T: FormattedValueIntrinsic> AsRef<Segment> for FormattedSegment<T> {
+    #[inline]
     fn as_ref(&self) -> &Segment {
         unsafe {
             &*(self as *const FormattedSegment<T> as *const FormattedSegment<GenericFormattedValue>)
@@ -577,12 +610,14 @@ impl<T: FormattedValueIntrinsic> fmt::Debug for FormattedSegment<T> {
 }
 
 impl<T: FormattedValueIntrinsic> Default for FormattedSegment<T> {
+    #[inline]
     fn default() -> Self {
         Self::new()
     }
 }
 
 impl<T: FormattedValueIntrinsic> glib::types::StaticType for FormattedSegment<T> {
+    #[inline]
     fn static_type() -> glib::types::Type {
         unsafe { glib::translate::from_glib(ffi::gst_segment_get_type()) }
     }
@@ -596,6 +631,7 @@ impl glib::value::ValueType for Segment {
 unsafe impl<'a> glib::value::FromValue<'a> for Segment {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib_none(
@@ -608,6 +644,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for Segment {
 unsafe impl<'a> glib::value::FromValue<'a> for &'a Segment {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         Segment::from_glib_ptr_borrow(
@@ -618,6 +655,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for &'a Segment {
 
 #[doc(hidden)]
 impl<T: FormattedValueIntrinsic> glib::value::ToValue for FormattedSegment<T> {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Segment>();
         unsafe {
@@ -629,6 +667,7 @@ impl<T: FormattedValueIntrinsic> glib::value::ToValue for FormattedSegment<T> {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -636,6 +675,7 @@ impl<T: FormattedValueIntrinsic> glib::value::ToValue for FormattedSegment<T> {
 
 #[doc(hidden)]
 impl<T: FormattedValueIntrinsic> glib::value::ToValueOptional for FormattedSegment<T> {
+    #[inline]
     fn to_value_optional(s: Option<&Self>) -> glib::Value {
         skip_assert_initialized!();
         let mut value = glib::Value::for_value_type::<Segment>();
@@ -650,6 +690,7 @@ impl<T: FormattedValueIntrinsic> glib::value::ToValueOptional for FormattedSegme
 }
 
 impl<T: FormattedValueIntrinsic> From<FormattedSegment<T>> for glib::Value {
+    #[inline]
     fn from(v: FormattedSegment<T>) -> glib::Value {
         skip_assert_initialized!();
         glib::value::ToValue::to_value(&v)

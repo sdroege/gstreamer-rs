@@ -469,6 +469,7 @@ impl std::hash::Hash for StreamConsumer {
 }
 
 impl std::borrow::Borrow<gst_app::AppSrc> for StreamConsumer {
+    #[inline]
     fn borrow(&self) -> &gst_app::AppSrc {
         &self.appsrc
     }

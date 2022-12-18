@@ -14,6 +14,7 @@ use crate::{ClockReturn, FlowReturn, PadLinkReturn, State, StateChange, StateCha
 macro_rules! impl_return_result_traits {
     ($ffi_type:ident, $ret_type:ident, $ok_type:ident, $err_type:ident) => {
         impl From<$ok_type> for $ret_type {
+            #[inline]
             fn from(value: $ok_type) -> Self {
                 skip_assert_initialized!();
                 $ret_type::from_ok(value)
@@ -23,12 +24,14 @@ macro_rules! impl_return_result_traits {
         impl IntoGlib for $ok_type {
             type GlibType = <$ret_type as IntoGlib>::GlibType;
 
+            #[inline]
             fn into_glib(self) -> Self::GlibType {
                 $ret_type::from_ok(self).into_glib()
             }
         }
 
         impl From<$err_type> for $ret_type {
+            #[inline]
             fn from(value: $err_type) -> Self {
                 skip_assert_initialized!();
                 $ret_type::from_error(value)
@@ -38,12 +41,14 @@ macro_rules! impl_return_result_traits {
         impl IntoGlib for $err_type {
             type GlibType = <$ret_type as IntoGlib>::GlibType;
 
+            #[inline]
             fn into_glib(self) -> Self::GlibType {
                 $ret_type::from_error(self).into_glib()
             }
         }
 
         impl From<Result<$ok_type, $err_type>> for $ret_type {
+            #[inline]
             fn from(res: Result<$ok_type, $err_type>) -> Self {
                 skip_assert_initialized!();
                 match res {
@@ -55,6 +60,8 @@ macro_rules! impl_return_result_traits {
 
         impl TryFromGlib<ffi::$ffi_type> for $ok_type {
             type Error = $err_type;
+
+            #[inline]
             unsafe fn try_from_glib(val: ffi::$ffi_type) -> Result<$ok_type, $err_type> {
                 skip_assert_initialized!();
                 $ret_type::from_glib(val).into_result()
@@ -64,6 +71,7 @@ macro_rules! impl_return_result_traits {
 }
 
 impl StateChangeReturn {
+    #[inline]
     pub fn into_result(self) -> Result<StateChangeSuccess, StateChangeError> {
         match self {
             StateChangeReturn::Success => Ok(StateChangeSuccess::Success),
@@ -74,11 +82,13 @@ impl StateChangeReturn {
         }
     }
 
+    #[inline]
     pub fn from_error(_: StateChangeError) -> Self {
         skip_assert_initialized!();
         StateChangeReturn::Failure
     }
 
+    #[inline]
     pub fn from_ok(v: StateChangeSuccess) -> Self {
         skip_assert_initialized!();
         match v {
@@ -109,6 +119,7 @@ impl_return_result_traits!(
 );
 
 impl FlowReturn {
+    #[inline]
     pub fn into_result(self) -> Result<FlowSuccess, FlowError> {
         match self {
             FlowReturn::CustomSuccess2 => Ok(FlowSuccess::CustomSuccess2),
@@ -128,6 +139,7 @@ impl FlowReturn {
         }
     }
 
+    #[inline]
     pub fn from_error(v: FlowError) -> Self {
         skip_assert_initialized!();
         match v {
@@ -143,6 +155,7 @@ impl FlowReturn {
         }
     }
 
+    #[inline]
     pub fn from_ok(v: FlowSuccess) -> Self {
         skip_assert_initialized!();
         match v {
@@ -188,6 +201,7 @@ pub enum FlowError {
 impl_return_result_traits!(GstFlowReturn, FlowReturn, FlowSuccess, FlowError);
 
 impl PadLinkReturn {
+    #[inline]
     pub fn into_result(self) -> Result<PadLinkSuccess, PadLinkError> {
         match self {
             PadLinkReturn::Ok => Ok(PadLinkSuccess),
@@ -201,6 +215,7 @@ impl PadLinkReturn {
         }
     }
 
+    #[inline]
     pub fn from_error(v: PadLinkError) -> Self {
         skip_assert_initialized!();
         match v {
@@ -213,6 +228,7 @@ impl PadLinkReturn {
         }
     }
 
+    #[inline]
     pub fn from_ok(_: PadLinkSuccess) -> Self {
         skip_assert_initialized!();
         PadLinkReturn::Ok
@@ -247,6 +263,7 @@ impl_return_result_traits!(
 );
 
 impl ClockReturn {
+    #[inline]
     pub fn into_result(self) -> Result<ClockSuccess, ClockError> {
         match self {
             ClockReturn::Ok => Ok(ClockSuccess::Ok),
@@ -261,6 +278,7 @@ impl ClockReturn {
         }
     }
 
+    #[inline]
     pub fn from_error(v: ClockError) -> Self {
         skip_assert_initialized!();
         match v {
@@ -273,6 +291,7 @@ impl ClockReturn {
         }
     }
 
+    #[inline]
     pub fn from_ok(v: ClockSuccess) -> Self {
         skip_assert_initialized!();
         match v {
@@ -308,6 +327,7 @@ pub enum ClockError {
 impl_return_result_traits!(GstClockReturn, ClockReturn, ClockSuccess, ClockError);
 
 impl PartialEq for crate::TypeFindProbability {
+    #[inline]
     fn eq(&self, other: &crate::TypeFindProbability) -> bool {
         (self.into_glib() as u32).eq(&(other.into_glib() as u32))
     }
@@ -316,12 +336,14 @@ impl PartialEq for crate::TypeFindProbability {
 impl Eq for crate::TypeFindProbability {}
 
 impl PartialOrd for crate::TypeFindProbability {
+    #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
         (self.into_glib() as u32).partial_cmp(&(other.into_glib() as u32))
     }
 }
 
 impl Ord for crate::TypeFindProbability {
+    #[inline]
     fn cmp(&self, other: &Self) -> cmp::Ordering {
         (self.into_glib() as u32).cmp(&(other.into_glib() as u32))
     }
@@ -330,6 +352,7 @@ impl Ord for crate::TypeFindProbability {
 impl ops::Add<u32> for crate::TypeFindProbability {
     type Output = crate::TypeFindProbability;
 
+    #[inline]
     fn add(self, rhs: u32) -> crate::TypeFindProbability {
         let res = (self.into_glib() as u32).saturating_add(rhs);
         unsafe { from_glib(res as i32) }
@@ -337,6 +360,7 @@ impl ops::Add<u32> for crate::TypeFindProbability {
 }
 
 impl ops::AddAssign<u32> for crate::TypeFindProbability {
+    #[inline]
     fn add_assign(&mut self, rhs: u32) {
         let res = (self.into_glib() as u32).saturating_add(rhs);
         *self = unsafe { from_glib(res as i32) };
@@ -346,6 +370,7 @@ impl ops::AddAssign<u32> for crate::TypeFindProbability {
 impl ops::Sub<u32> for crate::TypeFindProbability {
     type Output = crate::TypeFindProbability;
 
+    #[inline]
     fn sub(self, rhs: u32) -> crate::TypeFindProbability {
         let res = (self.into_glib() as u32).saturating_sub(rhs);
         unsafe { from_glib(res as i32) }
@@ -353,6 +378,7 @@ impl ops::Sub<u32> for crate::TypeFindProbability {
 }
 
 impl ops::SubAssign<u32> for crate::TypeFindProbability {
+    #[inline]
     fn sub_assign(&mut self, rhs: u32) {
         let res = (self.into_glib() as u32).saturating_sub(rhs);
         *self = unsafe { from_glib(res as i32) };
@@ -360,6 +386,7 @@ impl ops::SubAssign<u32> for crate::TypeFindProbability {
 }
 
 impl PartialEq for crate::Rank {
+    #[inline]
     fn eq(&self, other: &crate::Rank) -> bool {
         (self.into_glib() as u32).eq(&(other.into_glib() as u32))
     }
@@ -368,12 +395,14 @@ impl PartialEq for crate::Rank {
 impl Eq for crate::Rank {}
 
 impl PartialOrd for crate::Rank {
+    #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
         (self.into_glib() as u32).partial_cmp(&(other.into_glib() as u32))
     }
 }
 
 impl Ord for crate::Rank {
+    #[inline]
     fn cmp(&self, other: &Self) -> cmp::Ordering {
         (self.into_glib() as u32).cmp(&(other.into_glib() as u32))
     }
@@ -382,6 +411,7 @@ impl Ord for crate::Rank {
 impl ops::Add<u32> for crate::Rank {
     type Output = crate::Rank;
 
+    #[inline]
     fn add(self, rhs: u32) -> crate::Rank {
         let res = (self.into_glib() as u32).saturating_add(rhs);
         unsafe { from_glib(res as i32) }
@@ -389,6 +419,7 @@ impl ops::Add<u32> for crate::Rank {
 }
 
 impl ops::AddAssign<u32> for crate::Rank {
+    #[inline]
     fn add_assign(&mut self, rhs: u32) {
         let res = (self.into_glib() as u32).saturating_add(rhs);
         *self = unsafe { from_glib(res as i32) };
@@ -398,6 +429,7 @@ impl ops::AddAssign<u32> for crate::Rank {
 impl ops::Sub<u32> for crate::Rank {
     type Output = crate::Rank;
 
+    #[inline]
     fn sub(self, rhs: u32) -> crate::Rank {
         let res = (self.into_glib() as u32).saturating_sub(rhs);
         unsafe { from_glib(res as i32) }
@@ -405,6 +437,7 @@ impl ops::Sub<u32> for crate::Rank {
 }
 
 impl ops::SubAssign<u32> for crate::Rank {
+    #[inline]
     fn sub_assign(&mut self, rhs: u32) {
         let res = (self.into_glib() as u32).saturating_sub(rhs);
         *self = unsafe { from_glib(res as i32) };
@@ -606,6 +639,7 @@ impl FromGlib<ffi::GstMessageType> for MessageType {
 }
 
 impl StaticType for MessageType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_message_type_get_type()) }
     }
@@ -618,6 +652,7 @@ impl glib::value::ValueType for MessageType {
 unsafe impl<'a> FromValue<'a> for MessageType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0) as ffi::GstMessageType)
@@ -625,6 +660,7 @@ unsafe impl<'a> FromValue<'a> for MessageType {
 }
 
 impl ToValue for MessageType {
+    #[inline]
     fn to_value(&self) -> Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -633,12 +669,14 @@ impl ToValue for MessageType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> Type {
         Self::static_type()
     }
 }
 
 impl From<MessageType> for glib::Value {
+    #[inline]
     fn from(v: MessageType) -> glib::Value {
         skip_assert_initialized!();
         ToValue::to_value(&v)
@@ -647,6 +685,7 @@ impl From<MessageType> for glib::Value {
 
 impl State {
     #[must_use]
+    #[inline]
     pub fn next(self, pending: Self) -> Self {
         let current = self.into_glib();
         let pending = pending.into_glib();
@@ -658,6 +697,7 @@ impl State {
 }
 
 impl StateChange {
+    #[inline]
     pub fn new(current: State, next: State) -> Self {
         skip_assert_initialized!();
         let current = current.into_glib();
@@ -665,6 +705,7 @@ impl StateChange {
         unsafe { from_glib((current << 3) | next) }
     }
 
+    #[inline]
     pub fn current(self) -> State {
         match self {
             StateChange::NullToReady => State::Null,
@@ -681,6 +722,7 @@ impl StateChange {
         }
     }
 
+    #[inline]
     pub fn next(self) -> State {
         match self {
             StateChange::NullToReady => State::Ready,

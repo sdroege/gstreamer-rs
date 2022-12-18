@@ -203,6 +203,7 @@ where
 }
 
 impl<T: 'static> IntoGlibPtr<*mut ffi::GstIterator> for Iterator<T> {
+    #[inline]
     unsafe fn into_glib_ptr(self) -> *mut ffi::GstIterator {
         let s = mem::ManuallyDrop::new(self);
         let it = s.to_glib_none().0;
@@ -447,6 +448,7 @@ where
 }
 
 impl<T: StaticType + 'static> Clone for Iterator<T> {
+    #[inline]
     fn clone(&self) -> Self {
         unsafe { from_glib_full(ffi::gst_iterator_copy(self.to_glib_none().0)) }
     }
@@ -461,6 +463,7 @@ impl<T> fmt::Debug for Iterator<T> {
 }
 
 impl<T> Drop for Iterator<T> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             ffi::gst_iterator_free(self.iter.as_ptr());
@@ -481,6 +484,7 @@ where
 }
 
 impl<T> glib::types::StaticType for Iterator<T> {
+    #[inline]
     fn static_type() -> glib::types::Type {
         unsafe { glib::translate::from_glib(ffi::gst_iterator_get_type()) }
     }
@@ -560,6 +564,7 @@ unsafe impl<T: StaticType + 'static> TransparentPtrType for Iterator<T> {}
 impl<'a, T: 'static> glib::translate::ToGlibPtr<'a, *const ffi::GstIterator> for Iterator<T> {
     type Storage = PhantomData<&'a Iterator<T>>;
 
+    #[inline]
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstIterator, Self> {
         glib::translate::Stash(self.iter.as_ptr(), PhantomData)
     }
@@ -650,6 +655,7 @@ impl<T> StdIterator<T> {
 }
 
 impl<T: StaticType + 'static> Clone for StdIterator<T> {
+    #[inline]
     fn clone(&self) -> Self {
         Self {
             inner: self.inner.clone(),

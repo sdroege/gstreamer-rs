@@ -108,6 +108,7 @@ impl Buffer {
     }
 
     #[doc(alias = "gst_buffer_map")]
+    #[inline]
     pub fn into_mapped_buffer_readable(self) -> Result<MappedBuffer<Readable>, Self> {
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
@@ -129,6 +130,7 @@ impl Buffer {
     }
 
     #[doc(alias = "gst_buffer_map")]
+    #[inline]
     pub fn into_mapped_buffer_writable(self) -> Result<MappedBuffer<Writable>, Self> {
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
@@ -149,10 +151,12 @@ impl Buffer {
         }
     }
 
+    #[inline]
     pub fn into_cursor_readable(self) -> BufferCursor<Readable> {
         BufferCursor::new_readable(self)
     }
 
+    #[inline]
     pub fn into_cursor_writable(self) -> Result<BufferCursor<Writable>, glib::BoolError> {
         BufferCursor::new_writable(self)
     }
@@ -175,6 +179,7 @@ impl Default for Buffer {
 
 impl BufferRef {
     #[doc(alias = "gst_buffer_map")]
+    #[inline]
     pub fn map_readable(&self) -> Result<BufferMap<Readable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
@@ -193,6 +198,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "gst_buffer_map")]
+    #[inline]
     pub fn map_writable(&mut self) -> Result<BufferMap<Writable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
@@ -339,46 +345,55 @@ impl BufferRef {
 
     #[doc(alias = "get_offset")]
     #[doc(alias = "GST_BUFFER_OFFSET")]
+    #[inline]
     pub fn offset(&self) -> u64 {
         self.0.offset
     }
 
+    #[inline]
     pub fn set_offset(&mut self, offset: u64) {
         self.0.offset = offset;
     }
 
     #[doc(alias = "get_offset_end")]
     #[doc(alias = "GST_BUFFER_OFFSET_END")]
+    #[inline]
     pub fn offset_end(&self) -> u64 {
         self.0.offset_end
     }
 
+    #[inline]
     pub fn set_offset_end(&mut self, offset_end: u64) {
         self.0.offset_end = offset_end;
     }
 
     #[doc(alias = "get_pts")]
     #[doc(alias = "GST_BUFFER_PTS")]
+    #[inline]
     pub fn pts(&self) -> Option<ClockTime> {
         unsafe { from_glib(self.0.pts) }
     }
 
+    #[inline]
     pub fn set_pts(&mut self, pts: impl Into<Option<ClockTime>>) {
         self.0.pts = pts.into().into_glib();
     }
 
     #[doc(alias = "get_dts")]
     #[doc(alias = "GST_BUFFER_DTS")]
+    #[inline]
     pub fn dts(&self) -> Option<ClockTime> {
         unsafe { from_glib(self.0.dts) }
     }
 
+    #[inline]
     pub fn set_dts(&mut self, dts: impl Into<Option<ClockTime>>) {
         self.0.dts = dts.into().into_glib();
     }
 
     #[doc(alias = "get_dts_or_pts")]
     #[doc(alias = "GST_BUFFER_DTS_OR_PTS")]
+    #[inline]
     pub fn dts_or_pts(&self) -> Option<ClockTime> {
         let val = self.dts();
         if val.is_none() {
@@ -390,32 +405,38 @@ impl BufferRef {
 
     #[doc(alias = "get_duration")]
     #[doc(alias = "GST_BUFFER_DURATION")]
+    #[inline]
     pub fn duration(&self) -> Option<ClockTime> {
         unsafe { from_glib(self.0.duration) }
     }
 
+    #[inline]
     pub fn set_duration(&mut self, duration: impl Into<Option<ClockTime>>) {
         self.0.duration = duration.into().into_glib();
     }
 
     #[doc(alias = "get_flags")]
     #[doc(alias = "GST_BUFFER_FLAGS")]
+    #[inline]
     pub fn flags(&self) -> BufferFlags {
         BufferFlags::from_bits_truncate(self.0.mini_object.flags)
     }
 
     #[doc(alias = "GST_BUFFER_FLAG_SET")]
+    #[inline]
     pub fn set_flags(&mut self, flags: BufferFlags) {
         self.0.mini_object.flags |= flags.bits();
     }
 
     #[doc(alias = "GST_BUFFER_FLAG_UNSET")]
+    #[inline]
     pub fn unset_flags(&mut self, flags: BufferFlags) {
         self.0.mini_object.flags &= !flags.bits();
     }
 
     #[doc(alias = "get_meta")]
     #[doc(alias = "gst_buffer_get_meta")]
+    #[inline]
     pub fn meta<T: MetaAPI>(&self) -> Option<MetaRef<T>> {
         unsafe {
             let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::meta_api().into_glib());
@@ -428,6 +449,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_meta_mut")]
+    #[inline]
     pub fn meta_mut<T: MetaAPI>(&mut self) -> Option<MetaRefMut<T, crate::meta::Standalone>> {
         unsafe {
             let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::meta_api().into_glib());
@@ -1087,15 +1109,18 @@ impl Eq for BufferRef {}
 
 impl<'a, T> BufferMap<'a, T> {
     #[doc(alias = "get_size")]
+    #[inline]
     pub fn size(&self) -> usize {
         self.map_info.size
     }
 
     #[doc(alias = "get_buffer")]
+    #[inline]
     pub fn buffer(&self) -> &BufferRef {
         self.buffer
     }
 
+    #[inline]
     pub fn as_slice(&self) -> &[u8] {
         if self.map_info.size == 0 {
             return &[];
@@ -1105,6 +1130,7 @@ impl<'a, T> BufferMap<'a, T> {
 }
 
 impl<'a> BufferMap<'a, Writable> {
+    #[inline]
     pub fn as_mut_slice(&mut self) -> &mut [u8] {
         if self.map_info.size == 0 {
             return &mut [];
@@ -1114,12 +1140,14 @@ impl<'a> BufferMap<'a, Writable> {
 }
 
 impl<'a, T> AsRef<[u8]> for BufferMap<'a, T> {
+    #[inline]
     fn as_ref(&self) -> &[u8] {
         self.as_slice()
     }
 }
 
 impl<'a> AsMut<[u8]> for BufferMap<'a, Writable> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
@@ -1128,12 +1156,14 @@ impl<'a> AsMut<[u8]> for BufferMap<'a, Writable> {
 impl<'a, T> ops::Deref for BufferMap<'a, T> {
     type Target = [u8];
 
+    #[inline]
     fn deref(&self) -> &[u8] {
         self.as_slice()
     }
 }
 
 impl<'a> ops::DerefMut for BufferMap<'a, Writable> {
+    #[inline]
     fn deref_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
@@ -1154,6 +1184,7 @@ impl<'a, T> PartialEq for BufferMap<'a, T> {
 impl<'a, T> Eq for BufferMap<'a, T> {}
 
 impl<'a, T> Drop for BufferMap<'a, T> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             ffi::gst_buffer_unmap(self.buffer.as_mut_ptr(), &mut self.map_info);
@@ -1165,6 +1196,7 @@ unsafe impl<'a, T> Send for BufferMap<'a, T> {}
 unsafe impl<'a, T> Sync for BufferMap<'a, T> {}
 
 impl<T> MappedBuffer<T> {
+    #[inline]
     pub fn as_slice(&self) -> &[u8] {
         if self.map_info.size == 0 {
             return &[];
@@ -1173,15 +1205,18 @@ impl<T> MappedBuffer<T> {
     }
 
     #[doc(alias = "get_size")]
+    #[inline]
     pub fn size(&self) -> usize {
         self.map_info.size
     }
 
     #[doc(alias = "get_buffer")]
+    #[inline]
     pub fn buffer(&self) -> &BufferRef {
         self.buffer.as_ref()
     }
 
+    #[inline]
     pub fn into_buffer(self) -> Buffer {
         let mut s = mem::ManuallyDrop::new(self);
         let buffer = unsafe { ptr::read(&s.buffer) };
@@ -1194,6 +1229,7 @@ impl<T> MappedBuffer<T> {
 }
 
 impl MappedBuffer<Writable> {
+    #[inline]
     pub fn as_mut_slice(&mut self) -> &mut [u8] {
         if self.map_info.size == 0 {
             return &mut [];
@@ -1203,12 +1239,14 @@ impl MappedBuffer<Writable> {
 }
 
 impl<T> AsRef<[u8]> for MappedBuffer<T> {
+    #[inline]
     fn as_ref(&self) -> &[u8] {
         self.as_slice()
     }
 }
 
 impl AsMut<[u8]> for MappedBuffer<Writable> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
@@ -1217,18 +1255,21 @@ impl AsMut<[u8]> for MappedBuffer<Writable> {
 impl<T> ops::Deref for MappedBuffer<T> {
     type Target = [u8];
 
+    #[inline]
     fn deref(&self) -> &[u8] {
         self.as_slice()
     }
 }
 
 impl ops::DerefMut for MappedBuffer<Writable> {
+    #[inline]
     fn deref_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
 }
 
 impl<T> Drop for MappedBuffer<T> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             ffi::gst_buffer_unmap(self.buffer.as_mut_ptr(), &mut self.map_info);

@@ -29,26 +29,32 @@ impl ClockTime {
     // checker-ignore-item
     pub const MAX: ClockTime = ClockTime(ffi::GST_CLOCK_TIME_NONE - 1);
 
+    #[inline]
     pub const fn hours(self) -> u64 {
         self.0 / Self::SECOND.0 / 60 / 60
     }
 
+    #[inline]
     pub const fn minutes(self) -> u64 {
         self.0 / Self::SECOND.0 / 60
     }
 
+    #[inline]
     pub const fn seconds(self) -> u64 {
         self.0 / Self::SECOND.0
     }
 
+    #[inline]
     pub const fn mseconds(self) -> u64 {
         self.0 / Self::MSECOND.0
     }
 
+    #[inline]
     pub const fn useconds(self) -> u64 {
         self.0 / Self::USECOND.0
     }
 
+    #[inline]
     pub const fn nseconds(self) -> u64 {
         self.0
     }
@@ -60,6 +66,7 @@ impl ClockTime {
     ///
     /// Panics if the resulting duration in nanoseconds exceeds the `u64` range.
     #[track_caller]
+    #[inline]
     pub const fn from_seconds(seconds: u64) -> Self {
         skip_assert_initialized!();
         // `Option::expect` is not `const` as of rustc 1.63.0.
@@ -76,6 +83,7 @@ impl ClockTime {
     ///
     /// Panics if the resulting duration in nanoseconds exceeds the `u64` range.
     #[track_caller]
+    #[inline]
     pub const fn from_mseconds(mseconds: u64) -> Self {
         skip_assert_initialized!();
         // `Option::expect` is not `const` as of rustc 1.63.0.
@@ -92,6 +100,7 @@ impl ClockTime {
     ///
     /// Panics if the resulting duration in nanoseconds exceeds the `u64` range.
     #[track_caller]
+    #[inline]
     pub const fn from_useconds(useconds: u64) -> Self {
         skip_assert_initialized!();
         // `Option::expect` is not `const` as of rustc 1.63.0.
@@ -109,6 +118,7 @@ impl ClockTime {
     /// Panics if the requested duration equals `GST_CLOCK_TIME_NONE`
     /// (`u64::MAX`).
     #[track_caller]
+    #[inline]
     pub const fn from_nseconds(nseconds: u64) -> Self {
         skip_assert_initialized!();
         assert!(
@@ -122,6 +132,7 @@ impl ClockTime {
 impl Signed<ClockTime> {
     // rustdoc-stripper-ignore-next
     /// Returns the `self` in nanoseconds.
+    #[inline]
     pub fn nseconds(self) -> Signed<u64> {
         match self {
             Signed::Positive(val) => Signed::Positive(val.nseconds()),
@@ -131,6 +142,7 @@ impl Signed<ClockTime> {
 
     // rustdoc-stripper-ignore-next
     /// Creates new value from nanoseconds.
+    #[inline]
     pub fn from_nseconds(val: Signed<u64>) -> Self {
         skip_assert_initialized!();
         match val {
@@ -141,6 +153,7 @@ impl Signed<ClockTime> {
 
     // rustdoc-stripper-ignore-next
     /// Returns the `self` in microseconds.
+    #[inline]
     pub fn useconds(self) -> Signed<u64> {
         match self {
             Signed::Positive(val) => Signed::Positive(val.useconds()),
@@ -150,6 +163,7 @@ impl Signed<ClockTime> {
 
     // rustdoc-stripper-ignore-next
     /// Creates new value from microseconds.
+    #[inline]
     pub fn from_useconds(val: Signed<u64>) -> Self {
         skip_assert_initialized!();
         match val {
@@ -160,6 +174,7 @@ impl Signed<ClockTime> {
 
     // rustdoc-stripper-ignore-next
     /// Returns the `self` in milliseconds.
+    #[inline]
     pub fn mseconds(self) -> Signed<u64> {
         match self {
             Signed::Positive(val) => Signed::Positive(val.mseconds()),
@@ -169,6 +184,7 @@ impl Signed<ClockTime> {
 
     // rustdoc-stripper-ignore-next
     /// Creates new value from milliseconds.
+    #[inline]
     pub fn from_mseconds(val: Signed<u64>) -> Self {
         skip_assert_initialized!();
         match val {
@@ -179,6 +195,7 @@ impl Signed<ClockTime> {
 
     // rustdoc-stripper-ignore-next
     /// Returns the `self` in seconds.
+    #[inline]
     pub fn seconds(self) -> Signed<u64> {
         match self {
             Signed::Positive(val) => Signed::Positive(val.seconds()),
@@ -188,6 +205,7 @@ impl Signed<ClockTime> {
 
     // rustdoc-stripper-ignore-next
     /// Creates new value from seconds.
+    #[inline]
     pub fn from_seconds(val: Signed<u64>) -> Self {
         skip_assert_initialized!();
         match val {
@@ -231,31 +249,37 @@ pub trait TimeFormatConstructor {
 
 impl TimeFormatConstructor for u64 {
     #[track_caller]
+    #[inline]
     fn nseconds(self) -> ClockTime {
         ClockTime::from_nseconds(self)
     }
 
     #[track_caller]
+    #[inline]
     fn useconds(self) -> ClockTime {
         ClockTime::from_useconds(self)
     }
 
     #[track_caller]
+    #[inline]
     fn mseconds(self) -> ClockTime {
         ClockTime::from_mseconds(self)
     }
 
     #[track_caller]
+    #[inline]
     fn seconds(self) -> ClockTime {
         ClockTime::from_seconds(self)
     }
 
     #[track_caller]
+    #[inline]
     fn minutes(self) -> ClockTime {
         ClockTime::from_seconds(self * 60)
     }
 
     #[track_caller]
+    #[inline]
     fn hours(self) -> ClockTime {
         ClockTime::from_seconds(self * 60 * 60)
     }
@@ -270,6 +294,7 @@ pub enum ClockTimeValueTypeOrNoneChecker {}
 unsafe impl glib::value::ValueTypeChecker for ClockTimeValueTypeOrNoneChecker {
     type Error = glib::value::ValueTypeMismatchOrNoneError<glib::value::ValueTypeMismatchError>;
 
+    #[inline]
     fn check(value: &glib::Value) -> Result<(), Self::Error> {
         skip_assert_initialized!();
         glib::value::GenericValueTypeChecker::<ClockTime>::check(value)?;
@@ -286,6 +311,7 @@ unsafe impl glib::value::ValueTypeChecker for ClockTimeValueTypeOrNoneChecker {
 unsafe impl<'a> glib::value::FromValue<'a> for ClockTime {
     type Checker = ClockTimeValueTypeOrNoneChecker;
 
+    #[inline]
     unsafe fn from_value(value: &glib::Value) -> ClockTime {
         skip_assert_initialized!();
         ClockTime(glib::gobject_ffi::g_value_get_uint64(
@@ -295,6 +321,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for ClockTime {
 }
 
 impl glib::value::ToValue for ClockTime {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<ClockTime>();
         let gct = self.into_glib();
@@ -308,12 +335,14 @@ impl glib::value::ToValue for ClockTime {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
 }
 
 impl glib::value::ToValueOptional for ClockTime {
+    #[inline]
     fn to_value_optional(opt: Option<&Self>) -> glib::Value {
         skip_assert_initialized!();
         let mut value = glib::Value::for_value_type::<ClockTime>();
@@ -325,6 +354,7 @@ impl glib::value::ToValueOptional for ClockTime {
 }
 
 impl From<ClockTime> for glib::Value {
+    #[inline]
     fn from(v: ClockTime) -> glib::Value {
         glib::value::ToValue::to_value(&v)
     }
@@ -332,6 +362,7 @@ impl From<ClockTime> for glib::Value {
 
 #[doc(hidden)]
 impl glib::StaticType for ClockTime {
+    #[inline]
     fn static_type() -> glib::Type {
         <u64 as glib::StaticType>::static_type()
     }
@@ -351,6 +382,7 @@ impl std::error::Error for DurationError {}
 impl TryFrom<Duration> for ClockTime {
     type Error = DurationError;
 
+    #[inline]
     fn try_from(d: Duration) -> Result<Self, Self::Error> {
         skip_assert_initialized!();
 
@@ -366,6 +398,7 @@ impl TryFrom<Duration> for ClockTime {
 }
 
 impl From<ClockTime> for Duration {
+    #[inline]
     fn from(t: ClockTime) -> Self {
         skip_assert_initialized!();
 

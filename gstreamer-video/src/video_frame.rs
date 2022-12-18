@@ -29,18 +29,22 @@ impl<T> fmt::Debug for VideoFrame<T> {
 }
 
 impl<T> VideoFrame<T> {
+    #[inline]
     pub fn info(&self) -> &crate::VideoInfo {
         &self.info
     }
 
+    #[inline]
     pub fn flags(&self) -> crate::VideoFrameFlags {
         unsafe { from_glib(self.frame.flags) }
     }
 
+    #[inline]
     pub fn id(&self) -> i32 {
         self.frame.id
     }
 
+    #[inline]
     pub fn into_buffer(self) -> gst::Buffer {
         let s = mem::ManuallyDrop::new(self);
         unsafe { ptr::read(&s.buffer) }
@@ -80,105 +84,130 @@ impl<T> VideoFrame<T> {
         }
     }
 
+    #[inline]
     pub fn format(&self) -> crate::VideoFormat {
         self.info().format()
     }
 
+    #[inline]
     pub fn format_info(&self) -> crate::VideoFormatInfo {
         self.info().format_info()
     }
 
+    #[inline]
     pub fn width(&self) -> u32 {
         self.info().width()
     }
 
+    #[inline]
     pub fn height(&self) -> u32 {
         self.info().height()
     }
 
+    #[inline]
     pub fn size(&self) -> usize {
         self.info().size()
     }
 
+    #[inline]
     pub fn is_interlaced(&self) -> bool {
         self.flags().contains(crate::VideoFrameFlags::INTERLACED)
     }
 
+    #[inline]
     pub fn is_tff(&self) -> bool {
         self.flags().contains(crate::VideoFrameFlags::TFF)
     }
 
+    #[inline]
     pub fn is_rff(&self) -> bool {
         self.flags().contains(crate::VideoFrameFlags::RFF)
     }
 
+    #[inline]
     pub fn is_onefield(&self) -> bool {
         self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
     }
 
+    #[inline]
     pub fn is_bottom_field(&self) -> bool {
         self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
             && !self.flags().contains(crate::VideoFrameFlags::TFF)
     }
 
+    #[inline]
     pub fn is_top_field(&self) -> bool {
         self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
             && self.flags().contains(crate::VideoFrameFlags::TFF)
     }
 
+    #[inline]
     pub fn n_planes(&self) -> u32 {
         self.info().n_planes()
     }
 
+    #[inline]
     pub fn n_components(&self) -> u32 {
         self.info().n_components()
     }
 
+    #[inline]
     pub fn plane_stride(&self) -> &[i32] {
         self.info().stride()
     }
 
+    #[inline]
     pub fn plane_offset(&self) -> &[usize] {
         self.info().offset()
     }
 
+    #[inline]
     pub fn comp_data(&self, component: u32) -> Result<&[u8], glib::BoolError> {
         let poffset = self.info().comp_poffset(component as u8) as usize;
         Ok(&self.plane_data(self.format_info().plane()[component as usize])?[poffset..])
     }
 
+    #[inline]
     pub fn comp_depth(&self, component: u32) -> u32 {
         self.info().comp_depth(component as u8)
     }
 
+    #[inline]
     pub fn comp_height(&self, component: u32) -> u32 {
         self.info().comp_height(component as u8)
     }
 
+    #[inline]
     pub fn comp_width(&self, component: u32) -> u32 {
         self.info().comp_width(component as u8)
     }
 
+    #[inline]
     pub fn comp_offset(&self, component: u32) -> usize {
         self.info().comp_offset(component as u8)
     }
 
+    #[inline]
     pub fn comp_poffset(&self, component: u32) -> u32 {
         self.info().comp_poffset(component as u8)
     }
 
+    #[inline]
     pub fn comp_pstride(&self, component: u32) -> i32 {
         self.info().comp_pstride(component as u8)
     }
 
+    #[inline]
     pub fn comp_stride(&self, component: u32) -> i32 {
         self.info().comp_stride(component as u8)
     }
 
+    #[inline]
     pub fn comp_plane(&self, component: u32) -> u32 {
         self.info().comp_plane(component as u8)
     }
 
+    #[inline]
     pub fn buffer(&self) -> &gst::BufferRef {
         unsafe { gst::BufferRef::from_ptr(self.frame.buffer) }
     }
@@ -219,6 +248,7 @@ impl<T> VideoFrame<T> {
         }
     }
 
+    #[inline]
     pub unsafe fn from_glib_full(frame: ffi::GstVideoFrame) -> Self {
         let info = crate::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::Buffer::from_glib_none(frame.buffer);
@@ -230,6 +260,7 @@ impl<T> VideoFrame<T> {
         }
     }
 
+    #[inline]
     pub fn as_video_frame_ref(&self) -> VideoFrameRef<&gst::BufferRef> {
         let frame = unsafe { ptr::read(&self.frame) };
         let info = self.info.clone();
@@ -241,16 +272,19 @@ impl<T> VideoFrame<T> {
         }
     }
 
+    #[inline]
     pub fn as_ptr(&self) -> *const ffi::GstVideoFrame {
         &self.frame
     }
 
+    #[inline]
     pub fn into_raw(self) -> ffi::GstVideoFrame {
         mem::ManuallyDrop::new(self).frame
     }
 }
 
 impl<T> Drop for VideoFrame<T> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             ffi::gst_video_frame_unmap(&mut self.frame);
@@ -259,6 +293,7 @@ impl<T> Drop for VideoFrame<T> {
 }
 
 impl VideoFrame<Readable> {
+    #[inline]
     pub fn from_buffer_readable(
         buffer: gst::Buffer,
         info: &crate::VideoInfo,
@@ -291,6 +326,7 @@ impl VideoFrame<Readable> {
         }
     }
 
+    #[inline]
     pub fn from_buffer_id_readable(
         buffer: gst::Buffer,
         id: i32,
@@ -325,12 +361,14 @@ impl VideoFrame<Readable> {
         }
     }
 
+    #[inline]
     pub fn buffer_owned(&self) -> gst::Buffer {
         unsafe { from_glib_none(self.frame.buffer) }
     }
 }
 
 impl VideoFrame<Writable> {
+    #[inline]
     pub fn from_buffer_writable(
         buffer: gst::Buffer,
         info: &crate::VideoInfo,
@@ -365,6 +403,7 @@ impl VideoFrame<Writable> {
         }
     }
 
+    #[inline]
     pub fn from_buffer_id_writable(
         buffer: gst::Buffer,
         id: i32,
@@ -401,6 +440,7 @@ impl VideoFrame<Writable> {
         }
     }
 
+    #[inline]
     pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
         unsafe { gst::BufferRef::from_mut_ptr(self.frame.buffer) }
     }
@@ -446,6 +486,7 @@ impl VideoFrame<Writable> {
         }
     }
 
+    #[inline]
     pub fn as_mut_video_frame_ref(&mut self) -> VideoFrameRef<&mut gst::BufferRef> {
         let frame = unsafe { ptr::read(&self.frame) };
         let info = self.info.clone();
@@ -457,6 +498,7 @@ impl VideoFrame<Writable> {
         }
     }
 
+    #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut ffi::GstVideoFrame {
         &mut self.frame
     }
@@ -471,14 +513,17 @@ pub struct VideoFrameRef<T> {
 }
 
 impl<T> VideoFrameRef<T> {
+    #[inline]
     pub fn info(&self) -> &crate::VideoInfo {
         &self.info
     }
 
+    #[inline]
     pub fn flags(&self) -> crate::VideoFrameFlags {
         unsafe { from_glib(self.frame.flags) }
     }
 
+    #[inline]
     pub fn id(&self) -> i32 {
         self.frame.id
     }
@@ -520,64 +565,79 @@ impl<T> VideoFrameRef<T> {
         }
     }
 
+    #[inline]
     pub fn format(&self) -> crate::VideoFormat {
         self.info().format()
     }
 
+    #[inline]
     pub fn format_info(&self) -> crate::VideoFormatInfo {
         self.info().format_info()
     }
 
+    #[inline]
     pub fn width(&self) -> u32 {
         self.info().width()
     }
 
+    #[inline]
     pub fn height(&self) -> u32 {
         self.info().height()
     }
 
+    #[inline]
     pub fn size(&self) -> usize {
         self.info().size()
     }
 
+    #[inline]
     pub fn is_interlaced(&self) -> bool {
         self.flags().contains(crate::VideoFrameFlags::INTERLACED)
     }
 
+    #[inline]
     pub fn is_tff(&self) -> bool {
         self.flags().contains(crate::VideoFrameFlags::TFF)
     }
 
+    #[inline]
     pub fn is_rff(&self) -> bool {
         self.flags().contains(crate::VideoFrameFlags::RFF)
     }
 
+    #[inline]
     pub fn is_onefield(&self) -> bool {
         self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
     }
 
+    #[inline]
     pub fn is_bottom_field(&self) -> bool {
         self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
             && !self.flags().contains(crate::VideoFrameFlags::TFF)
     }
 
+    #[inline]
     pub fn is_top_field(&self) -> bool {
         self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
             && self.flags().contains(crate::VideoFrameFlags::TFF)
     }
 
+    #[inline]
     pub fn n_planes(&self) -> u32 {
         self.info().n_planes()
     }
 
+    #[inline]
     pub fn n_components(&self) -> u32 {
         self.info().n_components()
     }
 
+    #[inline]
     pub fn plane_stride(&self) -> &[i32] {
         self.info().stride()
     }
 
+    #[inline]
     pub fn plane_offset(&self) -> &[usize] {
         self.info().offset()
     }
@@ -587,34 +647,42 @@ impl<T> VideoFrameRef<T> {
         Ok(&self.plane_data(self.format_info().plane()[component as usize])?[poffset..])
     }
 
+    #[inline]
     pub fn comp_depth(&self, component: u32) -> u32 {
         self.info().comp_depth(component as u8)
     }
 
+    #[inline]
     pub fn comp_height(&self, component: u32) -> u32 {
         self.info().comp_height(component as u8)
     }
 
+    #[inline]
     pub fn comp_width(&self, component: u32) -> u32 {
         self.info().comp_width(component as u8)
     }
 
+    #[inline]
     pub fn comp_offset(&self, component: u32) -> usize {
         self.info().comp_offset(component as u8)
     }
 
+    #[inline]
     pub fn comp_poffset(&self, component: u32) -> u32 {
         self.info().comp_poffset(component as u8)
     }
 
+    #[inline]
     pub fn comp_pstride(&self, component: u32) -> i32 {
         self.info().comp_pstride(component as u8)
     }
 
+    #[inline]
     pub fn comp_stride(&self, component: u32) -> i32 {
         self.info().comp_stride(component as u8)
     }
 
+    #[inline]
     pub fn comp_plane(&self, component: u32) -> u32 {
         self.info().comp_plane(component as u8)
     }
@@ -655,12 +723,14 @@ impl<T> VideoFrameRef<T> {
         }
     }
 
+    #[inline]
     pub fn as_ptr(&self) -> *const ffi::GstVideoFrame {
         &self.frame
     }
 }
 
 impl<'a> VideoFrameRef<&'a gst::BufferRef> {
+    #[inline]
     pub unsafe fn from_glib_borrow(frame: *const ffi::GstVideoFrame) -> Borrowed<Self> {
         assert!(!frame.is_null());
 
@@ -674,6 +744,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         })
     }
 
+    #[inline]
     pub unsafe fn from_glib_full(frame: ffi::GstVideoFrame) -> Self {
         let info = crate::VideoInfo(ptr::read(&frame.info));
         Self {
@@ -684,6 +755,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         }
     }
 
+    #[inline]
     pub fn from_buffer_ref_readable<'b>(
         buffer: &'a gst::BufferRef,
         info: &'b crate::VideoInfo,
@@ -716,6 +788,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         }
     }
 
+    #[inline]
     pub fn from_buffer_ref_id_readable<'b>(
         buffer: &'a gst::BufferRef,
         id: i32,
@@ -750,12 +823,14 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         }
     }
 
+    #[inline]
     pub fn buffer(&self) -> &gst::BufferRef {
         unsafe { gst::BufferRef::from_ptr(self.frame.buffer) }
     }
 }
 
 impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
+    #[inline]
     pub unsafe fn from_glib_borrow_mut(frame: *mut ffi::GstVideoFrame) -> Self {
         assert!(!frame.is_null());
 
@@ -769,6 +844,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         }
     }
 
+    #[inline]
     pub unsafe fn from_glib_full_mut(frame: ffi::GstVideoFrame) -> Self {
         let info = crate::VideoInfo(ptr::read(&frame.info));
         Self {
@@ -779,6 +855,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         }
     }
 
+    #[inline]
     pub fn from_buffer_ref_writable<'b>(
         buffer: &'a mut gst::BufferRef,
         info: &'b crate::VideoInfo,
@@ -813,6 +890,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         }
     }
 
+    #[inline]
     pub fn from_buffer_ref_id_writable<'b>(
         buffer: &'a mut gst::BufferRef,
         id: i32,
@@ -849,6 +927,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         }
     }
 
+    #[inline]
     pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
         unsafe { gst::BufferRef::from_mut_ptr(self.frame.buffer) }
     }
@@ -894,6 +973,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         }
     }
 
+    #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut ffi::GstVideoFrame {
         &mut self.frame
     }
@@ -902,6 +982,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
 impl<'a> ops::Deref for VideoFrameRef<&'a mut gst::BufferRef> {
     type Target = VideoFrameRef<&'a gst::BufferRef>;
 
+    #[inline]
     fn deref(&self) -> &Self::Target {
         unsafe { &*(self as *const Self as *const Self::Target) }
     }
@@ -911,6 +992,7 @@ unsafe impl<T> Send for VideoFrameRef<T> {}
 unsafe impl<T> Sync for VideoFrameRef<T> {}
 
 impl<T> Drop for VideoFrameRef<T> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             if self.unmap {
@@ -928,6 +1010,7 @@ pub trait VideoBufferExt {
 }
 
 impl VideoBufferExt for gst::BufferRef {
+    #[inline]
     fn video_flags(&self) -> crate::VideoBufferFlags {
         unsafe {
             let ptr = self.as_mut_ptr();
@@ -935,6 +1018,7 @@ impl VideoBufferExt for gst::BufferRef {
         }
     }
 
+    #[inline]
     fn set_video_flags(&mut self, flags: crate::VideoBufferFlags) {
         unsafe {
             let ptr = self.as_mut_ptr();
@@ -942,6 +1026,7 @@ impl VideoBufferExt for gst::BufferRef {
         }
     }
 
+    #[inline]
     fn unset_video_flags(&mut self, flags: crate::VideoBufferFlags) {
         unsafe {
             let ptr = self.as_mut_ptr();

@@ -43,11 +43,13 @@ impl AudioClippingMeta {
     }
 
     #[doc(alias = "get_start")]
+    #[inline]
     pub fn start(&self) -> gst::GenericFormattedValue {
         unsafe { gst::GenericFormattedValue::new(from_glib(self.0.format), self.0.start as i64) }
     }
 
     #[doc(alias = "get_end")]
+    #[inline]
     pub fn end(&self) -> gst::GenericFormattedValue {
         unsafe { gst::GenericFormattedValue::new(from_glib(self.0.format), self.0.end as i64) }
     }
@@ -57,6 +59,7 @@ unsafe impl MetaAPI for AudioClippingMeta {
     type GstType = ffi::GstAudioClippingMeta;
 
     #[doc(alias = "gst_audio_clipping_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_clipping_meta_api_get_type()) }
     }
@@ -175,16 +178,19 @@ impl AudioMeta {
     }
 
     #[doc(alias = "get_info")]
+    #[inline]
     pub fn info(&self) -> crate::AudioInfo {
         unsafe { from_glib_none(&self.0.info as *const _ as *mut ffi::GstAudioInfo) }
     }
 
     #[doc(alias = "get_samples")]
+    #[inline]
     pub fn samples(&self) -> usize {
         self.0.samples
     }
 
     #[doc(alias = "get_offsets")]
+    #[inline]
     pub fn offsets(&self) -> &[usize] {
         if self.0.offsets.is_null() || self.0.info.channels < 1 {
             return &[];
@@ -200,6 +206,7 @@ unsafe impl MetaAPI for AudioMeta {
     type GstType = ffi::GstAudioMeta;
 
     #[doc(alias = "gst_audio_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_meta_api_get_type()) }
     }
@@ -252,11 +259,13 @@ impl AudioLevelMeta {
     }
 
     #[doc(alias = "get_level")]
+    #[inline]
     pub fn level(&self) -> u8 {
         self.0.level
     }
 
     #[doc(alias = "get_voice_activity")]
+    #[inline]
     pub fn voice_activity(&self) -> bool {
         unsafe { from_glib(self.0.voice_activity) }
     }
@@ -268,6 +277,7 @@ unsafe impl MetaAPI for AudioLevelMeta {
     type GstType = ffi::GstAudioLevelMeta;
 
     #[doc(alias = "gst_audio_level_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_level_meta_api_get_type()) }
     }

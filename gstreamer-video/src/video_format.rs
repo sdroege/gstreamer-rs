@@ -217,6 +217,7 @@ pub enum VideoEndianness {
 }
 
 impl FromGlib<i32> for VideoEndianness {
+    #[inline]
     unsafe fn from_glib(value: i32) -> Self {
         skip_assert_initialized!();
 
@@ -231,6 +232,7 @@ impl FromGlib<i32> for VideoEndianness {
 impl IntoGlib for VideoEndianness {
     type GlibType = i32;
 
+    #[inline]
     fn into_glib(self) -> i32 {
         match self {
             Self::LittleEndian => 1234,

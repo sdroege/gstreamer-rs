@@ -134,33 +134,40 @@ impl VideoTimeCode {
         unsafe { from_glib(ffi::gst_video_time_code_is_valid(self.to_glib_none().0)) }
     }
 
+    #[inline]
     pub fn set_fps(&mut self, fps: gst::Fraction) {
         self.inner.config.fps_n = fps.numer() as u32;
         self.inner.config.fps_d = fps.denom() as u32;
     }
 
+    #[inline]
     pub fn set_flags(&mut self, flags: VideoTimeCodeFlags) {
         self.inner.config.flags = flags.into_glib()
     }
 
+    #[inline]
     pub fn set_hours(&mut self, hours: u32) {
         self.inner.hours = hours
     }
 
+    #[inline]
     pub fn set_minutes(&mut self, minutes: u32) {
         assert!(minutes < 60);
         self.inner.minutes = minutes
     }
 
+    #[inline]
     pub fn set_seconds(&mut self, seconds: u32) {
         assert!(seconds < 60);
         self.inner.seconds = seconds
     }
 
+    #[inline]
     pub fn set_frames(&mut self, frames: u32) {
         self.inner.frames = frames
     }
 
+    #[inline]
     pub fn set_field_count(&mut self, field_count: u32) {
         assert!(field_count <= 2);
         self.inner.field_count = field_count
@@ -289,26 +296,32 @@ impl ValidVideoTimeCode {
 macro_rules! generic_impl {
     ($name:ident) => {
         impl $name {
+            #[inline]
             pub fn hours(&self) -> u32 {
                 self.inner.hours
             }
 
+            #[inline]
             pub fn minutes(&self) -> u32 {
                 self.inner.minutes
             }
 
+            #[inline]
             pub fn seconds(&self) -> u32 {
                 self.inner.seconds
             }
 
+            #[inline]
             pub fn frames(&self) -> u32 {
                 self.inner.frames
             }
 
+            #[inline]
             pub fn field_count(&self) -> u32 {
                 self.inner.field_count
             }
 
+            #[inline]
             pub fn fps(&self) -> gst::Fraction {
                 (
                     self.inner.config.fps_n as i32,
@@ -317,14 +330,17 @@ macro_rules! generic_impl {
                     .into()
             }
 
+            #[inline]
             pub fn flags(&self) -> VideoTimeCodeFlags {
                 unsafe { from_glib(self.inner.config.flags) }
             }
 
+            #[inline]
             pub fn latest_daily_jam(&self) -> Option<glib::DateTime> {
                 unsafe { from_glib_none(self.inner.config.latest_daily_jam) }
             }
 
+            #[inline]
             pub fn set_latest_daily_jam(&mut self, latest_daily_jam: Option<glib::DateTime>) {
                 unsafe {
                     if !self.inner.config.latest_daily_jam.is_null() {
@@ -372,6 +388,7 @@ generic_impl!(VideoTimeCode);
 generic_impl!(ValidVideoTimeCode);
 
 impl StaticType for ValidVideoTimeCode {
+    #[inline]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_time_code_get_type()) }
     }
@@ -457,6 +474,7 @@ impl Ord for ValidVideoTimeCode {
 }
 
 impl From<ValidVideoTimeCode> for VideoTimeCode {
+    #[inline]
     fn from(v: ValidVideoTimeCode) -> Self {
         skip_assert_initialized!();
         // Use ManuallyDrop here to prevent the Drop impl of VideoTimeCode
@@ -492,10 +510,12 @@ impl VideoTimeCodeMeta {
     }
 
     #[doc(alias = "get_tc")]
+    #[inline]
     pub fn tc(&self) -> ValidVideoTimeCode {
         unsafe { ValidVideoTimeCode::from_glib_none(&self.0.tc as *const _) }
     }
 
+    #[inline]
     pub fn set_tc(&mut self, tc: ValidVideoTimeCode) {
         #![allow(clippy::cast_ptr_alignment)]
         unsafe {
@@ -513,6 +533,7 @@ unsafe impl MetaAPI for VideoTimeCodeMeta {
     type GstType = ffi::GstVideoTimeCodeMeta;
 
     #[doc(alias = "gst_video_time_code_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_time_code_meta_api_get_type()) }
     }

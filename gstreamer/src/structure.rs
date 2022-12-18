@@ -93,6 +93,7 @@ impl Structure {
 }
 
 impl IntoGlibPtr<*mut ffi::GstStructure> for Structure {
+    #[inline]
     unsafe fn into_glib_ptr(self) -> *mut ffi::GstStructure {
         let s = mem::ManuallyDrop::new(self);
         s.0.as_ptr()
@@ -102,30 +103,35 @@ impl IntoGlibPtr<*mut ffi::GstStructure> for Structure {
 impl Deref for Structure {
     type Target = StructureRef;
 
+    #[inline]
     fn deref(&self) -> &StructureRef {
         unsafe { &*(self.0.as_ptr() as *const StructureRef) }
     }
 }
 
 impl DerefMut for Structure {
+    #[inline]
     fn deref_mut(&mut self) -> &mut StructureRef {
         unsafe { &mut *(self.0.as_ptr() as *mut StructureRef) }
     }
 }
 
 impl AsRef<StructureRef> for Structure {
+    #[inline]
     fn as_ref(&self) -> &StructureRef {
         self.deref()
     }
 }
 
 impl AsMut<StructureRef> for Structure {
+    #[inline]
     fn as_mut(&mut self) -> &mut StructureRef {
         self.deref_mut()
     }
 }
 
 impl Clone for Structure {
+    #[inline]
     fn clone(&self) -> Self {
         unsafe {
             let ptr = ffi::gst_structure_copy(self.0.as_ref());
@@ -136,6 +142,7 @@ impl Clone for Structure {
 }
 
 impl Drop for Structure {
+    #[inline]
     fn drop(&mut self) {
         unsafe { ffi::gst_structure_free(self.0.as_mut()) }
     }
@@ -193,12 +200,14 @@ impl str::FromStr for Structure {
 }
 
 impl Borrow<StructureRef> for Structure {
+    #[inline]
     fn borrow(&self) -> &StructureRef {
         self.as_ref()
     }
 }
 
 impl BorrowMut<StructureRef> for Structure {
+    #[inline]
     fn borrow_mut(&mut self) -> &mut StructureRef {
         self.as_mut()
     }
@@ -217,6 +226,7 @@ impl ToOwned for StructureRef {
 }
 
 impl glib::types::StaticType for Structure {
+    #[inline]
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_structure_get_type()) }
     }
@@ -225,10 +235,12 @@ impl glib::types::StaticType for Structure {
 impl<'a> ToGlibPtr<'a, *const ffi::GstStructure> for Structure {
     type Storage = PhantomData<&'a Self>;
 
+    #[inline]
     fn to_glib_none(&'a self) -> Stash<'a, *const ffi::GstStructure, Self> {
         unsafe { Stash(self.0.as_ref(), PhantomData) }
     }
 
+    #[inline]
     fn to_glib_full(&self) -> *const ffi::GstStructure {
         unsafe { ffi::gst_structure_copy(self.0.as_ref()) }
     }
@@ -237,6 +249,7 @@ impl<'a> ToGlibPtr<'a, *const ffi::GstStructure> for Structure {
 impl<'a> ToGlibPtr<'a, *mut ffi::GstStructure> for Structure {
     type Storage = PhantomData<&'a Self>;
 
+    #[inline]
     fn to_glib_none(&'a self) -> Stash<'a, *mut ffi::GstStructure, Self> {
         unsafe {
             Stash(
@@ -246,6 +259,7 @@ impl<'a> ToGlibPtr<'a, *mut ffi::GstStructure> for Structure {
         }
     }
 
+    #[inline]
     fn to_glib_full(&self) -> *mut ffi::GstStructure {
         unsafe { ffi::gst_structure_copy(self.0.as_ref()) }
     }
@@ -254,12 +268,14 @@ impl<'a> ToGlibPtr<'a, *mut ffi::GstStructure> for Structure {
 impl<'a> ToGlibPtrMut<'a, *mut ffi::GstStructure> for Structure {
     type Storage = PhantomData<&'a mut Self>;
 
+    #[inline]
     fn to_glib_none_mut(&'a mut self) -> StashMut<*mut ffi::GstStructure, Self> {
         unsafe { StashMut(self.0.as_mut(), PhantomData) }
     }
 }
 
 impl FromGlibPtrNone<*const ffi::GstStructure> for Structure {
+    #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstStructure) -> Self {
         assert!(!ptr.is_null());
         let ptr = ffi::gst_structure_copy(ptr);
@@ -269,6 +285,7 @@ impl FromGlibPtrNone<*const ffi::GstStructure> for Structure {
 }
 
 impl FromGlibPtrNone<*mut ffi::GstStructure> for Structure {
+    #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstStructure) -> Self {
         assert!(!ptr.is_null());
         let ptr = ffi::gst_structure_copy(ptr);
@@ -278,6 +295,7 @@ impl FromGlibPtrNone<*mut ffi::GstStructure> for Structure {
 }
 
 impl FromGlibPtrFull<*const ffi::GstStructure> for Structure {
+    #[inline]
     unsafe fn from_glib_full(ptr: *const ffi::GstStructure) -> Self {
         assert!(!ptr.is_null());
         Structure(ptr::NonNull::new_unchecked(ptr as *mut ffi::GstStructure))
@@ -285,6 +303,7 @@ impl FromGlibPtrFull<*const ffi::GstStructure> for Structure {
 }
 
 impl FromGlibPtrFull<*mut ffi::GstStructure> for Structure {
+    #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstStructure) -> Self {
         assert!(!ptr.is_null());
         Structure(ptr::NonNull::new_unchecked(ptr))
@@ -292,12 +311,14 @@ impl FromGlibPtrFull<*mut ffi::GstStructure> for Structure {
 }
 
 impl FromGlibPtrBorrow<*const ffi::GstStructure> for Structure {
+    #[inline]
     unsafe fn from_glib_borrow(ptr: *const ffi::GstStructure) -> Borrowed<Self> {
         Borrowed::new(from_glib_full(ptr))
     }
 }
 
 impl FromGlibPtrBorrow<*mut ffi::GstStructure> for Structure {
+    #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstStructure) -> Borrowed<Self> {
         Borrowed::new(from_glib_full(ptr))
     }
@@ -381,22 +402,26 @@ unsafe impl Send for StructureRef {}
 unsafe impl Sync for StructureRef {}
 
 impl StructureRef {
+    #[inline]
     pub unsafe fn from_glib_borrow<'a>(ptr: *const ffi::GstStructure) -> &'a StructureRef {
         assert!(!ptr.is_null());
 
         &*(ptr as *mut StructureRef)
     }
 
+    #[inline]
     pub unsafe fn from_glib_borrow_mut<'a>(ptr: *mut ffi::GstStructure) -> &'a mut StructureRef {
         assert!(!ptr.is_null());
 
         &mut *(ptr as *mut StructureRef)
     }
 
+    #[inline]
     pub fn as_ptr(&self) -> *const ffi::GstStructure {
         self as *const Self as *const ffi::GstStructure
     }
 
+    #[inline]
     pub fn as_mut_ptr(&self) -> *mut ffi::GstStructure {
         self as *const Self as *mut ffi::GstStructure
     }
@@ -849,6 +874,7 @@ impl PartialEq for StructureRef {
 impl Eq for StructureRef {}
 
 impl glib::types::StaticType for StructureRef {
+    #[inline]
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_structure_get_type()) }
     }

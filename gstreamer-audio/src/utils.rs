@@ -10,6 +10,7 @@ impl<'a> MutexGuard<'a> {
     #[allow(clippy::trivially_copy_pass_by_ref)]
     #[allow(dead_code)]
     #[doc(alias = "g_mutex_lock")]
+    #[inline]
     pub fn lock(mutex: &'a glib::ffi::GMutex) -> Self {
         skip_assert_initialized!();
         unsafe {
@@ -20,6 +21,7 @@ impl<'a> MutexGuard<'a> {
 }
 
 impl<'a> Drop for MutexGuard<'a> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             glib::ffi::g_mutex_unlock(mut_override(self.0));

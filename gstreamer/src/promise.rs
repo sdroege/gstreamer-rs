@@ -192,6 +192,7 @@ impl futures_core::future::FusedFuture for PromiseFuture {
 impl Deref for PromiseReply {
     type Target = StructureRef;
 
+    #[inline]
     fn deref(&self) -> &StructureRef {
         self.0.get_reply().expect("Promise without reply")
     }

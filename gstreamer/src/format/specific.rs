@@ -37,6 +37,7 @@ impl Buffers {
     /// Panics if the provided count equals `u64::MAX`,
     /// which is reserved for `None` in C.
     #[track_caller]
+    #[inline]
     pub const fn from_u64(buffers: u64) -> Self {
         if buffers == ffi::GST_BUFFER_OFFSET_NONE {
             panic!("`Buffers` value out of range");
@@ -53,6 +54,7 @@ impl Buffers {
     /// Panics if the provided count equals `u64::MAX`,
     /// which is reserved for `None` in C.
     #[track_caller]
+    #[inline]
     pub fn from_usize(buffers: usize) -> Self {
         Buffers::from_u64(buffers.try_into().unwrap())
     }
@@ -76,6 +78,7 @@ pub trait BuffersFormatConstructor {
 
 impl BuffersFormatConstructor for u64 {
     #[track_caller]
+    #[inline]
     fn buffers(self) -> Buffers {
         Buffers::from_u64(self)
     }
@@ -109,6 +112,7 @@ impl Bytes {
     /// Panics if the provided count equals `u64::MAX`,
     /// which is reserved for `None` in C.
     #[track_caller]
+    #[inline]
     pub const fn from_u64(bytes: u64) -> Self {
         if bytes == u64::MAX {
             panic!("`Bytes` value out of range");
@@ -125,6 +129,7 @@ impl Bytes {
     /// Panics if the provided count equals `u64::MAX`,
     /// which is reserved for `None` in C.
     #[track_caller]
+    #[inline]
     pub fn from_usize(bytes: usize) -> Self {
         // FIXME can't use `try_into` in `const` (rustc 1.64.0)
         Bytes::from_u64(bytes.try_into().unwrap())
@@ -165,21 +170,25 @@ pub trait BytesFormatConstructor {
 
 impl BytesFormatConstructor for u64 {
     #[track_caller]
+    #[inline]
     fn bytes(self) -> Bytes {
         Bytes::from_u64(self)
     }
 
     #[track_caller]
+    #[inline]
     fn kibibytes(self) -> Bytes {
         Bytes::from_u64(self * 1024)
     }
 
     #[track_caller]
+    #[inline]
     fn mebibytes(self) -> Bytes {
         Bytes::from_u64(self * 1024 * 1024)
     }
 
     #[track_caller]
+    #[inline]
     fn gibibytes(self) -> Bytes {
         Bytes::from_u64(self * 1024 * 1024 * 1024)
     }
@@ -200,6 +209,7 @@ impl Default {
     /// Panics if the provided quantity equals `u64::MAX`,
     /// which is reserved for `None` in C.
     #[track_caller]
+    #[inline]
     pub const fn from_u64(quantity: u64) -> Self {
         if quantity == u64::MAX {
             panic!("`Default` value out of range");
@@ -216,6 +226,7 @@ impl Default {
     /// Panics if the provided quantity equals `u64::MAX`,
     /// which is reserved for `None` in C.
     #[track_caller]
+    #[inline]
     pub fn from_usize(quantity: usize) -> Self {
         // FIXME can't use `try_into` in `const` (rustc 1.64.0)
         Default::from_u64(quantity.try_into().unwrap())
@@ -240,6 +251,7 @@ pub trait DefaultFormatConstructor {
 
 impl DefaultFormatConstructor for u64 {
     #[track_caller]
+    #[inline]
     fn default_format(self) -> Default {
         Default::from_u64(self)
     }
@@ -262,6 +274,7 @@ impl Percent {
     ///
     /// Panics if the provided value is larger than 100.
     #[track_caller]
+    #[inline]
     pub const fn from_percent(percent: u32) -> Self {
         if percent > 100 {
             panic!("`Percent` value out of range");
@@ -277,6 +290,7 @@ impl Percent {
     ///
     /// Panics if the provided value is larger than [`Self::MAX`].
     #[track_caller]
+    #[inline]
     pub const fn from_ppm(ppm: u32) -> Self {
         if ppm > ffi::GST_FORMAT_PERCENT_MAX as u32 {
             panic!("`Percent` ppm value out of range");
@@ -292,6 +306,7 @@ impl Percent {
     ///
     /// Panics if the provided radio is out of the range [0.0, 1.0].
     #[track_caller]
+    #[inline]
     pub fn from_ratio(ratio: f32) -> Self {
         // FIXME floating point arithmetic is not allowed in constant functions (rustc 1.64.0)
         Percent::try_from(ratio).expect("`Percent` ratio out of range")
@@ -305,24 +320,29 @@ impl_signed_int_into_signed!(Percent, u32);
 impl FormattedValue for Option<Percent> {
     type FullRange = Option<Percent>;
 
+    #[inline]
     fn default_format() -> Format {
         Format::Percent
     }
 
+    #[inline]
     fn format(&self) -> Format {
         Format::Percent
     }
 
+    #[inline]
     fn is_some(&self) -> bool {
         Option::is_some(self)
     }
 
+    #[inline]
     unsafe fn into_raw_value(self) -> i64 {
         self.map_or(-1, |v| v.0 as i64)
     }
 }
 
 impl FormattedValueFullRange for Option<Percent> {
+    #[inline]
     unsafe fn from_raw(format: Format, value: i64) -> Self {
         debug_assert_eq!(format, Format::Percent);
         Percent::try_from_glib(value).ok()
@@ -330,6 +350,7 @@ impl FormattedValueFullRange for Option<Percent> {
 }
 
 impl From<Option<Percent>> for GenericFormattedValue {
+    #[inline]
     fn from(v: Option<Percent>) -> Self {
         skip_assert_initialized!();
         GenericFormattedValue::Percent(v)
@@ -337,6 +358,7 @@ impl From<Option<Percent>> for GenericFormattedValue {
 }
 
 impl From<Percent> for GenericFormattedValue {
+    #[inline]
     fn from(v: Percent) -> Self {
         skip_assert_initialized!();
         GenericFormattedValue::Percent(Some(v))
@@ -346,18 +368,22 @@ impl From<Percent> for GenericFormattedValue {
 impl FormattedValue for Percent {
     type FullRange = Option<Percent>;
 
+    #[inline]
     fn default_format() -> Format {
         Format::Percent
     }
 
+    #[inline]
     fn format(&self) -> Format {
         Format::Percent
     }
 
+    #[inline]
     fn is_some(&self) -> bool {
         true
     }
 
+    #[inline]
     unsafe fn into_raw_value(self) -> i64 {
         self.0 as i64
     }
@@ -366,6 +392,7 @@ impl FormattedValue for Percent {
 impl TryFrom<u64> for Percent {
     type Error = GlibNoneError;
 
+    #[inline]
     fn try_from(v: u64) -> Result<Percent, GlibNoneError> {
         skip_assert_initialized!();
         unsafe { Self::try_from_glib(v as i64) }
@@ -388,6 +415,7 @@ impl TryFromGlib<i64> for Percent {
 impl TryFrom<u32> for Percent {
     type Error = FormattedValueError;
 
+    #[inline]
     fn try_from(value: u32) -> Result<Self, Self::Error> {
         skip_assert_initialized!();
         if value > ffi::GST_FORMAT_PERCENT_MAX as u32 {
@@ -401,6 +429,7 @@ impl TryFrom<u32> for Percent {
 impl TryFrom<GenericFormattedValue> for Option<Percent> {
     type Error = FormattedValueError;
 
+    #[inline]
     fn try_from(v: GenericFormattedValue) -> Result<Option<Percent>, Self::Error> {
         skip_assert_initialized!();
         if let GenericFormattedValue::Percent(v) = v {
@@ -416,6 +445,7 @@ impl SpecificFormattedValue for Option<Percent> {}
 impl SpecificFormattedValueFullRange for Option<Percent> {}
 impl SpecificFormattedValueIntrinsic for Percent {}
 impl FormattedValueNoneBuilder for Option<Percent> {
+    #[inline]
     fn none() -> Option<Percent> {
         None
     }
@@ -428,6 +458,7 @@ pub struct TryPercentFromFloatError(());
 impl TryFrom<f64> for Percent {
     type Error = TryPercentFromFloatError;
 
+    #[inline]
     fn try_from(v: f64) -> Result<Self, Self::Error> {
         skip_assert_initialized!();
         if v < 0.0 || v > 1.0 {
@@ -443,6 +474,7 @@ impl TryFrom<f64> for Percent {
 impl TryFrom<f32> for Percent {
     type Error = TryPercentFromFloatError;
 
+    #[inline]
     fn try_from(v: f32) -> Result<Self, Self::Error> {
         skip_assert_initialized!();
         if v < 0.0 || v > 1.0 {
@@ -470,11 +502,13 @@ pub trait PercentFormatIntegerConstructor {
 
 impl PercentFormatIntegerConstructor for u32 {
     #[track_caller]
+    #[inline]
     fn percent(self) -> Percent {
         Percent::from_percent(self)
     }
 
     #[track_caller]
+    #[inline]
     fn ppm(self) -> Percent {
         Percent::from_ppm(self)
     }
@@ -491,6 +525,7 @@ pub trait PercentFormatFloatConstructor {
 
 impl PercentFormatFloatConstructor for f32 {
     #[track_caller]
+    #[inline]
     fn percent_ratio(self) -> Percent {
         Percent::try_from(self).unwrap()
     }

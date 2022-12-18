@@ -113,11 +113,13 @@ where
     T: SpecificFormattedValue<FullRange = V::FullRange>,
 {
     type Original = Self;
+    #[inline]
     fn try_into_checked(self, _other: V) -> Result<Self, FormattedValueError> {
         skip_assert_initialized!();
         Ok(self)
     }
 
+    #[inline]
     fn try_into_checked_explicit(
         self,
         _format: Format,
@@ -129,6 +131,7 @@ where
 
 impl<T: SpecificFormattedValue> CompatibleFormattedValue<GenericFormattedValue> for T {
     type Original = Self;
+    #[inline]
     fn try_into_checked(self, other: GenericFormattedValue) -> Result<Self, FormattedValueError> {
         skip_assert_initialized!();
         if self.format() == other.format() {
@@ -138,6 +141,7 @@ impl<T: SpecificFormattedValue> CompatibleFormattedValue<GenericFormattedValue> 
         }
     }
 
+    #[inline]
     fn try_into_checked_explicit(
         self,
         format: Format,
@@ -153,6 +157,7 @@ impl<T: SpecificFormattedValue> CompatibleFormattedValue<GenericFormattedValue> 
 
 impl<V: SpecificFormattedValue> CompatibleFormattedValue<V> for GenericFormattedValue {
     type Original = Self;
+    #[inline]
     fn try_into_checked(self, _other: V) -> Result<Self, FormattedValueError> {
         skip_assert_initialized!();
         if self.format() == V::default_format() {
@@ -162,6 +167,7 @@ impl<V: SpecificFormattedValue> CompatibleFormattedValue<V> for GenericFormatted
         }
     }
 
+    #[inline]
     fn try_into_checked_explicit(
         self,
         _format: Format,

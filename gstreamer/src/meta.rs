@@ -15,6 +15,7 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
     #[doc(alias = "get_meta_api")]
     fn meta_api() -> glib::Type;
 
+    #[inline]
     unsafe fn from_ptr(buffer: &BufferRef, ptr: *const Self::GstType) -> MetaRef<Self> {
         assert!(!ptr.is_null());
 
@@ -32,6 +33,7 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
         }
     }
 
+    #[inline]
     unsafe fn from_mut_ptr<T>(
         buffer: &mut BufferRef,
         ptr: *mut Self::GstType,
@@ -95,12 +97,14 @@ impl<'a, T: fmt::Debug + 'a, U> fmt::Debug for MetaRefMut<'a, T, U> {
 impl<'a, T> ops::Deref for MetaRef<'a, T> {
     type Target = T;
 
+    #[inline]
     fn deref(&self) -> &T {
         self.meta
     }
 }
 
 impl<'a, T> AsRef<MetaRef<'a, T>> for MetaRef<'a, T> {
+    #[inline]
     fn as_ref(&self) -> &MetaRef<'a, T> {
         self
     }
@@ -109,18 +113,21 @@ impl<'a, T> AsRef<MetaRef<'a, T>> for MetaRef<'a, T> {
 impl<'a, T, U> ops::Deref for MetaRefMut<'a, T, U> {
     type Target = T;
 
+    #[inline]
     fn deref(&self) -> &T {
         self.meta
     }
 }
 
 impl<'a, T, U> ops::DerefMut for MetaRefMut<'a, T, U> {
+    #[inline]
     fn deref_mut(&mut self) -> &mut T {
         self.meta
     }
 }
 
 impl<'a, T, U> AsRef<MetaRef<'a, T>> for MetaRefMut<'a, T, U> {
+    #[inline]
     fn as_ref(&self) -> &MetaRef<'a, T> {
         unsafe { &*(self as *const MetaRefMut<'a, T, U> as *const MetaRef<'a, T>) }
     }
@@ -128,6 +135,7 @@ impl<'a, T, U> AsRef<MetaRef<'a, T>> for MetaRefMut<'a, T, U> {
 
 impl<'a, T> MetaRef<'a, T> {
     #[doc(alias = "get_api")]
+    #[inline]
     pub fn api(&self) -> glib::Type {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
@@ -136,6 +144,7 @@ impl<'a, T> MetaRef<'a, T> {
         }
     }
 
+    #[inline]
     pub fn flags(&self) -> crate::MetaFlags {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
@@ -143,6 +152,7 @@ impl<'a, T> MetaRef<'a, T> {
         }
     }
 
+    #[inline]
     pub fn type_(&self) -> glib::Type {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
@@ -155,6 +165,7 @@ impl<'a, T> MetaRef<'a, T> {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "get_seqnum")]
     #[doc(alias = "gst_meta_get_seqnum")]
+    #[inline]
     pub fn seqnum(&self) -> MetaSeqnum {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
@@ -162,6 +173,7 @@ impl<'a, T> MetaRef<'a, T> {
         }
     }
 
+    #[inline]
     pub fn as_ptr(&self) -> *const T::GstType
     where
         T: MetaAPI,
@@ -171,6 +183,7 @@ impl<'a, T> MetaRef<'a, T> {
 }
 
 impl<'a> MetaRef<'a, Meta> {
+    #[inline]
     pub fn downcast_ref<T: MetaAPI>(&self) -> Option<&MetaRef<'a, T>> {
         let target_type = T::meta_api();
         let type_ = self.api();
@@ -184,6 +197,7 @@ impl<'a> MetaRef<'a, Meta> {
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[inline]
     pub fn try_as_custom_meta(&self) -> Option<&MetaRef<'a, CustomMeta>> {
         unsafe {
             if ffi::gst_meta_info_is_custom(&*self.0.info) == glib::ffi::GFALSE {
@@ -197,6 +211,7 @@ impl<'a> MetaRef<'a, Meta> {
 
 impl<'a, T, U> MetaRefMut<'a, T, U> {
     #[doc(alias = "get_api")]
+    #[inline]
     pub fn api(&self) -> glib::Type {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
@@ -205,6 +220,7 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
         }
     }
 
+    #[inline]
     pub fn flags(&self) -> crate::MetaFlags {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
@@ -212,6 +228,7 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
         }
     }
 
+    #[inline]
     pub fn type_(&self) -> glib::Type {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
@@ -224,6 +241,7 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "get_seqnum")]
     #[doc(alias = "gst_meta_get_seqnum")]
+    #[inline]
     pub fn seqnum(&self) -> u64 {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
@@ -231,6 +249,7 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
         }
     }
 
+    #[inline]
     pub fn as_ptr(&self) -> *const T::GstType
     where
         T: MetaAPI,
@@ -238,6 +257,7 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
         self.meta as *const _ as *const <T as MetaAPI>::GstType
     }
 
+    #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut T::GstType
     where
         T: MetaAPI,
@@ -266,6 +286,7 @@ impl<'a, T> MetaRefMut<'a, T, Standalone> {
 }
 
 impl<'a, U> MetaRefMut<'a, Meta, U> {
+    #[inline]
     pub fn downcast_ref<T: MetaAPI>(&mut self) -> Option<&MetaRefMut<'a, T, U>> {
         let target_type = T::meta_api();
         let type_ = self.api();
@@ -277,6 +298,7 @@ impl<'a, U> MetaRefMut<'a, Meta, U> {
         }
     }
 
+    #[inline]
     pub fn downcast_mut<T: MetaAPI>(&mut self) -> Option<&mut MetaRefMut<'a, T, U>> {
         let target_type = T::meta_api();
         let type_ = self.api();
@@ -292,6 +314,7 @@ impl<'a, U> MetaRefMut<'a, Meta, U> {
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[inline]
     pub fn try_as_custom_meta(&self) -> Option<&MetaRefMut<'a, CustomMeta, U>> {
         unsafe {
             if ffi::gst_meta_info_is_custom(&*self.0.info) == glib::ffi::GFALSE {
@@ -304,6 +327,7 @@ impl<'a, U> MetaRefMut<'a, Meta, U> {
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[inline]
     pub fn try_as_mut_custom_meta(&mut self) -> Option<&mut MetaRefMut<'a, CustomMeta, U>> {
         unsafe {
             if ffi::gst_meta_info_is_custom(&*self.0.info) == glib::ffi::GFALSE {
@@ -324,10 +348,12 @@ unsafe impl Sync for Meta {}
 
 impl Meta {
     #[doc(alias = "get_api")]
+    #[inline]
     fn api(&self) -> glib::Type {
         unsafe { glib::Type::from_glib((*self.0.info).api) }
     }
 
+    #[inline]
     pub fn flags(&self) -> crate::MetaFlags {
         unsafe { from_glib(self.0.flags) }
     }
@@ -336,6 +362,7 @@ impl Meta {
 unsafe impl MetaAPI for Meta {
     type GstType = ffi::GstMeta;
 
+    #[inline]
     fn meta_api() -> glib::Type {
         glib::Type::INVALID
     }
@@ -369,11 +396,13 @@ impl ParentBufferMeta {
     }
 
     #[doc(alias = "get_parent")]
+    #[inline]
     pub fn parent(&self) -> &BufferRef {
         unsafe { BufferRef::from_ptr(self.0.buffer) }
     }
 
     #[doc(alias = "get_parent_owned")]
+    #[inline]
     pub fn parent_owned(&self) -> Buffer {
         unsafe { from_glib_none(self.0.buffer) }
     }
@@ -383,6 +412,7 @@ unsafe impl MetaAPI for ParentBufferMeta {
     type GstType = ffi::GstParentBufferMeta;
 
     #[doc(alias = "gst_parent_buffer_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_parent_buffer_meta_api_get_type()) }
     }
@@ -416,11 +446,13 @@ impl ProtectionMeta {
     }
 
     #[doc(alias = "get_info")]
+    #[inline]
     pub fn info(&self) -> &crate::StructureRef {
         unsafe { crate::StructureRef::from_glib_borrow(self.0.info) }
     }
 
     #[doc(alias = "get_info_mut")]
+    #[inline]
     pub fn info_mut(&mut self) -> &mut crate::StructureRef {
         unsafe { crate::StructureRef::from_glib_borrow_mut(self.0.info) }
     }
@@ -430,6 +462,7 @@ unsafe impl MetaAPI for ProtectionMeta {
     type GstType = ffi::GstProtectionMeta;
 
     #[doc(alias = "gst_protection_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_protection_meta_api_get_type()) }
     }
@@ -472,21 +505,25 @@ impl ReferenceTimestampMeta {
     }
 
     #[doc(alias = "get_reference")]
+    #[inline]
     pub fn reference(&self) -> &CapsRef {
         unsafe { CapsRef::from_ptr(self.0.reference) }
     }
 
     #[doc(alias = "get_parent_owned")]
+    #[inline]
     pub fn parent_owned(&self) -> Caps {
         unsafe { from_glib_none(self.0.reference) }
     }
 
     #[doc(alias = "get_timestamp")]
+    #[inline]
     pub fn timestamp(&self) -> ClockTime {
         unsafe { try_from_glib(self.0.timestamp).expect("undefined timestamp") }
     }
 
     #[doc(alias = "get_duration")]
+    #[inline]
     pub fn duration(&self) -> Option<ClockTime> {
         unsafe { from_glib(self.0.duration) }
     }
@@ -496,6 +533,7 @@ unsafe impl MetaAPI for ReferenceTimestampMeta {
     type GstType = ffi::GstReferenceTimestampMeta;
 
     #[doc(alias = "gst_reference_timestamp_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_reference_timestamp_meta_api_get_type()) }
     }
@@ -653,6 +691,7 @@ impl CustomMeta {
     }
 
     #[doc(alias = "gst_custom_meta_get_structure")]
+    #[inline]
     pub fn structure(&self) -> &crate::StructureRef {
         unsafe {
             crate::StructureRef::from_glib_borrow(ffi::gst_custom_meta_get_structure(mut_override(
@@ -662,6 +701,7 @@ impl CustomMeta {
     }
 
     #[doc(alias = "gst_custom_meta_get_structure")]
+    #[inline]
     pub fn mut_structure(&mut self) -> &mut crate::StructureRef {
         unsafe {
             crate::StructureRef::from_glib_borrow_mut(ffi::gst_custom_meta_get_structure(
@@ -671,6 +711,7 @@ impl CustomMeta {
     }
 
     #[doc(alias = "gst_custom_meta_has_name")]
+    #[inline]
     pub fn has_name(&self, name: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_custom_meta_has_name(

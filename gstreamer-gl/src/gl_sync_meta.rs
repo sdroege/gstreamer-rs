@@ -31,12 +31,13 @@ impl GLSyncMeta {
     }
 
     #[doc(alias = "get_context")]
-    pub fn context(&self) -> GLContext {
-        unsafe { from_glib_none(self.0.context) }
+    #[inline]
+    pub fn context(&self) -> &GLContext {
+        unsafe { &*(&self.0.context as *const *mut ffi::GstGLContext as *const GLContext) }
     }
 
     #[doc(alias = "gst_gl_sync_meta_set_sync_point")]
-    pub fn set_sync_point<C: IsA<GLContext>>(&self, context: &C) {
+    pub fn set_sync_point(&self, context: &impl IsA<GLContext>) {
         unsafe {
             ffi::gst_gl_sync_meta_set_sync_point(
                 &self.0 as *const _ as *mut _,
@@ -46,7 +47,7 @@ impl GLSyncMeta {
     }
 
     #[doc(alias = "gst_gl_sync_meta_wait")]
-    pub fn wait<C: IsA<GLContext>>(&self, context: &C) {
+    pub fn wait(&self, context: &impl IsA<GLContext>) {
         unsafe {
             ffi::gst_gl_sync_meta_wait(
                 &self.0 as *const _ as *mut _,
@@ -56,7 +57,7 @@ impl GLSyncMeta {
     }
 
     #[doc(alias = "gst_gl_sync_meta_wait_cpu")]
-    pub fn wait_cpu<C: IsA<GLContext>>(&self, context: &C) {
+    pub fn wait_cpu(&self, context: &impl IsA<GLContext>) {
         unsafe {
             ffi::gst_gl_sync_meta_wait_cpu(
                 &self.0 as *const _ as *mut _,
@@ -70,6 +71,7 @@ unsafe impl MetaAPI for GLSyncMeta {
     type GstType = ffi::GstGLSyncMeta;
 
     #[doc(alias = "gst_gl_sync_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_sync_meta_api_get_type()) }
     }

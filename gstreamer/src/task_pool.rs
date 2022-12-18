@@ -108,6 +108,7 @@ impl TaskHandle for TaskPoolTaskHandle {
 
 impl Drop for TaskPoolTaskHandle {
     #[doc(alias = "gst_task_pool_dispose_handle")]
+    #[inline]
     fn drop(&mut self) {
         if let Some(task_pool) = self.task_pool.take() {
             cfg_if::cfg_if! {

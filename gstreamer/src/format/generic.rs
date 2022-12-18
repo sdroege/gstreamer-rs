@@ -26,6 +26,7 @@ impl Other {
     /// Panics if the provided quantity equals `u64::MAX`,
     /// which is reserved for `None` in C.
     #[track_caller]
+    #[inline]
     pub const fn from_u64(quantity: u64) -> Self {
         if quantity == u64::MAX {
             panic!("`Other` value out of range");
@@ -42,6 +43,7 @@ impl Other {
     /// Panics if the provided quantity equals `u64::MAX`,
     /// which is reserved for `None` in C.
     #[track_caller]
+    #[inline]
     pub fn from_usize(quantity: usize) -> Self {
         // FIXME can't use `try_into` in `const` (rustc 1.64.0)
         Other::from_u64(quantity.try_into().unwrap())
@@ -56,6 +58,7 @@ glib_newtype_display!(Other, DisplayableOptionOther);
 
 impl TryFrom<u64> for Other {
     type Error = GlibNoneError;
+    #[inline]
     fn try_from(val: u64) -> Result<Self, GlibNoneError> {
         skip_assert_initialized!();
         unsafe { Self::try_from_glib(val) }
@@ -82,6 +85,7 @@ pub trait OtherFormatConstructor {
 
 impl OtherFormatConstructor for u64 {
     #[track_caller]
+    #[inline]
     fn other_format(self) -> Other {
         Other::from_u64(self)
     }
@@ -125,6 +129,7 @@ impl Displayable for GenericFormattedValue {
 }
 
 impl GenericFormattedValue {
+    #[inline]
     pub fn new(format: Format, value: i64) -> Self {
         skip_assert_initialized!();
         match format {
@@ -139,6 +144,7 @@ impl GenericFormattedValue {
     }
 
     #[doc(alias = "get_format")]
+    #[inline]
     pub fn format(&self) -> Format {
         match *self {
             Self::Undefined(_) => Format::Undefined,
@@ -152,6 +158,7 @@ impl GenericFormattedValue {
     }
 
     #[doc(alias = "get_value")]
+    #[inline]
     pub fn value(&self) -> i64 {
         unsafe {
             match *self {
@@ -173,14 +180,17 @@ impl FormattedValue for GenericFormattedValue {
     // from the variants' inner type since they are not all `Option`s.
     type FullRange = GenericFormattedValue;
 
+    #[inline]
     fn default_format() -> Format {
         Format::Undefined
     }
 
+    #[inline]
     fn format(&self) -> Format {
         self.format()
     }
 
+    #[inline]
     fn is_some(&self) -> bool {
         match self {
             Self::Undefined(_) => true,
@@ -193,12 +203,14 @@ impl FormattedValue for GenericFormattedValue {
         }
     }
 
+    #[inline]
     unsafe fn into_raw_value(self) -> i64 {
         self.value()
     }
 }
 
 impl FormattedValueFullRange for GenericFormattedValue {
+    #[inline]
     unsafe fn from_raw(format: Format, value: i64) -> Self {
         GenericFormattedValue::new(format, value)
     }
@@ -217,6 +229,7 @@ impl FormattedValueNoneBuilder for GenericFormattedValue {
     }
 
     #[track_caller]
+    #[inline]
     fn none_for_format(format: Format) -> Self {
         skip_assert_initialized!();
         match format {
@@ -235,6 +248,7 @@ impl UnsignedIntoSigned for GenericFormattedValue {
     type Signed = GenericSignedFormattedValue;
 
     #[track_caller]
+    #[inline]
     fn into_positive(self) -> Self::Signed {
         use Signed::Positive;
         match self {
@@ -251,6 +265,7 @@ impl UnsignedIntoSigned for GenericFormattedValue {
     }
 
     #[track_caller]
+    #[inline]
     fn into_negative(self) -> Self::Signed {
         use Signed::Negative;
         match self {
@@ -269,6 +284,7 @@ impl UnsignedIntoSigned for GenericFormattedValue {
 
 impl CompatibleFormattedValue<GenericFormattedValue> for GenericFormattedValue {
     type Original = Self;
+    #[inline]
     fn try_into_checked(self, other: GenericFormattedValue) -> Result<Self, FormattedValueError> {
         skip_assert_initialized!();
         if self.format() == other.format() {
@@ -278,6 +294,7 @@ impl CompatibleFormattedValue<GenericFormattedValue> for GenericFormattedValue {
         }
     }
 
+    #[inline]
     fn try_into_checked_explicit(
         self,
         format: Format,
@@ -304,6 +321,7 @@ pub enum GenericSignedFormattedValue {
 
 impl GenericSignedFormattedValue {
     #[doc(alias = "get_format")]
+    #[inline]
     pub fn format(&self) -> Format {
         match *self {
             Self::Default(_) => Format::Default,
@@ -315,6 +333,7 @@ impl GenericSignedFormattedValue {
         }
     }
 
+    #[inline]
     pub fn abs(self) -> GenericFormattedValue {
         use GenericFormattedValue as Unsigned;
         match self {
@@ -327,6 +346,7 @@ impl GenericSignedFormattedValue {
         }
     }
 
+    #[inline]
     pub fn is_some(&self) -> bool {
         match self {
             Self::Default(v) => v.is_some(),
@@ -338,11 +358,13 @@ impl GenericSignedFormattedValue {
         }
     }
 
+    #[inline]
     pub fn is_none(&self) -> bool {
         !self.is_some()
     }
 
     #[track_caller]
+    #[inline]
     pub fn none_for_format(format: Format) -> Self {
         skip_assert_initialized!();
         match format {
@@ -361,6 +383,7 @@ impl GenericSignedFormattedValue {
 
 macro_rules! impl_gsfv_fn_opt_ret(
     ($fn:ident(self) -> Option<$ret_ty:ty>) => {
+        #[inline]
         pub fn $fn(self) -> Option<$ret_ty> {
             match self {
                 Self::Default(opt_signed) => opt_signed.map(|signed| signed.$fn()),
@@ -383,6 +406,7 @@ impl GenericSignedFormattedValue {
 impl std::ops::Neg for GenericSignedFormattedValue {
     type Output = Self;
 
+    #[inline]
     fn neg(self) -> Self {
         use std::ops::Neg;
         match self {

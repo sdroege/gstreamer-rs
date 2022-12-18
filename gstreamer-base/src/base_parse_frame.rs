@@ -25,6 +25,7 @@ pub enum Overhead {
 impl IntoGlib for Overhead {
     type GlibType = i32;
 
+    #[inline]
     fn into_glib(self) -> i32 {
         match self {
             Self::None => 0,
@@ -51,6 +52,7 @@ impl FromGlib<i32> for Overhead {
 impl<'a> ::glib::translate::ToGlibPtr<'a, *mut ffi::GstBaseParseFrame> for BaseParseFrame<'a> {
     type Storage = PhantomData<&'a Self>;
 
+    #[inline]
     fn to_glib_none(&'a self) -> ::glib::translate::Stash<*mut ffi::GstBaseParseFrame, Self> {
         Stash(self.0.as_ptr(), PhantomData)
     }
@@ -75,6 +77,7 @@ impl<'a> fmt::Debug for BaseParseFrame<'a> {
 }
 
 impl<'a> BaseParseFrame<'a> {
+    #[inline]
     pub(crate) unsafe fn new(frame: *mut ffi::GstBaseParseFrame, _parse: &'a BaseParse) -> Self {
         skip_assert_initialized!();
         assert!(!frame.is_null());
@@ -82,6 +85,7 @@ impl<'a> BaseParseFrame<'a> {
     }
 
     #[doc(alias = "get_buffer")]
+    #[inline]
     pub fn buffer(&self) -> Option<&gst::BufferRef> {
         unsafe {
             let ptr = (*self.to_glib_none().0).buffer;
@@ -111,6 +115,7 @@ impl<'a> BaseParseFrame<'a> {
     }
 
     #[doc(alias = "get_output_buffer")]
+    #[inline]
     pub fn output_buffer(&self) -> Option<&gst::BufferRef> {
         unsafe {
             let ptr = (*self.to_glib_none().0).out_buffer;
@@ -158,29 +163,35 @@ impl<'a> BaseParseFrame<'a> {
     }
 
     #[doc(alias = "get_flags")]
+    #[inline]
     pub fn flags(&self) -> BaseParseFrameFlags {
         let flags = unsafe { (*self.to_glib_none().0).flags };
         BaseParseFrameFlags::from_bits_truncate(flags)
     }
 
+    #[inline]
     pub fn set_flags(&mut self, flags: BaseParseFrameFlags) {
         unsafe { (*self.to_glib_none().0).flags |= flags.bits() }
     }
 
+    #[inline]
     pub fn unset_flags(&mut self, flags: BaseParseFrameFlags) {
         unsafe { (*self.to_glib_none().0).flags &= !flags.bits() }
     }
 
     #[doc(alias = "get_offset")]
+    #[inline]
     pub fn offset(&self) -> u64 {
         unsafe { (*self.to_glib_none().0).offset }
     }
 
     #[doc(alias = "get_overhead")]
+    #[inline]
     pub fn overhead(&self) -> Overhead {
         unsafe { from_glib((*self.to_glib_none().0).overhead) }
     }
 
+    #[inline]
     pub fn set_overhead(&mut self, overhead: Overhead) {
         unsafe {
             (*self.to_glib_none().0).overhead = overhead.into_glib();

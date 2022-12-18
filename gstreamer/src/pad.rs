@@ -23,12 +23,14 @@ pub struct PadProbeId(NonZeroU64);
 impl IntoGlib for PadProbeId {
     type GlibType = libc::c_ulong;
 
+    #[inline]
     fn into_glib(self) -> libc::c_ulong {
         self.0.get() as libc::c_ulong
     }
 }
 
 impl FromGlib<libc::c_ulong> for PadProbeId {
+    #[inline]
     unsafe fn from_glib(val: libc::c_ulong) -> PadProbeId {
         skip_assert_initialized!();
         assert_ne!(val, 0);
@@ -37,6 +39,7 @@ impl FromGlib<libc::c_ulong> for PadProbeId {
 }
 
 impl PadProbeId {
+    #[inline]
     pub fn as_raw(&self) -> libc::c_ulong {
         self.0.get() as libc::c_ulong
     }
@@ -70,6 +73,7 @@ unsafe impl<'a> Sync for PadProbeData<'a> {}
 #[must_use = "if unused the StreamLock will immediately unlock"]
 pub struct StreamLock<'a>(&'a Pad);
 impl<'a> Drop for StreamLock<'a> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             let pad: *mut ffi::GstPad = self.0.to_glib_none().0;

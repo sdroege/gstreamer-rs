@@ -28,6 +28,7 @@ pub trait UndefinedFormatConstructor {
 
 impl UndefinedFormatConstructor for i64 {
     #[track_caller]
+    #[inline]
     fn undefined_format(self) -> Undefined {
         Undefined(self)
     }
@@ -36,24 +37,29 @@ impl UndefinedFormatConstructor for i64 {
 impl FormattedValue for Undefined {
     type FullRange = Undefined;
 
+    #[inline]
     fn default_format() -> Format {
         Format::Undefined
     }
 
+    #[inline]
     fn format(&self) -> Format {
         Format::Undefined
     }
 
+    #[inline]
     fn is_some(&self) -> bool {
         true
     }
 
+    #[inline]
     unsafe fn into_raw_value(self) -> i64 {
         self.0
     }
 }
 
 impl FormattedValueFullRange for Undefined {
+    #[inline]
     unsafe fn from_raw(format: Format, value: i64) -> Self {
         debug_assert_eq!(format, Format::Undefined);
         Undefined(value)
@@ -61,6 +67,7 @@ impl FormattedValueFullRange for Undefined {
 }
 
 impl From<Undefined> for GenericFormattedValue {
+    #[inline]
     fn from(v: Undefined) -> Self {
         skip_assert_initialized!();
         GenericFormattedValue::Undefined(v)
@@ -70,6 +77,7 @@ impl From<Undefined> for GenericFormattedValue {
 impl TryFrom<GenericFormattedValue> for Undefined {
     type Error = FormattedValueError;
 
+    #[inline]
     fn try_from(v: GenericFormattedValue) -> Result<Undefined, Self::Error> {
         skip_assert_initialized!();
         if let GenericFormattedValue::Undefined(v) = v {
@@ -92,6 +100,7 @@ impl TryFromGlib<i64> for Undefined {
 }
 
 impl From<i64> for Undefined {
+    #[inline]
     fn from(v: i64) -> Self {
         skip_assert_initialized!();
         Undefined(v)
@@ -101,30 +110,35 @@ impl From<i64> for Undefined {
 impl Deref for Undefined {
     type Target = i64;
 
+    #[inline]
     fn deref(&self) -> &i64 {
         &self.0
     }
 }
 
 impl DerefMut for Undefined {
+    #[inline]
     fn deref_mut(&mut self) -> &mut i64 {
         &mut self.0
     }
 }
 
 impl AsRef<i64> for Undefined {
+    #[inline]
     fn as_ref(&self) -> &i64 {
         &self.0
     }
 }
 
 impl AsMut<i64> for Undefined {
+    #[inline]
     fn as_mut(&mut self) -> &mut i64 {
         &mut self.0
     }
 }
 
 impl From<Undefined> for Signed<u64> {
+    #[inline]
     fn from(val: Undefined) -> Signed<u64> {
         skip_assert_initialized!();
         val.0.into()

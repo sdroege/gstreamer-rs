@@ -20,6 +20,7 @@ pub enum Signed<T> {
 }
 
 impl<T> Signed<T> {
+    #[inline]
     pub fn is_positive(self) -> bool {
         matches!(self, Signed::Positive(_))
     }
@@ -27,6 +28,7 @@ impl<T> Signed<T> {
     // rustdoc-stripper-ignore-next
     /// Returns `Some(value)`, where `value` is the inner value,
     /// if `self` is positive.
+    #[inline]
     pub fn positive(self) -> Option<T> {
         match self {
             Signed::Positive(val) => Some(val),
@@ -37,6 +39,7 @@ impl<T> Signed<T> {
     // rustdoc-stripper-ignore-next
     /// Transforms the `Signed<T>` into a `Result<T, E>`,
     /// mapping `Positive(v)` to `Ok(v)` and `Negative(_)` to `Err(err)`.
+    #[inline]
     pub fn positive_or<E>(self, err: E) -> Result<T, E> {
         match self {
             Signed::Positive(val) => Ok(val),
@@ -47,6 +50,7 @@ impl<T> Signed<T> {
     // rustdoc-stripper-ignore-next
     /// Transforms the `Signed<T>` into a `Result<T, E>`,
     /// mapping `Positive(v)` to `Ok(v)` and `Negative(v)` to `Err(err(v))`.
+    #[inline]
     pub fn positive_or_else<E, F: FnOnce(T) -> E>(self, err: F) -> Result<T, E> {
         match self {
             Signed::Positive(val) => Ok(val),
@@ -54,6 +58,7 @@ impl<T> Signed<T> {
         }
     }
 
+    #[inline]
     pub fn is_negative(self) -> bool {
         matches!(self, Signed::Negative(_))
     }
@@ -61,6 +66,7 @@ impl<T> Signed<T> {
     // rustdoc-stripper-ignore-next
     /// Returns `Some(value)`, where `value` is the inner value,
     /// if `self` is negative.
+    #[inline]
     pub fn negative(self) -> Option<T> {
         match self {
             Signed::Negative(val) => Some(val),
@@ -71,6 +77,7 @@ impl<T> Signed<T> {
     // rustdoc-stripper-ignore-next
     /// Transforms the `Signed<T>` into a `Result<T, E>`,
     /// mapping `Negative(v)` to `Ok(v)` and `Positive(_)` to `Err(err)`.
+    #[inline]
     pub fn negative_or<E>(self, err: E) -> Result<T, E> {
         match self {
             Signed::Negative(val) => Ok(val),
@@ -81,6 +88,7 @@ impl<T> Signed<T> {
     // rustdoc-stripper-ignore-next
     /// Transforms the `Signed<T>` into a `Result<T, E>`,
     /// mapping `Negative(v)` to `Ok(v)` and `Positive(_)` to `Err(err(v))`.
+    #[inline]
     pub fn negative_or_else<E, F: FnOnce(T) -> E>(self, err: F) -> Result<T, E> {
         match self {
             Signed::Negative(val) => Ok(val),
@@ -90,6 +98,7 @@ impl<T> Signed<T> {
 
     // rustdoc-stripper-ignore-next
     /// Returns the absolute value of `self`.
+    #[inline]
     pub fn abs(self) -> T {
         match self {
             Signed::Positive(val) | Signed::Negative(val) => val,
@@ -100,6 +109,7 @@ impl<T> Signed<T> {
 impl<T> std::ops::Neg for Signed<T> {
     type Output = Signed<T>;
 
+    #[inline]
     fn neg(self) -> Self {
         match self {
             Signed::Positive(val) => Signed::Negative(val),
@@ -143,6 +153,7 @@ impl<T> Signed<Option<T>> {
     /// Transposes a `Signed` `Option` into an `Option` of a `Signed`.
     ///
     /// Note that if the inner value was `None`, the sign is lost.
+    #[inline]
     pub fn transpose(self) -> Option<Signed<T>> {
         use Signed::*;
 
@@ -263,10 +274,12 @@ where
 {
     type Signed = <T as UnsignedIntoSigned>::Signed;
 
+    #[inline]
     fn none_signed() -> Self::Signed {
         Self::none().into_positive()
     }
 
+    #[inline]
     fn none_signed_for_format(format: Format) -> Self::Signed {
         skip_assert_initialized!();
         Self::none_for_format(format).into_positive()

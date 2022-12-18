@@ -112,41 +112,49 @@ impl VideoMeta {
     }
 
     #[doc(alias = "get_flags")]
+    #[inline]
     pub fn video_frame_flags(&self) -> crate::VideoFrameFlags {
         unsafe { from_glib(self.0.flags) }
     }
 
     #[doc(alias = "get_format")]
+    #[inline]
     pub fn format(&self) -> crate::VideoFormat {
         unsafe { from_glib(self.0.format) }
     }
 
     #[doc(alias = "get_id")]
+    #[inline]
     pub fn id(&self) -> i32 {
         self.0.id
     }
 
     #[doc(alias = "get_width")]
+    #[inline]
     pub fn width(&self) -> u32 {
         self.0.width
     }
 
     #[doc(alias = "get_height")]
+    #[inline]
     pub fn height(&self) -> u32 {
         self.0.height
     }
 
     #[doc(alias = "get_n_planes")]
+    #[inline]
     pub fn n_planes(&self) -> u32 {
         self.0.n_planes
     }
 
     #[doc(alias = "get_offset")]
+    #[inline]
     pub fn offset(&self) -> &[usize] {
         &self.0.offset[0..(self.0.n_planes as usize)]
     }
 
     #[doc(alias = "get_stride")]
+    #[inline]
     pub fn stride(&self) -> &[i32] {
         &self.0.stride[0..(self.0.n_planes as usize)]
     }
@@ -154,6 +162,7 @@ impl VideoMeta {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "get_alignment")]
+    #[inline]
     pub fn alignment(&self) -> crate::VideoAlignment {
         crate::VideoAlignment::new(
             self.0.alignment.padding_top,
@@ -224,6 +233,7 @@ unsafe impl MetaAPI for VideoMeta {
     type GstType = ffi::GstVideoMeta;
 
     #[doc(alias = "gst_video_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_meta_api_get_type()) }
     }
@@ -278,10 +288,12 @@ impl VideoCropMeta {
     }
 
     #[doc(alias = "get_rect")]
+    #[inline]
     pub fn rect(&self) -> (u32, u32, u32, u32) {
         (self.0.x, self.0.y, self.0.width, self.0.height)
     }
 
+    #[inline]
     pub fn set_rect(&mut self, rect: (u32, u32, u32, u32)) {
         self.0.x = rect.0;
         self.0.y = rect.1;
@@ -294,6 +306,7 @@ unsafe impl MetaAPI for VideoCropMeta {
     type GstType = ffi::GstVideoCropMeta;
 
     #[doc(alias = "gst_video_crop_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_crop_meta_api_get_type()) }
     }
@@ -337,21 +350,25 @@ impl VideoRegionOfInterestMeta {
     }
 
     #[doc(alias = "get_rect")]
+    #[inline]
     pub fn rect(&self) -> (u32, u32, u32, u32) {
         (self.0.x, self.0.y, self.0.w, self.0.h)
     }
 
     #[doc(alias = "get_id")]
+    #[inline]
     pub fn id(&self) -> i32 {
         self.0.id
     }
 
     #[doc(alias = "get_parent_id")]
+    #[inline]
     pub fn parent_id(&self) -> i32 {
         self.0.parent_id
     }
 
     #[doc(alias = "get_roi_type")]
+    #[inline]
     pub fn roi_type<'a>(&self) -> &'a str {
         unsafe { glib::Quark::from_glib(self.0.roi_type).as_str() }
     }
@@ -365,10 +382,12 @@ impl VideoRegionOfInterestMeta {
     }
 
     #[doc(alias = "get_param")]
+    #[inline]
     pub fn param<'b>(&self, name: &'b str) -> Option<&gst::StructureRef> {
         self.params().find(|s| s.name() == name)
     }
 
+    #[inline]
     pub fn set_rect(&mut self, rect: (u32, u32, u32, u32)) {
         self.0.x = rect.0;
         self.0.y = rect.1;
@@ -376,10 +395,12 @@ impl VideoRegionOfInterestMeta {
         self.0.h = rect.3;
     }
 
+    #[inline]
     pub fn set_id(&mut self, id: i32) {
         self.0.id = id
     }
 
+    #[inline]
     pub fn set_parent_id(&mut self, id: i32) {
         self.0.parent_id = id
     }
@@ -421,6 +442,7 @@ unsafe impl MetaAPI for VideoRegionOfInterestMeta {
     type GstType = ffi::GstVideoRegionOfInterestMeta;
 
     #[doc(alias = "gst_video_region_of_interest_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_region_of_interest_meta_api_get_type()) }
     }
@@ -471,10 +493,12 @@ impl VideoAffineTransformationMeta {
     }
 
     #[doc(alias = "get_matrix")]
+    #[inline]
     pub fn matrix(&self) -> &[[f32; 4]; 4] {
         unsafe { &*(&self.0.matrix as *const [f32; 16] as *const [[f32; 4]; 4]) }
     }
 
+    #[inline]
     pub fn set_matrix(&mut self, matrix: &[[f32; 4]; 4]) {
         for (i, o) in Iterator::zip(matrix.iter().flatten(), self.0.matrix.iter_mut()) {
             *o = *i;
@@ -496,6 +520,7 @@ unsafe impl MetaAPI for VideoAffineTransformationMeta {
     type GstType = ffi::GstVideoAffineTransformationMeta;
 
     #[doc(alias = "gst_video_affine_transformation_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_affine_transformation_meta_api_get_type()) }
     }
@@ -534,15 +559,18 @@ impl VideoOverlayCompositionMeta {
     }
 
     #[doc(alias = "get_overlay")]
+    #[inline]
     pub fn overlay(&self) -> &crate::VideoOverlayCompositionRef {
         unsafe { crate::VideoOverlayCompositionRef::from_ptr(self.0.overlay) }
     }
 
     #[doc(alias = "get_overlay_owned")]
+    #[inline]
     pub fn overlay_owned(&self) -> crate::VideoOverlayComposition {
         unsafe { from_glib_none(self.overlay().as_ptr()) }
     }
 
+    #[inline]
     pub fn set_overlay(&mut self, overlay: &crate::VideoOverlayComposition) {
         #![allow(clippy::cast_ptr_alignment)]
         unsafe {
@@ -557,6 +585,7 @@ unsafe impl MetaAPI for VideoOverlayCompositionMeta {
     type GstType = ffi::GstVideoOverlayCompositionMeta;
 
     #[doc(alias = "gst_video_overlay_composition_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_overlay_composition_meta_api_get_type()) }
     }
@@ -607,11 +636,13 @@ impl VideoCaptionMeta {
     }
 
     #[doc(alias = "get_caption_type")]
+    #[inline]
     pub fn caption_type(&self) -> crate::VideoCaptionType {
         unsafe { from_glib(self.0.caption_type) }
     }
 
     #[doc(alias = "get_data")]
+    #[inline]
     pub fn data(&self) -> &[u8] {
         if self.0.size == 0 {
             return &[];
@@ -630,6 +661,7 @@ unsafe impl MetaAPI for VideoCaptionMeta {
     type GstType = ffi::GstVideoCaptionMeta;
 
     #[doc(alias = "gst_video_caption_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_caption_meta_api_get_type()) }
     }
@@ -684,16 +716,19 @@ impl VideoAFDMeta {
     }
 
     #[doc(alias = "get_field")]
+    #[inline]
     pub fn field(&self) -> u8 {
         self.0.field
     }
 
     #[doc(alias = "get_spec")]
+    #[inline]
     pub fn spec(&self) -> crate::VideoAFDSpec {
         unsafe { from_glib(self.0.spec) }
     }
 
     #[doc(alias = "get_afd")]
+    #[inline]
     pub fn afd(&self) -> crate::VideoAFDValue {
         unsafe { from_glib(self.0.afd) }
     }
@@ -705,6 +740,7 @@ unsafe impl MetaAPI for VideoAFDMeta {
     type GstType = ffi::GstVideoAFDMeta;
 
     #[doc(alias = "gst_video_afd_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_afd_meta_api_get_type()) }
     }
@@ -762,20 +798,24 @@ impl VideoBarMeta {
     }
 
     #[doc(alias = "get_field")]
+    #[inline]
     pub fn field(&self) -> u8 {
         self.0.field
     }
 
+    #[inline]
     pub fn is_letterbox(&self) -> bool {
         unsafe { from_glib(self.0.is_letterbox) }
     }
 
     #[doc(alias = "get_bar_data1")]
+    #[inline]
     pub fn bar_data1(&self) -> u32 {
         self.0.bar_data1
     }
 
     #[doc(alias = "get_bar_data2")]
+    #[inline]
     pub fn bar_data2(&self) -> u32 {
         self.0.bar_data2
     }
@@ -787,6 +827,7 @@ unsafe impl MetaAPI for VideoBarMeta {
     type GstType = ffi::GstVideoBarMeta;
 
     #[doc(alias = "gst_video_bar_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_bar_meta_api_get_type()) }
     }
@@ -837,10 +878,12 @@ impl VideoCodecAlphaMeta {
         }
     }
 
+    #[inline]
     pub fn alpha_buffer(&self) -> &gst::BufferRef {
         unsafe { gst::BufferRef::from_ptr(self.0.buffer) }
     }
 
+    #[inline]
     pub fn alpha_buffer_owned(&self) -> gst::Buffer {
         unsafe { from_glib_none(self.0.buffer) }
     }
@@ -852,6 +895,7 @@ unsafe impl MetaAPI for VideoCodecAlphaMeta {
     type GstType = ffi::GstVideoCodecAlphaMeta;
 
     #[doc(alias = "gst_video_codec_alpha_meta_api_get_type")]
+    #[inline]
     fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_codec_alpha_meta_api_get_type()) }
     }

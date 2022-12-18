@@ -162,6 +162,7 @@ impl TaskPoolFunction {
         Self(Arc::new(Mutex::new(Some(inner))))
     }
 
+    #[inline]
     fn clone(&self) -> Self {
         Self(self.0.clone())
     }
@@ -190,6 +191,7 @@ impl TaskPoolFunction {
         drop(inner);
     }
 
+    #[inline]
     fn as_ptr(&self) -> *const Mutex<Option<TaskPoolFunctionInner>> {
         Arc::as_ptr(&self.0)
     }

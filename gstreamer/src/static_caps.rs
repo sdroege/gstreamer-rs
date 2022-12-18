@@ -12,6 +12,7 @@ pub struct StaticCaps(ptr::NonNull<ffi::GstStaticCaps>);
 
 impl StaticCaps {
     #[doc(alias = "gst_static_caps_get")]
+    #[inline]
     pub fn get(&self) -> Caps {
         unsafe { from_glib_full(ffi::gst_static_caps_get(self.0.as_ptr())) }
     }
@@ -31,6 +32,7 @@ impl fmt::Debug for StaticCaps {
 }
 
 impl glib::types::StaticType for StaticCaps {
+    #[inline]
     fn static_type() -> glib::types::Type {
         unsafe { glib::translate::from_glib(ffi::gst_static_caps_get_type()) }
     }
@@ -46,6 +48,7 @@ unsafe impl glib::translate::TransparentPtrType for StaticCaps {}
 unsafe impl<'a> glib::value::FromValue<'a> for StaticCaps {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib_none(
@@ -56,6 +59,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for StaticCaps {
 
 #[doc(hidden)]
 impl glib::value::ToValue for StaticCaps {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -67,12 +71,14 @@ impl glib::value::ToValue for StaticCaps {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
 }
 
 impl From<StaticCaps> for glib::Value {
+    #[inline]
     fn from(v: StaticCaps) -> glib::Value {
         skip_assert_initialized!();
         glib::value::ToValue::to_value(&v)
@@ -81,6 +87,7 @@ impl From<StaticCaps> for glib::Value {
 
 #[doc(hidden)]
 impl glib::value::ToValueOptional for StaticCaps {
+    #[inline]
     fn to_value_optional(s: Option<&Self>) -> glib::Value {
         skip_assert_initialized!();
         let mut value = glib::Value::for_value_type::<Self>();
@@ -103,6 +110,7 @@ impl glib::translate::GlibPtrDefault for StaticCaps {
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticCaps> for StaticCaps {
     type Storage = PhantomData<&'a StaticCaps>;
 
+    #[inline]
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstStaticCaps, Self> {
         glib::translate::Stash(self.0.as_ptr(), PhantomData)
     }

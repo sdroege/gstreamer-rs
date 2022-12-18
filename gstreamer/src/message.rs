@@ -17,6 +17,7 @@ mini_object_wrapper!(Message, MessageRef, ffi::GstMessage, || {
 
 impl MessageRef {
     #[doc(alias = "get_src")]
+    #[inline]
     pub fn src(&self) -> Option<&Object> {
         unsafe {
             if (*self.as_ptr()).src.is_null() {
@@ -54,6 +55,7 @@ impl MessageRef {
 
     #[doc(alias = "get_structure")]
     #[doc(alias = "gst_message_get_structure")]
+    #[inline]
     pub fn structure(&self) -> Option<&StructureRef> {
         unsafe {
             let structure = ffi::gst_message_get_structure(self.as_mut_ptr());
@@ -66,6 +68,7 @@ impl MessageRef {
     }
 
     #[doc(alias = "gst_message_has_name")]
+    #[inline]
     pub fn has_name(&self, name: &str) -> bool {
         self.structure().map_or(false, |s| s.has_name(name))
     }
@@ -122,6 +125,7 @@ impl MessageRef {
     }
 
     #[doc(alias = "get_type")]
+    #[inline]
     pub fn type_(&self) -> MessageType {
         unsafe { from_glib((*self.as_ptr()).type_) }
     }
@@ -223,10 +227,12 @@ macro_rules! declare_concrete_message(
         pub struct $name<$param = MessageRef>($param);
 
         impl $name {
+            #[inline]
             pub fn message(&self) -> &MessageRef {
                 unsafe { &*(self as *const Self as *const MessageRef) }
             }
 
+            #[inline]
             unsafe fn view(message: &MessageRef) -> MessageView<'_> {
                 let message = &*(message as *const MessageRef as *const Self);
                 MessageView::$name(message)
@@ -236,6 +242,7 @@ macro_rules! declare_concrete_message(
         impl Deref for $name {
             type Target = MessageRef;
 
+            #[inline]
             fn deref(&self) -> &Self::Target {
                 unsafe {
                     &*(self as *const Self as *const Self::Target)
@@ -246,12 +253,14 @@ macro_rules! declare_concrete_message(
         impl ToOwned for $name {
             type Owned = $name<Message>;
 
+            #[inline]
             fn to_owned(&self) -> Self::Owned {
                 $name::<Message>(self.copy())
             }
         }
 
         impl $name<Message> {
+            #[inline]
             pub fn get_mut(&mut self) -> Option<&mut $name> {
                 self.0.get_mut().map(|message| unsafe {
                     &mut *(message as *mut MessageRef as *mut $name)
@@ -262,18 +271,21 @@ macro_rules! declare_concrete_message(
         impl Deref for $name<Message> {
             type Target = $name;
 
+            #[inline]
             fn deref(&self) -> &Self::Target {
                 unsafe { &*(self.0.as_ptr() as *const Self::Target) }
             }
         }
 
         impl Borrow<$name> for $name<Message> {
+            #[inline]
             fn borrow(&self) -> &$name {
                 &*self
             }
         }
 
         impl From<$name<Message>> for Message {
+            #[inline]
             fn from(concrete: $name<Message>) -> Self {
                 skip_assert_initialized!();
                 concrete.0

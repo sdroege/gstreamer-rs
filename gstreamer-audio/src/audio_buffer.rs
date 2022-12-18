@@ -30,67 +30,83 @@ impl<T> fmt::Debug for AudioBuffer<T> {
 }
 
 impl<T> AudioBuffer<T> {
+    #[inline]
     pub fn info(&self) -> &crate::AudioInfo {
         &self.info
     }
 
+    #[inline]
     pub fn into_buffer(self) -> gst::Buffer {
         unsafe { ptr::read(&mem::ManuallyDrop::new(self).buffer) }
     }
 
+    #[inline]
     pub fn format(&self) -> crate::AudioFormat {
         self.info().format()
     }
 
+    #[inline]
     pub fn format_info(&self) -> crate::AudioFormatInfo {
         self.info().format_info()
     }
 
+    #[inline]
     pub fn channels(&self) -> u32 {
         self.info().channels()
     }
 
+    #[inline]
     pub fn rate(&self) -> u32 {
         self.info().rate()
     }
 
+    #[inline]
     pub fn layout(&self) -> crate::AudioLayout {
         self.info().layout()
     }
 
+    #[inline]
     pub fn width(&self) -> u32 {
         self.info().width()
     }
 
+    #[inline]
     pub fn depth(&self) -> u32 {
         self.info().depth()
     }
 
+    #[inline]
     pub fn sample_stride(&self) -> u32 {
         self.info().width() / 8
     }
 
+    #[inline]
     pub fn bps(&self) -> u32 {
         self.info().bps()
     }
 
+    #[inline]
     pub fn bpf(&self) -> u32 {
         self.info().bpf()
     }
 
+    #[inline]
     pub fn n_samples(&self) -> usize {
         self.audio_buffer.n_samples
     }
 
+    #[inline]
     pub fn n_planes(&self) -> u32 {
         self.audio_buffer.n_planes as u32
     }
 
+    #[inline]
     pub fn plane_size(&self) -> usize {
         (self.n_samples() * self.sample_stride() as usize * self.channels() as usize)
             / self.n_planes() as usize
     }
 
+    #[inline]
     pub fn buffer(&self) -> &gst::BufferRef {
         unsafe { gst::BufferRef::from_ptr(self.audio_buffer.buffer) }
     }
@@ -110,6 +126,7 @@ impl<T> AudioBuffer<T> {
         }
     }
 
+    #[inline]
     pub fn as_audio_buffer_ref(&self) -> AudioBufferRef<&gst::BufferRef> {
         let info = self.info.clone();
         AudioBufferRef {
@@ -120,12 +137,14 @@ impl<T> AudioBuffer<T> {
         }
     }
 
+    #[inline]
     pub fn as_ptr(&self) -> *const ffi::GstAudioBuffer {
         &*self.audio_buffer
     }
 }
 
 impl<T> Drop for AudioBuffer<T> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             ffi::gst_audio_buffer_unmap(&mut *self.audio_buffer);
@@ -134,6 +153,7 @@ impl<T> Drop for AudioBuffer<T> {
 }
 
 impl AudioBuffer<Readable> {
+    #[inline]
     pub fn from_buffer_readable(
         buffer: gst::Buffer,
         info: &crate::AudioInfo,
@@ -169,6 +189,7 @@ impl AudioBuffer<Readable> {
 }
 
 impl AudioBuffer<Writable> {
+    #[inline]
     pub fn from_buffer_writable(
         buffer: gst::Buffer,
         info: &crate::AudioInfo,
@@ -202,6 +223,7 @@ impl AudioBuffer<Writable> {
         }
     }
 
+    #[inline]
     pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
         unsafe { gst::BufferRef::from_mut_ptr(self.audio_buffer.buffer) }
     }
@@ -221,6 +243,7 @@ impl AudioBuffer<Writable> {
         }
     }
 
+    #[inline]
     pub fn as_mut_audio_buffer_ref(&mut self) -> AudioBufferRef<&mut gst::BufferRef> {
         let info = self.info.clone();
         AudioBufferRef {
@@ -231,6 +254,7 @@ impl AudioBuffer<Writable> {
         }
     }
 
+    #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut ffi::GstAudioBuffer {
         &mut *self.audio_buffer
     }
@@ -245,6 +269,7 @@ enum AudioBufferPtr {
 impl ops::Deref for AudioBufferPtr {
     type Target = ffi::GstAudioBuffer;
 
+    #[inline]
     fn deref(&self) -> &Self::Target {
         match self {
             Self::Owned(ref b) => b,
@@ -254,6 +279,7 @@ impl ops::Deref for AudioBufferPtr {
 }
 
 impl ops::DerefMut for AudioBufferPtr {
+    #[inline]
     fn deref_mut(&mut self) -> &mut Self::Target {
         match self {
             Self::Owned(ref mut b) => &mut *b,
@@ -272,58 +298,72 @@ pub struct AudioBufferRef<T> {
 }
 
 impl<T> AudioBufferRef<T> {
+    #[inline]
     pub fn info(&self) -> &crate::AudioInfo {
         &self.info
     }
 
+    #[inline]
     pub fn format(&self) -> crate::AudioFormat {
         self.info().format()
     }
 
+    #[inline]
     pub fn format_info(&self) -> crate::AudioFormatInfo {
         self.info().format_info()
     }
 
+    #[inline]
     pub fn channels(&self) -> u32 {
         self.info().channels()
     }
 
+    #[inline]
     pub fn rate(&self) -> u32 {
         self.info().rate()
     }
 
+    #[inline]
     pub fn layout(&self) -> crate::AudioLayout {
         self.info().layout()
     }
 
+    #[inline]
     pub fn width(&self) -> u32 {
         self.info().width()
     }
 
+    #[inline]
     pub fn depth(&self) -> u32 {
         self.info().depth()
     }
 
+    #[inline]
     pub fn sample_stride(&self) -> u32 {
         self.info().width() / 8
     }
 
+    #[inline]
     pub fn bps(&self) -> u32 {
         self.info().bps()
     }
 
+    #[inline]
     pub fn bpf(&self) -> u32 {
         self.info().bpf()
     }
 
+    #[inline]
     pub fn n_samples(&self) -> usize {
         self.audio_buffer.n_samples
     }
 
+    #[inline]
     pub fn n_planes(&self) -> u32 {
         self.audio_buffer.n_planes as u32
     }
 
+    #[inline]
     pub fn plane_size(&self) -> usize {
         (self.n_samples() * self.sample_stride() as usize * self.channels() as usize)
             / self.n_planes() as usize
@@ -348,12 +388,14 @@ impl<T> AudioBufferRef<T> {
         }
     }
 
+    #[inline]
     pub fn as_ptr(&self) -> *const ffi::GstAudioBuffer {
         &*self.audio_buffer
     }
 }
 
 impl<'a> AudioBufferRef<&'a gst::BufferRef> {
+    #[inline]
     pub unsafe fn from_glib_borrow(audio_buffer: *const ffi::GstAudioBuffer) -> Borrowed<Self> {
         assert!(!audio_buffer.is_null());
 
@@ -370,6 +412,7 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
         })
     }
 
+    #[inline]
     pub fn from_buffer_ref_readable<'b>(
         buffer: &'a gst::BufferRef,
         info: &'b crate::AudioInfo,
@@ -403,12 +446,14 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
         }
     }
 
+    #[inline]
     pub fn buffer(&self) -> &gst::BufferRef {
         unsafe { gst::BufferRef::from_ptr(self.audio_buffer.buffer) }
     }
 }
 
 impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
+    #[inline]
     pub unsafe fn from_glib_borrow_mut(audio_buffer: *mut ffi::GstAudioBuffer) -> Borrowed<Self> {
         assert!(!audio_buffer.is_null());
 
@@ -423,6 +468,7 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
         })
     }
 
+    #[inline]
     pub fn from_buffer_ref_writable<'b>(
         buffer: &'a mut gst::BufferRef,
         info: &'b crate::AudioInfo,
@@ -456,10 +502,12 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
         }
     }
 
+    #[inline]
     pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
         unsafe { gst::BufferRef::from_mut_ptr(self.audio_buffer.buffer) }
     }
 
+    #[inline]
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
         if plane >= self.n_planes() {
             return Err(glib::bool_error!(
@@ -479,6 +527,7 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
         }
     }
 
+    #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut ffi::GstAudioBuffer {
         &mut *self.audio_buffer
     }
@@ -487,6 +536,7 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
 impl<'a> ops::Deref for AudioBufferRef<&'a mut gst::BufferRef> {
     type Target = AudioBufferRef<&'a gst::BufferRef>;
 
+    #[inline]
     fn deref(&self) -> &Self::Target {
         unsafe { &*(self as *const Self as *const Self::Target) }
     }
@@ -496,6 +546,7 @@ unsafe impl<T> Send for AudioBufferRef<T> {}
 unsafe impl<T> Sync for AudioBufferRef<T> {}
 
 impl<T> Drop for AudioBufferRef<T> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             if self.unmap {

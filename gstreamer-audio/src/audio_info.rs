@@ -139,6 +139,7 @@ impl AudioInfo {
         }
     }
 
+    #[inline]
     pub fn is_valid(&self) -> bool {
         !self.0.finfo.is_null() && self.0.channels > 0 && self.0.rate > 0 && self.0.bpf > 0
     }
@@ -220,6 +221,7 @@ impl AudioInfo {
         }
     }
 
+    #[inline]
     pub fn format(&self) -> crate::AudioFormat {
         if self.0.finfo.is_null() {
             return crate::AudioFormat::Unknown;
@@ -228,66 +230,82 @@ impl AudioInfo {
         unsafe { from_glib((*self.0.finfo).format) }
     }
 
+    #[inline]
     pub fn format_info(&self) -> crate::AudioFormatInfo {
         crate::AudioFormatInfo::from_format(self.format())
     }
 
+    #[inline]
     pub fn layout(&self) -> crate::AudioLayout {
         unsafe { from_glib(self.0.layout) }
     }
 
+    #[inline]
     pub fn flags(&self) -> crate::AudioFlags {
         unsafe { from_glib(self.0.flags) }
     }
 
+    #[inline]
     pub fn rate(&self) -> u32 {
         self.0.rate as u32
     }
 
+    #[inline]
     pub fn channels(&self) -> u32 {
         self.0.channels as u32
     }
 
+    #[inline]
     pub fn bpf(&self) -> u32 {
         self.0.bpf as u32
     }
 
+    #[inline]
     pub fn bps(&self) -> u32 {
         self.format_info().depth() >> 3
     }
 
+    #[inline]
     pub fn depth(&self) -> u32 {
         self.format_info().depth()
     }
 
+    #[inline]
     pub fn width(&self) -> u32 {
         self.format_info().width()
     }
 
+    #[inline]
     pub fn endianness(&self) -> crate::AudioEndianness {
         self.format_info().endianness()
     }
 
+    #[inline]
     pub fn is_big_endian(&self) -> bool {
         self.format_info().is_big_endian()
     }
 
+    #[inline]
     pub fn is_little_endian(&self) -> bool {
         self.format_info().is_little_endian()
     }
 
+    #[inline]
     pub fn is_float(&self) -> bool {
         self.format_info().is_float()
     }
 
+    #[inline]
     pub fn is_integer(&self) -> bool {
         self.format_info().is_integer()
     }
 
+    #[inline]
     pub fn is_signed(&self) -> bool {
         self.format_info().is_signed()
     }
 
+    #[inline]
     pub fn positions(&self) -> Option<&[crate::AudioChannelPosition]> {
         if self.0.channels > 64 || self.is_unpositioned() {
             return None;
@@ -296,12 +314,14 @@ impl AudioInfo {
         Some(&self.1[0..(self.0.channels as usize)])
     }
 
+    #[inline]
     pub fn is_unpositioned(&self) -> bool {
         self.flags().contains(crate::AudioFlags::UNPOSITIONED)
     }
 }
 
 impl Clone for AudioInfo {
+    #[inline]
     fn clone(&self) -> Self {
         unsafe { Self(ptr::read(&self.0), self.1) }
     }
@@ -309,6 +329,7 @@ impl Clone for AudioInfo {
 
 impl PartialEq for AudioInfo {
     #[doc(alias = "gst_audio_info_is_equal")]
+    #[inline]
     fn eq(&self, other: &Self) -> bool {
         unsafe { from_glib(ffi::gst_audio_info_is_equal(&self.0, &other.0)) }
     }
@@ -320,6 +341,7 @@ unsafe impl Send for AudioInfo {}
 unsafe impl Sync for AudioInfo {}
 
 impl glib::types::StaticType for AudioInfo {
+    #[inline]
     fn static_type() -> glib::types::Type {
         unsafe { glib::translate::from_glib(ffi::gst_audio_info_get_type()) }
     }
@@ -384,6 +406,7 @@ impl glib::value::ToValueOptional for AudioInfo {
 
 #[doc(hidden)]
 impl glib::translate::Uninitialized for AudioInfo {
+    #[inline]
     unsafe fn uninitialized() -> Self {
         mem::zeroed()
     }
@@ -398,6 +421,7 @@ impl glib::translate::GlibPtrDefault for AudioInfo {
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstAudioInfo> for AudioInfo {
     type Storage = PhantomData<&'a Self>;
 
+    #[inline]
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstAudioInfo, Self> {
         glib::translate::Stash(&self.0, PhantomData)
     }

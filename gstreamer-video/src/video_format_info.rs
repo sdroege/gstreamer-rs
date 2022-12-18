@@ -9,12 +9,14 @@ use glib::translate::{from_glib, IntoGlib, ToGlibPtr};
 pub struct VideoFormatInfo(&'static ffi::GstVideoFormatInfo);
 
 impl VideoFormatInfo {
+    #[inline]
     pub unsafe fn from_ptr(format_info: *const ffi::GstVideoFormatInfo) -> Self {
         assert_initialized_main_thread!();
         assert!(!format_info.is_null());
         Self(&*format_info)
     }
 
+    #[inline]
     pub fn from_format(format: crate::VideoFormat) -> Self {
         assert_initialized_main_thread!();
 
@@ -26,126 +28,156 @@ impl VideoFormatInfo {
         }
     }
 
+    #[inline]
     pub fn format(&self) -> crate::VideoFormat {
         unsafe { from_glib(self.0.format) }
     }
 
+    #[inline]
     pub fn name<'a>(&self) -> &'a str {
         unsafe { CStr::from_ptr(self.0.name).to_str().unwrap() }
     }
 
+    #[inline]
     pub fn description<'a>(&self) -> &'a str {
         unsafe { CStr::from_ptr(self.0.description).to_str().unwrap() }
     }
 
+    #[inline]
     pub fn flags(&self) -> crate::VideoFormatFlags {
         unsafe { from_glib(self.0.flags) }
     }
 
+    #[inline]
     pub fn bits(&self) -> u32 {
         self.0.bits
     }
 
+    #[inline]
     pub fn n_components(&self) -> u32 {
         self.0.n_components
     }
 
+    #[inline]
     pub fn shift(&self) -> &[u32] {
         &self.0.shift[0..(self.0.n_components as usize)]
     }
 
+    #[inline]
     pub fn depth(&self) -> &[u32] {
         &self.0.depth[0..(self.0.n_components as usize)]
     }
 
+    #[inline]
     pub fn pixel_stride(&self) -> &[i32] {
         &self.0.pixel_stride[0..(self.0.n_components as usize)]
     }
 
+    #[inline]
     pub fn n_planes(&self) -> u32 {
         self.0.n_planes
     }
 
+    #[inline]
     pub fn plane(&self) -> &[u32] {
         &self.0.plane[0..(self.0.n_components as usize)]
     }
 
+    #[inline]
     pub fn poffset(&self) -> &[u32] {
         &self.0.poffset[0..(self.0.n_components as usize)]
     }
 
+    #[inline]
     pub fn w_sub(&self) -> &[u32] {
         &self.0.w_sub[0..(self.0.n_components as usize)]
     }
 
+    #[inline]
     pub fn h_sub(&self) -> &[u32] {
         &self.0.h_sub[0..(self.0.n_components as usize)]
     }
 
+    #[inline]
     pub fn tile_mode(&self) -> crate::VideoTileMode {
         unsafe { from_glib(self.0.tile_mode) }
     }
 
     #[cfg_attr(feature = "v1_22", deprecated = "Since 1.22")]
+    #[inline]
     pub fn tile_ws(&self) -> u32 {
         self.0.tile_ws
     }
 
     #[cfg_attr(feature = "v1_22", deprecated = "Since 1.22")]
+    #[inline]
     pub fn tile_hs(&self) -> u32 {
         self.0.tile_hs
     }
 
+    #[inline]
     pub fn unpack_format(&self) -> crate::VideoFormat {
         unsafe { from_glib(self.0.unpack_format) }
     }
 
+    #[inline]
     pub fn pack_lines(&self) -> i32 {
         self.0.pack_lines
     }
 
+    #[inline]
     pub fn has_alpha(&self) -> bool {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_ALPHA != 0
     }
 
+    #[inline]
     pub fn has_palette(&self) -> bool {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_PALETTE != 0
     }
 
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[inline]
     pub fn has_subtiles(&self) -> bool {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_SUBTILES != 0
     }
 
+    #[inline]
     pub fn is_complex(&self) -> bool {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_COMPLEX != 0
     }
 
+    #[inline]
     pub fn is_gray(&self) -> bool {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_GRAY != 0
     }
 
+    #[inline]
     pub fn is_le(&self) -> bool {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_LE != 0
     }
 
+    #[inline]
     pub fn is_rgb(&self) -> bool {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_RGB != 0
     }
 
+    #[inline]
     pub fn is_tiled(&self) -> bool {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_TILED != 0
     }
 
+    #[inline]
     pub fn is_yuv(&self) -> bool {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_YUV != 0
     }
 
+    #[inline]
     pub fn scale_width(&self, component: u8, width: u32) -> u32 {
         (-((-(i64::from(width))) >> self.w_sub()[component as usize])) as u32
     }
 
+    #[inline]
     pub fn scale_height(&self, component: u8, height: u32) -> u32 {
         (-((-(i64::from(height))) >> self.h_sub()[component as usize])) as u32
     }
@@ -345,6 +377,7 @@ unsafe impl Sync for VideoFormatInfo {}
 unsafe impl Send for VideoFormatInfo {}
 
 impl PartialEq for VideoFormatInfo {
+    #[inline]
     fn eq(&self, other: &Self) -> bool {
         self.format() == other.format()
     }
@@ -353,6 +386,7 @@ impl PartialEq for VideoFormatInfo {
 impl Eq for VideoFormatInfo {}
 
 impl PartialOrd for VideoFormatInfo {
+    #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
@@ -497,6 +531,7 @@ impl str::FromStr for crate::VideoFormatInfo {
 }
 
 impl From<crate::VideoFormat> for VideoFormatInfo {
+    #[inline]
     fn from(f: crate::VideoFormat) -> Self {
         skip_assert_initialized!();
         Self::from_format(f)
@@ -515,6 +550,7 @@ unsafe impl glib::translate::TransparentPtrType for VideoFormatInfo {}
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoFormatInfo> for VideoFormatInfo {
     type Storage = PhantomData<&'a Self>;
 
+    #[inline]
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstVideoFormatInfo, Self> {
         glib::translate::Stash(self.0, PhantomData)
     }
@@ -562,18 +598,22 @@ impl fmt::Debug for VideoTileInfo {
 #[cfg(any(feature = "v1_22", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
 impl VideoTileInfo {
+    #[inline]
     pub fn width(&self) -> u32 {
         self.0.width
     }
 
+    #[inline]
     pub fn height(&self) -> u32 {
         self.0.height
     }
 
+    #[inline]
     pub fn stride(&self) -> u32 {
         self.0.stride
     }
 
+    #[inline]
     pub fn size(&self) -> u32 {
         self.0.size
     }

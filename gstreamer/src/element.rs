@@ -84,12 +84,14 @@ pub struct NotifyWatchId(NonZeroU64);
 impl IntoGlib for NotifyWatchId {
     type GlibType = libc::c_ulong;
 
+    #[inline]
     fn into_glib(self) -> libc::c_ulong {
         self.0.get() as libc::c_ulong
     }
 }
 
 impl FromGlib<libc::c_ulong> for NotifyWatchId {
+    #[inline]
     unsafe fn from_glib(val: libc::c_ulong) -> NotifyWatchId {
         skip_assert_initialized!();
         assert_ne!(val, 0);
@@ -294,6 +296,7 @@ pub trait ElementExtManual: 'static {
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
+    #[inline]
     fn element_class(&self) -> &glib::Class<Element> {
         unsafe {
             let klass = (*(self.as_ptr() as *mut glib::gobject_ffi::GTypeInstance)).g_class

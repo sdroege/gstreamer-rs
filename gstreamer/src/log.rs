@@ -20,6 +20,7 @@ impl fmt::Debug for DebugMessage {
 
 impl DebugMessage {
     #[doc(alias = "gst_debug_message_get")]
+    #[inline]
     pub fn get(&self) -> Option<Cow<glib::GStr>> {
         unsafe {
             let message = ffi::gst_debug_message_get(self.0.as_ptr());
@@ -35,6 +36,7 @@ impl DebugMessage {
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_debug_message_get_id")]
+    #[inline]
     pub fn id(&self) -> Option<&glib::GStr> {
         unsafe {
             let id = ffi::gst_debug_message_get_id(self.0.as_ptr());
@@ -83,6 +85,7 @@ impl DebugCategory {
     }
 
     #[doc(alias = "gst_debug_get_category")]
+    #[inline]
     pub fn get(name: &str) -> Option<DebugCategory> {
         skip_assert_initialized!();
         unsafe {
@@ -102,6 +105,7 @@ impl DebugCategory {
 
     #[doc(alias = "get_threshold")]
     #[doc(alias = "gst_debug_category_get_threshold")]
+    #[inline]
     pub fn threshold(self) -> crate::DebugLevel {
         match self.0 {
             Some(cat) => unsafe { from_glib(cat.as_ref().threshold) },
@@ -110,6 +114,7 @@ impl DebugCategory {
     }
 
     #[doc(alias = "gst_debug_category_set_threshold")]
+    #[inline]
     pub fn set_threshold(self, threshold: crate::DebugLevel) {
         if let Some(cat) = self.0 {
             unsafe { ffi::gst_debug_category_set_threshold(cat.as_ptr(), threshold.into_glib()) }
@@ -117,6 +122,7 @@ impl DebugCategory {
     }
 
     #[doc(alias = "gst_debug_category_reset_threshold")]
+    #[inline]
     pub fn reset_threshold(self) {
         if let Some(cat) = self.0 {
             unsafe { ffi::gst_debug_category_reset_threshold(cat.as_ptr()) }
@@ -133,6 +139,7 @@ impl DebugCategory {
 
     #[doc(alias = "get_color")]
     #[doc(alias = "gst_debug_category_get_color")]
+    #[inline]
     pub fn color(self) -> crate::DebugColorFlags {
         match self.0 {
             Some(cat) => unsafe { from_glib(cat.as_ref().color) },
@@ -142,6 +149,7 @@ impl DebugCategory {
 
     #[doc(alias = "get_name")]
     #[doc(alias = "gst_debug_category_get_name")]
+    #[inline]
     pub fn name<'a>(self) -> &'a str {
         match self.0 {
             Some(cat) => unsafe { CStr::from_ptr(cat.as_ref().name).to_str().unwrap() },
@@ -151,6 +159,7 @@ impl DebugCategory {
 
     #[doc(alias = "get_description")]
     #[doc(alias = "gst_debug_category_get_description")]
+    #[inline]
     pub fn description<'a>(self) -> Option<&'a str> {
         let cat = self.0?;
 
@@ -464,6 +473,7 @@ impl DebugCategory {
 
     #[doc(alias = "get_all_categories")]
     #[doc(alias = "gst_debug_get_all_categories")]
+    #[inline]
     pub fn all_categories() -> glib::SList<DebugCategory> {
         unsafe { glib::SList::from_glib_container(ffi::gst_debug_get_all_categories()) }
     }
@@ -471,6 +481,7 @@ impl DebugCategory {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_debug_log_get_line")]
+    #[inline]
     pub fn get_line(
         &self,
         level: crate::DebugLevel,
@@ -512,6 +523,7 @@ impl GlibPtrDefault for DebugCategory {
 unsafe impl TransparentPtrType for DebugCategory {}
 
 impl FromGlibPtrNone<*mut ffi::GstDebugCategory> for DebugCategory {
+    #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstDebugCategory) -> Self {
         assert!(!ptr.is_null());
         DebugCategory(Some(ptr::NonNull::new_unchecked(ptr)))
@@ -519,6 +531,7 @@ impl FromGlibPtrNone<*mut ffi::GstDebugCategory> for DebugCategory {
 }
 
 impl FromGlibPtrFull<*mut ffi::GstDebugCategory> for DebugCategory {
+    #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstDebugCategory) -> Self {
         assert!(!ptr.is_null());
         DebugCategory(Some(ptr::NonNull::new_unchecked(ptr)))
@@ -1064,6 +1077,7 @@ unsafe impl Sync for DebugLogFunction {}
 pub struct LoggedObject(ptr::NonNull<glib::gobject_ffi::GObject>);
 
 impl LoggedObject {
+    #[inline]
     pub fn as_ptr(&self) -> *mut glib::gobject_ffi::GObject {
         self.0.as_ptr()
     }

@@ -28,6 +28,7 @@ macro_rules! mini_object_wrapper (
         }
 
         impl $name {
+            #[inline]
             pub unsafe fn from_glib_none(ptr: *const $ffi_name) -> Self {
                 skip_assert_initialized!();
                 assert!(!ptr.is_null());
@@ -39,6 +40,7 @@ macro_rules! mini_object_wrapper (
                 }
             }
 
+            #[inline]
             pub unsafe fn from_glib_full(ptr: *const $ffi_name) -> Self {
                 skip_assert_initialized!();
                 assert!(!ptr.is_null());
@@ -48,6 +50,7 @@ macro_rules! mini_object_wrapper (
                 }
             }
 
+            #[inline]
             pub unsafe fn from_glib_borrow(ptr: *const $ffi_name) -> $crate::glib::translate::Borrowed<Self> {
                 skip_assert_initialized!();
                 assert!(!ptr.is_null());
@@ -57,11 +60,14 @@ macro_rules! mini_object_wrapper (
                 })
             }
 
+            #[inline]
             pub unsafe fn replace_ptr(&mut self, ptr: *mut $ffi_name) {
                 assert!(!ptr.is_null());
                 self.obj = std::ptr::NonNull::new_unchecked(ptr);
             }
 
+            #[inline]
+            #[doc(alias = "gst_mini_object_make_writable")]
             pub fn make_mut(&mut self) -> &mut $ref_name {
                 unsafe {
                     if self.is_writable() {
@@ -78,6 +84,7 @@ macro_rules! mini_object_wrapper (
                 }
             }
 
+            #[inline]
             pub fn get_mut(&mut self) -> Option<&mut $ref_name> {
                 if self.is_writable() {
                     Some(unsafe { &mut *(self.obj.as_mut() as *mut $ffi_name as *mut $ref_name) })
@@ -87,6 +94,7 @@ macro_rules! mini_object_wrapper (
             }
 
             #[doc(alias = "gst_mini_object_is_writable")]
+            #[inline]
             pub fn is_writable(&self) -> bool {
                 unsafe {
                     $crate::glib::translate::from_glib($crate::ffi::gst_mini_object_is_writable(
@@ -96,6 +104,7 @@ macro_rules! mini_object_wrapper (
             }
 
             #[must_use]
+            #[inline]
             pub fn upcast(self) -> $crate::miniobject::MiniObject {
                 use $crate::glib::translate::IntoGlibPtr;
 
@@ -106,6 +115,7 @@ macro_rules! mini_object_wrapper (
         }
 
         impl $crate::glib::translate::IntoGlibPtr<*mut $ffi_name> for $name {
+            #[inline]
             unsafe fn into_glib_ptr(self) -> *mut $ffi_name {
                 let s = std::mem::ManuallyDrop::new(self);
                 s.as_mut_ptr()
@@ -113,12 +123,14 @@ macro_rules! mini_object_wrapper (
         }
 
         impl Clone for $name {
+            #[inline]
             fn clone(&self) -> Self {
                 unsafe { $name::from_glib_none(self.as_ptr()) }
             }
         }
 
         impl Drop for $name {
+            #[inline]
             fn drop(&mut self) {
                 unsafe {
                     $crate::ffi::gst_mini_object_unref(self.as_mut_ptr() as *mut $crate::ffi::GstMiniObject);
@@ -129,18 +141,21 @@ macro_rules! mini_object_wrapper (
         impl std::ops::Deref for $name {
             type Target = $ref_name;
 
+            #[inline]
             fn deref(&self) -> &Self::Target {
                 unsafe { &*(self.obj.as_ref() as *const $ffi_name as *const $ref_name) }
             }
         }
 
         impl AsRef<$ref_name> for $name {
+            #[inline]
             fn as_ref(&self) -> &$ref_name {
                 &*self
             }
         }
 
         impl std::borrow::Borrow<$ref_name> for $name {
+            #[inline]
             fn borrow(&self) -> &$ref_name {
                 &*self
             }
@@ -149,10 +164,12 @@ macro_rules! mini_object_wrapper (
         impl<'a> $crate::glib::translate::ToGlibPtr<'a, *const $ffi_name> for $name {
             type Storage = std::marker::PhantomData<&'a Self>;
 
+            #[inline]
             fn to_glib_none(&'a self) -> $crate::glib::translate::Stash<'a, *const $ffi_name, Self> {
                 $crate::glib::translate::Stash(self.as_ptr(), std::marker::PhantomData)
             }
 
+            #[inline]
             fn to_glib_full(&self) -> *const $ffi_name {
                 unsafe {
                     $crate::ffi::gst_mini_object_ref(self.as_mut_ptr() as *mut $crate::ffi::GstMiniObject);
@@ -164,10 +181,12 @@ macro_rules! mini_object_wrapper (
         impl<'a> $crate::glib::translate::ToGlibPtr<'a, *mut $ffi_name> for $name {
             type Storage = std::marker::PhantomData<&'a Self>;
 
+            #[inline]
             fn to_glib_none(&'a self) -> $crate::glib::translate::Stash<'a, *mut $ffi_name, Self> {
                 $crate::glib::translate::Stash(self.as_mut_ptr(), std::marker::PhantomData)
             }
 
+            #[inline]
             fn to_glib_full(&self) -> *mut $ffi_name {
                 unsafe {
                     $crate::ffi::gst_mini_object_ref(self.as_mut_ptr() as *mut $crate::ffi::GstMiniObject);
@@ -179,6 +198,7 @@ macro_rules! mini_object_wrapper (
         impl<'a> $crate::glib::translate::ToGlibPtrMut<'a, *mut $ffi_name> for $name {
             type Storage = std::marker::PhantomData<&'a mut Self>;
 
+            #[inline]
             fn to_glib_none_mut(&'a mut self) -> $crate::glib::translate::StashMut<*mut $ffi_name, Self> {
                 self.make_mut();
                 $crate::glib::translate::StashMut(self.as_mut_ptr(), std::marker::PhantomData)
@@ -267,36 +287,42 @@ macro_rules! mini_object_wrapper (
         }
 
         impl $crate::glib::translate::FromGlibPtrNone<*const $ffi_name> for $name {
+            #[inline]
             unsafe fn from_glib_none(ptr: *const $ffi_name) -> Self {
                 Self::from_glib_none(ptr)
             }
         }
 
         impl $crate::glib::translate::FromGlibPtrNone<*mut $ffi_name> for $name {
+            #[inline]
             unsafe fn from_glib_none(ptr: *mut $ffi_name) -> Self {
                 Self::from_glib_none(ptr)
             }
         }
 
         impl $crate::glib::translate::FromGlibPtrFull<*const $ffi_name> for $name {
+            #[inline]
             unsafe fn from_glib_full(ptr: *const $ffi_name) -> Self {
                 Self::from_glib_full(ptr)
             }
         }
 
         impl $crate::glib::translate::FromGlibPtrFull<*mut $ffi_name> for $name {
+            #[inline]
             unsafe fn from_glib_full(ptr: *mut $ffi_name) -> Self {
                 Self::from_glib_full(ptr)
             }
         }
 
         impl $crate::glib::translate::FromGlibPtrBorrow<*const $ffi_name> for $name {
+            #[inline]
             unsafe fn from_glib_borrow(ptr: *const $ffi_name) -> $crate::glib::translate::Borrowed<Self> {
                 Self::from_glib_borrow(ptr)
             }
         }
 
         impl $crate::glib::translate::FromGlibPtrBorrow<*mut $ffi_name> for $name {
+            #[inline]
             unsafe fn from_glib_borrow(ptr: *mut $ffi_name) -> $crate::glib::translate::Borrowed<Self> {
                 Self::from_glib_borrow(ptr)
             }
@@ -397,19 +423,23 @@ macro_rules! mini_object_wrapper (
         unsafe impl $crate::glib::translate::TransparentPtrType for $name {}
 
         impl $ref_name {
+            #[inline]
             pub fn as_ptr(&self) -> *const $ffi_name {
                 self as *const Self as *const $ffi_name
             }
 
+            #[inline]
             pub fn as_mut_ptr(&self) -> *mut $ffi_name {
                 self as *const Self as *mut $ffi_name
             }
 
+            #[inline]
             pub unsafe fn from_ptr<'a>(ptr: *const $ffi_name) -> &'a Self {
                 assert!(!ptr.is_null());
                 &*(ptr as *const Self)
             }
 
+            #[inline]
             pub unsafe fn from_mut_ptr<'a>(ptr: *mut $ffi_name) -> &'a mut Self {
                 assert!(!ptr.is_null());
                 assert_ne!(
@@ -420,6 +450,7 @@ macro_rules! mini_object_wrapper (
             }
 
             #[doc(alias = "gst_mini_object_copy")]
+            #[inline]
             pub fn copy(&self) -> $name {
                 unsafe {
                     $name::from_glib_full($crate::ffi::gst_mini_object_copy(
@@ -428,18 +459,21 @@ macro_rules! mini_object_wrapper (
                 }
             }
 
+            #[inline]
             pub fn upcast_ref(&self) -> &$crate::miniobject::MiniObjectRef {
                 unsafe {
                     &*(self.as_ptr() as *const $crate::miniobject::MiniObjectRef)
                 }
             }
 
+            #[inline]
             pub fn upcast_mut(&mut self) -> &mut $crate::miniobject::MiniObjectRef {
                 unsafe {
                     &mut *(self.as_mut_ptr() as *mut $crate::miniobject::MiniObjectRef)
                 }
             }
 
+            #[inline]
             pub fn ptr_eq(this: &$ref_name, other: &$ref_name) -> bool {
                 skip_assert_initialized!();
                 this.as_ptr() == other.as_ptr()
@@ -453,6 +487,7 @@ macro_rules! mini_object_wrapper (
         impl ToOwned for $ref_name {
             type Owned = $name;
 
+            #[inline]
             fn to_owned(&self) -> $name {
                 self.copy()
             }
@@ -467,12 +502,14 @@ macro_rules! mini_object_wrapper (
         $crate::mini_object_wrapper!($name, $ref_name, $ffi_name);
 
         impl $crate::glib::types::StaticType for $name {
+            #[inline]
             fn static_type() -> $crate::glib::types::Type {
                 $ref_name::static_type()
             }
         }
 
         impl $crate::glib::types::StaticType for $ref_name {
+            #[inline]
             fn static_type() -> $crate::glib::types::Type {
                 unsafe { $crate::glib::translate::from_glib($get_type()) }
             }
@@ -487,6 +524,7 @@ macro_rules! mini_object_wrapper (
         unsafe impl<'a> $crate::glib::value::FromValue<'a> for $name {
             type Checker = $crate::glib::value::GenericValueTypeOrNoneChecker<Self>;
 
+            #[inline]
             unsafe fn from_value(value: &'a $crate::glib::Value) -> Self {
                 skip_assert_initialized!();
                 $crate::glib::translate::from_glib_none(
@@ -498,6 +536,7 @@ macro_rules! mini_object_wrapper (
         unsafe impl<'a> $crate::glib::value::FromValue<'a> for &'a $name {
             type Checker = $crate::glib::value::GenericValueTypeOrNoneChecker<Self>;
 
+            #[inline]
             unsafe fn from_value(value: &'a $crate::glib::Value) -> Self {
                 skip_assert_initialized!();
                 assert_eq!(std::mem::size_of::<$name>(), std::mem::size_of::<$crate::glib::ffi::gpointer>());
@@ -509,6 +548,7 @@ macro_rules! mini_object_wrapper (
         }
 
         impl $crate::glib::value::ToValue for $name {
+            #[inline]
             fn to_value(&self) -> $crate::glib::Value {
                 let mut value = $crate::glib::Value::for_value_type::<Self>();
                 unsafe {
@@ -520,12 +560,14 @@ macro_rules! mini_object_wrapper (
                 value
             }
 
+            #[inline]
             fn value_type(&self) -> $crate::glib::Type {
                 <Self as $crate::glib::StaticType>::static_type()
             }
         }
 
         impl $crate::glib::value::ToValueOptional for $name {
+            #[inline]
             fn to_value_optional(s: Option<&Self>) -> $crate::glib::Value {
                 skip_assert_initialized!();
                 let mut value = $crate::glib::Value::for_value_type::<Self>();
@@ -540,6 +582,7 @@ macro_rules! mini_object_wrapper (
         }
 
         impl From<$name> for $crate::glib::Value {
+            #[inline]
             fn from(v: $name) -> $crate::glib::Value {
                 skip_assert_initialized!();
                 let mut value = $crate::glib::Value::for_value_type::<$name>();
@@ -556,6 +599,7 @@ macro_rules! mini_object_wrapper (
         unsafe impl<'a> $crate::glib::value::FromValue<'a> for &'a $ref_name {
             type Checker = $crate::glib::value::GenericValueTypeOrNoneChecker<Self>;
 
+            #[inline]
             unsafe fn from_value(value: &'a $crate::glib::Value) -> Self {
                 skip_assert_initialized!();
                 &*($crate::glib::gobject_ffi::g_value_get_boxed($crate::glib::translate::ToGlibPtr::to_glib_none(value).0) as *const $ref_name)
@@ -576,6 +620,7 @@ mini_object_wrapper!(MiniObject, MiniObjectRef, ffi::GstMiniObject, || {
 });
 
 impl MiniObject {
+    #[inline]
     pub fn downcast<T: IsMiniObject + glib::StaticType>(self) -> Result<T, Self> {
         if self.type_().is_a(T::static_type()) {
             unsafe { Ok(from_glib_full(self.into_glib_ptr() as *mut T::FfiType)) }
@@ -601,10 +646,12 @@ impl fmt::Debug for MiniObjectRef {
 }
 
 impl MiniObjectRef {
+    #[inline]
     pub fn type_(&self) -> glib::Type {
         unsafe { from_glib((*self.as_ptr()).type_) }
     }
 
+    #[inline]
     pub fn downcast_ref<T: IsMiniObject + glib::StaticType>(&self) -> Option<&T::RefType> {
         if self.type_().is_a(T::static_type()) {
             unsafe { Some(&*(self as *const Self as *const T::RefType)) }
@@ -613,6 +660,7 @@ impl MiniObjectRef {
         }
     }
 
+    #[inline]
     pub fn downcast_mut<T: IsMiniObject + glib::StaticType>(&mut self) -> Option<&mut T::RefType> {
         if self.type_().is_a(T::static_type()) {
             unsafe { Some(&mut *(self as *mut Self as *mut T::RefType)) }

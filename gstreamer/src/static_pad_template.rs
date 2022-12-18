@@ -12,16 +12,19 @@ pub struct StaticPadTemplate(ptr::NonNull<ffi::GstStaticPadTemplate>);
 
 impl StaticPadTemplate {
     #[doc(alias = "gst_static_pad_template_get")]
+    #[inline]
     pub fn get(&self) -> PadTemplate {
         unsafe { from_glib_full(ffi::gst_static_pad_template_get(self.0.as_ptr())) }
     }
 
     #[doc(alias = "get_caps")]
     #[doc(alias = "gst_static_pad_template_get_caps")]
+    #[inline]
     pub fn caps(&self) -> Caps {
         unsafe { from_glib_full(ffi::gst_static_pad_template_get_caps(self.0.as_ptr())) }
     }
 
+    #[inline]
     pub fn name_template<'a>(&self) -> &'a str {
         unsafe {
             CStr::from_ptr(self.0.as_ref().name_template)
@@ -30,10 +33,12 @@ impl StaticPadTemplate {
         }
     }
 
+    #[inline]
     pub fn direction(&self) -> crate::PadDirection {
         unsafe { from_glib(self.0.as_ref().direction) }
     }
 
+    #[inline]
     pub fn presence(&self) -> crate::PadPresence {
         unsafe { from_glib(self.0.as_ref().presence) }
     }
@@ -64,6 +69,7 @@ impl fmt::Debug for StaticPadTemplate {
 }
 
 impl glib::types::StaticType for StaticPadTemplate {
+    #[inline]
     fn static_type() -> glib::types::Type {
         unsafe { glib::translate::from_glib(ffi::gst_static_pad_template_get_type()) }
     }
@@ -77,6 +83,7 @@ impl glib::value::ValueType for StaticPadTemplate {
 unsafe impl<'a> glib::value::FromValue<'a> for StaticPadTemplate {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
@@ -86,6 +93,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for StaticPadTemplate {
 
 #[doc(hidden)]
 impl glib::value::ToValue for StaticPadTemplate {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -97,6 +105,7 @@ impl glib::value::ToValue for StaticPadTemplate {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -104,6 +113,7 @@ impl glib::value::ToValue for StaticPadTemplate {
 
 #[doc(hidden)]
 impl glib::value::ToValueOptional for StaticPadTemplate {
+    #[inline]
     fn to_value_optional(s: Option<&Self>) -> glib::Value {
         skip_assert_initialized!();
         let mut value = glib::Value::for_value_type::<Self>();
@@ -118,6 +128,7 @@ impl glib::value::ToValueOptional for StaticPadTemplate {
 }
 
 impl From<StaticPadTemplate> for glib::Value {
+    #[inline]
     fn from(v: StaticPadTemplate) -> glib::Value {
         skip_assert_initialized!();
         glib::value::ToValue::to_value(&v)
@@ -133,6 +144,7 @@ impl glib::translate::GlibPtrDefault for StaticPadTemplate {
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticPadTemplate> for StaticPadTemplate {
     type Storage = PhantomData<&'a StaticPadTemplate>;
 
+    #[inline]
     fn to_glib_none(
         &'a self,
     ) -> glib::translate::Stash<'a, *const ffi::GstStaticPadTemplate, Self> {
@@ -173,7 +185,6 @@ impl glib::translate::FromGlibPtrBorrow<*mut ffi::GstStaticPadTemplate> for Stat
 
 #[doc(hidden)]
 impl glib::translate::FromGlibPtrFull<*mut ffi::GstStaticPadTemplate> for StaticPadTemplate {
-    #[inline]
     unsafe fn from_glib_full(_ptr: *mut ffi::GstStaticPadTemplate) -> Self {
         unimplemented!();
     }

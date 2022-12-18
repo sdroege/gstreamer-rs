@@ -18,24 +18,28 @@ pub struct BufferPoolConfig(Structure);
 impl Deref for BufferPoolConfig {
     type Target = BufferPoolConfigRef;
 
+    #[inline]
     fn deref(&self) -> &BufferPoolConfigRef {
         unsafe { &*(self.0.as_ptr() as *const StructureRef as *const BufferPoolConfigRef) }
     }
 }
 
 impl DerefMut for BufferPoolConfig {
+    #[inline]
     fn deref_mut(&mut self) -> &mut BufferPoolConfigRef {
         unsafe { &mut *(self.0.as_ptr() as *mut StructureRef as *mut BufferPoolConfigRef) }
     }
 }
 
 impl AsRef<BufferPoolConfigRef> for BufferPoolConfig {
+    #[inline]
     fn as_ref(&self) -> &BufferPoolConfigRef {
         self.deref()
     }
 }
 
 impl AsMut<BufferPoolConfigRef> for BufferPoolConfig {
+    #[inline]
     fn as_mut(&mut self) -> &mut BufferPoolConfigRef {
         self.deref_mut()
     }
@@ -46,12 +50,14 @@ impl AsMut<BufferPoolConfigRef> for BufferPoolConfig {
 pub struct BufferPoolConfigRef(StructureRef);
 
 impl BufferPoolConfigRef {
+    #[inline]
     pub unsafe fn from_glib_borrow<'a>(ptr: *const ffi::GstStructure) -> &'a BufferPoolConfigRef {
         assert!(!ptr.is_null());
 
         &*(ptr as *mut StructureRef as *mut BufferPoolConfigRef)
     }
 
+    #[inline]
     pub unsafe fn from_glib_borrow_mut<'a>(
         ptr: *mut ffi::GstStructure,
     ) -> &'a mut BufferPoolConfigRef {
@@ -60,10 +66,12 @@ impl BufferPoolConfigRef {
         &mut *(ptr as *mut StructureRef as *mut BufferPoolConfigRef)
     }
 
+    #[inline]
     pub fn as_ptr(&self) -> *const ffi::GstStructure {
         self as *const Self as *const ffi::GstStructure
     }
 
+    #[inline]
     pub fn as_mut_ptr(&self) -> *mut ffi::GstStructure {
         self as *const Self as *mut ffi::GstStructure
     }
@@ -72,24 +80,28 @@ impl BufferPoolConfigRef {
 impl ops::Deref for BufferPoolConfigRef {
     type Target = crate::StructureRef;
 
+    #[inline]
     fn deref(&self) -> &crate::StructureRef {
         &self.0
     }
 }
 
 impl ops::DerefMut for BufferPoolConfigRef {
+    #[inline]
     fn deref_mut(&mut self) -> &mut crate::StructureRef {
         &mut self.0
     }
 }
 
 impl AsRef<crate::StructureRef> for BufferPoolConfigRef {
+    #[inline]
     fn as_ref(&self) -> &crate::StructureRef {
         &self.0
     }
 }
 
 impl AsMut<crate::StructureRef> for BufferPoolConfigRef {
+    #[inline]
     fn as_mut(&mut self) -> &mut crate::StructureRef {
         &mut self.0
     }
@@ -305,6 +317,7 @@ impl Eq for BufferPoolAcquireParams {}
 impl<'a> ToGlibPtr<'a, *const ffi::GstBufferPoolAcquireParams> for BufferPoolAcquireParams {
     type Storage = PhantomData<&'a Self>;
 
+    #[inline]
     fn to_glib_none(
         &'a self,
     ) -> glib::translate::Stash<'a, *const ffi::GstBufferPoolAcquireParams, Self> {
@@ -316,6 +329,7 @@ impl<'a> ToGlibPtr<'a, *const ffi::GstBufferPoolAcquireParams> for BufferPoolAcq
 impl<'a> ToGlibPtrMut<'a, *mut ffi::GstBufferPoolAcquireParams> for BufferPoolAcquireParams {
     type Storage = PhantomData<&'a mut Self>;
 
+    #[inline]
     fn to_glib_none_mut(
         &'a mut self,
     ) -> glib::translate::StashMut<'a, *mut ffi::GstBufferPoolAcquireParams, Self> {
@@ -325,6 +339,7 @@ impl<'a> ToGlibPtrMut<'a, *mut ffi::GstBufferPoolAcquireParams> for BufferPoolAc
 
 #[doc(hidden)]
 impl FromGlibPtrNone<*mut ffi::GstBufferPoolAcquireParams> for BufferPoolAcquireParams {
+    #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstBufferPoolAcquireParams) -> Self {
         Self(*ptr)
     }

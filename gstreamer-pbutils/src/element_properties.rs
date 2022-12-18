@@ -41,12 +41,14 @@ impl Default for ElementProperties {
 impl Deref for ElementProperties {
     type Target = gst::StructureRef;
 
+    #[inline]
     fn deref(&self) -> &Self::Target {
         self.0.as_ref()
     }
 }
 
 impl From<ElementProperties> for gst::Structure {
+    #[inline]
     fn from(e: ElementProperties) -> Self {
         skip_assert_initialized!();
 
@@ -122,6 +124,7 @@ impl ElementProperties {
         )
     }
 
+    #[inline]
     pub fn into_inner(self) -> gst::Structure {
         self.0
     }
@@ -197,18 +200,21 @@ pub struct ElementPropertiesMapItem(gst::Structure);
 impl Deref for ElementPropertiesMapItem {
     type Target = gst::StructureRef;
 
+    #[inline]
     fn deref(&self) -> &Self::Target {
         self.0.as_ref()
     }
 }
 
 impl DerefMut for ElementPropertiesMapItem {
+    #[inline]
     fn deref_mut(&mut self) -> &mut Self::Target {
         self.0.deref_mut()
     }
 }
 
 impl From<ElementPropertiesMapItem> for gst::Structure {
+    #[inline]
     fn from(e: ElementPropertiesMapItem) -> Self {
         skip_assert_initialized!();
 
@@ -225,6 +231,7 @@ impl ElementPropertiesMapItem {
         }
     }
 
+    #[inline]
     pub fn into_inner(self) -> gst::Structure {
         self.0
     }

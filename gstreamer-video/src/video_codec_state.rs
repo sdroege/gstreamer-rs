@@ -21,20 +21,24 @@ pub struct InNegotiation<'a> {
 pub struct Readable {}
 
 impl<'a> VideoCodecStateContext<'a> for InNegotiation<'a> {
+    #[inline]
     fn element(&self) -> Option<&'a dyn HasStreamLock> {
         Some(self.element)
     }
 
+    #[inline]
     fn element_as_ptr(&self) -> *const gst::ffi::GstElement {
         self.element.element_as_ptr()
     }
 }
 
 impl<'a> VideoCodecStateContext<'a> for Readable {
+    #[inline]
     fn element(&self) -> Option<&'a dyn HasStreamLock> {
         None
     }
 
+    #[inline]
     fn element_as_ptr(&self) -> *const gst::ffi::GstElement {
         ptr::null()
     }
@@ -59,6 +63,7 @@ impl<'a, T: VideoCodecStateContext<'a>> fmt::Debug for VideoCodecState<'a, T> {
 
 impl<'a> VideoCodecState<'a, Readable> {
     // Take ownership of @state
+    #[inline]
     pub(crate) unsafe fn new(state: *mut ffi::GstVideoCodecState) -> Self {
         skip_assert_initialized!();
         Self {
@@ -71,6 +76,7 @@ impl<'a> VideoCodecState<'a, Readable> {
 
 impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
     // Take ownership of @state
+    #[inline]
     pub(crate) unsafe fn new<T: HasStreamLock>(
         state: *mut ffi::GstVideoCodecState,
         element: &'a T,
@@ -88,6 +94,7 @@ impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
 
 impl<'a, T: VideoCodecStateContext<'a>> VideoCodecState<'a, T> {
     #[doc(alias = "get_info")]
+    #[inline]
     pub fn info(&self) -> VideoInfo {
         unsafe {
             let ptr = &((*self.as_mut_ptr()).info) as *const _ as usize as *mut _;
@@ -96,6 +103,7 @@ impl<'a, T: VideoCodecStateContext<'a>> VideoCodecState<'a, T> {
     }
 
     #[doc(alias = "get_caps")]
+    #[inline]
     pub fn caps(&self) -> Option<&gst::CapsRef> {
         unsafe {
             let ptr = (*self.as_mut_ptr()).caps;
@@ -108,7 +116,14 @@ impl<'a, T: VideoCodecStateContext<'a>> VideoCodecState<'a, T> {
         }
     }
 
+    #[doc(alias = "get_caps")]
+    #[inline]
+    pub fn caps_owned(&self) -> Option<gst::Caps> {
+        unsafe { from_glib_none((*self.as_mut_ptr()).caps) }
+    }
+
     #[doc(alias = "get_codec_data")]
+    #[inline]
     pub fn codec_data(&self) -> Option<&gst::BufferRef> {
         unsafe {
             let ptr = (*self.as_mut_ptr()).codec_data;
@@ -121,7 +136,14 @@ impl<'a, T: VideoCodecStateContext<'a>> VideoCodecState<'a, T> {
         }
     }
 
+    #[doc(alias = "get_codec_data")]
+    #[inline]
+    pub fn codec_data_owned(&self) -> Option<gst::Buffer> {
+        unsafe { from_glib_none((*self.as_mut_ptr()).codec_data) }
+    }
+
     #[doc(alias = "get_allocation_caps")]
+    #[inline]
     pub fn allocation_caps(&self) -> Option<&gst::CapsRef> {
         unsafe {
             let ptr = (*self.as_mut_ptr()).allocation_caps;
@@ -133,13 +155,22 @@ impl<'a, T: VideoCodecStateContext<'a>> VideoCodecState<'a, T> {
             }
         }
     }
+
+    #[doc(alias = "get_allocation_caps")]
+    #[inline]
+    pub fn allocation_caps_owned(&self) -> Option<gst::Caps> {
+        unsafe { from_glib_none((*self.as_mut_ptr()).allocation_caps) }
+    }
+
     #[doc(hidden)]
+    #[inline]
     pub fn as_mut_ptr(&self) -> *mut ffi::GstVideoCodecState {
         self.state
     }
 }
 
 impl<'a, T: VideoCodecStateContext<'a>> Drop for VideoCodecState<'a, T> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             if let Some(element) = self.context.element() {
@@ -152,12 +183,14 @@ impl<'a, T: VideoCodecStateContext<'a>> Drop for VideoCodecState<'a, T> {
 }
 
 impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
+    #[inline]
     pub fn set_info(&mut self, info: VideoInfo) {
         unsafe {
             ptr::write(&mut (*self.as_mut_ptr()).info, *(info.to_glib_none().0));
         }
     }
 
+    #[inline]
     pub fn set_caps(&mut self, caps: &gst::Caps) {
         unsafe {
             let prev = (*self.as_mut_ptr()).caps;
@@ -173,6 +206,7 @@ impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
         }
     }
 
+    #[inline]
     pub fn set_codec_data(&mut self, codec_data: &gst::Buffer) {
         unsafe {
             let prev = (*self.as_mut_ptr()).codec_data;
@@ -188,6 +222,7 @@ impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
         }
     }
 
+    #[inline]
     pub fn set_allocation_caps(&mut self, allocation_caps: &gst::Caps) {
         unsafe {
             let prev = (*self.as_mut_ptr()).allocation_caps;
@@ -205,6 +240,7 @@ impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
 }
 
 impl<'a> Clone for VideoCodecState<'a, Readable> {
+    #[inline]
     fn clone(&self) -> Self {
         unsafe {
             let state = ffi::gst_video_codec_state_ref(self.state);

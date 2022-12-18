@@ -13,6 +13,7 @@ use crate::TestClock;
 pub struct Harness(ptr::NonNull<ffi::GstHarness>);
 
 impl Drop for Harness {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             ffi::gst_harness_teardown(self.0.as_ptr());
@@ -592,6 +593,7 @@ impl Harness {
         }
     }
 
+    #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstHarness) -> Harness {
         assert!(!ptr.is_null());
 
@@ -814,6 +816,7 @@ pub struct Ref<'a>(&'a Harness);
 impl<'a> ops::Deref for Ref<'a> {
     type Target = Harness;
 
+    #[inline]
     fn deref(&self) -> &Harness {
         self.0
     }
@@ -825,12 +828,14 @@ pub struct RefMut<'a>(&'a mut Harness);
 impl<'a> ops::Deref for RefMut<'a> {
     type Target = Harness;
 
+    #[inline]
     fn deref(&self) -> &Harness {
         self.0
     }
 }
 
 impl<'a> ops::DerefMut for RefMut<'a> {
+    #[inline]
     fn deref_mut(&mut self) -> &mut Harness {
         self.0
     }

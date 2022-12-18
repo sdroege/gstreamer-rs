@@ -10,30 +10,35 @@ pub struct AudioConverterConfig(gst::Structure);
 impl ops::Deref for AudioConverterConfig {
     type Target = gst::StructureRef;
 
+    #[inline]
     fn deref(&self) -> &gst::StructureRef {
         self.0.deref()
     }
 }
 
 impl ops::DerefMut for AudioConverterConfig {
+    #[inline]
     fn deref_mut(&mut self) -> &mut gst::StructureRef {
         self.0.deref_mut()
     }
 }
 
 impl AsRef<gst::StructureRef> for AudioConverterConfig {
+    #[inline]
     fn as_ref(&self) -> &gst::StructureRef {
         self.0.as_ref()
     }
 }
 
 impl AsMut<gst::StructureRef> for AudioConverterConfig {
+    #[inline]
     fn as_mut(&mut self) -> &mut gst::StructureRef {
         self.0.as_mut()
     }
 }
 
 impl Default for AudioConverterConfig {
+    #[inline]
     fn default() -> Self {
         Self::new()
     }

@@ -23,7 +23,7 @@ macro_rules! impl_serde(
 
         impl<'de> Deserialize<'de> for $t {
             fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-	            skip_assert_initialized!();
+                skip_assert_initialized!();
                 <$inner>::deserialize(deserializer)
                     .and_then(|value| {
                         $t::try_from(value).map_err(|_| {

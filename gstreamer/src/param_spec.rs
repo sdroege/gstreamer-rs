@@ -20,6 +20,7 @@ unsafe impl Sync for ParamSpecFraction {}
 impl std::ops::Deref for ParamSpecFraction {
     type Target = ParamSpec;
 
+    #[inline]
     fn deref(&self) -> &Self::Target {
         unsafe { &*(self as *const ParamSpecFraction as *const ParamSpec) }
     }
@@ -29,6 +30,7 @@ unsafe impl glib::ParamSpecType for ParamSpecFraction {}
 
 #[doc(hidden)]
 impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecFraction {
+    #[inline]
     unsafe fn from_glib_full(ptr: *mut gobject_ffi::GParamSpec) -> Self {
         from_glib_full(ptr as *mut ffi::GstParamSpecFraction)
     }
@@ -68,6 +70,7 @@ impl ParamSpecFraction {
         }
     }
 
+    #[inline]
     pub fn minimum(&self) -> crate::Fraction {
         unsafe {
             let ptr = self.as_ptr();
@@ -76,6 +79,7 @@ impl ParamSpecFraction {
         }
     }
 
+    #[inline]
     pub fn maximum(&self) -> crate::Fraction {
         unsafe {
             let ptr = self.as_ptr();
@@ -84,6 +88,7 @@ impl ParamSpecFraction {
         }
     }
 
+    #[inline]
     pub fn default_value(&self) -> crate::Fraction {
         unsafe {
             let ptr = self.as_ptr();
@@ -92,6 +97,7 @@ impl ParamSpecFraction {
         }
     }
 
+    #[inline]
     pub fn upcast(self) -> ParamSpec {
         unsafe {
             from_glib_full(
@@ -101,6 +107,7 @@ impl ParamSpecFraction {
         }
     }
 
+    #[inline]
     pub fn upcast_ref(&self) -> &ParamSpec {
         self
     }
@@ -198,6 +205,7 @@ unsafe impl Sync for ParamSpecArray {}
 impl std::ops::Deref for ParamSpecArray {
     type Target = ParamSpec;
 
+    #[inline]
     fn deref(&self) -> &Self::Target {
         unsafe { &*(self as *const ParamSpecArray as *const ParamSpec) }
     }
@@ -207,6 +215,7 @@ unsafe impl glib::ParamSpecType for ParamSpecArray {}
 
 #[doc(hidden)]
 impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecArray {
+    #[inline]
     unsafe fn from_glib_full(ptr: *mut gobject_ffi::GParamSpec) -> Self {
         from_glib_full(ptr as *mut ffi::GstParamSpecArray)
     }
@@ -239,6 +248,7 @@ impl ParamSpecArray {
         }
     }
 
+    #[inline]
     pub fn element_spec(&self) -> Option<&ParamSpec> {
         unsafe {
             let ptr = self.as_ptr();
@@ -254,6 +264,7 @@ impl ParamSpecArray {
         }
     }
 
+    #[inline]
     pub fn upcast(self) -> ParamSpec {
         unsafe {
             from_glib_full(
@@ -263,6 +274,7 @@ impl ParamSpecArray {
         }
     }
 
+    #[inline]
     pub fn upcast_ref(&self) -> &ParamSpec {
         self
     }

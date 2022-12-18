@@ -31,6 +31,7 @@ enum DateTimeVariants {
 pub(crate) struct Date(glib::Date);
 
 impl From<glib::Date> for Date {
+    #[inline]
     fn from(glib_date: glib::Date) -> Self {
         skip_assert_initialized!();
         Date(glib_date)
@@ -55,12 +56,14 @@ impl ToValueOptional for Date {
 }
 
 impl StaticType for Date {
+    #[inline]
     fn static_type() -> glib::Type {
         glib::Date::static_type()
     }
 }
 
 impl From<Date> for glib::Value {
+    #[inline]
     fn from(v: Date) -> glib::Value {
         skip_assert_initialized!();
         v.0.into()

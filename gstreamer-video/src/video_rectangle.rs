@@ -14,6 +14,7 @@ pub struct VideoRectangle {
 }
 
 impl VideoRectangle {
+    #[inline]
     pub fn new(x: i32, y: i32, w: i32, h: i32) -> Self {
         skip_assert_initialized!();
         Self { x, y, w, h }
@@ -52,6 +53,7 @@ pub fn center_video_rectangle(
 
 #[doc(hidden)]
 impl glib::translate::Uninitialized for VideoRectangle {
+    #[inline]
     unsafe fn uninitialized() -> Self {
         mem::zeroed()
     }
@@ -61,6 +63,7 @@ impl glib::translate::Uninitialized for VideoRectangle {
 impl<'a> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstVideoRectangle> for VideoRectangle {
     type Storage = PhantomData<&'a mut Self>;
 
+    #[inline]
     fn to_glib_none_mut(
         &'a mut self,
     ) -> glib::translate::StashMut<*mut ffi::GstVideoRectangle, Self> {

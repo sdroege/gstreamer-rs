@@ -594,6 +594,7 @@ pub trait FormattedValueNoneBuilder: FormattedValueFullRange {
     /// Panics if `None` can't be represented by `Self` for `format` or by the requested
     /// `GenericFormattedValue` variant.
     #[track_caller]
+    #[inline]
     fn none_for_format(format: Format) -> Self {
         skip_assert_initialized!();
         // This is the default impl. `GenericFormattedValue` must override.

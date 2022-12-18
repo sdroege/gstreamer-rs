@@ -9,6 +9,7 @@ use glib::translate::*;
 pub struct RTSPContext(ptr::NonNull<ffi::GstRTSPContext>);
 
 impl RTSPContext {
+    #[inline]
     pub fn with_current_context<F: FnOnce(&RTSPContext) -> T, T>(func: F) -> Option<T> {
         unsafe {
             let ptr = ffi::gst_rtsp_context_get_current();
@@ -37,6 +38,7 @@ impl FromGlibPtrBorrow<*mut ffi::GstRTSPContext> for RTSPContext {
 impl<'a> ToGlibPtr<'a, *mut ffi::GstRTSPContext> for RTSPContext {
     type Storage = PhantomData<&'a RTSPContext>;
 
+    #[inline]
     fn to_glib_none(&'a self) -> Stash<'a, *mut ffi::GstRTSPContext, Self> {
         Stash(self.0.as_ptr(), PhantomData)
     }

@@ -123,6 +123,7 @@ impl Memory {
         }
     }
 
+    #[inline]
     pub fn into_mapped_memory_readable(self) -> Result<MappedMemory<Readable>, Self> {
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
@@ -143,6 +144,7 @@ impl Memory {
         }
     }
 
+    #[inline]
     pub fn into_mapped_memory_writable(self) -> Result<MappedMemory<Writable>, Self> {
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
@@ -166,6 +168,7 @@ impl Memory {
 
 impl MemoryRef {
     #[doc(alias = "get_allocator")]
+    #[inline]
     pub fn allocator(&self) -> Option<&Allocator> {
         unsafe {
             if self.0.allocator.is_null() {
@@ -177,6 +180,7 @@ impl MemoryRef {
     }
 
     #[doc(alias = "get_parent")]
+    #[inline]
     pub fn parent(&self) -> Option<&MemoryRef> {
         unsafe {
             if self.0.parent.is_null() {
@@ -188,26 +192,31 @@ impl MemoryRef {
     }
 
     #[doc(alias = "get_maxsize")]
+    #[inline]
     pub fn maxsize(&self) -> usize {
         self.0.maxsize
     }
 
     #[doc(alias = "get_align")]
+    #[inline]
     pub fn align(&self) -> usize {
         self.0.align
     }
 
     #[doc(alias = "get_offset")]
+    #[inline]
     pub fn offset(&self) -> usize {
         self.0.offset
     }
 
     #[doc(alias = "get_size")]
+    #[inline]
     pub fn size(&self) -> usize {
         self.0.size
     }
 
     #[doc(alias = "get_flags")]
+    #[inline]
     pub fn flags(&self) -> MemoryFlags {
         unsafe { from_glib(self.0.mini_object.flags) }
     }
@@ -257,6 +266,7 @@ impl MemoryRef {
         }
     }
 
+    #[inline]
     pub fn map_readable(&self) -> Result<MemoryMap<Readable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
@@ -274,6 +284,7 @@ impl MemoryRef {
         }
     }
 
+    #[inline]
     pub fn map_writable(&mut self) -> Result<MemoryMap<Writable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
@@ -326,15 +337,18 @@ impl MemoryRef {
 
 impl<'a, T> MemoryMap<'a, T> {
     #[doc(alias = "get_size")]
+    #[inline]
     pub fn size(&self) -> usize {
         self.map_info.size
     }
 
     #[doc(alias = "get_memory")]
+    #[inline]
     pub fn memory(&self) -> &MemoryRef {
         self.memory
     }
 
+    #[inline]
     pub fn as_slice(&self) -> &[u8] {
         if self.map_info.size == 0 {
             return &[];
@@ -344,6 +358,7 @@ impl<'a, T> MemoryMap<'a, T> {
 }
 
 impl<'a> MemoryMap<'a, Writable> {
+    #[inline]
     pub fn as_mut_slice(&mut self) -> &mut [u8] {
         if self.map_info.size == 0 {
             return &mut [];
@@ -353,12 +368,14 @@ impl<'a> MemoryMap<'a, Writable> {
 }
 
 impl<'a, T> AsRef<[u8]> for MemoryMap<'a, T> {
+    #[inline]
     fn as_ref(&self) -> &[u8] {
         self.as_slice()
     }
 }
 
 impl<'a> AsMut<[u8]> for MemoryMap<'a, Writable> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
@@ -367,12 +384,14 @@ impl<'a> AsMut<[u8]> for MemoryMap<'a, Writable> {
 impl<'a, T> Deref for MemoryMap<'a, T> {
     type Target = [u8];
 
+    #[inline]
     fn deref(&self) -> &[u8] {
         self.as_slice()
     }
 }
 
 impl<'a> DerefMut for MemoryMap<'a, Writable> {
+    #[inline]
     fn deref_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
@@ -393,6 +412,7 @@ impl<'a, T> PartialEq for MemoryMap<'a, T> {
 impl<'a, T> Eq for MemoryMap<'a, T> {}
 
 impl<'a, T> Drop for MemoryMap<'a, T> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             ffi::gst_memory_unmap(self.memory.as_mut_ptr(), &mut self.map_info);
@@ -404,6 +424,7 @@ unsafe impl<'a, T> Send for MemoryMap<'a, T> {}
 unsafe impl<'a, T> Sync for MemoryMap<'a, T> {}
 
 impl<T> MappedMemory<T> {
+    #[inline]
     pub fn as_slice(&self) -> &[u8] {
         if self.map_info.size == 0 {
             return &[];
@@ -412,15 +433,18 @@ impl<T> MappedMemory<T> {
     }
 
     #[doc(alias = "get_size")]
+    #[inline]
     pub fn size(&self) -> usize {
         self.map_info.size
     }
 
     #[doc(alias = "get_memory")]
+    #[inline]
     pub fn memory(&self) -> &MemoryRef {
         self.memory.as_ref()
     }
 
+    #[inline]
     pub fn into_memory(self) -> Memory {
         let mut s = mem::ManuallyDrop::new(self);
         let memory = unsafe { ptr::read(&s.memory) };
@@ -433,6 +457,7 @@ impl<T> MappedMemory<T> {
 }
 
 impl MappedMemory<Writable> {
+    #[inline]
     pub fn as_mut_slice(&mut self) -> &mut [u8] {
         if self.map_info.size == 0 {
             return &mut [];
@@ -442,12 +467,14 @@ impl MappedMemory<Writable> {
 }
 
 impl<T> AsRef<[u8]> for MappedMemory<T> {
+    #[inline]
     fn as_ref(&self) -> &[u8] {
         self.as_slice()
     }
 }
 
 impl AsMut<[u8]> for MappedMemory<Writable> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
@@ -456,18 +483,21 @@ impl AsMut<[u8]> for MappedMemory<Writable> {
 impl<T> Deref for MappedMemory<T> {
     type Target = [u8];
 
+    #[inline]
     fn deref(&self) -> &[u8] {
         self.as_slice()
     }
 }
 
 impl DerefMut for MappedMemory<Writable> {
+    #[inline]
     fn deref_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
 }
 
 impl<T> Drop for MappedMemory<T> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             ffi::gst_memory_unmap(self.memory.as_mut_ptr(), &mut self.map_info);
@@ -576,24 +606,28 @@ where
 }
 
 impl AsRef<MemoryRef> for MemoryRef {
+    #[inline]
     fn as_ref(&self) -> &MemoryRef {
         self
     }
 }
 
 impl AsMut<MemoryRef> for MemoryRef {
+    #[inline]
     fn as_mut(&mut self) -> &mut MemoryRef {
         self
     }
 }
 
 impl AsRef<Memory> for Memory {
+    #[inline]
     fn as_ref(&self) -> &Memory {
         self
     }
 }
 
 unsafe impl MemoryType for Memory {
+    #[inline]
     fn check_memory_type(_mem: &MemoryRef) -> bool {
         skip_assert_initialized!();
         true
@@ -601,6 +635,7 @@ unsafe impl MemoryType for Memory {
 }
 
 impl Memory {
+    #[inline]
     pub fn downcast_memory<M: MemoryType>(self) -> Result<M, Self>
     where
         <M as crate::prelude::IsMiniObject>::RefType: AsRef<MemoryRef> + AsMut<MemoryRef>,
@@ -614,6 +649,7 @@ impl Memory {
 }
 
 impl MemoryRef {
+    #[inline]
     pub fn is_memory_type<M: MemoryType>(&self) -> bool
     where
         <M as crate::prelude::IsMiniObject>::RefType: AsRef<MemoryRef> + AsMut<MemoryRef>,
@@ -621,6 +657,7 @@ impl MemoryRef {
         M::check_memory_type(self)
     }
 
+    #[inline]
     pub fn downcast_memory_ref<M: MemoryType>(&self) -> Option<&M::RefType>
     where
         <M as crate::prelude::IsMiniObject>::RefType: AsRef<MemoryRef> + AsMut<MemoryRef>,
@@ -632,6 +669,7 @@ impl MemoryRef {
         }
     }
 
+    #[inline]
     pub fn downcast_memory_mut<M: MemoryType>(&mut self) -> Option<&mut M::RefType>
     where
         <M as crate::prelude::IsMiniObject>::RefType: AsRef<MemoryRef> + AsMut<MemoryRef>,
@@ -650,6 +688,7 @@ macro_rules! memory_object_wrapper {
         $crate::mini_object_wrapper!($name, $ref_name, $ffi_name);
 
         unsafe impl $crate::memory::MemoryType for $name {
+            #[inline]
             fn check_memory_type(mem: &$crate::MemoryRef) -> bool {
                 skip_assert_initialized!();
                 $mem_type_check(mem)
@@ -657,6 +696,7 @@ macro_rules! memory_object_wrapper {
         }
 
         impl $name {
+            #[inline]
             pub fn downcast_memory<M: $crate::memory::MemoryType>(self) -> Result<M, Self>
             where
                 <M as $crate::miniobject::IsMiniObject>::RefType: AsRef<$crate::MemoryRef>
@@ -675,6 +715,7 @@ macro_rules! memory_object_wrapper {
                 }
             }
 
+            #[inline]
             pub fn upcast_memory<M>(self) -> M
             where
                 M: $crate::memory::MemoryType
@@ -694,6 +735,7 @@ macro_rules! memory_object_wrapper {
         }
 
         impl $ref_name {
+            #[inline]
             pub fn upcast_memory_ref<M>(&self) -> &M::RefType
             where
                 M: $crate::memory::MemoryType,
@@ -704,6 +746,7 @@ macro_rules! memory_object_wrapper {
                 self.as_ref()
             }
 
+            #[inline]
             pub fn upcast_memory_mut<M>(&mut self) -> &mut M::RefType
             where
                 M: $crate::memory::MemoryType,
@@ -718,42 +761,49 @@ macro_rules! memory_object_wrapper {
         impl std::ops::Deref for $ref_name {
             type Target = $parent_memory_ref_type;
 
+            #[inline]
             fn deref(&self) -> &Self::Target {
                 unsafe { &*(self as *const _ as *const Self::Target) }
             }
         }
 
         impl std::ops::DerefMut for $ref_name {
+            #[inline]
             fn deref_mut(&mut self) -> &mut Self::Target {
                 unsafe { &mut *(self as *mut _ as *mut Self::Target) }
             }
         }
 
         impl AsRef<$parent_memory_type> for $name {
+            #[inline]
             fn as_ref(&self) -> &$parent_memory_type {
                 unsafe { &*(self as *const _ as *const $parent_memory_type) }
             }
         }
 
         impl AsRef<$parent_memory_ref_type> for $ref_name {
+            #[inline]
             fn as_ref(&self) -> &$parent_memory_ref_type {
                 self
             }
         }
 
         impl AsMut<$parent_memory_ref_type> for $ref_name {
+            #[inline]
             fn as_mut(&mut self) -> &mut $parent_memory_ref_type {
                 &mut *self
             }
         }
 
         impl $crate::glib::types::StaticType for $name {
+            #[inline]
             fn static_type() -> glib::types::Type {
                 $ref_name::static_type()
             }
         }
 
         impl $crate::glib::types::StaticType for $ref_name {
+            #[inline]
             fn static_type() -> $crate::glib::types::Type {
                 unsafe { $crate::glib::translate::from_glib($crate::ffi::gst_memory_get_type()) }
             }
@@ -856,18 +906,21 @@ macro_rules! memory_object_wrapper {
 
         $(
             impl AsRef<$parent_parent_memory_type> for $name {
+                #[inline]
                 fn as_ref(&self) -> &$parent_parent_memory_type {
                     unsafe { &*(self as *const _ as *const $parent_parent_memory_type) }
                 }
             }
 
             impl AsRef<$parent_parent_memory_ref_type> for $ref_name {
+                #[inline]
                 fn as_ref(&self) -> &$parent_parent_memory_ref_type {
                     self
                 }
             }
 
             impl AsMut<$parent_parent_memory_ref_type> for $ref_name {
+                #[inline]
                 fn as_mut(&mut self) -> &mut $parent_parent_memory_ref_type {
                     &mut *self
                 }

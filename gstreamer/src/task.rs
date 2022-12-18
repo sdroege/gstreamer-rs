@@ -124,6 +124,7 @@ impl Task {
 pub struct TaskLock(Arc<RecMutex>);
 
 impl Default for TaskLock {
+    #[inline]
     fn default() -> Self {
         Self::new()
     }
@@ -139,6 +140,7 @@ unsafe impl Sync for RecMutex {}
 pub struct TaskLockGuard<'a>(&'a RecMutex);
 
 impl TaskLock {
+    #[inline]
     pub fn new() -> Self {
         unsafe {
             let lock = TaskLock(Arc::new(RecMutex(mem::zeroed())));
@@ -148,6 +150,7 @@ impl TaskLock {
     }
 
     // checker-ignore-item
+    #[inline]
     pub fn lock(&self) -> TaskLockGuard {
         unsafe {
             let guard = TaskLockGuard(&self.0);
@@ -158,6 +161,7 @@ impl TaskLock {
 }
 
 impl Drop for RecMutex {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             glib::ffi::g_rec_mutex_clear(&mut self.0);
@@ -166,6 +170,7 @@ impl Drop for RecMutex {
 }
 
 impl<'a> Drop for TaskLockGuard<'a> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             glib::ffi::g_rec_mutex_unlock(mut_override(&self.0 .0));
