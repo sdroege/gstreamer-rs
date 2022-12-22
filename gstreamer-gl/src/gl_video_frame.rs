@@ -3,7 +3,6 @@
 use glib::translate::{from_glib, ToGlibPtr};
 use gst_video::video_frame::Readable;
 
-use byteorder::{NativeEndian, ReadBytesExt};
 use std::mem;
 
 pub trait VideoFrameGLExt {
@@ -76,7 +75,14 @@ impl<'a> VideoFrameGLExt for gst_video::VideoFrameRef<&'a gst::BufferRef> {
             if !res {
                 Err(buffer)
             } else {
-                Ok(gst_video::VideoFrame::from_glib_full(frame.assume_init()))
+                let mut frame = frame.assume_init();
+                // Reset size/stride/offset to 0 as the memory pointers
+                // are the GL texture ID and accessing them would read
+                // random memory.
+                frame.info.size = 0;
+                frame.info.stride.fill(0);
+                frame.info.offset.fill(0);
+                Ok(gst_video::VideoFrame::from_glib_full(frame))
             }
         }
     }
@@ -117,9 +123,14 @@ impl<'a> VideoFrameGLExt for gst_video::VideoFrameRef<&'a gst::BufferRef> {
                     "Failed to fill in the values of GstVideoFrame"
                 ))
             } else {
-                Ok(gst_video::VideoFrameRef::from_glib_full(
-                    frame.assume_init(),
-                ))
+                let mut frame = frame.assume_init();
+                // Reset size/stride/offset to 0 as the memory pointers
+                // are the GL texture ID and accessing them would read
+                // random memory.
+                frame.info.size = 0;
+                frame.info.stride.fill(0);
+                frame.info.offset.fill(0);
+                Ok(gst_video::VideoFrameRef::from_glib_full(frame))
             }
         }
     }
@@ -136,10 +147,10 @@ impl<'a> VideoFrameGLExt for gst_video::VideoFrameRef<&'a gst::BufferRef> {
             return None;
         }
 
-        let mut data = self.plane_data(idx).ok()?;
-        let id = &data.read_u32::<NativeEndian>().ok()?;
-
-        Some(*id)
+        unsafe {
+            let ptr = (*self.as_ptr()).data[idx as usize] as *const u32;
+            Some(*ptr)
+        }
     }
 }
 
