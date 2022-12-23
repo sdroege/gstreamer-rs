@@ -1142,7 +1142,7 @@ unsafe fn update_probe_info(
 ) {
     if ret == PadProbeReturn::Handled {
         // Handled queries need to be returned
-        // Handled buffers are consumed
+        // Handled buffers and buffer lists are consumed
         // No other types can safely be used here
 
         match probe_info.data {
@@ -1154,11 +1154,16 @@ unsafe fn update_probe_info(
                 assert_eq!(data_type, Some(Buffer::static_type()));
                 // Buffer not consumed by probe; consume it here
             }
+            Some(PadProbeData::BufferList(_)) => {
+                assert_eq!(data_type, Some(BufferList::static_type()));
+                // BufferList not consumed by probe; consume it here
+            }
             Some(PadProbeData::Event(_)) => {
                 assert_eq!(data_type, Some(Event::static_type()));
                 // Event not consumed by probe; consume it here
             }
             None if data_type == Some(Buffer::static_type())
+                || data_type == Some(BufferList::static_type())
                 || data_type == Some(Event::static_type()) =>
             {
                 // Buffer or Event consumed by probe
