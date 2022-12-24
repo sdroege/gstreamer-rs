@@ -645,7 +645,7 @@ macro_rules! log_with_level(
             let mut storage = [0u8; 256];
             let function_name = if function_name_len < 256 {
                 storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
             } else {
                 ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
             };
@@ -661,7 +661,7 @@ macro_rules! log_with_level(
                         $cat.clone(),
                         Some(obj),
                         $level,
-                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                         function_name.as_ref(),
                         line!(),
                         $crate::glib::gstr!($msg),
@@ -671,7 +671,7 @@ macro_rules! log_with_level(
                         $cat.clone(),
                         Some(obj),
                         $level,
-                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                         function_name.as_ref(),
                         line!(),
                         args,
@@ -694,7 +694,7 @@ macro_rules! log_with_level(
             let mut storage = [0u8; 256];
             let function_name = if function_name_len < 256 {
                 storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
             } else {
                 ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
             };
@@ -704,7 +704,7 @@ macro_rules! log_with_level(
                 $cat.clone(),
                 Some(obj),
                 $level,
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                 function_name.as_ref(),
                 line!(),
                 format_args!($($args)*),
@@ -726,7 +726,7 @@ macro_rules! log_with_level(
             let mut storage = [0u8; 256];
             let function_name = if function_name_len < 256 {
                 storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
             } else {
                 ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
             };
@@ -743,7 +743,7 @@ macro_rules! log_with_level(
                         $cat.clone(),
                         Some(obj),
                         $level,
-                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                         function_name.as_ref(),
                         line!(),
                         $crate::glib::gstr!($msg),
@@ -753,7 +753,7 @@ macro_rules! log_with_level(
                         $cat.clone(),
                         Some(obj),
                         $level,
-                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                         function_name.as_ref(),
                         line!(),
                         args,
@@ -776,7 +776,7 @@ macro_rules! log_with_level(
             let mut storage = [0u8; 256];
             let function_name = if function_name_len < 256 {
                 storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
             } else {
                 ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
             };
@@ -787,7 +787,7 @@ macro_rules! log_with_level(
                 $cat.clone(),
                 Some(obj),
                 $level,
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                 function_name.as_ref(),
                 line!(),
                 format_args!($($args)*),
@@ -807,7 +807,7 @@ macro_rules! log_with_level(
             let mut storage = [0u8; 256];
             let function_name = if function_name_len < 256 {
                 storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
             } else {
                 ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
             };
@@ -821,7 +821,7 @@ macro_rules! log_with_level(
                         $cat.clone(),
                         Some($crate::glib::gstr!($id)),
                         $level,
-                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                         function_name.as_ref(),
                         line!(),
                         $crate::glib::gstr!($msg),
@@ -831,7 +831,7 @@ macro_rules! log_with_level(
                         $cat.clone(),
                         Some($crate::glib::gstr!($id)),
                         $level,
-                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                         function_name.as_ref(),
                         line!(),
                         args,
@@ -852,7 +852,7 @@ macro_rules! log_with_level(
             let mut storage = [0u8; 256];
             let function_name = if function_name_len < 256 {
                 storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
             } else {
                 ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
             };
@@ -861,7 +861,7 @@ macro_rules! log_with_level(
                 $cat.clone(),
                 Some($crate::glib::gstr!($id)),
                 $level,
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                 function_name.as_ref(),
                 line!(),
                 format_args!($($args)*),
@@ -881,7 +881,7 @@ macro_rules! log_with_level(
             let mut storage = [0u8; 256];
             let function_name = if function_name_len < 256 {
                 storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
             } else {
                 ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
             };
@@ -895,7 +895,7 @@ macro_rules! log_with_level(
                         $cat.clone(),
                         Some($id),
                         $level,
-                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                         function_name.as_ref(),
                         line!(),
                         $crate::glib::gstr!($msg),
@@ -905,7 +905,7 @@ macro_rules! log_with_level(
                         $cat.clone(),
                         Some($id),
                         $level,
-                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                         function_name.as_ref(),
                         line!(),
                         args,
@@ -926,7 +926,7 @@ macro_rules! log_with_level(
             let mut storage = [0u8; 256];
             let function_name = if function_name_len < 256 {
                 storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
             } else {
                 ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
             };
@@ -935,7 +935,7 @@ macro_rules! log_with_level(
                 $cat.clone(),
                 Some($id),
                 $level,
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                 function_name.as_ref(),
                 line!(),
                 format_args!($($args)*),
@@ -955,7 +955,7 @@ macro_rules! log_with_level(
             let mut storage = [0u8; 256];
             let function_name = if function_name_len < 256 {
                 storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
             } else {
                 ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
             };
@@ -969,7 +969,7 @@ macro_rules! log_with_level(
                         $cat.clone(),
                         None as Option<&$crate::glib::Object>,
                         $level,
-                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                         function_name.as_ref(),
                         line!(),
                         $crate::glib::gstr!($msg),
@@ -979,7 +979,7 @@ macro_rules! log_with_level(
                         $cat.clone(),
                         None as Option<&$crate::glib::Object>,
                         $level,
-                        unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                        unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                         function_name.as_ref(),
                         line!(),
                         args,
@@ -1000,7 +1000,7 @@ macro_rules! log_with_level(
             let mut storage = [0u8; 256];
             let function_name = if function_name_len < 256 {
                 storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(&storage[..function_name_len+1]) })
+                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
             } else {
                 ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
             };
@@ -1009,7 +1009,7 @@ macro_rules! log_with_level(
                 $cat.clone(),
                 None as Option<&$crate::glib::Object>,
                 $level,
-                unsafe { $crate::glib::GStr::from_bytes_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
                 function_name.as_ref(),
                 line!(),
                 format_args!($($args)*),
