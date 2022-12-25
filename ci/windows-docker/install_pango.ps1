@@ -1,6 +1,6 @@
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
 
-$env:MESON_ARGS = "--prefix=C:\gst-install\"
+$env:MESON_ARGS = "--prefix=C:\gst-install\ -Dharfbuzz:freetype=enabled -Dfreetype:harfbuzz=disabled"
 
 # Download pango all its subprojects
 git clone -b main --depth 1 https://gitlab.gnome.org/gnome/pango.git C:\pango
