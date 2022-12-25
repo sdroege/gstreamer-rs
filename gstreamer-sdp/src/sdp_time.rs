@@ -66,7 +66,7 @@ impl SDPTime {
 
 impl Clone for SDPTime {
     fn clone(&self) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         #[allow(clippy::cast_ptr_alignment)]
         unsafe {
             let mut time = mem::MaybeUninit::uninit();

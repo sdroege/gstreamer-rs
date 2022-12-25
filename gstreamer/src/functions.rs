@@ -16,7 +16,7 @@ pub fn parse_bin_from_description_with_name(
     ghost_unlinked_pads: bool,
     bin_name: &str,
 ) -> Result<Bin, glib::Error> {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     let bin = parse_bin_from_description(bin_description, ghost_unlinked_pads)?;
     if !bin_name.is_empty() {
         let obj = bin.clone().upcast::<Object>();
@@ -34,7 +34,7 @@ pub fn parse_bin_from_description_full(
     mut context: Option<&mut ParseContext>,
     flags: ParseFlags,
 ) -> Result<Element, glib::Error> {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         let mut error = ptr::null_mut();
         let ret = ffi::gst_parse_bin_from_description_full(
@@ -59,7 +59,7 @@ pub fn parse_bin_from_description_with_name_full(
     context: Option<&mut ParseContext>,
     flags: ParseFlags,
 ) -> Result<Element, glib::Error> {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     let bin =
         parse_bin_from_description_full(bin_description, ghost_unlinked_pads, context, flags)?;
     if !bin_name.is_empty() {

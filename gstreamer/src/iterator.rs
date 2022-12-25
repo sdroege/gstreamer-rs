@@ -590,7 +590,7 @@ impl<'a, T: 'static> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstIterator> fo
 impl<T: StaticType> glib::translate::FromGlibPtrNone<*const ffi::GstIterator> for Iterator<T> {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstIterator) -> Self {
-        assert_ne!(
+        debug_assert_ne!(
             glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
             glib::ffi::GFALSE
         );
@@ -602,7 +602,7 @@ impl<T: StaticType> glib::translate::FromGlibPtrNone<*const ffi::GstIterator> fo
 impl<T: StaticType> glib::translate::FromGlibPtrNone<*mut ffi::GstIterator> for Iterator<T> {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstIterator) -> Self {
-        assert_ne!(
+        debug_assert_ne!(
             glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
             glib::ffi::GFALSE
         );
@@ -614,8 +614,8 @@ impl<T: StaticType> glib::translate::FromGlibPtrNone<*mut ffi::GstIterator> for 
 impl<T: StaticType> glib::translate::FromGlibPtrBorrow<*mut ffi::GstIterator> for Iterator<T> {
     #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstIterator) -> Borrowed<Self> {
-        assert!(!ptr.is_null());
-        assert_ne!(
+        debug_assert!(!ptr.is_null());
+        debug_assert_ne!(
             glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
             glib::ffi::GFALSE
         );
@@ -630,8 +630,8 @@ impl<T: StaticType> glib::translate::FromGlibPtrBorrow<*mut ffi::GstIterator> fo
 impl<T: StaticType> glib::translate::FromGlibPtrFull<*mut ffi::GstIterator> for Iterator<T> {
     #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstIterator) -> Self {
-        assert!(!ptr.is_null());
-        assert_ne!(
+        debug_assert!(!ptr.is_null());
+        debug_assert_ne!(
             glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
             glib::ffi::GFALSE
         );

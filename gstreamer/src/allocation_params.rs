@@ -82,7 +82,7 @@ impl FromGlib<ffi::GstAllocationParams> for AllocationParams {
     #[allow(unused_unsafe)]
     #[inline]
     unsafe fn from_glib(value: ffi::GstAllocationParams) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         Self::from(value)
     }
 }

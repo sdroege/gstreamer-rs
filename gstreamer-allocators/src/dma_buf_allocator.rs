@@ -37,7 +37,7 @@ impl fmt::Debug for DmaBufMemoryRef {
 impl DmaBufMemoryRef {
     #[doc(alias = "gst_dmabuf_memory_get_fd")]
     pub fn fd(&self) -> RawFd {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe { ffi::gst_dmabuf_memory_get_fd(self.as_mut_ptr()) }
     }
 }
@@ -49,7 +49,7 @@ impl DmaBufAllocator {
         fd: A,
         size: usize,
     ) -> Result<gst::Memory, glib::BoolError> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         Option::<_>::from_glib_full(ffi::gst_dmabuf_allocator_alloc(
             self.unsafe_cast_ref::<gst::Allocator>().to_glib_none().0,
             fd.into_raw_fd(),
@@ -67,7 +67,7 @@ impl DmaBufAllocator {
         size: usize,
         flags: FdMemoryFlags,
     ) -> Result<gst::Memory, glib::BoolError> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         Option::<_>::from_glib_full(ffi::gst_dmabuf_allocator_alloc_with_flags(
             self.unsafe_cast_ref::<gst::Allocator>().to_glib_none().0,
             fd,

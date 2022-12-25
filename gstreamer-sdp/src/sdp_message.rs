@@ -27,10 +27,14 @@ glib::wrapper! {
     match fn {
         copy => |ptr| {
             let mut copy = std::ptr::null_mut();
-            assert_eq!(ffi::gst_sdp_message_copy(ptr, &mut copy), ffi::GST_SDP_OK);
+            let res = ffi::gst_sdp_message_copy(ptr, &mut copy);
+            debug_assert_eq!(res, ffi::GST_SDP_OK);
             copy
         },
-        free => |ptr| assert_eq!(ffi::gst_sdp_message_free(ptr), ffi::GST_SDP_OK),
+        free => |ptr| {
+            let res = ffi::gst_sdp_message_free(ptr);
+            debug_assert_eq!(res, ffi::GST_SDP_OK);
+        },
         type_ => || ffi::gst_sdp_message_get_type(),
     }
 }
@@ -887,7 +891,7 @@ impl SDPMessageRef {
 
     #[doc(alias = "gst_sdp_message_as_uri")]
     pub fn as_uri(&self, scheme: &str) -> Result<String, glib::error::BoolError> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             match from_glib_full(ffi::gst_sdp_message_as_uri(
                 scheme.to_glib_none().0,

@@ -22,7 +22,7 @@ unsafe impl Sync for CapsFeatures {}
 impl CapsFeatures {
     #[doc(alias = "gst_caps_features_new")]
     pub fn new(features: &[&str]) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let mut f = Self::new_empty();
 
         for feature in features {
@@ -34,7 +34,7 @@ impl CapsFeatures {
 
     #[doc(alias = "gst_caps_features_new_id")]
     pub fn from_quarks(features: &[glib::Quark]) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let mut f = Self::new_empty();
 
         for feature in features {
@@ -104,7 +104,7 @@ impl Clone for CapsFeatures {
     fn clone(&self) -> Self {
         unsafe {
             let ptr = ffi::gst_caps_features_copy(self.0.as_ref());
-            assert!(!ptr.is_null());
+            debug_assert!(!ptr.is_null());
             CapsFeatures(ptr::NonNull::new_unchecked(ptr))
         }
     }
@@ -218,9 +218,9 @@ impl<'a> ToGlibPtrMut<'a, *mut ffi::GstCapsFeatures> for CapsFeatures {
 impl FromGlibPtrNone<*const ffi::GstCapsFeatures> for CapsFeatures {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstCapsFeatures) -> Self {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         let ptr = ffi::gst_caps_features_copy(ptr);
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         CapsFeatures(ptr::NonNull::new_unchecked(ptr))
     }
 }
@@ -228,9 +228,9 @@ impl FromGlibPtrNone<*const ffi::GstCapsFeatures> for CapsFeatures {
 impl FromGlibPtrNone<*mut ffi::GstCapsFeatures> for CapsFeatures {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstCapsFeatures) -> Self {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         let ptr = ffi::gst_caps_features_copy(ptr);
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         CapsFeatures(ptr::NonNull::new_unchecked(ptr))
     }
 }
@@ -238,7 +238,7 @@ impl FromGlibPtrNone<*mut ffi::GstCapsFeatures> for CapsFeatures {
 impl FromGlibPtrFull<*const ffi::GstCapsFeatures> for CapsFeatures {
     #[inline]
     unsafe fn from_glib_full(ptr: *const ffi::GstCapsFeatures) -> Self {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         CapsFeatures(ptr::NonNull::new_unchecked(
             ptr as *mut ffi::GstCapsFeatures,
         ))
@@ -248,7 +248,7 @@ impl FromGlibPtrFull<*const ffi::GstCapsFeatures> for CapsFeatures {
 impl FromGlibPtrFull<*mut ffi::GstCapsFeatures> for CapsFeatures {
     #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstCapsFeatures) -> Self {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         CapsFeatures(ptr::NonNull::new_unchecked(ptr))
     }
 }
@@ -327,7 +327,7 @@ pub struct CapsFeaturesRef(ffi::GstCapsFeatures);
 impl CapsFeaturesRef {
     #[inline]
     pub unsafe fn from_glib_borrow<'a>(ptr: *const ffi::GstCapsFeatures) -> &'a CapsFeaturesRef {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
 
         &*(ptr as *mut CapsFeaturesRef)
     }
@@ -336,7 +336,7 @@ impl CapsFeaturesRef {
     pub unsafe fn from_glib_borrow_mut<'a>(
         ptr: *mut ffi::GstCapsFeatures,
     ) -> &'a mut CapsFeaturesRef {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
 
         &mut *(ptr as *mut CapsFeaturesRef)
     }
@@ -547,7 +547,7 @@ impl<'a> Iterator for Iter<'a> {
         unsafe {
             let feature =
                 ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), self.idx as u32);
-            assert!(!feature.is_null());
+            debug_assert!(!feature.is_null());
 
             self.idx += 1;
 
@@ -576,7 +576,7 @@ impl<'a> Iterator for Iter<'a> {
                 self.idx = end + 1;
                 let feature =
                     ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), end as u32);
-                assert!(!feature.is_null());
+                debug_assert!(!feature.is_null());
                 Some(CStr::from_ptr(feature).to_str().unwrap())
             }
         }
@@ -591,7 +591,7 @@ impl<'a> Iterator for Iter<'a> {
                     self.caps_features.as_ptr(),
                     self.n_features as u32 - 1,
                 );
-                assert!(!feature.is_null());
+                debug_assert!(!feature.is_null());
                 Some(CStr::from_ptr(feature).to_str().unwrap())
             }
         }
@@ -609,7 +609,7 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
         unsafe {
             let feature =
                 ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), self.n_features as u32);
-            assert!(!feature.is_null());
+            debug_assert!(!feature.is_null());
 
             Some(CStr::from_ptr(feature).to_str().unwrap())
         }
@@ -627,7 +627,7 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
                     self.caps_features.as_ptr(),
                     self.n_features as u32,
                 );
-                assert!(!feature.is_null());
+                debug_assert!(!feature.is_null());
 
                 Some(CStr::from_ptr(feature).to_str().unwrap())
             }
@@ -650,8 +650,7 @@ impl<'a> IntoIterator for &'a CapsFeaturesRef {
 
 impl<'a> std::iter::FromIterator<&'a str> for CapsFeatures {
     fn from_iter<T: IntoIterator<Item = &'a str>>(iter: T) -> Self {
-        assert_initialized_main_thread!();
-
+        skip_assert_initialized!();
         let mut features = CapsFeatures::new_empty();
 
         iter.into_iter().for_each(|f| features.add(f));
@@ -662,8 +661,7 @@ impl<'a> std::iter::FromIterator<&'a str> for CapsFeatures {
 
 impl std::iter::FromIterator<String> for CapsFeatures {
     fn from_iter<T: IntoIterator<Item = String>>(iter: T) -> Self {
-        assert_initialized_main_thread!();
-
+        skip_assert_initialized!();
         let mut features = CapsFeatures::new_empty();
 
         iter.into_iter().for_each(|f| features.add(&f));
@@ -674,8 +672,7 @@ impl std::iter::FromIterator<String> for CapsFeatures {
 
 impl std::iter::FromIterator<glib::Quark> for CapsFeatures {
     fn from_iter<T: IntoIterator<Item = glib::Quark>>(iter: T) -> Self {
-        assert_initialized_main_thread!();
-
+        skip_assert_initialized!();
         let mut features = CapsFeatures::new_empty();
 
         iter.into_iter().for_each(|f| features.add_from_quark(f));

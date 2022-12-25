@@ -33,7 +33,7 @@ impl TypeFind {
     where
         F: Fn(&mut TypeFind) + Send + Sync + 'static,
     {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             let func: Box<F> = Box::new(func);
             let func = Box::into_raw(func);

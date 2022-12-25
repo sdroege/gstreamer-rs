@@ -12,7 +12,7 @@ impl PadTemplate {
         pad_template: &StaticPadTemplate,
         pad_type: glib::types::Type,
     ) -> Result<PadTemplate, glib::BoolError> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             Option::<_>::from_glib_none(
                 ffi::gst_pad_template_new_from_static_pad_template_with_gtype(
@@ -83,7 +83,7 @@ impl PadTemplate {
         presence: PadPresence,
         caps: &'a Caps,
     ) -> PadTemplateBuilder<'a> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         PadTemplateBuilder {
             name_template,

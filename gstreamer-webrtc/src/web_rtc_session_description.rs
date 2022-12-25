@@ -9,7 +9,7 @@ use crate::{WebRTCSDPType, WebRTCSessionDescription};
 impl WebRTCSessionDescription {
     #[doc(alias = "gst_webrtc_session_description_new")]
     pub fn new(type_: WebRTCSDPType, sdp: gst_sdp::SDPMessage) -> WebRTCSessionDescription {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             let mut sdp = mem::ManuallyDrop::new(sdp);
             from_glib_full(ffi::gst_webrtc_session_description_new(

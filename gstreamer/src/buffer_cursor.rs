@@ -112,7 +112,7 @@ macro_rules! define_read_write_fn_impl(
                         buffer_ref($self).as_mut_ptr(),
                         $self.cur_mem_idx,
                     );
-                    assert!(!memory.is_null());
+                    debug_assert!(!memory.is_null());
 
                     if ffi::gst_memory_map(memory, &mut $self.map_info, $map_flags)
                         == glib::ffi::GFALSE
@@ -124,10 +124,10 @@ macro_rules! define_read_write_fn_impl(
                     }
                 }
 
-                assert!($self.cur_mem_offset < $self.map_info.size);
+                debug_assert!($self.cur_mem_offset < $self.map_info.size);
             }
 
-            assert!(!$self.map_info.memory.is_null());
+            debug_assert!(!$self.map_info.memory.is_null());
 
             // Copy all data we can currently copy
             let data_left = $self.map_info.size - $self.cur_mem_offset;

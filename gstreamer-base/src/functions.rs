@@ -61,7 +61,7 @@ pub fn type_find_helper_for_buffer<P: IsA<gst::Object>>(
     obj: Option<&P>,
     buf: &gst::BufferRef,
 ) -> Result<(gst::Caps, gst::TypeFindProbability), glib::error::BoolError> {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         let mut prob = mem::MaybeUninit::uninit();
         let ret = ffi::gst_type_find_helper_for_buffer(
@@ -85,7 +85,7 @@ pub fn type_find_helper_for_buffer_with_extension<P: IsA<gst::Object>>(
     buf: &gst::BufferRef,
     extension: Option<&str>,
 ) -> Result<(gst::Caps, gst::TypeFindProbability), glib::error::BoolError> {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         let mut prob = mem::MaybeUninit::uninit();
         let ret = ffi::gst_type_find_helper_for_buffer_with_extension(
@@ -110,7 +110,7 @@ pub fn type_find_helper_for_buffer_with_caps(
     buf: &gst::BufferRef,
     caps: &gst::CapsRef,
 ) -> (Option<gst::Caps>, gst::TypeFindProbability) {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         let mut prob = mem::MaybeUninit::uninit();
         let ret = from_glib_full(ffi::gst_type_find_helper_for_buffer_with_caps(
@@ -131,7 +131,7 @@ pub fn type_find_helper_for_data_with_caps(
     data: &[u8],
     caps: &gst::CapsRef,
 ) -> (Option<gst::Caps>, gst::TypeFindProbability) {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     let size = data.len() as _;
     unsafe {
         let mut prob = mem::MaybeUninit::uninit();
@@ -153,7 +153,7 @@ pub fn type_find_list_factories_for_caps(
     obj: Option<&impl IsA<gst::Object>>,
     caps: &gst::CapsRef,
 ) -> glib::List<gst::TypeFindFactory> {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         glib::collections::List::from_glib_full(ffi::gst_type_find_list_factories_for_caps(
             obj.map(|p| p.as_ref()).to_glib_none().0,

@@ -14,7 +14,7 @@ impl DeviceProvider {
         rank: Rank,
         type_: glib::types::Type,
     ) -> Result<(), glib::error::BoolError> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_device_provider_register(

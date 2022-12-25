@@ -203,7 +203,7 @@ impl ValidVideoTimeCode {
         frames: u32,
         field_count: u32,
     ) -> Result<Self, glib::error::BoolError> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let tc = VideoTimeCode::new(
             fps,
             latest_daily_jam,
@@ -233,7 +233,6 @@ impl ValidVideoTimeCode {
 
     #[doc(alias = "gst_video_time_code_add_frames")]
     pub fn add_frames(&mut self, frames: i64) {
-        skip_assert_initialized!();
         unsafe {
             ffi::gst_video_time_code_add_frames(self.to_glib_none_mut().0, frames);
         }

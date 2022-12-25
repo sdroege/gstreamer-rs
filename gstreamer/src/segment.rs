@@ -156,7 +156,6 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
         stop_type: SeekType,
         stop: impl CompatibleFormattedValue<T>,
     ) -> Option<bool> {
-        skip_assert_initialized!();
         let start = start.try_into_checked_explicit(self.format()).unwrap();
         let stop = stop.try_into_checked_explicit(self.format()).unwrap();
 

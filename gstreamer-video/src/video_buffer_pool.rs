@@ -66,7 +66,7 @@ impl VideoAlignment {
         padding_right: u32,
         stride_align: &[u32; ffi::GST_VIDEO_MAX_PLANES as usize],
     ) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         let videoalignment = ffi::GstVideoAlignment {
             padding_top,

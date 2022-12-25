@@ -90,7 +90,7 @@ impl ElementProperties {
         let structure_name = self.0.name();
 
         if structure_name != "element-properties" {
-            assert_eq!(structure_name, "element-properties-map");
+            debug_assert_eq!(structure_name, "element-properties-map");
             return false;
         }
 

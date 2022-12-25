@@ -127,7 +127,7 @@ pub struct ParamSpecFractionBuilder<'a> {
 
 impl<'a> ParamSpecFractionBuilder<'a> {
     fn new(name: &'a str) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         Self {
             name,
             ..Default::default()
@@ -292,7 +292,7 @@ pub struct ParamSpecArrayBuilder<'a> {
 
 impl<'a> ParamSpecArrayBuilder<'a> {
     fn new(name: &'a str) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         Self {
             name,
             ..Default::default()

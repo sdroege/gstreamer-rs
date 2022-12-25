@@ -31,7 +31,7 @@ macro_rules! mini_object_wrapper (
             #[inline]
             pub unsafe fn from_glib_none(ptr: *const $ffi_name) -> Self {
                 skip_assert_initialized!();
-                assert!(!ptr.is_null());
+                debug_assert!(!ptr.is_null());
 
                 $crate::ffi::gst_mini_object_ref(ptr as *mut $crate::ffi::GstMiniObject);
 
@@ -43,7 +43,7 @@ macro_rules! mini_object_wrapper (
             #[inline]
             pub unsafe fn from_glib_full(ptr: *const $ffi_name) -> Self {
                 skip_assert_initialized!();
-                assert!(!ptr.is_null());
+                debug_assert!(!ptr.is_null());
 
                 $name {
                     obj: std::ptr::NonNull::new_unchecked(ptr as *mut $ffi_name),
@@ -53,7 +53,7 @@ macro_rules! mini_object_wrapper (
             #[inline]
             pub unsafe fn from_glib_borrow(ptr: *const $ffi_name) -> $crate::glib::translate::Borrowed<Self> {
                 skip_assert_initialized!();
-                assert!(!ptr.is_null());
+                debug_assert!(!ptr.is_null());
 
                 $crate::glib::translate::Borrowed::new($name {
                     obj: std::ptr::NonNull::new_unchecked(ptr as *mut $ffi_name),
@@ -62,7 +62,7 @@ macro_rules! mini_object_wrapper (
 
             #[inline]
             pub unsafe fn replace_ptr(&mut self, ptr: *mut $ffi_name) {
-                assert!(!ptr.is_null());
+                debug_assert!(!ptr.is_null());
                 self.obj = std::ptr::NonNull::new_unchecked(ptr);
             }
 
@@ -78,7 +78,7 @@ macro_rules! mini_object_wrapper (
                         self.as_mut_ptr() as *mut $crate::ffi::GstMiniObject
                     );
                     self.replace_ptr(ptr as *mut $ffi_name);
-                    assert!(self.is_writable());
+                    debug_assert!(self.is_writable());
 
                     &mut *(self.obj.as_mut() as *mut $ffi_name as *mut $ref_name)
                 }
@@ -435,14 +435,14 @@ macro_rules! mini_object_wrapper (
 
             #[inline]
             pub unsafe fn from_ptr<'a>(ptr: *const $ffi_name) -> &'a Self {
-                assert!(!ptr.is_null());
+                debug_assert!(!ptr.is_null());
                 &*(ptr as *const Self)
             }
 
             #[inline]
             pub unsafe fn from_mut_ptr<'a>(ptr: *mut $ffi_name) -> &'a mut Self {
-                assert!(!ptr.is_null());
-                assert_ne!(
+                debug_assert!(!ptr.is_null());
+                debug_assert_ne!(
                     $crate::ffi::gst_mini_object_is_writable(ptr as *mut $crate::ffi::GstMiniObject),
                     $crate::glib::ffi::GFALSE
                 );
@@ -542,7 +542,7 @@ macro_rules! mini_object_wrapper (
                 assert_eq!(std::mem::size_of::<$name>(), std::mem::size_of::<$crate::glib::ffi::gpointer>());
                 let value = &*(value as *const $crate::glib::Value as *const $crate::glib::gobject_ffi::GValue);
                 let ptr = &value.data[0].v_pointer as *const $crate::glib::ffi::gpointer as *const *const $ffi_name;
-                assert!(!(*ptr).is_null());
+                debug_assert!(!(*ptr).is_null());
                 &*(ptr as *const $name)
             }
         }

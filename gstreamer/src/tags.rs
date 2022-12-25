@@ -465,7 +465,7 @@ impl TagListRef {
 
         unsafe {
             let name = ffi::gst_tag_list_nth_tag_name(self.as_ptr(), idx);
-            assert!(!name.is_null());
+            debug_assert!(!name.is_null());
             Some(CStr::from_ptr(name).to_str().unwrap())
         }
     }

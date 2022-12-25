@@ -212,7 +212,7 @@ pub fn is_common_aspect_ratio(width: u32, height: u32, par: gst::Fraction) -> bo
 pub fn video_make_raw_caps(
     formats: &[crate::VideoFormat],
 ) -> crate::VideoCapsBuilder<gst::caps::NoFeature> {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
 
     let formats = formats.iter().copied().map(|f| match f {
         crate::VideoFormat::Encoded => panic!("Invalid encoded format"),

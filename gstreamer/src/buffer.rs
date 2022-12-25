@@ -163,7 +163,6 @@ impl Buffer {
 
     #[doc(alias = "gst_buffer_append")]
     pub fn append(&mut self, other: Self) {
-        skip_assert_initialized!();
         unsafe {
             let ptr = ffi::gst_buffer_append(self.as_mut_ptr(), other.into_glib_ptr());
             self.replace_ptr(ptr);
@@ -1001,8 +1000,7 @@ impl<'a> IntoIterator for &'a BufferRef {
 
 impl std::iter::FromIterator<Memory> for Buffer {
     fn from_iter<T: IntoIterator<Item = Memory>>(iter: T) -> Self {
-        assert_initialized_main_thread!();
-
+        skip_assert_initialized!();
         let iter = iter.into_iter();
 
         let mut buffer = Buffer::new();

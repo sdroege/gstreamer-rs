@@ -17,11 +17,11 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
 
     #[inline]
     unsafe fn from_ptr(buffer: &BufferRef, ptr: *const Self::GstType) -> MetaRef<Self> {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
 
         let meta_api = Self::meta_api();
         if meta_api != glib::Type::INVALID {
-            assert_eq!(
+            debug_assert_eq!(
                 meta_api,
                 from_glib((*(*(ptr as *const ffi::GstMeta)).info).api)
             )
@@ -38,11 +38,11 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
         buffer: &mut BufferRef,
         ptr: *mut Self::GstType,
     ) -> MetaRefMut<Self, T> {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
 
         let meta_api = Self::meta_api();
         if meta_api != glib::Type::INVALID {
-            assert_eq!(
+            debug_assert_eq!(
                 meta_api,
                 from_glib((*(*(ptr as *const ffi::GstMeta)).info).api)
             )
@@ -278,7 +278,7 @@ impl<'a, T> MetaRefMut<'a, T, Standalone> {
                 self.buffer.as_mut_ptr(),
                 self.meta as *mut T as *mut ffi::GstMeta,
             );
-            assert_ne!(res, glib::ffi::GFALSE);
+            debug_assert_ne!(res, glib::ffi::GFALSE);
 
             Ok(())
         }

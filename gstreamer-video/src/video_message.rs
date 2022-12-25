@@ -42,7 +42,7 @@ macro_rules! message_builder_generic_impl {
 
         #[must_use = "Building the message without using it has no effect"]
         pub fn build(mut self) -> Message {
-            assert_initialized_main_thread!();
+            skip_assert_initialized!();
             unsafe {
                 let src = self.builder.src.to_glib_none().0;
                 let msg = $new_fn(&mut self, src);
@@ -77,8 +77,8 @@ struct MessageBuilder<'a> {
 }
 
 impl<'a> MessageBuilder<'a> {
-    pub fn new() -> Self {
-        assert_initialized_main_thread!();
+    pub(crate) fn new() -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -151,18 +151,18 @@ impl NavigationEventMessage {
     #[doc(alias = "gst_navigation_message_new_event")]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(event: gst::Event) -> gst::Message {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         NavigationEventMessageBuilder::new(event).build()
     }
 
     pub fn builder<'a>(event: gst::Event) -> NavigationEventMessageBuilder<'a> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         NavigationEventMessageBuilder::new(event)
     }
 
     #[doc(alias = "gst_navigation_message_parse_event")]
     pub fn parse(msg: &gst::MessageRef) -> Result<Self, glib::error::BoolError> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             let mut event = ptr::null_mut();
             let ret = from_glib(ffi::gst_navigation_message_parse_event(
@@ -188,7 +188,7 @@ pub enum NavigationMessage {
 impl NavigationMessage {
     #[doc(alias = "gst_navigation_message_get_type")]
     pub fn type_(msg: &gst::MessageRef) -> NavigationMessageType {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe { from_glib(ffi::gst_navigation_message_get_type(msg.as_mut_ptr())) }
     }
 

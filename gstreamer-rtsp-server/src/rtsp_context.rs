@@ -29,7 +29,7 @@ impl RTSPContext {
 impl FromGlibPtrBorrow<*mut ffi::GstRTSPContext> for RTSPContext {
     #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstRTSPContext) -> Borrowed<Self> {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         Borrowed::new(RTSPContext(ptr::NonNull::new_unchecked(ptr)))
     }
 }

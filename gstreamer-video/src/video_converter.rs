@@ -27,7 +27,7 @@ impl VideoConverter {
         out_info: &crate::VideoInfo,
         config: Option<VideoConverterConfig>,
     ) -> Result<Self, glib::BoolError> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         if in_info.fps() != out_info.fps() {
             return Err(glib::bool_error!("Can't do framerate conversion"));
         }

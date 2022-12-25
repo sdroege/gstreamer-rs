@@ -192,7 +192,7 @@ impl<'a> VideoCodecFrame<'a> {
                 let writable: bool = from_glib(gst::ffi::gst_mini_object_is_writable(
                     ptr as *const gst::ffi::GstMiniObject,
                 ));
-                assert!(writable);
+                debug_assert!(writable);
 
                 Some(gst::BufferRef::from_mut_ptr(ptr))
             }
@@ -201,19 +201,14 @@ impl<'a> VideoCodecFrame<'a> {
 
     pub fn set_output_buffer(&mut self, output_buffer: gst::Buffer) {
         unsafe {
+            assert!(output_buffer.is_writable());
             let prev = (*self.to_glib_none().0).output_buffer;
 
             if !prev.is_null() {
                 gst::ffi::gst_mini_object_unref(prev as *mut gst::ffi::GstMiniObject);
             }
 
-            let ptr = output_buffer.into_glib_ptr();
-            let writable: bool = from_glib(gst::ffi::gst_mini_object_is_writable(
-                ptr as *const gst::ffi::GstMiniObject,
-            ));
-            assert!(writable);
-
-            (*self.to_glib_none().0).output_buffer = ptr;
+            (*self.to_glib_none().0).output_buffer = output_buffer.into_glib_ptr();
         }
     }
 

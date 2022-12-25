@@ -37,7 +37,7 @@ impl fmt::Debug for PhysMemoryRef {
 impl PhysMemoryRef {
     #[doc(alias = "gst_phys_memory_get_phys_addr")]
     pub fn phys_addr(&self) -> libc::uintptr_t {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe { ffi::gst_phys_memory_get_phys_addr(self.as_mut_ptr()) }
     }
 }

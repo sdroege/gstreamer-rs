@@ -69,7 +69,7 @@ impl SDPConnection {
 
 impl Clone for SDPConnection {
     fn clone(&self) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             let mut conn = mem::MaybeUninit::uninit();
             ffi::gst_sdp_connection_set(

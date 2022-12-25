@@ -312,7 +312,7 @@ impl EncodingContainerProfile {
                 profile.upcast().into_glib_ptr(),
             );
             // Can't possibly fail unless we pass random pointers
-            assert_ne!(res, glib::ffi::GFALSE);
+            debug_assert_ne!(res, glib::ffi::GFALSE);
         }
     }
 }

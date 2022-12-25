@@ -124,7 +124,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticCaps> for StaticCap
 impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticCaps> for StaticCaps {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstStaticCaps) -> Self {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         StaticCaps(ptr::NonNull::new_unchecked(ptr as *mut _))
     }
 }
@@ -133,7 +133,7 @@ impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticCaps> for StaticCaps 
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticCaps> for StaticCaps {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstStaticCaps) -> Self {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         StaticCaps(ptr::NonNull::new_unchecked(ptr))
     }
 }
@@ -142,7 +142,7 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticCaps> for StaticCaps {
 impl glib::translate::FromGlibPtrBorrow<*mut ffi::GstStaticCaps> for StaticCaps {
     #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstStaticCaps) -> Borrowed<Self> {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         Borrowed::new(StaticCaps(ptr::NonNull::new_unchecked(ptr)))
     }
 }

@@ -48,7 +48,7 @@ impl SDPZone {
 
 impl Clone for SDPZone {
     fn clone(&self) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             let mut zone = mem::MaybeUninit::uninit();
             ffi::gst_sdp_zone_set(zone.as_mut_ptr(), self.0.time, self.0.typed_time);

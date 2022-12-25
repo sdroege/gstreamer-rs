@@ -319,7 +319,7 @@ impl<'a, T> RTPBuffer<'a, T> {
         unsafe {
             let ptr = self.rtp_buffer.buffer;
 
-            assert!(!ptr.is_null());
+            debug_assert!(!ptr.is_null());
 
             gst::BufferRef::from_ptr(ptr)
         }

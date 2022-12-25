@@ -18,7 +18,7 @@ impl FromGlib<i32> for AudioEndianness {
     #[allow(unused_unsafe)]
     #[inline]
     unsafe fn from_glib(value: i32) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         match value {
             1234 => Self::LittleEndian,
@@ -52,7 +52,7 @@ impl AudioFormatInfo {
 
         unsafe {
             let info = ffi::gst_audio_format_get_info(format.into_glib());
-            assert!(!info.is_null());
+            debug_assert!(!info.is_null());
 
             Self(&*info)
         }

@@ -164,7 +164,7 @@ pub fn buffer_reorder_channels(
     from: &[AudioChannelPosition],
     to: &[AudioChannelPosition],
 ) -> Result<(), glib::BoolError> {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
 
     if from.len() != to.len() || from.len() > 64 {
         return Err(glib::bool_error!("Invalid number of channels"));

@@ -43,7 +43,7 @@ macro_rules! event_builder_generic_impl {
 
         #[must_use = "Building the event without using it has no effect"]
         pub fn build(mut self) -> gst::Event {
-            assert_initialized_main_thread!();
+            skip_assert_initialized!();
             unsafe {
                 let event = $new_fn(&mut self);
                 if let Some(seqnum) = self.seqnum {
@@ -151,6 +151,7 @@ pub struct DownstreamForceKeyUnitEvent {
 
 impl DownstreamForceKeyUnitEvent {
     pub fn builder<'a>() -> DownstreamForceKeyUnitEventBuilder<'a> {
+        assert_initialized_main_thread!();
         DownstreamForceKeyUnitEventBuilder::new()
     }
 
@@ -246,6 +247,7 @@ pub struct UpstreamForceKeyUnitEvent {
 
 impl UpstreamForceKeyUnitEvent {
     pub fn builder<'a>() -> UpstreamForceKeyUnitEventBuilder<'a> {
+        assert_initialized_main_thread!();
         UpstreamForceKeyUnitEventBuilder::new()
     }
 
@@ -370,7 +372,7 @@ macro_rules! nav_event_builder {
         }
 
         impl<'a> $builder<'a> {
-            pub fn new($($event_field: $event_type)?) -> Self {
+            fn new($($event_field: $event_type)?) -> Self {
                 skip_assert_initialized!();
                 Self {
                     seqnum: None,
@@ -500,7 +502,7 @@ pub struct CommandEventBuilder<'a> {
 }
 
 impl<'a> CommandEventBuilder<'a> {
-    pub fn new(command: NavigationCommand) -> Self {
+    fn new(command: NavigationCommand) -> Self {
         skip_assert_initialized!();
         Self {
             seqnum: None,
@@ -958,7 +960,7 @@ impl NavigationEvent {
 
     #[doc(alias = "gst_navigation_event_get_type")]
     pub fn type_(event: &gst::EventRef) -> NavigationEventType {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe { from_glib(ffi::gst_navigation_event_get_type(event.as_mut_ptr())) }
     }
 

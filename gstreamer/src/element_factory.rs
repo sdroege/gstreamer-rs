@@ -17,8 +17,6 @@ impl ElementFactory {
         &self,
         properties: &[(&str, &dyn ToValue)],
     ) -> Result<Element, glib::BoolError> {
-        assert_initialized_main_thread!();
-
         let mut builder = self.create();
         builder.properties = properties
             .iter()
@@ -33,8 +31,7 @@ impl ElementFactory {
         factoryname: &str,
         properties: &[(&str, &dyn ToValue)],
     ) -> Result<Element, glib::BoolError> {
-        assert_initialized_main_thread!();
-
+        skip_assert_initialized!();
         let mut builder = Self::make(factoryname);
         builder.properties = properties
             .iter()
@@ -47,6 +44,8 @@ impl ElementFactory {
     #[doc(alias = "gst_element_factory_create_with_properties")]
     #[track_caller]
     pub fn create(&self) -> ElementBuilder {
+        assert_initialized_main_thread!();
+
         ElementBuilder {
             name_or_factory: NameOrFactory::Factory(self),
             properties: Vec::new(),
@@ -81,8 +80,7 @@ impl ElementFactory {
         factoryname: &str,
         name: Option<&str>,
     ) -> Result<Element, glib::BoolError> {
-        assert_initialized_main_thread!();
-
+        skip_assert_initialized!();
         let mut builder = Self::make(factoryname);
         if let Some(name) = name {
             builder = builder.name(name);

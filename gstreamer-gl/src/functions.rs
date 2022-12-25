@@ -12,7 +12,7 @@ pub fn gl_handle_context_query(
     context: Option<&impl IsA<GLContext>>,
     other_context: Option<&impl IsA<GLContext>>,
 ) -> bool {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         from_glib(ffi::gst_gl_handle_context_query(
             element.as_ref().to_glib_none().0,
@@ -29,7 +29,7 @@ pub fn gl_handle_set_context(
     element: &impl IsA<gst::Element>,
     context: &gst::Context,
 ) -> (Option<GLDisplay>, Option<GLContext>) {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         let mut display = ptr::null_mut();
         let mut other_context = ptr::null_mut();

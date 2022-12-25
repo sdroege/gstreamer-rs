@@ -51,7 +51,7 @@ unsafe impl Sync for Structure {}
 impl Structure {
     #[doc(alias = "gst_structure_new")]
     pub fn builder(name: &str) -> Builder {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         Builder::new(name)
     }
 
@@ -60,14 +60,14 @@ impl Structure {
         assert_initialized_main_thread!();
         unsafe {
             let ptr = ffi::gst_structure_new_empty(name.to_glib_none().0);
-            assert!(!ptr.is_null());
+            debug_assert!(!ptr.is_null());
             Structure(ptr::NonNull::new_unchecked(ptr))
         }
     }
 
     #[doc(alias = "gst_structure_new")]
     pub fn new(name: &str, values: &[(&str, &(dyn ToSendValue + Sync))]) -> Structure {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let mut structure = Structure::new_empty(name);
 
         for &(f, v) in values {
@@ -82,7 +82,7 @@ impl Structure {
         name: &str,
         iter: impl IntoIterator<Item = (&'a str, SendValue)>,
     ) -> Structure {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let mut structure = Structure::new_empty(name);
 
         iter.into_iter()
@@ -135,7 +135,7 @@ impl Clone for Structure {
     fn clone(&self) -> Self {
         unsafe {
             let ptr = ffi::gst_structure_copy(self.0.as_ref());
-            assert!(!ptr.is_null());
+            debug_assert!(!ptr.is_null());
             Structure(ptr::NonNull::new_unchecked(ptr))
         }
     }
@@ -219,7 +219,7 @@ impl ToOwned for StructureRef {
     fn to_owned(&self) -> Structure {
         unsafe {
             let ptr = ffi::gst_structure_copy(&self.0);
-            assert!(!ptr.is_null());
+            debug_assert!(!ptr.is_null());
             Structure(ptr::NonNull::new_unchecked(ptr))
         }
     }
@@ -277,9 +277,9 @@ impl<'a> ToGlibPtrMut<'a, *mut ffi::GstStructure> for Structure {
 impl FromGlibPtrNone<*const ffi::GstStructure> for Structure {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstStructure) -> Self {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         let ptr = ffi::gst_structure_copy(ptr);
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         Structure(ptr::NonNull::new_unchecked(ptr))
     }
 }
@@ -287,9 +287,9 @@ impl FromGlibPtrNone<*const ffi::GstStructure> for Structure {
 impl FromGlibPtrNone<*mut ffi::GstStructure> for Structure {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstStructure) -> Self {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         let ptr = ffi::gst_structure_copy(ptr);
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         Structure(ptr::NonNull::new_unchecked(ptr))
     }
 }
@@ -297,7 +297,7 @@ impl FromGlibPtrNone<*mut ffi::GstStructure> for Structure {
 impl FromGlibPtrFull<*const ffi::GstStructure> for Structure {
     #[inline]
     unsafe fn from_glib_full(ptr: *const ffi::GstStructure) -> Self {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         Structure(ptr::NonNull::new_unchecked(ptr as *mut ffi::GstStructure))
     }
 }
@@ -305,7 +305,7 @@ impl FromGlibPtrFull<*const ffi::GstStructure> for Structure {
 impl FromGlibPtrFull<*mut ffi::GstStructure> for Structure {
     #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstStructure) -> Self {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         Structure(ptr::NonNull::new_unchecked(ptr))
     }
 }
@@ -404,14 +404,14 @@ unsafe impl Sync for StructureRef {}
 impl StructureRef {
     #[inline]
     pub unsafe fn from_glib_borrow<'a>(ptr: *const ffi::GstStructure) -> &'a StructureRef {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
 
         &*(ptr as *mut StructureRef)
     }
 
     #[inline]
     pub unsafe fn from_glib_borrow_mut<'a>(ptr: *mut ffi::GstStructure) -> &'a mut StructureRef {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
 
         &mut *(ptr as *mut StructureRef)
     }
@@ -631,7 +631,7 @@ impl StructureRef {
 
         unsafe {
             let field_name = ffi::gst_structure_nth_field_name(&self.0, idx);
-            assert!(!field_name.is_null());
+            debug_assert!(!field_name.is_null());
 
             Some(CStr::from_ptr(field_name).to_str().unwrap())
         }

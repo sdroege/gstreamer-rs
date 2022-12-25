@@ -11,18 +11,16 @@ pub struct VideoFormatInfo(&'static ffi::GstVideoFormatInfo);
 impl VideoFormatInfo {
     #[inline]
     pub unsafe fn from_ptr(format_info: *const ffi::GstVideoFormatInfo) -> Self {
-        assert_initialized_main_thread!();
-        assert!(!format_info.is_null());
+        debug_assert!(!format_info.is_null());
         Self(&*format_info)
     }
 
     #[inline]
     pub fn from_format(format: crate::VideoFormat) -> Self {
         assert_initialized_main_thread!();
-
         unsafe {
             let info = ffi::gst_video_format_get_info(format.into_glib());
-            assert!(!info.is_null());
+            debug_assert!(!info.is_null());
 
             Self(&*info)
         }

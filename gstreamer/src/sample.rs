@@ -63,8 +63,6 @@ impl<'a> SampleBuilder<'a> {
 
     #[must_use = "Building the sample without using it has no effect"]
     pub fn build(self) -> Sample {
-        assert_initialized_main_thread!();
-
         unsafe {
             let info = self
                 .info
@@ -92,6 +90,8 @@ impl<'a> SampleBuilder<'a> {
 
 impl Sample {
     pub fn builder<'a>() -> SampleBuilder<'a> {
+        assert_initialized_main_thread!();
+
         SampleBuilder {
             buffer: None,
             buffer_list: None,

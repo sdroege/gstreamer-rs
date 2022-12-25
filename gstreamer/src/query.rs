@@ -274,7 +274,7 @@ macro_rules! declare_concrete_query(
         impl DerefMut for $name<Query> {
             #[inline]
             fn deref_mut(&mut self) -> &mut Self::Target {
-                assert!(self.0.is_writable());
+                debug_assert!(self.0.is_writable());
                 unsafe { &mut *(self.0.as_mut_ptr() as *mut Self::Target) }
             }
         }
@@ -931,7 +931,7 @@ declare_concrete_query!(Custom, T);
 impl Custom<Query> {
     #[doc(alias = "gst_query_new_custom")]
     pub fn new(structure: crate::Structure) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             Self(from_glib_full(ffi::gst_query_new_custom(
                 ffi::GST_QUERY_CUSTOM,
@@ -1020,7 +1020,7 @@ declare_concrete_query!(Allocation, T);
 impl Allocation<Query> {
     #[doc(alias = "gst_query_new_allocation")]
     pub fn new(caps: &crate::Caps, need_pool: bool) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             Self(from_glib_full(ffi::gst_query_new_allocation(
                 caps.as_mut_ptr(),
@@ -1386,7 +1386,7 @@ declare_concrete_query!(AcceptCaps, T);
 impl AcceptCaps<Query> {
     #[doc(alias = "gst_query_new_accept_caps")]
     pub fn new(caps: &crate::Caps) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             Self(from_glib_full(ffi::gst_query_new_accept_caps(
                 caps.as_mut_ptr(),
@@ -1434,7 +1434,7 @@ declare_concrete_query!(Caps, T);
 impl Caps<Query> {
     #[doc(alias = "gst_query_new_caps")]
     pub fn new(filter: Option<&crate::Caps>) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             Self(from_glib_full(ffi::gst_query_new_caps(
                 filter.to_glib_none().0,

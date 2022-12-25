@@ -11,17 +11,17 @@ pub struct Fraction(pub Rational32);
 impl Fraction {
     #[inline]
     pub fn new(num: i32, den: i32) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         (num, den).into()
     }
 
     pub fn approximate_f32(x: f32) -> Option<Self> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         Rational32::approximate_float(x).map(|r| r.into())
     }
 
     pub fn approximate_f64(x: f64) -> Option<Self> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         Rational32::approximate_float(x).map(|r| r.into())
     }
 
@@ -232,7 +232,7 @@ impl ops::Neg for &Fraction {
 impl From<i32> for Fraction {
     #[inline]
     fn from(x: i32) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         Fraction(x.into())
     }
 }
@@ -240,7 +240,7 @@ impl From<i32> for Fraction {
 impl From<(i32, i32)> for Fraction {
     #[inline]
     fn from(x: (i32, i32)) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         Fraction(x.into())
     }
 }
@@ -256,7 +256,7 @@ impl From<Fraction> for (i32, i32) {
 impl From<Rational32> for Fraction {
     #[inline]
     fn from(x: Rational32) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         Fraction(x)
     }
 }
@@ -357,7 +357,7 @@ impl IntRangeType for i32 {
 
     #[inline]
     fn with_step(min: i32, max: i32, step: i32) -> IntRange<Self> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         assert!(min <= max);
         assert!(step > 0);
@@ -375,7 +375,7 @@ impl IntRangeType for i64 {
 
     #[inline]
     fn with_step(min: i64, max: i64, step: i64) -> IntRange<Self> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         assert!(min <= max);
         assert!(step > 0);
@@ -387,13 +387,13 @@ impl IntRangeType for i64 {
 impl<T: IntRangeType> IntRange<T> {
     #[inline]
     pub fn new(min: T, max: T) -> IntRange<T> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         T::with_min_max(min, max)
     }
 
     #[inline]
     pub fn with_step(min: T, max: T, step: T) -> IntRange<T> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         T::with_step(min, max, step)
     }
 }
@@ -548,7 +548,7 @@ pub struct FractionRange {
 impl FractionRange {
     #[inline]
     pub fn new<T: Into<Fraction>, U: Into<Fraction>>(min: T, max: U) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         let min = min.into();
         let max = max.into();
@@ -644,7 +644,7 @@ pub struct Bitmask(pub u64);
 impl Bitmask {
     #[inline]
     pub fn new(v: u64) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         Bitmask(v)
     }
 }
@@ -783,7 +783,7 @@ impl Array {
     }
 
     pub fn from_values(values: impl IntoIterator<Item = glib::SendValue>) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         Self::new(values)
     }
@@ -817,7 +817,7 @@ impl Array {
 
 impl Default for Array {
     fn default() -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         unsafe {
             let value = glib::Value::for_value_type::<Array>();
@@ -845,7 +845,7 @@ impl AsRef<[glib::SendValue]> for Array {
 
 impl std::iter::FromIterator<glib::SendValue> for Array {
     fn from_iter<T: IntoIterator<Item = glib::SendValue>>(iter: T) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         Self::from_values(iter)
     }
 }
@@ -903,7 +903,7 @@ unsafe impl<'a> Sync for ArrayRef<'a> {}
 
 impl<'a> ArrayRef<'a> {
     pub fn new(values: &'a [glib::SendValue]) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         Self(values)
     }
@@ -1010,7 +1010,7 @@ impl List {
     }
 
     pub fn from_values(values: impl IntoIterator<Item = glib::SendValue>) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         Self::new(values)
     }
@@ -1044,7 +1044,7 @@ impl List {
 
 impl Default for List {
     fn default() -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         unsafe {
             let value = glib::Value::for_value_type::<List>();
@@ -1072,7 +1072,7 @@ impl AsRef<[glib::SendValue]> for List {
 
 impl std::iter::FromIterator<glib::SendValue> for List {
     fn from_iter<T: IntoIterator<Item = glib::SendValue>>(iter: T) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         Self::from_values(iter)
     }
 }
@@ -1130,7 +1130,7 @@ unsafe impl<'a> Sync for ListRef<'a> {}
 
 impl<'a> ListRef<'a> {
     pub fn new(values: &'a [glib::SendValue]) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         Self(values)
     }
@@ -1384,7 +1384,7 @@ impl GstValueExt for glib::Value {
     }
 
     fn deserialize(s: &str, type_: glib::Type) -> Result<glib::Value, glib::BoolError> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         unsafe {
             let mut value = glib::Value::from_type(type_);
@@ -1406,7 +1406,7 @@ impl GstValueExt for glib::Value {
         s: &str,
         pspec: &glib::ParamSpec,
     ) -> Result<glib::Value, glib::BoolError> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         unsafe {
             let mut value = glib::Value::from_type_unchecked(pspec.value_type());

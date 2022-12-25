@@ -101,7 +101,7 @@ impl VideoColorimetry {
         transfer: crate::VideoTransferFunction,
         primaries: crate::VideoColorPrimaries,
     ) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         let colorimetry = ffi::GstVideoColorimetry {
             range: range.into_glib(),

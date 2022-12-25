@@ -48,7 +48,7 @@ pub fn audio_make_raw_caps(
     formats: &[crate::AudioFormat],
     layout: crate::AudioLayout,
 ) -> crate::AudioCapsBuilder<gst::caps::NoFeature> {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
 
     let formats = formats.iter().copied().map(|f| match f {
         crate::AudioFormat::Encoded => panic!("Invalid encoded format"),

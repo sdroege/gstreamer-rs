@@ -160,7 +160,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticPadTemplate> for St
 impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticPadTemplate> for StaticPadTemplate {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstStaticPadTemplate) -> Self {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         StaticPadTemplate(ptr::NonNull::new_unchecked(ptr as *mut _))
     }
 }
@@ -169,7 +169,7 @@ impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticPadTemplate> for Stat
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticPadTemplate> for StaticPadTemplate {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstStaticPadTemplate) -> Self {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         StaticPadTemplate(ptr::NonNull::new_unchecked(ptr))
     }
 }
@@ -178,7 +178,7 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticPadTemplate> for Static
 impl glib::translate::FromGlibPtrBorrow<*mut ffi::GstStaticPadTemplate> for StaticPadTemplate {
     #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstStaticPadTemplate) -> Borrowed<Self> {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         Borrowed::new(StaticPadTemplate(ptr::NonNull::new_unchecked(ptr)))
     }
 }

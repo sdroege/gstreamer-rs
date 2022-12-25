@@ -525,7 +525,7 @@ unsafe impl TransparentPtrType for DebugCategory {}
 impl FromGlibPtrNone<*mut ffi::GstDebugCategory> for DebugCategory {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstDebugCategory) -> Self {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         DebugCategory(Some(ptr::NonNull::new_unchecked(ptr)))
     }
 }
@@ -533,7 +533,7 @@ impl FromGlibPtrNone<*mut ffi::GstDebugCategory> for DebugCategory {
 impl FromGlibPtrFull<*mut ffi::GstDebugCategory> for DebugCategory {
     #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstDebugCategory) -> Self {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
         DebugCategory(Some(ptr::NonNull::new_unchecked(ptr)))
     }
 }

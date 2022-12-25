@@ -157,7 +157,7 @@ impl EventRef {
     pub fn seqnum(&self) -> Seqnum {
         unsafe {
             let seqnum = ffi::gst_event_get_seqnum(self.as_mut_ptr());
-            assert_ne!(seqnum, 0);
+            debug_assert_ne!(seqnum, 0);
             Seqnum(NonZeroU32::new_unchecked(seqnum))
         }
     }
@@ -770,7 +770,7 @@ impl StreamGroupDone {
             ffi::gst_event_parse_stream_group_done(self.as_mut_ptr(), group_id.as_mut_ptr());
 
             let group_id = group_id.assume_init();
-            assert_ne!(group_id, 0);
+            debug_assert_ne!(group_id, 0);
             GroupId(NonZeroU32::new_unchecked(group_id))
         }
     }
@@ -1544,7 +1544,6 @@ macro_rules! event_builder_generic_impl {
 
         #[must_use = "Building the event without using it has no effect"]
         pub fn build(mut self) -> Event {
-            assert_initialized_main_thread!();
             unsafe {
                 let event = $new_fn(&mut self);
                 if let Some(seqnum) = self.builder.seqnum {

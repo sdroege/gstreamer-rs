@@ -37,7 +37,7 @@ impl<O: IsA<TaskPool>> TaskPoolExtManual for O {
             );
 
             if !error.is_null() {
-                assert!(handle.is_null());
+                debug_assert!(handle.is_null());
 
                 // Assume that task_pool_trampoline was
                 // not called and will not be called

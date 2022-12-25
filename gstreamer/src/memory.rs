@@ -836,7 +836,7 @@ macro_rules! memory_object_wrapper {
                 let value = &*(value as *const $crate::glib::Value as *const $crate::glib::gobject_ffi::GValue);
                 let ptr = &value.data[0].v_pointer as *const $crate::glib::ffi::gpointer
                     as *const *const $ffi_name;
-                assert!(!(*ptr).is_null());
+                debug_assert!(!(*ptr).is_null());
                 &*(ptr as *const $name)
             }
         }

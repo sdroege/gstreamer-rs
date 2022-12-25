@@ -397,7 +397,7 @@ impl<T> AudioBufferRef<T> {
 impl<'a> AudioBufferRef<&'a gst::BufferRef> {
     #[inline]
     pub unsafe fn from_glib_borrow(audio_buffer: *const ffi::GstAudioBuffer) -> Borrowed<Self> {
-        assert!(!audio_buffer.is_null());
+        debug_assert!(!audio_buffer.is_null());
 
         let info = crate::AudioInfo::from_glib_none(
             &(*audio_buffer).info as *const _ as *mut ffi::GstAudioInfo,
@@ -455,7 +455,7 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
 impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
     #[inline]
     pub unsafe fn from_glib_borrow_mut(audio_buffer: *mut ffi::GstAudioBuffer) -> Borrowed<Self> {
-        assert!(!audio_buffer.is_null());
+        debug_assert!(!audio_buffer.is_null());
 
         let info = crate::AudioInfo::from_glib_none(
             &(*audio_buffer).info as *const _ as *mut ffi::GstAudioInfo,

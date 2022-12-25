@@ -595,7 +595,7 @@ impl Harness {
 
     #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstHarness) -> Harness {
-        assert!(!ptr.is_null());
+        debug_assert!(!ptr.is_null());
 
         Harness(ptr::NonNull::new_unchecked(ptr))
     }
@@ -646,7 +646,7 @@ impl Harness {
         element_sinkpad_name: Option<&str>,
         element_srcpad_name: Option<&str>,
     ) -> Harness {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let element_sinkpad_name = element_sinkpad_name.to_glib_none();
         let element_srcpad_name = element_srcpad_name.to_glib_none();
         unsafe {

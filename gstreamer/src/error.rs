@@ -62,7 +62,7 @@ impl ErrorMessage {
         function: &'static str,
         line: u32,
     ) -> ErrorMessage {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let error_domain = T::domain();
         let error_code = error.code();
 
@@ -115,7 +115,7 @@ pub struct LoggableError {
 
 impl LoggableError {
     pub fn new(category: crate::DebugCategory, bool_error: glib::BoolError) -> LoggableError {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         LoggableError {
             category,
             bool_error,

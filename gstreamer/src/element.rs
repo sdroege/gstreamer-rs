@@ -56,7 +56,7 @@ impl Element {
         rank: Rank,
         type_: glib::types::Type,
     ) -> Result<(), glib::error::BoolError> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_element_register(
@@ -94,7 +94,7 @@ impl FromGlib<libc::c_ulong> for NotifyWatchId {
     #[inline]
     unsafe fn from_glib(val: libc::c_ulong) -> NotifyWatchId {
         skip_assert_initialized!();
-        assert_ne!(val, 0);
+        debug_assert_ne!(val, 0);
         NotifyWatchId(NonZeroU64::new_unchecked(val as _))
     }
 }

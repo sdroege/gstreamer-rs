@@ -20,7 +20,7 @@ impl PlayVideoOverlayVideoRenderer {
         window_handle: uintptr_t,
         video_sink: &P,
     ) -> PlayVideoOverlayVideoRenderer {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         from_glib_full(ffi::gst_play_video_overlay_video_renderer_new_with_sink(
             window_handle as *mut _,
@@ -30,7 +30,7 @@ impl PlayVideoOverlayVideoRenderer {
 
     #[doc(alias = "gst_play_video_overlay_video_renderer_new_with_sink")]
     pub fn with_sink<P: IsA<gst::Element>>(video_sink: &P) -> PlayVideoOverlayVideoRenderer {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         unsafe {
             from_glib_full(ffi::gst_play_video_overlay_video_renderer_new_with_sink(

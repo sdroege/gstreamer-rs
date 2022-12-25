@@ -41,13 +41,13 @@ impl PlayConfig {
     #[doc(alias = "get_position_update_interval")]
     #[doc(alias = "gst_play_config_get_position_update_interval")]
     pub fn position_update_interval(&self) -> u32 {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe { ffi::gst_play_config_get_position_update_interval(self.0.to_glib_none().0) }
     }
 
     #[doc(alias = "get_seek_accurate")]
     pub fn is_seek_accurate(&self) -> bool {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             from_glib(ffi::gst_play_config_get_seek_accurate(
                 self.0.to_glib_none().0,
@@ -58,13 +58,13 @@ impl PlayConfig {
     #[doc(alias = "get_user_agent")]
     #[doc(alias = "gst_play_config_get_user_agent")]
     pub fn user_agent(&self) -> Option<String> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe { from_glib_full(ffi::gst_play_config_get_user_agent(self.0.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_play_config_set_position_update_interval")]
     pub fn set_position_update_interval(&mut self, interval: u32) {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             ffi::gst_play_config_set_position_update_interval(
                 self.0.to_glib_none_mut().0,
@@ -74,7 +74,7 @@ impl PlayConfig {
     }
 
     pub fn set_seek_accurate(&mut self, accurate: bool) {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         // FIXME: Work-around for
         // http://cgit.freedesktop.org/gstreamer/gst-plugins-bad/commit/?id=cc58bd6ae071dec4ea7b4be626034accd0372755
         self.set("accurate-seek", accurate);
@@ -82,7 +82,7 @@ impl PlayConfig {
 
     #[doc(alias = "gst_play_config_set_user_agent")]
     pub fn set_user_agent(&mut self, agent: &str) {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             ffi::gst_play_config_set_user_agent(
                 self.0.to_glib_none_mut().0,

@@ -21,11 +21,13 @@ glib::wrapper! {
     match fn {
         copy => |ptr| {
             let mut copy = ptr::null_mut();
-            assert_eq!(ffi::gst_sdp_media_copy(ptr, &mut copy), ffi::GST_SDP_OK);
+            let res = ffi::gst_sdp_media_copy(ptr, &mut copy);
+            debug_assert_eq!(res, ffi::GST_SDP_OK);
             copy
         },
         free => |ptr| {
-            ffi::gst_sdp_media_free(ptr);
+            let res = ffi::gst_sdp_media_free(ptr);
+            debug_assert_eq!(res, ffi::GST_SDP_OK);
         },
     }
 }
@@ -612,7 +614,7 @@ impl SDPMediaRef {
         caps: &gst::CapsRef,
         media: &mut SDPMedia,
     ) -> Result<(), glib::BoolError> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let result = unsafe {
             ffi::gst_sdp_media_set_media_from_caps(caps.as_ptr(), media.to_glib_none_mut().0)
         };

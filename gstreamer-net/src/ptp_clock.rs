@@ -87,7 +87,7 @@ impl PtpClock {
                 Box::into_raw(user_data) as glib::ffi::gpointer,
                 Some(destroy::<F>),
             );
-            assert_ne!(id, 0);
+            debug_assert_ne!(id, 0);
 
             PtpStatisticsCallback(NonZeroU64::new_unchecked(id as _))
         }

@@ -16,7 +16,7 @@ use crate::VideoOrientationMethod;
 impl VideoCaptionType {
     #[doc(alias = "gst_video_caption_type_from_caps")]
     pub fn from_caps(caps: &gst::CapsRef) -> VideoCaptionType {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe { from_glib(ffi::gst_video_caption_type_from_caps(caps.as_ptr())) }
     }
 }
@@ -28,7 +28,7 @@ impl VideoOrientationMethod {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_video_orientation_from_tag")]
     pub fn from_tag(taglist: &gst::TagListRef) -> Option<VideoOrientationMethod> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         unsafe {
             use std::mem;

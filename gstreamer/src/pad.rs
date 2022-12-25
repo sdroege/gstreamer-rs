@@ -33,7 +33,7 @@ impl FromGlib<libc::c_ulong> for PadProbeId {
     #[inline]
     unsafe fn from_glib(val: libc::c_ulong) -> PadProbeId {
         skip_assert_initialized!();
-        assert_ne!(val, 0);
+        debug_assert_ne!(val, 0);
         PadProbeId(NonZeroU64::new_unchecked(val as _))
     }
 }
@@ -1364,7 +1364,7 @@ where
 {
     let func: &F = &*((*pad).getrangedata as *const F);
 
-    assert!(!buffer.is_null());
+    debug_assert!(!buffer.is_null());
 
     let pad = Pad::from_glib_borrow(pad);
     let pad = pad.unsafe_cast_ref();
@@ -1639,7 +1639,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             unsafe {
                 let res = ffi::gst_ghost_pad_construct(pad.to_glib_none().0);
                 // This can't really fail...
-                assert_ne!(res, glib::ffi::GFALSE, "Failed to construct ghost pad");
+                debug_assert_ne!(res, glib::ffi::GFALSE, "Failed to construct ghost pad");
             }
         }
 
@@ -1647,7 +1647,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
     }
 
     pub fn from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         let templ = templ.get();
         Self::from_template(&templ, name)
@@ -1691,7 +1691,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             unsafe {
                 let res = ffi::gst_ghost_pad_construct(pad.to_glib_none().0);
                 // This can't really fail...
-                assert_ne!(res, glib::ffi::GFALSE, "Failed to construct ghost pad");
+                debug_assert_ne!(res, glib::ffi::GFALSE, "Failed to construct ghost pad");
             }
         }
 

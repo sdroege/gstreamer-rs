@@ -38,7 +38,7 @@ impl SDPBandwidth {
 
 impl Clone for SDPBandwidth {
     fn clone(&self) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         unsafe {
             let mut bw = mem::MaybeUninit::uninit();
             ffi::gst_sdp_bandwidth_set(bw.as_mut_ptr(), self.0.bwtype, self.0.bandwidth);

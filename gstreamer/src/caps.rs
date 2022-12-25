@@ -51,7 +51,7 @@ impl Caps {
 
     #[doc(alias = "gst_caps_new_simple")]
     pub fn new_simple(name: &str, values: &[(&str, &(dyn ToSendValue + Sync))]) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let mut caps = Caps::new_empty();
 
         let structure = Structure::new(name, values);
@@ -68,7 +68,6 @@ impl Caps {
 
     #[doc(alias = "gst_caps_fixate")]
     pub fn fixate(&mut self) {
-        skip_assert_initialized!();
         unsafe {
             // See https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/388
             assert!(!self.is_any());
@@ -83,7 +82,6 @@ impl Caps {
 
     #[doc(alias = "gst_caps_merge")]
     pub fn merge(&mut self, other: Self) {
-        skip_assert_initialized!();
         unsafe {
             let ptr = ffi::gst_caps_merge(self.as_mut_ptr(), other.into_glib_ptr());
             self.replace_ptr(ptr);
@@ -92,7 +90,6 @@ impl Caps {
 
     #[doc(alias = "gst_caps_merge_structure")]
     pub fn merge_structure(&mut self, structure: Structure) {
-        skip_assert_initialized!();
         unsafe {
             let ptr = ffi::gst_caps_merge_structure(self.as_mut_ptr(), structure.into_glib_ptr());
             self.replace_ptr(ptr);
@@ -101,7 +98,6 @@ impl Caps {
 
     #[doc(alias = "gst_caps_merge_structure_full")]
     pub fn merge_structure_full(&mut self, structure: Structure, features: Option<CapsFeatures>) {
-        skip_assert_initialized!();
         unsafe {
             let ptr = ffi::gst_caps_merge_structure_full(
                 self.as_mut_ptr(),
@@ -116,7 +112,6 @@ impl Caps {
 
     #[doc(alias = "gst_caps_normalize")]
     pub fn normalize(&mut self) {
-        skip_assert_initialized!();
         unsafe {
             let ptr = ffi::gst_caps_normalize(self.as_mut_ptr());
             self.replace_ptr(ptr);
@@ -125,7 +120,6 @@ impl Caps {
 
     #[doc(alias = "gst_caps_simplify")]
     pub fn simplify(&mut self) {
-        skip_assert_initialized!();
         unsafe {
             let ptr = ffi::gst_caps_simplify(self.as_mut_ptr());
             self.replace_ptr(ptr);
@@ -134,7 +128,6 @@ impl Caps {
 
     #[doc(alias = "gst_caps_truncate")]
     pub fn truncate(&mut self) {
-        skip_assert_initialized!();
         unsafe {
             let ptr = ffi::gst_caps_truncate(self.as_mut_ptr());
             self.replace_ptr(ptr);
@@ -157,7 +150,7 @@ impl str::FromStr for Caps {
 
 impl std::iter::FromIterator<Structure> for Caps {
     fn from_iter<T: IntoIterator<Item = Structure>>(iter: T) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let mut caps = Caps::new_empty();
 
         {
@@ -171,7 +164,7 @@ impl std::iter::FromIterator<Structure> for Caps {
 
 impl std::iter::FromIterator<(Structure, CapsFeatures)> for Caps {
     fn from_iter<T: IntoIterator<Item = (Structure, CapsFeatures)>>(iter: T) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let mut caps = Caps::new_empty();
 
         {
@@ -186,7 +179,7 @@ impl std::iter::FromIterator<(Structure, CapsFeatures)> for Caps {
 
 impl std::iter::FromIterator<(Structure, Option<CapsFeatures>)> for Caps {
     fn from_iter<T: IntoIterator<Item = (Structure, Option<CapsFeatures>)>>(iter: T) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let mut caps = Caps::new_empty();
 
         {
@@ -201,7 +194,7 @@ impl std::iter::FromIterator<(Structure, Option<CapsFeatures>)> for Caps {
 
 impl std::iter::FromIterator<Caps> for Caps {
     fn from_iter<T: IntoIterator<Item = Caps>>(iter: T) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         let mut caps = Caps::new_empty();
 
         {
@@ -493,7 +486,6 @@ impl CapsRef {
 
     #[doc(alias = "gst_caps_subtract")]
     pub fn subtract(&self, other: &Self) -> Caps {
-        skip_assert_initialized!();
         unsafe {
             from_glib_full(ffi::gst_caps_subtract(
                 self.as_mut_ptr(),

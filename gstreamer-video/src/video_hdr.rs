@@ -10,7 +10,7 @@ pub struct VideoContentLightLevel(ffi::GstVideoContentLightLevel);
 
 impl VideoContentLightLevel {
     pub fn new(max_content_light_level: u16, max_frame_average_light_level: u16) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         VideoContentLightLevel(ffi::GstVideoContentLightLevel {
             max_content_light_level,
@@ -148,7 +148,7 @@ impl VideoMasteringDisplayInfo {
         max_display_mastering_luminance: u32,
         min_display_mastering_luminance: u32,
     ) -> Self {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         VideoMasteringDisplayInfo(ffi::GstVideoMasteringDisplayInfo {
             display_primaries: unsafe { mem::transmute(display_primaries) },
