@@ -51,7 +51,7 @@ readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 version = "0.20.0"
 edition = "2021"
-rust-version = "1.63"
+rust-version = "1.64"
 [package.metadata.docs.rs]
 features = ["dox"]
 [package.metadata.system-deps.gst_editing_services_1_0]

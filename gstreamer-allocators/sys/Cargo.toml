@@ -42,7 +42,7 @@ license = "MIT"
 name = "gstreamer-allocators-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
-rust-version = "1.63"
+rust-version = "1.64"
 version = "0.20.0"
 [package.metadata.docs.rs]
 features = ["dox"]

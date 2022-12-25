@@ -11,7 +11,7 @@ homepage = "https://gstreamer.freedesktop.org"
 documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_play/"
 keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
 edition = "2021"
-rust-version = "1.63"
+rust-version = "1.64"
 
 [dependencies]
 bitflags = "1.0"
