@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.19.5] - 2022-12-27
+### Fixed
+- Clear video frame values when mapping as GL texture to avoid out of bounds
+  reads when trying to access the GL texture as raw video frame.
+- Allow returning `Handled` from `BufferList` pad probes.
+
+### Changed
+- Update GStreamer .gir files to latest 1.21 git.
+
 ## [0.19.4] - 2022-12-16
 ### Added
 - Subclassing bindings for `gst_audio::AudioFilter`.
