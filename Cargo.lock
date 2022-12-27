@@ -10,9 +10,9 @@ checksum = "f26201604c87b1e01bd3d98f8d5d9a8fcbb815e8cedb41ffccbeb4bf593a35fe"
 
 [[package]]
 name = "anyhow"
-version = "1.0.66"
+version = "1.0.68"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "216261ddc8289130e551ddcd5ce8a064710c0d064a4d2895c67151c92b5443f6"
+checksum = "2cb2f989d18dd141ab8ae82f64d1a8cdd37e0840f73a406896cf5e99502fab61"
 
 [[package]]
 name = "arrayref"
@@ -478,7 +478,7 @@ dependencies = [
 
 [[package]]
 name = "examples"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "anyhow",
  "byte-slice-cast",
@@ -992,7 +992,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "cfg-if",
@@ -1020,7 +1020,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-allocators"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1033,7 +1033,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-allocators-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1046,7 +1046,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-app"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "futures-core",
@@ -1064,7 +1064,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-app-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gstreamer-base-sys",
@@ -1077,7 +1077,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-audio"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "cfg-if",
@@ -1095,7 +1095,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-audio-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1109,7 +1109,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-base"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "atomic_refcell",
  "bitflags",
@@ -1123,7 +1123,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-base-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1136,7 +1136,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-check"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1147,7 +1147,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-check-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1160,7 +1160,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-controller"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1172,7 +1172,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-controller-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1186,7 +1186,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-editing-services"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "gio",
@@ -1203,7 +1203,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-editing-services-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -1218,10 +1218,9 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
- "byteorder",
  "gir-format-check",
  "glib",
  "gstreamer",
@@ -1236,7 +1235,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-egl"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1248,7 +1247,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-egl-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gstreamer-gl-sys",
@@ -1260,7 +1259,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1275,7 +1274,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-wayland"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1287,7 +1286,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-wayland-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gstreamer-gl-sys",
@@ -1299,7 +1298,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-x11"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1311,7 +1310,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-x11-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gstreamer-gl-sys",
@@ -1323,7 +1322,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-mpegts"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1333,7 +1332,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-mpegts-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gstreamer-base-sys",
@@ -1346,7 +1345,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-net"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "gio",
  "gir-format-check",
@@ -1357,7 +1356,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-net-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -1370,7 +1369,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-pbutils"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1387,7 +1386,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-pbutils-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1402,7 +1401,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-play"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1416,7 +1415,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-play-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1430,7 +1429,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-player"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1444,7 +1443,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-player-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1458,7 +1457,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtp"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1473,7 +1472,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtp-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gstreamer-base-sys",
@@ -1486,7 +1485,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtsp"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1501,7 +1500,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtsp-server"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "gio",
@@ -1520,7 +1519,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtsp-server-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -1537,7 +1536,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtsp-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -1552,7 +1551,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-sdp"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1562,7 +1561,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-sdp-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gstreamer-sys",
@@ -1574,7 +1573,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1586,7 +1585,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-tag-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1599,7 +1598,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-utils"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "futures",
  "gstreamer",
@@ -1611,7 +1610,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-validate"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1623,7 +1622,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-validate-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -1637,7 +1636,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-video"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "bitflags",
  "cfg-if",
@@ -1656,7 +1655,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-video-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1670,7 +1669,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-webrtc"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1682,7 +1681,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-webrtc-sys"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "glib-sys",
  "gstreamer-sdp-sys",
@@ -1762,9 +1761,9 @@ checksum = "2540771e65fc8cb83cd6e8a237f70c319bd5c29f78ed1084ba5d50eeac86f7f9"
 
 [[package]]
 name = "hermit-abi"
-version = "0.1.19"
+version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62b467343b94ba476dcb2500d242dadbb39557df889310ac77c5d99100aaac33"
+checksum = "ee512640fe35acbfb4bb779db6f0d80704c2cacfa2e39b601ef3e3f47d1ae4c7"
 dependencies = [
  "libc",
 ]
@@ -1827,9 +1826,9 @@ dependencies = [
 
 [[package]]
 name = "itoa"
-version = "1.0.4"
+version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4217ad341ebadf8d8e724e264f13e593e0648f5b3e94b3896a5df283be015ecc"
+checksum = "fad582f4b9e86b6caa621cabeb0963332d92eea04729ab12892c2533951e6440"
 
 [[package]]
 name = "jni-sys"
@@ -1875,9 +1874,9 @@ checksum = "03087c2bad5e1034e8cace5926dec053fb3790248370865f5117a7d0213354c8"
 
 [[package]]
 name = "libc"
-version = "0.2.138"
+version = "0.2.139"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "db6d7e329c562c5dfab7a46a2afabc8b987ab9a4834c9d1ca04dc54c1546cef8"
+checksum = "201de327520df007757c1f0adce6e827fe8562fbc28bfd9c15571c66ca1f5f79"
 
 [[package]]
 name = "libloading"
@@ -2133,9 +2132,9 @@ dependencies = [
 
 [[package]]
 name = "num_cpus"
-version = "1.14.0"
+version = "1.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6058e64324c71e02bc2b150e4f3bc8286db6c83092132ffa3f6b1eab0f9def5"
+checksum = "0fac9e2da13b5eb447a6ce3d392f23a29d8694bff781bf03a16cd9ac8697593b"
 dependencies = [
  "hermit-abi",
  "libc",
@@ -2275,9 +2274,9 @@ dependencies = [
 
 [[package]]
 name = "paste"
-version = "1.0.10"
+version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cf1c2c742266c2f1041c914ba65355a83ae8747b05f208319784083583494b4b"
+checksum = "d01a5bd0424d00070b0098dd17ebca6f961a959dead1dbcbbbc1d1cd8d3deeba"
 
 [[package]]
 name = "percent-encoding"
@@ -2287,9 +2286,9 @@ checksum = "478c572c3d73181ff3c2539045f6eb99e5491218eae919370993b890cdbdd98e"
 
 [[package]]
 name = "pest"
-version = "2.5.1"
+version = "2.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cc8bed3549e0f9b0a2a78bf7c0018237a2cdf085eecbbc048e52612438e4e9d0"
+checksum = "0f6e86fb9e7026527a0d46bc308b841d73170ef8f443e1807f6ef88526a816d4"
 dependencies = [
  "thiserror",
  "ucd-trie",
@@ -2388,18 +2387,18 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.47"
+version = "1.0.49"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5ea3d908b0e36316caf9e9e2c4625cdde190a7e6f440d794667ed17a1855e725"
+checksum = "57a8eca9f9c4ffde41714334dee777596264c7825420f521abc92b5b5deb63a5"
 dependencies = [
  "unicode-ident",
 ]
 
 [[package]]
 name = "quote"
-version = "1.0.21"
+version = "1.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bbe448f377a7d6961e30f5955f9b8d106c3f5e449d493ee1b125c1d43c2b5179"
+checksum = "8856d8364d252a14d474036ea1358d63c9e6965c8e5c1885c18f73d70bff9c7b"
 dependencies = [
  "proc-macro2",
 ]
@@ -2497,14 +2496,14 @@ version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bfa0f585226d2e68097d4f95d113b15b83a82e819ab25717ec0590d9584ef366"
 dependencies = [
- "semver 1.0.14",
+ "semver 1.0.16",
 ]
 
 [[package]]
 name = "rustix"
-version = "0.36.5"
+version = "0.36.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a3807b5d10909833d3e9acd1eb5fb988f79376ff10fce42937de71a449c4c588"
+checksum = "4feacf7db682c6c329c4ede12649cd36ecab0f3be5b7d74e6a20304725db4549"
 dependencies = [
  "bitflags",
  "errno",
@@ -2516,9 +2515,9 @@ dependencies = [
 
 [[package]]
 name = "ryu"
-version = "1.0.11"
+version = "1.0.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4501abdff3ae82a1c1b477a17252eb69cee9e66eb915c1abaa4f44d873df9f09"
+checksum = "7b4b9743ed687d4b4bcedf9ff5eaa7398495ae14e61cba0a295704edbc7decde"
 
 [[package]]
 name = "safe_arch"
@@ -2570,9 +2569,9 @@ dependencies = [
 
 [[package]]
 name = "semver"
-version = "1.0.14"
+version = "1.0.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e25dfac463d778e353db5be2449d1cce89bd6fd23c9f1ea21310ce6e5a1b29c4"
+checksum = "58bc9567378fc7690d6b2addae4e60ac2eeea07becb2c64b9f218b53865cba2a"
 
 [[package]]
 name = "semver-parser"
@@ -2585,27 +2584,27 @@ dependencies = [
 
 [[package]]
 name = "serde"
-version = "1.0.150"
+version = "1.0.152"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e326c9ec8042f1b5da33252c8a37e9ffbd2c9bef0155215b6e6c80c790e05f91"
+checksum = "bb7d1f0d3021d347a83e556fc4683dea2ea09d87bccdf88ff5c12545d89d5efb"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_bytes"
-version = "0.11.7"
+version = "0.11.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cfc50e8183eeeb6178dcb167ae34a8051d63535023ae38b5d8d12beae193d37b"
+checksum = "718dc5fff5b36f99093fc49b280cfc96ce6fc824317783bff5a1fed0c7a64819"
 dependencies = [
  "serde",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.150"
+version = "1.0.152"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "42a3df25b0713732468deadad63ab9da1f1fd75a48a15024b50363f128db627e"
+checksum = "af487d118eecd09402d70a5d72551860e788df87b464af30e5ea6a38c75c541e"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2614,9 +2613,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.89"
+version = "1.0.91"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "020ff22c755c2ed3f8cf162dbb41a7268d934702f3ed3631656ea597e08fc3db"
+checksum = "877c235533714907a8c2464236f5c4b2a17262ef1bd71f38f35ea592c8da6883"
 dependencies = [
  "itoa",
  "ryu",
@@ -2720,9 +2719,9 @@ checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 
 [[package]]
 name = "syn"
-version = "1.0.105"
+version = "1.0.107"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "60b9b43d45702de4c839cb9b51d9f529c5dd26a4aff255b42b1ebc03e88ee908"
+checksum = "1f4064b5b16e03ae50984a5a8ed5d4f8803e6bc1fd170a3cda91a1be4b18e3f5"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2770,18 +2769,18 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "1.0.37"
+version = "1.0.38"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "10deb33631e3c9018b9baf9dcbbc4f737320d2b576bac10f6aefa048fa407e3e"
+checksum = "6a9cd18aa97d5c45c6603caea1da6628790b37f7a34b6ca89522331c5180fed0"
 dependencies = [
  "thiserror-impl",
 ]
 
 [[package]]
 name = "thiserror-impl"
-version = "1.0.37"
+version = "1.0.38"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "982d17546b47146b28f7c22e3d08465f6b8903d0ea13c1660d9d84a6e7adcdbb"
+checksum = "1fb327af4685e4d03fa8cbcf1716380da910eeb2bb8be417e7f9fd3fb164f36f"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2844,7 +2843,7 @@ dependencies = [
 
 [[package]]
 name = "tutorials"
-version = "0.19.3"
+version = "0.19.4"
 dependencies = [
  "anyhow",
  "byte-slice-cast",
@@ -2878,9 +2877,9 @@ dependencies = [
 
 [[package]]
 name = "unicode-ident"
-version = "1.0.5"
+version = "1.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6ceab39d59e4c9499d4e5a8ee0e2735b891bb7308ac83dfb4e80cad195c9f6f3"
+checksum = "84a22b9f218b40614adcb3f4ff08b703773ad44fa9423e4e0d346d5db86e4ebc"
 
 [[package]]
 name = "vec_map"
