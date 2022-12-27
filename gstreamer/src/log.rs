@@ -2,6 +2,7 @@
 
 use crate::DebugLevel;
 
+use glib::IntoGStr;
 use libc::c_char;
 use std::borrow::Cow;
 use std::ffi::CStr;
@@ -179,7 +180,7 @@ impl DebugCategory {
         obj: Option<&impl IsA<glib::Object>>,
         level: crate::DebugLevel,
         file: &glib::GStr,
-        function: &glib::GStr,
+        function: &str,
         line: u32,
         args: fmt::Arguments,
     ) {
@@ -187,7 +188,14 @@ impl DebugCategory {
             return;
         }
 
-        self.log_unfiltered(obj, level, file, function, line, args)
+        self.log_unfiltered_internal(
+            obj.map(|obj| obj.as_ref()),
+            level,
+            file,
+            function,
+            line,
+            args,
+        )
     }
 
     #[inline]
@@ -197,7 +205,7 @@ impl DebugCategory {
         obj: Option<&impl IsA<glib::Object>>,
         level: crate::DebugLevel,
         file: &glib::GStr,
-        function: &glib::GStr,
+        function: &str,
         line: u32,
         msg: &glib::GStr,
     ) {
@@ -205,7 +213,14 @@ impl DebugCategory {
             return;
         }
 
-        self.log_literal_unfiltered(obj, level, file, function, line, msg)
+        self.log_literal_unfiltered_internal(
+            obj.map(|obj| obj.as_ref()),
+            level,
+            file,
+            function,
+            line,
+            msg,
+        )
     }
 
     // rustdoc-stripper-ignore-next
@@ -217,18 +232,18 @@ impl DebugCategory {
         obj: Option<&impl IsA<glib::Object>>,
         level: crate::DebugLevel,
         file: &glib::GStr,
-        function: &glib::GStr,
+        function: &str,
         line: u32,
         args: fmt::Arguments,
     ) {
-        let mut w = glib::GStringBuilder::default();
-
-        // Can't really happen but better safe than sorry
-        if fmt::write(&mut w, args).is_err() {
-            return;
-        }
-
-        self.log_literal_unfiltered(obj, level, file, function, line, w.into_string().as_gstr());
+        self.log_unfiltered_internal(
+            obj.map(|obj| obj.as_ref()),
+            level,
+            file,
+            function,
+            line,
+            args,
+        )
     }
 
     // rustdoc-stripper-ignore-next
@@ -240,7 +255,54 @@ impl DebugCategory {
         obj: Option<&impl IsA<glib::Object>>,
         level: crate::DebugLevel,
         file: &glib::GStr,
-        function: &glib::GStr,
+        function: &str,
+        line: u32,
+        msg: &glib::GStr,
+    ) {
+        self.log_literal_unfiltered_internal(
+            obj.map(|obj| obj.as_ref()),
+            level,
+            file,
+            function,
+            line,
+            msg,
+        )
+    }
+
+    #[inline(never)]
+    fn log_unfiltered_internal(
+        self,
+        obj: Option<&glib::Object>,
+        level: crate::DebugLevel,
+        file: &glib::GStr,
+        function: &str,
+        line: u32,
+        args: fmt::Arguments,
+    ) {
+        let mut w = glib::GStringBuilder::default();
+
+        // Can't really happen but better safe than sorry
+        if fmt::write(&mut w, args).is_err() {
+            return;
+        }
+
+        self.log_literal_unfiltered_internal(
+            obj,
+            level,
+            file,
+            function,
+            line,
+            w.into_string().as_gstr(),
+        );
+    }
+
+    #[inline(never)]
+    fn log_literal_unfiltered_internal(
+        self,
+        obj: Option<&glib::Object>,
+        level: crate::DebugLevel,
+        file: &glib::GStr,
+        function: &str,
         line: u32,
         msg: &glib::GStr,
     ) {
@@ -250,35 +312,37 @@ impl DebugCategory {
         };
 
         let obj_ptr = match obj {
-            Some(obj) => obj.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+            Some(obj) => obj.as_ptr(),
             None => ptr::null_mut(),
         };
 
-        #[cfg(feature = "v1_20")]
-        unsafe {
-            ffi::gst_debug_log_literal(
-                cat.as_ptr(),
-                level.into_glib(),
-                file.as_ptr(),
-                function.as_ptr(),
-                line as i32,
-                obj_ptr,
-                msg.as_ptr(),
-            );
-        }
-        #[cfg(not(feature = "v1_20"))]
-        unsafe {
-            ffi::gst_debug_log(
-                cat.as_ptr(),
-                level.into_glib(),
-                file.as_ptr(),
-                function.as_ptr(),
-                line as i32,
-                obj_ptr,
-                b"%s\0".as_ptr() as *const _,
-                msg.as_ptr(),
-            );
-        }
+        function.run_with_gstr(|function| {
+            #[cfg(feature = "v1_20")]
+            unsafe {
+                ffi::gst_debug_log_literal(
+                    cat.as_ptr(),
+                    level.into_glib(),
+                    file.as_ptr(),
+                    function.as_ptr(),
+                    line as i32,
+                    obj_ptr,
+                    msg.as_ptr(),
+                );
+            }
+            #[cfg(not(feature = "v1_20"))]
+            unsafe {
+                ffi::gst_debug_log(
+                    cat.as_ptr(),
+                    level.into_glib(),
+                    file.as_ptr(),
+                    function.as_ptr(),
+                    line as i32,
+                    obj_ptr,
+                    b"%s\0".as_ptr() as *const _,
+                    msg.as_ptr(),
+                );
+            }
+        });
     }
 
     #[cfg(any(feature = "v1_22", feature = "dox"))]
@@ -287,10 +351,10 @@ impl DebugCategory {
     #[doc(alias = "gst_debug_log_id")]
     pub fn log_id(
         self,
-        id: Option<impl AsRef<glib::GStr>>,
+        id: impl AsRef<glib::GStr>,
         level: crate::DebugLevel,
         file: &glib::GStr,
-        function: &glib::GStr,
+        function: &str,
         line: u32,
         args: fmt::Arguments,
     ) {
@@ -298,14 +362,7 @@ impl DebugCategory {
             return;
         }
 
-        let mut w = glib::GStringBuilder::default();
-
-        // Can't really happen but better safe than sorry
-        if fmt::write(&mut w, args).is_err() {
-            return;
-        }
-
-        self.log_id_literal_unfiltered(id, level, file, function, line, w.into_string().as_gstr());
+        self.log_id_unfiltered_internal(id.as_ref(), level, file, function, line, args);
     }
 
     #[cfg(any(feature = "v1_22", feature = "dox"))]
@@ -314,10 +371,10 @@ impl DebugCategory {
     #[doc(alias = "gst_debug_log_id_literal")]
     pub fn log_id_literal(
         self,
-        id: Option<impl AsRef<glib::GStr>>,
+        id: impl AsRef<glib::GStr>,
         level: crate::DebugLevel,
         file: &glib::GStr,
-        function: &glib::GStr,
+        function: &str,
         line: u32,
         msg: &glib::GStr,
     ) {
@@ -325,7 +382,7 @@ impl DebugCategory {
             return;
         }
 
-        self.log_id_literal_unfiltered(id, level, file, function, line, msg);
+        self.log_id_literal_unfiltered_internal(id.as_ref(), level, file, function, line, msg);
     }
 
     #[cfg(any(feature = "v1_22", feature = "dox"))]
@@ -336,21 +393,14 @@ impl DebugCategory {
     #[doc(alias = "gst_debug_log_id")]
     pub fn log_id_unfiltered(
         self,
-        id: Option<impl AsRef<glib::GStr>>,
+        id: impl AsRef<glib::GStr>,
         level: crate::DebugLevel,
         file: &glib::GStr,
-        function: &glib::GStr,
+        function: &str,
         line: u32,
         args: fmt::Arguments,
     ) {
-        let mut w = glib::GStringBuilder::default();
-
-        // Can't really happen but better safe than sorry
-        if fmt::write(&mut w, args).is_err() {
-            return;
-        }
-
-        self.log_id_literal_unfiltered(id, level, file, function, line, w.into_string().as_gstr());
+        self.log_id_unfiltered_internal(id.as_ref(), level, file, function, line, args)
     }
 
     #[cfg(any(feature = "v1_22", feature = "dox"))]
@@ -361,10 +411,52 @@ impl DebugCategory {
     #[doc(alias = "gst_debug_log_id_literal")]
     pub fn log_id_literal_unfiltered(
         self,
-        id: Option<impl AsRef<glib::GStr>>,
+        id: impl AsRef<glib::GStr>,
         level: crate::DebugLevel,
         file: &glib::GStr,
-        function: &glib::GStr,
+        function: &str,
+        line: u32,
+        msg: &glib::GStr,
+    ) {
+        self.log_id_literal_unfiltered_internal(id.as_ref(), level, file, function, line, msg)
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[inline(never)]
+    fn log_id_unfiltered_internal(
+        self,
+        id: &glib::GStr,
+        level: crate::DebugLevel,
+        file: &glib::GStr,
+        function: &str,
+        line: u32,
+        args: fmt::Arguments,
+    ) {
+        let mut w = glib::GStringBuilder::default();
+
+        // Can't really happen but better safe than sorry
+        if fmt::write(&mut w, args).is_err() {
+            return;
+        }
+
+        self.log_id_literal_unfiltered_internal(
+            id,
+            level,
+            file,
+            function,
+            line,
+            w.into_string().as_gstr(),
+        );
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[inline(never)]
+    fn log_id_literal_unfiltered_internal(
+        self,
+        id: &glib::GStr,
+        level: crate::DebugLevel,
+        file: &glib::GStr,
+        function: &str,
         line: u32,
         msg: &glib::GStr,
     ) {
@@ -373,22 +465,17 @@ impl DebugCategory {
             None => return,
         };
 
-        let id = match id {
-            None => ptr::null(),
-            Some(id) => id.as_ref().as_ptr(),
-        };
-
-        unsafe {
+        function.run_with_gstr(|function| unsafe {
             ffi::gst_debug_log_id_literal(
                 cat.as_ptr(),
                 level.into_glib(),
                 file.as_ptr(),
                 function.as_ptr(),
                 line as i32,
-                id,
+                id.as_ptr(),
                 msg.as_ptr(),
             );
-        }
+        });
     }
 
     #[doc(alias = "get_all_categories")]
@@ -641,16 +728,7 @@ macro_rules! log_with_level(
             use $crate::glib::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
-            // avoid this complication
-            let function_name = $crate::glib::function_name!();
-            let function_name_len = function_name.len();
-            let mut storage = [0u8; 256];
-            let function_name = if function_name_len < 256 {
-                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
-            } else {
-                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
-            };
+            // directly pass it as `&GStr` forward
 
             let obj = unsafe { $obj.unsafe_cast_ref::<$crate::glib::Object>() };
 
@@ -664,7 +742,7 @@ macro_rules! log_with_level(
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        function_name.as_ref(),
+                        $crate::glib::function_name!(),
                         line!(),
                         $crate::glib::gstr!($msg),
                     )
@@ -674,7 +752,7 @@ macro_rules! log_with_level(
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        function_name.as_ref(),
+                        $crate::glib::function_name!(),
                         line!(),
                         args,
                     )
@@ -690,16 +768,7 @@ macro_rules! log_with_level(
             use $crate::glib::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
-            // avoid this complication
-            let function_name = $crate::glib::function_name!();
-            let function_name_len = function_name.len();
-            let mut storage = [0u8; 256];
-            let function_name = if function_name_len < 256 {
-                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
-            } else {
-                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
-            };
+            // directly pass it as `&GStr` forward
 
             let obj = unsafe { $obj.unsafe_cast_ref::<$crate::glib::Object>() };
             $crate::DebugCategory::log_unfiltered(
@@ -707,7 +776,7 @@ macro_rules! log_with_level(
                 Some(obj),
                 $level,
                 unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                function_name.as_ref(),
+                $crate::glib::function_name!(),
                 line!(),
                 format_args!($($args)*),
             )
@@ -722,16 +791,7 @@ macro_rules! log_with_level(
             use $crate::glib::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
-            // avoid this complication
-            let function_name = $crate::glib::function_name!();
-            let function_name_len = function_name.len();
-            let mut storage = [0u8; 256];
-            let function_name = if function_name_len < 256 {
-                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
-            } else {
-                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
-            };
+            // directly pass it as `&GStr` forward
 
             let obj = $imp.obj();
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
@@ -746,7 +806,7 @@ macro_rules! log_with_level(
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        function_name.as_ref(),
+                        $crate::glib::function_name!(),
                         line!(),
                         $crate::glib::gstr!($msg),
                     )
@@ -756,7 +816,7 @@ macro_rules! log_with_level(
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        function_name.as_ref(),
+                        $crate::glib::function_name!(),
                         line!(),
                         args,
                     )
@@ -772,16 +832,7 @@ macro_rules! log_with_level(
             use $crate::glib::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
-            // avoid this complication
-            let function_name = $crate::glib::function_name!();
-            let function_name_len = function_name.len();
-            let mut storage = [0u8; 256];
-            let function_name = if function_name_len < 256 {
-                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
-            } else {
-                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
-            };
+            // directly pass it as `&GStr` forward
 
             let obj = $imp.obj();
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
@@ -790,7 +841,7 @@ macro_rules! log_with_level(
                 Some(obj),
                 $level,
                 unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                function_name.as_ref(),
+                $crate::glib::function_name!(),
                 line!(),
                 format_args!($($args)*),
             )
@@ -803,16 +854,7 @@ macro_rules! log_with_level(
         #[allow(clippy::redundant_closure_call)]
         if $cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
-            // avoid this complication
-            let function_name = $crate::glib::function_name!();
-            let function_name_len = function_name.len();
-            let mut storage = [0u8; 256];
-            let function_name = if function_name_len < 256 {
-                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
-            } else {
-                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
-            };
+            // directly pass it as `&GStr` forward
 
             // Check if formatting is necessary or not
             // FIXME: This needs to be a closure because the return value of format_args!() can't
@@ -821,20 +863,20 @@ macro_rules! log_with_level(
                 if args.as_str().is_some() {
                     $crate::DebugCategory::log_id_literal_unfiltered(
                         $cat.clone(),
-                        Some($crate::glib::gstr!($id)),
+                        $crate::glib::gstr!($id),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        function_name.as_ref(),
+                        $crate::glib::function_name!(),
                         line!(),
                         $crate::glib::gstr!($msg),
                     )
                 } else {
                     $crate::DebugCategory::log_id_unfiltered(
                         $cat.clone(),
-                        Some($crate::glib::gstr!($id)),
+                        $crate::glib::gstr!($id),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        function_name.as_ref(),
+                        $crate::glib::function_name!(),
                         line!(),
                         args,
                     )
@@ -848,23 +890,14 @@ macro_rules! log_with_level(
         #[allow(unused_unsafe)]
         if $cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
-            // avoid this complication
-            let function_name = $crate::glib::function_name!();
-            let function_name_len = function_name.len();
-            let mut storage = [0u8; 256];
-            let function_name = if function_name_len < 256 {
-                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
-            } else {
-                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
-            };
+            // directly pass it as `&GStr` forward
 
             $crate::DebugCategory::log_id_unfiltered(
                 $cat.clone(),
-                Some($crate::glib::gstr!($id)),
+                $crate::glib::gstr!($id),
                 $level,
                 unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                function_name.as_ref(),
+                $crate::glib::function_name!(),
                 line!(),
                 format_args!($($args)*),
             )
@@ -877,16 +910,7 @@ macro_rules! log_with_level(
         #[allow(clippy::redundant_closure_call)]
         if $cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
-            // avoid this complication
-            let function_name = $crate::glib::function_name!();
-            let function_name_len = function_name.len();
-            let mut storage = [0u8; 256];
-            let function_name = if function_name_len < 256 {
-                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
-            } else {
-                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
-            };
+            // directly pass it as `&GStr` forward
 
             // Check if formatting is necessary or not
             // FIXME: This needs to be a closure because the return value of format_args!() can't
@@ -895,20 +919,20 @@ macro_rules! log_with_level(
                 if args.as_str().is_some() {
                     $crate::DebugCategory::log_id_literal_unfiltered(
                         $cat.clone(),
-                        Some($id),
+                        $id,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        function_name.as_ref(),
+                        $crate::glib::function_name!(),
                         line!(),
                         $crate::glib::gstr!($msg),
                     )
                 } else {
                     $crate::DebugCategory::log_id_unfiltered(
                         $cat.clone(),
-                        Some($id),
+                        $id,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        function_name.as_ref(),
+                        $crate::glib::function_name!(),
                         line!(),
                         args,
                     )
@@ -922,23 +946,14 @@ macro_rules! log_with_level(
         #[allow(unused_unsafe)]
         if $cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
-            // avoid this complication
-            let function_name = $crate::glib::function_name!();
-            let function_name_len = function_name.len();
-            let mut storage = [0u8; 256];
-            let function_name = if function_name_len < 256 {
-                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
-            } else {
-                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
-            };
+            // directly pass it as `&GStr` forward
 
             $crate::DebugCategory::log_id_unfiltered(
                 $cat.clone(),
-                Some($id),
+                $id,
                 $level,
                 unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                function_name.as_ref(),
+                $crate::glib::function_name!(),
                 line!(),
                 format_args!($($args)*),
             )
@@ -951,16 +966,7 @@ macro_rules! log_with_level(
         #[allow(clippy::redundant_closure_call)]
         if $cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
-            // avoid this complication
-            let function_name = $crate::glib::function_name!();
-            let function_name_len = function_name.len();
-            let mut storage = [0u8; 256];
-            let function_name = if function_name_len < 256 {
-                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
-            } else {
-                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
-            };
+            // directly pass it as `&GStr` forward
 
             // Check if formatting is necessary or not
             // FIXME: This needs to be a closure because the return value of format_args!() can't
@@ -972,7 +978,7 @@ macro_rules! log_with_level(
                         None as Option<&$crate::glib::Object>,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        function_name.as_ref(),
+                        $crate::glib::function_name!(),
                         line!(),
                         $crate::glib::gstr!($msg),
                     )
@@ -982,7 +988,7 @@ macro_rules! log_with_level(
                         None as Option<&$crate::glib::Object>,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        function_name.as_ref(),
+                        $crate::glib::function_name!(),
                         line!(),
                         args,
                     )
@@ -996,23 +1002,14 @@ macro_rules! log_with_level(
         #[allow(unused_unsafe)]
         if $cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
-            // avoid this complication
-            let function_name = $crate::glib::function_name!();
-            let function_name_len = function_name.len();
-            let mut storage = [0u8; 256];
-            let function_name = if function_name_len < 256 {
-                storage[0..function_name_len].copy_from_slice(function_name.as_bytes());
-                ::std::borrow::Cow::Borrowed(unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(&storage[..function_name_len+1]) })
-            } else {
-                ::std::borrow::Cow::Owned($crate::glib::GString::from(function_name))
-            };
+            // directly pass it as `&GStr` forward
 
             $crate::DebugCategory::log_unfiltered(
                 $cat.clone(),
                 None as Option<&$crate::glib::Object>,
                 $level,
                 unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                function_name.as_ref(),
+                $crate::glib::function_name!(),
                 line!(),
                 format_args!($($args)*),
             )

@@ -2,7 +2,7 @@
 
 use thiserror::Error;
 
-use glib::prelude::*;
+use glib::{prelude::*, IntoGStr};
 
 #[macro_export]
 macro_rules! error_msg(
@@ -123,39 +123,42 @@ impl LoggableError {
         }
     }
 
+    #[inline(never)]
     pub fn log(&self) {
-        self.category.log(
-            None as Option<&glib::Object>,
-            crate::DebugLevel::Error,
-            glib::GString::from(self.bool_error.filename).as_gstr(),
-            glib::GString::from(self.bool_error.function).as_gstr(),
-            self.bool_error.line,
-            format_args!("{}", self.bool_error.message),
-        );
+        self.bool_error.filename.run_with_gstr(|filename| {
+            self.category.log(
+                None::<&glib::Object>,
+                crate::DebugLevel::Error,
+                filename,
+                self.bool_error.function,
+                self.bool_error.line,
+                format_args!("{}", self.bool_error.message),
+            );
+        });
     }
 
-    pub fn log_with_object<O: IsA<glib::Object>>(&self, obj: &O) {
-        self.category.log(
-            Some(obj),
-            crate::DebugLevel::Error,
-            glib::GString::from(self.bool_error.filename).as_gstr(),
-            glib::GString::from(self.bool_error.function).as_gstr(),
-            self.bool_error.line,
-            format_args!("{}", self.bool_error.message),
-        );
+    pub fn log_with_object(&self, obj: &impl IsA<glib::Object>) {
+        self.log_with_object_internal(obj.as_ref());
     }
 
-    pub fn log_with_imp<I: glib::subclass::prelude::ObjectSubclass>(&self, imp: &I) {
+    #[inline(never)]
+    fn log_with_object_internal(&self, obj: &glib::Object) {
+        self.bool_error.filename.run_with_gstr(|filename| {
+            self.category.log(
+                Some(obj),
+                crate::DebugLevel::Error,
+                filename,
+                self.bool_error.function,
+                self.bool_error.line,
+                format_args!("{}", self.bool_error.message),
+            );
+        });
+    }
+
+    pub fn log_with_imp(&self, imp: &impl glib::subclass::types::ObjectSubclass) {
         use glib::subclass::prelude::*;
 
-        self.category.log(
-            Some(unsafe { imp.obj().unsafe_cast_ref::<glib::Object>() }),
-            crate::DebugLevel::Error,
-            glib::GString::from(self.bool_error.filename).as_gstr(),
-            glib::GString::from(self.bool_error.function).as_gstr(),
-            self.bool_error.line,
-            format_args!("{}", self.bool_error.message),
-        );
+        self.log_with_object_internal(unsafe { imp.obj().unsafe_cast_ref::<glib::Object>() });
     }
 
     pub fn category(&self) -> crate::DebugCategory {
