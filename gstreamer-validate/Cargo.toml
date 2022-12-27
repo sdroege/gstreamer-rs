@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-validate"
-version = "0.19.4"
+version = "0.19.5"
 authors = ["Philippe Normand <philn@igalia.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer WebRTC library"
