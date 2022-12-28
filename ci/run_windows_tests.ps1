@@ -59,8 +59,8 @@ foreach($features in $features_matrix) {
             }
 
             if ($crate -eq 'examples') {
-                # FIXME: We can do --all-features for examples once we have gtk installed in the image
-                $env:LocalFeatures = "--features=rtsp-server,rtsp-server-record,pango-cairo,overlay-composition"
+                # FIXME: We can do --all-features for examples once we have gtk3 installed in the image
+                $env:LocalFeatures = "--features=rtsp-server,rtsp-server-record,pango-cairo,overlay-composition,gst-play,gst-player,ges,image,cairo-rs,gst-video/v1_18,windows"
             }
 
             if ($crate -eq 'tutorials') {
