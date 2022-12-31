@@ -279,21 +279,17 @@ impl DebugCategory {
         line: u32,
         args: fmt::Arguments,
     ) {
-        let mut w = glib::GStringBuilder::default();
+        let mut w = smallvec::SmallVec::<[u8; 256]>::new();
 
         // Can't really happen but better safe than sorry
-        if fmt::write(&mut w, args).is_err() {
+        if std::io::Write::write_fmt(&mut w, args).is_err() {
             return;
         }
+        w.push(0);
 
-        self.log_literal_unfiltered_internal(
-            obj,
-            level,
-            file,
-            function,
-            line,
-            w.into_string().as_gstr(),
-        );
+        self.log_literal_unfiltered_internal(obj, level, file, function, line, unsafe {
+            glib::GStr::from_utf8_with_nul_unchecked(&w)
+        });
     }
 
     #[inline(never)]
@@ -432,21 +428,16 @@ impl DebugCategory {
         line: u32,
         args: fmt::Arguments,
     ) {
-        let mut w = glib::GStringBuilder::default();
+        let mut w = smallvec::SmallVec::<[u8; 256]>::new();
 
         // Can't really happen but better safe than sorry
-        if fmt::write(&mut w, args).is_err() {
+        if std::io::Write::write_fmt(&mut w, args).is_err() {
             return;
         }
 
-        self.log_id_literal_unfiltered_internal(
-            id,
-            level,
-            file,
-            function,
-            line,
-            w.into_string().as_gstr(),
-        );
+        self.log_id_literal_unfiltered_internal(id, level, file, function, line, unsafe {
+            glib::GStr::from_utf8_with_nul_unchecked(&w)
+        });
     }
 
     #[cfg(any(feature = "v1_22", feature = "dox"))]
