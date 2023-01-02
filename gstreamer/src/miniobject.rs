@@ -194,8 +194,12 @@ macro_rules! mini_object_wrapper (
             fn to_glib_none_from_slice(t: &'a [$name]) -> (*mut *mut $ffi_name, Self::Storage) {
                 skip_assert_initialized!();
                 let mut v_ptr = Vec::with_capacity(t.len() + 1);
-                v_ptr.extend(t.iter().map(|t| t.as_mut_ptr()));
-                v_ptr.push(std::ptr::null_mut());
+                unsafe {
+                    let ptr = v_ptr.as_mut_ptr();
+                    std::ptr::copy_nonoverlapping(t.as_ptr() as *mut *mut $ffi_name, ptr, t.len());
+                    std::ptr::write(ptr.add(t.len()), std::ptr::null_mut());
+                    v_ptr.set_len(t.len() + 1);
+                }
 
                 (v_ptr.as_ptr() as *mut *mut $ffi_name, (std::marker::PhantomData, Some(v_ptr)))
             }
@@ -204,12 +208,11 @@ macro_rules! mini_object_wrapper (
                 skip_assert_initialized!();
 
                 let v_ptr = unsafe {
-                    let v_ptr = $crate::glib::ffi::g_malloc0(std::mem::size_of::<*mut $ffi_name>() * t.len() + 1)
+                    let v_ptr = $crate::glib::ffi::g_malloc(std::mem::size_of::<*mut $ffi_name>() * t.len() + 1)
                         as *mut *mut $ffi_name;
 
-                    for (i, t) in t.iter().enumerate() {
-                        std::ptr::write(v_ptr.add(i), t.as_mut_ptr());
-                    }
+                    std::ptr::copy_nonoverlapping(t.as_ptr() as *mut *mut $ffi_name, v_ptr, t.len());
+                    std::ptr::write(v_ptr.add(t.len()), std::ptr::null_mut());
 
                     v_ptr
                 };
@@ -220,12 +223,13 @@ macro_rules! mini_object_wrapper (
             fn to_glib_full_from_slice(t: &[$name]) -> *mut *mut $ffi_name {
                 skip_assert_initialized!();
                 unsafe {
-                    let v_ptr = $crate::glib::ffi::g_malloc0(std::mem::size_of::<*mut $ffi_name>() * t.len() + 1)
+                    let v_ptr = $crate::glib::ffi::g_malloc(std::mem::size_of::<*mut $ffi_name>() * t.len() + 1)
                         as *mut *mut $ffi_name;
 
                     for (i, s) in t.iter().enumerate() {
                         std::ptr::write(v_ptr.add(i), $crate::glib::translate::ToGlibPtr::to_glib_full(s));
                     }
+                    std::ptr::write(v_ptr.add(t.len()), std::ptr::null_mut());
 
                     v_ptr
                 }
@@ -305,10 +309,12 @@ macro_rules! mini_object_wrapper (
                     return Vec::new();
                 }
 
-                let mut res = Vec::with_capacity(num);
+                let mut res = Vec::<Self>::with_capacity(num);
+                let res_ptr = res.as_mut_ptr();
                 for i in 0..num {
-                    res.push($crate::glib::translate::from_glib_none(std::ptr::read(ptr.add(i))));
+                    ::std::ptr::write(res_ptr.add(i), $crate::glib::translate::from_glib_none(std::ptr::read(ptr.add(i))));
                 }
+                res.set_len(num);
                 res
             }
 
@@ -324,9 +330,9 @@ macro_rules! mini_object_wrapper (
                 }
 
                 let mut res = Vec::with_capacity(num);
-                for i in 0..num {
-                    res.push($crate::glib::translate::from_glib_full(std::ptr::read(ptr.add(i))));
-                }
+                let res_ptr = res.as_mut_ptr();
+                ::std::ptr::copy_nonoverlapping(ptr as *mut Self, res_ptr, num);
+                res.set_len(num);
                 $crate::glib::ffi::g_free(ptr as *mut _);
                 res
             }
