@@ -120,6 +120,7 @@ impl BufferPoolConfigRef {
 
     #[doc(alias = "get_options")]
     #[doc(alias = "gst_buffer_pool_config_n_options")]
+    #[doc(alias = "gst_buffer_pool_config_get_option")]
     pub fn options(&self) -> Vec<String> {
         unsafe {
             let n = ffi::gst_buffer_pool_config_n_options(self.0.as_mut_ptr()) as usize;
