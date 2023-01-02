@@ -657,6 +657,11 @@ impl<T: FormattedValueIntrinsic> glib::translate::GlibPtrDefault for FormattedSe
 }
 
 #[doc(hidden)]
+unsafe impl<T: FormattedValueIntrinsic> TransparentType for FormattedSegment<T> {
+    type GlibType = ffi::GstSegment;
+}
+
+#[doc(hidden)]
 impl<'a, T: FormattedValueIntrinsic> glib::translate::ToGlibPtr<'a, *const ffi::GstSegment>
     for FormattedSegment<T>
 {

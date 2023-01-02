@@ -42,6 +42,7 @@ impl IntoGlib for AudioEndianness {
 }
 
 #[doc(alias = "GstAudioFormatInfo")]
+#[derive(Copy, Clone)]
 pub struct AudioFormatInfo(&'static ffi::GstAudioFormatInfo);
 
 impl AudioFormatInfo {
@@ -378,6 +379,9 @@ impl From<AudioFormatInfo> for glib::Value {
 impl glib::translate::GlibPtrDefault for AudioFormatInfo {
     type GlibType = *mut ffi::GstAudioFormatInfo;
 }
+
+#[doc(hidden)]
+unsafe impl glib::translate::TransparentPtrType for AudioFormatInfo {}
 
 #[doc(hidden)]
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstAudioFormatInfo> for AudioFormatInfo {

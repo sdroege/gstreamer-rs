@@ -569,6 +569,9 @@ impl<T> glib::translate::GlibPtrDefault for Iterator<T> {
 }
 
 #[doc(hidden)]
+unsafe impl<T: StaticType + 'static> TransparentPtrType for Iterator<T> {}
+
+#[doc(hidden)]
 impl<'a, T: 'static> glib::translate::ToGlibPtr<'a, *const ffi::GstIterator> for Iterator<T> {
     type Storage = PhantomData<&'a Iterator<T>>;
 

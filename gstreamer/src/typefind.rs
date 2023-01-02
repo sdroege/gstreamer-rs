@@ -254,6 +254,7 @@ mod tests {
         crate::init().unwrap();
 
         let xml_factory = TypeFindFactory::factories()
+            .into_iter()
             .find(|f| {
                 f.caps()
                     .map(|c| {

@@ -394,7 +394,7 @@ impl DebugCategory {
     #[doc(alias = "get_all_categories")]
     #[doc(alias = "gst_debug_get_all_categories")]
     pub fn all_categories() -> glib::SList<DebugCategory> {
-        unsafe { glib::SList::from_glib_container_static(ffi::gst_debug_get_all_categories()) }
+        unsafe { glib::SList::from_glib_container(ffi::gst_debug_get_all_categories()) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -437,6 +437,8 @@ impl fmt::Debug for DebugCategory {
 impl GlibPtrDefault for DebugCategory {
     type GlibType = *mut ffi::GstDebugCategory;
 }
+
+unsafe impl TransparentPtrType for DebugCategory {}
 
 impl FromGlibPtrNone<*mut ffi::GstDebugCategory> for DebugCategory {
     unsafe fn from_glib_none(ptr: *mut ffi::GstDebugCategory) -> Self {
@@ -1216,7 +1218,9 @@ mod tests {
     fn all() {
         crate::init().unwrap();
 
-        assert!(DebugCategory::all_categories().any(|c| c.name() == "GST_PERFORMANCE"));
+        assert!(DebugCategory::all_categories()
+            .iter()
+            .any(|c| c.name() == "GST_PERFORMANCE"));
     }
 
     #[test]

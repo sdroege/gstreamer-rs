@@ -368,6 +368,8 @@ impl GlibPtrDefault for Structure {
     type GlibType = *mut ffi::GstStructure;
 }
 
+unsafe impl TransparentPtrType for Structure {}
+
 #[repr(transparent)]
 #[doc(alias = "GstStructure")]
 pub struct StructureRef(ffi::GstStructure);

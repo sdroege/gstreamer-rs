@@ -11,6 +11,7 @@ use std::marker::PhantomData;
 use std::ptr;
 
 #[doc(alias = "GstStaticCaps")]
+#[derive(Clone, Copy)]
 pub struct StaticCaps(ptr::NonNull<ffi::GstStaticCaps>);
 
 impl StaticCaps {
@@ -42,6 +43,8 @@ impl glib::types::StaticType for StaticCaps {
 impl glib::value::ValueType for StaticCaps {
     type Type = Self;
 }
+
+unsafe impl glib::translate::TransparentPtrType for StaticCaps {}
 
 #[doc(hidden)]
 unsafe impl<'a> glib::value::FromValue<'a> for StaticCaps {

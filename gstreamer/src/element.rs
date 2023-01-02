@@ -996,7 +996,7 @@ pub unsafe trait ElementClassExt {
         unsafe {
             let klass = self as *const _ as *const ffi::GstElementClass;
 
-            glib::List::from_glib_none_static(ffi::gst_element_class_get_pad_template_list(
+            glib::List::from_glib_none(ffi::gst_element_class_get_pad_template_list(
                 klass as *mut _,
             ))
         }

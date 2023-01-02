@@ -352,6 +352,11 @@ macro_rules! generic_impl {
         }
 
         #[doc(hidden)]
+        unsafe impl TransparentType for $name {
+            type GlibType = ffi::GstVideoTimeCode;
+        }
+
+        #[doc(hidden)]
         impl<'a> ToGlibPtr<'a, *const ffi::GstVideoTimeCode> for $name {
             type Storage = PhantomData<&'a Self>;
 

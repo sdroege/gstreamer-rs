@@ -12,6 +12,7 @@ use std::marker::PhantomData;
 use std::ptr;
 
 #[doc(alias = "GstStaticPadTemplate")]
+#[derive(Clone, Copy)]
 pub struct StaticPadTemplate(ptr::NonNull<ffi::GstStaticPadTemplate>);
 
 impl StaticPadTemplate {
@@ -42,6 +43,8 @@ impl StaticPadTemplate {
         unsafe { from_glib(self.0.as_ref().presence) }
     }
 }
+
+unsafe impl glib::translate::TransparentPtrType for StaticPadTemplate {}
 
 unsafe impl Send for StaticPadTemplate {}
 unsafe impl Sync for StaticPadTemplate {}

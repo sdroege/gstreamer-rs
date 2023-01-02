@@ -137,6 +137,11 @@ impl GlibPtrDefault for VideoTimeCodeInterval {
 }
 
 #[doc(hidden)]
+unsafe impl TransparentType for VideoTimeCodeInterval {
+    type GlibType = ffi::GstVideoTimeCodeInterval;
+}
+
+#[doc(hidden)]
 impl<'a> ToGlibPtr<'a, *const ffi::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
     type Storage = PhantomData<&'a Self>;
 

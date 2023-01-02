@@ -300,6 +300,8 @@ impl GlibPtrDefault for CapsFeatures {
     type GlibType = *mut ffi::GstCapsFeatures;
 }
 
+unsafe impl TransparentPtrType for CapsFeatures {}
+
 #[repr(transparent)]
 #[doc(alias = "GstCapsFeatures")]
 pub struct CapsFeaturesRef(ffi::GstCapsFeatures);

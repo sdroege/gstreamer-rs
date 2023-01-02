@@ -101,9 +101,9 @@ impl ElementFactory {
     #[doc(alias = "get_static_pad_templates")]
     pub fn static_pad_templates(&self) -> glib::List<StaticPadTemplate> {
         unsafe {
-            glib::List::from_glib_none_static(ffi::gst_element_factory_get_static_pad_templates(
+            glib::List::from_glib_none(ffi::gst_element_factory_get_static_pad_templates(
                 self.to_glib_none().0,
-            ) as *mut _)
+            ))
         }
     }
 

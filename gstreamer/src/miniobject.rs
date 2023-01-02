@@ -387,6 +387,8 @@ macro_rules! mini_object_wrapper (
             type GlibType = *mut $ffi_name;
         }
 
+        unsafe impl $crate::glib::translate::TransparentPtrType for $name {}
+
         impl $ref_name {
             pub fn as_ptr(&self) -> *const $ffi_name {
                 self as *const Self as *const $ffi_name

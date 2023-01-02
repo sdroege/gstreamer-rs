@@ -513,6 +513,9 @@ impl glib::translate::GlibPtrDefault for VideoFormatInfo {
 }
 
 #[doc(hidden)]
+unsafe impl glib::translate::TransparentPtrType for VideoFormatInfo {}
+
+#[doc(hidden)]
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoFormatInfo> for VideoFormatInfo {
     type Storage = PhantomData<&'a Self>;
 
