@@ -173,7 +173,7 @@ impl SampleRef {
             if ptr.is_null() {
                 None
             } else {
-                Some(crate::Segment::from_ptr(ptr))
+                Some(crate::Segment::from_glib_ptr_borrow(ptr))
             }
         }
     }
