@@ -17,15 +17,9 @@ impl Plugin {
             }
         }
     }
-}
 
-pub trait GstPluginExtManual: 'static {
     #[doc(alias = "get_plugin_flags")]
-    fn plugin_flags(&self) -> PluginFlags;
-}
-
-impl<O: IsA<crate::Plugin>> GstPluginExtManual for O {
-    fn plugin_flags(&self) -> PluginFlags {
+    pub fn plugin_flags(&self) -> PluginFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);

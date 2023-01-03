@@ -325,7 +325,6 @@ pub mod prelude {
         pad::PadExtManual,
         param_spec::GstParamSpecBuilderExt,
         pipeline::GstPipelineExtManual,
-        plugin::GstPluginExtManual,
         plugin_feature::PluginFeatureExtManual,
         tag_setter::TagSetterExtManual,
         tags::{CustomTag, Tag},
