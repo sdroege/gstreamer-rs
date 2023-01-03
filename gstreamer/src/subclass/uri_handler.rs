@@ -78,11 +78,6 @@ impl<T: URIHandlerImpl> URIHandlerImplExt for T {
     }
 }
 
-// Send+Sync wrapper around a NULL-terminated C string array
-struct CStrV(*const *const libc::c_char);
-unsafe impl Send for CStrV {}
-unsafe impl Sync for CStrV {}
-
 unsafe impl<T: URIHandlerImpl> IsImplementable<T> for URIHandler {
     fn interface_init(iface: &mut glib::Interface<Self>) {
         let iface = iface.as_mut();
@@ -91,10 +86,8 @@ unsafe impl<T: URIHandlerImpl> IsImplementable<T> for URIHandler {
         unsafe {
             let mut data = T::type_data();
             let protocols = T::protocols();
-            let protocols = protocols.to_glib_full();
             let data = data.as_mut();
-
-            data.set_class_data(Self::static_type(), CStrV(protocols));
+            data.set_class_data(Self::static_type(), glib::StrV::from(protocols));
         }
 
         iface.get_type = Some(uri_handler_get_type::<T>);
@@ -115,9 +108,9 @@ unsafe extern "C" fn uri_handler_get_protocols<T: URIHandlerImpl>(
 ) -> *const *const libc::c_char {
     let data = <T as ObjectSubclassType>::type_data();
     data.as_ref()
-        .class_data::<CStrV>(URIHandler::static_type())
-        .unwrap_or(&CStrV(std::ptr::null()))
-        .0
+        .class_data::<glib::StrV>(URIHandler::static_type())
+        .map(|p| p.as_ptr() as *const *const _)
+        .unwrap_or(ptr::null())
 }
 
 unsafe extern "C" fn uri_handler_get_uri<T: URIHandlerImpl>(

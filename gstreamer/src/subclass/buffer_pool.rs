@@ -7,6 +7,7 @@ use glib::{
     Cast, StaticType,
 };
 use libc::c_char;
+use std::ptr;
 
 use crate::{BufferPool, BufferPoolAcquireParams, BufferPoolConfigRef};
 
@@ -278,17 +279,6 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
     }
 }
 
-// Send+Sync wrapper around a NULL-terminated C string array
-struct CStrV(*mut *const libc::c_char);
-unsafe impl Send for CStrV {}
-unsafe impl Sync for CStrV {}
-
-impl Drop for CStrV {
-    fn drop(&mut self) {
-        unsafe { glib::ffi::g_strfreev(self.0 as *mut _) };
-    }
-}
-
 unsafe impl<T: BufferPoolImpl> IsSubclassable<T> for BufferPool {
     fn class_init(klass: &mut glib::Class<Self>) {
         Self::parent_class_init::<T>(klass);
@@ -312,8 +302,7 @@ unsafe impl<T: BufferPoolImpl> IsSubclassable<T> for BufferPool {
         // Store the pool options in the instance data
         // for later retrieval in buffer_pool_get_options
         let options = T::options();
-        let options = options.to_glib_full();
-        instance.set_instance_data(T::type_(), CStrV(options));
+        instance.set_instance_data(T::type_(), glib::StrV::from(options));
     }
 }
 
@@ -468,9 +457,9 @@ unsafe extern "C" fn buffer_pool_get_options<T: BufferPoolImpl>(
 ) -> *mut *const c_char {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
-    T::instance_data::<CStrV>(imp, T::type_())
-        .unwrap_or(&CStrV(std::ptr::null_mut()))
-        .0
+    T::instance_data::<glib::StrV>(imp, T::type_())
+        .map(|p| p.as_ptr() as *mut *const _)
+        .unwrap_or(ptr::null_mut())
 }
 
 unsafe extern "C" fn buffer_pool_set_config<T: BufferPoolImpl>(
