@@ -5,7 +5,7 @@
 #![allow(deprecated)]
 
 use crate::{
-    Bus, Caps, Clock, ClockTime, Context, ElementFactory, Object, Pad, PadTemplate, State,
+    Bus, Caps, Clock, ClockTime, Context, ElementFactory, Message, Object, Pad, PadTemplate, State,
     StateChange, StateChangeError, StateChangeReturn, StateChangeSuccess, URIType,
 };
 use glib::{
@@ -138,6 +138,9 @@ pub trait ElementExt: 'static {
 
     #[doc(alias = "gst_element_no_more_pads")]
     fn no_more_pads(&self);
+
+    #[doc(alias = "gst_element_post_message")]
+    fn post_message(&self, message: Message) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_element_provide_clock")]
     fn provide_clock(&self) -> Option<Clock>;
@@ -434,6 +437,18 @@ impl<O: IsA<Element>> ElementExt for O {
     fn no_more_pads(&self) {
         unsafe {
             ffi::gst_element_no_more_pads(self.as_ref().to_glib_none().0);
+        }
+    }
+
+    fn post_message(&self, message: Message) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_element_post_message(
+                    self.as_ref().to_glib_none().0,
+                    message.into_glib_ptr()
+                ),
+                "Failed to post message"
+            )
         }
     }
 

@@ -54,7 +54,6 @@ manual = [
     "Gst.BufferPoolAcquireParams",
     "Gst.ClockTimeDiff",
     "Gst.Element",
-    "Gst.FlowReturn",
     "Gst.Format",
     "Gst.Memory",
     "Gst.Message",
@@ -95,12 +94,21 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "Gst.FlowReturn"
+status = "manual"
+must_use = true
+    [object.conversion_type]
+    variant = "Result"
+    ok_type = "gst::FlowSuccess"
+    err_type = "gst::FlowError"
+
+[[object]]
 name = "Gst.Query"
 status = "manual"
 ref_mode = "ref"
 
 [[object]]
-name = "gst.Structure"
+name = "Gst.Structure"
 status = "manual"
 ref_mode = "ref"
 
@@ -201,11 +209,9 @@ status = "generate"
 
     [[object.function]]
     name = "send_event"
-    manual = true
-
-    [[object.function]]
-    name = "send_event_simple"
-    manual = true
+        [[object.function.parameter]]
+        name = "structure"
+        move = true
 
     [[object.function]]
     name = "send_key_event"
@@ -440,18 +446,6 @@ manual_traits = ["VideoDecoderExtManual"]
     ignore = true
 
     [[object.function]]
-    name = "finish_frame"
-    manual = true
-
-    [[object.function]]
-    name = "release_frame"
-    manual = true
-
-    [[object.function]]
-    name = "drop_frame"
-    manual = true
-
-    [[object.function]]
     name = "finish_subframe"
     manual = true
 
@@ -528,10 +522,6 @@ manual_traits = ["VideoEncoderExtManual"]
     [[object.function]]
     name = "allocate_output_frame_with_params"
     ignore = true
-
-    [[object.function]]
-    name = "finish_frame"
-    manual = true
 
     [[object.function]]
     name = "finish_subframe"

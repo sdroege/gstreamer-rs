@@ -49,6 +49,12 @@ pub trait RTPBasePayloadExt: 'static {
     #[doc(alias = "gst_rtp_base_payload_is_source_info_enabled")]
     fn is_source_info_enabled(&self) -> bool;
 
+    #[doc(alias = "gst_rtp_base_payload_push")]
+    fn push(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    #[doc(alias = "gst_rtp_base_payload_push_list")]
+    fn push_list(&self, list: gst::BufferList) -> Result<gst::FlowSuccess, gst::FlowError>;
+
     #[doc(alias = "gst_rtp_base_payload_set_options")]
     fn set_options(&self, media: &str, dynamic: bool, encoding_name: &str, clock_rate: u32);
 
@@ -316,6 +322,24 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         unsafe {
             from_glib(ffi::gst_rtp_base_payload_is_source_info_enabled(
                 self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn push(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_rtp_base_payload_push(
+                self.as_ref().to_glib_none().0,
+                buffer.into_glib_ptr(),
+            ))
+        }
+    }
+
+    fn push_list(&self, list: gst::BufferList) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_rtp_base_payload_push_list(
+                self.as_ref().to_glib_none().0,
+                list.into_glib_ptr(),
             ))
         }
     }

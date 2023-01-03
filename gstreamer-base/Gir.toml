@@ -209,16 +209,6 @@ manual_traits = ["AggregatorExtManual"]
     manual = true
 
     [[object.function]]
-    name = "finish_buffer"
-    # Takes ownership
-    manual = true
-
-    [[object.function]]
-    name = "finish_buffer_list"
-    # Takes ownership
-    manual = true
-
-    [[object.function]]
     name = "selected_samples"
     # Info parameter
     manual = true

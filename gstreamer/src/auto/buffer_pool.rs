@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Object;
+use crate::{Buffer, Object};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -45,6 +45,9 @@ pub trait BufferPoolExt: 'static {
     #[doc(alias = "gst_buffer_pool_is_active")]
     fn is_active(&self) -> bool;
 
+    #[doc(alias = "gst_buffer_pool_release_buffer")]
+    fn release_buffer(&self, buffer: Buffer);
+
     #[doc(alias = "gst_buffer_pool_set_active")]
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError>;
 
@@ -75,6 +78,15 @@ impl<O: IsA<BufferPool>> BufferPoolExt for O {
             from_glib(ffi::gst_buffer_pool_is_active(
                 self.as_ref().to_glib_none().0,
             ))
+        }
+    }
+
+    fn release_buffer(&self, buffer: Buffer) {
+        unsafe {
+            ffi::gst_buffer_pool_release_buffer(
+                self.as_ref().to_glib_none().0,
+                buffer.into_glib_ptr(),
+            );
         }
     }
 

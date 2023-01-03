@@ -11,9 +11,8 @@ use std::{
 use glib::{ffi::gpointer, prelude::*, translate::*};
 
 use crate::{
-    element::ElementExtManual,
     format::{FormattedValue, SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic},
-    prelude::PadExt,
+    prelude::*,
     Buffer, BufferList, Event, FlowError, FlowReturn, FlowSuccess, Format, GenericFormattedValue,
     LoggableError, Pad, PadFlags, PadProbeReturn, PadProbeType, Query, QueryRef, StaticPadTemplate,
 };
@@ -99,16 +98,6 @@ pub trait PadExtManual: 'static {
         F: Fn(&Self, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static;
     #[doc(alias = "gst_pad_remove_probe")]
     fn remove_probe(&self, id: PadProbeId);
-
-    #[doc(alias = "gst_pad_chain")]
-    fn chain(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError>;
-    #[doc(alias = "gst_pad_push")]
-    fn push(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError>;
-
-    #[doc(alias = "gst_pad_chain_list")]
-    fn chain_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError>;
-    #[doc(alias = "gst_pad_push_list")]
-    fn push_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError>;
 
     #[doc(alias = "gst_pad_pull_range")]
     fn pull_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError>;
@@ -338,42 +327,6 @@ impl<O: IsA<Pad>> PadExtManual for O {
     fn remove_probe(&self, id: PadProbeId) {
         unsafe {
             ffi::gst_pad_remove_probe(self.as_ref().to_glib_none().0, id.into_glib());
-        }
-    }
-
-    fn chain(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_pad_chain(
-                self.as_ref().to_glib_none().0,
-                buffer.into_glib_ptr(),
-            ))
-        }
-    }
-
-    fn push(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_pad_push(
-                self.as_ref().to_glib_none().0,
-                buffer.into_glib_ptr(),
-            ))
-        }
-    }
-
-    fn chain_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_pad_chain_list(
-                self.as_ref().to_glib_none().0,
-                list.into_glib_ptr(),
-            ))
-        }
-    }
-
-    fn push_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_pad_push_list(
-                self.as_ref().to_glib_none().0,
-                list.into_glib_ptr(),
-            ))
         }
     }
 
@@ -1918,7 +1871,6 @@ mod tests {
     use std::sync::{atomic::AtomicUsize, mpsc::channel, Arc, Mutex};
 
     use super::*;
-    use crate::prelude::*;
 
     #[test]
     fn test_event_chain_functions() {

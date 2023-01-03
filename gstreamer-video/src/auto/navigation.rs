@@ -36,6 +36,14 @@ pub trait NavigationExt: 'static {
     #[doc(alias = "gst_navigation_send_command")]
     fn send_command(&self, command: NavigationCommand);
 
+    #[doc(alias = "gst_navigation_send_event")]
+    fn send_event(&self, structure: gst::Structure);
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "gst_navigation_send_event_simple")]
+    fn send_event_simple(&self, event: gst::Event);
+
     #[doc(alias = "gst_navigation_send_key_event")]
     fn send_key_event(&self, event: &str, key: &str);
 
@@ -52,6 +60,26 @@ impl<O: IsA<Navigation>> NavigationExt for O {
     fn send_command(&self, command: NavigationCommand) {
         unsafe {
             ffi::gst_navigation_send_command(self.as_ref().to_glib_none().0, command.into_glib());
+        }
+    }
+
+    fn send_event(&self, structure: gst::Structure) {
+        unsafe {
+            ffi::gst_navigation_send_event(
+                self.as_ref().to_glib_none().0,
+                structure.into_glib_ptr(),
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    fn send_event_simple(&self, event: gst::Event) {
+        unsafe {
+            ffi::gst_navigation_send_event_simple(
+                self.as_ref().to_glib_none().0,
+                event.into_glib_ptr(),
+            );
         }
     }
 

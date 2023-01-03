@@ -73,6 +73,15 @@ status = "manual"
 conversion_type = "Option"
 
 [[object]]
+name = "Gst.FlowReturn"
+status = "manual"
+must_use = true
+    [object.conversion_type]
+    variant = "Result"
+    ok_type = "gst::FlowSuccess"
+    err_type = "gst::FlowError"
+
+[[object]]
 name = "Gst.Object"
 # For renaming the trait...
 status = "manual"
@@ -143,14 +152,6 @@ status = "generate"
 manual_traits = ["AudioDecoderExtManual"]
 
     [[object.function]]
-    name = "finish_frame"
-    manual = true
-
-    [[object.function]]
-    name = "finish_subframe"
-    manual = true
-
-    [[object.function]]
     name = "get_latency"
         [[object.function.parameter]]
         name = "min"
@@ -204,11 +205,6 @@ manual_traits = ["AudioDecoderExtManual"]
 name = "GstAudio.AudioEncoder"
 status = "generate"
 manual_traits = ["AudioEncoderExtManual"]
-
-    [[object.function]]
-    name = "finish_frame"
-    manual = true
-
     [[object.function]]
     name = "negotiate"
     manual = true

@@ -21,6 +21,7 @@ generate = [
     "GstRtp.RTCPSDESType",
     "GstRtp.RTCPType",
     "GstRtp.RTCPXRType",
+    "GstRtp.RTPBaseDepayload",
     "GstRtp.RTPHeaderExtensionDirection",
     "GstRtp.RTPHeaderExtensionFlags",
     "GstRtp.RTPPayload",
@@ -81,20 +82,6 @@ status = "generate"
     ignore = true
 
 [[object]]
-name = "GstRtp.RTPBaseDepayload"
-status = "generate"
-
-    [[object.function]]
-    name = "push"
-    # Move buffer
-    manual = true
-
-    [[object.function]]
-    name = "push_list"
-    # Move buffer list
-    manual = true
-
-[[object]]
 name = "GstRtp.RTPBasePayload"
 status = "generate"
 manual_traits = ["RTPHeaderExtensionExtManual"]
@@ -103,16 +90,6 @@ manual_traits = ["RTPHeaderExtensionExtManual"]
     name = "set_outcaps"
     # varargs function
     ignore = true
-
-    [[object.function]]
-    name = "push"
-    # Move buffer
-    manual = true
-
-    [[object.function]]
-    name = "push_list"
-    # Move buffer list
-    manual = true
 
     [[object.function]]
     name = "set_outcaps_structure"

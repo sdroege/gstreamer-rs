@@ -219,29 +219,6 @@ impl AppSrc {
         AppSrcBuilder::default()
     }
 
-    #[doc(alias = "gst_app_src_push_buffer")]
-    pub fn push_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_app_src_push_buffer(
-                self.to_glib_none().0,
-                buffer.into_glib_ptr(),
-            ))
-        }
-    }
-
-    #[doc(alias = "gst_app_src_push_buffer_list")]
-    pub fn push_buffer_list(
-        &self,
-        list: gst::BufferList,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_app_src_push_buffer_list(
-                self.to_glib_none().0,
-                list.into_glib_ptr(),
-            ))
-        }
-    }
-
     #[doc(alias = "gst_app_src_set_callbacks")]
     pub fn set_callbacks(&self, callbacks: AppSrcCallbacks) {
         use once_cell::sync::Lazy;

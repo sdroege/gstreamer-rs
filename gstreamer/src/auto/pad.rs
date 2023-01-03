@@ -4,8 +4,8 @@
 // DO NOT EDIT
 
 use crate::{
-    Caps, Element, Event, FlowError, FlowSuccess, Object, PadDirection, PadLinkCheck, PadLinkError,
-    PadLinkSuccess, PadMode, PadTemplate, Stream, TaskState,
+    Buffer, BufferList, Caps, Element, Event, FlowError, FlowSuccess, Object, PadDirection,
+    PadLinkCheck, PadLinkError, PadLinkSuccess, PadMode, PadTemplate, Stream, TaskState,
 };
 use glib::{
     prelude::*,
@@ -36,6 +36,12 @@ pub trait PadExt: 'static {
 
     #[doc(alias = "gst_pad_can_link")]
     fn can_link(&self, sinkpad: &impl IsA<Pad>) -> bool;
+
+    #[doc(alias = "gst_pad_chain")]
+    fn chain(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError>;
+
+    #[doc(alias = "gst_pad_chain_list")]
+    fn chain_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError>;
 
     #[doc(alias = "gst_pad_check_reconfigure")]
     fn check_reconfigure(&self) -> bool;
@@ -172,6 +178,12 @@ pub trait PadExt: 'static {
     #[doc(alias = "gst_pad_peer_query_caps")]
     fn peer_query_caps(&self, filter: Option<&Caps>) -> Caps;
 
+    #[doc(alias = "gst_pad_push")]
+    fn push(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError>;
+
+    #[doc(alias = "gst_pad_push_list")]
+    fn push_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError>;
+
     #[doc(alias = "gst_pad_query_accept_caps")]
     fn query_accept_caps(&self, caps: &Caps) -> bool;
 
@@ -234,6 +246,24 @@ impl<O: IsA<Pad>> PadExt for O {
             from_glib(ffi::gst_pad_can_link(
                 self.as_ref().to_glib_none().0,
                 sinkpad.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn chain(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_pad_chain(
+                self.as_ref().to_glib_none().0,
+                buffer.into_glib_ptr(),
+            ))
+        }
+    }
+
+    fn chain_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_pad_chain_list(
+                self.as_ref().to_glib_none().0,
+                list.into_glib_ptr(),
             ))
         }
     }
@@ -497,6 +527,24 @@ impl<O: IsA<Pad>> PadExt for O {
             from_glib_full(ffi::gst_pad_peer_query_caps(
                 self.as_ref().to_glib_none().0,
                 filter.to_glib_none().0,
+            ))
+        }
+    }
+
+    fn push(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_pad_push(
+                self.as_ref().to_glib_none().0,
+                buffer.into_glib_ptr(),
+            ))
+        }
+    }
+
+    fn push_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_pad_push_list(
+                self.as_ref().to_glib_none().0,
+                list.into_glib_ptr(),
             ))
         }
     }

@@ -7,13 +7,6 @@ use glib::{prelude::*, translate::*};
 use crate::AudioEncoder;
 
 pub trait AudioEncoderExtManual: 'static {
-    #[doc(alias = "gst_audio_encoder_finish_frame")]
-    fn finish_frame(
-        &self,
-        buffer: Option<gst::Buffer>,
-        frames: i32,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
     #[doc(alias = "gst_audio_encoder_negotiate")]
     fn negotiate(&self) -> Result<(), gst::FlowError>;
 
@@ -33,20 +26,6 @@ pub trait AudioEncoderExtManual: 'static {
 }
 
 impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
-    fn finish_frame(
-        &self,
-        buffer: Option<gst::Buffer>,
-        frames: i32,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_audio_encoder_finish_frame(
-                self.as_ref().to_glib_none().0,
-                buffer.map(|b| b.into_glib_ptr()).unwrap_or(ptr::null_mut()),
-                frames,
-            ))
-        }
-    }
-
     fn negotiate(&self) -> Result<(), gst::FlowError> {
         unsafe {
             let ret = from_glib(ffi::gst_audio_encoder_negotiate(

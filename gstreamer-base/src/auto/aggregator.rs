@@ -30,6 +30,17 @@ unsafe impl Send for Aggregator {}
 unsafe impl Sync for Aggregator {}
 
 pub trait AggregatorExt: 'static {
+    #[doc(alias = "gst_aggregator_finish_buffer")]
+    fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_aggregator_finish_buffer_list")]
+    fn finish_buffer_list(
+        &self,
+        bufferlist: gst::BufferList,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
     #[doc(alias = "gst_aggregator_get_buffer_pool")]
     #[doc(alias = "get_buffer_pool")]
     fn buffer_pool(&self) -> Option<gst::BufferPool>;
@@ -139,6 +150,29 @@ pub trait AggregatorExt: 'static {
 }
 
 impl<O: IsA<Aggregator>> AggregatorExt for O {
+    fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_aggregator_finish_buffer(
+                self.as_ref().to_glib_none().0,
+                buffer.into_glib_ptr(),
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    fn finish_buffer_list(
+        &self,
+        bufferlist: gst::BufferList,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_aggregator_finish_buffer_list(
+                self.as_ref().to_glib_none().0,
+                bufferlist.into_glib_ptr(),
+            ))
+        }
+    }
+
     fn buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
             from_glib_full(ffi::gst_aggregator_get_buffer_pool(

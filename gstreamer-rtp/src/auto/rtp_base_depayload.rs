@@ -35,6 +35,12 @@ pub trait RTPBaseDepayloadExt: 'static {
     #[doc(alias = "gst_rtp_base_depayload_is_source_info_enabled")]
     fn is_source_info_enabled(&self) -> bool;
 
+    #[doc(alias = "gst_rtp_base_depayload_push")]
+    fn push(&self, out_buf: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    #[doc(alias = "gst_rtp_base_depayload_push_list")]
+    fn push_list(&self, out_list: gst::BufferList) -> Result<gst::FlowSuccess, gst::FlowError>;
+
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtp_base_depayload_set_source_info_enabled")]
@@ -141,6 +147,24 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
         unsafe {
             from_glib(ffi::gst_rtp_base_depayload_is_source_info_enabled(
                 self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn push(&self, out_buf: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_rtp_base_depayload_push(
+                self.as_ref().to_glib_none().0,
+                out_buf.into_glib_ptr(),
+            ))
+        }
+    }
+
+    fn push_list(&self, out_list: gst::BufferList) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_rtp_base_depayload_push_list(
+                self.as_ref().to_glib_none().0,
+                out_list.into_glib_ptr(),
             ))
         }
     }

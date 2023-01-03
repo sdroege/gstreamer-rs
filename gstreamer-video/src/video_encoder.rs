@@ -32,12 +32,6 @@ pub trait VideoEncoderExtManual: 'static {
     #[doc(alias = "gst_video_encoder_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
-    #[doc(alias = "gst_video_encoder_finish_frame")]
-    fn finish_frame(
-        &self,
-        frame: Option<VideoCodecFrame>,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_encoder_finish_subframe")]
@@ -102,18 +96,6 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
                 &mut params,
             );
             (from_glib_full(allocator), params.into())
-        }
-    }
-
-    fn finish_frame(
-        &self,
-        frame: Option<VideoCodecFrame>,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_video_encoder_finish_frame(
-                self.as_ref().to_glib_none().0,
-                frame.map(|f| f.into_glib_ptr()).unwrap_or(ptr::null_mut()),
-            ))
         }
     }
 

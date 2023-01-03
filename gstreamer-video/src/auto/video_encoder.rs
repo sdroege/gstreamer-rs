@@ -31,6 +31,9 @@ pub trait VideoEncoderExt: 'static {
     #[doc(alias = "gst_video_encoder_allocate_output_buffer")]
     fn allocate_output_buffer(&self, size: usize) -> gst::Buffer;
 
+    #[doc(alias = "gst_video_encoder_finish_frame")]
+    fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
+
     #[doc(alias = "gst_video_encoder_get_max_encode_time")]
     #[doc(alias = "get_max_encode_time")]
     fn max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
@@ -83,6 +86,15 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
             from_glib_full(ffi::gst_video_encoder_allocate_output_buffer(
                 self.as_ref().to_glib_none().0,
                 size,
+            ))
+        }
+    }
+
+    fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_video_encoder_finish_frame(
+                self.as_ref().to_glib_none().0,
+                frame.into_glib_ptr(),
             ))
         }
     }

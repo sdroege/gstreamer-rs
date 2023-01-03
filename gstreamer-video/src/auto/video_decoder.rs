@@ -38,6 +38,12 @@ pub trait VideoDecoderExt: 'static {
     #[doc(alias = "gst_video_decoder_allocate_output_buffer")]
     fn allocate_output_buffer(&self) -> Result<gst::Buffer, glib::BoolError>;
 
+    #[doc(alias = "gst_video_decoder_drop_frame")]
+    fn drop_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    #[doc(alias = "gst_video_decoder_finish_frame")]
+    fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
+
     #[doc(alias = "gst_video_decoder_get_buffer_pool")]
     #[doc(alias = "get_buffer_pool")]
     fn buffer_pool(&self) -> Option<gst::BufferPool>;
@@ -83,13 +89,16 @@ pub trait VideoDecoderExt: 'static {
     fn is_subframe_mode(&self) -> bool;
 
     #[doc(alias = "gst_video_decoder_have_frame")]
-    fn have_frame(&self) -> gst::FlowReturn;
+    fn have_frame(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[doc(alias = "gst_video_decoder_merge_tags")]
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
 
     #[doc(alias = "gst_video_decoder_proxy_getcaps")]
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
+
+    #[doc(alias = "gst_video_decoder_release_frame")]
+    fn release_frame(&self, frame: VideoCodecFrame);
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
@@ -234,6 +243,24 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
+    fn drop_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_video_decoder_drop_frame(
+                self.as_ref().to_glib_none().0,
+                frame.into_glib_ptr(),
+            ))
+        }
+    }
+
+    fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_video_decoder_finish_frame(
+                self.as_ref().to_glib_none().0,
+                frame.into_glib_ptr(),
+            ))
+        }
+    }
+
     fn buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
             from_glib_full(ffi::gst_video_decoder_get_buffer_pool(
@@ -303,9 +330,9 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
-    fn have_frame(&self) -> gst::FlowReturn {
+    fn have_frame(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            from_glib(ffi::gst_video_decoder_have_frame(
+            try_from_glib(ffi::gst_video_decoder_have_frame(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -328,6 +355,15 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
                 caps.to_glib_none().0,
                 filter.to_glib_none().0,
             ))
+        }
+    }
+
+    fn release_frame(&self, frame: VideoCodecFrame) {
+        unsafe {
+            ffi::gst_video_decoder_release_frame(
+                self.as_ref().to_glib_none().0,
+                frame.into_glib_ptr(),
+            );
         }
     }
 

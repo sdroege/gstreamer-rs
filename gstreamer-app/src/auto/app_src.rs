@@ -109,6 +109,29 @@ impl AppSrc {
         unsafe { from_glib(ffi::gst_app_src_get_stream_type(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_app_src_push_buffer")]
+    pub fn push_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_app_src_push_buffer(
+                self.to_glib_none().0,
+                buffer.into_glib_ptr(),
+            ))
+        }
+    }
+
+    #[doc(alias = "gst_app_src_push_buffer_list")]
+    pub fn push_buffer_list(
+        &self,
+        buffer_list: gst::BufferList,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_app_src_push_buffer_list(
+                self.to_glib_none().0,
+                buffer_list.into_glib_ptr(),
+            ))
+        }
+    }
+
     #[doc(alias = "gst_app_src_push_sample")]
     pub fn push_sample(&self, sample: &gst::Sample) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {

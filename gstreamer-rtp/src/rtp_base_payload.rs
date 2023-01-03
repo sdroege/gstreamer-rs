@@ -11,12 +11,6 @@ pub trait RTPBasePayloadExtManual: 'static {
     #[doc(alias = "gst_rtp_base_payload_set_outcaps")]
     fn set_outcaps(&self, s: Option<&gst::StructureRef>) -> Result<(), glib::error::BoolError>;
 
-    #[doc(alias = "gst_rtp_base_payload_push")]
-    fn push(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    #[doc(alias = "gst_rtp_base_payload_push_list")]
-    fn push_list(&self, list: gst::BufferList) -> Result<gst::FlowSuccess, gst::FlowError>;
-
     fn sink_pad(&self) -> &gst::Pad;
 
     fn src_pad(&self) -> &gst::Pad;
@@ -36,24 +30,6 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExtManual for O {
                 ),
                 "Failed to negotiate by setting outcaps structure"
             )
-        }
-    }
-
-    fn push(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_rtp_base_payload_push(
-                self.as_ref().to_glib_none().0,
-                buffer.into_glib_ptr(),
-            ))
-        }
-    }
-
-    fn push_list(&self, list: gst::BufferList) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_rtp_base_payload_push_list(
-                self.as_ref().to_glib_none().0,
-                list.into_glib_ptr(),
-            ))
         }
     }
 

@@ -304,16 +304,6 @@ impl Bus {
             future::ready(message_types.contains(&message_type))
         })
     }
-
-    #[doc(alias = "gst_bus_post")]
-    pub fn post(&self, message: crate::Message) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib::result_from_gboolean!(
-                ffi::gst_bus_post(self.to_glib_none().0, message.into_glib_ptr()),
-                "Failed to post message"
-            )
-        }
-    }
 }
 
 #[derive(Debug)]

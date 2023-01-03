@@ -344,8 +344,6 @@ pub trait BufferPoolExtManual: 'static {
         &self,
         params: Option<&BufferPoolAcquireParams>,
     ) -> Result<crate::Buffer, crate::FlowError>;
-    #[doc(alias = "gst_buffer_pool_release_buffer")]
-    fn release_buffer(&self, buffer: crate::Buffer);
 }
 
 impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
@@ -391,15 +389,6 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
                 params_ptr,
             ))
             .map(|_| from_glib_full(buffer))
-        }
-    }
-
-    fn release_buffer(&self, buffer: crate::Buffer) {
-        unsafe {
-            ffi::gst_buffer_pool_release_buffer(
-                self.as_ref().to_glib_none().0,
-                buffer.into_glib_ptr(),
-            );
         }
     }
 }

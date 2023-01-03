@@ -31,6 +31,19 @@ pub trait AudioDecoderExt: 'static {
     #[doc(alias = "gst_audio_decoder_allocate_output_buffer")]
     fn allocate_output_buffer(&self, size: usize) -> gst::Buffer;
 
+    #[doc(alias = "gst_audio_decoder_finish_frame")]
+    fn finish_frame(
+        &self,
+        buf: Option<gst::Buffer>,
+        frames: i32,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_audio_decoder_finish_subframe")]
+    fn finish_subframe(&self, buf: Option<gst::Buffer>)
+        -> Result<gst::FlowSuccess, gst::FlowError>;
+
     #[doc(alias = "gst_audio_decoder_get_audio_info")]
     #[doc(alias = "get_audio_info")]
     fn audio_info(&self) -> AudioInfo;
@@ -148,6 +161,34 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
             from_glib_full(ffi::gst_audio_decoder_allocate_output_buffer(
                 self.as_ref().to_glib_none().0,
                 size,
+            ))
+        }
+    }
+
+    fn finish_frame(
+        &self,
+        buf: Option<gst::Buffer>,
+        frames: i32,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_audio_decoder_finish_frame(
+                self.as_ref().to_glib_none().0,
+                buf.into_glib_ptr(),
+                frames,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    fn finish_subframe(
+        &self,
+        buf: Option<gst::Buffer>,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_audio_decoder_finish_subframe(
+                self.as_ref().to_glib_none().0,
+                buf.into_glib_ptr(),
             ))
         }
     }

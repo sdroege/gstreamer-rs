@@ -159,16 +159,6 @@ name = "GstApp.AppSrc"
 status = "generate"
 final_type = true
 
-    [[object.function]]
-    name = "push_buffer"
-    # Pass by value
-    manual = true
-
-    [[object.function]]
-    name = "push_buffer_list"
-    # Pass by value
-    manual = true
-
     [[object.signal]]
     name = "end-of-stream"
     # Action signal

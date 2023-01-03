@@ -155,8 +155,6 @@ pub trait ElementExtManual: 'static {
         structure: crate::Structure,
     );
 
-    #[doc(alias = "gst_element_post_message")]
-    fn post_message(&self, message: crate::Message) -> Result<(), glib::error::BoolError>;
     fn post_error_message(&self, msg: crate::ErrorMessage);
 
     #[doc(alias = "gst_element_iterate_pads")]
@@ -427,18 +425,6 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 line as i32,
                 structure.into_glib_ptr(),
             );
-        }
-    }
-
-    fn post_message(&self, message: crate::Message) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib::result_from_gboolean!(
-                ffi::gst_element_post_message(
-                    self.as_ref().to_glib_none().0,
-                    message.into_glib_ptr()
-                ),
-                "Failed to post message"
-            )
         }
     }
 

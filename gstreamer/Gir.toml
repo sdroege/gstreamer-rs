@@ -533,11 +533,6 @@ manual_traits = ["BufferPoolExtManual"]
     manual = true
 
     [[object.function]]
-    name = "release_buffer"
-    # Takes ownership
-    manual = true
-
-    [[object.function]]
     name = "set_active"
         [object.function.return]
         bool_return_is_error = "Failed to activate buffer pool"
@@ -605,8 +600,8 @@ final_type = true
 
     [[object.function]]
     name = "post"
-    # transfer ownership of the message
-    manual = true
+        [object.function.return]
+        bool_return_is_error = "Failed to post message"
 
 [[object]]
 name = "Gst.Caps"
@@ -1085,8 +1080,8 @@ manual_traits = ["ElementExtManual"]
 
     [[object.function]]
     name = "post_message"
-    # takes ownership of message
-    manual = true
+        [object.function.return]
+        bool_return_is_error = "Failed to post message"
 
     [[object.function]]
     name = "add_pad"
@@ -1605,26 +1600,6 @@ manual_traits = ["PadExtManual"]
     manual = true
 
     [[object.function]]
-    name = "chain"
-    # Move buffer
-    manual = true
-
-    [[object.function]]
-    name = "push"
-    # Move buffer
-    manual = true
-
-    [[object.function]]
-    name = "chain_list"
-    # Move buffer
-    manual = true
-
-    [[object.function]]
-    name = "push_list"
-    # Move buffer
-    manual = true
-
-    [[object.function]]
     name = "pull_range"
     # Buffer can be NULL
     manual = true
@@ -1925,11 +1900,6 @@ final_type = true
     name = "list_free"
     # useless and unsafe
     ignore = true
-
-    [[object.function]]
-    name = "set_cache_data"
-    # pass by value
-    manual = true
 
     [[object.function]]
     name = "get_cache_data"

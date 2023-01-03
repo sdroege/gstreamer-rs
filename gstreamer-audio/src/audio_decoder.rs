@@ -21,19 +21,6 @@ extern "C" {
 }
 
 pub trait AudioDecoderExtManual: 'static {
-    fn finish_frame(
-        &self,
-        buffer: Option<gst::Buffer>,
-        frames: i32,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn finish_subframe(
-        &self,
-        buffer: Option<gst::Buffer>,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
     fn negotiate(&self) -> Result<(), gst::FlowError>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -63,35 +50,6 @@ pub trait AudioDecoderExtManual: 'static {
 }
 
 impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
-    fn finish_frame(
-        &self,
-        buffer: Option<gst::Buffer>,
-        frames: i32,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_audio_decoder_finish_frame(
-                self.as_ref().to_glib_none().0,
-                buffer.map(|b| b.into_glib_ptr()).unwrap_or(ptr::null_mut()),
-                frames,
-            ))
-        }
-    }
-
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "gst_audio_decoder_finish_subframe")]
-    fn finish_subframe(
-        &self,
-        buffer: Option<gst::Buffer>,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_audio_decoder_finish_subframe(
-                self.as_ref().to_glib_none().0,
-                buffer.map(|b| b.into_glib_ptr()).unwrap_or(ptr::null_mut()),
-            ))
-        }
-    }
-
     #[doc(alias = "gst_audio_decoder_negotiate")]
     fn negotiate(&self) -> Result<(), gst::FlowError> {
         unsafe {

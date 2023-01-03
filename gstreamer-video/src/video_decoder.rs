@@ -45,10 +45,6 @@ pub trait VideoDecoderExtManual: 'static {
     #[doc(alias = "get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
-    fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
-    fn release_frame(&self, frame: VideoCodecFrame);
-    fn drop_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
-
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_video_decoder_finish_subframe")]
@@ -143,36 +139,6 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
                 &mut params,
             );
             (from_glib_full(allocator), params.into())
-        }
-    }
-
-    #[doc(alias = "gst_video_decoder_finish_frame")]
-    fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_video_decoder_finish_frame(
-                self.as_ref().to_glib_none().0,
-                frame.into_glib_ptr(),
-            ))
-        }
-    }
-
-    #[doc(alias = "gst_video_decoder_release_frame")]
-    fn release_frame(&self, frame: VideoCodecFrame) {
-        unsafe {
-            ffi::gst_video_decoder_release_frame(
-                self.as_ref().to_glib_none().0,
-                frame.into_glib_ptr(),
-            )
-        }
-    }
-
-    #[doc(alias = "gst_video_decoder_drop_frame")]
-    fn drop_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_video_decoder_drop_frame(
-                self.as_ref().to_glib_none().0,
-                frame.into_glib_ptr(),
-            ))
         }
     }
 

@@ -3,8 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{Object, PluginDependencyFlags};
-use glib::translate::*;
+use crate::{Object, PluginDependencyFlags, Structure};
+use glib::{prelude::*, translate::*};
 use std::{fmt, ptr};
 
 glib::wrapper! {
@@ -123,6 +123,13 @@ impl Plugin {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_plugin_load(self.to_glib_none().0))
                 .ok_or_else(|| glib::bool_error!("Failed to load plugin"))
+        }
+    }
+
+    #[doc(alias = "gst_plugin_set_cache_data")]
+    pub fn set_cache_data(&self, cache_data: Structure) {
+        unsafe {
+            ffi::gst_plugin_set_cache_data(self.to_glib_none().0, cache_data.into_glib_ptr());
         }
     }
 

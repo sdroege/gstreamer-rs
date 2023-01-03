@@ -41,8 +41,6 @@ mod enums;
 #[cfg(feature = "serde")]
 mod flag_serde;
 
-mod navigation;
-
 mod caps;
 pub use crate::caps::VideoCapsBuilder;
 
@@ -159,7 +157,7 @@ pub mod prelude {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub use crate::video_aggregator_pad::VideoAggregatorPadExtManual;
     pub use crate::{
-        auto::traits::*, navigation::NavigationExtManual, video_buffer_pool::VideoBufferPoolConfig,
+        auto::traits::*, video_buffer_pool::VideoBufferPoolConfig,
         video_decoder::VideoDecoderExtManual, video_encoder::VideoEncoderExtManual,
         video_format::VideoFormatIteratorExt, video_frame::VideoBufferExt,
         video_overlay::VideoOverlayExtManual,

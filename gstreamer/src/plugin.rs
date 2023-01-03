@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{Plugin, PluginFlags, Structure, StructureRef};
+use crate::{Plugin, PluginFlags, StructureRef};
 
 impl Plugin {
     #[doc(alias = "get_cache_data")]
@@ -15,13 +15,6 @@ impl Plugin {
             } else {
                 Some(StructureRef::from_glib_borrow(cache_data))
             }
-        }
-    }
-
-    #[doc(alias = "gst_plugin_set_cache_data")]
-    pub fn set_cache_data(&self, cache_data: Structure) {
-        unsafe {
-            ffi::gst_plugin_set_cache_data(self.to_glib_none().0, cache_data.into_glib_ptr());
         }
     }
 }

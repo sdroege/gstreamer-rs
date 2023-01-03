@@ -31,6 +31,13 @@ pub trait AudioEncoderExt: 'static {
     #[doc(alias = "gst_audio_encoder_allocate_output_buffer")]
     fn allocate_output_buffer(&self, size: usize) -> gst::Buffer;
 
+    #[doc(alias = "gst_audio_encoder_finish_frame")]
+    fn finish_frame(
+        &self,
+        buffer: Option<gst::Buffer>,
+        samples: i32,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
     #[doc(alias = "gst_audio_encoder_get_audio_info")]
     #[doc(alias = "get_audio_info")]
     fn audio_info(&self) -> AudioInfo;
@@ -152,6 +159,20 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
             from_glib_full(ffi::gst_audio_encoder_allocate_output_buffer(
                 self.as_ref().to_glib_none().0,
                 size,
+            ))
+        }
+    }
+
+    fn finish_frame(
+        &self,
+        buffer: Option<gst::Buffer>,
+        samples: i32,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_audio_encoder_finish_frame(
+                self.as_ref().to_glib_none().0,
+                buffer.into_glib_ptr(),
+                samples,
             ))
         }
     }
