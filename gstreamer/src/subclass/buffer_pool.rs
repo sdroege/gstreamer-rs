@@ -608,7 +608,7 @@ mod tests {
         data: *mut libc::c_void,
         _mini_object: *mut ffi::GstMiniObject,
     ) {
-        let finalized = &*(data as *const AtomicBool);
+        let finalized = Arc::from_raw(data as *const AtomicBool);
         finalized.store(true, Ordering::SeqCst);
     }
 }
