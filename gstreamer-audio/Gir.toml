@@ -244,6 +244,10 @@ manual_traits = ["AudioEncoderExtManual"]
         name = "tolerance"
         mandatory = true
 
+    [[object.function]]
+    name = "set_headers"
+    manual = true
+
 [[object]]
 name = "GstAudio.AudioFlags"
 status = "generate"

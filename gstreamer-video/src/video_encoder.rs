@@ -69,6 +69,9 @@ pub trait VideoEncoderExtManual: 'static {
         output_state: VideoCodecState<'a, InNegotiation<'a>>,
     ) -> Result<(), gst::FlowError>;
 
+    #[doc(alias = "gst_video_encoder_set_headers")]
+    fn set_headers(&self, headers: impl IntoIterator<Item = gst::Buffer>);
+
     fn sink_pad(&self) -> &gst::Pad;
 
     fn src_pad(&self) -> &gst::Pad;
@@ -251,6 +254,18 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
             Ok(())
         } else {
             Err(gst::FlowError::NotNegotiated)
+        }
+    }
+
+    fn set_headers(&self, headers: impl IntoIterator<Item = gst::Buffer>) {
+        unsafe {
+            ffi::gst_video_encoder_set_headers(
+                self.as_ref().to_glib_none().0,
+                headers
+                    .into_iter()
+                    .collect::<glib::List<_>>()
+                    .into_glib_ptr(),
+            );
         }
     }
 

@@ -502,14 +502,14 @@ impl fmt::Display for DateTime {
 impl<'a> From<&'a glib::DateTime> for DateTime {
     fn from(v: &'a glib::DateTime) -> DateTime {
         skip_assert_initialized!();
-        DateTime::from_g_date_time(v)
+        DateTime::from_g_date_time(v.clone())
     }
 }
 
 impl From<glib::DateTime> for DateTime {
     fn from(v: glib::DateTime) -> DateTime {
         skip_assert_initialized!();
-        DateTime::from_g_date_time(&v)
+        DateTime::from_g_date_time(v)
     }
 }
 

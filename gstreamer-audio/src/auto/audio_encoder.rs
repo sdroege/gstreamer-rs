@@ -106,9 +106,6 @@ pub trait AudioEncoderExt: 'static {
     #[doc(alias = "gst_audio_encoder_set_hard_resync")]
     fn set_hard_resync(&self, enabled: bool);
 
-    #[doc(alias = "gst_audio_encoder_set_headers")]
-    fn set_headers(&self, headers: Vec<gst::Buffer>);
-
     #[doc(alias = "gst_audio_encoder_set_latency")]
     fn set_latency(&self, min: gst::ClockTime, max: impl Into<Option<gst::ClockTime>>);
 
@@ -318,15 +315,6 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
             ffi::gst_audio_encoder_set_hard_resync(
                 self.as_ref().to_glib_none().0,
                 enabled.into_glib(),
-            );
-        }
-    }
-
-    fn set_headers(&self, headers: Vec<gst::Buffer>) {
-        unsafe {
-            ffi::gst_audio_encoder_set_headers(
-                self.as_ref().to_glib_none().0,
-                headers.into_glib_ptr(),
             );
         }
     }

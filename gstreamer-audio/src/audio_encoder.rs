@@ -24,6 +24,9 @@ pub trait AudioEncoderExtManual: 'static {
     #[doc(alias = "gst_audio_encoder_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
+    #[doc(alias = "gst_audio_encoder_set_headers")]
+    fn set_headers(&self, headers: impl IntoIterator<Item = gst::Buffer>);
+
     fn sink_pad(&self) -> &gst::Pad;
 
     fn src_pad(&self) -> &gst::Pad;
@@ -81,6 +84,18 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
                 &mut params,
             );
             (from_glib_full(allocator), params.into())
+        }
+    }
+
+    fn set_headers(&self, headers: impl IntoIterator<Item = gst::Buffer>) {
+        unsafe {
+            ffi::gst_audio_encoder_set_headers(
+                self.as_ref().to_glib_none().0,
+                headers
+                    .into_iter()
+                    .collect::<glib::List<_>>()
+                    .into_glib_ptr(),
+            );
         }
     }
 

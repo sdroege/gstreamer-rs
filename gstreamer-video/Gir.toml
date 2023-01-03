@@ -573,6 +573,10 @@ manual_traits = ["VideoEncoderExtManual"]
     name = "get_allocator"
     manual = true
 
+    [[object.function]]
+    name = "set_headers"
+    manual = true
+
 [[object]]
 name = "GstVideo.VideoFieldOrder"
 status = "generate"

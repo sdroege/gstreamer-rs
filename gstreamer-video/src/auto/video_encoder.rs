@@ -50,9 +50,6 @@ pub trait VideoEncoderExt: 'static {
     #[doc(alias = "gst_video_encoder_proxy_getcaps")]
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
 
-    #[doc(alias = "gst_video_encoder_set_headers")]
-    fn set_headers(&self, headers: Vec<gst::Buffer>);
-
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_encoder_set_min_force_key_unit_interval")]
@@ -134,15 +131,6 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
                 caps.to_glib_none().0,
                 filter.to_glib_none().0,
             ))
-        }
-    }
-
-    fn set_headers(&self, headers: Vec<gst::Buffer>) {
-        unsafe {
-            ffi::gst_video_encoder_set_headers(
-                self.as_ref().to_glib_none().0,
-                headers.into_glib_ptr(),
-            );
         }
     }
 
