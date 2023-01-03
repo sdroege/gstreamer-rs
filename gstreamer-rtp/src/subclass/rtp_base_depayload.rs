@@ -1,12 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::*;
+use std::ptr;
 
+use glib::translate::*;
 use gst::subclass::prelude::*;
 
-use crate::prelude::*;
-use crate::RTPBaseDepayload;
-use std::ptr;
+use crate::{prelude::*, RTPBaseDepayload};
 
 pub trait RTPBaseDepayloadImpl: RTPBaseDepayloadImplExt + ElementImpl {
     fn set_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {

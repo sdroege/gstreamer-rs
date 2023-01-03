@@ -1,8 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use glib::{prelude::*, translate::*};
+
 use crate::ColorBalanceChannel;
-use glib::prelude::*;
-use glib::translate::*;
 
 impl ColorBalanceChannel {
     pub fn label(&self) -> glib::GString {

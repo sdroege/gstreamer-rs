@@ -2,7 +2,6 @@ use std::sync::{Arc, Mutex};
 
 use anyhow::Error;
 use byte_slice_cast::*;
-
 use glib::source::SourceId;
 use gst::prelude::*;
 use gst_app::AppSrc;

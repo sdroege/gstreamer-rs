@@ -5,12 +5,13 @@
 // audio / subtitle streams or changing the volume) are all supported by simple
 // one-line function calls on the GstPlayer.
 
-use gst::prelude::*;
-
-use std::env;
-use std::sync::{Arc, Mutex};
+use std::{
+    env,
+    sync::{Arc, Mutex},
+};
 
 use anyhow::Error;
+use gst::prelude::*;
 
 #[allow(unused_imports)]
 #[path = "../examples-common.rs"]

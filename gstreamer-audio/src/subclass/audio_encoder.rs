@@ -1,15 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::*;
-
-use gst::subclass::prelude::*;
-
 use std::ptr;
 
-use crate::prelude::*;
+use glib::translate::*;
+use gst::subclass::prelude::*;
 
-use crate::AudioEncoder;
-use crate::AudioInfo;
+use crate::{prelude::*, AudioEncoder, AudioInfo};
 
 pub trait AudioEncoderImpl: AudioEncoderImplExt + ElementImpl {
     fn open(&self) -> Result<(), gst::ErrorMessage> {

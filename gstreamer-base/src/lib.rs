@@ -33,8 +33,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::use_self)]
 #[allow(unused_imports)]
 mod auto;
-pub use crate::auto::functions::*;
-pub use crate::auto::*;
+pub use crate::auto::{functions::*, *};
 
 pub mod functions;
 pub use crate::functions::*;
@@ -63,13 +62,11 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst::prelude::*;
 
-    pub use crate::aggregator::AggregatorExtManual;
-    pub use crate::aggregator_pad::AggregatorPadExtManual;
-    pub use crate::auto::traits::*;
-    pub use crate::base_parse::BaseParseExtManual;
-    pub use crate::base_sink::BaseSinkExtManual;
-    pub use crate::base_src::BaseSrcExtManual;
-    pub use crate::base_transform::BaseTransformExtManual;
+    pub use crate::{
+        aggregator::AggregatorExtManual, aggregator_pad::AggregatorPadExtManual, auto::traits::*,
+        base_parse::BaseParseExtManual, base_sink::BaseSinkExtManual, base_src::BaseSrcExtManual,
+        base_transform::BaseTransformExtManual,
+    };
 }
 
 mod utils;

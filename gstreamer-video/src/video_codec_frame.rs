@@ -1,11 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::utils::HasStreamLock;
-use crate::VideoCodecFrameFlags;
+use std::{fmt, marker::PhantomData, mem};
+
 use glib::translate::*;
-use std::fmt;
-use std::marker::PhantomData;
-use std::mem;
+
+use crate::{utils::HasStreamLock, VideoCodecFrameFlags};
 
 pub struct VideoCodecFrame<'a> {
     frame: *mut ffi::GstVideoCodecFrame,

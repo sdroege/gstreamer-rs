@@ -1,12 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::PlayVideoOverlayVideoRenderer;
-use glib::prelude::*;
-use glib::translate::*;
-
 use std::ptr;
 
+use glib::{prelude::*, translate::*};
 use libc::uintptr_t;
+
+use crate::PlayVideoOverlayVideoRenderer;
 
 impl PlayVideoOverlayVideoRenderer {
     pub unsafe fn new(window_handle: uintptr_t) -> PlayVideoOverlayVideoRenderer {

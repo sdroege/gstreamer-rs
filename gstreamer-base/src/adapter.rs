@@ -1,10 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::Adapter;
+use std::{io, mem, ops};
+
 use glib::translate::*;
-use std::io;
-use std::mem;
-use std::ops;
+
+use crate::Adapter;
 
 impl Adapter {
     #[doc(alias = "gst_adapter_copy")]

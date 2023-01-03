@@ -1,24 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::format::{CompatibleFormattedValue, FormattedValue};
-use crate::prelude::*;
-use crate::structure::*;
-use crate::GenericFormattedValue;
-use crate::GroupId;
-use crate::MessageType;
-use crate::Object;
-use crate::Seqnum;
-use crate::TagList;
-
-use std::borrow::Borrow;
-use std::ffi::CStr;
-use std::fmt;
-use std::mem;
-use std::num::NonZeroU32;
-use std::ops::Deref;
-use std::ptr;
+use std::{borrow::Borrow, ffi::CStr, fmt, mem, num::NonZeroU32, ops::Deref, ptr};
 
 use glib::translate::*;
+
+use crate::{
+    format::{CompatibleFormattedValue, FormattedValue},
+    prelude::*,
+    structure::*,
+    GenericFormattedValue, GroupId, MessageType, Object, Seqnum, TagList,
+};
 
 mini_object_wrapper!(Message, MessageRef, ffi::GstMessage, || {
     ffi::gst_message_get_type()

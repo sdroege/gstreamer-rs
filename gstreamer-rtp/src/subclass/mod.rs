@@ -16,12 +16,10 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst::subclass::prelude::*;
 
+    pub use super::rtp_base_depayload::{RTPBaseDepayloadImpl, RTPBaseDepayloadImplExt};
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub use super::rtp_base_payload::{RTPBasePayloadImpl, RTPBasePayloadImplExt};
-
-    pub use super::rtp_base_depayload::{RTPBaseDepayloadImpl, RTPBaseDepayloadImplExt};
-
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub use super::rtp_header_extension::{RTPHeaderExtensionImpl, RTPHeaderExtensionImplExt};

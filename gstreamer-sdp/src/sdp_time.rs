@@ -1,10 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::ffi::CStr;
-use std::fmt;
-use std::mem;
-use std::os::raw::c_char;
-use std::ptr;
+use std::{ffi::CStr, fmt, mem, os::raw::c_char, ptr};
 
 use glib::translate::*;
 

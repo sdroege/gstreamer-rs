@@ -2,27 +2,19 @@
 
 #![allow(clippy::upper_case_acronyms)]
 
-use glib::{Date, StaticType, ToValue};
-
-use num_rational::Rational32;
-
-use serde::de;
-use serde::de::{Deserialize, Deserializer, SeqAccess, Visitor};
-use serde::ser;
-use serde::ser::{Serialize, SerializeTuple, Serializer};
-
 use std::{fmt, mem};
 
+use glib::{Date, StaticType, ToValue};
+use num_rational::Rational32;
 use once_cell::sync::Lazy;
+use serde::{
+    de,
+    de::{Deserialize, Deserializer, SeqAccess, Visitor},
+    ser,
+    ser::{Serialize, SerializeTuple, Serializer},
+};
 
-use crate::Buffer;
-use crate::DateTime;
-use crate::List;
-use crate::Sample;
-use crate::Structure;
-
-use crate::date_time_serde;
-use crate::value::*;
+use crate::{date_time_serde, value::*, Buffer, DateTime, List, Sample, Structure};
 
 pub(crate) static ARRAY_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Array::static_type);
 pub(crate) static BITMASK_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Bitmask::static_type);
@@ -293,16 +285,9 @@ impl_de_send_value_collection!(List);
 
 #[cfg(test)]
 mod tests {
-    use crate::Array;
-    use crate::Bitmask;
-    use crate::DateTime;
-    use crate::Fraction;
-    use crate::FractionRange;
-    use crate::IntRange;
-    use crate::List;
-    use crate::Structure;
-
     use glib::{Date, DateMonth};
+
+    use crate::{Array, Bitmask, DateTime, Fraction, FractionRange, IntRange, List, Structure};
 
     #[test]
     fn test_serialize_simple() {

@@ -2,8 +2,7 @@
 
 use thiserror::Error;
 
-use crate::ErrorMessage;
-use crate::FlowReturn;
+use crate::{ErrorMessage, FlowReturn};
 
 #[macro_export]
 macro_rules! panic_to_error(

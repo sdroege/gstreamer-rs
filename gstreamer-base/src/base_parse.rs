@@ -1,11 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::BaseParse;
-use crate::BaseParseFrame;
-use glib::prelude::*;
-use glib::translate::*;
-use gst::format::{FormattedValue, SpecificFormattedValueFullRange};
 use std::mem;
+
+use glib::{prelude::*, translate::*};
+use gst::format::{FormattedValue, SpecificFormattedValueFullRange};
+
+use crate::{BaseParse, BaseParseFrame};
 
 pub trait BaseParseExtManual: 'static {
     #[doc(alias = "get_sink_pad")]

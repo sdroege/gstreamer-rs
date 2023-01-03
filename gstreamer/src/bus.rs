@@ -1,21 +1,23 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::{
+    future,
+    mem::transmute,
+    pin::Pin,
+    task::{Context, Poll},
+};
+
 use futures_channel::mpsc::{self, UnboundedReceiver};
 use futures_core::Stream;
 use futures_util::{stream::FusedStream, StreamExt};
-use glib::ffi::{gboolean, gpointer};
-use glib::prelude::*;
-use glib::source::{Continue, Priority, SourceId};
-use glib::translate::*;
-use std::future;
-use std::mem::transmute;
-use std::pin::Pin;
-use std::task::{Context, Poll};
+use glib::{
+    ffi::{gboolean, gpointer},
+    prelude::*,
+    source::{Continue, Priority, SourceId},
+    translate::*,
+};
 
-use crate::Bus;
-use crate::BusSyncReply;
-use crate::Message;
-use crate::MessageType;
+use crate::{Bus, BusSyncReply, Message, MessageType};
 
 unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + Send + 'static>(
     bus: *mut ffi::GstBus,
@@ -377,8 +379,9 @@ impl FusedStream for BusStream {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::sync::{Arc, Mutex};
+
+    use super::*;
 
     #[test]
     fn test_sync_handler() {

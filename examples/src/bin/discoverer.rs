@@ -8,15 +8,11 @@
 // Discovered information could for example contain the stream's duration or whether it is
 // seekable (filesystem) or not (some http servers).
 
-use gst_pbutils::prelude::*;
-
-use gst_pbutils::DiscovererInfo;
-use gst_pbutils::DiscovererStreamInfo;
+use std::env;
 
 use anyhow::Error;
 use derive_more::{Display, Error};
-
-use std::env;
+use gst_pbutils::{prelude::*, DiscovererInfo, DiscovererStreamInfo};
 
 #[path = "../examples-common.rs"]
 mod examples_common;

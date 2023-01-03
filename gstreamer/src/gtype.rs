@@ -1,7 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::*;
 use std::ffi::c_void;
+
+use glib::translate::*;
 
 pub trait PluginApiExt {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -63,8 +64,9 @@ impl PluginApiExt for glib::Type {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use glib::StaticType;
+
+    use super::*;
 
     #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy, glib::Enum)]
     #[repr(u32)]

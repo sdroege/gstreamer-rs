@@ -1,9 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::RTSPMediaFactory;
+use glib::{prelude::*, translate::*};
 
-use glib::prelude::*;
-use glib::translate::*;
+use crate::RTSPMediaFactory;
 
 pub trait RTSPMediaFactoryExtManual: 'static {
     #[doc(alias = "gst_rtsp_media_factory_add_role_from_structure")]

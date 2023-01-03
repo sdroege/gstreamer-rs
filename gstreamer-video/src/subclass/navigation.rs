@@ -1,9 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::translate::*;
-
-use glib::subclass::prelude::*;
+use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use crate::Navigation;
 

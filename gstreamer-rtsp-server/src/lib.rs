@@ -58,13 +58,11 @@ mod rtsp_token;
 
 pub mod subclass;
 
-pub use crate::rtsp_context::*;
-pub use crate::rtsp_thread::*;
-pub use crate::rtsp_token::*;
+use std::ffi::CStr;
 
 use once_cell::sync::Lazy;
 
-use std::ffi::CStr;
+pub use crate::{rtsp_context::*, rtsp_thread::*, rtsp_token::*};
 
 pub static RTSP_ADDRESS_POOL_ANY_IPV4: Lazy<&'static str> = Lazy::new(|| unsafe {
     CStr::from_ptr(ffi::GST_RTSP_ADDRESS_POOL_ANY_IPV4)
@@ -132,15 +130,11 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst_rtsp::prelude::*;
 
-    pub use crate::auto::traits::*;
-
-    pub use crate::rtsp_address_pool::RTSPAddressPoolExtManual;
-    pub use crate::rtsp_auth::RTSPAuthExtManual;
-    pub use crate::rtsp_client::RTSPClientExtManual;
-    pub use crate::rtsp_media::RTSPMediaExtManual;
-    pub use crate::rtsp_media_factory::RTSPMediaFactoryExtManual;
-    pub use crate::rtsp_onvif_media_factory::RTSPOnvifMediaFactoryExtManual;
-    pub use crate::rtsp_server::RTSPServerExtManual;
-    pub use crate::rtsp_session::RTSPSessionExtManual;
-    pub use crate::rtsp_session_pool::RTSPSessionPoolExtManual;
+    pub use crate::{
+        auto::traits::*, rtsp_address_pool::RTSPAddressPoolExtManual, rtsp_auth::RTSPAuthExtManual,
+        rtsp_client::RTSPClientExtManual, rtsp_media::RTSPMediaExtManual,
+        rtsp_media_factory::RTSPMediaFactoryExtManual,
+        rtsp_onvif_media_factory::RTSPOnvifMediaFactoryExtManual, rtsp_server::RTSPServerExtManual,
+        rtsp_session::RTSPSessionExtManual, rtsp_session_pool::RTSPSessionPoolExtManual,
+    };
 }

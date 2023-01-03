@@ -28,15 +28,17 @@ void main () {
 "#;
 
 mod mirror {
-    use super::{gl, FRAGMENT_SHADER};
-    use gst_base::subclass::BaseTransformMode;
-    use gst_gl::prelude::*;
-    use gst_gl::subclass::prelude::*;
-    use gst_gl::subclass::GLFilterMode;
-    use gst_gl::*;
-
-    use once_cell::sync::Lazy;
     use std::sync::Mutex;
+
+    use gst_base::subclass::BaseTransformMode;
+    use gst_gl::{
+        prelude::*,
+        subclass::{prelude::*, GLFilterMode},
+        *,
+    };
+    use once_cell::sync::Lazy;
+
+    use super::{gl, FRAGMENT_SHADER};
 
     pub static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
         gst::DebugCategory::new(

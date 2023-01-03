@@ -1,6 +1,6 @@
-use gst::prelude::*;
-
 use std::ops::{Deref, DerefMut};
+
+use gst::prelude::*;
 
 // rustdoc-stripper-ignore-next
 /// Wrapper around `gst::Structure` for `element-properties`

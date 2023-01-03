@@ -1,12 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::translate::*;
+use gst_base::{prelude::*, subclass::prelude::*};
 
-use gst_base::prelude::*;
-use gst_base::subclass::prelude::*;
-
-use crate::AudioFilter;
-use crate::AudioInfo;
+use crate::{AudioFilter, AudioInfo};
 
 pub trait AudioFilterImpl: AudioFilterImplExt + BaseTransformImpl {
     fn allowed_caps() -> &'static gst::Caps;

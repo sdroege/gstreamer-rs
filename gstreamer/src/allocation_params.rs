@@ -1,7 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::marker::PhantomData;
-use std::mem;
+use std::{marker::PhantomData, mem};
 
 use glib::translate::*;
 

@@ -1,13 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::TestClock;
+use std::{marker::PhantomData, mem, ops, path, ptr};
+
 use glib::translate::*;
 use gst::prelude::*;
-use std::marker::PhantomData;
-use std::mem;
-use std::ops;
-use std::path;
-use std::ptr;
+
+use crate::TestClock;
 
 #[derive(Debug)]
 #[doc(alias = "GstHarness")]

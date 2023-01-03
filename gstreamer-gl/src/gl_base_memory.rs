@@ -1,12 +1,8 @@
-use glib::prelude::*;
-use glib::translate::*;
-use gst::Memory;
-
-use crate::GLAllocationParams;
-use crate::GLBaseMemoryAllocator;
-
 use ffi::GstGLBaseMemory;
-use gst::MemoryRef;
+use glib::{prelude::*, translate::*};
+use gst::{Memory, MemoryRef};
+
+use crate::{GLAllocationParams, GLBaseMemoryAllocator};
 
 gst::memory_object_wrapper!(
     GLBaseMemory,

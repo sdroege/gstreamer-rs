@@ -1,11 +1,12 @@
-use std::collections::HashMap;
-use std::mem;
-use std::sync::{atomic, Arc, Mutex};
-
-use once_cell::sync::Lazy;
-use thiserror::Error;
+use std::{
+    collections::HashMap,
+    mem,
+    sync::{atomic, Arc, Mutex},
+};
 
 use gst::{glib, prelude::*};
+use once_cell::sync::Lazy;
+use thiserror::Error;
 
 static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
     gst::DebugCategory::new(
@@ -480,8 +481,10 @@ mod tests {
         sync::{Arc, Mutex},
     };
 
-    use futures::channel::mpsc;
-    use futures::{channel::mpsc::Receiver, SinkExt, StreamExt};
+    use futures::{
+        channel::{mpsc, mpsc::Receiver},
+        SinkExt, StreamExt,
+    };
     use gst::prelude::*;
 
     use crate::{ConsumptionLink, StreamProducer};

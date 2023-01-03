@@ -7,20 +7,17 @@
 // coefficients are provided via Rust API on the filter as a Vec<f32>.
 #![allow(clippy::non_send_fields_in_send_ty)]
 
-use gst::prelude::*;
-
 use anyhow::Error;
 use derive_more::{Display, Error};
+use gst::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
 // Our custom FIR filter element is defined in this module
 mod fir_filter {
-    use gst_base::subclass::prelude::*;
-
     use byte_slice_cast::*;
-
+    use gst_base::subclass::prelude::*;
     use once_cell::sync::Lazy;
 
     // The debug category we use below for our filter
@@ -34,9 +31,9 @@ mod fir_filter {
 
     // In the imp submodule we include the actual implementation
     mod imp {
+        use std::{collections::VecDeque, sync::Mutex};
+
         use super::*;
-        use std::collections::VecDeque;
-        use std::sync::Mutex;
 
         // This is the private data of our filter
         #[derive(Default)]

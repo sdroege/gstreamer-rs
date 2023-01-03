@@ -7,11 +7,9 @@
 // with the correct stride from GStreamer to the image crate as GStreamer does not necessarily
 // produce tightly packed pixels, and in case of RGBx never.
 
-use gst::element_error;
-use gst::prelude::*;
-
 use anyhow::Error;
 use derive_more::{Display, Error};
+use gst::{element_error, prelude::*};
 
 #[path = "../examples-common.rs"]
 mod examples_common;

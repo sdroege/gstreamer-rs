@@ -1,14 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::translate::*;
-
-use super::prelude::*;
+use glib::{prelude::*, translate::*};
 use gst::LoggableError;
 use gst_base::subclass::prelude::*;
 
-use crate::AudioRingBufferSpec;
-use crate::AudioSink;
+use super::prelude::*;
+use crate::{AudioRingBufferSpec, AudioSink};
 
 pub trait AudioSinkImpl: AudioSinkImplExt + AudioBaseSinkImpl {
     fn close(&self) -> Result<(), LoggableError> {

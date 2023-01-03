@@ -1,7 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::PlayerGMainContextSignalDispatcher;
 use glib::translate::*;
+
+use crate::PlayerGMainContextSignalDispatcher;
 
 impl PlayerGMainContextSignalDispatcher {
     #[doc(alias = "gst_player_g_main_context_signal_dispatcher_new")]

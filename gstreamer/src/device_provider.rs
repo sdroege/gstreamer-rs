@@ -1,13 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::DeviceProvider;
-use crate::Plugin;
-use crate::Rank;
-
-use glib::prelude::*;
-use glib::translate::*;
-
 use std::ffi::CStr;
+
+use glib::{prelude::*, translate::*};
+
+use crate::{DeviceProvider, Plugin, Rank};
 
 impl DeviceProvider {
     #[doc(alias = "gst_device_provider_register")]

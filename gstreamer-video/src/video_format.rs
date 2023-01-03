@@ -1,10 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use once_cell::sync::Lazy;
-use std::ffi::CStr;
-use std::str;
+use std::{ffi::CStr, str};
 
 use glib::translate::{from_glib, FromGlib, IntoGlib};
+use once_cell::sync::Lazy;
 
 #[cfg(feature = "v1_18")]
 pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| unsafe {

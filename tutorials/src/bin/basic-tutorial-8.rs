@@ -1,7 +1,6 @@
 use std::sync::{Arc, Mutex};
 
 use byte_slice_cast::*;
-
 use glib::source::SourceId;
 use gst::prelude::*;
 use gst_app::{AppSink, AppSrc};

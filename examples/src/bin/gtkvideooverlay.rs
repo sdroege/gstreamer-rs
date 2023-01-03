@@ -17,17 +17,11 @@
 // {videotestsrc} - {xvimagesink(on linux)}
 // {videotestsrc} - {glimagesink(on mac)}
 
-use gst_video::prelude::*;
+use std::{cell::RefCell, os::raw::c_void, process};
 
 use gio::prelude::*;
-
+use gst_video::prelude::*;
 use gtk::prelude::*;
-
-use std::os::raw::c_void;
-
-use std::cell::RefCell;
-
-use std::process;
 
 #[cfg(all(target_os = "linux", feature = "gtkvideooverlay-x11"))]
 fn create_video_sink() -> gst::Element {

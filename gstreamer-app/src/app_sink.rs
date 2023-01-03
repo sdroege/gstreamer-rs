@@ -1,22 +1,20 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::AppSink;
-use glib::ffi::gpointer;
-use glib::prelude::*;
-use glib::translate::*;
-use std::mem;
-use std::panic;
-use std::ptr;
-use std::sync::atomic::{AtomicBool, Ordering};
-
-use {
-    futures_core::Stream,
-    std::{
-        pin::Pin,
-        sync::{Arc, Mutex},
-        task::{Context, Poll, Waker},
+use std::{
+    mem, panic,
+    pin::Pin,
+    ptr,
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc, Mutex,
     },
+    task::{Context, Poll, Waker},
 };
+
+use futures_core::Stream;
+use glib::{ffi::gpointer, prelude::*, translate::*};
+
+use crate::AppSink;
 
 #[allow(clippy::type_complexity)]
 pub struct AppSinkCallbacks {
@@ -1205,9 +1203,10 @@ impl Stream for AppSinkStream {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use futures_util::StreamExt;
     use gst::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test_app_sink_stream() {

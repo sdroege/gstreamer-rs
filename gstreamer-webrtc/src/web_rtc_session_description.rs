@@ -1,9 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::WebRTCSDPType;
-use crate::WebRTCSessionDescription;
-use glib::translate::*;
 use std::mem;
+
+use glib::translate::*;
+
+use crate::{WebRTCSDPType, WebRTCSessionDescription};
 
 impl WebRTCSessionDescription {
     #[doc(alias = "gst_webrtc_session_description_new")]

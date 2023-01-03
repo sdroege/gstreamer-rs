@@ -1,12 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use glib::{prelude::*, subclass::prelude::*, translate::*};
+
 use super::prelude::*;
 use crate::{
     ffi, Bin, Buffer, BufferList, Element, Event, FlowError, FlowSuccess, Message, MiniObject,
     Object, Pad, PadLinkError, PadLinkSuccess, QueryRef, StateChange, StateChangeError,
     StateChangeSuccess, Tracer,
 };
-use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 #[allow(unused_variables)]
 pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {

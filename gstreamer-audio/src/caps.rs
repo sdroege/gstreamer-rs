@@ -1,7 +1,8 @@
-use crate::{AudioFormat, AudioLayout};
+use std::ops::{Bound::*, RangeBounds};
+
 use gst::Caps;
-use std::ops::Bound::*;
-use std::ops::RangeBounds;
+
+use crate::{AudioFormat, AudioLayout};
 
 pub struct AudioCapsBuilder<T> {
     builder: gst::caps::Builder<T>,

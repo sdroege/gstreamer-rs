@@ -1,17 +1,19 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::format::{CompatibleFormattedValue, FormattedValue, GenericFormattedValue};
-use crate::structure::*;
+use std::{
+    borrow::{Borrow, BorrowMut},
+    ffi::CStr,
+    fmt, mem,
+    ops::{Deref, DerefMut},
+    ptr,
+};
 
-use std::borrow::{Borrow, BorrowMut};
-use std::ffi::CStr;
-use std::fmt;
-use std::mem;
-use std::ops::{Deref, DerefMut};
-use std::ptr;
+use glib::{object::IsA, translate::*};
 
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{
+    format::{CompatibleFormattedValue, FormattedValue, GenericFormattedValue},
+    structure::*,
+};
 
 mini_object_wrapper!(Query, QueryRef, ffi::GstQuery, || {
     ffi::gst_query_get_type()

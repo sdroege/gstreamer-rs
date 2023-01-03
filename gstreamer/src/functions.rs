@@ -1,18 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::auto::functions::parse_bin_from_description;
-use glib::prelude::*;
-use glib::translate::*;
 use std::ptr;
 
-use crate::Bin;
-use crate::Element;
-use crate::Object;
-use crate::ParseContext;
-use crate::ParseFlags;
+use glib::{prelude::*, translate::*};
+
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use crate::Tracer;
+use crate::{
+    auto::functions::parse_bin_from_description, Bin, Element, Object, ParseContext, ParseFlags,
+};
 
 pub fn parse_bin_from_description_with_name(
     bin_description: &str,

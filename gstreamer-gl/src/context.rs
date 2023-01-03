@@ -1,10 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::GLDisplay;
-use glib::prelude::*;
-use glib::translate::*;
-use gst::ContextRef;
 use std::ptr;
+
+use glib::{prelude::*, translate::*};
+use gst::ContextRef;
+
+use crate::GLDisplay;
 
 pub trait ContextGLExt {
     #[doc(alias = "get_gl_display")]

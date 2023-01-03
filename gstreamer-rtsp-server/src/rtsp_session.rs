@@ -1,10 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::RTSPSession;
-use crate::RTSPSessionMedia;
-use glib::prelude::*;
-use glib::translate::*;
 use std::mem;
+
+use glib::{prelude::*, translate::*};
+
+use crate::{RTSPSession, RTSPSessionMedia};
 
 pub trait RTSPSessionExtManual: 'static {
     #[doc(alias = "gst_rtsp_session_dup_media")]

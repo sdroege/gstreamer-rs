@@ -1,9 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::translate::*;
-use gst::subclass::prelude::*;
-use gst::{result_from_gboolean, LoggableError, CAT_RUST};
+use glib::{prelude::*, translate::*};
+use gst::{result_from_gboolean, subclass::prelude::*, LoggableError, CAT_RUST};
 
 use crate::AudioVisualizer;
 

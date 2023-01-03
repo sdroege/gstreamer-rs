@@ -1,10 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::PluginFeature;
-use crate::Rank;
+use glib::{
+    prelude::*,
+    translate::{from_glib, FromGlibPtrFull, IntoGlib, ToGlibPtr},
+};
 
-use glib::prelude::*;
-use glib::translate::{from_glib, FromGlibPtrFull, IntoGlib, ToGlibPtr};
+use crate::{PluginFeature, Rank};
 
 pub trait PluginFeatureExtManual: Sized + 'static {
     #[doc(alias = "get_rank")]

@@ -6,11 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use crate::GLDisplayEGL;
-use glib::ffi::gpointer;
-use glib::translate::*;
+use glib::{ffi::gpointer, translate::*};
 use gst_gl::GLDisplayType;
 use libc::uintptr_t;
+
+use crate::GLDisplayEGL;
 
 impl GLDisplayEGL {
     pub unsafe fn with_egl_display(

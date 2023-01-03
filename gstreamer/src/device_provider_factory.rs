@@ -1,14 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::DeviceProviderFactory;
-use crate::ELEMENT_METADATA_AUTHOR;
-use crate::ELEMENT_METADATA_DESCRIPTION;
-use crate::ELEMENT_METADATA_DOC_URI;
-use crate::ELEMENT_METADATA_ICON_NAME;
-use crate::ELEMENT_METADATA_KLASS;
-use crate::ELEMENT_METADATA_LONGNAME;
-use glib::translate::*;
 use std::ffi::CStr;
+
+use glib::translate::*;
+
+use crate::{
+    DeviceProviderFactory, ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION,
+    ELEMENT_METADATA_DOC_URI, ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS,
+    ELEMENT_METADATA_LONGNAME,
+};
 
 impl DeviceProviderFactory {
     #[doc(alias = "gst_device_provider_factory_list_get_device_providers")]

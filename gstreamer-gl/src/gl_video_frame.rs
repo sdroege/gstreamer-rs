@@ -1,9 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::mem;
+
 use glib::translate::{from_glib, ToGlibPtr};
 use gst_video::video_frame::Readable;
-
-use std::mem;
 
 pub trait VideoFrameGLExt {
     fn from_buffer_readable_gl(

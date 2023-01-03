@@ -8,10 +8,9 @@
 // the client machinery and printing some status.
 #![allow(clippy::non_send_fields_in_send_ty)]
 
-use gst_rtsp_server::prelude::*;
-
 use anyhow::Error;
 use derive_more::{Display, Error};
+use gst_rtsp_server::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;
@@ -81,9 +80,9 @@ fn main_loop() -> Result<(), Error> {
 
 // Our custom media factory that creates a media input manually
 mod media_factory {
-    use super::*;
-
     use gst_rtsp_server::subclass::prelude::*;
+
+    use super::*;
 
     // In the imp submodule we include the actual implementation
     mod imp {
@@ -211,9 +210,9 @@ mod media {
 // Our custom RTSP server subclass that reports when clients are connecting and uses
 // our custom RTSP client subclass for each client
 mod server {
-    use super::*;
-
     use gst_rtsp_server::subclass::prelude::*;
+
+    use super::*;
 
     // In the imp submodule we include the actual implementation
     mod imp {

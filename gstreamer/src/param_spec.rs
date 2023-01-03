@@ -1,8 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::gobject_ffi;
-use glib::translate::*;
-use glib::ParamSpec;
+use glib::{gobject_ffi, translate::*, ParamSpec};
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -366,8 +364,9 @@ impl<'a, T: glib::prelude::ParamSpecBuilderExt<'a>> GstParamSpecBuilderExt<'a> f
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use glib::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test_trait() {

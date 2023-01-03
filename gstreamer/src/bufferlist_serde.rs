@@ -1,13 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use serde::de::{Deserialize, Deserializer, SeqAccess, Visitor};
-use serde::ser::{Serialize, SerializeSeq, Serializer};
-
 use std::fmt;
 
-use crate::Buffer;
-use crate::BufferList;
-use crate::BufferListRef;
+use serde::{
+    de::{Deserialize, Deserializer, SeqAccess, Visitor},
+    ser::{Serialize, SerializeSeq, Serializer},
+};
+
+use crate::{Buffer, BufferList, BufferListRef};
 
 impl Serialize for BufferListRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -61,8 +61,7 @@ impl<'de> Deserialize<'de> for BufferList {
 
 #[cfg(test)]
 mod tests {
-    use crate::BufferList;
-    use crate::ClockTime;
+    use crate::{BufferList, ClockTime};
 
     #[test]
     fn test_serialize() {

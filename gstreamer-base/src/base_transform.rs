@@ -1,10 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::{mem, ptr};
+
+use glib::{prelude::*, translate::*};
+
 use crate::BaseTransform;
-use glib::prelude::*;
-use glib::translate::*;
-use std::mem;
-use std::ptr;
 
 pub trait BaseTransformExtManual: 'static {
     #[doc(alias = "get_allocator")]

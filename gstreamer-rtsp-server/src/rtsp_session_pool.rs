@@ -1,11 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::RTSPSessionPool;
-use glib::ffi::{gboolean, gpointer};
-use glib::prelude::*;
-use glib::source::{Continue, Priority};
-use glib::translate::*;
 use std::mem::transmute;
+
+use glib::{
+    ffi::{gboolean, gpointer},
+    prelude::*,
+    source::{Continue, Priority},
+    translate::*,
+};
+
+use crate::RTSPSessionPool;
 
 unsafe extern "C" fn trampoline_watch<F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static>(
     pool: *mut ffi::GstRTSPSessionPool,

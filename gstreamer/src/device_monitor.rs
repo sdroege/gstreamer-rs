@@ -1,12 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::Caps;
-use crate::DeviceMonitor;
-
-use glib::prelude::*;
-use glib::translate::*;
-
 use std::num::NonZeroU32;
+
+use glib::{prelude::*, translate::*};
+
+use crate::{Caps, DeviceMonitor};
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct DeviceMonitorFilterId(NonZeroU32);

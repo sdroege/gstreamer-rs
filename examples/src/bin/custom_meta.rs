@@ -4,16 +4,15 @@
 // an appsrc and retrieves them again from an appsink.
 #![allow(clippy::non_send_fields_in_send_ty)]
 
-use gst::element_error;
-use gst::prelude::*;
+use gst::{element_error, prelude::*};
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
 mod custom_meta {
+    use std::{fmt, mem};
+
     use gst::prelude::*;
-    use std::fmt;
-    use std::mem;
 
     // Public Rust type for the custom meta.
     #[repr(transparent)]
@@ -70,10 +69,10 @@ mod custom_meta {
 
     // Actual unsafe implementation of the meta.
     mod imp {
+        use std::{mem, ptr};
+
         use glib::translate::*;
         use once_cell::sync::Lazy;
-        use std::mem;
-        use std::ptr;
 
         pub(super) struct CustomMetaParams {
             pub label: String,

@@ -1,12 +1,9 @@
-use gst::prelude::*;
-use gst_video::prelude::ColorBalanceExt;
+use std::{cmp, thread, time};
 
 use anyhow::Error;
-
-use termion::event::Key;
-use termion::input::TermRead;
-
-use std::{cmp, thread, time};
+use gst::prelude::*;
+use gst_video::prelude::ColorBalanceExt;
+use termion::{event::Key, input::TermRead};
 
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;

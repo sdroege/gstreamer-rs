@@ -35,11 +35,10 @@
 //    those with lowers (higher number). Thus, Layers with higher priority are "in the front".
 // - The timeline is the enclosing element, grouping all layers and providing a timeframe.
 
-use gst::prelude::*;
+use std::env;
 
 use ges::prelude::*;
-
-use std::env;
+use gst::prelude::*;
 
 #[allow(unused_imports)]
 #[path = "../examples-common.rs"]

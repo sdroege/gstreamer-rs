@@ -1,25 +1,25 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::Clock;
-use crate::ClockEntryType;
-use crate::ClockError;
-use crate::ClockFlags;
-use crate::ClockReturn;
-use crate::ClockSuccess;
-use crate::ClockTime;
-use crate::ClockTimeDiff;
-use glib::ffi::{gboolean, gpointer};
-use glib::prelude::*;
-use glib::translate::*;
-use libc::c_void;
-use std::cmp;
-use std::ptr;
+use std::{
+    cmp,
+    marker::Unpin,
+    pin::Pin,
+    ptr,
+    sync::{atomic, atomic::AtomicI32},
+};
 
 use futures_core::{Future, Stream};
-use std::marker::Unpin;
-use std::pin::Pin;
-use std::sync::atomic;
-use std::sync::atomic::AtomicI32;
+use glib::{
+    ffi::{gboolean, gpointer},
+    prelude::*,
+    translate::*,
+};
+use libc::c_void;
+
+use crate::{
+    Clock, ClockEntryType, ClockError, ClockFlags, ClockReturn, ClockSuccess, ClockTime,
+    ClockTimeDiff,
+};
 
 glib::wrapper! {
     #[derive(Debug, PartialOrd, Ord, PartialEq, Eq, Hash)]
@@ -527,10 +527,12 @@ impl<O: IsA<Clock>> ClockExtManual for O {
 
 #[cfg(test)]
 mod tests {
-    use super::super::prelude::*;
-    use super::super::*;
-    use super::*;
     use std::sync::mpsc::channel;
+
+    use super::{
+        super::{prelude::*, *},
+        *,
+    };
 
     #[test]
     fn test_wait() {

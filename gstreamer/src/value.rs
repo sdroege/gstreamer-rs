@@ -1,13 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use num_rational::Rational32;
-use std::cmp;
-use std::fmt;
-use std::ops;
-use std::slice;
+use std::{cmp, fmt, ops, slice};
 
-use glib::translate::*;
-use glib::StaticType;
+use glib::{translate::*, StaticType};
+use num_rational::Rational32;
 
 #[derive(Copy, Clone, Debug, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub struct Fraction(pub Rational32);

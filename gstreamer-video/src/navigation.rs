@@ -1,6 +1,9 @@
+use glib::{
+    object::IsA,
+    translate::{IntoGlibPtr, ToGlibPtr},
+};
+
 use crate::auto::Navigation;
-use glib::object::IsA;
-use glib::translate::{IntoGlibPtr, ToGlibPtr};
 
 pub trait NavigationExtManual: 'static {
     #[doc(alias = "gst_navigation_send_event")]

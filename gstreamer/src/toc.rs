@@ -1,20 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::ffi::CStr;
-use std::fmt;
-use std::mem;
-use std::ptr;
+use std::{ffi::CStr, fmt, mem, ptr};
 
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, IntoGlib, IntoGlibPtr,
     ToGlibPtr,
 };
 
-use crate::TagList;
-use crate::TagMergeMode;
-use crate::TocEntryType;
-use crate::TocLoopType;
-use crate::TocScope;
+use crate::{TagList, TagMergeMode, TocEntryType, TocLoopType, TocScope};
 
 mini_object_wrapper!(Toc, TocRef, ffi::GstToc, || { ffi::gst_toc_get_type() });
 

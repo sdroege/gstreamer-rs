@@ -1,13 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use serde::de::{Deserialize, Deserializer};
-use serde::ser::{Serialize, SerializeStruct, Serializer};
+use serde::{
+    de::{Deserialize, Deserializer},
+    ser::{Serialize, SerializeStruct, Serializer},
+};
 
-use crate::toc::*;
-use crate::TagList;
-use crate::TocEntryType;
-use crate::TocLoopType;
-use crate::TocScope;
+use crate::{toc::*, TagList, TocEntryType, TocLoopType, TocScope};
 
 impl Serialize for TocRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -117,12 +115,7 @@ impl<'de> Deserialize<'de> for TocEntry {
 
 #[cfg(test)]
 mod tests {
-    use crate::tags::Title;
-    use crate::toc::*;
-    use crate::TagList;
-    use crate::TagMergeMode;
-    use crate::TocEntryType;
-    use crate::TocScope;
+    use crate::{tags::Title, toc::*, TagList, TagMergeMode, TocEntryType, TocScope};
 
     #[test]
     fn test_serialize() {

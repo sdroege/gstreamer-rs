@@ -1,7 +1,8 @@
-use crate::VideoFormat;
+use std::ops::{Bound::*, RangeBounds};
+
 use gst::Caps;
-use std::ops::Bound::*;
-use std::ops::RangeBounds;
+
+use crate::VideoFormat;
 
 pub struct VideoCapsBuilder<T> {
     builder: gst::caps::Builder<T>,

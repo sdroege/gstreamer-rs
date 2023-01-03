@@ -3,12 +3,10 @@
 // or for an EOS message. When a message notifying about either of both
 // is received, the future is resolved.
 
-use gst::prelude::*;
-
-use futures::executor::LocalPool;
-use futures::prelude::*;
-
 use std::env;
+
+use futures::{executor::LocalPool, prelude::*};
+use gst::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

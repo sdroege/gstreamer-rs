@@ -1,12 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::{boxed::Box as Box_, mem::transmute};
+
+use glib::{
+    object::ObjectType,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+
 use crate::Player;
-use glib::object::ObjectType;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
 
 impl Player {
     #[doc(alias = "get_config")]

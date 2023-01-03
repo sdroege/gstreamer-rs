@@ -1,20 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::ffi::CStr;
-use std::fmt;
-use std::marker::PhantomData;
-use std::mem;
+use std::{ffi::CStr, fmt, marker::PhantomData, mem};
 
+use glib::{
+    translate::*,
+    value::{FromValue, SendValue, ToSendValue, Value},
+    StaticType,
+};
 use once_cell::sync::Lazy;
 
-use glib::translate::*;
-use glib::value::{FromValue, SendValue, ToSendValue, Value};
-use glib::StaticType;
-
-use crate::Sample;
-use crate::TagError;
-use crate::TagMergeMode;
-use crate::TagScope;
+use crate::{Sample, TagError, TagMergeMode, TagScope};
 
 pub trait Tag<'a> {
     type TagType: StaticType + FromValue<'a> + ToSendValue + Send + Sync;

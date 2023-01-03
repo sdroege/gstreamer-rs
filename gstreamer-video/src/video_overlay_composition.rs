@@ -1,7 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::fmt;
-use std::mem;
+use std::{fmt, mem};
 
 use glib::translate::{from_glib, from_glib_full, from_glib_none, IntoGlib, ToGlibPtr};
 

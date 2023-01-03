@@ -1,10 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::RTSPContext;
-use crate::RTSPOnvifMediaFactory;
+use glib::{prelude::*, translate::*};
 
-use glib::prelude::*;
-use glib::translate::*;
+use crate::{RTSPContext, RTSPOnvifMediaFactory};
 
 pub trait RTSPOnvifMediaFactoryExtManual: 'static {
     #[doc(alias = "gst_rtsp_onvif_media_factory_requires_backchannel")]

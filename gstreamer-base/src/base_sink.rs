@@ -1,9 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::BaseSink;
-use glib::prelude::*;
-use glib::translate::*;
 use std::mem;
+
+use glib::{prelude::*, translate::*};
+
+use crate::BaseSink;
 
 pub trait BaseSinkExtManual: 'static {
     #[doc(alias = "get_segment")]

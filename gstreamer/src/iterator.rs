@@ -1,17 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::ffi::{gconstpointer, gpointer};
-use glib::translate::*;
-use glib::value::{FromValue, ToValue};
-use glib::StaticType;
-use glib::Value;
-use std::ffi::CString;
-use std::fmt;
-use std::iter;
-use std::marker::PhantomData;
-use std::mem;
-use std::ptr;
-use std::sync::Arc;
+use std::{ffi::CString, fmt, iter, marker::PhantomData, mem, ptr, sync::Arc};
+
+use glib::{
+    ffi::{gconstpointer, gpointer},
+    translate::*,
+    value::{FromValue, ToValue},
+    StaticType, Value,
+};
 use thiserror::Error;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
@@ -355,9 +351,9 @@ unsafe extern "C" fn filter_boxed_unref<T: 'static>(boxed: gpointer) {
 }
 
 unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib::ffi::GType {
+    use std::{collections::HashMap, sync::Mutex};
+
     use once_cell::sync::Lazy;
-    use std::collections::HashMap;
-    use std::sync::Mutex;
 
     static mut TYPES: Lazy<Mutex<HashMap<String, glib::ffi::GType>>> =
         Lazy::new(|| Mutex::new(HashMap::new()));
@@ -806,8 +802,9 @@ mod tests {
 
     #[test]
     fn test_std_resync_collect() {
-        use crate::prelude::*;
         use std::collections::BTreeSet;
+
+        use crate::prelude::*;
 
         crate::init().unwrap();
 

@@ -1,12 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::subclass::prelude::*;
-use glib::translate::*;
+use std::mem::transmute;
+
+use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use crate::RTSPMediaFactory;
-
-use std::mem::transmute;
 
 pub trait RTSPMediaFactoryImpl: RTSPMediaFactoryImplExt + ObjectImpl + Send + Sync {
     fn gen_key(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString> {

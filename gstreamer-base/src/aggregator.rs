@@ -1,20 +1,20 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::Aggregator;
-use glib::prelude::*;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-use glib::signal::{connect_raw, SignalHandlerId};
-use glib::translate::*;
-use gst::format::FormattedValue;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::boxed::Box as Box_;
-use std::mem;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::mem::transmute;
-use std::ptr;
+use std::{mem, ptr};
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+use glib::signal::{connect_raw, SignalHandlerId};
+use glib::{prelude::*, translate::*};
+use gst::format::FormattedValue;
+
+use crate::Aggregator;
 
 pub trait AggregatorExtManual: 'static {
     #[doc(alias = "get_allocator")]

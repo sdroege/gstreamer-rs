@@ -1,16 +1,17 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::*;
-use glib::StaticType;
+use std::{
+    fmt,
+    io::{self, prelude::*},
+    time::Duration,
+};
 
-use std::fmt;
-use std::io::{self, prelude::*};
-use std::time::Duration;
+use glib::{translate::*, StaticType};
 
-use super::{Format, FormattedValueError, GenericFormattedValue, Signed};
 use super::{
-    FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic, FormattedValueNoneBuilder,
-    SpecificFormattedValue, SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic,
+    Format, FormattedValue, FormattedValueError, FormattedValueFullRange, FormattedValueIntrinsic,
+    FormattedValueNoneBuilder, GenericFormattedValue, Signed, SpecificFormattedValue,
+    SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic,
 };
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Default)]
@@ -405,8 +406,9 @@ enum Sign {
 /// contain the sign; that will be added by this method.
 fn pad_clocktime(f: &mut fmt::Formatter<'_>, sign: Sign, buf: &str) -> fmt::Result {
     skip_assert_initialized!();
-    use self::Sign::*;
     use std::fmt::{Alignment, Write};
+
+    use self::Sign::*;
 
     // Start by determining how we're padding, gathering
     // settings from the Formatter and the Sign
@@ -584,9 +586,10 @@ impl std::iter::Sum for ClockTime {
 
 #[cfg(test)]
 mod tests {
+    use opt_ops::prelude::*;
+
     use super::*;
     use crate::format::{Signed, UnsignedIntoSigned};
-    use opt_ops::prelude::*;
 
     const CT_1: ClockTime = ClockTime::from_nseconds(1);
     const CT_2: ClockTime = ClockTime::from_nseconds(2);

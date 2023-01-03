@@ -1,9 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::ptr;
+
+use glib::{bool_error, prelude::*, subclass::prelude::*, translate::*, BoolError};
+
 use super::prelude::*;
 use crate::{AllocationParams, Allocator, Memory};
-use glib::{bool_error, prelude::*, subclass::prelude::*, translate::*, BoolError};
-use std::ptr;
 
 pub trait AllocatorImpl: AllocatorImplExt + GstObjectImpl + Send + Sync {
     fn alloc(&self, size: usize, params: Option<&AllocationParams>) -> Result<Memory, BoolError> {

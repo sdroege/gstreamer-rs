@@ -1,7 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{from_glib, ToGlibPtr};
-use glib::{FlagsClass, StaticType, ToValue};
+use glib::{
+    translate::{from_glib, ToGlibPtr},
+    FlagsClass, StaticType, ToValue,
+};
 use gst::bitflags_serde_impl;
 
 bitflags_serde_impl!(crate::MarkerFlags, "v1_20");

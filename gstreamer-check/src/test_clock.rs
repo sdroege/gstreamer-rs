@@ -1,8 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::TestClock;
-use glib::translate::*;
 use std::ptr;
+
+use glib::translate::*;
+
+use crate::TestClock;
 
 impl TestClock {
     #[doc(alias = "gst_test_clock_has_id")]

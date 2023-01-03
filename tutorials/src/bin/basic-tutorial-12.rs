@@ -1,7 +1,7 @@
-use gst::prelude::*;
 use std::io::Write;
 
 use anyhow::Error;
+use gst::prelude::*;
 
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;

@@ -17,10 +17,10 @@ pub fn run<T, F: FnOnce() -> T + Send + 'static>(main: F) -> T
 where
     T: Send + 'static,
 {
+    use std::thread;
+
     use cocoa::appkit::NSApplication;
     use objc::{msg_send, sel, sel_impl};
-
-    use std::thread;
 
     unsafe {
         let app = cocoa::appkit::NSApp();

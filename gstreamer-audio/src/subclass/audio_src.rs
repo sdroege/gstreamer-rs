@@ -2,15 +2,12 @@
 
 use std::mem;
 
-use glib::prelude::*;
-use glib::translate::*;
-
-use super::prelude::*;
+use glib::{prelude::*, translate::*};
 use gst::LoggableError;
 use gst_base::subclass::prelude::*;
 
-use crate::AudioRingBufferSpec;
-use crate::AudioSrc;
+use super::prelude::*;
+use crate::{AudioRingBufferSpec, AudioSrc};
 
 pub trait AudioSrcImpl: AudioSrcImplExt + AudioBaseSrcImpl {
     fn close(&self) -> Result<(), LoggableError> {

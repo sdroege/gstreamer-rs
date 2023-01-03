@@ -149,8 +149,6 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst_base::prelude::*;
 
-    pub use crate::auto::traits::*;
-    pub use crate::navigation::NavigationExtManual;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub use crate::video_aggregator::VideoAggregatorExtManual;
@@ -160,12 +158,12 @@ pub mod prelude {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub use crate::video_aggregator_pad::VideoAggregatorPadExtManual;
-    pub use crate::video_buffer_pool::VideoBufferPoolConfig;
-    pub use crate::video_decoder::VideoDecoderExtManual;
-    pub use crate::video_encoder::VideoEncoderExtManual;
-    pub use crate::video_format::VideoFormatIteratorExt;
-    pub use crate::video_frame::VideoBufferExt;
-    pub use crate::video_overlay::VideoOverlayExtManual;
+    pub use crate::{
+        auto::traits::*, navigation::NavigationExtManual, video_buffer_pool::VideoBufferPoolConfig,
+        video_decoder::VideoDecoderExtManual, video_encoder::VideoEncoderExtManual,
+        video_format::VideoFormatIteratorExt, video_frame::VideoBufferExt,
+        video_overlay::VideoOverlayExtManual,
+    };
 }
 
 pub mod subclass;

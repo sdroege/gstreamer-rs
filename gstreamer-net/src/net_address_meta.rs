@@ -61,8 +61,9 @@ impl fmt::Debug for NetAddressMeta {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use gio::prelude::*;
+
+    use super::*;
 
     #[test]
     fn test_add_get_meta() {

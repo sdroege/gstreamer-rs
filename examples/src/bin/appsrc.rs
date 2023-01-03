@@ -10,10 +10,9 @@
 // The application provides data of the following format:
 // Video / BGRx (4 bytes) / 2 fps
 
-use gst::prelude::*;
-
 use anyhow::Error;
 use derive_more::{Display, Error};
+use gst::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

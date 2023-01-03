@@ -4,7 +4,6 @@ use std::{
 };
 
 use glib::{translate::*, Cast};
-
 use gst::{Memory, MemoryRef};
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]

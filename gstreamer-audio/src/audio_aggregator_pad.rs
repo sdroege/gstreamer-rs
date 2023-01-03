@@ -1,6 +1,6 @@
+use glib::{object::IsA, translate::*};
+
 use crate::auto::AudioAggregatorPad;
-use glib::object::IsA;
-use glib::translate::*;
 
 pub trait AudioAggregatorPadExtManual: 'static {
     fn audio_info(&self) -> Option<crate::AudioInfo>;

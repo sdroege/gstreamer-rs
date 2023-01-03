@@ -1,7 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::Play;
 use glib::translate::*;
+
+use crate::Play;
 
 impl Play {
     #[doc(alias = "get_config")]

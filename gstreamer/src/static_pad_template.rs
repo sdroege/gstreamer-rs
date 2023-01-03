@@ -1,15 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::Caps;
-use crate::PadTemplate;
+use std::{ffi::CStr, fmt, marker::PhantomData, ptr};
 
-use glib::translate::*;
-use glib::StaticType;
-use std::ffi::CStr;
+use glib::{translate::*, StaticType};
 
-use std::fmt;
-use std::marker::PhantomData;
-use std::ptr;
+use crate::{Caps, PadTemplate};
 
 #[doc(alias = "GstStaticPadTemplate")]
 #[derive(Clone, Copy)]

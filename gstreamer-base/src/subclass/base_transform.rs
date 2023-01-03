@@ -1,15 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::prelude::*;
+use std::{mem, ptr};
 
 use glib::translate::*;
-
 use gst::subclass::prelude::*;
 
-use std::mem;
-use std::ptr;
-
-use crate::BaseTransform;
+use crate::{prelude::*, BaseTransform};
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum BaseTransformMode {

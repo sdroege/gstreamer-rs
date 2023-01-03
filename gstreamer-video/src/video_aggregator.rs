@@ -1,6 +1,6 @@
+use glib::{object::IsA, translate::*};
+
 use crate::auto::VideoAggregator;
-use glib::object::IsA;
-use glib::translate::*;
 
 pub trait VideoAggregatorExtManual: 'static {
     fn video_info(&self) -> Option<crate::VideoInfo>;

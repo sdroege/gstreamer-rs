@@ -1,11 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::translate::*;
-
-use gst::subclass::prelude::*;
-
 use std::ptr;
+
+use glib::{prelude::*, translate::*};
+use gst::subclass::prelude::*;
 
 use crate::BaseSink;
 

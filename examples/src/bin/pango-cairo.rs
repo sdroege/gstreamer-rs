@@ -11,15 +11,15 @@
 // The capsfilter element allows us to dictate the video resolution we want for the
 // videotestsrc and the cairooverlay element.
 
-use gst::prelude::*;
-
-use pango::prelude::*;
-
-use std::ops;
-use std::sync::{Arc, Mutex};
+use std::{
+    ops,
+    sync::{Arc, Mutex},
+};
 
 use anyhow::Error;
 use derive_more::{Display, Error};
+use gst::prelude::*;
+use pango::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

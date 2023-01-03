@@ -5,11 +5,11 @@
 #![allow(clippy::non_send_fields_in_send_ty)]
 #![doc = include_str!("../README.md")]
 
+use std::sync::Once;
+
 pub use ffi;
 pub use glib;
 pub use gst;
-
-use std::sync::Once;
 
 static PBUTILS_INIT: Once = Once::new();
 
@@ -40,8 +40,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::use_self)]
 #[allow(unused_imports)]
 mod auto;
-pub use crate::auto::functions::*;
-pub use crate::auto::*;
+pub use crate::auto::{functions::*, *};
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 mod element_properties;
@@ -72,11 +71,12 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst::prelude::*;
 
-    pub use crate::audio_visualizer::*;
-    pub use crate::auto::traits::*;
-    pub use crate::encoding_profile::{
-        EncodingProfileBuilder, EncodingProfileExtManual, EncodingProfileHasRestrictionGetter,
+    pub use crate::{
+        audio_visualizer::*,
+        auto::traits::*,
+        encoding_profile::{
+            EncodingProfileBuilder, EncodingProfileExtManual, EncodingProfileHasRestrictionGetter,
+        },
+        functions::CodecTag,
     };
-
-    pub use crate::functions::CodecTag;
 }

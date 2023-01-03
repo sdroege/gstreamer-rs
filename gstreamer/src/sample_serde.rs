@@ -1,15 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use serde::de::{Deserialize, Deserializer};
-use serde::ser::{Serialize, SerializeStruct, Serializer};
+use serde::{
+    de::{Deserialize, Deserializer},
+    ser::{Serialize, SerializeStruct, Serializer},
+};
 
-use crate::Buffer;
-use crate::BufferList;
-use crate::Caps;
-use crate::Sample;
-use crate::SampleRef;
-use crate::Segment;
-use crate::Structure;
+use crate::{Buffer, BufferList, Caps, Sample, SampleRef, Segment, Structure};
 
 impl Serialize for SampleRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -76,15 +72,10 @@ impl<'de> Deserialize<'de> for Sample {
 
 #[cfg(test)]
 mod tests {
-    use crate::Buffer;
-    use crate::Caps;
-    use crate::ClockTime;
-    use crate::Format;
-    use crate::GenericFormattedValue;
-    use crate::Sample;
-    use crate::Segment;
-    use crate::SegmentFlags;
-    use crate::Structure;
+    use crate::{
+        Buffer, Caps, ClockTime, Format, GenericFormattedValue, Sample, Segment, SegmentFlags,
+        Structure,
+    };
 
     #[test]
     fn test_serialize() {

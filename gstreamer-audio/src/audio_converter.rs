@@ -1,8 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-
 use std::ops;
+
+use glib::prelude::*;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AudioConverterConfig(gst::Structure);

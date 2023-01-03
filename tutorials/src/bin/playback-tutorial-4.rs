@@ -1,11 +1,11 @@
-use gst::prelude::*;
-
-use glib::FlagsClass;
+use std::{
+    io::Write,
+    sync::{Arc, Mutex},
+};
 
 use anyhow::Error;
-
-use std::io::Write;
-use std::sync::{Arc, Mutex};
+use glib::FlagsClass;
+use gst::prelude::*;
 
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;

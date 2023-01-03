@@ -1,21 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::ELEMENT_METADATA_AUTHOR;
-use crate::ELEMENT_METADATA_DESCRIPTION;
-use crate::ELEMENT_METADATA_DOC_URI;
-use crate::ELEMENT_METADATA_ICON_NAME;
-use crate::ELEMENT_METADATA_KLASS;
-use crate::ELEMENT_METADATA_LONGNAME;
 use std::ffi::CStr;
 
-use crate::CapsRef;
-use crate::Element;
-use crate::ElementFactory;
-use crate::Rank;
-use crate::StaticPadTemplate;
+use glib::{prelude::*, translate::*};
 
-use glib::prelude::*;
-use glib::translate::*;
+use crate::{
+    CapsRef, Element, ElementFactory, Rank, StaticPadTemplate, ELEMENT_METADATA_AUTHOR,
+    ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI, ELEMENT_METADATA_ICON_NAME,
+    ELEMENT_METADATA_KLASS, ELEMENT_METADATA_LONGNAME,
+};
 
 impl ElementFactory {
     #[doc(alias = "gst_element_factory_create_with_properties")]

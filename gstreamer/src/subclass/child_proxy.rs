@@ -1,10 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use super::prelude::*;
-use glib::prelude::*;
-use glib::subclass::prelude::*;
-use glib::translate::*;
+use glib::{prelude::*, subclass::prelude::*, translate::*};
 
+use super::prelude::*;
 use crate::ChildProxy;
 
 pub trait ChildProxyImpl: GstObjectImpl + Send + Sync {

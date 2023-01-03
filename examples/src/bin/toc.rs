@@ -9,9 +9,9 @@
 // {filesrc} - {decodebin} - {queue} - {fakesink}
 //                          \- ...
 
-use gst::prelude::*;
-
 use std::env;
+
+use gst::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

@@ -12,16 +12,15 @@
 // {uridecodebin} -|                                          {encodebin}-{filesink}
 //                  \-{queue}-{videoconvert}-{videoscale}----/
 
-use gst::element_error;
-use gst::element_warning;
-
-use gst_pbutils::prelude::*;
-
-use std::env;
-use std::sync::{Arc, Mutex};
+use std::{
+    env,
+    sync::{Arc, Mutex},
+};
 
 use anyhow::Error;
 use derive_more::{Display, Error};
+use gst::{element_error, element_warning};
+use gst_pbutils::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

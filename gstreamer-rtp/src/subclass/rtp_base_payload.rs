@@ -1,11 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::translate::*;
-
 use gst::subclass::prelude::*;
 
-use crate::prelude::*;
-use crate::RTPBasePayload;
+use crate::{prelude::*, RTPBasePayload};
 
 pub trait RTPBasePayloadImpl: RTPBasePayloadImplExt + ElementImpl {
     fn caps(&self, pad: &gst::Pad, filter: Option<&gst::Caps>) -> gst::Caps {

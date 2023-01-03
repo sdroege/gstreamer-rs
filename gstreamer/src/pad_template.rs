@@ -1,13 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::Caps;
-use crate::PadDirection;
-use crate::PadPresence;
-use crate::PadTemplate;
-use crate::StaticPadTemplate;
-use glib::prelude::*;
-use glib::translate::*;
 use std::ffi::CStr;
+
+use glib::{prelude::*, translate::*};
+
+use crate::{Caps, PadDirection, PadPresence, PadTemplate, StaticPadTemplate};
 
 impl PadTemplate {
     #[doc(alias = "gst_pad_template_new_from_static_pad_template_with_gtype")]

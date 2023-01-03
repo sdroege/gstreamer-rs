@@ -1,7 +1,6 @@
 use std::fmt;
 
 use glib::translate::*;
-
 use gst::{Memory, MemoryRef};
 
 gst::memory_object_wrapper!(

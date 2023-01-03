@@ -5,10 +5,9 @@
 
 use std::env;
 
-use gst_rtsp_server::prelude::*;
-
 use anyhow::Error;
 use derive_more::{Display, Error};
+use gst_rtsp_server::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

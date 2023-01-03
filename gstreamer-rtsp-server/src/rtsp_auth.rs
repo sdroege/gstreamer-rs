@@ -1,15 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
+use std::{boxed::Box as Box_, mem::transmute};
 
-use std::boxed::Box as Box_;
-use std::mem::transmute;
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
 
-use crate::RTSPAuth;
-use crate::RTSPToken;
+use crate::{RTSPAuth, RTSPToken};
 
 pub trait RTSPAuthExtManual: 'static {
     #[doc(alias = "gst_rtsp_auth_set_default_token")]

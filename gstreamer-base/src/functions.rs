@@ -1,8 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::translate::*;
 use std::mem;
+
+use glib::{prelude::*, translate::*};
 
 #[doc(alias = "gst_type_find_helper_for_data")]
 pub fn type_find_helper_for_data(

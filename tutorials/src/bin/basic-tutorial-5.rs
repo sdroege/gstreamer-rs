@@ -1,14 +1,10 @@
 #[cfg(feature = "tutorial5")]
 mod tutorial5 {
-    use std::os::raw::c_void;
-    use std::process;
+    use std::{ops, os::raw::c_void, process};
 
     use gdk::prelude::*;
-    use gtk::prelude::*;
-
     use gst_video::prelude::*;
-
-    use std::ops;
+    use gtk::prelude::*;
 
     // Custom struct to keep our window reference alive
     // and to store the timeout id so that we can remove

@@ -1,13 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 
-use crate::auto::EncodingAudioProfile;
-use crate::auto::EncodingContainerProfile;
-use crate::auto::EncodingProfile;
-use crate::auto::EncodingVideoProfile;
-
+use crate::auto::{
+    EncodingAudioProfile, EncodingContainerProfile, EncodingProfile, EncodingVideoProfile,
+};
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 use crate::ElementProperties;
 
@@ -609,9 +606,10 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::auto::EncodingContainerProfile;
-    use crate::auto::EncodingVideoProfile;
-    use crate::prelude::*;
+    use crate::{
+        auto::{EncodingContainerProfile, EncodingVideoProfile},
+        prelude::*,
+    };
 
     const AUDIO_PROFILE_NAME: &str = "audio-profile";
     const AUDIO_PROFILE_DESCRIPTION: &str = "audio-profile-description";

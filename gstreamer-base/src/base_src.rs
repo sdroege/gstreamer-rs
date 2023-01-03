@@ -1,9 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::translate::*;
-use std::mem;
-use std::ptr;
+use std::{mem, ptr};
+
+use glib::{prelude::*, translate::*};
 
 use crate::BaseSrc;
 

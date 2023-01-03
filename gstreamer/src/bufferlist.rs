@@ -1,12 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{from_glib, from_glib_full, from_glib_none, IntoGlib, IntoGlibPtr};
-use std::fmt;
-use std::ops::ControlFlow;
-use std::ptr;
+use std::{fmt, ops::ControlFlow, ptr};
 
-use crate::Buffer;
-use crate::BufferRef;
+use glib::translate::{from_glib, from_glib_full, from_glib_none, IntoGlib, IntoGlibPtr};
+
+use crate::{Buffer, BufferRef};
 
 mini_object_wrapper!(BufferList, BufferListRef, ffi::GstBufferList, || {
     ffi::gst_buffer_list_get_type()
@@ -191,8 +189,7 @@ impl fmt::Debug for BufferList {
 
 impl fmt::Debug for BufferListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        use crate::utils::Displayable;
-        use crate::ClockTime;
+        use crate::{utils::Displayable, ClockTime};
 
         let size = self.iter().map(|b| b.size()).sum::<usize>();
         let (pts, dts) = self

@@ -1,11 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::NavigationMessageType;
-use glib::translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr};
-use glib::ToSendValue;
-use gst::ffi as gst_ffi;
-use gst::{prelude::*, Message, Object, Seqnum};
 use std::ptr;
+
+use glib::{
+    translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr},
+    ToSendValue,
+};
+use gst::{ffi as gst_ffi, prelude::*, Message, Object, Seqnum};
+
+use crate::NavigationMessageType;
 
 macro_rules! message_builder_generic_impl {
     ($new_fn:expr) => {

@@ -1,17 +1,16 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::fmt;
-use std::marker::PhantomData;
-use std::mem;
-use std::ops::{Deref, DerefMut};
-use std::ptr;
-use std::slice;
+use std::{
+    fmt,
+    marker::PhantomData,
+    mem,
+    ops::{Deref, DerefMut},
+    ptr, slice,
+};
 
 use glib::translate::{from_glib, from_glib_full, from_glib_none, IntoGlibPtr, ToGlibPtr};
 
-use crate::AllocationParams;
-use crate::Allocator;
-use crate::MemoryFlags;
+use crate::{AllocationParams, Allocator, MemoryFlags};
 
 mini_object_wrapper!(Memory, MemoryRef, ffi::GstMemory, || {
     ffi::gst_memory_get_type()

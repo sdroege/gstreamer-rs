@@ -5,16 +5,15 @@
 #![allow(clippy::non_send_fields_in_send_ty)]
 #![doc = include_str!("../README.md")]
 
+use std::sync::Once;
+
 pub use ffi;
 pub use gio;
 pub use glib;
+use glib::translate::from_glib;
 pub use gst;
 pub use gst_base;
 pub use gst_pbutils;
-
-use std::sync::Once;
-
-use glib::translate::from_glib;
 
 static GES_INIT: Once = Once::new();
 

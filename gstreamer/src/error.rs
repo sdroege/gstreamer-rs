@@ -1,8 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use thiserror::Error;
-
 use glib::{prelude::*, IntoGStr};
+use thiserror::Error;
 
 #[macro_export]
 macro_rules! error_msg(

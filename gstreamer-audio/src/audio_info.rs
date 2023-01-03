@@ -1,14 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::{fmt, marker::PhantomData, mem, ptr};
+
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, IntoGlib, ToGlibPtr, ToGlibPtrMut,
 };
 use gst::prelude::*;
-
-use std::fmt;
-use std::marker::PhantomData;
-use std::mem;
-use std::ptr;
 
 #[doc(alias = "GstAudioInfo")]
 pub struct AudioInfo(ffi::GstAudioInfo, [crate::AudioChannelPosition; 64]);

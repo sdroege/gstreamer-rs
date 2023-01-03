@@ -18,11 +18,9 @@
 // (More modes of operation are possible, see: gst::TagMergeMode)
 // This merge-mode can also be supplied to any method that adds new tags.
 
-use gst::prelude::*;
-
-use anyhow::anyhow;
-use anyhow::Error;
+use anyhow::{anyhow, Error};
 use derive_more::{Display, Error};
+use gst::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

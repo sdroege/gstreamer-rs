@@ -1,14 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::Caps;
-use crate::Plugin;
-use crate::Rank;
-use crate::TypeFindFactory;
-use crate::TypeFindProbability;
+use std::{ptr, slice};
 
 use glib::translate::*;
-use std::ptr;
-use std::slice;
+
+use crate::{Caps, Plugin, Rank, TypeFindFactory, TypeFindProbability};
 
 #[repr(transparent)]
 #[derive(Debug)]

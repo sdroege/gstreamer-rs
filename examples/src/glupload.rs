@@ -4,17 +4,12 @@
 
 // {videotestsrc} - { glsinkbin }
 
-use gst::element_error;
-
-use gst_gl::prelude::*;
-
-use std::ffi::CStr;
-use std::mem;
-use std::ptr;
-use std::sync;
+use std::{ffi::CStr, mem, ptr, sync};
 
 use anyhow::Error;
 use derive_more::{Display, Error};
+use gst::element_error;
+use gst_gl::prelude::*;
 
 #[derive(Debug, Display, Error)]
 #[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
@@ -343,10 +338,9 @@ impl App {
 
         let shared_context: gst_gl::GLContext;
         if cfg!(target_os = "linux") {
-            use glutin::platform::unix::RawHandle;
             #[cfg(any(feature = "gst-gl-x11", feature = "gst-gl-wayland"))]
             use glutin::platform::unix::WindowExtUnix;
-            use glutin::platform::ContextTraitExt;
+            use glutin::platform::{unix::RawHandle, ContextTraitExt};
 
             let api = App::map_gl_api(windowed_context.get_api());
 

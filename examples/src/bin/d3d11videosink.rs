@@ -7,15 +7,20 @@
 // directly to the on the DXGI swapchain's backbuffer via Windows API in
 // strictly zero-copy manner
 
-use gst::glib;
-use gst::prelude::*;
-use std::collections::VecDeque;
-use std::sync::{Arc, Mutex};
-use std::time::SystemTime;
+use std::{
+    collections::VecDeque,
+    sync::{Arc, Mutex},
+    time::SystemTime,
+};
+
+use gst::{glib, prelude::*};
 use windows::{
     core::*,
     Win32::Graphics::{
-        Direct2D::Common::*, Direct2D::*, Direct3D11::*, DirectWrite::*, Dxgi::Common::*, Dxgi::*,
+        Direct2D::{Common::*, *},
+        Direct3D11::*,
+        DirectWrite::*,
+        Dxgi::{Common::*, *},
     },
 };
 

@@ -1,7 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use serde::de::{Deserialize, Deserializer};
-use serde::ser::{Serialize, Serializer};
+use serde::{
+    de::{Deserialize, Deserializer},
+    ser::{Serialize, Serializer},
+};
 
 use crate::format::{Buffers, Bytes, Default, Other, Percent, Undefined};
 
@@ -59,11 +61,10 @@ impl<'de> Deserialize<'de> for Undefined {
 
 #[cfg(test)]
 mod tests {
-    use crate::format::prelude::*;
-    use crate::format::{Default, Other, Undefined};
-    use crate::ClockTime;
-    use crate::Format;
-    use crate::GenericFormattedValue;
+    use crate::{
+        format::{prelude::*, Default, Other, Undefined},
+        ClockTime, Format, GenericFormattedValue,
+    };
 
     #[test]
     fn test_serialize() {

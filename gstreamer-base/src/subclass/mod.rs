@@ -19,11 +19,13 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst::subclass::prelude::*;
 
-    pub use super::aggregator::{AggregatorImpl, AggregatorImplExt};
-    pub use super::aggregator_pad::{AggregatorPadImpl, AggregatorPadImplExt};
-    pub use super::base_parse::{BaseParseImpl, BaseParseImplExt};
-    pub use super::base_sink::{BaseSinkImpl, BaseSinkImplExt};
-    pub use super::base_src::{BaseSrcImpl, BaseSrcImplExt};
-    pub use super::base_transform::{BaseTransformImpl, BaseTransformImplExt};
-    pub use super::push_src::{PushSrcImpl, PushSrcImplExt};
+    pub use super::{
+        aggregator::{AggregatorImpl, AggregatorImplExt},
+        aggregator_pad::{AggregatorPadImpl, AggregatorPadImplExt},
+        base_parse::{BaseParseImpl, BaseParseImplExt},
+        base_sink::{BaseSinkImpl, BaseSinkImplExt},
+        base_src::{BaseSrcImpl, BaseSrcImplExt},
+        base_transform::{BaseTransformImpl, BaseTransformImplExt},
+        push_src::{PushSrcImpl, PushSrcImplExt},
+    };
 }

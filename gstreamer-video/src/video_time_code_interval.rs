@@ -1,10 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::{cmp, fmt, mem, str};
+
 use glib::translate::*;
-use std::cmp;
-use std::fmt;
-use std::mem;
-use std::str;
 
 glib::wrapper! {
     #[doc(alias = "GstVideoTimeCodeInterval")]

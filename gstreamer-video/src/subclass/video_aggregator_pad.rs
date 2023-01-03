@@ -1,16 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::{mem, ptr};
+
 use glib::translate::*;
+use gst_base::{prelude::*, subclass::prelude::*};
 
-use gst_base::prelude::*;
-use gst_base::subclass::prelude::*;
-
-use std::mem;
-use std::ptr;
-
-use crate::subclass::AggregateFramesToken;
-use crate::VideoAggregator;
-use crate::VideoAggregatorPad;
+use crate::{subclass::AggregateFramesToken, VideoAggregator, VideoAggregatorPad};
 
 pub trait VideoAggregatorPadImpl: VideoAggregatorPadImplExt + AggregatorPadImpl {
     fn update_conversion_info(&self) {

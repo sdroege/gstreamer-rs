@@ -17,13 +17,11 @@
 // {src} - {typefind} - {demuxer} -|           {multiqueue} - {matroskamux} - {filesink}
 //                                  \-[video]-/
 
-use gst::element_error;
-use gst::prelude::*;
-
 use std::env;
 
 use anyhow::Error;
 use derive_more::{Display, Error};
+use gst::{element_error, prelude::*};
 
 #[path = "../examples-common.rs"]
 mod examples_common;

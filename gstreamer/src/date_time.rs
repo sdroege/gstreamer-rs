@@ -1,8 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::{cmp, fmt};
+
 use glib::translate::*;
-use std::cmp;
-use std::fmt;
 
 use crate::DateTime;
 

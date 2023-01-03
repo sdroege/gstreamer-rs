@@ -1,14 +1,12 @@
-use gst::event::{Seek, Step};
-use gst::prelude::*;
-use gst::{Element, SeekFlags, SeekType, State};
+use std::{io, thread, time};
 
 use anyhow::Error;
-
-use termion::event::Key;
-use termion::input::TermRead;
-use termion::raw::IntoRawMode;
-
-use std::{io, thread, time};
+use gst::{
+    event::{Seek, Step},
+    prelude::*,
+    Element, SeekFlags, SeekType, State,
+};
+use termion::{event::Key, input::TermRead, raw::IntoRawMode};
 
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;

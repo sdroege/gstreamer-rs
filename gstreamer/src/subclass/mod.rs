@@ -31,35 +31,37 @@ mod preset;
 mod tag_setter;
 mod uri_handler;
 
-pub use self::device_provider::DeviceProviderMetadata;
-pub use self::element::ElementMetadata;
-
-pub use self::error::FlowError;
-pub use self::plugin::{MAJOR_VERSION, MINOR_VERSION};
-
-pub use self::task_pool::TaskPoolFunction;
+pub use self::{
+    device_provider::DeviceProviderMetadata,
+    element::ElementMetadata,
+    error::FlowError,
+    plugin::{MAJOR_VERSION, MINOR_VERSION},
+    task_pool::TaskPoolFunction,
+};
 
 pub mod prelude {
     #[doc(hidden)]
     pub use glib::subclass::prelude::*;
 
-    pub use super::allocator::{AllocatorImpl, AllocatorImplExt};
-    pub use super::bin::{BinImpl, BinImplExt};
-    pub use super::buffer_pool::{BufferPoolImpl, BufferPoolImplExt};
-    pub use super::child_proxy::{ChildProxyImpl, ChildProxyImplExt};
-    pub use super::clock::{ClockImpl, ClockImplExt};
-    pub use super::device::{DeviceImpl, DeviceImplExt};
-    pub use super::device_provider::{DeviceProviderImpl, DeviceProviderImplExt};
-    pub use super::element::{ElementImpl, ElementImplExt};
-    pub use super::ghost_pad::GhostPadImpl;
-    pub use super::object::GstObjectImpl;
-    pub use super::pad::{PadImpl, PadImplExt};
-    pub use super::pipeline::PipelineImpl;
-    pub use super::preset::PresetImpl;
-    pub use super::proxy_pad::ProxyPadImpl;
-    pub use super::system_clock::SystemClockImpl;
-    pub use super::tag_setter::TagSetterImpl;
-    pub use super::task_pool::TaskPoolImpl;
-    pub use super::tracer::{TracerHook, TracerImpl, TracerImplExt};
-    pub use super::uri_handler::{URIHandlerImpl, URIHandlerImplExt};
+    pub use super::{
+        allocator::{AllocatorImpl, AllocatorImplExt},
+        bin::{BinImpl, BinImplExt},
+        buffer_pool::{BufferPoolImpl, BufferPoolImplExt},
+        child_proxy::{ChildProxyImpl, ChildProxyImplExt},
+        clock::{ClockImpl, ClockImplExt},
+        device::{DeviceImpl, DeviceImplExt},
+        device_provider::{DeviceProviderImpl, DeviceProviderImplExt},
+        element::{ElementImpl, ElementImplExt},
+        ghost_pad::GhostPadImpl,
+        object::GstObjectImpl,
+        pad::{PadImpl, PadImplExt},
+        pipeline::PipelineImpl,
+        preset::PresetImpl,
+        proxy_pad::ProxyPadImpl,
+        system_clock::SystemClockImpl,
+        tag_setter::TagSetterImpl,
+        task_pool::TaskPoolImpl,
+        tracer::{TracerHook, TracerImpl, TracerImplExt},
+        uri_handler::{URIHandlerImpl, URIHandlerImplExt},
+    };
 }

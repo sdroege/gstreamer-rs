@@ -4,14 +4,12 @@
 // send to the server. For this, the launch syntax pipeline, that is passed
 // to this example's cli is spawned and the client's media is streamed into it.
 
-use std::env;
-use std::ptr;
-
-use glib::translate::*;
-use gst_rtsp_server::prelude::*;
+use std::{env, ptr};
 
 use anyhow::Error;
 use derive_more::{Display, Error};
+use glib::translate::*;
+use gst_rtsp_server::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

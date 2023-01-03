@@ -1,13 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::subclass::prelude::*;
-use glib::translate::*;
-
 use std::ptr;
 
-use crate::RTSPMedia;
-use crate::RTSPThread;
+use glib::{prelude::*, subclass::prelude::*, translate::*};
+
+use crate::{RTSPMedia, RTSPThread};
 
 #[derive(Debug)]
 pub struct SDPInfo(ptr::NonNull<ffi::GstSDPInfo>);

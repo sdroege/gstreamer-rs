@@ -29,15 +29,14 @@
 // Especially Windows APIs tend to be quite picky about samplerate and sample-format.
 // The same applies to videostreams.
 
-use gst::element_error;
-use gst::element_warning;
-use gst::prelude::*;
-
-use std::env;
-use std::sync::{Arc, Mutex};
+use std::{
+    env,
+    sync::{Arc, Mutex},
+};
 
 use anyhow::Error;
 use derive_more::{Display, Error};
+use gst::{element_error, element_warning, prelude::*};
 
 #[path = "../examples-common.rs"]
 mod examples_common;

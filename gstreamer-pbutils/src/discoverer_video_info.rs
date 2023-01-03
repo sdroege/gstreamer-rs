@@ -1,8 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::DiscovererVideoInfo;
-
 use glib::translate::*;
+
+use crate::DiscovererVideoInfo;
 
 impl DiscovererVideoInfo {
     #[doc(alias = "get_framerate")]

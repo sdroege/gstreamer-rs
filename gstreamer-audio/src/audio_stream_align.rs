@@ -1,9 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::AudioStreamAlign;
+use std::mem;
 
 use glib::translate::*;
-use std::mem;
+
+use crate::AudioStreamAlign;
 
 impl AudioStreamAlign {
     #[doc(alias = "gst_audio_stream_align_process")]

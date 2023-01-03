@@ -1,12 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::TaskPool;
-
 use std::ptr;
 
-use glib::ffi::gpointer;
-use glib::prelude::*;
-use glib::translate::*;
+use glib::{ffi::gpointer, prelude::*, translate::*};
+
+use crate::TaskPool;
 
 unsafe extern "C" fn task_pool_trampoline<P: FnOnce() + Send + 'static>(data: gpointer) {
     let func = Box::from_raw(data as *mut P);
@@ -125,9 +123,10 @@ impl Drop for TaskPoolTaskHandle {
 
 #[cfg(test)]
 mod tests {
+    use std::sync::mpsc::{channel, RecvError};
+
     use super::*;
     use crate::prelude::*;
-    use std::sync::mpsc::{channel, RecvError};
 
     #[test]
     fn test_simple() {

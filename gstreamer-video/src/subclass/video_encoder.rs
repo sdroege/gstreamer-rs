@@ -1,13 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::translate::*;
-
 use gst::subclass::prelude::*;
 
-use crate::prelude::*;
-use crate::video_codec_state::{Readable, VideoCodecState};
-use crate::VideoCodecFrame;
-use crate::VideoEncoder;
+use crate::{
+    prelude::*,
+    video_codec_state::{Readable, VideoCodecState},
+    VideoCodecFrame, VideoEncoder,
+};
 
 pub trait VideoEncoderImpl: VideoEncoderImplExt + ElementImpl {
     fn open(&self) -> Result<(), gst::ErrorMessage> {

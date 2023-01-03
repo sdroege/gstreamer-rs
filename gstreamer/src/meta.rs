@@ -1,20 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::fmt;
-use std::marker::PhantomData;
-use std::ops;
-
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 use std::ptr;
-
-use crate::Buffer;
-use crate::BufferRef;
-use crate::Caps;
-use crate::CapsRef;
-use crate::ClockTime;
+use std::{fmt, marker::PhantomData, ops};
 
 use glib::translate::*;
+
+use crate::{Buffer, BufferRef, Caps, CapsRef, ClockTime};
 
 pub unsafe trait MetaAPI: Sync + Send + Sized {
     type GstType;

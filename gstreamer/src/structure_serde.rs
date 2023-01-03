@@ -2,25 +2,19 @@
 
 #![allow(clippy::upper_case_acronyms)]
 
-use glib::{Date, ToValue};
-
-use serde::de;
-use serde::de::{Deserialize, DeserializeSeed, Deserializer, SeqAccess, Visitor};
-use serde::ser;
-use serde::ser::{Serialize, SerializeSeq, SerializeTuple, Serializer};
-
 use std::fmt;
 
-use crate::Buffer;
-use crate::DateTime;
-use crate::Sample;
+use glib::{Date, ToValue};
+use serde::{
+    de,
+    de::{Deserialize, DeserializeSeed, Deserializer, SeqAccess, Visitor},
+    ser,
+    ser::{Serialize, SerializeSeq, SerializeTuple, Serializer},
+};
 
-use crate::date_time_serde;
-use crate::value::*;
-use crate::value_serde::*;
-
-use crate::Structure;
-use crate::StructureRef;
+use crate::{
+    date_time_serde, value::*, value_serde::*, Buffer, DateTime, Sample, Structure, StructureRef,
+};
 
 struct FieldSe<'a>(&'static str, &'a glib::SendValue);
 impl<'a> Serialize for FieldSe<'a> {
@@ -166,10 +160,7 @@ impl<'de> Deserialize<'de> for Structure {
 mod tests {
     use glib::{Date, DateMonth};
 
-    use crate::Array;
-    use crate::DateTime;
-    use crate::Fraction;
-    use crate::Structure;
+    use crate::{Array, DateTime, Fraction, Structure};
 
     #[test]
     fn test_serialize() {

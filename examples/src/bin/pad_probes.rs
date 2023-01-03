@@ -8,11 +8,10 @@
 // {audiotestsrc} - {fakesink}
 #![allow(clippy::question_mark)]
 
-use gst::prelude::*;
+use std::i16;
 
 use byte_slice_cast::*;
-
-use std::i16;
+use gst::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

@@ -1,28 +1,26 @@
 // This example demonstrates how to implement a custom compositor based on cairo.
 #![allow(clippy::non_send_fields_in_send_ty)]
 
+use anyhow::{Context, Error};
 use gst::prelude::*;
 use gst_base::prelude::*;
-
-use anyhow::{Context, Error};
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
 // Our custom compositor element is defined in this module.
 mod cairo_compositor {
-    use super::*;
     use gst_base::subclass::prelude::*;
-    use gst_video::prelude::*;
-    use gst_video::subclass::prelude::*;
-
+    use gst_video::{prelude::*, subclass::prelude::*};
     use once_cell::sync::Lazy;
+
+    use super::*;
 
     // In the imp submodule we include the actual implementation of the compositor.
     mod imp {
-        use super::*;
-
         use std::sync::Mutex;
+
+        use super::*;
 
         // Settings of the compositor.
         #[derive(Clone)]
@@ -413,8 +411,9 @@ mod cairo_compositor {
     // This doesn't implement any additional logic but only provides properties for configuring the
     // appearance of the stream corresponding to this pad and the storage of the property values.
     mod imp_pad {
-        use super::*;
         use std::sync::Mutex;
+
+        use super::*;
 
         // Settings of our pad.
         #[derive(Clone)]

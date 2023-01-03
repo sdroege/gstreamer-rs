@@ -1,13 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{from_glib, Borrowed, FromGlibPtrNone, ToGlibPtr};
+use std::{fmt, marker::PhantomData, mem, ops, ptr, slice};
 
-use std::fmt;
-use std::marker::PhantomData;
-use std::mem;
-use std::ops;
-use std::ptr;
-use std::slice;
+use glib::translate::{from_glib, Borrowed, FromGlibPtrNone, ToGlibPtr};
 
 pub enum Readable {}
 pub enum Writable {}

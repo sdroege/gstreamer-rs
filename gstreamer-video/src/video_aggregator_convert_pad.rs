@@ -1,10 +1,13 @@
-use crate::auto::VideoAggregatorConvertPad;
-use glib::object::IsA;
-use glib::signal::{connect_raw, SignalHandlerId};
-use glib::translate::*;
-use glib::Cast;
-
 use std::mem::transmute;
+
+use glib::{
+    object::IsA,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+    Cast,
+};
+
+use crate::auto::VideoAggregatorConvertPad;
 
 pub trait VideoAggregatorConvertPadExtManual: 'static {
     #[doc(alias = "converter-config")]

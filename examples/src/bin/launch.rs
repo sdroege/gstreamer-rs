@@ -3,10 +3,9 @@
 // as launch syntax.
 // When the parsing succeeded, the pipeline is run until the stream ends or an error happens.
 
-use gst::prelude::*;
+use std::{env, process};
 
-use std::env;
-use std::process;
+use gst::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

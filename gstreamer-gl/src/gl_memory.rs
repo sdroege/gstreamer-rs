@@ -1,13 +1,8 @@
-use glib::translate::*;
-
-use crate::GLBaseMemory;
-use crate::GLBaseMemoryRef;
-use crate::GLFormat;
-use crate::GLTextureTarget;
-
 use ffi::GstGLMemory;
-use gst::{result_from_gboolean, LoggableError, CAT_RUST};
-use gst::{Memory, MemoryRef};
+use glib::translate::*;
+use gst::{result_from_gboolean, LoggableError, Memory, MemoryRef, CAT_RUST};
+
+use crate::{GLBaseMemory, GLBaseMemoryRef, GLFormat, GLTextureTarget};
 
 gst::memory_object_wrapper!(
     GLMemory,

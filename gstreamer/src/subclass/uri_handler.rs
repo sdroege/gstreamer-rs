@@ -1,14 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::translate::*;
-
-use glib::subclass::prelude::*;
-
-use crate::URIHandler;
-use crate::URIType;
-
 use std::ptr;
+
+use glib::{prelude::*, subclass::prelude::*, translate::*};
+
+use crate::{URIHandler, URIType};
 
 pub trait URIHandlerImpl: super::element::ElementImpl {
     const URI_TYPE: URIType;

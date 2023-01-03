@@ -1,7 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use super::{Format, FormattedValueError, GenericFormattedValue};
-use super::{FormattedValue, SpecificFormattedValue};
+use super::{
+    Format, FormattedValue, FormattedValueError, GenericFormattedValue, SpecificFormattedValue,
+};
 
 // rustdoc-stripper-ignore-next
 /// A trait implemented on types which can hold [`FormattedValue`]s compatible with parameter `F`.

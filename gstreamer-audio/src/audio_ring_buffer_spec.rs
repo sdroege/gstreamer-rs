@@ -1,13 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::ffi::GstAudioRingBufferSpec;
+use std::fmt;
+
 use glib::translate::*;
 use gst::Caps;
 
-use crate::AudioInfo;
-use crate::AudioRingBufferFormatType;
-
-use std::fmt;
+use crate::{ffi::GstAudioRingBufferSpec, AudioInfo, AudioRingBufferFormatType};
 
 #[repr(transparent)]
 pub struct AudioRingBufferSpec(pub(crate) GstAudioRingBufferSpec);

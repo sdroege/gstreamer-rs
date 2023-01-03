@@ -2,26 +2,25 @@
 
 #![allow(clippy::upper_case_acronyms)]
 
-use glib::translate::{from_glib, ToGlibPtr};
-use glib::{Date, SendValue, ToValue};
+use std::{cell::RefCell, cmp, fmt, rc::Rc};
 
-use serde::de;
-use serde::de::{Deserialize, DeserializeSeed, Deserializer, SeqAccess, Visitor};
-use serde::ser;
-use serde::ser::{Serialize, SerializeSeq, SerializeStruct, SerializeTuple, Serializer};
+use glib::{
+    translate::{from_glib, ToGlibPtr},
+    Date, SendValue, ToValue,
+};
+use serde::{
+    de,
+    de::{Deserialize, DeserializeSeed, Deserializer, SeqAccess, Visitor},
+    ser,
+    ser::{Serialize, SerializeSeq, SerializeStruct, SerializeTuple, Serializer},
+};
 
-use std::cell::RefCell;
-use std::cmp;
-use std::fmt;
-use std::rc::Rc;
-
-use crate::date_time_serde;
-use crate::tags::{GenericTagIter, TagList, TagListRef};
-use crate::value_serde::{DATE_OTHER_TYPE_ID, DATE_TIME_OTHER_TYPE_ID, SAMPLE_OTHER_TYPE_ID};
-use crate::DateTime;
-use crate::Sample;
-use crate::TagMergeMode;
-use crate::TagScope;
+use crate::{
+    date_time_serde,
+    tags::{GenericTagIter, TagList, TagListRef},
+    value_serde::{DATE_OTHER_TYPE_ID, DATE_TIME_OTHER_TYPE_ID, SAMPLE_OTHER_TYPE_ID},
+    DateTime, Sample, TagMergeMode, TagScope,
+};
 
 macro_rules! ser_tag (
     ($value:ident, $seq:ident, $t:ty) => (
@@ -311,12 +310,7 @@ impl<'de> Deserialize<'de> for TagList {
 
 #[cfg(test)]
 mod tests {
-    use crate::tags::*;
-    use crate::Buffer;
-    use crate::ClockTime;
-    use crate::Sample;
-    use crate::TagMergeMode;
-    use crate::TagScope;
+    use crate::{tags::*, Buffer, ClockTime, Sample, TagMergeMode, TagScope};
 
     #[test]
     fn test_serialize() {

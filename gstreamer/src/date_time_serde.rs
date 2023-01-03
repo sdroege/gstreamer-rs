@@ -2,14 +2,18 @@
 
 #![allow(clippy::upper_case_acronyms)]
 
-use glib::translate::{FromGlib, IntoGlib};
-use glib::value::{ToValue, ToValueOptional};
-use glib::StaticType;
+use glib::{
+    translate::{FromGlib, IntoGlib},
+    value::{ToValue, ToValueOptional},
+    StaticType,
+};
+use serde::{
+    de::{Deserialize, Deserializer, Error},
+    ser,
+    ser::{Serialize, Serializer},
+};
 
 use crate::DateTime;
-use serde::de::{Deserialize, Deserializer, Error};
-use serde::ser;
-use serde::ser::{Serialize, Serializer};
 
 #[derive(serde::Serialize, serde::Deserialize)]
 enum DateTimeVariants {

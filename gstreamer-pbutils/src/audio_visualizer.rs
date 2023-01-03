@@ -1,9 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::auto::AudioVisualizer;
-use crate::subclass::AudioVisualizerSetupToken;
 use glib::object::IsA;
 use gst::prelude::*;
+
+use crate::{auto::AudioVisualizer, subclass::AudioVisualizerSetupToken};
 
 pub trait AudioVisualizerExtManual: 'static {
     // rustdoc-stripper-ignore-next

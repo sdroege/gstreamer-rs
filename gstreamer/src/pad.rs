@@ -1,35 +1,22 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::element::ElementExtManual;
-use crate::format::{
-    FormattedValue, SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic,
+use std::{
+    mem,
+    num::NonZeroU64,
+    ops::ControlFlow,
+    panic::{self, AssertUnwindSafe},
+    ptr,
 };
-use crate::prelude::PadExt;
-use crate::Buffer;
-use crate::BufferList;
-use crate::Event;
-use crate::FlowError;
-use crate::FlowReturn;
-use crate::FlowSuccess;
-use crate::LoggableError;
-use crate::Pad;
-use crate::PadFlags;
-use crate::PadProbeReturn;
-use crate::PadProbeType;
-use crate::Query;
-use crate::QueryRef;
-use crate::StaticPadTemplate;
-use crate::{Format, GenericFormattedValue};
 
-use std::mem;
-use std::num::NonZeroU64;
-use std::ops::ControlFlow;
-use std::panic::{self, AssertUnwindSafe};
-use std::ptr;
+use glib::{ffi::gpointer, prelude::*, translate::*};
 
-use glib::ffi::gpointer;
-use glib::prelude::*;
-use glib::translate::*;
+use crate::{
+    element::ElementExtManual,
+    format::{FormattedValue, SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic},
+    prelude::PadExt,
+    Buffer, BufferList, Event, FlowError, FlowReturn, FlowSuccess, Format, GenericFormattedValue,
+    LoggableError, Pad, PadFlags, PadProbeReturn, PadProbeType, Query, QueryRef, StaticPadTemplate,
+};
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct PadProbeId(NonZeroU64);
@@ -1928,10 +1915,10 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
 
 #[cfg(test)]
 mod tests {
+    use std::sync::{atomic::AtomicUsize, mpsc::channel, Arc, Mutex};
+
     use super::*;
     use crate::prelude::*;
-    use std::sync::{atomic::AtomicUsize, mpsc::channel};
-    use std::sync::{Arc, Mutex};
 
     #[test]
     fn test_event_chain_functions() {

@@ -1,19 +1,22 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::borrow::{Borrow, BorrowMut, ToOwned};
-use std::ffi::CStr;
-use std::fmt;
-use std::marker::PhantomData;
-use std::mem;
-use std::ops::{Deref, DerefMut};
-use std::ptr;
-use std::str;
+use std::{
+    borrow::{Borrow, BorrowMut, ToOwned},
+    ffi::CStr,
+    fmt,
+    marker::PhantomData,
+    mem,
+    ops::{Deref, DerefMut},
+    ptr, str,
+};
+
+use glib::{
+    translate::*,
+    value::{FromValue, SendValue, ToSendValue},
+    StaticType,
+};
 
 use crate::Fraction;
-
-use glib::translate::*;
-use glib::value::{FromValue, SendValue, ToSendValue};
-use glib::StaticType;
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 pub enum GetError<E: std::error::Error> {

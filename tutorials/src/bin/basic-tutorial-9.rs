@@ -1,11 +1,10 @@
-use anyhow::Error;
+use std::env;
 
+use anyhow::Error;
 use gst_pbutils::{
     prelude::*, Discoverer, DiscovererContainerInfo, DiscovererInfo, DiscovererResult,
     DiscovererStreamInfo,
 };
-
-use std::env;
 
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;

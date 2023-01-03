@@ -1,20 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::ClockReturn;
-use crate::FlowReturn;
-use crate::PadLinkReturn;
-use crate::State;
-use crate::StateChange;
-use crate::StateChangeReturn;
 use std::{cmp, ops};
+
+use glib::{
+    translate::*,
+    value::{FromValue, ToValue, Value},
+    StaticType, Type,
+};
 use thiserror::Error;
 
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::value::Value;
-use glib::StaticType;
-use glib::Type;
+use crate::{ClockReturn, FlowReturn, PadLinkReturn, State, StateChange, StateChangeReturn};
 
 macro_rules! impl_return_result_traits {
     ($ffi_type:ident, $ret_type:ident, $ok_type:ident, $err_type:ident) => {

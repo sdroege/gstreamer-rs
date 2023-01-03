@@ -1,14 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use super::prelude::*;
+use std::ptr;
+
 use glib::{
     subclass::{prelude::*, InitializingObject},
     translate::*,
     Cast, StaticType,
 };
 use libc::c_char;
-use std::ptr;
 
+use super::prelude::*;
 use crate::{BufferPool, BufferPoolAcquireParams, BufferPoolConfigRef};
 
 pub trait BufferPoolImpl: BufferPoolImplExt + GstObjectImpl + Send + Sync {

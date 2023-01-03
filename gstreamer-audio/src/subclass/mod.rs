@@ -17,14 +17,16 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst_base::subclass::prelude::*;
 
-    pub use super::audio_aggregator::{AudioAggregatorImpl, AudioAggregatorImplExt};
-    pub use super::audio_aggregator_convert_pad::AudioAggregatorConvertPadImpl;
-    pub use super::audio_aggregator_pad::{AudioAggregatorPadImpl, AudioAggregatorPadImplExt};
-    pub use super::audio_base_sink::AudioBaseSinkImpl;
-    pub use super::audio_base_src::AudioBaseSrcImpl;
-    pub use super::audio_decoder::{AudioDecoderImpl, AudioDecoderImplExt};
-    pub use super::audio_encoder::{AudioEncoderImpl, AudioEncoderImplExt};
-    pub use super::audio_filter::{AudioFilterImpl, AudioFilterImplExt};
-    pub use super::audio_sink::{AudioSinkImpl, AudioSinkImplExt};
-    pub use super::audio_src::{AudioSrcImpl, AudioSrcImplExt};
+    pub use super::{
+        audio_aggregator::{AudioAggregatorImpl, AudioAggregatorImplExt},
+        audio_aggregator_convert_pad::AudioAggregatorConvertPadImpl,
+        audio_aggregator_pad::{AudioAggregatorPadImpl, AudioAggregatorPadImplExt},
+        audio_base_sink::AudioBaseSinkImpl,
+        audio_base_src::AudioBaseSrcImpl,
+        audio_decoder::{AudioDecoderImpl, AudioDecoderImplExt},
+        audio_encoder::{AudioEncoderImpl, AudioEncoderImplExt},
+        audio_filter::{AudioFilterImpl, AudioFilterImplExt},
+        audio_sink::{AudioSinkImpl, AudioSinkImplExt},
+        audio_src::{AudioSrcImpl, AudioSrcImplExt},
+    };
 }

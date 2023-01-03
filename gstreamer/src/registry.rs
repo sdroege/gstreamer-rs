@@ -1,10 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::Plugin;
-use crate::PluginFeature;
-use crate::Registry;
-
 use glib::translate::*;
+
+use crate::{Plugin, PluginFeature, Registry};
 
 impl Registry {
     #[doc(alias = "gst_registry_feature_filter")]

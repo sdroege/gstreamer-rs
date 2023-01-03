@@ -1,13 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::utils::HasStreamLock;
-use crate::video_codec_state::{InNegotiation, Readable, VideoCodecState, VideoCodecStateContext};
-use crate::VideoCodecFrame;
-use crate::VideoEncoder;
-use glib::prelude::*;
-use glib::translate::*;
-use std::mem;
-use std::ptr;
+use std::{mem, ptr};
+
+use glib::{prelude::*, translate::*};
+
+use crate::{
+    utils::HasStreamLock,
+    video_codec_state::{InNegotiation, Readable, VideoCodecState, VideoCodecStateContext},
+    VideoCodecFrame, VideoEncoder,
+};
 
 pub trait VideoEncoderExtManual: 'static {
     #[doc(alias = "gst_video_encoder_allocate_output_frame")]

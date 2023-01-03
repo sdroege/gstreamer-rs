@@ -1,10 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use super::prelude::*;
-use glib::prelude::*;
-use glib::subclass::prelude::*;
-use glib::translate::*;
+use glib::{prelude::*, subclass::prelude::*, translate::*};
 
+use super::prelude::*;
 use crate::Pad;
 
 pub trait PadImpl: PadImplExt + GstObjectImpl + Send + Sync {
@@ -84,11 +82,10 @@ unsafe extern "C" fn pad_unlinked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut 
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::prelude::*;
     use std::sync::atomic;
 
-    use crate::PadDirection;
+    use super::*;
+    use crate::{prelude::*, PadDirection};
 
     pub mod imp {
         use super::*;

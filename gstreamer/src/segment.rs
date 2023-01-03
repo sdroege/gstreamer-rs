@@ -1,18 +1,16 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::format::{
-    CompatibleFormattedValue, FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic,
-    FormattedValueNoneBuilder, NoneSignedBuilder, UnsignedIntoSigned,
+use std::{fmt, marker::PhantomData, mem};
+
+use glib::{translate::*, StaticType};
+
+use crate::{
+    format::{
+        CompatibleFormattedValue, FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic,
+        FormattedValueNoneBuilder, NoneSignedBuilder, UnsignedIntoSigned,
+    },
+    Format, GenericFormattedValue, SeekFlags, SeekType,
 };
-use crate::Format;
-use crate::GenericFormattedValue;
-use crate::SeekFlags;
-use crate::SeekType;
-use glib::translate::*;
-use glib::StaticType;
-use std::fmt;
-use std::marker::PhantomData;
-use std::mem;
 
 pub type Segment = FormattedSegment<GenericFormattedValue>;
 

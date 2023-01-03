@@ -2,11 +2,11 @@
 #![allow(clippy::missing_safety_doc)]
 #![allow(clippy::non_send_fields_in_send_ty)]
 
+use std::sync::Once;
+
 pub use ffi::*;
 pub use glib;
 pub use gst;
-
-use std::sync::Once;
 
 static MPEGTS_INIT: Once = Once::new();
 

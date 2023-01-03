@@ -1,6 +1,6 @@
+use glib::{object::IsA, translate::*};
+
 use crate::RTPBaseDepayload;
-use glib::object::IsA;
-use glib::translate::*;
 
 pub trait RTPBaseDepayloadExtManual: 'static {
     #[doc(alias = "gst_rtp_base_depayload_push")]

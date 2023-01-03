@@ -1,9 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::ClockTime;
-use crate::ControlBinding;
-use glib::prelude::*;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
+
+use crate::{ClockTime, ControlBinding};
 
 pub trait ControlBindingExtManual: 'static {
     #[doc(alias = "get_g_value_array")]

@@ -1,14 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use serde::de::{Deserialize, Deserializer};
-use serde::ser;
-use serde::ser::{Serialize, SerializeStruct, Serializer};
+use serde::{
+    de::{Deserialize, Deserializer},
+    ser,
+    ser::{Serialize, SerializeStruct, Serializer},
+};
 use serde_bytes::{ByteBuf, Bytes};
 
-use crate::Buffer;
-use crate::BufferFlags;
-use crate::BufferRef;
-use crate::ClockTime;
+use crate::{Buffer, BufferFlags, BufferRef, ClockTime};
 
 // TODO: try `Either<ByteBuf, Bytes>` to merge the base reprensentations for ser and de
 // while avoiding unneeded copy
@@ -75,9 +74,7 @@ impl<'de> Deserialize<'de> for Buffer {
 
 #[cfg(test)]
 mod tests {
-    use crate::Buffer;
-    use crate::BufferFlags;
-    use crate::ClockTime;
+    use crate::{Buffer, BufferFlags, ClockTime};
 
     #[test]
     fn test_serialize() {

@@ -1,11 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::*;
+use std::{fmt, mem, ptr, str};
 
-use std::fmt;
-use std::mem;
-use std::ptr;
-use std::str;
+use glib::translate::*;
 
 #[doc(alias = "GstVideoContentLightLevel")]
 #[derive(Copy, Clone)]

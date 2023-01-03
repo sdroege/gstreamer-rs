@@ -1,11 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
+use glib::{prelude::*, signal::SignalHandlerId, translate::*};
 
-use crate::ClockTime;
-use crate::ObjectFlags;
+use crate::{ClockTime, ObjectFlags};
 
 pub trait GstObjectExtManual: 'static {
     #[doc(alias = "deep-notify")]
@@ -127,9 +124,10 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
 
 #[cfg(test)]
 mod tests {
+    use std::sync::{Arc, Mutex};
+
     use super::*;
     use crate::prelude::*;
-    use std::sync::{Arc, Mutex};
 
     #[test]
     fn test_deep_notify() {

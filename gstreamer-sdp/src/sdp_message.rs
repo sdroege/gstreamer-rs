@@ -1,24 +1,23 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::borrow::{Borrow, BorrowMut, ToOwned};
-use std::ffi::CStr;
-use std::fmt;
-use std::mem;
-use std::ops;
-use std::ptr;
+use std::{
+    borrow::{Borrow, BorrowMut, ToOwned},
+    ffi::CStr,
+    fmt, mem, ops, ptr,
+};
 
-use glib::translate::*;
-use glib::StaticType;
+use glib::{translate::*, StaticType};
 
-use crate::sdp_attribute::SDPAttribute;
-use crate::sdp_bandwidth::SDPBandwidth;
-use crate::sdp_connection::SDPConnection;
-use crate::sdp_key::SDPKey;
-use crate::sdp_media::SDPMedia;
-use crate::sdp_media::SDPMediaRef;
-use crate::sdp_origin::SDPOrigin;
-use crate::sdp_time::SDPTime;
-use crate::sdp_zone::SDPZone;
+use crate::{
+    sdp_attribute::SDPAttribute,
+    sdp_bandwidth::SDPBandwidth,
+    sdp_connection::SDPConnection,
+    sdp_key::SDPKey,
+    sdp_media::{SDPMedia, SDPMediaRef},
+    sdp_origin::SDPOrigin,
+    sdp_time::SDPTime,
+    sdp_zone::SDPZone,
+};
 
 glib::wrapper! {
     #[derive(PartialEq, Eq, PartialOrd, Ord, Hash)]

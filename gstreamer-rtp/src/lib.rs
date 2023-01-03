@@ -34,8 +34,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::use_self)]
 #[allow(unused_imports)]
 mod auto;
-pub use crate::auto::functions::*;
-pub use crate::auto::*;
+pub use crate::auto::{functions::*, *};
 
 #[cfg(feature = "serde")]
 mod flag_serde;
@@ -62,16 +61,13 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst::prelude::*;
 
-    pub use crate::auto::traits::*;
-
-    pub use crate::rtp_buffer::RTPBufferExt;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    pub use crate::rtp_header_extension::RTPHeaderExtensionExtManual;
-
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub use crate::rtp_base_payload::RTPBasePayloadExtManual;
-
-    pub use crate::rtp_base_depayload::RTPBaseDepayloadExtManual;
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub use crate::rtp_header_extension::RTPHeaderExtensionExtManual;
+    pub use crate::{
+        auto::traits::*, rtp_base_depayload::RTPBaseDepayloadExtManual, rtp_buffer::RTPBufferExt,
+    };
 }

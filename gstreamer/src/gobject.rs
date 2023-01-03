@@ -1,7 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::value::GstValueExt;
 use glib::prelude::*;
+
+use crate::value::GstValueExt;
 
 pub trait GObjectExtManualGst: 'static {
     #[doc(alias = "gst_util_set_object_arg")]

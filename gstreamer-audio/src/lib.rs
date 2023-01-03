@@ -81,14 +81,13 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst_base::prelude::*;
 
-    pub use super::audio_decoder::AudioDecoderExtManual;
-    pub use super::audio_encoder::AudioEncoderExtManual;
-    pub use crate::audio_aggregator::AudioAggregatorExtManual;
-    pub use crate::audio_aggregator_convert_pad::AudioAggregatorConvertPadExtManual;
-    pub use crate::audio_aggregator_pad::AudioAggregatorPadExtManual;
-    pub use crate::audio_format::AudioFormatIteratorExt;
-
-    pub use crate::auto::traits::*;
+    pub use super::{audio_decoder::AudioDecoderExtManual, audio_encoder::AudioEncoderExtManual};
+    pub use crate::{
+        audio_aggregator::AudioAggregatorExtManual,
+        audio_aggregator_convert_pad::AudioAggregatorConvertPadExtManual,
+        audio_aggregator_pad::AudioAggregatorPadExtManual, audio_format::AudioFormatIteratorExt,
+        auto::traits::*,
+    };
 }
 
 pub mod subclass;

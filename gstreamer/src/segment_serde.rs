@@ -1,11 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use serde::de;
-use serde::de::{Deserialize, Deserializer};
-use serde::ser::{Serialize, Serializer};
+use serde::{
+    de,
+    de::{Deserialize, Deserializer},
+    ser::{Serialize, Serializer},
+};
 
-use crate::format::{FormattedValue, FormattedValueIntrinsic, SpecificFormattedValueIntrinsic};
-use crate::{Format, FormattedSegment, GenericFormattedValue, Segment, SegmentFlags};
+use crate::{
+    format::{FormattedValue, FormattedValueIntrinsic, SpecificFormattedValueIntrinsic},
+    Format, FormattedSegment, GenericFormattedValue, Segment, SegmentFlags,
+};
 
 #[derive(serde::Serialize, serde::Deserialize)]
 struct FormattedSegmentSerde {
@@ -103,11 +107,7 @@ impl<'de, T: SpecificFormattedValueIntrinsic> Deserialize<'de> for FormattedSegm
 
 #[cfg(test)]
 mod tests {
-    use crate::ClockTime;
-    use crate::Format;
-    use crate::GenericFormattedValue;
-    use crate::Segment;
-    use crate::SegmentFlags;
+    use crate::{ClockTime, Format, GenericFormattedValue, Segment, SegmentFlags};
 
     #[test]
     fn test_serialize() {
@@ -211,8 +211,7 @@ mod tests {
 
     #[test]
     fn test_deserialize_formatted() {
-        use crate::format::Time;
-        use crate::FormattedSegment;
+        use crate::{format::Time, FormattedSegment};
 
         crate::init().unwrap();
 

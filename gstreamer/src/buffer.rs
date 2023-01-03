@@ -1,26 +1,12 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::fmt;
-use std::marker::PhantomData;
-use std::mem;
-use std::ops;
-use std::ops::ControlFlow;
-use std::ptr;
-use std::slice;
-use std::u64;
-use std::usize;
-
-use crate::meta::*;
-use crate::BufferCursor;
-use crate::BufferFlags;
-use crate::BufferRefCursor;
-use crate::ClockTime;
-use crate::Memory;
-use crate::MemoryRef;
+use std::{fmt, marker::PhantomData, mem, ops, ops::ControlFlow, ptr, slice, u64, usize};
 
 use glib::translate::{
     from_glib, from_glib_full, FromGlib, FromGlibPtrFull, IntoGlib, IntoGlibPtr,
 };
+
+use crate::{meta::*, BufferCursor, BufferFlags, BufferRefCursor, ClockTime, Memory, MemoryRef};
 
 pub enum Readable {}
 pub enum Writable {}
@@ -1048,8 +1034,9 @@ impl PartialEq<Buffer> for BufferRef {
 
 impl fmt::Debug for BufferRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        use crate::utils::Displayable;
         use std::cell::RefCell;
+
+        use crate::utils::Displayable;
 
         struct DebugIter<I>(RefCell<I>);
         impl<I: Iterator> fmt::Debug for DebugIter<I>

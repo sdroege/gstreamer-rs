@@ -1,9 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::ChildProxy;
-use glib::prelude::*;
-use glib::translate::*;
 use std::ptr;
+
+use glib::{prelude::*, translate::*};
+
+use crate::ChildProxy;
 
 pub trait ChildProxyExtManual: 'static {
     #[doc(alias = "gst_child_proxy_lookup")]

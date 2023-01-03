@@ -1,19 +1,12 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::DebugLevel;
+use std::{borrow::Cow, ffi::CStr, fmt, ptr};
 
-use glib::IntoGStr;
+use glib::{ffi::gpointer, prelude::*, translate::*, IntoGStr};
 use libc::c_char;
-use std::borrow::Cow;
-use std::ffi::CStr;
-use std::fmt;
-use std::ptr;
-
 use once_cell::sync::Lazy;
 
-use glib::ffi::gpointer;
-use glib::prelude::*;
-use glib::translate::*;
+use crate::DebugLevel;
 
 #[derive(PartialEq, Eq)]
 #[doc(alias = "GstDebugMessage")]
@@ -1188,9 +1181,9 @@ pub fn debug_remove_log_function(log_fn: DebugLogFunction) {
 
 #[cfg(test)]
 mod tests {
+    use std::sync::{mpsc, Arc, Mutex};
+
     use super::*;
-    use std::sync::mpsc;
-    use std::sync::{Arc, Mutex};
 
     #[test]
     #[doc(alias = "get_existing")]

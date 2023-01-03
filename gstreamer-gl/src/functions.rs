@@ -1,8 +1,8 @@
-use crate::GLContext;
-use crate::GLDisplay;
-use glib::object::IsA;
-use glib::translate::*;
 use std::ptr;
+
+use glib::{object::IsA, translate::*};
+
+use crate::{GLContext, GLDisplay};
 
 #[doc(alias = "gst_gl_handle_context_query")]
 pub fn gl_handle_context_query(

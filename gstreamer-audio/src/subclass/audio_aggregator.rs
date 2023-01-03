@@ -1,14 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::*;
-
-use gst_base::prelude::*;
-use gst_base::subclass::prelude::*;
-
 use std::ptr;
 
-use crate::AudioAggregator;
-use crate::AudioAggregatorPad;
+use glib::translate::*;
+use gst_base::{prelude::*, subclass::prelude::*};
+
+use crate::{AudioAggregator, AudioAggregatorPad};
 
 pub trait AudioAggregatorImpl: AudioAggregatorImplExt + AggregatorImpl {
     fn create_output_buffer(&self, num_frames: u32) -> Option<gst::Buffer> {

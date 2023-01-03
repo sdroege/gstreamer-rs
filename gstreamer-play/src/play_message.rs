@@ -1,5 +1,4 @@
-use crate::PlayMessageType;
-use crate::{PlayMediaInfo, PlayState};
+use crate::{PlayMediaInfo, PlayMessageType, PlayState};
 
 #[derive(Clone, PartialEq, Debug)]
 #[non_exhaustive]

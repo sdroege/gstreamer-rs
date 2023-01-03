@@ -1,10 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::AudioChannelPosition;
-
 use std::mem;
 
 use glib::translate::{from_glib, IntoGlib};
+
+use crate::AudioChannelPosition;
 
 impl AudioChannelPosition {
     pub fn to_mask(self) -> u64 {

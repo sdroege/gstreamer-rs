@@ -1,11 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::AudioDecoder;
-use crate::AudioInfo;
-use glib::prelude::*;
-use glib::translate::*;
-use std::mem;
-use std::ptr;
+use std::{mem, ptr};
+
+use glib::{prelude::*, translate::*};
+
+use crate::{AudioDecoder, AudioInfo};
 
 extern "C" {
     fn _gst_audio_decoder_error(

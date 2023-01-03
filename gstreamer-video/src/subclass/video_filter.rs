@@ -1,13 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::translate::*;
+use gst_base::{prelude::*, subclass::prelude::*};
 
-use gst_base::prelude::*;
-use gst_base::subclass::prelude::*;
-
-use crate::VideoFilter;
-use crate::VideoFrameRef;
-use crate::VideoInfo;
+use crate::{VideoFilter, VideoFrameRef, VideoInfo};
 
 pub trait VideoFilterImpl: VideoFilterImplExt + BaseTransformImpl {
     fn set_info(

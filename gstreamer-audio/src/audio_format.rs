@@ -1,10 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::ffi::CStr;
-use std::str;
+use std::{ffi::CStr, str};
 
 use glib::translate::{from_glib, IntoGlib};
-
 use once_cell::sync::Lazy;
 
 #[cfg(feature = "v1_18")]

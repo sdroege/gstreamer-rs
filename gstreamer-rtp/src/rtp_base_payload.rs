@@ -1,7 +1,8 @@
-use crate::RTPBasePayload;
-use glib::object::IsA;
-use glib::translate::*;
 use std::ptr;
+
+use glib::{object::IsA, translate::*};
+
+use crate::RTPBasePayload;
 
 pub trait RTPBasePayloadExtManual: 'static {
     #[cfg(any(feature = "v1_20", feature = "dox"))]

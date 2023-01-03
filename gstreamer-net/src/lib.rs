@@ -32,9 +32,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::use_self)]
 #[allow(unused_imports)]
 mod auto;
-pub use crate::auto::*;
-
-pub use crate::net_address_meta::*;
+pub use crate::{auto::*, net_address_meta::*};
 mod net_address_meta;
 
 mod ptp_clock;

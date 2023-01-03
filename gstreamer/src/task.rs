@@ -1,13 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::{mem, ptr, sync::Arc};
+
+use glib::{prelude::*, translate::*};
+
 use crate::Task;
-
-use std::mem;
-use std::ptr;
-use std::sync::Arc;
-
-use glib::prelude::*;
-use glib::translate::*;
 
 #[allow(clippy::type_complexity)]
 pub struct TaskBuilder<F: FnMut(&Task) + Send + 'static> {
@@ -178,9 +175,10 @@ impl<'a> Drop for TaskLockGuard<'a> {
 
 #[cfg(test)]
 mod tests {
+    use std::sync::mpsc::channel;
+
     use super::*;
     use crate::prelude::*;
-    use std::sync::mpsc::channel;
 
     #[test]
     fn test_simple() {

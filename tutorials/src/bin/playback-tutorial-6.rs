@@ -1,7 +1,6 @@
+use anyhow::Error;
 use glib::FlagsClass;
 use gst::prelude::*;
-
-use anyhow::Error;
 
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;

@@ -1,7 +1,6 @@
-use crate::auto::VideoAggregatorPad;
-use crate::subclass::AggregateFramesToken;
-use glib::object::IsA;
-use glib::translate::*;
+use glib::{object::IsA, translate::*};
+
+use crate::{auto::VideoAggregatorPad, subclass::AggregateFramesToken};
 
 pub trait VideoAggregatorPadExtManual: 'static {
     #[doc(alias = "gst_video_aggregator_pad_has_current_buffer")]

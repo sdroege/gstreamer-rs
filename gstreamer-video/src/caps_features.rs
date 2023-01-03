@@ -1,8 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use gst::CapsFeatures;
 use std::ffi::CStr;
 
+use gst::CapsFeatures;
 use once_cell::sync::Lazy;
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]

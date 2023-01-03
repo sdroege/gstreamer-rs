@@ -1,21 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::{borrow::Cow, sync::atomic};
+
+use glib::{subclass::prelude::*, translate::*};
+
 use super::prelude::*;
-use crate::prelude::*;
-use glib::subclass::prelude::*;
-use glib::translate::*;
-
-use crate::Element;
-use crate::Event;
-use crate::PadTemplate;
-use crate::QueryRef;
-use crate::StateChange;
-use crate::StateChangeError;
-use crate::StateChangeReturn;
-use crate::StateChangeSuccess;
-
-use std::borrow::Cow;
-use std::sync::atomic;
+use crate::{
+    prelude::*, Element, Event, PadTemplate, QueryRef, StateChange, StateChangeError,
+    StateChangeReturn, StateChangeSuccess,
+};
 
 #[derive(Debug, Clone)]
 pub struct ElementMetadata {
@@ -562,9 +555,9 @@ unsafe extern "C" fn element_post_message<T: ElementImpl>(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::sync::atomic;
 
+    use super::*;
     use crate::ElementFactory;
 
     pub mod imp {

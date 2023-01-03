@@ -1,14 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::translate::*;
-
-use gst::subclass::prelude::*;
-
 use std::ptr;
 
-use crate::Aggregator;
-use crate::AggregatorPad;
+use glib::{prelude::*, translate::*};
+use gst::subclass::prelude::*;
+
+use crate::{Aggregator, AggregatorPad};
 
 pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
     fn flush(&self) -> Result<gst::FlowSuccess, gst::FlowError> {

@@ -1,10 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::{Player, PlayerVideoRenderer};
+use glib::{prelude::*, subclass::prelude::*, translate::*};
 
-use glib::prelude::*;
-use glib::subclass::prelude::*;
-use glib::translate::*;
+use crate::{Player, PlayerVideoRenderer};
 
 pub trait PlayerVideoRendererImpl: ObjectImpl {
     fn create_video_sink(&self, player: &Player) -> gst::Element;

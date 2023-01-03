@@ -1,15 +1,12 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::subclass::prelude::*;
-use glib::translate::*;
-use gst::prelude::*;
-
 use std::ptr;
 
+use glib::{prelude::*, subclass::prelude::*, translate::*};
+use gst::prelude::*;
+
 use super::base_src::{BaseSrcImpl, CreateSuccess};
-use crate::prelude::BaseSrcExtManual;
-use crate::PushSrc;
+use crate::{prelude::BaseSrcExtManual, PushSrc};
 
 pub trait PushSrcImpl: PushSrcImplExt + BaseSrcImpl {
     fn fill(&self, buffer: &mut gst::BufferRef) -> Result<gst::FlowSuccess, gst::FlowError> {

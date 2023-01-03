@@ -1,15 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::translate::*;
+use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
-use glib::subclass::prelude::*;
-
-use crate::Bin;
-use crate::Element;
-use crate::LoggableError;
-use crate::Message;
+use crate::{Bin, Element, LoggableError, Message};
 
 pub trait BinImpl: BinImplExt + ElementImpl {
     fn add_element(&self, element: &Element) -> Result<(), LoggableError> {

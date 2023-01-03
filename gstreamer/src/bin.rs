@@ -1,19 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::Bin;
-use crate::BinFlags;
-use crate::Element;
-use crate::LoggableError;
+use std::{boxed::Box as Box_, mem::transmute, path};
 
-use glib::prelude::*;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::GString;
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+    GString,
+};
 
-use std::boxed::Box as Box_;
-use std::mem::transmute;
-use std::path;
+use crate::{Bin, BinFlags, Element, LoggableError};
 
 impl Bin {
     // rustdoc-stripper-ignore-next

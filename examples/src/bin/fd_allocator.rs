@@ -14,19 +14,17 @@
 // how the file descriptor of FdMemory can be accessed in a pipeline.
 // Note that instead of manual mapping the file descriptor it is also possible
 // to use map_writable, which will also map the file descriptor.
-use futures::StreamExt;
-use gst::{element_error, prelude::*};
-
-use anyhow::Error;
-use derive_more::{Display, Error};
-
-use memmap2::MmapMut;
-use uds::UnixStreamExt;
-
 use std::{
     os::unix::{net::UnixStream, prelude::AsRawFd},
     sync::{Arc, Mutex},
 };
+
+use anyhow::Error;
+use derive_more::{Display, Error};
+use futures::StreamExt;
+use gst::{element_error, prelude::*};
+use memmap2::MmapMut;
+use uds::UnixStreamExt;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

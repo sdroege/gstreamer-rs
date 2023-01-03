@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use crate::GLDisplayWayland;
-use glib::ffi::gpointer;
-use glib::translate::*;
+use glib::{ffi::gpointer, translate::*};
 use libc::uintptr_t;
+
+use crate::GLDisplayWayland;
 
 impl GLDisplayWayland {
     pub unsafe fn with_display(

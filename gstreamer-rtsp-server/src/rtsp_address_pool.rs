@@ -1,11 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::RTSPAddress;
-use crate::RTSPAddressPool;
-use crate::RTSPAddressPoolResult;
-use glib::prelude::*;
-use glib::translate::*;
 use std::ptr;
+
+use glib::{prelude::*, translate::*};
+
+use crate::{RTSPAddress, RTSPAddressPool, RTSPAddressPoolResult};
 
 pub trait RTSPAddressPoolExtManual: 'static {
     #[doc(alias = "gst_rtsp_address_pool_reserve_address")]

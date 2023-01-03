@@ -25,7 +25,6 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst_base::subclass::prelude::*;
 
-    pub use super::navigation::NavigationImpl;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub use super::video_aggregator::{VideoAggregatorImpl, VideoAggregatorImplExt};
@@ -35,8 +34,11 @@ pub mod prelude {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub use super::video_aggregator_pad::{VideoAggregatorPadImpl, VideoAggregatorPadImplExt};
-    pub use super::video_decoder::{VideoDecoderImpl, VideoDecoderImplExt};
-    pub use super::video_encoder::{VideoEncoderImpl, VideoEncoderImplExt};
-    pub use super::video_filter::{VideoFilterImpl, VideoFilterImplExt};
-    pub use super::video_sink::{VideoSinkImpl, VideoSinkImplExt};
+    pub use super::{
+        navigation::NavigationImpl,
+        video_decoder::{VideoDecoderImpl, VideoDecoderImplExt},
+        video_encoder::{VideoEncoderImpl, VideoEncoderImplExt},
+        video_filter::{VideoFilterImpl, VideoFilterImplExt},
+        video_sink::{VideoSinkImpl, VideoSinkImplExt},
+    };
 }

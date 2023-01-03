@@ -1,7 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::fmt;
-use std::ptr;
+use std::{fmt, ptr};
 
 use glib::translate::{from_glib, from_glib_none, FromGlib, IntoGlib, IntoGlibPtr, ToGlibPtr};
 use gst::prelude::*;

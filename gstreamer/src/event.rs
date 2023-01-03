@@ -1,26 +1,19 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::format::{
-    CompatibleFormattedValue, FormattedValue, FormattedValueIntrinsic, GenericFormattedValue,
+use std::{borrow::Borrow, cmp, ffi::CStr, fmt, mem, num::NonZeroU32, ops::Deref, ptr};
+
+use glib::{
+    translate::{FromGlibPtrContainer, *},
+    value::ToSendValue,
 };
-use crate::structure::*;
-use crate::ClockTime;
 
-use std::borrow::Borrow;
-use std::cmp;
-use std::ffi::CStr;
-use std::fmt;
-use std::mem;
-use std::num::NonZeroU32;
-use std::ops::Deref;
-use std::ptr;
-
-use glib::translate::*;
-use glib::value::ToSendValue;
-
-use glib::translate::FromGlibPtrContainer;
-
-use crate::EventType;
+use crate::{
+    format::{
+        CompatibleFormattedValue, FormattedValue, FormattedValueIntrinsic, GenericFormattedValue,
+    },
+    structure::*,
+    ClockTime, EventType,
+};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Seqnum(pub(crate) NonZeroU32);

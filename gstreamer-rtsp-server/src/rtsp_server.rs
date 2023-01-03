@@ -1,9 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use glib::{prelude::*, source::SourceId, translate::*};
+
 use crate::RTSPServer;
-use glib::prelude::*;
-use glib::source::SourceId;
-use glib::translate::*;
 
 pub trait RTSPServerExtManual: 'static {
     #[doc(alias = "gst_rtsp_server_attach")]

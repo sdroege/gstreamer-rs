@@ -1,19 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::caps_features::*;
-use crate::structure::*;
-use std::fmt;
-use std::marker::PhantomData;
-use std::ptr;
-use std::str;
+use std::{fmt, marker::PhantomData, ptr, str};
 
-use crate::CapsIntersectMode;
-
-use glib::translate::{
-    from_glib, from_glib_full, FromGlibPtrFull, IntoGlib, IntoGlibPtr, ToGlibPtr,
+use glib::{
+    translate::{from_glib, from_glib_full, FromGlibPtrFull, IntoGlib, IntoGlibPtr, ToGlibPtr},
+    value::ToSendValue,
+    StaticType,
 };
-use glib::value::ToSendValue;
-use glib::StaticType;
+
+use crate::{caps_features::*, structure::*, CapsIntersectMode};
 
 mini_object_wrapper!(Caps, CapsRef, ffi::GstCaps, || { ffi::gst_caps_get_type() });
 
@@ -1068,8 +1063,7 @@ impl<T> BuilderFull<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::Array;
-    use crate::Fraction;
+    use crate::{Array, Fraction};
 
     #[test]
     fn test_simple() {

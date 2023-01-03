@@ -1,21 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::fmt;
-use std::ptr;
+use std::{fmt, ptr};
 
 use glib::translate::{from_glib_full, from_glib_none, mut_override, IntoGlibPtr, ToGlibPtr};
 
-use crate::format::FormattedValueIntrinsic;
-use crate::Buffer;
-use crate::BufferList;
-use crate::BufferListRef;
-use crate::BufferRef;
-use crate::Caps;
-use crate::CapsRef;
-use crate::FormattedSegment;
-use crate::Segment;
-use crate::Structure;
-use crate::StructureRef;
+use crate::{
+    format::FormattedValueIntrinsic, Buffer, BufferList, BufferListRef, BufferRef, Caps, CapsRef,
+    FormattedSegment, Segment, Structure, StructureRef,
+};
 
 mini_object_wrapper!(Sample, SampleRef, ffi::GstSample, || {
     ffi::gst_sample_get_type()
@@ -253,8 +245,7 @@ impl fmt::Debug for SampleRef {
 mod tests {
     #[test]
     fn test_sample_new_with_info() {
-        use crate::Sample;
-        use crate::Structure;
+        use crate::{Sample, Structure};
 
         crate::init().unwrap();
 

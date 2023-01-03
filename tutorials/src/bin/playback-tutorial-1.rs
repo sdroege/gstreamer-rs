@@ -1,12 +1,9 @@
-use glib::FlagsClass;
-use gst::prelude::*;
+use std::{thread, time};
 
 use anyhow::Error;
-
-use termion::event::Key;
-use termion::input::TermRead;
-
-use std::{thread, time};
+use glib::FlagsClass;
+use gst::prelude::*;
+use termion::{event::Key, input::TermRead};
 
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;

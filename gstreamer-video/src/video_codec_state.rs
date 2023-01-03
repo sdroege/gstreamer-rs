@@ -1,12 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::utils::HasStreamLock;
-use glib::translate::*;
-use std::fmt;
-use std::marker::PhantomData;
-use std::ptr;
+use std::{fmt, marker::PhantomData, ptr};
 
-use crate::video_info::VideoInfo;
+use glib::translate::*;
+
+use crate::{utils::HasStreamLock, video_info::VideoInfo};
 
 pub trait VideoCodecStateContext<'a> {
     #[doc(alias = "get_element")]

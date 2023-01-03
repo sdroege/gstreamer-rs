@@ -34,8 +34,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::use_self)]
 #[allow(unused_imports)]
 mod auto;
-pub use crate::auto::functions::*;
-pub use crate::auto::*;
+pub use crate::auto::{functions::*, *};
 
 #[cfg(feature = "serde")]
 mod flag_serde;
@@ -62,11 +61,10 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst_video::prelude::*;
 
-    pub use crate::auto::traits::*;
-
-    pub use crate::context::ContextGLExt;
-    pub use crate::gl_context::GLContextExtManual;
-    pub use crate::gl_video_frame::VideoFrameGLExt;
+    pub use crate::{
+        auto::traits::*, context::ContextGLExt, gl_context::GLContextExtManual,
+        gl_video_frame::VideoFrameGLExt,
+    };
 }
 
 pub mod subclass;

@@ -1,13 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::{fmt, marker::PhantomData, mem, ptr, str};
+
 use glib::translate::*;
 use gst::prelude::*;
-
-use std::fmt;
-use std::marker::PhantomData;
-use std::mem;
-use std::ptr;
-use std::str;
 
 #[doc(alias = "GST_VIDEO_MAX_PLANES")]
 pub const VIDEO_MAX_PLANES: usize = ffi::GST_VIDEO_MAX_PLANES as usize;

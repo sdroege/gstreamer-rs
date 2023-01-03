@@ -1,17 +1,17 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::utils::HasStreamLock;
-use crate::video_codec_state::{InNegotiation, Readable, VideoCodecState, VideoCodecStateContext};
-use crate::VideoCodecFrame;
-use crate::VideoDecoder;
-use crate::VideoFormat;
+use std::{mem, ptr};
+
+use glib::{prelude::*, translate::*};
+
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use crate::VideoInterlaceMode;
-use glib::prelude::*;
-use glib::translate::*;
-use std::mem;
-use std::ptr;
+use crate::{
+    utils::HasStreamLock,
+    video_codec_state::{InNegotiation, Readable, VideoCodecState, VideoCodecStateContext},
+    VideoCodecFrame, VideoDecoder, VideoFormat,
+};
 
 extern "C" {
     fn _gst_video_decoder_error(

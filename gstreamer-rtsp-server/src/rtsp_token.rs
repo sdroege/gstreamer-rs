@@ -1,9 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::*;
-use glib::value::ToSendValue;
-
 use std::fmt;
+
+use glib::{translate::*, value::ToSendValue};
 
 gst::mini_object_wrapper!(RTSPToken, RTSPTokenRef, ffi::GstRTSPToken, || {
     ffi::gst_rtsp_token_get_type()

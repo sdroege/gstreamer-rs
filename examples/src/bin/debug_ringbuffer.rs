@@ -5,9 +5,9 @@
 //
 // It's possible to dump the logs at any time in an application,
 // not just on exit like is done here.
-use gst::prelude::*;
-
 use std::process;
+
+use gst::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

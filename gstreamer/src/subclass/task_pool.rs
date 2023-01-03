@@ -1,15 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::{
+    hash::{Hash, Hasher},
+    ptr,
+    sync::{Arc, Mutex},
+};
+
+use glib::{ffi::gpointer, subclass::prelude::*, translate::*};
+
 use super::prelude::*;
 use crate::{TaskHandle, TaskPool};
-
-use std::hash::{Hash, Hasher};
-use std::ptr;
-use std::sync::{Arc, Mutex};
-
-use glib::ffi::gpointer;
-use glib::subclass::prelude::*;
-use glib::translate::*;
 
 pub trait TaskPoolImpl: GstObjectImpl + Send + Sync {
     // rustdoc-stripper-ignore-next
@@ -231,11 +231,16 @@ impl Hash for TaskPoolFunction {
 
 #[cfg(test)]
 mod tests {
+    use std::{
+        sync::{
+            atomic,
+            mpsc::{channel, TryRecvError},
+        },
+        thread,
+    };
+
     use super::*;
     use crate::prelude::*;
-    use std::sync::atomic;
-    use std::sync::mpsc::{channel, TryRecvError};
-    use std::thread;
 
     pub mod imp {
         use super::*;

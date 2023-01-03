@@ -1,17 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::fmt;
-use std::io;
-use std::marker::PhantomData;
-use std::mem;
-use std::ptr;
-use std::u64;
-use std::usize;
+use std::{fmt, io, marker::PhantomData, mem, ptr, u64, usize};
 
-use crate::Buffer;
-use crate::BufferRef;
-
-use crate::buffer::{Readable, Writable};
+use crate::{
+    buffer::{Readable, Writable},
+    Buffer, BufferRef,
+};
 
 pub struct BufferCursor<T> {
     buffer: Option<Buffer>,

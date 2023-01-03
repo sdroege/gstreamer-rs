@@ -1,11 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::ffi::CStr;
-use std::marker::PhantomData;
-use std::mem;
+use std::{ffi::CStr, marker::PhantomData, mem};
 
 use glib::translate::*;
-
 use once_cell::sync::Lazy;
 
 pub static BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META: Lazy<&'static str> =

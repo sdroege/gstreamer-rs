@@ -17,9 +17,9 @@ pub fn run<T, F: FnOnce() -> T + Send + 'static>(main: F) -> T
 where
     T: Send + 'static,
 {
-    use cocoa::appkit::NSApplication;
-
     use std::thread;
+
+    use cocoa::appkit::NSApplication;
 
     unsafe {
         let app = cocoa::appkit::NSApp();

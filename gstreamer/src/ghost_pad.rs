@@ -1,17 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::prelude::*;
-use crate::FlowError;
-use crate::FlowSuccess;
-use crate::GhostPad;
-use crate::LoggableError;
-use crate::Pad;
-use crate::PadBuilder;
-use crate::PadFlags;
-use crate::PadGetRangeSuccess;
-use crate::PadMode;
-use crate::StaticPadTemplate;
 use glib::translate::*;
+
+use crate::{
+    prelude::*, FlowError, FlowSuccess, GhostPad, LoggableError, Pad, PadBuilder, PadFlags,
+    PadGetRangeSuccess, PadMode, StaticPadTemplate,
+};
 
 impl GhostPad {
     #[doc(alias = "gst_ghost_pad_activate_mode_default")]

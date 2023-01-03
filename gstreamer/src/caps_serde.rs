@@ -1,17 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use serde::de;
-use serde::de::{Deserialize, Deserializer, EnumAccess, SeqAccess, VariantAccess, Visitor};
-use serde::ser::{Serialize, SerializeSeq, SerializeTuple, Serializer};
-
 use std::fmt;
 
-use crate::Caps;
-use crate::CapsFeatures;
-use crate::CapsFeaturesRef;
-use crate::CapsRef;
-use crate::Structure;
-use crate::StructureRef;
+use serde::{
+    de,
+    de::{Deserialize, Deserializer, EnumAccess, SeqAccess, VariantAccess, Visitor},
+    ser::{Serialize, SerializeSeq, SerializeTuple, Serializer},
+};
+
+use crate::{Caps, CapsFeatures, CapsFeaturesRef, CapsRef, Structure, StructureRef};
 
 enum CapsVariantKinds {
     Any,
@@ -223,10 +220,7 @@ impl<'de> Deserialize<'de> for Caps {
 
 #[cfg(test)]
 mod tests {
-    use crate::Array;
-    use crate::Caps;
-    use crate::CapsFeatures;
-    use crate::Fraction;
+    use crate::{Array, Caps, CapsFeatures, Fraction};
 
     #[test]
     fn test_serialize() {

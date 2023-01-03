@@ -1,13 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::cmp::Ordering;
-use std::ffi::CStr;
-use std::fmt;
-use std::marker::PhantomData;
-use std::str;
+use std::{cmp::Ordering, ffi::CStr, fmt, marker::PhantomData, str};
 
-use glib::translate::{from_glib, from_glib_none, FromGlib, IntoGlib, ToGlibPtr, ToGlibPtrMut};
-use glib::StaticType;
+use glib::{
+    translate::{from_glib, from_glib_none, FromGlib, IntoGlib, ToGlibPtr, ToGlibPtrMut},
+    StaticType,
+};
 
 #[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]
 pub enum AudioEndianness {

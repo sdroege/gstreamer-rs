@@ -1,13 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use serde::de;
-use serde::de::{Deserialize, Deserializer, EnumAccess, SeqAccess, VariantAccess, Visitor};
-use serde::ser::{Serialize, SerializeSeq, Serializer};
-
 use std::fmt;
 
-use crate::CapsFeatures;
-use crate::CapsFeaturesRef;
+use serde::{
+    de,
+    de::{Deserialize, Deserializer, EnumAccess, SeqAccess, VariantAccess, Visitor},
+    ser::{Serialize, SerializeSeq, Serializer},
+};
+
+use crate::{CapsFeatures, CapsFeaturesRef};
 
 enum CapsFeaturesVariantKinds {
     Any,

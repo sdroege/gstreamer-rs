@@ -1,10 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::TryFromGlib;
 use std::ops::{Deref, DerefMut};
 
-use super::{FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic};
-use super::{FormattedValueError, GenericFormattedValue, Signed};
+use glib::translate::TryFromGlib;
+
+use super::{
+    FormattedValue, FormattedValueError, FormattedValueFullRange, FormattedValueIntrinsic,
+    GenericFormattedValue, Signed,
+};
 use crate::Format;
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]

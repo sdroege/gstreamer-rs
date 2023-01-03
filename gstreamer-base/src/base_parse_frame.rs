@@ -1,12 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::*;
-use std::fmt;
-use std::marker::PhantomData;
-use std::ptr;
+use std::{fmt, marker::PhantomData, ptr};
 
-use crate::BaseParse;
-use crate::BaseParseFrameFlags;
+use glib::translate::*;
+
+use crate::{BaseParse, BaseParseFrameFlags};
 
 pub struct BaseParseFrame<'a>(
     ptr::NonNull<ffi::GstBaseParseFrame>,

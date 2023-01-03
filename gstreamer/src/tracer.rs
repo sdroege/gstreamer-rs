@@ -1,7 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::{Plugin, Tracer};
 use glib::translate::*;
+
+use crate::{Plugin, Tracer};
 
 impl Tracer {
     #[doc(alias = "gst_tracer_register")]

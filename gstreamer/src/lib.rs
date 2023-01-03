@@ -10,9 +10,8 @@
 // Re-exported for the subclass gst_plugin_define! macro
 pub use ffi;
 pub use glib;
-pub use paste;
-
 use glib::translate::{from_glib, from_glib_full};
+pub use paste;
 
 #[doc(hidden)]
 pub static INITIALIZED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
@@ -43,8 +42,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::let_unit_value)]
 #[allow(unused_imports)]
 mod auto;
-pub use crate::auto::functions::*;
-pub use crate::auto::*;
+pub use crate::auto::{functions::*, *};
 
 #[macro_use]
 #[cfg(feature = "serde")]
@@ -106,8 +104,9 @@ pub mod meta;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use crate::meta::MetaSeqnum;
-pub use crate::meta::ReferenceTimestampMeta;
-pub use crate::meta::{Meta, MetaAPI, MetaRef, MetaRefMut, ParentBufferMeta, ProtectionMeta};
+pub use crate::meta::{
+    Meta, MetaAPI, MetaRef, MetaRefMut, ParentBufferMeta, ProtectionMeta, ReferenceTimestampMeta,
+};
 pub mod buffer;
 pub use crate::buffer::{
     Buffer, BufferMap, BufferRef, MappedBuffer, BUFFER_COPY_ALL, BUFFER_COPY_METADATA,
@@ -194,20 +193,21 @@ mod tag_setter;
 pub mod task;
 pub use task::{TaskLock, TaskLockGuard};
 mod task_pool;
-pub use crate::element::{ElementMessageType, NotifyWatchId};
-pub use crate::element::{
-    ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,
-    ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS, ELEMENT_METADATA_LONGNAME,
-};
-pub use crate::task_pool::{TaskHandle, TaskPoolTaskHandle};
-
 pub use self::iterator::{Iterator, IteratorError, IteratorImpl, StdIterator};
-pub use crate::device_monitor::DeviceMonitorFilterId;
-pub use crate::enums::{
-    ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, PadLinkSuccess,
-    StateChangeError, StateChangeSuccess, TagError,
+pub use crate::{
+    device_monitor::DeviceMonitorFilterId,
+    element::{
+        ElementMessageType, NotifyWatchId, ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION,
+        ELEMENT_METADATA_DOC_URI, ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS,
+        ELEMENT_METADATA_LONGNAME,
+    },
+    enums::{
+        ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, PadLinkSuccess,
+        StateChangeError, StateChangeSuccess, TagError,
+    },
+    parse_context::ParseContext,
+    task_pool::{TaskHandle, TaskPoolTaskHandle},
 };
-pub use crate::parse_context::ParseContext;
 mod plugin_feature;
 
 mod plugin;
@@ -241,8 +241,7 @@ mod pad_template;
 pub use pad_template::PadTemplateBuilder;
 
 pub mod param_spec;
-pub use crate::param_spec::ParamSpecArray;
-pub use crate::param_spec::ParamSpecFraction;
+pub use crate::param_spec::{ParamSpecArray, ParamSpecFraction};
 
 pub mod functions;
 pub use crate::functions::*;
@@ -297,51 +296,44 @@ pub const PARAM_FLAG_CONDITIONALLY_AVAILABLE: glib::ParamFlags = glib::ParamFlag
 pub mod prelude {
     #[doc(hidden)]
     pub use glib::prelude::*;
+    pub use muldiv::MulDiv;
     pub use opt_ops::prelude::*;
-
-    pub use crate::auto::traits::*;
-
-    pub use crate::meta::MetaAPI;
 
     // OS dependent Bus extensions (also import the other platform trait for doc)
     #[cfg(any(unix, feature = "dox"))]
     pub use crate::bus_unix::UnixBusExtManual;
     #[cfg(any(windows, feature = "dox"))]
     pub use crate::bus_windows::WindowsBusExtManual;
-
-    pub use crate::bin::GstBinExtManual;
-    pub use crate::buffer_pool::BufferPoolExtManual;
-    pub use crate::child_proxy::ChildProxyExtManual;
-    pub use crate::clock::ClockExtManual;
-    pub use crate::device_monitor::DeviceMonitorExtManual;
-    pub use crate::device_provider::DeviceProviderExtManual;
-    pub use crate::element::{ElementClassExt, ElementExtManual};
-    pub use crate::gobject::GObjectExtManualGst;
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     pub use crate::gtype::PluginApiExt;
-    pub use crate::message::MessageErrorDomain;
-    pub use crate::object::GstObjectExtManual;
-    pub use crate::pad::PadExtManual;
-    pub use crate::pipeline::GstPipelineExtManual;
-    pub use crate::plugin::GstPluginExtManual;
-    pub use crate::plugin_feature::PluginFeatureExtManual;
-    pub use crate::tag_setter::TagSetterExtManual;
-    pub use crate::task_pool::{TaskHandle, TaskPoolExtManual};
-    pub use crate::typefind::TypeFindImpl;
-    pub use crate::value::GstValueExt;
-
-    pub use crate::miniobject::IsMiniObject;
-
-    pub use crate::tags::{CustomTag, Tag};
-
-    pub use crate::param_spec::GstParamSpecBuilderExt;
-
-    pub use muldiv::MulDiv;
-
-    pub use crate::format::prelude::*;
-    pub use crate::utils::Displayable;
-
-    pub use crate::memory::MemoryType;
+    pub use crate::{
+        auto::traits::*,
+        bin::GstBinExtManual,
+        buffer_pool::BufferPoolExtManual,
+        child_proxy::ChildProxyExtManual,
+        clock::ClockExtManual,
+        device_monitor::DeviceMonitorExtManual,
+        device_provider::DeviceProviderExtManual,
+        element::{ElementClassExt, ElementExtManual},
+        format::prelude::*,
+        gobject::GObjectExtManualGst,
+        memory::MemoryType,
+        message::MessageErrorDomain,
+        meta::MetaAPI,
+        miniobject::IsMiniObject,
+        object::GstObjectExtManual,
+        pad::PadExtManual,
+        param_spec::GstParamSpecBuilderExt,
+        pipeline::GstPipelineExtManual,
+        plugin::GstPluginExtManual,
+        plugin_feature::PluginFeatureExtManual,
+        tag_setter::TagSetterExtManual,
+        tags::{CustomTag, Tag},
+        task_pool::{TaskHandle, TaskPoolExtManual},
+        typefind::TypeFindImpl,
+        utils::Displayable,
+        value::GstValueExt,
+    };
 }
 
 #[macro_use]

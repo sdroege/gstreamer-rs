@@ -1,18 +1,24 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::{
+    mem, panic,
+    pin::Pin,
+    ptr,
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc, Mutex,
+    },
+    task::{Context, Poll, Waker},
+};
+
 use futures_sink::Sink;
-use glib::ffi::{gboolean, gpointer};
-use glib::prelude::*;
-use glib::translate::*;
+use glib::{
+    ffi::{gboolean, gpointer},
+    prelude::*,
+    translate::*,
+};
 
 use crate::AppSrc;
-use std::mem;
-use std::panic;
-use std::pin::Pin;
-use std::ptr;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::{Arc, Mutex};
-use std::task::{Context, Poll, Waker};
 
 #[allow(clippy::type_complexity)]
 pub struct AppSrcCallbacks {
@@ -678,10 +684,12 @@ impl Sink<gst::Sample> for AppSrcSink {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use std::sync::atomic::{AtomicUsize, Ordering};
+
     use futures_util::{sink::SinkExt, stream::StreamExt};
     use gst::prelude::*;
-    use std::sync::atomic::{AtomicUsize, Ordering};
+
+    use super::*;
 
     #[test]
     fn test_app_src_sink() {

@@ -2,8 +2,9 @@
 
 use std::num::NonZeroU64;
 
-use crate::PtpClock;
 use glib::translate::*;
+
+use crate::PtpClock;
 
 impl PtpClock {
     // rustdoc-stripper-ignore-next

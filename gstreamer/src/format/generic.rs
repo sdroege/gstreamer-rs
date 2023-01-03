@@ -1,17 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{FromGlib, GlibNoneError, IntoGlib, OptionIntoGlib, TryFromGlib};
 use std::fmt;
 
-use crate::utils::Displayable;
+use glib::translate::{FromGlib, GlibNoneError, IntoGlib, OptionIntoGlib, TryFromGlib};
 
 use super::{
-    Buffers, Bytes, ClockTime, Default, Format, FormattedValueError, Percent, Signed, Undefined,
+    Buffers, Bytes, ClockTime, CompatibleFormattedValue, Default, Format, FormattedValue,
+    FormattedValueError, FormattedValueFullRange, FormattedValueIntrinsic,
+    FormattedValueNoneBuilder, Percent, Signed, SignedIntrinsic, Undefined, UnsignedIntoSigned,
 };
-use super::{
-    CompatibleFormattedValue, FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic,
-    FormattedValueNoneBuilder, SignedIntrinsic, UnsignedIntoSigned,
-};
+use crate::utils::Displayable;
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Other(u64);

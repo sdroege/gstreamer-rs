@@ -2,13 +2,10 @@
 
 use std::mem;
 
-use crate::prelude::*;
-
 use glib::translate::*;
 use gst::subclass::prelude::*;
 
-use crate::BaseParse;
-use crate::BaseParseFrame;
+use crate::{prelude::*, BaseParse, BaseParseFrame};
 
 pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
     fn start(&self) -> Result<(), gst::ErrorMessage> {

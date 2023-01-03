@@ -1,32 +1,19 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::Element;
-
-use once_cell::sync::Lazy;
-
-use crate::format::{
-    CompatibleFormattedValue, FormattedValue, SpecificFormattedValueFullRange,
-    SpecificFormattedValueIntrinsic,
-};
-use crate::prelude::*;
-use crate::ClockTime;
-use crate::ElementFlags;
-use crate::Event;
-use crate::Pad;
-use crate::PadTemplate;
-use crate::Plugin;
-use crate::QueryRef;
-use crate::Rank;
-use crate::State;
-use crate::{Format, GenericFormattedValue};
+use std::{ffi::CStr, future::Future, mem, num::NonZeroU64, pin::Pin};
 
 use glib::translate::*;
+use once_cell::sync::Lazy;
 
-use std::ffi::CStr;
-use std::future::Future;
-use std::mem;
-use std::num::NonZeroU64;
-use std::pin::Pin;
+use crate::{
+    format::{
+        CompatibleFormattedValue, FormattedValue, SpecificFormattedValueFullRange,
+        SpecificFormattedValueIntrinsic,
+    },
+    prelude::*,
+    ClockTime, Element, ElementFlags, Event, Format, GenericFormattedValue, Pad, PadTemplate,
+    Plugin, QueryRef, Rank, State,
+};
 
 impl Element {
     #[doc(alias = "gst_element_link_many")]
@@ -1752,9 +1739,11 @@ macro_rules! element_imp_info(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use glib::GString;
     use std::sync::mpsc::channel;
+
+    use glib::GString;
+
+    use super::*;
 
     #[test]
     fn test_get_pads() {

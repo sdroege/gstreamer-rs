@@ -1,15 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::Buffer;
-use crate::BufferList;
-use crate::FlowError;
-use crate::FlowSuccess;
-use crate::Pad;
-use crate::ProxyPad;
 use std::ptr;
 
-use glib::prelude::*;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
+
+use crate::{Buffer, BufferList, FlowError, FlowSuccess, Pad, ProxyPad};
 
 impl ProxyPad {
     #[doc(alias = "gst_proxy_pad_chain_default")]

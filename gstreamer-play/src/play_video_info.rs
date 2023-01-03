@@ -1,8 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::PlayVideoInfo;
-use glib::translate::*;
 use std::mem;
+
+use glib::translate::*;
+
+use crate::PlayVideoInfo;
 
 impl PlayVideoInfo {
     #[doc(alias = "get_framerate")]

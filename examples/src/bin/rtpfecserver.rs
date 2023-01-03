@@ -1,5 +1,4 @@
-use gst::element_error;
-use gst::prelude::*;
+use gst::{element_error, prelude::*};
 
 #[path = "../examples-common.rs"]
 mod examples_common;

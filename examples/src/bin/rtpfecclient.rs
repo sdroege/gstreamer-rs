@@ -1,7 +1,6 @@
-use gst::element_error;
-use gst::prelude::*;
-
 use std::env;
+
+use gst::{element_error, prelude::*};
 
 #[path = "../examples-common.rs"]
 mod examples_common;

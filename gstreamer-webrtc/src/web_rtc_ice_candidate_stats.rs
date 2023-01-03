@@ -1,8 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::WebRTCICECandidateStats;
-use glib::translate::*;
 use std::ffi::CStr;
+
+use glib::translate::*;
+
+use crate::WebRTCICECandidateStats;
 
 impl WebRTCICECandidateStats {
     pub fn ipaddr(&self) -> Option<&str> {

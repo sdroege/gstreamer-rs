@@ -1,8 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use glib::{prelude::*, translate::*};
+
 use crate::AggregatorPad;
-use glib::prelude::*;
-use glib::translate::*;
 
 pub trait AggregatorPadExtManual: 'static {
     #[doc(alias = "get_segment")]

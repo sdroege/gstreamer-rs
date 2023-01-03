@@ -1,20 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::AllocationParams;
-use crate::Allocator;
-use crate::BufferPool;
-use crate::Structure;
-use crate::StructureRef;
+use std::{
+    marker::PhantomData,
+    mem, ops,
+    ops::{Deref, DerefMut},
+    ptr,
+};
 
-use glib::prelude::*;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 
-use std::marker::PhantomData;
-use std::mem;
-use std::ops;
-use std::ops::Deref;
-use std::ops::DerefMut;
-use std::ptr;
+use crate::{AllocationParams, Allocator, BufferPool, Structure, StructureRef};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[repr(transparent)]

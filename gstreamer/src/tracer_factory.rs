@@ -1,8 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::TracerFactory;
-
 use glib::translate::*;
+
+use crate::TracerFactory;
 
 impl TracerFactory {
     #[doc(alias = "gst_tracer_factory_get_list")]

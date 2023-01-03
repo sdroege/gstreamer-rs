@@ -1,15 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use super::prelude::*;
-use glib::prelude::*;
-use glib::subclass::prelude::*;
-use glib::translate::*;
-
 use std::borrow::Cow;
 
-use crate::Device;
-use crate::DeviceProvider;
-use crate::LoggableError;
+use glib::{prelude::*, subclass::prelude::*, translate::*};
+
+use super::prelude::*;
+use crate::{Device, DeviceProvider, LoggableError};
 
 #[derive(Debug, Clone)]
 pub struct DeviceProviderMetadata {

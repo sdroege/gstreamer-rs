@@ -1,18 +1,12 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::prelude::*;
-use glib::translate::*;
-
-use gst::prelude::*;
-use gst::subclass::prelude::*;
-
-use std::mem;
-use std::ptr;
+use std::{mem, ptr};
 
 use atomic_refcell::AtomicRefCell;
+use glib::{prelude::*, translate::*};
+use gst::{prelude::*, subclass::prelude::*};
 
-use crate::prelude::BaseSrcExtManual;
-use crate::BaseSrc;
+use crate::{prelude::BaseSrcExtManual, BaseSrc};
 
 #[derive(Default)]
 pub(super) struct InstanceData {

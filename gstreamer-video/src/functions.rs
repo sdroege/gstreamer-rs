@@ -1,10 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr};
+use std::{i32, mem, ptr};
 
-use std::i32;
-use std::mem;
-use std::ptr;
+use glib::translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr};
 
 #[doc(alias = "gst_video_convert_sample")]
 pub fn convert_sample(
@@ -227,8 +225,9 @@ pub fn video_make_raw_caps(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::sync::{Arc, Mutex};
+
+    use super::*;
 
     #[test]
     fn test_convert_sample_async() {

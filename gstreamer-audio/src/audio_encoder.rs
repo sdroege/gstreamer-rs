@@ -1,10 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::{mem, ptr};
+
+use glib::{prelude::*, translate::*};
+
 use crate::AudioEncoder;
-use glib::prelude::*;
-use glib::translate::*;
-use std::mem;
-use std::ptr;
 
 pub trait AudioEncoderExtManual: 'static {
     #[doc(alias = "gst_audio_encoder_finish_frame")]

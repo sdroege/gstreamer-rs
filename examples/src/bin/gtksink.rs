@@ -10,13 +10,11 @@
 //                      (|)
 // {videotestsrc} - {glsinkbin}
 
-use gst::prelude::*;
+use std::cell::RefCell;
 
 use gio::prelude::*;
-
+use gst::prelude::*;
 use gtk::prelude::*;
-
-use std::cell::RefCell;
 
 fn create_ui(app: &gtk::Application) {
     let pipeline = gst::Pipeline::default();

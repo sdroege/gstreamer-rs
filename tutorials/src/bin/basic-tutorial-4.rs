@@ -1,6 +1,6 @@
+use std::{io, io::Write};
+
 use gst::prelude::*;
-use std::io;
-use std::io::Write;
 
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;

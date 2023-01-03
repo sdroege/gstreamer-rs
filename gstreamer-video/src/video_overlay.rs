@@ -1,10 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::VideoOverlay;
+use glib::{prelude::*, translate::*};
 use libc::uintptr_t;
 
-use glib::prelude::*;
-use glib::translate::*;
+use crate::VideoOverlay;
 
 pub trait VideoOverlayExtManual: 'static {
     unsafe fn set_window_handle(&self, handle: uintptr_t);

@@ -1,13 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::PromiseResult;
-use crate::Structure;
-use crate::StructureRef;
+use std::{
+    ops::Deref,
+    pin::Pin,
+    ptr,
+    task::{Context, Poll},
+};
+
 use glib::translate::*;
 
-use std::ptr;
-use std::task::{Context, Poll};
-use std::{ops::Deref, pin::Pin};
+use crate::{PromiseResult, Structure, StructureRef};
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -209,9 +211,9 @@ impl std::fmt::Debug for PromiseReply {
 
 #[cfg(test)]
 mod tests {
+    use std::{sync::mpsc::channel, thread};
+
     use super::*;
-    use std::sync::mpsc::channel;
-    use std::thread;
 
     #[test]
     fn test_change_func() {

@@ -1,13 +1,16 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
-use crate::{NavigationCommand, NavigationEventType};
-use glib::translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr};
-use glib::ToSendValue;
-use gst::EventType;
 use std::mem;
+
+use glib::{
+    translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr},
+    ToSendValue,
+};
+use gst::EventType;
 
 #[cfg(any(feature = "v1_22", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
 use crate::NavigationModifierType;
+use crate::{NavigationCommand, NavigationEventType};
 
 // FIXME: Copy from gstreamer/src/event.rs
 macro_rules! event_builder_generic_impl {
