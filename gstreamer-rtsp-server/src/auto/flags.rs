@@ -4,11 +4,7 @@
 // DO NOT EDIT
 
 use bitflags::bitflags;
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 
 bitflags! {
     #[doc(alias = "GstRTSPAddressFlags")]
@@ -30,6 +26,7 @@ bitflags! {
 impl IntoGlib for RTSPAddressFlags {
     type GlibType = ffi::GstRTSPAddressFlags;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTSPAddressFlags {
         self.bits()
     }
@@ -37,6 +34,7 @@ impl IntoGlib for RTSPAddressFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPAddressFlags> for RTSPAddressFlags {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPAddressFlags) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -57,6 +55,7 @@ bitflags! {
 impl IntoGlib for RTSPTransportMode {
     type GlibType = ffi::GstRTSPTransportMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTSPTransportMode {
         self.bits()
     }
@@ -64,6 +63,7 @@ impl IntoGlib for RTSPTransportMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPTransportMode> for RTSPTransportMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPTransportMode) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -71,6 +71,7 @@ impl FromGlib<ffi::GstRTSPTransportMode> for RTSPTransportMode {
 }
 
 impl StaticType for RTSPTransportMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_transport_mode_get_type()) }
     }
@@ -83,6 +84,7 @@ impl glib::value::ValueType for RTSPTransportMode {
 unsafe impl<'a> FromValue<'a> for RTSPTransportMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -90,6 +92,7 @@ unsafe impl<'a> FromValue<'a> for RTSPTransportMode {
 }
 
 impl ToValue for RTSPTransportMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -98,6 +101,7 @@ impl ToValue for RTSPTransportMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

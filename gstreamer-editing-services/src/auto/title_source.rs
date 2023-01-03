@@ -4,16 +4,11 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::Extractable;
-use crate::MetaContainer;
-use crate::Source;
-use crate::TextHAlign;
-use crate::TextVAlign;
-use crate::TimelineElement;
-use crate::TrackElement;
-use crate::VideoSource;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{
+    Extractable, MetaContainer, Source, TextHAlign, TextVAlign, TimelineElement, TrackElement,
+    VideoSource,
+};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GESTitleSource")]

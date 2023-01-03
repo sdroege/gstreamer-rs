@@ -4,22 +4,16 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::Extractable;
-use crate::MetaContainer;
-use crate::Operation;
-use crate::TimelineElement;
-use crate::TrackElement;
-use crate::Transition;
-use crate::VideoStandardTransitionType;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
+use crate::{
+    Extractable, MetaContainer, Operation, TimelineElement, TrackElement, Transition,
+    VideoStandardTransitionType,
+};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GESVideoTransition")]

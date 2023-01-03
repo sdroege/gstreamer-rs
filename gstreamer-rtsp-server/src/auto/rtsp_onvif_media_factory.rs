@@ -4,9 +4,7 @@
 // DO NOT EDIT
 
 use crate::RTSPMediaFactory;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstRTSPOnvifMediaFactory")]

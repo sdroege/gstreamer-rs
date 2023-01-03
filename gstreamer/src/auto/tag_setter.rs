@@ -3,12 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Element;
-use crate::Object;
-use crate::TagList;
-use crate::TagMergeMode;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{Element, Object, TagList, TagMergeMode};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstTagSetter")]

@@ -4,19 +4,12 @@
 // DO NOT EDIT
 
 use crate::DiscovererInfo;
-use glib::object::ObjectType as ObjectType_;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-use glib::StaticType;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-use glib::ToValue;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
-use std::ptr;
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute, ptr};
 
 glib::wrapper! {
     #[doc(alias = "GstDiscoverer")]

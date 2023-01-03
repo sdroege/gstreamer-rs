@@ -4,20 +4,13 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::Edge;
-use crate::EditMode;
-use crate::Extractable;
-use crate::Layer;
-use crate::MetaContainer;
-use crate::TimelineElement;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
+use crate::{Edge, EditMode, Extractable, Layer, MetaContainer, TimelineElement};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GESContainer")]
@@ -62,7 +55,7 @@ pub trait GESContainerExt: 'static {
     fn remove(&self, child: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_container_ungroup")]
-    fn ungroup(&self, recursive: bool) -> Vec<Container>;
+    fn ungroup(self, recursive: bool) -> Vec<Container>;
 
     fn height(&self) -> u32;
 
@@ -140,10 +133,10 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
-    fn ungroup(&self, recursive: bool) -> Vec<Container> {
+    fn ungroup(self, recursive: bool) -> Vec<Container> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_container_ungroup(
-                self.as_ref().to_glib_full(),
+                self.upcast().into_glib_ptr(),
                 recursive.into_glib(),
             ))
         }

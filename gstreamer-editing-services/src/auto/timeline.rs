@@ -4,28 +4,18 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::Asset;
+use crate::{
+    Asset, Extractable, Group, Layer, MetaContainer, TimelineElement, Track, TrackElement,
+};
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use crate::Clip;
-use crate::Extractable;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use crate::FrameNumber;
-use crate::Group;
-use crate::Layer;
-use crate::MetaContainer;
-use crate::TimelineElement;
-use crate::Track;
-use crate::TrackElement;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
-use std::ptr;
+use crate::{Clip, FrameNumber};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute, ptr};
 
 glib::wrapper! {
     #[doc(alias = "GESTimeline")]
@@ -280,7 +270,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             glib::result_from_gboolean!(
                 ffi::ges_timeline_add_track(
                     self.as_ref().to_glib_none().0,
-                    track.as_ref().to_glib_full()
+                    track.as_ref().to_glib_none().0
                 ),
                 "Failed to add track"
             )
@@ -452,7 +442,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
                 uri.to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -535,7 +525,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
                 overwrite.into_glib(),
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

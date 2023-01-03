@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::object::IsA;
+use glib::prelude::*;
 
 glib::wrapper! {
     #[doc(alias = "GstPlayVideoRenderer")]

@@ -3,14 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::AudioSource;
-use crate::Extractable;
-use crate::MetaContainer;
-use crate::Source;
-use crate::TimelineElement;
-use crate::TrackElement;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{AudioSource, Extractable, MetaContainer, Source, TimelineElement, TrackElement};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GESAudioTestSource")]

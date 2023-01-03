@@ -3,19 +3,15 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::RTSPAddress;
-use crate::RTSPAddressPool;
-use crate::RTSPFilterResult;
-use crate::RTSPPublishClockMode;
-use crate::RTSPStreamTransport;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use std::boxed::Box as Box_;
-use std::mem;
-use std::mem::transmute;
+use crate::{
+    RTSPAddress, RTSPAddressPool, RTSPFilterResult, RTSPPublishClockMode, RTSPStreamTransport,
+};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GstRTSPStream")]
@@ -272,10 +268,10 @@ pub trait RTSPStreamExt: 'static {
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_rtsp_stream_recv_rtcp")]
-    fn recv_rtcp(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
+    fn recv_rtcp(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[doc(alias = "gst_rtsp_stream_recv_rtp")]
-    fn recv_rtp(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
+    fn recv_rtp(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[doc(alias = "gst_rtsp_stream_remove_transport")]
     fn remove_transport(
@@ -882,20 +878,20 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn recv_rtcp(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
+    fn recv_rtcp(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             try_from_glib(ffi::gst_rtsp_stream_recv_rtcp(
                 self.as_ref().to_glib_none().0,
-                buffer.to_glib_full(),
+                buffer.into_glib_ptr(),
             ))
         }
     }
 
-    fn recv_rtp(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
+    fn recv_rtp(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             try_from_glib(ffi::gst_rtsp_stream_recv_rtp(
                 self.as_ref().to_glib_none().0,
-                buffer.to_glib_full(),
+                buffer.into_glib_ptr(),
             ))
         }
     }

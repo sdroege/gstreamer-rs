@@ -3,11 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Object;
-use crate::PluginDependencyFlags;
+use crate::{Object, PluginDependencyFlags};
 use glib::translate::*;
-use std::fmt;
-use std::ptr;
+use std::{fmt, ptr};
 
 glib::wrapper! {
     #[doc(alias = "GstPlugin")]

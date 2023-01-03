@@ -7,15 +7,12 @@
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use crate::MarkerList;
 use crate::MetaFlag;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use std::boxed::Box as Box_;
-use std::mem;
-use std::mem::transmute;
-use std::ptr;
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem, mem::transmute, ptr};
 
 glib::wrapper! {
     #[doc(alias = "GESMetaContainer")]

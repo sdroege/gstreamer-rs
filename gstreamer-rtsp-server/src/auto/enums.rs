@@ -3,11 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -31,6 +27,7 @@ pub enum RTSPAddressPoolResult {
 impl IntoGlib for RTSPAddressPoolResult {
     type GlibType = ffi::GstRTSPAddressPoolResult;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTSPAddressPoolResult {
         match self {
             Self::Ok => ffi::GST_RTSP_ADDRESS_POOL_OK,
@@ -45,6 +42,7 @@ impl IntoGlib for RTSPAddressPoolResult {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPAddressPoolResult> for RTSPAddressPoolResult {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPAddressPoolResult) -> Self {
         skip_assert_initialized!();
         match value {
@@ -76,6 +74,7 @@ pub enum RTSPFilterResult {
 impl IntoGlib for RTSPFilterResult {
     type GlibType = ffi::GstRTSPFilterResult;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTSPFilterResult {
         match self {
             Self::Remove => ffi::GST_RTSP_FILTER_REMOVE,
@@ -88,6 +87,7 @@ impl IntoGlib for RTSPFilterResult {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPFilterResult> for RTSPFilterResult {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPFilterResult) -> Self {
         skip_assert_initialized!();
         match value {
@@ -123,6 +123,7 @@ pub enum RTSPMediaStatus {
 impl IntoGlib for RTSPMediaStatus {
     type GlibType = ffi::GstRTSPMediaStatus;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTSPMediaStatus {
         match self {
             Self::Unprepared => ffi::GST_RTSP_MEDIA_STATUS_UNPREPARED,
@@ -138,6 +139,7 @@ impl IntoGlib for RTSPMediaStatus {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPMediaStatus> for RTSPMediaStatus {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPMediaStatus) -> Self {
         skip_assert_initialized!();
         match value {
@@ -170,6 +172,7 @@ pub enum RTSPPublishClockMode {
 impl IntoGlib for RTSPPublishClockMode {
     type GlibType = ffi::GstRTSPPublishClockMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTSPPublishClockMode {
         match self {
             Self::None => ffi::GST_RTSP_PUBLISH_CLOCK_MODE_NONE,
@@ -182,6 +185,7 @@ impl IntoGlib for RTSPPublishClockMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPPublishClockMode> for RTSPPublishClockMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPPublishClockMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -194,6 +198,7 @@ impl FromGlib<ffi::GstRTSPPublishClockMode> for RTSPPublishClockMode {
 }
 
 impl StaticType for RTSPPublishClockMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_publish_clock_mode_get_type()) }
     }
@@ -206,6 +211,7 @@ impl glib::value::ValueType for RTSPPublishClockMode {
 unsafe impl<'a> FromValue<'a> for RTSPPublishClockMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -213,6 +219,7 @@ unsafe impl<'a> FromValue<'a> for RTSPPublishClockMode {
 }
 
 impl ToValue for RTSPPublishClockMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -221,6 +228,7 @@ impl ToValue for RTSPPublishClockMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -252,6 +260,7 @@ pub enum RTSPSuspendMode {
 impl IntoGlib for RTSPSuspendMode {
     type GlibType = ffi::GstRTSPSuspendMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTSPSuspendMode {
         match self {
             Self::None => ffi::GST_RTSP_SUSPEND_MODE_NONE,
@@ -264,6 +273,7 @@ impl IntoGlib for RTSPSuspendMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPSuspendMode> for RTSPSuspendMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPSuspendMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -276,6 +286,7 @@ impl FromGlib<ffi::GstRTSPSuspendMode> for RTSPSuspendMode {
 }
 
 impl StaticType for RTSPSuspendMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_suspend_mode_get_type()) }
     }
@@ -288,6 +299,7 @@ impl glib::value::ValueType for RTSPSuspendMode {
 unsafe impl<'a> FromValue<'a> for RTSPSuspendMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -295,6 +307,7 @@ unsafe impl<'a> FromValue<'a> for RTSPSuspendMode {
 }
 
 impl ToValue for RTSPSuspendMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -303,6 +316,7 @@ impl ToValue for RTSPSuspendMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -332,6 +346,7 @@ pub enum RTSPThreadType {
 impl IntoGlib for RTSPThreadType {
     type GlibType = ffi::GstRTSPThreadType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTSPThreadType {
         match self {
             Self::Client => ffi::GST_RTSP_THREAD_TYPE_CLIENT,
@@ -343,6 +358,7 @@ impl IntoGlib for RTSPThreadType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPThreadType> for RTSPThreadType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPThreadType) -> Self {
         skip_assert_initialized!();
         match value {

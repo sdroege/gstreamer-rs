@@ -4,8 +4,7 @@
 // DO NOT EDIT
 
 use crate::RTSPStream;
-use glib::object::IsA;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 use std::boxed::Box as Box_;
 
 glib::wrapper! {
@@ -21,7 +20,7 @@ impl RTSPStreamTransport {
     pub const NONE: Option<&'static RTSPStreamTransport> = None;
 
     //#[doc(alias = "gst_rtsp_stream_transport_new")]
-    //pub fn new(stream: &impl IsA<RTSPStream>, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> RTSPStreamTransport {
+    //pub fn new(stream: &impl IsA<RTSPStream>, tr: /*Ignored*/gst_rtsp::RTSPTransport) -> RTSPStreamTransport {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_transport_new() }
     //}
 }
@@ -58,7 +57,7 @@ pub trait RTSPStreamTransportExt: 'static {
     fn recv_data(
         &self,
         channel: u32,
-        buffer: &gst::Buffer,
+        buffer: gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[doc(alias = "gst_rtsp_stream_transport_send_rtcp")]
@@ -103,7 +102,7 @@ pub trait RTSPStreamTransportExt: 'static {
     fn set_timed_out(&self, timedout: bool);
 
     //#[doc(alias = "gst_rtsp_stream_transport_set_transport")]
-    //fn set_transport(&self, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport);
+    //fn set_transport(&self, tr: /*Ignored*/gst_rtsp::RTSPTransport);
 
     #[doc(alias = "gst_rtsp_stream_transport_set_url")]
     fn set_url(&self, url: Option<&gst_rtsp::RTSPUrl>);
@@ -164,13 +163,13 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
     fn recv_data(
         &self,
         channel: u32,
-        buffer: &gst::Buffer,
+        buffer: gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             try_from_glib(ffi::gst_rtsp_stream_transport_recv_data(
                 self.as_ref().to_glib_none().0,
                 channel,
-                buffer.to_glib_full(),
+                buffer.into_glib_ptr(),
             ))
         }
     }
@@ -316,7 +315,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         }
     }
 
-    //fn set_transport(&self, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) {
+    //fn set_transport(&self, tr: /*Ignored*/gst_rtsp::RTSPTransport) {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_transport_set_transport() }
     //}
 

@@ -3,8 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Extractable;
-use crate::Formatter;
+use crate::{Extractable, Formatter};
 
 glib::wrapper! {
     #[doc(alias = "GESBaseXmlFormatter")]

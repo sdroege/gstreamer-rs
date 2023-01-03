@@ -3,8 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::VideoAggregatorConvertPad;
-use crate::VideoAggregatorPad;
+use crate::{VideoAggregatorConvertPad, VideoAggregatorPad};
 
 glib::wrapper! {
     #[doc(alias = "GstVideoAggregatorParallelConvertPad")]

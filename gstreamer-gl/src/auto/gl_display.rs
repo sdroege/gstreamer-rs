@@ -3,18 +3,13 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::GLContext;
-use crate::GLDisplayType;
-use crate::GLWindow;
-use crate::GLAPI;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
-use std::ptr;
+use crate::{GLContext, GLDisplayType, GLWindow, GLAPI};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute, ptr};
 
 glib::wrapper! {
     #[doc(alias = "GstGLDisplay")]
@@ -127,7 +122,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
                 &mut p_context,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(from_glib_full(p_context))
             } else {

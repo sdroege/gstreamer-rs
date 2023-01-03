@@ -4,8 +4,7 @@
 // DO NOT EDIT
 
 use crate::Object;
-use glib::object::IsA;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstBufferPool")]

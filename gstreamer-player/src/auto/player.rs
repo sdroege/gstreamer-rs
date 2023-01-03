@@ -3,24 +3,16 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::PlayerAudioInfo;
-use crate::PlayerColorBalanceType;
-use crate::PlayerMediaInfo;
-use crate::PlayerSignalDispatcher;
-use crate::PlayerState;
-use crate::PlayerSubtitleInfo;
-use crate::PlayerVideoInfo;
-use crate::PlayerVideoRenderer;
-use crate::PlayerVisualization;
-use glib::object::IsA;
-use glib::object::ObjectType as ObjectType_;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
+use crate::{
+    PlayerAudioInfo, PlayerColorBalanceType, PlayerMediaInfo, PlayerSignalDispatcher, PlayerState,
+    PlayerSubtitleInfo, PlayerVideoInfo, PlayerVideoRenderer, PlayerVisualization,
+};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GstPlayer")]
@@ -34,14 +26,14 @@ glib::wrapper! {
 impl Player {
     #[doc(alias = "gst_player_new")]
     pub fn new(
-        video_renderer: Option<&impl IsA<PlayerVideoRenderer>>,
-        signal_dispatcher: Option<&impl IsA<PlayerSignalDispatcher>>,
+        video_renderer: Option<impl IsA<PlayerVideoRenderer>>,
+        signal_dispatcher: Option<impl IsA<PlayerSignalDispatcher>>,
     ) -> Player {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_player_new(
-                video_renderer.map(|p| p.as_ref()).to_glib_full(),
-                signal_dispatcher.map(|p| p.as_ref()).to_glib_full(),
+                video_renderer.map(|p| p.upcast()).into_glib_ptr(),
+                signal_dispatcher.map(|p| p.upcast()).into_glib_ptr(),
             ))
         }
     }

@@ -4,8 +4,7 @@
 // DO NOT EDIT
 
 use crate::RTSPServer;
-use glib::object::Cast;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstRTSPOnvifServer")]

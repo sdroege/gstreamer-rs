@@ -4,25 +4,19 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::Asset;
-use crate::Clip;
-use crate::Extractable;
-use crate::MetaContainer;
-use crate::Timeline;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use crate::Track;
-use crate::TrackType;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
+use crate::{Asset, Clip, Extractable, MetaContainer, Timeline, TrackType};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::ptr;
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GESLayer")]
@@ -228,7 +222,7 @@ impl<O: IsA<Layer>> LayerExt for O {
                 clip.as_ref().to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

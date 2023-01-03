@@ -4,14 +4,12 @@
 // DO NOT EDIT
 
 use crate::AudioInfo;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use std::boxed::Box as Box_;
-use std::mem;
-use std::mem::transmute;
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GstAudioEncoder")]
@@ -109,7 +107,7 @@ pub trait AudioEncoderExt: 'static {
     fn set_hard_resync(&self, enabled: bool);
 
     #[doc(alias = "gst_audio_encoder_set_headers")]
-    fn set_headers(&self, headers: &[&gst::Buffer]);
+    fn set_headers(&self, headers: Vec<gst::Buffer>);
 
     #[doc(alias = "gst_audio_encoder_set_latency")]
     fn set_latency(&self, min: gst::ClockTime, max: impl Into<Option<gst::ClockTime>>);
@@ -324,11 +322,11 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         }
     }
 
-    fn set_headers(&self, headers: &[&gst::Buffer]) {
+    fn set_headers(&self, headers: Vec<gst::Buffer>) {
         unsafe {
             ffi::gst_audio_encoder_set_headers(
                 self.as_ref().to_glib_none().0,
-                headers.to_glib_full(),
+                headers.into_glib_ptr(),
             );
         }
     }

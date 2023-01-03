@@ -4,8 +4,7 @@
 // DO NOT EDIT
 
 use crate::NetClientClock;
-use glib::object::Cast;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstNtpClock")]

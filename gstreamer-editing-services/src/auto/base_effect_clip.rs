@@ -3,12 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Clip;
-use crate::Container;
-use crate::Extractable;
-use crate::MetaContainer;
-use crate::OperationClip;
-use crate::TimelineElement;
+use crate::{Clip, Container, Extractable, MetaContainer, OperationClip, TimelineElement};
 
 glib::wrapper! {
     #[doc(alias = "GESBaseEffectClip")]

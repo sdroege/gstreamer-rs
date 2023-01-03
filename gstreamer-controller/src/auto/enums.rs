@@ -3,11 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -29,6 +25,7 @@ pub enum InterpolationMode {
 impl IntoGlib for InterpolationMode {
     type GlibType = ffi::GstInterpolationMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstInterpolationMode {
         match self {
             Self::None => ffi::GST_INTERPOLATION_MODE_NONE,
@@ -42,6 +39,7 @@ impl IntoGlib for InterpolationMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstInterpolationMode> for InterpolationMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstInterpolationMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -55,6 +53,7 @@ impl FromGlib<ffi::GstInterpolationMode> for InterpolationMode {
 }
 
 impl StaticType for InterpolationMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_interpolation_mode_get_type()) }
     }
@@ -67,6 +66,7 @@ impl glib::value::ValueType for InterpolationMode {
 unsafe impl<'a> FromValue<'a> for InterpolationMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -74,6 +74,7 @@ unsafe impl<'a> FromValue<'a> for InterpolationMode {
 }
 
 impl ToValue for InterpolationMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -82,6 +83,7 @@ impl ToValue for InterpolationMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -117,6 +119,7 @@ pub enum LFOWaveform {
 impl IntoGlib for LFOWaveform {
     type GlibType = ffi::GstLFOWaveform;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstLFOWaveform {
         match self {
             Self::Sine => ffi::GST_LFO_WAVEFORM_SINE,
@@ -131,6 +134,7 @@ impl IntoGlib for LFOWaveform {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstLFOWaveform> for LFOWaveform {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstLFOWaveform) -> Self {
         skip_assert_initialized!();
         match value {
@@ -145,6 +149,7 @@ impl FromGlib<ffi::GstLFOWaveform> for LFOWaveform {
 }
 
 impl StaticType for LFOWaveform {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_lfo_waveform_get_type()) }
     }
@@ -157,6 +162,7 @@ impl glib::value::ValueType for LFOWaveform {
 unsafe impl<'a> FromValue<'a> for LFOWaveform {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -164,6 +170,7 @@ unsafe impl<'a> FromValue<'a> for LFOWaveform {
 }
 
 impl ToValue for LFOWaveform {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -172,6 +179,7 @@ impl ToValue for LFOWaveform {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

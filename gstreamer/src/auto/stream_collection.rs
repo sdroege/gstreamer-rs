@@ -3,8 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Object;
-use crate::Stream;
+use crate::{Object, Stream};
 use glib::translate::*;
 
 glib::wrapper! {

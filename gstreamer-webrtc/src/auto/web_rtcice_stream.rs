@@ -3,11 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::WebRTCICEComponent;
-use crate::WebRTCICETransport;
-use glib::object::IsA;
-use glib::translate::*;
-use glib::StaticType;
+use crate::{WebRTCICEComponent, WebRTCICETransport};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstWebRTCICEStream")]

@@ -3,12 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Issue;
-use crate::ReportLevel;
-use crate::Reporter;
-use crate::ReportingDetails;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{Issue, ReportLevel, Reporter, ReportingDetails};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]

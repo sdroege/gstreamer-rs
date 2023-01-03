@@ -4,8 +4,7 @@
 // DO NOT EDIT
 
 use crate::RTSPMediaFactory;
-use glib::object::IsA;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 use std::mem;
 
 glib::wrapper! {
@@ -38,7 +37,7 @@ unsafe impl Sync for RTSPMountPoints {}
 
 pub trait RTSPMountPointsExt: 'static {
     #[doc(alias = "gst_rtsp_mount_points_add_factory")]
-    fn add_factory(&self, path: &str, factory: &impl IsA<RTSPMediaFactory>);
+    fn add_factory(&self, path: &str, factory: impl IsA<RTSPMediaFactory>);
 
     #[doc(alias = "gst_rtsp_mount_points_make_path")]
     fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Result<glib::GString, glib::BoolError>;
@@ -52,12 +51,12 @@ pub trait RTSPMountPointsExt: 'static {
 }
 
 impl<O: IsA<RTSPMountPoints>> RTSPMountPointsExt for O {
-    fn add_factory(&self, path: &str, factory: &impl IsA<RTSPMediaFactory>) {
+    fn add_factory(&self, path: &str, factory: impl IsA<RTSPMediaFactory>) {
         unsafe {
             ffi::gst_rtsp_mount_points_add_factory(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,
-                factory.as_ref().to_glib_full(),
+                factory.upcast().into_glib_ptr(),
             );
         }
     }

@@ -3,11 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::AllocationParams;
-use crate::Memory;
-use crate::Object;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{AllocationParams, Memory, Object};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstAllocator")]
@@ -40,7 +37,7 @@ pub trait AllocatorExt: 'static {
     ) -> Result<Memory, glib::BoolError>;
 
     #[doc(alias = "gst_allocator_set_default")]
-    fn set_default(&self);
+    fn set_default(self);
 }
 
 impl<O: IsA<Allocator>> AllocatorExt for O {
@@ -59,9 +56,9 @@ impl<O: IsA<Allocator>> AllocatorExt for O {
         }
     }
 
-    fn set_default(&self) {
+    fn set_default(self) {
         unsafe {
-            ffi::gst_allocator_set_default(self.as_ref().to_glib_full());
+            ffi::gst_allocator_set_default(self.upcast().into_glib_ptr());
         }
     }
 }

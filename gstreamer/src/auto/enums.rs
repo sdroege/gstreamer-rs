@@ -4,15 +4,10 @@
 // DO NOT EDIT
 
 use crate::EventTypeFlags;
-use glib::error::ErrorDomain;
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::Quark;
-use glib::StaticType;
-use glib::Type;
-use std::ffi::CStr;
-use std::fmt;
+use glib::{
+    error::ErrorDomain, translate::*, value::FromValue, value::ToValue, Quark, StaticType, Type,
+};
+use std::{ffi::CStr, fmt};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -34,6 +29,7 @@ pub enum BufferingMode {
 impl IntoGlib for BufferingMode {
     type GlibType = ffi::GstBufferingMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstBufferingMode {
         match self {
             Self::Stream => ffi::GST_BUFFERING_STREAM,
@@ -47,6 +43,7 @@ impl IntoGlib for BufferingMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstBufferingMode> for BufferingMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstBufferingMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -60,6 +57,7 @@ impl FromGlib<ffi::GstBufferingMode> for BufferingMode {
 }
 
 impl StaticType for BufferingMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_buffering_mode_get_type()) }
     }
@@ -72,6 +70,7 @@ impl glib::value::ValueType for BufferingMode {
 unsafe impl<'a> FromValue<'a> for BufferingMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -79,6 +78,7 @@ unsafe impl<'a> FromValue<'a> for BufferingMode {
 }
 
 impl ToValue for BufferingMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -87,6 +87,7 @@ impl ToValue for BufferingMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -118,6 +119,7 @@ pub enum BusSyncReply {
 impl IntoGlib for BusSyncReply {
     type GlibType = ffi::GstBusSyncReply;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstBusSyncReply {
         match self {
             Self::Drop => ffi::GST_BUS_DROP,
@@ -130,6 +132,7 @@ impl IntoGlib for BusSyncReply {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstBusSyncReply> for BusSyncReply {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstBusSyncReply) -> Self {
         skip_assert_initialized!();
         match value {
@@ -142,6 +145,7 @@ impl FromGlib<ffi::GstBusSyncReply> for BusSyncReply {
 }
 
 impl StaticType for BusSyncReply {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_bus_sync_reply_get_type()) }
     }
@@ -154,6 +158,7 @@ impl glib::value::ValueType for BusSyncReply {
 unsafe impl<'a> FromValue<'a> for BusSyncReply {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -161,6 +166,7 @@ unsafe impl<'a> FromValue<'a> for BusSyncReply {
 }
 
 impl ToValue for BusSyncReply {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -169,6 +175,7 @@ impl ToValue for BusSyncReply {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -198,6 +205,7 @@ pub enum CapsIntersectMode {
 impl IntoGlib for CapsIntersectMode {
     type GlibType = ffi::GstCapsIntersectMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstCapsIntersectMode {
         match self {
             Self::ZigZag => ffi::GST_CAPS_INTERSECT_ZIG_ZAG,
@@ -209,6 +217,7 @@ impl IntoGlib for CapsIntersectMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstCapsIntersectMode> for CapsIntersectMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstCapsIntersectMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -220,6 +229,7 @@ impl FromGlib<ffi::GstCapsIntersectMode> for CapsIntersectMode {
 }
 
 impl StaticType for CapsIntersectMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_caps_intersect_mode_get_type()) }
     }
@@ -232,6 +242,7 @@ impl glib::value::ValueType for CapsIntersectMode {
 unsafe impl<'a> FromValue<'a> for CapsIntersectMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -239,6 +250,7 @@ unsafe impl<'a> FromValue<'a> for CapsIntersectMode {
 }
 
 impl ToValue for CapsIntersectMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -247,6 +259,7 @@ impl ToValue for CapsIntersectMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -276,6 +289,7 @@ pub enum ClockEntryType {
 impl IntoGlib for ClockEntryType {
     type GlibType = ffi::GstClockEntryType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstClockEntryType {
         match self {
             Self::Single => ffi::GST_CLOCK_ENTRY_SINGLE,
@@ -287,6 +301,7 @@ impl IntoGlib for ClockEntryType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstClockEntryType> for ClockEntryType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstClockEntryType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -298,6 +313,7 @@ impl FromGlib<ffi::GstClockEntryType> for ClockEntryType {
 }
 
 impl StaticType for ClockEntryType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_clock_entry_type_get_type()) }
     }
@@ -310,6 +326,7 @@ impl glib::value::ValueType for ClockEntryType {
 unsafe impl<'a> FromValue<'a> for ClockEntryType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -317,6 +334,7 @@ unsafe impl<'a> FromValue<'a> for ClockEntryType {
 }
 
 impl ToValue for ClockEntryType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -325,6 +343,7 @@ impl ToValue for ClockEntryType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -367,6 +386,7 @@ pub enum ClockReturn {
 impl IntoGlib for ClockReturn {
     type GlibType = ffi::GstClockReturn;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstClockReturn {
         match self {
             Self::Ok => ffi::GST_CLOCK_OK,
@@ -384,6 +404,7 @@ impl IntoGlib for ClockReturn {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstClockReturn> for ClockReturn {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstClockReturn) -> Self {
         skip_assert_initialized!();
         match value {
@@ -401,6 +422,7 @@ impl FromGlib<ffi::GstClockReturn> for ClockReturn {
 }
 
 impl StaticType for ClockReturn {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_clock_return_get_type()) }
     }
@@ -413,6 +435,7 @@ impl glib::value::ValueType for ClockReturn {
 unsafe impl<'a> FromValue<'a> for ClockReturn {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -420,6 +443,7 @@ unsafe impl<'a> FromValue<'a> for ClockReturn {
 }
 
 impl ToValue for ClockReturn {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -428,6 +452,7 @@ impl ToValue for ClockReturn {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -463,6 +488,7 @@ pub enum ClockType {
 impl IntoGlib for ClockType {
     type GlibType = ffi::GstClockType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstClockType {
         match self {
             Self::Realtime => ffi::GST_CLOCK_TYPE_REALTIME,
@@ -477,6 +503,7 @@ impl IntoGlib for ClockType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstClockType> for ClockType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstClockType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -491,6 +518,7 @@ impl FromGlib<ffi::GstClockType> for ClockType {
 }
 
 impl StaticType for ClockType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_clock_type_get_type()) }
     }
@@ -503,6 +531,7 @@ impl glib::value::ValueType for ClockType {
 unsafe impl<'a> FromValue<'a> for ClockType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -510,6 +539,7 @@ unsafe impl<'a> FromValue<'a> for ClockType {
 }
 
 impl ToValue for ClockType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -518,6 +548,7 @@ impl ToValue for ClockType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -617,39 +648,31 @@ impl FromGlib<ffi::GstCoreError> for CoreError {
 }
 
 impl ErrorDomain for CoreError {
+    #[inline]
     fn domain() -> Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_core_error_quark()) }
     }
 
+    #[inline]
     fn code(self) -> i32 {
         self.into_glib()
     }
 
+    #[inline]
+    #[allow(clippy::match_single_binding)]
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
-        match code {
-            ffi::GST_CORE_ERROR_FAILED => Some(Self::Failed),
-            ffi::GST_CORE_ERROR_TOO_LAZY => Some(Self::TooLazy),
-            ffi::GST_CORE_ERROR_NOT_IMPLEMENTED => Some(Self::NotImplemented),
-            ffi::GST_CORE_ERROR_STATE_CHANGE => Some(Self::StateChange),
-            ffi::GST_CORE_ERROR_PAD => Some(Self::Pad),
-            ffi::GST_CORE_ERROR_THREAD => Some(Self::Thread),
-            ffi::GST_CORE_ERROR_NEGOTIATION => Some(Self::Negotiation),
-            ffi::GST_CORE_ERROR_EVENT => Some(Self::Event),
-            ffi::GST_CORE_ERROR_SEEK => Some(Self::Seek),
-            ffi::GST_CORE_ERROR_CAPS => Some(Self::Caps),
-            ffi::GST_CORE_ERROR_TAG => Some(Self::Tag),
-            ffi::GST_CORE_ERROR_MISSING_PLUGIN => Some(Self::MissingPlugin),
-            ffi::GST_CORE_ERROR_CLOCK => Some(Self::Clock),
-            ffi::GST_CORE_ERROR_DISABLED => Some(Self::Disabled),
-            _ => Some(Self::Failed),
+        match unsafe { from_glib(code) } {
+            Self::__Unknown(_) => Some(Self::Failed),
+            value => Some(value),
         }
     }
 }
 
 impl StaticType for CoreError {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_core_error_get_type()) }
     }
@@ -662,6 +685,7 @@ impl glib::value::ValueType for CoreError {
 unsafe impl<'a> FromValue<'a> for CoreError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -669,6 +693,7 @@ unsafe impl<'a> FromValue<'a> for CoreError {
 }
 
 impl ToValue for CoreError {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -677,6 +702,7 @@ impl ToValue for CoreError {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -741,6 +767,7 @@ impl fmt::Display for DebugLevel {
 impl IntoGlib for DebugLevel {
     type GlibType = ffi::GstDebugLevel;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstDebugLevel {
         match self {
             Self::None => ffi::GST_LEVEL_NONE,
@@ -759,6 +786,7 @@ impl IntoGlib for DebugLevel {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstDebugLevel> for DebugLevel {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstDebugLevel) -> Self {
         skip_assert_initialized!();
         match value {
@@ -777,6 +805,7 @@ impl FromGlib<ffi::GstDebugLevel> for DebugLevel {
 }
 
 impl StaticType for DebugLevel {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_debug_level_get_type()) }
     }
@@ -789,6 +818,7 @@ impl glib::value::ValueType for DebugLevel {
 unsafe impl<'a> FromValue<'a> for DebugLevel {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -796,6 +826,7 @@ unsafe impl<'a> FromValue<'a> for DebugLevel {
 }
 
 impl ToValue for DebugLevel {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -804,6 +835,7 @@ impl ToValue for DebugLevel {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1017,6 +1049,7 @@ impl FromGlib<ffi::GstEventType> for EventType {
 }
 
 impl StaticType for EventType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_event_type_get_type()) }
     }
@@ -1029,6 +1062,7 @@ impl glib::value::ValueType for EventType {
 unsafe impl<'a> FromValue<'a> for EventType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1036,6 +1070,7 @@ unsafe impl<'a> FromValue<'a> for EventType {
 }
 
 impl ToValue for EventType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1044,6 +1079,7 @@ impl ToValue for EventType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1140,6 +1176,7 @@ impl FromGlib<ffi::GstFlowReturn> for FlowReturn {
 }
 
 impl StaticType for FlowReturn {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_flow_return_get_type()) }
     }
@@ -1152,6 +1189,7 @@ impl glib::value::ValueType for FlowReturn {
 unsafe impl<'a> FromValue<'a> for FlowReturn {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1159,6 +1197,7 @@ unsafe impl<'a> FromValue<'a> for FlowReturn {
 }
 
 impl ToValue for FlowReturn {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1167,6 +1206,7 @@ impl ToValue for FlowReturn {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1238,6 +1278,7 @@ impl Format {
 impl IntoGlib for Format {
     type GlibType = ffi::GstFormat;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstFormat {
         match self {
             Self::Undefined => ffi::GST_FORMAT_UNDEFINED,
@@ -1253,6 +1294,7 @@ impl IntoGlib for Format {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstFormat> for Format {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstFormat) -> Self {
         skip_assert_initialized!();
         match value {
@@ -1268,6 +1310,7 @@ impl FromGlib<ffi::GstFormat> for Format {
 }
 
 impl StaticType for Format {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_format_get_type()) }
     }
@@ -1280,6 +1323,7 @@ impl glib::value::ValueType for Format {
 unsafe impl<'a> FromValue<'a> for Format {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1287,6 +1331,7 @@ unsafe impl<'a> FromValue<'a> for Format {
 }
 
 impl ToValue for Format {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1295,6 +1340,7 @@ impl ToValue for Format {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1332,6 +1378,7 @@ pub enum LibraryError {
 impl IntoGlib for LibraryError {
     type GlibType = ffi::GstLibraryError;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstLibraryError {
         match self {
             Self::Failed => ffi::GST_LIBRARY_ERROR_FAILED,
@@ -1347,6 +1394,7 @@ impl IntoGlib for LibraryError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstLibraryError> for LibraryError {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstLibraryError) -> Self {
         skip_assert_initialized!();
         match value {
@@ -1362,31 +1410,31 @@ impl FromGlib<ffi::GstLibraryError> for LibraryError {
 }
 
 impl ErrorDomain for LibraryError {
+    #[inline]
     fn domain() -> Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_library_error_quark()) }
     }
 
+    #[inline]
     fn code(self) -> i32 {
         self.into_glib()
     }
 
+    #[inline]
+    #[allow(clippy::match_single_binding)]
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
-        match code {
-            ffi::GST_LIBRARY_ERROR_FAILED => Some(Self::Failed),
-            ffi::GST_LIBRARY_ERROR_TOO_LAZY => Some(Self::TooLazy),
-            ffi::GST_LIBRARY_ERROR_INIT => Some(Self::Init),
-            ffi::GST_LIBRARY_ERROR_SHUTDOWN => Some(Self::Shutdown),
-            ffi::GST_LIBRARY_ERROR_SETTINGS => Some(Self::Settings),
-            ffi::GST_LIBRARY_ERROR_ENCODE => Some(Self::Encode),
-            _ => Some(Self::Failed),
+        match unsafe { from_glib(code) } {
+            Self::__Unknown(_) => Some(Self::Failed),
+            value => Some(value),
         }
     }
 }
 
 impl StaticType for LibraryError {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_library_error_get_type()) }
     }
@@ -1399,6 +1447,7 @@ impl glib::value::ValueType for LibraryError {
 unsafe impl<'a> FromValue<'a> for LibraryError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1406,6 +1455,7 @@ unsafe impl<'a> FromValue<'a> for LibraryError {
 }
 
 impl ToValue for LibraryError {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1414,6 +1464,7 @@ impl ToValue for LibraryError {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1446,6 +1497,7 @@ pub enum PadDirection {
 impl IntoGlib for PadDirection {
     type GlibType = ffi::GstPadDirection;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstPadDirection {
         match self {
             Self::Unknown => ffi::GST_PAD_UNKNOWN,
@@ -1458,6 +1510,7 @@ impl IntoGlib for PadDirection {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadDirection> for PadDirection {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstPadDirection) -> Self {
         skip_assert_initialized!();
         match value {
@@ -1470,6 +1523,7 @@ impl FromGlib<ffi::GstPadDirection> for PadDirection {
 }
 
 impl StaticType for PadDirection {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_pad_direction_get_type()) }
     }
@@ -1482,6 +1536,7 @@ impl glib::value::ValueType for PadDirection {
 unsafe impl<'a> FromValue<'a> for PadDirection {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1489,6 +1544,7 @@ unsafe impl<'a> FromValue<'a> for PadDirection {
 }
 
 impl ToValue for PadDirection {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1497,6 +1553,7 @@ impl ToValue for PadDirection {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1537,6 +1594,7 @@ pub enum PadLinkReturn {
 impl IntoGlib for PadLinkReturn {
     type GlibType = ffi::GstPadLinkReturn;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstPadLinkReturn {
         match self {
             Self::Ok => ffi::GST_PAD_LINK_OK,
@@ -1553,6 +1611,7 @@ impl IntoGlib for PadLinkReturn {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadLinkReturn> for PadLinkReturn {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstPadLinkReturn) -> Self {
         skip_assert_initialized!();
         match value {
@@ -1569,6 +1628,7 @@ impl FromGlib<ffi::GstPadLinkReturn> for PadLinkReturn {
 }
 
 impl StaticType for PadLinkReturn {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_pad_link_return_get_type()) }
     }
@@ -1581,6 +1641,7 @@ impl glib::value::ValueType for PadLinkReturn {
 unsafe impl<'a> FromValue<'a> for PadLinkReturn {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1588,6 +1649,7 @@ unsafe impl<'a> FromValue<'a> for PadLinkReturn {
 }
 
 impl ToValue for PadLinkReturn {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1596,6 +1658,7 @@ impl ToValue for PadLinkReturn {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1648,6 +1711,7 @@ impl fmt::Display for PadMode {
 impl IntoGlib for PadMode {
     type GlibType = ffi::GstPadMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstPadMode {
         match self {
             Self::None => ffi::GST_PAD_MODE_NONE,
@@ -1660,6 +1724,7 @@ impl IntoGlib for PadMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadMode> for PadMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstPadMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -1672,6 +1737,7 @@ impl FromGlib<ffi::GstPadMode> for PadMode {
 }
 
 impl StaticType for PadMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_pad_mode_get_type()) }
     }
@@ -1684,6 +1750,7 @@ impl glib::value::ValueType for PadMode {
 unsafe impl<'a> FromValue<'a> for PadMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1691,6 +1758,7 @@ unsafe impl<'a> FromValue<'a> for PadMode {
 }
 
 impl ToValue for PadMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1699,6 +1767,7 @@ impl ToValue for PadMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1731,6 +1800,7 @@ pub enum PadPresence {
 impl IntoGlib for PadPresence {
     type GlibType = ffi::GstPadPresence;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstPadPresence {
         match self {
             Self::Always => ffi::GST_PAD_ALWAYS,
@@ -1743,6 +1813,7 @@ impl IntoGlib for PadPresence {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadPresence> for PadPresence {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstPadPresence) -> Self {
         skip_assert_initialized!();
         match value {
@@ -1755,6 +1826,7 @@ impl FromGlib<ffi::GstPadPresence> for PadPresence {
 }
 
 impl StaticType for PadPresence {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_pad_presence_get_type()) }
     }
@@ -1767,6 +1839,7 @@ impl glib::value::ValueType for PadPresence {
 unsafe impl<'a> FromValue<'a> for PadPresence {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1774,6 +1847,7 @@ unsafe impl<'a> FromValue<'a> for PadPresence {
 }
 
 impl ToValue for PadPresence {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1782,6 +1856,7 @@ impl ToValue for PadPresence {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1817,6 +1892,7 @@ pub enum PadProbeReturn {
 impl IntoGlib for PadProbeReturn {
     type GlibType = ffi::GstPadProbeReturn;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstPadProbeReturn {
         match self {
             Self::Drop => ffi::GST_PAD_PROBE_DROP,
@@ -1831,6 +1907,7 @@ impl IntoGlib for PadProbeReturn {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadProbeReturn> for PadProbeReturn {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstPadProbeReturn) -> Self {
         skip_assert_initialized!();
         match value {
@@ -1845,6 +1922,7 @@ impl FromGlib<ffi::GstPadProbeReturn> for PadProbeReturn {
 }
 
 impl StaticType for PadProbeReturn {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_pad_probe_return_get_type()) }
     }
@@ -1857,6 +1935,7 @@ impl glib::value::ValueType for PadProbeReturn {
 unsafe impl<'a> FromValue<'a> for PadProbeReturn {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1864,6 +1943,7 @@ unsafe impl<'a> FromValue<'a> for PadProbeReturn {
 }
 
 impl ToValue for PadProbeReturn {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1872,6 +1952,7 @@ impl ToValue for PadProbeReturn {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1913,6 +1994,7 @@ pub enum ParseError {
 impl IntoGlib for ParseError {
     type GlibType = ffi::GstParseError;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstParseError {
         match self {
             Self::Syntax => ffi::GST_PARSE_ERROR_SYNTAX,
@@ -1930,6 +2012,7 @@ impl IntoGlib for ParseError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstParseError> for ParseError {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstParseError) -> Self {
         skip_assert_initialized!();
         match value {
@@ -1947,33 +2030,30 @@ impl FromGlib<ffi::GstParseError> for ParseError {
 }
 
 impl ErrorDomain for ParseError {
+    #[inline]
     fn domain() -> Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_parse_error_quark()) }
     }
 
+    #[inline]
     fn code(self) -> i32 {
         self.into_glib()
     }
 
+    #[inline]
+    #[allow(clippy::match_single_binding)]
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
-        match code {
-            ffi::GST_PARSE_ERROR_SYNTAX => Some(Self::Syntax),
-            ffi::GST_PARSE_ERROR_NO_SUCH_ELEMENT => Some(Self::NoSuchElement),
-            ffi::GST_PARSE_ERROR_NO_SUCH_PROPERTY => Some(Self::NoSuchProperty),
-            ffi::GST_PARSE_ERROR_LINK => Some(Self::Link),
-            ffi::GST_PARSE_ERROR_COULD_NOT_SET_PROPERTY => Some(Self::CouldNotSetProperty),
-            ffi::GST_PARSE_ERROR_EMPTY_BIN => Some(Self::EmptyBin),
-            ffi::GST_PARSE_ERROR_EMPTY => Some(Self::Empty),
-            ffi::GST_PARSE_ERROR_DELAYED_LINK => Some(Self::DelayedLink),
-            value => Some(Self::__Unknown(value)),
+        match unsafe { from_glib(code) } {
+            value => Some(value),
         }
     }
 }
 
 impl StaticType for ParseError {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_parse_error_get_type()) }
     }
@@ -1986,6 +2066,7 @@ impl glib::value::ValueType for ParseError {
 unsafe impl<'a> FromValue<'a> for ParseError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1993,6 +2074,7 @@ unsafe impl<'a> FromValue<'a> for ParseError {
 }
 
 impl ToValue for ParseError {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2001,6 +2083,7 @@ impl ToValue for ParseError {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2032,6 +2115,7 @@ pub enum PluginError {
 impl IntoGlib for PluginError {
     type GlibType = ffi::GstPluginError;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstPluginError {
         match self {
             Self::Module => ffi::GST_PLUGIN_ERROR_MODULE,
@@ -2044,6 +2128,7 @@ impl IntoGlib for PluginError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPluginError> for PluginError {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstPluginError) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2056,28 +2141,30 @@ impl FromGlib<ffi::GstPluginError> for PluginError {
 }
 
 impl ErrorDomain for PluginError {
+    #[inline]
     fn domain() -> Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_plugin_error_quark()) }
     }
 
+    #[inline]
     fn code(self) -> i32 {
         self.into_glib()
     }
 
+    #[inline]
+    #[allow(clippy::match_single_binding)]
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
-        match code {
-            ffi::GST_PLUGIN_ERROR_MODULE => Some(Self::Module),
-            ffi::GST_PLUGIN_ERROR_DEPENDENCIES => Some(Self::Dependencies),
-            ffi::GST_PLUGIN_ERROR_NAME_MISMATCH => Some(Self::NameMismatch),
-            value => Some(Self::__Unknown(value)),
+        match unsafe { from_glib(code) } {
+            value => Some(value),
         }
     }
 }
 
 impl StaticType for PluginError {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_plugin_error_get_type()) }
     }
@@ -2090,6 +2177,7 @@ impl glib::value::ValueType for PluginError {
 unsafe impl<'a> FromValue<'a> for PluginError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2097,6 +2185,7 @@ unsafe impl<'a> FromValue<'a> for PluginError {
 }
 
 impl ToValue for PluginError {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2105,6 +2194,7 @@ impl ToValue for PluginError {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2140,6 +2230,7 @@ pub enum ProgressType {
 impl IntoGlib for ProgressType {
     type GlibType = ffi::GstProgressType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstProgressType {
         match self {
             Self::Start => ffi::GST_PROGRESS_TYPE_START,
@@ -2154,6 +2245,7 @@ impl IntoGlib for ProgressType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstProgressType> for ProgressType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstProgressType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2168,6 +2260,7 @@ impl FromGlib<ffi::GstProgressType> for ProgressType {
 }
 
 impl StaticType for ProgressType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_progress_type_get_type()) }
     }
@@ -2180,6 +2273,7 @@ impl glib::value::ValueType for ProgressType {
 unsafe impl<'a> FromValue<'a> for ProgressType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2187,6 +2281,7 @@ unsafe impl<'a> FromValue<'a> for ProgressType {
 }
 
 impl ToValue for ProgressType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2195,6 +2290,7 @@ impl ToValue for ProgressType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2228,6 +2324,7 @@ pub enum PromiseResult {
 impl IntoGlib for PromiseResult {
     type GlibType = ffi::GstPromiseResult;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstPromiseResult {
         match self {
             Self::Pending => ffi::GST_PROMISE_RESULT_PENDING,
@@ -2241,6 +2338,7 @@ impl IntoGlib for PromiseResult {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPromiseResult> for PromiseResult {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstPromiseResult) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2254,6 +2352,7 @@ impl FromGlib<ffi::GstPromiseResult> for PromiseResult {
 }
 
 impl StaticType for PromiseResult {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_promise_result_get_type()) }
     }
@@ -2266,6 +2365,7 @@ impl glib::value::ValueType for PromiseResult {
 unsafe impl<'a> FromValue<'a> for PromiseResult {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2273,6 +2373,7 @@ unsafe impl<'a> FromValue<'a> for PromiseResult {
 }
 
 impl ToValue for PromiseResult {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2281,6 +2382,7 @@ impl ToValue for PromiseResult {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2312,6 +2414,7 @@ pub enum QOSType {
 impl IntoGlib for QOSType {
     type GlibType = ffi::GstQOSType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstQOSType {
         match self {
             Self::Overflow => ffi::GST_QOS_TYPE_OVERFLOW,
@@ -2324,6 +2427,7 @@ impl IntoGlib for QOSType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstQOSType> for QOSType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstQOSType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2336,6 +2440,7 @@ impl FromGlib<ffi::GstQOSType> for QOSType {
 }
 
 impl StaticType for QOSType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_qos_type_get_type()) }
     }
@@ -2348,6 +2453,7 @@ impl glib::value::ValueType for QOSType {
 unsafe impl<'a> FromValue<'a> for QOSType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2355,6 +2461,7 @@ unsafe impl<'a> FromValue<'a> for QOSType {
 }
 
 impl ToValue for QOSType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2363,6 +2470,7 @@ impl ToValue for QOSType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2397,6 +2505,7 @@ pub enum Rank {
 impl IntoGlib for Rank {
     type GlibType = ffi::GstRank;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRank {
         match self {
             Self::None => ffi::GST_RANK_NONE,
@@ -2410,6 +2519,7 @@ impl IntoGlib for Rank {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRank> for Rank {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRank) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2423,6 +2533,7 @@ impl FromGlib<ffi::GstRank> for Rank {
 }
 
 impl StaticType for Rank {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rank_get_type()) }
     }
@@ -2435,6 +2546,7 @@ impl glib::value::ValueType for Rank {
 unsafe impl<'a> FromValue<'a> for Rank {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2442,6 +2554,7 @@ unsafe impl<'a> FromValue<'a> for Rank {
 }
 
 impl ToValue for Rank {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2450,6 +2563,7 @@ impl ToValue for Rank {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2553,40 +2667,31 @@ impl FromGlib<ffi::GstResourceError> for ResourceError {
 }
 
 impl ErrorDomain for ResourceError {
+    #[inline]
     fn domain() -> Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_resource_error_quark()) }
     }
 
+    #[inline]
     fn code(self) -> i32 {
         self.into_glib()
     }
 
+    #[inline]
+    #[allow(clippy::match_single_binding)]
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
-        match code {
-            ffi::GST_RESOURCE_ERROR_FAILED => Some(Self::Failed),
-            ffi::GST_RESOURCE_ERROR_TOO_LAZY => Some(Self::TooLazy),
-            ffi::GST_RESOURCE_ERROR_NOT_FOUND => Some(Self::NotFound),
-            ffi::GST_RESOURCE_ERROR_BUSY => Some(Self::Busy),
-            ffi::GST_RESOURCE_ERROR_OPEN_READ => Some(Self::OpenRead),
-            ffi::GST_RESOURCE_ERROR_OPEN_WRITE => Some(Self::OpenWrite),
-            ffi::GST_RESOURCE_ERROR_OPEN_READ_WRITE => Some(Self::OpenReadWrite),
-            ffi::GST_RESOURCE_ERROR_CLOSE => Some(Self::Close),
-            ffi::GST_RESOURCE_ERROR_READ => Some(Self::Read),
-            ffi::GST_RESOURCE_ERROR_WRITE => Some(Self::Write),
-            ffi::GST_RESOURCE_ERROR_SEEK => Some(Self::Seek),
-            ffi::GST_RESOURCE_ERROR_SYNC => Some(Self::Sync),
-            ffi::GST_RESOURCE_ERROR_SETTINGS => Some(Self::Settings),
-            ffi::GST_RESOURCE_ERROR_NO_SPACE_LEFT => Some(Self::NoSpaceLeft),
-            ffi::GST_RESOURCE_ERROR_NOT_AUTHORIZED => Some(Self::NotAuthorized),
-            _ => Some(Self::Failed),
+        match unsafe { from_glib(code) } {
+            Self::__Unknown(_) => Some(Self::Failed),
+            value => Some(value),
         }
     }
 }
 
 impl StaticType for ResourceError {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_resource_error_get_type()) }
     }
@@ -2599,6 +2704,7 @@ impl glib::value::ValueType for ResourceError {
 unsafe impl<'a> FromValue<'a> for ResourceError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2606,6 +2712,7 @@ unsafe impl<'a> FromValue<'a> for ResourceError {
 }
 
 impl ToValue for ResourceError {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2614,6 +2721,7 @@ impl ToValue for ResourceError {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2645,6 +2753,7 @@ pub enum SeekType {
 impl IntoGlib for SeekType {
     type GlibType = ffi::GstSeekType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstSeekType {
         match self {
             Self::None => ffi::GST_SEEK_TYPE_NONE,
@@ -2657,6 +2766,7 @@ impl IntoGlib for SeekType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstSeekType> for SeekType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstSeekType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2669,6 +2779,7 @@ impl FromGlib<ffi::GstSeekType> for SeekType {
 }
 
 impl StaticType for SeekType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_seek_type_get_type()) }
     }
@@ -2681,6 +2792,7 @@ impl glib::value::ValueType for SeekType {
 unsafe impl<'a> FromValue<'a> for SeekType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2688,6 +2800,7 @@ unsafe impl<'a> FromValue<'a> for SeekType {
 }
 
 impl ToValue for SeekType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2696,6 +2809,7 @@ impl ToValue for SeekType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2732,6 +2846,7 @@ pub enum State {
 impl IntoGlib for State {
     type GlibType = ffi::GstState;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstState {
         match self {
             Self::VoidPending => ffi::GST_STATE_VOID_PENDING,
@@ -2746,6 +2861,7 @@ impl IntoGlib for State {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstState> for State {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstState) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2760,6 +2876,7 @@ impl FromGlib<ffi::GstState> for State {
 }
 
 impl StaticType for State {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_state_get_type()) }
     }
@@ -2772,6 +2889,7 @@ impl glib::value::ValueType for State {
 unsafe impl<'a> FromValue<'a> for State {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2779,6 +2897,7 @@ unsafe impl<'a> FromValue<'a> for State {
 }
 
 impl ToValue for State {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2787,6 +2906,7 @@ impl ToValue for State {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2853,6 +2973,7 @@ impl fmt::Display for StateChange {
 impl IntoGlib for StateChange {
     type GlibType = ffi::GstStateChange;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstStateChange {
         match self {
             Self::NullToReady => ffi::GST_STATE_CHANGE_NULL_TO_READY,
@@ -2872,6 +2993,7 @@ impl IntoGlib for StateChange {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstStateChange> for StateChange {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstStateChange) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2891,6 +3013,7 @@ impl FromGlib<ffi::GstStateChange> for StateChange {
 }
 
 impl StaticType for StateChange {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_state_change_get_type()) }
     }
@@ -2903,6 +3026,7 @@ impl glib::value::ValueType for StateChange {
 unsafe impl<'a> FromValue<'a> for StateChange {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2910,6 +3034,7 @@ unsafe impl<'a> FromValue<'a> for StateChange {
 }
 
 impl ToValue for StateChange {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2918,6 +3043,7 @@ impl ToValue for StateChange {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2952,6 +3078,7 @@ pub enum StateChangeReturn {
 impl IntoGlib for StateChangeReturn {
     type GlibType = ffi::GstStateChangeReturn;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstStateChangeReturn {
         match self {
             Self::Failure => ffi::GST_STATE_CHANGE_FAILURE,
@@ -2965,6 +3092,7 @@ impl IntoGlib for StateChangeReturn {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstStateChangeReturn> for StateChangeReturn {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstStateChangeReturn) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2978,6 +3106,7 @@ impl FromGlib<ffi::GstStateChangeReturn> for StateChangeReturn {
 }
 
 impl StaticType for StateChangeReturn {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_state_change_return_get_type()) }
     }
@@ -2990,6 +3119,7 @@ impl glib::value::ValueType for StateChangeReturn {
 unsafe impl<'a> FromValue<'a> for StateChangeReturn {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2997,6 +3127,7 @@ unsafe impl<'a> FromValue<'a> for StateChangeReturn {
 }
 
 impl ToValue for StateChangeReturn {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -3005,6 +3136,7 @@ impl ToValue for StateChangeReturn {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -3100,38 +3232,31 @@ impl FromGlib<ffi::GstStreamError> for StreamError {
 }
 
 impl ErrorDomain for StreamError {
+    #[inline]
     fn domain() -> Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_stream_error_quark()) }
     }
 
+    #[inline]
     fn code(self) -> i32 {
         self.into_glib()
     }
 
+    #[inline]
+    #[allow(clippy::match_single_binding)]
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
-        match code {
-            ffi::GST_STREAM_ERROR_FAILED => Some(Self::Failed),
-            ffi::GST_STREAM_ERROR_TOO_LAZY => Some(Self::TooLazy),
-            ffi::GST_STREAM_ERROR_NOT_IMPLEMENTED => Some(Self::NotImplemented),
-            ffi::GST_STREAM_ERROR_TYPE_NOT_FOUND => Some(Self::TypeNotFound),
-            ffi::GST_STREAM_ERROR_WRONG_TYPE => Some(Self::WrongType),
-            ffi::GST_STREAM_ERROR_CODEC_NOT_FOUND => Some(Self::CodecNotFound),
-            ffi::GST_STREAM_ERROR_DECODE => Some(Self::Decode),
-            ffi::GST_STREAM_ERROR_ENCODE => Some(Self::Encode),
-            ffi::GST_STREAM_ERROR_DEMUX => Some(Self::Demux),
-            ffi::GST_STREAM_ERROR_MUX => Some(Self::Mux),
-            ffi::GST_STREAM_ERROR_FORMAT => Some(Self::Format),
-            ffi::GST_STREAM_ERROR_DECRYPT => Some(Self::Decrypt),
-            ffi::GST_STREAM_ERROR_DECRYPT_NOKEY => Some(Self::DecryptNokey),
-            _ => Some(Self::Failed),
+        match unsafe { from_glib(code) } {
+            Self::__Unknown(_) => Some(Self::Failed),
+            value => Some(value),
         }
     }
 }
 
 impl StaticType for StreamError {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_stream_error_get_type()) }
     }
@@ -3144,6 +3269,7 @@ impl glib::value::ValueType for StreamError {
 unsafe impl<'a> FromValue<'a> for StreamError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -3151,6 +3277,7 @@ unsafe impl<'a> FromValue<'a> for StreamError {
 }
 
 impl ToValue for StreamError {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -3159,6 +3286,7 @@ impl ToValue for StreamError {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -3198,6 +3326,7 @@ pub enum StreamStatusType {
 impl IntoGlib for StreamStatusType {
     type GlibType = ffi::GstStreamStatusType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstStreamStatusType {
         match self {
             Self::Create => ffi::GST_STREAM_STATUS_TYPE_CREATE,
@@ -3214,6 +3343,7 @@ impl IntoGlib for StreamStatusType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstStreamStatusType> for StreamStatusType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstStreamStatusType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -3230,6 +3360,7 @@ impl FromGlib<ffi::GstStreamStatusType> for StreamStatusType {
 }
 
 impl StaticType for StreamStatusType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_stream_status_type_get_type()) }
     }
@@ -3242,6 +3373,7 @@ impl glib::value::ValueType for StreamStatusType {
 unsafe impl<'a> FromValue<'a> for StreamStatusType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -3249,6 +3381,7 @@ unsafe impl<'a> FromValue<'a> for StreamStatusType {
 }
 
 impl ToValue for StreamStatusType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -3257,6 +3390,7 @@ impl ToValue for StreamStatusType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -3286,6 +3420,7 @@ pub enum StructureChangeType {
 impl IntoGlib for StructureChangeType {
     type GlibType = ffi::GstStructureChangeType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstStructureChangeType {
         match self {
             Self::Link => ffi::GST_STRUCTURE_CHANGE_TYPE_PAD_LINK,
@@ -3297,6 +3432,7 @@ impl IntoGlib for StructureChangeType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstStructureChangeType> for StructureChangeType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstStructureChangeType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -3308,6 +3444,7 @@ impl FromGlib<ffi::GstStructureChangeType> for StructureChangeType {
 }
 
 impl StaticType for StructureChangeType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_structure_change_type_get_type()) }
     }
@@ -3320,6 +3457,7 @@ impl glib::value::ValueType for StructureChangeType {
 unsafe impl<'a> FromValue<'a> for StructureChangeType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -3327,6 +3465,7 @@ unsafe impl<'a> FromValue<'a> for StructureChangeType {
 }
 
 impl ToValue for StructureChangeType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -3335,6 +3474,7 @@ impl ToValue for StructureChangeType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -3368,6 +3508,7 @@ pub enum TagFlag {
 impl IntoGlib for TagFlag {
     type GlibType = ffi::GstTagFlag;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstTagFlag {
         match self {
             Self::Undefined => ffi::GST_TAG_FLAG_UNDEFINED,
@@ -3381,6 +3522,7 @@ impl IntoGlib for TagFlag {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTagFlag> for TagFlag {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstTagFlag) -> Self {
         skip_assert_initialized!();
         match value {
@@ -3394,6 +3536,7 @@ impl FromGlib<ffi::GstTagFlag> for TagFlag {
 }
 
 impl StaticType for TagFlag {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_tag_flag_get_type()) }
     }
@@ -3406,6 +3549,7 @@ impl glib::value::ValueType for TagFlag {
 unsafe impl<'a> FromValue<'a> for TagFlag {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -3413,6 +3557,7 @@ unsafe impl<'a> FromValue<'a> for TagFlag {
 }
 
 impl ToValue for TagFlag {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -3421,6 +3566,7 @@ impl ToValue for TagFlag {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -3460,6 +3606,7 @@ pub enum TagMergeMode {
 impl IntoGlib for TagMergeMode {
     type GlibType = ffi::GstTagMergeMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstTagMergeMode {
         match self {
             Self::Undefined => ffi::GST_TAG_MERGE_UNDEFINED,
@@ -3476,6 +3623,7 @@ impl IntoGlib for TagMergeMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTagMergeMode> for TagMergeMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstTagMergeMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -3492,6 +3640,7 @@ impl FromGlib<ffi::GstTagMergeMode> for TagMergeMode {
 }
 
 impl StaticType for TagMergeMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_tag_merge_mode_get_type()) }
     }
@@ -3504,6 +3653,7 @@ impl glib::value::ValueType for TagMergeMode {
 unsafe impl<'a> FromValue<'a> for TagMergeMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -3511,6 +3661,7 @@ unsafe impl<'a> FromValue<'a> for TagMergeMode {
 }
 
 impl ToValue for TagMergeMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -3519,6 +3670,7 @@ impl ToValue for TagMergeMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -3549,6 +3701,7 @@ pub enum TagScope {
 impl IntoGlib for TagScope {
     type GlibType = ffi::GstTagScope;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstTagScope {
         match self {
             Self::Stream => ffi::GST_TAG_SCOPE_STREAM,
@@ -3560,6 +3713,7 @@ impl IntoGlib for TagScope {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTagScope> for TagScope {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstTagScope) -> Self {
         skip_assert_initialized!();
         match value {
@@ -3571,6 +3725,7 @@ impl FromGlib<ffi::GstTagScope> for TagScope {
 }
 
 impl StaticType for TagScope {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_tag_scope_get_type()) }
     }
@@ -3583,6 +3738,7 @@ impl glib::value::ValueType for TagScope {
 unsafe impl<'a> FromValue<'a> for TagScope {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -3590,6 +3746,7 @@ unsafe impl<'a> FromValue<'a> for TagScope {
 }
 
 impl ToValue for TagScope {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -3598,6 +3755,7 @@ impl ToValue for TagScope {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -3629,6 +3787,7 @@ pub enum TaskState {
 impl IntoGlib for TaskState {
     type GlibType = ffi::GstTaskState;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstTaskState {
         match self {
             Self::Started => ffi::GST_TASK_STARTED,
@@ -3641,6 +3800,7 @@ impl IntoGlib for TaskState {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTaskState> for TaskState {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstTaskState) -> Self {
         skip_assert_initialized!();
         match value {
@@ -3653,6 +3813,7 @@ impl FromGlib<ffi::GstTaskState> for TaskState {
 }
 
 impl StaticType for TaskState {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_task_state_get_type()) }
     }
@@ -3665,6 +3826,7 @@ impl glib::value::ValueType for TaskState {
 unsafe impl<'a> FromValue<'a> for TaskState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -3672,6 +3834,7 @@ unsafe impl<'a> FromValue<'a> for TaskState {
 }
 
 impl ToValue for TaskState {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -3680,6 +3843,7 @@ impl ToValue for TaskState {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -3734,6 +3898,7 @@ impl TocEntryType {
 impl IntoGlib for TocEntryType {
     type GlibType = ffi::GstTocEntryType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstTocEntryType {
         match self {
             Self::Angle => ffi::GST_TOC_ENTRY_TYPE_ANGLE,
@@ -3750,6 +3915,7 @@ impl IntoGlib for TocEntryType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTocEntryType> for TocEntryType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstTocEntryType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -3766,6 +3932,7 @@ impl FromGlib<ffi::GstTocEntryType> for TocEntryType {
 }
 
 impl StaticType for TocEntryType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_toc_entry_type_get_type()) }
     }
@@ -3778,6 +3945,7 @@ impl glib::value::ValueType for TocEntryType {
 unsafe impl<'a> FromValue<'a> for TocEntryType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -3785,6 +3953,7 @@ unsafe impl<'a> FromValue<'a> for TocEntryType {
 }
 
 impl ToValue for TocEntryType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -3793,6 +3962,7 @@ impl ToValue for TocEntryType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -3827,6 +3997,7 @@ pub enum TocLoopType {
 impl IntoGlib for TocLoopType {
     type GlibType = ffi::GstTocLoopType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstTocLoopType {
         match self {
             Self::None => ffi::GST_TOC_LOOP_NONE,
@@ -3840,6 +4011,7 @@ impl IntoGlib for TocLoopType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTocLoopType> for TocLoopType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstTocLoopType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -3853,6 +4025,7 @@ impl FromGlib<ffi::GstTocLoopType> for TocLoopType {
 }
 
 impl StaticType for TocLoopType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_toc_loop_type_get_type()) }
     }
@@ -3865,6 +4038,7 @@ impl glib::value::ValueType for TocLoopType {
 unsafe impl<'a> FromValue<'a> for TocLoopType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -3872,6 +4046,7 @@ unsafe impl<'a> FromValue<'a> for TocLoopType {
 }
 
 impl ToValue for TocLoopType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -3880,6 +4055,7 @@ impl ToValue for TocLoopType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -3910,6 +4086,7 @@ pub enum TocScope {
 impl IntoGlib for TocScope {
     type GlibType = ffi::GstTocScope;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstTocScope {
         match self {
             Self::Global => ffi::GST_TOC_SCOPE_GLOBAL,
@@ -3921,6 +4098,7 @@ impl IntoGlib for TocScope {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTocScope> for TocScope {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstTocScope) -> Self {
         skip_assert_initialized!();
         match value {
@@ -3932,6 +4110,7 @@ impl FromGlib<ffi::GstTocScope> for TocScope {
 }
 
 impl StaticType for TocScope {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_toc_scope_get_type()) }
     }
@@ -3944,6 +4123,7 @@ impl glib::value::ValueType for TocScope {
 unsafe impl<'a> FromValue<'a> for TocScope {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -3951,6 +4131,7 @@ unsafe impl<'a> FromValue<'a> for TocScope {
 }
 
 impl ToValue for TocScope {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -3959,6 +4140,7 @@ impl ToValue for TocScope {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -3996,6 +4178,7 @@ pub enum TypeFindProbability {
 impl IntoGlib for TypeFindProbability {
     type GlibType = ffi::GstTypeFindProbability;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstTypeFindProbability {
         match self {
             Self::None => ffi::GST_TYPE_FIND_NONE,
@@ -4011,6 +4194,7 @@ impl IntoGlib for TypeFindProbability {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTypeFindProbability> for TypeFindProbability {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstTypeFindProbability) -> Self {
         skip_assert_initialized!();
         match value {
@@ -4026,6 +4210,7 @@ impl FromGlib<ffi::GstTypeFindProbability> for TypeFindProbability {
 }
 
 impl StaticType for TypeFindProbability {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_type_find_probability_get_type()) }
     }
@@ -4038,6 +4223,7 @@ impl glib::value::ValueType for TypeFindProbability {
 unsafe impl<'a> FromValue<'a> for TypeFindProbability {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -4045,6 +4231,7 @@ unsafe impl<'a> FromValue<'a> for TypeFindProbability {
 }
 
 impl ToValue for TypeFindProbability {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -4053,6 +4240,7 @@ impl ToValue for TypeFindProbability {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -4086,6 +4274,7 @@ pub enum URIError {
 impl IntoGlib for URIError {
     type GlibType = ffi::GstURIError;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstURIError {
         match self {
             Self::UnsupportedProtocol => ffi::GST_URI_ERROR_UNSUPPORTED_PROTOCOL,
@@ -4099,6 +4288,7 @@ impl IntoGlib for URIError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstURIError> for URIError {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstURIError) -> Self {
         skip_assert_initialized!();
         match value {
@@ -4112,29 +4302,30 @@ impl FromGlib<ffi::GstURIError> for URIError {
 }
 
 impl ErrorDomain for URIError {
+    #[inline]
     fn domain() -> Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_uri_error_quark()) }
     }
 
+    #[inline]
     fn code(self) -> i32 {
         self.into_glib()
     }
 
+    #[inline]
+    #[allow(clippy::match_single_binding)]
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
-        match code {
-            ffi::GST_URI_ERROR_UNSUPPORTED_PROTOCOL => Some(Self::UnsupportedProtocol),
-            ffi::GST_URI_ERROR_BAD_URI => Some(Self::BadUri),
-            ffi::GST_URI_ERROR_BAD_STATE => Some(Self::BadState),
-            ffi::GST_URI_ERROR_BAD_REFERENCE => Some(Self::BadReference),
-            value => Some(Self::__Unknown(value)),
+        match unsafe { from_glib(code) } {
+            value => Some(value),
         }
     }
 }
 
 impl StaticType for URIError {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_uri_error_get_type()) }
     }
@@ -4147,6 +4338,7 @@ impl glib::value::ValueType for URIError {
 unsafe impl<'a> FromValue<'a> for URIError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -4154,6 +4346,7 @@ unsafe impl<'a> FromValue<'a> for URIError {
 }
 
 impl ToValue for URIError {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -4162,6 +4355,7 @@ impl ToValue for URIError {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -4194,6 +4388,7 @@ pub enum URIType {
 impl IntoGlib for URIType {
     type GlibType = ffi::GstURIType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstURIType {
         match self {
             Self::Unknown => ffi::GST_URI_UNKNOWN,
@@ -4206,6 +4401,7 @@ impl IntoGlib for URIType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstURIType> for URIType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstURIType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -4218,6 +4414,7 @@ impl FromGlib<ffi::GstURIType> for URIType {
 }
 
 impl StaticType for URIType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_uri_type_get_type()) }
     }
@@ -4230,6 +4427,7 @@ impl glib::value::ValueType for URIType {
 unsafe impl<'a> FromValue<'a> for URIType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -4237,6 +4435,7 @@ unsafe impl<'a> FromValue<'a> for URIType {
 }
 
 impl ToValue for URIType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -4245,6 +4444,7 @@ impl ToValue for URIType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

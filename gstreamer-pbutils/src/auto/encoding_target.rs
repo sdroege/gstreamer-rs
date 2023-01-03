@@ -5,8 +5,7 @@
 
 use crate::EncodingProfile;
 use glib::translate::*;
-use std::fmt;
-use std::ptr;
+use std::{fmt, ptr};
 
 glib::wrapper! {
     #[doc(alias = "GstEncodingTarget")]
@@ -93,7 +92,7 @@ impl EncodingTarget {
         unsafe {
             let mut error = ptr::null_mut();
             let is_ok = ffi::gst_encoding_target_save(self.to_glib_none().0, &mut error);
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -111,7 +110,7 @@ impl EncodingTarget {
                 filepath.as_ref().to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

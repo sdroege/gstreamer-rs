@@ -3,22 +3,15 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Clip;
-use crate::Container;
-use crate::Extractable;
-use crate::MetaContainer;
-use crate::SourceClip;
-use crate::TimelineElement;
-use crate::VideoTestPattern;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
+use crate::{
+    Clip, Container, Extractable, MetaContainer, SourceClip, TimelineElement, VideoTestPattern,
+};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GESTestClip")]

@@ -3,10 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::GLBaseMemoryAllocator;
-use crate::GLContext;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{GLBaseMemoryAllocator, GLContext};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstGLMemoryAllocator")]

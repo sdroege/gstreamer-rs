@@ -4,13 +4,10 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::DiscovererAudioInfo;
-use crate::DiscovererContainerInfo;
-use crate::DiscovererResult;
-use crate::DiscovererSerializeFlags;
-use crate::DiscovererStreamInfo;
-use crate::DiscovererSubtitleInfo;
-use crate::DiscovererVideoInfo;
+use crate::{
+    DiscovererAudioInfo, DiscovererContainerInfo, DiscovererResult, DiscovererSerializeFlags,
+    DiscovererStreamInfo, DiscovererSubtitleInfo, DiscovererVideoInfo,
+};
 use glib::translate::*;
 
 glib::wrapper! {

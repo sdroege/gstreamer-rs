@@ -4,11 +4,7 @@
 // DO NOT EDIT
 
 use bitflags::bitflags;
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 
 bitflags! {
     #[doc(alias = "GstAudioFlags")]
@@ -22,6 +18,7 @@ bitflags! {
 impl IntoGlib for AudioFlags {
     type GlibType = ffi::GstAudioFlags;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstAudioFlags {
         self.bits()
     }
@@ -29,6 +26,7 @@ impl IntoGlib for AudioFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioFlags> for AudioFlags {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstAudioFlags) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -36,6 +34,7 @@ impl FromGlib<ffi::GstAudioFlags> for AudioFlags {
 }
 
 impl StaticType for AudioFlags {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_audio_flags_get_type()) }
     }
@@ -48,6 +47,7 @@ impl glib::value::ValueType for AudioFlags {
 unsafe impl<'a> FromValue<'a> for AudioFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -55,6 +55,7 @@ unsafe impl<'a> FromValue<'a> for AudioFlags {
 }
 
 impl ToValue for AudioFlags {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -63,6 +64,7 @@ impl ToValue for AudioFlags {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -96,6 +98,7 @@ bitflags! {
 impl IntoGlib for AudioFormatFlags {
     type GlibType = ffi::GstAudioFormatFlags;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstAudioFormatFlags {
         self.bits()
     }
@@ -103,6 +106,7 @@ impl IntoGlib for AudioFormatFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioFormatFlags> for AudioFormatFlags {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstAudioFormatFlags) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -110,6 +114,7 @@ impl FromGlib<ffi::GstAudioFormatFlags> for AudioFormatFlags {
 }
 
 impl StaticType for AudioFormatFlags {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_audio_format_flags_get_type()) }
     }
@@ -122,6 +127,7 @@ impl glib::value::ValueType for AudioFormatFlags {
 unsafe impl<'a> FromValue<'a> for AudioFormatFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -129,6 +135,7 @@ unsafe impl<'a> FromValue<'a> for AudioFormatFlags {
 }
 
 impl ToValue for AudioFormatFlags {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -137,6 +144,7 @@ impl ToValue for AudioFormatFlags {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -162,6 +170,7 @@ bitflags! {
 impl IntoGlib for AudioPackFlags {
     type GlibType = ffi::GstAudioPackFlags;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstAudioPackFlags {
         self.bits()
     }
@@ -169,6 +178,7 @@ impl IntoGlib for AudioPackFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioPackFlags> for AudioPackFlags {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstAudioPackFlags) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -176,6 +186,7 @@ impl FromGlib<ffi::GstAudioPackFlags> for AudioPackFlags {
 }
 
 impl StaticType for AudioPackFlags {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_audio_pack_flags_get_type()) }
     }
@@ -188,6 +199,7 @@ impl glib::value::ValueType for AudioPackFlags {
 unsafe impl<'a> FromValue<'a> for AudioPackFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -195,6 +207,7 @@ unsafe impl<'a> FromValue<'a> for AudioPackFlags {
 }
 
 impl ToValue for AudioPackFlags {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -203,6 +216,7 @@ impl ToValue for AudioPackFlags {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

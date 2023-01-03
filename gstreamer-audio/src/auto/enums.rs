@@ -3,11 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
@@ -164,6 +160,7 @@ impl FromGlib<ffi::GstAudioChannelPosition> for AudioChannelPosition {
 }
 
 impl StaticType for AudioChannelPosition {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_audio_channel_position_get_type()) }
     }
@@ -176,6 +173,7 @@ impl glib::value::ValueType for AudioChannelPosition {
 unsafe impl<'a> FromValue<'a> for AudioChannelPosition {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -183,6 +181,7 @@ unsafe impl<'a> FromValue<'a> for AudioChannelPosition {
 }
 
 impl ToValue for AudioChannelPosition {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -191,6 +190,7 @@ impl ToValue for AudioChannelPosition {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -224,6 +224,7 @@ pub enum AudioDitherMethod {
 impl IntoGlib for AudioDitherMethod {
     type GlibType = ffi::GstAudioDitherMethod;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstAudioDitherMethod {
         match self {
             Self::None => ffi::GST_AUDIO_DITHER_NONE,
@@ -237,6 +238,7 @@ impl IntoGlib for AudioDitherMethod {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioDitherMethod> for AudioDitherMethod {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstAudioDitherMethod) -> Self {
         skip_assert_initialized!();
         match value {
@@ -250,6 +252,7 @@ impl FromGlib<ffi::GstAudioDitherMethod> for AudioDitherMethod {
 }
 
 impl StaticType for AudioDitherMethod {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_audio_dither_method_get_type()) }
     }
@@ -262,6 +265,7 @@ impl glib::value::ValueType for AudioDitherMethod {
 unsafe impl<'a> FromValue<'a> for AudioDitherMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -269,6 +273,7 @@ unsafe impl<'a> FromValue<'a> for AudioDitherMethod {
 }
 
 impl ToValue for AudioDitherMethod {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -277,6 +282,7 @@ impl ToValue for AudioDitherMethod {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -463,6 +469,7 @@ impl FromGlib<ffi::GstAudioFormat> for AudioFormat {
 }
 
 impl StaticType for AudioFormat {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_audio_format_get_type()) }
     }
@@ -475,6 +482,7 @@ impl glib::value::ValueType for AudioFormat {
 unsafe impl<'a> FromValue<'a> for AudioFormat {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -482,6 +490,7 @@ unsafe impl<'a> FromValue<'a> for AudioFormat {
 }
 
 impl ToValue for AudioFormat {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -490,6 +499,7 @@ impl ToValue for AudioFormat {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -519,6 +529,7 @@ pub enum AudioLayout {
 impl IntoGlib for AudioLayout {
     type GlibType = ffi::GstAudioLayout;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstAudioLayout {
         match self {
             Self::Interleaved => ffi::GST_AUDIO_LAYOUT_INTERLEAVED,
@@ -530,6 +541,7 @@ impl IntoGlib for AudioLayout {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioLayout> for AudioLayout {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstAudioLayout) -> Self {
         skip_assert_initialized!();
         match value {
@@ -541,6 +553,7 @@ impl FromGlib<ffi::GstAudioLayout> for AudioLayout {
 }
 
 impl StaticType for AudioLayout {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_audio_layout_get_type()) }
     }
@@ -553,6 +566,7 @@ impl glib::value::ValueType for AudioLayout {
 unsafe impl<'a> FromValue<'a> for AudioLayout {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -560,6 +574,7 @@ unsafe impl<'a> FromValue<'a> for AudioLayout {
 }
 
 impl ToValue for AudioLayout {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -568,6 +583,7 @@ impl ToValue for AudioLayout {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -603,6 +619,7 @@ pub enum AudioNoiseShapingMethod {
 impl IntoGlib for AudioNoiseShapingMethod {
     type GlibType = ffi::GstAudioNoiseShapingMethod;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstAudioNoiseShapingMethod {
         match self {
             Self::None => ffi::GST_AUDIO_NOISE_SHAPING_NONE,
@@ -617,6 +634,7 @@ impl IntoGlib for AudioNoiseShapingMethod {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioNoiseShapingMethod> for AudioNoiseShapingMethod {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstAudioNoiseShapingMethod) -> Self {
         skip_assert_initialized!();
         match value {
@@ -631,6 +649,7 @@ impl FromGlib<ffi::GstAudioNoiseShapingMethod> for AudioNoiseShapingMethod {
 }
 
 impl StaticType for AudioNoiseShapingMethod {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_audio_noise_shaping_method_get_type()) }
     }
@@ -643,6 +662,7 @@ impl glib::value::ValueType for AudioNoiseShapingMethod {
 unsafe impl<'a> FromValue<'a> for AudioNoiseShapingMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -650,6 +670,7 @@ unsafe impl<'a> FromValue<'a> for AudioNoiseShapingMethod {
 }
 
 impl ToValue for AudioNoiseShapingMethod {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -658,6 +679,7 @@ impl ToValue for AudioNoiseShapingMethod {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -693,6 +715,7 @@ pub enum AudioResamplerMethod {
 impl IntoGlib for AudioResamplerMethod {
     type GlibType = ffi::GstAudioResamplerMethod;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstAudioResamplerMethod {
         match self {
             Self::Nearest => ffi::GST_AUDIO_RESAMPLER_METHOD_NEAREST,
@@ -707,6 +730,7 @@ impl IntoGlib for AudioResamplerMethod {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioResamplerMethod> for AudioResamplerMethod {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstAudioResamplerMethod) -> Self {
         skip_assert_initialized!();
         match value {
@@ -721,6 +745,7 @@ impl FromGlib<ffi::GstAudioResamplerMethod> for AudioResamplerMethod {
 }
 
 impl StaticType for AudioResamplerMethod {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_audio_resampler_method_get_type()) }
     }
@@ -733,6 +758,7 @@ impl glib::value::ValueType for AudioResamplerMethod {
 unsafe impl<'a> FromValue<'a> for AudioResamplerMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -740,6 +766,7 @@ unsafe impl<'a> FromValue<'a> for AudioResamplerMethod {
 }
 
 impl ToValue for AudioResamplerMethod {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -748,6 +775,7 @@ impl ToValue for AudioResamplerMethod {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -851,6 +879,7 @@ impl FromGlib<ffi::GstAudioRingBufferFormatType> for AudioRingBufferFormatType {
 }
 
 impl StaticType for AudioRingBufferFormatType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_audio_ring_buffer_format_type_get_type()) }
     }
@@ -863,6 +892,7 @@ impl glib::value::ValueType for AudioRingBufferFormatType {
 unsafe impl<'a> FromValue<'a> for AudioRingBufferFormatType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -870,6 +900,7 @@ unsafe impl<'a> FromValue<'a> for AudioRingBufferFormatType {
 }
 
 impl ToValue for AudioRingBufferFormatType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -878,6 +909,7 @@ impl ToValue for AudioRingBufferFormatType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -909,6 +941,7 @@ pub enum StreamVolumeFormat {
 impl IntoGlib for StreamVolumeFormat {
     type GlibType = ffi::GstStreamVolumeFormat;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstStreamVolumeFormat {
         match self {
             Self::Linear => ffi::GST_STREAM_VOLUME_FORMAT_LINEAR,
@@ -921,6 +954,7 @@ impl IntoGlib for StreamVolumeFormat {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstStreamVolumeFormat> for StreamVolumeFormat {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstStreamVolumeFormat) -> Self {
         skip_assert_initialized!();
         match value {

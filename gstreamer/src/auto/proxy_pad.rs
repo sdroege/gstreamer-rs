@@ -3,10 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Object;
-use crate::Pad;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{Object, Pad};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstProxyPad")]

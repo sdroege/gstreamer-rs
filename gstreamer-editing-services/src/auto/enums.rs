@@ -3,17 +3,10 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-use std::ffi::CStr;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-use std::fmt;
+use std::{ffi::CStr, fmt};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -33,6 +26,7 @@ pub enum AssetLoadingReturn {
 impl IntoGlib for AssetLoadingReturn {
     type GlibType = ffi::GESAssetLoadingReturn;
 
+    #[inline]
     fn into_glib(self) -> ffi::GESAssetLoadingReturn {
         match self {
             Self::Error => ffi::GES_ASSET_LOADING_ERROR,
@@ -45,6 +39,7 @@ impl IntoGlib for AssetLoadingReturn {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESAssetLoadingReturn> for AssetLoadingReturn {
+    #[inline]
     unsafe fn from_glib(value: ffi::GESAssetLoadingReturn) -> Self {
         skip_assert_initialized!();
         match value {
@@ -78,6 +73,7 @@ pub enum ChildrenControlMode {
 impl IntoGlib for ChildrenControlMode {
     type GlibType = ffi::GESChildrenControlMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GESChildrenControlMode {
         match self {
             Self::Update => ffi::GES_CHILDREN_UPDATE,
@@ -92,6 +88,7 @@ impl IntoGlib for ChildrenControlMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESChildrenControlMode> for ChildrenControlMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GESChildrenControlMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -148,6 +145,7 @@ impl fmt::Display for Edge {
 impl IntoGlib for Edge {
     type GlibType = ffi::GESEdge;
 
+    #[inline]
     fn into_glib(self) -> ffi::GESEdge {
         match self {
             Self::Start => ffi::GES_EDGE_START,
@@ -160,6 +158,7 @@ impl IntoGlib for Edge {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESEdge> for Edge {
+    #[inline]
     unsafe fn from_glib(value: ffi::GESEdge) -> Self {
         skip_assert_initialized!();
         match value {
@@ -172,6 +171,7 @@ impl FromGlib<ffi::GESEdge> for Edge {
 }
 
 impl StaticType for Edge {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_edge_get_type()) }
     }
@@ -184,6 +184,7 @@ impl glib::value::ValueType for Edge {
 unsafe impl<'a> FromValue<'a> for Edge {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -191,6 +192,7 @@ unsafe impl<'a> FromValue<'a> for Edge {
 }
 
 impl ToValue for Edge {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -199,6 +201,7 @@ impl ToValue for Edge {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -259,6 +262,7 @@ impl fmt::Display for EditMode {
 impl IntoGlib for EditMode {
     type GlibType = ffi::GESEditMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GESEditMode {
         match self {
             Self::Normal => ffi::GES_EDIT_MODE_NORMAL,
@@ -273,6 +277,7 @@ impl IntoGlib for EditMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESEditMode> for EditMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GESEditMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -287,6 +292,7 @@ impl FromGlib<ffi::GESEditMode> for EditMode {
 }
 
 impl StaticType for EditMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_edit_mode_get_type()) }
     }
@@ -299,6 +305,7 @@ impl glib::value::ValueType for EditMode {
 unsafe impl<'a> FromValue<'a> for EditMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -306,6 +313,7 @@ unsafe impl<'a> FromValue<'a> for EditMode {
 }
 
 impl ToValue for EditMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -314,6 +322,7 @@ impl ToValue for EditMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -357,6 +366,7 @@ pub enum Error {
 impl IntoGlib for Error {
     type GlibType = ffi::GESError;
 
+    #[inline]
     fn into_glib(self) -> ffi::GESError {
         match self {
             Self::AssetWrongId => ffi::GES_ERROR_ASSET_WRONG_ID,
@@ -375,6 +385,7 @@ impl IntoGlib for Error {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESError> for Error {
+    #[inline]
     unsafe fn from_glib(value: ffi::GESError) -> Self {
         skip_assert_initialized!();
         match value {
@@ -414,6 +425,7 @@ pub enum TextHAlign {
 impl IntoGlib for TextHAlign {
     type GlibType = ffi::GESTextHAlign;
 
+    #[inline]
     fn into_glib(self) -> ffi::GESTextHAlign {
         match self {
             Self::Left => ffi::GES_TEXT_HALIGN_LEFT,
@@ -428,6 +440,7 @@ impl IntoGlib for TextHAlign {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESTextHAlign> for TextHAlign {
+    #[inline]
     unsafe fn from_glib(value: ffi::GESTextHAlign) -> Self {
         skip_assert_initialized!();
         match value {
@@ -442,6 +455,7 @@ impl FromGlib<ffi::GESTextHAlign> for TextHAlign {
 }
 
 impl StaticType for TextHAlign {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_text_halign_get_type()) }
     }
@@ -454,6 +468,7 @@ impl glib::value::ValueType for TextHAlign {
 unsafe impl<'a> FromValue<'a> for TextHAlign {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -461,6 +476,7 @@ unsafe impl<'a> FromValue<'a> for TextHAlign {
 }
 
 impl ToValue for TextHAlign {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -469,6 +485,7 @@ impl ToValue for TextHAlign {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -506,6 +523,7 @@ pub enum TextVAlign {
 impl IntoGlib for TextVAlign {
     type GlibType = ffi::GESTextVAlign;
 
+    #[inline]
     fn into_glib(self) -> ffi::GESTextVAlign {
         match self {
             Self::Baseline => ffi::GES_TEXT_VALIGN_BASELINE,
@@ -521,6 +539,7 @@ impl IntoGlib for TextVAlign {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESTextVAlign> for TextVAlign {
+    #[inline]
     unsafe fn from_glib(value: ffi::GESTextVAlign) -> Self {
         skip_assert_initialized!();
         match value {
@@ -536,6 +555,7 @@ impl FromGlib<ffi::GESTextVAlign> for TextVAlign {
 }
 
 impl StaticType for TextVAlign {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_text_valign_get_type()) }
     }
@@ -548,6 +568,7 @@ impl glib::value::ValueType for TextVAlign {
 unsafe impl<'a> FromValue<'a> for TextVAlign {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -555,6 +576,7 @@ unsafe impl<'a> FromValue<'a> for TextVAlign {
 }
 
 impl ToValue for TextVAlign {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -563,6 +585,7 @@ impl ToValue for TextVAlign {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -902,6 +925,7 @@ impl FromGlib<ffi::GESVideoStandardTransitionType> for VideoStandardTransitionTy
 }
 
 impl StaticType for VideoStandardTransitionType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_video_standard_transition_type_get_type()) }
     }
@@ -914,6 +938,7 @@ impl glib::value::ValueType for VideoStandardTransitionType {
 unsafe impl<'a> FromValue<'a> for VideoStandardTransitionType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -921,6 +946,7 @@ unsafe impl<'a> FromValue<'a> for VideoStandardTransitionType {
 }
 
 impl ToValue for VideoStandardTransitionType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -929,6 +955,7 @@ impl ToValue for VideoStandardTransitionType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1044,6 +1071,7 @@ impl FromGlib<ffi::GESVideoTestPattern> for VideoTestPattern {
 }
 
 impl StaticType for VideoTestPattern {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_video_test_pattern_get_type()) }
     }
@@ -1056,6 +1084,7 @@ impl glib::value::ValueType for VideoTestPattern {
 unsafe impl<'a> FromValue<'a> for VideoTestPattern {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1063,6 +1092,7 @@ unsafe impl<'a> FromValue<'a> for VideoTestPattern {
 }
 
 impl ToValue for VideoTestPattern {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1071,6 +1101,7 @@ impl ToValue for VideoTestPattern {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

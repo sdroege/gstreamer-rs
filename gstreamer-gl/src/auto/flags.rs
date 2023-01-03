@@ -4,11 +4,7 @@
 // DO NOT EDIT
 
 use bitflags::bitflags;
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 use std::fmt;
 
 bitflags! {
@@ -51,6 +47,7 @@ impl fmt::Display for GLAPI {
 impl IntoGlib for GLAPI {
     type GlibType = ffi::GstGLAPI;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstGLAPI {
         self.bits()
     }
@@ -58,6 +55,7 @@ impl IntoGlib for GLAPI {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLAPI> for GLAPI {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstGLAPI) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -65,6 +63,7 @@ impl FromGlib<ffi::GstGLAPI> for GLAPI {
 }
 
 impl StaticType for GLAPI {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_gl_api_get_type()) }
     }
@@ -77,6 +76,7 @@ impl glib::value::ValueType for GLAPI {
 unsafe impl<'a> FromValue<'a> for GLAPI {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -84,6 +84,7 @@ unsafe impl<'a> FromValue<'a> for GLAPI {
 }
 
 impl ToValue for GLAPI {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -92,6 +93,7 @@ impl ToValue for GLAPI {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -138,6 +140,7 @@ impl GLConfigSurfaceType {
 impl IntoGlib for GLConfigSurfaceType {
     type GlibType = ffi::GstGLConfigSurfaceType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstGLConfigSurfaceType {
         self.bits()
     }
@@ -147,6 +150,7 @@ impl IntoGlib for GLConfigSurfaceType {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLConfigSurfaceType> for GLConfigSurfaceType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstGLConfigSurfaceType) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -156,6 +160,7 @@ impl FromGlib<ffi::GstGLConfigSurfaceType> for GLConfigSurfaceType {
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl StaticType for GLConfigSurfaceType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_gl_config_surface_type_get_type()) }
     }
@@ -172,6 +177,7 @@ impl glib::value::ValueType for GLConfigSurfaceType {
 unsafe impl<'a> FromValue<'a> for GLConfigSurfaceType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -181,6 +187,7 @@ unsafe impl<'a> FromValue<'a> for GLConfigSurfaceType {
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl ToValue for GLConfigSurfaceType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -189,6 +196,7 @@ impl ToValue for GLConfigSurfaceType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -246,6 +254,7 @@ bitflags! {
 impl IntoGlib for GLDisplayType {
     type GlibType = ffi::GstGLDisplayType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstGLDisplayType {
         self.bits()
     }
@@ -253,6 +262,7 @@ impl IntoGlib for GLDisplayType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLDisplayType> for GLDisplayType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstGLDisplayType) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -260,6 +270,7 @@ impl FromGlib<ffi::GstGLDisplayType> for GLDisplayType {
 }
 
 impl StaticType for GLDisplayType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_gl_display_type_get_type()) }
     }
@@ -272,6 +283,7 @@ impl glib::value::ValueType for GLDisplayType {
 unsafe impl<'a> FromValue<'a> for GLDisplayType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -279,6 +291,7 @@ unsafe impl<'a> FromValue<'a> for GLDisplayType {
 }
 
 impl ToValue for GLDisplayType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -287,6 +300,7 @@ impl ToValue for GLDisplayType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -346,6 +360,7 @@ impl fmt::Display for GLPlatform {
 impl IntoGlib for GLPlatform {
     type GlibType = ffi::GstGLPlatform;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstGLPlatform {
         self.bits()
     }
@@ -353,6 +368,7 @@ impl IntoGlib for GLPlatform {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLPlatform> for GLPlatform {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstGLPlatform) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -360,6 +376,7 @@ impl FromGlib<ffi::GstGLPlatform> for GLPlatform {
 }
 
 impl StaticType for GLPlatform {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_gl_platform_get_type()) }
     }
@@ -372,6 +389,7 @@ impl glib::value::ValueType for GLPlatform {
 unsafe impl<'a> FromValue<'a> for GLPlatform {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -379,6 +397,7 @@ unsafe impl<'a> FromValue<'a> for GLPlatform {
 }
 
 impl ToValue for GLPlatform {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -387,6 +406,7 @@ impl ToValue for GLPlatform {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -431,6 +451,7 @@ impl GLSLProfile {
 impl IntoGlib for GLSLProfile {
     type GlibType = ffi::GstGLSLProfile;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstGLSLProfile {
         self.bits()
     }
@@ -438,6 +459,7 @@ impl IntoGlib for GLSLProfile {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLSLProfile> for GLSLProfile {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstGLSLProfile) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -445,6 +467,7 @@ impl FromGlib<ffi::GstGLSLProfile> for GLSLProfile {
 }
 
 impl StaticType for GLSLProfile {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_glsl_profile_get_type()) }
     }
@@ -457,6 +480,7 @@ impl glib::value::ValueType for GLSLProfile {
 unsafe impl<'a> FromValue<'a> for GLSLProfile {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -464,6 +488,7 @@ unsafe impl<'a> FromValue<'a> for GLSLProfile {
 }
 
 impl ToValue for GLSLProfile {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -472,6 +497,7 @@ impl ToValue for GLSLProfile {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

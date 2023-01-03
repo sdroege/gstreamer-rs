@@ -4,8 +4,7 @@
 // DO NOT EDIT
 
 use crate::Asset;
-use glib::object::IsA;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GESExtractable")]

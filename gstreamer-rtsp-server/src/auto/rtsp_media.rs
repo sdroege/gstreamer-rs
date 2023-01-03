@@ -3,26 +3,19 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::RTSPAddressPool;
-use crate::RTSPMediaStatus;
-use crate::RTSPPublishClockMode;
-use crate::RTSPStream;
-use crate::RTSPStreamTransport;
-use crate::RTSPSuspendMode;
-use crate::RTSPThread;
-use crate::RTSPTransportMode;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
-use std::boxed::Box as Box_;
+use crate::{
+    RTSPAddressPool, RTSPMediaStatus, RTSPPublishClockMode, RTSPStream, RTSPStreamTransport,
+    RTSPSuspendMode, RTSPThread, RTSPTransportMode,
+};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::mem;
-use std::mem::transmute;
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GstRTSPMedia")]
@@ -37,9 +30,9 @@ impl RTSPMedia {
     pub const NONE: Option<&'static RTSPMedia> = None;
 
     #[doc(alias = "gst_rtsp_media_new")]
-    pub fn new(element: &impl IsA<gst::Element>) -> RTSPMedia {
+    pub fn new(element: impl IsA<gst::Element>) -> RTSPMedia {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_rtsp_media_new(element.as_ref().to_glib_full())) }
+        unsafe { from_glib_full(ffi::gst_rtsp_media_new(element.upcast().into_glib_ptr())) }
     }
 }
 
@@ -207,7 +200,7 @@ pub trait RTSPMediaExt: 'static {
     fn n_streams(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_media_prepare")]
-    fn prepare(&self, thread: Option<&RTSPThread>) -> Result<(), glib::error::BoolError>;
+    fn prepare(&self, thread: Option<RTSPThread>) -> Result<(), glib::error::BoolError>;
 
     //#[doc(alias = "gst_rtsp_media_seek")]
     //fn seek(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange) -> bool;
@@ -773,10 +766,10 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         unsafe { ffi::gst_rtsp_media_n_streams(self.as_ref().to_glib_none().0) }
     }
 
-    fn prepare(&self, thread: Option<&RTSPThread>) -> Result<(), glib::error::BoolError> {
+    fn prepare(&self, thread: Option<RTSPThread>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_rtsp_media_prepare(self.as_ref().to_glib_none().0, thread.to_glib_full()),
+                ffi::gst_rtsp_media_prepare(self.as_ref().to_glib_none().0, thread.into_glib_ptr()),
                 "Failed to prepare media"
             )
         }

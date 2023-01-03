@@ -3,16 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Bin;
-use crate::ClockTime;
-use crate::DebugGraphDetails;
-use crate::DebugLevel;
-use crate::Element;
-use crate::StackTraceFlags;
-use glib::object::IsA;
-use glib::translate::*;
-use std::mem;
-use std::ptr;
+use crate::{Bin, ClockTime, DebugGraphDetails, DebugLevel, Element, StackTraceFlags};
+use glib::{prelude::*, translate::*};
+use std::{mem, ptr};
 
 #[doc(alias = "gst_debug_add_ring_buffer_logger")]
 pub fn debug_add_ring_buffer_logger(max_size_per_thread: u32, thread_timeout: u32) {

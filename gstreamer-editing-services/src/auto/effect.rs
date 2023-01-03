@@ -3,15 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::BaseEffect;
-use crate::Extractable;
-use crate::MetaContainer;
-use crate::Operation;
-use crate::TimelineElement;
-use crate::TrackElement;
-use glib::object::IsA;
-use glib::translate::*;
-use glib::StaticType;
+use crate::{BaseEffect, Extractable, MetaContainer, Operation, TimelineElement, TrackElement};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GESEffect")]

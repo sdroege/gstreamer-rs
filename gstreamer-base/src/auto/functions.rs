@@ -3,8 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::object::IsA;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 
 #[doc(alias = "gst_type_find_helper")]
 pub fn type_find_helper(src: &impl IsA<gst::Pad>, size: u64) -> Result<gst::Caps, glib::BoolError> {

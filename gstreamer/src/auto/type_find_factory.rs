@@ -3,9 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Caps;
-use crate::Object;
-use crate::PluginFeature;
+use crate::{Caps, Object, PluginFeature};
 use glib::translate::*;
 
 glib::wrapper! {

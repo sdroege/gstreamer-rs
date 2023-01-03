@@ -3,13 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
-use std::ffi::CStr;
-use std::fmt;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use std::{ffi::CStr, fmt};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -27,6 +22,7 @@ pub enum ColorBalanceType {
 impl IntoGlib for ColorBalanceType {
     type GlibType = ffi::GstColorBalanceType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstColorBalanceType {
         match self {
             Self::Hardware => ffi::GST_COLOR_BALANCE_HARDWARE,
@@ -38,6 +34,7 @@ impl IntoGlib for ColorBalanceType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstColorBalanceType> for ColorBalanceType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstColorBalanceType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -49,6 +46,7 @@ impl FromGlib<ffi::GstColorBalanceType> for ColorBalanceType {
 }
 
 impl StaticType for ColorBalanceType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_color_balance_type_get_type()) }
     }
@@ -61,6 +59,7 @@ impl glib::value::ValueType for ColorBalanceType {
 unsafe impl<'a> FromValue<'a> for ColorBalanceType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -68,6 +67,7 @@ unsafe impl<'a> FromValue<'a> for ColorBalanceType {
 }
 
 impl ToValue for ColorBalanceType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -76,6 +76,7 @@ impl ToValue for ColorBalanceType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -180,6 +181,7 @@ impl FromGlib<ffi::GstNavigationCommand> for NavigationCommand {
 }
 
 impl StaticType for NavigationCommand {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_navigation_command_get_type()) }
     }
@@ -192,6 +194,7 @@ impl glib::value::ValueType for NavigationCommand {
 unsafe impl<'a> FromValue<'a> for NavigationCommand {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -199,6 +202,7 @@ unsafe impl<'a> FromValue<'a> for NavigationCommand {
 }
 
 impl ToValue for NavigationCommand {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -207,6 +211,7 @@ impl ToValue for NavigationCommand {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -326,6 +331,7 @@ impl FromGlib<ffi::GstNavigationEventType> for NavigationEventType {
 }
 
 impl StaticType for NavigationEventType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_navigation_event_type_get_type()) }
     }
@@ -338,6 +344,7 @@ impl glib::value::ValueType for NavigationEventType {
 unsafe impl<'a> FromValue<'a> for NavigationEventType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -345,6 +352,7 @@ unsafe impl<'a> FromValue<'a> for NavigationEventType {
 }
 
 impl ToValue for NavigationEventType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -353,6 +361,7 @@ impl ToValue for NavigationEventType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -388,6 +397,7 @@ pub enum NavigationMessageType {
 impl IntoGlib for NavigationMessageType {
     type GlibType = ffi::GstNavigationMessageType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstNavigationMessageType {
         match self {
             Self::Invalid => ffi::GST_NAVIGATION_MESSAGE_INVALID,
@@ -402,6 +412,7 @@ impl IntoGlib for NavigationMessageType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstNavigationMessageType> for NavigationMessageType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstNavigationMessageType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -416,6 +427,7 @@ impl FromGlib<ffi::GstNavigationMessageType> for NavigationMessageType {
 }
 
 impl StaticType for NavigationMessageType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_navigation_message_type_get_type()) }
     }
@@ -428,6 +440,7 @@ impl glib::value::ValueType for NavigationMessageType {
 unsafe impl<'a> FromValue<'a> for NavigationMessageType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -435,6 +448,7 @@ unsafe impl<'a> FromValue<'a> for NavigationMessageType {
 }
 
 impl ToValue for NavigationMessageType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -443,6 +457,7 @@ impl ToValue for NavigationMessageType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -474,6 +489,7 @@ pub enum NavigationQueryType {
 impl IntoGlib for NavigationQueryType {
     type GlibType = ffi::GstNavigationQueryType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstNavigationQueryType {
         match self {
             Self::Invalid => ffi::GST_NAVIGATION_QUERY_INVALID,
@@ -486,6 +502,7 @@ impl IntoGlib for NavigationQueryType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstNavigationQueryType> for NavigationQueryType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstNavigationQueryType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -498,6 +515,7 @@ impl FromGlib<ffi::GstNavigationQueryType> for NavigationQueryType {
 }
 
 impl StaticType for NavigationQueryType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_navigation_query_type_get_type()) }
     }
@@ -510,6 +528,7 @@ impl glib::value::ValueType for NavigationQueryType {
 unsafe impl<'a> FromValue<'a> for NavigationQueryType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -517,6 +536,7 @@ unsafe impl<'a> FromValue<'a> for NavigationQueryType {
 }
 
 impl ToValue for NavigationQueryType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -525,6 +545,7 @@ impl ToValue for NavigationQueryType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -560,6 +581,7 @@ pub enum VideoAFDSpec {
 impl IntoGlib for VideoAFDSpec {
     type GlibType = ffi::GstVideoAFDSpec;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoAFDSpec {
         match self {
             Self::DvbEtsi => ffi::GST_VIDEO_AFD_SPEC_DVB_ETSI,
@@ -574,6 +596,7 @@ impl IntoGlib for VideoAFDSpec {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoAFDSpec> for VideoAFDSpec {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoAFDSpec) -> Self {
         skip_assert_initialized!();
         match value {
@@ -588,6 +611,7 @@ impl FromGlib<ffi::GstVideoAFDSpec> for VideoAFDSpec {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoAFDSpec {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_afd_spec_get_type()) }
     }
@@ -604,6 +628,7 @@ impl glib::value::ValueType for VideoAFDSpec {
 unsafe impl<'a> FromValue<'a> for VideoAFDSpec {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -613,6 +638,7 @@ unsafe impl<'a> FromValue<'a> for VideoAFDSpec {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl ToValue for VideoAFDSpec {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -621,6 +647,7 @@ impl ToValue for VideoAFDSpec {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -674,6 +701,7 @@ pub enum VideoAFDValue {
 impl IntoGlib for VideoAFDValue {
     type GlibType = ffi::GstVideoAFDValue;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoAFDValue {
         match self {
             Self::Unavailable => ffi::GST_VIDEO_AFD_UNAVAILABLE,
@@ -696,6 +724,7 @@ impl IntoGlib for VideoAFDValue {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoAFDValue> for VideoAFDValue {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoAFDValue) -> Self {
         skip_assert_initialized!();
         match value {
@@ -718,6 +747,7 @@ impl FromGlib<ffi::GstVideoAFDValue> for VideoAFDValue {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoAFDValue {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_afd_value_get_type()) }
     }
@@ -734,6 +764,7 @@ impl glib::value::ValueType for VideoAFDValue {
 unsafe impl<'a> FromValue<'a> for VideoAFDValue {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -743,6 +774,7 @@ unsafe impl<'a> FromValue<'a> for VideoAFDValue {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl ToValue for VideoAFDValue {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -751,6 +783,7 @@ impl ToValue for VideoAFDValue {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -784,6 +817,7 @@ pub enum VideoAlphaMode {
 impl IntoGlib for VideoAlphaMode {
     type GlibType = ffi::GstVideoAlphaMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoAlphaMode {
         match self {
             Self::Copy => ffi::GST_VIDEO_ALPHA_MODE_COPY,
@@ -796,6 +830,7 @@ impl IntoGlib for VideoAlphaMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoAlphaMode> for VideoAlphaMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoAlphaMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -808,6 +843,7 @@ impl FromGlib<ffi::GstVideoAlphaMode> for VideoAlphaMode {
 }
 
 impl StaticType for VideoAlphaMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_alpha_mode_get_type()) }
     }
@@ -820,6 +856,7 @@ impl glib::value::ValueType for VideoAlphaMode {
 unsafe impl<'a> FromValue<'a> for VideoAlphaMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -827,6 +864,7 @@ unsafe impl<'a> FromValue<'a> for VideoAlphaMode {
 }
 
 impl ToValue for VideoAlphaMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -835,6 +873,7 @@ impl ToValue for VideoAlphaMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -884,6 +923,7 @@ impl VideoCaptionType {
 impl IntoGlib for VideoCaptionType {
     type GlibType = ffi::GstVideoCaptionType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoCaptionType {
         match self {
             Self::Unknown => ffi::GST_VIDEO_CAPTION_TYPE_UNKNOWN,
@@ -900,6 +940,7 @@ impl IntoGlib for VideoCaptionType {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoCaptionType> for VideoCaptionType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoCaptionType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -916,6 +957,7 @@ impl FromGlib<ffi::GstVideoCaptionType> for VideoCaptionType {
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl StaticType for VideoCaptionType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_caption_type_get_type()) }
     }
@@ -932,6 +974,7 @@ impl glib::value::ValueType for VideoCaptionType {
 unsafe impl<'a> FromValue<'a> for VideoCaptionType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -941,6 +984,7 @@ unsafe impl<'a> FromValue<'a> for VideoCaptionType {
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl ToValue for VideoCaptionType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -949,6 +993,7 @@ impl ToValue for VideoCaptionType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -984,6 +1029,7 @@ pub enum VideoChromaMode {
 impl IntoGlib for VideoChromaMode {
     type GlibType = ffi::GstVideoChromaMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoChromaMode {
         match self {
             Self::Full => ffi::GST_VIDEO_CHROMA_MODE_FULL,
@@ -997,6 +1043,7 @@ impl IntoGlib for VideoChromaMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoChromaMode> for VideoChromaMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoChromaMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -1010,6 +1057,7 @@ impl FromGlib<ffi::GstVideoChromaMode> for VideoChromaMode {
 }
 
 impl StaticType for VideoChromaMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_chroma_mode_get_type()) }
     }
@@ -1022,6 +1070,7 @@ impl glib::value::ValueType for VideoChromaMode {
 unsafe impl<'a> FromValue<'a> for VideoChromaMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1029,6 +1078,7 @@ unsafe impl<'a> FromValue<'a> for VideoChromaMode {
 }
 
 impl ToValue for VideoChromaMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1037,6 +1087,7 @@ impl ToValue for VideoChromaMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1094,6 +1145,7 @@ impl VideoColorMatrix {
 impl IntoGlib for VideoColorMatrix {
     type GlibType = ffi::GstVideoColorMatrix;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoColorMatrix {
         match self {
             Self::Unknown => ffi::GST_VIDEO_COLOR_MATRIX_UNKNOWN,
@@ -1110,6 +1162,7 @@ impl IntoGlib for VideoColorMatrix {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoColorMatrix> for VideoColorMatrix {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoColorMatrix) -> Self {
         skip_assert_initialized!();
         match value {
@@ -1126,6 +1179,7 @@ impl FromGlib<ffi::GstVideoColorMatrix> for VideoColorMatrix {
 }
 
 impl StaticType for VideoColorMatrix {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_color_matrix_get_type()) }
     }
@@ -1138,6 +1192,7 @@ impl glib::value::ValueType for VideoColorMatrix {
 unsafe impl<'a> FromValue<'a> for VideoColorMatrix {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1145,6 +1200,7 @@ unsafe impl<'a> FromValue<'a> for VideoColorMatrix {
 }
 
 impl ToValue for VideoColorMatrix {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1153,6 +1209,7 @@ impl ToValue for VideoColorMatrix {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1301,6 +1358,7 @@ impl FromGlib<ffi::GstVideoColorPrimaries> for VideoColorPrimaries {
 }
 
 impl StaticType for VideoColorPrimaries {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_color_primaries_get_type()) }
     }
@@ -1313,6 +1371,7 @@ impl glib::value::ValueType for VideoColorPrimaries {
 unsafe impl<'a> FromValue<'a> for VideoColorPrimaries {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1320,6 +1379,7 @@ unsafe impl<'a> FromValue<'a> for VideoColorPrimaries {
 }
 
 impl ToValue for VideoColorPrimaries {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1328,6 +1388,7 @@ impl ToValue for VideoColorPrimaries {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1363,6 +1424,7 @@ pub enum VideoDitherMethod {
 impl IntoGlib for VideoDitherMethod {
     type GlibType = ffi::GstVideoDitherMethod;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoDitherMethod {
         match self {
             Self::None => ffi::GST_VIDEO_DITHER_NONE,
@@ -1377,6 +1439,7 @@ impl IntoGlib for VideoDitherMethod {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoDitherMethod> for VideoDitherMethod {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoDitherMethod) -> Self {
         skip_assert_initialized!();
         match value {
@@ -1391,6 +1454,7 @@ impl FromGlib<ffi::GstVideoDitherMethod> for VideoDitherMethod {
 }
 
 impl StaticType for VideoDitherMethod {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_dither_method_get_type()) }
     }
@@ -1403,6 +1467,7 @@ impl glib::value::ValueType for VideoDitherMethod {
 unsafe impl<'a> FromValue<'a> for VideoDitherMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1410,6 +1475,7 @@ unsafe impl<'a> FromValue<'a> for VideoDitherMethod {
 }
 
 impl ToValue for VideoDitherMethod {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1418,6 +1484,7 @@ impl ToValue for VideoDitherMethod {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1468,6 +1535,7 @@ impl fmt::Display for VideoFieldOrder {
 impl IntoGlib for VideoFieldOrder {
     type GlibType = ffi::GstVideoFieldOrder;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoFieldOrder {
         match self {
             Self::Unknown => ffi::GST_VIDEO_FIELD_ORDER_UNKNOWN,
@@ -1480,6 +1548,7 @@ impl IntoGlib for VideoFieldOrder {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoFieldOrder> for VideoFieldOrder {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoFieldOrder) -> Self {
         skip_assert_initialized!();
         match value {
@@ -1492,6 +1561,7 @@ impl FromGlib<ffi::GstVideoFieldOrder> for VideoFieldOrder {
 }
 
 impl StaticType for VideoFieldOrder {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_field_order_get_type()) }
     }
@@ -1504,6 +1574,7 @@ impl glib::value::ValueType for VideoFieldOrder {
 unsafe impl<'a> FromValue<'a> for VideoFieldOrder {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1511,6 +1582,7 @@ unsafe impl<'a> FromValue<'a> for VideoFieldOrder {
 }
 
 impl ToValue for VideoFieldOrder {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1519,6 +1591,7 @@ impl ToValue for VideoFieldOrder {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2175,6 +2248,7 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
 }
 
 impl StaticType for VideoFormat {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_format_get_type()) }
     }
@@ -2187,6 +2261,7 @@ impl glib::value::ValueType for VideoFormat {
 unsafe impl<'a> FromValue<'a> for VideoFormat {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2194,6 +2269,7 @@ unsafe impl<'a> FromValue<'a> for VideoFormat {
 }
 
 impl ToValue for VideoFormat {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2202,6 +2278,7 @@ impl ToValue for VideoFormat {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2231,6 +2308,7 @@ pub enum VideoGammaMode {
 impl IntoGlib for VideoGammaMode {
     type GlibType = ffi::GstVideoGammaMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoGammaMode {
         match self {
             Self::None => ffi::GST_VIDEO_GAMMA_MODE_NONE,
@@ -2242,6 +2320,7 @@ impl IntoGlib for VideoGammaMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoGammaMode> for VideoGammaMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoGammaMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2253,6 +2332,7 @@ impl FromGlib<ffi::GstVideoGammaMode> for VideoGammaMode {
 }
 
 impl StaticType for VideoGammaMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_gamma_mode_get_type()) }
     }
@@ -2265,6 +2345,7 @@ impl glib::value::ValueType for VideoGammaMode {
 unsafe impl<'a> FromValue<'a> for VideoGammaMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2272,6 +2353,7 @@ unsafe impl<'a> FromValue<'a> for VideoGammaMode {
 }
 
 impl ToValue for VideoGammaMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2280,6 +2362,7 @@ impl ToValue for VideoGammaMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2348,6 +2431,7 @@ impl fmt::Display for VideoInterlaceMode {
 impl IntoGlib for VideoInterlaceMode {
     type GlibType = ffi::GstVideoInterlaceMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoInterlaceMode {
         match self {
             Self::Progressive => ffi::GST_VIDEO_INTERLACE_MODE_PROGRESSIVE,
@@ -2363,6 +2447,7 @@ impl IntoGlib for VideoInterlaceMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoInterlaceMode> for VideoInterlaceMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoInterlaceMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2378,6 +2463,7 @@ impl FromGlib<ffi::GstVideoInterlaceMode> for VideoInterlaceMode {
 }
 
 impl StaticType for VideoInterlaceMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_interlace_mode_get_type()) }
     }
@@ -2390,6 +2476,7 @@ impl glib::value::ValueType for VideoInterlaceMode {
 unsafe impl<'a> FromValue<'a> for VideoInterlaceMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2397,6 +2484,7 @@ unsafe impl<'a> FromValue<'a> for VideoInterlaceMode {
 }
 
 impl ToValue for VideoInterlaceMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2405,6 +2493,7 @@ impl ToValue for VideoInterlaceMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2438,6 +2527,7 @@ pub enum VideoMatrixMode {
 impl IntoGlib for VideoMatrixMode {
     type GlibType = ffi::GstVideoMatrixMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoMatrixMode {
         match self {
             Self::Full => ffi::GST_VIDEO_MATRIX_MODE_FULL,
@@ -2451,6 +2541,7 @@ impl IntoGlib for VideoMatrixMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoMatrixMode> for VideoMatrixMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoMatrixMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2464,6 +2555,7 @@ impl FromGlib<ffi::GstVideoMatrixMode> for VideoMatrixMode {
 }
 
 impl StaticType for VideoMatrixMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_matrix_mode_get_type()) }
     }
@@ -2476,6 +2568,7 @@ impl glib::value::ValueType for VideoMatrixMode {
 unsafe impl<'a> FromValue<'a> for VideoMatrixMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2483,6 +2576,7 @@ unsafe impl<'a> FromValue<'a> for VideoMatrixMode {
 }
 
 impl ToValue for VideoMatrixMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2491,6 +2585,7 @@ impl ToValue for VideoMatrixMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2536,6 +2631,7 @@ pub enum VideoMultiviewFramePacking {
 impl IntoGlib for VideoMultiviewFramePacking {
     type GlibType = ffi::GstVideoMultiviewFramePacking;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoMultiviewFramePacking {
         match self {
             Self::None => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_NONE,
@@ -2557,6 +2653,7 @@ impl IntoGlib for VideoMultiviewFramePacking {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoMultiviewFramePacking> for VideoMultiviewFramePacking {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoMultiviewFramePacking) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2578,6 +2675,7 @@ impl FromGlib<ffi::GstVideoMultiviewFramePacking> for VideoMultiviewFramePacking
 }
 
 impl StaticType for VideoMultiviewFramePacking {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_multiview_frame_packing_get_type()) }
     }
@@ -2590,6 +2688,7 @@ impl glib::value::ValueType for VideoMultiviewFramePacking {
 unsafe impl<'a> FromValue<'a> for VideoMultiviewFramePacking {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2597,6 +2696,7 @@ unsafe impl<'a> FromValue<'a> for VideoMultiviewFramePacking {
 }
 
 impl ToValue for VideoMultiviewFramePacking {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2605,6 +2705,7 @@ impl ToValue for VideoMultiviewFramePacking {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2722,6 +2823,7 @@ impl FromGlib<ffi::GstVideoMultiviewMode> for VideoMultiviewMode {
 }
 
 impl StaticType for VideoMultiviewMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_multiview_mode_get_type()) }
     }
@@ -2734,6 +2836,7 @@ impl glib::value::ValueType for VideoMultiviewMode {
 unsafe impl<'a> FromValue<'a> for VideoMultiviewMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2741,6 +2844,7 @@ unsafe impl<'a> FromValue<'a> for VideoMultiviewMode {
 }
 
 impl ToValue for VideoMultiviewMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2749,6 +2853,7 @@ impl ToValue for VideoMultiviewMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2794,6 +2899,7 @@ pub enum VideoOrientationMethod {
 impl IntoGlib for VideoOrientationMethod {
     type GlibType = ffi::GstVideoOrientationMethod;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoOrientationMethod {
         match self {
             Self::Identity => ffi::GST_VIDEO_ORIENTATION_IDENTITY,
@@ -2813,6 +2919,7 @@ impl IntoGlib for VideoOrientationMethod {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoOrientationMethod> for VideoOrientationMethod {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoOrientationMethod) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2832,6 +2939,7 @@ impl FromGlib<ffi::GstVideoOrientationMethod> for VideoOrientationMethod {
 }
 
 impl StaticType for VideoOrientationMethod {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_orientation_method_get_type()) }
     }
@@ -2844,6 +2952,7 @@ impl glib::value::ValueType for VideoOrientationMethod {
 unsafe impl<'a> FromValue<'a> for VideoOrientationMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2851,6 +2960,7 @@ unsafe impl<'a> FromValue<'a> for VideoOrientationMethod {
 }
 
 impl ToValue for VideoOrientationMethod {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2859,6 +2969,7 @@ impl ToValue for VideoOrientationMethod {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2890,6 +3001,7 @@ pub enum VideoPrimariesMode {
 impl IntoGlib for VideoPrimariesMode {
     type GlibType = ffi::GstVideoPrimariesMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoPrimariesMode {
         match self {
             Self::None => ffi::GST_VIDEO_PRIMARIES_MODE_NONE,
@@ -2902,6 +3014,7 @@ impl IntoGlib for VideoPrimariesMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoPrimariesMode> for VideoPrimariesMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoPrimariesMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -2914,6 +3027,7 @@ impl FromGlib<ffi::GstVideoPrimariesMode> for VideoPrimariesMode {
 }
 
 impl StaticType for VideoPrimariesMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_primaries_mode_get_type()) }
     }
@@ -2926,6 +3040,7 @@ impl glib::value::ValueType for VideoPrimariesMode {
 unsafe impl<'a> FromValue<'a> for VideoPrimariesMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -2933,6 +3048,7 @@ unsafe impl<'a> FromValue<'a> for VideoPrimariesMode {
 }
 
 impl ToValue for VideoPrimariesMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -2941,6 +3057,7 @@ impl ToValue for VideoPrimariesMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -2976,6 +3093,7 @@ pub enum VideoResamplerMethod {
 impl IntoGlib for VideoResamplerMethod {
     type GlibType = ffi::GstVideoResamplerMethod;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoResamplerMethod {
         match self {
             Self::Nearest => ffi::GST_VIDEO_RESAMPLER_METHOD_NEAREST,
@@ -2990,6 +3108,7 @@ impl IntoGlib for VideoResamplerMethod {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoResamplerMethod> for VideoResamplerMethod {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoResamplerMethod) -> Self {
         skip_assert_initialized!();
         match value {
@@ -3004,6 +3123,7 @@ impl FromGlib<ffi::GstVideoResamplerMethod> for VideoResamplerMethod {
 }
 
 impl StaticType for VideoResamplerMethod {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_resampler_method_get_type()) }
     }
@@ -3016,6 +3136,7 @@ impl glib::value::ValueType for VideoResamplerMethod {
 unsafe impl<'a> FromValue<'a> for VideoResamplerMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -3023,6 +3144,7 @@ unsafe impl<'a> FromValue<'a> for VideoResamplerMethod {
 }
 
 impl ToValue for VideoResamplerMethod {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -3031,6 +3153,7 @@ impl ToValue for VideoResamplerMethod {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -3064,6 +3187,7 @@ pub enum VideoTileMode {
 impl IntoGlib for VideoTileMode {
     type GlibType = ffi::GstVideoTileMode;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstVideoTileMode {
         match self {
             Self::Unknown => ffi::GST_VIDEO_TILE_MODE_UNKNOWN,
@@ -3077,6 +3201,7 @@ impl IntoGlib for VideoTileMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoTileMode> for VideoTileMode {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstVideoTileMode) -> Self {
         skip_assert_initialized!();
         match value {
@@ -3090,6 +3215,7 @@ impl FromGlib<ffi::GstVideoTileMode> for VideoTileMode {
 }
 
 impl StaticType for VideoTileMode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_tile_mode_get_type()) }
     }
@@ -3102,6 +3228,7 @@ impl glib::value::ValueType for VideoTileMode {
 unsafe impl<'a> FromValue<'a> for VideoTileMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -3109,6 +3236,7 @@ unsafe impl<'a> FromValue<'a> for VideoTileMode {
 }
 
 impl ToValue for VideoTileMode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -3117,6 +3245,7 @@ impl ToValue for VideoTileMode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -3293,6 +3422,7 @@ impl FromGlib<ffi::GstVideoTransferFunction> for VideoTransferFunction {
 }
 
 impl StaticType for VideoTransferFunction {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_transfer_function_get_type()) }
     }
@@ -3305,6 +3435,7 @@ impl glib::value::ValueType for VideoTransferFunction {
 unsafe impl<'a> FromValue<'a> for VideoTransferFunction {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -3312,6 +3443,7 @@ unsafe impl<'a> FromValue<'a> for VideoTransferFunction {
 }
 
 impl ToValue for VideoTransferFunction {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -3320,6 +3452,7 @@ impl ToValue for VideoTransferFunction {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

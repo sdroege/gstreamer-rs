@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[derive()]
@@ -19,9 +19,9 @@ glib::wrapper! {
 impl DateTime {
     #[doc(alias = "gst_date_time_new_from_g_date_time")]
     #[doc(alias = "new_from_g_date_time")]
-    pub fn from_g_date_time(dt: &glib::DateTime) -> DateTime {
+    pub fn from_g_date_time(dt: glib::DateTime) -> DateTime {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_date_time_new_from_g_date_time(dt.to_glib_full())) }
+        unsafe { from_glib_full(ffi::gst_date_time_new_from_g_date_time(dt.into_glib_ptr())) }
     }
 
     #[doc(alias = "gst_date_time_new_from_iso8601_string")]

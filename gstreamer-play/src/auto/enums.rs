@@ -4,17 +4,10 @@
 // DO NOT EDIT
 
 use crate::PlayMediaInfo;
-use glib::error::ErrorDomain;
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::Quark;
-use glib::StaticType;
-use glib::Type;
-use std::ffi::CStr;
-use std::fmt;
-use std::mem;
-use std::ptr;
+use glib::{
+    error::ErrorDomain, translate::*, value::FromValue, value::ToValue, Quark, StaticType, Type,
+};
+use std::{ffi::CStr, fmt, mem, ptr};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -57,6 +50,7 @@ impl fmt::Display for PlayColorBalanceType {
 impl IntoGlib for PlayColorBalanceType {
     type GlibType = ffi::GstPlayColorBalanceType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstPlayColorBalanceType {
         match self {
             Self::Hue => ffi::GST_PLAY_COLOR_BALANCE_HUE,
@@ -70,6 +64,7 @@ impl IntoGlib for PlayColorBalanceType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPlayColorBalanceType> for PlayColorBalanceType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstPlayColorBalanceType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -83,6 +78,7 @@ impl FromGlib<ffi::GstPlayColorBalanceType> for PlayColorBalanceType {
 }
 
 impl StaticType for PlayColorBalanceType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_play_color_balance_type_get_type()) }
     }
@@ -95,6 +91,7 @@ impl glib::value::ValueType for PlayColorBalanceType {
 unsafe impl<'a> FromValue<'a> for PlayColorBalanceType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -102,6 +99,7 @@ unsafe impl<'a> FromValue<'a> for PlayColorBalanceType {
 }
 
 impl ToValue for PlayColorBalanceType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -110,6 +108,7 @@ impl ToValue for PlayColorBalanceType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -158,6 +157,7 @@ impl fmt::Display for PlayError {
 impl IntoGlib for PlayError {
     type GlibType = ffi::GstPlayError;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstPlayError {
         match self {
             Self::Failed => ffi::GST_PLAY_ERROR_FAILED,
@@ -168,6 +168,7 @@ impl IntoGlib for PlayError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPlayError> for PlayError {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstPlayError) -> Self {
         skip_assert_initialized!();
         match value {
@@ -178,26 +179,31 @@ impl FromGlib<ffi::GstPlayError> for PlayError {
 }
 
 impl ErrorDomain for PlayError {
+    #[inline]
     fn domain() -> Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_play_error_quark()) }
     }
 
+    #[inline]
     fn code(self) -> i32 {
         self.into_glib()
     }
 
+    #[inline]
+    #[allow(clippy::match_single_binding)]
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
-        match code {
-            ffi::GST_PLAY_ERROR_FAILED => Some(Self::Failed),
-            _ => Some(Self::Failed),
+        match unsafe { from_glib(code) } {
+            Self::__Unknown(_) => Some(Self::Failed),
+            value => Some(value),
         }
     }
 }
 
 impl StaticType for PlayError {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_play_error_get_type()) }
     }
@@ -210,6 +216,7 @@ impl glib::value::ValueType for PlayError {
 unsafe impl<'a> FromValue<'a> for PlayError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -217,6 +224,7 @@ unsafe impl<'a> FromValue<'a> for PlayError {
 }
 
 impl ToValue for PlayError {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -225,6 +233,7 @@ impl ToValue for PlayError {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -467,6 +476,7 @@ impl FromGlib<ffi::GstPlayMessage> for PlayMessage {
 }
 
 impl StaticType for PlayMessage {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_play_message_get_type()) }
     }
@@ -479,6 +489,7 @@ impl glib::value::ValueType for PlayMessage {
 unsafe impl<'a> FromValue<'a> for PlayMessage {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -486,6 +497,7 @@ unsafe impl<'a> FromValue<'a> for PlayMessage {
 }
 
 impl ToValue for PlayMessage {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -494,6 +506,7 @@ impl ToValue for PlayMessage {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -529,6 +542,7 @@ pub enum PlaySnapshotFormat {
 impl IntoGlib for PlaySnapshotFormat {
     type GlibType = ffi::GstPlaySnapshotFormat;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstPlaySnapshotFormat {
         match self {
             Self::RawNative => ffi::GST_PLAY_THUMBNAIL_RAW_NATIVE,
@@ -543,6 +557,7 @@ impl IntoGlib for PlaySnapshotFormat {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPlaySnapshotFormat> for PlaySnapshotFormat {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstPlaySnapshotFormat) -> Self {
         skip_assert_initialized!();
         match value {
@@ -597,6 +612,7 @@ impl fmt::Display for PlayState {
 impl IntoGlib for PlayState {
     type GlibType = ffi::GstPlayState;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstPlayState {
         match self {
             Self::Stopped => ffi::GST_PLAY_STATE_STOPPED,
@@ -610,6 +626,7 @@ impl IntoGlib for PlayState {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPlayState> for PlayState {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstPlayState) -> Self {
         skip_assert_initialized!();
         match value {
@@ -623,6 +640,7 @@ impl FromGlib<ffi::GstPlayState> for PlayState {
 }
 
 impl StaticType for PlayState {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_play_state_get_type()) }
     }
@@ -635,6 +653,7 @@ impl glib::value::ValueType for PlayState {
 unsafe impl<'a> FromValue<'a> for PlayState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -642,6 +661,7 @@ unsafe impl<'a> FromValue<'a> for PlayState {
 }
 
 impl ToValue for PlayState {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -650,6 +670,7 @@ impl ToValue for PlayState {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

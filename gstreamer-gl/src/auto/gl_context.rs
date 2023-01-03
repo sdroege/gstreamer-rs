@@ -3,16 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::GLDisplay;
-use crate::GLPlatform;
-use crate::GLSLProfile;
-use crate::GLSLVersion;
-use crate::GLWindow;
-use crate::GLAPI;
-use glib::object::IsA;
-use glib::translate::*;
-use std::mem;
-use std::ptr;
+use crate::{GLDisplay, GLPlatform, GLSLProfile, GLSLVersion, GLWindow, GLAPI};
+use glib::{prelude::*, translate::*};
+use std::{mem, ptr};
 
 glib::wrapper! {
     #[doc(alias = "GstGLContext")]
@@ -126,13 +119,13 @@ pub trait GLContextExt: 'static {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_gl_context_request_config")]
-    fn request_config(&self, gl_config: Option<&gst::Structure>) -> bool;
+    fn request_config(&self, gl_config: Option<gst::Structure>) -> bool;
 
     #[doc(alias = "gst_gl_context_set_shared_with")]
     fn set_shared_with(&self, share: &impl IsA<GLContext>);
 
     #[doc(alias = "gst_gl_context_set_window")]
-    fn set_window(&self, window: &impl IsA<GLWindow>) -> Result<(), glib::error::BoolError>;
+    fn set_window(&self, window: impl IsA<GLWindow>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_gl_context_supports_glsl_profile_version")]
     fn supports_glsl_profile_version(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
@@ -219,7 +212,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
                 other_context.map(|p| p.as_ref()).to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -238,7 +231,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         unsafe {
             let mut error = ptr::null_mut();
             let is_ok = ffi::gst_gl_context_fill_info(self.as_ref().to_glib_none().0, &mut error);
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -325,11 +318,11 @@ impl<O: IsA<GLContext>> GLContextExt for O {
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    fn request_config(&self, gl_config: Option<&gst::Structure>) -> bool {
+    fn request_config(&self, gl_config: Option<gst::Structure>) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_context_request_config(
                 self.as_ref().to_glib_none().0,
-                gl_config.to_glib_full(),
+                gl_config.into_glib_ptr(),
             ))
         }
     }
@@ -343,12 +336,12 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    fn set_window(&self, window: &impl IsA<GLWindow>) -> Result<(), glib::error::BoolError> {
+    fn set_window(&self, window: impl IsA<GLWindow>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_gl_context_set_window(
                     self.as_ref().to_glib_none().0,
-                    window.as_ref().to_glib_full()
+                    window.upcast().into_glib_ptr()
                 ),
                 "Failed to set window"
             )

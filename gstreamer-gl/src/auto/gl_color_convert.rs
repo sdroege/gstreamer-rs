@@ -4,8 +4,7 @@
 // DO NOT EDIT
 
 use crate::GLContext;
-use glib::object::IsA;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstGLColorConvert")]

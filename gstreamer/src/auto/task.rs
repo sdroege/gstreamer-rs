@@ -3,11 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Object;
-use crate::TaskPool;
-use crate::TaskState;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{Object, TaskPool, TaskState};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstTask")]

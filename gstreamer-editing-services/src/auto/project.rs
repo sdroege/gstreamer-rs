@@ -3,20 +3,16 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Asset;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use crate::Formatter;
-use crate::MetaContainer;
-use crate::Timeline;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
-use std::ptr;
+use crate::{Asset, MetaContainer, Timeline};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute, ptr};
 
 glib::wrapper! {
     #[doc(alias = "GESProject")]
@@ -91,7 +87,7 @@ pub trait ProjectExt: 'static {
         &self,
         timeline: &impl IsA<Timeline>,
         uri: &str,
-        formatter_asset: Option<&impl IsA<Asset>>,
+        formatter_asset: Option<impl IsA<Asset>>,
         overwrite: bool,
     ) -> Result<(), glib::Error>;
 
@@ -247,7 +243,7 @@ impl<O: IsA<Project>> ProjectExt for O {
                 timeline.as_ref().to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -272,7 +268,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         &self,
         timeline: &impl IsA<Timeline>,
         uri: &str,
-        formatter_asset: Option<&impl IsA<Asset>>,
+        formatter_asset: Option<impl IsA<Asset>>,
         overwrite: bool,
     ) -> Result<(), glib::Error> {
         unsafe {
@@ -281,11 +277,11 @@ impl<O: IsA<Project>> ProjectExt for O {
                 self.as_ref().to_glib_none().0,
                 timeline.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,
-                formatter_asset.map(|p| p.as_ref()).to_glib_full(),
+                formatter_asset.map(|p| p.upcast()).into_glib_ptr(),
                 overwrite.into_glib(),
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

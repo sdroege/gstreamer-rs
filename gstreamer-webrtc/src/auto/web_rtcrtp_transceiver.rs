@@ -6,29 +6,17 @@
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 use crate::WebRTCKind;
-use crate::WebRTCRTPReceiver;
-use crate::WebRTCRTPSender;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use crate::WebRTCRTPTransceiverDirection;
-use glib::object::ObjectType as ObjectType_;
+use crate::{WebRTCRTPReceiver, WebRTCRTPSender};
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use glib::signal::connect_raw;
+use glib::signal::{connect_raw, SignalHandlerId};
+use glib::{prelude::*, translate::*};
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use glib::ToValue;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use std::boxed::Box as Box_;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use std::mem::transmute;
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GstWebRTCRTPTransceiver")]

@@ -3,11 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::GLContext;
-use crate::GLFormat;
-use crate::GLTextureTarget;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{GLContext, GLFormat, GLTextureTarget};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]

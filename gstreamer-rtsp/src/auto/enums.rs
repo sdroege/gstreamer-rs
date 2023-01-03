@@ -3,11 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -27,6 +23,7 @@ pub enum RTSPAuthMethod {
 impl IntoGlib for RTSPAuthMethod {
     type GlibType = ffi::GstRTSPAuthMethod;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTSPAuthMethod {
         match self {
             Self::None => ffi::GST_RTSP_AUTH_NONE,
@@ -39,6 +36,7 @@ impl IntoGlib for RTSPAuthMethod {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPAuthMethod> for RTSPAuthMethod {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPAuthMethod) -> Self {
         skip_assert_initialized!();
         match value {
@@ -51,6 +49,7 @@ impl FromGlib<ffi::GstRTSPAuthMethod> for RTSPAuthMethod {
 }
 
 impl StaticType for RTSPAuthMethod {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_auth_method_get_type()) }
     }
@@ -63,6 +62,7 @@ impl glib::value::ValueType for RTSPAuthMethod {
 unsafe impl<'a> FromValue<'a> for RTSPAuthMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -70,6 +70,7 @@ unsafe impl<'a> FromValue<'a> for RTSPAuthMethod {
 }
 
 impl ToValue for RTSPAuthMethod {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -78,6 +79,7 @@ impl ToValue for RTSPAuthMethod {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -109,6 +111,7 @@ pub enum RTSPFamily {
 impl IntoGlib for RTSPFamily {
     type GlibType = ffi::GstRTSPFamily;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTSPFamily {
         match self {
             Self::None => ffi::GST_RTSP_FAM_NONE,
@@ -121,6 +124,7 @@ impl IntoGlib for RTSPFamily {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPFamily> for RTSPFamily {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPFamily) -> Self {
         skip_assert_initialized!();
         match value {
@@ -133,6 +137,7 @@ impl FromGlib<ffi::GstRTSPFamily> for RTSPFamily {
 }
 
 impl StaticType for RTSPFamily {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_family_get_type()) }
     }
@@ -145,6 +150,7 @@ impl glib::value::ValueType for RTSPFamily {
 unsafe impl<'a> FromValue<'a> for RTSPFamily {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -152,6 +158,7 @@ unsafe impl<'a> FromValue<'a> for RTSPFamily {
 }
 
 impl ToValue for RTSPFamily {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -160,6 +167,7 @@ impl ToValue for RTSPFamily {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -563,6 +571,7 @@ impl FromGlib<ffi::GstRTSPHeaderField> for RTSPHeaderField {
 }
 
 impl StaticType for RTSPHeaderField {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_header_field_get_type()) }
     }
@@ -575,6 +584,7 @@ impl glib::value::ValueType for RTSPHeaderField {
 unsafe impl<'a> FromValue<'a> for RTSPHeaderField {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -582,6 +592,7 @@ unsafe impl<'a> FromValue<'a> for RTSPHeaderField {
 }
 
 impl ToValue for RTSPHeaderField {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -590,6 +601,7 @@ impl ToValue for RTSPHeaderField {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -627,6 +639,7 @@ pub enum RTSPMsgType {
 impl IntoGlib for RTSPMsgType {
     type GlibType = ffi::GstRTSPMsgType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTSPMsgType {
         match self {
             Self::Invalid => ffi::GST_RTSP_MESSAGE_INVALID,
@@ -642,6 +655,7 @@ impl IntoGlib for RTSPMsgType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPMsgType> for RTSPMsgType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPMsgType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -657,6 +671,7 @@ impl FromGlib<ffi::GstRTSPMsgType> for RTSPMsgType {
 }
 
 impl StaticType for RTSPMsgType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_msg_type_get_type()) }
     }
@@ -669,6 +684,7 @@ impl glib::value::ValueType for RTSPMsgType {
 unsafe impl<'a> FromValue<'a> for RTSPMsgType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -676,6 +692,7 @@ unsafe impl<'a> FromValue<'a> for RTSPMsgType {
 }
 
 impl ToValue for RTSPMsgType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -684,6 +701,7 @@ impl ToValue for RTSPMsgType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -719,6 +737,7 @@ pub enum RTSPRangeUnit {
 impl IntoGlib for RTSPRangeUnit {
     type GlibType = ffi::GstRTSPRangeUnit;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTSPRangeUnit {
         match self {
             Self::Smpte => ffi::GST_RTSP_RANGE_SMPTE,
@@ -733,6 +752,7 @@ impl IntoGlib for RTSPRangeUnit {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPRangeUnit> for RTSPRangeUnit {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPRangeUnit) -> Self {
         skip_assert_initialized!();
         match value {
@@ -747,6 +767,7 @@ impl FromGlib<ffi::GstRTSPRangeUnit> for RTSPRangeUnit {
 }
 
 impl StaticType for RTSPRangeUnit {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_range_unit_get_type()) }
     }
@@ -759,6 +780,7 @@ impl glib::value::ValueType for RTSPRangeUnit {
 unsafe impl<'a> FromValue<'a> for RTSPRangeUnit {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -766,6 +788,7 @@ unsafe impl<'a> FromValue<'a> for RTSPRangeUnit {
 }
 
 impl ToValue for RTSPRangeUnit {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -774,6 +797,7 @@ impl ToValue for RTSPRangeUnit {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -889,6 +913,7 @@ impl FromGlib<ffi::GstRTSPResult> for RTSPResult {
 }
 
 impl StaticType for RTSPResult {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_result_get_type()) }
     }
@@ -901,6 +926,7 @@ impl glib::value::ValueType for RTSPResult {
 unsafe impl<'a> FromValue<'a> for RTSPResult {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -908,6 +934,7 @@ unsafe impl<'a> FromValue<'a> for RTSPResult {
 }
 
 impl ToValue for RTSPResult {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -916,6 +943,7 @@ impl ToValue for RTSPResult {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -953,6 +981,7 @@ pub enum RTSPState {
 impl IntoGlib for RTSPState {
     type GlibType = ffi::GstRTSPState;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTSPState {
         match self {
             Self::Invalid => ffi::GST_RTSP_STATE_INVALID,
@@ -968,6 +997,7 @@ impl IntoGlib for RTSPState {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPState> for RTSPState {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPState) -> Self {
         skip_assert_initialized!();
         match value {
@@ -983,6 +1013,7 @@ impl FromGlib<ffi::GstRTSPState> for RTSPState {
 }
 
 impl StaticType for RTSPState {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_state_get_type()) }
     }
@@ -995,6 +1026,7 @@ impl glib::value::ValueType for RTSPState {
 unsafe impl<'a> FromValue<'a> for RTSPState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1002,6 +1034,7 @@ unsafe impl<'a> FromValue<'a> for RTSPState {
 }
 
 impl ToValue for RTSPState {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1010,6 +1043,7 @@ impl ToValue for RTSPState {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1245,6 +1279,7 @@ impl FromGlib<ffi::GstRTSPStatusCode> for RTSPStatusCode {
 }
 
 impl StaticType for RTSPStatusCode {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_status_code_get_type()) }
     }
@@ -1257,6 +1292,7 @@ impl glib::value::ValueType for RTSPStatusCode {
 unsafe impl<'a> FromValue<'a> for RTSPStatusCode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1264,6 +1300,7 @@ unsafe impl<'a> FromValue<'a> for RTSPStatusCode {
 }
 
 impl ToValue for RTSPStatusCode {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1272,6 +1309,7 @@ impl ToValue for RTSPStatusCode {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -1307,6 +1345,7 @@ pub enum RTSPTimeType {
 impl IntoGlib for RTSPTimeType {
     type GlibType = ffi::GstRTSPTimeType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTSPTimeType {
         match self {
             Self::Seconds => ffi::GST_RTSP_TIME_SECONDS,
@@ -1321,6 +1360,7 @@ impl IntoGlib for RTSPTimeType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPTimeType> for RTSPTimeType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPTimeType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -1335,6 +1375,7 @@ impl FromGlib<ffi::GstRTSPTimeType> for RTSPTimeType {
 }
 
 impl StaticType for RTSPTimeType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_time_type_get_type()) }
     }
@@ -1347,6 +1388,7 @@ impl glib::value::ValueType for RTSPTimeType {
 unsafe impl<'a> FromValue<'a> for RTSPTimeType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -1354,6 +1396,7 @@ unsafe impl<'a> FromValue<'a> for RTSPTimeType {
 }
 
 impl ToValue for RTSPTimeType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -1362,6 +1405,7 @@ impl ToValue for RTSPTimeType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

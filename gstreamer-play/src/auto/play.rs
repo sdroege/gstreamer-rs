@@ -3,22 +3,16 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::PlayAudioInfo;
-use crate::PlayColorBalanceType;
-use crate::PlayMediaInfo;
-use crate::PlaySubtitleInfo;
-use crate::PlayVideoInfo;
-use crate::PlayVideoRenderer;
-use crate::PlayVisualization;
-use glib::object::IsA;
-use glib::object::ObjectType as ObjectType_;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
+use crate::{
+    PlayAudioInfo, PlayColorBalanceType, PlayMediaInfo, PlaySubtitleInfo, PlayVideoInfo,
+    PlayVideoRenderer, PlayVisualization,
+};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GstPlay")]
@@ -31,11 +25,11 @@ glib::wrapper! {
 
 impl Play {
     #[doc(alias = "gst_play_new")]
-    pub fn new(video_renderer: Option<&impl IsA<PlayVideoRenderer>>) -> Play {
+    pub fn new(video_renderer: Option<impl IsA<PlayVideoRenderer>>) -> Play {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_play_new(
-                video_renderer.map(|p| p.as_ref()).to_glib_full(),
+                video_renderer.map(|p| p.upcast()).into_glib_ptr(),
             ))
         }
     }

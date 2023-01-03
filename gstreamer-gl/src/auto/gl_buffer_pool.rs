@@ -7,9 +7,7 @@
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 use crate::GLAllocationParams;
 use crate::GLContext;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstGLBufferPool")]

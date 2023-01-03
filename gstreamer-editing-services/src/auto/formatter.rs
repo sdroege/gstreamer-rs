@@ -4,11 +4,8 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::Asset;
-use crate::Extractable;
-use crate::Timeline;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{Asset, Extractable, Timeline};
+use glib::{prelude::*, translate::*};
 use std::ptr;
 
 glib::wrapper! {
@@ -29,7 +26,7 @@ impl Formatter {
         unsafe {
             let mut error = ptr::null_mut();
             let is_ok = ffi::ges_formatter_can_load_uri(uri.to_glib_none().0, &mut error);
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -44,7 +41,7 @@ impl Formatter {
         unsafe {
             let mut error = ptr::null_mut();
             let is_ok = ffi::ges_formatter_can_save_uri(uri.to_glib_none().0, &mut error);
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -90,7 +87,7 @@ impl<O: IsA<Formatter>> FormatterExt for O {
                 uri.to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -115,7 +112,7 @@ impl<O: IsA<Formatter>> FormatterExt for O {
                 overwrite.into_glib(),
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

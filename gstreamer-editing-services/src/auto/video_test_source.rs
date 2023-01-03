@@ -3,15 +3,11 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Extractable;
-use crate::MetaContainer;
-use crate::Source;
-use crate::TimelineElement;
-use crate::TrackElement;
-use crate::VideoSource;
-use crate::VideoTestPattern;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{
+    Extractable, MetaContainer, Source, TimelineElement, TrackElement, VideoSource,
+    VideoTestPattern,
+};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GESVideoTestSource")]

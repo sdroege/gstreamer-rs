@@ -3,16 +3,13 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::WebRTCICEComponent;
-use crate::WebRTCICEConnectionState;
-use crate::WebRTCICEGatheringState;
-use glib::object::ObjectType as ObjectType_;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
+use crate::{WebRTCICEComponent, WebRTCICEConnectionState, WebRTCICEGatheringState};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GstWebRTCICETransport")]

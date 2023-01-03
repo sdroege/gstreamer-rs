@@ -24,6 +24,7 @@ bitflags! {
 impl IntoGlib for FdMemoryFlags {
     type GlibType = ffi::GstFdMemoryFlags;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstFdMemoryFlags {
         self.bits()
     }
@@ -31,6 +32,7 @@ impl IntoGlib for FdMemoryFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstFdMemoryFlags> for FdMemoryFlags {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstFdMemoryFlags) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)

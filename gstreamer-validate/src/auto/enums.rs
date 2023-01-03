@@ -3,13 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
-use std::ffi::CStr;
-use std::fmt;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use std::{ffi::CStr, fmt};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -68,6 +63,7 @@ impl fmt::Display for ReportLevel {
 impl IntoGlib for ReportLevel {
     type GlibType = ffi::GstValidateReportLevel;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstValidateReportLevel {
         match self {
             Self::Critical => ffi::GST_VALIDATE_REPORT_LEVEL_CRITICAL,
@@ -84,6 +80,7 @@ impl IntoGlib for ReportLevel {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstValidateReportLevel> for ReportLevel {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstValidateReportLevel) -> Self {
         skip_assert_initialized!();
         match value {
@@ -100,6 +97,7 @@ impl FromGlib<ffi::GstValidateReportLevel> for ReportLevel {
 }
 
 impl StaticType for ReportLevel {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_validate_report_level_get_type()) }
     }
@@ -112,6 +110,7 @@ impl glib::value::ValueType for ReportLevel {
 unsafe impl<'a> FromValue<'a> for ReportLevel {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -119,6 +118,7 @@ unsafe impl<'a> FromValue<'a> for ReportLevel {
 }
 
 impl ToValue for ReportLevel {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -127,6 +127,7 @@ impl ToValue for ReportLevel {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -168,6 +169,7 @@ pub enum ReportingDetails {
 impl IntoGlib for ReportingDetails {
     type GlibType = ffi::GstValidateReportingDetails;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstValidateReportingDetails {
         match self {
             Self::Unknown => ffi::GST_VALIDATE_SHOW_UNKNOWN,
@@ -185,6 +187,7 @@ impl IntoGlib for ReportingDetails {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstValidateReportingDetails> for ReportingDetails {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstValidateReportingDetails) -> Self {
         skip_assert_initialized!();
         match value {
@@ -202,6 +205,7 @@ impl FromGlib<ffi::GstValidateReportingDetails> for ReportingDetails {
 }
 
 impl StaticType for ReportingDetails {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_validate_reporting_details_get_type()) }
     }
@@ -214,6 +218,7 @@ impl glib::value::ValueType for ReportingDetails {
 unsafe impl<'a> FromValue<'a> for ReportingDetails {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -221,6 +226,7 @@ unsafe impl<'a> FromValue<'a> for ReportingDetails {
 }
 
 impl ToValue for ReportingDetails {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -229,6 +235,7 @@ impl ToValue for ReportingDetails {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

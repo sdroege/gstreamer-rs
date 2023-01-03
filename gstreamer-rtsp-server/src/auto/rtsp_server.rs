@@ -3,22 +3,15 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::RTSPAuth;
-use crate::RTSPClient;
-use crate::RTSPFilterResult;
-use crate::RTSPMountPoints;
-use crate::RTSPSessionPool;
-use crate::RTSPThreadPool;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
-use std::ptr;
+use crate::{
+    RTSPAuth, RTSPClient, RTSPFilterResult, RTSPMountPoints, RTSPSessionPool, RTSPThreadPool,
+};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute, ptr};
 
 glib::wrapper! {
     #[doc(alias = "GstRTSPServer")]
@@ -153,7 +146,7 @@ pub trait RTSPServerExt: 'static {
     #[doc(alias = "gst_rtsp_server_transfer_connection")]
     fn transfer_connection(
         &self,
-        socket: &impl IsA<gio::Socket>,
+        socket: impl IsA<gio::Socket>,
         ip: &str,
         port: i32,
         initial_buffer: Option<&str>,
@@ -420,7 +413,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
 
     fn transfer_connection(
         &self,
-        socket: &impl IsA<gio::Socket>,
+        socket: impl IsA<gio::Socket>,
         ip: &str,
         port: i32,
         initial_buffer: Option<&str>,
@@ -429,7 +422,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             glib::result_from_gboolean!(
                 ffi::gst_rtsp_server_transfer_connection(
                     self.as_ref().to_glib_none().0,
-                    socket.as_ref().to_glib_full(),
+                    socket.upcast().into_glib_ptr(),
                     ip.to_glib_none().0,
                     port,
                     initial_buffer.to_glib_none().0

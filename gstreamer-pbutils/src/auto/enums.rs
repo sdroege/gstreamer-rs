@@ -3,11 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -41,6 +37,7 @@ pub enum AudioVisualizerShader {
 impl IntoGlib for AudioVisualizerShader {
     type GlibType = ffi::GstAudioVisualizerShader;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstAudioVisualizerShader {
         match self {
             Self::None => ffi::GST_AUDIO_VISUALIZER_SHADER_NONE,
@@ -60,6 +57,7 @@ impl IntoGlib for AudioVisualizerShader {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioVisualizerShader> for AudioVisualizerShader {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstAudioVisualizerShader) -> Self {
         skip_assert_initialized!();
         match value {
@@ -79,6 +77,7 @@ impl FromGlib<ffi::GstAudioVisualizerShader> for AudioVisualizerShader {
 }
 
 impl StaticType for AudioVisualizerShader {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_audio_visualizer_shader_get_type()) }
     }
@@ -91,6 +90,7 @@ impl glib::value::ValueType for AudioVisualizerShader {
 unsafe impl<'a> FromValue<'a> for AudioVisualizerShader {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -98,6 +98,7 @@ unsafe impl<'a> FromValue<'a> for AudioVisualizerShader {
 }
 
 impl ToValue for AudioVisualizerShader {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -106,6 +107,7 @@ impl ToValue for AudioVisualizerShader {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -143,6 +145,7 @@ pub enum DiscovererResult {
 impl IntoGlib for DiscovererResult {
     type GlibType = ffi::GstDiscovererResult;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstDiscovererResult {
         match self {
             Self::Ok => ffi::GST_DISCOVERER_OK,
@@ -158,6 +161,7 @@ impl IntoGlib for DiscovererResult {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstDiscovererResult> for DiscovererResult {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstDiscovererResult) -> Self {
         skip_assert_initialized!();
         match value {
@@ -173,6 +177,7 @@ impl FromGlib<ffi::GstDiscovererResult> for DiscovererResult {
 }
 
 impl StaticType for DiscovererResult {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_discoverer_result_get_type()) }
     }
@@ -185,6 +190,7 @@ impl glib::value::ValueType for DiscovererResult {
 unsafe impl<'a> FromValue<'a> for DiscovererResult {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -192,6 +198,7 @@ unsafe impl<'a> FromValue<'a> for DiscovererResult {
 }
 
 impl ToValue for DiscovererResult {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -200,6 +207,7 @@ impl ToValue for DiscovererResult {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

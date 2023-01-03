@@ -3,10 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::GLBaseMemory;
-use crate::GLContext;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{GLBaseMemory, GLContext};
+use glib::{prelude::*, translate::*};
 use std::mem;
 
 glib::wrapper! {

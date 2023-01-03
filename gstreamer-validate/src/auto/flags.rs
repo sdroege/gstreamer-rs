@@ -4,11 +4,7 @@
 // DO NOT EDIT
 
 use bitflags::bitflags;
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 
 bitflags! {
     #[doc(alias = "GstValidateIssueFlags")]
@@ -28,6 +24,7 @@ bitflags! {
 impl IntoGlib for IssueFlags {
     type GlibType = ffi::GstValidateIssueFlags;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstValidateIssueFlags {
         self.bits()
     }
@@ -35,6 +32,7 @@ impl IntoGlib for IssueFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstValidateIssueFlags> for IssueFlags {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstValidateIssueFlags) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -42,6 +40,7 @@ impl FromGlib<ffi::GstValidateIssueFlags> for IssueFlags {
 }
 
 impl StaticType for IssueFlags {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_validate_issue_flags_get_type()) }
     }
@@ -54,6 +53,7 @@ impl glib::value::ValueType for IssueFlags {
 unsafe impl<'a> FromValue<'a> for IssueFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -61,6 +61,7 @@ unsafe impl<'a> FromValue<'a> for IssueFlags {
 }
 
 impl ToValue for IssueFlags {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -69,6 +70,7 @@ impl ToValue for IssueFlags {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

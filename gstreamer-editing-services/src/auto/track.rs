@@ -3,24 +3,16 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::MetaContainer;
-use crate::Timeline;
-use crate::TrackElement;
-use crate::TrackType;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use glib::ToValue;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
+use crate::{MetaContainer, Timeline, TrackElement, TrackType};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::ptr;
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GESTrack")]
@@ -35,9 +27,9 @@ impl Track {
     pub const NONE: Option<&'static Track> = None;
 
     #[doc(alias = "ges_track_new")]
-    pub fn new(type_: TrackType, caps: &gst::Caps) -> Track {
+    pub fn new(type_: TrackType, caps: gst::Caps) -> Track {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::ges_track_new(type_.into_glib(), caps.to_glib_full())) }
+        unsafe { from_glib_none(ffi::ges_track_new(type_.into_glib(), caps.into_glib_ptr())) }
     }
 }
 
@@ -168,7 +160,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
                 object.as_ref().to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -236,7 +228,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
                 object.as_ref().to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

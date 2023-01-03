@@ -4,30 +4,16 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::Bus;
-use crate::Caps;
-use crate::Clock;
-use crate::ClockTime;
-use crate::Context;
-use crate::ElementFactory;
-use crate::Object;
-use crate::Pad;
-use crate::PadTemplate;
-use crate::State;
-use crate::StateChange;
-use crate::StateChangeError;
-use crate::StateChangeReturn;
-use crate::StateChangeSuccess;
-use crate::URIType;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use std::boxed::Box as Box_;
-use std::mem;
-use std::mem::transmute;
-use std::ptr;
+use crate::{
+    Bus, Caps, Clock, ClockTime, Context, ElementFactory, Object, Pad, PadTemplate, State,
+    StateChange, StateChangeError, StateChangeReturn, StateChangeSuccess, URIType,
+};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem, mem::transmute, ptr};
 
 glib::wrapper! {
     #[doc(alias = "GstElement")]

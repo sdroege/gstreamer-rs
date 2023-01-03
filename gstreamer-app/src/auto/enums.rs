@@ -3,11 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
@@ -31,6 +27,7 @@ pub enum AppLeakyType {
 impl IntoGlib for AppLeakyType {
     type GlibType = ffi::GstAppLeakyType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstAppLeakyType {
         match self {
             Self::None => ffi::GST_APP_LEAKY_TYPE_NONE,
@@ -45,6 +42,7 @@ impl IntoGlib for AppLeakyType {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstAppLeakyType> for AppLeakyType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstAppLeakyType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -59,6 +57,7 @@ impl FromGlib<ffi::GstAppLeakyType> for AppLeakyType {
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl StaticType for AppLeakyType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_app_leaky_type_get_type()) }
     }
@@ -75,6 +74,7 @@ impl glib::value::ValueType for AppLeakyType {
 unsafe impl<'a> FromValue<'a> for AppLeakyType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -84,6 +84,7 @@ unsafe impl<'a> FromValue<'a> for AppLeakyType {
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl ToValue for AppLeakyType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -92,6 +93,7 @@ impl ToValue for AppLeakyType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -125,6 +127,7 @@ pub enum AppStreamType {
 impl IntoGlib for AppStreamType {
     type GlibType = ffi::GstAppStreamType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstAppStreamType {
         match self {
             Self::Stream => ffi::GST_APP_STREAM_TYPE_STREAM,
@@ -137,6 +140,7 @@ impl IntoGlib for AppStreamType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAppStreamType> for AppStreamType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstAppStreamType) -> Self {
         skip_assert_initialized!();
         match value {
@@ -149,6 +153,7 @@ impl FromGlib<ffi::GstAppStreamType> for AppStreamType {
 }
 
 impl StaticType for AppStreamType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_app_stream_type_get_type()) }
     }
@@ -161,6 +166,7 @@ impl glib::value::ValueType for AppStreamType {
 unsafe impl<'a> FromValue<'a> for AppStreamType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
@@ -168,6 +174,7 @@ unsafe impl<'a> FromValue<'a> for AppStreamType {
 }
 
 impl ToValue for AppStreamType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -176,6 +183,7 @@ impl ToValue for AppStreamType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

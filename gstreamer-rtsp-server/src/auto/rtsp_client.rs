@@ -3,25 +3,19 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::RTSPAuth;
-use crate::RTSPContext;
-use crate::RTSPFilterResult;
-use crate::RTSPMountPoints;
-use crate::RTSPSession;
-use crate::RTSPSessionPool;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use crate::RTSPStreamTransport;
-use crate::RTSPThreadPool;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
+use crate::{
+    RTSPAuth, RTSPContext, RTSPFilterResult, RTSPMountPoints, RTSPSession, RTSPSessionPool,
+    RTSPThreadPool,
+};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GstRTSPClient")]
@@ -103,7 +97,7 @@ pub trait RTSPClientExt: 'static {
     fn set_auth(&self, auth: Option<&impl IsA<RTSPAuth>>);
 
     //#[doc(alias = "gst_rtsp_client_set_connection")]
-    //fn set_connection(&self, conn: /*Ignored*/&mut gst_rtsp::RTSPConnection) -> bool;
+    //fn set_connection(&self, conn: /*Ignored*/gst_rtsp::RTSPConnection) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -440,7 +434,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    //fn set_connection(&self, conn: /*Ignored*/&mut gst_rtsp::RTSPConnection) -> bool {
+    //fn set_connection(&self, conn: /*Ignored*/gst_rtsp::RTSPConnection) -> bool {
     //    unsafe { TODO: call ffi:gst_rtsp_client_set_connection() }
     //}
 

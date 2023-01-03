@@ -4,15 +4,10 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::Extractable;
-use crate::MetaContainer;
-use crate::Operation;
-use crate::TextHAlign;
-use crate::TextVAlign;
-use crate::TimelineElement;
-use crate::TrackElement;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{
+    Extractable, MetaContainer, Operation, TextHAlign, TextVAlign, TimelineElement, TrackElement,
+};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GESTextOverlay")]

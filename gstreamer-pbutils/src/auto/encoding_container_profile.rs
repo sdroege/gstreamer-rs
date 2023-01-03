@@ -4,8 +4,7 @@
 // DO NOT EDIT
 
 use crate::EncodingProfile;
-use glib::object::IsA;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstEncodingContainerProfile")]

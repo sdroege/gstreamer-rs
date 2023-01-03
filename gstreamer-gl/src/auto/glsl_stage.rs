@@ -3,11 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::GLContext;
-use crate::GLSLProfile;
-use crate::GLSLVersion;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{GLContext, GLSLProfile, GLSLVersion};
+use glib::{prelude::*, translate::*};
 use std::ptr;
 
 glib::wrapper! {
@@ -100,7 +97,7 @@ impl GLSLStage {
         unsafe {
             let mut error = ptr::null_mut();
             let is_ok = ffi::gst_glsl_stage_compile(self.to_glib_none().0, &mut error);
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

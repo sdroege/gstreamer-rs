@@ -3,10 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::RTSPMedia;
-use crate::RTSPStreamTransport;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{RTSPMedia, RTSPStreamTransport};
+use glib::{prelude::*, translate::*};
 use std::mem;
 
 glib::wrapper! {
@@ -22,12 +20,12 @@ impl RTSPSessionMedia {
     pub const NONE: Option<&'static RTSPSessionMedia> = None;
 
     #[doc(alias = "gst_rtsp_session_media_new")]
-    pub fn new(path: &str, media: &impl IsA<RTSPMedia>) -> RTSPSessionMedia {
+    pub fn new(path: &str, media: impl IsA<RTSPMedia>) -> RTSPSessionMedia {
         skip_assert_initialized!();
         unsafe {
             from_glib_full(ffi::gst_rtsp_session_media_new(
                 path.to_glib_none().0,
-                media.as_ref().to_glib_full(),
+                media.upcast().into_glib_ptr(),
             ))
         }
     }
@@ -74,7 +72,7 @@ pub trait RTSPSessionMediaExt: 'static {
     fn set_state(&self, state: gst::State) -> Result<(), glib::error::BoolError>;
 
     //#[doc(alias = "gst_rtsp_session_media_set_transport")]
-    //fn set_transport(&self, stream: &impl IsA<RTSPStream>, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> RTSPStreamTransport;
+    //fn set_transport(&self, stream: &impl IsA<RTSPStream>, tr: /*Ignored*/gst_rtsp::RTSPTransport) -> RTSPStreamTransport;
 }
 
 impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
@@ -159,7 +157,7 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
         }
     }
 
-    //fn set_transport(&self, stream: &impl IsA<RTSPStream>, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> RTSPStreamTransport {
+    //fn set_transport(&self, stream: &impl IsA<RTSPStream>, tr: /*Ignored*/gst_rtsp::RTSPTransport) -> RTSPStreamTransport {
     //    unsafe { TODO: call ffi:gst_rtsp_session_media_set_transport() }
     //}
 }

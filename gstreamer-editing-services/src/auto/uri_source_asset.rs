@@ -3,12 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Asset;
-use crate::MetaContainer;
-use crate::TrackElementAsset;
-use crate::UriClipAsset;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{Asset, MetaContainer, TrackElementAsset, UriClipAsset};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GESUriSourceAsset")]

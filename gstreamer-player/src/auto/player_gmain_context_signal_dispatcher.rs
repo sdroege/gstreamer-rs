@@ -4,9 +4,7 @@
 // DO NOT EDIT
 
 use crate::PlayerSignalDispatcher;
-use glib::object::ObjectType as ObjectType_;
-use glib::translate::*;
-use glib::StaticType;
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstPlayerGMainContextSignalDispatcher")]

@@ -4,11 +4,7 @@
 // DO NOT EDIT
 
 use bitflags::bitflags;
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 
 bitflags! {
     #[doc(alias = "GstRTPBufferFlags")]
@@ -24,6 +20,7 @@ bitflags! {
 impl IntoGlib for RTPBufferFlags {
     type GlibType = ffi::GstRTPBufferFlags;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTPBufferFlags {
         self.bits()
     }
@@ -31,6 +28,7 @@ impl IntoGlib for RTPBufferFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTPBufferFlags> for RTPBufferFlags {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTPBufferFlags) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -38,6 +36,7 @@ impl FromGlib<ffi::GstRTPBufferFlags> for RTPBufferFlags {
 }
 
 impl StaticType for RTPBufferFlags {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtp_buffer_flags_get_type()) }
     }
@@ -50,6 +49,7 @@ impl glib::value::ValueType for RTPBufferFlags {
 unsafe impl<'a> FromValue<'a> for RTPBufferFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -57,6 +57,7 @@ unsafe impl<'a> FromValue<'a> for RTPBufferFlags {
 }
 
 impl ToValue for RTPBufferFlags {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -65,6 +66,7 @@ impl ToValue for RTPBufferFlags {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -90,6 +92,7 @@ bitflags! {
 impl IntoGlib for RTPBufferMapFlags {
     type GlibType = ffi::GstRTPBufferMapFlags;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTPBufferMapFlags {
         self.bits()
     }
@@ -97,6 +100,7 @@ impl IntoGlib for RTPBufferMapFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTPBufferMapFlags> for RTPBufferMapFlags {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTPBufferMapFlags) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -104,6 +108,7 @@ impl FromGlib<ffi::GstRTPBufferMapFlags> for RTPBufferMapFlags {
 }
 
 impl StaticType for RTPBufferMapFlags {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtp_buffer_map_flags_get_type()) }
     }
@@ -116,6 +121,7 @@ impl glib::value::ValueType for RTPBufferMapFlags {
 unsafe impl<'a> FromValue<'a> for RTPBufferMapFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -123,6 +129,7 @@ unsafe impl<'a> FromValue<'a> for RTPBufferMapFlags {
 }
 
 impl ToValue for RTPBufferMapFlags {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -131,6 +138,7 @@ impl ToValue for RTPBufferMapFlags {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -168,6 +176,7 @@ bitflags! {
 impl IntoGlib for RTPHeaderExtensionDirection {
     type GlibType = ffi::GstRTPHeaderExtensionDirection;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTPHeaderExtensionDirection {
         self.bits()
     }
@@ -177,6 +186,7 @@ impl IntoGlib for RTPHeaderExtensionDirection {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTPHeaderExtensionDirection> for RTPHeaderExtensionDirection {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTPHeaderExtensionDirection) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -186,6 +196,7 @@ impl FromGlib<ffi::GstRTPHeaderExtensionDirection> for RTPHeaderExtensionDirecti
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl StaticType for RTPHeaderExtensionDirection {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtp_header_extension_direction_get_type()) }
     }
@@ -202,6 +213,7 @@ impl glib::value::ValueType for RTPHeaderExtensionDirection {
 unsafe impl<'a> FromValue<'a> for RTPHeaderExtensionDirection {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -211,6 +223,7 @@ unsafe impl<'a> FromValue<'a> for RTPHeaderExtensionDirection {
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl ToValue for RTPHeaderExtensionDirection {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -219,6 +232,7 @@ impl ToValue for RTPHeaderExtensionDirection {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -252,6 +266,7 @@ bitflags! {
 impl IntoGlib for RTPHeaderExtensionFlags {
     type GlibType = ffi::GstRTPHeaderExtensionFlags;
 
+    #[inline]
     fn into_glib(self) -> ffi::GstRTPHeaderExtensionFlags {
         self.bits()
     }
@@ -261,6 +276,7 @@ impl IntoGlib for RTPHeaderExtensionFlags {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTPHeaderExtensionFlags> for RTPHeaderExtensionFlags {
+    #[inline]
     unsafe fn from_glib(value: ffi::GstRTPHeaderExtensionFlags) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -270,6 +286,7 @@ impl FromGlib<ffi::GstRTPHeaderExtensionFlags> for RTPHeaderExtensionFlags {
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl StaticType for RTPHeaderExtensionFlags {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtp_header_extension_flags_get_type()) }
     }
@@ -286,6 +303,7 @@ impl glib::value::ValueType for RTPHeaderExtensionFlags {
 unsafe impl<'a> FromValue<'a> for RTPHeaderExtensionFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -295,6 +313,7 @@ unsafe impl<'a> FromValue<'a> for RTPHeaderExtensionFlags {
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl ToValue for RTPHeaderExtensionFlags {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -303,6 +322,7 @@ impl ToValue for RTPHeaderExtensionFlags {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

@@ -3,10 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::ClockTime;
-use crate::Object;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{ClockTime, Object};
+use glib::{prelude::*, translate::*};
 use std::mem;
 
 glib::wrapper! {

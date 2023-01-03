@@ -3,11 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::GLDisplay;
-use crate::GLSLProfile;
-use crate::GLSLVersion;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{GLDisplay, GLSLProfile, GLSLVersion};
+use glib::{prelude::*, translate::*};
 use std::mem;
 
 #[doc(alias = "gst_gl_check_extension")]

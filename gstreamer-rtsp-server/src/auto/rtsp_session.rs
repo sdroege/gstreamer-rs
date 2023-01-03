@@ -3,18 +3,13 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::RTSPFilterResult;
-use crate::RTSPMedia;
-use crate::RTSPSessionMedia;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
+use crate::{RTSPFilterResult, RTSPMedia, RTSPSessionMedia};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GstRTSPSession")]
@@ -67,7 +62,7 @@ pub trait RTSPSessionExt: 'static {
     fn is_expired_usec(&self, now: i64) -> bool;
 
     #[doc(alias = "gst_rtsp_session_manage_media")]
-    fn manage_media(&self, path: &str, media: &impl IsA<RTSPMedia>) -> RTSPSessionMedia;
+    fn manage_media(&self, path: &str, media: impl IsA<RTSPMedia>) -> RTSPSessionMedia;
 
     //#[doc(alias = "gst_rtsp_session_next_timeout")]
     //fn next_timeout(&self, now: /*Ignored*/&mut glib::TimeVal) -> i32;
@@ -200,12 +195,12 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn manage_media(&self, path: &str, media: &impl IsA<RTSPMedia>) -> RTSPSessionMedia {
+    fn manage_media(&self, path: &str, media: impl IsA<RTSPMedia>) -> RTSPSessionMedia {
         unsafe {
             from_glib_none(ffi::gst_rtsp_session_manage_media(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,
-                media.as_ref().to_glib_full(),
+                media.upcast().into_glib_ptr(),
             ))
         }
     }

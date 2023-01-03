@@ -4,15 +4,12 @@
 // DO NOT EDIT
 
 use crate::VideoCodecFrame;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GstVideoEncoder")]
@@ -54,7 +51,7 @@ pub trait VideoEncoderExt: 'static {
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
 
     #[doc(alias = "gst_video_encoder_set_headers")]
-    fn set_headers(&self, headers: &[&gst::Buffer]);
+    fn set_headers(&self, headers: Vec<gst::Buffer>);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -140,11 +137,11 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
-    fn set_headers(&self, headers: &[&gst::Buffer]) {
+    fn set_headers(&self, headers: Vec<gst::Buffer>) {
         unsafe {
             ffi::gst_video_encoder_set_headers(
                 self.as_ref().to_glib_none().0,
-                headers.to_glib_full(),
+                headers.into_glib_ptr(),
             );
         }
     }

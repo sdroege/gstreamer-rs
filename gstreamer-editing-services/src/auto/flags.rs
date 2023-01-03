@@ -4,13 +4,8 @@
 // DO NOT EDIT
 
 use bitflags::bitflags;
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
-use std::ffi::CStr;
-use std::fmt;
+use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use std::{ffi::CStr, fmt};
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 bitflags! {
@@ -30,6 +25,7 @@ bitflags! {
 impl IntoGlib for MarkerFlags {
     type GlibType = ffi::GESMarkerFlags;
 
+    #[inline]
     fn into_glib(self) -> ffi::GESMarkerFlags {
         self.bits()
     }
@@ -39,6 +35,7 @@ impl IntoGlib for MarkerFlags {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GESMarkerFlags> for MarkerFlags {
+    #[inline]
     unsafe fn from_glib(value: ffi::GESMarkerFlags) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -48,6 +45,7 @@ impl FromGlib<ffi::GESMarkerFlags> for MarkerFlags {
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl StaticType for MarkerFlags {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_marker_flags_get_type()) }
     }
@@ -64,6 +62,7 @@ impl glib::value::ValueType for MarkerFlags {
 unsafe impl<'a> FromValue<'a> for MarkerFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -73,6 +72,7 @@ unsafe impl<'a> FromValue<'a> for MarkerFlags {
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl ToValue for MarkerFlags {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -81,6 +81,7 @@ impl ToValue for MarkerFlags {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -112,6 +113,7 @@ bitflags! {
 impl IntoGlib for MetaFlag {
     type GlibType = ffi::GESMetaFlag;
 
+    #[inline]
     fn into_glib(self) -> ffi::GESMetaFlag {
         self.bits()
     }
@@ -119,6 +121,7 @@ impl IntoGlib for MetaFlag {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESMetaFlag> for MetaFlag {
+    #[inline]
     unsafe fn from_glib(value: ffi::GESMetaFlag) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -126,6 +129,7 @@ impl FromGlib<ffi::GESMetaFlag> for MetaFlag {
 }
 
 impl StaticType for MetaFlag {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_meta_flag_get_type()) }
     }
@@ -138,6 +142,7 @@ impl glib::value::ValueType for MetaFlag {
 unsafe impl<'a> FromValue<'a> for MetaFlag {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -145,6 +150,7 @@ unsafe impl<'a> FromValue<'a> for MetaFlag {
 }
 
 impl ToValue for MetaFlag {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -153,6 +159,7 @@ impl ToValue for MetaFlag {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -186,6 +193,7 @@ bitflags! {
 impl IntoGlib for PipelineFlags {
     type GlibType = ffi::GESPipelineFlags;
 
+    #[inline]
     fn into_glib(self) -> ffi::GESPipelineFlags {
         self.bits()
     }
@@ -193,6 +201,7 @@ impl IntoGlib for PipelineFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESPipelineFlags> for PipelineFlags {
+    #[inline]
     unsafe fn from_glib(value: ffi::GESPipelineFlags) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -200,6 +209,7 @@ impl FromGlib<ffi::GESPipelineFlags> for PipelineFlags {
 }
 
 impl StaticType for PipelineFlags {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_pipeline_flags_get_type()) }
     }
@@ -212,6 +222,7 @@ impl glib::value::ValueType for PipelineFlags {
 unsafe impl<'a> FromValue<'a> for PipelineFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -219,6 +230,7 @@ unsafe impl<'a> FromValue<'a> for PipelineFlags {
 }
 
 impl ToValue for PipelineFlags {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -227,6 +239,7 @@ impl ToValue for PipelineFlags {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }
@@ -281,6 +294,7 @@ impl fmt::Display for TrackType {
 impl IntoGlib for TrackType {
     type GlibType = ffi::GESTrackType;
 
+    #[inline]
     fn into_glib(self) -> ffi::GESTrackType {
         self.bits()
     }
@@ -288,6 +302,7 @@ impl IntoGlib for TrackType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESTrackType> for TrackType {
+    #[inline]
     unsafe fn from_glib(value: ffi::GESTrackType) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
@@ -295,6 +310,7 @@ impl FromGlib<ffi::GESTrackType> for TrackType {
 }
 
 impl StaticType for TrackType {
+    #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_track_type_get_type()) }
     }
@@ -307,6 +323,7 @@ impl glib::value::ValueType for TrackType {
 unsafe impl<'a> FromValue<'a> for TrackType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
@@ -314,6 +331,7 @@ unsafe impl<'a> FromValue<'a> for TrackType {
 }
 
 impl ToValue for TrackType {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -322,6 +340,7 @@ impl ToValue for TrackType {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
     }

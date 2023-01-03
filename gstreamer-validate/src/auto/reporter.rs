@@ -3,12 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Report;
-use crate::ReportingDetails;
-use crate::Runner;
-use glib::object::IsA;
-use glib::translate::*;
-use glib::StaticType;
+use crate::{Report, ReportingDetails, Runner};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstValidateReporter")]
@@ -68,7 +64,7 @@ pub trait ReporterExt: 'static {
     fn set_handle_g_logs(&self);
 
     #[doc(alias = "gst_validate_reporter_set_name")]
-    fn set_name(&self, name: Option<&str>);
+    fn set_name(&self, name: Option<glib::GString>);
 
     #[doc(alias = "gst_validate_reporter_set_runner")]
     fn set_runner(&self, runner: &impl IsA<Runner>);
@@ -148,11 +144,11 @@ impl<O: IsA<Reporter>> ReporterExt for O {
         }
     }
 
-    fn set_name(&self, name: Option<&str>) {
+    fn set_name(&self, name: Option<glib::GString>) {
         unsafe {
             ffi::gst_validate_reporter_set_name(
                 self.as_ref().to_glib_none().0,
-                name.to_glib_full(),
+                name.into_glib_ptr(),
             );
         }
     }

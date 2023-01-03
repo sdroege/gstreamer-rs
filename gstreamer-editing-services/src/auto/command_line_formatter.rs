@@ -3,11 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Extractable;
-use crate::Formatter;
-use crate::Timeline;
-use glib::object::IsA;
-use glib::translate::*;
+use crate::{Extractable, Formatter, Timeline};
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GESCommandLineFormatter")]

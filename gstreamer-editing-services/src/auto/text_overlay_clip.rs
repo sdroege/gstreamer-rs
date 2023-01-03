@@ -3,23 +3,16 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::Clip;
-use crate::Container;
-use crate::Extractable;
-use crate::MetaContainer;
-use crate::OperationClip;
-use crate::OverlayClip;
-use crate::TextHAlign;
-use crate::TextVAlign;
-use crate::TimelineElement;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::ToValue;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
+use crate::{
+    Clip, Container, Extractable, MetaContainer, OperationClip, OverlayClip, TextHAlign,
+    TextVAlign, TimelineElement,
+};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GESTextOverlayClip")]

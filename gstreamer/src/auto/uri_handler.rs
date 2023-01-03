@@ -4,8 +4,7 @@
 // DO NOT EDIT
 
 use crate::URIType;
-use glib::object::IsA;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 use std::ptr;
 
 glib::wrapper! {
@@ -70,7 +69,7 @@ impl<O: IsA<URIHandler>> URIHandlerExt for O {
                 uri.to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

@@ -3,18 +3,13 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::PipelineFlags;
-use crate::Timeline;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
-use std::ptr;
+use crate::{PipelineFlags, Timeline};
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, mem::transmute, ptr};
 
 glib::wrapper! {
     #[doc(alias = "GESPipeline")]
@@ -208,7 +203,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
                 location.to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -248,7 +243,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
             glib::result_from_gboolean!(
                 ffi::ges_pipeline_set_timeline(
                     self.as_ref().to_glib_none().0,
-                    timeline.as_ref().to_glib_full()
+                    timeline.as_ref().to_glib_none().0
                 ),
                 "Failed to set timeline"
             )

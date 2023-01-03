@@ -120,7 +120,7 @@ impl Section {
     //}
 
     //#[doc(alias = "gst_mpegts_section_from_atsc_mgt")]
-    //pub fn from_atsc_mgt(mgt: /*Ignored*/&mut AtscMGT) -> Section {
+    //pub fn from_atsc_mgt(mgt: /*Ignored*/AtscMGT) -> Section {
     //    unsafe { TODO: call ffi:gst_mpegts_section_from_atsc_mgt() }
     //}
 
@@ -135,22 +135,22 @@ impl Section {
     //}
 
     //#[doc(alias = "gst_mpegts_section_from_nit")]
-    //pub fn from_nit(nit: /*Ignored*/&mut NIT) -> Section {
+    //pub fn from_nit(nit: /*Ignored*/NIT) -> Section {
     //    unsafe { TODO: call ffi:gst_mpegts_section_from_nit() }
     //}
 
     //#[doc(alias = "gst_mpegts_section_from_pat")]
-    //pub fn from_pat(programs: /*Ignored*/&[PatProgram], ts_id: u16) -> Section {
+    //pub fn from_pat(programs: /*Ignored*/Vec<PatProgram>, ts_id: u16) -> Section {
     //    unsafe { TODO: call ffi:gst_mpegts_section_from_pat() }
     //}
 
     //#[doc(alias = "gst_mpegts_section_from_pmt")]
-    //pub fn from_pmt(pmt: /*Ignored*/&mut PMT, pid: u16) -> Section {
+    //pub fn from_pmt(pmt: /*Ignored*/PMT, pid: u16) -> Section {
     //    unsafe { TODO: call ffi:gst_mpegts_section_from_pmt() }
     //}
 
     //#[doc(alias = "gst_mpegts_section_from_sdt")]
-    //pub fn from_sdt(sdt: /*Ignored*/&mut SDT) -> Section {
+    //pub fn from_sdt(sdt: /*Ignored*/SDT) -> Section {
     //    unsafe { TODO: call ffi:gst_mpegts_section_from_sdt() }
     //}
 }
