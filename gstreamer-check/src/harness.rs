@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{marker::PhantomData, mem, ops, path, ptr};
+use std::{mem, ops, path, ptr};
 
 use glib::translate::*;
 use gst::prelude::*;
@@ -9,6 +9,7 @@ use crate::TestClock;
 
 #[derive(Debug)]
 #[doc(alias = "GstHarness")]
+#[repr(transparent)]
 pub struct Harness(ptr::NonNull<ffi::GstHarness>);
 
 impl Drop for Harness {
@@ -753,13 +754,12 @@ impl Harness {
     #[doc(alias = "get_sink_harness")]
     pub fn sink_harness(&self) -> Option<Ref> {
         unsafe {
-            let sink_harness = (*self.0.as_ptr()).sink_harness;
-            if sink_harness.is_null() {
+            if (*self.0.as_ptr()).sink_harness.is_null() {
                 None
             } else {
                 Some(Ref(
-                    mem::ManuallyDrop::new(Harness(ptr::NonNull::new_unchecked(sink_harness))),
-                    PhantomData,
+                    &*((&(*self.0.as_ptr()).sink_harness) as *const *mut ffi::GstHarness
+                        as *const Harness),
                 ))
             }
         }
@@ -768,13 +768,12 @@ impl Harness {
     #[doc(alias = "get_src_harness")]
     pub fn src_harness(&self) -> Option<Ref> {
         unsafe {
-            let src_harness = (*self.0.as_ptr()).src_harness;
-            if src_harness.is_null() {
+            if (*self.0.as_ptr()).src_harness.is_null() {
                 None
             } else {
                 Some(Ref(
-                    mem::ManuallyDrop::new(Harness(ptr::NonNull::new_unchecked(src_harness))),
-                    PhantomData,
+                    &*((&(*self.0.as_ptr()).src_harness) as *const *mut ffi::GstHarness
+                        as *const Harness),
                 ))
             }
         }
@@ -783,13 +782,12 @@ impl Harness {
     #[doc(alias = "get_mut_sink_harness")]
     pub fn sink_harness_mut(&mut self) -> Option<RefMut> {
         unsafe {
-            let sink_harness = (*self.0.as_ptr()).sink_harness;
-            if sink_harness.is_null() {
+            if (*self.0.as_ptr()).sink_harness.is_null() {
                 None
             } else {
                 Some(RefMut(
-                    mem::ManuallyDrop::new(Harness(ptr::NonNull::new_unchecked(sink_harness))),
-                    PhantomData,
+                    &mut *((&mut (*self.0.as_ptr()).sink_harness) as *mut *mut ffi::GstHarness
+                        as *mut Harness),
                 ))
             }
         }
@@ -798,13 +796,12 @@ impl Harness {
     #[doc(alias = "get_mut_src_harness")]
     pub fn src_harness_mut(&mut self) -> Option<RefMut> {
         unsafe {
-            let src_harness = (*self.0.as_ptr()).src_harness;
-            if src_harness.is_null() {
+            if (*self.0.as_ptr()).src_harness.is_null() {
                 None
             } else {
                 Some(RefMut(
-                    mem::ManuallyDrop::new(Harness(ptr::NonNull::new_unchecked(src_harness))),
-                    PhantomData,
+                    &mut *((&mut (*self.0.as_ptr()).src_harness) as *mut *mut ffi::GstHarness
+                        as *mut Harness),
                 ))
             }
         }
@@ -812,30 +809,30 @@ impl Harness {
 }
 
 #[derive(Debug)]
-pub struct Ref<'a>(mem::ManuallyDrop<Harness>, PhantomData<&'a Harness>);
+pub struct Ref<'a>(&'a Harness);
 
 impl<'a> ops::Deref for Ref<'a> {
     type Target = Harness;
 
     fn deref(&self) -> &Harness {
-        &self.0
+        self.0
     }
 }
 
 #[derive(Debug)]
-pub struct RefMut<'a>(mem::ManuallyDrop<Harness>, PhantomData<&'a mut Harness>);
+pub struct RefMut<'a>(&'a mut Harness);
 
 impl<'a> ops::Deref for RefMut<'a> {
     type Target = Harness;
 
     fn deref(&self) -> &Harness {
-        &self.0
+        self.0
     }
 }
 
 impl<'a> ops::DerefMut for RefMut<'a> {
     fn deref_mut(&mut self) -> &mut Harness {
-        &mut self.0
+        self.0
     }
 }
 
