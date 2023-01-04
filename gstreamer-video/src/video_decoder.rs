@@ -45,22 +45,6 @@ pub trait VideoDecoderExtManual: 'static {
     #[doc(alias = "get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_video_decoder_finish_subframe")]
-    fn finish_subframe(&self, frame: &VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_video_decoder_drop_subframe")]
-    fn drop_subframe(&self, frame: &VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_video_decoder_have_last_subframe")]
-    fn have_last_subframe(
-        &self,
-        frame: &VideoCodecFrame,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
     #[doc(alias = "get_latency")]
     fn latency(&self) -> (gst::ClockTime, Option<gst::ClockTime>);
     fn set_latency(
@@ -336,45 +320,6 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
                 file.to_glib_none().0,
                 function.to_glib_none().0,
                 line as i32,
-            ))
-        }
-    }
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_video_decoder_finish_subframe")]
-    fn finish_subframe(&self, frame: &VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_video_decoder_finish_subframe(
-                self.as_ref().to_glib_none().0,
-                frame.to_glib_full(),
-            ))
-        }
-    }
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_video_decoder_drop_subframe")]
-    fn drop_subframe(&self, frame: &VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_video_decoder_drop_subframe(
-                self.as_ref().to_glib_none().0,
-                frame.to_glib_full(),
-            ))
-        }
-    }
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_video_decoder_have_last_subframe")]
-    fn have_last_subframe(
-        &self,
-        frame: &VideoCodecFrame,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_video_decoder_have_last_subframe(
-                self.as_ref().to_glib_none().0,
-                frame.to_glib_none().0,
             ))
         }
     }

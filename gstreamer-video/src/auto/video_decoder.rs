@@ -41,8 +41,18 @@ pub trait VideoDecoderExt: 'static {
     #[doc(alias = "gst_video_decoder_drop_frame")]
     fn drop_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_video_decoder_drop_subframe")]
+    fn drop_subframe(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
+
     #[doc(alias = "gst_video_decoder_finish_frame")]
     fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_video_decoder_finish_subframe")]
+    fn finish_subframe(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[doc(alias = "gst_video_decoder_get_buffer_pool")]
     #[doc(alias = "get_buffer_pool")]
@@ -90,6 +100,14 @@ pub trait VideoDecoderExt: 'static {
 
     #[doc(alias = "gst_video_decoder_have_frame")]
     fn have_frame(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_video_decoder_have_last_subframe")]
+    fn have_last_subframe(
+        &self,
+        frame: &VideoCodecFrame,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[doc(alias = "gst_video_decoder_merge_tags")]
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
@@ -252,9 +270,31 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn drop_subframe(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_video_decoder_drop_subframe(
+                self.as_ref().to_glib_none().0,
+                frame.into_glib_ptr(),
+            ))
+        }
+    }
+
     fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             try_from_glib(ffi::gst_video_decoder_finish_frame(
+                self.as_ref().to_glib_none().0,
+                frame.into_glib_ptr(),
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn finish_subframe(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_video_decoder_finish_subframe(
                 self.as_ref().to_glib_none().0,
                 frame.into_glib_ptr(),
             ))
@@ -334,6 +374,20 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         unsafe {
             try_from_glib(ffi::gst_video_decoder_have_frame(
                 self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn have_last_subframe(
+        &self,
+        frame: &VideoCodecFrame,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_video_decoder_have_last_subframe(
+                self.as_ref().to_glib_none().0,
+                frame.to_glib_none().0,
             ))
         }
     }
