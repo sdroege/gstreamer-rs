@@ -325,13 +325,13 @@ macro_rules! generic_impl {
                 unsafe { from_glib_none(self.inner.config.latest_daily_jam) }
             }
 
-            pub fn set_latest_daily_jam(&mut self, latest_daily_jam: Option<&glib::DateTime>) {
+            pub fn set_latest_daily_jam(&mut self, latest_daily_jam: Option<glib::DateTime>) {
                 unsafe {
                     if !self.inner.config.latest_daily_jam.is_null() {
                         glib::ffi::g_date_time_unref(self.inner.config.latest_daily_jam);
                     }
 
-                    self.inner.config.latest_daily_jam = latest_daily_jam.to_glib_full()
+                    self.inner.config.latest_daily_jam = latest_daily_jam.into_glib_ptr();
                 }
             }
         }

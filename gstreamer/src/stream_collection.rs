@@ -104,20 +104,23 @@ pub struct StreamCollectionBuilder(StreamCollection);
 
 impl StreamCollectionBuilder {
     #[doc(alias = "gst_stream_collection_add_stream")]
-    pub fn stream(self, stream: &Stream) -> Self {
+    pub fn stream(self, stream: Stream) -> Self {
         unsafe {
-            ffi::gst_stream_collection_add_stream((self.0).to_glib_none().0, stream.to_glib_full());
+            ffi::gst_stream_collection_add_stream(
+                (self.0).to_glib_none().0,
+                stream.into_glib_ptr(),
+            );
         }
 
         self
     }
 
-    pub fn streams(self, streams: &[impl AsRef<Stream>]) -> Self {
-        for stream in streams {
+    pub fn streams(self, streams: impl IntoIterator<Item = Stream>) -> Self {
+        for stream in streams.into_iter() {
             unsafe {
                 ffi::gst_stream_collection_add_stream(
                     (self.0).to_glib_none().0,
-                    stream.as_ref().to_glib_full(),
+                    stream.into_glib_ptr(),
                 );
             }
         }

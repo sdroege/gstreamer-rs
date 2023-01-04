@@ -538,7 +538,7 @@ unsafe extern "C" fn element_provide_clock<T: ElementImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
 
-    panic_to_error!(imp, None, { imp.provide_clock() }).to_glib_full()
+    panic_to_error!(imp, None, { imp.provide_clock() }).into_glib_ptr()
 }
 
 unsafe extern "C" fn element_post_message<T: ElementImpl>(

@@ -58,8 +58,8 @@ fn configure_pipeline(pipeline: &ges::Pipeline, output_name: &str) {
     let container_profile =
         gst_pbutils::EncodingContainerProfile::builder(&gst::Caps::builder("video/webm").build())
             .name("container")
-            .add_profile(&video_profile)
-            .add_profile(&audio_profile)
+            .add_profile(video_profile)
+            .add_profile(audio_profile)
             .build();
 
     // Apply the EncodingProfile to the pipeline, and set it to render mode

@@ -49,5 +49,5 @@ unsafe extern "C" fn mount_points_make_path<T: RTSPMountPointsImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
 
-    imp.make_path(&from_glib_borrow(url)).to_glib_full()
+    imp.make_path(&from_glib_borrow(url)).into_glib_ptr()
 }

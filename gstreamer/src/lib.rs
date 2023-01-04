@@ -10,7 +10,6 @@
 // Re-exported for the subclass gst_plugin_define! macro
 pub use ffi;
 pub use glib;
-use glib::translate::{from_glib, from_glib_full};
 pub use paste;
 
 #[doc(hidden)]
@@ -256,6 +255,8 @@ use std::ptr;
 #[doc(alias = "gst_init_check")]
 pub fn init() -> Result<(), glib::Error> {
     unsafe {
+        use glib::translate::*;
+
         let mut error = ptr::null_mut();
         if from_glib(ffi::gst_init_check(
             ptr::null_mut(),

@@ -736,7 +736,7 @@ unsafe extern "C" fn audio_decoder_getcaps<T: AudioDecoderImpl>(
                 .as_ref(),
         )
     })
-    .to_glib_full()
+    .into_glib_ptr()
 }
 
 unsafe extern "C" fn audio_decoder_sink_event<T: AudioDecoderImpl>(

@@ -806,7 +806,7 @@ unsafe extern "C" fn video_decoder_getcaps<T: VideoDecoderImpl>(
                 .as_ref(),
         )
     })
-    .to_glib_full()
+    .into_glib_ptr()
 }
 
 unsafe extern "C" fn video_decoder_sink_event<T: VideoDecoderImpl>(

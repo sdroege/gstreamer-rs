@@ -553,7 +553,7 @@ unsafe extern "C" fn media_create_rtpbin<T: RTSPMediaImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
 
-    let res: *mut gst::ffi::GstElement = imp.create_rtpbin().to_glib_full();
+    let res: *mut gst::ffi::GstElement = imp.create_rtpbin().into_glib_ptr();
 
     if !res.is_null() {
         glib::gobject_ffi::g_object_force_floating(res as *mut _);

@@ -941,7 +941,7 @@ unsafe extern "C" fn aggregator_create_new_pad<T: AggregatorImpl>(
                 .as_ref(),
         )
     })
-    .to_glib_full()
+    .into_glib_ptr()
 }
 
 unsafe extern "C" fn aggregator_update_src_caps<T: AggregatorImpl>(
@@ -1074,5 +1074,6 @@ unsafe extern "C" fn aggregator_peek_next_sample<T: AggregatorImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
 
-    gst::panic_to_error!(imp, None, { imp.peek_next_sample(&from_glib_borrow(pad)) }).to_glib_full()
+    gst::panic_to_error!(imp, None, { imp.peek_next_sample(&from_glib_borrow(pad)) })
+        .into_glib_ptr()
 }

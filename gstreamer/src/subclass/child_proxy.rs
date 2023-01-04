@@ -132,7 +132,7 @@ unsafe extern "C" fn child_proxy_get_child_by_name<T: ChildProxyImpl>(
     let imp = instance.imp();
 
     imp.child_by_name(&glib::GString::from_glib_borrow(name))
-        .to_glib_full()
+        .into_glib_ptr()
 }
 
 unsafe extern "C" fn child_proxy_get_child_by_index<T: ChildProxyImpl>(
@@ -142,7 +142,7 @@ unsafe extern "C" fn child_proxy_get_child_by_index<T: ChildProxyImpl>(
     let instance = &*(child_proxy as *mut T::Instance);
     let imp = instance.imp();
 
-    imp.child_by_index(index).to_glib_full()
+    imp.child_by_index(index).into_glib_ptr()
 }
 
 unsafe extern "C" fn child_proxy_get_children_count<T: ChildProxyImpl>(

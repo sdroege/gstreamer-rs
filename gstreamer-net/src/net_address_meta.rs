@@ -33,11 +33,11 @@ impl NetAddressMeta {
         unsafe { from_glib_none(self.0.addr) }
     }
 
-    pub fn set_addr<T: IsA<gio::SocketAddress>>(&mut self, addr: &T) {
+    pub fn set_addr(&mut self, addr: impl IsA<gio::SocketAddress>) {
         #![allow(clippy::cast_ptr_alignment)]
         unsafe {
             glib::gobject_ffi::g_object_unref(self.0.addr as *mut _);
-            self.0.addr = addr.as_ref().to_glib_full();
+            self.0.addr = addr.upcast().into_glib_ptr();
         }
     }
 }

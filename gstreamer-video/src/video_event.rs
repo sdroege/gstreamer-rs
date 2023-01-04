@@ -1,10 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 use std::mem;
 
-use glib::{
-    translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr},
-    ToSendValue,
-};
+use glib::{translate::*, ToSendValue};
 use gst::EventType;
 
 #[cfg(any(feature = "v1_22", feature = "dox"))]
@@ -426,7 +423,7 @@ nav_event_builder!(
                 modifier_state: s.modifier_state,
             },
         };
-        gst::ffi::gst_event_new_navigation(event.structure().to_glib_full())
+        gst::ffi::gst_event_new_navigation(event.structure().into_glib_ptr())
     }
 );
 
@@ -487,7 +484,7 @@ nav_event_builder!(
                 modifier_state: s.modifier_state,
             },
         };
-        gst::ffi::gst_event_new_navigation(event.structure().to_glib_full())
+        gst::ffi::gst_event_new_navigation(event.structure().into_glib_ptr())
     }
 );
 
@@ -532,7 +529,7 @@ impl<'a> CommandEventBuilder<'a> {
             #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
             modifier_state: s.modifier_state,
         };
-        gst::ffi::gst_event_new_navigation(event.structure().to_glib_full())
+        gst::ffi::gst_event_new_navigation(event.structure().into_glib_ptr())
     });
 }
 
@@ -573,7 +570,7 @@ nav_event_builder!(
                 modifier_state: s.modifier_state,
             },
         };
-        gst::ffi::gst_event_new_navigation(event.structure().to_glib_full())
+        gst::ffi::gst_event_new_navigation(event.structure().into_glib_ptr())
     }
 );
 
@@ -599,7 +596,7 @@ nav_event_builder!(
                 modifier_state: s.modifier_state,
             },
         };
-        gst::ffi::gst_event_new_navigation(event.structure().to_glib_full())
+        gst::ffi::gst_event_new_navigation(event.structure().into_glib_ptr())
     }
 );
 

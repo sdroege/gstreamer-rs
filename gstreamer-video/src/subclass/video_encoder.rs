@@ -661,7 +661,7 @@ unsafe extern "C" fn video_encoder_getcaps<T: VideoEncoderImpl>(
                 .as_ref(),
         )
     })
-    .to_glib_full()
+    .into_glib_ptr()
 }
 
 unsafe extern "C" fn video_encoder_sink_event<T: VideoEncoderImpl>(

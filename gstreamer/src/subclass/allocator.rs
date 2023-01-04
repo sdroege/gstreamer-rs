@@ -167,7 +167,7 @@ mod tests {
         const TEST_ALLOCATOR_NAME: &str = "TestAllocator";
 
         let allocator = TestAllocator::default();
-        Allocator::register(TEST_ALLOCATOR_NAME, &allocator);
+        Allocator::register(TEST_ALLOCATOR_NAME, allocator);
 
         let allocator = Allocator::find(Some(TEST_ALLOCATOR_NAME));
 

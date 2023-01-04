@@ -61,8 +61,8 @@ fn configure_encodebin(encodebin: &gst::Element) {
         &gst::Caps::builder("video/x-matroska").build(),
     )
     .name("container")
-    .add_profile(&(video_profile))
-    .add_profile(&(audio_profile))
+    .add_profile(video_profile)
+    .add_profile(audio_profile)
     .build();
 
     // Finally, apply the EncodingProfile onto our encodebin element.

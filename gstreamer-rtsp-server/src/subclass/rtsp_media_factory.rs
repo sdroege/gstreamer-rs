@@ -203,7 +203,7 @@ unsafe extern "C" fn factory_gen_key<T: RTSPMediaFactoryImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
 
-    imp.gen_key(&from_glib_borrow(url)).to_glib_full()
+    imp.gen_key(&from_glib_borrow(url)).into_glib_ptr()
 }
 
 unsafe extern "C" fn factory_create_element<T: RTSPMediaFactoryImpl>(
@@ -213,7 +213,7 @@ unsafe extern "C" fn factory_create_element<T: RTSPMediaFactoryImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
 
-    let element = imp.create_element(&from_glib_borrow(url)).to_glib_full();
+    let element = imp.create_element(&from_glib_borrow(url)).into_glib_ptr();
     glib::gobject_ffi::g_object_force_floating(element as *mut _);
     element
 }
@@ -225,7 +225,7 @@ unsafe extern "C" fn factory_construct<T: RTSPMediaFactoryImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
 
-    imp.construct(&from_glib_borrow(url)).to_glib_full()
+    imp.construct(&from_glib_borrow(url)).into_glib_ptr()
 }
 
 unsafe extern "C" fn factory_create_pipeline<T: RTSPMediaFactoryImpl>(
@@ -240,8 +240,9 @@ unsafe extern "C" fn factory_create_pipeline<T: RTSPMediaFactoryImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
 
-    let pipeline: *mut gst::ffi::GstPipeline =
-        imp.create_pipeline(&from_glib_borrow(media)).to_glib_full();
+    let pipeline: *mut gst::ffi::GstPipeline = imp
+        .create_pipeline(&from_glib_borrow(media))
+        .into_glib_ptr();
 
     // FIXME We somehow need to ensure the pipeline actually stays alive...
     glib::gobject_ffi::g_object_set_qdata_full(

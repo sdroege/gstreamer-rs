@@ -64,7 +64,7 @@ unsafe extern "C" fn server_create_client<T: RTSPServerImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
 
-    imp.create_client().to_glib_full()
+    imp.create_client().into_glib_ptr()
 }
 
 unsafe extern "C" fn server_client_connected<T: RTSPServerImpl>(

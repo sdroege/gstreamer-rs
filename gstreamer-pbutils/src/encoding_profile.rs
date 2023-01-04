@@ -154,7 +154,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
 
 // Split the trait as only the getter is public
 trait EncodingProfileHasRestrictionSetter {
-    fn set_restriction(&self, restriction: Option<&gst::Caps>);
+    fn set_restriction(&self, restriction: Option<gst::Caps>);
 }
 
 pub trait EncodingProfileHasRestrictionGetter {
@@ -167,12 +167,12 @@ macro_rules! declare_encoding_profile_has_restriction(
     ($name:ident) => {
         impl EncodingProfileHasRestrictionSetter for $name {
             // checker-ignore-item
-            fn set_restriction(&self, restriction: Option<&gst::Caps>) {
+            fn set_restriction(&self, restriction: Option<gst::Caps>) {
                 let profile: &EncodingProfile = glib::object::Cast::upcast_ref(self);
 
                 unsafe {
                     let restriction = match restriction {
-                        Some(restriction) => restriction.to_glib_full(),
+                        Some(restriction) => restriction.into_glib_ptr(),
                         None => gst::ffi::gst_caps_new_any(),
                     };
 
@@ -305,11 +305,11 @@ impl EncodingContainerProfile {
     }
 
     // checker-ignore-item
-    fn add_profile<P: IsA<EncodingProfile>>(&self, profile: &P) {
+    fn add_profile(&self, profile: impl IsA<EncodingProfile>) {
         unsafe {
             let res = ffi::gst_encoding_container_profile_add_profile(
                 self.to_glib_none().0,
-                profile.as_ref().to_glib_full(),
+                profile.upcast().into_glib_ptr(),
             );
             // Can't possibly fail unless we pass random pointers
             assert_ne!(res, glib::ffi::GFALSE);
@@ -588,7 +588,7 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
         );
 
         for profile in self.profiles {
-            container_profile.add_profile(&profile);
+            container_profile.add_profile(profile);
         }
 
         set_common_fields(&container_profile, self.base);
@@ -597,8 +597,8 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
     }
 
     #[doc(alias = "gst_encoding_container_profile_add_profile")]
-    pub fn add_profile<P: IsA<EncodingProfile>>(mut self, profile: &P) -> Self {
-        self.profiles.push(profile.as_ref().clone());
+    pub fn add_profile(mut self, profile: impl IsA<EncodingProfile>) -> Self {
+        self.profiles.push(profile.upcast());
         self
     }
 }
@@ -666,7 +666,7 @@ mod tests {
         let restriction = gst_audio::AudioCapsBuilder::new()
             .format(gst_audio::AudioFormat::S32be)
             .build();
-        audio_profile.set_restriction(Some(&restriction));
+        audio_profile.set_restriction(Some(restriction.clone()));
         assert_eq!(audio_profile.restriction().unwrap(), restriction);
     }
 
@@ -714,7 +714,7 @@ mod tests {
         let restriction = gst_video::VideoCapsBuilder::new()
             .format(gst_video::VideoFormat::Nv12)
             .build();
-        video_profile.set_restriction(Some(&restriction));
+        video_profile.set_restriction(Some(restriction.clone()));
         assert_eq!(video_profile.restriction().unwrap(), restriction);
     }
 
@@ -743,8 +743,8 @@ mod tests {
             .presence(PRESENCE)
             .allow_dynamic_output(ALLOW_DYNAMIC_OUTPUT)
             .enabled(ENABLED)
-            .add_profile(&audio_profile)
-            .add_profile(&video_profile)
+            .add_profile(audio_profile.clone())
+            .add_profile(video_profile.clone())
             .build();
 
         assert_eq!(profile.name().unwrap(), CONTAINER_PROFILE_NAME);

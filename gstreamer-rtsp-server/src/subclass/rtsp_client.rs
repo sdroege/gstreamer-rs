@@ -839,7 +839,7 @@ unsafe extern "C" fn client_make_path_from_uri<T: RTSPClientImpl>(
     let imp = instance.imp();
 
     imp.make_path_from_uri(&from_glib_borrow(url))
-        .to_glib_full()
+        .into_glib_ptr()
 }
 
 unsafe extern "C" fn client_closed<T: RTSPClientImpl>(ptr: *mut ffi::GstRTSPClient) {
@@ -1000,7 +1000,7 @@ unsafe extern "C" fn client_check_requirements<T: RTSPClientImpl>(
     let imp = instance.imp();
 
     imp.check_requirements(&from_glib_borrow(ctx), Vec::from_glib_none(arr).as_slice())
-        .to_glib_full()
+        .into_glib_ptr()
 }
 
 unsafe extern "C" fn client_pre_options_request<T: RTSPClientImpl>(

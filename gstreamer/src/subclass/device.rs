@@ -97,13 +97,10 @@ unsafe extern "C" fn device_create_element<T: DeviceImpl>(
         Ok(element) => {
             // The reference we're going to return, the initial reference is going to
             // be dropped here now
-            let element_ptr = element.to_glib_full();
-            drop(element);
+            let element = element.into_glib_ptr();
             // See https://gitlab.freedesktop.org/gstreamer/gstreamer/issues/444
-            glib::gobject_ffi::g_object_force_floating(
-                element_ptr as *mut glib::gobject_ffi::GObject,
-            );
-            element_ptr
+            glib::gobject_ffi::g_object_force_floating(element as *mut glib::gobject_ffi::GObject);
+            element
         }
         Err(err) => {
             err.log_with_imp(imp);

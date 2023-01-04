@@ -205,7 +205,7 @@ unsafe extern "C" fn rtp_base_payload_get_caps<T: RTPBasePayloadImpl>(
                 .as_ref(),
         )
     })
-    .to_glib_full()
+    .into_glib_ptr()
 }
 
 unsafe extern "C" fn rtp_base_payload_set_caps<T: RTPBasePayloadImpl>(
