@@ -24,8 +24,8 @@ fn main_loop(uri: &str) -> Result<(), Error> {
 
     let dispatcher = gst_player::PlayerGMainContextSignalDispatcher::new(None);
     let player = gst_player::Player::new(
-        gst_player::PlayerVideoRenderer::NONE,
-        Some(&dispatcher.upcast::<gst_player::PlayerSignalDispatcher>()),
+        None::<gst_player::PlayerVideoRenderer>,
+        Some(dispatcher.upcast::<gst_player::PlayerSignalDispatcher>()),
     );
 
     // Tell the player what uri to play.

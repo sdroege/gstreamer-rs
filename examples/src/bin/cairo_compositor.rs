@@ -14,8 +14,6 @@ mod cairo_compositor {
     use gst_video::{prelude::*, subclass::prelude::*};
     use once_cell::sync::Lazy;
 
-    use super::*;
-
     // In the imp submodule we include the actual implementation of the compositor.
     mod imp {
         use std::sync::Mutex;

@@ -38,7 +38,6 @@
 use std::env;
 
 use ges::prelude::*;
-use gst::prelude::*;
 
 #[allow(unused_imports)]
 #[path = "../examples-common.rs"]

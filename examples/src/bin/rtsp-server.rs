@@ -56,7 +56,7 @@ fn main_loop() -> Result<(), Error> {
     // Now we add a new mount-point and tell the RTSP server to serve the content
     // provided by the factory we configured above, when a client connects to
     // this specific path.
-    mounts.add_factory("/test", &factory);
+    mounts.add_factory("/test", factory);
 
     // Attach the server to our main context.
     // A main context is the thing where other stuff is registering itself for its

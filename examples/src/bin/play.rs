@@ -17,7 +17,7 @@ use gst_play::{Play, PlayMessage, PlayVideoRenderer};
 fn main_loop(uri: &str) -> Result<(), Error> {
     gst::init()?;
 
-    let play = Play::new(PlayVideoRenderer::NONE);
+    let play = Play::new(None::<PlayVideoRenderer>);
     play.set_uri(Some(uri));
     play.play();
 
