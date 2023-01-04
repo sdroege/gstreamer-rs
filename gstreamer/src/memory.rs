@@ -23,7 +23,7 @@ pub struct MemoryMap<'a, T> {
 }
 
 pub struct MappedMemory<T> {
-    memory: Option<Memory>,
+    memory: Memory,
     map_info: ffi::GstMapInfo,
     phantom: PhantomData<T>,
 }
@@ -133,7 +133,7 @@ impl Memory {
             ));
             if res {
                 Ok(MappedMemory {
-                    memory: Some(self),
+                    memory: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
@@ -153,7 +153,7 @@ impl Memory {
             ));
             if res {
                 Ok(MappedMemory {
-                    memory: Some(self),
+                    memory: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
@@ -418,13 +418,14 @@ impl<T> MappedMemory<T> {
 
     #[doc(alias = "get_memory")]
     pub fn memory(&self) -> &MemoryRef {
-        self.memory.as_ref().unwrap().as_ref()
+        self.memory.as_ref()
     }
 
-    pub fn into_memory(mut self) -> Memory {
-        let memory = self.memory.take().unwrap();
+    pub fn into_memory(self) -> Memory {
+        let mut s = mem::ManuallyDrop::new(self);
+        let memory = unsafe { ptr::read(&s.memory) };
         unsafe {
-            ffi::gst_memory_unmap(memory.as_mut_ptr(), &mut self.map_info);
+            ffi::gst_memory_unmap(memory.as_mut_ptr(), &mut s.map_info);
         }
 
         memory
@@ -468,10 +469,8 @@ impl DerefMut for MappedMemory<Writable> {
 
 impl<T> Drop for MappedMemory<T> {
     fn drop(&mut self) {
-        if let Some(ref memory) = self.memory {
-            unsafe {
-                ffi::gst_memory_unmap(memory.as_mut_ptr(), &mut self.map_info);
-            }
+        unsafe {
+            ffi::gst_memory_unmap(self.memory.as_mut_ptr(), &mut self.map_info);
         }
     }
 }
@@ -879,6 +878,23 @@ macro_rules! memory_object_wrapper {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn test_map() {
+        crate::init().unwrap();
+
+        let mem = crate::Memory::from_slice(vec![1, 2, 3, 4]);
+        let map = mem.map_readable().unwrap();
+        assert_eq!(map.as_slice(), &[1, 2, 3, 4]);
+        drop(map);
+
+        let mem = mem.into_mapped_memory_readable().unwrap();
+        assert_eq!(mem.as_slice(), &[1, 2, 3, 4]);
+
+        let mem = mem.into_memory();
+        let map = mem.map_readable().unwrap();
+        assert_eq!(map.as_slice(), &[1, 2, 3, 4]);
+    }
+
     #[test]
     fn test_dump() {
         crate::init().unwrap();

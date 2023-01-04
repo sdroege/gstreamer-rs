@@ -28,7 +28,7 @@ pub struct BufferMap<'a, T> {
 }
 
 pub struct MappedBuffer<T> {
-    buffer: Option<Buffer>,
+    buffer: Buffer,
     map_info: ffi::GstMapInfo,
     phantom: PhantomData<T>,
 }
@@ -118,7 +118,7 @@ impl Buffer {
             ));
             if res {
                 Ok(MappedBuffer {
-                    buffer: Some(self),
+                    buffer: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
@@ -139,7 +139,7 @@ impl Buffer {
             ));
             if res {
                 Ok(MappedBuffer {
-                    buffer: Some(self),
+                    buffer: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
@@ -1179,13 +1179,14 @@ impl<T> MappedBuffer<T> {
 
     #[doc(alias = "get_buffer")]
     pub fn buffer(&self) -> &BufferRef {
-        self.buffer.as_ref().unwrap().as_ref()
+        self.buffer.as_ref()
     }
 
-    pub fn into_buffer(mut self) -> Buffer {
-        let buffer = self.buffer.take().unwrap();
+    pub fn into_buffer(self) -> Buffer {
+        let mut s = mem::ManuallyDrop::new(self);
+        let buffer = unsafe { ptr::read(&s.buffer) };
         unsafe {
-            ffi::gst_buffer_unmap(buffer.as_mut_ptr(), &mut self.map_info);
+            ffi::gst_buffer_unmap(buffer.as_mut_ptr(), &mut s.map_info);
         }
 
         buffer
@@ -1229,10 +1230,8 @@ impl ops::DerefMut for MappedBuffer<Writable> {
 
 impl<T> Drop for MappedBuffer<T> {
     fn drop(&mut self) {
-        if let Some(ref buffer) = self.buffer {
-            unsafe {
-                ffi::gst_buffer_unmap(buffer.as_mut_ptr(), &mut self.map_info);
-            }
+        unsafe {
+            ffi::gst_buffer_unmap(self.buffer.as_mut_ptr(), &mut self.map_info);
         }
     }
 }

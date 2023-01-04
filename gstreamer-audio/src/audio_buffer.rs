@@ -10,7 +10,7 @@ pub enum Writable {}
 pub struct AudioBuffer<T> {
     // Has to be boxed because it contains self-references
     audio_buffer: Box<ffi::GstAudioBuffer>,
-    buffer: Option<gst::Buffer>,
+    buffer: gst::Buffer,
     info: crate::AudioInfo,
     phantom: PhantomData<T>,
 }
@@ -34,8 +34,8 @@ impl<T> AudioBuffer<T> {
         &self.info
     }
 
-    pub fn into_buffer(mut self) -> gst::Buffer {
-        self.buffer.take().unwrap()
+    pub fn into_buffer(self) -> gst::Buffer {
+        unsafe { ptr::read(&mem::ManuallyDrop::new(self).buffer) }
     }
 
     pub fn format(&self) -> crate::AudioFormat {
@@ -114,9 +114,9 @@ impl<T> AudioBuffer<T> {
         let info = self.info.clone();
         AudioBufferRef {
             audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::from(&*self.audio_buffer)),
-            buffer: Some(self.buffer()),
             info,
             unmap: false,
+            phantom: PhantomData,
         }
     }
 
@@ -159,7 +159,7 @@ impl AudioBuffer<Readable> {
                 );
                 Ok(Self {
                     audio_buffer,
-                    buffer: Some(buffer),
+                    buffer,
                     info,
                     phantom: PhantomData,
                 })
@@ -194,7 +194,7 @@ impl AudioBuffer<Writable> {
                 );
                 Ok(Self {
                     audio_buffer,
-                    buffer: Some(buffer),
+                    buffer,
                     info,
                     phantom: PhantomData,
                 })
@@ -225,9 +225,9 @@ impl AudioBuffer<Writable> {
         let info = self.info.clone();
         AudioBufferRef {
             audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::from(&mut *self.audio_buffer)),
-            buffer: Some(self.buffer_mut()),
             info,
             unmap: false,
+            phantom: PhantomData,
         }
     }
 
@@ -266,9 +266,9 @@ impl ops::DerefMut for AudioBufferPtr {
 pub struct AudioBufferRef<T> {
     // Has to be boxed because it contains self-references
     audio_buffer: AudioBufferPtr,
-    buffer: Option<T>,
     info: crate::AudioInfo,
     unmap: bool,
+    phantom: PhantomData<T>,
 }
 
 impl<T> AudioBufferRef<T> {
@@ -360,14 +360,13 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
         let info = crate::AudioInfo::from_glib_none(
             &(*audio_buffer).info as *const _ as *mut ffi::GstAudioInfo,
         );
-        let buffer = gst::BufferRef::from_ptr((*audio_buffer).buffer);
         Borrowed::new(Self {
             audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::new_unchecked(
                 audio_buffer as *mut _,
             )),
-            buffer: Some(buffer),
             info,
             unmap: false,
+            phantom: PhantomData,
         })
     }
 
@@ -396,16 +395,16 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
                 );
                 Ok(Self {
                     audio_buffer: AudioBufferPtr::Owned(audio_buffer),
-                    buffer: Some(buffer),
                     info,
                     unmap: true,
+                    phantom: PhantomData,
                 })
             }
         }
     }
 
     pub fn buffer(&self) -> &gst::BufferRef {
-        self.buffer.as_ref().unwrap()
+        unsafe { gst::BufferRef::from_ptr(self.audio_buffer.buffer) }
     }
 }
 
@@ -416,12 +415,11 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
         let info = crate::AudioInfo::from_glib_none(
             &(*audio_buffer).info as *const _ as *mut ffi::GstAudioInfo,
         );
-        let buffer = gst::BufferRef::from_mut_ptr((*audio_buffer).buffer);
         Borrowed::new(Self {
             audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::new_unchecked(audio_buffer)),
-            buffer: Some(buffer),
             info,
             unmap: false,
+            phantom: PhantomData,
         })
     }
 
@@ -450,16 +448,16 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
                 );
                 Ok(Self {
                     audio_buffer: AudioBufferPtr::Owned(audio_buffer),
-                    buffer: Some(buffer),
                     info,
                     unmap: true,
+                    phantom: PhantomData,
                 })
             }
         }
     }
 
     pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
-        self.buffer.as_mut().unwrap()
+        unsafe { gst::BufferRef::from_mut_ptr(self.audio_buffer.buffer) }
     }
 
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
