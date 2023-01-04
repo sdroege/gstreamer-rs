@@ -166,8 +166,14 @@ impl Memory {
 
 impl MemoryRef {
     #[doc(alias = "get_allocator")]
-    pub fn allocator(&self) -> Option<Allocator> {
-        unsafe { from_glib_none(self.0.allocator) }
+    pub fn allocator(&self) -> Option<&Allocator> {
+        unsafe {
+            if self.0.allocator.is_null() {
+                None
+            } else {
+                Some(&*(&self.0.allocator as *const *mut ffi::GstAllocator as *const Allocator))
+            }
+        }
     }
 
     #[doc(alias = "get_parent")]

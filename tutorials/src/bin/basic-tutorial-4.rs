@@ -128,7 +128,7 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::Message) {
         MessageView::StateChanged(state_changed) => {
             if state_changed
                 .src()
-                .map(|s| s == custom_data.playbin)
+                .map(|s| s == &custom_data.playbin)
                 .unwrap_or(false)
             {
                 let new_state = state_changed.current();

@@ -98,7 +98,7 @@ fn tutorial_main() {
                 break;
             }
             MessageView::StateChanged(state_changed) => {
-                if state_changed.src().map(|s| s == pipeline).unwrap_or(false) {
+                if state_changed.src().map(|s| s == &pipeline).unwrap_or(false) {
                     println!(
                         "Pipeline state changed from {:?} to {:?}",
                         state_changed.old(),

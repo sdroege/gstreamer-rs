@@ -179,7 +179,7 @@ fn example_main() -> Result<(), Error> {
             }
             MessageView::StateChanged(s) => {
                 if let Some(element) = msg.src() {
-                    if element == pipeline && s.current() == gst::State::Playing {
+                    if element == &pipeline && s.current() == gst::State::Playing {
                         eprintln!("PLAYING");
                         gst::debug_bin_to_dot_file(
                             &pipeline,

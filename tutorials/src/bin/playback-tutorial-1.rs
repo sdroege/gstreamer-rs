@@ -155,7 +155,7 @@ fn tutorial_main() -> Result<(), Error> {
             MessageView::StateChanged(state_changed) => {
                 if state_changed
                     .src()
-                    .map(|s| s == playbin_clone)
+                    .map(|s| s == &playbin_clone)
                     .unwrap_or(false)
                     && state_changed.current() == gst::State::Playing
                 {

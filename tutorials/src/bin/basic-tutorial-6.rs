@@ -141,7 +141,7 @@ fn tutorial_main() {
             MessageView::StateChanged(state_changed) =>
             // We are only interested in state-changed messages from the pipeline
             {
-                if state_changed.src().map(|s| s == pipeline).unwrap_or(false) {
+                if state_changed.src().map(|s| s == &pipeline).unwrap_or(false) {
                     let new_state = state_changed.current();
                     let old_state = state_changed.old();
 

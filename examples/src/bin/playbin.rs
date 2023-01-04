@@ -121,7 +121,7 @@ fn example_main() {
             MessageView::StateChanged(state_changed) =>
             // We are only interested in state-changed messages from playbin
             {
-                if state_changed.src().map(|s| s == playbin).unwrap_or(false)
+                if state_changed.src().map(|s| s == &playbin).unwrap_or(false)
                     && state_changed.current() == gst::State::Playing
                 {
                     // Generate a dot graph of the pipeline to GST_DEBUG_DUMP_DOT_DIR if defined

@@ -239,11 +239,18 @@ impl ParamSpecArray {
         }
     }
 
-    pub fn element_spec(&self) -> Option<ParamSpec> {
+    pub fn element_spec(&self) -> Option<&ParamSpec> {
         unsafe {
             let ptr = self.as_ptr();
 
-            from_glib_none((*ptr).element_spec)
+            if (*ptr).element_spec.is_null() {
+                None
+            } else {
+                Some(
+                    &*(&(*ptr).element_spec as *const *mut glib::gobject_ffi::GParamSpec
+                        as *const glib::ParamSpec),
+                )
+            }
         }
     }
 

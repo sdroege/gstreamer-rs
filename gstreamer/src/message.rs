@@ -17,8 +17,14 @@ mini_object_wrapper!(Message, MessageRef, ffi::GstMessage, || {
 
 impl MessageRef {
     #[doc(alias = "get_src")]
-    pub fn src(&self) -> Option<Object> {
-        unsafe { from_glib_none((*self.as_ptr()).src) }
+    pub fn src(&self) -> Option<&Object> {
+        unsafe {
+            if (*self.as_ptr()).src.is_null() {
+                None
+            } else {
+                Some(&*(&(*self.as_ptr()).src as *const *mut ffi::GstObject as *const Object))
+            }
+        }
     }
 
     #[doc(alias = "get_seqnum")]

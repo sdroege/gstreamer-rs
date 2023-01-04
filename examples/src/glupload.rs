@@ -414,7 +414,7 @@ impl App {
                         let context_type = ctxt.context_type();
                         if context_type == *gst_gl::GL_DISPLAY_CONTEXT_TYPE {
                             if let Some(el) =
-                                msg.src().map(|s| s.downcast::<gst::Element>().unwrap())
+                                msg.src().map(|s| s.downcast_ref::<gst::Element>().unwrap())
                             {
                                 let context = gst::Context::new(context_type, true);
                                 context.set_gl_display(&gl_display);
@@ -423,7 +423,7 @@ impl App {
                         }
                         if context_type == "gst.gl.app_context" {
                             if let Some(el) =
-                                msg.src().map(|s| s.downcast::<gst::Element>().unwrap())
+                                msg.src().map(|s| s.downcast_ref::<gst::Element>().unwrap())
                             {
                                 let mut context = gst::Context::new(context_type, true);
                                 {
