@@ -273,6 +273,7 @@ impl AppSink {
     ///
     /// This method returns an instance of [`AppSinkBuilder`](crate::builders::AppSinkBuilder) which can be used to create [`AppSink`] objects.
     pub fn builder() -> AppSinkBuilder {
+        assert_initialized_main_thread!();
         AppSinkBuilder::default()
     }
 
