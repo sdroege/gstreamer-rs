@@ -216,6 +216,7 @@ impl AppSrc {
     ///
     /// This method returns an instance of [`AppSrcBuilder`](crate::builders::AppSrcBuilder) which can be used to create [`AppSrc`] objects.
     pub fn builder() -> AppSrcBuilder {
+        assert_initialized_main_thread!();
         AppSrcBuilder::default()
     }
 
