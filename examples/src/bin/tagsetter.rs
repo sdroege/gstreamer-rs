@@ -32,10 +32,9 @@ struct MissingElement(#[error(not(source))] String);
 #[derive(Debug, Display, Error)]
 #[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
 struct ErrorMessage {
-    src: String,
-    error: String,
-    debug: Option<String>,
-    source: glib::Error,
+    src: glib::GString,
+    error: glib::Error,
+    debug: Option<glib::GString>,
 }
 
 fn example_main() -> Result<(), Error> {
@@ -90,14 +89,12 @@ fn example_main() -> Result<(), Error> {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
                 return Err(ErrorMessage {
-                    src: err
+                    src: msg
                         .src()
                         .map(|s| s.path_string())
-                        .unwrap_or_else(|| "None".into())
-                        .to_string(),
-                    error: err.error().to_string(),
+                        .unwrap_or_else(|| glib::GString::from("UNKNOWN")),
+                    error: err.error(),
                     debug: err.debug(),
-                    source: err.error(),
                 }
                 .into());
             }

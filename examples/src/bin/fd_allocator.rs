@@ -20,7 +20,6 @@ use std::{
 };
 
 use anyhow::Error;
-use derive_more::{Display, Error};
 use futures::StreamExt;
 use gst::{element_error, prelude::*};
 use memmap2::MmapMut;
@@ -28,15 +27,6 @@ use uds::UnixStreamExt;
 
 #[path = "../examples-common.rs"]
 mod examples_common;
-
-#[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
-struct ErrorMessage {
-    src: String,
-    error: String,
-    debug: Option<String>,
-    source: glib::Error,
-}
 
 fn create_receiver_pipeline(
     video_info: &gst_video::VideoInfo,

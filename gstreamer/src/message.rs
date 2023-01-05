@@ -339,7 +339,7 @@ impl Error {
 
     #[doc(alias = "get_debug")]
     #[doc(alias = "gst_message_parse_error")]
-    pub fn debug(&self) -> Option<String> {
+    pub fn debug(&self) -> Option<glib::GString> {
         unsafe {
             let mut debug = ptr::null_mut();
 
@@ -409,7 +409,7 @@ impl Warning {
 
     #[doc(alias = "get_debug")]
     #[doc(alias = "gst_message_parse_warning")]
-    pub fn debug(&self) -> Option<String> {
+    pub fn debug(&self) -> Option<glib::GString> {
         unsafe {
             let mut debug = ptr::null_mut();
 
@@ -479,7 +479,7 @@ impl Info {
 
     #[doc(alias = "get_debug")]
     #[doc(alias = "gst_message_parse_info")]
-    pub fn debug(&self) -> Option<String> {
+    pub fn debug(&self) -> Option<glib::GString> {
         unsafe {
             let mut debug = ptr::null_mut();
 

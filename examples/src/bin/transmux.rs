@@ -29,10 +29,9 @@ mod examples_common;
 #[derive(Debug, Display, Error)]
 #[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
 struct ErrorMessage {
-    src: String,
-    error: String,
-    debug: Option<String>,
-    source: glib::Error,
+    src: glib::GString,
+    error: glib::Error,
+    debug: Option<glib::GString>,
 }
 
 fn example_main() -> Result<(), Error> {
@@ -140,11 +139,10 @@ fn example_main() -> Result<(), Error> {
                 return Err(ErrorMessage {
                     src: msg
                         .src()
-                        .map(|s| String::from(s.path_string()))
-                        .unwrap_or_else(|| String::from("None")),
-                    error: err.error().to_string(),
+                        .map(|s| s.path_string())
+                        .unwrap_or_else(|| glib::GString::from("UNKNOWN")),
+                    error: err.error(),
                     debug: err.debug(),
-                    source: err.error(),
                 }
                 .into());
             }
