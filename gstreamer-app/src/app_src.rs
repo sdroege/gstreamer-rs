@@ -222,26 +222,34 @@ impl AppSrc {
 
     #[doc(alias = "gst_app_src_set_callbacks")]
     pub fn set_callbacks(&self, callbacks: AppSrcCallbacks) {
+        #[cfg(not(feature = "v1_18"))]
         use once_cell::sync::Lazy;
+        #[cfg(not(feature = "v1_18"))]
         static SET_ONCE_QUARK: Lazy<glib::Quark> =
             Lazy::new(|| glib::Quark::from_str("gstreamer-rs-app-src-callbacks"));
 
         unsafe {
             let src = self.to_glib_none().0;
-            // This is not thread-safe before 1.16.3, see
-            // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
-            if gst::version() < (1, 16, 3, 0) {
-                if !glib::gobject_ffi::g_object_get_qdata(src as *mut _, SET_ONCE_QUARK.into_glib())
+            #[cfg(not(feature = "v1_18"))]
+            {
+                // This is not thread-safe before 1.16.3, see
+                // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
+                if gst::version() < (1, 16, 3, 0) {
+                    if !glib::gobject_ffi::g_object_get_qdata(
+                        src as *mut _,
+                        SET_ONCE_QUARK.into_glib(),
+                    )
                     .is_null()
-                {
-                    panic!("AppSrc callbacks can only be set once");
-                }
+                    {
+                        panic!("AppSrc callbacks can only be set once");
+                    }
 
-                glib::gobject_ffi::g_object_set_qdata(
-                    src as *mut _,
-                    SET_ONCE_QUARK.into_glib(),
-                    1 as *mut _,
-                );
+                    glib::gobject_ffi::g_object_set_qdata(
+                        src as *mut _,
+                        SET_ONCE_QUARK.into_glib(),
+                        1 as *mut _,
+                    );
+                }
             }
 
             ffi::gst_app_src_set_callbacks(
@@ -600,11 +608,14 @@ impl AppSrcSink {
 
 impl Drop for AppSrcSink {
     fn drop(&mut self) {
-        // This is not thread-safe before 1.16.3, see
-        // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
-        if gst::version() >= (1, 16, 3, 0) {
-            if let Some(app_src) = self.app_src.upgrade() {
-                app_src.set_callbacks(AppSrcCallbacks::builder().build());
+        #[cfg(not(feature = "v1_18"))]
+        {
+            // This is not thread-safe before 1.16.3, see
+            // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
+            if gst::version() >= (1, 16, 3, 0) {
+                if let Some(app_src) = self.app_src.upgrade() {
+                    app_src.set_callbacks(AppSrcCallbacks::builder().build());
+                }
             }
         }
     }

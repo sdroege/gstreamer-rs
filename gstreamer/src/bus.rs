@@ -189,27 +189,35 @@ impl Bus {
     where
         F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static,
     {
+        #[cfg(not(feature = "v1_18"))]
         use once_cell::sync::Lazy;
+        #[cfg(not(feature = "v1_18"))]
         static SET_ONCE_QUARK: Lazy<glib::Quark> =
             Lazy::new(|| glib::Quark::from_str("gstreamer-rs-sync-handler"));
 
         unsafe {
             let bus = self.to_glib_none().0;
 
-            // This is not thread-safe before 1.16.3, see
-            // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/merge_requests/416
-            if crate::version() < (1, 16, 3, 0) {
-                if !glib::gobject_ffi::g_object_get_qdata(bus as *mut _, SET_ONCE_QUARK.into_glib())
+            #[cfg(not(feature = "v1_18"))]
+            {
+                // This is not thread-safe before 1.16.3, see
+                // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/merge_requests/416
+                if crate::version() < (1, 16, 3, 0) {
+                    if !glib::gobject_ffi::g_object_get_qdata(
+                        bus as *mut _,
+                        SET_ONCE_QUARK.into_glib(),
+                    )
                     .is_null()
-                {
-                    panic!("Bus sync handler can only be set once");
-                }
+                    {
+                        panic!("Bus sync handler can only be set once");
+                    }
 
-                glib::gobject_ffi::g_object_set_qdata(
-                    bus as *mut _,
-                    SET_ONCE_QUARK.into_glib(),
-                    1 as *mut _,
-                );
+                    glib::gobject_ffi::g_object_set_qdata(
+                        bus as *mut _,
+                        SET_ONCE_QUARK.into_glib(),
+                        1 as *mut _,
+                    );
+                }
             }
 
             ffi::gst_bus_set_sync_handler(
@@ -222,10 +230,13 @@ impl Bus {
     }
 
     pub fn unset_sync_handler(&self) {
-        // This is not thread-safe before 1.16.3, see
-        // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/merge_requests/416
-        if crate::version() < (1, 16, 3, 0) {
-            return;
+        #[cfg(not(feature = "v1_18"))]
+        {
+            // This is not thread-safe before 1.16.3, see
+            // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/merge_requests/416
+            if crate::version() < (1, 16, 3, 0) {
+                return;
+            }
         }
 
         unsafe {
