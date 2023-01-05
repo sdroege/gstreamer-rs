@@ -112,7 +112,7 @@ macro_rules! bitflags_deserialize_impl {
                             return Ok(Self::Value::empty());
                         }
 
-                        let mut gvalue = glib::Value::from_type(Self::Value::static_type());
+                        let mut gvalue = unsafe { glib::Value::from_type_unchecked(Self::Value::static_type()) };
                         let tokens = value.split('+');
                         let class = FlagsClass::new(Self::Value::static_type()).unwrap();
 

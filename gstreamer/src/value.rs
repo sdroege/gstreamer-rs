@@ -1306,7 +1306,7 @@ impl GstValueExt for glib::Value {
         assert_initialized_main_thread!();
 
         unsafe {
-            let mut value = glib::Value::from_type(pspec.value_type());
+            let mut value = glib::Value::from_type_unchecked(pspec.value_type());
             let ret: bool = from_glib(ffi::gst_value_deserialize_with_pspec(
                 value.to_glib_none_mut().0,
                 s.to_glib_none().0,

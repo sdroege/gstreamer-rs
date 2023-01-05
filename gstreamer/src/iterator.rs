@@ -64,7 +64,8 @@ where
     {
         unsafe {
             let func_box: Box<dyn Fn(T) -> bool + Send + Sync + 'static> = Box::new(func);
-            let mut closure_value = glib::Value::from_type(from_glib(filter_boxed_get_type::<T>()));
+            let mut closure_value =
+                glib::Value::from_type_unchecked(from_glib(filter_boxed_get_type::<T>()));
             glib::gobject_ffi::g_value_take_boxed(
                 closure_value.to_glib_none_mut().0,
                 Arc::into_raw(Arc::new(func_box)) as gpointer,
@@ -137,7 +138,7 @@ where
             let func_ptr = &mut func as *mut F as gpointer;
 
             let mut accum = Some(init);
-            let mut ret = glib::Value::from_type(glib::Type::POINTER);
+            let mut ret = glib::Value::from_type_unchecked(glib::Type::POINTER);
             glib::gobject_ffi::g_value_set_pointer(
                 ret.to_glib_none_mut().0,
                 &mut accum as *mut _ as gpointer,
