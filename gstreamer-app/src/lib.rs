@@ -10,6 +10,14 @@ pub use glib;
 pub use gst;
 pub use gst_base;
 
+macro_rules! assert_initialized_main_thread {
+    () => {
+        if !gst::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
+            gst::assert_initialized();
+        }
+    };
+}
+
 macro_rules! skip_assert_initialized {
     () => {};
 }

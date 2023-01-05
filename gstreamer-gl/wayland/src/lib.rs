@@ -15,8 +15,8 @@ pub use gst_gl;
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { gst::ffi::gst_is_initialized() } != glib::ffi::GTRUE {
-            panic!("GStreamer has not been initialized. Call `gst::init` first.");
+        if !gst::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
+            gst::assert_initialized();
         }
     };
 }

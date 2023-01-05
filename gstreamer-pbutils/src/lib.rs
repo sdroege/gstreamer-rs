@@ -16,12 +16,7 @@ static PBUTILS_INIT: Once = Once::new();
 macro_rules! assert_initialized_main_thread {
     () => {
         if !gst::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
-            #[allow(unused_unsafe)]
-            if unsafe { gst::ffi::gst_is_initialized() } != glib::ffi::GTRUE {
-                panic!("GStreamer has not been initialized. Call `gst::init` first.");
-            } else {
-                gst::INITIALIZED.store(true, std::sync::atomic::Ordering::SeqCst);
-            }
+            gst::assert_initialized();
         }
         crate::PBUTILS_INIT.call_once(|| {
             unsafe { ffi::gst_pb_utils_init() };

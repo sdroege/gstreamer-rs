@@ -13,12 +13,7 @@ pub use gst;
 macro_rules! assert_initialized_main_thread {
     () => {
         if !gst::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
-            #[allow(unused_unsafe)]
-            if unsafe { gst::ffi::gst_is_initialized() } != glib::ffi::GTRUE {
-                panic!("GStreamer has not been initialized. Call `gst::init` first.");
-            } else {
-                gst::INITIALIZED.store(true, std::sync::atomic::Ordering::SeqCst);
-            }
+            gst::assert_initialized();
         }
     };
 }

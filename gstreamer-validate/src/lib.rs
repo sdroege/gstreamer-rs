@@ -8,25 +8,25 @@
 #[doc(hidden)]
 pub static INITIALIZED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 
+#[cold]
+#[inline(never)]
+#[track_caller]
+pub fn assert_initialized() {
+    if unsafe { ffi::gst_validate_is_initialized() } != glib::ffi::GTRUE {
+        panic!("GStreamer Validate has not been initialized. Call `gst_validate::init` first.");
+    } else {
+        crate::INITIALIZED.store(true, std::sync::atomic::Ordering::SeqCst);
+    }
+}
+
 macro_rules! assert_initialized_main_thread {
     () => {
         if !gst::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
-            #[allow(unused_unsafe)]
-            if unsafe { gst::ffi::gst_is_initialized() } != glib::ffi::GTRUE {
-                panic!("GStreamer has not been initialized. Call `gst::init` first.");
-            } else {
-                gst::INITIALIZED.store(true, std::sync::atomic::Ordering::SeqCst);
-            }
+            gst::assert_initialized();
         }
 
         if !crate::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
-            if unsafe { ffi::gst_validate_is_initialized() } != glib::ffi::GTRUE {
-                panic!(
-                    "GStreamer Validate has not been initialized. Call `gst_validate::init` first."
-                );
-            } else {
-                crate::INITIALIZED.store(true, std::sync::atomic::Ordering::SeqCst);
-            }
+            $crate::assert_initialized();
         }
     };
 }

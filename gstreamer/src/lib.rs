@@ -15,15 +15,22 @@ pub use paste;
 #[doc(hidden)]
 pub static INITIALIZED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 
+#[cold]
+#[inline(never)]
+#[track_caller]
+pub fn assert_initialized() {
+    #[allow(unused_unsafe)]
+    if unsafe { ffi::gst_is_initialized() } != glib::ffi::GTRUE {
+        panic!("GStreamer has not been initialized. Call `gst::init` first.");
+    } else {
+        crate::INITIALIZED.store(true, std::sync::atomic::Ordering::SeqCst);
+    }
+}
+
 macro_rules! assert_initialized_main_thread {
     () => {
         if !crate::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
-            #[allow(unused_unsafe)]
-            if unsafe { ffi::gst_is_initialized() } != glib::ffi::GTRUE {
-                panic!("GStreamer has not been initialized. Call `gst::init` first.");
-            } else {
-                crate::INITIALIZED.store(true, std::sync::atomic::Ordering::SeqCst);
-            }
+            $crate::assert_initialized();
         }
     };
 }
