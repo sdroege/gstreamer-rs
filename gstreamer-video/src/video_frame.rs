@@ -268,7 +268,7 @@ impl VideoFrame<Readable> {
         assert!(info.is_valid());
 
         unsafe {
-            let mut frame = mem::MaybeUninit::zeroed();
+            let mut frame = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_video_frame_map(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
@@ -301,7 +301,7 @@ impl VideoFrame<Readable> {
         assert!(info.is_valid());
 
         unsafe {
-            let mut frame = mem::MaybeUninit::zeroed();
+            let mut frame = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_video_frame_map_id(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
@@ -340,7 +340,7 @@ impl VideoFrame<Writable> {
         assert!(info.is_valid());
 
         unsafe {
-            let mut frame = mem::MaybeUninit::zeroed();
+            let mut frame = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_video_frame_map(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
@@ -375,7 +375,7 @@ impl VideoFrame<Writable> {
         assert!(info.is_valid());
 
         unsafe {
-            let mut frame = mem::MaybeUninit::zeroed();
+            let mut frame = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_video_frame_map_id(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
@@ -693,7 +693,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         assert!(info.is_valid());
 
         unsafe {
-            let mut frame = mem::MaybeUninit::zeroed();
+            let mut frame = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_video_frame_map(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
@@ -726,7 +726,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         assert!(info.is_valid());
 
         unsafe {
-            let mut frame = mem::MaybeUninit::zeroed();
+            let mut frame = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_video_frame_map_id(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
@@ -788,7 +788,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         assert!(info.is_valid());
 
         unsafe {
-            let mut frame = mem::MaybeUninit::zeroed();
+            let mut frame = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_video_frame_map(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
@@ -823,7 +823,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         assert!(info.is_valid());
 
         unsafe {
-            let mut frame = mem::MaybeUninit::zeroed();
+            let mut frame = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_video_frame_map_id(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,

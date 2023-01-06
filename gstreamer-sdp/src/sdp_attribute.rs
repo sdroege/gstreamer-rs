@@ -15,7 +15,7 @@ impl SDPAttribute {
     pub fn new(key: &str, value: Option<&str>) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut attr = mem::MaybeUninit::zeroed();
+            let mut attr = mem::MaybeUninit::uninit();
             ffi::gst_sdp_attribute_set(
                 attr.as_mut_ptr(),
                 key.to_glib_none().0,

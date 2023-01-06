@@ -110,7 +110,7 @@ impl Buffer {
     #[doc(alias = "gst_buffer_map")]
     pub fn into_mapped_buffer_readable(self) -> Result<MappedBuffer<Readable>, Self> {
         unsafe {
-            let mut map_info = mem::MaybeUninit::zeroed();
+            let mut map_info = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_buffer_map(
                 self.as_mut_ptr(),
                 map_info.as_mut_ptr(),
@@ -131,7 +131,7 @@ impl Buffer {
     #[doc(alias = "gst_buffer_map")]
     pub fn into_mapped_buffer_writable(self) -> Result<MappedBuffer<Writable>, Self> {
         unsafe {
-            let mut map_info = mem::MaybeUninit::zeroed();
+            let mut map_info = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_buffer_map(
                 self.as_mut_ptr(),
                 map_info.as_mut_ptr(),
@@ -177,7 +177,7 @@ impl BufferRef {
     #[doc(alias = "gst_buffer_map")]
     pub fn map_readable(&self) -> Result<BufferMap<Readable>, glib::BoolError> {
         unsafe {
-            let mut map_info = mem::MaybeUninit::zeroed();
+            let mut map_info = mem::MaybeUninit::uninit();
             let res =
                 ffi::gst_buffer_map(self.as_mut_ptr(), map_info.as_mut_ptr(), ffi::GST_MAP_READ);
             if res == glib::ffi::GTRUE {
@@ -195,7 +195,7 @@ impl BufferRef {
     #[doc(alias = "gst_buffer_map")]
     pub fn map_writable(&mut self) -> Result<BufferMap<Writable>, glib::BoolError> {
         unsafe {
-            let mut map_info = mem::MaybeUninit::zeroed();
+            let mut map_info = mem::MaybeUninit::uninit();
             let res = ffi::gst_buffer_map(
                 self.as_mut_ptr(),
                 map_info.as_mut_ptr(),

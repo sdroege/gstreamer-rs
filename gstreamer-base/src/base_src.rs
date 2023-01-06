@@ -31,13 +31,13 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();
-            let mut params = mem::zeroed();
+            let mut params = mem::MaybeUninit::uninit();
             ffi::gst_base_src_get_allocator(
                 self.as_ref().to_glib_none().0,
                 &mut allocator,
-                &mut params,
+                params.as_mut_ptr(),
             );
-            (from_glib_full(allocator), params.into())
+            (from_glib_full(allocator), params.assume_init().into())
         }
     }
 

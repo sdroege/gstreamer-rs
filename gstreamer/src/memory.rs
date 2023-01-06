@@ -125,7 +125,7 @@ impl Memory {
 
     pub fn into_mapped_memory_readable(self) -> Result<MappedMemory<Readable>, Self> {
         unsafe {
-            let mut map_info = mem::MaybeUninit::zeroed();
+            let mut map_info = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_memory_map(
                 self.as_mut_ptr(),
                 map_info.as_mut_ptr(),
@@ -145,7 +145,7 @@ impl Memory {
 
     pub fn into_mapped_memory_writable(self) -> Result<MappedMemory<Writable>, Self> {
         unsafe {
-            let mut map_info = mem::MaybeUninit::zeroed();
+            let mut map_info = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_memory_map(
                 self.as_mut_ptr(),
                 map_info.as_mut_ptr(),
@@ -259,7 +259,7 @@ impl MemoryRef {
 
     pub fn map_readable(&self) -> Result<MemoryMap<Readable>, glib::BoolError> {
         unsafe {
-            let mut map_info = mem::MaybeUninit::zeroed();
+            let mut map_info = mem::MaybeUninit::uninit();
             let res =
                 ffi::gst_memory_map(self.as_mut_ptr(), map_info.as_mut_ptr(), ffi::GST_MAP_READ);
             if res == glib::ffi::GTRUE {
@@ -276,7 +276,7 @@ impl MemoryRef {
 
     pub fn map_writable(&mut self) -> Result<MemoryMap<Writable>, glib::BoolError> {
         unsafe {
-            let mut map_info = mem::MaybeUninit::zeroed();
+            let mut map_info = mem::MaybeUninit::uninit();
             let res = ffi::gst_memory_map(
                 self.as_mut_ptr(),
                 map_info.as_mut_ptr(),

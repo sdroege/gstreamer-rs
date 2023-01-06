@@ -107,7 +107,7 @@ impl VideoBufferPoolConfig for gst::BufferPoolConfigRef {
     #[doc(alias = "gst_buffer_pool_config_get_video_alignment")]
     fn video_alignment(&self) -> Option<VideoAlignment> {
         unsafe {
-            let mut alignment = mem::MaybeUninit::zeroed();
+            let mut alignment = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_buffer_pool_config_get_video_alignment(
                 self.as_ref().as_mut_ptr(),
                 alignment.as_mut_ptr(),

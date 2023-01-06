@@ -15,7 +15,7 @@ impl SDPZone {
     pub fn new(time: &str, typed_time: &str) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut zone = mem::MaybeUninit::zeroed();
+            let mut zone = mem::MaybeUninit::uninit();
             ffi::gst_sdp_zone_set(
                 zone.as_mut_ptr(),
                 time.to_glib_none().0,
@@ -50,7 +50,7 @@ impl Clone for SDPZone {
     fn clone(&self) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut zone = mem::MaybeUninit::zeroed();
+            let mut zone = mem::MaybeUninit::uninit();
             ffi::gst_sdp_zone_set(zone.as_mut_ptr(), self.0.time, self.0.typed_time);
             SDPZone(zone.assume_init())
         }

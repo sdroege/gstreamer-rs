@@ -15,7 +15,7 @@ impl SDPBandwidth {
     pub fn new(bwtype: &str, bandwidth: u32) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut bw = mem::MaybeUninit::zeroed();
+            let mut bw = mem::MaybeUninit::uninit();
             ffi::gst_sdp_bandwidth_set(bw.as_mut_ptr(), bwtype.to_glib_none().0, bandwidth);
             SDPBandwidth(bw.assume_init())
         }
@@ -40,7 +40,7 @@ impl Clone for SDPBandwidth {
     fn clone(&self) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut bw = mem::MaybeUninit::zeroed();
+            let mut bw = mem::MaybeUninit::uninit();
             ffi::gst_sdp_bandwidth_set(bw.as_mut_ptr(), self.0.bwtype, self.0.bandwidth);
             SDPBandwidth(bw.assume_init())
         }

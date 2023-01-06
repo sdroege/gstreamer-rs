@@ -15,7 +15,7 @@ impl SDPTime {
     pub fn new(start: &str, stop: &str, repeat: &[&str]) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut time = mem::MaybeUninit::zeroed();
+            let mut time = mem::MaybeUninit::uninit();
             ffi::gst_sdp_time_set(
                 time.as_mut_ptr(),
                 start.to_glib_none().0,
@@ -69,7 +69,7 @@ impl Clone for SDPTime {
         assert_initialized_main_thread!();
         #[allow(clippy::cast_ptr_alignment)]
         unsafe {
-            let mut time = mem::MaybeUninit::zeroed();
+            let mut time = mem::MaybeUninit::uninit();
             ffi::gst_sdp_time_set(
                 time.as_mut_ptr(),
                 self.0.start,

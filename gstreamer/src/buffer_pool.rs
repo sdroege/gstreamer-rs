@@ -207,7 +207,7 @@ impl BufferPoolConfigRef {
     pub fn allocator(&self) -> Option<(Option<Allocator>, AllocationParams)> {
         unsafe {
             let mut allocator = ptr::null_mut();
-            let mut params = mem::MaybeUninit::zeroed();
+            let mut params = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_buffer_pool_config_get_allocator(
                 self.0.as_mut_ptr(),
                 &mut allocator,

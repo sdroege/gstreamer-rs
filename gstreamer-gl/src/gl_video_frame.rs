@@ -62,7 +62,7 @@ impl<'a> VideoFrameGLExt for gst_video::VideoFrameRef<&'a gst::BufferRef> {
         }
 
         unsafe {
-            let mut frame = mem::MaybeUninit::zeroed();
+            let mut frame = mem::MaybeUninit::uninit();
             let res: bool = from_glib(gst_video::ffi::gst_video_frame_map(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
@@ -108,7 +108,7 @@ impl<'a> VideoFrameGLExt for gst_video::VideoFrameRef<&'a gst::BufferRef> {
         }
 
         unsafe {
-            let mut frame = mem::MaybeUninit::zeroed();
+            let mut frame = mem::MaybeUninit::uninit();
             let res: bool = from_glib(gst_video::ffi::gst_video_frame_map(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,

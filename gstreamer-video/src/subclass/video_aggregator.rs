@@ -126,7 +126,7 @@ impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoAggregatorClass;
             (*parent_class).find_best_format.and_then(|f| {
-                let mut info = mem::MaybeUninit::zeroed();
+                let mut info = mem::MaybeUninit::uninit();
                 ffi::gst_video_info_init(info.as_mut_ptr());
                 let mut info = info.assume_init();
 

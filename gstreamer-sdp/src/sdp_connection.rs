@@ -15,7 +15,7 @@ impl SDPConnection {
     pub fn new(nettype: &str, addrtype: &str, address: &str, ttl: u32, addr_number: u32) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut conn = mem::MaybeUninit::zeroed();
+            let mut conn = mem::MaybeUninit::uninit();
             ffi::gst_sdp_connection_set(
                 conn.as_mut_ptr(),
                 nettype.to_glib_none().0,
@@ -71,7 +71,7 @@ impl Clone for SDPConnection {
     fn clone(&self) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut conn = mem::MaybeUninit::zeroed();
+            let mut conn = mem::MaybeUninit::uninit();
             ffi::gst_sdp_connection_set(
                 conn.as_mut_ptr(),
                 self.0.nettype,

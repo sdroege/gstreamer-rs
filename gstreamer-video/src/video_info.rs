@@ -158,7 +158,7 @@ impl str::FromStr for crate::VideoColorimetry {
         assert_initialized_main_thread!();
 
         unsafe {
-            let mut colorimetry = mem::MaybeUninit::zeroed();
+            let mut colorimetry = mem::MaybeUninit::uninit();
             let valid: bool = from_glib(ffi::gst_video_colorimetry_from_string(
                 colorimetry.as_mut_ptr(),
                 s.to_glib_none().0,

@@ -76,7 +76,7 @@ impl<T: FormattedValueIntrinsic> FormattedSegment<T> {
     pub fn new() -> Self {
         assert_initialized_main_thread!();
         let segment = unsafe {
-            let mut segment = mem::MaybeUninit::zeroed();
+            let mut segment = mem::MaybeUninit::uninit();
             ffi::gst_segment_init(segment.as_mut_ptr(), T::default_format().into_glib());
             segment.assume_init()
         };

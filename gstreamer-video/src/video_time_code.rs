@@ -77,7 +77,7 @@ impl VideoTimeCode {
     ) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut v = mem::MaybeUninit::zeroed();
+            let mut v = mem::MaybeUninit::uninit();
             ffi::gst_video_time_code_init(
                 v.as_mut_ptr(),
                 fps.numer() as u32,

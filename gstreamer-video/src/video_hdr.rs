@@ -47,7 +47,7 @@ impl VideoContentLightLevel {
         skip_assert_initialized!();
 
         unsafe {
-            let mut info = mem::MaybeUninit::zeroed();
+            let mut info = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_video_content_light_level_from_caps(
                 info.as_mut_ptr(),
                 caps.as_ptr(),
@@ -101,7 +101,7 @@ impl str::FromStr for VideoContentLightLevel {
         assert_initialized_main_thread!();
 
         unsafe {
-            let mut colorimetry = mem::MaybeUninit::zeroed();
+            let mut colorimetry = mem::MaybeUninit::uninit();
             let valid: bool = from_glib(ffi::gst_video_content_light_level_from_string(
                 colorimetry.as_mut_ptr(),
                 s.to_glib_none().0,
@@ -206,7 +206,7 @@ impl VideoMasteringDisplayInfo {
         skip_assert_initialized!();
 
         unsafe {
-            let mut info = mem::MaybeUninit::zeroed();
+            let mut info = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_video_mastering_display_info_from_caps(
                 info.as_mut_ptr(),
                 caps.as_ptr(),
@@ -254,7 +254,7 @@ impl str::FromStr for VideoMasteringDisplayInfo {
         assert_initialized_main_thread!();
 
         unsafe {
-            let mut colorimetry = mem::MaybeUninit::zeroed();
+            let mut colorimetry = mem::MaybeUninit::uninit();
             let valid: bool = from_glib(ffi::gst_video_mastering_display_info_from_string(
                 colorimetry.as_mut_ptr(),
                 s.to_glib_none().0,
