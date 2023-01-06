@@ -57,3 +57,5 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst::prelude::*;
 }
+
+pub mod subclass;
