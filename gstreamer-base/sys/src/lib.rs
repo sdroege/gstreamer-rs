@@ -30,8 +30,8 @@ pub const GST_AGGREGATOR_START_TIME_SELECTION_SET: GstAggregatorStartTimeSelecti
 // Constants
 pub const GST_BASE_PARSE_FLAG_DRAINING: c_int = 2;
 pub const GST_BASE_PARSE_FLAG_LOST_SYNC: c_int = 1;
-pub const GST_BASE_TRANSFORM_SINK_NAME: *const c_char = b"sink\0" as *const u8 as *const c_char;
-pub const GST_BASE_TRANSFORM_SRC_NAME: *const c_char = b"src\0" as *const u8 as *const c_char;
+pub const GST_BASE_TRANSFORM_SINK_NAME: &[u8] = b"sink\0";
+pub const GST_BASE_TRANSFORM_SRC_NAME: &[u8] = b"src\0";
 
 // Flags
 pub type GstBaseParseFrameFlags = c_uint;

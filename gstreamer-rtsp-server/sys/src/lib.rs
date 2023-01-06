@@ -57,31 +57,21 @@ pub const GST_RTSP_THREAD_TYPE_CLIENT: GstRTSPThreadType = 0;
 pub const GST_RTSP_THREAD_TYPE_MEDIA: GstRTSPThreadType = 1;
 
 // Constants
-pub const GST_RTSP_ADDRESS_POOL_ANY_IPV4: *const c_char =
-    b"0.0.0.0\0" as *const u8 as *const c_char;
-pub const GST_RTSP_ADDRESS_POOL_ANY_IPV6: *const c_char = b"::\0" as *const u8 as *const c_char;
-pub const GST_RTSP_AUTH_CHECK_CONNECT: *const c_char =
-    b"auth.check.connect\0" as *const u8 as *const c_char;
-pub const GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS: *const c_char =
-    b"auth.check.media.factory.access\0" as *const u8 as *const c_char;
-pub const GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT: *const c_char =
-    b"auth.check.media.factory.construct\0" as *const u8 as *const c_char;
-pub const GST_RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS: *const c_char =
-    b"auth.check.transport.client-settings\0" as *const u8 as *const c_char;
-pub const GST_RTSP_AUTH_CHECK_URL: *const c_char =
-    b"auth.check.url\0" as *const u8 as *const c_char;
-pub const GST_RTSP_ONVIF_BACKCHANNEL_REQUIREMENT: *const c_char =
-    b"www.onvif.org/ver20/backchannel\0" as *const u8 as *const c_char;
-pub const GST_RTSP_ONVIF_REPLAY_REQUIREMENT: *const c_char =
-    b"onvif-replay\0" as *const u8 as *const c_char;
-pub const GST_RTSP_PERM_MEDIA_FACTORY_ACCESS: *const c_char =
-    b"media.factory.access\0" as *const u8 as *const c_char;
-pub const GST_RTSP_PERM_MEDIA_FACTORY_CONSTRUCT: *const c_char =
-    b"media.factory.construct\0" as *const u8 as *const c_char;
-pub const GST_RTSP_TOKEN_MEDIA_FACTORY_ROLE: *const c_char =
-    b"media.factory.role\0" as *const u8 as *const c_char;
-pub const GST_RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS: *const c_char =
-    b"transport.client-settings\0" as *const u8 as *const c_char;
+pub const GST_RTSP_ADDRESS_POOL_ANY_IPV4: &[u8] = b"0.0.0.0\0";
+pub const GST_RTSP_ADDRESS_POOL_ANY_IPV6: &[u8] = b"::\0";
+pub const GST_RTSP_AUTH_CHECK_CONNECT: &[u8] = b"auth.check.connect\0";
+pub const GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS: &[u8] = b"auth.check.media.factory.access\0";
+pub const GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT: &[u8] =
+    b"auth.check.media.factory.construct\0";
+pub const GST_RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS: &[u8] =
+    b"auth.check.transport.client-settings\0";
+pub const GST_RTSP_AUTH_CHECK_URL: &[u8] = b"auth.check.url\0";
+pub const GST_RTSP_ONVIF_BACKCHANNEL_REQUIREMENT: &[u8] = b"www.onvif.org/ver20/backchannel\0";
+pub const GST_RTSP_ONVIF_REPLAY_REQUIREMENT: &[u8] = b"onvif-replay\0";
+pub const GST_RTSP_PERM_MEDIA_FACTORY_ACCESS: &[u8] = b"media.factory.access\0";
+pub const GST_RTSP_PERM_MEDIA_FACTORY_CONSTRUCT: &[u8] = b"media.factory.construct\0";
+pub const GST_RTSP_TOKEN_MEDIA_FACTORY_ROLE: &[u8] = b"media.factory.role\0";
+pub const GST_RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS: &[u8] = b"transport.client-settings\0";
 
 // Flags
 pub type GstRTSPAddressFlags = c_uint;

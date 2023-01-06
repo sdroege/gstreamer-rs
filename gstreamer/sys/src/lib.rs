@@ -424,50 +424,34 @@ pub const GST_URI_SINK: GstURIType = 1;
 pub const GST_URI_SRC: GstURIType = 2;
 
 // Constants
-pub const GST_ALLOCATOR_SYSMEM: *const c_char = b"SystemMemory\0" as *const u8 as *const c_char;
+pub const GST_ALLOCATOR_SYSMEM: &[u8] = b"SystemMemory\0";
 pub const GST_BUFFER_COPY_ALL: GstBufferCopyFlags = 15;
 pub const GST_BUFFER_COPY_METADATA: GstBufferCopyFlags = 7;
 pub const GST_BUFFER_OFFSET_NONE: u64 = 18446744073709551615;
 pub const GST_CAN_INLINE: c_int = 1;
-pub const GST_CAPS_FEATURE_MEMORY_SYSTEM_MEMORY: *const c_char =
-    b"memory:SystemMemory\0" as *const u8 as *const c_char;
+pub const GST_CAPS_FEATURE_MEMORY_SYSTEM_MEMORY: &[u8] = b"memory:SystemMemory\0";
 pub const GST_CLOCK_TIME_NONE: GstClockTime = 18446744073709551615;
 pub const GST_DEBUG_BG_MASK: c_int = 240;
 pub const GST_DEBUG_FG_MASK: c_int = 15;
 pub const GST_DEBUG_FORMAT_MASK: c_int = 65280;
-pub const GST_ELEMENT_FACTORY_KLASS_DECODER: *const c_char =
-    b"Decoder\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_DECRYPTOR: *const c_char =
-    b"Decryptor\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_DEMUXER: *const c_char =
-    b"Demuxer\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_DEPAYLOADER: *const c_char =
-    b"Depayloader\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_ENCODER: *const c_char =
-    b"Encoder\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_ENCRYPTOR: *const c_char =
-    b"Encryptor\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_FORMATTER: *const c_char =
-    b"Formatter\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_HARDWARE: *const c_char =
-    b"Hardware\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_AUDIO: *const c_char =
-    b"Audio\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_IMAGE: *const c_char =
-    b"Image\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_METADATA: *const c_char =
-    b"Metadata\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_SUBTITLE: *const c_char =
-    b"Subtitle\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_VIDEO: *const c_char =
-    b"Video\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_MUXER: *const c_char = b"Muxer\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_PARSER: *const c_char =
-    b"Parser\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_PAYLOADER: *const c_char =
-    b"Payloader\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_SINK: *const c_char = b"Sink\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_SRC: *const c_char = b"Source\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_DECODER: &[u8] = b"Decoder\0";
+pub const GST_ELEMENT_FACTORY_KLASS_DECRYPTOR: &[u8] = b"Decryptor\0";
+pub const GST_ELEMENT_FACTORY_KLASS_DEMUXER: &[u8] = b"Demuxer\0";
+pub const GST_ELEMENT_FACTORY_KLASS_DEPAYLOADER: &[u8] = b"Depayloader\0";
+pub const GST_ELEMENT_FACTORY_KLASS_ENCODER: &[u8] = b"Encoder\0";
+pub const GST_ELEMENT_FACTORY_KLASS_ENCRYPTOR: &[u8] = b"Encryptor\0";
+pub const GST_ELEMENT_FACTORY_KLASS_FORMATTER: &[u8] = b"Formatter\0";
+pub const GST_ELEMENT_FACTORY_KLASS_HARDWARE: &[u8] = b"Hardware\0";
+pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_AUDIO: &[u8] = b"Audio\0";
+pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_IMAGE: &[u8] = b"Image\0";
+pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_METADATA: &[u8] = b"Metadata\0";
+pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_SUBTITLE: &[u8] = b"Subtitle\0";
+pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_VIDEO: &[u8] = b"Video\0";
+pub const GST_ELEMENT_FACTORY_KLASS_MUXER: &[u8] = b"Muxer\0";
+pub const GST_ELEMENT_FACTORY_KLASS_PARSER: &[u8] = b"Parser\0";
+pub const GST_ELEMENT_FACTORY_KLASS_PAYLOADER: &[u8] = b"Payloader\0";
+pub const GST_ELEMENT_FACTORY_KLASS_SINK: &[u8] = b"Sink\0";
+pub const GST_ELEMENT_FACTORY_KLASS_SRC: &[u8] = b"Source\0";
 pub const GST_ELEMENT_FACTORY_TYPE_ANY: GstElementFactoryListType = 562949953421311;
 pub const GST_ELEMENT_FACTORY_TYPE_AUDIOVIDEO_SINKS: GstElementFactoryListType = 3940649673949188;
 pub const GST_ELEMENT_FACTORY_TYPE_AUDIO_ENCODER: GstElementFactoryListType = 1125899906842626;
@@ -493,27 +477,23 @@ pub const GST_ELEMENT_FACTORY_TYPE_PAYLOADER: GstElementFactoryListType = 128;
 pub const GST_ELEMENT_FACTORY_TYPE_SINK: GstElementFactoryListType = 4;
 pub const GST_ELEMENT_FACTORY_TYPE_SRC: GstElementFactoryListType = 8;
 pub const GST_ELEMENT_FACTORY_TYPE_VIDEO_ENCODER: GstElementFactoryListType = 2814749767106562;
-pub const GST_ELEMENT_METADATA_AUTHOR: *const c_char = b"author\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_METADATA_DESCRIPTION: *const c_char =
-    b"description\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_METADATA_DOC_URI: *const c_char = b"doc-uri\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_METADATA_ICON_NAME: *const c_char =
-    b"icon-name\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_METADATA_KLASS: *const c_char = b"klass\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_METADATA_LONGNAME: *const c_char =
-    b"long-name\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_METADATA_AUTHOR: &[u8] = b"author\0";
+pub const GST_ELEMENT_METADATA_DESCRIPTION: &[u8] = b"description\0";
+pub const GST_ELEMENT_METADATA_DOC_URI: &[u8] = b"doc-uri\0";
+pub const GST_ELEMENT_METADATA_ICON_NAME: &[u8] = b"icon-name\0";
+pub const GST_ELEMENT_METADATA_KLASS: &[u8] = b"klass\0";
+pub const GST_ELEMENT_METADATA_LONGNAME: &[u8] = b"long-name\0";
 pub const GST_EVENT_NUM_SHIFT: c_int = 8;
 pub const GST_EVENT_TYPE_BOTH: GstEventTypeFlags = 3;
 pub const GST_FLAG_SET_MASK_EXACT: c_uint = 4294967295;
 pub const GST_FORMAT_PERCENT_MAX: i64 = 1000000;
 pub const GST_FORMAT_PERCENT_SCALE: i64 = 10000;
 pub const GST_GROUP_ID_INVALID: c_int = 0;
-pub const GST_LICENSE_UNKNOWN: *const c_char = b"unknown\0" as *const u8 as *const c_char;
+pub const GST_LICENSE_UNKNOWN: &[u8] = b"unknown\0";
 pub const GST_LOCK_FLAG_READWRITE: GstLockFlags = 3;
 pub const GST_MAP_READWRITE: GstMapFlags = 3;
-pub const GST_META_TAG_MEMORY_REFERENCE_STR: *const c_char =
-    b"memory-reference\0" as *const u8 as *const c_char;
-pub const GST_META_TAG_MEMORY_STR: *const c_char = b"memory\0" as *const u8 as *const c_char;
+pub const GST_META_TAG_MEMORY_REFERENCE_STR: &[u8] = b"memory-reference\0";
+pub const GST_META_TAG_MEMORY_STR: &[u8] = b"memory\0";
 pub const GST_MSECOND: GstClockTimeDiff = 1000000;
 pub const GST_NSECOND: GstClockTimeDiff = 1;
 pub const GST_PARAM_CONDITIONALLY_AVAILABLE: c_int = 16384;
@@ -523,134 +503,98 @@ pub const GST_PARAM_MUTABLE_PAUSED: c_int = 2048;
 pub const GST_PARAM_MUTABLE_PLAYING: c_int = 4096;
 pub const GST_PARAM_MUTABLE_READY: c_int = 1024;
 pub const GST_PARAM_USER_SHIFT: c_int = 65536;
-pub const GST_PROTECTION_SYSTEM_ID_CAPS_FIELD: *const c_char =
-    b"protection-system\0" as *const u8 as *const c_char;
-pub const GST_PROTECTION_UNSPECIFIED_SYSTEM_ID: *const c_char =
-    b"unspecified-system-id\0" as *const u8 as *const c_char;
+pub const GST_PROTECTION_SYSTEM_ID_CAPS_FIELD: &[u8] = b"protection-system\0";
+pub const GST_PROTECTION_UNSPECIFIED_SYSTEM_ID: &[u8] = b"unspecified-system-id\0";
 pub const GST_QUERY_NUM_SHIFT: c_int = 8;
 pub const GST_QUERY_TYPE_BOTH: GstQueryTypeFlags = 3;
 pub const GST_SECOND: GstClockTimeDiff = 1000000000;
 pub const GST_SEGMENT_INSTANT_FLAGS: c_int = 912;
 pub const GST_SEQNUM_INVALID: c_int = 0;
-pub const GST_TAG_ALBUM: *const c_char = b"album\0" as *const u8 as *const c_char;
-pub const GST_TAG_ALBUM_ARTIST: *const c_char = b"album-artist\0" as *const u8 as *const c_char;
-pub const GST_TAG_ALBUM_ARTIST_SORTNAME: *const c_char =
-    b"album-artist-sortname\0" as *const u8 as *const c_char;
-pub const GST_TAG_ALBUM_GAIN: *const c_char =
-    b"replaygain-album-gain\0" as *const u8 as *const c_char;
-pub const GST_TAG_ALBUM_PEAK: *const c_char =
-    b"replaygain-album-peak\0" as *const u8 as *const c_char;
-pub const GST_TAG_ALBUM_SORTNAME: *const c_char = b"album-sortname\0" as *const u8 as *const c_char;
-pub const GST_TAG_ALBUM_VOLUME_COUNT: *const c_char =
-    b"album-disc-count\0" as *const u8 as *const c_char;
-pub const GST_TAG_ALBUM_VOLUME_NUMBER: *const c_char =
-    b"album-disc-number\0" as *const u8 as *const c_char;
-pub const GST_TAG_APPLICATION_DATA: *const c_char =
-    b"application-data\0" as *const u8 as *const c_char;
-pub const GST_TAG_APPLICATION_NAME: *const c_char =
-    b"application-name\0" as *const u8 as *const c_char;
-pub const GST_TAG_ARTIST: *const c_char = b"artist\0" as *const u8 as *const c_char;
-pub const GST_TAG_ARTIST_SORTNAME: *const c_char =
-    b"artist-sortname\0" as *const u8 as *const c_char;
-pub const GST_TAG_ATTACHMENT: *const c_char = b"attachment\0" as *const u8 as *const c_char;
-pub const GST_TAG_AUDIO_CODEC: *const c_char = b"audio-codec\0" as *const u8 as *const c_char;
-pub const GST_TAG_BEATS_PER_MINUTE: *const c_char =
-    b"beats-per-minute\0" as *const u8 as *const c_char;
-pub const GST_TAG_BITRATE: *const c_char = b"bitrate\0" as *const u8 as *const c_char;
-pub const GST_TAG_CODEC: *const c_char = b"codec\0" as *const u8 as *const c_char;
-pub const GST_TAG_COMMENT: *const c_char = b"comment\0" as *const u8 as *const c_char;
-pub const GST_TAG_COMPOSER: *const c_char = b"composer\0" as *const u8 as *const c_char;
-pub const GST_TAG_COMPOSER_SORTNAME: *const c_char =
-    b"composer-sortname\0" as *const u8 as *const c_char;
-pub const GST_TAG_CONDUCTOR: *const c_char = b"conductor\0" as *const u8 as *const c_char;
-pub const GST_TAG_CONTACT: *const c_char = b"contact\0" as *const u8 as *const c_char;
-pub const GST_TAG_CONTAINER_FORMAT: *const c_char =
-    b"container-format\0" as *const u8 as *const c_char;
-pub const GST_TAG_COPYRIGHT: *const c_char = b"copyright\0" as *const u8 as *const c_char;
-pub const GST_TAG_COPYRIGHT_URI: *const c_char = b"copyright-uri\0" as *const u8 as *const c_char;
-pub const GST_TAG_DATE: *const c_char = b"date\0" as *const u8 as *const c_char;
-pub const GST_TAG_DATE_TIME: *const c_char = b"datetime\0" as *const u8 as *const c_char;
-pub const GST_TAG_DESCRIPTION: *const c_char = b"description\0" as *const u8 as *const c_char;
-pub const GST_TAG_DEVICE_MANUFACTURER: *const c_char =
-    b"device-manufacturer\0" as *const u8 as *const c_char;
-pub const GST_TAG_DEVICE_MODEL: *const c_char = b"device-model\0" as *const u8 as *const c_char;
-pub const GST_TAG_DURATION: *const c_char = b"duration\0" as *const u8 as *const c_char;
-pub const GST_TAG_ENCODED_BY: *const c_char = b"encoded-by\0" as *const u8 as *const c_char;
-pub const GST_TAG_ENCODER: *const c_char = b"encoder\0" as *const u8 as *const c_char;
-pub const GST_TAG_ENCODER_VERSION: *const c_char =
-    b"encoder-version\0" as *const u8 as *const c_char;
-pub const GST_TAG_EXTENDED_COMMENT: *const c_char =
-    b"extended-comment\0" as *const u8 as *const c_char;
-pub const GST_TAG_GENRE: *const c_char = b"genre\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_CAPTURE_DIRECTION: *const c_char =
-    b"geo-location-capture-direction\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_CITY: *const c_char =
-    b"geo-location-city\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_COUNTRY: *const c_char =
-    b"geo-location-country\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_ELEVATION: *const c_char =
-    b"geo-location-elevation\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_HORIZONTAL_ERROR: *const c_char =
-    b"geo-location-horizontal-error\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_LATITUDE: *const c_char =
-    b"geo-location-latitude\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_LONGITUDE: *const c_char =
-    b"geo-location-longitude\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_MOVEMENT_DIRECTION: *const c_char =
-    b"geo-location-movement-direction\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_MOVEMENT_SPEED: *const c_char =
-    b"geo-location-movement-speed\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_NAME: *const c_char =
-    b"geo-location-name\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_SUBLOCATION: *const c_char =
-    b"geo-location-sublocation\0" as *const u8 as *const c_char;
-pub const GST_TAG_GROUPING: *const c_char = b"grouping\0" as *const u8 as *const c_char;
-pub const GST_TAG_HOMEPAGE: *const c_char = b"homepage\0" as *const u8 as *const c_char;
-pub const GST_TAG_IMAGE: *const c_char = b"image\0" as *const u8 as *const c_char;
-pub const GST_TAG_IMAGE_ORIENTATION: *const c_char =
-    b"image-orientation\0" as *const u8 as *const c_char;
-pub const GST_TAG_INTERPRETED_BY: *const c_char = b"interpreted-by\0" as *const u8 as *const c_char;
-pub const GST_TAG_ISRC: *const c_char = b"isrc\0" as *const u8 as *const c_char;
-pub const GST_TAG_KEYWORDS: *const c_char = b"keywords\0" as *const u8 as *const c_char;
-pub const GST_TAG_LANGUAGE_CODE: *const c_char = b"language-code\0" as *const u8 as *const c_char;
-pub const GST_TAG_LANGUAGE_NAME: *const c_char = b"language-name\0" as *const u8 as *const c_char;
-pub const GST_TAG_LICENSE: *const c_char = b"license\0" as *const u8 as *const c_char;
-pub const GST_TAG_LICENSE_URI: *const c_char = b"license-uri\0" as *const u8 as *const c_char;
-pub const GST_TAG_LOCATION: *const c_char = b"location\0" as *const u8 as *const c_char;
-pub const GST_TAG_LYRICS: *const c_char = b"lyrics\0" as *const u8 as *const c_char;
-pub const GST_TAG_MAXIMUM_BITRATE: *const c_char =
-    b"maximum-bitrate\0" as *const u8 as *const c_char;
-pub const GST_TAG_MIDI_BASE_NOTE: *const c_char = b"midi-base-note\0" as *const u8 as *const c_char;
-pub const GST_TAG_MINIMUM_BITRATE: *const c_char =
-    b"minimum-bitrate\0" as *const u8 as *const c_char;
-pub const GST_TAG_NOMINAL_BITRATE: *const c_char =
-    b"nominal-bitrate\0" as *const u8 as *const c_char;
-pub const GST_TAG_ORGANIZATION: *const c_char = b"organization\0" as *const u8 as *const c_char;
-pub const GST_TAG_PERFORMER: *const c_char = b"performer\0" as *const u8 as *const c_char;
-pub const GST_TAG_PREVIEW_IMAGE: *const c_char = b"preview-image\0" as *const u8 as *const c_char;
-pub const GST_TAG_PRIVATE_DATA: *const c_char = b"private-data\0" as *const u8 as *const c_char;
-pub const GST_TAG_PUBLISHER: *const c_char = b"publisher\0" as *const u8 as *const c_char;
-pub const GST_TAG_REFERENCE_LEVEL: *const c_char =
-    b"replaygain-reference-level\0" as *const u8 as *const c_char;
-pub const GST_TAG_SERIAL: *const c_char = b"serial\0" as *const u8 as *const c_char;
-pub const GST_TAG_SHOW_EPISODE_NUMBER: *const c_char =
-    b"show-episode-number\0" as *const u8 as *const c_char;
-pub const GST_TAG_SHOW_NAME: *const c_char = b"show-name\0" as *const u8 as *const c_char;
-pub const GST_TAG_SHOW_SEASON_NUMBER: *const c_char =
-    b"show-season-number\0" as *const u8 as *const c_char;
-pub const GST_TAG_SHOW_SORTNAME: *const c_char = b"show-sortname\0" as *const u8 as *const c_char;
-pub const GST_TAG_SUBTITLE_CODEC: *const c_char = b"subtitle-codec\0" as *const u8 as *const c_char;
-pub const GST_TAG_TITLE: *const c_char = b"title\0" as *const u8 as *const c_char;
-pub const GST_TAG_TITLE_SORTNAME: *const c_char = b"title-sortname\0" as *const u8 as *const c_char;
-pub const GST_TAG_TRACK_COUNT: *const c_char = b"track-count\0" as *const u8 as *const c_char;
-pub const GST_TAG_TRACK_GAIN: *const c_char =
-    b"replaygain-track-gain\0" as *const u8 as *const c_char;
-pub const GST_TAG_TRACK_NUMBER: *const c_char = b"track-number\0" as *const u8 as *const c_char;
-pub const GST_TAG_TRACK_PEAK: *const c_char =
-    b"replaygain-track-peak\0" as *const u8 as *const c_char;
-pub const GST_TAG_USER_RATING: *const c_char = b"user-rating\0" as *const u8 as *const c_char;
-pub const GST_TAG_VERSION: *const c_char = b"version\0" as *const u8 as *const c_char;
-pub const GST_TAG_VIDEO_CODEC: *const c_char = b"video-codec\0" as *const u8 as *const c_char;
+pub const GST_TAG_ALBUM: &[u8] = b"album\0";
+pub const GST_TAG_ALBUM_ARTIST: &[u8] = b"album-artist\0";
+pub const GST_TAG_ALBUM_ARTIST_SORTNAME: &[u8] = b"album-artist-sortname\0";
+pub const GST_TAG_ALBUM_GAIN: &[u8] = b"replaygain-album-gain\0";
+pub const GST_TAG_ALBUM_PEAK: &[u8] = b"replaygain-album-peak\0";
+pub const GST_TAG_ALBUM_SORTNAME: &[u8] = b"album-sortname\0";
+pub const GST_TAG_ALBUM_VOLUME_COUNT: &[u8] = b"album-disc-count\0";
+pub const GST_TAG_ALBUM_VOLUME_NUMBER: &[u8] = b"album-disc-number\0";
+pub const GST_TAG_APPLICATION_DATA: &[u8] = b"application-data\0";
+pub const GST_TAG_APPLICATION_NAME: &[u8] = b"application-name\0";
+pub const GST_TAG_ARTIST: &[u8] = b"artist\0";
+pub const GST_TAG_ARTIST_SORTNAME: &[u8] = b"artist-sortname\0";
+pub const GST_TAG_ATTACHMENT: &[u8] = b"attachment\0";
+pub const GST_TAG_AUDIO_CODEC: &[u8] = b"audio-codec\0";
+pub const GST_TAG_BEATS_PER_MINUTE: &[u8] = b"beats-per-minute\0";
+pub const GST_TAG_BITRATE: &[u8] = b"bitrate\0";
+pub const GST_TAG_CODEC: &[u8] = b"codec\0";
+pub const GST_TAG_COMMENT: &[u8] = b"comment\0";
+pub const GST_TAG_COMPOSER: &[u8] = b"composer\0";
+pub const GST_TAG_COMPOSER_SORTNAME: &[u8] = b"composer-sortname\0";
+pub const GST_TAG_CONDUCTOR: &[u8] = b"conductor\0";
+pub const GST_TAG_CONTACT: &[u8] = b"contact\0";
+pub const GST_TAG_CONTAINER_FORMAT: &[u8] = b"container-format\0";
+pub const GST_TAG_COPYRIGHT: &[u8] = b"copyright\0";
+pub const GST_TAG_COPYRIGHT_URI: &[u8] = b"copyright-uri\0";
+pub const GST_TAG_DATE: &[u8] = b"date\0";
+pub const GST_TAG_DATE_TIME: &[u8] = b"datetime\0";
+pub const GST_TAG_DESCRIPTION: &[u8] = b"description\0";
+pub const GST_TAG_DEVICE_MANUFACTURER: &[u8] = b"device-manufacturer\0";
+pub const GST_TAG_DEVICE_MODEL: &[u8] = b"device-model\0";
+pub const GST_TAG_DURATION: &[u8] = b"duration\0";
+pub const GST_TAG_ENCODED_BY: &[u8] = b"encoded-by\0";
+pub const GST_TAG_ENCODER: &[u8] = b"encoder\0";
+pub const GST_TAG_ENCODER_VERSION: &[u8] = b"encoder-version\0";
+pub const GST_TAG_EXTENDED_COMMENT: &[u8] = b"extended-comment\0";
+pub const GST_TAG_GENRE: &[u8] = b"genre\0";
+pub const GST_TAG_GEO_LOCATION_CAPTURE_DIRECTION: &[u8] = b"geo-location-capture-direction\0";
+pub const GST_TAG_GEO_LOCATION_CITY: &[u8] = b"geo-location-city\0";
+pub const GST_TAG_GEO_LOCATION_COUNTRY: &[u8] = b"geo-location-country\0";
+pub const GST_TAG_GEO_LOCATION_ELEVATION: &[u8] = b"geo-location-elevation\0";
+pub const GST_TAG_GEO_LOCATION_HORIZONTAL_ERROR: &[u8] = b"geo-location-horizontal-error\0";
+pub const GST_TAG_GEO_LOCATION_LATITUDE: &[u8] = b"geo-location-latitude\0";
+pub const GST_TAG_GEO_LOCATION_LONGITUDE: &[u8] = b"geo-location-longitude\0";
+pub const GST_TAG_GEO_LOCATION_MOVEMENT_DIRECTION: &[u8] = b"geo-location-movement-direction\0";
+pub const GST_TAG_GEO_LOCATION_MOVEMENT_SPEED: &[u8] = b"geo-location-movement-speed\0";
+pub const GST_TAG_GEO_LOCATION_NAME: &[u8] = b"geo-location-name\0";
+pub const GST_TAG_GEO_LOCATION_SUBLOCATION: &[u8] = b"geo-location-sublocation\0";
+pub const GST_TAG_GROUPING: &[u8] = b"grouping\0";
+pub const GST_TAG_HOMEPAGE: &[u8] = b"homepage\0";
+pub const GST_TAG_IMAGE: &[u8] = b"image\0";
+pub const GST_TAG_IMAGE_ORIENTATION: &[u8] = b"image-orientation\0";
+pub const GST_TAG_INTERPRETED_BY: &[u8] = b"interpreted-by\0";
+pub const GST_TAG_ISRC: &[u8] = b"isrc\0";
+pub const GST_TAG_KEYWORDS: &[u8] = b"keywords\0";
+pub const GST_TAG_LANGUAGE_CODE: &[u8] = b"language-code\0";
+pub const GST_TAG_LANGUAGE_NAME: &[u8] = b"language-name\0";
+pub const GST_TAG_LICENSE: &[u8] = b"license\0";
+pub const GST_TAG_LICENSE_URI: &[u8] = b"license-uri\0";
+pub const GST_TAG_LOCATION: &[u8] = b"location\0";
+pub const GST_TAG_LYRICS: &[u8] = b"lyrics\0";
+pub const GST_TAG_MAXIMUM_BITRATE: &[u8] = b"maximum-bitrate\0";
+pub const GST_TAG_MIDI_BASE_NOTE: &[u8] = b"midi-base-note\0";
+pub const GST_TAG_MINIMUM_BITRATE: &[u8] = b"minimum-bitrate\0";
+pub const GST_TAG_NOMINAL_BITRATE: &[u8] = b"nominal-bitrate\0";
+pub const GST_TAG_ORGANIZATION: &[u8] = b"organization\0";
+pub const GST_TAG_PERFORMER: &[u8] = b"performer\0";
+pub const GST_TAG_PREVIEW_IMAGE: &[u8] = b"preview-image\0";
+pub const GST_TAG_PRIVATE_DATA: &[u8] = b"private-data\0";
+pub const GST_TAG_PUBLISHER: &[u8] = b"publisher\0";
+pub const GST_TAG_REFERENCE_LEVEL: &[u8] = b"replaygain-reference-level\0";
+pub const GST_TAG_SERIAL: &[u8] = b"serial\0";
+pub const GST_TAG_SHOW_EPISODE_NUMBER: &[u8] = b"show-episode-number\0";
+pub const GST_TAG_SHOW_NAME: &[u8] = b"show-name\0";
+pub const GST_TAG_SHOW_SEASON_NUMBER: &[u8] = b"show-season-number\0";
+pub const GST_TAG_SHOW_SORTNAME: &[u8] = b"show-sortname\0";
+pub const GST_TAG_SUBTITLE_CODEC: &[u8] = b"subtitle-codec\0";
+pub const GST_TAG_TITLE: &[u8] = b"title\0";
+pub const GST_TAG_TITLE_SORTNAME: &[u8] = b"title-sortname\0";
+pub const GST_TAG_TRACK_COUNT: &[u8] = b"track-count\0";
+pub const GST_TAG_TRACK_GAIN: &[u8] = b"replaygain-track-gain\0";
+pub const GST_TAG_TRACK_NUMBER: &[u8] = b"track-number\0";
+pub const GST_TAG_TRACK_PEAK: &[u8] = b"replaygain-track-peak\0";
+pub const GST_TAG_USER_RATING: &[u8] = b"user-rating\0";
+pub const GST_TAG_VERSION: &[u8] = b"version\0";
+pub const GST_TAG_VIDEO_CODEC: &[u8] = b"video-codec\0";
 pub const GST_TOC_REPEAT_COUNT_INFINITE: c_int = -1;
 pub const GST_URI_NO_PORT: c_int = 0;
 pub const GST_USECOND: GstClockTimeDiff = 1000;

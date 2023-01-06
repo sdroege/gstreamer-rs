@@ -6,8 +6,8 @@
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 use glib::{error::ErrorDomain, Quark};
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
-use std::{ffi::CStr, fmt};
+use glib::{translate::*, value::FromValue, value::ToValue, GStr, StaticType, Type};
+use std::fmt;
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -1679,15 +1679,13 @@ pub enum WebRTCSDPType {
 }
 
 impl WebRTCSDPType {
-    pub fn to_str<'a>(self) -> &'a str {
+    pub fn to_str<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_webrtc_sdp_type_to_string(self.into_glib())
                     .as_ref()
                     .expect("gst_webrtc_sdp_type_to_string returned NULL"),
             )
-            .to_str()
-            .expect("gst_webrtc_sdp_type_to_string returned an invalid string")
         }
     }
 }

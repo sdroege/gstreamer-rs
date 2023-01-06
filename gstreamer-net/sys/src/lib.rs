@@ -24,14 +24,11 @@ use glib::{gboolean, gconstpointer, gpointer, GType};
 // Constants
 pub const GST_NET_TIME_PACKET_SIZE: c_int = 16;
 pub const GST_PTP_CLOCK_ID_NONE: u64 = 18446744073709551615;
-pub const GST_PTP_STATISTICS_BEST_MASTER_CLOCK_SELECTED: *const c_char =
-    b"GstPtpStatisticsBestMasterClockSelected\0" as *const u8 as *const c_char;
-pub const GST_PTP_STATISTICS_NEW_DOMAIN_FOUND: *const c_char =
-    b"GstPtpStatisticsNewDomainFound\0" as *const u8 as *const c_char;
-pub const GST_PTP_STATISTICS_PATH_DELAY_MEASURED: *const c_char =
-    b"GstPtpStatisticsPathDelayMeasured\0" as *const u8 as *const c_char;
-pub const GST_PTP_STATISTICS_TIME_UPDATED: *const c_char =
-    b"GstPtpStatisticsTimeUpdated\0" as *const u8 as *const c_char;
+pub const GST_PTP_STATISTICS_BEST_MASTER_CLOCK_SELECTED: &[u8] =
+    b"GstPtpStatisticsBestMasterClockSelected\0";
+pub const GST_PTP_STATISTICS_NEW_DOMAIN_FOUND: &[u8] = b"GstPtpStatisticsNewDomainFound\0";
+pub const GST_PTP_STATISTICS_PATH_DELAY_MEASURED: &[u8] = b"GstPtpStatisticsPathDelayMeasured\0";
+pub const GST_PTP_STATISTICS_TIME_UPDATED: &[u8] = b"GstPtpStatisticsTimeUpdated\0";
 
 // Callbacks
 pub type GstPtpStatisticsCallback =

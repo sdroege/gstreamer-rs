@@ -3,10 +3,13 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+use glib::GStr;
 use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-use std::{ffi::CStr, fmt};
+use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -119,15 +122,13 @@ pub enum Edge {
 impl Edge {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::ges_edge_name(self.into_glib())
                     .as_ref()
                     .expect("ges_edge_name returned NULL"),
             )
-            .to_str()
-            .expect("ges_edge_name returned an invalid string")
         }
     }
 }
@@ -236,15 +237,13 @@ pub enum EditMode {
 impl EditMode {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::ges_edit_mode_name(self.into_glib())
                     .as_ref()
                     .expect("ges_edit_mode_name returned NULL"),
             )
-            .to_str()
-            .expect("ges_edit_mode_name returned an invalid string")
         }
     }
 }

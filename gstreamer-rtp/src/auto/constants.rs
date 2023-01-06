@@ -3,255 +3,117 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use std::ffi::CStr;
+use glib::GStr;
 
 #[doc(alias = "GST_RTP_HDREXT_BASE")]
-pub static RTP_HDREXT_BASE: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_HDREXT_BASE).to_str().unwrap()
-    });
+pub static RTP_HDREXT_BASE: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_HDREXT_BASE) };
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 #[doc(alias = "GST_RTP_HDREXT_ELEMENT_CLASS")]
-pub static RTP_HDREXT_ELEMENT_CLASS: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_HDREXT_ELEMENT_CLASS)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_HDREXT_ELEMENT_CLASS: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_HDREXT_ELEMENT_CLASS) };
 #[doc(alias = "GST_RTP_HDREXT_NTP_56")]
-pub static RTP_HDREXT_NTP_56: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_HDREXT_NTP_56).to_str().unwrap()
-    });
+pub static RTP_HDREXT_NTP_56: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_HDREXT_NTP_56) };
 #[doc(alias = "GST_RTP_HDREXT_NTP_64")]
-pub static RTP_HDREXT_NTP_64: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_HDREXT_NTP_64).to_str().unwrap()
-    });
+pub static RTP_HDREXT_NTP_64: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_HDREXT_NTP_64) };
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 #[doc(alias = "GST_RTP_HEADER_EXTENSION_URI_METADATA_KEY")]
-pub static RTP_HEADER_EXTENSION_URI_METADATA_KEY: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_HEADER_EXTENSION_URI_METADATA_KEY)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_HEADER_EXTENSION_URI_METADATA_KEY: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_HEADER_EXTENSION_URI_METADATA_KEY) };
 #[doc(alias = "GST_RTP_PAYLOAD_1016_STRING")]
-pub static RTP_PAYLOAD_1016_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_1016_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_1016_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_1016_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_CELLB_STRING")]
-pub static RTP_PAYLOAD_CELLB_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_CELLB_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_CELLB_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_CELLB_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_CN_STRING")]
-pub static RTP_PAYLOAD_CN_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_CN_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_CN_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_CN_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_DVI4_11025_STRING")]
-pub static RTP_PAYLOAD_DVI4_11025_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_DVI4_11025_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_DVI4_11025_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_DVI4_11025_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_DVI4_16000_STRING")]
-pub static RTP_PAYLOAD_DVI4_16000_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_DVI4_16000_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_DVI4_16000_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_DVI4_16000_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_DVI4_22050_STRING")]
-pub static RTP_PAYLOAD_DVI4_22050_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_DVI4_22050_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_DVI4_22050_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_DVI4_22050_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_DVI4_8000_STRING")]
-pub static RTP_PAYLOAD_DVI4_8000_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_DVI4_8000_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_DVI4_8000_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_DVI4_8000_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_DYNAMIC_STRING")]
-pub static RTP_PAYLOAD_DYNAMIC_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_DYNAMIC_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_DYNAMIC_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_DYNAMIC_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_G721_STRING")]
-pub static RTP_PAYLOAD_G721_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_G721_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_G721_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_G721_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_G722_STRING")]
-pub static RTP_PAYLOAD_G722_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_G722_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_G722_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_G722_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_G723_53_STRING")]
-pub static RTP_PAYLOAD_G723_53_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_G723_53_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_G723_53_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_G723_53_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_G723_63_STRING")]
-pub static RTP_PAYLOAD_G723_63_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_G723_63_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_G723_63_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_G723_63_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_G723_STRING")]
-pub static RTP_PAYLOAD_G723_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_G723_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_G723_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_G723_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_G728_STRING")]
-pub static RTP_PAYLOAD_G728_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_G728_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_G728_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_G728_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_G729_STRING")]
-pub static RTP_PAYLOAD_G729_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_G729_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_G729_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_G729_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_GSM_STRING")]
-pub static RTP_PAYLOAD_GSM_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_GSM_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_GSM_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_GSM_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_H261_STRING")]
-pub static RTP_PAYLOAD_H261_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_H261_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_H261_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_H261_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_H263_STRING")]
-pub static RTP_PAYLOAD_H263_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_H263_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_H263_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_H263_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_JPEG_STRING")]
-pub static RTP_PAYLOAD_JPEG_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_JPEG_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_JPEG_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_JPEG_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_L16_MONO_STRING")]
-pub static RTP_PAYLOAD_L16_MONO_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_L16_MONO_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_L16_MONO_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_L16_MONO_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_L16_STEREO_STRING")]
-pub static RTP_PAYLOAD_L16_STEREO_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_L16_STEREO_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_L16_STEREO_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_L16_STEREO_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_LPC_STRING")]
-pub static RTP_PAYLOAD_LPC_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_LPC_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_LPC_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_LPC_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_MP2T_STRING")]
-pub static RTP_PAYLOAD_MP2T_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_MP2T_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_MP2T_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_MP2T_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_MPA_STRING")]
-pub static RTP_PAYLOAD_MPA_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_MPA_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_MPA_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_MPA_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_MPV_STRING")]
-pub static RTP_PAYLOAD_MPV_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_MPV_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_MPV_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_MPV_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_NV_STRING")]
-pub static RTP_PAYLOAD_NV_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_NV_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_NV_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_NV_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_PCMA_STRING")]
-pub static RTP_PAYLOAD_PCMA_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_PCMA_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_PCMA_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_PCMA_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_PCMU_STRING")]
-pub static RTP_PAYLOAD_PCMU_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_PCMU_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_PCMU_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_PCMU_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_QCELP_STRING")]
-pub static RTP_PAYLOAD_QCELP_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_QCELP_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_QCELP_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_QCELP_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_TS41_STRING")]
-pub static RTP_PAYLOAD_TS41_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_TS41_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_TS41_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_TS41_STRING) };
 #[doc(alias = "GST_RTP_PAYLOAD_TS48_STRING")]
-pub static RTP_PAYLOAD_TS48_STRING: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_RTP_PAYLOAD_TS48_STRING)
-            .to_str()
-            .unwrap()
-    });
+pub static RTP_PAYLOAD_TS48_STRING: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_PAYLOAD_TS48_STRING) };

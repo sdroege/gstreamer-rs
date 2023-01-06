@@ -65,14 +65,11 @@ pub const GST_INSTALL_PLUGINS_HELPER_MISSING: GstInstallPluginsReturn = 202;
 pub const GST_INSTALL_PLUGINS_INSTALL_IN_PROGRESS: GstInstallPluginsReturn = 203;
 
 // Constants
-pub const GST_ENCODING_CATEGORY_CAPTURE: *const c_char = b"capture\0" as *const u8 as *const c_char;
-pub const GST_ENCODING_CATEGORY_DEVICE: *const c_char = b"device\0" as *const u8 as *const c_char;
-pub const GST_ENCODING_CATEGORY_FILE_EXTENSION: *const c_char =
-    b"file-extension\0" as *const u8 as *const c_char;
-pub const GST_ENCODING_CATEGORY_ONLINE_SERVICE: *const c_char =
-    b"online-service\0" as *const u8 as *const c_char;
-pub const GST_ENCODING_CATEGORY_STORAGE_EDITING: *const c_char =
-    b"storage-editing\0" as *const u8 as *const c_char;
+pub const GST_ENCODING_CATEGORY_CAPTURE: &[u8] = b"capture\0";
+pub const GST_ENCODING_CATEGORY_DEVICE: &[u8] = b"device\0";
+pub const GST_ENCODING_CATEGORY_FILE_EXTENSION: &[u8] = b"file-extension\0";
+pub const GST_ENCODING_CATEGORY_ONLINE_SERVICE: &[u8] = b"online-service\0";
+pub const GST_ENCODING_CATEGORY_STORAGE_EDITING: &[u8] = b"storage-editing\0";
 
 // Flags
 pub type GstDiscovererSerializeFlags = c_uint;

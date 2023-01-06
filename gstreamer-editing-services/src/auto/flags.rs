@@ -4,8 +4,8 @@
 // DO NOT EDIT
 
 use bitflags::bitflags;
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
-use std::{ffi::CStr, fmt};
+use glib::{translate::*, value::FromValue, value::ToValue, GStr, StaticType, Type};
+use std::fmt;
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 bitflags! {
@@ -270,15 +270,13 @@ bitflags! {
 }
 
 impl TrackType {
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::ges_track_type_name(self.into_glib())
                     .as_ref()
                     .expect("ges_track_type_name returned NULL"),
             )
-            .to_str()
-            .expect("ges_track_type_name returned an invalid string")
         }
     }
 }

@@ -4,9 +4,10 @@
 // DO NOT EDIT
 
 use glib::{
-    error::ErrorDomain, translate::*, value::FromValue, value::ToValue, Quark, StaticType, Type,
+    error::ErrorDomain, translate::*, value::FromValue, value::ToValue, GStr, Quark, StaticType,
+    Type,
 };
-use std::{ffi::CStr, fmt};
+use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -25,15 +26,13 @@ pub enum PlayerColorBalanceType {
 }
 
 impl PlayerColorBalanceType {
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_player_color_balance_type_get_name(self.into_glib())
                     .as_ref()
                     .expect("gst_player_color_balance_type_get_name returned NULL"),
             )
-            .to_str()
-            .expect("gst_player_color_balance_type_get_name returned an invalid string")
         }
     }
 }
@@ -132,15 +131,13 @@ pub enum PlayerError {
 }
 
 impl PlayerError {
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_player_error_get_name(self.into_glib())
                     .as_ref()
                     .expect("gst_player_error_get_name returned NULL"),
             )
-            .to_str()
-            .expect("gst_player_error_get_name returned an invalid string")
         }
     }
 }
@@ -314,15 +311,13 @@ pub enum PlayerState {
 }
 
 impl PlayerState {
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_player_state_get_name(self.into_glib())
                     .as_ref()
                     .expect("gst_player_state_get_name returned NULL"),
             )
-            .to_str()
-            .expect("gst_player_state_get_name returned an invalid string")
         }
     }
 }

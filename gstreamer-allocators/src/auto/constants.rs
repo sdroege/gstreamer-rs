@@ -3,22 +3,14 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use std::ffi::CStr;
+use glib::GStr;
 
 #[doc(alias = "GST_ALLOCATOR_DMABUF")]
-pub static ALLOCATOR_DMABUF: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_ALLOCATOR_DMABUF).to_str().unwrap()
-    });
+pub static ALLOCATOR_DMABUF: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_ALLOCATOR_DMABUF) };
 #[doc(alias = "GST_ALLOCATOR_FD")]
-pub static ALLOCATOR_FD: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_ALLOCATOR_FD).to_str().unwrap()
-    });
+pub static ALLOCATOR_FD: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_ALLOCATOR_FD) };
 #[doc(alias = "GST_CAPS_FEATURE_MEMORY_DMABUF")]
-pub static CAPS_FEATURE_MEMORY_DMABUF: once_cell::sync::Lazy<&'static str> =
-    once_cell::sync::Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_CAPS_FEATURE_MEMORY_DMABUF)
-            .to_str()
-            .unwrap()
-    });
+pub static CAPS_FEATURE_MEMORY_DMABUF: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_CAPS_FEATURE_MEMORY_DMABUF) };

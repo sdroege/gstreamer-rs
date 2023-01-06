@@ -22,10 +22,9 @@ use libc::{
 use glib::{gboolean, gconstpointer, gpointer, GType};
 
 // Constants
-pub const GST_ALLOCATOR_DMABUF: *const c_char = b"dmabuf\0" as *const u8 as *const c_char;
-pub const GST_ALLOCATOR_FD: *const c_char = b"fd\0" as *const u8 as *const c_char;
-pub const GST_CAPS_FEATURE_MEMORY_DMABUF: *const c_char =
-    b"memory:DMABuf\0" as *const u8 as *const c_char;
+pub const GST_ALLOCATOR_DMABUF: &[u8] = b"dmabuf\0";
+pub const GST_ALLOCATOR_FD: &[u8] = b"fd\0";
+pub const GST_CAPS_FEATURE_MEMORY_DMABUF: &[u8] = b"memory:DMABuf\0";
 
 // Flags
 pub type GstFdMemoryFlags = c_uint;

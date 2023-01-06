@@ -450,42 +450,32 @@ pub const GST_VIDEO_VBI_PARSER_RESULT_OK: GstVideoVBIParserResult = 1;
 pub const GST_VIDEO_VBI_PARSER_RESULT_ERROR: GstVideoVBIParserResult = 2;
 
 // Constants
-pub const GST_BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META: *const c_char =
-    b"GstBufferPoolOptionVideoAffineTransformation\0" as *const u8 as *const c_char;
-pub const GST_BUFFER_POOL_OPTION_VIDEO_ALIGNMENT: *const c_char =
-    b"GstBufferPoolOptionVideoAlignment\0" as *const u8 as *const c_char;
-pub const GST_BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META: *const c_char =
-    b"GstBufferPoolOptionVideoGLTextureUploadMeta\0" as *const u8 as *const c_char;
-pub const GST_BUFFER_POOL_OPTION_VIDEO_META: *const c_char =
-    b"GstBufferPoolOptionVideoMeta\0" as *const u8 as *const c_char;
-pub const GST_CAPS_FEATURE_FORMAT_INTERLACED: *const c_char =
-    b"format:Interlaced\0" as *const u8 as *const c_char;
-pub const GST_CAPS_FEATURE_META_GST_VIDEO_AFFINE_TRANSFORMATION_META: *const c_char =
-    b"meta:GstVideoAffineTransformation\0" as *const u8 as *const c_char;
-pub const GST_CAPS_FEATURE_META_GST_VIDEO_GL_TEXTURE_UPLOAD_META: *const c_char =
-    b"meta:GstVideoGLTextureUploadMeta\0" as *const u8 as *const c_char;
-pub const GST_CAPS_FEATURE_META_GST_VIDEO_META: *const c_char =
-    b"meta:GstVideoMeta\0" as *const u8 as *const c_char;
-pub const GST_CAPS_FEATURE_META_GST_VIDEO_OVERLAY_COMPOSITION: *const c_char =
-    b"meta:GstVideoOverlayComposition\0" as *const u8 as *const c_char;
-pub const GST_META_TAG_VIDEO_COLORSPACE_STR: *const c_char =
-    b"colorspace\0" as *const u8 as *const c_char;
-pub const GST_META_TAG_VIDEO_ORIENTATION_STR: *const c_char =
-    b"orientation\0" as *const u8 as *const c_char;
-pub const GST_META_TAG_VIDEO_SIZE_STR: *const c_char = b"size\0" as *const u8 as *const c_char;
-pub const GST_META_TAG_VIDEO_STR: *const c_char = b"video\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_COLORIMETRY_BT2020: *const c_char = b"bt2020\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_COLORIMETRY_BT2020_10: *const c_char =
-    b"bt2020-10\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_COLORIMETRY_BT2100_HLG: *const c_char =
-    b"bt2100-hlg\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_COLORIMETRY_BT2100_PQ: *const c_char =
-    b"bt2100-pq\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_COLORIMETRY_BT601: *const c_char = b"bt601\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_COLORIMETRY_BT709: *const c_char = b"bt709\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_COLORIMETRY_SMPTE240M: *const c_char =
-    b"smpte240m\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_COLORIMETRY_SRGB: *const c_char = b"sRGB\0" as *const u8 as *const c_char;
+pub const GST_BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META: &[u8] =
+    b"GstBufferPoolOptionVideoAffineTransformation\0";
+pub const GST_BUFFER_POOL_OPTION_VIDEO_ALIGNMENT: &[u8] = b"GstBufferPoolOptionVideoAlignment\0";
+pub const GST_BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META: &[u8] =
+    b"GstBufferPoolOptionVideoGLTextureUploadMeta\0";
+pub const GST_BUFFER_POOL_OPTION_VIDEO_META: &[u8] = b"GstBufferPoolOptionVideoMeta\0";
+pub const GST_CAPS_FEATURE_FORMAT_INTERLACED: &[u8] = b"format:Interlaced\0";
+pub const GST_CAPS_FEATURE_META_GST_VIDEO_AFFINE_TRANSFORMATION_META: &[u8] =
+    b"meta:GstVideoAffineTransformation\0";
+pub const GST_CAPS_FEATURE_META_GST_VIDEO_GL_TEXTURE_UPLOAD_META: &[u8] =
+    b"meta:GstVideoGLTextureUploadMeta\0";
+pub const GST_CAPS_FEATURE_META_GST_VIDEO_META: &[u8] = b"meta:GstVideoMeta\0";
+pub const GST_CAPS_FEATURE_META_GST_VIDEO_OVERLAY_COMPOSITION: &[u8] =
+    b"meta:GstVideoOverlayComposition\0";
+pub const GST_META_TAG_VIDEO_COLORSPACE_STR: &[u8] = b"colorspace\0";
+pub const GST_META_TAG_VIDEO_ORIENTATION_STR: &[u8] = b"orientation\0";
+pub const GST_META_TAG_VIDEO_SIZE_STR: &[u8] = b"size\0";
+pub const GST_META_TAG_VIDEO_STR: &[u8] = b"video\0";
+pub const GST_VIDEO_COLORIMETRY_BT2020: &[u8] = b"bt2020\0";
+pub const GST_VIDEO_COLORIMETRY_BT2020_10: &[u8] = b"bt2020-10\0";
+pub const GST_VIDEO_COLORIMETRY_BT2100_HLG: &[u8] = b"bt2100-hlg\0";
+pub const GST_VIDEO_COLORIMETRY_BT2100_PQ: &[u8] = b"bt2100-pq\0";
+pub const GST_VIDEO_COLORIMETRY_BT601: &[u8] = b"bt601\0";
+pub const GST_VIDEO_COLORIMETRY_BT709: &[u8] = b"bt709\0";
+pub const GST_VIDEO_COLORIMETRY_SMPTE240M: &[u8] = b"smpte240m\0";
+pub const GST_VIDEO_COLORIMETRY_SRGB: &[u8] = b"sRGB\0";
 pub const GST_VIDEO_COMP_A: c_int = 3;
 pub const GST_VIDEO_COMP_B: c_int = 2;
 pub const GST_VIDEO_COMP_G: c_int = 1;
@@ -495,76 +485,47 @@ pub const GST_VIDEO_COMP_R: c_int = 0;
 pub const GST_VIDEO_COMP_U: c_int = 1;
 pub const GST_VIDEO_COMP_V: c_int = 2;
 pub const GST_VIDEO_COMP_Y: c_int = 0;
-pub const GST_VIDEO_CONVERTER_OPT_ALPHA_MODE: *const c_char =
-    b"GstVideoConverter.alpha-mode\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_ALPHA_VALUE: *const c_char =
-    b"GstVideoConverter.alpha-value\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_ASYNC_TASKS: *const c_char =
-    b"GstVideoConverter.async-tasks\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_BORDER_ARGB: *const c_char =
-    b"GstVideoConverter.border-argb\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_CHROMA_MODE: *const c_char =
-    b"GstVideoConverter.chroma-mode\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_CHROMA_RESAMPLER_METHOD: *const c_char =
-    b"GstVideoConverter.chroma-resampler-method\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_DEST_HEIGHT: *const c_char =
-    b"GstVideoConverter.dest-height\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_DEST_WIDTH: *const c_char =
-    b"GstVideoConverter.dest-width\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_DEST_X: *const c_char =
-    b"GstVideoConverter.dest-x\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_DEST_Y: *const c_char =
-    b"GstVideoConverter.dest-y\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_DITHER_METHOD: *const c_char =
-    b"GstVideoConverter.dither-method\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_DITHER_QUANTIZATION: *const c_char =
-    b"GstVideoConverter.dither-quantization\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_FILL_BORDER: *const c_char =
-    b"GstVideoConverter.fill-border\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_GAMMA_MODE: *const c_char =
-    b"GstVideoConverter.gamma-mode\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_MATRIX_MODE: *const c_char =
-    b"GstVideoConverter.matrix-mode\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_PRIMARIES_MODE: *const c_char =
-    b"GstVideoConverter.primaries-mode\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_RESAMPLER_METHOD: *const c_char =
-    b"GstVideoConverter.resampler-method\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_RESAMPLER_TAPS: *const c_char =
-    b"GstVideoConverter.resampler-taps\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_SRC_HEIGHT: *const c_char =
-    b"GstVideoConverter.src-height\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_SRC_WIDTH: *const c_char =
-    b"GstVideoConverter.src-width\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_SRC_X: *const c_char =
-    b"GstVideoConverter.src-x\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_SRC_Y: *const c_char =
-    b"GstVideoConverter.src-y\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_CONVERTER_OPT_THREADS: *const c_char =
-    b"GstVideoConverter.threads\0" as *const u8 as *const c_char;
+pub const GST_VIDEO_CONVERTER_OPT_ALPHA_MODE: &[u8] = b"GstVideoConverter.alpha-mode\0";
+pub const GST_VIDEO_CONVERTER_OPT_ALPHA_VALUE: &[u8] = b"GstVideoConverter.alpha-value\0";
+pub const GST_VIDEO_CONVERTER_OPT_ASYNC_TASKS: &[u8] = b"GstVideoConverter.async-tasks\0";
+pub const GST_VIDEO_CONVERTER_OPT_BORDER_ARGB: &[u8] = b"GstVideoConverter.border-argb\0";
+pub const GST_VIDEO_CONVERTER_OPT_CHROMA_MODE: &[u8] = b"GstVideoConverter.chroma-mode\0";
+pub const GST_VIDEO_CONVERTER_OPT_CHROMA_RESAMPLER_METHOD: &[u8] =
+    b"GstVideoConverter.chroma-resampler-method\0";
+pub const GST_VIDEO_CONVERTER_OPT_DEST_HEIGHT: &[u8] = b"GstVideoConverter.dest-height\0";
+pub const GST_VIDEO_CONVERTER_OPT_DEST_WIDTH: &[u8] = b"GstVideoConverter.dest-width\0";
+pub const GST_VIDEO_CONVERTER_OPT_DEST_X: &[u8] = b"GstVideoConverter.dest-x\0";
+pub const GST_VIDEO_CONVERTER_OPT_DEST_Y: &[u8] = b"GstVideoConverter.dest-y\0";
+pub const GST_VIDEO_CONVERTER_OPT_DITHER_METHOD: &[u8] = b"GstVideoConverter.dither-method\0";
+pub const GST_VIDEO_CONVERTER_OPT_DITHER_QUANTIZATION: &[u8] =
+    b"GstVideoConverter.dither-quantization\0";
+pub const GST_VIDEO_CONVERTER_OPT_FILL_BORDER: &[u8] = b"GstVideoConverter.fill-border\0";
+pub const GST_VIDEO_CONVERTER_OPT_GAMMA_MODE: &[u8] = b"GstVideoConverter.gamma-mode\0";
+pub const GST_VIDEO_CONVERTER_OPT_MATRIX_MODE: &[u8] = b"GstVideoConverter.matrix-mode\0";
+pub const GST_VIDEO_CONVERTER_OPT_PRIMARIES_MODE: &[u8] = b"GstVideoConverter.primaries-mode\0";
+pub const GST_VIDEO_CONVERTER_OPT_RESAMPLER_METHOD: &[u8] = b"GstVideoConverter.resampler-method\0";
+pub const GST_VIDEO_CONVERTER_OPT_RESAMPLER_TAPS: &[u8] = b"GstVideoConverter.resampler-taps\0";
+pub const GST_VIDEO_CONVERTER_OPT_SRC_HEIGHT: &[u8] = b"GstVideoConverter.src-height\0";
+pub const GST_VIDEO_CONVERTER_OPT_SRC_WIDTH: &[u8] = b"GstVideoConverter.src-width\0";
+pub const GST_VIDEO_CONVERTER_OPT_SRC_X: &[u8] = b"GstVideoConverter.src-x\0";
+pub const GST_VIDEO_CONVERTER_OPT_SRC_Y: &[u8] = b"GstVideoConverter.src-y\0";
+pub const GST_VIDEO_CONVERTER_OPT_THREADS: &[u8] = b"GstVideoConverter.threads\0";
 pub const GST_VIDEO_DECODER_MAX_ERRORS: c_int = -1;
-pub const GST_VIDEO_DECODER_SINK_NAME: *const c_char = b"sink\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_DECODER_SRC_NAME: *const c_char = b"src\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_ENCODER_SINK_NAME: *const c_char = b"sink\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_ENCODER_SRC_NAME: *const c_char = b"src\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_FPS_RANGE: *const c_char =
-    b"(fraction) [ 0, max ]\0" as *const u8 as *const c_char;
+pub const GST_VIDEO_DECODER_SINK_NAME: &[u8] = b"sink\0";
+pub const GST_VIDEO_DECODER_SRC_NAME: &[u8] = b"src\0";
+pub const GST_VIDEO_ENCODER_SINK_NAME: &[u8] = b"sink\0";
+pub const GST_VIDEO_ENCODER_SRC_NAME: &[u8] = b"src\0";
+pub const GST_VIDEO_FPS_RANGE: &[u8] = b"(fraction) [ 0, max ]\0";
 pub const GST_VIDEO_MAX_COMPONENTS: c_int = 4;
 pub const GST_VIDEO_MAX_PLANES: c_int = 4;
-pub const GST_VIDEO_RESAMPLER_OPT_CUBIC_B: *const c_char =
-    b"GstVideoResampler.cubic-b\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_RESAMPLER_OPT_CUBIC_C: *const c_char =
-    b"GstVideoResampler.cubic-c\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_RESAMPLER_OPT_ENVELOPE: *const c_char =
-    b"GstVideoResampler.envelope\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_RESAMPLER_OPT_MAX_TAPS: *const c_char =
-    b"GstVideoResampler.max-taps\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_RESAMPLER_OPT_SHARPEN: *const c_char =
-    b"GstVideoResampler.sharpen\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_RESAMPLER_OPT_SHARPNESS: *const c_char =
-    b"GstVideoResampler.sharpness\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_SCALER_OPT_DITHER_METHOD: *const c_char =
-    b"GstVideoScaler.dither-method\0" as *const u8 as *const c_char;
-pub const GST_VIDEO_SIZE_RANGE: *const c_char = b"(int) [ 1, max ]\0" as *const u8 as *const c_char;
+pub const GST_VIDEO_RESAMPLER_OPT_CUBIC_B: &[u8] = b"GstVideoResampler.cubic-b\0";
+pub const GST_VIDEO_RESAMPLER_OPT_CUBIC_C: &[u8] = b"GstVideoResampler.cubic-c\0";
+pub const GST_VIDEO_RESAMPLER_OPT_ENVELOPE: &[u8] = b"GstVideoResampler.envelope\0";
+pub const GST_VIDEO_RESAMPLER_OPT_MAX_TAPS: &[u8] = b"GstVideoResampler.max-taps\0";
+pub const GST_VIDEO_RESAMPLER_OPT_SHARPEN: &[u8] = b"GstVideoResampler.sharpen\0";
+pub const GST_VIDEO_RESAMPLER_OPT_SHARPNESS: &[u8] = b"GstVideoResampler.sharpness\0";
+pub const GST_VIDEO_SCALER_OPT_DITHER_METHOD: &[u8] = b"GstVideoScaler.dither-method\0";
+pub const GST_VIDEO_SIZE_RANGE: &[u8] = b"(int) [ 1, max ]\0";
 pub const GST_VIDEO_TILE_TYPE_MASK: c_int = 65535;
 pub const GST_VIDEO_TILE_TYPE_SHIFT: c_int = 16;
 pub const GST_VIDEO_TILE_X_TILES_MASK: c_int = 65535;

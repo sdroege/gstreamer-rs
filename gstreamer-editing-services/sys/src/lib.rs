@@ -174,20 +174,17 @@ pub const GES_VIDEO_TEST_PATTERN_SOLID: GESVideoTestPattern = 17;
 
 // Constants
 pub const GES_FRAME_NUMBER_NONE: i64 = 9223372036854775807;
-pub const GES_META_DESCRIPTION: *const c_char = b"description\0" as *const u8 as *const c_char;
-pub const GES_META_FORMATTER_EXTENSION: *const c_char =
-    b"extension\0" as *const u8 as *const c_char;
-pub const GES_META_FORMATTER_MIMETYPE: *const c_char = b"mimetype\0" as *const u8 as *const c_char;
-pub const GES_META_FORMATTER_NAME: *const c_char = b"name\0" as *const u8 as *const c_char;
-pub const GES_META_FORMATTER_RANK: *const c_char = b"rank\0" as *const u8 as *const c_char;
-pub const GES_META_FORMATTER_VERSION: *const c_char = b"version\0" as *const u8 as *const c_char;
-pub const GES_META_FORMAT_VERSION: *const c_char =
-    b"format-version\0" as *const u8 as *const c_char;
-pub const GES_META_MARKER_COLOR: *const c_char = b"marker-color\0" as *const u8 as *const c_char;
-pub const GES_META_VOLUME: *const c_char = b"volume\0" as *const u8 as *const c_char;
+pub const GES_META_DESCRIPTION: &[u8] = b"description\0";
+pub const GES_META_FORMATTER_EXTENSION: &[u8] = b"extension\0";
+pub const GES_META_FORMATTER_MIMETYPE: &[u8] = b"mimetype\0";
+pub const GES_META_FORMATTER_NAME: &[u8] = b"name\0";
+pub const GES_META_FORMATTER_RANK: &[u8] = b"rank\0";
+pub const GES_META_FORMATTER_VERSION: &[u8] = b"version\0";
+pub const GES_META_FORMAT_VERSION: &[u8] = b"format-version\0";
+pub const GES_META_MARKER_COLOR: &[u8] = b"marker-color\0";
+pub const GES_META_VOLUME: &[u8] = b"volume\0";
 pub const GES_META_VOLUME_DEFAULT: c_double = 1.000000;
-pub const GES_MULTI_FILE_URI_PREFIX: *const c_char =
-    b"multifile://\0" as *const u8 as *const c_char;
+pub const GES_MULTI_FILE_URI_PREFIX: &[u8] = b"multifile://\0";
 pub const GES_PADDING: c_int = 4;
 pub const GES_PADDING_LARGE: c_int = 20;
 pub const GES_TIMELINE_ELEMENT_NO_LAYER_PRIORITY: u32 = 4294967295;

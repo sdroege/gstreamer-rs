@@ -109,12 +109,12 @@ pub const GST_SDP_EINVAL: GstSDPResult = -1;
 
 // Constants
 pub const GST_MIKEY_VERSION: c_int = 1;
-pub const GST_SDP_BWTYPE_AS: *const c_char = b"AS\0" as *const u8 as *const c_char;
-pub const GST_SDP_BWTYPE_CT: *const c_char = b"CT\0" as *const u8 as *const c_char;
-pub const GST_SDP_BWTYPE_EXT_PREFIX: *const c_char = b"X-\0" as *const u8 as *const c_char;
-pub const GST_SDP_BWTYPE_RR: *const c_char = b"RR\0" as *const u8 as *const c_char;
-pub const GST_SDP_BWTYPE_RS: *const c_char = b"RS\0" as *const u8 as *const c_char;
-pub const GST_SDP_BWTYPE_TIAS: *const c_char = b"TIAS\0" as *const u8 as *const c_char;
+pub const GST_SDP_BWTYPE_AS: &[u8] = b"AS\0";
+pub const GST_SDP_BWTYPE_CT: &[u8] = b"CT\0";
+pub const GST_SDP_BWTYPE_EXT_PREFIX: &[u8] = b"X-\0";
+pub const GST_SDP_BWTYPE_RR: &[u8] = b"RR\0";
+pub const GST_SDP_BWTYPE_RS: &[u8] = b"RS\0";
+pub const GST_SDP_BWTYPE_TIAS: &[u8] = b"TIAS\0";
 
 // Records
 #[repr(C)]

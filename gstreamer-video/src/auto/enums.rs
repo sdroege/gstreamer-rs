@@ -3,8 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
-use std::{ffi::CStr, fmt};
+use glib::{translate::*, value::FromValue, value::ToValue, GStr, StaticType, Type};
+use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -2407,15 +2407,13 @@ impl VideoInterlaceMode {
         }
     }
 
-    pub fn to_str<'a>(self) -> &'a str {
+    pub fn to_str<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_video_interlace_mode_to_string(self.into_glib())
                     .as_ref()
                     .expect("gst_video_interlace_mode_to_string returned NULL"),
             )
-            .to_str()
-            .expect("gst_video_interlace_mode_to_string returned an invalid string")
         }
     }
 }

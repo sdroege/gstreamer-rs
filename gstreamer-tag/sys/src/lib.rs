@@ -50,77 +50,45 @@ pub const GST_TAG_IMAGE_TYPE_BAND_ARTIST_LOGO: GstTagImageType = 17;
 pub const GST_TAG_IMAGE_TYPE_PUBLISHER_STUDIO_LOGO: GstTagImageType = 18;
 
 // Constants
-pub const GST_TAG_ACOUSTID_FINGERPRINT: *const c_char =
-    b"chromaprint-fingerprint\0" as *const u8 as *const c_char;
-pub const GST_TAG_ACOUSTID_ID: *const c_char = b"acoustid-id\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_CONTRAST: *const c_char =
-    b"capturing-contrast\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_DIGITAL_ZOOM_RATIO: *const c_char =
-    b"capturing-digital-zoom-ratio\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_EXPOSURE_COMPENSATION: *const c_char =
-    b"capturing-exposure-compensation\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_EXPOSURE_MODE: *const c_char =
-    b"capturing-exposure-mode\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_EXPOSURE_PROGRAM: *const c_char =
-    b"capturing-exposure-program\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_FLASH_FIRED: *const c_char =
-    b"capturing-flash-fired\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_FLASH_MODE: *const c_char =
-    b"capturing-flash-mode\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_FOCAL_LENGTH: *const c_char =
-    b"capturing-focal-length\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_FOCAL_LENGTH_35_MM: *const c_char =
-    b"capturing-focal-length-35mm\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_FOCAL_RATIO: *const c_char =
-    b"capturing-focal-ratio\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_GAIN_ADJUSTMENT: *const c_char =
-    b"capturing-gain-adjustment\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_ISO_SPEED: *const c_char =
-    b"capturing-iso-speed\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_METERING_MODE: *const c_char =
-    b"capturing-metering-mode\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_SATURATION: *const c_char =
-    b"capturing-saturation\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_SCENE_CAPTURE_TYPE: *const c_char =
-    b"capturing-scene-capture-type\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_SHARPNESS: *const c_char =
-    b"capturing-sharpness\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_SHUTTER_SPEED: *const c_char =
-    b"capturing-shutter-speed\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_SOURCE: *const c_char =
-    b"capturing-source\0" as *const u8 as *const c_char;
-pub const GST_TAG_CAPTURING_WHITE_BALANCE: *const c_char =
-    b"capturing-white-balance\0" as *const u8 as *const c_char;
-pub const GST_TAG_CDDA_CDDB_DISCID: *const c_char = b"discid\0" as *const u8 as *const c_char;
-pub const GST_TAG_CDDA_CDDB_DISCID_FULL: *const c_char =
-    b"discid-full\0" as *const u8 as *const c_char;
-pub const GST_TAG_CDDA_MUSICBRAINZ_DISCID: *const c_char =
-    b"musicbrainz-discid\0" as *const u8 as *const c_char;
-pub const GST_TAG_CDDA_MUSICBRAINZ_DISCID_FULL: *const c_char =
-    b"musicbrainz-discid-full\0" as *const u8 as *const c_char;
-pub const GST_TAG_CMML_CLIP: *const c_char = b"cmml-clip\0" as *const u8 as *const c_char;
-pub const GST_TAG_CMML_HEAD: *const c_char = b"cmml-head\0" as *const u8 as *const c_char;
-pub const GST_TAG_CMML_STREAM: *const c_char = b"cmml-stream\0" as *const u8 as *const c_char;
+pub const GST_TAG_ACOUSTID_FINGERPRINT: &[u8] = b"chromaprint-fingerprint\0";
+pub const GST_TAG_ACOUSTID_ID: &[u8] = b"acoustid-id\0";
+pub const GST_TAG_CAPTURING_CONTRAST: &[u8] = b"capturing-contrast\0";
+pub const GST_TAG_CAPTURING_DIGITAL_ZOOM_RATIO: &[u8] = b"capturing-digital-zoom-ratio\0";
+pub const GST_TAG_CAPTURING_EXPOSURE_COMPENSATION: &[u8] = b"capturing-exposure-compensation\0";
+pub const GST_TAG_CAPTURING_EXPOSURE_MODE: &[u8] = b"capturing-exposure-mode\0";
+pub const GST_TAG_CAPTURING_EXPOSURE_PROGRAM: &[u8] = b"capturing-exposure-program\0";
+pub const GST_TAG_CAPTURING_FLASH_FIRED: &[u8] = b"capturing-flash-fired\0";
+pub const GST_TAG_CAPTURING_FLASH_MODE: &[u8] = b"capturing-flash-mode\0";
+pub const GST_TAG_CAPTURING_FOCAL_LENGTH: &[u8] = b"capturing-focal-length\0";
+pub const GST_TAG_CAPTURING_FOCAL_LENGTH_35_MM: &[u8] = b"capturing-focal-length-35mm\0";
+pub const GST_TAG_CAPTURING_FOCAL_RATIO: &[u8] = b"capturing-focal-ratio\0";
+pub const GST_TAG_CAPTURING_GAIN_ADJUSTMENT: &[u8] = b"capturing-gain-adjustment\0";
+pub const GST_TAG_CAPTURING_ISO_SPEED: &[u8] = b"capturing-iso-speed\0";
+pub const GST_TAG_CAPTURING_METERING_MODE: &[u8] = b"capturing-metering-mode\0";
+pub const GST_TAG_CAPTURING_SATURATION: &[u8] = b"capturing-saturation\0";
+pub const GST_TAG_CAPTURING_SCENE_CAPTURE_TYPE: &[u8] = b"capturing-scene-capture-type\0";
+pub const GST_TAG_CAPTURING_SHARPNESS: &[u8] = b"capturing-sharpness\0";
+pub const GST_TAG_CAPTURING_SHUTTER_SPEED: &[u8] = b"capturing-shutter-speed\0";
+pub const GST_TAG_CAPTURING_SOURCE: &[u8] = b"capturing-source\0";
+pub const GST_TAG_CAPTURING_WHITE_BALANCE: &[u8] = b"capturing-white-balance\0";
+pub const GST_TAG_CDDA_CDDB_DISCID: &[u8] = b"discid\0";
+pub const GST_TAG_CDDA_CDDB_DISCID_FULL: &[u8] = b"discid-full\0";
+pub const GST_TAG_CDDA_MUSICBRAINZ_DISCID: &[u8] = b"musicbrainz-discid\0";
+pub const GST_TAG_CDDA_MUSICBRAINZ_DISCID_FULL: &[u8] = b"musicbrainz-discid-full\0";
+pub const GST_TAG_CMML_CLIP: &[u8] = b"cmml-clip\0";
+pub const GST_TAG_CMML_HEAD: &[u8] = b"cmml-head\0";
+pub const GST_TAG_CMML_STREAM: &[u8] = b"cmml-stream\0";
 pub const GST_TAG_ID3V2_HEADER_SIZE: c_int = 10;
-pub const GST_TAG_IMAGE_HORIZONTAL_PPI: *const c_char =
-    b"image-horizontal-ppi\0" as *const u8 as *const c_char;
-pub const GST_TAG_IMAGE_VERTICAL_PPI: *const c_char =
-    b"image-vertical-ppi\0" as *const u8 as *const c_char;
-pub const GST_TAG_MUSICAL_KEY: *const c_char = b"musical-key\0" as *const u8 as *const c_char;
-pub const GST_TAG_MUSICBRAINZ_ALBUMARTISTID: *const c_char =
-    b"musicbrainz-albumartistid\0" as *const u8 as *const c_char;
-pub const GST_TAG_MUSICBRAINZ_ALBUMID: *const c_char =
-    b"musicbrainz-albumid\0" as *const u8 as *const c_char;
-pub const GST_TAG_MUSICBRAINZ_ARTISTID: *const c_char =
-    b"musicbrainz-artistid\0" as *const u8 as *const c_char;
-pub const GST_TAG_MUSICBRAINZ_RELEASEGROUPID: *const c_char =
-    b"musicbrainz-releasegroupid\0" as *const u8 as *const c_char;
-pub const GST_TAG_MUSICBRAINZ_RELEASETRACKID: *const c_char =
-    b"musicbrainz-releasetrackid\0" as *const u8 as *const c_char;
-pub const GST_TAG_MUSICBRAINZ_TRACKID: *const c_char =
-    b"musicbrainz-trackid\0" as *const u8 as *const c_char;
-pub const GST_TAG_MUSICBRAINZ_TRMID: *const c_char =
-    b"musicbrainz-trmid\0" as *const u8 as *const c_char;
+pub const GST_TAG_IMAGE_HORIZONTAL_PPI: &[u8] = b"image-horizontal-ppi\0";
+pub const GST_TAG_IMAGE_VERTICAL_PPI: &[u8] = b"image-vertical-ppi\0";
+pub const GST_TAG_MUSICAL_KEY: &[u8] = b"musical-key\0";
+pub const GST_TAG_MUSICBRAINZ_ALBUMARTISTID: &[u8] = b"musicbrainz-albumartistid\0";
+pub const GST_TAG_MUSICBRAINZ_ALBUMID: &[u8] = b"musicbrainz-albumid\0";
+pub const GST_TAG_MUSICBRAINZ_ARTISTID: &[u8] = b"musicbrainz-artistid\0";
+pub const GST_TAG_MUSICBRAINZ_RELEASEGROUPID: &[u8] = b"musicbrainz-releasegroupid\0";
+pub const GST_TAG_MUSICBRAINZ_RELEASETRACKID: &[u8] = b"musicbrainz-releasetrackid\0";
+pub const GST_TAG_MUSICBRAINZ_TRACKID: &[u8] = b"musicbrainz-trackid\0";
+pub const GST_TAG_MUSICBRAINZ_TRMID: &[u8] = b"musicbrainz-trmid\0";
 
 // Flags
 pub type GstTagLicenseFlags = c_uint;

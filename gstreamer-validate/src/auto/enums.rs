@@ -3,8 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
-use std::{ffi::CStr, fmt};
+use glib::{translate::*, value::FromValue, value::ToValue, GStr, StaticType, Type};
+use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -39,15 +39,13 @@ impl ReportLevel {
         }
     }
 
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_validate_report_level_get_name(self.into_glib())
                     .as_ref()
                     .expect("gst_validate_report_level_get_name returned NULL"),
             )
-            .to_str()
-            .expect("gst_validate_report_level_get_name returned an invalid string")
         }
     }
 }

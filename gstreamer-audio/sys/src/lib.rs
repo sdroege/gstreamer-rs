@@ -190,58 +190,45 @@ pub const GST_STREAM_VOLUME_FORMAT_CUBIC: GstStreamVolumeFormat = 1;
 pub const GST_STREAM_VOLUME_FORMAT_DB: GstStreamVolumeFormat = 2;
 
 // Constants
-pub const GST_AUDIO_CHANNELS_RANGE: *const c_char =
-    b"(int) [ 1, max ]\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_CONVERTER_OPT_DITHER_METHOD: *const c_char =
-    b"GstAudioConverter.dither-method\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_CONVERTER_OPT_DITHER_THRESHOLD: *const c_char =
-    b"GstAudioConverter.dither-threshold\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_CONVERTER_OPT_MIX_MATRIX: *const c_char =
-    b"GstAudioConverter.mix-matrix\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_CONVERTER_OPT_NOISE_SHAPING_METHOD: *const c_char =
-    b"GstAudioConverter.noise-shaping-method\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_CONVERTER_OPT_QUANTIZATION: *const c_char =
-    b"GstAudioConverter.quantization\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_CONVERTER_OPT_RESAMPLER_METHOD: *const c_char =
-    b"GstAudioConverter.resampler-method\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_CHANNELS_RANGE: &[u8] = b"(int) [ 1, max ]\0";
+pub const GST_AUDIO_CONVERTER_OPT_DITHER_METHOD: &[u8] = b"GstAudioConverter.dither-method\0";
+pub const GST_AUDIO_CONVERTER_OPT_DITHER_THRESHOLD: &[u8] = b"GstAudioConverter.dither-threshold\0";
+pub const GST_AUDIO_CONVERTER_OPT_MIX_MATRIX: &[u8] = b"GstAudioConverter.mix-matrix\0";
+pub const GST_AUDIO_CONVERTER_OPT_NOISE_SHAPING_METHOD: &[u8] =
+    b"GstAudioConverter.noise-shaping-method\0";
+pub const GST_AUDIO_CONVERTER_OPT_QUANTIZATION: &[u8] = b"GstAudioConverter.quantization\0";
+pub const GST_AUDIO_CONVERTER_OPT_RESAMPLER_METHOD: &[u8] = b"GstAudioConverter.resampler-method\0";
 pub const GST_AUDIO_DECODER_MAX_ERRORS: c_int = -1;
-pub const GST_AUDIO_DECODER_SINK_NAME: *const c_char = b"sink\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_DECODER_SRC_NAME: *const c_char = b"src\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_DECODER_SINK_NAME: &[u8] = b"sink\0";
+pub const GST_AUDIO_DECODER_SRC_NAME: &[u8] = b"src\0";
 pub const GST_AUDIO_DEF_CHANNELS: c_int = 2;
-pub const GST_AUDIO_DEF_FORMAT: *const c_char = b"S16LE\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_DEF_FORMAT: &[u8] = b"S16LE\0";
 pub const GST_AUDIO_DEF_RATE: c_int = 44100;
-pub const GST_AUDIO_ENCODER_SINK_NAME: *const c_char = b"sink\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_ENCODER_SRC_NAME: *const c_char = b"src\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RATE_RANGE: *const c_char = b"(int) [ 1, max ]\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_CUBIC_B: *const c_char =
-    b"GstAudioResampler.cubic-b\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_CUBIC_C: *const c_char =
-    b"GstAudioResampler.cubic-c\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_CUTOFF: *const c_char =
-    b"GstAudioResampler.cutoff\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_FILTER_INTERPOLATION: *const c_char =
-    b"GstAudioResampler.filter-interpolation\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_FILTER_MODE: *const c_char =
-    b"GstAudioResampler.filter-mode\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_FILTER_MODE_THRESHOLD: *const c_char =
-    b"GstAudioResampler.filter-mode-threshold\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_FILTER_OVERSAMPLE: *const c_char =
-    b"GstAudioResampler.filter-oversample\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_MAX_PHASE_ERROR: *const c_char =
-    b"GstAudioResampler.max-phase-error\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_N_TAPS: *const c_char =
-    b"GstAudioResampler.n-taps\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_STOP_ATTENUATION: *const c_char =
-    b"GstAudioResampler.stop-attenutation\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_TRANSITION_BANDWIDTH: *const c_char =
-    b"GstAudioResampler.transition-bandwidth\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_ENCODER_SINK_NAME: &[u8] = b"sink\0";
+pub const GST_AUDIO_ENCODER_SRC_NAME: &[u8] = b"src\0";
+pub const GST_AUDIO_RATE_RANGE: &[u8] = b"(int) [ 1, max ]\0";
+pub const GST_AUDIO_RESAMPLER_OPT_CUBIC_B: &[u8] = b"GstAudioResampler.cubic-b\0";
+pub const GST_AUDIO_RESAMPLER_OPT_CUBIC_C: &[u8] = b"GstAudioResampler.cubic-c\0";
+pub const GST_AUDIO_RESAMPLER_OPT_CUTOFF: &[u8] = b"GstAudioResampler.cutoff\0";
+pub const GST_AUDIO_RESAMPLER_OPT_FILTER_INTERPOLATION: &[u8] =
+    b"GstAudioResampler.filter-interpolation\0";
+pub const GST_AUDIO_RESAMPLER_OPT_FILTER_MODE: &[u8] = b"GstAudioResampler.filter-mode\0";
+pub const GST_AUDIO_RESAMPLER_OPT_FILTER_MODE_THRESHOLD: &[u8] =
+    b"GstAudioResampler.filter-mode-threshold\0";
+pub const GST_AUDIO_RESAMPLER_OPT_FILTER_OVERSAMPLE: &[u8] =
+    b"GstAudioResampler.filter-oversample\0";
+pub const GST_AUDIO_RESAMPLER_OPT_MAX_PHASE_ERROR: &[u8] = b"GstAudioResampler.max-phase-error\0";
+pub const GST_AUDIO_RESAMPLER_OPT_N_TAPS: &[u8] = b"GstAudioResampler.n-taps\0";
+pub const GST_AUDIO_RESAMPLER_OPT_STOP_ATTENUATION: &[u8] =
+    b"GstAudioResampler.stop-attenutation\0";
+pub const GST_AUDIO_RESAMPLER_OPT_TRANSITION_BANDWIDTH: &[u8] =
+    b"GstAudioResampler.transition-bandwidth\0";
 pub const GST_AUDIO_RESAMPLER_QUALITY_DEFAULT: c_int = 4;
 pub const GST_AUDIO_RESAMPLER_QUALITY_MAX: c_int = 10;
 pub const GST_AUDIO_RESAMPLER_QUALITY_MIN: c_int = 0;
-pub const GST_META_TAG_AUDIO_CHANNELS_STR: *const c_char =
-    b"channels\0" as *const u8 as *const c_char;
-pub const GST_META_TAG_AUDIO_RATE_STR: *const c_char = b"rate\0" as *const u8 as *const c_char;
-pub const GST_META_TAG_AUDIO_STR: *const c_char = b"audio\0" as *const u8 as *const c_char;
+pub const GST_META_TAG_AUDIO_CHANNELS_STR: &[u8] = b"channels\0";
+pub const GST_META_TAG_AUDIO_RATE_STR: &[u8] = b"rate\0";
+pub const GST_META_TAG_AUDIO_STR: &[u8] = b"audio\0";
 
 // Flags
 pub type GstAudioChannelMixerFlags = c_uint;

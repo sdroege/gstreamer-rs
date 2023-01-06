@@ -118,61 +118,44 @@ pub const GST_GL_WINDOW_ERROR_OLD_LIBS: GstGLWindowError = 1;
 pub const GST_GL_WINDOW_ERROR_RESOURCE_UNAVAILABLE: GstGLWindowError = 2;
 
 // Constants
-pub const GST_BUFFER_POOL_OPTION_GL_SYNC_META: *const c_char =
-    b"GstBufferPoolOptionGLSyncMeta\0" as *const u8 as *const c_char;
-pub const GST_BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_2D: *const c_char =
-    b"GstBufferPoolOptionGLTextureTarget2D\0" as *const u8 as *const c_char;
-pub const GST_BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_EXTERNAL_OES: *const c_char =
-    b"GstBufferPoolOptionGLTextureTargetExternalOES\0" as *const u8 as *const c_char;
-pub const GST_BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_RECTANGLE: *const c_char =
-    b"GstBufferPoolOptionGLTextureTargetRectangle\0" as *const u8 as *const c_char;
-pub const GST_CAPS_FEATURE_MEMORY_GL_BUFFER: *const c_char =
-    b"memory:GLBuffer\0" as *const u8 as *const c_char;
-pub const GST_CAPS_FEATURE_MEMORY_GL_MEMORY: *const c_char =
-    b"memory:GLMemory\0" as *const u8 as *const c_char;
+pub const GST_BUFFER_POOL_OPTION_GL_SYNC_META: &[u8] = b"GstBufferPoolOptionGLSyncMeta\0";
+pub const GST_BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_2D: &[u8] =
+    b"GstBufferPoolOptionGLTextureTarget2D\0";
+pub const GST_BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_EXTERNAL_OES: &[u8] =
+    b"GstBufferPoolOptionGLTextureTargetExternalOES\0";
+pub const GST_BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_RECTANGLE: &[u8] =
+    b"GstBufferPoolOptionGLTextureTargetRectangle\0";
+pub const GST_CAPS_FEATURE_MEMORY_GL_BUFFER: &[u8] = b"memory:GLBuffer\0";
+pub const GST_CAPS_FEATURE_MEMORY_GL_MEMORY: &[u8] = b"memory:GLMemory\0";
 pub const GST_GL_ALLOCATION_PARAMS_ALLOC_FLAG_ALLOC: c_int = 1;
 pub const GST_GL_ALLOCATION_PARAMS_ALLOC_FLAG_BUFFER: c_int = 16;
 pub const GST_GL_ALLOCATION_PARAMS_ALLOC_FLAG_USER: c_int = 65536;
 pub const GST_GL_ALLOCATION_PARAMS_ALLOC_FLAG_VIDEO: c_int = 8;
 pub const GST_GL_ALLOCATION_PARAMS_ALLOC_FLAG_WRAP_GPU_HANDLE: c_int = 4;
 pub const GST_GL_ALLOCATION_PARAMS_ALLOC_FLAG_WRAP_SYSMEM: c_int = 2;
-pub const GST_GL_API_GLES1_NAME: *const c_char = b"gles1\0" as *const u8 as *const c_char;
-pub const GST_GL_API_GLES2_NAME: *const c_char = b"gles2\0" as *const u8 as *const c_char;
-pub const GST_GL_API_OPENGL3_NAME: *const c_char = b"opengl3\0" as *const u8 as *const c_char;
-pub const GST_GL_API_OPENGL_NAME: *const c_char = b"opengl\0" as *const u8 as *const c_char;
-pub const GST_GL_BASE_MEMORY_ALLOCATOR_NAME: *const c_char =
-    b"GLBaseMemory\0" as *const u8 as *const c_char;
-pub const GST_GL_BUFFER_ALLOCATOR_NAME: *const c_char = b"GLBuffer\0" as *const u8 as *const c_char;
-pub const GST_GL_COLOR_CONVERT_EXT_FORMATS: *const c_char =
-    b", BGR10A2_LE, RGB10A2_LE, P010_10LE, P012_LE, P016_LE, Y212_LE, Y412_LE\0" as *const u8
-        as *const c_char;
-pub const GST_GL_CONFIG_STRUCTURE_NAME: *const c_char =
-    b"gst-gl-context-config\0" as *const u8 as *const c_char;
-pub const GST_GL_CONTEXT_TYPE_CGL: *const c_char =
-    b"gst.gl.context.CGL\0" as *const u8 as *const c_char;
-pub const GST_GL_CONTEXT_TYPE_EAGL: *const c_char =
-    b"gst.gl.context.EAGL\0" as *const u8 as *const c_char;
-pub const GST_GL_CONTEXT_TYPE_EGL: *const c_char =
-    b"gst.gl.context.EGL\0" as *const u8 as *const c_char;
-pub const GST_GL_CONTEXT_TYPE_GLX: *const c_char =
-    b"gst.gl.context.GLX\0" as *const u8 as *const c_char;
-pub const GST_GL_CONTEXT_TYPE_WGL: *const c_char =
-    b"gst.gl.context.WGL\0" as *const u8 as *const c_char;
-pub const GST_GL_DISPLAY_CONTEXT_TYPE: *const c_char =
-    b"gst.gl.GLDisplay\0" as *const u8 as *const c_char;
-pub const GST_GL_MEMORY_ALLOCATOR_NAME: *const c_char = b"GLMemory\0" as *const u8 as *const c_char;
-pub const GST_GL_MEMORY_PBO_ALLOCATOR_NAME: *const c_char =
-    b"GLMemoryPBO\0" as *const u8 as *const c_char;
-pub const GST_GL_MEMORY_VIDEO_EXT_FORMATS: *const c_char =
-    b", BGR10A2_LE, RGB10A2_LE, P010_10LE, P012_LE, P016_LE, Y212_LE, Y412_LE\0" as *const u8
-        as *const c_char;
-pub const GST_GL_RENDERBUFFER_ALLOCATOR_NAME: *const c_char =
-    b"GLRenderbuffer\0" as *const u8 as *const c_char;
-pub const GST_GL_TEXTURE_TARGET_2D_STR: *const c_char = b"2D\0" as *const u8 as *const c_char;
-pub const GST_GL_TEXTURE_TARGET_EXTERNAL_OES_STR: *const c_char =
-    b"external-oes\0" as *const u8 as *const c_char;
-pub const GST_GL_TEXTURE_TARGET_RECTANGLE_STR: *const c_char =
-    b"rectangle\0" as *const u8 as *const c_char;
+pub const GST_GL_API_GLES1_NAME: &[u8] = b"gles1\0";
+pub const GST_GL_API_GLES2_NAME: &[u8] = b"gles2\0";
+pub const GST_GL_API_OPENGL3_NAME: &[u8] = b"opengl3\0";
+pub const GST_GL_API_OPENGL_NAME: &[u8] = b"opengl\0";
+pub const GST_GL_BASE_MEMORY_ALLOCATOR_NAME: &[u8] = b"GLBaseMemory\0";
+pub const GST_GL_BUFFER_ALLOCATOR_NAME: &[u8] = b"GLBuffer\0";
+pub const GST_GL_COLOR_CONVERT_EXT_FORMATS: &[u8] =
+    b", BGR10A2_LE, RGB10A2_LE, P010_10LE, P012_LE, P016_LE, Y212_LE, Y412_LE\0";
+pub const GST_GL_CONFIG_STRUCTURE_NAME: &[u8] = b"gst-gl-context-config\0";
+pub const GST_GL_CONTEXT_TYPE_CGL: &[u8] = b"gst.gl.context.CGL\0";
+pub const GST_GL_CONTEXT_TYPE_EAGL: &[u8] = b"gst.gl.context.EAGL\0";
+pub const GST_GL_CONTEXT_TYPE_EGL: &[u8] = b"gst.gl.context.EGL\0";
+pub const GST_GL_CONTEXT_TYPE_GLX: &[u8] = b"gst.gl.context.GLX\0";
+pub const GST_GL_CONTEXT_TYPE_WGL: &[u8] = b"gst.gl.context.WGL\0";
+pub const GST_GL_DISPLAY_CONTEXT_TYPE: &[u8] = b"gst.gl.GLDisplay\0";
+pub const GST_GL_MEMORY_ALLOCATOR_NAME: &[u8] = b"GLMemory\0";
+pub const GST_GL_MEMORY_PBO_ALLOCATOR_NAME: &[u8] = b"GLMemoryPBO\0";
+pub const GST_GL_MEMORY_VIDEO_EXT_FORMATS: &[u8] =
+    b", BGR10A2_LE, RGB10A2_LE, P010_10LE, P012_LE, P016_LE, Y212_LE, Y412_LE\0";
+pub const GST_GL_RENDERBUFFER_ALLOCATOR_NAME: &[u8] = b"GLRenderbuffer\0";
+pub const GST_GL_TEXTURE_TARGET_2D_STR: &[u8] = b"2D\0";
+pub const GST_GL_TEXTURE_TARGET_EXTERNAL_OES_STR: &[u8] = b"external-oes\0";
+pub const GST_GL_TEXTURE_TARGET_RECTANGLE_STR: &[u8] = b"rectangle\0";
 pub const GST_MAP_GL: c_int = 131072;
 
 // Flags

@@ -5,9 +5,10 @@
 
 use crate::PlayMediaInfo;
 use glib::{
-    error::ErrorDomain, translate::*, value::FromValue, value::ToValue, Quark, StaticType, Type,
+    error::ErrorDomain, translate::*, value::FromValue, value::ToValue, GStr, Quark, StaticType,
+    Type,
 };
-use std::{ffi::CStr, fmt, mem, ptr};
+use std::{fmt, mem, ptr};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -26,15 +27,13 @@ pub enum PlayColorBalanceType {
 }
 
 impl PlayColorBalanceType {
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_play_color_balance_type_get_name(self.into_glib())
                     .as_ref()
                     .expect("gst_play_color_balance_type_get_name returned NULL"),
             )
-            .to_str()
-            .expect("gst_play_color_balance_type_get_name returned an invalid string")
         }
     }
 }
@@ -133,15 +132,13 @@ pub enum PlayError {
 }
 
 impl PlayError {
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_play_error_get_name(self.into_glib())
                     .as_ref()
                     .expect("gst_play_error_get_name returned NULL"),
             )
-            .to_str()
-            .expect("gst_play_error_get_name returned an invalid string")
         }
     }
 }
@@ -282,15 +279,13 @@ pub(crate) enum PlayMessage {
 }
 
 impl PlayMessage {
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_play_message_get_name(self.into_glib())
                     .as_ref()
                     .expect("gst_play_message_get_name returned NULL"),
             )
-            .to_str()
-            .expect("gst_play_message_get_name returned an invalid string")
         }
     }
 
@@ -588,15 +583,13 @@ pub enum PlayState {
 }
 
 impl PlayState {
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_play_state_get_name(self.into_glib())
                     .as_ref()
                     .expect("gst_play_state_get_name returned NULL"),
             )
-            .to_str()
-            .expect("gst_play_state_get_name returned an invalid string")
         }
     }
 }

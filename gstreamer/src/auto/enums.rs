@@ -5,9 +5,10 @@
 
 use crate::EventTypeFlags;
 use glib::{
-    error::ErrorDomain, translate::*, value::FromValue, value::ToValue, Quark, StaticType, Type,
+    error::ErrorDomain, translate::*, value::FromValue, value::ToValue, GStr, Quark, StaticType,
+    Type,
 };
-use std::{ffi::CStr, fmt};
+use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -743,15 +744,13 @@ pub enum DebugLevel {
 }
 
 impl DebugLevel {
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_debug_level_get_name(self.into_glib())
                     .as_ref()
                     .expect("gst_debug_level_get_name returned NULL"),
             )
-            .to_str()
-            .expect("gst_debug_level_get_name returned an invalid string")
         }
     }
 }
@@ -933,15 +932,13 @@ impl EventType {
         unsafe { from_glib(ffi::gst_event_type_get_flags(self.into_glib())) }
     }
 
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_event_type_get_name(self.into_glib())
                     .as_ref()
                     .expect("gst_event_type_get_name returned NULL"),
             )
-            .to_str()
-            .expect("gst_event_type_get_name returned an invalid string")
         }
     }
 
@@ -1687,15 +1684,13 @@ pub enum PadMode {
 }
 
 impl PadMode {
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_pad_mode_get_name(self.into_glib())
                     .as_ref()
                     .expect("gst_pad_mode_get_name returned NULL"),
             )
-            .to_str()
-            .expect("gst_pad_mode_get_name returned an invalid string")
         }
     }
 }
@@ -2949,15 +2944,13 @@ pub enum StateChange {
 }
 
 impl StateChange {
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_state_change_get_name(self.into_glib())
                     .as_ref()
                     .expect("gst_state_change_get_name returned NULL"),
             )
-            .to_str()
-            .expect("gst_state_change_get_name returned an invalid string")
         }
     }
 }
@@ -3881,15 +3874,13 @@ pub enum TocEntryType {
 }
 
 impl TocEntryType {
-    pub fn nick<'a>(self) -> &'a str {
+    pub fn nick<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_toc_entry_type_get_nick(self.into_glib())
                     .as_ref()
                     .expect("gst_toc_entry_type_get_nick returned NULL"),
             )
-            .to_str()
-            .expect("gst_toc_entry_type_get_nick returned an invalid string")
         }
     }
 }

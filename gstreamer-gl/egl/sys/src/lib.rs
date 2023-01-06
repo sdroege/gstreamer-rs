@@ -22,8 +22,7 @@ use libc::{
 use glib::{gboolean, gconstpointer, gpointer, GType};
 
 // Constants
-pub const GST_GL_DISPLAY_EGL_NAME: *const c_char =
-    b"gst.gl.display.egl\0" as *const u8 as *const c_char;
+pub const GST_GL_DISPLAY_EGL_NAME: &[u8] = b"gst.gl.display.egl\0";
 
 // Records
 #[derive(Copy, Clone)]

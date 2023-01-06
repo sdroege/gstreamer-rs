@@ -4,8 +4,8 @@
 // DO NOT EDIT
 
 use bitflags::bitflags;
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
-use std::{ffi::CStr, fmt};
+use glib::{translate::*, value::FromValue, value::ToValue, GStr, StaticType, Type};
+use std::fmt;
 
 bitflags! {
     #[doc(alias = "GstBinFlags")]
@@ -2284,15 +2284,13 @@ bitflags! {
 }
 
 impl StreamType {
-    pub fn name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a GStr {
         unsafe {
-            CStr::from_ptr(
+            GStr::from_ptr(
                 ffi::gst_stream_type_get_name(self.into_glib())
                     .as_ref()
                     .expect("gst_stream_type_get_name returned NULL"),
             )
-            .to_str()
-            .expect("gst_stream_type_get_name returned an invalid string")
         }
     }
 }
