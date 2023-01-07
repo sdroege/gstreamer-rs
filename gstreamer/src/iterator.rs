@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{ffi::CString, fmt, iter, marker::PhantomData, mem, ptr, sync::Arc};
+use std::{any::Any, fmt, iter, marker::PhantomData, mem, ptr, sync::Arc};
 
 use glib::{
     ffi::{gconstpointer, gpointer},
@@ -63,9 +63,8 @@ where
         T: StaticType,
     {
         unsafe {
-            let func_box: Box<dyn Fn(T) -> bool + Send + Sync + 'static> = Box::new(func);
-            let mut closure_value =
-                glib::Value::from_type_unchecked(from_glib(filter_boxed_get_type::<T>()));
+            let func_box: Box<dyn Any + Send + Sync + 'static> = Box::new(func);
+            let mut closure_value = glib::Value::from_type_unchecked(filter_boxed_get_type());
             glib::gobject_ffi::g_value_take_boxed(
                 closure_value.to_glib_none_mut().0,
                 Arc::into_raw(Arc::new(func_box)) as gpointer,
@@ -73,7 +72,7 @@ where
 
             from_glib_full(ffi::gst_iterator_filter(
                 self.into_glib_ptr(),
-                Some(filter_trampoline::<T>),
+                Some(filter_trampoline::<T, F>),
                 closure_value.to_glib_none().0,
             ))
         }
@@ -317,7 +316,10 @@ where
 unsafe impl<T> Send for Iterator<T> {}
 unsafe impl<T> Sync for Iterator<T> {}
 
-unsafe extern "C" fn filter_trampoline<T>(value: gconstpointer, func: gconstpointer) -> i32
+unsafe extern "C" fn filter_trampoline<T: StaticType, F: Fn(T) -> bool + Send + Sync + 'static>(
+    value: gconstpointer,
+    func: gconstpointer,
+) -> i32
 where
     for<'a> T: FromValue<'a> + 'static,
 {
@@ -325,7 +327,8 @@ where
 
     let func = func as *const glib::gobject_ffi::GValue;
     let func = glib::gobject_ffi::g_value_get_boxed(func);
-    let func = &*(func as *const &(dyn Fn(T) -> bool + Send + Sync + 'static));
+    let func = &*(func as *const &(dyn Any + Send + Sync + 'static));
+    let func = func.downcast_ref::<F>().unwrap();
 
     let value = &*(value as *const glib::Value);
     let value = value.get::<T>().expect("Iterator filter_trampoline");
@@ -337,8 +340,8 @@ where
     }
 }
 
-unsafe extern "C" fn filter_boxed_ref<T: 'static>(boxed: gpointer) -> gpointer {
-    let boxed = Arc::from_raw(boxed as *const Box<dyn Fn(T) -> bool + Send + Sync + 'static>);
+unsafe extern "C" fn filter_boxed_ref(boxed: gpointer) -> gpointer {
+    let boxed = Arc::from_raw(boxed as *const Box<dyn Any + Send + Sync + 'static>);
     let copy = Arc::clone(&boxed);
 
     // Forget it and keep it alive, we will still need it later
@@ -347,33 +350,22 @@ unsafe extern "C" fn filter_boxed_ref<T: 'static>(boxed: gpointer) -> gpointer {
     Arc::into_raw(copy) as gpointer
 }
 
-unsafe extern "C" fn filter_boxed_unref<T: 'static>(boxed: gpointer) {
-    let _ = Arc::from_raw(boxed as *const Box<dyn Fn(T) -> bool + Send + Sync + 'static>);
+unsafe extern "C" fn filter_boxed_unref(boxed: gpointer) {
+    let _ = Arc::from_raw(boxed as *const Box<dyn Any + Send + Sync + 'static>);
 }
 
-unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib::ffi::GType {
-    use std::{collections::HashMap, sync::Mutex};
+unsafe extern "C" fn filter_boxed_get_type() -> glib::Type {
+    use std::sync::Once;
 
-    use once_cell::sync::Lazy;
+    static mut TYPE: glib::Type = glib::Type::INVALID;
+    static ONCE: Once = Once::new();
 
-    static mut TYPES: Lazy<Mutex<HashMap<String, glib::ffi::GType>>> =
-        Lazy::new(|| Mutex::new(HashMap::new()));
-
-    let mut types = TYPES.lock().unwrap();
-    let type_name = T::static_type().name();
-
-    if let Some(type_) = types.get(type_name) {
-        return *type_;
-    }
-
-    let type_ = {
+    ONCE.call_once(|| {
         let iter_type_name = {
             let mut idx = 0;
 
             loop {
-                let iter_type_name =
-                    CString::new(format!("GstRsIteratorFilterBoxed-{}-{}", type_name, idx))
-                        .unwrap();
+                let iter_type_name = glib::gformat!("GstRsIteratorFilterBoxed-{}", idx);
                 if glib::gobject_ffi::g_type_from_name(iter_type_name.as_ptr())
                     == glib::gobject_ffi::G_TYPE_INVALID
                 {
@@ -383,20 +375,16 @@ unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib::f
             }
         };
 
-        let type_ = glib::gobject_ffi::g_boxed_type_register_static(
+        TYPE = from_glib(glib::gobject_ffi::g_boxed_type_register_static(
             iter_type_name.as_ptr(),
-            Some(filter_boxed_ref::<T>),
-            Some(filter_boxed_unref::<T>),
-        );
+            Some(filter_boxed_ref),
+            Some(filter_boxed_unref),
+        ));
 
-        assert_ne!(type_, glib::gobject_ffi::G_TYPE_INVALID);
+        assert!(TYPE.is_valid());
+    });
 
-        type_
-    };
-
-    types.insert(String::from(type_name), type_);
-
-    type_
+    TYPE
 }
 
 unsafe extern "C" fn find_trampoline<T, F: FnMut(T) -> bool>(
