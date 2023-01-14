@@ -40,6 +40,7 @@ impl Eq for StreamProducer {}
 /// Link between a `StreamProducer` and a consumer, disconnecting the link on `Drop`.
 /// The producer and consumer will stay alive while the link is.
 #[derive(Debug)]
+#[must_use]
 pub struct ConsumptionLink {
     consumer: gst_app::AppSrc,
     producer: Option<StreamProducer>,
