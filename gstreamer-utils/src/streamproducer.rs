@@ -48,6 +48,8 @@ pub struct ConsumptionLink {
     dropped: Arc<atomic::AtomicU64>,
     /// number of buffers pushed through `consumer`
     pushed: Arc<atomic::AtomicU64>,
+    /// if buffers should not be pushed to the `consumer` right now
+    discard: Arc<atomic::AtomicBool>,
 }
 
 impl ConsumptionLink {
@@ -76,6 +78,16 @@ impl ConsumptionLink {
     /// number of buffers pushed through this link
     pub fn pushed(&self) -> u64 {
         self.pushed.load(atomic::Ordering::SeqCst)
+    }
+
+    /// if buffers are currently pushed through this link
+    pub fn discard(&self) -> bool {
+        self.discard.load(atomic::Ordering::SeqCst)
+    }
+
+    /// If set to `true` then no buffers will be pushed through this link
+    pub fn set_discard(&self, discard: bool) {
+        self.discard.store(discard, atomic::Ordering::SeqCst)
     }
 }
 
@@ -150,6 +162,7 @@ impl StreamProducer {
         let stream_consumer = StreamConsumer::new(consumer, fku_probe_id);
         let dropped = stream_consumer.dropped.clone();
         let pushed = stream_consumer.pushed.clone();
+        let discard = stream_consumer.discard.clone();
 
         consumers
             .consumers
@@ -160,6 +173,7 @@ impl StreamProducer {
             producer: Some(self.clone()),
             dropped,
             pushed,
+            discard,
         })
     }
 
@@ -267,6 +281,11 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
                                 {
                                     consumer.appsrc.set_latency(latency, gst::ClockTime::NONE);
                                 }
+                            }
+
+                            if consumer.discard.load(atomic::Ordering::SeqCst) {
+                                consumer.needs_keyframe.store(false, atomic::Ordering::SeqCst);
+                                return None;
                             }
 
                             if is_discont && !is_keyframe {
@@ -394,6 +413,8 @@ struct StreamConsumer {
     dropped: Arc<atomic::AtomicU64>,
     /// number of buffers pushed through `appsrc`
     pushed: Arc<atomic::AtomicU64>,
+    /// if buffers should not be pushed to the `appsrc` right now
+    discard: Arc<atomic::AtomicBool>,
 }
 
 impl StreamConsumer {
@@ -428,6 +449,7 @@ impl StreamConsumer {
             needs_keyframe,
             dropped,
             pushed: Arc::new(atomic::AtomicU64::new(0)),
+            discard: Arc::new(atomic::AtomicBool::new(false)),
         }
     }
 }
