@@ -53,6 +53,17 @@ pub struct ConsumptionLink {
 }
 
 impl ConsumptionLink {
+    /// Create a new disconnected `ConsumptionLink`.
+    pub fn disconnected(consumer: gst_app::AppSrc) -> ConsumptionLink {
+        ConsumptionLink {
+            consumer,
+            producer: None,
+            dropped: Arc::new(atomic::AtomicU64::new(0)),
+            pushed: Arc::new(atomic::AtomicU64::new(0)),
+            discard: Arc::new(atomic::AtomicBool::new(false)),
+        }
+    }
+
     /// Replace the producer by a new one, keeping the existing consumer.
     pub fn change_producer(
         &mut self,
