@@ -181,13 +181,6 @@ impl StreamProducer {
         }
     }
 
-    /// Stop discarding data samples and start forwarding them to the consumers.
-    ///
-    /// This is useful for example for prerolling live sources.
-    pub fn forward(&self) {
-        self.consumers.lock().unwrap().discard = false;
-    }
-
     /// configure if EOS from appsrc should be forwarded to all the consumers
     pub fn set_forward_eos(&self, forward_eos: bool) {
         self.consumers.lock().unwrap().forward_eos = forward_eos;
@@ -225,7 +218,6 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
             current_latency: None,
             latency_updated: false,
             consumers: HashMap::new(),
-            discard: true,
             forward_eos: true,
         }));
 
@@ -241,10 +233,6 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
                             return Err(gst::FlowError::Flushing);
                         }
                     };
-
-                    if consumers.discard {
-                        return Ok(gst::FlowSuccess::Ok);
-                    }
 
                     let (is_discont, is_keyframe) = if let Some(buf) = sample.buffer() {
                         let flags = buf.flags();
@@ -385,8 +373,6 @@ struct StreamConsumers {
     latency_updated: bool,
     /// The consumers, AppSrc pointer value -> consumer
     consumers: HashMap<gst_app::AppSrc, StreamConsumer>,
-    /// Whether appsrc samples should be forwarded to consumers yet
-    discard: bool,
     /// Whether appsrc EOS should be forwarded to consumers
     forward_eos: bool,
 }
@@ -599,7 +585,6 @@ mod tests {
         gst::init().unwrap();
 
         let (producer_pipe, producer_src, _producer_sink, producer) = create_producer();
-        producer.forward();
         producer_pipe
             .set_state(gst::State::Playing)
             .expect("Couldn't set producer pipeline state");
