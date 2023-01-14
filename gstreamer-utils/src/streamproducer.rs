@@ -100,6 +100,11 @@ impl ConsumptionLink {
     pub fn set_discard(&self, discard: bool) {
         self.discard.store(discard, atomic::Ordering::SeqCst)
     }
+
+    /// Get the GStreamer `appsrc` wrapped by this link
+    pub fn appsrc(&self) -> &gst_app::AppSrc {
+        &self.consumer
+    }
 }
 
 impl Drop for ConsumptionLink {
