@@ -150,12 +150,7 @@ pub trait ElementImplExt: ObjectSubclass {
 
     fn panicked(&self) -> &atomic::AtomicBool;
 
-    fn catch_panic<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R, P: IsA<Element>>(
-        &self,
-        element: &P,
-        fallback: G,
-        f: F,
-    ) -> R;
+    fn catch_panic<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R>(&self, fallback: G, f: F) -> R;
 
     fn catch_panic_pad_function<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R>(
         parent: Option<&crate::Object>,
@@ -329,20 +324,8 @@ impl<T: ElementImpl> ElementImplExt for T {
             .expect("instance not initialized correctly")
     }
 
-    fn catch_panic<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R, P: IsA<Element>>(
-        &self,
-        element: &P,
-        fallback: G,
-        f: F,
-    ) -> R {
-        unsafe {
-            assert!(element.type_().is_a(T::type_()));
-            let ptr: *mut ffi::GstElement = element.as_ptr() as *mut _;
-            let instance = &*(ptr as *mut T::Instance);
-            let imp = instance.imp();
-
-            panic_to_error!(imp, fallback(), { f(imp) })
-        }
+    fn catch_panic<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R>(&self, fallback: G, f: F) -> R {
+        panic_to_error!(self, fallback(), { f(self) })
     }
 
     fn catch_panic_pad_function<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R>(
@@ -350,15 +333,10 @@ impl<T: ElementImpl> ElementImplExt for T {
         fallback: G,
         f: F,
     ) -> R {
-        unsafe {
-            let wrap = parent.as_ref().unwrap().downcast_ref::<Element>().unwrap();
-            assert!(wrap.type_().is_a(Self::type_()));
-            let ptr: *mut ffi::GstElement = wrap.to_glib_none().0;
-            let instance = &*(ptr as *mut Self::Instance);
-            let imp = instance.imp();
+        let element = parent.unwrap().dynamic_cast_ref::<Self::Type>().unwrap();
+        let imp = element.imp();
 
-            panic_to_error!(imp, fallback(), { f(imp) })
-        }
+        panic_to_error!(imp, fallback(), { f(imp) })
     }
 
     fn post_error_message(&self, msg: crate::ErrorMessage) {
