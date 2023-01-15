@@ -79,9 +79,9 @@ impl Structure {
     }
 
     #[allow(clippy::should_implement_trait)]
-    pub fn from_iter<'a>(
+    pub fn from_iter(
         name: impl IntoGStr,
-        iter: impl IntoIterator<Item = (&'a glib::GStr, SendValue)>,
+        iter: impl IntoIterator<Item = (impl IntoGStr, SendValue)>,
     ) -> Structure {
         skip_assert_initialized!();
         let mut structure = Structure::new_empty(name);
