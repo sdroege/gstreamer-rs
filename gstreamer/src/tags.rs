@@ -1,19 +1,18 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{ffi::CStr, fmt, marker::PhantomData, mem};
+use std::{fmt, marker::PhantomData, mem};
 
 use glib::{
     translate::*,
     value::{FromValue, SendValue, ToSendValue, Value},
-    StaticType,
+    IntoGStr, StaticType,
 };
-use once_cell::sync::Lazy;
 
 use crate::{Sample, TagError, TagMergeMode, TagScope};
 
 pub trait Tag<'a> {
     type TagType: StaticType + FromValue<'a> + ToSendValue + Send + Sync;
-    fn tag_name<'b>() -> &'b str;
+    const TAG_NAME: &'static glib::GStr;
 }
 
 macro_rules! impl_tag(
@@ -21,14 +20,8 @@ macro_rules! impl_tag(
         pub enum $name {}
         impl<'a> Tag<'a> for $name {
             type TagType = $t;
-
-            fn tag_name<'b>() -> &'b str {
-                *$rust_tag
-            }
+            const TAG_NAME: &'static glib::GStr = unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::$gst_tag) };
         }
-
-        pub(crate) static $rust_tag: Lazy<&'static str> = Lazy::new(||
-            unsafe { CStr::from_ptr(ffi::$gst_tag).to_str().unwrap() });
     };
 );
 
@@ -363,15 +356,15 @@ impl<T> TagValue<T> {
 impl TagListRef {
     #[doc(alias = "gst_tag_list_add")]
     pub fn add<'a, T: Tag<'a>>(&mut self, value: &T::TagType, mode: TagMergeMode) {
-        // result can be safely ignored here as `value`'s type is tied to `T::tag_name()`
+        // result can be safely ignored here as `value`'s type is tied to `T::TAG_NAME`
         let v = <T::TagType as ToSendValue>::to_send_value(value);
-        let _res = self.add_value(T::tag_name(), &v, mode);
+        let _res = self.add_value(T::TAG_NAME, &v, mode);
     }
 
     #[doc(alias = "gst_tag_list_add")]
     pub fn add_generic(
         &mut self,
-        tag_name: &str,
+        tag_name: impl IntoGStr,
         value: impl ToSendValue,
         mode: TagMergeMode,
     ) -> Result<(), TagError> {
@@ -381,50 +374,49 @@ impl TagListRef {
     #[doc(alias = "gst_tag_list_add_value")]
     pub fn add_value(
         &mut self,
-        tag_name: &str,
+        tag_name: impl IntoGStr,
         value: &glib::SendValue,
         mode: TagMergeMode,
     ) -> Result<(), TagError> {
         unsafe {
-            let tag_name = tag_name.to_glib_none();
+            tag_name.run_with_gstr(|tag_name| {
+                let tag_type: glib::Type = from_glib(ffi::gst_tag_get_type(tag_name.as_ptr()));
+                if tag_type != value.type_() {
+                    return Err(TagError::TypeMismatch);
+                }
 
-            let tag_type: glib::Type = from_glib(ffi::gst_tag_get_type(tag_name.0));
-            if tag_type != value.type_() {
-                return Err(TagError::TypeMismatch);
-            }
-
-            ffi::gst_tag_list_add_value(
-                self.as_mut_ptr(),
-                mode.into_glib(),
-                tag_name.0,
-                value.to_glib_none().0,
-            );
+                ffi::gst_tag_list_add_value(
+                    self.as_mut_ptr(),
+                    mode.into_glib(),
+                    tag_name.as_ptr(),
+                    value.to_glib_none().0,
+                );
+                Ok(())
+            })
         }
-
-        Ok(())
     }
 
     #[doc(alias = "gst_tag_list_remove_tag")]
     pub fn remove<'a, T: Tag<'a>>(&mut self) {
-        self.remove_generic(T::tag_name());
+        self.remove_generic(T::TAG_NAME);
     }
 
     #[doc(alias = "gst_tag_list_remove_tag")]
-    pub fn remove_generic(&mut self, tag_name: &str) {
+    pub fn remove_generic(&mut self, tag_name: impl IntoGStr) {
         unsafe {
-            let tag_name = tag_name.to_glib_none();
-
-            ffi::gst_tag_list_remove_tag(self.as_mut_ptr(), tag_name.0);
+            tag_name.run_with_gstr(|tag_name| {
+                ffi::gst_tag_list_remove_tag(self.as_mut_ptr(), tag_name.as_ptr());
+            })
         }
     }
 
     #[doc(alias = "gst_tag_list_get")]
     pub fn get<'a, T: Tag<'a>>(&self) -> Option<TagValue<T::TagType>> {
-        self.generic(T::tag_name()).map(|value| {
+        self.generic(T::TAG_NAME).map(|value| {
             if !value.is::<T::TagType>() {
                 panic!(
                     "TagListRef::get type mismatch for tag {}: {}",
-                    T::tag_name(),
+                    T::TAG_NAME,
                     value.type_()
                 );
             }
@@ -434,21 +426,23 @@ impl TagListRef {
 
     #[doc(alias = "gst_tag_list_get")]
     #[doc(alias = "get_generic")]
-    pub fn generic(&self, tag_name: &str) -> Option<SendValue> {
+    pub fn generic(&self, tag_name: impl IntoGStr) -> Option<SendValue> {
         unsafe {
             let mut value: mem::MaybeUninit<SendValue> = mem::MaybeUninit::zeroed();
 
-            let found: bool = from_glib(ffi::gst_tag_list_copy_value(
-                (*value.as_mut_ptr()).to_glib_none_mut().0,
-                self.as_ptr(),
-                tag_name.to_glib_none().0,
-            ));
+            let found: bool = tag_name.run_with_gstr(|tag_name| {
+                from_glib(ffi::gst_tag_list_copy_value(
+                    (*value.as_mut_ptr()).to_glib_none_mut().0,
+                    self.as_ptr(),
+                    tag_name.as_ptr(),
+                ))
+            });
 
             if !found {
-                return None;
+                None
+            } else {
+                Some(value.assume_init())
             }
-
-            Some(value.assume_init())
         }
     }
 
@@ -458,7 +452,7 @@ impl TagListRef {
     }
 
     #[doc(alias = "gst_tag_list_nth_tag_name")]
-    pub fn nth_tag_name(&self, idx: u32) -> Option<&str> {
+    pub fn nth_tag_name(&self, idx: u32) -> Option<&glib::GStr> {
         if idx >= self.n_tags() {
             return None;
         }
@@ -466,18 +460,18 @@ impl TagListRef {
         unsafe {
             let name = ffi::gst_tag_list_nth_tag_name(self.as_ptr(), idx);
             debug_assert!(!name.is_null());
-            Some(CStr::from_ptr(name).to_str().unwrap())
+            Some(glib::GStr::from_ptr(name))
         }
     }
 
     #[doc(alias = "get_index")]
     #[doc(alias = "gst_tag_list_get_index")]
     pub fn index<'a, T: Tag<'a>>(&self, idx: u32) -> Option<&'a TagValue<T::TagType>> {
-        self.index_generic(T::tag_name(), idx).map(|value| {
+        self.index_generic(T::TAG_NAME, idx).map(|value| {
             if !value.is::<T::TagType>() {
                 panic!(
                     "TagListRef::get_index type mismatch for tag {}: {}",
-                    T::tag_name(),
+                    T::TAG_NAME,
                     value.type_()
                 );
             }
@@ -487,36 +481,42 @@ impl TagListRef {
 
     #[doc(alias = "get_index_generic")]
     #[doc(alias = "gst_tag_list_get_index")]
-    pub fn index_generic<'a>(&'a self, tag_name: &str, idx: u32) -> Option<&'a SendValue> {
+    pub fn index_generic(&self, tag_name: impl IntoGStr, idx: u32) -> Option<&SendValue> {
         unsafe {
-            let value =
-                ffi::gst_tag_list_get_value_index(self.as_ptr(), tag_name.to_glib_none().0, idx);
+            let value = tag_name.run_with_gstr(|tag_name| {
+                ffi::gst_tag_list_get_value_index(self.as_ptr(), tag_name.as_ptr(), idx)
+            });
 
             if value.is_null() {
-                return None;
+                None
+            } else {
+                Some(&*(value as *const SendValue))
             }
-
-            Some(&*(value as *const SendValue))
         }
     }
 
     #[doc(alias = "get_size")]
     #[doc(alias = "gst_tag_list_get_tag_size")]
     pub fn size<'a, T: Tag<'a>>(&self) -> u32 {
-        self.size_by_name(T::tag_name())
+        self.size_by_name(T::TAG_NAME)
     }
 
     #[doc(alias = "get_size_by_name")]
     #[doc(alias = "gst_tag_list_get_tag_size")]
-    pub fn size_by_name(&self, tag_name: &str) -> u32 {
-        unsafe { ffi::gst_tag_list_get_tag_size(self.as_ptr(), tag_name.to_glib_none().0) }
+    pub fn size_by_name(&self, tag_name: impl IntoGStr) -> u32 {
+        unsafe {
+            tag_name.run_with_gstr(|tag_name| {
+                ffi::gst_tag_list_get_tag_size(self.as_ptr(), tag_name.as_ptr())
+            })
+        }
     }
 
     pub fn iter_tag<'a, T: Tag<'a>>(&'a self) -> TagIter<'a, T> {
         TagIter::new(self)
     }
 
-    pub fn iter_tag_generic<'a>(&'a self, tag_name: &'a str) -> GenericTagIter<'a> {
+    pub fn iter_tag_generic(&self, tag_name: impl IntoGStr) -> GenericTagIter {
+        let tag_name = glib::Quark::from_str(tag_name).as_str();
         GenericTagIter::new(self, tag_name)
     }
 
@@ -728,13 +728,13 @@ where
 #[derive(Debug)]
 pub struct GenericTagIter<'a> {
     taglist: &'a TagListRef,
-    name: &'a str,
+    name: &'static glib::GStr,
     idx: usize,
     size: usize,
 }
 
 impl<'a> GenericTagIter<'a> {
-    fn new(taglist: &'a TagListRef, name: &'a str) -> GenericTagIter<'a> {
+    fn new(taglist: &'a TagListRef, name: &'static glib::GStr) -> GenericTagIter<'a> {
         skip_assert_initialized!();
         GenericTagIter {
             taglist,
@@ -850,7 +850,7 @@ impl<'a> GenericIter<'a> {
 }
 
 impl<'a> Iterator for GenericIter<'a> {
-    type Item = (&'a str, GenericTagIter<'a>);
+    type Item = (&'a glib::GStr, GenericTagIter<'a>);
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.idx >= self.size {
@@ -944,7 +944,7 @@ impl<'a> Iter<'a> {
 }
 
 impl<'a> Iterator for Iter<'a> {
-    type Item = (&'a str, glib::SendValue);
+    type Item = (&'a glib::GStr, glib::SendValue);
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.idx >= self.size {
@@ -1019,50 +1019,50 @@ impl<'a> ExactSizeIterator for Iter<'a> {}
 impl<'a> std::iter::FusedIterator for Iter<'a> {}
 
 #[doc(alias = "gst_tag_exists")]
-pub fn tag_exists(name: &str) -> bool {
+pub fn tag_exists(name: impl IntoGStr) -> bool {
     skip_assert_initialized!();
-    unsafe { from_glib(ffi::gst_tag_exists(name.to_glib_none().0)) }
+    unsafe { name.run_with_gstr(|name| from_glib(ffi::gst_tag_exists(name.as_ptr()))) }
 }
 
 #[doc(alias = "gst_tag_get_type")]
-pub fn tag_get_type(name: &str) -> glib::Type {
+pub fn tag_get_type(name: impl IntoGStr) -> glib::Type {
     skip_assert_initialized!();
-    unsafe { from_glib(ffi::gst_tag_get_type(name.to_glib_none().0)) }
+    unsafe { name.run_with_gstr(|name| from_glib(ffi::gst_tag_get_type(name.as_ptr()))) }
 }
 
 #[doc(alias = "gst_tag_get_nick")]
-pub fn tag_get_nick(name: &str) -> &str {
+pub fn tag_get_nick<'b>(name: impl IntoGStr) -> &'b glib::GStr {
     skip_assert_initialized!();
     unsafe {
-        let ptr = ffi::gst_tag_get_nick(name.to_glib_none().0);
-        CStr::from_ptr(ptr).to_str().unwrap()
+        let ptr = name.run_with_gstr(|name| ffi::gst_tag_get_nick(name.as_ptr()));
+        glib::GStr::from_ptr(ptr)
     }
 }
 
 #[doc(alias = "gst_tag_get_description")]
-pub fn tag_get_description<'b>(name: &str) -> Option<&'b str> {
+pub fn tag_get_description<'b>(name: impl IntoGStr) -> Option<&'b glib::GStr> {
     skip_assert_initialized!();
     unsafe {
-        let ptr = ffi::gst_tag_get_description(name.to_glib_none().0);
+        let ptr = name.run_with_gstr(|name| ffi::gst_tag_get_description(name.as_ptr()));
 
         if ptr.is_null() {
             None
         } else {
-            Some(CStr::from_ptr(ptr).to_str().unwrap())
+            Some(glib::GStr::from_ptr(ptr))
         }
     }
 }
 
 #[doc(alias = "gst_tag_get_flag")]
-pub fn tag_get_flag(name: &str) -> crate::TagFlag {
+pub fn tag_get_flag(name: impl IntoGStr) -> crate::TagFlag {
     skip_assert_initialized!();
-    unsafe { from_glib(ffi::gst_tag_get_flag(name.to_glib_none().0)) }
+    unsafe { name.run_with_gstr(|name| from_glib(ffi::gst_tag_get_flag(name.as_ptr()))) }
 }
 
 pub trait CustomTag<'a>: Tag<'a> {
     const FLAG: crate::TagFlag;
-    const NICK: &'static str;
-    const DESCRIPTION: &'static str;
+    const NICK: &'static glib::GStr;
+    const DESCRIPTION: &'static glib::GStr;
 
     fn merge_func(src: &Value) -> Value {
         skip_assert_initialized!();
@@ -1072,7 +1072,7 @@ pub trait CustomTag<'a>: Tag<'a> {
 
 #[doc(alias = "gst_tag_register")]
 pub fn register<T: for<'a> CustomTag<'a>>() {
-    assert!(!tag_exists(T::tag_name()));
+    assert!(!tag_exists(T::TAG_NAME));
 
     unsafe extern "C" fn merge_func_trampoline<T: for<'a> CustomTag<'a>>(
         dest: *mut glib::gobject_ffi::GValue,
@@ -1083,11 +1083,11 @@ pub fn register<T: for<'a> CustomTag<'a>>() {
 
     unsafe {
         ffi::gst_tag_register(
-            T::tag_name().to_glib_none().0,
+            T::TAG_NAME.as_ptr(),
             T::FLAG.into_glib(),
             T::TagType::static_type().into_glib(),
-            T::NICK.to_glib_none().0,
-            T::DESCRIPTION.to_glib_none().0,
+            T::NICK.as_ptr(),
+            T::DESCRIPTION.as_ptr(),
             Some(merge_func_trampoline::<T>),
         )
     }
@@ -1186,21 +1186,25 @@ mod tests {
         {
             let tags = tags.get_mut().unwrap();
             assert!(tags
-                .add_generic(&TAG_TITLE, "some title", TagMergeMode::Append)
+                .add_generic(Title::TAG_NAME, "some title", TagMergeMode::Append)
                 .is_ok());
             assert!(tags
-                .add_generic(&TAG_TITLE, "second title", TagMergeMode::Append)
+                .add_generic(Title::TAG_NAME, "second title", TagMergeMode::Append)
                 .is_ok());
             assert!(tags
-                .add_generic(&TAG_DURATION, ClockTime::SECOND * 120, TagMergeMode::Append)
+                .add_generic(
+                    Duration::TAG_NAME,
+                    ClockTime::SECOND * 120,
+                    TagMergeMode::Append
+                )
                 .is_ok());
             assert!(tags
-                .add_generic(&TAG_TITLE, "third title", TagMergeMode::Append)
+                .add_generic(Title::TAG_NAME, "third title", TagMergeMode::Append)
                 .is_ok());
 
             assert_eq!(
                 tags.add_generic(
-                    &TAG_IMAGE,
+                    Image::TAG_NAME,
                     "`&[str] instead of `Sample`",
                     TagMergeMode::Append
                 ),
@@ -1209,35 +1213,35 @@ mod tests {
         }
 
         assert_eq!(
-            tags.index_generic(&TAG_TITLE, 0).unwrap().get(),
+            tags.index_generic(Title::TAG_NAME, 0).unwrap().get(),
             Ok(Some("some title"))
         );
         assert_eq!(
-            tags.index_generic(&TAG_TITLE, 1).unwrap().get(),
+            tags.index_generic(Title::TAG_NAME, 1).unwrap().get(),
             Ok(Some("second title"))
         );
         assert_eq!(
-            tags.index_generic(&TAG_DURATION, 0).unwrap().get(),
+            tags.index_generic(Duration::TAG_NAME, 0).unwrap().get(),
             Ok(Some(ClockTime::SECOND * 120))
         );
         assert_eq!(
-            tags.index_generic(&TAG_TITLE, 2).unwrap().get(),
+            tags.index_generic(Title::TAG_NAME, 2).unwrap().get(),
             Ok(Some("third title"))
         );
 
         assert_eq!(
-            tags.generic(&TAG_TITLE).unwrap().get(),
+            tags.generic(Title::TAG_NAME).unwrap().get(),
             Ok(Some("some title, second title, third title"))
         );
 
         assert_eq!(tags.n_tags(), 2);
-        assert_eq!(tags.nth_tag_name(0), Some(*TAG_TITLE));
-        assert_eq!(tags.size_by_name(&TAG_TITLE), 3);
-        assert_eq!(tags.nth_tag_name(1), Some(*TAG_DURATION));
-        assert_eq!(tags.size_by_name(&TAG_DURATION), 1);
+        assert_eq!(tags.nth_tag_name(0), Some(Title::TAG_NAME));
+        assert_eq!(tags.size_by_name(Title::TAG_NAME), 3);
+        assert_eq!(tags.nth_tag_name(1), Some(Duration::TAG_NAME));
+        assert_eq!(tags.size_by_name(Duration::TAG_NAME), 1);
 
         // GenericTagIter
-        let mut title_iter = tags.iter_tag_generic(&TAG_TITLE);
+        let mut title_iter = tags.iter_tag_generic(Title::TAG_NAME);
         assert_eq!(title_iter.size_hint(), (3, Some(3)));
         let first_title = title_iter.next().unwrap();
         assert_eq!(first_title.get(), Ok(Some("some title")));
@@ -1252,7 +1256,7 @@ mod tests {
         assert_eq!(tag_list_iter.size_hint(), (2, Some(2)));
 
         let (tag_name, mut tag_iter) = tag_list_iter.next().unwrap();
-        assert_eq!(tag_name, *TAG_TITLE);
+        assert_eq!(tag_name, Title::TAG_NAME);
         let first_title = tag_iter.next().unwrap();
         assert_eq!(first_title.get(), Ok(Some("some title")));
         let second_title = tag_iter.next().unwrap();
@@ -1262,7 +1266,7 @@ mod tests {
         assert!(tag_iter.next().is_none());
 
         let (tag_name, mut tag_iter) = tag_list_iter.next().unwrap();
-        assert_eq!(tag_name, *TAG_DURATION);
+        assert_eq!(tag_name, Duration::TAG_NAME);
         let first_duration = tag_iter.next().unwrap();
         assert_eq!(first_duration.get(), Ok(Some(ClockTime::SECOND * 120)));
         assert!(tag_iter.next().is_none());
@@ -1272,14 +1276,14 @@ mod tests {
         assert_eq!(tag_list_iter.size_hint(), (2, Some(2)));
 
         let (tag_name, tag_value) = tag_list_iter.next().unwrap();
-        assert_eq!(tag_name, *TAG_TITLE);
+        assert_eq!(tag_name, Title::TAG_NAME);
         assert_eq!(
             tag_value.get(),
             Ok(Some("some title, second title, third title"))
         );
 
         let (tag_name, tag_value) = tag_list_iter.next().unwrap();
-        assert_eq!(tag_name, *TAG_DURATION);
+        assert_eq!(tag_name, Duration::TAG_NAME);
         assert_eq!(tag_value.get(), Ok(Some(ClockTime::SECOND * 120)));
         assert!(tag_iter.next().is_none());
     }
@@ -1292,15 +1296,14 @@ mod tests {
 
         impl<'a> Tag<'a> for MyCustomTag {
             type TagType = &'a str;
-            fn tag_name<'b>() -> &'b str {
-                "my-custom-tag"
-            }
+            const TAG_NAME: &'static glib::GStr = glib::gstr!("my-custom-tag");
         }
 
         impl<'a> CustomTag<'a> for MyCustomTag {
             const FLAG: crate::TagFlag = crate::TagFlag::Meta;
-            const NICK: &'static str = "my custom tag";
-            const DESCRIPTION: &'static str = "My own custom tag type for testing";
+            const NICK: &'static glib::GStr = glib::gstr!("my custom tag");
+            const DESCRIPTION: &'static glib::GStr =
+                glib::gstr!("My own custom tag type for testing");
 
             fn merge_func(src: &Value) -> Value {
                 skip_assert_initialized!();
@@ -1310,17 +1313,17 @@ mod tests {
 
         register::<MyCustomTag>();
 
-        assert!(tag_exists(MyCustomTag::tag_name()));
+        assert!(tag_exists(MyCustomTag::TAG_NAME));
         assert_eq!(
-            tag_get_type(MyCustomTag::tag_name()),
+            tag_get_type(MyCustomTag::TAG_NAME),
             <MyCustomTag as Tag>::TagType::static_type()
         );
-        assert_eq!(tag_get_nick(MyCustomTag::tag_name()), MyCustomTag::NICK);
+        assert_eq!(tag_get_nick(MyCustomTag::TAG_NAME), MyCustomTag::NICK);
         assert_eq!(
-            tag_get_description(MyCustomTag::tag_name()),
+            tag_get_description(MyCustomTag::TAG_NAME),
             Some(MyCustomTag::DESCRIPTION)
         );
-        assert_eq!(tag_get_flag(MyCustomTag::tag_name()), MyCustomTag::FLAG);
+        assert_eq!(tag_get_flag(MyCustomTag::TAG_NAME), MyCustomTag::FLAG);
 
         let mut tags = TagList::new();
         {

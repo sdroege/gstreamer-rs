@@ -262,7 +262,7 @@ mod tests {
             .field("string", "bla")
             .field("fraction", Fraction::new(1, 2))
             .field("array", Array::new([1, 2]))
-            .features(&["foo:bar", "foo:baz"])
+            .features(["foo:bar", "foo:baz"])
             .build();
 
         let pretty_config = ron::ser::PrettyConfig::new().new_line("".to_string());
@@ -405,7 +405,7 @@ mod tests {
                 .as_ref()
         );
         let f = caps.features(0).unwrap();
-        assert!(f.is_equal(CapsFeatures::new(&["foo:bar", "foo:baz"]).as_ref()));
+        assert!(f.is_equal(CapsFeatures::new(["foo:bar", "foo:baz"]).as_ref()));
 
         let caps_ron = r#"
             Some([
@@ -471,7 +471,7 @@ mod tests {
             .field("string", "bla")
             .field("fraction", Fraction::new(1, 2))
             .field("array", Array::new([1, 2]))
-            .features(&["foo:bar", "foo:baz"])
+            .features(["foo:bar", "foo:baz"])
             .build();
         let caps_ser = ron::ser::to_string(&caps).unwrap();
         let caps_de: Caps = ron::de::from_str(caps_ser.as_str()).unwrap();

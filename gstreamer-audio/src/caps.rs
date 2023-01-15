@@ -2,6 +2,8 @@ use std::ops::{Bound::*, RangeBounds};
 
 use gst::Caps;
 
+use glib::IntoGStr;
+
 use crate::{AudioFormat, AudioLayout};
 
 pub struct AudioCapsBuilder<T> {
@@ -10,7 +12,7 @@ pub struct AudioCapsBuilder<T> {
 
 impl AudioCapsBuilder<gst::caps::NoFeature> {
     pub fn new() -> Self {
-        let builder = Caps::builder("audio/x-raw");
+        let builder = Caps::builder(glib::gstr!("audio/x-raw"));
         let builder = AudioCapsBuilder { builder };
         builder
             .rate_range(..)
@@ -29,7 +31,10 @@ impl AudioCapsBuilder<gst::caps::NoFeature> {
         }
     }
 
-    pub fn features(self, features: &[&str]) -> AudioCapsBuilder<gst::caps::HasFeatures> {
+    pub fn features(
+        self,
+        features: impl IntoIterator<Item = impl IntoGStr>,
+    ) -> AudioCapsBuilder<gst::caps::HasFeatures> {
         AudioCapsBuilder {
             builder: self.builder.features(features),
         }
@@ -45,14 +50,14 @@ impl Default for AudioCapsBuilder<gst::caps::NoFeature> {
 impl<T> AudioCapsBuilder<T> {
     pub fn format(self, format: AudioFormat) -> Self {
         Self {
-            builder: self.builder.field("format", format.to_str()),
+            builder: self.builder.field(glib::gstr!("format"), format.to_str()),
         }
     }
 
     pub fn format_list(self, formats: impl IntoIterator<Item = AudioFormat>) -> Self {
         Self {
             builder: self.builder.field(
-                "format",
+                glib::gstr!("format"),
                 gst::List::new(formats.into_iter().map(|f| f.to_str())),
             ),
         }
@@ -60,7 +65,7 @@ impl<T> AudioCapsBuilder<T> {
 
     pub fn rate(self, rate: i32) -> Self {
         Self {
-            builder: self.builder.field("rate", rate),
+            builder: self.builder.field(glib::gstr!("rate"), rate),
         }
     }
 
@@ -68,19 +73,21 @@ impl<T> AudioCapsBuilder<T> {
         let (start, end) = range_bounds_i32_start_end(rates);
         let gst_rates = gst::IntRange::<i32>::new(start, end);
         Self {
-            builder: self.builder.field("rate", gst_rates),
+            builder: self.builder.field(glib::gstr!("rate"), gst_rates),
         }
     }
 
     pub fn rate_list(self, rates: impl IntoIterator<Item = i32>) -> Self {
         Self {
-            builder: self.builder.field("rate", gst::List::new(rates)),
+            builder: self
+                .builder
+                .field(glib::gstr!("rate"), gst::List::new(rates)),
         }
     }
 
     pub fn channels(self, channels: i32) -> Self {
         Self {
-            builder: self.builder.field("channels", channels),
+            builder: self.builder.field(glib::gstr!("channels"), channels),
         }
     }
 
@@ -88,26 +95,30 @@ impl<T> AudioCapsBuilder<T> {
         let (start, end) = range_bounds_i32_start_end(channels);
         let gst_channels: gst::IntRange<i32> = gst::IntRange::new(start, end);
         Self {
-            builder: self.builder.field("channels", gst_channels),
+            builder: self.builder.field(glib::gstr!("channels"), gst_channels),
         }
     }
 
     pub fn channels_list(self, channels: impl IntoIterator<Item = i32>) -> Self {
         Self {
-            builder: self.builder.field("channels", gst::List::new(channels)),
+            builder: self
+                .builder
+                .field(glib::gstr!("channels"), gst::List::new(channels)),
         }
     }
 
     pub fn layout(self, layout: AudioLayout) -> Self {
         Self {
-            builder: self.builder.field("layout", layout_str(layout)),
+            builder: self
+                .builder
+                .field(glib::gstr!("layout"), layout_str(layout)),
         }
     }
 
     pub fn layout_list(self, layouts: impl IntoIterator<Item = AudioLayout>) -> Self {
         Self {
             builder: self.builder.field(
-                "layout",
+                glib::gstr!("layout"),
                 gst::List::new(layouts.into_iter().map(layout_str)),
             ),
         }
@@ -122,11 +133,11 @@ impl<T> AudioCapsBuilder<T> {
     }
 
     pub fn fallback_channel_mask(self) -> Self {
-        let channels = self.builder.structure().get::<i32>("channels");
+        let channels = self.builder.structure().get::<i32>(glib::gstr!("channels"));
         match channels {
             Ok(channels) => Self {
                 builder: self.builder.field(
-                    "channel-mask",
+                    glib::gstr!("channel-mask"),
                     gst::Bitmask::new(crate::AudioChannelPosition::fallback_mask(channels as u32)),
                 ),
             },
@@ -161,11 +172,11 @@ fn range_bounds_i32_start_end(range: impl RangeBounds<i32>) -> (i32, i32) {
     (start, end)
 }
 
-fn layout_str(layout: AudioLayout) -> &'static str {
+fn layout_str(layout: AudioLayout) -> &'static glib::GStr {
     skip_assert_initialized!();
     match layout {
-        crate::AudioLayout::Interleaved => "interleaved",
-        crate::AudioLayout::NonInterleaved => "non-interleaved",
-        crate::AudioLayout::__Unknown(_) => "unknown",
+        crate::AudioLayout::Interleaved => glib::gstr!("interleaved"),
+        crate::AudioLayout::NonInterleaved => glib::gstr!("non-interleaved"),
+        crate::AudioLayout::__Unknown(_) => glib::gstr!("unknown"),
     }
 }

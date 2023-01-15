@@ -50,7 +50,7 @@ impl<'a> Serialize for StructureForIter<'a> {
 impl Serialize for StructureRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let mut tup = serializer.serialize_tuple(2)?;
-        tup.serialize_element(self.name())?;
+        tup.serialize_element(self.name().as_str())?;
         tup.serialize_element(&StructureForIter(self))?;
         tup.end()
     }
@@ -141,7 +141,7 @@ impl<'de> Visitor<'de> for StructureVisitor {
         let name = seq
             .next_element::<String>()?
             .ok_or_else(|| de::Error::custom("Expected a name for the `Structure`"))?;
-        let mut structure = Structure::new_empty(&name);
+        let mut structure = Structure::new_empty(name);
         seq.next_element_seed(FieldsDe(structure.as_mut()))?
             .ok_or_else(|| de::Error::custom("Expected a sequence of `Field`s"))?;
 

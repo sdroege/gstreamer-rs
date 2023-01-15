@@ -41,36 +41,36 @@ impl DeviceProviderFactory {
     #[doc(alias = "get_longname")]
     #[doc(alias = "gst_device_provider_factory_get_longname")]
     pub fn longname(&self) -> &str {
-        self.metadata(&ELEMENT_METADATA_LONGNAME).unwrap()
+        self.metadata(ELEMENT_METADATA_LONGNAME).unwrap()
     }
 
     #[doc(alias = "get_klass")]
     #[doc(alias = "gst_device_provider_factory_get_klass")]
     pub fn klass(&self) -> &str {
-        self.metadata(&ELEMENT_METADATA_KLASS).unwrap()
+        self.metadata(ELEMENT_METADATA_KLASS).unwrap()
     }
 
     #[doc(alias = "get_description")]
     #[doc(alias = "gst_device_provider_factory_get_description")]
     pub fn description(&self) -> &str {
-        self.metadata(&ELEMENT_METADATA_DESCRIPTION).unwrap()
+        self.metadata(ELEMENT_METADATA_DESCRIPTION).unwrap()
     }
 
     #[doc(alias = "get_author")]
     #[doc(alias = "gst_device_provider_factory_get_author")]
     pub fn author(&self) -> &str {
-        self.metadata(&ELEMENT_METADATA_AUTHOR).unwrap()
+        self.metadata(ELEMENT_METADATA_AUTHOR).unwrap()
     }
 
     #[doc(alias = "get_documentation_uri")]
     #[doc(alias = "gst_device_provider_factory_get_documentation_uri")]
     pub fn documentation_uri(&self) -> Option<&str> {
-        self.metadata(&ELEMENT_METADATA_DOC_URI)
+        self.metadata(ELEMENT_METADATA_DOC_URI)
     }
 
     #[doc(alias = "get_icon_name")]
     #[doc(alias = "gst_device_provider_factory_get_icon_name")]
     pub fn icon_name(&self) -> Option<&str> {
-        self.metadata(&ELEMENT_METADATA_ICON_NAME)
+        self.metadata(ELEMENT_METADATA_ICON_NAME)
     }
 }

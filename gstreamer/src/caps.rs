@@ -5,7 +5,7 @@ use std::{fmt, marker::PhantomData, ptr, str};
 use glib::{
     translate::{from_glib, from_glib_full, FromGlibPtrFull, IntoGlib, IntoGlibPtr, ToGlibPtr},
     value::ToSendValue,
-    StaticType,
+    IntoGStr, StaticType,
 };
 
 use crate::{caps_features::*, structure::*, CapsIntersectMode};
@@ -14,7 +14,7 @@ mini_object_wrapper!(Caps, CapsRef, ffi::GstCaps, || { ffi::gst_caps_get_type() 
 
 impl Caps {
     #[doc(alias = "gst_caps_new_simple")]
-    pub fn builder(name: &str) -> Builder<NoFeature> {
+    pub fn builder(name: impl IntoGStr) -> Builder<NoFeature> {
         assert_initialized_main_thread!();
         Builder::new(name)
     }
@@ -50,7 +50,9 @@ impl Caps {
     }
 
     #[doc(alias = "gst_caps_new_simple")]
-    pub fn new_simple(name: &str, values: &[(&str, &(dyn ToSendValue + Sync))]) -> Self {
+    #[deprecated = "Use `Caps::builder()` or `Caps::new_empty()`"]
+    #[allow(deprecated)]
+    pub fn new_simple(name: impl IntoGStr, values: &[(&str, &(dyn ToSendValue + Sync))]) -> Self {
         skip_assert_initialized!();
         let mut caps = Caps::new_empty();
 
@@ -61,9 +63,14 @@ impl Caps {
     }
 
     #[doc(alias = "gst_caps_new_empty_simple")]
-    pub fn new_empty_simple(name: &str) -> Self {
+    pub fn new_empty_simple(name: impl IntoGStr) -> Self {
         skip_assert_initialized!();
-        Self::new_simple(name, &[])
+        let mut caps = Caps::new_empty();
+
+        let structure = Structure::new_empty(name);
+        caps.get_mut().unwrap().append_structure(structure);
+
+        caps
     }
 
     #[doc(alias = "gst_caps_fixate")]
@@ -142,8 +149,10 @@ impl str::FromStr for Caps {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
         unsafe {
-            Option::<_>::from_glib_full(ffi::gst_caps_from_string(s.to_glib_none().0))
-                .ok_or_else(|| glib::bool_error!("Failed to parse caps from string"))
+            s.run_with_gstr(|s| {
+                Option::<_>::from_glib_full(ffi::gst_caps_from_string(s.as_ptr()))
+                    .ok_or_else(|| glib::bool_error!("Failed to parse caps from string"))
+            })
         }
     }
 }
@@ -234,7 +243,23 @@ impl std::iter::Extend<Caps> for CapsRef {
 }
 
 impl CapsRef {
+    #[doc(alias = "gst_caps_set_value")]
+    pub fn set(&mut self, name: impl IntoGStr, value: impl ToSendValue + Sync) {
+        let value = value.to_send_value();
+        self.set_value(name, value);
+    }
+
+    #[doc(alias = "gst_caps_set_value")]
+    pub fn set_value(&mut self, name: impl IntoGStr, value: glib::SendValue) {
+        unsafe {
+            name.run_with_gstr(|name| {
+                ffi::gst_caps_set_value(self.as_mut_ptr(), name.as_ptr(), value.to_glib_none().0)
+            });
+        }
+    }
+
     #[doc(alias = "gst_caps_set_simple")]
+    #[deprecated = "Use `CapsRef::set()`"]
     pub fn set_simple(&mut self, values: &[(&str, &(dyn ToSendValue + Sync))]) {
         for &(name, value) in values {
             let value = value.to_value();
@@ -913,7 +938,7 @@ impl<T> fmt::Debug for Builder<T> {
 }
 
 impl Builder<NoFeature> {
-    fn new(name: &str) -> Builder<NoFeature> {
+    fn new(name: impl IntoGStr) -> Builder<NoFeature> {
         skip_assert_initialized!();
         Builder {
             s: crate::Structure::new_empty(name),
@@ -922,7 +947,10 @@ impl Builder<NoFeature> {
         }
     }
 
-    pub fn features(self, features: &[&str]) -> Builder<HasFeatures> {
+    pub fn features(
+        self,
+        features: impl IntoIterator<Item = impl IntoGStr>,
+    ) -> Builder<HasFeatures> {
         Builder {
             s: self.s,
             features: Some(CapsFeatures::new(features)),
@@ -940,7 +968,7 @@ impl Builder<NoFeature> {
 }
 
 impl<T> Builder<T> {
-    pub fn field(mut self, name: &str, value: impl Into<glib::Value> + Send) -> Self {
+    pub fn field(mut self, name: impl IntoGStr, value: impl Into<glib::Value> + Send) -> Self {
         self.s.set(name, value);
         self
     }
@@ -1058,6 +1086,7 @@ mod tests {
     use crate::{Array, Fraction};
 
     #[test]
+    #[allow(deprecated)]
     fn test_simple() {
         crate::init().unwrap();
 
@@ -1100,12 +1129,12 @@ mod tests {
 
         {
             let caps = caps.get_mut().unwrap();
-            caps.set_features(0, Some(CapsFeatures::new(&["foo:bla"])));
+            caps.set_features(0, Some(CapsFeatures::new(["foo:bla"])));
         }
         assert!(caps
             .features(0)
             .unwrap()
-            .is_equal(CapsFeatures::new(&["foo:bla"]).as_ref()));
+            .is_equal(CapsFeatures::new(["foo:bla"]).as_ref()));
     }
 
     #[test]
@@ -1132,7 +1161,7 @@ mod tests {
 
         let caps = Caps::builder("foo/bar")
             .field("int", 12)
-            .features(&["foo:bla", "foo:baz"])
+            .features(["foo:bla", "foo:baz"])
             .build();
         assert_eq!(caps.to_string(), "foo/bar(foo:bla, foo:baz), int=(int)12");
     }
@@ -1172,7 +1201,7 @@ mod tests {
             .structure_with_any_features(Structure::builder("audio/x-raw").build())
             .structure_with_features(
                 Structure::builder("video/x-raw").build(),
-                CapsFeatures::new(&["foo:bla", "foo:baz"]),
+                CapsFeatures::new(["foo:bla", "foo:baz"]),
             )
             .build();
         assert_eq!(
@@ -1185,11 +1214,11 @@ mod tests {
     fn test_builder_full_with_features() {
         crate::init().unwrap();
 
-        let caps = Caps::builder_full_with_features(CapsFeatures::new(&["foo:bla"]))
+        let caps = Caps::builder_full_with_features(CapsFeatures::new(["foo:bla"]))
             .structure(Structure::builder("audio/x-raw").build())
             .structure_with_features(
                 Structure::builder("video/x-raw").build(),
-                CapsFeatures::new(&["foo:baz"]),
+                CapsFeatures::new(["foo:baz"]),
             )
             .build();
         assert_eq!(
@@ -1253,7 +1282,7 @@ mod tests {
             .build();
         assert_eq!(format!("{:?}", caps), "Caps(audio/x-raw(ANY))");
 
-        let caps = Caps::builder_full_with_features(CapsFeatures::new(&["foo:bla"]))
+        let caps = Caps::builder_full_with_features(CapsFeatures::new(["foo:bla"]))
             .structure(
                 Structure::builder("audio/x-raw")
                     .field(

@@ -2,7 +2,6 @@
 
 use std::{
     borrow::{Borrow, BorrowMut, ToOwned},
-    ffi::CStr,
     fmt,
     marker::PhantomData,
     mem,
@@ -11,9 +10,10 @@ use std::{
 };
 
 use glib::{
+    prelude::*,
     translate::*,
     value::{FromValue, SendValue, ToSendValue},
-    StaticType,
+    IntoGStr,
 };
 
 use crate::Fraction;
@@ -50,23 +50,24 @@ unsafe impl Sync for Structure {}
 
 impl Structure {
     #[doc(alias = "gst_structure_new")]
-    pub fn builder(name: &str) -> Builder {
+    pub fn builder(name: impl IntoGStr) -> Builder {
         skip_assert_initialized!();
         Builder::new(name)
     }
 
     #[doc(alias = "gst_structure_new_empty")]
-    pub fn new_empty(name: &str) -> Structure {
+    pub fn new_empty(name: impl IntoGStr) -> Structure {
         assert_initialized_main_thread!();
         unsafe {
-            let ptr = ffi::gst_structure_new_empty(name.to_glib_none().0);
+            let ptr = name.run_with_gstr(|name| ffi::gst_structure_new_empty(name.as_ptr()));
             debug_assert!(!ptr.is_null());
             Structure(ptr::NonNull::new_unchecked(ptr))
         }
     }
 
     #[doc(alias = "gst_structure_new")]
-    pub fn new(name: &str, values: &[(&str, &(dyn ToSendValue + Sync))]) -> Structure {
+    #[deprecated = "Use `Structure::builder()` or `Structure::new_empty()`"]
+    pub fn new(name: impl IntoGStr, values: &[(&str, &(dyn ToSendValue + Sync))]) -> Structure {
         skip_assert_initialized!();
         let mut structure = Structure::new_empty(name);
 
@@ -79,8 +80,8 @@ impl Structure {
 
     #[allow(clippy::should_implement_trait)]
     pub fn from_iter<'a>(
-        name: &str,
-        iter: impl IntoIterator<Item = (&'a str, SendValue)>,
+        name: impl IntoGStr,
+        iter: impl IntoIterator<Item = (&'a glib::GStr, SendValue)>,
     ) -> Structure {
         skip_assert_initialized!();
         let mut structure = Structure::new_empty(name);
@@ -189,7 +190,8 @@ impl str::FromStr for Structure {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
         unsafe {
-            let structure = ffi::gst_structure_from_string(s.to_glib_none().0, ptr::null_mut());
+            let structure =
+                s.run_with_gstr(|s| ffi::gst_structure_from_string(s.as_ptr(), ptr::null_mut()));
             if structure.is_null() {
                 Err(glib::bool_error!("Failed to parse structure from string"))
             } else {
@@ -429,7 +431,7 @@ impl StructureRef {
     #[doc(alias = "gst_structure_get")]
     pub fn get<'a, T: FromValue<'a>>(
         &'a self,
-        name: &str,
+        name: impl IntoGStr,
     ) -> Result<T, GetError<<<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error>>
     {
         let name = glib::Quark::from_str(name);
@@ -439,7 +441,7 @@ impl StructureRef {
     #[doc(alias = "gst_structure_get")]
     pub fn get_optional<'a, T: FromValue<'a>>(
         &'a self,
-        name: &str,
+        name: impl IntoGStr,
     ) -> Result<
         Option<T>,
         GetError<<<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error>,
@@ -450,7 +452,10 @@ impl StructureRef {
 
     #[doc(alias = "get_value")]
     #[doc(alias = "gst_structure_get_value")]
-    pub fn value(&self, name: &str) -> Result<&SendValue, GetError<std::convert::Infallible>> {
+    pub fn value(
+        &self,
+        name: impl IntoGStr,
+    ) -> Result<&SendValue, GetError<std::convert::Infallible>> {
         let name = glib::Quark::from_str(name);
         self.value_by_quark(name)
     }
@@ -502,19 +507,17 @@ impl StructureRef {
     }
 
     #[doc(alias = "gst_structure_set")]
-    pub fn set(&mut self, name: &str, value: impl Into<glib::Value> + Send) {
+    pub fn set(&mut self, name: impl IntoGStr, value: impl Into<glib::Value> + Send) {
         let value = glib::SendValue::from_owned(value);
         self.set_value(name, value);
     }
 
     #[doc(alias = "gst_structure_set_value")]
-    pub fn set_value(&mut self, name: &str, value: SendValue) {
+    pub fn set_value(&mut self, name: impl IntoGStr, value: SendValue) {
         unsafe {
-            ffi::gst_structure_take_value(
-                &mut self.0,
-                name.to_glib_none().0,
-                &mut value.into_raw(),
-            );
+            name.run_with_gstr(|name| {
+                ffi::gst_structure_take_value(&mut self.0, name.as_ptr(), &mut value.into_raw())
+            });
         }
     }
 
@@ -533,12 +536,8 @@ impl StructureRef {
 
     #[doc(alias = "get_name")]
     #[doc(alias = "gst_structure_get_name")]
-    pub fn name<'a>(&self) -> &'a str {
-        unsafe {
-            CStr::from_ptr(ffi::gst_structure_get_name(&self.0))
-                .to_str()
-                .unwrap()
-        }
+    pub fn name<'a>(&self) -> &'a glib::GStr {
+        unsafe { glib::GStr::from_ptr(ffi::gst_structure_get_name(&self.0)) }
     }
 
     #[doc(alias = "gst_structure_get_name_id")]
@@ -547,8 +546,10 @@ impl StructureRef {
     }
 
     #[doc(alias = "gst_structure_set_name")]
-    pub fn set_name(&mut self, name: &str) {
-        unsafe { ffi::gst_structure_set_name(&mut self.0, name.to_glib_none().0) }
+    pub fn set_name(&mut self, name: impl IntoGStr) {
+        unsafe {
+            name.run_with_gstr(|name| ffi::gst_structure_set_name(&mut self.0, name.as_ptr()))
+        }
     }
 
     #[doc(alias = "gst_structure_has_name")]
@@ -557,23 +558,24 @@ impl StructureRef {
     }
 
     #[doc(alias = "gst_structure_has_field")]
-    pub fn has_field(&self, field: &str) -> bool {
+    pub fn has_field(&self, field: impl IntoGStr) -> bool {
         unsafe {
-            from_glib(ffi::gst_structure_has_field(
-                &self.0,
-                field.to_glib_none().0,
-            ))
+            field.run_with_gstr(|field| {
+                from_glib(ffi::gst_structure_has_field(&self.0, field.as_ptr()))
+            })
         }
     }
 
     #[doc(alias = "gst_structure_has_field_typed")]
-    pub fn has_field_with_type(&self, field: &str, type_: glib::Type) -> bool {
+    pub fn has_field_with_type(&self, field: impl IntoGStr, type_: glib::Type) -> bool {
         unsafe {
-            from_glib(ffi::gst_structure_has_field_typed(
-                &self.0,
-                field.to_glib_none().0,
-                type_.into_glib(),
-            ))
+            field.run_with_gstr(|field| {
+                from_glib(ffi::gst_structure_has_field_typed(
+                    &self.0,
+                    field.as_ptr(),
+                    type_.into_glib(),
+                ))
+            })
         }
     }
 
@@ -594,15 +596,17 @@ impl StructureRef {
     }
 
     #[doc(alias = "gst_structure_remove_field")]
-    pub fn remove_field(&mut self, field: &str) {
+    pub fn remove_field(&mut self, field: impl IntoGStr) {
         unsafe {
-            ffi::gst_structure_remove_field(&mut self.0, field.to_glib_none().0);
+            field.run_with_gstr(|field| {
+                ffi::gst_structure_remove_field(&mut self.0, field.as_ptr())
+            });
         }
     }
 
     #[doc(alias = "gst_structure_remove_fields")]
-    pub fn remove_fields(&mut self, fields: &[&str]) {
-        for f in fields {
+    pub fn remove_fields(&mut self, fields: impl IntoIterator<Item = impl IntoGStr>) {
+        for f in fields.into_iter() {
             self.remove_field(f)
         }
     }
@@ -624,7 +628,7 @@ impl StructureRef {
 
     #[doc(alias = "get_nth_field_name")]
     #[doc(alias = "gst_structure_nth_field_name")]
-    pub fn nth_field_name<'a>(&self, idx: u32) -> Option<&'a str> {
+    pub fn nth_field_name<'a>(&self, idx: u32) -> Option<&'a glib::GStr> {
         if idx >= self.n_fields() {
             return None;
         }
@@ -633,7 +637,7 @@ impl StructureRef {
             let field_name = ffi::gst_structure_nth_field_name(&self.0, idx);
             debug_assert!(!field_name.is_null());
 
-            Some(CStr::from_ptr(field_name).to_str().unwrap())
+            Some(glib::GStr::from_ptr(field_name))
         }
     }
 
@@ -663,75 +667,86 @@ impl StructureRef {
     }
 
     #[doc(alias = "gst_structure_fixate_field")]
-    pub fn fixate_field(&mut self, name: &str) -> bool {
+    pub fn fixate_field(&mut self, name: impl IntoGStr) -> bool {
         unsafe {
-            from_glib(ffi::gst_structure_fixate_field(
-                &mut self.0,
-                name.to_glib_none().0,
-            ))
+            name.run_with_gstr(|name| {
+                from_glib(ffi::gst_structure_fixate_field(&mut self.0, name.as_ptr()))
+            })
         }
     }
 
     #[doc(alias = "gst_structure_fixate_field_boolean")]
-    pub fn fixate_field_bool(&mut self, name: &str, target: bool) -> bool {
+    pub fn fixate_field_bool(&mut self, name: impl IntoGStr, target: bool) -> bool {
         unsafe {
-            from_glib(ffi::gst_structure_fixate_field_boolean(
-                &mut self.0,
-                name.to_glib_none().0,
-                target.into_glib(),
-            ))
+            name.run_with_gstr(|name| {
+                from_glib(ffi::gst_structure_fixate_field_boolean(
+                    &mut self.0,
+                    name.as_ptr(),
+                    target.into_glib(),
+                ))
+            })
         }
     }
 
     #[doc(alias = "gst_structure_fixate_field_string")]
-    pub fn fixate_field_str(&mut self, name: &str, target: &str) -> bool {
+    pub fn fixate_field_str(&mut self, name: impl IntoGStr, target: impl IntoGStr) -> bool {
         unsafe {
-            from_glib(ffi::gst_structure_fixate_field_string(
-                &mut self.0,
-                name.to_glib_none().0,
-                target.to_glib_none().0,
-            ))
+            name.run_with_gstr(|name| {
+                target.run_with_gstr(|target| {
+                    from_glib(ffi::gst_structure_fixate_field_string(
+                        &mut self.0,
+                        name.as_ptr(),
+                        target.as_ptr(),
+                    ))
+                })
+            })
         }
     }
 
     #[doc(alias = "gst_structure_fixate_field_nearest_double")]
-    pub fn fixate_field_nearest_double(&mut self, name: &str, target: f64) -> bool {
+    pub fn fixate_field_nearest_double(&mut self, name: impl IntoGStr, target: f64) -> bool {
         unsafe {
-            from_glib(ffi::gst_structure_fixate_field_nearest_double(
-                &mut self.0,
-                name.to_glib_none().0,
-                target,
-            ))
+            name.run_with_gstr(|name| {
+                from_glib(ffi::gst_structure_fixate_field_nearest_double(
+                    &mut self.0,
+                    name.as_ptr(),
+                    target,
+                ))
+            })
         }
     }
 
     #[doc(alias = "gst_structure_fixate_field_nearest_fraction")]
-    pub fn fixate_field_nearest_fraction<T: Into<Fraction>>(
+    pub fn fixate_field_nearest_fraction(
         &mut self,
-        name: &str,
-        target: T,
+        name: impl IntoGStr,
+        target: impl Into<Fraction>,
     ) -> bool {
         skip_assert_initialized!();
 
         let target = target.into();
         unsafe {
-            from_glib(ffi::gst_structure_fixate_field_nearest_fraction(
-                &mut self.0,
-                name.to_glib_none().0,
-                target.numer(),
-                target.denom(),
-            ))
+            name.run_with_gstr(|name| {
+                from_glib(ffi::gst_structure_fixate_field_nearest_fraction(
+                    &mut self.0,
+                    name.as_ptr(),
+                    target.numer(),
+                    target.denom(),
+                ))
+            })
         }
     }
 
     #[doc(alias = "gst_structure_fixate_field_nearest_int")]
-    pub fn fixate_field_nearest_int(&mut self, name: &str, target: i32) -> bool {
+    pub fn fixate_field_nearest_int(&mut self, name: impl IntoGStr, target: i32) -> bool {
         unsafe {
-            from_glib(ffi::gst_structure_fixate_field_nearest_int(
-                &mut self.0,
-                name.to_glib_none().0,
-                target,
-            ))
+            name.run_with_gstr(|name| {
+                from_glib(ffi::gst_structure_fixate_field_nearest_int(
+                    &mut self.0,
+                    name.as_ptr(),
+                    target,
+                ))
+            })
         }
     }
 
@@ -941,7 +956,7 @@ impl<'a> FieldIterator<'a> {
 }
 
 impl<'a> Iterator for FieldIterator<'a> {
-    type Item = &'static str;
+    type Item = &'static glib::GStr;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.idx >= self.n_fields {
@@ -991,7 +1006,7 @@ impl<'a> Iter<'a> {
 }
 
 impl<'a> Iterator for Iter<'a> {
-    type Item = (&'static str, &'a SendValue);
+    type Item = (&'static glib::GStr, &'a SendValue);
 
     fn next(&mut self) -> Option<Self::Item> {
         let f = self.iter.next()?;
@@ -1041,7 +1056,7 @@ impl<'a> std::iter::FusedIterator for Iter<'a> {}
 
 impl<'a> IntoIterator for &'a StructureRef {
     type IntoIter = Iter<'a>;
-    type Item = (&'static str, &'a SendValue);
+    type Item = (&'static glib::GStr, &'a SendValue);
 
     fn into_iter(self) -> Self::IntoIter {
         self.iter()
@@ -1054,8 +1069,20 @@ impl<'a> std::iter::Extend<(&'a str, SendValue)> for StructureRef {
     }
 }
 
+impl<'a> std::iter::Extend<(&'a glib::GStr, SendValue)> for StructureRef {
+    fn extend<T: IntoIterator<Item = (&'a glib::GStr, SendValue)>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|(f, v)| self.set_value(f, v));
+    }
+}
+
 impl std::iter::Extend<(String, SendValue)> for StructureRef {
     fn extend<T: IntoIterator<Item = (String, SendValue)>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|(f, v)| self.set_value(&f, v));
+    }
+}
+
+impl std::iter::Extend<(glib::GString, SendValue)> for StructureRef {
+    fn extend<T: IntoIterator<Item = (glib::GString, SendValue)>>(&mut self, iter: T) {
         iter.into_iter().for_each(|(f, v)| self.set_value(&f, v));
     }
 }
@@ -1074,14 +1101,14 @@ pub struct Builder {
 }
 
 impl Builder {
-    fn new(name: &str) -> Self {
+    fn new(name: impl IntoGStr) -> Self {
         skip_assert_initialized!();
         Builder {
             s: Structure::new_empty(name),
         }
     }
 
-    pub fn field(mut self, name: &str, value: impl Into<glib::Value> + Send) -> Self {
+    pub fn field(mut self, name: impl IntoGStr, value: impl Into<glib::Value> + Send) -> Self {
         self.s.set(name, value);
         self
     }
@@ -1097,6 +1124,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[allow(deprecated)]
     fn new_set_get() {
         use glib::{value, Type};
 

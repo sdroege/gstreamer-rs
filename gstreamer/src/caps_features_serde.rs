@@ -33,7 +33,7 @@ impl<'a> Serialize for CapsFeaturesForIterSe<'a> {
         if size > 0 {
             let mut seq = serializer.serialize_seq(Some(size))?;
             for feature in iter {
-                seq.serialize_element(feature)?;
+                seq.serialize_element(feature.as_str())?;
             }
             seq.end()
         } else {
@@ -81,7 +81,7 @@ impl<'de> Visitor<'de> for CapsFeaturesSomeVisitor {
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Self::Value, A::Error> {
         let mut features = CapsFeatures::new_empty();
         while let Some(feature) = seq.next_element::<String>()? {
-            features.add(feature.as_ref());
+            features.add(feature.as_str());
         }
         Ok(CapsFeaturesSome(features))
     }

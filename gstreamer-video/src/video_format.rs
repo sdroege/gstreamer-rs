@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{ffi::CStr, str};
+use std::str;
 
 use glib::translate::{from_glib, FromGlib, IntoGlib};
 use once_cell::sync::Lazy;
@@ -269,18 +269,16 @@ impl crate::VideoFormat {
     }
 
     #[doc(alias = "gst_video_format_to_string")]
-    pub fn to_str<'a>(self) -> &'a str {
+    pub fn to_str<'a>(self) -> &'a glib::GStr {
         if self == Self::Unknown {
-            return "UNKNOWN";
+            return glib::gstr!("UNKNOWN");
         }
         unsafe {
-            CStr::from_ptr(
+            glib::GStr::from_ptr(
                 ffi::gst_video_format_to_string(self.into_glib())
                     .as_ref()
                     .expect("gst_video_format_to_string returned NULL"),
             )
-            .to_str()
-            .expect("gst_video_format_to_string returned an invalid string")
         }
     }
 

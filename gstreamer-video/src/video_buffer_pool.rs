@@ -1,32 +1,24 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{ffi::CStr, marker::PhantomData, mem};
+use std::{marker::PhantomData, mem};
 
 use glib::translate::*;
-use once_cell::sync::Lazy;
 
-pub static BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META: Lazy<&'static str> =
-    Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META)
-            .to_str()
-            .unwrap()
-    });
-pub static BUFFER_POOL_OPTION_VIDEO_ALIGNMENT: Lazy<&'static str> = Lazy::new(|| unsafe {
-    CStr::from_ptr(ffi::GST_BUFFER_POOL_OPTION_VIDEO_ALIGNMENT)
-        .to_str()
-        .unwrap()
-});
-pub static BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META: Lazy<&'static str> =
-    Lazy::new(|| unsafe {
-        CStr::from_ptr(ffi::GST_BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META)
-            .to_str()
-            .unwrap()
-    });
-pub static BUFFER_POOL_OPTION_VIDEO_META: Lazy<&'static str> = Lazy::new(|| unsafe {
-    CStr::from_ptr(ffi::GST_BUFFER_POOL_OPTION_VIDEO_META)
-        .to_str()
-        .unwrap()
-});
+pub static BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META: &glib::GStr = unsafe {
+    glib::GStr::from_utf8_with_nul_unchecked(
+        ffi::GST_BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META,
+    )
+};
+pub static BUFFER_POOL_OPTION_VIDEO_ALIGNMENT: &glib::GStr = unsafe {
+    glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_BUFFER_POOL_OPTION_VIDEO_ALIGNMENT)
+};
+pub static BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META: &glib::GStr = unsafe {
+    glib::GStr::from_utf8_with_nul_unchecked(
+        ffi::GST_BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META,
+    )
+};
+pub static BUFFER_POOL_OPTION_VIDEO_META: &glib::GStr =
+    unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_BUFFER_POOL_OPTION_VIDEO_META) };
 
 #[derive(Debug, Clone)]
 #[doc(alias = "GstVideoAlignment")]

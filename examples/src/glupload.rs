@@ -541,7 +541,7 @@ impl App {
         let src = gst::ElementFactory::make("videotestsrc").build()?;
 
         let caps = gst_video::VideoCapsBuilder::new()
-            .features(&[&gst_gl::CAPS_FEATURE_MEMORY_GL_MEMORY])
+            .features([gst_gl::CAPS_FEATURE_MEMORY_GL_MEMORY])
             .format(gst_video::VideoFormat::Rgba)
             .field("texture-target", "2D")
             .build();

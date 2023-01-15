@@ -2,7 +2,6 @@
 
 use std::{
     borrow::{Borrow, BorrowMut, ToOwned},
-    ffi::CStr,
     fmt,
     marker::PhantomData,
     mem,
@@ -10,7 +9,7 @@ use std::{
     ptr, str,
 };
 
-use glib::{translate::*, StaticType};
+use glib::{translate::*, IntoGStr, StaticType};
 use once_cell::sync::Lazy;
 
 #[doc(alias = "GstCapsFeatures")]
@@ -21,7 +20,7 @@ unsafe impl Sync for CapsFeatures {}
 
 impl CapsFeatures {
     #[doc(alias = "gst_caps_features_new")]
-    pub fn new(features: &[&str]) -> Self {
+    pub fn new(features: impl IntoIterator<Item = impl IntoGStr>) -> Self {
         skip_assert_initialized!();
         let mut f = Self::new_empty();
 
@@ -33,12 +32,12 @@ impl CapsFeatures {
     }
 
     #[doc(alias = "gst_caps_features_new_id")]
-    pub fn from_quarks(features: &[glib::Quark]) -> Self {
+    pub fn from_quarks(features: impl IntoIterator<Item = glib::Quark>) -> Self {
         skip_assert_initialized!();
         let mut f = Self::new_empty();
 
-        for feature in features {
-            f.add_from_quark(*feature);
+        for feature in features.into_iter() {
+            f.add_from_quark(feature);
         }
 
         f
@@ -140,7 +139,7 @@ impl str::FromStr for CapsFeatures {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
         unsafe {
-            let ptr = ffi::gst_caps_features_from_string(s.to_glib_none().0);
+            let ptr = s.run_with_gstr(|s| ffi::gst_caps_features_from_string(s.as_ptr()));
             if ptr.is_null() {
                 return Err(glib::bool_error!(
                     "Failed to parse caps features from string"
@@ -361,12 +360,14 @@ impl CapsFeaturesRef {
     }
 
     #[doc(alias = "gst_caps_features_contains")]
-    pub fn contains(&self, feature: &str) -> bool {
+    pub fn contains(&self, feature: impl IntoGStr) -> bool {
         unsafe {
-            from_glib(ffi::gst_caps_features_contains(
-                self.as_ptr(),
-                feature.to_glib_none().0,
-            ))
+            feature.run_with_gstr(|feature| {
+                from_glib(ffi::gst_caps_features_contains(
+                    self.as_ptr(),
+                    feature.as_ptr(),
+                ))
+            })
         }
     }
 
@@ -388,7 +389,7 @@ impl CapsFeaturesRef {
 
     #[doc(alias = "get_nth")]
     #[doc(alias = "gst_caps_features_get_nth")]
-    pub fn nth(&self, idx: u32) -> Option<&str> {
+    pub fn nth(&self, idx: u32) -> Option<&glib::GStr> {
         if idx >= self.size() {
             return None;
         }
@@ -399,7 +400,7 @@ impl CapsFeaturesRef {
                 return None;
             }
 
-            Some(CStr::from_ptr(feature).to_str().unwrap())
+            Some(glib::GStr::from_ptr(feature))
         }
     }
 
@@ -416,13 +417,21 @@ impl CapsFeaturesRef {
     }
 
     #[doc(alias = "gst_caps_features_add")]
-    pub fn add(&mut self, feature: &str) {
-        unsafe { ffi::gst_caps_features_add(self.as_mut_ptr(), feature.to_glib_none().0) }
+    pub fn add(&mut self, feature: impl IntoGStr) {
+        unsafe {
+            feature.run_with_gstr(|feature| {
+                ffi::gst_caps_features_add(self.as_mut_ptr(), feature.as_ptr())
+            })
+        }
     }
 
     #[doc(alias = "gst_caps_features_remove")]
-    pub fn remove(&mut self, feature: &str) {
-        unsafe { ffi::gst_caps_features_remove(self.as_mut_ptr(), feature.to_glib_none().0) }
+    pub fn remove(&mut self, feature: impl IntoGStr) {
+        unsafe {
+            feature.run_with_gstr(|feature| {
+                ffi::gst_caps_features_remove(self.as_mut_ptr(), feature.as_ptr())
+            })
+        }
     }
 
     #[doc(alias = "gst_caps_features_add_id")]
@@ -464,8 +473,20 @@ impl<'a> std::iter::Extend<&'a str> for CapsFeaturesRef {
     }
 }
 
+impl<'a> std::iter::Extend<&'a glib::GStr> for CapsFeaturesRef {
+    fn extend<T: IntoIterator<Item = &'a glib::GStr>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|f| self.add(f));
+    }
+}
+
 impl std::iter::Extend<String> for CapsFeaturesRef {
     fn extend<T: IntoIterator<Item = String>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|f| self.add(&f));
+    }
+}
+
+impl std::iter::Extend<glib::GString> for CapsFeaturesRef {
+    fn extend<T: IntoIterator<Item = glib::GString>>(&mut self, iter: T) {
         iter.into_iter().for_each(|f| self.add(&f));
     }
 }
@@ -537,7 +558,7 @@ impl<'a> Iter<'a> {
 }
 
 impl<'a> Iterator for Iter<'a> {
-    type Item = &'a str;
+    type Item = &'a glib::GStr;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.idx >= self.n_features {
@@ -551,7 +572,7 @@ impl<'a> Iterator for Iter<'a> {
 
             self.idx += 1;
 
-            Some(CStr::from_ptr(feature).to_str().unwrap())
+            Some(glib::GStr::from_ptr(feature))
         }
     }
 
@@ -577,7 +598,7 @@ impl<'a> Iterator for Iter<'a> {
                 let feature =
                     ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), end as u32);
                 debug_assert!(!feature.is_null());
-                Some(CStr::from_ptr(feature).to_str().unwrap())
+                Some(glib::GStr::from_ptr(feature))
             }
         }
     }
@@ -592,7 +613,7 @@ impl<'a> Iterator for Iter<'a> {
                     self.n_features as u32 - 1,
                 );
                 debug_assert!(!feature.is_null());
-                Some(CStr::from_ptr(feature).to_str().unwrap())
+                Some(glib::GStr::from_ptr(feature))
             }
         }
     }
@@ -611,7 +632,7 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
                 ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), self.n_features as u32);
             debug_assert!(!feature.is_null());
 
-            Some(CStr::from_ptr(feature).to_str().unwrap())
+            Some(glib::GStr::from_ptr(feature))
         }
     }
 
@@ -629,7 +650,7 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
                 );
                 debug_assert!(!feature.is_null());
 
-                Some(CStr::from_ptr(feature).to_str().unwrap())
+                Some(glib::GStr::from_ptr(feature))
             }
         }
     }
@@ -641,7 +662,7 @@ impl<'a> std::iter::FusedIterator for Iter<'a> {}
 
 impl<'a> IntoIterator for &'a CapsFeaturesRef {
     type IntoIter = Iter<'a>;
-    type Item = &'a str;
+    type Item = &'a glib::GStr;
 
     fn into_iter(self) -> Self::IntoIter {
         self.iter()
@@ -659,9 +680,33 @@ impl<'a> std::iter::FromIterator<&'a str> for CapsFeatures {
     }
 }
 
+impl<'a> std::iter::FromIterator<&'a glib::GStr> for CapsFeatures {
+    fn from_iter<T: IntoIterator<Item = &'a glib::GStr>>(iter: T) -> Self {
+        assert_initialized_main_thread!();
+
+        let mut features = CapsFeatures::new_empty();
+
+        iter.into_iter().for_each(|f| features.add(f));
+
+        features
+    }
+}
+
 impl std::iter::FromIterator<String> for CapsFeatures {
     fn from_iter<T: IntoIterator<Item = String>>(iter: T) -> Self {
         skip_assert_initialized!();
+        let mut features = CapsFeatures::new_empty();
+
+        iter.into_iter().for_each(|f| features.add(&f));
+
+        features
+    }
+}
+
+impl std::iter::FromIterator<glib::GString> for CapsFeatures {
+    fn from_iter<T: IntoIterator<Item = glib::GString>>(iter: T) -> Self {
+        assert_initialized_main_thread!();
+
         let mut features = CapsFeatures::new_empty();
 
         iter.into_iter().for_each(|f| features.add(&f));
@@ -710,13 +755,10 @@ impl ToOwned for CapsFeaturesRef {
 unsafe impl Sync for CapsFeaturesRef {}
 unsafe impl Send for CapsFeaturesRef {}
 
-pub static CAPS_FEATURE_MEMORY_SYSTEM_MEMORY: Lazy<&'static str> = Lazy::new(|| unsafe {
-    CStr::from_ptr(ffi::GST_CAPS_FEATURE_MEMORY_SYSTEM_MEMORY)
-        .to_str()
-        .unwrap()
-});
+pub static CAPS_FEATURE_MEMORY_SYSTEM_MEMORY: &glib::GStr =
+    unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_CAPS_FEATURE_MEMORY_SYSTEM_MEMORY) };
 pub static CAPS_FEATURES_MEMORY_SYSTEM_MEMORY: Lazy<CapsFeatures> =
-    Lazy::new(|| CapsFeatures::new(&[*CAPS_FEATURE_MEMORY_SYSTEM_MEMORY]));
+    Lazy::new(|| CapsFeatures::new([CAPS_FEATURE_MEMORY_SYSTEM_MEMORY]));
 
 #[cfg(test)]
 mod tests {

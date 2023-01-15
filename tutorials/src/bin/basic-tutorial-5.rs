@@ -234,7 +234,7 @@ mod tutorial5 {
                     None => return,
                 };
 
-                if application.structure().map(|s| s.name()) == Some("tags-changed") {
+                if application.structure().map(|s| s.name().as_str()) == Some("tags-changed") {
                     let textbuf = streams_list
                         .buffer()
                         .expect("Couldn't get buffer from text_view");

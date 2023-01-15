@@ -46,7 +46,7 @@ fn main_loop() -> Result<(), Error> {
     // server to require from clients.
     let auth = gst_rtsp_server::RTSPAuth::new();
     let token = gst_rtsp_server::RTSPToken::new(&[(
-        *gst_rtsp_server::RTSP_TOKEN_MEDIA_FACTORY_ROLE,
+        gst_rtsp_server::RTSP_TOKEN_MEDIA_FACTORY_ROLE,
         &"user",
     )]);
     let basic = gst_rtsp_server::RTSPAuth::make_basic("user", "password");

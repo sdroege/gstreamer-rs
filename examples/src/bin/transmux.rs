@@ -86,7 +86,7 @@ fn example_main() -> Result<(), Error> {
             .expect("typefinder \"have-type\" signal values[2]");
         let format_name = caps.structure(0).expect("Failed to get format name").name();
 
-        let demuxer = match format_name {
+        let demuxer = match format_name.as_str() {
             "video/x-matroska" | "video/webm" => gst::ElementFactory::make("matroskademux")
                 .build()
                 .expect("matroskademux missing"),

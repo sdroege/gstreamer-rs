@@ -17,12 +17,12 @@ pub fn pb_utils_add_codec_description_to_tag_list_for_tag<'a, T: CodecTag<'a>>(
     caps: &gst::CapsRef,
 ) -> Result<(), glib::BoolError> {
     assert_initialized_main_thread!();
-    let codec_tag = T::tag_name();
+    let codec_tag = T::TAG_NAME;
     unsafe {
         glib::result_from_gboolean!(
             ffi::gst_pb_utils_add_codec_description_to_tag_list(
                 taglist.as_mut_ptr(),
-                codec_tag.to_glib_none().0,
+                codec_tag.as_ptr(),
                 caps.as_ptr(),
             ),
             "Failed to find codec description",

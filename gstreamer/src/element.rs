@@ -3,7 +3,6 @@
 use std::{ffi::CStr, future::Future, mem, num::NonZeroU64, pin::Pin};
 
 use glib::translate::*;
-use once_cell::sync::Lazy;
 
 use crate::{
     format::{
@@ -982,41 +981,23 @@ pub unsafe trait ElementClassExt {
 unsafe impl<T: IsA<Element> + glib::object::IsClass> ElementClassExt for glib::object::Class<T> {}
 
 #[doc(alias = "GST_ELEMENT_METADATA_AUTHOR")]
-pub static ELEMENT_METADATA_AUTHOR: Lazy<&'static str> = Lazy::new(|| unsafe {
-    CStr::from_ptr(ffi::GST_ELEMENT_METADATA_AUTHOR)
-        .to_str()
-        .unwrap()
-});
+pub static ELEMENT_METADATA_AUTHOR: &glib::GStr =
+    unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_ELEMENT_METADATA_AUTHOR) };
 #[doc(alias = "GST_ELEMENT_METADATA_DESCRIPTION")]
-pub static ELEMENT_METADATA_DESCRIPTION: Lazy<&'static str> = Lazy::new(|| unsafe {
-    CStr::from_ptr(ffi::GST_ELEMENT_METADATA_DESCRIPTION)
-        .to_str()
-        .unwrap()
-});
+pub static ELEMENT_METADATA_DESCRIPTION: &glib::GStr =
+    unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_ELEMENT_METADATA_DESCRIPTION) };
 #[doc(alias = "GST_ELEMENT_METADATA_DOC_URI")]
-pub static ELEMENT_METADATA_DOC_URI: Lazy<&'static str> = Lazy::new(|| unsafe {
-    CStr::from_ptr(ffi::GST_ELEMENT_METADATA_DOC_URI)
-        .to_str()
-        .unwrap()
-});
+pub static ELEMENT_METADATA_DOC_URI: &glib::GStr =
+    unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_ELEMENT_METADATA_DOC_URI) };
 #[doc(alias = "GST_ELEMENT_METADATA_ICON_NAME")]
-pub static ELEMENT_METADATA_ICON_NAME: Lazy<&'static str> = Lazy::new(|| unsafe {
-    CStr::from_ptr(ffi::GST_ELEMENT_METADATA_ICON_NAME)
-        .to_str()
-        .unwrap()
-});
+pub static ELEMENT_METADATA_ICON_NAME: &glib::GStr =
+    unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_ELEMENT_METADATA_ICON_NAME) };
 #[doc(alias = "GST_ELEMENT_METADATA_KLASS")]
-pub static ELEMENT_METADATA_KLASS: Lazy<&'static str> = Lazy::new(|| unsafe {
-    CStr::from_ptr(ffi::GST_ELEMENT_METADATA_KLASS)
-        .to_str()
-        .unwrap()
-});
+pub static ELEMENT_METADATA_KLASS: &glib::GStr =
+    unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_ELEMENT_METADATA_KLASS) };
 #[doc(alias = "GST_ELEMENT_METADATA_LONGNAME")]
-pub static ELEMENT_METADATA_LONGNAME: Lazy<&'static str> = Lazy::new(|| unsafe {
-    CStr::from_ptr(ffi::GST_ELEMENT_METADATA_LONGNAME)
-        .to_str()
-        .unwrap()
-});
+pub static ELEMENT_METADATA_LONGNAME: &glib::GStr =
+    unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_ELEMENT_METADATA_LONGNAME) };
 
 #[doc(alias = "GST_ELEMENT_ERROR")]
 #[doc(alias = "GST_ELEMENT_ERROR_WITH_DETAILS")]

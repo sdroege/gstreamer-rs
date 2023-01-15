@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{ffi::CStr, fmt, marker::PhantomData, ptr};
+use std::{fmt, marker::PhantomData, ptr};
 
 use glib::{translate::*, StaticType};
 
@@ -25,7 +25,7 @@ impl fmt::Debug for StaticCaps {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("StaticCaps")
             .field("str", &unsafe {
-                CStr::from_ptr(self.0.as_ref().string).to_str()
+                glib::GStr::from_ptr(self.0.as_ref().string)
             })
             .finish()
     }

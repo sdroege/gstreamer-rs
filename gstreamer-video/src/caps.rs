@@ -1,5 +1,6 @@
 use std::ops::{Bound::*, RangeBounds};
 
+use glib::IntoGStr;
 use gst::Caps;
 
 use crate::VideoFormat;
@@ -10,7 +11,7 @@ pub struct VideoCapsBuilder<T> {
 
 impl VideoCapsBuilder<gst::caps::NoFeature> {
     pub fn new() -> Self {
-        let builder = Caps::builder("video/x-raw");
+        let builder = Caps::builder(glib::gstr!("video/x-raw"));
         let builder = VideoCapsBuilder { builder };
         builder
             .format_list(VideoFormat::iter_raw())
@@ -25,7 +26,10 @@ impl VideoCapsBuilder<gst::caps::NoFeature> {
         }
     }
 
-    pub fn features(self, features: &[&str]) -> VideoCapsBuilder<gst::caps::HasFeatures> {
+    pub fn features(
+        self,
+        features: impl IntoIterator<Item = impl IntoGStr>,
+    ) -> VideoCapsBuilder<gst::caps::HasFeatures> {
         VideoCapsBuilder {
             builder: self.builder.features(features),
         }
@@ -41,14 +45,14 @@ impl Default for VideoCapsBuilder<gst::caps::NoFeature> {
 impl<T> VideoCapsBuilder<T> {
     pub fn format(self, format: VideoFormat) -> Self {
         Self {
-            builder: self.builder.field("format", format.to_str()),
+            builder: self.builder.field(glib::gstr!("format"), format.to_str()),
         }
     }
 
     pub fn format_list(self, formats: impl IntoIterator<Item = VideoFormat>) -> Self {
         Self {
             builder: self.builder.field(
-                "format",
+                glib::gstr!("format"),
                 gst::List::new(formats.into_iter().map(|f| f.to_str())),
             ),
         }
@@ -56,7 +60,7 @@ impl<T> VideoCapsBuilder<T> {
 
     pub fn width(self, width: i32) -> Self {
         Self {
-            builder: self.builder.field("width", width),
+            builder: self.builder.field(glib::gstr!("width"), width),
         }
     }
 
@@ -64,19 +68,21 @@ impl<T> VideoCapsBuilder<T> {
         let (start, end) = range_bounds_i32_start_end(widths);
         let gst_widths: gst::IntRange<i32> = gst::IntRange::new(start, end);
         Self {
-            builder: self.builder.field("width", gst_widths),
+            builder: self.builder.field(glib::gstr!("width"), gst_widths),
         }
     }
 
     pub fn width_list(self, widths: impl IntoIterator<Item = i32>) -> Self {
         Self {
-            builder: self.builder.field("width", gst::List::new(widths)),
+            builder: self
+                .builder
+                .field(glib::gstr!("width"), gst::List::new(widths)),
         }
     }
 
     pub fn height(self, height: i32) -> Self {
         Self {
-            builder: self.builder.field("height", height),
+            builder: self.builder.field(glib::gstr!("height"), height),
         }
     }
 
@@ -84,19 +90,21 @@ impl<T> VideoCapsBuilder<T> {
         let (start, end) = range_bounds_i32_start_end(heights);
         let gst_heights: gst::IntRange<i32> = gst::IntRange::new(start, end);
         Self {
-            builder: self.builder.field("height", gst_heights),
+            builder: self.builder.field(glib::gstr!("height"), gst_heights),
         }
     }
 
     pub fn height_list(self, heights: impl IntoIterator<Item = i32>) -> Self {
         Self {
-            builder: self.builder.field("height", gst::List::new(heights)),
+            builder: self
+                .builder
+                .field(glib::gstr!("height"), gst::List::new(heights)),
         }
     }
 
     pub fn framerate(self, framerate: gst::Fraction) -> Self {
         Self {
-            builder: self.builder.field("framerate", framerate),
+            builder: self.builder.field(glib::gstr!("framerate"), framerate),
         }
     }
 
@@ -120,13 +128,15 @@ impl<T> VideoCapsBuilder<T> {
         assert!(start <= end);
         let framerates: gst::FractionRange = gst::FractionRange::new(start, end);
         Self {
-            builder: self.builder.field("framerate", framerates),
+            builder: self.builder.field(glib::gstr!("framerate"), framerates),
         }
     }
 
     pub fn framerate_list(self, framerates: impl IntoIterator<Item = gst::Fraction>) -> Self {
         Self {
-            builder: self.builder.field("framerate", gst::List::new(framerates)),
+            builder: self
+                .builder
+                .field(glib::gstr!("framerate"), gst::List::new(framerates)),
         }
     }
 

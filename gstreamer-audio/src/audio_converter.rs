@@ -79,49 +79,52 @@ impl AudioConverterConfig {
     }
 
     pub fn set_dither_method(&mut self, v: crate::AudioDitherMethod) {
-        self.0.set("GstAudioConverter.dither-method", v);
+        self.0
+            .set(glib::gstr!("GstAudioConverter.dither-method"), v);
     }
 
     #[doc(alias = "get_dither_method")]
     pub fn dither_method(&self) -> crate::AudioDitherMethod {
         self.0
-            .get_optional("GstAudioConverter.dither-method")
+            .get_optional(glib::gstr!("GstAudioConverter.dither-method"))
             .expect("Wrong type")
             .unwrap_or(crate::AudioDitherMethod::None)
     }
 
     pub fn set_noise_shaping_method(&mut self, v: crate::AudioNoiseShapingMethod) {
-        self.0.set("GstAudioConverter.noise-shaping-method", v);
+        self.0
+            .set(glib::gstr!("GstAudioConverter.noise-shaping-method"), v);
     }
 
     #[doc(alias = "get_noise_shaping_method")]
     pub fn noise_shaping_method(&self) -> crate::AudioNoiseShapingMethod {
         self.0
-            .get_optional("GstAudioConverter.noise-shaping-method")
+            .get_optional(glib::gstr!("GstAudioConverter.noise-shaping-method"))
             .expect("Wrong type")
             .unwrap_or(crate::AudioNoiseShapingMethod::None)
     }
 
     pub fn set_quantization(&mut self, v: u32) {
-        self.0.set("GstAudioConverter.quantization", v);
+        self.0.set(glib::gstr!("GstAudioConverter.quantization"), v);
     }
 
     #[doc(alias = "get_quantization")]
     pub fn quantization(&self) -> u32 {
         self.0
-            .get_optional("GstAudioConverter.quantization")
+            .get_optional(glib::gstr!("GstAudioConverter.quantization"))
             .expect("Wrong type")
             .unwrap_or(1)
     }
 
     pub fn set_resampler_method(&mut self, v: crate::AudioResamplerMethod) {
-        self.0.set("GstAudioConverter.resampler-method", v);
+        self.0
+            .set(glib::gstr!("GstAudioConverter.resampler-method"), v);
     }
 
     #[doc(alias = "get_resampler_method")]
     pub fn resampler_method(&self) -> crate::AudioResamplerMethod {
         self.0
-            .get_optional("GstAudioConverter.resampler-method")
+            .get_optional(glib::gstr!("GstAudioConverter.resampler-method"))
             .expect("Wrong type")
             .unwrap_or(crate::AudioResamplerMethod::BlackmanNuttall)
     }
@@ -133,13 +136,14 @@ impl AudioConverterConfig {
             assert_eq!(val.len(), length);
             gst::Array::from_values(val.iter().map(|val| val.to_send_value())).to_send_value()
         }));
-        self.0.set("GstAudioConverter.mix-matrix", array);
+        self.0
+            .set(glib::gstr!("GstAudioConverter.mix-matrix"), array);
     }
 
     #[doc(alias = "get_mix_matrix")]
     pub fn mix_matrix(&self) -> Vec<Vec<f32>> {
         self.0
-            .get_optional::<gst::Array>("GstAudioConverter.mix-matrix")
+            .get_optional::<gst::Array>(glib::gstr!("GstAudioConverter.mix-matrix"))
             .expect("Wrong type")
             .map(|array| {
                 array
@@ -162,7 +166,8 @@ impl AudioConverterConfig {
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
     pub fn set_dither_threshold(&mut self, v: u32) {
-        self.0.set("GstAudioConverter.dither-threshold", v);
+        self.0
+            .set(glib::gstr!("GstAudioConverter.dither-threshold"), v);
     }
 
     #[cfg(any(feature = "v1_22", feature = "dox"))]
@@ -170,7 +175,7 @@ impl AudioConverterConfig {
     #[doc(alias = "get_dither_threshold")]
     pub fn dither_threshold(&self) -> u32 {
         self.0
-            .get_optional("GstAudioConverter.dither-threshold")
+            .get_optional(glib::gstr!("GstAudioConverter.dither-threshold"))
             .expect("Wrong type")
             .unwrap_or(20)
     }

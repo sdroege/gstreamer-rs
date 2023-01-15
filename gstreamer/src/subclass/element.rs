@@ -720,7 +720,7 @@ mod tests {
         assert_eq!(element.name(), "test");
 
         assert_eq!(
-            element.metadata(&crate::ELEMENT_METADATA_LONGNAME),
+            element.metadata(crate::ELEMENT_METADATA_LONGNAME),
             Some("Test Element")
         );
 

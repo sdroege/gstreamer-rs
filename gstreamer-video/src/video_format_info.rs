@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{cmp::Ordering, ffi::CStr, fmt, marker::PhantomData, str};
+use std::{cmp::Ordering, fmt, marker::PhantomData, str};
 
 use glib::translate::{from_glib, IntoGlib, ToGlibPtr};
 
@@ -32,13 +32,13 @@ impl VideoFormatInfo {
     }
 
     #[inline]
-    pub fn name<'a>(&self) -> &'a str {
-        unsafe { CStr::from_ptr(self.0.name).to_str().unwrap() }
+    pub fn name<'a>(&self) -> &'a glib::GStr {
+        unsafe { glib::GStr::from_ptr(self.0.name) }
     }
 
     #[inline]
-    pub fn description<'a>(&self) -> &'a str {
-        unsafe { CStr::from_ptr(self.0.description).to_str().unwrap() }
+    pub fn description<'a>(&self) -> &'a glib::GStr {
+        unsafe { glib::GStr::from_ptr(self.0.description) }
     }
 
     #[inline]
