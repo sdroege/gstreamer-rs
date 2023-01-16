@@ -667,26 +667,11 @@ impl<O: IsA<Pad>> PadExtManual for O {
                     None => panic::resume_unwind(err),
                 };
 
-                let maybe_couldnt_stop = if pad.pause_task().is_err() {
-                    ", could not stop task"
-                } else {
-                    ""
-                };
-                let cause = if let Some(cause) = err.downcast_ref::<&str>() {
-                    cause
-                } else if let Some(cause) = err.downcast_ref::<String>() {
-                    cause
-                } else {
-                    "Panicked"
-                };
-                let _ = element.post_message(
-                    crate::message::Error::builder(
-                        crate::LibraryError::Failed,
-                        &format!("Panicked: {}{}", cause, maybe_couldnt_stop),
-                    )
-                    .src(&*pad)
-                    .build(),
-                );
+                if pad.pause_task().is_err() {
+                    crate::error!(crate::CAT_RUST, "could not stop pad task on panic");
+                }
+
+                crate::subclass::post_panic_error_message(&element, pad.upcast_ref(), Some(err));
             }
         }
 

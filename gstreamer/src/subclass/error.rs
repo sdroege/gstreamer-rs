@@ -2,33 +2,61 @@
 
 use thiserror::Error;
 
-use crate::{ErrorMessage, FlowReturn};
+use crate::{prelude::ElementExt, ErrorMessage, FlowReturn};
+
+#[doc(hidden)]
+#[inline(never)]
+pub fn post_panic_error_message(
+    element: &crate::Element,
+    src: &crate::Object,
+    panic: Option<Box<dyn std::any::Any + Send + 'static>>,
+) {
+    let cause = panic.as_ref().and_then(|err| {
+        err.downcast_ref::<&str>()
+            .copied()
+            .or_else(|| err.downcast_ref::<String>().map(|s| s.as_str()))
+    });
+
+    let msg = if let Some(cause) = cause {
+        crate::message::Error::builder(crate::LibraryError::Failed, &format!("Panicked: {}", cause))
+            .src(src)
+            .build()
+    } else {
+        crate::message::Error::builder(crate::LibraryError::Failed, "Panicked")
+            .src(src)
+            .build()
+    };
+
+    let _ = element.post_message(msg);
+}
 
 #[macro_export]
 macro_rules! panic_to_error(
     ($imp:expr, $ret:expr, $code:block) => {{
-        use std::panic::{self, AssertUnwindSafe};
-        use std::sync::atomic::Ordering;
-
         #[allow(clippy::unused_unit)]
         {
-            if $imp.panicked().load(Ordering::Relaxed) {
-                $imp.post_error_message($crate::error_msg!($crate::LibraryError::Failed, ["Panicked"]));
+            let panicked = $imp.panicked();
+            let element = $crate::glib::subclass::types::ObjectSubclassExt::obj($imp);
+            let element = unsafe { $crate::glib::Cast::unsafe_cast_ref::<$crate::Element>(element.as_ref()) };
+            if panicked.load(std::sync::atomic::Ordering::Relaxed) {
+                $crate::subclass::post_panic_error_message(
+                    element,
+                    $crate::glib::Cast::upcast_ref::<$crate::Object>(element),
+                    None,
+                );
                 $ret
             } else {
-                let result = panic::catch_unwind(AssertUnwindSafe(|| $code));
+                let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| $code));
 
                 match result {
                     Ok(result) => result,
                     Err(err) => {
-                        $imp.panicked().store(true, Ordering::Relaxed);
-                        if let Some(cause) = err.downcast_ref::<&str>() {
-                            $imp.post_error_message($crate::error_msg!($crate::LibraryError::Failed, ["Panicked: {}", cause]));
-                        } else if let Some(cause) = err.downcast_ref::<String>() {
-                            $imp.post_error_message($crate::error_msg!($crate::LibraryError::Failed, ["Panicked: {}", cause]));
-                        } else {
-                            $imp.post_error_message($crate::error_msg!($crate::LibraryError::Failed, ["Panicked"]));
-                        }
+                        panicked.store(true, std::sync::atomic::Ordering::Relaxed);
+                        $crate::subclass::post_panic_error_message(
+                            element,
+                            $crate::glib::Cast::upcast_ref::<$crate::Object>(element),
+                            Some(err),
+                        );
                         $ret
                     }
                 }

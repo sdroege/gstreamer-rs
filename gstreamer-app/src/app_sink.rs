@@ -135,24 +135,13 @@ impl AppSinkCallbacksBuilder {
     }
 }
 
-fn post_panic_error_message(element: &AppSink, err: &dyn std::any::Any) {
-    skip_assert_initialized!();
-    if let Some(cause) = err.downcast_ref::<&str>() {
-        gst::element_error!(element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
-    } else if let Some(cause) = err.downcast_ref::<String>() {
-        gst::element_error!(element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
-    } else {
-        gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
-    }
-}
-
 unsafe extern "C" fn trampoline_eos(appsink: *mut ffi::GstAppSink, callbacks: gpointer) {
     let callbacks = callbacks as *mut AppSinkCallbacks;
     let element: Borrowed<AppSink> = from_glib_borrow(appsink);
 
     if (*callbacks).panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::subclass::post_panic_error_message(element.upcast_ref(), element.upcast_ref(), None);
         return;
     }
 
@@ -162,7 +151,11 @@ unsafe extern "C" fn trampoline_eos(appsink: *mut ffi::GstAppSink, callbacks: gp
             Ok(result) => result,
             Err(err) => {
                 (*callbacks).panicked.store(true, Ordering::Relaxed);
-                post_panic_error_message(&element, &err);
+                gst::subclass::post_panic_error_message(
+                    element.upcast_ref(),
+                    element.upcast_ref(),
+                    Some(err),
+                );
             }
         }
     }
@@ -177,7 +170,7 @@ unsafe extern "C" fn trampoline_new_preroll(
 
     if (*callbacks).panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::subclass::post_panic_error_message(element.upcast_ref(), element.upcast_ref(), None);
         return gst::FlowReturn::Error.into_glib();
     }
 
@@ -187,7 +180,11 @@ unsafe extern "C" fn trampoline_new_preroll(
             Ok(result) => result,
             Err(err) => {
                 (*callbacks).panicked.store(true, Ordering::Relaxed);
-                post_panic_error_message(&element, &err);
+                gst::subclass::post_panic_error_message(
+                    element.upcast_ref(),
+                    element.upcast_ref(),
+                    Some(err),
+                );
 
                 gst::FlowReturn::Error
             }
@@ -208,7 +205,7 @@ unsafe extern "C" fn trampoline_new_sample(
 
     if (*callbacks).panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::subclass::post_panic_error_message(element.upcast_ref(), element.upcast_ref(), None);
         return gst::FlowReturn::Error.into_glib();
     }
 
@@ -218,7 +215,11 @@ unsafe extern "C" fn trampoline_new_sample(
             Ok(result) => result,
             Err(err) => {
                 (*callbacks).panicked.store(true, Ordering::Relaxed);
-                post_panic_error_message(&element, &err);
+                gst::subclass::post_panic_error_message(
+                    element.upcast_ref(),
+                    element.upcast_ref(),
+                    Some(err),
+                );
 
                 gst::FlowReturn::Error
             }
@@ -239,7 +240,7 @@ unsafe extern "C" fn trampoline_new_event(
 
     if (*callbacks).panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst::element_error!(element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::subclass::post_panic_error_message(element.upcast_ref(), element.upcast_ref(), None);
         return false.into_glib();
     }
 
@@ -249,7 +250,11 @@ unsafe extern "C" fn trampoline_new_event(
             Ok(result) => result,
             Err(err) => {
                 (*callbacks).panicked.store(true, Ordering::Relaxed);
-                post_panic_error_message(&element, &err);
+                gst::subclass::post_panic_error_message(
+                    element.upcast_ref(),
+                    element.upcast_ref(),
+                    Some(err),
+                );
 
                 false
             }

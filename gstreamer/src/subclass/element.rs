@@ -319,6 +319,7 @@ impl<T: ElementImpl> ElementImplExt for T {
         }
     }
 
+    #[inline(never)]
     fn panicked(&self) -> &atomic::AtomicBool {
         self.instance_data::<atomic::AtomicBool>(crate::Element::static_type())
             .expect("instance not initialized correctly")

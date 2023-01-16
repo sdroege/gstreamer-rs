@@ -100,24 +100,23 @@ macro_rules! plugin_define(
 
             #[allow(clippy::missing_safety_doc)]
             unsafe extern "C" fn plugin_init_trampoline(plugin: *mut $crate::ffi::GstPlugin) -> $crate::glib::ffi::gboolean {
-                use std::panic::{self, AssertUnwindSafe};
+                let panic_result = std::panic::catch_unwind(
+                    std::panic::AssertUnwindSafe(|| super::$plugin_init(&$crate::glib::translate::from_glib_borrow(plugin)))
+                );
 
-                let panic_result = panic::catch_unwind(AssertUnwindSafe(|| super::$plugin_init(&$crate::glib::translate::from_glib_borrow(plugin))));
                 match panic_result {
                     Ok(register_result) => match register_result {
                         Ok(_) => $crate::glib::ffi::GTRUE,
                         Err(err) => {
-                            let cat = $crate::DebugCategory::get("GST_PLUGIN_LOADING").unwrap();
-                            $crate::error!(cat, "Failed to register plugin: {}", err);
+                            $crate::error!($crate::CAT_PLUGIN_LOADING, "Failed to register plugin: {}", err);
                             $crate::glib::ffi::GFALSE
                         }
                     }
                     Err(err) => {
-                        let cat = $crate::DebugCategory::get("GST_PLUGIN_LOADING").unwrap();
-                        if let Some(cause) = err.downcast_ref::<&str>() {
-                            $crate::error!(cat, "Failed to initialize plugin due to panic: {}", cause);
-                        } else if let Some(cause) = err.downcast_ref::<String>() {
-                            $crate::error!(cat, "Failed to initialize plugin due to panic: {}", cause);
+                        let cause = err.downcast_ref::<&str>().copied()
+                            .or_else(|| err.downcast_ref::<String>().map(|s| s.as_str()));
+                        if let Some(cause) = cause {
+                            $crate::error!($crate::PLUGIN_LOADING, "Failed to initialize plugin due to panic: {}", cause);
                         } else {
                             $crate::error!(cat, "Failed to initialize plugin due to panic");
                         }
