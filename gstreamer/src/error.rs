@@ -9,35 +9,35 @@ macro_rules! error_msg(
     ($err:expr, ($msg:expr), [$dbg:expr]) =>  {
         $crate::ErrorMessage::new(&$err, Some($msg),
                           Some($dbg),
-                          file!(), module_path!(), line!())
+                          file!(), $crate::glib::function_name!(), line!())
     };
     ($err:expr, ($msg:expr)) => {
         $crate::ErrorMessage::new(&$err, Some($msg),
                           None,
-                          file!(), module_path!(), line!())
+                          file!(), $crate::glib::function_name!(), line!())
     };
     ($err:expr, [$dbg:expr]) => {
         $crate::ErrorMessage::new(&$err, None,
                           Some($dbg),
-                          file!(), module_path!(), line!())
+                          file!(), $crate::glib::function_name!(), line!())
     };
 
 // Format strings
     ($err:expr, ($($msg:tt)*), [$($dbg:tt)*]) =>  { {
         $crate::ErrorMessage::new(&$err, Some(format!($($msg)*).as_ref()),
                           Some(format!($($dbg)*).as_ref()),
-                          file!(), module_path!(), line!())
+                          file!(), $crate::glib::function_name!(), line!())
     }};
     ($err:expr, ($($msg:tt)*)) =>  { {
         $crate::ErrorMessage::new(&$err, Some(format!($($msg)*).as_ref()),
                           None,
-                          file!(), module_path!(), line!())
+                          file!(), $crate::glib::function_name!(), line!())
     }};
 
     ($err:expr, [$($dbg:tt)*]) =>  { {
         $crate::ErrorMessage::new(&$err, None,
                           Some(format!($($dbg)*).as_ref()),
-                          file!(), module_path!(), line!())
+                          file!(), $crate::glib::function_name!(), line!())
     }};
 );
 

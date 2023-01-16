@@ -160,7 +160,7 @@ macro_rules! audio_decoder_error(
             Some($msg),
             Some($debug),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         )
     }};
@@ -172,7 +172,7 @@ macro_rules! audio_decoder_error(
             Some($msg),
             None,
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         )
     }};
@@ -184,7 +184,7 @@ macro_rules! audio_decoder_error(
             None,
             Some($debug),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         )
     }};
@@ -196,7 +196,7 @@ macro_rules! audio_decoder_error(
             Some(&format!($($msg)*)),
             Some(&format!($($debug)*)),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         )
     }};
@@ -208,7 +208,7 @@ macro_rules! audio_decoder_error(
             Some(&format!($($msg)*)),
             None,
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         )
     }};
@@ -220,7 +220,7 @@ macro_rules! audio_decoder_error(
             None,
             Some(&format!($($debug)*)),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         )
     }};

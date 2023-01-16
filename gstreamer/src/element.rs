@@ -1011,7 +1011,7 @@ macro_rules! element_error(
             Some($msg),
             Some($debug),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1023,7 +1023,7 @@ macro_rules! element_error(
             Some($msg),
             None,
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1035,7 +1035,7 @@ macro_rules! element_error(
             None,
             Some($debug),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1047,7 +1047,7 @@ macro_rules! element_error(
             Some(&format!($($msg)*)),
             Some(&format!($($debug)*)),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1059,7 +1059,7 @@ macro_rules! element_error(
             Some(&format!($($msg)*)),
             None,
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1071,7 +1071,7 @@ macro_rules! element_error(
             None,
             Some(&format!($($debug)*)),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1084,7 +1084,7 @@ macro_rules! element_error(
             Some($msg),
             Some($debug),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1097,7 +1097,7 @@ macro_rules! element_error(
             Some($msg),
             None,
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1110,7 +1110,7 @@ macro_rules! element_error(
             None,
             Some($debug),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1123,7 +1123,7 @@ macro_rules! element_error(
             Some(&format!($($msg)*)),
             Some(&format!($($debug)*)),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1136,7 +1136,7 @@ macro_rules! element_error(
             Some(&format!($($msg)*)),
             None,
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1149,7 +1149,7 @@ macro_rules! element_error(
             None,
             Some(&format!($($debug)*)),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1168,7 +1168,7 @@ macro_rules! element_warning(
             Some($msg),
             Some($debug),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1180,7 +1180,7 @@ macro_rules! element_warning(
             Some($msg),
             None,
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1192,7 +1192,7 @@ macro_rules! element_warning(
             None,
             Some($debug),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1204,7 +1204,7 @@ macro_rules! element_warning(
             Some(&format!($($msg)*)),
             Some(&format!($($debug)*)),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1216,7 +1216,7 @@ macro_rules! element_warning(
             Some(&format!($($msg)*)),
             None,
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1228,7 +1228,7 @@ macro_rules! element_warning(
             None,
             Some(&format!($($debug)*)),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1241,7 +1241,7 @@ macro_rules! element_warning(
             Some($msg),
             Some($debug),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1254,7 +1254,7 @@ macro_rules! element_warning(
             Some($msg),
             None,
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1267,7 +1267,7 @@ macro_rules! element_warning(
             None,
             Some($debug),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1280,7 +1280,7 @@ macro_rules! element_warning(
             Some(&format!($($msg)*)),
             Some(&format!($($debug)*)),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1293,7 +1293,7 @@ macro_rules! element_warning(
             Some(&format!($($msg)*)),
             None,
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1306,7 +1306,7 @@ macro_rules! element_warning(
             None,
             Some(&format!($($debug)*)),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1325,7 +1325,7 @@ macro_rules! element_info(
             Some($msg),
             Some($debug),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1337,7 +1337,7 @@ macro_rules! element_info(
             Some($msg),
             None,
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1349,7 +1349,7 @@ macro_rules! element_info(
             None,
             Some($debug),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1361,7 +1361,7 @@ macro_rules! element_info(
             Some(&format!($($msg)*)),
             Some(&format!($($debug)*)),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1373,7 +1373,7 @@ macro_rules! element_info(
             Some(&format!($($msg)*)),
             None,
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1385,7 +1385,7 @@ macro_rules! element_info(
             None,
             Some(&format!($($debug)*)),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
         );
     }};
@@ -1398,7 +1398,7 @@ macro_rules! element_info(
             Some($msg),
             Some($debug),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1411,7 +1411,7 @@ macro_rules! element_info(
             Some($msg),
             None,
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1424,7 +1424,7 @@ macro_rules! element_info(
             None,
             Some($debug),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1437,7 +1437,7 @@ macro_rules! element_info(
             Some(&format!($($msg)*)),
             Some(&format!($($debug)*)),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1450,7 +1450,7 @@ macro_rules! element_info(
             Some(&format!($($msg)*)),
             None,
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
@@ -1463,7 +1463,7 @@ macro_rules! element_info(
             None,
             Some(&format!($($debug)*)),
             file!(),
-            module_path!(),
+            $crate::glib::function_name!(),
             line!(),
             $details,
         );
