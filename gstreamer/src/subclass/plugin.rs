@@ -118,7 +118,7 @@ macro_rules! plugin_define(
                         if let Some(cause) = cause {
                             $crate::error!($crate::CAT_PLUGIN_LOADING, "Failed to initialize plugin due to panic: {}", cause);
                         } else {
-                            $crate::error!(cat, "Failed to initialize plugin due to panic");
+                            $crate::error!($crate::CAT_PLUGIN_LOADING, "Failed to initialize plugin due to panic");
                         }
 
                         $crate::glib::ffi::GFALSE
