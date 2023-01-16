@@ -116,7 +116,7 @@ macro_rules! plugin_define(
                         let cause = err.downcast_ref::<&str>().copied()
                             .or_else(|| err.downcast_ref::<String>().map(|s| s.as_str()));
                         if let Some(cause) = cause {
-                            $crate::error!($crate::PLUGIN_LOADING, "Failed to initialize plugin due to panic: {}", cause);
+                            $crate::error!($crate::CAT_PLUGIN_LOADING, "Failed to initialize plugin due to panic: {}", cause);
                         } else {
                             $crate::error!(cat, "Failed to initialize plugin due to panic");
                         }
