@@ -16,17 +16,11 @@ glib::wrapper! {
 
 impl ControlPoint {
     pub fn timestamp(&self) -> gst::ClockTime {
-        unsafe {
-            let ptr = self.to_glib_none().0;
-            try_from_glib((*ptr).timestamp).expect("undefined timestamp")
-        }
+        unsafe { try_from_glib((*self.as_ptr()).timestamp).expect("undefined timestamp") }
     }
 
     pub fn value(&self) -> f64 {
-        unsafe {
-            let ptr = self.to_glib_none().0;
-            (*ptr).value
-        }
+        unsafe { (*self.as_ptr()).value }
     }
 }
 

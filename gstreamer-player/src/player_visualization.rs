@@ -2,22 +2,16 @@
 
 use std::ffi::CStr;
 
-use glib::translate::*;
-
 use crate::PlayerVisualization;
 
 impl PlayerVisualization {
     pub fn name(&self) -> &str {
-        unsafe {
-            CStr::from_ptr((*self.to_glib_none().0).name)
-                .to_str()
-                .unwrap()
-        }
+        unsafe { CStr::from_ptr((*self.as_ptr()).name).to_str().unwrap() }
     }
 
     pub fn description(&self) -> &str {
         unsafe {
-            CStr::from_ptr((*self.to_glib_none().0).description)
+            CStr::from_ptr((*self.as_ptr()).description)
                 .to_str()
                 .unwrap()
         }

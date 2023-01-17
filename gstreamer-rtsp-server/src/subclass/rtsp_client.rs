@@ -1,7 +1,5 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::mem;
-
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use crate::RTSPClient;
@@ -783,10 +781,7 @@ unsafe extern "C" fn client_create_sdp<T: RTSPClientImpl>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
 
-    let sdp = mem::ManuallyDrop::new(imp.create_sdp(&from_glib_borrow(media)));
-    let ptr = sdp.to_glib_none().0;
-
-    ptr as *mut _
+    imp.create_sdp(&from_glib_borrow(media)).into_glib_ptr()
 }
 
 unsafe extern "C" fn client_configure_client_media<T: RTSPClientImpl>(

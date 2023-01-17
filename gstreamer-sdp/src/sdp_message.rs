@@ -52,7 +52,7 @@ impl ops::Deref for SDPMessage {
     type Target = SDPMessageRef;
 
     fn deref(&self) -> &SDPMessageRef {
-        unsafe { &*(self.to_glib_none().0 as *const SDPMessageRef) }
+        unsafe { &*(self.as_ptr() as *const SDPMessageRef) }
     }
 }
 
@@ -190,10 +190,7 @@ impl SDPMessageRef {
     #[doc(alias = "gst_sdp_message_add_media")]
     pub fn add_media(&mut self, media: SDPMedia) {
         unsafe {
-            ffi::gst_sdp_message_add_media(
-                &mut self.0,
-                media.to_glib_none().0 as *mut ffi::GstSDPMedia,
-            );
+            ffi::gst_sdp_message_add_media(&mut self.0, media.as_ptr() as *mut ffi::GstSDPMedia);
         }
     }
 

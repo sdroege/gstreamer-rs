@@ -2,14 +2,12 @@
 
 use std::ffi::CStr;
 
-use glib::translate::*;
-
 use crate::WebRTCICECandidateStats;
 
 impl WebRTCICECandidateStats {
     pub fn ipaddr(&self) -> Option<&str> {
         unsafe {
-            let ptr = (*self.to_glib_none().0).ipaddr;
+            let ptr = (*self.as_ptr()).ipaddr;
             if ptr.is_null() {
                 None
             } else {
@@ -19,16 +17,16 @@ impl WebRTCICECandidateStats {
     }
 
     pub fn port(&self) -> u32 {
-        unsafe { (*self.to_glib_none().0).port }
+        unsafe { (*self.as_ptr()).port }
     }
 
     pub fn stream_id(&self) -> u32 {
-        unsafe { (*self.to_glib_none().0).stream_id }
+        unsafe { (*self.as_ptr()).stream_id }
     }
 
     pub fn type_(&self) -> Option<&str> {
         unsafe {
-            let ptr = (*self.to_glib_none().0).type_;
+            let ptr = (*self.as_ptr()).type_;
             if ptr.is_null() {
                 None
             } else {
@@ -39,7 +37,7 @@ impl WebRTCICECandidateStats {
 
     pub fn proto(&self) -> Option<&str> {
         unsafe {
-            let ptr = (*self.to_glib_none().0).proto;
+            let ptr = (*self.as_ptr()).proto;
             if ptr.is_null() {
                 None
             } else {
@@ -50,7 +48,7 @@ impl WebRTCICECandidateStats {
 
     pub fn relay_proto(&self) -> Option<&str> {
         unsafe {
-            let ptr = (*self.to_glib_none().0).relay_proto;
+            let ptr = (*self.as_ptr()).relay_proto;
             if ptr.is_null() {
                 None
             } else {
@@ -60,12 +58,12 @@ impl WebRTCICECandidateStats {
     }
 
     pub fn prio(&self) -> u32 {
-        unsafe { (*self.to_glib_none().0).prio }
+        unsafe { (*self.as_ptr()).prio }
     }
 
     pub fn url(&self) -> Option<&str> {
         unsafe {
-            let ptr = (*self.to_glib_none().0).url;
+            let ptr = (*self.as_ptr()).url;
             if ptr.is_null() {
                 None
             } else {

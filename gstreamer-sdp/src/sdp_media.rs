@@ -57,7 +57,7 @@ impl ops::Deref for SDPMedia {
     type Target = SDPMediaRef;
 
     fn deref(&self) -> &SDPMediaRef {
-        unsafe { &*(self.to_glib_none().0 as *const SDPMediaRef) }
+        unsafe { &*(self.as_ptr() as *const SDPMediaRef) }
     }
 }
 
