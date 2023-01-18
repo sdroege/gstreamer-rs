@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.19.6] - 2023-01-18
+### Fixed
+- The `AppSrc` and `AppSink` builders now assert that GStreamer is initialized
+  before creating an instance.
+
 ## [0.19.5] - 2022-12-27
 ### Fixed
 - Clear video frame values when mapping as GL texture to avoid out of bounds
@@ -1421,7 +1426,10 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.3...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.6...HEAD
+[0.19.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.5...0.19.6
+[0.19.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.4...0.19.5
+[0.19.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.3...0.19.4
 [0.19.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.2...0.19.3
 [0.19.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.1...0.19.2
 [0.19.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.0...0.19.1
