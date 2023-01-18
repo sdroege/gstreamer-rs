@@ -1427,9 +1427,9 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   The API of the two is incompatible.
 
 [Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.6...HEAD
-[0.19.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.5...0.19.6
-[0.19.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.4...0.19.5
-[0.19.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.3...0.19.4
+[0.19.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.5...0.19.6
+[0.19.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.4...0.19.5
+[0.19.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.3...0.19.4
 [0.19.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.2...0.19.3
 [0.19.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.1...0.19.2
 [0.19.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.0...0.19.1
