@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.19.7] - 2023-01-19
+### Fixed
+- Work around the possibility that the caps in the allocation query can be
+  `NULL` by returning any caps for now. This will be handled properly with a
+  minimal API change in the 0.20 release.
+
 ## [0.19.6] - 2023-01-18
 ### Fixed
 - The `AppSrc` and `AppSink` builders now assert that GStreamer is initialized
@@ -1426,7 +1432,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.6...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.7...HEAD
+[0.19.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.6...0.19.7
 [0.19.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.5...0.19.6
 [0.19.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.4...0.19.5
 [0.19.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.3...0.19.4
