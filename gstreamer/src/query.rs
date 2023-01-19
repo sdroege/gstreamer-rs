@@ -1019,11 +1019,12 @@ impl Uri {
 declare_concrete_query!(Allocation, T);
 impl Allocation<Query> {
     #[doc(alias = "gst_query_new_allocation")]
-    pub fn new(caps: &crate::Caps, need_pool: bool) -> Self {
+    pub fn new(caps: Option<&crate::Caps>, need_pool: bool) -> Self {
         skip_assert_initialized!();
         unsafe {
             Self(from_glib_full(ffi::gst_query_new_allocation(
-                caps.as_mut_ptr(),
+                caps.map(|caps| caps.as_mut_ptr())
+                    .unwrap_or(ptr::null_mut()),
                 need_pool.into_glib(),
             )))
         }
@@ -1032,24 +1033,28 @@ impl Allocation<Query> {
 
 impl Allocation {
     #[doc(alias = "gst_query_parse_allocation")]
-    pub fn get(&self) -> (&crate::CapsRef, bool) {
+    pub fn get(&self) -> (Option<&crate::CapsRef>, bool) {
         unsafe {
             let mut caps = ptr::null_mut();
             let mut need_pool = mem::MaybeUninit::uninit();
 
             ffi::gst_query_parse_allocation(self.as_mut_ptr(), &mut caps, need_pool.as_mut_ptr());
             (
-                crate::CapsRef::from_ptr(caps),
+                if caps.is_null() {
+                    None
+                } else {
+                    Some(crate::CapsRef::from_ptr(caps))
+                },
                 from_glib(need_pool.assume_init()),
             )
         }
     }
 
     #[doc(alias = "gst_query_parse_allocation")]
-    pub fn get_owned(&self) -> (crate::Caps, bool) {
+    pub fn get_owned(&self) -> (Option<crate::Caps>, bool) {
         unsafe {
             let (caps, need_pool) = self.get();
-            (from_glib_none(caps.as_ptr()), need_pool)
+            (caps.map(|caps| from_glib_none(caps.as_ptr())), need_pool)
         }
     }
 
@@ -1749,7 +1754,7 @@ mod tests {
     fn allocation_need_pool() {
         crate::init().unwrap();
 
-        let mut a = Allocation::new(&crate::Caps::builder("foo/bar").build(), true);
+        let mut a = Allocation::new(Some(&crate::Caps::new_empty_simple("foo/bar")), true);
         let pool = crate::BufferPool::new();
         a.add_allocation_pool(Some(&pool), 1024, 1, 4);
     }
@@ -1758,7 +1763,7 @@ mod tests {
     fn allocation_do_not_need_pool() {
         crate::init().unwrap();
 
-        let mut a = Allocation::new(&crate::Caps::builder("foo/bar").build(), false);
+        let mut a = Allocation::new(Some(&crate::Caps::new_empty_simple("foo/bar")), false);
         a.add_allocation_pool(crate::BufferPool::NONE, 1024, 1, 4);
 
         // cannot infer type of the type parameter `T` declared on the enum `Option`
