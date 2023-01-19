@@ -1019,7 +1019,16 @@ impl Allocation {
 
             ffi::gst_query_parse_allocation(self.as_mut_ptr(), &mut caps, need_pool.as_mut_ptr());
             (
-                crate::CapsRef::from_ptr(caps),
+                if caps.is_null() {
+                    #[link(name = "gstreamer-1.0")]
+                    extern "C" {
+                        pub static _gst_caps_any: *mut ffi::GstCaps;
+                    }
+
+                    crate::CapsRef::from_ptr(_gst_caps_any)
+                } else {
+                    crate::CapsRef::from_ptr(caps)
+                },
                 from_glib(need_pool.assume_init()),
             )
         }
