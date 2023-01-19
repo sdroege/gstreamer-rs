@@ -1,6 +1,6 @@
 [package]
 name = "examples"
-version = "0.19.6"
+version = "0.19.7"
 license = "MIT"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 edition = "2021"
