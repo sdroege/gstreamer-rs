@@ -42,6 +42,7 @@ impl ParamSpecFraction {
         ParamSpecFractionBuilder::new(name)
     }
 
+    #[deprecated = "Use builder() instead"]
     #[allow(clippy::new_ret_no_self)]
     #[doc(alias = "gst_param_spec_fraction")]
     pub fn new<'a>(
@@ -54,6 +55,18 @@ impl ParamSpecFraction {
         flags: glib::ParamFlags,
     ) -> glib::ParamSpec {
         assert_initialized_main_thread!();
+        unsafe { Self::new_unchecked(name, nick, blurb, min, max, default, flags) }
+    }
+
+    unsafe fn new_unchecked<'a>(
+        name: &str,
+        nick: impl Into<Option<&'a str>>,
+        blurb: impl Into<Option<&'a str>>,
+        min: crate::Fraction,
+        max: crate::Fraction,
+        default: crate::Fraction,
+        flags: glib::ParamFlags,
+    ) -> glib::ParamSpec {
         unsafe {
             from_glib_none(ffi::gst_param_spec_fraction(
                 name.to_glib_none().0,
@@ -127,7 +140,7 @@ pub struct ParamSpecFractionBuilder<'a> {
 
 impl<'a> ParamSpecFractionBuilder<'a> {
     fn new(name: &'a str) -> Self {
-        skip_assert_initialized!();
+        assert_initialized_main_thread!();
         Self {
             name,
             ..Default::default()
@@ -157,18 +170,20 @@ impl<'a> ParamSpecFractionBuilder<'a> {
 
     #[must_use]
     pub fn build(self) -> ParamSpec {
-        ParamSpecFraction::new(
-            self.name,
-            self.nick.unwrap_or(self.name),
-            self.blurb.unwrap_or(self.name),
-            self.minimum
-                .unwrap_or_else(|| crate::Fraction::new(-i32::MAX, 1)),
-            self.maximum
-                .unwrap_or_else(|| crate::Fraction::new(i32::MAX, 1)),
-            self.default_value
-                .unwrap_or_else(|| crate::Fraction::new(0, 1)),
-            self.flags,
-        )
+        unsafe {
+            ParamSpecFraction::new_unchecked(
+                self.name,
+                self.nick.unwrap_or(self.name),
+                self.blurb.unwrap_or(self.name),
+                self.minimum
+                    .unwrap_or_else(|| crate::Fraction::new(-i32::MAX, 1)),
+                self.maximum
+                    .unwrap_or_else(|| crate::Fraction::new(i32::MAX, 1)),
+                self.default_value
+                    .unwrap_or_else(|| crate::Fraction::new(0, 1)),
+                self.flags,
+            )
+        }
     }
 }
 
@@ -229,6 +244,7 @@ impl ParamSpecArray {
 
     #[allow(clippy::new_ret_no_self)]
     #[doc(alias = "gst_param_spec_array")]
+    #[deprecated = "Use builder() instead"]
     pub fn new<'a>(
         name: &str,
         nick: impl Into<Option<&'a str>>,
@@ -237,6 +253,17 @@ impl ParamSpecArray {
         flags: glib::ParamFlags,
     ) -> glib::ParamSpec {
         assert_initialized_main_thread!();
+
+        unsafe { Self::new_unchecked(name, nick, blurb, element_spec, flags) }
+    }
+
+    unsafe fn new_unchecked<'a>(
+        name: &str,
+        nick: impl Into<Option<&'a str>>,
+        blurb: impl Into<Option<&'a str>>,
+        element_spec: Option<&glib::ParamSpec>,
+        flags: glib::ParamFlags,
+    ) -> glib::ParamSpec {
         unsafe {
             from_glib_none(ffi::gst_param_spec_array(
                 name.to_glib_none().0,
@@ -292,7 +319,7 @@ pub struct ParamSpecArrayBuilder<'a> {
 
 impl<'a> ParamSpecArrayBuilder<'a> {
     fn new(name: &'a str) -> Self {
-        skip_assert_initialized!();
+        assert_initialized_main_thread!();
         Self {
             name,
             ..Default::default()
@@ -308,13 +335,15 @@ impl<'a> ParamSpecArrayBuilder<'a> {
 
     #[must_use]
     pub fn build(self) -> ParamSpec {
-        ParamSpecArray::new(
-            self.name,
-            self.nick.unwrap_or(self.name),
-            self.blurb.unwrap_or(self.name),
-            self.element_spec,
-            self.flags,
-        )
+        unsafe {
+            ParamSpecArray::new_unchecked(
+                self.name,
+                self.nick.unwrap_or(self.name),
+                self.blurb.unwrap_or(self.name),
+                self.element_spec,
+                self.flags,
+            )
+        }
     }
 }
 
@@ -388,6 +417,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[allow(deprecated)]
     fn test_trait() {
         crate::init().unwrap();
 
