@@ -37,10 +37,7 @@ impl<T: AllocatorImpl> AllocatorImplExt for T {
 
             if let Some(f) = (*parent_class).alloc {
                 from_glib_full::<*mut ffi::GstMemory, Option<_>>(f(
-                    self.instance()
-                        .unsafe_cast_ref::<Allocator>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<Allocator>().to_glib_none().0,
                     size,
                     mut_override(params.to_glib_none().0),
                 ))
@@ -58,10 +55,7 @@ impl<T: AllocatorImpl> AllocatorImplExt for T {
 
             if let Some(f) = (*parent_class).free {
                 f(
-                    self.instance()
-                        .unsafe_cast_ref::<Allocator>()
-                        .to_glib_none()
-                        .0,
+                    self.obj().unsafe_cast_ref::<Allocator>().to_glib_none().0,
                     memory.into_glib_ptr(),
                 )
             }
