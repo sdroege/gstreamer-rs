@@ -134,11 +134,7 @@ fn main() -> Result<()> {
             // something in wrong way or driver bug or so.
             unsafe {
                 let rtv = ID3D11RenderTargetView::from_raw_borrowed(&rtv_raw);
-                let resource = {
-                    let mut resource = None;
-                    rtv.GetResource(&mut resource);
-                    resource.unwrap()
-                };
+                let resource = rtv.GetResource().unwrap();
 
                 let texture = resource.cast::<ID3D11Texture2D>().unwrap();
                 let desc = {
@@ -195,7 +191,8 @@ fn main() -> Result<()> {
                         let mut was_decreased = false;
 
                         loop {
-                            let metrics = layout.GetMetrics().unwrap();
+                            let mut metrics = DWRITE_TEXT_METRICS::default();
+                            layout.GetMetrics(&mut metrics).unwrap();
                             layout
                                 .GetFontSize2(0, &mut font_size, Some(&mut range))
                                 .unwrap();
