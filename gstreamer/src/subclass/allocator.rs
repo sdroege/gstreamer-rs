@@ -150,7 +150,7 @@ mod tests {
 
     impl Default for TestAllocator {
         fn default() -> Self {
-            glib::Object::new(&[])
+            glib::Object::new_default()
         }
     }
 

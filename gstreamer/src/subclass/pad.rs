@@ -126,7 +126,10 @@ mod tests {
 
     impl TestPad {
         pub fn new(name: &str, direction: PadDirection) -> Self {
-            glib::Object::new(&[("name", &name), ("direction", &direction)])
+            glib::Object::builder()
+                .property("name", name)
+                .property("direction", direction)
+                .build()
         }
     }
 

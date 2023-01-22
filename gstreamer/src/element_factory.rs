@@ -48,7 +48,7 @@ impl ElementFactory {
 
         ElementBuilder {
             name_or_factory: NameOrFactory::Factory(self),
-            properties: Vec::new(),
+            properties: smallvec::SmallVec::new(),
         }
     }
 
@@ -60,7 +60,7 @@ impl ElementFactory {
 
         ElementBuilder {
             name_or_factory: NameOrFactory::Name(factoryname),
-            properties: Vec::new(),
+            properties: smallvec::SmallVec::new(),
         }
     }
 
@@ -219,7 +219,7 @@ impl ElementFactory {
 #[must_use = "The builder must be built to be used"]
 pub struct ElementBuilder<'a> {
     name_or_factory: NameOrFactory<'a>,
-    properties: Vec<(&'a str, ValueOrStr<'a>)>,
+    properties: smallvec::SmallVec<[(&'a str, ValueOrStr<'a>); 16]>,
 }
 
 #[derive(Copy, Clone)]
@@ -236,12 +236,14 @@ enum ValueOrStr<'a> {
 impl<'a> ElementBuilder<'a> {
     // rustdoc-stripper-ignore-next
     /// Sets the name property to the given `name`.
-    pub fn name(self, name: &'a str) -> Self {
-        self.property("name", name)
+    #[inline]
+    pub fn name(self, name: impl Into<glib::GString>) -> Self {
+        self.property("name", name.into())
     }
 
     // rustdoc-stripper-ignore-next
     /// Set property `name` to the given value `value`.
+    #[inline]
     pub fn property(self, name: &'a str, value: impl Into<glib::Value> + 'a) -> Self {
         Self {
             name_or_factory: self.name_or_factory,
@@ -255,6 +257,7 @@ impl<'a> ElementBuilder<'a> {
 
     // rustdoc-stripper-ignore-next
     /// Set property `name` to the given string value `value`.
+    #[inline]
     pub fn property_from_str(self, name: &'a str, value: &'a str) -> Self {
         Self {
             name_or_factory: self.name_or_factory,
@@ -328,7 +331,7 @@ impl<'a> ElementBuilder<'a> {
             ));
         }
 
-        let mut properties = Vec::with_capacity(self.properties.len());
+        let mut properties = smallvec::SmallVec::<[_; 16]>::with_capacity(self.properties.len());
         let klass = glib::Class::<Element>::from_type(element_type).unwrap();
         for (name, value) in self.properties {
             match value {
@@ -386,9 +389,10 @@ impl<'a> ElementBuilder<'a> {
             }
         }
 
-        let element = glib::Object::with_values(element_type, &properties)
-            .downcast::<crate::Element>()
-            .unwrap();
+        let element = unsafe {
+            glib::Object::with_mut_values(element_type, &mut properties)
+                .unsafe_cast::<crate::Element>()
+        };
 
         unsafe {
             use std::sync::atomic;

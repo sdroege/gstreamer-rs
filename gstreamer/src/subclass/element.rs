@@ -708,7 +708,7 @@ mod tests {
 
     impl TestElement {
         pub fn new(name: Option<&str>) -> Self {
-            glib::Object::new(&[("name", &name)])
+            glib::Object::builder().property("name", name).build()
         }
     }
 

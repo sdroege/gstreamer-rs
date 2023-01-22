@@ -400,7 +400,7 @@ mod cairo_compositor {
     impl CairoCompositor {
         // Creates a new instance of our compositor with the given name.
         pub fn new(name: Option<&str>) -> Self {
-            glib::Object::new(&[("name", &name)])
+            glib::Object::builder().property("name", name).build()
         }
     }
 

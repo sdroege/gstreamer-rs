@@ -1617,7 +1617,10 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
     pub fn new(name: Option<&str>, direction: crate::PadDirection) -> Self {
         assert_initialized_main_thread!();
 
-        let pad = glib::Object::new::<T>(&[("name", &name), ("direction", &direction)]);
+        let pad = glib::Object::builder::<T>()
+            .property("name", name)
+            .property("direction", direction)
+            .build();
 
         // Ghost pads are a bit special
         if let Some(pad) = pad.dynamic_cast_ref::<crate::GhostPad>() {
@@ -1660,16 +1663,14 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             }
         }
 
-        let pad = glib::Object::with_type(
-            type_,
-            &[
-                ("name", &name),
-                ("direction", &templ.direction()),
-                ("template", templ),
-            ],
-        )
-        .downcast::<T>()
-        .unwrap();
+        let mut properties = [
+            ("name", name.map(glib::GString::from).into()),
+            ("direction", templ.direction().into()),
+            ("template", templ.into()),
+        ];
+
+        let pad =
+            unsafe { glib::Object::with_mut_values(type_, &mut properties).unsafe_cast::<T>() };
 
         // Ghost pads are a bit special
         if let Some(pad) = pad.dynamic_cast_ref::<crate::GhostPad>() {

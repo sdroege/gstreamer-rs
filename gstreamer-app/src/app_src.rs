@@ -218,7 +218,7 @@ impl AppSrc {
     /// This method returns an instance of [`AppSrcBuilder`](crate::builders::AppSrcBuilder) which can be used to create [`AppSrc`] objects.
     pub fn builder() -> AppSrcBuilder {
         assert_initialized_main_thread!();
-        AppSrcBuilder::default()
+        AppSrcBuilder::new()
     }
 
     #[doc(alias = "gst_app_src_set_callbacks")]
@@ -353,111 +353,31 @@ impl AppSrc {
     }
 }
 
-#[derive(Default)]
 // rustdoc-stripper-ignore-next
 /// A [builder-pattern] type to construct [`AppSrc`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
 pub struct AppSrcBuilder {
-    automatic_eos: Option<bool>,
-    block: Option<bool>,
+    builder: glib::object::ObjectBuilder<'static, AppSrc>,
     callbacks: Option<AppSrcCallbacks>,
-    caps: Option<gst::Caps>,
-    do_timestamp: Option<bool>,
-    duration: Option<u64>,
-    format: Option<gst::Format>,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    handle_segment_change: Option<bool>,
-    is_live: Option<bool>,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    leaky_type: Option<crate::AppLeakyType>,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    max_buffers: Option<u64>,
-    max_bytes: Option<u64>,
-    max_latency: Option<i64>,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    max_time: Option<Option<gst::ClockTime>>,
-    min_latency: Option<i64>,
-    min_percent: Option<u32>,
-    size: Option<i64>,
-    stream_type: Option<crate::AppStreamType>,
-    name: Option<String>,
+    automatic_eos: Option<bool>,
 }
 
 impl AppSrcBuilder {
-    // rustdoc-stripper-ignore-next
-    /// Create a new [`AppSrcBuilder`].
-    pub fn new() -> Self {
-        Self::default()
+    fn new() -> Self {
+        Self {
+            builder: glib::Object::builder(),
+            callbacks: None,
+            automatic_eos: None,
+        }
     }
 
     // rustdoc-stripper-ignore-next
     /// Build the [`AppSrc`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> AppSrc {
-        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-        if let Some(ref block) = self.block {
-            properties.push(("block", block));
-        }
-        if let Some(ref caps) = self.caps {
-            properties.push(("caps", caps));
-        }
-        if let Some(ref do_timestamp) = self.do_timestamp {
-            properties.push(("do-timestamp", do_timestamp));
-        }
-        if let Some(ref duration) = self.duration {
-            properties.push(("duration", duration));
-        }
-        if let Some(ref format) = self.format {
-            properties.push(("format", format));
-        }
-        #[cfg(any(feature = "v1_18", feature = "dox"))]
-        if let Some(ref handle_segment_change) = self.handle_segment_change {
-            properties.push(("handle-segment-change", handle_segment_change));
-        }
-        if let Some(ref is_live) = self.is_live {
-            properties.push(("is-live", is_live));
-        }
-        #[cfg(any(feature = "v1_20", feature = "dox"))]
-        if let Some(ref leaky_type) = self.leaky_type {
-            properties.push(("leaky-type", leaky_type));
-        }
-        #[cfg(any(feature = "v1_20", feature = "dox"))]
-        if let Some(ref max_buffers) = self.max_buffers {
-            properties.push(("max-buffers", max_buffers));
-        }
-        if let Some(ref max_bytes) = self.max_bytes {
-            properties.push(("max-bytes", max_bytes));
-        }
-        if let Some(ref max_latency) = self.max_latency {
-            properties.push(("max-latency", max_latency));
-        }
-        #[cfg(any(feature = "v1_20", feature = "dox"))]
-        if let Some(ref max_time) = self.max_time {
-            properties.push(("max-time", max_time));
-        }
-        if let Some(ref min_latency) = self.min_latency {
-            properties.push(("min-latency", min_latency));
-        }
-        if let Some(ref min_percent) = self.min_percent {
-            properties.push(("min-percent", min_percent));
-        }
-        if let Some(ref size) = self.size {
-            properties.push(("size", size));
-        }
-        if let Some(ref stream_type) = self.stream_type {
-            properties.push(("stream-type", stream_type));
-        }
-        if let Some(ref name) = self.name {
-            properties.push(("name", name));
-        }
-
-        let appsrc = glib::Object::new::<AppSrc>(&properties);
+        let appsrc = self.builder.build();
 
         if let Some(callbacks) = self.callbacks {
             appsrc.set_callbacks(callbacks);
@@ -470,107 +390,147 @@ impl AppSrcBuilder {
         appsrc
     }
 
-    pub fn automatic_eos(mut self, automatic_eos: bool) -> Self {
-        self.automatic_eos = Some(automatic_eos);
-        self
+    pub fn automatic_eos(self, automatic_eos: bool) -> Self {
+        Self {
+            automatic_eos: Some(automatic_eos),
+            ..self
+        }
     }
 
-    pub fn block(mut self, block: bool) -> Self {
-        self.block = Some(block);
-        self
+    pub fn block(self, block: bool) -> Self {
+        Self {
+            builder: self.builder.property("block", block),
+            ..self
+        }
     }
 
-    pub fn callbacks(mut self, callbacks: AppSrcCallbacks) -> Self {
-        self.callbacks = Some(callbacks);
-        self
+    pub fn callbacks(self, callbacks: AppSrcCallbacks) -> Self {
+        Self {
+            callbacks: Some(callbacks),
+            ..self
+        }
     }
 
-    pub fn caps(mut self, caps: &gst::Caps) -> Self {
-        self.caps = Some(caps.clone());
-        self
+    pub fn caps(self, caps: &gst::Caps) -> Self {
+        Self {
+            builder: self.builder.property("caps", caps),
+            ..self
+        }
     }
 
-    pub fn do_timestamp(mut self, do_timestamp: bool) -> Self {
-        self.do_timestamp = Some(do_timestamp);
-        self
+    pub fn do_timestamp(self, do_timestamp: bool) -> Self {
+        Self {
+            builder: self.builder.property("do-timestamp", do_timestamp),
+            ..self
+        }
     }
 
-    pub fn duration(mut self, duration: u64) -> Self {
-        self.duration = Some(duration);
-        self
+    pub fn duration(self, duration: u64) -> Self {
+        Self {
+            builder: self.builder.property("duration", duration),
+            ..self
+        }
     }
 
-    pub fn format(mut self, format: gst::Format) -> Self {
-        self.format = Some(format);
-        self
+    pub fn format(self, format: gst::Format) -> Self {
+        Self {
+            builder: self.builder.property("format", format),
+            ..self
+        }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn handle_segment_change(mut self, handle_segment_change: bool) -> Self {
-        self.handle_segment_change = Some(handle_segment_change);
-        self
+    pub fn handle_segment_change(self, handle_segment_change: bool) -> Self {
+        Self {
+            builder: self
+                .builder
+                .property("handle-segment-change", handle_segment_change),
+            ..self
+        }
     }
 
-    pub fn is_live(mut self, is_live: bool) -> Self {
-        self.is_live = Some(is_live);
-        self
-    }
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    pub fn leaky_type(mut self, leaky_type: crate::AppLeakyType) -> Self {
-        self.leaky_type = Some(leaky_type);
-        self
-    }
-
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    pub fn max_buffers(mut self, max_buffers: u64) -> Self {
-        self.max_buffers = Some(max_buffers);
-        self
-    }
-
-    pub fn max_bytes(mut self, max_bytes: u64) -> Self {
-        self.max_bytes = Some(max_bytes);
-        self
-    }
-
-    pub fn max_latency(mut self, max_latency: i64) -> Self {
-        self.max_latency = Some(max_latency);
-        self
+    pub fn is_live(self, is_live: bool) -> Self {
+        Self {
+            builder: self.builder.property("is-live", is_live),
+            ..self
+        }
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
-    pub fn max_time(mut self, max_time: Option<gst::ClockTime>) -> Self {
-        self.max_time = Some(max_time);
-        self
+    pub fn leaky_type(self, leaky_type: crate::AppLeakyType) -> Self {
+        Self {
+            builder: self.builder.property("leaky-type", leaky_type),
+            ..self
+        }
     }
 
-    pub fn min_latency(mut self, min_latency: i64) -> Self {
-        self.min_latency = Some(min_latency);
-        self
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub fn max_buffers(self, max_buffers: u64) -> Self {
+        Self {
+            builder: self.builder.property("max-buffers", max_buffers),
+            ..self
+        }
     }
 
-    pub fn min_percent(mut self, min_percent: u32) -> Self {
-        self.min_percent = Some(min_percent);
-        self
+    pub fn max_bytes(self, max_bytes: u64) -> Self {
+        Self {
+            builder: self.builder.property("max-bytes", max_bytes),
+            ..self
+        }
     }
 
-    pub fn size(mut self, size: i64) -> Self {
-        self.size = Some(size);
-        self
+    pub fn max_latency(self, max_latency: i64) -> Self {
+        Self {
+            builder: self.builder.property("max-latency", max_latency),
+            ..self
+        }
     }
 
-    pub fn stream_type(mut self, stream_type: crate::AppStreamType) -> Self {
-        self.stream_type = Some(stream_type);
-        self
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub fn max_time(self, max_time: Option<gst::ClockTime>) -> Self {
+        Self {
+            builder: self.builder.property("max-time", max_time),
+            ..self
+        }
     }
 
-    pub fn name(mut self, name: &str) -> Self {
-        self.name = Some(name.to_string());
-        self
+    pub fn min_latency(self, min_latency: i64) -> Self {
+        Self {
+            builder: self.builder.property("min-latency", min_latency),
+            ..self
+        }
+    }
+
+    pub fn min_percent(self, min_percent: u32) -> Self {
+        Self {
+            builder: self.builder.property("min-percent", min_percent),
+            ..self
+        }
+    }
+
+    pub fn size(self, size: i64) -> Self {
+        Self {
+            builder: self.builder.property("size", size),
+            ..self
+        }
+    }
+
+    pub fn stream_type(self, stream_type: crate::AppStreamType) -> Self {
+        Self {
+            builder: self.builder.property("stream-type", stream_type),
+            ..self
+        }
+    }
+
+    pub fn name(self, name: impl Into<glib::GString>) -> Self {
+        Self {
+            builder: self.builder.property("name", name.into()),
+            ..self
+        }
     }
 }
 

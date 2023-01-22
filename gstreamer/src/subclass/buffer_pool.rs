@@ -517,7 +517,7 @@ mod tests {
 
     impl Default for TestBufferPool {
         fn default() -> Self {
-            glib::Object::new(&[])
+            glib::Object::new_default()
         }
     }
 

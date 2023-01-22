@@ -306,7 +306,7 @@ mod tests {
 
     impl Default for TestPool {
         fn default() -> Self {
-            glib::Object::new(&[])
+            glib::Object::new_default()
         }
     }
 

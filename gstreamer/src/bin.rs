@@ -17,7 +17,7 @@ impl Bin {
     ///
     /// This method returns an instance of [`BinBuilder`](crate::builders::BinBuilder) which can be used to create [`Bin`] objects.
     pub fn builder() -> BinBuilder {
-        BinBuilder::default()
+        BinBuilder::new()
     }
 }
 
@@ -223,59 +223,49 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
 
 impl Default for Bin {
     fn default() -> Self {
-        glib::object::Object::new::<Self>(&[])
+        glib::object::Object::new_default()
     }
 }
 
-#[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
 /// A [builder-pattern] type to construct [`Bin`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
 pub struct BinBuilder {
-    async_handling: Option<bool>,
-    message_forward: Option<bool>,
-    name: Option<String>,
+    builder: glib::object::ObjectBuilder<'static, Bin>,
 }
 
 impl BinBuilder {
-    // rustdoc-stripper-ignore-next
-    /// Create a new [`BinBuilder`].
-    pub fn new() -> Self {
-        Self::default()
+    fn new() -> Self {
+        Self {
+            builder: glib::Object::builder(),
+        }
     }
 
     // rustdoc-stripper-ignore-next
     /// Build the [`Bin`].
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Bin {
-        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-        if let Some(ref async_handling) = self.async_handling {
-            properties.push(("async-handling", async_handling));
-        }
-        if let Some(ref message_forward) = self.message_forward {
-            properties.push(("message-forward", message_forward));
-        }
-        if let Some(ref name) = self.name {
-            properties.push(("name", name));
-        }
-        glib::Object::new::<Bin>(&properties)
+        self.builder.build()
     }
 
-    pub fn async_handling(mut self, async_handling: bool) -> Self {
-        self.async_handling = Some(async_handling);
-        self
+    pub fn async_handling(self, async_handling: bool) -> Self {
+        Self {
+            builder: self.builder.property("async-handling", async_handling),
+        }
     }
 
-    pub fn message_forward(mut self, message_forward: bool) -> Self {
-        self.message_forward = Some(message_forward);
-        self
+    pub fn message_forward(self, message_forward: bool) -> Self {
+        Self {
+            builder: self.builder.property("message-forward", message_forward),
+        }
     }
 
-    pub fn name(mut self, name: &str) -> Self {
-        self.name = Some(name.to_string());
-        self
+    pub fn name(self, name: impl Into<glib::GString>) -> Self {
+        Self {
+            builder: self.builder.property("name", name.into()),
+        }
     }
 }
 
