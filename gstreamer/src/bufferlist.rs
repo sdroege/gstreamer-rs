@@ -315,6 +315,32 @@ impl<'a> IntoIterator for &'a BufferListRef {
     }
 }
 
+impl From<Buffer> for BufferList {
+    fn from(value: Buffer) -> Self {
+        skip_assert_initialized!();
+
+        let mut list = BufferList::new_sized(1);
+        {
+            let list = list.get_mut().unwrap();
+            list.add(value);
+        }
+        list
+    }
+}
+
+impl<const N: usize> From<[Buffer; N]> for BufferList {
+    fn from(value: [Buffer; N]) -> Self {
+        skip_assert_initialized!();
+
+        let mut list = BufferList::new_sized(N);
+        {
+            let list = list.get_mut().unwrap();
+            value.into_iter().for_each(|b| list.add(b));
+        }
+        list
+    }
+}
+
 impl std::iter::FromIterator<Buffer> for BufferList {
     fn from_iter<T: IntoIterator<Item = Buffer>>(iter: T) -> Self {
         assert_initialized_main_thread!();

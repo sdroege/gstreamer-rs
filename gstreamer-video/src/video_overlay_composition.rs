@@ -2,7 +2,7 @@
 
 use std::{fmt, mem};
 
-use glib::translate::{from_glib, from_glib_full, from_glib_none, IntoGlib, ToGlibPtr};
+use glib::translate::*;
 
 gst::mini_object_wrapper!(
     VideoOverlayRectangle,
@@ -341,6 +341,72 @@ impl<'a> IntoIterator for &'a VideoOverlayComposition {
     }
 }
 
+impl From<VideoOverlayRectangle> for VideoOverlayComposition {
+    fn from(value: VideoOverlayRectangle) -> Self {
+        skip_assert_initialized!();
+
+        unsafe {
+            Self::from_glib_full(ffi::gst_video_overlay_composition_new(
+                value.into_glib_ptr(),
+            ))
+        }
+    }
+}
+
+impl<'a> From<&'a VideoOverlayRectangle> for VideoOverlayComposition {
+    fn from(value: &'a VideoOverlayRectangle) -> Self {
+        skip_assert_initialized!();
+
+        unsafe { Self::from_glib_full(ffi::gst_video_overlay_composition_new(value.as_mut_ptr())) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+impl<const N: usize> From<[VideoOverlayRectangle; N]> for VideoOverlayComposition {
+    fn from(value: [VideoOverlayRectangle; N]) -> Self {
+        assert_initialized_main_thread!();
+
+        unsafe {
+            use std::ptr;
+
+            let composition =
+                Self::from_glib_full(ffi::gst_video_overlay_composition_new(ptr::null_mut()));
+
+            value.into_iter().for_each(|rect| {
+                ffi::gst_video_overlay_composition_add_rectangle(
+                    composition.as_mut_ptr(),
+                    rect.into_glib_ptr(),
+                );
+            });
+
+            composition
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+impl<'a, const N: usize> From<[&'a VideoOverlayRectangle; N]> for VideoOverlayComposition {
+    fn from(value: [&'a VideoOverlayRectangle; N]) -> Self {
+        assert_initialized_main_thread!();
+
+        unsafe {
+            use std::ptr;
+
+            let composition =
+                Self::from_glib_full(ffi::gst_video_overlay_composition_new(ptr::null_mut()));
+
+            value.into_iter().for_each(|rect| {
+                ffi::gst_video_overlay_composition_add_rectangle(
+                    composition.as_mut_ptr(),
+                    rect.as_mut_ptr(),
+                );
+            });
+
+            composition
+        }
+    }
+}
+
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 impl std::iter::FromIterator<VideoOverlayRectangle> for VideoOverlayComposition {
     fn from_iter<T: IntoIterator<Item = VideoOverlayRectangle>>(iter: T) -> Self {
@@ -355,7 +421,7 @@ impl std::iter::FromIterator<VideoOverlayRectangle> for VideoOverlayComposition 
             iter.into_iter().for_each(|rect| {
                 ffi::gst_video_overlay_composition_add_rectangle(
                     composition.as_mut_ptr(),
-                    rect.as_mut_ptr(),
+                    rect.into_glib_ptr(),
                 );
             });
 

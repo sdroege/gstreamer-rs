@@ -669,6 +669,94 @@ impl<'a> IntoIterator for &'a CapsFeaturesRef {
     }
 }
 
+impl<'a> From<&'a str> for CapsFeatures {
+    fn from(value: &'a str) -> Self {
+        skip_assert_initialized!();
+        let mut features = CapsFeatures::new_empty();
+
+        features.add(value);
+
+        features
+    }
+}
+
+impl<'a> From<&'a glib::GStr> for CapsFeatures {
+    fn from(value: &'a glib::GStr) -> Self {
+        skip_assert_initialized!();
+        let mut features = CapsFeatures::new_empty();
+
+        features.add(value);
+
+        features
+    }
+}
+
+impl From<glib::Quark> for CapsFeatures {
+    fn from(value: glib::Quark) -> Self {
+        skip_assert_initialized!();
+        let mut features = CapsFeatures::new_empty();
+
+        features.add_from_quark(value);
+
+        features
+    }
+}
+
+impl<'a, const N: usize> From<[&'a str; N]> for CapsFeatures {
+    fn from(value: [&'a str; N]) -> Self {
+        skip_assert_initialized!();
+        let mut features = CapsFeatures::new_empty();
+
+        value.into_iter().for_each(|f| features.add(f));
+
+        features
+    }
+}
+
+impl<'a, const N: usize> From<[&'a glib::GStr; N]> for CapsFeatures {
+    fn from(value: [&'a glib::GStr; N]) -> Self {
+        skip_assert_initialized!();
+        let mut features = CapsFeatures::new_empty();
+
+        value.into_iter().for_each(|f| features.add(f));
+
+        features
+    }
+}
+
+impl<const N: usize> From<[String; N]> for CapsFeatures {
+    fn from(value: [String; N]) -> Self {
+        skip_assert_initialized!();
+        let mut features = CapsFeatures::new_empty();
+
+        value.into_iter().for_each(|f| features.add(&f));
+
+        features
+    }
+}
+
+impl<const N: usize> From<[glib::GString; N]> for CapsFeatures {
+    fn from(value: [glib::GString; N]) -> Self {
+        skip_assert_initialized!();
+        let mut features = CapsFeatures::new_empty();
+
+        value.into_iter().for_each(|f| features.add(&f));
+
+        features
+    }
+}
+
+impl<const N: usize> From<[glib::Quark; N]> for CapsFeatures {
+    fn from(value: [glib::Quark; N]) -> Self {
+        skip_assert_initialized!();
+        let mut features = CapsFeatures::new_empty();
+
+        value.into_iter().for_each(|f| features.add_from_quark(f));
+
+        features
+    }
+}
+
 impl<'a> std::iter::FromIterator<&'a str> for CapsFeatures {
     fn from_iter<T: IntoIterator<Item = &'a str>>(iter: T) -> Self {
         skip_assert_initialized!();

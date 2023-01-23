@@ -157,6 +157,78 @@ impl str::FromStr for Caps {
     }
 }
 
+impl From<Structure> for Caps {
+    fn from(v: Structure) -> Caps {
+        skip_assert_initialized!();
+        let mut caps = Caps::new_empty();
+
+        {
+            let caps = caps.get_mut().unwrap();
+            caps.append_structure(v);
+        }
+
+        caps
+    }
+}
+
+impl<const N: usize> From<[Structure; N]> for Caps {
+    fn from(v: [Structure; N]) -> Caps {
+        skip_assert_initialized!();
+        let mut caps = Caps::new_empty();
+
+        {
+            let caps = caps.get_mut().unwrap();
+            v.into_iter().for_each(|s| caps.append_structure(s));
+        }
+
+        caps
+    }
+}
+
+impl From<(Structure, CapsFeatures)> for Caps {
+    fn from(v: (Structure, CapsFeatures)) -> Caps {
+        skip_assert_initialized!();
+        let mut caps = Caps::new_empty();
+
+        {
+            let caps = caps.get_mut().unwrap();
+            caps.append_structure_full(v.0, Some(v.1));
+        }
+
+        caps
+    }
+}
+
+impl<const N: usize> From<[(Structure, CapsFeatures); N]> for Caps {
+    fn from(v: [(Structure, CapsFeatures); N]) -> Caps {
+        skip_assert_initialized!();
+        let mut caps = Caps::new_empty();
+
+        {
+            let caps = caps.get_mut().unwrap();
+            v.into_iter()
+                .for_each(|s| caps.append_structure_full(s.0, Some(s.1)));
+        }
+
+        caps
+    }
+}
+
+impl<const N: usize> From<[(Structure, Option<CapsFeatures>); N]> for Caps {
+    fn from(v: [(Structure, Option<CapsFeatures>); N]) -> Caps {
+        skip_assert_initialized!();
+        let mut caps = Caps::new_empty();
+
+        {
+            let caps = caps.get_mut().unwrap();
+            v.into_iter()
+                .for_each(|s| caps.append_structure_full(s.0, s.1));
+        }
+
+        caps
+    }
+}
+
 impl std::iter::FromIterator<Structure> for Caps {
     fn from_iter<T: IntoIterator<Item = Structure>>(iter: T) -> Self {
         skip_assert_initialized!();

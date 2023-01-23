@@ -998,6 +998,32 @@ impl<'a> IntoIterator for &'a BufferRef {
     }
 }
 
+impl From<Memory> for Buffer {
+    fn from(value: Memory) -> Self {
+        skip_assert_initialized!();
+
+        let mut buffer = Buffer::new();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            buffer.append_memory(value);
+        }
+        buffer
+    }
+}
+
+impl<const N: usize> From<[Memory; N]> for Buffer {
+    fn from(value: [Memory; N]) -> Self {
+        skip_assert_initialized!();
+
+        let mut buffer = Buffer::new();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            value.into_iter().for_each(|b| buffer.append_memory(b));
+        }
+        buffer
+    }
+}
+
 impl std::iter::FromIterator<Memory> for Buffer {
     fn from_iter<T: IntoIterator<Item = Memory>>(iter: T) -> Self {
         skip_assert_initialized!();
