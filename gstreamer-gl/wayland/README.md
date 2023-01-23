@@ -67,6 +67,26 @@ You can install GStreamer and the plugins via [Homebrew](https://brew.sh/) or
 by installing the [binaries](https://gstreamer.freedesktop.org/data/pkg/osx/)
 provided by the GStreamer project.
 
+We recommend using the official GStreamer binaries over Homebrew, especially
+as GStreamer in Homebrew is [currently broken](https://github.com/orgs/Homebrew/discussions/3740#discussioncomment-3804964).
+
+#### GStreamer Binaries
+
+You need to download the *two* `.pkg` files from the GStreamer website and
+install them, e.g. `gstreamer-1.0-1.20.4-universal.pkg` and
+`gstreamer-1.0-devel-1.20.4-universal.pkg`.
+
+After installation, you also need to set the `PATH` environment variable as
+follows
+
+```console
+$ export PATH="/Library/Frameworks/GStreamer.framework/Versions/1.0/bin${PATH:+:$PATH}"
+```
+
+Also note that the `pkg-config` from GStreamer should be the first one in
+the `PATH` as other versions have all kinds of quirks that will cause
+problems.
+
 #### Homebrew
 
 Homebrew only installs various plugins if explicitly enabled, so some extra
@@ -82,19 +102,6 @@ $ brew install gstreamer gst-plugins-base gst-plugins-good \
 
 Make sure the version of these libraries is >= 1.14.
 
-#### GStreamer Binaries
-
-You need to download the *two* `.pkg` files from the GStreamer website and
-install them, e.g. `gstreamer-1.0-1.14.0-x86_64.pkg` and
-`gstreamer-1.0-devel-1.14.0-x86_64.pkg`.
-
-After installation, you also need to install `pkg-config` (e.g. via Homebrew)
-and set the `PKG_CONFIG_PATH` environment variable
-
-```console
-$ export PKG_CONFIG_PATH="/Library/Frameworks/GStreamer.framework/Versions/1.0/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
-```
-
 <a name="installation-windows"/>
 
 ### Windows
@@ -103,6 +110,32 @@ You can install GStreamer and the plugins via [MSYS2](http://www.msys2.org/)
 with `pacman` or by installing the
 [binaries](https://gstreamer.freedesktop.org/data/pkg/windows/) provided by
 the GStreamer project.
+
+We recommend using the official GStreamer binaries over MSYS2.
+
+#### GStreamer Binaries
+
+You need to download the *two* `.msi` files for your platform from the
+GStreamer website and install them, e.g. `gstreamer-1.0-x86_64-1.20.4.msi` and
+`gstreamer-1.0-devel-x86_64-1.20.4.msi`. Make sure to select the version that
+matches your Rust toolchain, i.e. MinGW or MSVC.
+
+After installation set the ``PATH` environment variable as follows:
+
+```console
+# For a UNIX-style shell:
+$ export PATH="c:/gstreamer/1.0/msvc_x86_64/bin${PATH:+:$PATH}"
+
+# For cmd.exe:
+$ set PATH=C:\gstreamer\1.0\msvc_x86_64\bin;%PATH%
+```
+
+Make sure to update the path to where you have actually installed GStreamer
+and for the corresponding toolchain.
+
+Also note that the `pkg-config.exe` from GStreamer should be the first one in
+the `PATH` as other versions have all kinds of quirks that will cause
+problems.
 
 #### MSYS2 / pacman
 
@@ -120,20 +153,6 @@ Note that the version of `pkg-config` included in `MSYS2` is
 [known to have problems](https://github.com/rust-lang/pkg-config-rs/issues/51#issuecomment-346300858)
 compiling GStreamer, so you may need to install another version. One option
 would be [`pkg-config-lite`](https://sourceforge.net/projects/pkgconfiglite/).
-
-#### GStreamer Binaries
-
-You need to download the *two* `.msi` files for your platform from the
-GStreamer website and install them, e.g. `gstreamer-1.0-x86_64-1.14.0.msi` and
-`gstreamer-1.0-devel-x86_64-1.14.0.msi`.
-
-After installation, you also need to install `pkg-config` (e.g. via MSYS2 or
-from [here](https://sourceforge.net/projects/pkgconfiglite/))
-and set the `PKG_CONFIG_PATH` environment variable
-
-```console
-$ export PKG_CONFIG_PATH="c:\\gstreamer\\1.0\\x86_64\\lib\\pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
-```
 
 <a name="getting-started"/>
 

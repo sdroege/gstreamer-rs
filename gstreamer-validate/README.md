@@ -24,7 +24,7 @@ API metadata provided by the GStreamer project.
 ## Installation
 
 To build the GStreamer bindings or anything depending on them, you need to
-have at least GStreamer 1.8 and gst-plugins-base 1.8 installed. In addition,
+have at least GStreamer 1.14 and gst-plugins-base 1.14 installed. In addition,
 some of the examples/tutorials require various GStreamer plugins to be
 available, which can be found in gst-plugins-base, gst-plugins-good,
 gst-plugins-bad, gst-plugins-ugly and/or gst-libav.
@@ -45,16 +45,13 @@ $ apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
       gstreamer1.0-libav libgstrtspserver-1.0-dev libges-1.0-dev
 ```
 
-The minimum required version of the above libraries is >= 1.8. If you
+The minimum required version of the above libraries is >= 1.14. If you
 build the gstreamer-player sub-crate, or any of the examples that
-depend on gstreamer-player, you must ensure that in addition to the
-above packages, `libgstreamer-plugins-bad1.0-dev` is installed and
-that the version is >= 1.12. See the `Cargo.toml` files for the full
-details,
+depend on gstreamer-player, you must ensure that in addition to the above
+packages, `libgstreamer-plugins-bad1.0-dev` is installed. See the `Cargo.toml`
+files for the full details,
 
 ```console
-$ # Only if you wish to install gstreamer-player, make sure the version
-$ # of this package is >= 1.12.
 $ apt-get install libgstreamer-plugins-bad1.0-dev
 ```
 
@@ -69,6 +66,26 @@ You can install GStreamer and the plugins via [Homebrew](https://brew.sh/) or
 by installing the [binaries](https://gstreamer.freedesktop.org/data/pkg/osx/)
 provided by the GStreamer project.
 
+We recommend using the official GStreamer binaries over Homebrew, especially
+as GStreamer in Homebrew is [currently broken](https://github.com/orgs/Homebrew/discussions/3740#discussioncomment-3804964).
+
+#### GStreamer Binaries
+
+You need to download the *two* `.pkg` files from the GStreamer website and
+install them, e.g. `gstreamer-1.0-1.20.4-universal.pkg` and
+`gstreamer-1.0-devel-1.20.4-universal.pkg`.
+
+After installation, you also need to set the `PATH` environment variable as
+follows
+
+```console
+$ export PATH="/Library/Frameworks/GStreamer.framework/Versions/1.0/bin${PATH:+:$PATH}"
+```
+
+Also note that the `pkg-config` from GStreamer should be the first one in
+the `PATH` as other versions have all kinds of quirks that will cause
+problems.
+
 #### Homebrew
 
 Homebrew only installs various plugins if explicitly enabled, so some extra
@@ -82,22 +99,7 @@ $ brew install gstreamer gst-plugins-base gst-plugins-good \
       --enable-gtk3
 ```
 
-If you wish to install the gstreamer-player sub-crate, make sure the
-version of these libraries is >= 1.12. Otherwise, a version >= 1.8 is
-sufficient.
-
-#### GStreamer Binaries
-
-You need to download the *two* `.pkg` files from the GStreamer website and
-install them, e.g. `gstreamer-1.0-1.12.3-x86_64.pkg` and
-`gstreamer-1.0-devel-1.12.3-x86_64.pkg`.
-
-After installation, you also need to install `pkg-config` (e.g. via Homebrew)
-and set the `PKG_CONFIG_PATH` environment variable
-
-```console
-$ export PKG_CONFIG_PATH="/Library/Frameworks/GStreamer.framework/Versions/Current/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
-```
+Make sure the version of these libraries is >= 1.14.
 
 <a name="installation-windows"/>
 
@@ -107,6 +109,32 @@ You can install GStreamer and the plugins via [MSYS2](http://www.msys2.org/)
 with `pacman` or by installing the
 [binaries](https://gstreamer.freedesktop.org/data/pkg/windows/) provided by
 the GStreamer project.
+
+We recommend using the official GStreamer binaries over MSYS2.
+
+#### GStreamer Binaries
+
+You need to download the *two* `.msi` files for your platform from the
+GStreamer website and install them, e.g. `gstreamer-1.0-x86_64-1.20.4.msi` and
+`gstreamer-1.0-devel-x86_64-1.20.4.msi`. Make sure to select the version that
+matches your Rust toolchain, i.e. MinGW or MSVC.
+
+After installation set the ``PATH` environment variable as follows:
+
+```console
+# For a UNIX-style shell:
+$ export PATH="c:/gstreamer/1.0/msvc_x86_64/bin${PATH:+:$PATH}"
+
+# For cmd.exe:
+$ set PATH=C:\gstreamer\1.0\msvc_x86_64\bin;%PATH%
+```
+
+Make sure to update the path to where you have actually installed GStreamer
+and for the corresponding toolchain.
+
+Also note that the `pkg-config.exe` from GStreamer should be the first one in
+the `PATH` as other versions have all kinds of quirks that will cause
+problems.
 
 #### MSYS2 / pacman
 
@@ -118,28 +146,12 @@ $ pacman -S glib2-devel pkg-config \
       mingw-w64-x86_64-gst-rtsp-server
 ```
 
-If you wish to install the gstreamer-player sub-crate, make sure the
-version of these libraries is >= 1.12. Otherwise, a version >= 1.8 is
-sufficient.
+Make sure the version of these libraries is >= 1.14.
 
 Note that the version of `pkg-config` included in `MSYS2` is
 [known to have problems](https://github.com/rust-lang/pkg-config-rs/issues/51#issuecomment-346300858)
 compiling GStreamer, so you may need to install another version. One option
 would be [`pkg-config-lite`](https://sourceforge.net/projects/pkgconfiglite/).
-
-#### GStreamer Binaries
-
-You need to download the *two* `.msi` files for your platform from the
-GStreamer website and install them, e.g. `gstreamer-1.0-x86_64-1.12.3.msi` and
-`gstreamer-1.0-devel-x86_64-1.12.3.msi`.
-
-After installation, you also need to install `pkg-config` (e.g. via MSYS2 or
-from [here](https://sourceforge.net/projects/pkgconfiglite/))
-and set the `PKG_CONFIG_PATH` environment variable
-
-```console
-$ export PKG_CONFIG_PATH="c:\\gstreamer\\1.0\\x86_64\\lib\\pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
-```
 
 <a name="getting-started"/>
 
