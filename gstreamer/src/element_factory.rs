@@ -13,6 +13,7 @@ use crate::{
 impl ElementFactory {
     #[doc(alias = "gst_element_factory_create_with_properties")]
     #[track_caller]
+    #[deprecated = "Use create() instead"]
     pub fn create_with_properties(
         &self,
         properties: &[(&str, &dyn ToValue)],
@@ -27,6 +28,7 @@ impl ElementFactory {
 
     #[doc(alias = "gst_element_factory_make_with_properties")]
     #[track_caller]
+    #[deprecated = "Use make() instead"]
     pub fn make_with_properties(
         factoryname: &str,
         properties: &[(&str, &dyn ToValue)],
