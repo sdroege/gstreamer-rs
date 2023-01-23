@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{fmt, marker::PhantomData, mem, ptr};
+use std::{fmt, marker::PhantomData, mem, ptr, slice};
 
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, IntoGlib, ToGlibPtr, ToGlibPtrMut,
@@ -8,7 +8,8 @@ use glib::translate::{
 use gst::prelude::*;
 
 #[doc(alias = "GstAudioInfo")]
-pub struct AudioInfo(ffi::GstAudioInfo, [crate::AudioChannelPosition; 64]);
+#[derive(Clone)]
+pub struct AudioInfo(ffi::GstAudioInfo);
 
 impl fmt::Debug for AudioInfo {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -40,34 +41,23 @@ impl<'a> AudioInfoBuilder<'a> {
         unsafe {
             let mut info = mem::MaybeUninit::uninit();
 
-            let positions = if let Some(p) = self.positions {
+            if let Some(p) = self.positions {
                 if p.len() != self.channels as usize || p.len() > 64 {
                     return Err(glib::bool_error!("Invalid positions length"));
                 }
 
-                let positions: [ffi::GstAudioChannelPosition; 64] = std::array::from_fn(|i| {
-                    if i >= self.channels as usize {
-                        ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
-                    } else {
-                        p[i].into_glib()
-                    }
-                });
-
                 let valid: bool = from_glib(ffi::gst_audio_check_valid_channel_positions(
-                    positions.as_ptr() as *mut _,
+                    p.as_ptr() as *mut _,
                     self.channels as i32,
                     true.into_glib(),
                 ));
                 if !valid {
                     return Err(glib::bool_error!("channel positions are invalid"));
                 }
+            }
 
-                Some(positions)
-            } else {
-                None
-            };
-
-            let positions_ptr = positions
+            let positions_ptr = self
+                .positions
                 .as_ref()
                 .map(|p| p.as_ptr())
                 .unwrap_or(ptr::null());
@@ -94,8 +84,7 @@ impl<'a> AudioInfoBuilder<'a> {
                 info.layout = layout.into_glib();
             }
 
-            let positions = std::array::from_fn(|i| from_glib(info.position[i]));
-            Ok(AudioInfo(info, positions))
+            Ok(AudioInfo(info))
         }
     }
 
@@ -154,9 +143,7 @@ impl AudioInfo {
                 info.as_mut_ptr(),
                 caps.as_ptr(),
             )) {
-                let info = info.assume_init();
-                let positions = std::array::from_fn(|i| from_glib(info.position[i]));
-                Ok(Self(info, positions))
+                Ok(Self(info.assume_init()))
             } else {
                 Err(glib::bool_error!("Failed to create AudioInfo from caps"))
             }
@@ -311,19 +298,17 @@ impl AudioInfo {
             return None;
         }
 
-        Some(&self.1[0..(self.0.channels as usize)])
+        Some(unsafe {
+            slice::from_raw_parts(
+                &self.0.position as *const i32 as *const crate::AudioChannelPosition,
+                self.0.channels as usize,
+            )
+        })
     }
 
     #[inline]
     pub fn is_unpositioned(&self) -> bool {
         self.flags().contains(crate::AudioFlags::UNPOSITIONED)
-    }
-}
-
-impl Clone for AudioInfo {
-    #[inline]
-    fn clone(&self) -> Self {
-        unsafe { Self(ptr::read(&self.0), self.1) }
     }
 }
 
@@ -435,10 +420,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstAudioInfo> for AudioInfo 
 impl glib::translate::FromGlibPtrNone<*const ffi::GstAudioInfo> for AudioInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstAudioInfo) -> Self {
-        Self(
-            ptr::read(ptr),
-            std::array::from_fn(|i| from_glib((*ptr).position[i])),
-        )
+        Self(ptr::read(ptr))
     }
 }
 
@@ -446,10 +428,7 @@ impl glib::translate::FromGlibPtrNone<*const ffi::GstAudioInfo> for AudioInfo {
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstAudioInfo> for AudioInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstAudioInfo) -> Self {
-        Self(
-            ptr::read(ptr),
-            std::array::from_fn(|i| from_glib((*ptr).position[i])),
-        )
+        Self(ptr::read(ptr))
     }
 }
 

@@ -40,7 +40,6 @@ mod audio_stream_align;
 pub use self::audio_stream_align::AudioStreamAlign;
 
 mod enums;
-pub use self::enums::AudioChannelPosition;
 pub use self::enums::AudioDitherMethod;
 pub use self::enums::AudioFormat;
 pub use self::enums::AudioLayout;
