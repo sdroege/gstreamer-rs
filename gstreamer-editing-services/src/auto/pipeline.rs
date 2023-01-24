@@ -248,7 +248,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
             glib::result_from_gboolean!(
                 ffi::ges_pipeline_set_timeline(
                     self.as_ref().to_glib_none().0,
-                    timeline.as_ref().to_glib_full()
+                    timeline.as_ref().to_glib_none().0
                 ),
                 "Failed to set timeline"
             )

@@ -277,7 +277,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             glib::result_from_gboolean!(
                 ffi::ges_timeline_add_track(
                     self.as_ref().to_glib_none().0,
-                    track.as_ref().to_glib_full()
+                    track.as_ref().to_glib_none().0
                 ),
                 "Failed to add track"
             )
