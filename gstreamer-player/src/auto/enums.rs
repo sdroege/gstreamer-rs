@@ -65,6 +65,7 @@ impl FromGlib<ffi::GstPlayerColorBalanceType> for PlayerColorBalanceType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstPlayerColorBalanceType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_PLAYER_COLOR_BALANCE_HUE => Self::Hue,
             ffi::GST_PLAYER_COLOR_BALANCE_BRIGHTNESS => Self::Brightness,
@@ -167,6 +168,7 @@ impl FromGlib<ffi::GstPlayerError> for PlayerError {
     #[inline]
     unsafe fn from_glib(value: ffi::GstPlayerError) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_PLAYER_ERROR_FAILED => Self::Failed,
             value => Self::__Unknown(value),
@@ -283,6 +285,7 @@ impl FromGlib<ffi::GstPlayerSnapshotFormat> for PlayerSnapshotFormat {
     #[inline]
     unsafe fn from_glib(value: ffi::GstPlayerSnapshotFormat) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_PLAYER_THUMBNAIL_RAW_NATIVE => Self::RawNative,
             ffi::GST_PLAYER_THUMBNAIL_RAW_xRGB => Self::RawXrgb,
@@ -350,6 +353,7 @@ impl FromGlib<ffi::GstPlayerState> for PlayerState {
     #[inline]
     unsafe fn from_glib(value: ffi::GstPlayerState) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_PLAYER_STATE_STOPPED => Self::Stopped,
             ffi::GST_PLAYER_STATE_BUFFERING => Self::Buffering,

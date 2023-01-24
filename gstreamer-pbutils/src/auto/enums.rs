@@ -60,6 +60,7 @@ impl FromGlib<ffi::GstAudioVisualizerShader> for AudioVisualizerShader {
     #[inline]
     unsafe fn from_glib(value: ffi::GstAudioVisualizerShader) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_AUDIO_VISUALIZER_SHADER_NONE => Self::None,
             ffi::GST_AUDIO_VISUALIZER_SHADER_FADE => Self::Fade,
@@ -164,6 +165,7 @@ impl FromGlib<ffi::GstDiscovererResult> for DiscovererResult {
     #[inline]
     unsafe fn from_glib(value: ffi::GstDiscovererResult) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_DISCOVERER_OK => Self::Ok,
             ffi::GST_DISCOVERER_URI_INVALID => Self::UriInvalid,

@@ -45,6 +45,7 @@ impl FromGlib<ffi::GstRTSPAddressPoolResult> for RTSPAddressPoolResult {
     #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPAddressPoolResult) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_RTSP_ADDRESS_POOL_OK => Self::Ok,
             ffi::GST_RTSP_ADDRESS_POOL_EINVAL => Self::Einval,
@@ -90,6 +91,7 @@ impl FromGlib<ffi::GstRTSPFilterResult> for RTSPFilterResult {
     #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPFilterResult) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_RTSP_FILTER_REMOVE => Self::Remove,
             ffi::GST_RTSP_FILTER_KEEP => Self::Keep,
@@ -142,6 +144,7 @@ impl FromGlib<ffi::GstRTSPMediaStatus> for RTSPMediaStatus {
     #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPMediaStatus) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_RTSP_MEDIA_STATUS_UNPREPARED => Self::Unprepared,
             ffi::GST_RTSP_MEDIA_STATUS_UNPREPARING => Self::Unpreparing,
@@ -188,6 +191,7 @@ impl FromGlib<ffi::GstRTSPPublishClockMode> for RTSPPublishClockMode {
     #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPPublishClockMode) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_RTSP_PUBLISH_CLOCK_MODE_NONE => Self::None,
             ffi::GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK => Self::Clock,
@@ -276,6 +280,7 @@ impl FromGlib<ffi::GstRTSPSuspendMode> for RTSPSuspendMode {
     #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPSuspendMode) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_RTSP_SUSPEND_MODE_NONE => Self::None,
             ffi::GST_RTSP_SUSPEND_MODE_PAUSE => Self::Pause,
@@ -361,6 +366,7 @@ impl FromGlib<ffi::GstRTSPThreadType> for RTSPThreadType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstRTSPThreadType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_RTSP_THREAD_TYPE_CLIENT => Self::Client,
             ffi::GST_RTSP_THREAD_TYPE_MEDIA => Self::Media,

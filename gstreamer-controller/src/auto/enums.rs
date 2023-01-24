@@ -42,6 +42,7 @@ impl FromGlib<ffi::GstInterpolationMode> for InterpolationMode {
     #[inline]
     unsafe fn from_glib(value: ffi::GstInterpolationMode) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_INTERPOLATION_MODE_NONE => Self::None,
             ffi::GST_INTERPOLATION_MODE_LINEAR => Self::Linear,
@@ -137,6 +138,7 @@ impl FromGlib<ffi::GstLFOWaveform> for LFOWaveform {
     #[inline]
     unsafe fn from_glib(value: ffi::GstLFOWaveform) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_LFO_WAVEFORM_SINE => Self::Sine,
             ffi::GST_LFO_WAVEFORM_SQUARE => Self::Square,

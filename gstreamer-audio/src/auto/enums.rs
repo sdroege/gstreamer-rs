@@ -43,6 +43,7 @@ impl FromGlib<ffi::GstAudioDitherMethod> for AudioDitherMethod {
     #[inline]
     unsafe fn from_glib(value: ffi::GstAudioDitherMethod) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_AUDIO_DITHER_NONE => Self::None,
             ffi::GST_AUDIO_DITHER_RPDF => Self::Rpdf,
@@ -232,6 +233,7 @@ impl IntoGlib for AudioFormat {
 impl FromGlib<ffi::GstAudioFormat> for AudioFormat {
     unsafe fn from_glib(value: ffi::GstAudioFormat) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_AUDIO_FORMAT_UNKNOWN => Self::Unknown,
             ffi::GST_AUDIO_FORMAT_ENCODED => Self::Encoded,
@@ -346,6 +348,7 @@ impl FromGlib<ffi::GstAudioLayout> for AudioLayout {
     #[inline]
     unsafe fn from_glib(value: ffi::GstAudioLayout) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_AUDIO_LAYOUT_INTERLEAVED => Self::Interleaved,
             ffi::GST_AUDIO_LAYOUT_NON_INTERLEAVED => Self::NonInterleaved,
@@ -439,6 +442,7 @@ impl FromGlib<ffi::GstAudioNoiseShapingMethod> for AudioNoiseShapingMethod {
     #[inline]
     unsafe fn from_glib(value: ffi::GstAudioNoiseShapingMethod) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_AUDIO_NOISE_SHAPING_NONE => Self::None,
             ffi::GST_AUDIO_NOISE_SHAPING_ERROR_FEEDBACK => Self::ErrorFeedback,
@@ -535,6 +539,7 @@ impl FromGlib<ffi::GstAudioResamplerMethod> for AudioResamplerMethod {
     #[inline]
     unsafe fn from_glib(value: ffi::GstAudioResamplerMethod) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_AUDIO_RESAMPLER_METHOD_NEAREST => Self::Nearest,
             ffi::GST_AUDIO_RESAMPLER_METHOD_LINEAR => Self::Linear,
@@ -659,6 +664,7 @@ impl IntoGlib for AudioRingBufferFormatType {
 impl FromGlib<ffi::GstAudioRingBufferFormatType> for AudioRingBufferFormatType {
     unsafe fn from_glib(value: ffi::GstAudioRingBufferFormatType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_RAW => Self::Raw,
             ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MU_LAW => Self::MuLaw,
@@ -759,6 +765,7 @@ impl FromGlib<ffi::GstStreamVolumeFormat> for StreamVolumeFormat {
     #[inline]
     unsafe fn from_glib(value: ffi::GstStreamVolumeFormat) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_STREAM_VOLUME_FORMAT_LINEAR => Self::Linear,
             ffi::GST_STREAM_VOLUME_FORMAT_CUBIC => Self::Cubic,

@@ -45,6 +45,7 @@ impl FromGlib<ffi::GstAppLeakyType> for AppLeakyType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstAppLeakyType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_APP_LEAKY_TYPE_NONE => Self::None,
             ffi::GST_APP_LEAKY_TYPE_UPSTREAM => Self::Upstream,
@@ -143,6 +144,7 @@ impl FromGlib<ffi::GstAppStreamType> for AppStreamType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstAppStreamType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_APP_STREAM_TYPE_STREAM => Self::Stream,
             ffi::GST_APP_STREAM_TYPE_SEEKABLE => Self::Seekable,

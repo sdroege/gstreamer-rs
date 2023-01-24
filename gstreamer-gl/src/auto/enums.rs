@@ -61,6 +61,7 @@ impl FromGlib<ffi::GstGLConfigCaveat> for GLConfigCaveat {
     #[inline]
     unsafe fn from_glib(value: ffi::GstGLConfigCaveat) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_GL_CONFIG_CAVEAT_NONE => Self::None,
             ffi::GST_GL_CONFIG_CAVEAT_SLOW => Self::Slow,
@@ -168,6 +169,7 @@ impl FromGlib<ffi::GstGLContextError> for GLContextError {
     #[inline]
     unsafe fn from_glib(value: ffi::GstGLContextError) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_GL_CONTEXT_ERROR_FAILED => Self::Failed,
             ffi::GST_GL_CONTEXT_ERROR_WRONG_CONFIG => Self::WrongConfig,
@@ -386,6 +388,7 @@ impl IntoGlib for GLFormat {
 impl FromGlib<ffi::GstGLFormat> for GLFormat {
     unsafe fn from_glib(value: ffi::GstGLFormat) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_GL_LUMINANCE => Self::Luminance,
             ffi::GST_GL_ALPHA => Self::Alpha,
@@ -490,6 +493,7 @@ impl FromGlib<ffi::GstGLQueryType> for GLQueryType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstGLQueryType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_GL_QUERY_NONE => Self::None,
             ffi::GST_GL_QUERY_TIME_ELAPSED => Self::TimeElapsed,
@@ -578,6 +582,7 @@ impl FromGlib<ffi::GstGLSLError> for GLSLError {
     #[inline]
     unsafe fn from_glib(value: ffi::GstGLSLError) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_GLSL_ERROR_COMPILE => Self::Compile,
             ffi::GST_GLSL_ERROR_LINK => Self::Link,
@@ -777,6 +782,7 @@ impl IntoGlib for GLSLVersion {
 impl FromGlib<ffi::GstGLSLVersion> for GLSLVersion {
     unsafe fn from_glib(value: ffi::GstGLSLVersion) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_GLSL_VERSION_NONE => Self::None,
             ffi::GST_GLSL_VERSION_100 => Self::_100,
@@ -879,6 +885,7 @@ impl FromGlib<ffi::GstGLStereoDownmix> for GLStereoDownmix {
     #[inline]
     unsafe fn from_glib(value: ffi::GstGLStereoDownmix) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_GL_STEREO_DOWNMIX_ANAGLYPH_GREEN_MAGENTA_DUBOIS => Self::GreenMagentaDubois,
             ffi::GST_GL_STEREO_DOWNMIX_ANAGLYPH_RED_CYAN_DUBOIS => Self::RedCyanDubois,
@@ -1007,6 +1014,7 @@ impl FromGlib<ffi::GstGLTextureTarget> for GLTextureTarget {
     #[inline]
     unsafe fn from_glib(value: ffi::GstGLTextureTarget) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_GL_TEXTURE_TARGET_NONE => Self::None,
             ffi::GST_GL_TEXTURE_TARGET_2D => Self::_2d,
@@ -1102,6 +1110,7 @@ impl FromGlib<ffi::GstGLUploadReturn> for GLUploadReturn {
     #[inline]
     unsafe fn from_glib(value: ffi::GstGLUploadReturn) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_GL_UPLOAD_DONE => Self::Done,
             ffi::GST_GL_UPLOAD_ERROR => Self::Error,
@@ -1192,6 +1201,7 @@ impl FromGlib<ffi::GstGLWindowError> for GLWindowError {
     #[inline]
     unsafe fn from_glib(value: ffi::GstGLWindowError) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_GL_WINDOW_ERROR_FAILED => Self::Failed,
             ffi::GST_GL_WINDOW_ERROR_OLD_LIBS => Self::OldLibs,

@@ -45,6 +45,7 @@ impl FromGlib<ffi::GESAssetLoadingReturn> for AssetLoadingReturn {
     #[inline]
     unsafe fn from_glib(value: ffi::GESAssetLoadingReturn) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GES_ASSET_LOADING_ERROR => Self::Error,
             ffi::GES_ASSET_LOADING_ASYNC => Self::Async,
@@ -94,6 +95,7 @@ impl FromGlib<ffi::GESChildrenControlMode> for ChildrenControlMode {
     #[inline]
     unsafe fn from_glib(value: ffi::GESChildrenControlMode) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GES_CHILDREN_UPDATE => Self::Update,
             ffi::GES_CHILDREN_IGNORE_NOTIFIES => Self::IgnoreNotifies,
@@ -162,6 +164,7 @@ impl FromGlib<ffi::GESEdge> for Edge {
     #[inline]
     unsafe fn from_glib(value: ffi::GESEdge) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GES_EDGE_START => Self::Start,
             ffi::GES_EDGE_END => Self::End,
@@ -279,6 +282,7 @@ impl FromGlib<ffi::GESEditMode> for EditMode {
     #[inline]
     unsafe fn from_glib(value: ffi::GESEditMode) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GES_EDIT_MODE_NORMAL => Self::Normal,
             ffi::GES_EDIT_MODE_RIPPLE => Self::Ripple,
@@ -387,6 +391,7 @@ impl FromGlib<ffi::GESError> for Error {
     #[inline]
     unsafe fn from_glib(value: ffi::GESError) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GES_ERROR_ASSET_WRONG_ID => Self::AssetWrongId,
             ffi::GES_ERROR_ASSET_LOADING => Self::AssetLoading,
@@ -442,6 +447,7 @@ impl FromGlib<ffi::GESTextHAlign> for TextHAlign {
     #[inline]
     unsafe fn from_glib(value: ffi::GESTextHAlign) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GES_TEXT_HALIGN_LEFT => Self::Left,
             ffi::GES_TEXT_HALIGN_CENTER => Self::Center,
@@ -541,6 +547,7 @@ impl FromGlib<ffi::GESTextVAlign> for TextVAlign {
     #[inline]
     unsafe fn from_glib(value: ffi::GESTextVAlign) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GES_TEXT_VALIGN_BASELINE => Self::Baseline,
             ffi::GES_TEXT_VALIGN_BOTTOM => Self::Bottom,
@@ -843,6 +850,7 @@ impl IntoGlib for VideoStandardTransitionType {
 impl FromGlib<ffi::GESVideoStandardTransitionType> for VideoStandardTransitionType {
     unsafe fn from_glib(value: ffi::GESVideoStandardTransitionType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_NONE => Self::None,
             ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BAR_WIPE_LR => Self::BarWipeLr,
@@ -1045,6 +1053,7 @@ impl IntoGlib for VideoTestPattern {
 impl FromGlib<ffi::GESVideoTestPattern> for VideoTestPattern {
     unsafe fn from_glib(value: ffi::GESVideoTestPattern) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GES_VIDEO_TEST_PATTERN_SMPTE => Self::Smpte,
             ffi::GES_VIDEO_TEST_PATTERN_SNOW => Self::Snow,

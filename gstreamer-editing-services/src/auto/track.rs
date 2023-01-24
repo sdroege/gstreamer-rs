@@ -77,7 +77,7 @@ pub trait GESTrackExt: 'static {
     fn remove_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error>;
 
     //#[doc(alias = "ges_track_set_create_element_for_gap_func")]
-    //fn set_create_element_for_gap_func<P: Fn(&Track) -> gst::Element + 'static>(&self, func: P);
+    //fn set_create_element_for_gap_func<P: Fn() -> gst::Element + 'static>(&self, func: P);
 
     #[doc(alias = "ges_track_set_mixing")]
     fn set_mixing(&self, mixing: bool);
@@ -237,7 +237,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    //fn set_create_element_for_gap_func<P: Fn(&Track) -> gst::Element + 'static>(&self, func: P) {
+    //fn set_create_element_for_gap_func<P: Fn() -> gst::Element + 'static>(&self, func: P) {
     //    unsafe { TODO: call ffi:ges_track_set_create_element_for_gap_func() }
     //}
 

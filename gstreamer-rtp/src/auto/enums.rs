@@ -57,6 +57,7 @@ impl FromGlib<ffi::GstRTCPFBType> for RTCPFBType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstRTCPFBType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_RTCP_FB_TYPE_INVALID => Self::FbTypeInvalid,
             ffi::GST_RTCP_RTPFB_TYPE_NACK => Self::RtpfbTypeNack,
@@ -212,6 +213,7 @@ impl IntoGlib for RTCPSDESType {
 impl FromGlib<ffi::GstRTCPSDESType> for RTCPSDESType {
     unsafe fn from_glib(value: ffi::GstRTCPSDESType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_RTCP_SDES_INVALID => Self::Invalid,
             ffi::GST_RTCP_SDES_END => Self::End,
@@ -339,6 +341,7 @@ impl FromGlib<ffi::GstRTCPType> for RTCPType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstRTCPType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_RTCP_TYPE_INVALID => Self::Invalid,
             ffi::GST_RTCP_TYPE_SR => Self::Sr,
@@ -454,6 +457,7 @@ impl FromGlib<ffi::GstRTCPXRType> for RTCPXRType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstRTCPXRType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_RTCP_XR_TYPE_INVALID => Self::Invalid,
             ffi::GST_RTCP_XR_TYPE_LRLE => Self::Lrle,
@@ -624,6 +628,7 @@ impl IntoGlib for RTPPayload {
 impl FromGlib<ffi::GstRTPPayload> for RTPPayload {
     unsafe fn from_glib(value: ffi::GstRTPPayload) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_RTP_PAYLOAD_PCMU => Self::Pcmu,
             ffi::GST_RTP_PAYLOAD_1016 => Self::_1016,
@@ -741,6 +746,7 @@ impl FromGlib<ffi::GstRTPProfile> for RTPProfile {
     #[inline]
     unsafe fn from_glib(value: ffi::GstRTPProfile) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_RTP_PROFILE_UNKNOWN => Self::Unknown,
             ffi::GST_RTP_PROFILE_AVP => Self::Avp,

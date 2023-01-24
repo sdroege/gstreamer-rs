@@ -47,6 +47,7 @@ impl FromGlib<ffi::GstAggregatorStartTimeSelection> for AggregatorStartTimeSelec
     #[inline]
     unsafe fn from_glib(value: ffi::GstAggregatorStartTimeSelection) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_AGGREGATOR_START_TIME_SELECTION_ZERO => Self::Zero,
             ffi::GST_AGGREGATOR_START_TIME_SELECTION_FIRST => Self::First,

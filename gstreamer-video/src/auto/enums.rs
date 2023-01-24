@@ -37,6 +37,7 @@ impl FromGlib<ffi::GstColorBalanceType> for ColorBalanceType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstColorBalanceType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_COLOR_BALANCE_HARDWARE => Self::Hardware,
             ffi::GST_COLOR_BALANCE_SOFTWARE => Self::Software,
@@ -159,6 +160,7 @@ impl IntoGlib for NavigationCommand {
 impl FromGlib<ffi::GstNavigationCommand> for NavigationCommand {
     unsafe fn from_glib(value: ffi::GstNavigationCommand) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_NAVIGATION_COMMAND_INVALID => Self::Invalid,
             ffi::GST_NAVIGATION_COMMAND_MENU1 => Self::Menu1,
@@ -305,6 +307,7 @@ impl IntoGlib for NavigationEventType {
 impl FromGlib<ffi::GstNavigationEventType> for NavigationEventType {
     unsafe fn from_glib(value: ffi::GstNavigationEventType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_NAVIGATION_EVENT_INVALID => Self::Invalid,
             ffi::GST_NAVIGATION_EVENT_KEY_PRESS => Self::KeyPress,
@@ -415,6 +418,7 @@ impl FromGlib<ffi::GstNavigationMessageType> for NavigationMessageType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstNavigationMessageType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_NAVIGATION_MESSAGE_INVALID => Self::Invalid,
             ffi::GST_NAVIGATION_MESSAGE_MOUSE_OVER => Self::MouseOver,
@@ -505,6 +509,7 @@ impl FromGlib<ffi::GstNavigationQueryType> for NavigationQueryType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstNavigationQueryType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_NAVIGATION_QUERY_INVALID => Self::Invalid,
             ffi::GST_NAVIGATION_QUERY_COMMANDS => Self::Commands,
@@ -599,6 +604,7 @@ impl FromGlib<ffi::GstVideoAFDSpec> for VideoAFDSpec {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoAFDSpec) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_AFD_SPEC_DVB_ETSI => Self::DvbEtsi,
             ffi::GST_VIDEO_AFD_SPEC_ATSC_A53 => Self::AtscA53,
@@ -727,6 +733,7 @@ impl FromGlib<ffi::GstVideoAFDValue> for VideoAFDValue {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoAFDValue) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_AFD_UNAVAILABLE => Self::Unavailable,
             ffi::GST_VIDEO_AFD_16_9_TOP_ALIGNED => Self::_169TopAligned,
@@ -833,6 +840,7 @@ impl FromGlib<ffi::GstVideoAlphaMode> for VideoAlphaMode {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoAlphaMode) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_ALPHA_MODE_COPY => Self::Copy,
             ffi::GST_VIDEO_ALPHA_MODE_SET => Self::Set,
@@ -943,6 +951,7 @@ impl FromGlib<ffi::GstVideoCaptionType> for VideoCaptionType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoCaptionType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_CAPTION_TYPE_UNKNOWN => Self::Unknown,
             ffi::GST_VIDEO_CAPTION_TYPE_CEA608_RAW => Self::Cea608Raw,
@@ -1046,6 +1055,7 @@ impl FromGlib<ffi::GstVideoChromaMode> for VideoChromaMode {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoChromaMode) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_CHROMA_MODE_FULL => Self::Full,
             ffi::GST_VIDEO_CHROMA_MODE_UPSAMPLE_ONLY => Self::UpsampleOnly,
@@ -1165,6 +1175,7 @@ impl FromGlib<ffi::GstVideoColorMatrix> for VideoColorMatrix {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoColorMatrix) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_COLOR_MATRIX_UNKNOWN => Self::Unknown,
             ffi::GST_VIDEO_COLOR_MATRIX_RGB => Self::Rgb,
@@ -1334,6 +1345,7 @@ impl IntoGlib for VideoColorPrimaries {
 impl FromGlib<ffi::GstVideoColorPrimaries> for VideoColorPrimaries {
     unsafe fn from_glib(value: ffi::GstVideoColorPrimaries) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_COLOR_PRIMARIES_UNKNOWN => Self::Unknown,
             ffi::GST_VIDEO_COLOR_PRIMARIES_BT709 => Self::Bt709,
@@ -1442,6 +1454,7 @@ impl FromGlib<ffi::GstVideoDitherMethod> for VideoDitherMethod {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoDitherMethod) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_DITHER_NONE => Self::None,
             ffi::GST_VIDEO_DITHER_VERTERR => Self::Verterr,
@@ -1551,6 +1564,7 @@ impl FromGlib<ffi::GstVideoFieldOrder> for VideoFieldOrder {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoFieldOrder) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_FIELD_ORDER_UNKNOWN => Self::Unknown,
             ffi::GST_VIDEO_FIELD_ORDER_TOP_FIELD_FIRST => Self::TopFieldFirst,
@@ -2096,6 +2110,7 @@ impl IntoGlib for VideoFormat {
 impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
     unsafe fn from_glib(value: ffi::GstVideoFormat) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_FORMAT_UNKNOWN => Self::Unknown,
             ffi::GST_VIDEO_FORMAT_ENCODED => Self::Encoded,
@@ -2323,6 +2338,7 @@ impl FromGlib<ffi::GstVideoGammaMode> for VideoGammaMode {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoGammaMode) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_GAMMA_MODE_NONE => Self::None,
             ffi::GST_VIDEO_GAMMA_MODE_REMAP => Self::Remap,
@@ -2448,6 +2464,7 @@ impl FromGlib<ffi::GstVideoInterlaceMode> for VideoInterlaceMode {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoInterlaceMode) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_INTERLACE_MODE_PROGRESSIVE => Self::Progressive,
             ffi::GST_VIDEO_INTERLACE_MODE_INTERLEAVED => Self::Interleaved,
@@ -2542,6 +2559,7 @@ impl FromGlib<ffi::GstVideoMatrixMode> for VideoMatrixMode {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoMatrixMode) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_MATRIX_MODE_FULL => Self::Full,
             ffi::GST_VIDEO_MATRIX_MODE_INPUT_ONLY => Self::InputOnly,
@@ -2654,6 +2672,7 @@ impl FromGlib<ffi::GstVideoMultiviewFramePacking> for VideoMultiviewFramePacking
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoMultiviewFramePacking) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_NONE => Self::None,
             ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_MONO => Self::Mono,
@@ -2801,6 +2820,7 @@ impl IntoGlib for VideoMultiviewMode {
 impl FromGlib<ffi::GstVideoMultiviewMode> for VideoMultiviewMode {
     unsafe fn from_glib(value: ffi::GstVideoMultiviewMode) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_MULTIVIEW_MODE_NONE => Self::None,
             ffi::GST_VIDEO_MULTIVIEW_MODE_MONO => Self::Mono,
@@ -2920,6 +2940,7 @@ impl FromGlib<ffi::GstVideoOrientationMethod> for VideoOrientationMethod {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoOrientationMethod) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_ORIENTATION_IDENTITY => Self::Identity,
             ffi::GST_VIDEO_ORIENTATION_90R => Self::_90r,
@@ -3015,6 +3036,7 @@ impl FromGlib<ffi::GstVideoPrimariesMode> for VideoPrimariesMode {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoPrimariesMode) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_PRIMARIES_MODE_NONE => Self::None,
             ffi::GST_VIDEO_PRIMARIES_MODE_MERGE_ONLY => Self::MergeOnly,
@@ -3109,6 +3131,7 @@ impl FromGlib<ffi::GstVideoResamplerMethod> for VideoResamplerMethod {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoResamplerMethod) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_RESAMPLER_METHOD_NEAREST => Self::Nearest,
             ffi::GST_VIDEO_RESAMPLER_METHOD_LINEAR => Self::Linear,
@@ -3202,6 +3225,7 @@ impl FromGlib<ffi::GstVideoTileMode> for VideoTileMode {
     #[inline]
     unsafe fn from_glib(value: ffi::GstVideoTileMode) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_TILE_MODE_UNKNOWN => Self::Unknown,
             ffi::GST_VIDEO_TILE_MODE_ZFLIPZ_2X2 => Self::Zflipz2x2,
@@ -3392,6 +3416,7 @@ impl IntoGlib for VideoTransferFunction {
 impl FromGlib<ffi::GstVideoTransferFunction> for VideoTransferFunction {
     unsafe fn from_glib(value: ffi::GstVideoTransferFunction) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VIDEO_TRANSFER_UNKNOWN => Self::Unknown,
             ffi::GST_VIDEO_TRANSFER_GAMMA10 => Self::Gamma10,

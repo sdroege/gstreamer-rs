@@ -81,6 +81,7 @@ impl FromGlib<ffi::GstValidateReportLevel> for ReportLevel {
     #[inline]
     unsafe fn from_glib(value: ffi::GstValidateReportLevel) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VALIDATE_REPORT_LEVEL_CRITICAL => Self::Critical,
             ffi::GST_VALIDATE_REPORT_LEVEL_WARNING => Self::Warning,
@@ -188,6 +189,7 @@ impl FromGlib<ffi::GstValidateReportingDetails> for ReportingDetails {
     #[inline]
     unsafe fn from_glib(value: ffi::GstValidateReportingDetails) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_VALIDATE_SHOW_UNKNOWN => Self::Unknown,
             ffi::GST_VALIDATE_SHOW_NONE => Self::None,

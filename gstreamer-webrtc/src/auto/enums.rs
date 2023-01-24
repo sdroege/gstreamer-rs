@@ -52,6 +52,7 @@ impl FromGlib<ffi::GstWebRTCBundlePolicy> for WebRTCBundlePolicy {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCBundlePolicy) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_BUNDLE_POLICY_NONE => Self::None,
             ffi::GST_WEBRTC_BUNDLE_POLICY_BALANCED => Self::Balanced,
@@ -154,6 +155,7 @@ impl FromGlib<ffi::GstWebRTCDTLSSetup> for WebRTCDTLSSetup {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCDTLSSetup) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_DTLS_SETUP_NONE => Self::None,
             ffi::GST_WEBRTC_DTLS_SETUP_ACTPASS => Self::Actpass,
@@ -249,6 +251,7 @@ impl FromGlib<ffi::GstWebRTCDTLSTransportState> for WebRTCDTLSTransportState {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCDTLSTransportState) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_DTLS_TRANSPORT_STATE_NEW => Self::New,
             ffi::GST_WEBRTC_DTLS_TRANSPORT_STATE_CLOSED => Self::Closed,
@@ -348,6 +351,7 @@ impl FromGlib<ffi::GstWebRTCDataChannelState> for WebRTCDataChannelState {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCDataChannelState) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_DATA_CHANNEL_STATE_CONNECTING => Self::Connecting,
             ffi::GST_WEBRTC_DATA_CHANNEL_STATE_OPEN => Self::Open,
@@ -485,6 +489,7 @@ impl FromGlib<ffi::GstWebRTCError> for WebRTCError {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCError) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_ERROR_DATA_CHANNEL_FAILURE => Self::DataChannelFailure,
             ffi::GST_WEBRTC_ERROR_DTLS_FAILURE => Self::DtlsFailure,
@@ -623,6 +628,7 @@ impl FromGlib<ffi::GstWebRTCFECType> for WebRTCFECType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCFECType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_FEC_TYPE_NONE => Self::None,
             ffi::GST_WEBRTC_FEC_TYPE_ULP_RED => Self::UlpRed,
@@ -717,6 +723,7 @@ impl FromGlib<ffi::GstWebRTCICEComponent> for WebRTCICEComponent {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCICEComponent) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_ICE_COMPONENT_RTP => Self::Rtp,
             ffi::GST_WEBRTC_ICE_COMPONENT_RTCP => Self::Rtcp,
@@ -816,6 +823,7 @@ impl FromGlib<ffi::GstWebRTCICEConnectionState> for WebRTCICEConnectionState {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCICEConnectionState) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_ICE_CONNECTION_STATE_NEW => Self::New,
             ffi::GST_WEBRTC_ICE_CONNECTION_STATE_CHECKING => Self::Checking,
@@ -908,6 +916,7 @@ impl FromGlib<ffi::GstWebRTCICEGatheringState> for WebRTCICEGatheringState {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCICEGatheringState) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_ICE_GATHERING_STATE_NEW => Self::New,
             ffi::GST_WEBRTC_ICE_GATHERING_STATE_GATHERING => Self::Gathering,
@@ -993,6 +1002,7 @@ impl FromGlib<ffi::GstWebRTCICERole> for WebRTCICERole {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCICERole) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_ICE_ROLE_CONTROLLED => Self::Controlled,
             ffi::GST_WEBRTC_ICE_ROLE_CONTROLLING => Self::Controlling,
@@ -1083,6 +1093,7 @@ impl FromGlib<ffi::GstWebRTCICETransportPolicy> for WebRTCICETransportPolicy {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCICETransportPolicy) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_ICE_TRANSPORT_POLICY_ALL => Self::All,
             ffi::GST_WEBRTC_ICE_TRANSPORT_POLICY_RELAY => Self::Relay,
@@ -1186,6 +1197,7 @@ impl FromGlib<ffi::GstWebRTCKind> for WebRTCKind {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCKind) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_KIND_UNKNOWN => Self::Unknown,
             ffi::GST_WEBRTC_KIND_AUDIO => Self::Audio,
@@ -1293,6 +1305,7 @@ impl FromGlib<ffi::GstWebRTCPeerConnectionState> for WebRTCPeerConnectionState {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCPeerConnectionState) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_PEER_CONNECTION_STATE_NEW => Self::New,
             ffi::GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTING => Self::Connecting,
@@ -1393,6 +1406,7 @@ impl FromGlib<ffi::GstWebRTCPriorityType> for WebRTCPriorityType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCPriorityType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_PRIORITY_TYPE_VERY_LOW => Self::VeryLow,
             ffi::GST_WEBRTC_PRIORITY_TYPE_LOW => Self::Low,
@@ -1498,6 +1512,7 @@ impl FromGlib<ffi::GstWebRTCRTPTransceiverDirection> for WebRTCRTPTransceiverDir
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCRTPTransceiverDirection) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_NONE => Self::None,
             ffi::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_INACTIVE => Self::Inactive,
@@ -1597,6 +1612,7 @@ impl FromGlib<ffi::GstWebRTCSCTPTransportState> for WebRTCSCTPTransportState {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCSCTPTransportState) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_SCTP_TRANSPORT_STATE_NEW => Self::New,
             ffi::GST_WEBRTC_SCTP_TRANSPORT_STATE_CONNECTING => Self::Connecting,
@@ -1718,6 +1734,7 @@ impl FromGlib<ffi::GstWebRTCSDPType> for WebRTCSDPType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCSDPType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_SDP_TYPE_OFFER => Self::Offer,
             ffi::GST_WEBRTC_SDP_TYPE_PRANSWER => Self::Pranswer,
@@ -1816,6 +1833,7 @@ impl FromGlib<ffi::GstWebRTCSignalingState> for WebRTCSignalingState {
     #[inline]
     unsafe fn from_glib(value: ffi::GstWebRTCSignalingState) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_SIGNALING_STATE_STABLE => Self::Stable,
             ffi::GST_WEBRTC_SIGNALING_STATE_CLOSED => Self::Closed,
@@ -1938,6 +1956,7 @@ impl IntoGlib for WebRTCStatsType {
 impl FromGlib<ffi::GstWebRTCStatsType> for WebRTCStatsType {
     unsafe fn from_glib(value: ffi::GstWebRTCStatsType) -> Self {
         skip_assert_initialized!();
+
         match value {
             ffi::GST_WEBRTC_STATS_CODEC => Self::Codec,
             ffi::GST_WEBRTC_STATS_INBOUND_RTP => Self::InboundRtp,

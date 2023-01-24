@@ -401,6 +401,11 @@ status = "generate"
     # attachment_point parameter unchecked
     unsafe = true
 
+    [[object.function]]
+    name = "draw_to_texture"
+    # needs to be manually implemented for correct types/mutability
+    ignore = true
+
 [[object]]
 name = "GstGL.GLOverlayCompositor"
 status = "generate"
