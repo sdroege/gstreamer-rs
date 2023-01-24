@@ -427,6 +427,7 @@ pub enum TagError {
 // enum instead
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 #[doc(alias = "GstMessageType")]
+#[non_exhaustive]
 pub enum MessageType {
     #[doc(alias = "GST_MESSAGE_UNKNOWN")]
     Unknown,
