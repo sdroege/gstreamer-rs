@@ -4,7 +4,7 @@ pub const MAJOR_VERSION: i32 = 1;
 
 cfg_if::cfg_if! {
     if #[cfg(feature = "v1_22")] {
-        pub const MINOR_VERSION: i32 = 21;
+        pub const MINOR_VERSION: i32 = 22;
     } else if #[cfg(feature = "v1_20")] {
         pub const MINOR_VERSION: i32 = 20;
     } else if #[cfg(feature = "v1_18")] {
