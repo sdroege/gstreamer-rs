@@ -64,4 +64,4 @@ version = "1.18"
 version = "1.20"
 
 [package.metadata.system-deps.gstreamer_video_1_0.v1_22]
-version = "1.21"
+version = "1.22"

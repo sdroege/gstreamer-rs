@@ -16,7 +16,7 @@ rust-version = "1.57"
 features = ["dox"]
 [package.metadata.system-deps.gstreamer_validate_1_0]
 name = "gstreamer-validate-1.0"
-version = "1.21"
+version = "1.22"
 
 [lib]
 name = "gstreamer_validate_sys"
