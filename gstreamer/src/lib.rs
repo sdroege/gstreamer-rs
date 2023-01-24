@@ -180,7 +180,6 @@ mod device_monitor;
 mod device_provider;
 mod device_provider_factory;
 mod enums;
-pub use crate::enums::MessageType;
 mod ghost_pad;
 mod gobject;
 mod iterator;
@@ -208,8 +207,8 @@ pub use crate::{
         ELEMENT_METADATA_LONGNAME,
     },
     enums::{
-        ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, PadLinkSuccess,
-        StateChangeError, StateChangeSuccess, TagError,
+        ClockError, ClockSuccess, FlowError, FlowReturn, FlowSuccess, MessageType, PadLinkError,
+        PadLinkReturn, PadLinkSuccess, StateChangeError, StateChangeSuccess, TagError,
     },
     parse_context::ParseContext,
     task_pool::{TaskHandle, TaskPoolTaskHandle},

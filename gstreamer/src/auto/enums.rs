@@ -104,17 +104,15 @@ impl From<BufferingMode> for glib::Value {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
-#[non_exhaustive]
+#[repr(i32)]
 #[doc(alias = "GstBusSyncReply")]
 pub enum BusSyncReply {
     #[doc(alias = "GST_BUS_DROP")]
-    Drop,
+    Drop = ffi::GST_BUS_DROP,
     #[doc(alias = "GST_BUS_PASS")]
-    Pass,
+    Pass = ffi::GST_BUS_PASS,
     #[doc(alias = "GST_BUS_ASYNC")]
-    Async,
-    #[doc(hidden)]
-    __Unknown(i32),
+    Async = ffi::GST_BUS_ASYNC,
 }
 
 #[doc(hidden)]
@@ -123,12 +121,7 @@ impl IntoGlib for BusSyncReply {
 
     #[inline]
     fn into_glib(self) -> ffi::GstBusSyncReply {
-        match self {
-            Self::Drop => ffi::GST_BUS_DROP,
-            Self::Pass => ffi::GST_BUS_PASS,
-            Self::Async => ffi::GST_BUS_ASYNC,
-            Self::__Unknown(value) => value,
-        }
+        self as ffi::GstBusSyncReply
     }
 }
 
@@ -138,12 +131,8 @@ impl FromGlib<ffi::GstBusSyncReply> for BusSyncReply {
     unsafe fn from_glib(value: ffi::GstBusSyncReply) -> Self {
         skip_assert_initialized!();
 
-        match value {
-            ffi::GST_BUS_DROP => Self::Drop,
-            ffi::GST_BUS_PASS => Self::Pass,
-            ffi::GST_BUS_ASYNC => Self::Async,
-            value => Self::__Unknown(value),
-        }
+        debug_assert!([ffi::GST_BUS_DROP, ffi::GST_BUS_PASS, ffi::GST_BUS_ASYNC].contains(&value));
+        std::mem::transmute(value)
     }
 }
 
@@ -364,27 +353,25 @@ impl From<ClockEntryType> for glib::Value {
 
 #[must_use]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
-#[non_exhaustive]
+#[repr(i32)]
 #[doc(alias = "GstClockReturn")]
 pub enum ClockReturn {
     #[doc(alias = "GST_CLOCK_OK")]
-    Ok,
+    Ok = ffi::GST_CLOCK_OK,
     #[doc(alias = "GST_CLOCK_EARLY")]
-    Early,
+    Early = ffi::GST_CLOCK_EARLY,
     #[doc(alias = "GST_CLOCK_UNSCHEDULED")]
-    Unscheduled,
+    Unscheduled = ffi::GST_CLOCK_UNSCHEDULED,
     #[doc(alias = "GST_CLOCK_BUSY")]
-    Busy,
+    Busy = ffi::GST_CLOCK_BUSY,
     #[doc(alias = "GST_CLOCK_BADTIME")]
-    Badtime,
+    Badtime = ffi::GST_CLOCK_BADTIME,
     #[doc(alias = "GST_CLOCK_ERROR")]
-    Error,
+    Error = ffi::GST_CLOCK_ERROR,
     #[doc(alias = "GST_CLOCK_UNSUPPORTED")]
-    Unsupported,
+    Unsupported = ffi::GST_CLOCK_UNSUPPORTED,
     #[doc(alias = "GST_CLOCK_DONE")]
-    Done,
-    #[doc(hidden)]
-    __Unknown(i32),
+    Done = ffi::GST_CLOCK_DONE,
 }
 
 #[doc(hidden)]
@@ -393,17 +380,7 @@ impl IntoGlib for ClockReturn {
 
     #[inline]
     fn into_glib(self) -> ffi::GstClockReturn {
-        match self {
-            Self::Ok => ffi::GST_CLOCK_OK,
-            Self::Early => ffi::GST_CLOCK_EARLY,
-            Self::Unscheduled => ffi::GST_CLOCK_UNSCHEDULED,
-            Self::Busy => ffi::GST_CLOCK_BUSY,
-            Self::Badtime => ffi::GST_CLOCK_BADTIME,
-            Self::Error => ffi::GST_CLOCK_ERROR,
-            Self::Unsupported => ffi::GST_CLOCK_UNSUPPORTED,
-            Self::Done => ffi::GST_CLOCK_DONE,
-            Self::__Unknown(value) => value,
-        }
+        self as ffi::GstClockReturn
     }
 }
 
@@ -413,17 +390,18 @@ impl FromGlib<ffi::GstClockReturn> for ClockReturn {
     unsafe fn from_glib(value: ffi::GstClockReturn) -> Self {
         skip_assert_initialized!();
 
-        match value {
-            ffi::GST_CLOCK_OK => Self::Ok,
-            ffi::GST_CLOCK_EARLY => Self::Early,
-            ffi::GST_CLOCK_UNSCHEDULED => Self::Unscheduled,
-            ffi::GST_CLOCK_BUSY => Self::Busy,
-            ffi::GST_CLOCK_BADTIME => Self::Badtime,
-            ffi::GST_CLOCK_ERROR => Self::Error,
-            ffi::GST_CLOCK_UNSUPPORTED => Self::Unsupported,
-            ffi::GST_CLOCK_DONE => Self::Done,
-            value => Self::__Unknown(value),
-        }
+        debug_assert!([
+            ffi::GST_CLOCK_OK,
+            ffi::GST_CLOCK_EARLY,
+            ffi::GST_CLOCK_UNSCHEDULED,
+            ffi::GST_CLOCK_BUSY,
+            ffi::GST_CLOCK_BADTIME,
+            ffi::GST_CLOCK_ERROR,
+            ffi::GST_CLOCK_UNSUPPORTED,
+            ffi::GST_CLOCK_DONE
+        ]
+        .contains(&value));
+        std::mem::transmute(value)
     }
 }
 
@@ -1099,134 +1077,6 @@ impl From<EventType> for glib::Value {
     }
 }
 
-#[must_use]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
-#[non_exhaustive]
-#[doc(alias = "GstFlowReturn")]
-pub enum FlowReturn {
-    #[doc(alias = "GST_FLOW_CUSTOM_SUCCESS_2")]
-    CustomSuccess2,
-    #[doc(alias = "GST_FLOW_CUSTOM_SUCCESS_1")]
-    CustomSuccess1,
-    #[doc(alias = "GST_FLOW_CUSTOM_SUCCESS")]
-    CustomSuccess,
-    #[doc(alias = "GST_FLOW_OK")]
-    Ok,
-    #[doc(alias = "GST_FLOW_NOT_LINKED")]
-    NotLinked,
-    #[doc(alias = "GST_FLOW_FLUSHING")]
-    Flushing,
-    #[doc(alias = "GST_FLOW_EOS")]
-    Eos,
-    #[doc(alias = "GST_FLOW_NOT_NEGOTIATED")]
-    NotNegotiated,
-    #[doc(alias = "GST_FLOW_ERROR")]
-    Error,
-    #[doc(alias = "GST_FLOW_NOT_SUPPORTED")]
-    NotSupported,
-    #[doc(alias = "GST_FLOW_CUSTOM_ERROR")]
-    CustomError,
-    #[doc(alias = "GST_FLOW_CUSTOM_ERROR_1")]
-    CustomError1,
-    #[doc(alias = "GST_FLOW_CUSTOM_ERROR_2")]
-    CustomError2,
-    #[doc(hidden)]
-    __Unknown(i32),
-}
-
-#[doc(hidden)]
-impl IntoGlib for FlowReturn {
-    type GlibType = ffi::GstFlowReturn;
-
-    fn into_glib(self) -> ffi::GstFlowReturn {
-        match self {
-            Self::CustomSuccess2 => ffi::GST_FLOW_CUSTOM_SUCCESS_2,
-            Self::CustomSuccess1 => ffi::GST_FLOW_CUSTOM_SUCCESS_1,
-            Self::CustomSuccess => ffi::GST_FLOW_CUSTOM_SUCCESS,
-            Self::Ok => ffi::GST_FLOW_OK,
-            Self::NotLinked => ffi::GST_FLOW_NOT_LINKED,
-            Self::Flushing => ffi::GST_FLOW_FLUSHING,
-            Self::Eos => ffi::GST_FLOW_EOS,
-            Self::NotNegotiated => ffi::GST_FLOW_NOT_NEGOTIATED,
-            Self::Error => ffi::GST_FLOW_ERROR,
-            Self::NotSupported => ffi::GST_FLOW_NOT_SUPPORTED,
-            Self::CustomError => ffi::GST_FLOW_CUSTOM_ERROR,
-            Self::CustomError1 => ffi::GST_FLOW_CUSTOM_ERROR_1,
-            Self::CustomError2 => ffi::GST_FLOW_CUSTOM_ERROR_2,
-            Self::__Unknown(value) => value,
-        }
-    }
-}
-
-#[doc(hidden)]
-impl FromGlib<ffi::GstFlowReturn> for FlowReturn {
-    unsafe fn from_glib(value: ffi::GstFlowReturn) -> Self {
-        skip_assert_initialized!();
-
-        match value {
-            ffi::GST_FLOW_CUSTOM_SUCCESS_2 => Self::CustomSuccess2,
-            ffi::GST_FLOW_CUSTOM_SUCCESS_1 => Self::CustomSuccess1,
-            ffi::GST_FLOW_CUSTOM_SUCCESS => Self::CustomSuccess,
-            ffi::GST_FLOW_OK => Self::Ok,
-            ffi::GST_FLOW_NOT_LINKED => Self::NotLinked,
-            ffi::GST_FLOW_FLUSHING => Self::Flushing,
-            ffi::GST_FLOW_EOS => Self::Eos,
-            ffi::GST_FLOW_NOT_NEGOTIATED => Self::NotNegotiated,
-            ffi::GST_FLOW_ERROR => Self::Error,
-            ffi::GST_FLOW_NOT_SUPPORTED => Self::NotSupported,
-            ffi::GST_FLOW_CUSTOM_ERROR => Self::CustomError,
-            ffi::GST_FLOW_CUSTOM_ERROR_1 => Self::CustomError1,
-            ffi::GST_FLOW_CUSTOM_ERROR_2 => Self::CustomError2,
-            value => Self::__Unknown(value),
-        }
-    }
-}
-
-impl StaticType for FlowReturn {
-    #[inline]
-    fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_flow_return_get_type()) }
-    }
-}
-
-impl glib::value::ValueType for FlowReturn {
-    type Type = Self;
-}
-
-unsafe impl<'a> FromValue<'a> for FlowReturn {
-    type Checker = glib::value::GenericValueTypeChecker<Self>;
-
-    #[inline]
-    unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
-    }
-}
-
-impl ToValue for FlowReturn {
-    #[inline]
-    fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<Self>();
-        unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
-        }
-        value
-    }
-
-    #[inline]
-    fn value_type(&self) -> glib::Type {
-        Self::static_type()
-    }
-}
-
-impl From<FlowReturn> for glib::Value {
-    #[inline]
-    fn from(v: FlowReturn) -> Self {
-        skip_assert_initialized!();
-        ToValue::to_value(&v)
-    }
-}
-
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -1489,17 +1339,15 @@ impl From<LibraryError> for glib::Value {
 
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
-#[non_exhaustive]
+#[repr(i32)]
 #[doc(alias = "GstPadDirection")]
 pub enum PadDirection {
     #[doc(alias = "GST_PAD_UNKNOWN")]
-    Unknown,
+    Unknown = ffi::GST_PAD_UNKNOWN,
     #[doc(alias = "GST_PAD_SRC")]
-    Src,
+    Src = ffi::GST_PAD_SRC,
     #[doc(alias = "GST_PAD_SINK")]
-    Sink,
-    #[doc(hidden)]
-    __Unknown(i32),
+    Sink = ffi::GST_PAD_SINK,
 }
 
 #[doc(hidden)]
@@ -1508,12 +1356,7 @@ impl IntoGlib for PadDirection {
 
     #[inline]
     fn into_glib(self) -> ffi::GstPadDirection {
-        match self {
-            Self::Unknown => ffi::GST_PAD_UNKNOWN,
-            Self::Src => ffi::GST_PAD_SRC,
-            Self::Sink => ffi::GST_PAD_SINK,
-            Self::__Unknown(value) => value,
-        }
+        self as ffi::GstPadDirection
     }
 }
 
@@ -1523,12 +1366,8 @@ impl FromGlib<ffi::GstPadDirection> for PadDirection {
     unsafe fn from_glib(value: ffi::GstPadDirection) -> Self {
         skip_assert_initialized!();
 
-        match value {
-            ffi::GST_PAD_UNKNOWN => Self::Unknown,
-            ffi::GST_PAD_SRC => Self::Src,
-            ffi::GST_PAD_SINK => Self::Sink,
-            value => Self::__Unknown(value),
-        }
+        debug_assert!([ffi::GST_PAD_UNKNOWN, ffi::GST_PAD_SRC, ffi::GST_PAD_SINK].contains(&value));
+        std::mem::transmute(value)
     }
 }
 
@@ -1577,124 +1416,16 @@ impl From<PadDirection> for glib::Value {
     }
 }
 
-#[must_use]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
-#[non_exhaustive]
-#[doc(alias = "GstPadLinkReturn")]
-pub enum PadLinkReturn {
-    #[doc(alias = "GST_PAD_LINK_OK")]
-    Ok,
-    #[doc(alias = "GST_PAD_LINK_WRONG_HIERARCHY")]
-    WrongHierarchy,
-    #[doc(alias = "GST_PAD_LINK_WAS_LINKED")]
-    WasLinked,
-    #[doc(alias = "GST_PAD_LINK_WRONG_DIRECTION")]
-    WrongDirection,
-    #[doc(alias = "GST_PAD_LINK_NOFORMAT")]
-    Noformat,
-    #[doc(alias = "GST_PAD_LINK_NOSCHED")]
-    Nosched,
-    #[doc(alias = "GST_PAD_LINK_REFUSED")]
-    Refused,
-    #[doc(hidden)]
-    __Unknown(i32),
-}
-
-#[doc(hidden)]
-impl IntoGlib for PadLinkReturn {
-    type GlibType = ffi::GstPadLinkReturn;
-
-    #[inline]
-    fn into_glib(self) -> ffi::GstPadLinkReturn {
-        match self {
-            Self::Ok => ffi::GST_PAD_LINK_OK,
-            Self::WrongHierarchy => ffi::GST_PAD_LINK_WRONG_HIERARCHY,
-            Self::WasLinked => ffi::GST_PAD_LINK_WAS_LINKED,
-            Self::WrongDirection => ffi::GST_PAD_LINK_WRONG_DIRECTION,
-            Self::Noformat => ffi::GST_PAD_LINK_NOFORMAT,
-            Self::Nosched => ffi::GST_PAD_LINK_NOSCHED,
-            Self::Refused => ffi::GST_PAD_LINK_REFUSED,
-            Self::__Unknown(value) => value,
-        }
-    }
-}
-
-#[doc(hidden)]
-impl FromGlib<ffi::GstPadLinkReturn> for PadLinkReturn {
-    #[inline]
-    unsafe fn from_glib(value: ffi::GstPadLinkReturn) -> Self {
-        skip_assert_initialized!();
-
-        match value {
-            ffi::GST_PAD_LINK_OK => Self::Ok,
-            ffi::GST_PAD_LINK_WRONG_HIERARCHY => Self::WrongHierarchy,
-            ffi::GST_PAD_LINK_WAS_LINKED => Self::WasLinked,
-            ffi::GST_PAD_LINK_WRONG_DIRECTION => Self::WrongDirection,
-            ffi::GST_PAD_LINK_NOFORMAT => Self::Noformat,
-            ffi::GST_PAD_LINK_NOSCHED => Self::Nosched,
-            ffi::GST_PAD_LINK_REFUSED => Self::Refused,
-            value => Self::__Unknown(value),
-        }
-    }
-}
-
-impl StaticType for PadLinkReturn {
-    #[inline]
-    fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_pad_link_return_get_type()) }
-    }
-}
-
-impl glib::value::ValueType for PadLinkReturn {
-    type Type = Self;
-}
-
-unsafe impl<'a> FromValue<'a> for PadLinkReturn {
-    type Checker = glib::value::GenericValueTypeChecker<Self>;
-
-    #[inline]
-    unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
-    }
-}
-
-impl ToValue for PadLinkReturn {
-    #[inline]
-    fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<Self>();
-        unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
-        }
-        value
-    }
-
-    #[inline]
-    fn value_type(&self) -> glib::Type {
-        Self::static_type()
-    }
-}
-
-impl From<PadLinkReturn> for glib::Value {
-    #[inline]
-    fn from(v: PadLinkReturn) -> Self {
-        skip_assert_initialized!();
-        ToValue::to_value(&v)
-    }
-}
-
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
-#[non_exhaustive]
+#[repr(i32)]
 #[doc(alias = "GstPadMode")]
 pub enum PadMode {
     #[doc(alias = "GST_PAD_MODE_NONE")]
-    None,
+    None = ffi::GST_PAD_MODE_NONE,
     #[doc(alias = "GST_PAD_MODE_PUSH")]
-    Push,
+    Push = ffi::GST_PAD_MODE_PUSH,
     #[doc(alias = "GST_PAD_MODE_PULL")]
-    Pull,
-    #[doc(hidden)]
-    __Unknown(i32),
+    Pull = ffi::GST_PAD_MODE_PULL,
 }
 
 impl PadMode {
@@ -1722,12 +1453,7 @@ impl IntoGlib for PadMode {
 
     #[inline]
     fn into_glib(self) -> ffi::GstPadMode {
-        match self {
-            Self::None => ffi::GST_PAD_MODE_NONE,
-            Self::Push => ffi::GST_PAD_MODE_PUSH,
-            Self::Pull => ffi::GST_PAD_MODE_PULL,
-            Self::__Unknown(value) => value,
-        }
+        self as ffi::GstPadMode
     }
 }
 
@@ -1737,12 +1463,13 @@ impl FromGlib<ffi::GstPadMode> for PadMode {
     unsafe fn from_glib(value: ffi::GstPadMode) -> Self {
         skip_assert_initialized!();
 
-        match value {
-            ffi::GST_PAD_MODE_NONE => Self::None,
-            ffi::GST_PAD_MODE_PUSH => Self::Push,
-            ffi::GST_PAD_MODE_PULL => Self::Pull,
-            value => Self::__Unknown(value),
-        }
+        debug_assert!([
+            ffi::GST_PAD_MODE_NONE,
+            ffi::GST_PAD_MODE_PUSH,
+            ffi::GST_PAD_MODE_PULL
+        ]
+        .contains(&value));
+        std::mem::transmute(value)
     }
 }
 
@@ -1793,17 +1520,15 @@ impl From<PadMode> for glib::Value {
 
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
-#[non_exhaustive]
+#[repr(i32)]
 #[doc(alias = "GstPadPresence")]
 pub enum PadPresence {
     #[doc(alias = "GST_PAD_ALWAYS")]
-    Always,
+    Always = ffi::GST_PAD_ALWAYS,
     #[doc(alias = "GST_PAD_SOMETIMES")]
-    Sometimes,
+    Sometimes = ffi::GST_PAD_SOMETIMES,
     #[doc(alias = "GST_PAD_REQUEST")]
-    Request,
-    #[doc(hidden)]
-    __Unknown(i32),
+    Request = ffi::GST_PAD_REQUEST,
 }
 
 #[doc(hidden)]
@@ -1812,12 +1537,7 @@ impl IntoGlib for PadPresence {
 
     #[inline]
     fn into_glib(self) -> ffi::GstPadPresence {
-        match self {
-            Self::Always => ffi::GST_PAD_ALWAYS,
-            Self::Sometimes => ffi::GST_PAD_SOMETIMES,
-            Self::Request => ffi::GST_PAD_REQUEST,
-            Self::__Unknown(value) => value,
-        }
+        self as ffi::GstPadPresence
     }
 }
 
@@ -1827,12 +1547,13 @@ impl FromGlib<ffi::GstPadPresence> for PadPresence {
     unsafe fn from_glib(value: ffi::GstPadPresence) -> Self {
         skip_assert_initialized!();
 
-        match value {
-            ffi::GST_PAD_ALWAYS => Self::Always,
-            ffi::GST_PAD_SOMETIMES => Self::Sometimes,
-            ffi::GST_PAD_REQUEST => Self::Request,
-            value => Self::__Unknown(value),
-        }
+        debug_assert!([
+            ffi::GST_PAD_ALWAYS,
+            ffi::GST_PAD_SOMETIMES,
+            ffi::GST_PAD_REQUEST
+        ]
+        .contains(&value));
+        std::mem::transmute(value)
     }
 }
 
@@ -1882,21 +1603,19 @@ impl From<PadPresence> for glib::Value {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
-#[non_exhaustive]
+#[repr(i32)]
 #[doc(alias = "GstPadProbeReturn")]
 pub enum PadProbeReturn {
     #[doc(alias = "GST_PAD_PROBE_DROP")]
-    Drop,
+    Drop = ffi::GST_PAD_PROBE_DROP,
     #[doc(alias = "GST_PAD_PROBE_OK")]
-    Ok,
+    Ok = ffi::GST_PAD_PROBE_OK,
     #[doc(alias = "GST_PAD_PROBE_REMOVE")]
-    Remove,
+    Remove = ffi::GST_PAD_PROBE_REMOVE,
     #[doc(alias = "GST_PAD_PROBE_PASS")]
-    Pass,
+    Pass = ffi::GST_PAD_PROBE_PASS,
     #[doc(alias = "GST_PAD_PROBE_HANDLED")]
-    Handled,
-    #[doc(hidden)]
-    __Unknown(i32),
+    Handled = ffi::GST_PAD_PROBE_HANDLED,
 }
 
 #[doc(hidden)]
@@ -1905,14 +1624,7 @@ impl IntoGlib for PadProbeReturn {
 
     #[inline]
     fn into_glib(self) -> ffi::GstPadProbeReturn {
-        match self {
-            Self::Drop => ffi::GST_PAD_PROBE_DROP,
-            Self::Ok => ffi::GST_PAD_PROBE_OK,
-            Self::Remove => ffi::GST_PAD_PROBE_REMOVE,
-            Self::Pass => ffi::GST_PAD_PROBE_PASS,
-            Self::Handled => ffi::GST_PAD_PROBE_HANDLED,
-            Self::__Unknown(value) => value,
-        }
+        self as ffi::GstPadProbeReturn
     }
 }
 
@@ -1922,14 +1634,15 @@ impl FromGlib<ffi::GstPadProbeReturn> for PadProbeReturn {
     unsafe fn from_glib(value: ffi::GstPadProbeReturn) -> Self {
         skip_assert_initialized!();
 
-        match value {
-            ffi::GST_PAD_PROBE_DROP => Self::Drop,
-            ffi::GST_PAD_PROBE_OK => Self::Ok,
-            ffi::GST_PAD_PROBE_REMOVE => Self::Remove,
-            ffi::GST_PAD_PROBE_PASS => Self::Pass,
-            ffi::GST_PAD_PROBE_HANDLED => Self::Handled,
-            value => Self::__Unknown(value),
-        }
+        debug_assert!([
+            ffi::GST_PAD_PROBE_DROP,
+            ffi::GST_PAD_PROBE_OK,
+            ffi::GST_PAD_PROBE_REMOVE,
+            ffi::GST_PAD_PROBE_PASS,
+            ffi::GST_PAD_PROBE_HANDLED
+        ]
+        .contains(&value));
+        std::mem::transmute(value)
     }
 }
 
@@ -2755,17 +2468,15 @@ impl From<ResourceError> for glib::Value {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
-#[non_exhaustive]
+#[repr(i32)]
 #[doc(alias = "GstSeekType")]
 pub enum SeekType {
     #[doc(alias = "GST_SEEK_TYPE_NONE")]
-    None,
+    None = ffi::GST_SEEK_TYPE_NONE,
     #[doc(alias = "GST_SEEK_TYPE_SET")]
-    Set,
+    Set = ffi::GST_SEEK_TYPE_SET,
     #[doc(alias = "GST_SEEK_TYPE_END")]
-    End,
-    #[doc(hidden)]
-    __Unknown(i32),
+    End = ffi::GST_SEEK_TYPE_END,
 }
 
 #[doc(hidden)]
@@ -2774,12 +2485,7 @@ impl IntoGlib for SeekType {
 
     #[inline]
     fn into_glib(self) -> ffi::GstSeekType {
-        match self {
-            Self::None => ffi::GST_SEEK_TYPE_NONE,
-            Self::Set => ffi::GST_SEEK_TYPE_SET,
-            Self::End => ffi::GST_SEEK_TYPE_END,
-            Self::__Unknown(value) => value,
-        }
+        self as ffi::GstSeekType
     }
 }
 
@@ -2789,12 +2495,13 @@ impl FromGlib<ffi::GstSeekType> for SeekType {
     unsafe fn from_glib(value: ffi::GstSeekType) -> Self {
         skip_assert_initialized!();
 
-        match value {
-            ffi::GST_SEEK_TYPE_NONE => Self::None,
-            ffi::GST_SEEK_TYPE_SET => Self::Set,
-            ffi::GST_SEEK_TYPE_END => Self::End,
-            value => Self::__Unknown(value),
-        }
+        debug_assert!([
+            ffi::GST_SEEK_TYPE_NONE,
+            ffi::GST_SEEK_TYPE_SET,
+            ffi::GST_SEEK_TYPE_END
+        ]
+        .contains(&value));
+        std::mem::transmute(value)
     }
 }
 
@@ -2845,21 +2552,19 @@ impl From<SeekType> for glib::Value {
 
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
-#[non_exhaustive]
+#[repr(i32)]
 #[doc(alias = "GstState")]
 pub enum State {
     #[doc(alias = "GST_STATE_VOID_PENDING")]
-    VoidPending,
+    VoidPending = ffi::GST_STATE_VOID_PENDING,
     #[doc(alias = "GST_STATE_NULL")]
-    Null,
+    Null = ffi::GST_STATE_NULL,
     #[doc(alias = "GST_STATE_READY")]
-    Ready,
+    Ready = ffi::GST_STATE_READY,
     #[doc(alias = "GST_STATE_PAUSED")]
-    Paused,
+    Paused = ffi::GST_STATE_PAUSED,
     #[doc(alias = "GST_STATE_PLAYING")]
-    Playing,
-    #[doc(hidden)]
-    __Unknown(i32),
+    Playing = ffi::GST_STATE_PLAYING,
 }
 
 #[doc(hidden)]
@@ -2868,14 +2573,7 @@ impl IntoGlib for State {
 
     #[inline]
     fn into_glib(self) -> ffi::GstState {
-        match self {
-            Self::VoidPending => ffi::GST_STATE_VOID_PENDING,
-            Self::Null => ffi::GST_STATE_NULL,
-            Self::Ready => ffi::GST_STATE_READY,
-            Self::Paused => ffi::GST_STATE_PAUSED,
-            Self::Playing => ffi::GST_STATE_PLAYING,
-            Self::__Unknown(value) => value,
-        }
+        self as ffi::GstState
     }
 }
 
@@ -2885,14 +2583,15 @@ impl FromGlib<ffi::GstState> for State {
     unsafe fn from_glib(value: ffi::GstState) -> Self {
         skip_assert_initialized!();
 
-        match value {
-            ffi::GST_STATE_VOID_PENDING => Self::VoidPending,
-            ffi::GST_STATE_NULL => Self::Null,
-            ffi::GST_STATE_READY => Self::Ready,
-            ffi::GST_STATE_PAUSED => Self::Paused,
-            ffi::GST_STATE_PLAYING => Self::Playing,
-            value => Self::__Unknown(value),
-        }
+        debug_assert!([
+            ffi::GST_STATE_VOID_PENDING,
+            ffi::GST_STATE_NULL,
+            ffi::GST_STATE_READY,
+            ffi::GST_STATE_PAUSED,
+            ffi::GST_STATE_PLAYING
+        ]
+        .contains(&value));
+        std::mem::transmute(value)
     }
 }
 
@@ -2942,31 +2641,29 @@ impl From<State> for glib::Value {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
-#[non_exhaustive]
+#[repr(i32)]
 #[doc(alias = "GstStateChange")]
 pub enum StateChange {
     #[doc(alias = "GST_STATE_CHANGE_NULL_TO_READY")]
-    NullToReady,
+    NullToReady = ffi::GST_STATE_CHANGE_NULL_TO_READY,
     #[doc(alias = "GST_STATE_CHANGE_READY_TO_PAUSED")]
-    ReadyToPaused,
+    ReadyToPaused = ffi::GST_STATE_CHANGE_READY_TO_PAUSED,
     #[doc(alias = "GST_STATE_CHANGE_PAUSED_TO_PLAYING")]
-    PausedToPlaying,
+    PausedToPlaying = ffi::GST_STATE_CHANGE_PAUSED_TO_PLAYING,
     #[doc(alias = "GST_STATE_CHANGE_PLAYING_TO_PAUSED")]
-    PlayingToPaused,
+    PlayingToPaused = ffi::GST_STATE_CHANGE_PLAYING_TO_PAUSED,
     #[doc(alias = "GST_STATE_CHANGE_PAUSED_TO_READY")]
-    PausedToReady,
+    PausedToReady = ffi::GST_STATE_CHANGE_PAUSED_TO_READY,
     #[doc(alias = "GST_STATE_CHANGE_READY_TO_NULL")]
-    ReadyToNull,
+    ReadyToNull = ffi::GST_STATE_CHANGE_READY_TO_NULL,
     #[doc(alias = "GST_STATE_CHANGE_NULL_TO_NULL")]
-    NullToNull,
+    NullToNull = ffi::GST_STATE_CHANGE_NULL_TO_NULL,
     #[doc(alias = "GST_STATE_CHANGE_READY_TO_READY")]
-    ReadyToReady,
+    ReadyToReady = ffi::GST_STATE_CHANGE_READY_TO_READY,
     #[doc(alias = "GST_STATE_CHANGE_PAUSED_TO_PAUSED")]
-    PausedToPaused,
+    PausedToPaused = ffi::GST_STATE_CHANGE_PAUSED_TO_PAUSED,
     #[doc(alias = "GST_STATE_CHANGE_PLAYING_TO_PLAYING")]
-    PlayingToPlaying,
-    #[doc(hidden)]
-    __Unknown(i32),
+    PlayingToPlaying = ffi::GST_STATE_CHANGE_PLAYING_TO_PLAYING,
 }
 
 impl StateChange {
@@ -2994,19 +2691,7 @@ impl IntoGlib for StateChange {
 
     #[inline]
     fn into_glib(self) -> ffi::GstStateChange {
-        match self {
-            Self::NullToReady => ffi::GST_STATE_CHANGE_NULL_TO_READY,
-            Self::ReadyToPaused => ffi::GST_STATE_CHANGE_READY_TO_PAUSED,
-            Self::PausedToPlaying => ffi::GST_STATE_CHANGE_PAUSED_TO_PLAYING,
-            Self::PlayingToPaused => ffi::GST_STATE_CHANGE_PLAYING_TO_PAUSED,
-            Self::PausedToReady => ffi::GST_STATE_CHANGE_PAUSED_TO_READY,
-            Self::ReadyToNull => ffi::GST_STATE_CHANGE_READY_TO_NULL,
-            Self::NullToNull => ffi::GST_STATE_CHANGE_NULL_TO_NULL,
-            Self::ReadyToReady => ffi::GST_STATE_CHANGE_READY_TO_READY,
-            Self::PausedToPaused => ffi::GST_STATE_CHANGE_PAUSED_TO_PAUSED,
-            Self::PlayingToPlaying => ffi::GST_STATE_CHANGE_PLAYING_TO_PLAYING,
-            Self::__Unknown(value) => value,
-        }
+        self as ffi::GstStateChange
     }
 }
 
@@ -3016,19 +2701,20 @@ impl FromGlib<ffi::GstStateChange> for StateChange {
     unsafe fn from_glib(value: ffi::GstStateChange) -> Self {
         skip_assert_initialized!();
 
-        match value {
-            ffi::GST_STATE_CHANGE_NULL_TO_READY => Self::NullToReady,
-            ffi::GST_STATE_CHANGE_READY_TO_PAUSED => Self::ReadyToPaused,
-            ffi::GST_STATE_CHANGE_PAUSED_TO_PLAYING => Self::PausedToPlaying,
-            ffi::GST_STATE_CHANGE_PLAYING_TO_PAUSED => Self::PlayingToPaused,
-            ffi::GST_STATE_CHANGE_PAUSED_TO_READY => Self::PausedToReady,
-            ffi::GST_STATE_CHANGE_READY_TO_NULL => Self::ReadyToNull,
-            ffi::GST_STATE_CHANGE_NULL_TO_NULL => Self::NullToNull,
-            ffi::GST_STATE_CHANGE_READY_TO_READY => Self::ReadyToReady,
-            ffi::GST_STATE_CHANGE_PAUSED_TO_PAUSED => Self::PausedToPaused,
-            ffi::GST_STATE_CHANGE_PLAYING_TO_PLAYING => Self::PlayingToPlaying,
-            value => Self::__Unknown(value),
-        }
+        debug_assert!([
+            ffi::GST_STATE_CHANGE_NULL_TO_READY,
+            ffi::GST_STATE_CHANGE_READY_TO_PAUSED,
+            ffi::GST_STATE_CHANGE_PAUSED_TO_PLAYING,
+            ffi::GST_STATE_CHANGE_PLAYING_TO_PAUSED,
+            ffi::GST_STATE_CHANGE_PAUSED_TO_READY,
+            ffi::GST_STATE_CHANGE_READY_TO_NULL,
+            ffi::GST_STATE_CHANGE_NULL_TO_NULL,
+            ffi::GST_STATE_CHANGE_READY_TO_READY,
+            ffi::GST_STATE_CHANGE_PAUSED_TO_PAUSED,
+            ffi::GST_STATE_CHANGE_PLAYING_TO_PLAYING
+        ]
+        .contains(&value));
+        std::mem::transmute(value)
     }
 }
 
@@ -3079,19 +2765,17 @@ impl From<StateChange> for glib::Value {
 
 #[must_use]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
-#[non_exhaustive]
+#[repr(i32)]
 #[doc(alias = "GstStateChangeReturn")]
 pub enum StateChangeReturn {
     #[doc(alias = "GST_STATE_CHANGE_FAILURE")]
-    Failure,
+    Failure = ffi::GST_STATE_CHANGE_FAILURE,
     #[doc(alias = "GST_STATE_CHANGE_SUCCESS")]
-    Success,
+    Success = ffi::GST_STATE_CHANGE_SUCCESS,
     #[doc(alias = "GST_STATE_CHANGE_ASYNC")]
-    Async,
+    Async = ffi::GST_STATE_CHANGE_ASYNC,
     #[doc(alias = "GST_STATE_CHANGE_NO_PREROLL")]
-    NoPreroll,
-    #[doc(hidden)]
-    __Unknown(i32),
+    NoPreroll = ffi::GST_STATE_CHANGE_NO_PREROLL,
 }
 
 #[doc(hidden)]
@@ -3100,13 +2784,7 @@ impl IntoGlib for StateChangeReturn {
 
     #[inline]
     fn into_glib(self) -> ffi::GstStateChangeReturn {
-        match self {
-            Self::Failure => ffi::GST_STATE_CHANGE_FAILURE,
-            Self::Success => ffi::GST_STATE_CHANGE_SUCCESS,
-            Self::Async => ffi::GST_STATE_CHANGE_ASYNC,
-            Self::NoPreroll => ffi::GST_STATE_CHANGE_NO_PREROLL,
-            Self::__Unknown(value) => value,
-        }
+        self as ffi::GstStateChangeReturn
     }
 }
 
@@ -3116,13 +2794,14 @@ impl FromGlib<ffi::GstStateChangeReturn> for StateChangeReturn {
     unsafe fn from_glib(value: ffi::GstStateChangeReturn) -> Self {
         skip_assert_initialized!();
 
-        match value {
-            ffi::GST_STATE_CHANGE_FAILURE => Self::Failure,
-            ffi::GST_STATE_CHANGE_SUCCESS => Self::Success,
-            ffi::GST_STATE_CHANGE_ASYNC => Self::Async,
-            ffi::GST_STATE_CHANGE_NO_PREROLL => Self::NoPreroll,
-            value => Self::__Unknown(value),
-        }
+        debug_assert!([
+            ffi::GST_STATE_CHANGE_FAILURE,
+            ffi::GST_STATE_CHANGE_SUCCESS,
+            ffi::GST_STATE_CHANGE_ASYNC,
+            ffi::GST_STATE_CHANGE_NO_PREROLL
+        ]
+        .contains(&value));
+        std::mem::transmute(value)
     }
 }
 
@@ -4402,17 +4081,15 @@ impl From<URIError> for glib::Value {
 
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
-#[non_exhaustive]
+#[repr(i32)]
 #[doc(alias = "GstURIType")]
 pub enum URIType {
     #[doc(alias = "GST_URI_UNKNOWN")]
-    Unknown,
+    Unknown = ffi::GST_URI_UNKNOWN,
     #[doc(alias = "GST_URI_SINK")]
-    Sink,
+    Sink = ffi::GST_URI_SINK,
     #[doc(alias = "GST_URI_SRC")]
-    Src,
-    #[doc(hidden)]
-    __Unknown(i32),
+    Src = ffi::GST_URI_SRC,
 }
 
 #[doc(hidden)]
@@ -4421,12 +4098,7 @@ impl IntoGlib for URIType {
 
     #[inline]
     fn into_glib(self) -> ffi::GstURIType {
-        match self {
-            Self::Unknown => ffi::GST_URI_UNKNOWN,
-            Self::Sink => ffi::GST_URI_SINK,
-            Self::Src => ffi::GST_URI_SRC,
-            Self::__Unknown(value) => value,
-        }
+        self as ffi::GstURIType
     }
 }
 
@@ -4436,12 +4108,8 @@ impl FromGlib<ffi::GstURIType> for URIType {
     unsafe fn from_glib(value: ffi::GstURIType) -> Self {
         skip_assert_initialized!();
 
-        match value {
-            ffi::GST_URI_UNKNOWN => Self::Unknown,
-            ffi::GST_URI_SINK => Self::Sink,
-            ffi::GST_URI_SRC => Self::Src,
-            value => Self::__Unknown(value),
-        }
+        debug_assert!([ffi::GST_URI_UNKNOWN, ffi::GST_URI_SINK, ffi::GST_URI_SRC].contains(&value));
+        std::mem::transmute(value)
     }
 }
 

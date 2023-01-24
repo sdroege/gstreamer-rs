@@ -9,7 +9,7 @@ use glib::{
 };
 use thiserror::Error;
 
-use crate::{ClockReturn, FlowReturn, PadLinkReturn, State, StateChange, StateChangeReturn};
+use crate::{ClockReturn, State, StateChange, StateChangeReturn};
 
 macro_rules! impl_return_result_traits {
     ($ffi_type:ident, $ret_type:ident, $ok_type:ident, $err_type:ident) => {
@@ -74,11 +74,8 @@ impl StateChangeReturn {
     #[inline]
     pub fn into_result(self) -> Result<StateChangeSuccess, StateChangeError> {
         match self {
-            StateChangeReturn::Success => Ok(StateChangeSuccess::Success),
-            StateChangeReturn::Async => Ok(StateChangeSuccess::Async),
-            StateChangeReturn::NoPreroll => Ok(StateChangeSuccess::NoPreroll),
             StateChangeReturn::Failure => Err(StateChangeError),
-            _ => Err(StateChangeError),
+            _ => Ok(unsafe { std::mem::transmute(self) }),
         }
     }
 
@@ -91,19 +88,16 @@ impl StateChangeReturn {
     #[inline]
     pub fn from_ok(v: StateChangeSuccess) -> Self {
         skip_assert_initialized!();
-        match v {
-            StateChangeSuccess::Success => StateChangeReturn::Success,
-            StateChangeSuccess::Async => StateChangeReturn::Async,
-            StateChangeSuccess::NoPreroll => StateChangeReturn::NoPreroll,
-        }
+        unsafe { std::mem::transmute(v) }
     }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[repr(i32)]
 pub enum StateChangeSuccess {
-    Success,
-    Async,
-    NoPreroll,
+    Success = ffi::GST_STATE_CHANGE_SUCCESS,
+    Async = ffi::GST_STATE_CHANGE_ASYNC,
+    NoPreroll = ffi::GST_STATE_CHANGE_NO_PREROLL,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
@@ -118,114 +112,278 @@ impl_return_result_traits!(
     StateChangeError
 );
 
+#[must_use]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[repr(i32)]
+#[doc(alias = "GstFlowReturn")]
+pub enum FlowReturn {
+    #[doc(alias = "GST_FLOW_CUSTOM_SUCCESS_2")]
+    CustomSuccess2 = ffi::GST_FLOW_CUSTOM_SUCCESS_2,
+    #[doc(alias = "GST_FLOW_CUSTOM_SUCCESS_1")]
+    CustomSuccess1 = ffi::GST_FLOW_CUSTOM_SUCCESS_1,
+    #[doc(alias = "GST_FLOW_CUSTOM_SUCCESS")]
+    CustomSuccess = ffi::GST_FLOW_CUSTOM_SUCCESS,
+    #[doc(alias = "GST_FLOW_OK")]
+    Ok = ffi::GST_FLOW_OK,
+    #[doc(alias = "GST_FLOW_NOT_LINKED")]
+    NotLinked = ffi::GST_FLOW_NOT_LINKED,
+    #[doc(alias = "GST_FLOW_FLUSHING")]
+    Flushing = ffi::GST_FLOW_FLUSHING,
+    #[doc(alias = "GST_FLOW_EOS")]
+    Eos = ffi::GST_FLOW_EOS,
+    #[doc(alias = "GST_FLOW_NOT_NEGOTIATED")]
+    NotNegotiated = ffi::GST_FLOW_NOT_NEGOTIATED,
+    #[doc(alias = "GST_FLOW_ERROR")]
+    Error = ffi::GST_FLOW_ERROR,
+    #[doc(alias = "GST_FLOW_NOT_SUPPORTED")]
+    NotSupported = ffi::GST_FLOW_NOT_SUPPORTED,
+    #[doc(alias = "GST_FLOW_CUSTOM_ERROR")]
+    CustomError = ffi::GST_FLOW_CUSTOM_ERROR,
+    #[doc(alias = "GST_FLOW_CUSTOM_ERROR_1")]
+    CustomError1 = ffi::GST_FLOW_CUSTOM_ERROR_1,
+    #[doc(alias = "GST_FLOW_CUSTOM_ERROR_2")]
+    CustomError2 = ffi::GST_FLOW_CUSTOM_ERROR_2,
+}
+
+#[doc(hidden)]
+impl IntoGlib for FlowReturn {
+    type GlibType = ffi::GstFlowReturn;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstFlowReturn {
+        self as ffi::GstFlowReturn
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstFlowReturn> for FlowReturn {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstFlowReturn) -> Self {
+        skip_assert_initialized!();
+
+        if value < ffi::GST_FLOW_NOT_SUPPORTED
+            && (value > ffi::GST_FLOW_CUSTOM_ERROR || value < ffi::GST_FLOW_CUSTOM_ERROR_2)
+        {
+            FlowReturn::Error
+        } else if value > 0
+            && (value < ffi::GST_FLOW_CUSTOM_SUCCESS || value > ffi::GST_FLOW_CUSTOM_SUCCESS_2)
+        {
+            FlowReturn::Ok
+        } else {
+            std::mem::transmute(value)
+        }
+    }
+}
+
+impl StaticType for FlowReturn {
+    #[inline]
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_flow_return_get_type()) }
+    }
+}
+
+impl glib::value::ValueType for FlowReturn {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for FlowReturn {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for FlowReturn {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<FlowReturn> for glib::Value {
+    #[inline]
+    fn from(v: FlowReturn) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 impl FlowReturn {
     #[inline]
     pub fn into_result(self) -> Result<FlowSuccess, FlowError> {
-        match self {
-            FlowReturn::CustomSuccess2 => Ok(FlowSuccess::CustomSuccess2),
-            FlowReturn::CustomSuccess1 => Ok(FlowSuccess::CustomSuccess1),
-            FlowReturn::CustomSuccess => Ok(FlowSuccess::CustomSuccess),
-            FlowReturn::Ok => Ok(FlowSuccess::Ok),
-            FlowReturn::NotLinked => Err(FlowError::NotLinked),
-            FlowReturn::Flushing => Err(FlowError::Flushing),
-            FlowReturn::Eos => Err(FlowError::Eos),
-            FlowReturn::NotNegotiated => Err(FlowError::NotNegotiated),
-            FlowReturn::Error => Err(FlowError::Error),
-            FlowReturn::NotSupported => Err(FlowError::NotSupported),
-            FlowReturn::CustomError => Err(FlowError::CustomError),
-            FlowReturn::CustomError1 => Err(FlowError::CustomError1),
-            FlowReturn::CustomError2 => Err(FlowError::CustomError2),
-            _ => Err(FlowError::Error),
+        if self.into_glib() >= 0 {
+            Ok(unsafe { std::mem::transmute(self) })
+        } else {
+            Err(unsafe { std::mem::transmute(self) })
         }
     }
 
     #[inline]
     pub fn from_error(v: FlowError) -> Self {
         skip_assert_initialized!();
-        match v {
-            FlowError::NotLinked => FlowReturn::NotLinked,
-            FlowError::Flushing => FlowReturn::Flushing,
-            FlowError::Eos => FlowReturn::Eos,
-            FlowError::NotNegotiated => FlowReturn::NotNegotiated,
-            FlowError::Error => FlowReturn::Error,
-            FlowError::NotSupported => FlowReturn::NotSupported,
-            FlowError::CustomError => FlowReturn::CustomError,
-            FlowError::CustomError1 => FlowReturn::CustomError1,
-            FlowError::CustomError2 => FlowReturn::CustomError2,
-        }
+        unsafe { std::mem::transmute(v) }
     }
 
     #[inline]
     pub fn from_ok(v: FlowSuccess) -> Self {
         skip_assert_initialized!();
-        match v {
-            FlowSuccess::CustomSuccess2 => FlowReturn::CustomSuccess2,
-            FlowSuccess::CustomSuccess1 => FlowReturn::CustomSuccess1,
-            FlowSuccess::CustomSuccess => FlowReturn::CustomSuccess,
-            FlowSuccess::Ok => FlowReturn::Ok,
-        }
+        unsafe { std::mem::transmute(v) }
     }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[repr(i32)]
 pub enum FlowSuccess {
-    CustomSuccess2,
-    CustomSuccess1,
-    CustomSuccess,
-    Ok,
+    CustomSuccess2 = ffi::GST_FLOW_CUSTOM_SUCCESS_2,
+    CustomSuccess1 = ffi::GST_FLOW_CUSTOM_SUCCESS_1,
+    CustomSuccess = ffi::GST_FLOW_CUSTOM_SUCCESS,
+    Ok = ffi::GST_FLOW_OK,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
 #[must_use]
+#[repr(i32)]
 pub enum FlowError {
     #[error("Pad is not linked")]
-    NotLinked,
+    NotLinked = ffi::GST_FLOW_NOT_LINKED,
     #[error("Pad is flushing")]
-    Flushing,
+    Flushing = ffi::GST_FLOW_FLUSHING,
     #[error("Pad is EOS")]
-    Eos,
+    Eos = ffi::GST_FLOW_EOS,
     #[error("Pad is not negotiated")]
-    NotNegotiated,
+    NotNegotiated = ffi::GST_FLOW_NOT_NEGOTIATED,
     #[error("Some (fatal) error occurred. Element generating this error should post an error message with more details")]
-    Error,
+    Error = ffi::GST_FLOW_ERROR,
     #[error("This operation is not supported")]
-    NotSupported,
+    NotSupported = ffi::GST_FLOW_NOT_SUPPORTED,
     #[error("Elements can use values starting from this (and lower) to define custom error codes")]
-    CustomError,
+    CustomError = ffi::GST_FLOW_CUSTOM_ERROR,
     #[error("Pre-defined custom error code")]
-    CustomError1,
+    CustomError1 = ffi::GST_FLOW_CUSTOM_ERROR_1,
     #[error("Pre-defined custom error code")]
-    CustomError2,
+    CustomError2 = ffi::GST_FLOW_CUSTOM_ERROR_2,
 }
 
 impl_return_result_traits!(GstFlowReturn, FlowReturn, FlowSuccess, FlowError);
 
+#[must_use]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[repr(i32)]
+#[doc(alias = "GstPadLinkReturn")]
+pub enum PadLinkReturn {
+    #[doc(alias = "GST_PAD_LINK_OK")]
+    Ok = ffi::GST_PAD_LINK_OK,
+    #[doc(alias = "GST_PAD_LINK_WRONG_HIERARCHY")]
+    WrongHierarchy = ffi::GST_PAD_LINK_WRONG_HIERARCHY,
+    #[doc(alias = "GST_PAD_LINK_WAS_LINKED")]
+    WasLinked = ffi::GST_PAD_LINK_WAS_LINKED,
+    #[doc(alias = "GST_PAD_LINK_WRONG_DIRECTION")]
+    WrongDirection = ffi::GST_PAD_LINK_WRONG_DIRECTION,
+    #[doc(alias = "GST_PAD_LINK_NOFORMAT")]
+    Noformat = ffi::GST_PAD_LINK_NOFORMAT,
+    #[doc(alias = "GST_PAD_LINK_NOSCHED")]
+    Nosched = ffi::GST_PAD_LINK_NOSCHED,
+    #[doc(alias = "GST_PAD_LINK_REFUSED")]
+    Refused = ffi::GST_PAD_LINK_REFUSED,
+}
+
+#[doc(hidden)]
+impl IntoGlib for PadLinkReturn {
+    type GlibType = ffi::GstPadLinkReturn;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstPadLinkReturn {
+        self as ffi::GstPadLinkReturn
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstPadLinkReturn> for PadLinkReturn {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstPadLinkReturn) -> Self {
+        skip_assert_initialized!();
+
+        if value >= 0 {
+            PadLinkReturn::Ok
+        } else if value < ffi::GST_PAD_LINK_REFUSED {
+            PadLinkReturn::Refused
+        } else {
+            std::mem::transmute(value)
+        }
+    }
+}
+
+impl StaticType for PadLinkReturn {
+    #[inline]
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_pad_link_return_get_type()) }
+    }
+}
+
+impl glib::value::ValueType for PadLinkReturn {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for PadLinkReturn {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for PadLinkReturn {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<PadLinkReturn> for glib::Value {
+    #[inline]
+    fn from(v: PadLinkReturn) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 impl PadLinkReturn {
     #[inline]
     pub fn into_result(self) -> Result<PadLinkSuccess, PadLinkError> {
-        match self {
-            PadLinkReturn::Ok => Ok(PadLinkSuccess),
-            PadLinkReturn::WrongHierarchy => Err(PadLinkError::WrongHierarchy),
-            PadLinkReturn::WasLinked => Err(PadLinkError::WasLinked),
-            PadLinkReturn::WrongDirection => Err(PadLinkError::WrongDirection),
-            PadLinkReturn::Noformat => Err(PadLinkError::Noformat),
-            PadLinkReturn::Nosched => Err(PadLinkError::Nosched),
-            PadLinkReturn::Refused => Err(PadLinkError::Refused),
-            _ => Err(PadLinkError::Refused),
+        if self == PadLinkReturn::Ok {
+            Ok(PadLinkSuccess)
+        } else {
+            Err(unsafe { std::mem::transmute(self) })
         }
     }
 
     #[inline]
     pub fn from_error(v: PadLinkError) -> Self {
         skip_assert_initialized!();
-        match v {
-            PadLinkError::WrongHierarchy => PadLinkReturn::WrongHierarchy,
-            PadLinkError::WasLinked => PadLinkReturn::WasLinked,
-            PadLinkError::WrongDirection => PadLinkReturn::WrongDirection,
-            PadLinkError::Noformat => PadLinkReturn::Noformat,
-            PadLinkError::Nosched => PadLinkReturn::Nosched,
-            PadLinkError::Refused => PadLinkReturn::Refused,
-        }
+        unsafe { std::mem::transmute(v) }
     }
 
     #[inline]
@@ -240,19 +398,20 @@ pub struct PadLinkSuccess;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
 #[must_use]
+#[repr(i32)]
 pub enum PadLinkError {
     #[error("Pads have no common grandparent")]
-    WrongHierarchy,
+    WrongHierarchy = ffi::GST_PAD_LINK_WRONG_HIERARCHY,
     #[error("Pad was already linked")]
-    WasLinked,
+    WasLinked = ffi::GST_PAD_LINK_WAS_LINKED,
     #[error("Pads have wrong direction")]
-    WrongDirection,
+    WrongDirection = ffi::GST_PAD_LINK_WRONG_DIRECTION,
     #[error("Pads do not have common format")]
-    Noformat,
+    Noformat = ffi::GST_PAD_LINK_NOFORMAT,
     #[error("Pads cannot cooperate in scheduling")]
-    Nosched,
+    Nosched = ffi::GST_PAD_LINK_NOSCHED,
     #[error("Refused for some other reason")]
-    Refused,
+    Refused = ffi::GST_PAD_LINK_REFUSED,
 }
 
 impl_return_result_traits!(
@@ -268,60 +427,46 @@ impl ClockReturn {
         match self {
             ClockReturn::Ok => Ok(ClockSuccess::Ok),
             ClockReturn::Done => Ok(ClockSuccess::Done),
-            ClockReturn::Early => Err(ClockError::Early),
-            ClockReturn::Unscheduled => Err(ClockError::Unscheduled),
-            ClockReturn::Busy => Err(ClockError::Busy),
-            ClockReturn::Badtime => Err(ClockError::Badtime),
-            ClockReturn::Error => Err(ClockError::Error),
-            ClockReturn::Unsupported => Err(ClockError::Unsupported),
-            _ => Err(ClockError::Error),
+            _ => Err(unsafe { std::mem::transmute(self) }),
         }
     }
 
     #[inline]
     pub fn from_error(v: ClockError) -> Self {
         skip_assert_initialized!();
-        match v {
-            ClockError::Early => ClockReturn::Early,
-            ClockError::Unscheduled => ClockReturn::Unscheduled,
-            ClockError::Busy => ClockReturn::Busy,
-            ClockError::Badtime => ClockReturn::Badtime,
-            ClockError::Error => ClockReturn::Error,
-            ClockError::Unsupported => ClockReturn::Unsupported,
-        }
+        unsafe { std::mem::transmute(v) }
     }
 
     #[inline]
     pub fn from_ok(v: ClockSuccess) -> Self {
         skip_assert_initialized!();
-        match v {
-            ClockSuccess::Ok => ClockReturn::Ok,
-            ClockSuccess::Done => ClockReturn::Done,
-        }
+        unsafe { std::mem::transmute(v) }
     }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[repr(i32)]
 pub enum ClockSuccess {
-    Ok,
-    Done,
+    Ok = ffi::GST_CLOCK_OK,
+    Done = ffi::GST_CLOCK_DONE,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
 #[must_use]
+#[repr(i32)]
 pub enum ClockError {
     #[error("The operation was scheduled too late")]
-    Early,
+    Early = ffi::GST_CLOCK_EARLY,
     #[error("The clockID was unscheduled")]
-    Unscheduled,
+    Unscheduled = ffi::GST_CLOCK_UNSCHEDULED,
     #[error("The ClockID is busy")]
-    Busy,
+    Busy = ffi::GST_CLOCK_BUSY,
     #[error("A bad time was provided to a function")]
-    Badtime,
+    Badtime = ffi::GST_CLOCK_BADTIME,
     #[error("An error occurred")]
-    Error,
+    Error = ffi::GST_CLOCK_ERROR,
     #[error("Operation is not supported")]
-    Unsupported,
+    Unsupported = ffi::GST_CLOCK_UNSUPPORTED,
 }
 
 impl_return_result_traits!(GstClockReturn, ClockReturn, ClockSuccess, ClockError);
@@ -707,35 +852,11 @@ impl StateChange {
 
     #[inline]
     pub fn current(self) -> State {
-        match self {
-            StateChange::NullToReady => State::Null,
-            StateChange::ReadyToPaused => State::Ready,
-            StateChange::PausedToPlaying => State::Paused,
-            StateChange::PlayingToPaused => State::Playing,
-            StateChange::PausedToReady => State::Paused,
-            StateChange::ReadyToNull => State::Ready,
-            StateChange::NullToNull => State::Null,
-            StateChange::ReadyToReady => State::Ready,
-            StateChange::PausedToPaused => State::Paused,
-            StateChange::PlayingToPlaying => State::Playing,
-            StateChange::__Unknown(value) => State::__Unknown(value >> 3),
-        }
+        unsafe { from_glib(self.into_glib() >> 3) }
     }
 
     #[inline]
     pub fn next(self) -> State {
-        match self {
-            StateChange::NullToReady => State::Ready,
-            StateChange::ReadyToPaused => State::Paused,
-            StateChange::PausedToPlaying => State::Playing,
-            StateChange::PlayingToPaused => State::Paused,
-            StateChange::PausedToReady => State::Ready,
-            StateChange::ReadyToNull => State::Null,
-            StateChange::NullToNull => State::Null,
-            StateChange::ReadyToReady => State::Ready,
-            StateChange::PausedToPaused => State::Paused,
-            StateChange::PlayingToPlaying => State::Playing,
-            StateChange::__Unknown(value) => State::__Unknown(value & 0x7),
-        }
+        unsafe { from_glib(self.into_glib() & 0x7) }
     }
 }

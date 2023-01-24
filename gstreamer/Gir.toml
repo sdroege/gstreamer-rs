@@ -17,7 +17,6 @@ external_libraries = [
 
 generate = [
     "Gst.BufferingMode",
-    "Gst.BusSyncReply",
     "Gst.CapsIntersectMode",
     "Gst.ClockEntryType",
     "Gst.ClockTimeDiff",
@@ -25,8 +24,6 @@ generate = [
     "Gst.DebugGraphDetails",
     "Gst.EventTypeFlags",
     "Gst.GapFlags",
-    "Gst.PadMode",
-    "Gst.PadProbeReturn",
     "Gst.ParseError",
     "Gst.PluginAPIFlags",
     "Gst.PluginError",
@@ -35,9 +32,7 @@ generate = [
     "Gst.PromiseResult",
     "Gst.QOSType",
     "Gst.SchedulingFlags",
-    "Gst.SeekType",
     "Gst.SerializeFlags",
-    "Gst.StateChange",
     "Gst.StreamStatusType",
     "Gst.StreamType",
     "Gst.StructureChangeType",
@@ -604,6 +599,11 @@ final_type = true
         bool_return_is_error = "Failed to post message"
 
 [[object]]
+name = "Gst.BusSyncReply"
+status = "generate"
+exhaustive = true
+
+[[object]]
 name = "Gst.Caps"
 status = "manual"
 ref_mode = "ref"
@@ -769,6 +769,7 @@ status = "manual"
 name = "Gst.ClockReturn"
 status = "generate"
 must_use = true
+exhaustive = true
     [object.conversion_type]
     variant = "Result"
     ok_type = "ClockSuccess"
@@ -1388,8 +1389,10 @@ status = "generate"
 
 [[object]]
 name = "Gst.FlowReturn"
-status = "generate"
+# mapping unknown values to defaults
+status = "manual"
 must_use = true
+exhaustive = true
     [object.conversion_type]
     variant = "Result"
     ok_type = "FlowSuccess"
@@ -1739,6 +1742,7 @@ manual_traits = ["PadExtManual"]
 [[object]]
 name = "Gst.PadDirection"
 status = "generate"
+exhaustive = true
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
     cfg_condition = "feature = \"serde\""
@@ -1760,22 +1764,35 @@ status = "generate"
     ignore = true
 
 [[object]]
+# mapping unknown values to default
 name = "Gst.PadLinkReturn"
-status = "generate"
+status = "manual"
 must_use = true
+exhaustive = true
     [object.conversion_type]
     variant = "Result"
     ok_type = "PadLinkSuccess"
     err_type = "PadLinkError"
 
 [[object]]
+name = "Gst.PadMode"
+status = "generate"
+exhaustive = true
+
+[[object]]
 name = "Gst.PadPresence"
 status = "generate"
+exhaustive = true
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
     cfg_condition = "feature = \"serde\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+
+[[object]]
+name = "Gst.PadProbeReturn"
+status = "generate"
+exhaustive = true
 
 [[object]]
 name = "Gst.PadProbeType"
@@ -2099,6 +2116,11 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gst.SeekType"
+status = "generate"
+exhaustive = true
+
+[[object]]
 name = "Gst.SegmentFlags"
 status = "generate"
     [[object.member]]
@@ -2118,6 +2140,7 @@ status = "generate"
 [[object]]
 name = "Gst.State"
 status = "generate"
+exhaustive = true
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
     cfg_condition = "feature = \"serde\""
@@ -2125,9 +2148,15 @@ status = "generate"
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
 [[object]]
+name = "Gst.StateChange"
+status = "generate"
+exhaustive = true
+
+[[object]]
 name = "Gst.StateChangeReturn"
 status = "generate"
 must_use = true
+exhaustive = true
     [object.conversion_type]
     variant = "Result"
     ok_type = "StateChangeSuccess"
@@ -2461,6 +2490,7 @@ status = "generate"
 [[object]]
 name = "Gst.URIType"
 status = "generate"
+exhaustive = true
     [[object.derive]]
     name = "serde::Serialize, serde::Deserialize"
     cfg_condition = "feature = \"serde\""
