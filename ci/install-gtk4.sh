@@ -2,7 +2,7 @@
 
 set -eux
 
-BRANCH=4.8.2
+BRANCH=4.8.3
 
 git clone https://gitlab.gnome.org/GNOME/gtk.git --branch $BRANCH --depth=1
 cd gtk
