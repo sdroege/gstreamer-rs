@@ -9,15 +9,15 @@ use anyhow::Error;
 use derive_more::{Display, Error};
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "No such pad {} in {}", _0, _1)]
+#[display(fmt = "No such pad {_0} in {_1}")]
 struct NoSuchPad(&'static str, String);
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Usage: {} URI FEC_PERCENTAGE", _0)]
+#[display(fmt = "Usage: {_0} URI FEC_PERCENTAGE")]
 struct UsageError(#[error(not(source))] String);
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
+#[display(fmt = "Received error from {src}: {error} (debug: {debug:?})")]
 struct ErrorMessage {
     src: glib::GString,
     error: glib::Error,
@@ -201,6 +201,6 @@ fn example_main() -> Result<(), Error> {
 fn main() {
     match examples_common::run(example_main) {
         Ok(r) => r,
-        Err(e) => eprintln!("Error! {}", e),
+        Err(e) => eprintln!("Error! {e}"),
     }
 }

@@ -19,7 +19,7 @@ mod examples_common;
 struct NoMountPoints;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Usage: {} LAUNCH_LINE", _0)]
+#[display(fmt = "Usage: {_0} LAUNCH_LINE")]
 struct UsageError(#[error(not(source))] String);
 
 fn main_loop() -> Result<(), Error> {
@@ -152,6 +152,6 @@ fn example_main() -> Result<(), Error> {
 fn main() {
     match examples_common::run(example_main) {
         Ok(r) => r,
-        Err(e) => eprintln!("Error! {}", e),
+        Err(e) => eprintln!("Error! {e}"),
     }
 }

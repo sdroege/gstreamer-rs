@@ -166,7 +166,7 @@ fn example_main() {
     let glfilter = mirror::GLMirrorFilter::new(Some("foo"));
     App::new(Some(glfilter.as_ref()))
         .and_then(main_loop)
-        .unwrap_or_else(|e| eprintln!("Error! {}", e))
+        .unwrap_or_else(|e| eprintln!("Error! {e}"))
 }
 
 fn main() {

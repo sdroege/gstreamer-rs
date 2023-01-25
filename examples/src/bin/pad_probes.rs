@@ -66,7 +66,7 @@ fn example_main() {
                 })
                 .sum();
             let rms = (sum / (samples.len() as f64)).sqrt();
-            println!("rms: {}", rms);
+            println!("rms: {rms}");
         }
 
         gst::PadProbeReturn::Ok

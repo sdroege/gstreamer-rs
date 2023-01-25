@@ -5,12 +5,12 @@ mod tutorials_common;
 
 fn print_caps(caps: &gst::CapsRef, prefix: &str) {
     if caps.is_any() {
-        println!("{}ANY", prefix);
+        println!("{prefix}ANY");
         return;
     }
 
     if caps.is_empty() {
-        println!("{}EMPTY", prefix);
+        println!("{prefix}EMPTY");
         return;
     }
 
@@ -32,7 +32,7 @@ fn print_pad_template_information(factory: &gst::ElementFactory) {
     let long_name = factory
         .metadata("long-name")
         .expect("Failed to get long-name of element factory.");
-    println!("Pad Template for {}:", long_name);
+    println!("Pad Template for {long_name}:");
 
     if factory.num_pad_templates() == 0u32 {
         println!("  None");
@@ -69,7 +69,7 @@ fn print_pad_capabilities(element: &gst::Element, pad_name: &str) {
         .static_pad(pad_name)
         .expect("Could not retrieve pad");
 
-    println!("Caps for the {} pad:", pad_name);
+    println!("Caps for the {pad_name} pad:");
     let caps = pad.current_caps().unwrap_or_else(|| pad.query_caps(None));
     print_caps(&caps, "      ");
 }
@@ -145,10 +145,7 @@ fn tutorial_main() {
                     let new_state = state_changed.current();
                     let old_state = state_changed.old();
 
-                    println!(
-                        "Pipeline state changed from {:?} to {:?}",
-                        old_state, new_state
-                    );
+                    println!("Pipeline state changed from {old_state:?} to {new_state:?}");
                     print_pad_capabilities(&sink, "sink");
                 }
             }

@@ -109,7 +109,7 @@ fn example_main() {
                 println!("\nReceived toc: {:?} - updated: {}", toc.scope(), updated);
                 // Get a list of tags that are ToC specific.
                 if let Some(tags) = toc.tags() {
-                    println!("- tags: {}", tags);
+                    println!("- tags: {tags}");
                 }
                 // ToCs do not have a fixed structure. Depending on the format that
                 // they were parsed from, they might have different tree-like structures,
@@ -124,11 +124,11 @@ fn example_main() {
                     println!("\t{:?} - {}", toc_entry.entry_type(), toc_entry.uid());
                     // Every ToC entry can have a set of timestamps (start, stop).
                     if let Some((start, stop)) = toc_entry.start_stop_times() {
-                        println!("\t- start: {}, stop: {}", start, stop);
+                        println!("\t- start: {start}, stop: {stop}");
                     }
                     // Every ToC entry can have tags to it.
                     if let Some(tags) = toc_entry.tags() {
-                        println!("\t- tags: {}", tags);
+                        println!("\t- tags: {tags}");
                     }
                     // Every ToC entry can have a set of child entries.
                     // With this structure, you can create trees of arbitrary depth.
@@ -139,10 +139,10 @@ fn example_main() {
                             toc_sub_entry.uid()
                         );
                         if let Some((start, stop)) = toc_sub_entry.start_stop_times() {
-                            println!("\t\t- start: {}, stop: {}", start, stop);
+                            println!("\t\t- start: {start}, stop: {stop}");
                         }
                         if let Some(tags) = toc_sub_entry.tags() {
-                            println!("\t\t- tags: {}", tags);
+                            println!("\t\t- tags: {tags}");
                         }
                     }
                 }

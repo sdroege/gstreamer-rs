@@ -619,7 +619,7 @@ impl fmt::Display for Format {
             Self::Time => f.write_str("time"),
             Self::Buffers => f.write_str("buffers"),
             Self::Percent => f.write_str("%"),
-            Self::__Unknown(format) => write!(f, "(format: {})", format),
+            Self::__Unknown(format) => write!(f, "(format: {format})"),
         }
     }
 }

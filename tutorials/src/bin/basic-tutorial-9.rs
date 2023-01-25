@@ -57,7 +57,7 @@ fn print_stream_info(info: &DiscovererStreamInfo, depth: usize) {
                 }
             }
 
-            println!("{}", tags_str);
+            println!("{tags_str}");
         }
     };
 }
@@ -82,11 +82,11 @@ fn on_discovered(
 ) {
     let uri = discoverer_info.uri();
     match discoverer_info.result() {
-        DiscovererResult::Ok => println!("Discovered {}", uri),
-        DiscovererResult::UriInvalid => println!("Invalid uri {}", uri),
+        DiscovererResult::Ok => println!("Discovered {uri}"),
+        DiscovererResult::UriInvalid => println!("Invalid uri {uri}"),
         DiscovererResult::Error => {
             if let Some(msg) = error {
-                println!("{}", msg);
+                println!("{msg}");
             } else {
                 println!("Unknown error")
             }
@@ -95,7 +95,7 @@ fn on_discovered(
         DiscovererResult::Busy => println!("Busy"),
         DiscovererResult::MissingPlugins => {
             if let Some(s) = discoverer_info.misc() {
-                println!("{}", s);
+                println!("{s}");
             }
         }
         _ => println!("Unknown result"),
@@ -110,10 +110,10 @@ fn on_discovered(
     if let Some(tags) = discoverer_info.tags() {
         println!("Tags:");
         for (tag, values) in tags.iter_generic() {
-            print!("  {}: ", tag);
+            print!("  {tag}: ");
             values.for_each(|v| {
                 if let Some(s) = send_value_as_str(v) {
-                    println!("{}", s)
+                    println!("{s}")
                 }
             })
         }
@@ -145,7 +145,7 @@ fn run_discoverer() -> Result<(), Error> {
         "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm"
     };
 
-    println!("Discovering {}", uri);
+    println!("Discovering {uri}");
 
     let loop_ = glib::MainLoop::new(None, false);
     let timeout = 5 * gst::ClockTime::SECOND;
@@ -169,7 +169,7 @@ fn run_discoverer() -> Result<(), Error> {
 fn tutorial_main() {
     match run_discoverer() {
         Ok(_) => {}
-        Err(err) => eprintln!("Failed to run discovery: {}", err),
+        Err(err) => eprintln!("Failed to run discovery: {err}"),
     }
 }
 

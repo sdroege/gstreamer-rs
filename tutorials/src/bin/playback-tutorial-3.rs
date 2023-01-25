@@ -184,6 +184,6 @@ fn main() {
     // (but not necessary in normal Cocoa applications where this is set up automatically)
     match tutorials_common::run(tutorial_main) {
         Ok(_) => {}
-        Err(err) => eprintln!("Failed: {}", err),
+        Err(err) => eprintln!("Failed: {err}"),
     };
 }

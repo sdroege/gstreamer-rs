@@ -782,6 +782,6 @@ mod tests {
         init();
 
         let sdp = SDPMedia::new();
-        assert!(!format!("{:?}", sdp).is_empty());
+        assert!(!format!("{sdp:?}").is_empty());
     }
 }

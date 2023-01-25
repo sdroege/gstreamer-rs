@@ -33,7 +33,7 @@ fn example_main() {
                 if let Some(gst::ParseError::NoSuchElement) = err.kind::<gst::ParseError>() {
                     println!("Missing element(s): {:?}", context.missing_elements());
                 } else {
-                    println!("Failed to parse pipeline: {}", err);
+                    println!("Failed to parse pipeline: {err}");
                 }
 
                 process::exit(-1)

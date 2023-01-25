@@ -11,9 +11,9 @@ pub trait VideoFrameGLExt {
         info: &gst_video::VideoInfo,
     ) -> Result<gst_video::VideoFrame<Readable>, gst::Buffer>;
 
-    fn from_buffer_ref_readable_gl<'a, 'b>(
+    fn from_buffer_ref_readable_gl<'a>(
         buffer: &'a gst::BufferRef,
-        info: &'b gst_video::VideoInfo,
+        info: &gst_video::VideoInfo,
     ) -> Result<gst_video::VideoFrameRef<&'a gst::BufferRef>, glib::error::BoolError>;
 
     #[doc(alias = "get_texture_id")]
@@ -29,9 +29,9 @@ impl VideoFrameGLExt for gst_video::VideoFrame<Readable> {
         gst_video::VideoFrameRef::<&gst::BufferRef>::from_buffer_readable_gl(buffer, info)
     }
 
-    fn from_buffer_ref_readable_gl<'a, 'b>(
+    fn from_buffer_ref_readable_gl<'a>(
         buffer: &'a gst::BufferRef,
-        info: &'b gst_video::VideoInfo,
+        info: &gst_video::VideoInfo,
     ) -> Result<gst_video::VideoFrameRef<&'a gst::BufferRef>, glib::error::BoolError> {
         skip_assert_initialized!();
         gst_video::VideoFrameRef::<&gst::BufferRef>::from_buffer_ref_readable_gl(buffer, info)
@@ -87,9 +87,9 @@ impl<'a> VideoFrameGLExt for gst_video::VideoFrameRef<&'a gst::BufferRef> {
         }
     }
 
-    fn from_buffer_ref_readable_gl<'b, 'c>(
+    fn from_buffer_ref_readable_gl<'b>(
         buffer: &'b gst::BufferRef,
-        info: &'c gst_video::VideoInfo,
+        info: &gst_video::VideoInfo,
     ) -> Result<gst_video::VideoFrameRef<&'b gst::BufferRef>, glib::error::BoolError> {
         skip_assert_initialized!();
 

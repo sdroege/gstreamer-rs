@@ -42,7 +42,7 @@ impl CustomData {
 fn main() {
     // Initialize GStreamer
     if let Err(err) = gst::init() {
-        eprintln!("Failed to initialize Gst: {}", err);
+        eprintln!("Failed to initialize Gst: {err}");
         return;
     }
 

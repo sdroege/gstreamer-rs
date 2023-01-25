@@ -29,7 +29,7 @@ fn tutorial_main() -> Result<(), Error> {
     for feature in list {
         let factory = feature.downcast::<gst::ElementFactory>().unwrap();
         let name = factory.longname();
-        println!("  {}", name);
+        println!("  {name}");
 
         if selected_factory.is_none() && name.starts_with("GOOM") {
             selected_factory = Some(factory);
@@ -41,7 +41,7 @@ fn tutorial_main() -> Result<(), Error> {
 
     // We have now selected a factory for the visualization element
     let name = vis_factory.longname();
-    println!("Selected {}", name);
+    println!("Selected {name}");
     let vis_plugin = vis_factory.create().build().unwrap();
 
     // Build the pipeline
@@ -82,6 +82,6 @@ fn main() {
     // (but not necessary in normal Cocoa applications where this is set up automatically)
     match tutorials_common::run(tutorial_main) {
         Ok(_) => {}
-        Err(err) => eprintln!("Failed: {}", err),
+        Err(err) => eprintln!("Failed: {err}"),
     };
 }

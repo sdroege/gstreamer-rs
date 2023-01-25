@@ -108,12 +108,12 @@ impl AudioFormatInfo {
         let unpack_width = unpack_format.width() as usize;
 
         if unpack_width == 0 || self.0.unpack_func.is_none() {
-            panic!("No unpack format for {:?}", self);
+            panic!("No unpack format for {self:?}");
         }
 
         let self_width = self.width() as usize;
         if self_width == 0 {
-            panic!("No width for {:?}", self);
+            panic!("No width for {self:?}");
         }
 
         if src.len() % (self_width / 8) != 0 {
@@ -142,12 +142,12 @@ impl AudioFormatInfo {
         let unpack_width = unpack_format.width() as usize;
 
         if unpack_width == 0 || self.0.pack_func.is_none() {
-            panic!("No unpack format for {:?}", self);
+            panic!("No unpack format for {self:?}");
         }
 
         let self_width = self.width() as usize;
         if self_width == 0 {
-            panic!("No width for {:?}", self);
+            panic!("No width for {self:?}");
         }
 
         if src.len() % (unpack_width / 8) != 0 {

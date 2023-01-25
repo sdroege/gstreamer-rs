@@ -194,7 +194,7 @@ impl VideoFormatInfo {
         let unpack_format = Self::from_format(self.unpack_format());
 
         if unpack_format.pixel_stride()[0] == 0 || self.0.unpack_func.is_none() {
-            panic!("No unpack format for {:?}", self);
+            panic!("No unpack format for {self:?}");
         }
 
         if src.len() != self.n_planes() as usize {
@@ -222,7 +222,7 @@ impl VideoFormatInfo {
                 < self.scale_width(plane as u8, width as u32) as i32
                     * self.pixel_stride()[plane as usize]
             {
-                panic!("Too small source stride for plane {}", plane);
+                panic!("Too small source stride for plane {plane}");
             }
 
             let plane_size = y * stride[plane as usize]
@@ -230,7 +230,7 @@ impl VideoFormatInfo {
                     * self.pixel_stride()[plane as usize];
 
             if src[plane as usize].len() < plane_size as usize {
-                panic!("Too small source plane size for plane {}", plane);
+                panic!("Too small source plane size for plane {plane}");
             }
         }
 
@@ -270,7 +270,7 @@ impl VideoFormatInfo {
         let unpack_format = Self::from_format(self.unpack_format());
 
         if unpack_format.pixel_stride()[0] == 0 || self.0.unpack_func.is_none() {
-            panic!("No unpack format for {:?}", self);
+            panic!("No unpack format for {self:?}");
         }
 
         if dest.len() != self.n_planes() as usize {
@@ -298,7 +298,7 @@ impl VideoFormatInfo {
                 < self.scale_width(plane as u8, width as u32) as i32
                     * self.pixel_stride()[plane as usize]
             {
-                panic!("Too small destination stride for plane {}", plane);
+                panic!("Too small destination stride for plane {plane}");
             }
 
             let plane_size = y * dest_stride[plane as usize]
@@ -306,7 +306,7 @@ impl VideoFormatInfo {
                     * self.pixel_stride()[plane as usize];
 
             if dest[plane as usize].len() < plane_size as usize {
-                panic!("Too small destination plane size for plane {}", plane);
+                panic!("Too small destination plane size for plane {plane}");
             }
         }
 

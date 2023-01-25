@@ -42,7 +42,7 @@ use gst::{element_error, element_warning, prelude::*};
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
+#[display(fmt = "Received error from {src}: {error} (debug: {debug:?})")]
 struct ErrorMessage {
     src: glib::GString,
     error: glib::Error,
@@ -264,6 +264,6 @@ fn main() {
     // (but not necessary in normal Cocoa applications where this is set up automatically)
     match examples_common::run(example_main) {
         Ok(r) => r,
-        Err(e) => eprintln!("Error! {}", e),
+        Err(e) => eprintln!("Error! {e}"),
     }
 }

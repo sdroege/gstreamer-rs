@@ -1243,7 +1243,7 @@ mod tests {
         crate::init().unwrap();
 
         let caps = Caps::builder("foo/bar").build();
-        format!("{}", caps);
+        format!("{caps}");
     }
 
     #[test]
@@ -1344,15 +1344,15 @@ mod tests {
         crate::init().unwrap();
 
         let caps = Caps::new_any();
-        assert_eq!(format!("{:?}", caps), "Caps(\"ANY\")");
+        assert_eq!(format!("{caps:?}"), "Caps(\"ANY\")");
 
         let caps = Caps::new_empty();
-        assert_eq!(format!("{:?}", caps), "Caps(\"EMPTY\")");
+        assert_eq!(format!("{caps:?}"), "Caps(\"EMPTY\")");
 
         let caps = Caps::builder_full_with_any_features()
             .structure(Structure::builder("audio/x-raw").build())
             .build();
-        assert_eq!(format!("{:?}", caps), "Caps(audio/x-raw(ANY))");
+        assert_eq!(format!("{caps:?}"), "Caps(audio/x-raw(ANY))");
 
         let caps = Caps::builder_full_with_features(CapsFeatures::new(["foo:bla"]))
             .structure(
@@ -1370,7 +1370,7 @@ mod tests {
             )
             .build();
 
-        assert_eq!(format!("{:?}", caps), "Caps(audio/x-raw(foo:bla) { struct: Structure(nested { badger: (gboolean) TRUE }) }, video/x-raw(foo:bla) { width: (guint) 800 })");
+        assert_eq!(format!("{caps:?}"), "Caps(audio/x-raw(foo:bla) { struct: Structure(nested { badger: (gboolean) TRUE }) }, video/x-raw(foo:bla) { width: (guint) 800 })");
 
         let caps = Caps::builder_full()
             .structure(
@@ -1381,6 +1381,6 @@ mod tests {
             )
             .build();
 
-        assert_eq!(format!("{:?}", caps), "Caps(video/x-raw(memory:SystemMemory) { array: Array([(gchararray) \"a\", (gchararray) \"b\", (gchararray) \"c\"]), list: List([(gchararray) \"d\", (gchararray) \"e\", (gchararray) \"f\"]) })");
+        assert_eq!(format!("{caps:?}"), "Caps(video/x-raw(memory:SystemMemory) { array: Array([(gchararray) \"a\", (gchararray) \"b\", (gchararray) \"c\"]), list: List([(gchararray) \"d\", (gchararray) \"e\", (gchararray) \"f\"]) })");
     }
 }

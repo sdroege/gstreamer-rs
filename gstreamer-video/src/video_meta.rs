@@ -383,7 +383,7 @@ impl VideoRegionOfInterestMeta {
 
     #[doc(alias = "get_param")]
     #[inline]
-    pub fn param<'b>(&self, name: &'b str) -> Option<&gst::StructureRef> {
+    pub fn param<'b>(&'b self, name: &str) -> Option<&'b gst::StructureRef> {
         self.params().find(|s| s.name() == name)
     }
 

@@ -1097,10 +1097,7 @@ unsafe fn update_probe_info(
             {
                 // Buffer or Event consumed by probe
             }
-            other => panic!(
-                "Bad data for {:?} pad probe returning Handled: {:?}",
-                data_type, other
-            ),
+            other => panic!("Bad data for {data_type:?} pad probe returning Handled: {other:?}"),
         }
     } else {
         match probe_info.data {

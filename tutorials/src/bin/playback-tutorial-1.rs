@@ -12,16 +12,13 @@ fn analyze_streams(playbin: &gst::Element) {
     let n_video = playbin.property::<i32>("n-video");
     let n_audio = playbin.property::<i32>("n-audio");
     let n_text = playbin.property::<i32>("n-text");
-    println!(
-        "{} video stream(s), {} audio stream(s), {} text stream(s)",
-        n_video, n_audio, n_text
-    );
+    println!("{n_video} video stream(s), {n_audio} audio stream(s), {n_text} text stream(s)");
 
     for i in 0..n_video {
         let tags = playbin.emit_by_name::<Option<gst::TagList>>("get-video-tags", &[&i]);
 
         if let Some(tags) = tags {
-            println!("video stream {}:", i);
+            println!("video stream {i}:");
             if let Some(codec) = tags.get::<gst::tags::VideoCodec>() {
                 println!("    codec: {}", codec.get());
             }
@@ -32,7 +29,7 @@ fn analyze_streams(playbin: &gst::Element) {
         let tags = playbin.emit_by_name::<Option<gst::TagList>>("get-audio-tags", &[&i]);
 
         if let Some(tags) = tags {
-            println!("audio stream {}:", i);
+            println!("audio stream {i}:");
             if let Some(codec) = tags.get::<gst::tags::AudioCodec>() {
                 println!("    codec: {}", codec.get());
             }
@@ -49,7 +46,7 @@ fn analyze_streams(playbin: &gst::Element) {
         let tags = playbin.emit_by_name::<Option<gst::TagList>>("get-text-tags", &[&i]);
 
         if let Some(tags) = tags {
-            println!("subtitle stream {}:", i);
+            println!("subtitle stream {i}:");
             if let Some(codec) = tags.get::<gst::tags::LanguageCode>() {
                 println!("    language: {}", codec.get());
             }
@@ -60,8 +57,7 @@ fn analyze_streams(playbin: &gst::Element) {
     let current_audio = playbin.property::<i32>("current-audio");
     let current_text = playbin.property::<i32>("current-text");
     println!(
-        "Currently playing video stream {}, audio stream {}, text stream {}",
-        current_video, current_audio, current_text
+        "Currently playing video stream {current_video}, audio stream {current_audio}, text stream {current_text}"
     );
     println!("Type any number and hit ENTER to select a different audio stream");
 }
@@ -79,7 +75,7 @@ fn handle_keyboard(playbin: &gst::Element, main_loop: &glib::MainLoop) {
                         let n_audio = playbin.property::<i32>("n-audio");
 
                         if index < n_audio {
-                            println!("Setting current audio stream to {}", index);
+                            println!("Setting current audio stream to {index}");
                             playbin.set_property("current-audio", index);
                         } else {
                             eprintln!("Index out of bounds");
@@ -189,6 +185,6 @@ fn main() {
     // (but not necessary in normal Cocoa applications where this is set up automatically)
     match tutorials_common::run(tutorial_main) {
         Ok(_) => {}
-        Err(err) => eprintln!("Failed: {}", err),
+        Err(err) => eprintln!("Failed: {err}"),
     };
 }

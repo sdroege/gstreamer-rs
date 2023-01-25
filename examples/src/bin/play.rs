@@ -51,7 +51,7 @@ fn example_main() {
 
     match main_loop(uri) {
         Ok(r) => r,
-        Err(e) => eprintln!("Error! {}", e),
+        Err(e) => eprintln!("Error! {e}"),
     }
 }
 

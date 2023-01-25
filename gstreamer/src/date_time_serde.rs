@@ -111,8 +111,7 @@ impl Serialize for DateTime {
             DateTimeVariants::Y(self.year())
         } else {
             return Err(ser::Error::custom(format!(
-                "no parts could be found in `DateTime` {}",
-                self,
+                "no parts could be found in `DateTime` {self}",
             )));
         };
 

@@ -1121,7 +1121,7 @@ impl fmt::Display for LoggedObject {
                         }
                     };
 
-                    write!(f, "{}:{}", parent_name, name)
+                    write!(f, "{parent_name}:{name}")
                 } else if glib::gobject_ffi::g_type_is_a(type_, ffi::gst_object_get_type())
                     != glib::ffi::GFALSE
                 {
@@ -1133,7 +1133,7 @@ impl fmt::Display for LoggedObject {
                             .to_str()
                             .unwrap_or("<invalid name>")
                     };
-                    write!(f, "{}", name)
+                    write!(f, "{name}")
                 } else {
                     let type_name = CStr::from_ptr(glib::gobject_ffi::g_type_name(type_));
                     write!(
@@ -1144,7 +1144,7 @@ impl fmt::Display for LoggedObject {
                     )
                 }
             } else {
-                write!(f, "{:?}", ptr)
+                write!(f, "{ptr:?}")
             }
         }
     }

@@ -583,7 +583,7 @@ mod tests {
 
     impl Consumer {
         fn new(id: &str) -> Self {
-            let pipeline = gst::parse_launch(&format!("appsrc name={} ! appsink name=sink", id))
+            let pipeline = gst::parse_launch(&format!("appsrc name={id} ! appsink name=sink"))
                 .unwrap()
                 .downcast::<gst::Pipeline>()
                 .unwrap();
@@ -676,7 +676,7 @@ mod tests {
         assert!(producer.last_sample().is_none());
 
         for i in 0..10 {
-            let caps = gst::Caps::from_str(&format!("test,n={}", i)).unwrap();
+            let caps = gst::Caps::from_str(&format!("test,n={i}")).unwrap();
             producer_src.set_caps(Some(&caps));
             producer_src.push_buffer(gst::Buffer::new()).unwrap();
 

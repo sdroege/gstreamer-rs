@@ -82,8 +82,7 @@ impl<'a> Serialize for TagValuesSer<'a> {
                         ser_opt_tag!(value, seq, Sample)
                     } else {
                         Err(ser::Error::custom(format!(
-                            "unimplemented `Tag` serialization for type {}",
-                            type_id,
+                            "unimplemented `Tag` serialization for type {type_id}",
                         )))
                     }
                 }
@@ -240,7 +239,7 @@ impl<'de, 'a> Visitor<'de> for TagValuesTupleVisitor<'a> {
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<(), A::Error> {
         let name = seq
             .next_element::<String>()
-            .map_err(|err| de::Error::custom(format!("Error reading Tag name. {:?}", err)))?
+            .map_err(|err| de::Error::custom(format!("Error reading Tag name. {err:?}")))?
             .ok_or_else(|| de::Error::custom("Expected a name for the `Tag` name"))?;
         seq.next_element_seed(TagValues(name.as_str(), self.0))?
             .ok_or_else(|| de::Error::custom("Expected a seq of values for the `Tag`"))

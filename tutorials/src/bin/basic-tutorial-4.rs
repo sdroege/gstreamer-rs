@@ -134,10 +134,7 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::Message) {
                 let new_state = state_changed.current();
                 let old_state = state_changed.old();
 
-                println!(
-                    "Pipeline state changed from {:?} to {:?}",
-                    old_state, new_state
-                );
+                println!("Pipeline state changed from {old_state:?} to {new_state:?}");
 
                 custom_data.playing = new_state == gst::State::Playing;
                 if custom_data.playing {
@@ -146,7 +143,7 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::Message) {
                         let (seekable, start, end) = seeking.result();
                         custom_data.seek_enabled = seekable;
                         if seekable {
-                            println!("Seeking is ENABLED from {} to {}", start, end)
+                            println!("Seeking is ENABLED from {start} to {end}")
                         } else {
                             println!("Seeking is DISABLED for this stream.")
                         }

@@ -1284,6 +1284,6 @@ mod tests {
         init();
 
         let sdp = SDPMessage::new();
-        assert!(!format!("{:?}", sdp).is_empty());
+        assert!(!format!("{sdp:?}").is_empty());
     }
 }

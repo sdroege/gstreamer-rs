@@ -141,7 +141,7 @@ impl<T> AudioCapsBuilder<T> {
                     gst::Bitmask::new(crate::AudioChannelPosition::fallback_mask(channels as u32)),
                 ),
             },
-            Err(e) => panic!("{:?}", e),
+            Err(e) => panic!("{e:?}"),
         }
     }
 

@@ -12,7 +12,7 @@ use gst::element_error;
 use gst_gl::prelude::*;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
+#[display(fmt = "Received error from {src}: {error} (debug: {debug:?})")]
 struct ErrorMessage {
     src: glib::GString,
     error: glib::Error,
@@ -189,7 +189,7 @@ fn load(gl_context: &glutin::WindowedContext<glutin::PossiblyCurrent>) -> Gl {
         String::from_utf8(data).unwrap()
     };
 
-    println!("OpenGL version {}", version);
+    println!("OpenGL version {version}");
 
     let (program, attr_position, attr_texture, vao, vertex_buffer, vbo_indices) = unsafe {
         let vs = gl.CreateShader(gl::VERTEX_SHADER);
@@ -390,7 +390,7 @@ impl App {
                     )
                 }
                 #[allow(unreachable_patterns)]
-                handler => panic!("Unsupported platform: {:?}.", handler),
+                handler => panic!("Unsupported platform: {handler:?}."),
             };
 
             shared_context =
@@ -438,7 +438,7 @@ impl App {
                 }
 
                 if let Err(e) = event_proxy.lock().unwrap().send_event(Message::BusEvent) {
-                    eprintln!("Failed to send BusEvent to event proxy: {}", e)
+                    eprintln!("Failed to send BusEvent to event proxy: {e}")
                 }
 
                 gst::BusSyncReply::Pass

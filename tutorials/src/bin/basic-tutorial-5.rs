@@ -33,15 +33,15 @@ mod tutorial5 {
 
     // Extract tags from streams of @stype and add the info in the UI.
     fn add_streams_info(playbin: &gst::Element, textbuf: &gtk::TextBuffer, stype: &str) {
-        let propname: &str = &format!("n-{}", stype);
-        let signame: &str = &format!("get-{}-tags", stype);
+        let propname: &str = &format!("n-{stype}");
+        let signame: &str = &format!("get-{stype}-tags");
 
         let x = playbin.property::<i32>(propname);
         for i in 0..x {
             let tags = playbin.emit_by_name::<Option<gst::TagList>>(signame, &[&i]);
 
             if let Some(tags) = tags {
-                textbuf.insert_at_cursor(&format!("{} stream {}:\n ", stype, i));
+                textbuf.insert_at_cursor(&format!("{stype} stream {i}:\n "));
 
                 if let Some(codec) = tags.get::<gst::tags::VideoCodec>() {
                     textbuf.insert_at_cursor(&format!("    codec: {} \n", codec.get()));
@@ -123,7 +123,7 @@ mod tutorial5 {
                 )
                 .is_err()
             {
-                eprintln!("Seeking to {} failed", value);
+                eprintln!("Seeking to {value} failed");
             }
         });
 
@@ -187,7 +187,7 @@ mod tutorial5 {
                         video_overlay.set_window_handle(xid as usize);
                     }
                 } else {
-                    println!("Add support for display type '{}'", display_type_name);
+                    println!("Add support for display type '{display_type_name}'");
                     process::exit(-1);
                 }
             }
@@ -285,13 +285,13 @@ mod tutorial5 {
 
         // Initialize GTK
         if let Err(err) = gtk::init() {
-            eprintln!("Failed to initialize GTK: {}", err);
+            eprintln!("Failed to initialize GTK: {err}");
             return;
         }
 
         // Initialize GStreamer
         if let Err(err) = gst::init() {
-            eprintln!("Failed to initialize Gst: {}", err);
+            eprintln!("Failed to initialize Gst: {err}");
             return;
         }
 

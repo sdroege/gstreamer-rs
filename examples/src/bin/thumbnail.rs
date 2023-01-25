@@ -15,7 +15,7 @@ use gst::{element_error, prelude::*};
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
+#[display(fmt = "Received error from {src}: {error} (debug: {debug:?})")]
 struct ErrorMessage {
     src: glib::GString,
     error: glib::Error,
@@ -27,8 +27,7 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
 
     // Create our pipeline from a pipeline description string.
     let pipeline = gst::parse_launch(&format!(
-        "uridecodebin uri={} ! videoconvert ! appsink name=sink",
-        uri
+        "uridecodebin uri={uri} ! videoconvert ! appsink name=sink"
     ))?
     .downcast::<gst::Pipeline>()
     .expect("Expected a gst::Pipeline");
@@ -174,7 +173,7 @@ fn main_loop(pipeline: gst::Pipeline, position: u64) -> Result<(), Error> {
             MessageView::AsyncDone(..) => {
                 if !seeked {
                     // AsyncDone means that the pipeline has started now and that we can seek
-                    println!("Got AsyncDone message, seeking to {}s", position);
+                    println!("Got AsyncDone message, seeking to {position}s");
 
                     if pipeline
                         .seek_simple(gst::SeekFlags::FLUSH, position * gst::ClockTime::SECOND)
@@ -240,7 +239,7 @@ fn example_main() {
 
     match create_pipeline(uri, out_path).and_then(|pipeline| main_loop(pipeline, position)) {
         Ok(r) => r,
-        Err(e) => eprintln!("Error! {}", e),
+        Err(e) => eprintln!("Error! {e}"),
     }
 }
 

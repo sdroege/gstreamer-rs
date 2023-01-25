@@ -65,7 +65,7 @@ fn example_main() {
             .get::<i32>()
             .expect("playbin \"audio-tags-changed\" signal values[1]");
 
-        println!("audio tags of audio stream {} changed:", idx);
+        println!("audio tags of audio stream {idx} changed:");
 
         // HELP: is this correct?
         // We were only notified about the change of metadata. If we want to do

@@ -53,7 +53,7 @@ fn set_window_handle(video_overlay: &gst_video::VideoOverlay, gdk_window: &gdk::
             video_overlay.set_window_handle(xid as usize);
         }
     } else {
-        println!("Add support for display type '{}'", display_type_name);
+        println!("Add support for display type '{display_type_name}'");
         process::exit(-1);
     }
 }

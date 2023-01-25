@@ -1356,14 +1356,14 @@ mod tests {
         crate::init().unwrap();
 
         let mut tags = TagList::new();
-        assert_eq!(format!("{:?}", tags), "TagList");
+        assert_eq!(format!("{tags:?}"), "TagList");
         {
             let tags = tags.get_mut().unwrap();
             tags.add::<Title>(&"some title", TagMergeMode::Append);
             tags.add::<Duration>(&(ClockTime::SECOND * 120), TagMergeMode::Append);
         }
         assert_eq!(
-            format!("{:?}", tags),
+            format!("{tags:?}"),
             "TagList { title: (gchararray) \"some title\", duration: (guint64) 120000000000 }"
         );
     }

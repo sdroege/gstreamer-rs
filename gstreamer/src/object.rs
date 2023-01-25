@@ -39,7 +39,7 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
         f: F,
     ) -> SignalHandlerId {
         let signal_name = if let Some(name) = name {
-            format!("deep-notify::{}", name)
+            format!("deep-notify::{name}")
         } else {
             "deep-notify".into()
         };
@@ -54,14 +54,12 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
             let obj: O = unsafe {
                 values[0]
                     .get::<crate::Object>()
-                    .unwrap_or_else(|err| {
-                        panic!("Object signal \"deep-notify\": values[0]: {}", err)
-                    })
+                    .unwrap_or_else(|err| panic!("Object signal \"deep-notify\": values[0]: {err}"))
                     .unsafe_cast()
             };
             let prop_obj: crate::Object = values[1]
                 .get()
-                .unwrap_or_else(|err| panic!("Object signal \"deep-notify\": values[1]: {}", err));
+                .unwrap_or_else(|err| panic!("Object signal \"deep-notify\": values[1]: {err}"));
 
             let pspec = unsafe {
                 let pspec = glib::gobject_ffi::g_value_get_param(values[2].to_glib_none().0);

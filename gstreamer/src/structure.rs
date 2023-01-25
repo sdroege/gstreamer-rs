@@ -1260,6 +1260,6 @@ mod tests {
             .field("f6", crate::List::new(["d", "e", "f"]))
             .build();
 
-        assert_eq!(format!("{:?}", s), "Structure(test { f1: (gchararray) \"abc\", f2: (gchararray) \"bcd\", f3: (gint) 123, f4: Structure(nested { badger: (gboolean) TRUE }), f5: Array([(gchararray) \"a\", (gchararray) \"b\", (gchararray) \"c\"]), f6: List([(gchararray) \"d\", (gchararray) \"e\", (gchararray) \"f\"]) })");
+        assert_eq!(format!("{s:?}"), "Structure(test { f1: (gchararray) \"abc\", f2: (gchararray) \"bcd\", f3: (gint) 123, f4: Structure(nested { badger: (gboolean) TRUE }), f5: Array([(gchararray) \"a\", (gchararray) \"b\", (gchararray) \"c\"]), f6: List([(gchararray) \"d\", (gchararray) \"e\", (gchararray) \"f\"]) })");
     }
 }

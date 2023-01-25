@@ -117,10 +117,7 @@ fn example_main() {
                 Some(pipeline) => pipeline,
                 None => return glib::Continue(false),
             };
-            println!(
-                "Sending custom event to the pipeline with send_eos={}",
-                send_eos
-            );
+            println!("Sending custom event to the pipeline with send_eos={send_eos}");
             let ev = ExampleCustomEvent::new(*send_eos);
             if !pipeline.send_event(ev) {
                 println!("Warning: Failed to send custom event");

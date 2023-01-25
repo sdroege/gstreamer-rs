@@ -200,13 +200,13 @@ fn example_main() {
                     return;
                 }
 
-                println!("Producing buffer {}", i);
+                println!("Producing buffer {i}");
 
                 // Add a custom meta with a label to this buffer.
                 let mut buffer = gst::Buffer::new();
                 {
                     let buffer = buffer.get_mut().unwrap();
-                    custom_meta::CustomMeta::add(buffer, format!("This is buffer {}", i));
+                    custom_meta::CustomMeta::add(buffer, format!("This is buffer {i}"));
                 }
 
                 i += 1;

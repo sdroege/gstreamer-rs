@@ -18,7 +18,7 @@ use gst_pbutils::{prelude::*, DiscovererInfo, DiscovererStreamInfo};
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Discoverer error {}", _0)]
+#[display(fmt = "Discoverer error {_0}")]
 struct DiscovererError(#[error(not(source))] &'static str);
 
 fn print_tags(info: &DiscovererInfo) {
@@ -27,7 +27,7 @@ fn print_tags(info: &DiscovererInfo) {
     let tags = info.tags();
     match tags {
         Some(taglist) => {
-            println!("  {}", taglist); // FIXME use an iterator
+            println!("  {taglist}"); // FIXME use an iterator
         }
         None => {
             println!("  no tags");
@@ -42,7 +42,7 @@ fn print_stream_info(stream: &DiscovererStreamInfo) {
         Some(caps) => caps.to_string(),
         None => String::from("--"),
     };
-    println!("  Format: {}", caps_str);
+    println!("  Format: {caps_str}");
 }
 
 fn print_discoverer_info(info: &DiscovererInfo) -> Result<(), Error> {
@@ -85,7 +85,7 @@ fn run_discoverer() -> Result<(), Error> {
 fn example_main() {
     match run_discoverer() {
         Ok(_) => (),
-        Err(e) => eprintln!("Error: {}", e),
+        Err(e) => eprintln!("Error: {e}"),
     }
 }
 

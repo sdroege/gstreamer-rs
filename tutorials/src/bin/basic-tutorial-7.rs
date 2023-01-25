@@ -6,7 +6,7 @@ mod tutorials_common;
 fn tutorial_main() {
     // Initialize GStreamer
     if let Err(err) = gst::init() {
-        eprintln!("Failed to initialize Gst: {}", err);
+        eprintln!("Failed to initialize Gst: {err}");
         return;
     }
 

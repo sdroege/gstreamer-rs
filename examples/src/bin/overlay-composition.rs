@@ -22,7 +22,7 @@ use pango::prelude::*;
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
+#[display(fmt = "Received error from {src}: {error} (debug: {debug:?})")]
 struct ErrorMessage {
     src: glib::GString,
     error: glib::Error,
@@ -293,7 +293,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
 fn example_main() {
     match create_pipeline().and_then(main_loop) {
         Ok(r) => r,
-        Err(e) => eprintln!("Error! {}", e),
+        Err(e) => eprintln!("Error! {e}"),
     }
 }
 

@@ -20,7 +20,7 @@ mod examples_common;
 struct NoMountPoints;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Usage: {} LAUNCH_LINE", _0)]
+#[display(fmt = "Usage: {_0} LAUNCH_LINE")]
 struct UsageError(#[error(not(source))] String);
 
 fn main_loop() -> Result<(), Error> {
@@ -252,7 +252,7 @@ mod server {
 
             fn client_connected(&self, client: &gst_rtsp_server::RTSPClient) {
                 self.parent_client_connected(client);
-                println!("Client {:?} connected", client);
+                println!("Client {client:?} connected");
             }
         }
     }
@@ -301,7 +301,7 @@ mod client {
             fn closed(&self) {
                 let client = self.obj();
                 self.parent_closed();
-                println!("Client {:?} closed", client);
+                println!("Client {client:?} closed");
             }
         }
     }
@@ -346,7 +346,7 @@ mod mount_points {
         // Implementation of gst_rtsp_server::RTSPClient virtual methods
         impl RTSPMountPointsImpl for MountPoints {
             fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString> {
-                println!("Make path called for {:?} ", url);
+                println!("Make path called for {url:?} ");
                 self.parent_make_path(url)
             }
         }
@@ -372,6 +372,6 @@ fn example_main() -> Result<(), Error> {
 fn main() {
     match examples_common::run(example_main) {
         Ok(r) => r,
-        Err(e) => eprintln!("Error! {}", e),
+        Err(e) => eprintln!("Error! {e}"),
     }
 }

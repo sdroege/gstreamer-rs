@@ -13,7 +13,7 @@ fn tutorial_main() -> Result<(), Error> {
     // Build the pipeline
     let uri =
         "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
-    let pipeline = gst::parse_launch(&format!("playbin uri={}", uri))?;
+    let pipeline = gst::parse_launch(&format!("playbin uri={uri}"))?;
 
     // Start playing
     let res = pipeline.set_state(gst::State::Playing)?;
@@ -52,10 +52,10 @@ fn tutorial_main() -> Result<(), Error> {
                 }
 
                 let percent = buffering.percent();
-                print!("Buffering ({}%)\r", percent);
+                print!("Buffering ({percent}%)\r");
                 match std::io::stdout().flush() {
                     Ok(_) => {}
-                    Err(err) => eprintln!("Failed: {}", err),
+                    Err(err) => eprintln!("Failed: {err}"),
                 };
 
                 // Wait until buffering is complete before start/resume playing
@@ -87,6 +87,6 @@ fn tutorial_main() -> Result<(), Error> {
 fn main() {
     match tutorials_common::run(tutorial_main) {
         Ok(_) => {}
-        Err(err) => eprintln!("Failed: {}", err),
+        Err(err) => eprintln!("Failed: {err}"),
     }
 }

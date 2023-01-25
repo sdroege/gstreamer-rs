@@ -192,7 +192,7 @@ mod tests {
             7,
         );
         assert_eq!(
-            format!("{}", e),
+            format!("{e}"),
             "Error Some(\"message\") (Some(\"debug\")) at filename:7"
         );
     }
@@ -202,9 +202,6 @@ mod tests {
         crate::init().unwrap();
 
         let e: LoggableError = glib::BoolError::new("msg", "filename", "function", 7).into();
-        assert_eq!(
-            format!("{}", e),
-            "Error \"GST_RUST\": \"msg\" at filename:7"
-        );
+        assert_eq!(format!("{e}"), "Error \"GST_RUST\": \"msg\" at filename:7");
     }
 }

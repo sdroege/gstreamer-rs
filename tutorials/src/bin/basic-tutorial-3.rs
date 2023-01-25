@@ -62,18 +62,15 @@ fn tutorial_main() {
 
         let is_audio = new_pad_type.starts_with("audio/x-raw");
         if !is_audio {
-            println!(
-                "It has type {} which is not raw audio. Ignoring.",
-                new_pad_type
-            );
+            println!("It has type {new_pad_type} which is not raw audio. Ignoring.");
             return;
         }
 
         let res = src_pad.link(&sink_pad);
         if res.is_err() {
-            println!("Type is {} but link failed.", new_pad_type);
+            println!("Type is {new_pad_type} but link failed.");
         } else {
-            println!("Link succeeded (type {}).", new_pad_type);
+            println!("Link succeeded (type {new_pad_type}).");
         }
     });
 

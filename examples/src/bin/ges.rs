@@ -63,7 +63,7 @@ fn configure_pipeline(pipeline: &ges::Pipeline, output_name: &str) {
             .build();
 
     // Apply the EncodingProfile to the pipeline, and set it to render mode
-    let output_uri = format!("{}.webm", output_name);
+    let output_uri = format!("{output_name}.webm");
     pipeline
         .set_render_settings(&output_uri, &container_profile)
         .expect("Failed to set render settings");
@@ -168,7 +168,7 @@ fn example_main() {
 
     match main_loop(input_uri, output) {
         Ok(r) => r,
-        Err(e) => eprintln!("Error! {}", e),
+        Err(e) => eprintln!("Error! {e}"),
     }
 }
 

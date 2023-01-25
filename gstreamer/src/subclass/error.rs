@@ -18,7 +18,7 @@ pub fn post_panic_error_message(
     });
 
     let msg = if let Some(cause) = cause {
-        crate::message::Error::builder(crate::LibraryError::Failed, &format!("Panicked: {}", cause))
+        crate::message::Error::builder(crate::LibraryError::Failed, &format!("Panicked: {cause}"))
             .src(src)
             .build()
     } else {

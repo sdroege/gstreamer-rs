@@ -518,17 +518,17 @@ fn write_clocktime<W: io::Write>(
         let (h, m) = num_integer::div_rem(m, 60);
 
         // Write HH:MM:SS
-        write!(writer, "{}:{:02}:{:02}", h, m, s)?;
+        write!(writer, "{h}:{m:02}:{s:02}")?;
 
         if precision > 0 {
             // Format the nanoseconds into a stack-allocated string
             // The value is zero-padded so always 9 digits long
             let mut buf = [0u8; 9];
-            write!(&mut buf[..], "{:09}", ns).unwrap();
+            write!(&mut buf[..], "{ns:09}").unwrap();
             let buf_str = std::str::from_utf8(&buf[..]).unwrap();
 
             // Write decimal point and a prefix of the nanoseconds for more precision
-            write!(writer, ".{:.p$}", buf_str, p = precision)?;
+            write!(writer, ".{buf_str:.precision$}")?;
         }
     } else {
         // Undefined time
@@ -1152,9 +1152,9 @@ mod tests {
             "12:43:54.908569837"
         );
 
-        assert_eq!(format!("{:.0}", lots), "5124095:34:33");
-        assert_eq!(format!("{:.3}", lots), "5124095:34:33.709");
-        assert_eq!(format!("{}", lots), "5124095:34:33.709551614");
+        assert_eq!(format!("{lots:.0}"), "5124095:34:33");
+        assert_eq!(format!("{lots:.3}"), "5124095:34:33.709");
+        assert_eq!(format!("{lots}"), "5124095:34:33.709551614");
 
         // Precision caps at 9
         assert_eq!(
@@ -1165,7 +1165,7 @@ mod tests {
             format!("{:.10}", DisplayableOptClockTime(some)),
             "12:43:54.908569837"
         );
-        assert_eq!(format!("{:.10}", lots), "5124095:34:33.709551614");
+        assert_eq!(format!("{lots:.10}"), "5124095:34:33.709551614");
 
         // Short width
 
@@ -1189,9 +1189,9 @@ mod tests {
             "12:43:54.908569837"
         );
 
-        assert_eq!(format!("{:4.0}", lots), "5124095:34:33");
-        assert_eq!(format!("{:4.3}", lots), "5124095:34:33.709");
-        assert_eq!(format!("{:4}", lots), "5124095:34:33.709551614");
+        assert_eq!(format!("{lots:4.0}"), "5124095:34:33");
+        assert_eq!(format!("{lots:4.3}"), "5124095:34:33.709");
+        assert_eq!(format!("{lots:4}"), "5124095:34:33.709551614");
 
         // Simple padding
 
@@ -1269,15 +1269,15 @@ mod tests {
             " 12:43:54.908569837 "
         );
 
-        assert_eq!(format!("{:>14.0}", lots), " 5124095:34:33");
-        assert_eq!(format!("{:<14.0}", lots), "5124095:34:33 ");
-        assert_eq!(format!("{:^15.0}", lots), " 5124095:34:33 ");
-        assert_eq!(format!("{:>18.3}", lots), " 5124095:34:33.709");
-        assert_eq!(format!("{:<18.3}", lots), "5124095:34:33.709 ");
-        assert_eq!(format!("{:^19.3}", lots), " 5124095:34:33.709 ");
-        assert_eq!(format!("{:>24}", lots), " 5124095:34:33.709551614");
-        assert_eq!(format!("{:<24}", lots), "5124095:34:33.709551614 ");
-        assert_eq!(format!("{:^25}", lots), " 5124095:34:33.709551614 ");
+        assert_eq!(format!("{lots:>14.0}"), " 5124095:34:33");
+        assert_eq!(format!("{lots:<14.0}"), "5124095:34:33 ");
+        assert_eq!(format!("{lots:^15.0}"), " 5124095:34:33 ");
+        assert_eq!(format!("{lots:>18.3}"), " 5124095:34:33.709");
+        assert_eq!(format!("{lots:<18.3}"), "5124095:34:33.709 ");
+        assert_eq!(format!("{lots:^19.3}"), " 5124095:34:33.709 ");
+        assert_eq!(format!("{lots:>24}"), " 5124095:34:33.709551614");
+        assert_eq!(format!("{lots:<24}"), "5124095:34:33.709551614 ");
+        assert_eq!(format!("{lots:^25}"), " 5124095:34:33.709551614 ");
 
         // Padding with sign or zero-extension
 
@@ -1355,15 +1355,15 @@ mod tests {
             "+0012:43:54.908569837"
         );
 
-        assert_eq!(format!("{:+16.0}", lots), "  +5124095:34:33");
-        assert_eq!(format!("{:016.0}", lots), "0005124095:34:33");
-        assert_eq!(format!("{:+016.0}", lots), "+005124095:34:33");
-        assert_eq!(format!("{:+20.3}", lots), "  +5124095:34:33.709");
-        assert_eq!(format!("{:020.3}", lots), "0005124095:34:33.709");
-        assert_eq!(format!("{:+020.3}", lots), "+005124095:34:33.709");
-        assert_eq!(format!("{:+26}", lots), "  +5124095:34:33.709551614");
-        assert_eq!(format!("{:026}", lots), "0005124095:34:33.709551614");
-        assert_eq!(format!("{:+026}", lots), "+005124095:34:33.709551614");
+        assert_eq!(format!("{lots:+16.0}"), "  +5124095:34:33");
+        assert_eq!(format!("{lots:016.0}"), "0005124095:34:33");
+        assert_eq!(format!("{lots:+016.0}"), "+005124095:34:33");
+        assert_eq!(format!("{lots:+20.3}"), "  +5124095:34:33.709");
+        assert_eq!(format!("{lots:020.3}"), "0005124095:34:33.709");
+        assert_eq!(format!("{lots:+020.3}"), "+005124095:34:33.709");
+        assert_eq!(format!("{lots:+26}"), "  +5124095:34:33.709551614");
+        assert_eq!(format!("{lots:026}"), "0005124095:34:33.709551614");
+        assert_eq!(format!("{lots:+026}"), "+005124095:34:33.709551614");
     }
 
     #[test]

@@ -10,7 +10,7 @@ pub mod examples_common;
 fn example_main() {
     App::new(None)
         .and_then(main_loop)
-        .unwrap_or_else(|e| eprintln!("Error! {}", e))
+        .unwrap_or_else(|e| eprintln!("Error! {e}"))
 }
 
 fn main() {

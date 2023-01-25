@@ -18,7 +18,7 @@ use gst::prelude::*;
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
+#[display(fmt = "Received error from {src}: {error} (debug: {debug:?})")]
 struct ErrorMessage {
     src: glib::GString,
     error: glib::Error,
@@ -75,7 +75,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                     return;
                 }
 
-                println!("Producing frame {}", i);
+                println!("Producing frame {i}");
 
                 let r = if i % 2 == 0 { 0 } else { 255 };
                 let g = if i % 3 == 0 { 0 } else { 255 };
@@ -169,7 +169,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
 fn example_main() {
     match create_pipeline().and_then(main_loop) {
         Ok(r) => r,
-        Err(e) => eprintln!("Error! {}", e),
+        Err(e) => eprintln!("Error! {e}"),
     }
 }
 

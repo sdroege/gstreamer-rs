@@ -55,7 +55,7 @@ fn send_seek_event(pipeline: &Element, rate: f64) -> bool {
 
     // If we have not done so, obtain the sink through which we will send the seek events
     if let Some(video_sink) = pipeline.property::<Option<Element>>("video-sink") {
-        println!("Current rate: {}\r", rate);
+        println!("Current rate: {rate}\r");
         // Send the event
         video_sink.send_event(seek_event)
     } else {
@@ -123,7 +123,7 @@ USAGE: Choose one of the following options, then press enter:
     // Build the pipeline.
     let uri =
         "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
-    let pipeline = gst::parse_launch(&format!("playbin uri={}", uri))?;
+    let pipeline = gst::parse_launch(&format!("playbin uri={uri}"))?;
 
     // Start playing.
     let _ = pipeline.set_state(State::Playing)?;
@@ -151,7 +151,7 @@ USAGE: Choose one of the following options, then press enter:
                     "PLAYING"
                 };
                 playing = !playing;
-                println!("Setting state to {}\r", status);
+                println!("Setting state to {status}\r");
             }
             Command::DataRateUp => {
                 if send_seek_event(&pipeline, rate * 2.) {
@@ -193,6 +193,6 @@ USAGE: Choose one of the following options, then press enter:
 fn main() {
     match tutorials_common::run(tutorial_main) {
         Ok(_) => {}
-        Err(err) => eprintln!("Failed: {}", err),
+        Err(err) => eprintln!("Failed: {err}"),
     }
 }
