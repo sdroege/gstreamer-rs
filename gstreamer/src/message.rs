@@ -67,6 +67,16 @@ impl MessageRef {
         }
     }
 
+    #[doc(alias = "gst_message_writable_structure")]
+    #[inline]
+    pub fn structure_mut(&mut self) -> &mut StructureRef {
+        unsafe {
+            StructureRef::from_glib_borrow_mut(ffi::gst_message_writable_structure(
+                self.as_mut_ptr(),
+            ))
+        }
+    }
+
     #[doc(alias = "gst_message_has_name")]
     #[inline]
     pub fn has_name(&self, name: &str) -> bool {
