@@ -47,7 +47,7 @@ windows = { version = "0.48", features=["Win32_Graphics_Direct3D11",
     "Win32_Foundation", "Win32_Graphics_Direct3D", "Win32_Graphics_Dxgi",
     "Win32_Graphics_Dxgi_Common", "Win32_Graphics_Direct2D",
     "Win32_Graphics_Direct2D_Common", "Win32_Graphics_DirectWrite",
-    "Foundation_Numerics"], optional = true }
+    "Win32_Graphics_Imaging", "Win32_System_Com", "Foundation_Numerics"], optional = true }
 
 [target.'cfg(target_os = "macos")'.dependencies]
 cocoa = "0.24"
@@ -172,6 +172,10 @@ required-features = ["pango-cairo"]
 [[bin]]
 name = "overlay-composition"
 required-features = ["overlay-composition"]
+
+[[bin]]
+name = "overlay-composition-d2d"
+required-features = ["windows"]
 
 [[bin]]
 name = "ges"
