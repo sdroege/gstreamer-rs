@@ -158,20 +158,22 @@ fn create_ui(app: &gtk::Application) {
     });
 }
 
-fn main() {
+fn main() -> glib::ExitCode {
     // Initialize gstreamer and the gtk widget toolkit libraries.
     gst::init().unwrap();
     gtk::init().unwrap();
 
-    {
+    let res = {
         let app = gtk::Application::new(None, gio::ApplicationFlags::FLAGS_NONE);
 
         app.connect_activate(create_ui);
-        app.run();
-    }
+        app.run()
+    };
 
     // Optional, can be used to detect leaks using the leaks tracer
     unsafe {
         gst::deinit();
     }
+
+    res
 }
