@@ -342,6 +342,12 @@ status = "generate"
     ignore = true
 
     [[object.function]]
+    name = "create_context"
+        [[object.function.parameter]]
+        name = "other_context"
+        nullable = true
+
+    [[object.function]]
     name = "add_context"
         [object.function.return]
         bool_return_is_error = "Failed to add OpenGL context"

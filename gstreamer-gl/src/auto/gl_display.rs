@@ -53,8 +53,10 @@ pub trait GLDisplayExt: 'static {
     fn add_context(&self, context: &impl IsA<GLContext>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_gl_display_create_context")]
-    fn create_context(&self, other_context: &impl IsA<GLContext>)
-        -> Result<GLContext, glib::Error>;
+    fn create_context(
+        &self,
+        other_context: Option<&impl IsA<GLContext>>,
+    ) -> Result<GLContext, glib::Error>;
 
     #[doc(alias = "gst_gl_display_create_window")]
     fn create_window(&self) -> Result<GLWindow, glib::BoolError>;
@@ -111,14 +113,14 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
 
     fn create_context(
         &self,
-        other_context: &impl IsA<GLContext>,
+        other_context: Option<&impl IsA<GLContext>>,
     ) -> Result<GLContext, glib::Error> {
         unsafe {
             let mut p_context = ptr::null_mut();
             let mut error = ptr::null_mut();
             let is_ok = ffi::gst_gl_display_create_context(
                 self.as_ref().to_glib_none().0,
-                other_context.as_ref().to_glib_none().0,
+                other_context.map(|p| p.as_ref()).to_glib_none().0,
                 &mut p_context,
                 &mut error,
             );
