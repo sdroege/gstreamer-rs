@@ -51,7 +51,7 @@ impl<O: IsA<crate::Pipeline>> GstPipelineExtManual for O {
 
 impl Default for Pipeline {
     fn default() -> Self {
-        glib::object::Object::new_default()
+        glib::object::Object::new()
     }
 }
 

@@ -223,7 +223,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
 
 impl Default for Bin {
     fn default() -> Self {
-        glib::object::Object::new_default()
+        glib::object::Object::new()
     }
 }
 
