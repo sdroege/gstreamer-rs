@@ -65,6 +65,16 @@ impl StaticType for BufferingMode {
     }
 }
 
+impl glib::HasParamSpec for BufferingMode {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for BufferingMode {
     type Type = Self;
 }
@@ -140,6 +150,16 @@ impl StaticType for BusSyncReply {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_bus_sync_reply_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for BusSyncReply {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -228,6 +248,16 @@ impl StaticType for CapsIntersectMode {
     }
 }
 
+impl glib::HasParamSpec for CapsIntersectMode {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for CapsIntersectMode {
     type Type = Self;
 }
@@ -310,6 +340,16 @@ impl StaticType for ClockEntryType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_clock_entry_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for ClockEntryType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -412,6 +452,16 @@ impl StaticType for ClockReturn {
     }
 }
 
+impl glib::HasParamSpec for ClockReturn {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for ClockReturn {
     type Type = Self;
 }
@@ -506,6 +556,16 @@ impl StaticType for ClockType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_clock_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for ClockType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -664,6 +724,16 @@ impl StaticType for CoreError {
     }
 }
 
+impl glib::HasParamSpec for CoreError {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for CoreError {
     type Type = Self;
 }
@@ -793,6 +863,16 @@ impl StaticType for DebugLevel {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_debug_level_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for DebugLevel {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1039,6 +1119,16 @@ impl StaticType for EventType {
     }
 }
 
+impl glib::HasParamSpec for EventType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for EventType {
     type Type = Self;
 }
@@ -1174,6 +1264,16 @@ impl StaticType for Format {
     }
 }
 
+impl glib::HasParamSpec for Format {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for Format {
     type Type = Self;
 }
@@ -1299,6 +1399,16 @@ impl StaticType for LibraryError {
     }
 }
 
+impl glib::HasParamSpec for LibraryError {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for LibraryError {
     type Type = Self;
 }
@@ -1375,6 +1485,16 @@ impl StaticType for PadDirection {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_pad_direction_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for PadDirection {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1480,6 +1600,16 @@ impl StaticType for PadMode {
     }
 }
 
+impl glib::HasParamSpec for PadMode {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for PadMode {
     type Type = Self;
 }
@@ -1561,6 +1691,16 @@ impl StaticType for PadPresence {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_pad_presence_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for PadPresence {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1650,6 +1790,16 @@ impl StaticType for PadProbeReturn {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_pad_probe_return_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for PadProbeReturn {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1785,6 +1935,16 @@ impl StaticType for ParseError {
     }
 }
 
+impl glib::HasParamSpec for ParseError {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for ParseError {
     type Type = Self;
 }
@@ -1897,6 +2057,16 @@ impl StaticType for PluginError {
     }
 }
 
+impl glib::HasParamSpec for PluginError {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for PluginError {
     type Type = Self;
 }
@@ -1994,6 +2164,16 @@ impl StaticType for ProgressType {
     }
 }
 
+impl glib::HasParamSpec for ProgressType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for ProgressType {
     type Type = Self;
 }
@@ -2087,6 +2267,16 @@ impl StaticType for PromiseResult {
     }
 }
 
+impl glib::HasParamSpec for PromiseResult {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for PromiseResult {
     type Type = Self;
 }
@@ -2173,6 +2363,16 @@ impl StaticType for QOSType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_qos_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for QOSType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -2267,6 +2467,16 @@ impl StaticType for Rank {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rank_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for Rank {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -2429,6 +2639,16 @@ impl StaticType for ResourceError {
     }
 }
 
+impl glib::HasParamSpec for ResourceError {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for ResourceError {
     type Type = Self;
 }
@@ -2509,6 +2729,16 @@ impl StaticType for SeekType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_seek_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for SeekType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -2599,6 +2829,16 @@ impl StaticType for State {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_state_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for State {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -2725,6 +2965,16 @@ impl StaticType for StateChange {
     }
 }
 
+impl glib::HasParamSpec for StateChange {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for StateChange {
     type Type = Self;
 }
@@ -2809,6 +3059,16 @@ impl StaticType for StateChangeReturn {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_state_change_return_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for StateChangeReturn {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -2963,6 +3223,16 @@ impl StaticType for StreamError {
     }
 }
 
+impl glib::HasParamSpec for StreamError {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for StreamError {
     type Type = Self;
 }
@@ -3068,6 +3338,16 @@ impl StaticType for StreamStatusType {
     }
 }
 
+impl glib::HasParamSpec for StreamStatusType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for StreamStatusType {
     type Type = Self;
 }
@@ -3150,6 +3430,16 @@ impl StaticType for StructureChangeType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_structure_change_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for StructureChangeType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -3243,6 +3533,16 @@ impl StaticType for TagFlag {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_tag_flag_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for TagFlag {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -3351,6 +3651,16 @@ impl StaticType for TagMergeMode {
     }
 }
 
+impl glib::HasParamSpec for TagMergeMode {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for TagMergeMode {
     type Type = Self;
 }
@@ -3434,6 +3744,16 @@ impl StaticType for TagScope {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_tag_scope_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for TagScope {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -3523,6 +3843,16 @@ impl StaticType for TaskState {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_task_state_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for TaskState {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -3644,6 +3974,16 @@ impl StaticType for TocEntryType {
     }
 }
 
+impl glib::HasParamSpec for TocEntryType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for TocEntryType {
     type Type = Self;
 }
@@ -3738,6 +4078,16 @@ impl StaticType for TocLoopType {
     }
 }
 
+impl glib::HasParamSpec for TocLoopType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for TocLoopType {
     type Type = Self;
 }
@@ -3821,6 +4171,16 @@ impl StaticType for TocScope {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_toc_scope_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for TocScope {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -3922,6 +4282,16 @@ impl StaticType for TypeFindProbability {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_type_find_probability_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for TypeFindProbability {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -4041,6 +4411,16 @@ impl StaticType for URIError {
     }
 }
 
+impl glib::HasParamSpec for URIError {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for URIError {
     type Type = Self;
 }
@@ -4117,6 +4497,16 @@ impl StaticType for URIType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_uri_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for URIType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 

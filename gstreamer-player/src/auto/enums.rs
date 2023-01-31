@@ -83,6 +83,16 @@ impl StaticType for PlayerColorBalanceType {
     }
 }
 
+impl glib::HasParamSpec for PlayerColorBalanceType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for PlayerColorBalanceType {
     type Type = Self;
 }
@@ -204,6 +214,16 @@ impl StaticType for PlayerError {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_player_error_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for PlayerError {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -368,6 +388,16 @@ impl StaticType for PlayerState {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_player_state_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for PlayerState {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 

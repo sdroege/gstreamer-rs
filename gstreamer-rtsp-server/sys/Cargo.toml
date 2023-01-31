@@ -60,8 +60,10 @@ repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 version = "0.20.0"
 edition = "2021"
 rust-version = "1.64"
+
 [package.metadata.docs.rs]
 features = ["dox"]
+
 [package.metadata.system-deps.gstreamer_rtsp_server_1_0]
 name = "gstreamer-rtsp-server-1.0"
 version = "1.14"

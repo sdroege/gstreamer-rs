@@ -42,6 +42,16 @@ impl StaticType for RTSPEvent {
     }
 }
 
+impl glib::HasParamSpec for RTSPEvent {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for RTSPEvent {
     type Type = Self;
 }
@@ -119,6 +129,16 @@ impl StaticType for RTSPLowerTrans {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_lower_trans_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for RTSPLowerTrans {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -226,6 +246,16 @@ impl StaticType for RTSPMethod {
     }
 }
 
+impl glib::HasParamSpec for RTSPMethod {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for RTSPMethod {
     type Type = Self;
 }
@@ -304,6 +334,16 @@ impl StaticType for RTSPProfile {
     }
 }
 
+impl glib::HasParamSpec for RTSPProfile {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for RTSPProfile {
     type Type = Self;
 }
@@ -375,6 +415,16 @@ impl StaticType for RTSPTransMode {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_trans_mode_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for RTSPTransMode {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 

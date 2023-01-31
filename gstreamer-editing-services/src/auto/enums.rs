@@ -181,6 +181,16 @@ impl StaticType for Edge {
     }
 }
 
+impl glib::HasParamSpec for Edge {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for Edge {
     type Type = Self;
 }
@@ -298,6 +308,16 @@ impl StaticType for EditMode {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_edit_mode_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for EditMode {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -466,6 +486,16 @@ impl StaticType for TextHAlign {
     }
 }
 
+impl glib::HasParamSpec for TextHAlign {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for TextHAlign {
     type Type = Self;
 }
@@ -564,6 +594,16 @@ impl StaticType for TextVAlign {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_text_valign_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for TextVAlign {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -938,6 +978,16 @@ impl StaticType for VideoStandardTransitionType {
     }
 }
 
+impl glib::HasParamSpec for VideoStandardTransitionType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for VideoStandardTransitionType {
     type Type = Self;
 }
@@ -1082,6 +1132,16 @@ impl StaticType for VideoTestPattern {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_video_test_pattern_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for VideoTestPattern {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 

@@ -42,6 +42,16 @@ impl StaticType for RTPBufferFlags {
     }
 }
 
+impl glib::HasParamSpec for RTPBufferFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for RTPBufferFlags {
     type Type = Self;
 }
@@ -111,6 +121,16 @@ impl StaticType for RTPBufferMapFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtp_buffer_map_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for RTPBufferMapFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -204,6 +224,18 @@ impl StaticType for RTPHeaderExtensionDirection {
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::HasParamSpec for RTPHeaderExtensionDirection {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for RTPHeaderExtensionDirection {
     type Type = Self;
 }
@@ -289,6 +321,18 @@ impl StaticType for RTPHeaderExtensionFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtp_header_extension_flags_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::HasParamSpec for RTPHeaderExtensionFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 

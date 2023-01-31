@@ -80,6 +80,16 @@ impl StaticType for RTCPFBType {
     }
 }
 
+impl glib::HasParamSpec for RTCPFBType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for RTCPFBType {
     type Type = Self;
 }
@@ -251,6 +261,16 @@ impl StaticType for RTCPSDESType {
     }
 }
 
+impl glib::HasParamSpec for RTCPSDESType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for RTCPSDESType {
     type Type = Self;
 }
@@ -361,6 +381,16 @@ impl StaticType for RTCPType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtcp_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for RTCPType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -478,6 +508,18 @@ impl StaticType for RTCPXRType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtcpxr_type_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl glib::HasParamSpec for RTCPXRType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -668,6 +710,16 @@ impl StaticType for RTPPayload {
     }
 }
 
+impl glib::HasParamSpec for RTPPayload {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for RTPPayload {
     type Type = Self;
 }
@@ -762,6 +814,16 @@ impl StaticType for RTPProfile {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtp_profile_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for RTPProfile {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 

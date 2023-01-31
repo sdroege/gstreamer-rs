@@ -66,6 +66,18 @@ impl StaticType for AppLeakyType {
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::HasParamSpec for AppLeakyType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for AppLeakyType {
     type Type = Self;
 }
@@ -158,6 +170,16 @@ impl StaticType for AppStreamType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_app_stream_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for AppStreamType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 

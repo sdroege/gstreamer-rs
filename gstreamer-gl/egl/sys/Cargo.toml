@@ -12,6 +12,7 @@ repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 version = "0.20.0"
 edition = "2021"
 rust-version = "1.64"
+
 [package.metadata.system-deps.gstreamer_gl_egl_1_0]
 name = "gstreamer-gl-1.0"
 version = "1.14"
@@ -28,6 +29,7 @@ version = "1.20"
 
 [package.metadata.system-deps.gstreamer_gl_egl_1_0.v1_22]
 version = "1.22"
+
 [package.metadata.docs.rs]
 features = ["dox"]
 

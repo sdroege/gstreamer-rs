@@ -102,6 +102,16 @@ impl StaticType for ReportLevel {
     }
 }
 
+impl glib::HasParamSpec for ReportLevel {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for ReportLevel {
     type Type = Self;
 }
@@ -208,6 +218,16 @@ impl StaticType for ReportingDetails {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_validate_reporting_details_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for ReportingDetails {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 

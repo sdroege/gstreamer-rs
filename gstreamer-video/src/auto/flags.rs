@@ -81,6 +81,18 @@ impl StaticType for NavigationModifierType {
 
 #[cfg(any(feature = "v1_22", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+impl glib::HasParamSpec for NavigationModifierType {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
 impl glib::value::ValueType for NavigationModifierType {
     type Type = Self;
 }
@@ -178,6 +190,16 @@ impl StaticType for VideoBufferFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_buffer_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for VideoBufferFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -284,6 +306,16 @@ impl StaticType for VideoChromaSite {
     }
 }
 
+impl glib::HasParamSpec for VideoChromaSite {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for VideoChromaSite {
     type Type = Self;
 }
@@ -365,6 +397,18 @@ impl StaticType for VideoCodecFrameFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_codec_frame_flags_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::HasParamSpec for VideoCodecFrameFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -460,6 +504,18 @@ impl StaticType for VideoDecoderRequestSyncPointFlags {
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::HasParamSpec for VideoDecoderRequestSyncPointFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for VideoDecoderRequestSyncPointFlags {
     type Type = Self;
 }
@@ -537,6 +593,16 @@ impl StaticType for VideoFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for VideoFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -632,6 +698,16 @@ impl StaticType for VideoFormatFlags {
     }
 }
 
+impl glib::HasParamSpec for VideoFormatFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for VideoFormatFlags {
     type Type = Self;
 }
@@ -722,6 +798,16 @@ impl StaticType for VideoFrameFlags {
     }
 }
 
+impl glib::HasParamSpec for VideoFrameFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for VideoFrameFlags {
     type Type = Self;
 }
@@ -806,6 +892,16 @@ impl StaticType for VideoMultiviewFlags {
     }
 }
 
+impl glib::HasParamSpec for VideoMultiviewFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for VideoMultiviewFlags {
     type Type = Self;
 }
@@ -879,6 +975,18 @@ impl StaticType for VideoOverlayFormatFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_overlay_format_flags_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl glib::HasParamSpec for VideoOverlayFormatFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -964,6 +1072,16 @@ impl StaticType for VideoPackFlags {
     }
 }
 
+impl glib::HasParamSpec for VideoPackFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for VideoPackFlags {
     type Type = Self;
 }
@@ -1037,6 +1155,18 @@ impl StaticType for VideoTimeCodeFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_time_code_flags_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl glib::HasParamSpec for VideoTimeCodeFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 

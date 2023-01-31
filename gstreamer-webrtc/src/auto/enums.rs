@@ -74,6 +74,18 @@ impl StaticType for WebRTCBundlePolicy {
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl glib::HasParamSpec for WebRTCBundlePolicy {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl glib::value::ValueType for WebRTCBundlePolicy {
     type Type = Self;
 }
@@ -173,6 +185,16 @@ impl StaticType for WebRTCDTLSSetup {
     }
 }
 
+impl glib::HasParamSpec for WebRTCDTLSSetup {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for WebRTCDTLSSetup {
     type Type = Self;
 }
@@ -267,6 +289,16 @@ impl StaticType for WebRTCDTLSTransportState {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_dtls_transport_state_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for WebRTCDTLSTransportState {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -368,6 +400,18 @@ impl StaticType for WebRTCDataChannelState {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_data_channel_state_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl glib::HasParamSpec for WebRTCDataChannelState {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -547,6 +591,18 @@ impl StaticType for WebRTCError {
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::HasParamSpec for WebRTCError {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for WebRTCError {
     type Type = Self;
 }
@@ -648,6 +704,18 @@ impl StaticType for WebRTCFECType {
 
 #[cfg(any(feature = "v1_14_1", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+impl glib::HasParamSpec for WebRTCFECType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
+#[cfg(any(feature = "v1_14_1", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
 impl glib::value::ValueType for WebRTCFECType {
     type Type = Self;
 }
@@ -736,6 +804,16 @@ impl StaticType for WebRTCICEComponent {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_ice_component_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for WebRTCICEComponent {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -844,6 +922,16 @@ impl StaticType for WebRTCICEConnectionState {
     }
 }
 
+impl glib::HasParamSpec for WebRTCICEConnectionState {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for WebRTCICEConnectionState {
     type Type = Self;
 }
@@ -933,6 +1021,16 @@ impl StaticType for WebRTCICEGatheringState {
     }
 }
 
+impl glib::HasParamSpec for WebRTCICEGatheringState {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for WebRTCICEGatheringState {
     type Type = Self;
 }
@@ -1015,6 +1113,16 @@ impl StaticType for WebRTCICERole {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_ice_role_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for WebRTCICERole {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1108,6 +1216,18 @@ impl StaticType for WebRTCICETransportPolicy {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_ice_transport_policy_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl glib::HasParamSpec for WebRTCICETransportPolicy {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1213,6 +1333,18 @@ impl StaticType for WebRTCKind {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_kind_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::HasParamSpec for WebRTCKind {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1325,6 +1457,16 @@ impl StaticType for WebRTCPeerConnectionState {
     }
 }
 
+impl glib::HasParamSpec for WebRTCPeerConnectionState {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for WebRTCPeerConnectionState {
     type Type = Self;
 }
@@ -1423,6 +1565,18 @@ impl StaticType for WebRTCPriorityType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_priority_type_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl glib::HasParamSpec for WebRTCPriorityType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1531,6 +1685,16 @@ impl StaticType for WebRTCRTPTransceiverDirection {
     }
 }
 
+impl glib::HasParamSpec for WebRTCRTPTransceiverDirection {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for WebRTCRTPTransceiverDirection {
     type Type = Self;
 }
@@ -1629,6 +1793,18 @@ impl StaticType for WebRTCSCTPTransportState {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_sctp_transport_state_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl glib::HasParamSpec for WebRTCSCTPTransportState {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1752,6 +1928,16 @@ impl StaticType for WebRTCSDPType {
     }
 }
 
+impl glib::HasParamSpec for WebRTCSDPType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for WebRTCSDPType {
     type Type = Self;
 }
@@ -1850,6 +2036,16 @@ impl StaticType for WebRTCSignalingState {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_signaling_state_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for WebRTCSignalingState {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1981,6 +2177,16 @@ impl StaticType for WebRTCStatsType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_stats_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for WebRTCStatsType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 

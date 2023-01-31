@@ -43,6 +43,16 @@ impl StaticType for BinFlags {
     }
 }
 
+impl glib::HasParamSpec for BinFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for BinFlags {
     type Type = Self;
 }
@@ -122,6 +132,16 @@ impl StaticType for BufferCopyFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_buffer_copy_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for BufferCopyFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -221,6 +241,16 @@ impl StaticType for BufferFlags {
     }
 }
 
+impl glib::HasParamSpec for BufferFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for BufferFlags {
     type Type = Self;
 }
@@ -294,6 +324,16 @@ impl StaticType for BufferPoolAcquireFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_buffer_pool_acquire_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for BufferPoolAcquireFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -378,6 +418,16 @@ impl StaticType for ClockFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_clock_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for ClockFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -487,6 +537,16 @@ impl StaticType for DebugColorFlags {
     }
 }
 
+impl glib::HasParamSpec for DebugColorFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for DebugColorFlags {
     type Type = Self;
 }
@@ -568,6 +628,16 @@ impl StaticType for DebugGraphDetails {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_debug_graph_details_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for DebugGraphDetails {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -653,6 +723,16 @@ impl StaticType for ElementFlags {
     }
 }
 
+impl glib::HasParamSpec for ElementFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for ElementFlags {
     type Type = Self;
 }
@@ -733,6 +813,16 @@ impl StaticType for EventTypeFlags {
     }
 }
 
+impl glib::HasParamSpec for EventTypeFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for EventTypeFlags {
     type Type = Self;
 }
@@ -810,6 +900,18 @@ impl StaticType for GapFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_gap_flags_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::HasParamSpec for GapFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -903,6 +1005,16 @@ impl StaticType for MemoryFlags {
     }
 }
 
+impl glib::HasParamSpec for MemoryFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for MemoryFlags {
     type Type = Self;
 }
@@ -979,6 +1091,16 @@ impl StaticType for MetaFlags {
     }
 }
 
+impl glib::HasParamSpec for MetaFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for MetaFlags {
     type Type = Self;
 }
@@ -1048,6 +1170,16 @@ impl StaticType for ObjectFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_object_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for ObjectFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -1147,6 +1279,16 @@ impl StaticType for PadFlags {
     }
 }
 
+impl glib::HasParamSpec for PadFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for PadFlags {
     type Type = Self;
 }
@@ -1224,6 +1366,16 @@ impl StaticType for PadLinkCheck {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_pad_link_check_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for PadLinkCheck {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -1339,6 +1491,16 @@ impl StaticType for PadProbeType {
     }
 }
 
+impl glib::HasParamSpec for PadProbeType {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for PadProbeType {
     type Type = Self;
 }
@@ -1415,6 +1577,16 @@ impl StaticType for ParseFlags {
     }
 }
 
+impl glib::HasParamSpec for ParseFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for ParseFlags {
     type Type = Self;
 }
@@ -1484,6 +1656,16 @@ impl StaticType for PipelineFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_pipeline_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for PipelineFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -1564,6 +1746,18 @@ impl StaticType for PluginAPIFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_plugin_api_flags_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl glib::HasParamSpec for PluginAPIFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -1655,6 +1849,16 @@ impl StaticType for PluginDependencyFlags {
     }
 }
 
+impl glib::HasParamSpec for PluginDependencyFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for PluginDependencyFlags {
     type Type = Self;
 }
@@ -1726,6 +1930,16 @@ impl StaticType for PluginFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_plugin_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for PluginFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -1802,6 +2016,16 @@ impl StaticType for SchedulingFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_scheduling_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for SchedulingFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -1905,6 +2129,16 @@ impl StaticType for SeekFlags {
     }
 }
 
+impl glib::HasParamSpec for SeekFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for SeekFlags {
     type Type = Self;
 }
@@ -1988,6 +2222,16 @@ impl StaticType for SegmentFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_segment_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for SegmentFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -2075,6 +2319,18 @@ impl StaticType for SerializeFlags {
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::HasParamSpec for SerializeFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for SerializeFlags {
     type Type = Self;
 }
@@ -2153,6 +2409,16 @@ impl StaticType for StackTraceFlags {
     }
 }
 
+impl glib::HasParamSpec for StackTraceFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for StackTraceFlags {
     type Type = Self;
 }
@@ -2226,6 +2492,16 @@ impl StaticType for StreamFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_stream_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for StreamFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -2325,6 +2601,16 @@ impl StaticType for StreamType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_stream_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for StreamType {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 

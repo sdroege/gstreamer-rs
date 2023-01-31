@@ -77,6 +77,16 @@ impl StaticType for RTSPTransportMode {
     }
 }
 
+impl glib::HasParamSpec for RTSPTransportMode {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for RTSPTransportMode {
     type Type = Self;
 }

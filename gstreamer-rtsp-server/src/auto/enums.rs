@@ -208,6 +208,16 @@ impl StaticType for RTSPPublishClockMode {
     }
 }
 
+impl glib::HasParamSpec for RTSPPublishClockMode {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for RTSPPublishClockMode {
     type Type = Self;
 }
@@ -294,6 +304,16 @@ impl StaticType for RTSPSuspendMode {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_suspend_mode_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for RTSPSuspendMode {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 

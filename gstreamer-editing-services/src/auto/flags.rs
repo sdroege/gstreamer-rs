@@ -53,6 +53,18 @@ impl StaticType for MarkerFlags {
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::HasParamSpec for MarkerFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for MarkerFlags {
     type Type = Self;
 }
@@ -135,6 +147,16 @@ impl StaticType for MetaFlag {
     }
 }
 
+impl glib::HasParamSpec for MetaFlag {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for MetaFlag {
     type Type = Self;
 }
@@ -212,6 +234,16 @@ impl StaticType for PipelineFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_pipeline_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for PipelineFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -311,6 +343,16 @@ impl StaticType for TrackType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::ges_track_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for TrackType {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 

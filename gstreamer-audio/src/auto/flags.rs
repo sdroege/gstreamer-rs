@@ -40,6 +40,16 @@ impl StaticType for AudioFlags {
     }
 }
 
+impl glib::HasParamSpec for AudioFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for AudioFlags {
     type Type = Self;
 }
@@ -120,6 +130,16 @@ impl StaticType for AudioFormatFlags {
     }
 }
 
+impl glib::HasParamSpec for AudioFormatFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for AudioFormatFlags {
     type Type = Self;
 }
@@ -189,6 +209,16 @@ impl StaticType for AudioPackFlags {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_audio_pack_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for AudioPackFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 

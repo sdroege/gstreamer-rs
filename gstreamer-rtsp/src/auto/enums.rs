@@ -56,6 +56,16 @@ impl StaticType for RTSPAuthMethod {
     }
 }
 
+impl glib::HasParamSpec for RTSPAuthMethod {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for RTSPAuthMethod {
     type Type = Self;
 }
@@ -142,6 +152,16 @@ impl StaticType for RTSPFamily {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_family_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for RTSPFamily {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -580,6 +600,16 @@ impl StaticType for RTSPHeaderField {
     }
 }
 
+impl glib::HasParamSpec for RTSPHeaderField {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for RTSPHeaderField {
     type Type = Self;
 }
@@ -681,6 +711,16 @@ impl StaticType for RTSPMsgType {
     }
 }
 
+impl glib::HasParamSpec for RTSPMsgType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for RTSPMsgType {
     type Type = Self;
 }
@@ -775,6 +815,16 @@ impl StaticType for RTSPRangeUnit {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_range_unit_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for RTSPRangeUnit {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -925,6 +975,16 @@ impl StaticType for RTSPResult {
     }
 }
 
+impl glib::HasParamSpec for RTSPResult {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for RTSPResult {
     type Type = Self;
 }
@@ -1023,6 +1083,16 @@ impl StaticType for RTSPState {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_state_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for RTSPState {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1293,6 +1363,16 @@ impl StaticType for RTSPStatusCode {
     }
 }
 
+impl glib::HasParamSpec for RTSPStatusCode {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for RTSPStatusCode {
     type Type = Self;
 }
@@ -1387,6 +1467,16 @@ impl StaticType for RTSPTimeType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtsp_time_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for RTSPTimeType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 

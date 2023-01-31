@@ -69,6 +69,16 @@ impl StaticType for GLAPI {
     }
 }
 
+impl glib::HasParamSpec for GLAPI {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for GLAPI {
     type Type = Self;
 }
@@ -163,6 +173,18 @@ impl StaticType for GLConfigSurfaceType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_gl_config_surface_type_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::HasParamSpec for GLConfigSurfaceType {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 
@@ -276,6 +298,16 @@ impl StaticType for GLDisplayType {
     }
 }
 
+impl glib::HasParamSpec for GLDisplayType {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for GLDisplayType {
     type Type = Self;
 }
@@ -382,6 +414,16 @@ impl StaticType for GLPlatform {
     }
 }
 
+impl glib::HasParamSpec for GLPlatform {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
 impl glib::value::ValueType for GLPlatform {
     type Type = Self;
 }
@@ -470,6 +512,16 @@ impl StaticType for GLSLProfile {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_glsl_profile_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for GLSLProfile {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
     }
 }
 

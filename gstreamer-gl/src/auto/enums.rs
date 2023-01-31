@@ -82,6 +82,18 @@ impl StaticType for GLConfigCaveat {
 
 #[cfg(any(feature = "v1_20", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::HasParamSpec for GLConfigCaveat {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for GLConfigCaveat {
     type Type = Self;
 }
@@ -210,6 +222,16 @@ impl StaticType for GLContextError {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_gl_context_error_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for GLContextError {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -421,6 +443,16 @@ impl StaticType for GLFormat {
     }
 }
 
+impl glib::HasParamSpec for GLFormat {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for GLFormat {
     type Type = Self;
 }
@@ -507,6 +539,16 @@ impl StaticType for GLQueryType {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_gl_query_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for GLQueryType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -619,6 +661,16 @@ impl StaticType for GLSLError {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_glsl_error_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for GLSLError {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -813,6 +865,16 @@ impl StaticType for GLSLVersion {
     }
 }
 
+impl glib::HasParamSpec for GLSLVersion {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for GLSLVersion {
     type Type = Self;
 }
@@ -899,6 +961,16 @@ impl StaticType for GLStereoDownmix {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_gl_stereo_downmix_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for GLStereoDownmix {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1032,6 +1104,16 @@ impl StaticType for GLTextureTarget {
     }
 }
 
+impl glib::HasParamSpec for GLTextureTarget {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+    }
+}
+
 impl glib::value::ValueType for GLTextureTarget {
     type Type = Self;
 }
@@ -1126,6 +1208,16 @@ impl StaticType for GLUploadReturn {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_gl_upload_return_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for GLUploadReturn {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
@@ -1239,6 +1331,16 @@ impl StaticType for GLWindowError {
     #[inline]
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_gl_window_error_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for GLWindowError {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
     }
 }
 
