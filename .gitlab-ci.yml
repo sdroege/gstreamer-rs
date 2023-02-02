@@ -237,6 +237,9 @@ plugins-update-stable:
     - .plugins-update
     - .img-stable
   image: quay.io/freedesktop.org/ci-templates:container-build-base-2021-07-29.0
+  needs:
+    - job: 'build-stable'
+      artifacts: false
   variables:
     UPDATE_IMG: "stable"
 
@@ -245,6 +248,9 @@ plugins-update-msrv:
     - .plugins-update
     - .img-msrv
   image: quay.io/freedesktop.org/ci-templates:container-build-base-2021-07-29.0
+  needs:
+    - job: 'build-msrv'
+      artifacts: false
   variables:
     UPDATE_IMG: "msrv"
 
@@ -253,6 +259,9 @@ plugins-update-nightly:
     - .plugins-update
     - .img-nightly
   image: quay.io/freedesktop.org/ci-templates:container-build-base-2021-07-29.0
+  needs:
+    - job: 'build-nightly'
+      artifacts: false
   variables:
     UPDATE_IMG: "nightly"
 
