@@ -76,7 +76,8 @@ fn example_main() -> Result<(), Error> {
     // Set the "title" tag to "Special randomized white-noise".
     // The second parameter gst::TagMergeMode::Append tells the tagsetter to append this title
     // if there already is one.
-    tagsetter.add::<gst::tags::Title>(&"Special randomized white-noise", gst::TagMergeMode::Append);
+    tagsetter
+        .add_tag::<gst::tags::Title>(&"Special randomized white-noise", gst::TagMergeMode::Append);
 
     let bus = pipeline.bus().unwrap();
 

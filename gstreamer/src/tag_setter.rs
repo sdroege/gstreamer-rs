@@ -6,11 +6,11 @@ use crate::{tags::*, TagMergeMode, TagSetter};
 
 pub trait TagSetterExtManual: 'static {
     #[doc(alias = "gst_tag_setter_add_tag_value")]
-    fn add<'a, T: Tag<'a>>(&self, value: &T::TagType, mode: TagMergeMode);
+    fn add_tag<'a, T: Tag<'a>>(&self, value: &T::TagType, mode: TagMergeMode);
 }
 
 impl<O: IsA<TagSetter>> TagSetterExtManual for O {
-    fn add<'a, T: Tag<'a>>(&self, value: &T::TagType, mode: TagMergeMode) {
+    fn add_tag<'a, T: Tag<'a>>(&self, value: &T::TagType, mode: TagMergeMode) {
         unsafe {
             let v = value.to_send_value();
 
