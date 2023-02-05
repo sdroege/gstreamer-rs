@@ -338,19 +338,23 @@ status = "generate"
 
     [[object.function]]
     name = "get_gl_context_for_thread"
-    # glib::Thread not found in `glib`
-    ignore = true
+    # require object lock
+    manual = true
 
     [[object.function]]
     name = "create_context"
-        [[object.function.parameter]]
-        name = "other_context"
-        nullable = true
+    # require object lock
+    manual = true
 
     [[object.function]]
     name = "add_context"
-        [object.function.return]
-        bool_return_is_error = "Failed to add OpenGL context"
+    # require object lock
+    manual = true
+
+    [[object.function]]
+    name = "remove_context"
+    # require object lock
+    manual = true
 
     [[object.function]]
     name = "remove_window"

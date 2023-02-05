@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute, ptr};
+use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
     #[doc(alias = "GstGLDisplay")]
@@ -49,15 +49,6 @@ unsafe impl Send for GLDisplay {}
 unsafe impl Sync for GLDisplay {}
 
 pub trait GLDisplayExt: 'static {
-    #[doc(alias = "gst_gl_display_add_context")]
-    fn add_context(&self, context: &impl IsA<GLContext>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_gl_display_create_context")]
-    fn create_context(
-        &self,
-        other_context: Option<&impl IsA<GLContext>>,
-    ) -> Result<GLContext, glib::Error>;
-
     #[doc(alias = "gst_gl_display_create_window")]
     fn create_window(&self) -> Result<GLWindow, glib::BoolError>;
 
@@ -75,11 +66,6 @@ pub trait GLDisplayExt: 'static {
     #[doc(alias = "gst_gl_display_get_handle_type")]
     #[doc(alias = "get_handle_type")]
     fn handle_type(&self) -> GLDisplayType;
-
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_gl_display_remove_context")]
-    fn remove_context(&self, context: &impl IsA<GLContext>);
 
     #[doc(alias = "gst_gl_display_remove_window")]
     fn remove_window(&self, window: &impl IsA<GLWindow>) -> Result<(), glib::error::BoolError>;
@@ -99,40 +85,6 @@ pub trait GLDisplayExt: 'static {
 }
 
 impl<O: IsA<GLDisplay>> GLDisplayExt for O {
-    fn add_context(&self, context: &impl IsA<GLContext>) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib::result_from_gboolean!(
-                ffi::gst_gl_display_add_context(
-                    self.as_ref().to_glib_none().0,
-                    context.as_ref().to_glib_none().0
-                ),
-                "Failed to add OpenGL context"
-            )
-        }
-    }
-
-    fn create_context(
-        &self,
-        other_context: Option<&impl IsA<GLContext>>,
-    ) -> Result<GLContext, glib::Error> {
-        unsafe {
-            let mut p_context = ptr::null_mut();
-            let mut error = ptr::null_mut();
-            let is_ok = ffi::gst_gl_display_create_context(
-                self.as_ref().to_glib_none().0,
-                other_context.map(|p| p.as_ref()).to_glib_none().0,
-                &mut p_context,
-                &mut error,
-            );
-            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
-            if error.is_null() {
-                Ok(from_glib_full(p_context))
-            } else {
-                Err(from_glib_full(error))
-            }
-        }
-    }
-
     fn create_window(&self) -> Result<GLWindow, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_gl_display_create_window(
@@ -169,17 +121,6 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
             from_glib(ffi::gst_gl_display_get_handle_type(
                 self.as_ref().to_glib_none().0,
             ))
-        }
-    }
-
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn remove_context(&self, context: &impl IsA<GLContext>) {
-        unsafe {
-            ffi::gst_gl_display_remove_context(
-                self.as_ref().to_glib_none().0,
-                context.as_ref().to_glib_none().0,
-            );
         }
     }
 

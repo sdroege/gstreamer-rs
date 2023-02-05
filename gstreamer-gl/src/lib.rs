@@ -40,6 +40,7 @@ mod context;
 pub mod functions;
 pub use crate::functions::*;
 mod gl_context;
+mod gl_display;
 mod gl_sync_meta;
 mod gl_video_frame;
 pub use crate::gl_sync_meta::*;
