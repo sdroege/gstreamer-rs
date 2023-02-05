@@ -252,6 +252,7 @@ pub mod functions;
 pub use crate::functions::*;
 
 mod utils;
+pub use crate::utils::ObjectLockGuard;
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 mod gtype;

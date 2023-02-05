@@ -28,6 +28,8 @@ pub trait GstObjectExtManual: 'static {
         interval: ClockTime,
         values: &mut [glib::Value],
     ) -> Result<(), glib::error::BoolError>;
+
+    fn object_lock(&self) -> crate::utils::ObjectLockGuard<Self>;
 }
 
 impl<O: IsA<crate::Object>> GstObjectExtManual for O {
@@ -117,6 +119,11 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
                 "Failed to get value array"
             )
         }
+    }
+
+    #[inline]
+    fn object_lock(&self) -> crate::utils::ObjectLockGuard<Self> {
+        crate::utils::ObjectLockGuard::acquire(self)
     }
 }
 
