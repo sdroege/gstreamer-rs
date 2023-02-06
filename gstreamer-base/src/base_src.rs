@@ -3,6 +3,7 @@
 use std::{mem, ptr};
 
 use glib::{prelude::*, translate::*};
+use gst::prelude::*;
 
 use crate::BaseSrc;
 
@@ -44,7 +45,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
     fn segment(&self) -> gst::Segment {
         unsafe {
             let src: &ffi::GstBaseSrc = &*(self.as_ptr() as *const _);
-            let _guard = crate::utils::MutexGuard::lock(&src.element.object.lock);
+            let _guard = self.as_ref().object_lock();
             from_glib_none(&src.segment as *const _)
         }
     }

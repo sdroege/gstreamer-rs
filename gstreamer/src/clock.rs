@@ -17,8 +17,8 @@ use glib::{
 use libc::c_void;
 
 use crate::{
-    Clock, ClockEntryType, ClockError, ClockFlags, ClockReturn, ClockSuccess, ClockTime,
-    ClockTimeDiff,
+    prelude::*, Clock, ClockEntryType, ClockError, ClockFlags, ClockReturn, ClockSuccess,
+    ClockTime, ClockTimeDiff,
 };
 
 glib::wrapper! {
@@ -515,7 +515,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
     fn set_clock_flags(&self, flags: ClockFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             (*ptr).flags |= flags.into_glib();
         }
     }
@@ -523,7 +523,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
     fn unset_clock_flags(&self, flags: ClockFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             (*ptr).flags &= !flags.into_glib();
         }
     }
@@ -531,7 +531,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
     fn clock_flags(&self) -> ClockFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             from_glib((*ptr).flags)
         }
     }
@@ -541,10 +541,8 @@ impl<O: IsA<Clock>> ClockExtManual for O {
 mod tests {
     use std::sync::mpsc::channel;
 
-    use super::{
-        super::{prelude::*, *},
-        *,
-    };
+    use super::*;
+    use crate::SystemClock;
 
     #[test]
     fn test_wait() {

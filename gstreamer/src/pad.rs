@@ -997,7 +997,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
     fn set_pad_flags(&self, flags: PadFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             (*ptr).flags |= flags.into_glib();
         }
     }
@@ -1005,7 +1005,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
     fn unset_pad_flags(&self, flags: PadFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             (*ptr).flags &= !flags.into_glib();
         }
     }
@@ -1013,7 +1013,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
     fn pad_flags(&self) -> PadFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             from_glib((*ptr).flags)
         }
     }

@@ -3,6 +3,7 @@
 use std::mem;
 
 use glib::{prelude::*, translate::*};
+use gst::prelude::*;
 
 use crate::BaseSink;
 
@@ -22,7 +23,7 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
     fn segment(&self) -> gst::Segment {
         unsafe {
             let sink: &ffi::GstBaseSink = &*(self.as_ptr() as *const _);
-            let _guard = crate::utils::MutexGuard::lock(&sink.element.object.lock);
+            let _guard = self.as_ref().object_lock();
             from_glib_none(&sink.segment as *const _)
         }
     }

@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{Pipeline, PipelineFlags};
+use crate::{prelude::*, Pipeline, PipelineFlags};
 
 impl Pipeline {
     // rustdoc-stripper-ignore-next
@@ -27,7 +27,7 @@ impl<O: IsA<crate::Pipeline>> GstPipelineExtManual for O {
     fn set_pipeline_flags(&self, flags: PipelineFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             (*ptr).flags |= flags.into_glib();
         }
     }
@@ -35,7 +35,7 @@ impl<O: IsA<crate::Pipeline>> GstPipelineExtManual for O {
     fn unset_pipeline_flags(&self, flags: PipelineFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             (*ptr).flags &= !flags.into_glib();
         }
     }
@@ -43,7 +43,7 @@ impl<O: IsA<crate::Pipeline>> GstPipelineExtManual for O {
     fn pipeline_flags(&self) -> PipelineFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             from_glib((*ptr).flags)
         }
     }

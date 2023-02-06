@@ -9,7 +9,7 @@ use glib::{
     GString,
 };
 
-use crate::{Bin, BinFlags, Element, LoggableError};
+use crate::{prelude::*, Bin, BinFlags, Element, LoggableError};
 
 impl Bin {
     // rustdoc-stripper-ignore-next
@@ -171,7 +171,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
     fn children(&self) -> Vec<Element> {
         unsafe {
             let bin: &ffi::GstBin = &*(self.as_ptr() as *const _);
-            let _guard = crate::utils::MutexGuard::lock(&bin.element.object.lock);
+            let _guard = self.as_ref().object_lock();
             FromGlibPtrContainer::from_glib_none(bin.children)
         }
     }
@@ -199,7 +199,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
     fn set_bin_flags(&self, flags: BinFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             (*ptr).flags |= flags.into_glib();
         }
     }
@@ -207,7 +207,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
     fn unset_bin_flags(&self, flags: BinFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             (*ptr).flags &= !flags.into_glib();
         }
     }
@@ -215,7 +215,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
     fn bin_flags(&self) -> BinFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             from_glib((*ptr).flags)
         }
     }
@@ -293,7 +293,6 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::prelude::*;
 
     #[test]
     fn test_get_children() {

@@ -1,6 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::{prelude::*, translate::*};
+use gst::prelude::*;
 
 use crate::AggregatorPad;
 
@@ -13,7 +14,7 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExtManual for O {
     fn segment(&self) -> gst::Segment {
         unsafe {
             let ptr: &ffi::GstAggregatorPad = &*(self.as_ptr() as *const _);
-            let _guard = crate::utils::MutexGuard::lock(&ptr.parent.object.lock);
+            let _guard = self.as_ref().object_lock();
             from_glib_none(&ptr.segment as *const gst::ffi::GstSegment)
         }
     }

@@ -1,4 +1,5 @@
 use glib::{object::IsA, translate::*};
+use gst::prelude::*;
 
 use crate::auto::AudioAggregatorPad;
 
@@ -10,7 +11,7 @@ impl<O: IsA<AudioAggregatorPad>> AudioAggregatorPadExtManual for O {
     fn audio_info(&self) -> Option<crate::AudioInfo> {
         unsafe {
             let ptr = self.as_ptr() as *mut ffi::GstAudioAggregatorPad;
-            let _guard = crate::utils::MutexGuard::lock(&(*(ptr as *mut gst::ffi::GstObject)).lock);
+            let _guard = self.as_ref().object_lock();
 
             let info = &(*ptr).info;
 

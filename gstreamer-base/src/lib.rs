@@ -64,6 +64,4 @@ pub mod prelude {
     };
 }
 
-mod utils;
-
 pub mod subclass;

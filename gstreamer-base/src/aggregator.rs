@@ -12,7 +12,7 @@ use std::{mem, ptr};
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::signal::{connect_raw, SignalHandlerId};
 use glib::{prelude::*, translate::*};
-use gst::format::FormattedValue;
+use gst::{format::FormattedValue, prelude::*};
 
 use crate::Aggregator;
 
@@ -143,7 +143,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         unsafe {
             let ptr: *mut ffi::GstAggregator = self.as_ref().to_glib_none().0;
             let ptr = &mut *ptr;
-            let _guard = crate::utils::MutexGuard::lock(&ptr.parent.object.lock);
+            let _guard = self.as_ref().object_lock();
 
             // gstaggregator.c asserts that the src pad is always of type GST_TYPE_AGGREGATOR_PAD,
             // so the pointer cast here should be safe.

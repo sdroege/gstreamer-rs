@@ -6,6 +6,7 @@ use glib::object::Cast;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 use glib::signal::{connect_raw, SignalHandlerId};
 use glib::{object::IsA, translate::*};
+use gst::prelude::*;
 
 use crate::auto::{AudioAggregator, AudioAggregatorPad};
 
@@ -95,7 +96,7 @@ impl<O: IsA<AudioAggregator>> AudioAggregatorExtManual for O {
     fn current_caps(&self) -> Option<gst::Caps> {
         unsafe {
             let ptr = self.as_ptr() as *mut ffi::GstAudioAggregator;
-            let _guard = crate::utils::MutexGuard::lock(&(*(ptr as *mut gst::ffi::GstObject)).lock);
+            let _guard = self.as_ref().object_lock();
             from_glib_none((*ptr).current_caps)
         }
     }

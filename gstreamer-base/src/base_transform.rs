@@ -3,6 +3,7 @@
 use std::{mem, ptr};
 
 use glib::{prelude::*, translate::*};
+use gst::prelude::*;
 
 use crate::BaseTransform;
 
@@ -36,7 +37,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
     fn segment(&self) -> gst::Segment {
         unsafe {
             let trans: &ffi::GstBaseTransform = &*(self.as_ptr() as *const _);
-            let _guard = crate::utils::MutexGuard::lock(&trans.element.object.lock);
+            let _guard = self.as_ref().object_lock();
             from_glib_none(&trans.segment as *const _)
         }
     }

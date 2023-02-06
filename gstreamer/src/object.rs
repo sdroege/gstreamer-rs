@@ -77,7 +77,7 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
     fn set_object_flags(&self, flags: ObjectFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             (*ptr).flags |= flags.into_glib();
         }
     }
@@ -85,7 +85,7 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
     fn unset_object_flags(&self, flags: ObjectFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             (*ptr).flags &= !flags.into_glib();
         }
     }
@@ -93,7 +93,7 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
     fn object_flags(&self) -> ObjectFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             from_glib((*ptr).flags)
         }
     }

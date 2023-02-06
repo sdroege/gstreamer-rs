@@ -345,7 +345,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn set_element_flags(&self, flags: ElementFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             (*ptr).flags |= flags.into_glib();
         }
     }
@@ -353,7 +353,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn unset_element_flags(&self, flags: ElementFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             (*ptr).flags &= !flags.into_glib();
         }
     }
@@ -361,7 +361,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn element_flags(&self) -> ElementFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.as_ref().object_lock();
             from_glib((*ptr).flags)
         }
     }
@@ -483,7 +483,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn pads(&self) -> Vec<Pad> {
         unsafe {
             let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
-            let _guard = crate::utils::MutexGuard::lock(&elt.object.lock);
+            let _guard = self.as_ref().object_lock();
             FromGlibPtrContainer::from_glib_none(elt.pads)
         }
     }
@@ -491,7 +491,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn sink_pads(&self) -> Vec<Pad> {
         unsafe {
             let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
-            let _guard = crate::utils::MutexGuard::lock(&elt.object.lock);
+            let _guard = self.as_ref().object_lock();
             FromGlibPtrContainer::from_glib_none(elt.sinkpads)
         }
     }
@@ -499,7 +499,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn src_pads(&self) -> Vec<Pad> {
         unsafe {
             let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
-            let _guard = crate::utils::MutexGuard::lock(&elt.object.lock);
+            let _guard = self.as_ref().object_lock();
             FromGlibPtrContainer::from_glib_none(elt.srcpads)
         }
     }
@@ -507,7 +507,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn num_pads(&self) -> u16 {
         unsafe {
             let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
-            let _guard = crate::utils::MutexGuard::lock(&elt.object.lock);
+            let _guard = self.as_ref().object_lock();
             elt.numpads
         }
     }
@@ -515,7 +515,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn num_sink_pads(&self) -> u16 {
         unsafe {
             let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
-            let _guard = crate::utils::MutexGuard::lock(&elt.object.lock);
+            let _guard = self.as_ref().object_lock();
             elt.numsinkpads
         }
     }
@@ -523,7 +523,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn num_src_pads(&self) -> u16 {
         unsafe {
             let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
-            let _guard = crate::utils::MutexGuard::lock(&elt.object.lock);
+            let _guard = self.as_ref().object_lock();
             elt.numsrcpads
         }
     }

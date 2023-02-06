@@ -1,4 +1,5 @@
 use glib::{object::IsA, translate::*};
+use gst::prelude::*;
 
 use crate::{auto::VideoAggregatorPad, subclass::AggregateFramesToken};
 
@@ -54,7 +55,7 @@ impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExtManual for O {
     fn video_info(&self) -> Option<crate::VideoInfo> {
         unsafe {
             let ptr = self.as_ptr() as *mut ffi::GstVideoAggregatorPad;
-            let _guard = crate::utils::MutexGuard::lock(&(*(ptr as *mut gst::ffi::GstObject)).lock);
+            let _guard = self.as_ref().object_lock();
 
             let info = &(*ptr).info;
 

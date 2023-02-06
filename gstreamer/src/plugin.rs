@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{Plugin, PluginFlags, StructureRef};
+use crate::{prelude::*, Plugin, PluginFlags, StructureRef};
 
 impl Plugin {
     #[doc(alias = "get_cache_data")]
@@ -22,7 +22,7 @@ impl Plugin {
     pub fn plugin_flags(&self) -> PluginFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
+            let _guard = self.object_lock();
             from_glib((*ptr).flags)
         }
     }
