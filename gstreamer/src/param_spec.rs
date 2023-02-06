@@ -28,6 +28,17 @@ impl std::ops::Deref for ParamSpecFraction {
 
 unsafe impl glib::ParamSpecType for ParamSpecFraction {}
 
+impl glib::HasParamSpec for crate::Fraction {
+    type ParamSpec = ParamSpecFraction;
+
+    type SetValue = crate::Fraction;
+    type BuilderFn = for<'a> fn(&'a str) -> ParamSpecFractionBuilder;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        ParamSpecFraction::builder
+    }
+}
+
 #[doc(hidden)]
 impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecFraction {
     #[inline]
@@ -227,6 +238,17 @@ impl std::ops::Deref for ParamSpecArray {
 }
 
 unsafe impl glib::ParamSpecType for ParamSpecArray {}
+
+impl glib::HasParamSpec for crate::Array {
+    type ParamSpec = ParamSpecArray;
+
+    type SetValue = crate::Array;
+    type BuilderFn = for<'a> fn(&'a str) -> ParamSpecArrayBuilder;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        ParamSpecArray::builder
+    }
+}
 
 #[doc(hidden)]
 impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecArray {
