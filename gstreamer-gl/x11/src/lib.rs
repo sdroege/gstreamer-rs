@@ -8,7 +8,6 @@
 
 #![cfg_attr(all(not(doctest), doc), feature(doc_cfg))]
 #![allow(clippy::missing_safety_doc)]
-#![allow(clippy::non_send_fields_in_send_ty)]
 
 pub use ffi;
 pub use gst_gl;
@@ -21,7 +20,6 @@ macro_rules! assert_initialized_main_thread {
     };
 }
 
-#[allow(clippy::use_self)]
 mod auto;
 pub use auto::*;
 

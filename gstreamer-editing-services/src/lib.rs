@@ -2,7 +2,6 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 #![allow(clippy::missing_safety_doc)]
-#![allow(clippy::non_send_fields_in_send_ty)]
 #![doc = include_str!("../README.md")]
 
 use std::sync::Once;
@@ -51,10 +50,6 @@ macro_rules! skip_assert_initialized {
     () => {};
 }
 
-#[allow(clippy::unreadable_literal)]
-#[allow(clippy::too_many_arguments)]
-#[allow(clippy::match_same_arms)]
-#[allow(clippy::use_self)]
 #[allow(clippy::needless_borrow)]
 #[allow(deprecated)]
 #[allow(unused_imports)]

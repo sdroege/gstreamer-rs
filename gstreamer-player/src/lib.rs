@@ -2,7 +2,6 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 #![allow(clippy::missing_safety_doc)]
-#![allow(clippy::non_send_fields_in_send_ty)]
 #![doc = include_str!("../README.md")]
 
 pub use ffi;
@@ -21,12 +20,6 @@ macro_rules! assert_initialized_main_thread {
     };
 }
 
-#[allow(clippy::unreadable_literal)]
-#[allow(clippy::too_many_arguments)]
-#[allow(clippy::match_same_arms)]
-#[allow(clippy::type_complexity)]
-#[allow(clippy::cast_ptr_alignment)]
-#[allow(clippy::use_self)]
 #[allow(clippy::needless_borrow)]
 #[allow(unused_imports)]
 mod auto;

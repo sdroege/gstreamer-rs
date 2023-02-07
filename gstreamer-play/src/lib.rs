@@ -2,7 +2,6 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 #![allow(clippy::missing_safety_doc)]
-#![allow(clippy::non_send_fields_in_send_ty)]
 #![doc = include_str!("../README.md")]
 
 pub use ffi;
@@ -22,7 +21,6 @@ macro_rules! assert_initialized_main_thread {
 }
 
 #[allow(clippy::needless_borrow)]
-#[allow(unused_imports)]
 mod auto;
 pub(crate) use crate::auto::PlayMessage as PlayMessageType;
 pub use crate::auto::*;

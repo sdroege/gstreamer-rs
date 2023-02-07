@@ -4,7 +4,6 @@
 #![recursion_limit = "256"]
 #![allow(clippy::missing_safety_doc)]
 #![allow(clippy::manual_range_contains)]
-#![allow(clippy::non_send_fields_in_send_ty)]
 #![doc = include_str!("../README.md")]
 
 // Re-exported for the subclass gst_plugin_define! macro
@@ -39,14 +38,8 @@ macro_rules! skip_assert_initialized {
     () => {};
 }
 
-#[allow(clippy::unreadable_literal)]
-#[allow(clippy::too_many_arguments)]
-#[allow(clippy::match_same_arms)]
-#[allow(clippy::type_complexity)]
-#[allow(clippy::use_self)]
 #[allow(clippy::needless_borrow)]
 #[allow(clippy::let_unit_value)]
-#[allow(unused_imports)]
 mod auto;
 pub use crate::auto::{functions::*, *};
 

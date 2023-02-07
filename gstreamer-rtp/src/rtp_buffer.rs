@@ -128,6 +128,7 @@ impl<'a> RTPBuffer<'a, Writable> {
     }
 
     #[doc(alias = "gst_rtp_buffer_add_extension_onebyte_header")]
+    #[allow(clippy::manual_range_contains)]
     pub fn add_extension_onebyte_header(
         &mut self,
         id: u8,
