@@ -401,12 +401,12 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
                 &mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult),
             > = user_data as *const _ as usize
                 as *mut Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)>;
-            let res = if let Some(ref mut callback) = *callback {
+            if let Some(ref mut callback) = *callback {
                 callback(&client, &sess)
             } else {
                 panic!("cannot get closure...")
-            };
-            res.into_glib()
+            }
+            .into_glib()
         }
         let func = if func_data.is_some() {
             Some(func_func as _)

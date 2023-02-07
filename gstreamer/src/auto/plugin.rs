@@ -4,7 +4,7 @@
 // DO NOT EDIT
 
 use crate::{Object, PluginDependencyFlags, Structure};
-use glib::{prelude::*, translate::*};
+use glib::translate::*;
 use std::{fmt, ptr};
 
 glib::wrapper! {

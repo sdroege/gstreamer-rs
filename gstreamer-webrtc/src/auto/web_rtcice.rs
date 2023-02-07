@@ -341,7 +341,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
             let ice = from_glib_borrow(ice);
             let candidate: Borrowed<glib::GString> = from_glib_borrow(candidate);
             let callback: &P = &*(user_data as *mut _);
-            (*callback)(&ice, stream_id, candidate.as_str());
+            (*callback)(&ice, stream_id, candidate.as_str())
         }
         let func = Some(func_func::<P> as _);
         unsafe extern "C" fn notify_func<P: Fn(&WebRTCICE, u32, &str) + Send + Sync + 'static>(

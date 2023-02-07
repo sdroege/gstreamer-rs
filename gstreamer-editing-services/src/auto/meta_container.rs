@@ -227,7 +227,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
             let key: Borrowed<glib::GString> = from_glib_borrow(key);
             let value = from_glib_borrow(value);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
-            (*callback)(&container, key.as_str(), &value);
+            (*callback)(&container, key.as_str(), &value)
         }
         let func = Some(func_func::<P> as _);
         let super_callback0: &P = &func_data;

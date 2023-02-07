@@ -230,7 +230,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         let keep_alive_data: Box_<P> = Box_::new(keep_alive);
         unsafe extern "C" fn keep_alive_func<P: Fn() + 'static>(user_data: glib::ffi::gpointer) {
             let callback: &P = &*(user_data as *mut _);
-            (*callback)();
+            (*callback)()
         }
         let keep_alive = Some(keep_alive_func::<P> as _);
         unsafe extern "C" fn notify_func<P: Fn() + 'static>(data: glib::ffi::gpointer) {
@@ -258,7 +258,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         let message_sent_data: Box_<P> = Box_::new(message_sent);
         unsafe extern "C" fn message_sent_func<P: Fn() + 'static>(user_data: glib::ffi::gpointer) {
             let callback: &P = &*(user_data as *mut _);
-            (*callback)();
+            (*callback)()
         }
         let message_sent = Some(message_sent_func::<P> as _);
         unsafe extern "C" fn notify_func<P: Fn() + 'static>(data: glib::ffi::gpointer) {
@@ -286,7 +286,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         ) {
             let trans = from_glib_borrow(trans);
             let callback: &P = &*(user_data as *mut _);
-            (*callback)(&trans);
+            (*callback)(&trans)
         }
         let message_sent = Some(message_sent_func::<P> as _);
         unsafe extern "C" fn notify_func<P: Fn(&RTSPStreamTransport) + 'static>(

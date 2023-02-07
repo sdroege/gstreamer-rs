@@ -84,8 +84,7 @@ impl<O: IsA<GLFilter>> GLFilterExt for O {
             let filter = from_glib_borrow(filter);
             let in_tex = from_glib_borrow(in_tex);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
-            let res = (*callback)(&filter, &in_tex);
-            res.into_glib()
+            (*callback)(&filter, &in_tex).into_glib()
         }
         let func = Some(func_func::<P> as _);
         let super_callback0: &P = &func_data;

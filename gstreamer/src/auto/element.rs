@@ -264,8 +264,7 @@ impl<O: IsA<Element>> ElementExt for O {
             let element = from_glib_borrow(element);
             let pad = from_glib_borrow(pad);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
-            let res = (*callback)(&element, &pad);
-            res.into_glib()
+            (*callback)(&element, &pad).into_glib()
         }
         let func = Some(func_func::<P> as _);
         let super_callback0: &P = &func_data;
@@ -288,8 +287,7 @@ impl<O: IsA<Element>> ElementExt for O {
             let element = from_glib_borrow(element);
             let pad = from_glib_borrow(pad);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
-            let res = (*callback)(&element, &pad);
-            res.into_glib()
+            (*callback)(&element, &pad).into_glib()
         }
         let func = Some(func_func::<P> as _);
         let super_callback0: &P = &func_data;
@@ -312,8 +310,7 @@ impl<O: IsA<Element>> ElementExt for O {
             let element = from_glib_borrow(element);
             let pad = from_glib_borrow(pad);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
-            let res = (*callback)(&element, &pad);
-            res.into_glib()
+            (*callback)(&element, &pad).into_glib()
         }
         let func = Some(func_func::<P> as _);
         let super_callback0: &P = &func_data;

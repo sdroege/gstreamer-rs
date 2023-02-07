@@ -138,12 +138,12 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
                 as *mut Option<
                     &mut dyn (FnMut(&RTSPSession, &RTSPSessionMedia) -> RTSPFilterResult),
                 >;
-            let res = if let Some(ref mut callback) = *callback {
+            if let Some(ref mut callback) = *callback {
                 callback(&sess, &media)
             } else {
                 panic!("cannot get closure...")
-            };
-            res.into_glib()
+            }
+            .into_glib()
         }
         let func = if func_data.is_some() {
             Some(func_func as _)

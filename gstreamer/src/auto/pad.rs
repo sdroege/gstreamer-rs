@@ -306,8 +306,7 @@ impl<O: IsA<Pad>> PadExt for O {
         ) -> glib::ffi::gboolean {
             let pad = from_glib_borrow(pad);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
-            let res = (*callback)(&pad);
-            res.into_glib()
+            (*callback)(&pad).into_glib()
         }
         let forward = Some(forward_func::<P> as _);
         let super_callback0: &P = &forward_data;

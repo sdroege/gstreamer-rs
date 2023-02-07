@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::{prelude::*, translate::*};
+use glib::translate::*;
 
 glib::wrapper! {
     #[derive()]
