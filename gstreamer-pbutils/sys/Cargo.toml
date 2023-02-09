@@ -19,14 +19,17 @@ version = "0.17"
 [dependencies.gst_audio]
 package = "gstreamer-audio-sys"
 path = "../../gstreamer-audio/sys"
+version = "0.20"
 
 [dependencies.gst]
 package = "gstreamer-sys"
 path = "../../gstreamer/sys"
+version = "0.20"
 
 [dependencies.gst_video]
 package = "gstreamer-video-sys"
 path = "../../gstreamer-video/sys"
+version = "0.20"
 
 [dev-dependencies]
 shell-words = "1.0.0"

@@ -48,6 +48,7 @@ version = "0.17"
 [dependencies.gst_gl]
 package = "gstreamer-gl-sys"
 path = "../../sys"
+version = "0.20"
 
 [build-dependencies]
 system-deps = "6"

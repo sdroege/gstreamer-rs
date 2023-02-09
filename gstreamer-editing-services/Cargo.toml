@@ -16,12 +16,12 @@ rust-version = "1.64"
 [dependencies]
 libc = "0.2"
 bitflags = "1.0"
-ffi = { package = "gstreamer-editing-services-sys", path = "sys"}
+ffi = { package = "gstreamer-editing-services-sys", path = "sys", version = "0.20"}
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.17", version = "0.17" }
 gio = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.17", version = "0.17" }
-gst = { package = "gstreamer", path = "../gstreamer" }
-gst-base = { package = "gstreamer-base", path = "../gstreamer-base" }
-gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils" }
+gst = { package = "gstreamer", path = "../gstreamer", version = "0.20" }
+gst-base = { package = "gstreamer-base", path = "../gstreamer-base", version = "0.20" }
+gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils", version = "0.20" }
 serde = { version = "1.0", optional = true }
 
 [dev-dependencies]

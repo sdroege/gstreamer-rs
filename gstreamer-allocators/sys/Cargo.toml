@@ -19,6 +19,7 @@ package = "gobject-sys"
 [dependencies.gst]
 package = "gstreamer-sys"
 path = "../../gstreamer/sys"
+version = "0.20"
 
 [dev-dependencies]
 shell-words = "1.0.0"

@@ -10,11 +10,11 @@ rust-version = "1.64"
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.17", version = "0.17" }
 gdk = { git = "https://github.com/gtk-rs/gtk3-rs", branch = "0.17", version = "0.17.0", optional = true }
 gtk = { git = "https://github.com/gtk-rs/gtk3-rs", branch = "0.17", version = "0.17.0", optional = true }
-gst = { package = "gstreamer", path = "../gstreamer" }
-gst-audio = { package = "gstreamer-audio", path = "../gstreamer-audio" }
-gst-video = { package = "gstreamer-video", path = "../gstreamer-video", optional = true }
-gst-app = { package = "gstreamer-app", path = "../gstreamer-app" }
-gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils" }
+gst = { package = "gstreamer", path = "../gstreamer", version = "0.20" }
+gst-audio = { package = "gstreamer-audio", path = "../gstreamer-audio", version = "0.20" }
+gst-video = { package = "gstreamer-video", path = "../gstreamer-video", version = "0.20", optional = true }
+gst-app = { package = "gstreamer-app", path = "../gstreamer-app", version = "0.20" }
+gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils", version = "0.20" }
 byte-slice-cast = "1"
 anyhow = "1"
 termion = { version = "2", optional = true }

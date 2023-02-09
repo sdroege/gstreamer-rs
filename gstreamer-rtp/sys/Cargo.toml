@@ -13,10 +13,12 @@ version = "0.17"
 [dependencies.gst_base]
 package = "gstreamer-base-sys"
 path = "../../gstreamer-base/sys"
+version = "0.20"
 
 [dependencies.gst]
 package = "gstreamer-sys"
 path = "../../gstreamer/sys"
+version = "0.20"
 
 [dev-dependencies]
 shell-words = "1.0.0"

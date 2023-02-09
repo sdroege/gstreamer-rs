@@ -17,9 +17,9 @@ rust-version = "1.64"
 cfg-if = "1.0"
 libc = "0.2"
 bitflags = "1.0"
-ffi = { package = "gstreamer-base-sys", path = "sys" }
+ffi = { package = "gstreamer-base-sys", path = "sys", version = "0.20" }
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.17", version = "0.17" }
-gst = { package = "gstreamer", path = "../gstreamer" }
+gst = { package = "gstreamer", path = "../gstreamer", version = "0.20" }
 atomic_refcell = "0.1"
 
 [dev-dependencies]
