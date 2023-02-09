@@ -57,7 +57,7 @@ license = "MIT"
 name = "gstreamer-rtsp-server-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
-version = "0.20.0"
+version = "0.21.0"
 edition = "2021"
 rust-version = "1.64"
 
