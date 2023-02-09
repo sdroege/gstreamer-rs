@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.19.8] - 2023-02-09
+### Changed
+- Update GStreamer .gir files to 1.22.0 release.
+
+### Fixed
+- Marked `gst::MessageType` as non-exhaustive.
+
+### Added
+- Added bindings for `gst::Message::structure_mut()`.
+- Added subclassing support for `gst_allocators::FdAllocator` and `DmabufAllocator`.
+
 ## [0.19.7] - 2023-01-19
 ### Fixed
 - Work around the possibility that the caps in the allocation query can be
@@ -1432,7 +1443,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.7...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.8...HEAD
+[0.19.8]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.7...0.19.8
 [0.19.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.6...0.19.7
 [0.19.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.5...0.19.6
 [0.19.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.4...0.19.5
