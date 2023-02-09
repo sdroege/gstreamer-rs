@@ -1,6 +1,6 @@
 [package]
 name = "tutorials"
-version = "0.19.7"
+version = "0.19.8"
 license = "MIT"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 edition = "2021"
