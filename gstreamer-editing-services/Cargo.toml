@@ -17,8 +17,8 @@ rust-version = "1.64"
 libc = "0.2"
 bitflags = "1.0"
 ffi = { package = "gstreamer-editing-services-sys", path = "sys"}
-glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }
-gio = { git = "https://github.com/gtk-rs/gtk-rs-core" }
+glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.17", version = "0.17" }
+gio = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.17", version = "0.17" }
 gst = { package = "gstreamer", path = "../gstreamer" }
 gst-base = { package = "gstreamer-base", path = "../gstreamer-base" }
 gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils" }
