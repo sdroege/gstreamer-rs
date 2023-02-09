@@ -5,6 +5,37 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.20.0] - 2023-02-10
+### Fixed
+- Make `gst_gL::GLDisplay::create_context()` `other_context` parameter optional.
+- Make allocation query caps optional.
+
+### Added
+- Conversions between `gst::Signed<T>` and `T` and signed integer types.
+- Bindings for the object lock via `gst::Object::lock()`.
+- Various `FromIterator`, `Extend` and `From` impls for creating `Caps`,
+  `Structure`, `Buffer`, `BufferList`, `CapsFeatures` and other types.
+- `PartialEq` impls between owned/borrowed miniobjects/structures.
+- API for appending items to `gst::Array` and `gst::List`.
+
+### Changed
+- Compatible with the 0.17 gtk-rs release.
+- Updated minimum supported Rust version to 1.64.
+- Require GStreamer 1.22.0 or newer when enabling the `v1_22` feature.
+- Require the object lock to be taken for various `gst_gl::GLDisplay` methods.
+- Renamed `gst::TagSetter::add()` to `add_tags()` to avoid name conflict with
+  `Bin::add()`.
+- Mark various un-extendable enums as exhaustive.
+- Make use of `glib::GStr` and related API in caps, structure, tags and
+  logging API to reduce temporary string allocations.
+- Various code optimizations to reduce generated code size and allow more
+  optimal code to be generated.
+- Reduce size of various types, including reduction of `gst_audio::AudioInfo`
+  from 832 to 320 bytes.
+- Use actual function name instead of module name in log output.
+- Change `gst_utils::StreamProducer` API to forward buffers by default and
+  allow temporarily discarding via new `set_discard()` function.
+
 ## [0.19.8] - 2023-02-09
 ### Changed
 - Update GStreamer .gir files to 1.22.0 release.
@@ -1443,7 +1474,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.8...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.0...HEAD
+[0.20.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.8...0.20.0
 [0.19.8]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.7...0.19.8
 [0.19.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.6...0.19.7
 [0.19.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.5...0.19.6
