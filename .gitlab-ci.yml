@@ -96,13 +96,6 @@ trigger:
   before_script:
     - source ./ci/env.sh
     - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config
-    # If cargo exists assume we probably will want to update
-    # the lockfile
-    - |
-      if command -v cargo; then
-        cargo generate-lockfile --color=always
-        cargo update --color=always
-      fi
 
 .debian:11-base:
   extends: .debian:11
