@@ -117,7 +117,7 @@ pub fn integrate_events() {
 ///
 /// This function may only be called after `gstreamer::init`.
 pub fn integrate_spans() {
-    gstreamer::glib::Object::new::<tracer::TracingTracer>(&[]);
+    gstreamer::glib::Object::new::<tracer::TracingTracer>();
 }
 
 /// Disable the integration between GStreamer logging system and the `tracing` library.

@@ -5,7 +5,7 @@ use gstreamer::{
     prelude::PadExtManual,
     subclass::prelude::*,
     traits::{GstObjectExt, PadExt},
-    Buffer, FlowError, FlowSuccess, Object, Pad, Query, Tracer,
+    Buffer, FlowError, FlowSuccess, Object, Pad, Tracer,
 };
 use std::cell::RefCell;
 use tracing::{span::Attributes, Callsite, Dispatch, Id};
@@ -129,7 +129,7 @@ impl TracerImpl for TracingTracerPriv {
         self.pad_pre("pad_push_list", pad);
     }
 
-    fn pad_query_pre(&self, _: u64, pad: &Pad, _: &Query) {
+    fn pad_query_pre(&self, _: u64, pad: &Pad, _: &gstreamer::QueryRef) {
         self.pad_pre("pad_query", pad);
     }
 
@@ -157,7 +157,7 @@ impl TracerImpl for TracingTracerPriv {
         self.pop_span();
     }
 
-    fn pad_query_post(&self, _: u64, _: &Pad, _: &Query, _: bool) {
+    fn pad_query_post(&self, _: u64, _: &Pad, _: &gstreamer::QueryRef, _: bool) {
         self.pop_span();
     }
 }
