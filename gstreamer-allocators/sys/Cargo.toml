@@ -48,7 +48,7 @@ name = "gstreamer-allocators-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 rust-version = "1.64"
-version = "0.20.0"
+version = "0.20.1"
 
 [package.metadata.docs.rs]
 features = ["dox"]
