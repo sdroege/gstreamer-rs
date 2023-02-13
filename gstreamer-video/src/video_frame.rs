@@ -283,7 +283,11 @@ impl<T> VideoFrame<T> {
 
     #[inline]
     pub fn into_raw(self) -> ffi::GstVideoFrame {
-        mem::ManuallyDrop::new(self).frame
+        unsafe {
+            let mut s = mem::ManuallyDrop::new(self);
+            ptr::drop_in_place(&mut s.buffer);
+            s.frame
+        }
     }
 }
 
