@@ -1,6 +1,6 @@
 [package]
 name = "tracing-gstreamer"
-version = "0.4.0"
+version = "0.5.0"
 edition = "2018"
 authors = ["Simonas Kazlauskas <tracing-gstreamer@kazlauskas.me>"]
 license = "MIT OR Apache-2.0"
@@ -10,7 +10,7 @@ readme = "README.mkd"
 description = "Bridge between gstreamer and the tracing ecosystem"
 keywords = ["tracing", "logging", "gstreamer", "multimedia"]
 categories = ["development-tools::debugging", "development-tools::profiling"]
-rust-version = "1.63"
+rust-version = "1.64"
 
 [lib]
 harness = false
