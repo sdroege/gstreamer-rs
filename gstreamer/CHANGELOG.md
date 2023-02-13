@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.20.1] - 2023-02-13
+### Fixed
+- Fix memory leaks when converting a `gst_audio::AudioBuffer` or
+  `gst_video::VideoFrame` to a `gst::Buffer` or FFI type.
+
 ## [0.20.0] - 2023-02-10
 ### Fixed
 - Make `gst_gL::GLDisplay::create_context()` `other_context` parameter optional.
@@ -1474,7 +1479,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.0...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.1...HEAD
+[0.20.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.0...0.20.1
 [0.20.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.8...0.20.0
 [0.19.8]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.7...0.19.8
 [0.19.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.6...0.19.7
