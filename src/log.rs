@@ -69,7 +69,7 @@ unsafe extern "C" fn log_callback(
             &category_name,
             Some(&file),
             Some(&module),
-            Some(line as u32),
+            Some(line),
             GstCallsiteKind::Event,
             &[
                 "message",

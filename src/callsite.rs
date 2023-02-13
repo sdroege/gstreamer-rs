@@ -26,7 +26,7 @@ const CALLSITE_INTEREST_SOMETIMES: usize = 2;
 const CALLSITE_INTEREST_ALWAYS: usize = 3;
 
 impl GstCallsite {
-    fn make_static<'a>(key: &Key<'a>) -> &'static Self {
+    fn make_static(key: &Key) -> &'static Self {
         let module = key.module.unwrap_or("");
         let file = key.file.unwrap_or("");
         let prefixed_target_len = crate::TARGET.len() + 2 + key.target.len();
