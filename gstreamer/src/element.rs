@@ -1406,4 +1406,24 @@ mod tests {
 
         assert_eq!(receiver.recv(), Ok(()));
     }
+
+    #[test]
+    fn test_element_error() {
+        crate::init().unwrap();
+
+        let identity = crate::ElementFactory::make("identity").build().unwrap();
+
+        crate::element_error!(identity, crate::CoreError::Failed, ("msg"), ["debug"]);
+        crate::element_error!(identity, crate::CoreError::Failed, ["debug"]);
+        crate::element_error!(identity, crate::CoreError::Failed, ("msg"));
+
+        // We define a new variable for each call so there would be a compiler warning if the
+        // string formatting did not actually use it.
+        let x = 123i32;
+        crate::element_error!(identity, crate::CoreError::Failed, ("msg {x}"), ["debug"]);
+        let x = 123i32;
+        crate::element_error!(identity, crate::CoreError::Failed, ["debug {x}"]);
+        let x = 123i32;
+        crate::element_error!(identity, crate::CoreError::Failed, ("msg {}", x));
+    }
 }
