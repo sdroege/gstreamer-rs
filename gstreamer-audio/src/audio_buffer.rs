@@ -37,7 +37,14 @@ impl<T> AudioBuffer<T> {
 
     #[inline]
     pub fn into_buffer(self) -> gst::Buffer {
-        unsafe { ptr::read(&mem::ManuallyDrop::new(self).buffer) }
+        unsafe {
+            let mut s = mem::ManuallyDrop::new(self);
+            let buffer = ptr::read(&s.buffer);
+            ffi::gst_audio_buffer_unmap(&mut *s.audio_buffer);
+            ptr::drop_in_place(&mut s.audio_buffer);
+
+            buffer
+        }
     }
 
     #[inline]
