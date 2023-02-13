@@ -152,6 +152,42 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
 
 #[macro_export]
 macro_rules! audio_decoder_error(
+    ($obj:expr, $weight:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
+        use $crate::prelude::AudioDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            Some($msg),
+            Some($debug),
+            file!(),
+            $crate::glib::function_name!(),
+            line!(),
+        )
+    }};
+    ($obj:expr, $weight:expr, $err:expr, ($msg:expr)) => { {
+        use $crate::prelude::AudioDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            Some($msg),
+            None,
+            file!(),
+            $crate::glib::function_name!(),
+            line!(),
+        )
+    }};
+    ($obj:expr, $weight:expr, $err:expr, [$debug:expr]) => { {
+        use $crate::prelude::AudioDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            None,
+            Some($debug),
+            file!(),
+            $crate::glib::function_name!(),
+            line!(),
+        )
+    }};
     ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
         use $crate::prelude::AudioDecoderExtManual;
         $obj.error(

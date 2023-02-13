@@ -5,6 +5,24 @@ use thiserror::Error;
 
 #[macro_export]
 macro_rules! error_msg(
+// Plain strings
+    ($err:expr, ($msg:expr), [$dbg:expr]) =>  {
+        $crate::ErrorMessage::new(&$err, Some($msg),
+                          Some($dbg),
+                          file!(), $crate::glib::function_name!(), line!())
+    };
+    ($err:expr, ($msg:expr)) => {
+        $crate::ErrorMessage::new(&$err, Some($msg),
+                          None,
+                          file!(), $crate::glib::function_name!(), line!())
+    };
+    ($err:expr, [$dbg:expr]) => {
+        $crate::ErrorMessage::new(&$err, None,
+                          Some($dbg),
+                          file!(), $crate::glib::function_name!(), line!())
+    };
+
+// Format strings
     ($err:expr, ($($msg:tt)*), [$($dbg:tt)*]) =>  { {
         $crate::ErrorMessage::new(&$err, Some(format!($($msg)*).as_ref()),
                           Some(format!($($dbg)*).as_ref()),
