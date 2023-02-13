@@ -46,8 +46,12 @@ impl<T> VideoFrame<T> {
 
     #[inline]
     pub fn into_buffer(self) -> gst::Buffer {
-        let s = mem::ManuallyDrop::new(self);
-        unsafe { ptr::read(&s.buffer) }
+        unsafe {
+            let mut s = mem::ManuallyDrop::new(self);
+            let buffer = ptr::read(&s.buffer);
+            ffi::gst_video_frame_unmap(&mut s.frame);
+            buffer
+        }
     }
 
     #[doc(alias = "gst_video_frame_copy")]
