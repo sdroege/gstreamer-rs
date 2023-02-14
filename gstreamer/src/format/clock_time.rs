@@ -368,6 +368,16 @@ impl glib::StaticType for ClockTime {
     }
 }
 
+impl glib::HasParamSpec for ClockTime {
+    type ParamSpec = glib::ParamSpecUInt64;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecUInt64Builder;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder
+    }
+}
+
 #[derive(Debug)]
 pub struct DurationError;
 
@@ -1417,5 +1427,55 @@ mod tests {
         let time = crate::Signed::Negative(ClockTime::from_nseconds((u64::MAX >> 1) + 1));
         assert_eq!(i64::MIN as i128, -(((u64::MAX >> 1) + 1) as i128));
         assert_eq!(i64::try_from(time), Ok(i64::MIN));
+    }
+
+    #[test]
+    fn properties_macro_usage() {
+        use super::ClockTime;
+        use glib::{prelude::*, subclass::prelude::*, ParamSpecBuilderExt};
+        use std::cell::Cell;
+
+        #[derive(Default, glib::Properties)]
+        #[properties(wrapper_type = TestObject)]
+        pub struct TestObjectImp {
+            #[property(get, set)]
+            clock_time: Cell<ClockTime>,
+            #[property(get, set)]
+            optional_clock_time: Cell<Option<ClockTime>>,
+        }
+
+        #[glib::object_subclass]
+        impl ObjectSubclass for TestObjectImp {
+            const NAME: &'static str = "GstTestObject";
+            type Type = TestObject;
+        }
+
+        impl ObjectImpl for TestObjectImp {
+            fn properties() -> &'static [glib::ParamSpec] {
+                Self::derived_properties()
+            }
+
+            fn set_property(&self, id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
+                self.derived_set_property(id, value, pspec);
+            }
+
+            fn property(&self, id: usize, pspec: &glib::ParamSpec) -> glib::Value {
+                self.derived_property(id, pspec)
+            }
+        }
+
+        glib::wrapper! {
+            pub struct TestObject(ObjectSubclass<TestObjectImp>);
+        }
+
+        let obj: TestObject = glib::Object::new();
+
+        assert_eq!(obj.clock_time(), ClockTime::default());
+        obj.set_clock_time(ClockTime::MAX);
+        assert_eq!(obj.clock_time(), ClockTime::MAX);
+
+        assert_eq!(obj.optional_clock_time(), None);
+        obj.set_optional_clock_time(ClockTime::MAX);
+        assert_eq!(obj.optional_clock_time(), Some(ClockTime::MAX));
     }
 }
