@@ -14,6 +14,20 @@ use super::{
     SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic,
 };
 
+const TRY_FROM_FLOAT_SECS_ERROR_MSG: &str =
+    "can not convert float seconds to ClockTime: value is either negative, too big or NaN";
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TryFromFloatSecsError;
+
+impl fmt::Display for TryFromFloatSecsError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(TRY_FROM_FLOAT_SECS_ERROR_MSG)
+    }
+}
+
+impl std::error::Error for TryFromFloatSecsError {}
+
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Default)]
 pub struct ClockTime(u64);
 
@@ -42,6 +56,16 @@ impl ClockTime {
     #[inline]
     pub const fn seconds(self) -> u64 {
         self.0 / Self::SECOND.0
+    }
+
+    #[inline]
+    pub fn seconds_f32(self) -> f32 {
+        self.0 as f32 / Self::SECOND.0 as f32
+    }
+
+    #[inline]
+    pub fn seconds_f64(self) -> f64 {
+        self.0 as f64 / Self::SECOND.0 as f64
     }
 
     #[inline]
@@ -74,6 +98,62 @@ impl ClockTime {
             Some(res) => res,
             None => panic!("Out of `ClockTime` range"),
         })
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `ClockTime` which value is the given number of seconds.
+    ///
+    /// Returns an error if seconds is negative, infinite or NaN, or
+    /// the resulting duration in nanoseconds exceeds the `u64` range.
+    #[inline]
+    pub fn try_from_seconds_f32(seconds: f32) -> Result<Self, TryFromFloatSecsError> {
+        skip_assert_initialized!();
+
+        let dur = Duration::try_from_secs_f32(seconds).map_err(|_| TryFromFloatSecsError)?;
+        ClockTime::try_from(dur).map_err(|_| TryFromFloatSecsError)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `ClockTime` which value is the given number of seconds.
+    ///
+    /// # Panics
+    ///
+    /// Panics if seconds is negative, infinite or NaN, or the resulting duration
+    /// in nanoseconds exceeds the `u64` range.
+    #[track_caller]
+    #[inline]
+    pub fn from_seconds_f32(seconds: f32) -> Self {
+        skip_assert_initialized!();
+
+        Self::try_from_seconds_f32(seconds).expect(TRY_FROM_FLOAT_SECS_ERROR_MSG)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `ClockTime` which value is the given number of seconds.
+    ///
+    /// Returns an error if seconds is negative, infinite or NaN, or
+    /// the resulting duration in nanoseconds exceeds the `u64` range.
+    #[inline]
+    pub fn try_from_seconds_f64(seconds: f64) -> Result<Self, TryFromFloatSecsError> {
+        skip_assert_initialized!();
+
+        let dur = Duration::try_from_secs_f64(seconds).map_err(|_| TryFromFloatSecsError)?;
+        ClockTime::try_from(dur).map_err(|_| TryFromFloatSecsError)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `ClockTime` which value is the given number of seconds.
+    ///
+    /// # Panics
+    ///
+    /// Panics if seconds is negative, infinite or NaN, or the resulting duration
+    /// in nanoseconds exceeds the `u64` range.
+    #[track_caller]
+    #[inline]
+    pub fn from_seconds_f64(seconds: f64) -> Self {
+        skip_assert_initialized!();
+
+        Self::try_from_seconds_f64(seconds).expect(TRY_FROM_FLOAT_SECS_ERROR_MSG)
     }
 
     // rustdoc-stripper-ignore-next
@@ -204,6 +284,26 @@ impl Signed<ClockTime> {
     }
 
     // rustdoc-stripper-ignore-next
+    /// Returns the `self` in f32 seconds.
+    #[inline]
+    pub fn seconds_f32(self) -> f32 {
+        match self {
+            Signed::Positive(val) => val.seconds_f32(),
+            Signed::Negative(val) => -val.seconds_f32(),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Returns the `self` in f64 seconds.
+    #[inline]
+    pub fn seconds_f64(self) -> f64 {
+        match self {
+            Signed::Positive(val) => val.seconds_f64(),
+            Signed::Negative(val) => -val.seconds_f64(),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
     /// Creates new value from seconds.
     #[inline]
     pub fn from_seconds(val: Signed<u64>) -> Self {
@@ -212,6 +312,72 @@ impl Signed<ClockTime> {
             Signed::Positive(val) => Signed::Positive(ClockTime::from_seconds(val)),
             Signed::Negative(val) => Signed::Negative(ClockTime::from_seconds(val)),
         }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Signed<ClockTime>` which value is the given number of seconds.
+    ///
+    /// Returns an error if seconds is infinite or NaN, or
+    /// the resulting duration in nanoseconds exceeds the `u64` range.
+    #[inline]
+    pub fn try_from_seconds_f32(seconds: f32) -> Result<Self, TryFromFloatSecsError> {
+        skip_assert_initialized!();
+
+        ClockTime::try_from_seconds_f32(seconds.abs()).map(|ct| {
+            if seconds.is_sign_positive() {
+                Signed::Positive(ct)
+            } else {
+                Signed::Negative(ct)
+            }
+        })
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Signed<ClockTime>` which value is the given number of seconds.
+    ///
+    /// # Panics
+    ///
+    /// Panics if seconds is infinite or NaN, or the resulting duration
+    /// in nanoseconds exceeds the `u64` range.
+    #[track_caller]
+    #[inline]
+    pub fn from_seconds_f32(seconds: f32) -> Self {
+        skip_assert_initialized!();
+
+        Self::try_from_seconds_f32(seconds).expect(TRY_FROM_FLOAT_SECS_ERROR_MSG)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Signed<ClockTime>` which value is the given number of seconds.
+    ///
+    /// Returns an error if seconds is infinite or NaN, or
+    /// the resulting duration in nanoseconds exceeds the `u64` range.
+    #[inline]
+    pub fn try_from_seconds_f64(seconds: f64) -> Result<Self, TryFromFloatSecsError> {
+        skip_assert_initialized!();
+
+        ClockTime::try_from_seconds_f64(seconds.abs()).map(|ct| {
+            if seconds.is_sign_positive() {
+                Signed::Positive(ct)
+            } else {
+                Signed::Negative(ct)
+            }
+        })
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Signed<ClockTime>` which value is the given number of seconds.
+    ///
+    /// # Panics
+    ///
+    /// Panics if seconds is infinite or NaN, or the resulting duration
+    /// in nanoseconds exceeds the `u64` range.
+    #[track_caller]
+    #[inline]
+    pub fn from_seconds_f64(seconds: f64) -> Self {
+        skip_assert_initialized!();
+
+        Self::try_from_seconds_f64(seconds).expect(TRY_FROM_FLOAT_SECS_ERROR_MSG)
     }
 }
 
@@ -1477,5 +1643,162 @@ mod tests {
         assert_eq!(obj.optional_clock_time(), None);
         obj.set_optional_clock_time(ClockTime::MAX);
         assert_eq!(obj.optional_clock_time(), Some(ClockTime::MAX));
+    }
+
+    #[test]
+    fn seconds_float() {
+        let res = ClockTime::ZERO;
+        assert_eq!(res.seconds_f32(), 0.0);
+        assert_eq!(res.seconds_f64(), 0.0);
+
+        let res = ClockTime::from_nseconds(2_700_000_000);
+        assert_eq!(res.seconds_f32(), 2.7);
+        assert_eq!(res.seconds_f64(), 2.7);
+
+        let res = ClockTime::MAX;
+        assert_eq!(res.seconds_f32(), 18_446_744_073.709_553);
+        assert_eq!(res.seconds_f64(), 18_446_744_073.709_553);
+    }
+
+    #[test]
+    fn seconds_float_signed() {
+        let pos = Signed::Positive(ClockTime::ZERO);
+        assert_eq!(pos.seconds_f32(), 0.0);
+        assert_eq!(pos.seconds_f64(), 0.0);
+        let neg = Signed::Negative(ClockTime::ZERO);
+        assert_eq!(neg.seconds_f32(), 0.0);
+        assert_eq!(neg.seconds_f64(), 0.0);
+
+        let pos = Signed::Positive(ClockTime::from_nseconds(2_700_000_000));
+        assert_eq!(pos.seconds_f32(), 2.7);
+        assert_eq!(pos.seconds_f64(), 2.7);
+        let neg = Signed::Negative(ClockTime::from_nseconds(2_700_000_000));
+        assert_eq!(neg.seconds_f32(), -2.7);
+        assert_eq!(neg.seconds_f64(), -2.7);
+
+        let pos = Signed::Positive(ClockTime::MAX);
+        assert_eq!(pos.seconds_f32(), 18_446_744_073.709_553);
+        assert_eq!(pos.seconds_f64(), 18_446_744_073.709_553);
+        let neg = Signed::Negative(ClockTime::MAX);
+        assert_eq!(neg.seconds_f32(), -18_446_744_073.709_553);
+        assert_eq!(neg.seconds_f64(), -18_446_744_073.709_553);
+    }
+
+    #[test]
+    fn try_from_seconds_f32() {
+        let res = ClockTime::try_from_seconds_f32(0.0);
+        assert_eq!(res, Ok(ClockTime::ZERO));
+        let res = ClockTime::try_from_seconds_f32(1e-20);
+        assert_eq!(res, Ok(ClockTime::ZERO));
+        let res = ClockTime::try_from_seconds_f32(4.2e-7);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(420)));
+        let res = ClockTime::try_from_seconds_f32(2.7);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(2_700_000_048)));
+        // subnormal float:
+        let res = ClockTime::try_from_seconds_f32(f32::from_bits(1));
+        assert_eq!(res, Ok(ClockTime::ZERO));
+
+        // the conversion uses rounding with tie resolution to even
+        let res = ClockTime::try_from_seconds_f32(0.999e-9);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(1)));
+
+        let res = ClockTime::try_from_seconds_f32(-5.0);
+        assert!(res.is_err());
+        let res = ClockTime::try_from_seconds_f32(f32::NAN);
+        assert!(res.is_err());
+        let res = ClockTime::try_from_seconds_f32(2e19);
+        assert!(res.is_err());
+
+        // this float represents exactly 976562.5e-9
+        let val = f32::from_bits(0x3A80_0000);
+        let res = ClockTime::try_from_seconds_f32(val);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(976_562)));
+
+        // this float represents exactly 2929687.5e-9
+        let val = f32::from_bits(0x3B40_0000);
+        let res = ClockTime::try_from_seconds_f32(val);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(2_929_688)));
+
+        // this float represents exactly 1.000_976_562_5
+        let val = f32::from_bits(0x3F802000);
+        let res = ClockTime::try_from_seconds_f32(val);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(1_000_976_562)));
+
+        // this float represents exactly 1.002_929_687_5
+        let val = f32::from_bits(0x3F806000);
+        let res = ClockTime::try_from_seconds_f32(val);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(1_002_929_688)));
+    }
+
+    #[test]
+    fn try_from_seconds_f64() {
+        let res = ClockTime::try_from_seconds_f64(0.0);
+        assert_eq!(res, Ok(ClockTime::ZERO));
+        let res = ClockTime::try_from_seconds_f64(1e-20);
+        assert_eq!(res, Ok(ClockTime::ZERO));
+        let res = ClockTime::try_from_seconds_f64(4.2e-7);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(420)));
+        let res = ClockTime::try_from_seconds_f64(2.7);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(2_700_000_000)));
+        // subnormal float:
+        let res = ClockTime::try_from_seconds_f64(f64::from_bits(1));
+        assert_eq!(res, Ok(ClockTime::ZERO));
+
+        // the conversion uses rounding with tie resolution to even
+        let res = ClockTime::try_from_seconds_f64(0.999e-9);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(1)));
+        let res = ClockTime::try_from_seconds_f64(0.999_999_999_499);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(999_999_999)));
+        let res = ClockTime::try_from_seconds_f64(0.999_999_999_501);
+        assert_eq!(res, Ok(ClockTime::from_seconds(1)));
+        let res = ClockTime::try_from_seconds_f64(42.999_999_999_499);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(42_999_999_999)));
+        let res = ClockTime::try_from_seconds_f64(42.999_999_999_501);
+        assert_eq!(res, Ok(ClockTime::from_seconds(43)));
+
+        let res = ClockTime::try_from_seconds_f64(-5.0);
+        assert!(res.is_err());
+        let res = ClockTime::try_from_seconds_f64(f64::NAN);
+        assert!(res.is_err());
+        let res = ClockTime::try_from_seconds_f64(2e19);
+        assert!(res.is_err());
+
+        // this float represents exactly 976562.5e-9
+        let val = f64::from_bits(0x3F50_0000_0000_0000);
+        let res = ClockTime::try_from_seconds_f64(val);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(976_562)));
+
+        // this float represents exactly 2929687.5e-9
+        let val = f64::from_bits(0x3F68_0000_0000_0000);
+        let res = ClockTime::try_from_seconds_f64(val);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(2_929_688)));
+
+        // this float represents exactly 1.000_976_562_5
+        let val = f64::from_bits(0x3FF0_0400_0000_0000);
+        let res = ClockTime::try_from_seconds_f64(val);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(1_000_976_562)));
+
+        // this float represents exactly 1.002_929_687_5
+        let val = f64::from_bits(0x3FF0_0C00_0000_0000);
+        let res = ClockTime::try_from_seconds_f64(val);
+        assert_eq!(res, Ok(ClockTime::from_nseconds(1_002_929_688)));
+    }
+
+    #[test]
+    fn try_from_seconds_f32_signed() {
+        let pos = Signed::<ClockTime>::from_seconds_f32(5.0);
+        assert!(pos.is_positive());
+
+        let neg = Signed::<ClockTime>::from_seconds_f32(-5.0);
+        assert!(neg.is_negative());
+    }
+
+    #[test]
+    fn try_from_seconds_f64_signed() {
+        let pos = Signed::<ClockTime>::from_seconds_f64(5.0);
+        assert!(pos.is_positive());
+
+        let neg = Signed::<ClockTime>::from_seconds_f64(-5.0);
+        assert!(neg.is_negative());
     }
 }
