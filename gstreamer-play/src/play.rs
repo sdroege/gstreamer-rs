@@ -37,3 +37,9 @@ impl Play {
         }
     }
 }
+
+impl Default for Play {
+    fn default() -> Self {
+        Self::new(None::<crate::PlayVideoRenderer>)
+    }
+}
