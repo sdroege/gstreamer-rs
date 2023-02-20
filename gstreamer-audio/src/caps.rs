@@ -11,7 +11,19 @@ pub struct AudioCapsBuilder<T> {
 }
 
 impl AudioCapsBuilder<gst::caps::NoFeature> {
+    // rustdoc-stripper-ignore-next
+    /// Constructs an `AudioCapsBuilder` for the "audio/x-raw" encoding.
+    ///
+    /// If left unchanged, the resulting `Caps` will be initialized with:
+    /// - "audio/x-raw" encoding.
+    /// - maximum rate range.
+    /// - maximum channels range.
+    /// - both interleaved and non-interleaved layouts.
+    /// - all available formats.
+    ///
+    /// Use [`AudioCapsBuilder::for_encoding`] to specify another encoding.
     pub fn new() -> Self {
+        assert_initialized_main_thread!();
         let builder = Caps::builder(glib::gstr!("audio/x-raw"));
         let builder = AudioCapsBuilder { builder };
         builder
@@ -21,8 +33,32 @@ impl AudioCapsBuilder<gst::caps::NoFeature> {
             .format_list(AudioFormat::iter_raw())
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Constructs an `AudioCapsBuilder` for the "audio/x-raw" encoding
+    /// with interleaved layout.
+    ///
+    /// If left unchanged, the resulting `Caps` will be initialized with:
+    /// - "audio/x-raw" encoding.
+    /// - maximum rate range.
+    /// - maximum channels range.
+    /// - interleaved layout.
+    /// - all available formats.
+    ///
+    /// Use [`AudioCapsBuilder::for_encoding`] to specify another encoding.
     pub fn new_interleaved() -> Self {
         AudioCapsBuilder::new().layout(AudioLayout::Interleaved)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Constructs an `AudioCapsBuilder` for the specified encoding.
+    ///
+    /// The resulting `Caps` will use the `encoding` argument as name
+    /// and will not contain any additional fields unless explicitly added.
+    pub fn for_encoding(encoding: impl IntoGStr) -> Self {
+        assert_initialized_main_thread!();
+        AudioCapsBuilder {
+            builder: Caps::builder(encoding),
+        }
     }
 
     pub fn any_features(self) -> AudioCapsBuilder<gst::caps::HasFeatures> {
@@ -178,5 +214,24 @@ fn layout_str(layout: AudioLayout) -> &'static glib::GStr {
         crate::AudioLayout::Interleaved => glib::gstr!("interleaved"),
         crate::AudioLayout::NonInterleaved => glib::gstr!("non-interleaved"),
         crate::AudioLayout::__Unknown(_) => glib::gstr!("unknown"),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::AudioCapsBuilder;
+
+    #[test]
+    fn default_encoding() {
+        gst::init().unwrap();
+        let caps = AudioCapsBuilder::new().build();
+        assert_eq!(caps.structure(0).unwrap().name(), "audio/x-raw");
+    }
+
+    #[test]
+    fn explicit_encoding() {
+        gst::init().unwrap();
+        let caps = AudioCapsBuilder::for_encoding("audio/mpeg").build();
+        assert_eq!(caps.structure(0).unwrap().name(), "audio/mpeg");
     }
 }
