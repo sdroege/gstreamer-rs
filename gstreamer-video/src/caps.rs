@@ -10,7 +10,18 @@ pub struct VideoCapsBuilder<T> {
 }
 
 impl VideoCapsBuilder<gst::caps::NoFeature> {
+    // rustdoc-stripper-ignore-next
+    /// Constructs an `VideoCapsBuilder` for the "video/x-raw" encoding.
+    ///
+    /// If left unchanged, the resulting `Caps` will be initialized with:
+    /// - "video/x-raw" encoding.
+    /// - all available formats.
+    /// - maximum width range.
+    /// - maximum height range.
+    ///
+    /// Use [`VideoCapsBuilder::for_encoding`] to specify another encoding.
     pub fn new() -> Self {
+        assert_initialized_main_thread!();
         let builder = Caps::builder(glib::gstr!("video/x-raw"));
         let builder = VideoCapsBuilder { builder };
         builder
@@ -18,6 +29,18 @@ impl VideoCapsBuilder<gst::caps::NoFeature> {
             .width_range(..)
             .height_range(..)
             .framerate_range(..)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Constructs an `VideoCapsBuilder` for the specified encoding.
+    ///
+    /// The resulting `Caps` will use the `encoding` argument as name
+    /// and will not contain any additional fields unless explicitly added.
+    pub fn for_encoding(encoding: impl IntoGStr) -> Self {
+        assert_initialized_main_thread!();
+        VideoCapsBuilder {
+            builder: Caps::builder(encoding),
+        }
     }
 
     pub fn any_features(self) -> VideoCapsBuilder<gst::caps::HasFeatures> {
@@ -283,41 +306,60 @@ fn next_fraction(fraction: gst::Fraction) -> gst::Fraction {
     gst::Fraction::new(new_num, new_den)
 }
 
-#[test]
-fn test_0_1_fraction() {
-    gst::init().unwrap();
-    let zero_over_one = gst::Fraction::new(0, 1);
-    let prev = previous_fraction(zero_over_one);
-    assert_eq!(prev.numer(), -1);
-    assert_eq!(prev.denom(), i32::MAX);
-    let next = next_fraction(zero_over_one);
-    assert_eq!(next.numer(), 1);
-    assert_eq!(next.denom(), i32::MAX);
-}
+#[cfg(test)]
+mod tests {
+    use super::{next_fraction, previous_fraction, VideoCapsBuilder};
 
-#[test]
-fn test_25_1() {
-    gst::init().unwrap();
-    let twentyfive = gst::Fraction::new(25, 1);
-    let next = next_fraction(twentyfive);
-    //25.000000011641532
-    assert_eq!(next.numer(), 2147483626);
-    assert_eq!(next.denom(), 85899345);
-    let prev = previous_fraction(twentyfive);
-    //24.999999988358468
-    assert_eq!(prev.numer(), 2147483624);
-    assert_eq!(prev.denom(), 85899345);
-}
-#[test]
-fn test_1_25() {
-    gst::init().unwrap();
-    let twentyfive = gst::Fraction::new(1, 25);
-    let next = next_fraction(twentyfive);
-    //0.040000000018626
-    assert_eq!(next.numer(), 85899345);
-    assert_eq!(next.denom(), 2147483624);
-    let prev = previous_fraction(twentyfive);
-    //0.039999999981374
-    assert_eq!(prev.numer(), 85899345);
-    assert_eq!(prev.denom(), 2147483626);
+    #[test]
+    fn default_encoding() {
+        gst::init().unwrap();
+        let caps = VideoCapsBuilder::new().build();
+        assert_eq!(caps.structure(0).unwrap().name(), "video/x-raw");
+    }
+
+    #[test]
+    fn explicit_encoding() {
+        gst::init().unwrap();
+        let caps = VideoCapsBuilder::for_encoding("video/mpeg").build();
+        assert_eq!(caps.structure(0).unwrap().name(), "video/mpeg");
+    }
+
+    #[test]
+    fn test_0_1_fraction() {
+        gst::init().unwrap();
+        let zero_over_one = gst::Fraction::new(0, 1);
+        let prev = previous_fraction(zero_over_one);
+        assert_eq!(prev.numer(), -1);
+        assert_eq!(prev.denom(), i32::MAX);
+        let next = next_fraction(zero_over_one);
+        assert_eq!(next.numer(), 1);
+        assert_eq!(next.denom(), i32::MAX);
+    }
+
+    #[test]
+    fn test_25_1() {
+        gst::init().unwrap();
+        let twentyfive = gst::Fraction::new(25, 1);
+        let next = next_fraction(twentyfive);
+        //25.000000011641532
+        assert_eq!(next.numer(), 2147483626);
+        assert_eq!(next.denom(), 85899345);
+        let prev = previous_fraction(twentyfive);
+        //24.999999988358468
+        assert_eq!(prev.numer(), 2147483624);
+        assert_eq!(prev.denom(), 85899345);
+    }
+    #[test]
+    fn test_1_25() {
+        gst::init().unwrap();
+        let twentyfive = gst::Fraction::new(1, 25);
+        let next = next_fraction(twentyfive);
+        //0.040000000018626
+        assert_eq!(next.numer(), 85899345);
+        assert_eq!(next.denom(), 2147483624);
+        let prev = previous_fraction(twentyfive);
+        //0.039999999981374
+        assert_eq!(prev.numer(), 85899345);
+        assert_eq!(prev.denom(), 2147483626);
+    }
 }
