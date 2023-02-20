@@ -11,7 +11,7 @@ homepage = "https://gstreamer.freedesktop.org"
 documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_editing_services/"
 keywords = ["gstreamer", "multimedia", "gnome", "nle"]
 edition = "2021"
-rust-version = "1.64"
+rust-version = "1.66"
 
 [dependencies]
 libc = "0.2"
