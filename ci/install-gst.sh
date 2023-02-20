@@ -9,7 +9,7 @@ pushd .
 cd ..
 git clone https://gitlab.freedesktop.org/gstreamer/gstreamer.git \
     --depth 1 \
-    --branch 1.22
+    --branch main
 
 cd gstreamer
 

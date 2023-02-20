@@ -6,7 +6,7 @@ FROM "registry.freedesktop.org/gstreamer/gstreamer/amd64/windows:2022-12-10.0-ma
 ENV ErrorActionPreference='Stop'
 SHELL ["powershell","-NoLogo", "-NonInteractive", "-Command"]
 
-ARG DEFAULT_BRANCH="1.22"
+ARG DEFAULT_BRANCH="main"
 ARG RUST_VERSION="invalid"
 
 RUN choco install -y pkgconfiglite nasm llvm
