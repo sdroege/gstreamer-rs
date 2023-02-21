@@ -478,7 +478,7 @@ dependencies = [
 
 [[package]]
 name = "examples"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "anyhow",
  "byte-slice-cast",
@@ -996,7 +996,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "cfg-if",
@@ -1025,7 +1025,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-allocators"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1038,7 +1038,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-allocators-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1051,7 +1051,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-app"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "futures-core",
@@ -1069,7 +1069,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-app-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gstreamer-base-sys",
@@ -1082,7 +1082,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-audio"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "cfg-if",
@@ -1100,7 +1100,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-audio-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1114,7 +1114,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-base"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "atomic_refcell",
  "bitflags",
@@ -1128,7 +1128,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-base-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1141,7 +1141,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-check"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1152,7 +1152,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-check-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1165,7 +1165,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-controller"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1177,7 +1177,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-controller-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1191,7 +1191,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-editing-services"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "gio",
@@ -1208,7 +1208,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-editing-services-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -1223,7 +1223,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1240,7 +1240,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-egl"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1252,7 +1252,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-egl-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gstreamer-gl-sys",
@@ -1264,7 +1264,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1279,7 +1279,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-wayland"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1291,7 +1291,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-wayland-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gstreamer-gl-sys",
@@ -1303,7 +1303,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-x11"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1315,7 +1315,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-gl-x11-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gstreamer-gl-sys",
@@ -1327,7 +1327,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-mpegts"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1337,7 +1337,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-mpegts-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gstreamer-base-sys",
@@ -1350,7 +1350,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-net"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "gio",
  "gir-format-check",
@@ -1361,7 +1361,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-net-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -1374,7 +1374,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-pbutils"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1391,7 +1391,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-pbutils-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1406,7 +1406,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-play"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1420,7 +1420,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-play-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1434,7 +1434,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-player"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1448,7 +1448,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-player-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1462,7 +1462,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtp"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1477,7 +1477,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtp-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gstreamer-base-sys",
@@ -1490,7 +1490,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtsp"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1505,7 +1505,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtsp-server"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "gio",
@@ -1524,7 +1524,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtsp-server-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -1541,7 +1541,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-rtsp-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -1556,7 +1556,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-sdp"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1566,7 +1566,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-sdp-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gstreamer-sys",
@@ -1578,7 +1578,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1590,7 +1590,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-tag-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1603,7 +1603,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-utils"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "futures",
  "gstreamer",
@@ -1615,7 +1615,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-validate"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "gir-format-check",
@@ -1627,7 +1627,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-validate-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "gio-sys",
  "glib-sys",
@@ -1641,7 +1641,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-video"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "bitflags",
  "cfg-if",
@@ -1660,7 +1660,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-video-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1674,7 +1674,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-webrtc"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "gir-format-check",
  "glib",
@@ -1686,7 +1686,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-webrtc-sys"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "glib-sys",
  "gstreamer-sdp-sys",
@@ -2895,7 +2895,7 @@ dependencies = [
 
 [[package]]
 name = "tutorials"
-version = "0.20.1"
+version = "0.20.2"
 dependencies = [
  "anyhow",
  "byte-slice-cast",
