@@ -406,6 +406,11 @@ status = "generate"
 name = "Gst.Bin"
 status = "generate"
 trait_name = "GstBinExt"
+    [[object.function]]
+    name = "new"
+    # Remove the optional `name` argument in favor of using the builder
+    manual = true
+
     [[object.signal]]
     name = "do-latency"
     # Use Result<(), glib::BoolError>
@@ -1674,13 +1679,13 @@ manual_traits = ["PadExtManual"]
 
     [[object.function]]
     name = "new_from_template"
-    # Also has builder_with_template()
+    # Also has builder_from_template()
     rename = "from_template"
     manual = true
 
     [[object.function]]
     name = "new_from_static_template"
-    # Also has builder_with_static_template()
+    # Also has builder_from_static_template()
     rename = "from_static_template"
     manual = true
 
@@ -1880,6 +1885,11 @@ status = "generate"
 [[object]]
 name = "Gst.Pipeline"
 status = "generate"
+    [[object.function]]
+    name = "new"
+    # Remove the optional `name` argument in favor of using the builder
+    manual = true
+
     [[object.function]]
     name = "get_delay"
         [object.function.return]

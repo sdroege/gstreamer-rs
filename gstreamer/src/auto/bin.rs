@@ -22,12 +22,6 @@ glib::wrapper! {
 
 impl Bin {
     pub const NONE: Option<&'static Bin> = None;
-
-    #[doc(alias = "gst_bin_new")]
-    pub fn new(name: Option<&str>) -> Bin {
-        assert_initialized_main_thread!();
-        unsafe { Element::from_glib_none(ffi::gst_bin_new(name.to_glib_none().0)).unsafe_cast() }
-    }
 }
 
 unsafe impl Send for Bin {}

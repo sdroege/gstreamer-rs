@@ -30,7 +30,7 @@
 //! # use gstreamer as gst;
 //! # use gst::prelude::ElementExtManual;
 //! # gst::init();
-//! # let pipeline = gst::Pipeline::new(None);
+//! # let pipeline = gst::Pipeline::new();
 //! let res = pipeline.query_position::<gst::ClockTime>();
 //! ```
 //!
@@ -40,7 +40,7 @@
 //! # use gstreamer as gst;
 //! # use gst::{format::prelude::*, prelude::ElementExtManual};
 //! # gst::init();
-//! # let pipeline = gst::Pipeline::new(None);
+//! # let pipeline = gst::Pipeline::new();
 //! # let seek_flags = gst::SeekFlags::FLUSH | gst::SeekFlags::KEY_UNIT;
 //! let seek_pos = gst::ClockTime::from_seconds(10);
 //! let res = pipeline.seek_simple(seek_flags, seek_pos);

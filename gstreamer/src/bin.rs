@@ -13,9 +13,30 @@ use crate::{prelude::*, Bin, BinFlags, Element, LoggableError};
 
 impl Bin {
     // rustdoc-stripper-ignore-next
+    /// Creates a new [`Bin`] object with a default name.
+    ///
+    /// Use [`Bin::with_name()`] to create a [`Bin`] with a specific name.
+    /// Use [`Bin::builder()`] for additional configuration.
+    #[doc(alias = "gst_bin_new")]
+    pub fn new() -> Bin {
+        assert_initialized_main_thread!();
+        unsafe { Element::from_glib_none(ffi::gst_bin_new(std::ptr::null())).unsafe_cast() }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates a new [`Bin`] object with the specified name.
+    ///
+    /// Use [`Bin::builder()`] for additional configuration.
+    #[doc(alias = "gst_bin_new")]
+    pub fn with_name(name: &str) -> Bin {
+        assert_initialized_main_thread!();
+        unsafe { Element::from_glib_none(ffi::gst_bin_new(name.to_glib_none().0)).unsafe_cast() }
+    }
+
+    // rustdoc-stripper-ignore-next
     /// Creates a new builder-pattern struct instance to construct [`Bin`] objects.
     ///
-    /// This method returns an instance of [`BinBuilder`](crate::builders::BinBuilder) which can be used to create [`Bin`] objects.
+    /// This method returns an instance of [`BinBuilder`] which can be used to create [`Bin`] objects.
     pub fn builder() -> BinBuilder {
         BinBuilder::new()
     }
@@ -311,7 +332,7 @@ mod tests {
     fn test_get_children() {
         crate::init().unwrap();
 
-        let bin = crate::Bin::new(None);
+        let bin = crate::Bin::new();
         bin.add(
             &crate::ElementFactory::make("identity")
                 .name("identity0")

@@ -138,7 +138,7 @@ mod tests {
     fn test_deep_notify() {
         crate::init().unwrap();
 
-        let bin = crate::Bin::new(None);
+        let bin = crate::Bin::new();
         let identity = crate::ElementFactory::make("identity")
             .name("id")
             .build()

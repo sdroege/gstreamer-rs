@@ -146,8 +146,10 @@ mod element;
 pub mod element_factory;
 
 mod bin;
+pub use bin::BinBuilder;
 
 mod pipeline;
+pub use pipeline::PipelineBuilder;
 
 mod allocation_params;
 pub use self::allocation_params::AllocationParams;

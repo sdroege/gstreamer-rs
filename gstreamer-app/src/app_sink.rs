@@ -1273,7 +1273,7 @@ mod tests {
             .unwrap();
         let appsink = gst::ElementFactory::make("appsink").build().unwrap();
 
-        let pipeline = gst::Pipeline::new(None);
+        let pipeline = gst::Pipeline::new();
         pipeline.add(&videotestsrc).unwrap();
         pipeline.add(&appsink).unwrap();
 

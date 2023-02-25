@@ -1245,7 +1245,7 @@ mod tests {
         trace!(cat, "meh");
         memdump!(cat, "meh");
 
-        let obj = crate::Bin::new(Some("meh"));
+        let obj = crate::Bin::with_name("meh");
 
         error!(cat, obj: &obj, "meh");
         warning!(cat, obj: &obj, "meh");
@@ -1276,7 +1276,7 @@ mod tests {
             Some("some debug category"),
         );
         cat.set_threshold(DebugLevel::Info);
-        let obj = crate::Bin::new(Some("meh"));
+        let obj = crate::Bin::with_name("meh");
 
         let (sender, receiver) = mpsc::channel();
 

@@ -22,14 +22,6 @@ glib::wrapper! {
 
 impl Pipeline {
     pub const NONE: Option<&'static Pipeline> = None;
-
-    #[doc(alias = "gst_pipeline_new")]
-    pub fn new(name: Option<&str>) -> Pipeline {
-        assert_initialized_main_thread!();
-        unsafe {
-            Element::from_glib_none(ffi::gst_pipeline_new(name.to_glib_none().0)).unsafe_cast()
-        }
-    }
 }
 
 unsafe impl Send for Pipeline {}

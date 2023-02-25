@@ -101,7 +101,7 @@ fn tutorial_main() {
         .expect("Failed to create sink element");
 
     // Create the empty pipeline
-    let pipeline = gst::Pipeline::builder().name("test-pipeline").build();
+    let pipeline = gst::Pipeline::with_name("test-pipeline");
 
     pipeline.add_many([&source, &sink]).unwrap();
     source.link(&sink).expect("Elements could not be linked.");

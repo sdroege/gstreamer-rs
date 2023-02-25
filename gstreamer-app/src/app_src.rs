@@ -651,7 +651,7 @@ mod tests {
             .build()
             .unwrap();
 
-        let pipeline = gst::Pipeline::new(None);
+        let pipeline = gst::Pipeline::new();
         pipeline.add(&appsrc).unwrap();
         pipeline.add(&fakesink).unwrap();
 

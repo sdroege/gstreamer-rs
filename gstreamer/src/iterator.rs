@@ -803,7 +803,7 @@ mod tests {
 
         crate::init().unwrap();
 
-        let bin = crate::Bin::new(None);
+        let bin = crate::Bin::new();
         let id1 = crate::ElementFactory::make("identity").build().unwrap();
         let id2 = crate::ElementFactory::make("identity").build().unwrap();
 
@@ -834,7 +834,7 @@ mod tests {
 
         crate::init().unwrap();
 
-        let bin = crate::Bin::new(None);
+        let bin = crate::Bin::new();
         let id1 = crate::ElementFactory::make("identity").build().unwrap();
         let id2 = crate::ElementFactory::make("identity").build().unwrap();
 

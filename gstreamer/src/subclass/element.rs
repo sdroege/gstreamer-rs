@@ -725,7 +725,7 @@ mod tests {
             Some("Test Element")
         );
 
-        let pipeline = crate::Pipeline::new(None);
+        let pipeline = crate::Pipeline::new();
         let src = ElementFactory::make("fakesrc")
             .property("num-buffers", 100i32)
             .build()

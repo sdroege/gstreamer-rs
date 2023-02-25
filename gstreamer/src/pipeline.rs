@@ -6,9 +6,35 @@ use crate::{prelude::*, Pipeline, PipelineFlags};
 
 impl Pipeline {
     // rustdoc-stripper-ignore-next
+    /// Creates a new [`Pipeline`] object with a default name.
+    ///
+    /// Use [`Pipeline::with_name()`] to create a [`Pipeline`] with a specific name.
+    /// Use [`Pipeline::builder()`] to get a [`PipelineBuilder`] and then define a specific name.
+    #[doc(alias = "gst_pipeline_new")]
+    pub fn new() -> Pipeline {
+        assert_initialized_main_thread!();
+        unsafe {
+            crate::Element::from_glib_none(ffi::gst_pipeline_new(std::ptr::null())).unsafe_cast()
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates a new [`Pipeline`] object with the specified name.
+    ///
+    /// Use [`Pipeline::builder()`] for additional configuration.
+    #[doc(alias = "gst_pipeline_new")]
+    pub fn with_name(name: &str) -> Pipeline {
+        assert_initialized_main_thread!();
+        unsafe {
+            crate::Element::from_glib_none(ffi::gst_pipeline_new(name.to_glib_none().0))
+                .unsafe_cast()
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
     /// Creates a new builder-pattern struct instance to construct [`Pipeline`] objects.
     ///
-    /// This method returns an instance of [`PipelineBuilder`](crate::builders::PipelineBuilder) which can be used to create [`Pipeline`] objects.
+    /// This method returns an instance of [`PipelineBuilder`] which can be used to create [`Pipeline`] objects.
     pub fn builder() -> PipelineBuilder {
         PipelineBuilder::new()
     }

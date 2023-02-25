@@ -283,7 +283,7 @@ mod tests {
         file.write_all(b"succeeds").unwrap();
 
         let runner = crate::Runner::new();
-        let pipeline = gst::Pipeline::new(None);
+        let pipeline = gst::Pipeline::new();
         let scenario =
             crate::Scenario::factory_create(&runner, &pipeline, file.path().to_str().unwrap())
                 .unwrap();
