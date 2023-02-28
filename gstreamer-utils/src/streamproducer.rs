@@ -235,7 +235,7 @@ impl StreamProducer {
         }
     }
 
-    /// configure if EOS from appsrc should be forwarded to all the consumers
+    /// configure if EOS from appsrc should be forwarded to all the consumers (default: `true`)
     pub fn set_forward_eos(&self, forward_eos: bool) {
         self.consumers.lock().unwrap().forward_eos = forward_eos;
     }
