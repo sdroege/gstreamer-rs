@@ -41,6 +41,15 @@ pub use crate::auto::*;
 mod functions;
 pub use functions::*;
 
+mod action_type;
+pub use action_type::*;
+
+mod enums;
+pub use enums::*;
+
+mod action;
+pub use action::{Action, ActionRef};
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_validate::prelude::*" without getting conflicts
 pub mod prelude {

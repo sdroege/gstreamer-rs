@@ -17,7 +17,6 @@ external_libraries = [
 ]
 
 generate = [
-    "GstValidate.Action",
     "GstValidate.Reporter",
     "GstValidate.BinMonitor",
     "GstValidate.Monitor",
@@ -31,6 +30,8 @@ generate = [
     "GstValidate.ReportLevel",
     "GstValidate.IssueFlags",
     "GstValidate.IssueId",
+    "GstValidate.ActionTypeFlags",
+    "GstValidate.ActionType",
 ]
 
 manual = [
@@ -48,6 +49,7 @@ manual = [
     "Gst.Format",
     "Gst.SeekFlags",
     "Gst.SeekType",
+    "GstValidate.Action",
 ]
 
 [[object]]

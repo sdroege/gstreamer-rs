@@ -27,8 +27,8 @@ pub use self::runner::Runner;
 mod scenario;
 pub use self::scenario::Scenario;
 
-mod action;
-pub use self::action::Action;
+mod action_type;
+pub use self::action_type::ActionType;
 
 mod issue;
 pub use self::issue::Issue;
@@ -41,6 +41,7 @@ pub use self::enums::ReportLevel;
 pub use self::enums::ReportingDetails;
 
 mod flags;
+pub use self::flags::ActionTypeFlags;
 pub use self::flags::IssueFlags;
 
 mod alias;

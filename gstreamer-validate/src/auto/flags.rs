@@ -7,6 +7,110 @@ use bitflags::bitflags;
 use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 
 bitflags! {
+    #[doc(alias = "GstValidateActionTypeFlags")]
+    pub struct ActionTypeFlags: u32 {
+        #[doc(alias = "GST_VALIDATE_ACTION_TYPE_NONE")]
+        const NONE = ffi::GST_VALIDATE_ACTION_TYPE_NONE as _;
+        #[doc(alias = "GST_VALIDATE_ACTION_TYPE_CONFIG")]
+        const CONFIG = ffi::GST_VALIDATE_ACTION_TYPE_CONFIG as _;
+        #[doc(alias = "GST_VALIDATE_ACTION_TYPE_ASYNC")]
+        const ASYNC = ffi::GST_VALIDATE_ACTION_TYPE_ASYNC as _;
+        #[doc(alias = "GST_VALIDATE_ACTION_TYPE_NON_BLOCKING")]
+        const NON_BLOCKING = ffi::GST_VALIDATE_ACTION_TYPE_NON_BLOCKING as _;
+        #[doc(alias = "GST_VALIDATE_ACTION_TYPE_INTERLACED")]
+        const INTERLACED = ffi::GST_VALIDATE_ACTION_TYPE_INTERLACED as _;
+        #[doc(alias = "GST_VALIDATE_ACTION_TYPE_CAN_EXECUTE_ON_ADDITION")]
+        const CAN_EXECUTE_ON_ADDITION = ffi::GST_VALIDATE_ACTION_TYPE_CAN_EXECUTE_ON_ADDITION as _;
+        #[doc(alias = "GST_VALIDATE_ACTION_TYPE_NEEDS_CLOCK")]
+        const NEEDS_CLOCK = ffi::GST_VALIDATE_ACTION_TYPE_NEEDS_CLOCK as _;
+        #[doc(alias = "GST_VALIDATE_ACTION_TYPE_NO_EXECUTION_NOT_FATAL")]
+        const NO_EXECUTION_NOT_FATAL = ffi::GST_VALIDATE_ACTION_TYPE_NO_EXECUTION_NOT_FATAL as _;
+        #[doc(alias = "GST_VALIDATE_ACTION_TYPE_CAN_BE_OPTIONAL")]
+        const CAN_BE_OPTIONAL = ffi::GST_VALIDATE_ACTION_TYPE_CAN_BE_OPTIONAL as _;
+        #[doc(alias = "GST_VALIDATE_ACTION_TYPE_DOESNT_NEED_PIPELINE")]
+        const DOESNT_NEED_PIPELINE = ffi::GST_VALIDATE_ACTION_TYPE_DOESNT_NEED_PIPELINE as _;
+        #[doc(alias = "GST_VALIDATE_ACTION_TYPE_HANDLED_IN_CONFIG")]
+        const HANDLED_IN_CONFIG = ffi::GST_VALIDATE_ACTION_TYPE_HANDLED_IN_CONFIG as _;
+        #[doc(alias = "GST_VALIDATE_ACTION_TYPE_CHECK")]
+        const CHECK = ffi::GST_VALIDATE_ACTION_TYPE_CHECK as _;
+    }
+}
+
+#[doc(hidden)]
+impl IntoGlib for ActionTypeFlags {
+    type GlibType = ffi::GstValidateActionTypeFlags;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstValidateActionTypeFlags {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstValidateActionTypeFlags> for ActionTypeFlags {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstValidateActionTypeFlags) -> Self {
+        skip_assert_initialized!();
+        Self::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for ActionTypeFlags {
+    #[inline]
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_validate_action_type_flags_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for ActionTypeFlags {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        |name| Self::ParamSpec::builder(name)
+    }
+}
+
+impl glib::value::ValueType for ActionTypeFlags {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for ActionTypeFlags {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for ActionTypeFlags {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<ActionTypeFlags> for glib::Value {
+    #[inline]
+    fn from(v: ActionTypeFlags) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+bitflags! {
     #[doc(alias = "GstValidateIssueFlags")]
     pub struct IssueFlags: u32 {
         #[doc(alias = "GST_VALIDATE_ISSUE_FLAGS_NONE")]

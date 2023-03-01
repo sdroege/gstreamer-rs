@@ -31,7 +31,6 @@ pub fn setup_test_file(test_file: &str, use_fakesinks: bool) -> gst::Structure {
 
 #[cfg(test)]
 mod tests {
-
     #[test]
     fn test_init() {
         gst::init().unwrap();
