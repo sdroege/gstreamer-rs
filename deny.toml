@@ -27,6 +27,11 @@ multiple-versions = "deny"
 wildcards = "allow"
 highlight = "all"
 
+# Various crates depend on an older version of windows-sys
+[[bans.skip]]
+name = "windows-sys"
+version = "0.42"
+
 [sources]
 unknown-registry = "deny"
 unknown-git = "deny"
