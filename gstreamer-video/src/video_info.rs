@@ -854,7 +854,7 @@ impl VideoInfo {
     pub fn align_full(
         &mut self,
         align: &mut crate::VideoAlignment,
-    ) -> Result<([usize; crate::VIDEO_MAX_PLANES]), glib::BoolError> {
+    ) -> Result<[usize; crate::VIDEO_MAX_PLANES], glib::BoolError> {
         let mut plane_size = [0; crate::VIDEO_MAX_PLANES];
 
         unsafe {
