@@ -502,9 +502,7 @@ impl fmt::Debug for VideoFormatInfo {
         {
             fmt.field(
                 "tile-info",
-                &(0..self.n_planes())
-                    .into_iter()
-                    .map(|plane| self.tile_info(plane)),
+                &(0..self.n_planes()).map(|plane| self.tile_info(plane)),
             );
         }
 
