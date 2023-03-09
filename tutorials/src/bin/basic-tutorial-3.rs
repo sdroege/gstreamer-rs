@@ -7,8 +7,7 @@ fn tutorial_main() {
     // Initialize GStreamer
     gst::init().unwrap();
 
-    let uri =
-        "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
+    let uri = "http://desmottes.be/~cassidy/files/brol/test.mkv";
 
     // Create the elements
     let source = gst::ElementFactory::make("uridecodebin")
@@ -36,13 +35,17 @@ fn tutorial_main() {
     // Build the pipeline Note that we are NOT linking the source at this
     // point. We will do it later.
     pipeline
-        .add_many(&[&source, &convert, &resample, &sink])
+        .add_many([&source, &convert, &resample, &sink])
         .unwrap();
     gst::Element::link_many(&[&convert, &resample, &sink]).expect("Elements could not be linked.");
 
     // Connect the pad-added signal
     source.connect_pad_added(move |src, src_pad| {
         println!("Received new pad {} from {}", src_pad.name(), src.name());
+
+        src.downcast_ref::<gst::Bin>()
+            .unwrap()
+            .debug_to_dot_file_with_ts(gst::DebugGraphDetails::all(), "pad-added");
 
         let sink_pad = convert
             .static_pad("sink")

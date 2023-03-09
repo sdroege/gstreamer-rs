@@ -66,7 +66,7 @@ fn example_main() -> Result<(), Error> {
     // Increase the queue capacity to 100MB to avoid a stalling pipeline
 
     pipeline
-        .add_many(&[&src, &typefinder, &queue, &muxer, &sink])
+        .add_many([&src, &typefinder, &queue, &muxer, &sink])
         .expect("failed to add elements to pipeline");
 
     src.link(&typefinder)?;

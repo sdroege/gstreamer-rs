@@ -57,7 +57,7 @@ fn tutorial_main() {
     let pipeline = gst::Pipeline::builder().name("test-pipeline").build();
 
     pipeline
-        .add_many(&[
+        .add_many([
             &audio_source,
             &tee,
             &audio_queue,

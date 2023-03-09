@@ -99,7 +99,7 @@ fn example_main() -> Result<(), Error> {
         .property("sync", true)
         .build()?;
 
-    pipeline.add_many(&[&src, &conv, &q1, &enc, &q2, &pay, &rtpbin, &sink])?;
+    pipeline.add_many([&src, &conv, &q1, &enc, &q2, &pay, &rtpbin, &sink])?;
 
     conv.link(&q1)?;
     q1.link(&enc)?;

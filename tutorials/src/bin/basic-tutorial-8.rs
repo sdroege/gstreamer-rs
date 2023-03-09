@@ -110,7 +110,7 @@ fn main() {
     let pipeline = gst::Pipeline::builder().name("test-pipeline").build();
 
     pipeline
-        .add_many(&[
+        .add_many([
             appsrc.upcast_ref(),
             &tee,
             &audio_queue,

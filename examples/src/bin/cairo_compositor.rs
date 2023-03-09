@@ -576,7 +576,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
     comp.set_property("background-color", 0xff_33_33_33u32);
 
-    pipeline.add_many(&[&src1, &src2, comp.upcast_ref(), &conv, &sink])?;
+    pipeline.add_many([&src1, &src2, comp.upcast_ref(), &conv, &sink])?;
 
     // Link everything together.
     src1.link_filtered(

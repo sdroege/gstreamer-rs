@@ -77,7 +77,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     let videoconvert = gst::ElementFactory::make("videoconvert").build()?;
     let sink = gst::ElementFactory::make("autovideosink").build()?;
 
-    pipeline.add_many(&[&src, &overlay, &capsfilter, &videoconvert, &sink])?;
+    pipeline.add_many([&src, &overlay, &capsfilter, &videoconvert, &sink])?;
     gst::Element::link_many(&[&src, &overlay, &capsfilter, &videoconvert, &sink])?;
 
     // The PangoFontMap represents the set of fonts available for a particular rendering system.

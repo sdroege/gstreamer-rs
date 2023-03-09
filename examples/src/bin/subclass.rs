@@ -248,7 +248,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     let conv = gst::ElementFactory::make("audioconvert").build()?;
     let sink = gst::ElementFactory::make("autoaudiosink").build()?;
 
-    pipeline.add_many(&[&src, filter.upcast_ref(), &conv, &sink])?;
+    pipeline.add_many([&src, filter.upcast_ref(), &conv, &sink])?;
     src.link(&filter)?;
     filter.link(&conv)?;
     conv.link(&sink)?;

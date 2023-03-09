@@ -137,7 +137,7 @@ mod media_factory {
                     .build()
                     .unwrap();
 
-                bin.add_many(&[&src, &enc, &pay]).unwrap();
+                bin.add_many([&src, &enc, &pay]).unwrap();
                 gst::Element::link_many(&[&src, &enc, &pay]).unwrap();
 
                 Some(bin.upcast())

@@ -97,7 +97,7 @@ fn example_main() -> Result<(), Error> {
     configure_encodebin(&encodebin);
 
     pipeline
-        .add_many(&[&src, &encodebin, &sink])
+        .add_many([&src, &encodebin, &sink])
         .expect("failed to add elements to pipeline");
     // It is clear from the start, that encodebin has only one src pad, so we can
     // directly link it to our filesink without problems.

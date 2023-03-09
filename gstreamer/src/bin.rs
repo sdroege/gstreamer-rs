@@ -23,9 +23,16 @@ impl Bin {
 
 pub trait GstBinExtManual: 'static {
     #[doc(alias = "gst_bin_add_many")]
-    fn add_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError>;
+    fn add_many(
+        &self,
+        elements: impl IntoIterator<Item = impl AsRef<Element>>,
+    ) -> Result<(), glib::BoolError>;
+
     #[doc(alias = "gst_bin_remove_many")]
-    fn remove_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError>;
+    fn remove_many(
+        &self,
+        elements: impl IntoIterator<Item = impl AsRef<Element>>,
+    ) -> Result<(), glib::BoolError>;
 
     #[doc(alias = "do-latency")]
     fn connect_do_latency<F: Fn(&Self) -> Result<(), LoggableError> + Send + Sync + 'static>(
@@ -78,7 +85,10 @@ pub trait GstBinExtManual: 'static {
 }
 
 impl<O: IsA<Bin>> GstBinExtManual for O {
-    fn add_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError> {
+    fn add_many(
+        &self,
+        elements: impl IntoIterator<Item = impl AsRef<Element>>,
+    ) -> Result<(), glib::BoolError> {
         for e in elements {
             unsafe {
                 glib::result_from_gboolean!(
@@ -91,7 +101,10 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         Ok(())
     }
 
-    fn remove_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError> {
+    fn remove_many(
+        &self,
+        elements: impl IntoIterator<Item = impl AsRef<Element>>,
+    ) -> Result<(), glib::BoolError> {
         for e in elements {
             unsafe {
                 glib::result_from_gboolean!(

@@ -22,7 +22,7 @@ fn tutorial_main() {
     let pipeline = gst::Pipeline::builder().name("test-pipeline").build();
 
     // Build the pipeline
-    pipeline.add_many(&[&source, &sink]).unwrap();
+    pipeline.add_many([&source, &sink]).unwrap();
     source.link(&sink).expect("Elements could not be linked.");
 
     // Start playing

@@ -103,7 +103,7 @@ fn tutorial_main() {
     // Create the empty pipeline
     let pipeline = gst::Pipeline::builder().name("test-pipeline").build();
 
-    pipeline.add_many(&[&source, &sink]).unwrap();
+    pipeline.add_many([&source, &sink]).unwrap();
     source.link(&sink).expect("Elements could not be linked.");
 
     // Print initial negotiated caps (in NULL state)

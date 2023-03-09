@@ -103,7 +103,7 @@ fn create_ui(app: &gtk::Application) {
     // specific. This example supports Linux and Mac (using X11 and Quartz).
     let sink = create_video_sink();
 
-    pipeline.add_many(&[&src, &sink]).unwrap();
+    pipeline.add_many([&src, &sink]).unwrap();
     src.link(&sink).unwrap();
 
     // First, we create our gtk window - which will contain a region where

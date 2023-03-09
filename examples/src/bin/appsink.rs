@@ -46,7 +46,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
         )
         .build();
 
-    pipeline.add_many(&[&src, appsink.upcast_ref()])?;
+    pipeline.add_many([&src, appsink.upcast_ref()])?;
     src.link(&appsink)?;
 
     // Getting data out of the appsink is done by setting callbacks on it.

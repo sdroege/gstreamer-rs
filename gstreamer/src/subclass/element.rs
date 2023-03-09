@@ -733,7 +733,7 @@ mod tests {
         let sink = ElementFactory::make("fakesink").build().unwrap();
 
         pipeline
-            .add_many(&[&src, element.upcast_ref(), &sink])
+            .add_many([&src, element.upcast_ref(), &sink])
             .unwrap();
         Element::link_many(&[&src, element.upcast_ref(), &sink]).unwrap();
 

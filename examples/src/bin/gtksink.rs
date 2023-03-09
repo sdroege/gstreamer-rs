@@ -49,7 +49,7 @@ fn create_ui(app: &gtk::Application) {
         (sink, widget)
     };
 
-    pipeline.add_many(&[&src, &sink]).unwrap();
+    pipeline.add_many([&src, &sink]).unwrap();
     src.link(&sink).unwrap();
 
     // Create a simple gtk gui window to place our widget into.

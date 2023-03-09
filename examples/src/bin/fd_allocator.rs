@@ -45,7 +45,7 @@ fn create_receiver_pipeline(
     let queue = gst::ElementFactory::make("queue").build()?;
     let sink = gst::ElementFactory::make("autovideosink").build()?;
 
-    pipeline.add_many(&[src.upcast_ref(), &filter, &convert, &queue, &sink])?;
+    pipeline.add_many([src.upcast_ref(), &filter, &convert, &queue, &sink])?;
     gst::Element::link_many(&[src.upcast_ref(), &filter, &convert, &queue, &sink])?;
 
     let fd_allocator = gst_allocators::FdAllocator::new();
@@ -115,7 +115,7 @@ fn create_sender_pipeline(
         .ok_or_else(|| anyhow::anyhow!("is not a appsink"))?
         .set_caps(Some(&caps));
 
-    pipeline.add_many(&[&src, &sink])?;
+    pipeline.add_many([&src, &sink])?;
     gst::Element::link_many(&[&src, &sink])?;
 
     let appsink = sink
