@@ -17,7 +17,7 @@
 # Updating the nightly image should be done by simply running a scheduled ci
 # pipeline on the upstream repo with the $UPDATE_NIGHTLY variable defined.
 
-.templates_sha: &templates_sha 567700e483aabed992d0a4fea84994a0472deff6
+.templates_sha: &templates_sha fddab8aa63e89a8e65214f59860d9c0f030360c9
 
 include:
   - project: 'freedesktop/ci-templates'
@@ -89,34 +89,34 @@ trigger:
       when: 'manual'
       allow_failure: false
 
-.debian:11:
+.debian:12:
   needs: []
   variables:
-    FDO_DISTRIBUTION_VERSION: 'bullseye-slim'
+    FDO_DISTRIBUTION_VERSION: 'bookworm-slim'
   before_script:
     - source ./ci/env.sh
     - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config
 
-.debian:11-base:
-  extends: .debian:11
+.debian:12-base:
+  extends: .debian:12
   variables:
     FDO_DISTRIBUTION_TAG: 'base-$GST_RS_IMG_TAG'
 
-.debian:11-stable:
-  extends: .debian:11
+.debian:12-stable:
+  extends: .debian:12
   variables:
     RUST_IMAGE_FULL: "1"
     FDO_DISTRIBUTION_TAG: '$GST_RS_STABLE-$GST_RS_IMG_TAG'
     FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh $GST_RS_STABLE $RUST_IMAGE_FULL'
 
-.debian:11-msrv:
-  extends: .debian:11
+.debian:12-msrv:
+  extends: .debian:12
   variables:
     FDO_DISTRIBUTION_TAG: '$GST_RS_MSRV-$GST_RS_IMG_TAG'
     FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh $GST_RS_MSRV $RUST_IMAGE_FULL'
 
-.debian:11-nightly:
-  extends: .debian:11
+.debian:12-nightly:
+  extends: .debian:12
   variables:
     FDO_DISTRIBUTION_TAG: 'nightly-$GST_RS_IMG_TAG'
     FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh nightly $RUST_IMAGE_FULL'
@@ -138,37 +138,37 @@ trigger:
     FDO_DISTRIBUTION_EXEC: >-
       bash ci/install-gst.sh &&
       bash ci/install-gtk4.sh &&
-      pip3 install git+http://gitlab.freedesktop.org/freedesktop/ci-templates
+      pip3 install --break-system-packages git+http://gitlab.freedesktop.org/freedesktop/ci-templates
 
 .build-final-image:
   extends:
   - .fdo.container-build@debian
   stage: container-final
   variables:
-    FDO_BASE_IMAGE: '$CI_REGISTRY_IMAGE/debian/bullseye-slim:base-$GST_RS_IMG_TAG'
+    FDO_BASE_IMAGE: '$CI_REGISTRY_IMAGE/debian/bookworm-slim:base-$GST_RS_IMG_TAG'
 
 build-base:
   extends:
     - .build-base-image
-    - .debian:11-base
+    - .debian:12-base
 
 build-stable:
   needs: ["build-base"]
   extends:
     - .build-final-image
-    - .debian:11-stable
+    - .debian:12-stable
 
 build-msrv:
   needs: ["build-base"]
   extends:
     - .build-final-image
-    - .debian:11-msrv
+    - .debian:12-msrv
 
 build-nightly:
   needs: ["build-base"]
   extends:
     - .build-final-image
-    - .debian:11-nightly
+    - .debian:12-nightly
 
 update-nightly:
   extends: build-nightly
@@ -185,17 +185,17 @@ update-nightly:
 
 .img-stable:
   extends:
-    - .debian:11-stable
+    - .debian:12-stable
     - .dist-debian-container
 
 .img-msrv:
   extends:
-    - .debian:11-msrv
+    - .debian:12-msrv
     - .dist-debian-container
 
 .img-nightly:
   extends:
-    - .debian:11-nightly
+    - .debian:12-nightly
     - .dist-debian-container
 
 # GST_PLUGINS_RS_TOKEN is a variable of type 'Var' defined in gstreamer-rs CI
