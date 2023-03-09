@@ -740,6 +740,236 @@ unsafe impl<T: RTSPClientImpl> IsSubclassable<T> for RTSPClient {
     fn class_init(klass: &mut glib::Class<Self>) {
         Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();
+
+        // There was unintentional ABI breakage in 1.18 so let's work around that
+        // for now by casting to the old struct layout.
+        #[cfg(not(feature = "v1_18"))]
+        {
+            if gst::version() < (1, 18, 0, 0) {
+                #[derive(Copy, Clone)]
+                #[repr(C)]
+                pub struct CompatClass {
+                    pub parent_class: glib::gobject_ffi::GObjectClass,
+                    pub create_sdp: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPMedia,
+                        )
+                            -> *mut gst_sdp::ffi::GstSDPMessage,
+                    >,
+                    pub configure_client_media: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPMedia,
+                            *mut ffi::GstRTSPStream,
+                            *mut ffi::GstRTSPContext,
+                        ) -> glib::ffi::gboolean,
+                    >,
+                    pub configure_client_transport: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                            *mut gst_rtsp::ffi::GstRTSPTransport,
+                        ) -> glib::ffi::gboolean,
+                    >,
+                    pub params_set: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                        )
+                            -> gst_rtsp::ffi::GstRTSPResult,
+                    >,
+                    pub params_get: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                        )
+                            -> gst_rtsp::ffi::GstRTSPResult,
+                    >,
+                    pub make_path_from_uri: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *const gst_rtsp::ffi::GstRTSPUrl,
+                        ) -> *mut libc::c_char,
+                    >,
+                    pub closed: Option<unsafe extern "C" fn(*mut ffi::GstRTSPClient)>,
+                    pub new_session: Option<
+                        unsafe extern "C" fn(*mut ffi::GstRTSPClient, *mut ffi::GstRTSPSession),
+                    >,
+                    pub options_request: Option<
+                        unsafe extern "C" fn(*mut ffi::GstRTSPClient, *mut ffi::GstRTSPContext),
+                    >,
+                    pub describe_request: Option<
+                        unsafe extern "C" fn(*mut ffi::GstRTSPClient, *mut ffi::GstRTSPContext),
+                    >,
+                    pub setup_request: Option<
+                        unsafe extern "C" fn(*mut ffi::GstRTSPClient, *mut ffi::GstRTSPContext),
+                    >,
+                    pub play_request: Option<
+                        unsafe extern "C" fn(*mut ffi::GstRTSPClient, *mut ffi::GstRTSPContext),
+                    >,
+                    pub pause_request: Option<
+                        unsafe extern "C" fn(*mut ffi::GstRTSPClient, *mut ffi::GstRTSPContext),
+                    >,
+                    pub teardown_request: Option<
+                        unsafe extern "C" fn(*mut ffi::GstRTSPClient, *mut ffi::GstRTSPContext),
+                    >,
+                    pub set_parameter_request: Option<
+                        unsafe extern "C" fn(*mut ffi::GstRTSPClient, *mut ffi::GstRTSPContext),
+                    >,
+                    pub get_parameter_request: Option<
+                        unsafe extern "C" fn(*mut ffi::GstRTSPClient, *mut ffi::GstRTSPContext),
+                    >,
+                    pub handle_response: Option<
+                        unsafe extern "C" fn(*mut ffi::GstRTSPClient, *mut ffi::GstRTSPContext),
+                    >,
+                    pub tunnel_http_response: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut gst_rtsp::ffi::GstRTSPMessage,
+                            *mut gst_rtsp::ffi::GstRTSPMessage,
+                        ),
+                    >,
+                    pub send_message: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                            *mut gst_rtsp::ffi::GstRTSPMessage,
+                        ),
+                    >,
+                    pub handle_sdp: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                            *mut ffi::GstRTSPMedia,
+                            *mut gst_sdp::ffi::GstSDPMessage,
+                        ) -> glib::ffi::gboolean,
+                    >,
+                    pub announce_request: Option<
+                        unsafe extern "C" fn(*mut ffi::GstRTSPClient, *mut ffi::GstRTSPContext),
+                    >,
+                    pub record_request: Option<
+                        unsafe extern "C" fn(*mut ffi::GstRTSPClient, *mut ffi::GstRTSPContext),
+                    >,
+                    pub check_requirements: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                            *mut *mut libc::c_char,
+                        ) -> *mut libc::c_char,
+                    >,
+                    pub pre_options_request: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                        )
+                            -> gst_rtsp::ffi::GstRTSPStatusCode,
+                    >,
+                    pub pre_describe_request: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                        )
+                            -> gst_rtsp::ffi::GstRTSPStatusCode,
+                    >,
+                    pub pre_setup_request: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                        )
+                            -> gst_rtsp::ffi::GstRTSPStatusCode,
+                    >,
+                    pub pre_play_request: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                        )
+                            -> gst_rtsp::ffi::GstRTSPStatusCode,
+                    >,
+                    pub pre_pause_request: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                        )
+                            -> gst_rtsp::ffi::GstRTSPStatusCode,
+                    >,
+                    pub pre_teardown_request: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                        )
+                            -> gst_rtsp::ffi::GstRTSPStatusCode,
+                    >,
+                    pub pre_set_parameter_request: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                        )
+                            -> gst_rtsp::ffi::GstRTSPStatusCode,
+                    >,
+                    pub pre_get_parameter_request: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                        )
+                            -> gst_rtsp::ffi::GstRTSPStatusCode,
+                    >,
+                    pub pre_announce_request: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                        )
+                            -> gst_rtsp::ffi::GstRTSPStatusCode,
+                    >,
+                    pub pre_record_request: Option<
+                        unsafe extern "C" fn(
+                            *mut ffi::GstRTSPClient,
+                            *mut ffi::GstRTSPContext,
+                        )
+                            -> gst_rtsp::ffi::GstRTSPStatusCode,
+                    >,
+                    pub _gst_reserved: [glib::ffi::gpointer; 4],
+                }
+
+                let klass = unsafe {
+                    std::mem::transmute::<&mut ffi::GstRTSPClientClass, &mut CompatClass>(klass)
+                };
+
+                klass.create_sdp = Some(client_create_sdp::<T>);
+                klass.configure_client_media = Some(client_configure_client_media::<T>);
+                klass.params_set = Some(client_params_set::<T>);
+                klass.params_get = Some(client_params_get::<T>);
+                klass.make_path_from_uri = Some(client_make_path_from_uri::<T>);
+                klass.closed = Some(client_closed::<T>);
+                klass.new_session = Some(client_new_session::<T>);
+                klass.options_request = Some(client_options_request::<T>);
+                klass.describe_request = Some(client_describe_request::<T>);
+                klass.setup_request = Some(client_setup_request::<T>);
+                klass.play_request = Some(client_play_request::<T>);
+                klass.pause_request = Some(client_pause_request::<T>);
+                klass.teardown_request = Some(client_teardown_request::<T>);
+                klass.set_parameter_request = Some(client_set_parameter_request::<T>);
+                klass.get_parameter_request = Some(client_get_parameter_request::<T>);
+                klass.announce_request = Some(client_announce_request::<T>);
+                klass.record_request = Some(client_record_request::<T>);
+                klass.handle_response = Some(client_handle_response::<T>);
+                klass.handle_sdp = Some(client_handle_sdp::<T>);
+                klass.check_requirements = Some(client_check_requirements::<T>);
+                klass.pre_options_request = Some(client_pre_options_request::<T>);
+                klass.pre_describe_request = Some(client_pre_describe_request::<T>);
+                klass.pre_setup_request = Some(client_pre_setup_request::<T>);
+                klass.pre_play_request = Some(client_pre_play_request::<T>);
+                klass.pre_pause_request = Some(client_pre_pause_request::<T>);
+                klass.pre_teardown_request = Some(client_pre_teardown_request::<T>);
+                klass.pre_set_parameter_request = Some(client_pre_set_parameter_request::<T>);
+                klass.pre_get_parameter_request = Some(client_pre_get_parameter_request::<T>);
+                klass.pre_announce_request = Some(client_pre_announce_request::<T>);
+                klass.pre_record_request = Some(client_pre_record_request::<T>);
+
+                return;
+            }
+        }
+
         klass.create_sdp = Some(client_create_sdp::<T>);
         klass.configure_client_media = Some(client_configure_client_media::<T>);
         klass.params_set = Some(client_params_set::<T>);
