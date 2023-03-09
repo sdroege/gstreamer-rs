@@ -98,6 +98,15 @@ impl Player {
     }
 }
 
+impl Default for Player {
+    fn default() -> Self {
+        Self::new(
+            None::<crate::PlayerVideoRenderer>,
+            None::<crate::PlayerSignalDispatcher>,
+        )
+    }
+}
+
 unsafe extern "C" fn duration_changed_trampoline<
     F: Fn(&Player, Option<gst::ClockTime>) + Send + 'static,
 >(
