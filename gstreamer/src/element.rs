@@ -3,6 +3,7 @@
 use std::{ffi::CStr, future::Future, mem, num::NonZeroU64, pin::Pin};
 
 use glib::translate::*;
+use itertools::Itertools;
 
 use crate::{
     format::{
@@ -16,18 +17,20 @@ use crate::{
 
 impl Element {
     #[doc(alias = "gst_element_link_many")]
-    pub fn link_many<E: IsA<Element>>(elements: &[&E]) -> Result<(), glib::BoolError> {
+    pub fn link_many(
+        elements: impl IntoIterator<Item = impl AsRef<Element> + Clone>,
+    ) -> Result<(), glib::BoolError> {
         skip_assert_initialized!();
-        for e in elements.windows(2) {
+        for (src, dest) in elements.into_iter().tuple_windows() {
             unsafe {
                 glib::result_from_gboolean!(
                     ffi::gst_element_link(
-                        e[0].as_ref().to_glib_none().0,
-                        e[1].as_ref().to_glib_none().0,
+                        src.as_ref().to_glib_none().0,
+                        dest.as_ref().to_glib_none().0,
                     ),
                     "Failed to link elements '{}' and '{}'",
-                    e[0].as_ref().name(),
-                    e[1].as_ref().name(),
+                    src.as_ref().name(),
+                    dest.as_ref().name(),
                 )?;
             }
         }
@@ -36,13 +39,13 @@ impl Element {
     }
 
     #[doc(alias = "gst_element_unlink_many")]
-    pub fn unlink_many<E: IsA<Element>>(elements: &[&E]) {
+    pub fn unlink_many(elements: impl IntoIterator<Item = impl AsRef<Element> + Clone>) {
         skip_assert_initialized!();
-        for e in elements.windows(2) {
+        for (src, dest) in elements.into_iter().tuple_windows() {
             unsafe {
                 ffi::gst_element_unlink(
-                    e[0].as_ref().to_glib_none().0,
-                    e[1].as_ref().to_glib_none().0,
+                    src.as_ref().to_glib_none().0,
+                    dest.as_ref().to_glib_none().0,
                 );
             }
         }

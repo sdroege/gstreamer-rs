@@ -127,10 +127,9 @@ fn main() {
         ])
         .unwrap();
 
-    gst::Element::link_many(&[appsrc.upcast_ref(), &tee]).unwrap();
-    gst::Element::link_many(&[&audio_queue, &audio_convert1, &audio_resample, &audio_sink])
-        .unwrap();
-    gst::Element::link_many(&[
+    gst::Element::link_many([appsrc.upcast_ref(), &tee]).unwrap();
+    gst::Element::link_many([&audio_queue, &audio_convert1, &audio_resample, &audio_sink]).unwrap();
+    gst::Element::link_many([
         &video_queue,
         &audio_convert2,
         &visual,
@@ -138,7 +137,7 @@ fn main() {
         &video_sink,
     ])
     .unwrap();
-    gst::Element::link_many(&[&app_queue, appsink.upcast_ref()]).unwrap();
+    gst::Element::link_many([&app_queue, appsink.upcast_ref()]).unwrap();
 
     let tee_audio_pad = tee.request_pad_simple("src_%u").unwrap();
     println!(

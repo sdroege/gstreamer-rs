@@ -103,7 +103,7 @@ fn example_main() -> Result<(), Error> {
     // directly link it to our filesink without problems.
     // The caps of encodebin's src-pad are set after we configured the encoding-profile.
     // (But filesink doesn't really care about the caps at its input anyway)
-    gst::Element::link_many(&[&encodebin, &sink])?;
+    gst::Element::link_many([&encodebin, &sink])?;
 
     // Need to move a new reference into the closure.
     // !!ATTENTION!!:

@@ -37,7 +37,7 @@ fn tutorial_main() {
     pipeline
         .add_many([&source, &convert, &resample, &sink])
         .unwrap();
-    gst::Element::link_many(&[&convert, &resample, &sink]).expect("Elements could not be linked.");
+    gst::Element::link_many([&convert, &resample, &sink]).expect("Elements could not be linked.");
 
     // Connect the pad-added signal
     source.connect_pad_added(move |src, src_pad| {

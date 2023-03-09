@@ -50,7 +50,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     let sink = gst::ElementFactory::make("autovideosink").build()?;
 
     pipeline.add_many([appsrc.upcast_ref(), &videoconvert, &sink])?;
-    gst::Element::link_many(&[appsrc.upcast_ref(), &videoconvert, &sink])?;
+    gst::Element::link_many([appsrc.upcast_ref(), &videoconvert, &sink])?;
 
     // Our frame counter, that is stored in the mutable environment
     // of the closure of the need-data callback

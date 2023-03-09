@@ -71,7 +71,7 @@ fn example_main() -> Result<(), Error> {
     let decodebin = gst::ElementFactory::make("decodebin").build()?;
 
     pipeline.add_many([&src, &decodebin])?;
-    gst::Element::link_many(&[&src, &decodebin])?;
+    gst::Element::link_many([&src, &decodebin])?;
 
     // Need to move a new reference into the closure.
     // !!ATTENTION!!:

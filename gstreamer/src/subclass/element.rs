@@ -735,7 +735,7 @@ mod tests {
         pipeline
             .add_many([&src, element.upcast_ref(), &sink])
             .unwrap();
-        Element::link_many(&[&src, element.upcast_ref(), &sink]).unwrap();
+        Element::link_many([&src, element.upcast_ref(), &sink]).unwrap();
 
         pipeline.set_state(crate::State::Playing).unwrap();
         let bus = pipeline.bus().unwrap();

@@ -115,7 +115,7 @@ fn example_main() -> Result<(), Error> {
         .build()?;
 
     pipeline.add_many([&src, &netsim, &rtpbin, &depay, &dec, &conv, &scale, &filter])?;
-    gst::Element::link_many(&[&depay, &dec, &conv, &scale, &filter])?;
+    gst::Element::link_many([&depay, &dec, &conv, &scale, &filter])?;
 
     match args[1].as_str() {
         "play" => {
@@ -133,7 +133,7 @@ fn example_main() -> Result<(), Error> {
                 .build()?;
 
             pipeline.add_many([&enc, &mux, &sink])?;
-            gst::Element::link_many(&[&filter, &enc, &mux, &sink])?;
+            gst::Element::link_many([&filter, &enc, &mux, &sink])?;
             eprintln!("Recording to out.mkv");
         }
         _ => return Err(Error::from(UsageError(args[0].clone()))),
