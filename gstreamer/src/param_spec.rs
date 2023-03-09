@@ -221,7 +221,7 @@ glib::wrapper! {
     match fn {
         ref => |ptr| gobject_ffi::g_param_spec_ref_sink(ptr as *mut gobject_ffi::GParamSpec),
         unref => |ptr| gobject_ffi::g_param_spec_unref(ptr as *mut gobject_ffi::GParamSpec),
-        type_ => || ffi::gst_param_spec_fraction_get_type(),
+        type_ => || ffi::gst_param_spec_array_get_type(),
     }
 }
 
