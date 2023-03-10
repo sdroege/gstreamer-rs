@@ -15,6 +15,7 @@ use glib::{prelude::*, translate::*};
 use gst::{format::FormattedValue, prelude::*};
 
 use crate::Aggregator;
+use crate::AggregatorPad;
 
 pub trait AggregatorExtManual: 'static {
     #[doc(alias = "get_allocator")]
@@ -77,7 +78,7 @@ pub trait AggregatorExtManual: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    fn src_pad(&self) -> &gst::Pad;
+    fn src_pad(&self) -> &AggregatorPad;
 }
 
 impl<O: IsA<Aggregator>> AggregatorExtManual for O {
@@ -242,10 +243,10 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         }
     }
 
-    fn src_pad(&self) -> &gst::Pad {
+    fn src_pad(&self) -> &AggregatorPad {
         unsafe {
             let elt = &*(self.as_ptr() as *const ffi::GstAggregator);
-            &*(&elt.srcpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
+            &*(&elt.srcpad as *const *mut gst::ffi::GstPad as *const AggregatorPad)
         }
     }
 }
