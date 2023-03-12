@@ -104,7 +104,7 @@ fn tutorial_main() -> Result<(), Error> {
     let _guard = main_context.acquire().unwrap();
 
     // Build the channel to get the terminal inputs from a different thread.
-    let (ready_tx, ready_rx) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
+    let (ready_tx, ready_rx) = glib::MainContext::channel(glib::Priority::DEFAULT);
 
     // Start the keyboard handling thread
     thread::spawn(move || handle_keyboard(ready_tx));
