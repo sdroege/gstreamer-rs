@@ -12,7 +12,6 @@ pub fn init() {
 
 #[doc(alias = "gst_validate_init_debug")]
 pub fn init_debug() {
-    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_validate_init_debug();
     }
@@ -20,7 +19,7 @@ pub fn init_debug() {
 
 #[doc(alias = "gst_validate_setup_test_file")]
 pub fn setup_test_file(test_file: &str, use_fakesinks: bool) -> gst::Structure {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         from_glib_full(ffi::gst_validate_setup_test_file(
             test_file.to_glib_none().0,
