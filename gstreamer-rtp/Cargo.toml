@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-rtp"
-version = "0.20.2"
+version = "0.20.3"
 authors = ["Mathieu Duponchelle <mathieu@centricular.com>", "Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Rtp library"

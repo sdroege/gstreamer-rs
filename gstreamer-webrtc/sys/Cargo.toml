@@ -46,7 +46,7 @@ license = "MIT"
 name = "gstreamer-webrtc-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
-version = "0.20.2"
+version = "0.20.3"
 edition = "2021"
 rust-version = "1.64"
 

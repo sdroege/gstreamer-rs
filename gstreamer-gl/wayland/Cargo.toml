@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-gl-wayland"
-version = "0.20.2"
+version = "0.20.3"
 authors = [
     "Sebastian Dröge <sebastian@centricular.com>",
     "Víctor M. Jáquez L. <vjaquez@igalia.com>"
