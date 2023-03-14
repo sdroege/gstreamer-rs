@@ -133,7 +133,7 @@ fn main() -> Result<()> {
             // situation and any of failure below would mean we are doing
             // something in wrong way or driver bug or so.
             unsafe {
-                let rtv = ID3D11RenderTargetView::from_raw_borrowed(&rtv_raw);
+                let rtv = ID3D11RenderTargetView::from_raw_borrowed(&rtv_raw).unwrap();
                 let resource = rtv.GetResource().unwrap();
 
                 let texture = resource.cast::<ID3D11Texture2D>().unwrap();
