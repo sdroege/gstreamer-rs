@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.20.3] - 2023-03-14
+### Fixed
+- `gst::ParamSpecArray` uses the correct `glib::Type` now.
+- Work around accidental ABI breakage in 1.18 gst-rtsp-server `GstRTSPClient`.
+
+### Added
+- Document `gst_utils::StreamProducer::forward_eos()` default value.
+
 ## [0.20.2] - 2023-02-21
 ### Added
 - `glib::HasParamSpec` impl for `gst::ClockTime`
@@ -1485,7 +1493,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.2...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.3...HEAD
+[0.20.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.2...0.20.3
 [0.20.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.1...0.20.2
 [0.20.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.0...0.20.1
 [0.20.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.19.8...0.20.0
