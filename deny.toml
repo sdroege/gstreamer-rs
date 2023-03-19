@@ -38,3 +38,8 @@ unknown-git = "deny"
 allow-git = [
   "https://github.com/gtk-rs/gtk-rs-core",
 ]
+
+# Various crates depend on an older version of syn
+[[bans.skip]]
+name = "syn"
+version = "1.0"
