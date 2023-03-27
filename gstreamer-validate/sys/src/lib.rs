@@ -189,7 +189,8 @@ pub struct GstValidateActionParameter {
     pub types: *const c_char,
     pub possible_variables: *const c_char,
     pub def: *const c_char,
-    pub _gst_reserved: [gpointer; 4],
+    pub free: glib::GDestroyNotify,
+    pub _gst_reserved: [gpointer; 3],
 }
 
 impl ::std::fmt::Debug for GstValidateActionParameter {
@@ -201,6 +202,7 @@ impl ::std::fmt::Debug for GstValidateActionParameter {
             .field("types", &self.types)
             .field("possible_variables", &self.possible_variables)
             .field("def", &self.def)
+            .field("free", &self.free)
             .finish()
     }
 }
