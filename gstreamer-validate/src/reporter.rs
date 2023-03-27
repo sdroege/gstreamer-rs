@@ -3,6 +3,7 @@ use glib::translate::*;
 use crate::action::Action;
 
 impl crate::Reporter {
+    #[doc(alias = "gst_validate_report_action")]
     pub fn report_action(&self, action: &Action, issue_id: crate::IssueId, message: &str) {
         unsafe {
             ffi::gst_validate_report_action(

@@ -28,6 +28,17 @@ pub fn setup_test_file(test_file: &str, use_fakesinks: bool) -> gst::Structure {
     }
 }
 
+#[doc(alias = "gst_validate_print_action_types")]
+pub fn print_action_types(action_types: Vec<&str>) {
+    assert_initialized_main_thread!();
+    unsafe {
+        ffi::gst_validate_print_action_types(
+            action_types.to_glib_none().0,
+            action_types.len() as i32,
+        );
+    }
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
