@@ -3,7 +3,7 @@
 $env:MESON_ARGS = "--prefix=C:\gst-install\"
 
 # Download gtk and all its subprojects
-git clone -b 4.10.0 --depth 1 https://gitlab.gnome.org/gnome/gtk.git C:\gtk
+git clone -b 4.10.1 --depth 1 https://gitlab.gnome.org/gnome/gtk.git C:\gtk
 if (!$?) {
   Write-Host "Failed to clone gtk"
   Exit 1
