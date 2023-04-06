@@ -64,10 +64,13 @@ int main() {
     printf("%s;%zu;%zu\n", "GstMpegtsIso639AudioType", sizeof(GstMpegtsIso639AudioType), alignof(GstMpegtsIso639AudioType));
     printf("%s;%zu;%zu\n", "GstMpegtsLogicalChannel", sizeof(GstMpegtsLogicalChannel), alignof(GstMpegtsLogicalChannel));
     printf("%s;%zu;%zu\n", "GstMpegtsLogicalChannelDescriptor", sizeof(GstMpegtsLogicalChannelDescriptor), alignof(GstMpegtsLogicalChannelDescriptor));
+    printf("%s;%zu;%zu\n", "GstMpegtsMetadataDescriptor", sizeof(GstMpegtsMetadataDescriptor), alignof(GstMpegtsMetadataDescriptor));
+    printf("%s;%zu;%zu\n", "GstMpegtsMetadataFormat", sizeof(GstMpegtsMetadataFormat), alignof(GstMpegtsMetadataFormat));
     printf("%s;%zu;%zu\n", "GstMpegtsMiscDescriptorType", sizeof(GstMpegtsMiscDescriptorType), alignof(GstMpegtsMiscDescriptorType));
     printf("%s;%zu;%zu\n", "GstMpegtsModulationType", sizeof(GstMpegtsModulationType), alignof(GstMpegtsModulationType));
     printf("%s;%zu;%zu\n", "GstMpegtsNIT", sizeof(GstMpegtsNIT), alignof(GstMpegtsNIT));
     printf("%s;%zu;%zu\n", "GstMpegtsNITStream", sizeof(GstMpegtsNITStream), alignof(GstMpegtsNITStream));
+    printf("%s;%zu;%zu\n", "GstMpegtsPESMetadataMeta", sizeof(GstMpegtsPESMetadataMeta), alignof(GstMpegtsPESMetadataMeta));
     printf("%s;%zu;%zu\n", "GstMpegtsPMT", sizeof(GstMpegtsPMT), alignof(GstMpegtsPMT));
     printf("%s;%zu;%zu\n", "GstMpegtsPMTStream", sizeof(GstMpegtsPMTStream), alignof(GstMpegtsPMTStream));
     printf("%s;%zu;%zu\n", "GstMpegtsPatProgram", sizeof(GstMpegtsPatProgram), alignof(GstMpegtsPatProgram));

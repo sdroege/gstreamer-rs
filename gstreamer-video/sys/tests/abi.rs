@@ -696,6 +696,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstVideoInfoDmaDrm",
+        Layout {
+            size: size_of::<GstVideoInfoDmaDrm>(),
+            alignment: align_of::<GstVideoInfoDmaDrm>(),
+        },
+    ),
+    (
         "GstVideoInterlaceMode",
         Layout {
             size: size_of::<GstVideoInterlaceMode>(),

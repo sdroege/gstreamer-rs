@@ -40,7 +40,9 @@ pub struct GstAppSinkCallbacks {
     pub new_preroll: Option<unsafe extern "C" fn(*mut GstAppSink, gpointer) -> gst::GstFlowReturn>,
     pub new_sample: Option<unsafe extern "C" fn(*mut GstAppSink, gpointer) -> gst::GstFlowReturn>,
     pub new_event: Option<unsafe extern "C" fn(*mut GstAppSink, gpointer) -> gboolean>,
-    pub _gst_reserved: [gpointer; 3],
+    pub propose_allocation:
+        Option<unsafe extern "C" fn(*mut GstAppSink, *mut gst::GstQuery, gpointer) -> gboolean>,
+    pub _gst_reserved: [gpointer; 2],
 }
 
 impl ::std::fmt::Debug for GstAppSinkCallbacks {
@@ -50,6 +52,7 @@ impl ::std::fmt::Debug for GstAppSinkCallbacks {
             .field("new_preroll", &self.new_preroll)
             .field("new_sample", &self.new_sample)
             .field("new_event", &self.new_event)
+            .field("propose_allocation", &self.propose_allocation)
             .finish()
     }
 }

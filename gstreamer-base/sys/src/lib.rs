@@ -2058,6 +2058,12 @@ extern "C" {
         src: *mut GstBaseSrc,
         segment: *const gst::GstSegment,
     ) -> gboolean;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_base_src_push_segment(
+        src: *mut GstBaseSrc,
+        segment: *const gst::GstSegment,
+    ) -> gboolean;
     pub fn gst_base_src_query_latency(
         src: *mut GstBaseSrc,
         live: *mut gboolean,

@@ -199,6 +199,13 @@ fn get_c_output(name: &str) -> Result<String, Box<dyn Error>> {
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
     (
+        "GstDRMDumbAllocatorClass",
+        Layout {
+            size: size_of::<GstDRMDumbAllocatorClass>(),
+            alignment: align_of::<GstDRMDumbAllocatorClass>(),
+        },
+    ),
+    (
         "GstDmaBufAllocator",
         Layout {
             size: size_of::<GstDmaBufAllocator>(),

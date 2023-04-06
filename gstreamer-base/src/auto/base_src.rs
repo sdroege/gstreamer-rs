@@ -56,6 +56,16 @@ pub trait BaseSrcExt: 'static {
     #[doc(alias = "gst_base_src_new_seamless_segment")]
     fn new_seamless_segment(&self, start: i64, stop: i64, time: i64) -> bool;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_base_src_new_segment")]
+    fn new_segment(&self, segment: &gst::Segment) -> Result<(), glib::error::BoolError>;
+
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_base_src_push_segment")]
+    fn push_segment(&self, segment: &gst::Segment) -> bool;
+
     #[doc(alias = "gst_base_src_set_async")]
     fn set_async(&self, async_: bool);
 
@@ -167,6 +177,31 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
                 start,
                 stop,
                 time,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    fn new_segment(&self, segment: &gst::Segment) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_base_src_new_segment(
+                    self.as_ref().to_glib_none().0,
+                    segment.to_glib_none().0
+                ),
+                "Failed to update segment"
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    fn push_segment(&self, segment: &gst::Segment) -> bool {
+        unsafe {
+            from_glib(ffi::gst_base_src_push_segment(
+                self.as_ref().to_glib_none().0,
+                segment.to_glib_none().0,
             ))
         }
     }

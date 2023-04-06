@@ -476,6 +476,7 @@ pub const GST_ELEMENT_FACTORY_TYPE_PARSER: GstElementFactoryListType = 64;
 pub const GST_ELEMENT_FACTORY_TYPE_PAYLOADER: GstElementFactoryListType = 128;
 pub const GST_ELEMENT_FACTORY_TYPE_SINK: GstElementFactoryListType = 4;
 pub const GST_ELEMENT_FACTORY_TYPE_SRC: GstElementFactoryListType = 8;
+pub const GST_ELEMENT_FACTORY_TYPE_TIMESTAMPER: GstElementFactoryListType = 8192;
 pub const GST_ELEMENT_FACTORY_TYPE_VIDEO_ENCODER: GstElementFactoryListType = 2814749767106562;
 pub const GST_ELEMENT_METADATA_AUTHOR: &[u8] = b"author\0";
 pub const GST_ELEMENT_METADATA_DESCRIPTION: &[u8] = b"description\0";
@@ -6959,6 +6960,12 @@ extern "C" {
     pub fn gst_uri_get_port(uri: *const GstUri) -> c_uint;
     pub fn gst_uri_get_query_keys(uri: *const GstUri) -> *mut glib::GList;
     pub fn gst_uri_get_query_string(uri: *const GstUri) -> *mut c_char;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_uri_get_query_string_ordered(
+        uri: *const GstUri,
+        keys: *const glib::GList,
+    ) -> *mut c_char;
     pub fn gst_uri_get_query_table(uri: *const GstUri) -> *mut glib::GHashTable;
     pub fn gst_uri_get_query_value(uri: *const GstUri, query_key: *const c_char) -> *const c_char;
     pub fn gst_uri_get_scheme(uri: *const GstUri) -> *const c_char;
@@ -7003,6 +7010,10 @@ extern "C" {
     pub fn gst_uri_set_scheme(uri: *mut GstUri, scheme: *const c_char) -> gboolean;
     pub fn gst_uri_set_userinfo(uri: *mut GstUri, userinfo: *const c_char) -> gboolean;
     pub fn gst_uri_to_string(uri: *const GstUri) -> *mut c_char;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_uri_to_string_with_keys(uri: *const GstUri, keys: *const glib::GList)
+        -> *mut c_char;
     #[cfg(any(feature = "v1_18_3", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18_3")))]
     pub fn gst_uri_unref(uri: *mut GstUri);
@@ -7522,6 +7533,22 @@ extern "C" {
         ret: GstStateChangeReturn,
     ) -> GstStateChangeReturn;
     pub fn gst_element_create_all_pads(element: *mut GstElement);
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_element_decorate_stream_id(
+        element: *mut GstElement,
+        stream_id: *const c_char,
+    ) -> *mut c_char;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_element_decorate_stream_id_printf(
+        element: *mut GstElement,
+        format: *const c_char,
+        ...
+    ) -> *mut c_char;
+    //#[cfg(any(feature = "v1_24", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    //pub fn gst_element_decorate_stream_id_printf_valist(element: *mut GstElement, format: *const c_char, var_args: /*Unimplemented*/va_list) -> *mut c_char;
     pub fn gst_element_foreach_pad(
         element: *mut GstElement,
         func: GstElementForeachPadFunc,

@@ -1069,6 +1069,19 @@ extern "C" {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_message_has_body_buffer(msg: *const GstRTSPMessage) -> gboolean;
+    pub fn gst_rtsp_message_init(msg: *mut GstRTSPMessage) -> GstRTSPResult;
+    pub fn gst_rtsp_message_init_data(msg: *mut GstRTSPMessage, channel: u8) -> GstRTSPResult;
+    pub fn gst_rtsp_message_init_request(
+        msg: *mut GstRTSPMessage,
+        method: GstRTSPMethod,
+        uri: *const c_char,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_message_init_response(
+        msg: *mut GstRTSPMessage,
+        code: GstRTSPStatusCode,
+        reason: *const c_char,
+        request: *const GstRTSPMessage,
+    ) -> GstRTSPResult;
     pub fn gst_rtsp_message_parse_auth_credentials(
         msg: *mut GstRTSPMessage,
         field: GstRTSPHeaderField,
@@ -1335,19 +1348,6 @@ extern "C" {
     ) -> *mut c_char;
     pub fn gst_rtsp_header_allow_multiple(field: GstRTSPHeaderField) -> gboolean;
     pub fn gst_rtsp_header_as_text(field: GstRTSPHeaderField) -> *const c_char;
-    pub fn gst_rtsp_message_init(msg: *mut GstRTSPMessage) -> GstRTSPResult;
-    pub fn gst_rtsp_message_init_data(msg: *mut GstRTSPMessage, channel: u8) -> GstRTSPResult;
-    pub fn gst_rtsp_message_init_request(
-        msg: *mut GstRTSPMessage,
-        method: GstRTSPMethod,
-        uri: *const c_char,
-    ) -> GstRTSPResult;
-    pub fn gst_rtsp_message_init_response(
-        msg: *mut GstRTSPMessage,
-        code: GstRTSPStatusCode,
-        reason: *const c_char,
-        request: *const GstRTSPMessage,
-    ) -> GstRTSPResult;
     pub fn gst_rtsp_message_new(msg: *mut *mut GstRTSPMessage) -> GstRTSPResult;
     pub fn gst_rtsp_message_new_data(msg: *mut *mut GstRTSPMessage, channel: u8) -> GstRTSPResult;
     pub fn gst_rtsp_message_new_request(

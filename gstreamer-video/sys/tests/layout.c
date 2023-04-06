@@ -79,6 +79,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstVideoGLTextureUploadMeta", sizeof(GstVideoGLTextureUploadMeta), alignof(GstVideoGLTextureUploadMeta));
     printf("%s;%zu;%zu\n", "GstVideoGammaMode", sizeof(GstVideoGammaMode), alignof(GstVideoGammaMode));
     printf("%s;%zu;%zu\n", "GstVideoInfo", sizeof(GstVideoInfo), alignof(GstVideoInfo));
+    printf("%s;%zu;%zu\n", "GstVideoInfoDmaDrm", sizeof(GstVideoInfoDmaDrm), alignof(GstVideoInfoDmaDrm));
     printf("%s;%zu;%zu\n", "GstVideoInterlaceMode", sizeof(GstVideoInterlaceMode), alignof(GstVideoInterlaceMode));
     printf("%s;%zu;%zu\n", "GstVideoMasteringDisplayInfo", sizeof(GstVideoMasteringDisplayInfo), alignof(GstVideoMasteringDisplayInfo));
     printf("%s;%zu;%zu\n", "GstVideoMasteringDisplayInfoCoordinates", sizeof(GstVideoMasteringDisplayInfoCoordinates), alignof(GstVideoMasteringDisplayInfoCoordinates));

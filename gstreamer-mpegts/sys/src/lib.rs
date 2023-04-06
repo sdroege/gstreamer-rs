@@ -377,6 +377,20 @@ pub const GST_MPEGTS_AUDIO_TYPE_CLEAN_EFFECTS: GstMpegtsIso639AudioType = 1;
 pub const GST_MPEGTS_AUDIO_TYPE_HEARING_IMPAIRED: GstMpegtsIso639AudioType = 2;
 pub const GST_MPEGTS_AUDIO_TYPE_VISUAL_IMPAIRED_COMMENTARY: GstMpegtsIso639AudioType = 3;
 
+pub type GstMpegtsMetadataFormat = c_int;
+#[cfg(any(feature = "v1_24", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+pub const GST_MPEGTS_METADATA_FORMAT_TEM: GstMpegtsMetadataFormat = 16;
+#[cfg(any(feature = "v1_24", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+pub const GST_MPEGTS_METADATA_FORMAT_BIM: GstMpegtsMetadataFormat = 17;
+#[cfg(any(feature = "v1_24", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+pub const GST_MPEGTS_METADATA_FORMAT_APPLICATION_FORMAT: GstMpegtsMetadataFormat = 63;
+#[cfg(any(feature = "v1_24", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+pub const GST_MPEGTS_METADATA_FORMAT_IDENTIFIER_FIELD: GstMpegtsMetadataFormat = 255;
+
 pub type GstMpegtsMiscDescriptorType = c_int;
 pub const GST_MTS_DESC_DTG_LOGICAL_CHANNEL: GstMpegtsMiscDescriptorType = 131;
 
@@ -1506,6 +1520,36 @@ impl ::std::fmt::Debug for GstMpegtsLogicalChannelDescriptor {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstMpegtsMetadataDescriptor {
+    pub metadata_application_format: u16,
+    pub metadata_format: GstMpegtsMetadataFormat,
+    pub metadata_format_identifier: u32,
+    pub metadata_service_id: u8,
+    pub decoder_config_flags: u8,
+    pub dsm_cc_flag: gboolean,
+}
+
+impl ::std::fmt::Debug for GstMpegtsMetadataDescriptor {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstMpegtsMetadataDescriptor @ {self:p}"))
+            .field(
+                "metadata_application_format",
+                &self.metadata_application_format,
+            )
+            .field("metadata_format", &self.metadata_format)
+            .field(
+                "metadata_format_identifier",
+                &self.metadata_format_identifier,
+            )
+            .field("metadata_service_id", &self.metadata_service_id)
+            .field("decoder_config_flags", &self.decoder_config_flags)
+            .field("dsm_cc_flag", &self.dsm_cc_flag)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstMpegtsNIT {
     pub actual_network: gboolean,
     pub network_id: u16,
@@ -1538,6 +1582,24 @@ impl ::std::fmt::Debug for GstMpegtsNITStream {
             .field("transport_stream_id", &self.transport_stream_id)
             .field("original_network_id", &self.original_network_id)
             .field("descriptors", &self.descriptors)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstMpegtsPESMetadataMeta {
+    pub meta: gst::GstMeta,
+    pub metadata_service_id: u8,
+    pub flags: u8,
+}
+
+impl ::std::fmt::Debug for GstMpegtsPESMetadataMeta {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstMpegtsPESMetadataMeta @ {self:p}"))
+            .field("meta", &self.meta)
+            .field("metadata_service_id", &self.metadata_service_id)
+            .field("flags", &self.flags)
             .finish()
     }
 }
@@ -2318,6 +2380,20 @@ extern "C" {
         descriptor: *const GstMpegtsDescriptor,
         res: *mut GstMpegtsLogicalChannelDescriptor,
     ) -> gboolean;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_mpegts_descriptor_parse_metadata(
+        descriptor: *const GstMpegtsDescriptor,
+        res: *mut *mut GstMpegtsMetadataDescriptor,
+    ) -> gboolean;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_mpegts_descriptor_parse_metadata_std(
+        descriptor: *const GstMpegtsDescriptor,
+        metadata_input_leak_rate: *mut u32,
+        metadata_buffer_size: *mut u32,
+        metadata_output_leak_rate: *mut u32,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_descriptor_parse_registration(
@@ -2440,6 +2516,13 @@ extern "C" {
     pub fn gst_mpegts_logical_channel_descriptor_get_type() -> GType;
 
     //=========================================================================
+    // GstMpegtsMetadataDescriptor
+    //=========================================================================
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_mpegts_metadata_descriptor_get_type() -> GType;
+
+    //=========================================================================
     // GstMpegtsNIT
     //=========================================================================
     pub fn gst_mpegts_nit_get_type() -> GType;
@@ -2450,6 +2533,13 @@ extern "C" {
     //=========================================================================
     pub fn gst_mpegts_nit_stream_get_type() -> GType;
     pub fn gst_mpegts_nit_stream_new() -> *mut GstMpegtsNITStream;
+
+    //=========================================================================
+    // GstMpegtsPESMetadataMeta
+    //=========================================================================
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_mpegts_pes_metadata_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
     // GstMpegtsPMT
@@ -2641,6 +2731,11 @@ extern "C" {
     //=========================================================================
     // Other functions
     //=========================================================================
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_buffer_add_mpegts_pes_metadata_meta(
+        buffer: *mut gst::GstBuffer,
+    ) -> *mut GstMpegtsPESMetadataMeta;
     pub fn gst_mpegts_dvb_component_descriptor_free(source: *mut GstMpegtsComponentDescriptor);
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
@@ -2666,6 +2761,9 @@ extern "C" {
         -> *mut GstMpegtsSection;
     pub fn gst_mpegts_parse_descriptors(buffer: *mut u8, buf_len: size_t) -> *mut glib::GPtrArray;
     pub fn gst_mpegts_pat_new() -> *mut glib::GPtrArray;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_mpegts_pes_metadata_meta_api_get_type() -> GType;
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_scte_cancel_new(event_id: u32) -> *mut GstMpegtsSCTESIT;

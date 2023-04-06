@@ -36,6 +36,20 @@ pub const GST_FD_MEMORY_FLAG_DONT_CLOSE: GstFdMemoryFlags = 4;
 // Records
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstDRMDumbAllocatorClass {
+    pub parent_class: gst::GstAllocatorClass,
+}
+
+impl ::std::fmt::Debug for GstDRMDumbAllocatorClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstDRMDumbAllocatorClass @ {self:p}"))
+            .field("parent_class", &self.parent_class)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstDmaBufAllocatorClass {
     pub parent_class: GstFdAllocatorClass,
     pub _gst_reserved: [gpointer; 4],
@@ -80,6 +94,19 @@ impl ::std::fmt::Debug for GstPhysMemoryAllocatorInterface {
 }
 
 // Classes
+#[repr(C)]
+pub struct GstDRMDumbAllocator {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GstDRMDumbAllocator {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstDRMDumbAllocator @ {self:p}"))
+            .finish()
+    }
+}
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GstDmaBufAllocator {
@@ -126,6 +153,34 @@ impl ::std::fmt::Debug for GstPhysMemoryAllocator {
 extern "C" {
 
     //=========================================================================
+    // GstDRMDumbAllocator
+    //=========================================================================
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_drm_dumb_allocator_get_type() -> GType;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_drm_dumb_allocator_new_with_device_path(
+        drm_device_path: *const c_char,
+    ) -> *mut gst::GstAllocator;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_drm_dumb_allocator_new_with_fd(drm_fd: c_int) -> *mut gst::GstAllocator;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_drm_dumb_allocator_alloc(
+        allocator: *mut GstDRMDumbAllocator,
+        drm_fourcc: u32,
+        width: u32,
+        height: u32,
+        out_pitch: *mut u32,
+    ) -> *mut gst::GstMemory;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_drm_dumb_allocator_has_prime_export(allocator: *mut GstDRMDumbAllocator)
+        -> gboolean;
+
+    //=========================================================================
     // GstDmaBufAllocator
     //=========================================================================
     pub fn gst_dmabuf_allocator_get_type() -> GType;
@@ -165,8 +220,17 @@ extern "C" {
     // Other functions
     //=========================================================================
     pub fn gst_dmabuf_memory_get_fd(mem: *mut gst::GstMemory) -> c_int;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_drm_dumb_memory_export_dmabuf(mem: *mut gst::GstMemory) -> *mut gst::GstMemory;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_drm_dumb_memory_get_handle(mem: *mut gst::GstMemory) -> u32;
     pub fn gst_fd_memory_get_fd(mem: *mut gst::GstMemory) -> c_int;
     pub fn gst_is_dmabuf_memory(mem: *mut gst::GstMemory) -> gboolean;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_is_drm_dumb_memory(mem: *mut gst::GstMemory) -> gboolean;
     pub fn gst_is_fd_memory(mem: *mut gst::GstMemory) -> gboolean;
     pub fn gst_is_phys_memory(mem: *mut gst::GstMemory) -> gboolean;
     pub fn gst_phys_memory_get_phys_addr(mem: *mut gst::GstMemory) -> uintptr_t;

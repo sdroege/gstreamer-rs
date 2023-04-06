@@ -1679,6 +1679,25 @@ impl ::std::fmt::Debug for GstVideoInfo {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstVideoInfoDmaDrm {
+    pub vinfo: GstVideoInfo,
+    pub drm_fourcc: u32,
+    pub drm_modifier: u64,
+    pub _gst_reserved: [u32; 20],
+}
+
+impl ::std::fmt::Debug for GstVideoInfoDmaDrm {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVideoInfoDmaDrm @ {self:p}"))
+            .field("vinfo", &self.vinfo)
+            .field("drm_fourcc", &self.drm_fourcc)
+            .field("drm_modifier", &self.drm_modifier)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstVideoInfo_ABI_abi {
     pub multiview_mode: GstVideoMultiviewMode,
     pub multiview_flags: GstVideoMultiviewFlags,
@@ -3103,6 +3122,37 @@ extern "C" {
     pub fn gst_video_info_init(info: *mut GstVideoInfo);
 
     //=========================================================================
+    // GstVideoInfoDmaDrm
+    //=========================================================================
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_info_dma_drm_get_type() -> GType;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_info_dma_drm_new() -> *mut GstVideoInfoDmaDrm;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_info_dma_drm_new_from_caps(
+        caps: *const gst::GstCaps,
+    ) -> *mut GstVideoInfoDmaDrm;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_info_dma_drm_free(drm_info: *mut GstVideoInfoDmaDrm);
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_info_dma_drm_to_caps(drm_info: *const GstVideoInfoDmaDrm)
+        -> *mut gst::GstCaps;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_info_dma_drm_from_caps(
+        drm_info: *mut GstVideoInfoDmaDrm,
+        caps: *const gst::GstCaps,
+    ) -> gboolean;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_info_dma_drm_init(drm_info: *mut GstVideoInfoDmaDrm);
+
+    //=========================================================================
     // GstVideoMasteringDisplayInfo
     //=========================================================================
     #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -4432,6 +4482,21 @@ extern "C" {
         destroy_notify: glib::GDestroyNotify,
     );
     pub fn gst_video_crop_meta_api_get_type() -> GType;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_dma_drm_fourcc_from_format(format: GstVideoFormat) -> u32;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_dma_drm_fourcc_from_string(
+        format_str: *const c_char,
+        modifier: *mut u64,
+    ) -> u32;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_dma_drm_fourcc_to_format(fourcc: u32) -> GstVideoFormat;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_dma_drm_fourcc_to_string(fourcc: u32, modifier: u64) -> *mut c_char;
     pub fn gst_video_event_is_force_key_unit(event: *mut gst::GstEvent) -> gboolean;
     pub fn gst_video_event_new_downstream_force_key_unit(
         timestamp: gst::GstClockTime,
@@ -4481,6 +4546,9 @@ extern "C" {
         par_n: c_int,
         par_d: c_int,
     ) -> gboolean;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_is_dma_drm_caps(caps: *const gst::GstCaps) -> gboolean;
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn gst_video_make_raw_caps(

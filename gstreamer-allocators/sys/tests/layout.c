@@ -8,6 +8,7 @@
 #include <stdio.h>
 
 int main() {
+    printf("%s;%zu;%zu\n", "GstDRMDumbAllocatorClass", sizeof(GstDRMDumbAllocatorClass), alignof(GstDRMDumbAllocatorClass));
     printf("%s;%zu;%zu\n", "GstDmaBufAllocator", sizeof(GstDmaBufAllocator), alignof(GstDmaBufAllocator));
     printf("%s;%zu;%zu\n", "GstDmaBufAllocatorClass", sizeof(GstDmaBufAllocatorClass), alignof(GstDmaBufAllocatorClass));
     printf("%s;%zu;%zu\n", "GstFdAllocator", sizeof(GstFdAllocator), alignof(GstFdAllocator));

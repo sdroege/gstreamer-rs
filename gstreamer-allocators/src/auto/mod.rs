@@ -5,6 +5,17 @@
 
 #[cfg(any(target_os = "linux", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(target_os = "linux")))]
+#[cfg(any(feature = "v1_24", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+mod drm_dumb_allocator;
+#[cfg(any(target_os = "linux", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(target_os = "linux")))]
+#[cfg(any(feature = "v1_24", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+pub use self::drm_dumb_allocator::DRMDumbAllocator;
+
+#[cfg(any(target_os = "linux", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(target_os = "linux")))]
 mod dma_buf_allocator;
 #[cfg(any(target_os = "linux", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(target_os = "linux")))]

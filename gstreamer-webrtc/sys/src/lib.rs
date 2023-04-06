@@ -222,8 +222,14 @@ pub struct GstWebRTCICEClass {
     >,
     pub gather_candidates:
         Option<unsafe extern "C" fn(*mut GstWebRTCICE, *mut GstWebRTCICEStream) -> gboolean>,
-    pub add_candidate:
-        Option<unsafe extern "C" fn(*mut GstWebRTCICE, *mut GstWebRTCICEStream, *const c_char)>,
+    pub add_candidate: Option<
+        unsafe extern "C" fn(
+            *mut GstWebRTCICE,
+            *mut GstWebRTCICEStream,
+            *const c_char,
+            *mut gst::GstPromise,
+        ),
+    >,
     pub set_local_credentials: Option<
         unsafe extern "C" fn(
             *mut GstWebRTCICE,
@@ -747,6 +753,7 @@ extern "C" {
         ice: *mut GstWebRTCICE,
         stream: *mut GstWebRTCICEStream,
         candidate: *const c_char,
+        promise: *mut gst::GstPromise,
     );
     #[cfg(any(feature = "v1_22", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]

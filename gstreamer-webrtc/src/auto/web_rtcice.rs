@@ -28,9 +28,6 @@ unsafe impl Send for WebRTCICE {}
 unsafe impl Sync for WebRTCICE {}
 
 pub trait WebRTCICEExt: 'static {
-    #[doc(alias = "gst_webrtc_ice_add_candidate")]
-    fn add_candidate(&self, stream: &impl IsA<WebRTCICEStream>, candidate: &str);
-
     #[doc(alias = "gst_webrtc_ice_add_stream")]
     fn add_stream(&self, session_id: u32) -> Option<WebRTCICEStream>;
 
@@ -162,16 +159,6 @@ pub trait WebRTCICEExt: 'static {
 }
 
 impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
-    fn add_candidate(&self, stream: &impl IsA<WebRTCICEStream>, candidate: &str) {
-        unsafe {
-            ffi::gst_webrtc_ice_add_candidate(
-                self.as_ref().to_glib_none().0,
-                stream.as_ref().to_glib_none().0,
-                candidate.to_glib_none().0,
-            );
-        }
-    }
-
     fn add_stream(&self, session_id: u32) -> Option<WebRTCICEStream> {
         unsafe {
             from_glib_full(ffi::gst_webrtc_ice_add_stream(

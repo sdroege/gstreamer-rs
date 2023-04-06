@@ -2157,6 +2157,14 @@ extern "C" {
         error: *mut *mut glib::GError,
     ) -> gboolean;
     pub fn gst_gl_display_create_window(display: *mut GstGLDisplay) -> *mut GstGLWindow;
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_display_ensure_context(
+        display: *mut GstGLDisplay,
+        other_context: *mut GstGLContext,
+        context: *mut *mut GstGLContext,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
     pub fn gst_gl_display_filter_gl_api(display: *mut GstGLDisplay, gl_api: GstGLAPI);
     pub fn gst_gl_display_find_window(
         display: *mut GstGLDisplay,
