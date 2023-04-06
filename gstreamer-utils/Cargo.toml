@@ -28,3 +28,4 @@ futures = { version = "0.3", features = ["executor"] }
 [features]
 default = []
 v1_22 = []
+v1_24 = ["v1_22"]

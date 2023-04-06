@@ -20,6 +20,9 @@ features = ["dox"]
 name = "gstreamer-validate-1.0"
 version = "1.22"
 
+[package.metadata.system-deps.gstreamer_validate_1_0.v1_24]
+version = "1.23"
+
 [lib]
 name = "gstreamer_validate_sys"
 
@@ -51,3 +54,4 @@ tempfile = "3"
 
 [features]
 dox = ["glib/dox", "gio/dox", "gobject/dox", "gst/dox"]
+v1_24 = []

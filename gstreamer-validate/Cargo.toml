@@ -26,6 +26,7 @@ tempfile = "3"
 
 [features]
 default = []
+v1_24 = ["gst/v1_24", "ffi/v1_24"]
 dox = ["ffi/dox", "glib/dox", "gst/dox"]
 
 [package.metadata.docs.rs]
