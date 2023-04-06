@@ -9,6 +9,7 @@ use gst::prelude::*;
 
 #[doc(alias = "GstAudioInfo")]
 #[derive(Clone)]
+#[repr(transparent)]
 pub struct AudioInfo(ffi::GstAudioInfo);
 
 impl fmt::Debug for AudioInfo {

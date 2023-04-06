@@ -2,7 +2,7 @@
 
 use std::{fmt, marker::PhantomData, mem, ops, ptr, slice};
 
-use glib::translate::{from_glib, Borrowed, FromGlibPtrNone, ToGlibPtr};
+use glib::translate::{from_glib, Borrowed, ToGlibPtr};
 
 pub enum Readable {}
 pub enum Writable {}
@@ -11,7 +11,6 @@ pub struct AudioBuffer<T> {
     // Has to be boxed because it contains self-references
     audio_buffer: Box<ffi::GstAudioBuffer>,
     buffer: gst::Buffer,
-    info: crate::AudioInfo,
     phantom: PhantomData<T>,
 }
 
@@ -21,10 +20,10 @@ unsafe impl<T> Sync for AudioBuffer<T> {}
 impl<T> fmt::Debug for AudioBuffer<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("AudioBuffer")
-            .field("audio_buffer", &self.audio_buffer)
-            .field("buffer", &self.buffer)
-            .field("info", &self.info)
-            .field("phantom", &self.phantom)
+            .field("n_samples", &self.n_samples())
+            .field("n_planes", &self.n_planes())
+            .field("buffer", &self.buffer())
+            .field("info", &self.info())
             .finish()
     }
 }
@@ -32,7 +31,9 @@ impl<T> fmt::Debug for AudioBuffer<T> {
 impl<T> AudioBuffer<T> {
     #[inline]
     pub fn info(&self) -> &crate::AudioInfo {
-        &self.info
+        unsafe {
+            &*(&self.audio_buffer.info as *const ffi::GstAudioInfo as *const crate::AudioInfo)
+        }
     }
 
     #[inline]
@@ -135,10 +136,8 @@ impl<T> AudioBuffer<T> {
 
     #[inline]
     pub fn as_audio_buffer_ref(&self) -> AudioBufferRef<&gst::BufferRef> {
-        let info = self.info.clone();
         AudioBufferRef {
             audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::from(&*self.audio_buffer)),
-            info,
             unmap: false,
             phantom: PhantomData,
         }
@@ -181,13 +180,9 @@ impl AudioBuffer<Readable> {
             if !res {
                 Err(buffer)
             } else {
-                let info = crate::AudioInfo::from_glib_none(
-                    &audio_buffer.info as *const _ as *mut ffi::GstAudioInfo,
-                );
                 Ok(Self {
                     audio_buffer,
                     buffer,
-                    info,
                     phantom: PhantomData,
                 })
             }
@@ -217,13 +212,9 @@ impl AudioBuffer<Writable> {
             if !res {
                 Err(buffer)
             } else {
-                let info = crate::AudioInfo::from_glib_none(
-                    &audio_buffer.info as *const _ as *mut ffi::GstAudioInfo,
-                );
                 Ok(Self {
                     audio_buffer,
                     buffer,
-                    info,
                     phantom: PhantomData,
                 })
             }
@@ -252,10 +243,8 @@ impl AudioBuffer<Writable> {
 
     #[inline]
     pub fn as_mut_audio_buffer_ref(&mut self) -> AudioBufferRef<&mut gst::BufferRef> {
-        let info = self.info.clone();
         AudioBufferRef {
             audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::from(&mut *self.audio_buffer)),
-            info,
             unmap: false,
             phantom: PhantomData,
         }
@@ -295,19 +284,32 @@ impl ops::DerefMut for AudioBufferPtr {
     }
 }
 
-#[derive(Debug)]
 pub struct AudioBufferRef<T> {
     // Has to be boxed because it contains self-references
     audio_buffer: AudioBufferPtr,
-    info: crate::AudioInfo,
     unmap: bool,
     phantom: PhantomData<T>,
+}
+
+impl<T> fmt::Debug for AudioBufferRef<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("AudioBufferRef")
+            .field("n_samples", &self.n_samples())
+            .field("n_planes", &self.n_planes())
+            .field("buffer", &unsafe {
+                gst::BufferRef::from_ptr(self.audio_buffer.buffer)
+            })
+            .field("info", &self.info())
+            .finish()
+    }
 }
 
 impl<T> AudioBufferRef<T> {
     #[inline]
     pub fn info(&self) -> &crate::AudioInfo {
-        &self.info
+        unsafe {
+            &*(&self.audio_buffer.info as *const ffi::GstAudioInfo as *const crate::AudioInfo)
+        }
     }
 
     #[inline]
@@ -406,14 +408,10 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
     pub unsafe fn from_glib_borrow(audio_buffer: *const ffi::GstAudioBuffer) -> Borrowed<Self> {
         debug_assert!(!audio_buffer.is_null());
 
-        let info = crate::AudioInfo::from_glib_none(
-            &(*audio_buffer).info as *const _ as *mut ffi::GstAudioInfo,
-        );
         Borrowed::new(Self {
             audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::new_unchecked(
                 audio_buffer as *mut _,
             )),
-            info,
             unmap: false,
             phantom: PhantomData,
         })
@@ -440,12 +438,8 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
             if !res {
                 Err(glib::bool_error!("Failed to map AudioBuffer"))
             } else {
-                let info = crate::AudioInfo::from_glib_none(
-                    &audio_buffer.info as *const _ as *mut ffi::GstAudioInfo,
-                );
                 Ok(Self {
                     audio_buffer: AudioBufferPtr::Owned(audio_buffer),
-                    info,
                     unmap: true,
                     phantom: PhantomData,
                 })
@@ -464,12 +458,8 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
     pub unsafe fn from_glib_borrow_mut(audio_buffer: *mut ffi::GstAudioBuffer) -> Borrowed<Self> {
         debug_assert!(!audio_buffer.is_null());
 
-        let info = crate::AudioInfo::from_glib_none(
-            &(*audio_buffer).info as *const _ as *mut ffi::GstAudioInfo,
-        );
         Borrowed::new(Self {
             audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::new_unchecked(audio_buffer)),
-            info,
             unmap: false,
             phantom: PhantomData,
         })
@@ -496,12 +486,8 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
             if !res {
                 Err(glib::bool_error!("Failed to map AudioBuffer"))
             } else {
-                let info = crate::AudioInfo::from_glib_none(
-                    &audio_buffer.info as *const _ as *mut ffi::GstAudioInfo,
-                );
                 Ok(Self {
                     audio_buffer: AudioBufferPtr::Owned(audio_buffer),
-                    info,
                     unmap: true,
                     phantom: PhantomData,
                 })
