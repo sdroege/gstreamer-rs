@@ -87,7 +87,7 @@ impl Discoverer {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "use-cache")]
     pub fn set_use_cache(&self, use_cache: bool) {
-        glib::ObjectExt::set_property(self, "use-cache", &use_cache)
+        glib::ObjectExt::set_property(self, "use-cache", use_cache)
     }
 
     #[doc(alias = "discovered")]

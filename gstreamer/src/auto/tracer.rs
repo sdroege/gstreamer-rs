@@ -42,7 +42,7 @@ impl<O: IsA<Tracer>> TracerExt for O {
     }
 
     fn set_params(&self, params: Option<&str>) {
-        glib::ObjectExt::set_property(self.as_ref(), "params", &params)
+        glib::ObjectExt::set_property(self.as_ref(), "params", params)
     }
 
     fn connect_params_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {

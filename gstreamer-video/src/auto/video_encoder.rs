@@ -180,7 +180,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
     }
 
     fn set_qos(&self, qos: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "qos", &qos)
+        glib::ObjectExt::set_property(self.as_ref(), "qos", qos)
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]

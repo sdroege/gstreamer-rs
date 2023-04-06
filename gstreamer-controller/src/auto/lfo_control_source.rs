@@ -96,7 +96,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
     }
 
     fn set_amplitude(&self, amplitude: f64) {
-        glib::ObjectExt::set_property(self.as_ref(), "amplitude", &amplitude)
+        glib::ObjectExt::set_property(self.as_ref(), "amplitude", amplitude)
     }
 
     fn frequency(&self) -> f64 {
@@ -104,7 +104,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
     }
 
     fn set_frequency(&self, frequency: f64) {
-        glib::ObjectExt::set_property(self.as_ref(), "frequency", &frequency)
+        glib::ObjectExt::set_property(self.as_ref(), "frequency", frequency)
     }
 
     fn offset(&self) -> f64 {
@@ -112,7 +112,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
     }
 
     fn set_offset(&self, offset: f64) {
-        glib::ObjectExt::set_property(self.as_ref(), "offset", &offset)
+        glib::ObjectExt::set_property(self.as_ref(), "offset", offset)
     }
 
     fn timeshift(&self) -> u64 {
@@ -120,7 +120,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
     }
 
     fn set_timeshift(&self, timeshift: u64) {
-        glib::ObjectExt::set_property(self.as_ref(), "timeshift", &timeshift)
+        glib::ObjectExt::set_property(self.as_ref(), "timeshift", timeshift)
     }
 
     fn waveform(&self) -> LFOWaveform {
@@ -128,7 +128,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
     }
 
     fn set_waveform(&self, waveform: LFOWaveform) {
-        glib::ObjectExt::set_property(self.as_ref(), "waveform", &waveform)
+        glib::ObjectExt::set_property(self.as_ref(), "waveform", waveform)
     }
 
     fn connect_amplitude_notify<F: Fn(&Self) + Send + Sync + 'static>(

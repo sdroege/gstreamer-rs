@@ -105,7 +105,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
     }
 
     fn set_control_source_a<P: IsA<gst::ControlSource>>(&self, control_source_a: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "control-source-a", &control_source_a)
+        glib::ObjectExt::set_property(self.as_ref(), "control-source-a", control_source_a)
     }
 
     fn control_source_b(&self) -> Option<gst::ControlSource> {
@@ -113,7 +113,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
     }
 
     fn set_control_source_b<P: IsA<gst::ControlSource>>(&self, control_source_b: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "control-source-b", &control_source_b)
+        glib::ObjectExt::set_property(self.as_ref(), "control-source-b", control_source_b)
     }
 
     fn control_source_g(&self) -> Option<gst::ControlSource> {
@@ -121,7 +121,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
     }
 
     fn set_control_source_g<P: IsA<gst::ControlSource>>(&self, control_source_g: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "control-source-g", &control_source_g)
+        glib::ObjectExt::set_property(self.as_ref(), "control-source-g", control_source_g)
     }
 
     fn control_source_r(&self) -> Option<gst::ControlSource> {
@@ -129,7 +129,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
     }
 
     fn set_control_source_r<P: IsA<gst::ControlSource>>(&self, control_source_r: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "control-source-r", &control_source_r)
+        glib::ObjectExt::set_property(self.as_ref(), "control-source-r", control_source_r)
     }
 
     fn connect_control_source_a_notify<F: Fn(&Self) + Send + Sync + 'static>(

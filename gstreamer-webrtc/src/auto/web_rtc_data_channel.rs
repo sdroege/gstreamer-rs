@@ -100,7 +100,7 @@ impl WebRTCDataChannel {
         glib::ObjectExt::set_property(
             self,
             "buffered-amount-low-threshold",
-            &buffered_amount_low_threshold,
+            buffered_amount_low_threshold,
         )
     }
 

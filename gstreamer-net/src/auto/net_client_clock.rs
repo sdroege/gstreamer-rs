@@ -44,7 +44,7 @@ impl NetClientClock {
     }
 
     pub fn set_address(&self, address: Option<&str>) {
-        glib::ObjectExt::set_property(self, "address", &address)
+        glib::ObjectExt::set_property(self, "address", address)
     }
 
     #[doc(alias = "base-time")]
@@ -57,7 +57,7 @@ impl NetClientClock {
     }
 
     pub fn set_bus<P: IsA<gst::Bus>>(&self, bus: Option<&P>) {
-        glib::ObjectExt::set_property(self, "bus", &bus)
+        glib::ObjectExt::set_property(self, "bus", bus)
     }
 
     #[doc(alias = "internal-clock")]
@@ -72,7 +72,7 @@ impl NetClientClock {
 
     #[doc(alias = "minimum-update-interval")]
     pub fn set_minimum_update_interval(&self, minimum_update_interval: u64) {
-        glib::ObjectExt::set_property(self, "minimum-update-interval", &minimum_update_interval)
+        glib::ObjectExt::set_property(self, "minimum-update-interval", minimum_update_interval)
     }
 
     pub fn port(&self) -> i32 {
@@ -80,7 +80,7 @@ impl NetClientClock {
     }
 
     pub fn set_port(&self, port: i32) {
-        glib::ObjectExt::set_property(self, "port", &port)
+        glib::ObjectExt::set_property(self, "port", port)
     }
 
     #[doc(alias = "qos-dscp")]
@@ -90,7 +90,7 @@ impl NetClientClock {
 
     #[doc(alias = "qos-dscp")]
     pub fn set_qos_dscp(&self, qos_dscp: i32) {
-        glib::ObjectExt::set_property(self, "qos-dscp", &qos_dscp)
+        glib::ObjectExt::set_property(self, "qos-dscp", qos_dscp)
     }
 
     #[doc(alias = "round-trip-limit")]
@@ -100,7 +100,7 @@ impl NetClientClock {
 
     #[doc(alias = "round-trip-limit")]
     pub fn set_round_trip_limit(&self, round_trip_limit: u64) {
-        glib::ObjectExt::set_property(self, "round-trip-limit", &round_trip_limit)
+        glib::ObjectExt::set_property(self, "round-trip-limit", round_trip_limit)
     }
 
     #[doc(alias = "address")]

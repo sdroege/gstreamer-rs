@@ -291,7 +291,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_emit_signals(&self, emit_signals: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "emit-signals", &emit_signals)
+        glib::ObjectExt::set_property(self.as_ref(), "emit-signals", emit_signals)
     }
 
     fn start_time(&self) -> u64 {
@@ -299,7 +299,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
     }
 
     fn set_start_time(&self, start_time: u64) {
-        glib::ObjectExt::set_property(self.as_ref(), "start-time", &start_time)
+        glib::ObjectExt::set_property(self.as_ref(), "start-time", start_time)
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -311,7 +311,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_start_time_selection(&self, start_time_selection: AggregatorStartTimeSelection) {
-        glib::ObjectExt::set_property(self.as_ref(), "start-time-selection", &start_time_selection)
+        glib::ObjectExt::set_property(self.as_ref(), "start-time-selection", start_time_selection)
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]

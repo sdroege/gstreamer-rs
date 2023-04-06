@@ -214,7 +214,7 @@ impl AppSrc {
     }
 
     pub fn set_block(&self, block: bool) {
-        glib::ObjectExt::set_property(self, "block", &block)
+        glib::ObjectExt::set_property(self, "block", block)
     }
 
     pub fn format(&self) -> gst::Format {
@@ -222,7 +222,7 @@ impl AppSrc {
     }
 
     pub fn set_format(&self, format: gst::Format) {
-        glib::ObjectExt::set_property(self, "format", &format)
+        glib::ObjectExt::set_property(self, "format", format)
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -236,7 +236,7 @@ impl AppSrc {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "handle-segment-change")]
     pub fn set_handle_segment_change(&self, handle_segment_change: bool) {
-        glib::ObjectExt::set_property(self, "handle-segment-change", &handle_segment_change)
+        glib::ObjectExt::set_property(self, "handle-segment-change", handle_segment_change)
     }
 
     #[doc(alias = "is-live")]
@@ -246,7 +246,7 @@ impl AppSrc {
 
     #[doc(alias = "is-live")]
     pub fn set_is_live(&self, is_live: bool) {
-        glib::ObjectExt::set_property(self, "is-live", &is_live)
+        glib::ObjectExt::set_property(self, "is-live", is_live)
     }
 
     #[doc(alias = "max-latency")]
@@ -256,7 +256,7 @@ impl AppSrc {
 
     #[doc(alias = "max-latency")]
     pub fn set_max_latency(&self, max_latency: i64) {
-        glib::ObjectExt::set_property(self, "max-latency", &max_latency)
+        glib::ObjectExt::set_property(self, "max-latency", max_latency)
     }
 
     #[doc(alias = "min-latency")]
@@ -266,7 +266,7 @@ impl AppSrc {
 
     #[doc(alias = "min-latency")]
     pub fn set_min_latency(&self, min_latency: i64) {
-        glib::ObjectExt::set_property(self, "min-latency", &min_latency)
+        glib::ObjectExt::set_property(self, "min-latency", min_latency)
     }
 
     #[doc(alias = "min-percent")]
@@ -276,7 +276,7 @@ impl AppSrc {
 
     #[doc(alias = "min-percent")]
     pub fn set_min_percent(&self, min_percent: u32) {
-        glib::ObjectExt::set_property(self, "min-percent", &min_percent)
+        glib::ObjectExt::set_property(self, "min-percent", min_percent)
     }
 
     #[doc(alias = "block")]

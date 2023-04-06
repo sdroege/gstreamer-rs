@@ -484,7 +484,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     }
 
     fn set_drop_backlog(&self, drop_backlog: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "drop-backlog", &drop_backlog)
+        glib::ObjectExt::set_property(self.as_ref(), "drop-backlog", drop_backlog)
     }
 
     fn post_session_timeout(&self) -> i32 {
@@ -492,7 +492,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     }
 
     fn set_post_session_timeout(&self, post_session_timeout: i32) {
-        glib::ObjectExt::set_property(self.as_ref(), "post-session-timeout", &post_session_timeout)
+        glib::ObjectExt::set_property(self.as_ref(), "post-session-timeout", post_session_timeout)
     }
 
     fn connect_announce_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(

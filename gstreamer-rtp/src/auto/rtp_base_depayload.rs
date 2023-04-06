@@ -192,7 +192,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
         glib::ObjectExt::set_property(
             self.as_ref(),
             "auto-header-extension",
-            &auto_header_extension,
+            auto_header_extension,
         )
     }
 
@@ -205,7 +205,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_max_reorder(&self, max_reorder: i32) {
-        glib::ObjectExt::set_property(self.as_ref(), "max-reorder", &max_reorder)
+        glib::ObjectExt::set_property(self.as_ref(), "max-reorder", max_reorder)
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -217,7 +217,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_source_info(&self, source_info: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "source-info", &source_info)
+        glib::ObjectExt::set_property(self.as_ref(), "source-info", source_info)
     }
 
     fn stats(&self) -> Option<gst::Structure> {

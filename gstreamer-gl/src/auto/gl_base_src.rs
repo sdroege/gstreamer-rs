@@ -46,7 +46,7 @@ impl<O: IsA<GLBaseSrc>> GLBaseSrcExt for O {
     }
 
     fn set_timestamp_offset(&self, timestamp_offset: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "timestamp-offset", &timestamp_offset)
+        glib::ObjectExt::set_property(self.as_ref(), "timestamp-offset", timestamp_offset)
     }
 
     fn connect_timestamp_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(

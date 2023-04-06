@@ -86,7 +86,7 @@ impl MarkerList {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn set_flags(&self, flags: MarkerFlags) {
-        glib::ObjectExt::set_property(self, "flags", &flags)
+        glib::ObjectExt::set_property(self, "flags", flags)
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]

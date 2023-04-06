@@ -342,7 +342,7 @@ impl Player {
     }
 
     pub fn set_suburi(&self, suburi: Option<&str>) {
-        glib::ObjectExt::set_property(self, "suburi", &suburi)
+        glib::ObjectExt::set_property(self, "suburi", suburi)
     }
 
     #[doc(alias = "video-multiview-flags")]
@@ -352,7 +352,7 @@ impl Player {
 
     #[doc(alias = "video-multiview-flags")]
     pub fn set_video_multiview_flags(&self, video_multiview_flags: gst_video::VideoMultiviewFlags) {
-        glib::ObjectExt::set_property(self, "video-multiview-flags", &video_multiview_flags)
+        glib::ObjectExt::set_property(self, "video-multiview-flags", video_multiview_flags)
     }
 
     #[doc(alias = "video-multiview-mode")]
@@ -365,7 +365,7 @@ impl Player {
         &self,
         video_multiview_mode: gst_video::VideoMultiviewFramePacking,
     ) {
-        glib::ObjectExt::set_property(self, "video-multiview-mode", &video_multiview_mode)
+        glib::ObjectExt::set_property(self, "video-multiview-mode", video_multiview_mode)
     }
 
     #[doc(alias = "video-renderer")]

@@ -54,7 +54,7 @@ impl<O: IsA<AudioVisualizer>> AudioVisualizerExt for O {
     }
 
     fn set_shade_amount(&self, shade_amount: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "shade-amount", &shade_amount)
+        glib::ObjectExt::set_property(self.as_ref(), "shade-amount", shade_amount)
     }
 
     fn shader(&self) -> AudioVisualizerShader {
@@ -62,7 +62,7 @@ impl<O: IsA<AudioVisualizer>> AudioVisualizerExt for O {
     }
 
     fn set_shader(&self, shader: AudioVisualizerShader) {
-        glib::ObjectExt::set_property(self.as_ref(), "shader", &shader)
+        glib::ObjectExt::set_property(self.as_ref(), "shader", shader)
     }
 
     fn connect_shade_amount_notify<F: Fn(&Self) + Send + Sync + 'static>(

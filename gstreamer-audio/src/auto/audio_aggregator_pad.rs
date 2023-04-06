@@ -60,7 +60,7 @@ impl<O: IsA<AudioAggregatorPad>> AudioAggregatorPadExt for O {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     fn set_qos_messages(&self, qos_messages: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "qos-messages", &qos_messages)
+        glib::ObjectExt::set_property(self.as_ref(), "qos-messages", qos_messages)
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]

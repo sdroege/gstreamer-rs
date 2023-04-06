@@ -255,7 +255,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     }
 
     fn set_audio_filter<P: IsA<gst::Element>>(&self, audio_filter: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "audio-filter", &audio_filter)
+        glib::ObjectExt::set_property(self.as_ref(), "audio-filter", audio_filter)
     }
 
     fn audio_sink(&self) -> Option<gst::Element> {
@@ -263,7 +263,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     }
 
     fn set_audio_sink<P: IsA<gst::Element>>(&self, audio_sink: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "audio-sink", &audio_sink)
+        glib::ObjectExt::set_property(self.as_ref(), "audio-sink", audio_sink)
     }
 
     fn timeline(&self) -> Option<Timeline> {
@@ -275,7 +275,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     }
 
     fn set_video_filter<P: IsA<gst::Element>>(&self, video_filter: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "video-filter", &video_filter)
+        glib::ObjectExt::set_property(self.as_ref(), "video-filter", video_filter)
     }
 
     fn video_sink(&self) -> Option<gst::Element> {
@@ -283,7 +283,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     }
 
     fn set_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "video-sink", &video_sink)
+        glib::ObjectExt::set_property(self.as_ref(), "video-sink", video_sink)
     }
 
     fn connect_audio_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

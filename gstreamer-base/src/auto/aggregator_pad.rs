@@ -136,7 +136,7 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_emit_signals(&self, emit_signals: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "emit-signals", &emit_signals)
+        glib::ObjectExt::set_property(self.as_ref(), "emit-signals", emit_signals)
     }
 
     fn connect_buffer_consumed<F: Fn(&Self, &gst::Buffer) + Send + Sync + 'static>(

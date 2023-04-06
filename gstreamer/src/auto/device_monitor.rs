@@ -128,7 +128,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
     }
 
     fn set_show_all(&self, show_all: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "show-all", &show_all)
+        glib::ObjectExt::set_property(self.as_ref(), "show-all", show_all)
     }
 
     fn connect_show_all_notify<F: Fn(&Self) + Send + Sync + 'static>(

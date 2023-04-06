@@ -379,7 +379,7 @@ impl<O: IsA<Clock>> ClockExt for O {
     }
 
     fn set_window_size(&self, window_size: i32) {
-        glib::ObjectExt::set_property(self.as_ref(), "window-size", &window_size)
+        glib::ObjectExt::set_property(self.as_ref(), "window-size", window_size)
     }
 
     fn window_threshold(&self) -> i32 {
@@ -387,7 +387,7 @@ impl<O: IsA<Clock>> ClockExt for O {
     }
 
     fn set_window_threshold(&self, window_threshold: i32) {
-        glib::ObjectExt::set_property(self.as_ref(), "window-threshold", &window_threshold)
+        glib::ObjectExt::set_property(self.as_ref(), "window-threshold", window_threshold)
     }
 
     fn connect_synced<F: Fn(&Self, bool) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {

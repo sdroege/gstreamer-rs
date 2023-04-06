@@ -26,7 +26,7 @@ impl WebRTCDTLSTransport {
     }
 
     pub fn set_certificate(&self, certificate: Option<&str>) {
-        glib::ObjectExt::set_property(self, "certificate", &certificate)
+        glib::ObjectExt::set_property(self, "certificate", certificate)
     }
 
     pub fn is_client(&self) -> bool {
@@ -34,7 +34,7 @@ impl WebRTCDTLSTransport {
     }
 
     pub fn set_client(&self, client: bool) {
-        glib::ObjectExt::set_property(self, "client", &client)
+        glib::ObjectExt::set_property(self, "client", client)
     }
 
     #[doc(alias = "remote-certificate")]

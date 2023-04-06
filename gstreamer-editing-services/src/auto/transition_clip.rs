@@ -55,7 +55,7 @@ impl<O: IsA<TransitionClip>> TransitionClipExt for O {
     }
 
     fn set_vtype(&self, vtype: VideoStandardTransitionType) {
-        glib::ObjectExt::set_property(self.as_ref(), "vtype", &vtype)
+        glib::ObjectExt::set_property(self.as_ref(), "vtype", vtype)
     }
 
     fn connect_vtype_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

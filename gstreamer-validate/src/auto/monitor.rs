@@ -136,7 +136,7 @@ impl<O: IsA<Monitor>> MonitorExt for O {
     }
 
     fn set_pipeline<P: IsA<gst::Pipeline>>(&self, pipeline: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "pipeline", &pipeline)
+        glib::ObjectExt::set_property(self.as_ref(), "pipeline", pipeline)
     }
 
     fn validate_parent(&self) -> Option<Monitor> {
@@ -148,7 +148,7 @@ impl<O: IsA<Monitor>> MonitorExt for O {
     //}
 
     //fn set_verbosity(&self, verbosity: /*Ignored*/VerbosityFlags) {
-    //    glib::ObjectExt::set_property(self.as_ref(),"verbosity", &verbosity)
+    //    glib::ObjectExt::set_property(self.as_ref(),"verbosity", verbosity)
     //}
 
     fn connect_pipeline_notify<F: Fn(&Self) + Send + Sync + 'static>(

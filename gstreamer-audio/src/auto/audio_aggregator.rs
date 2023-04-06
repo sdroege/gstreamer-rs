@@ -70,7 +70,7 @@ impl<O: IsA<AudioAggregator>> AudioAggregatorExt for O {
     }
 
     fn set_alignment_threshold(&self, alignment_threshold: u64) {
-        glib::ObjectExt::set_property(self.as_ref(), "alignment-threshold", &alignment_threshold)
+        glib::ObjectExt::set_property(self.as_ref(), "alignment-threshold", alignment_threshold)
     }
 
     fn discont_wait(&self) -> u64 {
@@ -78,7 +78,7 @@ impl<O: IsA<AudioAggregator>> AudioAggregatorExt for O {
     }
 
     fn set_discont_wait(&self, discont_wait: u64) {
-        glib::ObjectExt::set_property(self.as_ref(), "discont-wait", &discont_wait)
+        glib::ObjectExt::set_property(self.as_ref(), "discont-wait", discont_wait)
     }
 
     fn output_buffer_duration(&self) -> u64 {
@@ -89,7 +89,7 @@ impl<O: IsA<AudioAggregator>> AudioAggregatorExt for O {
         glib::ObjectExt::set_property(
             self.as_ref(),
             "output-buffer-duration",
-            &output_buffer_duration,
+            output_buffer_duration,
         )
     }
 

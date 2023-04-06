@@ -59,7 +59,7 @@ impl<O: IsA<TriggerControlSource>> TriggerControlSourceExt for O {
     }
 
     fn set_tolerance(&self, tolerance: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "tolerance", &tolerance)
+        glib::ObjectExt::set_property(self.as_ref(), "tolerance", tolerance)
     }
 
     fn connect_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(

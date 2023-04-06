@@ -61,7 +61,7 @@ impl<O: IsA<SystemClock>> SystemClockExt for O {
     }
 
     fn set_clock_type(&self, clock_type: ClockType) {
-        glib::ObjectExt::set_property(self.as_ref(), "clock-type", &clock_type)
+        glib::ObjectExt::set_property(self.as_ref(), "clock-type", clock_type)
     }
 
     fn connect_clock_type_notify<F: Fn(&Self) + Send + Sync + 'static>(

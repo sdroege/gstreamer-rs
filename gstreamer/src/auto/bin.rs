@@ -215,7 +215,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
     }
 
     fn set_async_handling(&self, async_handling: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "async-handling", &async_handling)
+        glib::ObjectExt::set_property(self.as_ref(), "async-handling", async_handling)
     }
 
     fn is_message_forward(&self) -> bool {
@@ -223,7 +223,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
     }
 
     fn set_message_forward(&self, message_forward: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "message-forward", &message_forward)
+        glib::ObjectExt::set_property(self.as_ref(), "message-forward", message_forward)
     }
 
     fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(

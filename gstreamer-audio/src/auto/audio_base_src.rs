@@ -142,7 +142,7 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
     }
 
     fn set_buffer_time(&self, buffer_time: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "buffer-time", &buffer_time)
+        glib::ObjectExt::set_property(self.as_ref(), "buffer-time", buffer_time)
     }
 
     fn latency_time(&self) -> i64 {
@@ -150,7 +150,7 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
     }
 
     fn set_latency_time(&self, latency_time: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "latency-time", &latency_time)
+        glib::ObjectExt::set_property(self.as_ref(), "latency-time", latency_time)
     }
 
     fn connect_actual_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(

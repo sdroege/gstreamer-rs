@@ -245,7 +245,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
     }
 
     fn set_extra_timeout(&self, extra_timeout: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "extra-timeout", &extra_timeout)
+        glib::ObjectExt::set_property(self.as_ref(), "extra-timeout", extra_timeout)
     }
 
     fn is_timeout_always_visible(&self) -> bool {
@@ -256,7 +256,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         glib::ObjectExt::set_property(
             self.as_ref(),
             "timeout-always-visible",
-            &timeout_always_visible,
+            timeout_always_visible,
         )
     }
 

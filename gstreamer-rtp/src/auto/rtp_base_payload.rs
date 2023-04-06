@@ -379,7 +379,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         glib::ObjectExt::set_property(
             self.as_ref(),
             "auto-header-extension",
-            &auto_header_extension,
+            auto_header_extension,
         )
     }
 
@@ -388,7 +388,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
     }
 
     fn set_max_ptime(&self, max_ptime: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "max-ptime", &max_ptime)
+        glib::ObjectExt::set_property(self.as_ref(), "max-ptime", max_ptime)
     }
 
     fn min_ptime(&self) -> i64 {
@@ -396,7 +396,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
     }
 
     fn set_min_ptime(&self, min_ptime: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "min-ptime", &min_ptime)
+        glib::ObjectExt::set_property(self.as_ref(), "min-ptime", min_ptime)
     }
 
     fn mtu(&self) -> u32 {
@@ -404,7 +404,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
     }
 
     fn set_mtu(&self, mtu: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "mtu", &mtu)
+        glib::ObjectExt::set_property(self.as_ref(), "mtu", mtu)
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -419,7 +419,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         glib::ObjectExt::set_property(
             self.as_ref(),
             "onvif-no-rate-control",
-            &onvif_no_rate_control,
+            onvif_no_rate_control,
         )
     }
 
@@ -428,7 +428,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
     }
 
     fn set_perfect_rtptime(&self, perfect_rtptime: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "perfect-rtptime", &perfect_rtptime)
+        glib::ObjectExt::set_property(self.as_ref(), "perfect-rtptime", perfect_rtptime)
     }
 
     fn pt(&self) -> u32 {
@@ -436,7 +436,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
     }
 
     fn set_pt(&self, pt: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "pt", &pt)
+        glib::ObjectExt::set_property(self.as_ref(), "pt", pt)
     }
 
     fn ptime_multiple(&self) -> i64 {
@@ -444,7 +444,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
     }
 
     fn set_ptime_multiple(&self, ptime_multiple: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "ptime-multiple", &ptime_multiple)
+        glib::ObjectExt::set_property(self.as_ref(), "ptime-multiple", ptime_multiple)
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -456,7 +456,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_scale_rtptime(&self, scale_rtptime: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "scale-rtptime", &scale_rtptime)
+        glib::ObjectExt::set_property(self.as_ref(), "scale-rtptime", scale_rtptime)
     }
 
     fn seqnum(&self) -> u32 {
@@ -468,7 +468,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
     }
 
     fn set_seqnum_offset(&self, seqnum_offset: i32) {
-        glib::ObjectExt::set_property(self.as_ref(), "seqnum-offset", &seqnum_offset)
+        glib::ObjectExt::set_property(self.as_ref(), "seqnum-offset", seqnum_offset)
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -480,7 +480,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_source_info(&self, source_info: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "source-info", &source_info)
+        glib::ObjectExt::set_property(self.as_ref(), "source-info", source_info)
     }
 
     fn ssrc(&self) -> u32 {
@@ -488,7 +488,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
     }
 
     fn set_ssrc(&self, ssrc: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "ssrc", &ssrc)
+        glib::ObjectExt::set_property(self.as_ref(), "ssrc", ssrc)
     }
 
     fn stats(&self) -> Option<gst::Structure> {
@@ -504,7 +504,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
     }
 
     fn set_timestamp_offset(&self, timestamp_offset: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "timestamp-offset", &timestamp_offset)
+        glib::ObjectExt::set_property(self.as_ref(), "timestamp-offset", timestamp_offset)
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]

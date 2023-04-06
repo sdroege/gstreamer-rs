@@ -414,7 +414,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     fn set_max_rtp_port(&self, max_rtp_port: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "max-rtp-port", &max_rtp_port)
+        glib::ObjectExt::set_property(self.as_ref(), "max-rtp-port", max_rtp_port)
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
@@ -426,7 +426,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     fn set_min_rtp_port(&self, min_rtp_port: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "min-rtp-port", &min_rtp_port)
+        glib::ObjectExt::set_property(self.as_ref(), "min-rtp-port", min_rtp_port)
     }
 
     fn connect_add_local_ip_address<F: Fn(&Self, &str) -> bool + Send + Sync + 'static>(

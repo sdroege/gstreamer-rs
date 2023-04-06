@@ -86,7 +86,7 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
     }
 
     fn set_use_gstpay(&self, use_gstpay: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "use-gstpay", &use_gstpay)
+        glib::ObjectExt::set_property(self.as_ref(), "use-gstpay", use_gstpay)
     }
 
     fn connect_uri_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {

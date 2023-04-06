@@ -404,7 +404,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     }
 
     fn set_async(&self, async_: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "async", &async_)
+        glib::ObjectExt::set_property(self.as_ref(), "async", async_)
     }
 
     fn enables_last_sample(&self) -> bool {
@@ -412,7 +412,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     }
 
     fn set_enable_last_sample(&self, enable_last_sample: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "enable-last-sample", &enable_last_sample)
+        glib::ObjectExt::set_property(self.as_ref(), "enable-last-sample", enable_last_sample)
     }
 
     fn is_qos(&self) -> bool {
@@ -420,7 +420,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     }
 
     fn set_qos(&self, qos: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "qos", &qos)
+        glib::ObjectExt::set_property(self.as_ref(), "qos", qos)
     }
 
     fn connect_async_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {

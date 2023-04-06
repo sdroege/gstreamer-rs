@@ -57,7 +57,7 @@ impl<O: IsA<InterpolationControlSource>> InterpolationControlSourceExt for O {
     }
 
     fn set_mode(&self, mode: InterpolationMode) {
-        glib::ObjectExt::set_property(self.as_ref(), "mode", &mode)
+        glib::ObjectExt::set_property(self.as_ref(), "mode", mode)
     }
 
     fn connect_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {

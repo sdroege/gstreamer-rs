@@ -86,7 +86,7 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
     }
 
     fn set_control_source<P: IsA<gst::ControlSource>>(&self, control_source: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "control-source", &control_source)
+        glib::ObjectExt::set_property(self.as_ref(), "control-source", control_source)
     }
 
     fn connect_control_source_notify<F: Fn(&Self) + Send + Sync + 'static>(

@@ -42,7 +42,7 @@ impl NetTimeProvider {
     }
 
     pub fn set_active(&self, active: bool) {
-        glib::ObjectExt::set_property(self, "active", &active)
+        glib::ObjectExt::set_property(self, "active", active)
     }
 
     pub fn address(&self) -> Option<glib::GString> {
@@ -64,7 +64,7 @@ impl NetTimeProvider {
 
     #[doc(alias = "qos-dscp")]
     pub fn set_qos_dscp(&self, qos_dscp: i32) {
-        glib::ObjectExt::set_property(self, "qos-dscp", &qos_dscp)
+        glib::ObjectExt::set_property(self, "qos-dscp", qos_dscp)
     }
 
     #[doc(alias = "active")]

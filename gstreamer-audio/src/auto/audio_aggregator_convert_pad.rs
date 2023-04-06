@@ -47,7 +47,7 @@ impl<O: IsA<AudioAggregatorConvertPad>> AudioAggregatorConvertPadExt for O {
     //}
 
     //fn set_converter_config(&self, converter_config: /*Ignored*/Option<&gst::Structure>) {
-    //    glib::ObjectExt::set_property(self.as_ref(),"converter-config", &converter_config)
+    //    glib::ObjectExt::set_property(self.as_ref(),"converter-config", converter_config)
     //}
 
     fn connect_converter_config_notify<F: Fn(&Self) + Send + Sync + 'static>(

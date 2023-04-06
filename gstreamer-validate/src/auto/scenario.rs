@@ -120,7 +120,7 @@ impl<O: IsA<Scenario>> ScenarioExt for O {
     }
 
     fn set_execute_on_idle(&self, execute_on_idle: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "execute-on-idle", &execute_on_idle)
+        glib::ObjectExt::set_property(self.as_ref(), "execute-on-idle", execute_on_idle)
     }
 
     fn is_handles_states(&self) -> bool {

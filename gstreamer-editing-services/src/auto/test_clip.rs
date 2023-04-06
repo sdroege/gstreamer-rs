@@ -134,7 +134,7 @@ impl<O: IsA<TestClip>> TestClipExt for O {
     }
 
     fn set_freq(&self, freq: f64) {
-        glib::ObjectExt::set_property(self.as_ref(), "freq", &freq)
+        glib::ObjectExt::set_property(self.as_ref(), "freq", freq)
     }
 
     fn connect_freq_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

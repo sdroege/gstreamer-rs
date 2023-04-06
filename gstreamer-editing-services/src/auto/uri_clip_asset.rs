@@ -151,7 +151,7 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
     }
 
     fn set_duration(&self, duration: u64) {
-        glib::ObjectExt::set_property(self.as_ref(), "duration", &duration)
+        glib::ObjectExt::set_property(self.as_ref(), "duration", duration)
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]

@@ -39,7 +39,7 @@ impl WebRTCRTPTransceiver {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "codec-preferences")]
     pub fn set_codec_preferences(&self, codec_preferences: Option<&gst::Caps>) {
-        glib::ObjectExt::set_property(self, "codec-preferences", &codec_preferences)
+        glib::ObjectExt::set_property(self, "codec-preferences", codec_preferences)
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]
@@ -58,7 +58,7 @@ impl WebRTCRTPTransceiver {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn set_direction(&self, direction: WebRTCRTPTransceiverDirection) {
-        glib::ObjectExt::set_property(self, "direction", &direction)
+        glib::ObjectExt::set_property(self, "direction", direction)
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]

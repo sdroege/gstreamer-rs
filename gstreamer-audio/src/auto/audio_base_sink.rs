@@ -232,7 +232,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
     }
 
     fn set_buffer_time(&self, buffer_time: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "buffer-time", &buffer_time)
+        glib::ObjectExt::set_property(self.as_ref(), "buffer-time", buffer_time)
     }
 
     fn can_activate_pull(&self) -> bool {
@@ -240,7 +240,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
     }
 
     fn set_can_activate_pull(&self, can_activate_pull: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "can-activate-pull", &can_activate_pull)
+        glib::ObjectExt::set_property(self.as_ref(), "can-activate-pull", can_activate_pull)
     }
 
     fn latency_time(&self) -> i64 {
@@ -248,7 +248,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
     }
 
     fn set_latency_time(&self, latency_time: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "latency-time", &latency_time)
+        glib::ObjectExt::set_property(self.as_ref(), "latency-time", latency_time)
     }
 
     fn connect_alignment_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(

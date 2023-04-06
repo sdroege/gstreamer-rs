@@ -287,7 +287,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_id(&self, id: Option<&str>) {
-        glib::ObjectExt::set_property(self.as_ref(), "id", &id)
+        glib::ObjectExt::set_property(self.as_ref(), "id", id)
     }
 
     fn get_property_restriction_caps(&self) -> Option<gst::Caps> {

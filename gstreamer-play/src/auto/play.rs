@@ -332,7 +332,7 @@ impl Play {
     }
 
     pub fn set_suburi(&self, suburi: Option<&str>) {
-        glib::ObjectExt::set_property(self, "suburi", &suburi)
+        glib::ObjectExt::set_property(self, "suburi", suburi)
     }
 
     #[doc(alias = "video-multiview-flags")]
@@ -342,7 +342,7 @@ impl Play {
 
     #[doc(alias = "video-multiview-flags")]
     pub fn set_video_multiview_flags(&self, video_multiview_flags: gst_video::VideoMultiviewFlags) {
-        glib::ObjectExt::set_property(self, "video-multiview-flags", &video_multiview_flags)
+        glib::ObjectExt::set_property(self, "video-multiview-flags", video_multiview_flags)
     }
 
     #[doc(alias = "video-multiview-mode")]
@@ -355,7 +355,7 @@ impl Play {
         &self,
         video_multiview_mode: gst_video::VideoMultiviewFramePacking,
     ) {
-        glib::ObjectExt::set_property(self, "video-multiview-mode", &video_multiview_mode)
+        glib::ObjectExt::set_property(self, "video-multiview-mode", video_multiview_mode)
     }
 
     #[doc(alias = "video-renderer")]
@@ -365,7 +365,7 @@ impl Play {
 
     #[doc(alias = "video-renderer")]
     pub fn set_video_renderer<P: IsA<PlayVideoRenderer>>(&self, video_renderer: Option<&P>) {
-        glib::ObjectExt::set_property(self, "video-renderer", &video_renderer)
+        glib::ObjectExt::set_property(self, "video-renderer", video_renderer)
     }
 
     #[doc(alias = "gst_play_get_audio_streams")]

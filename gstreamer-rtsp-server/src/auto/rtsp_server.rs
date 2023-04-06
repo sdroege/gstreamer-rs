@@ -437,7 +437,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
     }
 
     fn set_property_content_length_limit(&self, content_length_limit: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "content-length-limit", &content_length_limit)
+        glib::ObjectExt::set_property(self.as_ref(), "content-length-limit", content_length_limit)
     }
 
     fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(

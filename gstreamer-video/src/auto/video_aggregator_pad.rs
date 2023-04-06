@@ -80,7 +80,7 @@ impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExt for O {
         glib::ObjectExt::set_property(
             self.as_ref(),
             "max-last-buffer-repeat",
-            &max_last_buffer_repeat,
+            max_last_buffer_repeat,
         )
     }
 
@@ -89,7 +89,7 @@ impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExt for O {
     }
 
     fn set_repeat_after_eos(&self, repeat_after_eos: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "repeat-after-eos", &repeat_after_eos)
+        glib::ObjectExt::set_property(self.as_ref(), "repeat-after-eos", repeat_after_eos)
     }
 
     fn zorder(&self) -> u32 {
@@ -97,7 +97,7 @@ impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExt for O {
     }
 
     fn set_zorder(&self, zorder: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "zorder", &zorder)
+        glib::ObjectExt::set_property(self.as_ref(), "zorder", zorder)
     }
 
     fn connect_max_last_buffer_repeat_notify<F: Fn(&Self) + Send + Sync + 'static>(

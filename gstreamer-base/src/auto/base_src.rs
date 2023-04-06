@@ -254,7 +254,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     }
 
     fn set_num_buffers(&self, num_buffers: i32) {
-        glib::ObjectExt::set_property(self.as_ref(), "num-buffers", &num_buffers)
+        glib::ObjectExt::set_property(self.as_ref(), "num-buffers", num_buffers)
     }
 
     fn is_typefind(&self) -> bool {
@@ -262,7 +262,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     }
 
     fn set_typefind(&self, typefind: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "typefind", &typefind)
+        glib::ObjectExt::set_property(self.as_ref(), "typefind", typefind)
     }
 
     fn connect_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(

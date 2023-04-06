@@ -723,7 +723,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     }
 
     fn set_property_bind_mcast_address(&self, bind_mcast_address: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "bind-mcast-address", &bind_mcast_address)
+        glib::ObjectExt::set_property(self.as_ref(), "bind-mcast-address", bind_mcast_address)
     }
 
     fn get_property_dscp_qos(&self) -> i32 {
@@ -731,7 +731,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     }
 
     fn set_property_dscp_qos(&self, dscp_qos: i32) {
-        glib::ObjectExt::set_property(self.as_ref(), "dscp-qos", &dscp_qos)
+        glib::ObjectExt::set_property(self.as_ref(), "dscp-qos", dscp_qos)
     }
 
     fn get_property_max_mcast_ttl(&self) -> u32 {
@@ -739,7 +739,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     }
 
     fn set_property_max_mcast_ttl(&self, max_mcast_ttl: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "max-mcast-ttl", &max_mcast_ttl)
+        glib::ObjectExt::set_property(self.as_ref(), "max-mcast-ttl", max_mcast_ttl)
     }
 
     fn is_stop_on_disconnect(&self) -> bool {

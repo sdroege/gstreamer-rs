@@ -516,7 +516,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         glib::ObjectExt::set_property(
             self.as_ref(),
             "automatic-request-sync-point-flags",
-            &automatic_request_sync_point_flags,
+            automatic_request_sync_point_flags,
         )
     }
 
@@ -532,7 +532,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         glib::ObjectExt::set_property(
             self.as_ref(),
             "automatic-request-sync-points",
-            &automatic_request_sync_points,
+            automatic_request_sync_points,
         )
     }
 
@@ -548,7 +548,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         glib::ObjectExt::set_property(
             self.as_ref(),
             "discard-corrupted-frames",
-            &discard_corrupted_frames,
+            discard_corrupted_frames,
         )
     }
 
@@ -564,7 +564,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         glib::ObjectExt::set_property(
             self.as_ref(),
             "min-force-key-unit-interval",
-            &min_force_key_unit_interval,
+            min_force_key_unit_interval,
         )
     }
 
@@ -577,7 +577,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_qos(&self, qos: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "qos", &qos)
+        glib::ObjectExt::set_property(self.as_ref(), "qos", qos)
     }
 
     #[cfg(any(feature = "v1_20", feature = "dox"))]

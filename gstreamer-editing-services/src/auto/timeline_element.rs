@@ -747,7 +747,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     }
 
     fn set_in_point(&self, in_point: u64) {
-        glib::ObjectExt::set_property(self.as_ref(), "in-point", &in_point)
+        glib::ObjectExt::set_property(self.as_ref(), "in-point", in_point)
     }
 
     fn is_serialize(&self) -> bool {
@@ -755,7 +755,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     }
 
     fn set_serialize(&self, serialize: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "serialize", &serialize)
+        glib::ObjectExt::set_property(self.as_ref(), "serialize", serialize)
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]

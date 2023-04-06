@@ -86,7 +86,7 @@ impl TestClock {
 
     #[doc(alias = "clock-type")]
     pub fn set_clock_type(&self, clock_type: gst::ClockType) {
-        glib::ObjectExt::set_property(self, "clock-type", &clock_type)
+        glib::ObjectExt::set_property(self, "clock-type", clock_type)
     }
 
     #[doc(alias = "start-time")]

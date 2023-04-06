@@ -185,7 +185,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
     }
 
     fn set_qos(&self, qos: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "qos", &qos)
+        glib::ObjectExt::set_property(self.as_ref(), "qos", qos)
     }
 
     fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {

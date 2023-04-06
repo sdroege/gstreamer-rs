@@ -185,7 +185,7 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
     }
 
     fn set_disable_passthrough(&self, disable_passthrough: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "disable-passthrough", &disable_passthrough)
+        glib::ObjectExt::set_property(self.as_ref(), "disable-passthrough", disable_passthrough)
     }
 
     fn connect_disable_passthrough_notify<F: Fn(&Self) + Send + Sync + 'static>(

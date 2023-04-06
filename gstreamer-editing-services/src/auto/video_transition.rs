@@ -140,7 +140,7 @@ impl<O: IsA<VideoTransition>> VideoTransitionExt for O {
     }
 
     fn set_invert(&self, invert: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "invert", &invert)
+        glib::ObjectExt::set_property(self.as_ref(), "invert", invert)
     }
 
     fn connect_border_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

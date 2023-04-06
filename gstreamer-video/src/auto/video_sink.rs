@@ -47,7 +47,7 @@ impl<O: IsA<VideoSink>> VideoSinkExt for O {
     }
 
     fn set_show_preroll_frame(&self, show_preroll_frame: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "show-preroll-frame", &show_preroll_frame)
+        glib::ObjectExt::set_property(self.as_ref(), "show-preroll-frame", show_preroll_frame)
     }
 
     fn connect_show_preroll_frame_notify<F: Fn(&Self) + Send + Sync + 'static>(
