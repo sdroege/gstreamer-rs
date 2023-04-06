@@ -52,6 +52,15 @@ status = "generate"
     [[object.function]]
     name = "phys_memory_get_phys_addr"
     manual = true
+    [[object.function]]
+    name = "is_drm_dumb_memory"
+    manual = true
+    [[object.function]]
+    name = "drm_dumb_memory_get_handle"
+    manual = true
+    [[object.function]]
+    name = "drm_dumb_memory_export_dmabuf"
+    manual = true
 
 [[object]]
 name = "GstAllocators.DmaBufAllocator"
@@ -63,6 +72,21 @@ cfg_condition = "target_os = \"linux\""
     [[object.function]]
     name = "alloc_with_flags"
     manual = true
+
+[[object]]
+name = "GstAllocators.DRMDumbAllocator"
+status = "generate"
+cfg_condition = "target_os = \"linux\""
+    [[object.function]]
+    name = "alloc"
+    manual = true
+    [[object.function]]
+    name = "new_with_fd"
+    manual = true
+    [[object.function]]
+    name = "new_with_device_path"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create allocator"
 
 [[object]]
 name = "GstAllocators.FdAllocator"

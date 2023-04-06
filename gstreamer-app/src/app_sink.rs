@@ -26,6 +26,8 @@ pub struct AppSinkCallbacks {
         Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
     >,
     new_event: Option<Box<dyn FnMut(&AppSink) -> bool + Send + 'static>>,
+    propose_allocation:
+        Option<Box<dyn FnMut(&AppSink, &mut gst::query::Allocation) -> bool + Send + 'static>>,
     panicked: AtomicBool,
     callbacks: ffi::GstAppSinkCallbacks,
 }
@@ -41,6 +43,7 @@ impl AppSinkCallbacks {
             new_preroll: None,
             new_sample: None,
             new_event: None,
+            propose_allocation: None,
         }
     }
 }
@@ -56,6 +59,8 @@ pub struct AppSinkCallbacksBuilder {
         Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
     >,
     new_event: Option<Box<dyn FnMut(&AppSink) -> bool + Send + 'static>>,
+    propose_allocation:
+        Option<Box<dyn FnMut(&AppSink, &mut gst::query::Allocation) -> bool + Send + 'static>>,
 }
 
 impl AppSinkCallbacksBuilder {
@@ -90,11 +95,37 @@ impl AppSinkCallbacksBuilder {
         }
     }
 
+    pub fn new_propose_allocation<
+        F: FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
+    >(
+        self,
+        new_sample: F,
+    ) -> Self {
+        Self {
+            new_sample: Some(Box::new(new_sample)),
+            ..self
+        }
+    }
+
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     pub fn new_event<F: FnMut(&AppSink) -> bool + Send + 'static>(self, new_event: F) -> Self {
         Self {
             new_event: Some(Box::new(new_event)),
+            ..self
+        }
+    }
+
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    pub fn propose_allocation<
+        F: FnMut(&AppSink, &mut gst::query::Allocation) -> bool + Send + 'static,
+    >(
+        self,
+        propose_allocation: F,
+    ) -> Self {
+        Self {
+            propose_allocation: Some(Box::new(propose_allocation)),
             ..self
         }
     }
@@ -105,12 +136,14 @@ impl AppSinkCallbacksBuilder {
         let have_new_preroll = self.new_preroll.is_some();
         let have_new_sample = self.new_sample.is_some();
         let have_new_event = self.new_event.is_some();
+        let have_propose_allocation = self.propose_allocation.is_some();
 
         AppSinkCallbacks {
             eos: self.eos,
             new_preroll: self.new_preroll,
             new_sample: self.new_sample,
             new_event: self.new_event,
+            propose_allocation: self.propose_allocation,
             panicked: AtomicBool::new(false),
             callbacks: ffi::GstAppSinkCallbacks {
                 eos: if have_eos { Some(trampoline_eos) } else { None },
@@ -129,7 +162,12 @@ impl AppSinkCallbacksBuilder {
                 } else {
                     None
                 },
-                _gst_reserved: [ptr::null_mut(), ptr::null_mut(), ptr::null_mut()],
+                propose_allocation: if have_propose_allocation {
+                    Some(trampoline_propose_allocation)
+                } else {
+                    None
+                },
+                _gst_reserved: [ptr::null_mut(), ptr::null_mut()],
             },
         }
     }
@@ -246,6 +284,48 @@ unsafe extern "C" fn trampoline_new_event(
 
     let ret = if let Some(ref mut new_event) = (*callbacks).new_event {
         let result = panic::catch_unwind(panic::AssertUnwindSafe(|| new_event(&element)));
+        match result {
+            Ok(result) => result,
+            Err(err) => {
+                (*callbacks).panicked.store(true, Ordering::Relaxed);
+                gst::subclass::post_panic_error_message(
+                    element.upcast_ref(),
+                    element.upcast_ref(),
+                    Some(err),
+                );
+
+                false
+            }
+        }
+    } else {
+        false
+    };
+
+    ret.into_glib()
+}
+
+unsafe extern "C" fn trampoline_propose_allocation(
+    appsink: *mut ffi::GstAppSink,
+    query: *mut gst::ffi::GstQuery,
+    callbacks: gpointer,
+) -> glib::ffi::gboolean {
+    let callbacks = callbacks as *mut AppSinkCallbacks;
+    let element: Borrowed<AppSink> = from_glib_borrow(appsink);
+
+    if (*callbacks).panicked.load(Ordering::Relaxed) {
+        let element: Borrowed<AppSink> = from_glib_borrow(appsink);
+        gst::subclass::post_panic_error_message(element.upcast_ref(), element.upcast_ref(), None);
+        return false.into_glib();
+    }
+
+    let ret = if let Some(ref mut propose_allocation) = (*callbacks).propose_allocation {
+        let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
+            gst::QueryViewMut::Allocation(allocation) => allocation,
+            _ => unreachable!(),
+        };
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
+            propose_allocation(&element, query)
+        }));
         match result {
             Ok(result) => result,
             Err(err) => {

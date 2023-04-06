@@ -22,6 +22,9 @@ pub use crate::auto::*;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
 mod web_rtc_ice_candidate_stats;
 mod web_rtc_session_description;
+#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+mod web_rtcice;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_webrtc::prelude::*" without getting conflicts

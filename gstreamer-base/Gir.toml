@@ -385,8 +385,8 @@ manual_traits = ["BaseSrcExtManual"]
 
     [[object.function]]
     name = "new_segment"
-    # Segment parameter
-    manual = true
+        [object.function.return]
+        bool_return_is_error = "Failed to update segment"
 
 [[object]]
 name = "GstBase.BaseTransform"

@@ -53,7 +53,7 @@ pub mod prelude {
 
     pub use crate::{
         auto::traits::*, context::ContextGLExt, gl_context::GLContextExtManual,
-        gl_video_frame::VideoFrameGLExt,
+        gl_display::GLDisplayExtManual, gl_video_frame::VideoFrameGLExt,
     };
 }
 

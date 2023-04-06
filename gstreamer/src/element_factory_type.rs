@@ -32,6 +32,8 @@ bitflags! {
         const ENCRYPTOR        = ffi::GST_ELEMENT_FACTORY_TYPE_ENCRYPTOR;
         #[doc(alias = "GST_ELEMENT_FACTORY_TYPE_HARDWARE")]
         const HARDWARE         = ffi::GST_ELEMENT_FACTORY_TYPE_HARDWARE;
+        #[doc(alias = "GST_ELEMENT_FACTORY_TYPE_TIMESTAMPER")]
+        const TIMESTAMPER      = ffi::GST_ELEMENT_FACTORY_TYPE_TIMESTAMPER;
 
         #[doc(alias = "GST_ELEMENT_FACTORY_TYPE_MEDIA_VIDEO")]
         const MEDIA_VIDEO      = ffi::GST_ELEMENT_FACTORY_TYPE_MEDIA_VIDEO;

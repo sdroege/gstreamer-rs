@@ -53,6 +53,12 @@ mod video_format_info;
 pub use crate::video_format_info::*;
 mod video_info;
 pub use crate::video_info::*;
+#[cfg(any(feature = "v1_24", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+mod video_info_dma_drm;
+#[cfg(any(feature = "v1_24", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+pub use crate::video_info_dma_drm::*;
 pub mod video_frame;
 pub use crate::video_frame::{VideoFrame, VideoFrameRef};
 mod video_overlay;

@@ -37,6 +37,13 @@ mod dma_buf_allocator;
 #[cfg_attr(feature = "dox", doc(cfg(target_os = "linux")))]
 pub use dma_buf_allocator::*;
 
+#[cfg(any(all(feature = "v1_24", target_os = "linux"), feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(all(feature = "v1_24", target_os = "linux"))))]
+mod drm_dumb_allocator;
+#[cfg(any(all(feature = "v1_24", target_os = "linux"), feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(all(feature = "v1_24", target_os = "linux"))))]
+pub use drm_dumb_allocator::*;
+
 mod phys_memory;
 pub use phys_memory::*;
 

@@ -20,11 +20,6 @@ pub trait BaseSrcExtManual: 'static {
         &self,
     ) -> Result<(bool, Option<gst::ClockTime>, Option<gst::ClockTime>), glib::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_base_src_new_segment")]
-    fn new_segment(&self, segment: &gst::Segment) -> Result<(), glib::BoolError>;
-
     fn src_pad(&self) -> &gst::Pad;
 }
 
@@ -74,23 +69,6 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
                 ))
             } else {
                 Err(glib::bool_error!("Failed to query latency"))
-            }
-        }
-    }
-
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn new_segment(&self, segment: &gst::Segment) -> Result<(), glib::BoolError> {
-        unsafe {
-            let ret = from_glib(ffi::gst_base_src_new_segment(
-                self.as_ref().to_glib_none().0,
-                segment.to_glib_none().0,
-            ));
-
-            if ret {
-                Ok(())
-            } else {
-                Err(glib::bool_error!("Failed to configure new segment"))
             }
         }
     }

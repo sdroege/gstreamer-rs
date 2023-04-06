@@ -104,6 +104,11 @@ final_type = true
     # Action signal
     ignore = true
 
+    [[object.signal]]
+    name = "propose-allocation"
+    # Action signal
+    ignore = true
+
     [[object.property]]
     name = "emit-signals"
     # Use callbacks instead

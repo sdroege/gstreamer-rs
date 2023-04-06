@@ -3,6 +3,46 @@ use crate::{GLContext, GLDisplay};
 use glib::prelude::*;
 use glib::translate::*;
 
+pub trait GLDisplayExtManual: 'static {
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_gl_display_ensure_context")]
+    fn ensure_context(
+        &self,
+        other_context: Option<&impl IsA<GLContext>>,
+        context: &mut Option<GLContext>,
+    ) -> Result<(), glib::Error>;
+}
+
+impl<O: IsA<GLDisplay>> GLDisplayExtManual for O {
+    #[cfg(any(feature = "v1_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    fn ensure_context(
+        &self,
+        other_context: Option<&impl IsA<GLContext>>,
+        context: &mut Option<GLContext>,
+    ) -> Result<(), glib::Error> {
+        unsafe {
+            let mut err = std::ptr::null_mut();
+            let res = ffi::gst_gl_display_ensure_context(
+                self.as_ref().to_glib_none().0,
+                other_context.map(AsRef::as_ref).to_glib_none().0,
+                context as *mut Option<GLContext> as *mut Option<*mut ffi::GstGLContext>
+                    as *mut *mut ffi::GstGLContext,
+                &mut err,
+            );
+
+            if res == glib::ffi::GFALSE {
+                *context = None;
+                Err(from_glib_full(err))
+            } else {
+                debug_assert!(err.is_null());
+                Ok(())
+            }
+        }
+    }
+}
+
 impl GLDisplay {
     #[doc(alias = "gst_gl_display_get_gl_context_for_thread")]
     pub fn get_gl_context_for_current_thread(

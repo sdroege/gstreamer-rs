@@ -1238,6 +1238,15 @@ manual_traits = ["ElementExtManual"]
     # Needs integration into subclassing infrastructure
     ignore = true
 
+    [[object.function]]
+    name = "decorate_stream_id_printf"
+    # Varargs
+    ignore = true
+    [[object.function]]
+    name = "decorate_stream_id_printf_valist"
+    # Varargs
+    ignore = true
+
 [[object]]
 name = "Gst.ElementFactory"
 status = "generate"

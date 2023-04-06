@@ -24,7 +24,6 @@ generate = [
     "GstWebRTC.WebRTCDTLSTransportState",
     "GstWebRTC.WebRTCError",
     "GstWebRTC.WebRTCFECType",
-    "GstWebRTC.WebRTCICE",
     "GstWebRTC.WebRTCICECandidateStats",
     "GstWebRTC.WebRTCICEComponent",
     "GstWebRTC.WebRTCICEConnectionState",
@@ -65,6 +64,14 @@ final_type = true
 name = "GstWebRTC.WebRTCDTLSTransport"
 status = "generate"
 final_type = true
+
+[[object]]
+name = "GstWebRTC.WebRTCICE"
+status = "generate"
+    [[object.function]]
+    name = "add_candidate"
+    # ABI breakage in 1.24 needs working around
+    manual = true
 
 [[object]]
 name = "GstWebRTC.WebRTCICETransport"

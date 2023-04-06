@@ -73,6 +73,7 @@ manual = [
     "GstVideo.VideoColorRange",
     "GstVideo.VideoFormatInfo",
     "GstVideo.VideoInfo",
+    "GstVideo.VideoInfoDmaDrm",
     "GstVideo.VideoMeta",
     "GstVideo.VideoTimeCode",
     "GstVideo.VideoTimeCodeInterval",

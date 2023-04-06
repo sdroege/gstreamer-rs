@@ -366,6 +366,11 @@ status = "generate"
         [object.function.return]
         nullable_return_is_error = "Failed to create window"
 
+    [[object.function]]
+    name = "ensure_context"
+    # inout parameter
+    manual = true
+
 [[object]]
 name = "GstGL.GLDisplayType"
 status = "generate"
