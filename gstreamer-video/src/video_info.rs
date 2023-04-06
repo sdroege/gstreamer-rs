@@ -92,6 +92,7 @@ impl From<VideoColorRange> for glib::Value {
 
 #[doc(alias = "GstVideoColorimetry")]
 #[derive(Copy, Clone)]
+#[repr(transparent)]
 pub struct VideoColorimetry(ffi::GstVideoColorimetry);
 
 impl VideoColorimetry {
@@ -267,6 +268,7 @@ impl TryFrom<crate::VideoMultiviewMode> for crate::VideoMultiviewFramePacking {
 
 #[doc(alias = "GstVideoInfo")]
 #[derive(Clone)]
+#[repr(transparent)]
 pub struct VideoInfo(pub(crate) ffi::GstVideoInfo);
 
 impl fmt::Debug for VideoInfo {

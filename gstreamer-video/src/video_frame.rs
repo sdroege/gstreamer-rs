@@ -10,7 +10,6 @@ pub enum Writable {}
 pub struct VideoFrame<T> {
     frame: ffi::GstVideoFrame,
     buffer: gst::Buffer,
-    info: crate::VideoInfo,
     phantom: PhantomData<T>,
 }
 
@@ -20,10 +19,10 @@ unsafe impl<T> Sync for VideoFrame<T> {}
 impl<T> fmt::Debug for VideoFrame<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoFrame")
-            .field("frame", &self.frame)
-            .field("buffer", &self.buffer)
-            .field("info", &self.info)
-            .field("phantom", &self.phantom)
+            .field("flags", &self.flags())
+            .field("id", &self.id())
+            .field("buffer", &self.buffer())
+            .field("info", &self.info())
             .finish()
     }
 }
@@ -31,7 +30,7 @@ impl<T> fmt::Debug for VideoFrame<T> {
 impl<T> VideoFrame<T> {
     #[inline]
     pub fn info(&self) -> &crate::VideoInfo {
-        &self.info
+        unsafe { &*(&self.frame.info as *const ffi::GstVideoInfo as *const crate::VideoInfo) }
     }
 
     #[inline]
@@ -254,12 +253,10 @@ impl<T> VideoFrame<T> {
 
     #[inline]
     pub unsafe fn from_glib_full(frame: ffi::GstVideoFrame) -> Self {
-        let info = crate::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::Buffer::from_glib_none(frame.buffer);
         Self {
             frame,
             buffer,
-            info,
             phantom: PhantomData,
         }
     }
@@ -267,10 +264,8 @@ impl<T> VideoFrame<T> {
     #[inline]
     pub fn as_video_frame_ref(&self) -> VideoFrameRef<&gst::BufferRef> {
         let frame = unsafe { ptr::read(&self.frame) };
-        let info = self.info.clone();
         VideoFrameRef {
             frame,
-            info,
             unmap: false,
             phantom: PhantomData,
         }
@@ -323,11 +318,9 @@ impl VideoFrame<Readable> {
                 Err(buffer)
             } else {
                 let frame = frame.assume_init();
-                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(Self {
                     frame,
                     buffer,
-                    info,
                     phantom: PhantomData,
                 })
             }
@@ -358,11 +351,9 @@ impl VideoFrame<Readable> {
                 Err(buffer)
             } else {
                 let frame = frame.assume_init();
-                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(Self {
                     frame,
                     buffer,
-                    info,
                     phantom: PhantomData,
                 })
             }
@@ -400,11 +391,9 @@ impl VideoFrame<Writable> {
                 Err(buffer)
             } else {
                 let frame = frame.assume_init();
-                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(Self {
                     frame,
                     buffer,
-                    info,
                     phantom: PhantomData,
                 })
             }
@@ -437,11 +426,9 @@ impl VideoFrame<Writable> {
                 Err(buffer)
             } else {
                 let frame = frame.assume_init();
-                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(Self {
                     frame,
                     buffer,
-                    info,
                     phantom: PhantomData,
                 })
             }
@@ -497,10 +484,8 @@ impl VideoFrame<Writable> {
     #[inline]
     pub fn as_mut_video_frame_ref(&mut self) -> VideoFrameRef<&mut gst::BufferRef> {
         let frame = unsafe { ptr::read(&self.frame) };
-        let info = self.info.clone();
         VideoFrameRef {
             frame,
-            info,
             unmap: false,
             phantom: PhantomData,
         }
@@ -512,18 +497,29 @@ impl VideoFrame<Writable> {
     }
 }
 
-#[derive(Debug)]
 pub struct VideoFrameRef<T> {
     frame: ffi::GstVideoFrame,
-    info: crate::VideoInfo,
     unmap: bool,
     phantom: PhantomData<T>,
+}
+
+impl<T> fmt::Debug for VideoFrameRef<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("VideoFrameRef")
+            .field("flags", &self.flags())
+            .field("id", &self.id())
+            .field("buffer", &unsafe {
+                gst::BufferRef::from_ptr(self.frame.buffer)
+            })
+            .field("info", &self.info())
+            .finish()
+    }
 }
 
 impl<T> VideoFrameRef<T> {
     #[inline]
     pub fn info(&self) -> &crate::VideoInfo {
-        &self.info
+        unsafe { &*(&self.frame.info as *const ffi::GstVideoInfo as *const crate::VideoInfo) }
     }
 
     #[inline]
@@ -743,10 +739,8 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         debug_assert!(!frame.is_null());
 
         let frame = ptr::read(frame);
-        let info = crate::VideoInfo(ptr::read(&frame.info));
         Borrowed::new(Self {
             frame,
-            info,
             unmap: false,
             phantom: PhantomData,
         })
@@ -754,10 +748,8 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 
     #[inline]
     pub unsafe fn from_glib_full(frame: ffi::GstVideoFrame) -> Self {
-        let info = crate::VideoInfo(ptr::read(&frame.info));
         Self {
             frame,
-            info,
             unmap: true,
             phantom: PhantomData,
         }
@@ -785,10 +777,8 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
                 Err(glib::bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
-                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(Self {
                     frame,
-                    info,
                     unmap: true,
                     phantom: PhantomData,
                 })
@@ -820,10 +810,8 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
                 Err(glib::bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
-                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(Self {
                     frame,
-                    info,
                     unmap: true,
                     phantom: PhantomData,
                 })
@@ -843,10 +831,8 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         debug_assert!(!frame.is_null());
 
         let frame = ptr::read(frame);
-        let info = crate::VideoInfo(ptr::read(&frame.info));
         Self {
             frame,
-            info,
             unmap: false,
             phantom: PhantomData,
         }
@@ -854,10 +840,8 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
 
     #[inline]
     pub unsafe fn from_glib_full_mut(frame: ffi::GstVideoFrame) -> Self {
-        let info = crate::VideoInfo(ptr::read(&frame.info));
         Self {
             frame,
-            info,
             unmap: true,
             phantom: PhantomData,
         }
@@ -887,10 +871,8 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
                 Err(glib::bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
-                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(Self {
                     frame,
-                    info,
                     unmap: true,
                     phantom: PhantomData,
                 })
@@ -924,10 +906,8 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
                 Err(glib::bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
-                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(Self {
                     frame,
-                    info,
                     unmap: true,
                     phantom: PhantomData,
                 })
