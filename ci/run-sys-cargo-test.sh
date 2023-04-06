@@ -12,7 +12,7 @@ get_features() {
             echo ""
             ;;
         *)
-            echo "--features=v1_22"
+            echo "--features=v1_24"
             ;;
     esac
 }

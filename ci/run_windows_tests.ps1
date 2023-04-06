@@ -41,7 +41,7 @@
     # "--features=v1_18,",
     # "--features=v1_20,",
     "",
-    "--features=v1_22,"
+    "--features=v1_24,"
 )
 
 foreach($features in $features_matrix) {
