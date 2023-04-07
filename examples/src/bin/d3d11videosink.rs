@@ -1,7 +1,7 @@
 // This example demonstrates the use of the d3d11videosink's "present"
 // signal and the use of Direct2D/DirectWrite APIs in Rust.
 //
-// Application can perform various hardware-acceleated 2D graphics operation
+// Application can perform various hardware-accelerated 2D graphics operation
 // (e.g., like cairo can support) and text rendering via the Windows APIs.
 // In this example, 2D graphics operation and text rendering will happen
 // directly to the on the DXGI swapchain's backbuffer via Windows API in
@@ -129,7 +129,7 @@ fn main() -> Result<()> {
             // APIs are marked as unsafe, except for cast.
             //
             // In theory, all the Direct3D/Direct2D APIs could fail for
-            // some reasons (it's hardware!), but in pratice, it's very unexpected
+            // some reasons (it's hardware!), but in practice, it's very unexpected
             // situation and any of failure below would mean we are doing
             // something in wrong way or driver bug or so.
             unsafe {

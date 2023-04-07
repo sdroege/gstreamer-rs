@@ -1,5 +1,5 @@
 // This example demonstrates another type of combination of gtk and gstreamer,
-// in comparision to the gtksink example.
+// in comparison to the gtksink example.
 // This example uses regions that are managed by the window system, and uses
 // the window system's api to insert a videostream into these regions.
 // So essentially, the window system of the system overlays our gui with
@@ -107,7 +107,7 @@ fn create_ui(app: &gtk::Application) {
     src.link(&sink).unwrap();
 
     // First, we create our gtk window - which will contain a region where
-    // our overlayed video will be displayed in.
+    // our overlaid video will be displayed in.
     let window = gtk::Window::new(gtk::WindowType::Toplevel);
     window.set_default_size(320, 240);
 
@@ -130,7 +130,7 @@ fn create_ui(app: &gtk::Application) {
         .unwrap()
         .downgrade();
     // Connect to this widget's realize signal, which will be emitted
-    // after its display has been initialized. This is neccessary, because
+    // after its display has been initialized. This is necessary, because
     // the window system doesn't know about our region until it was initialized.
     video_window.connect_realize(move |video_window| {
         // Here we temporarily retrieve a strong reference on the video-overlay from the

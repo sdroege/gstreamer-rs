@@ -400,7 +400,7 @@ impl Ord for VideoFormatInfo {
             .then_with(|| self.h_sub().cmp(other.h_sub()).reverse())
             .then_with(|| self.n_planes().cmp(&other.n_planes()))
             .then_with(|| {
-                // Format using native endianess is considered as bigger
+                // Format using native endianness is considered as bigger
                 match (
                     self.flags().contains(crate::VideoFormatFlags::LE),
                     other.flags().contains(crate::VideoFormatFlags::LE),

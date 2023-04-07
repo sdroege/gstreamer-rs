@@ -110,7 +110,7 @@
 //! assert_eq!(*(8.mebibytes()), 8 * 1024 * 1024);
 //! assert_eq!(*(4.gibibytes()), 4 * 1024 * 1024 * 1024);
 //!
-//! // ... and the macthing constants:
+//! // ... and the matching constants:
 //! assert_eq!(512 * Bytes::KiB, 512.kibibytes());
 //!
 //! // `Percent` can be built from a percent integer value:

@@ -59,7 +59,7 @@ fn example_main() {
         let playbin = values[0]
             .get::<glib::Object>()
             .expect("playbin \"audio-tags-changed\" signal values[1]");
-        // This gets the index of the stream that changed. This is neccessary, since
+        // This gets the index of the stream that changed. This is necessary, since
         // there could e.g. be multiple audio streams (english, spanish, ...).
         let idx = values[1]
             .get::<i32>()

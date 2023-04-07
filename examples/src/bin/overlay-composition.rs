@@ -150,7 +150,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
             // The image we draw (the text) will be static, but we will change the
             // transformation on the drawing context, which rotates and shifts everything
-            // that we draw afterwards. Like this, we have no complicated calulations
+            // that we draw afterwards. Like this, we have no complicated calculations
             // in the actual drawing below.
             // Calling multiple transformation methods after each other will apply the
             // new transformation on top. If you repeat the cr.rotate(angle) line below
@@ -179,7 +179,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 // to end up as a 200x100 rectangle would now be 100x200.
                 pangocairo::functions::update_layout(&cr, layout);
                 let (width, _height) = layout.size();
-                // Using width and height of the text, we can properly possition it within
+                // Using width and height of the text, we can properly position it within
                 // our canvas.
                 cr.move_to(
                     -(f64::from(width) / f64::from(pango::SCALE)) / 2.0,
@@ -241,7 +241,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     // will then change its caps and we use the notification about this change to
     // resize our canvas's size.
     // Another possibility for when this might happen is, when our video is a network
-    // stream that dynamically changes resolution when enough bandwith is available.
+    // stream that dynamically changes resolution when enough bandwidth is available.
     overlay.connect_closure(
         "caps-changed",
         false,

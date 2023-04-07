@@ -88,13 +88,13 @@ pub trait CompatibleFormattedValue<V: FormattedValue> {
     /// Returns `Ok(self)` with its type restored if it is compatible with the format of `V`.
     ///
     /// When possible, prefer using [`Self::try_into_checked`] which
-    /// reduces the risk of missuse.
+    /// reduces the risk of misuse.
     ///
     /// When used with compatible [`SpecificFormattedValue`]s, checks
     /// are enforced by the type system, no runtime checks are performed.
     ///
     /// When used with [`SpecificFormattedValue`] as a parameter and
-    /// a [`GenericFormattedValue`] as `Self`, a runtime check is perfomed
+    /// a [`GenericFormattedValue`] as `Self`, a runtime check is performed
     /// against the default format of the parameter. If the check fails,
     /// `Err(FormattedValueError)` is returned.
     ///

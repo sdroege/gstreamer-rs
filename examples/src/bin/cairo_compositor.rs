@@ -53,7 +53,7 @@ mod cairo_compositor {
 
         // Implementation of glib::Object virtual methods.
         impl ObjectImpl for CairoCompositor {
-            // Specfication of the compositor properties.
+            // Specification of the compositor properties.
             // In this case a single property for configuring the background color of the
             // composition.
             fn properties() -> &'static [glib::ParamSpec] {
@@ -453,7 +453,7 @@ mod cairo_compositor {
 
         // Implementation of glib::Object virtual methods.
         impl ObjectImpl for CairoCompositorPad {
-            // Specfication of the compositor pad properties.
+            // Specification of the compositor pad properties.
             // In this case there are various properties for defining the position and otherwise
             // the appearance of the stream corresponding to this pad.
             fn properties() -> &'static [glib::ParamSpec] {

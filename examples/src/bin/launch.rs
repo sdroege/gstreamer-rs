@@ -17,7 +17,7 @@ fn example_main() {
     gst::init().unwrap();
 
     // Let GStreamer create a pipeline from the parsed launch syntax on the cli.
-    // In comparision to the launch_glib_main example, this is using the advanced launch syntax
+    // In comparison to the launch_glib_main example, this is using the advanced launch syntax
     // parsing API of GStreamer. The function returns a Result, handing us the pipeline if
     // parsing and creating succeeded, and hands us detailed error information if something
     // went wrong. The error is passed as gst::ParseError. In this example, we separately

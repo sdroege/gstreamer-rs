@@ -1,5 +1,5 @@
 // This example demonstrates how to use GStreamer's iteration APIs.
-// This is used at multiple occassions - for example to iterate an
+// This is used at multiple occasions - for example to iterate an
 // element's pads.
 
 use gst::prelude::*;

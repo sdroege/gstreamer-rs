@@ -9,7 +9,7 @@ use serde_bytes::{ByteBuf, Bytes};
 
 use crate::{Buffer, BufferFlags, BufferRef, ClockTime};
 
-// TODO: try `Either<ByteBuf, Bytes>` to merge the base reprensentations for ser and de
+// TODO: try `Either<ByteBuf, Bytes>` to merge the base representations for ser and de
 // while avoiding unneeded copy
 
 impl Serialize for BufferRef {

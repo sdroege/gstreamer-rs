@@ -250,7 +250,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     // will then change its caps and we use the notification about this change to
     // resize our canvas's size.
     // Another possibility for when this might happen is, when our video is a network
-    // stream that dynamically changes resolution when enough bandwith is available.
+    // stream that dynamically changes resolution when enough bandwidth is available.
     overlay.connect_closure(
         "caps-changed",
         false,

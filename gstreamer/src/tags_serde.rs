@@ -38,7 +38,7 @@ macro_rules! ser_opt_tag (
     );
 );
 
-// Note: unlike `Value`s, `Tag`s with  optional `Type` `String` & `Date` values are guarenteed
+// Note: unlike `Value`s, `Tag`s with  optional `Type` `String` & `Date` values are guaranteed
 // to be Non-null and non-empty in the C API. See:
 // https://gitlab.freedesktop.org/gstreamer/gstreamer/blob/d90d771a9a512381315f7694c3a50b152035f3cb/gst/gststructure.c#L810-853
 

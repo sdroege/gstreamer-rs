@@ -50,7 +50,7 @@ fn main_loop() -> Result<(), Error> {
         &"user",
     )]);
     let basic = gst_rtsp_server::RTSPAuth::make_basic("user", "password");
-    // For propery authentication, we want to use encryption. And there's no
+    // For proper authentication, we want to use encryption. And there's no
     // encryption without a certificate!
     let cert = gio::TlsCertificate::from_pem(
         "-----BEGIN CERTIFICATE-----\

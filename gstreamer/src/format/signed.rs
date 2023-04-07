@@ -9,7 +9,7 @@ use crate::utils::Displayable;
 /// A signed wrapper.
 ///
 /// This wrapper allows representing a signed value from a type
-/// which is originaly unsigned. In C APIs, this is represented
+/// which is originally unsigned. In C APIs, this is represented
 /// by a tuple with a signed integer positive or negative and
 /// the absolute value.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]

@@ -191,7 +191,7 @@ status = "generate"
     name = "is_missing_plugin_message"
     ignore = true
 
-    # Initialization is handled implicitely
+    # Initialization is handled implicitly
     [[object.function]]
     name = "pb_utils_init"
     ignore = true

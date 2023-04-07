@@ -91,7 +91,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                     element_error!(
                         appsink,
                         gst::ResourceError::Failed,
-                        ("Failed to interprete buffer as S16 PCM")
+                        ("Failed to interpret buffer as S16 PCM")
                     );
 
                     gst::FlowError::Error

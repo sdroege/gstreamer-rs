@@ -302,7 +302,7 @@ impl DateTime {
                 .and_then(|d| d.to_utc())
                 .map(|d| d.into())
         } else {
-            // It would be cheaper to build a `glib::DateTime` direcly, unfortunetaly
+            // It would be cheaper to build a `glib::DateTime` directly, unfortunetaly
             // this would require using `glib::TimeZone::new_offset` which is feature-gated
             // to `glib/v2_58`. So we need to build a new `gst::DateTime` with `0f64`
             // and then discard seconds again
