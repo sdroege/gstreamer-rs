@@ -387,6 +387,15 @@ check commits:
     - job: 'build-stable'
       artifacts: false
 
+typos:
+  extends: .img-stable
+  stage: "lint"
+  script:
+    - typos
+  needs:
+    - job: 'build-stable'
+      artifacts: false
+
 clippy:
   extends: .img-stable
   stage: 'extras'

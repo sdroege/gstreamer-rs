@@ -28,6 +28,7 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
 
   cargo install --force cargo-deny
   cargo install --force cargo-outdated
+  cargo install --force typos-cli
 
   # Coverage tools
   rustup component add llvm-tools-preview

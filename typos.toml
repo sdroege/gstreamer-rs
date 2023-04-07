@@ -1,0 +1,31 @@
+[default.extend-words]
+gir = "gir"
+numer = "numer" # numerator
+inout = "inout"
+seeked = "seeked"
+BA = "BA" # sdp_message.rs
+UE = "UE" # rtsp-server-record.rs
+
+[default]
+extend-ignore-identifiers-re = [
+    "GST_MTS_TABLE_ID_14496_OBJET_DESCRIPTOR",
+    # gst_rtsp_media_factory_is_stop_on_disonnect
+    ".*is_stop_on_disonnect",
+    "ser_de", # gstreamer/CHANGELOG.md
+]
+
+[files]
+extend-exclude = [
+    # don't check dot and gir files
+    "*.gir",
+    "*.dot",
+    # don't check submodules
+    "gir/*",
+    "gir-files/*",
+    "gst-gir-files/*",
+    # versions.txt are generated and contain git hash objects
+    "versions.txt",
+    # can't fix typos in generated code as the typo is likely in the C API
+    "*/src/auto/*.rs",
+    "*/sys/src/lib.rs",
+]
