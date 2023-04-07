@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.20.4] - 2023-04-07
+### Fixed
+- Work around `gst_webrtc::WebRTCICE::add_candidate()` API breakage in 1.24.
+
+### Changed
+- Reduce size of `gst_audio::AudioBuffer` and `gst_video::VideoFrame` by a
+  factor of two by not storing an unnecessary copy of the audio/video info.
+
 ## [0.20.3] - 2023-03-14
 ### Fixed
 - `gst::ParamSpecArray` uses the correct `glib::Type` now.
