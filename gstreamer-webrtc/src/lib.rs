@@ -29,6 +29,9 @@ mod web_rtcice;
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_webrtc::prelude::*" without getting conflicts
 pub mod prelude {
+    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    pub use crate::web_rtcice::WebRTCICEExtManual;
     #[doc(hidden)]
     pub use gst_sdp::prelude::*;
 }
