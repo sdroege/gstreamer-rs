@@ -201,7 +201,7 @@ impl_tag!(
     GST_TAG_GEO_LOCATION_LATITUDE
 );
 impl_tag!(
-    GeoLocationLongitute,
+    GeoLocationLongitude,
     f64,
     TAG_GEO_LOCATION_LONGITUDE,
     GST_TAG_GEO_LOCATION_LONGITUDE
