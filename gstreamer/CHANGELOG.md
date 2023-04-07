@@ -327,11 +327,11 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
 ## [0.18.3] - 2022-01-31
 ### Added
 - `Default` implementation for `gst_video::VideoOverlayComposition` when
-  targetting GStreamer 1.20.
+  targeting GStreamer 1.20.
 - `gst_video::VideoOverlayComposition::add_rectangle()` in addition to the
   addition of all rectangles via an iterator during construction.
 - Subclassing support for `gst_rtp::RTPHeaderExtension`.
-- `gst_webrtc::WebRTCError` for programatically handling WebRTC errors.
+- `gst_webrtc::WebRTCError` for programmatically handling WebRTC errors.
 
 ### Fixed
 - `gst_rtp::RTPHeaderExtension` has `gst::Element` set as parent class now.
@@ -672,7 +672,7 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
 - `gst::MemoryRef::dump()` for dumping contents of a memory.
 - `gst::Bus::stream()` instead of a custom constructor on the `BusStream`.
 - Use more accurate types for `Seqnum`, `GroupId` and `MetaSeqnum`. These are
-  now proper wrapper types instead of plain integers, which makes mis-use
+  now proper wrapper types instead of plain integers, which makes miss-use
   harder.
 - Provide `TryFrom` impls for conversion between `glib::DateTime` and
   `gst::DateTime`.
@@ -1434,12 +1434,12 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
 ### Changed
 - `ClockTime` is now a wrapper around `Option<u64>` to handle the
   `CLOCK_TIME_NONE` case better. This wrapper implements all the arithmetic
-  and other traits as needed and ensures that no accidential calculations with
+  and other traits as needed and ensures that no accidental calculations with
   `CLOCK_TIME_NONE` can happen
 - "Values with format", like in `Duration`/`Position`/`Convert` queries or
   `Seek` events now return a `FormatValue` type. This contains the actual
   `Format` together with the value and does any required conversions. This
-  also makes it harder to accidentially mix e.g. values in bytes and time
+  also makes it harder to accidentally mix e.g. values in bytes and time
 - `PadProbeId` does not implement `Clone`/`Copy` anymore
 - Property notify watches return a custom type instead of ulong
 - `Error`/`Warning`/`Info` `Messages` can only be created with specific kinds of
@@ -1456,7 +1456,7 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
 - Success/Error enums (like `FlowReturn`, `PadLinkReturn`, `StateChangeReturn`) now
   implement an `into_result()` function that splits them into a `Result` with
   the good and bad cases. Also mark them as `#[must_use]` to make it harder to
-  accidentially ignore errors.
+  accidentally ignore errors.
 - Error enums implement the `Error` trait
 - Many examples use the `failure` crate for error handling now, cleaning up the
   error handling code quite a bit
