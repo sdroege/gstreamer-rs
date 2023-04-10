@@ -672,7 +672,7 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
 - `gst::MemoryRef::dump()` for dumping contents of a memory.
 - `gst::Bus::stream()` instead of a custom constructor on the `BusStream`.
 - Use more accurate types for `Seqnum`, `GroupId` and `MetaSeqnum`. These are
-  now proper wrapper types instead of plain integers, which makes miss-use
+  now proper wrapper types instead of plain integers, which makes misuse
   harder.
 - Provide `TryFrom` impls for conversion between `glib::DateTime` and
   `gst::DateTime`.
