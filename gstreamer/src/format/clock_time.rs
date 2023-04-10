@@ -1598,7 +1598,7 @@ mod tests {
     #[test]
     fn properties_macro_usage() {
         use super::ClockTime;
-        use glib::{prelude::*, subclass::prelude::*, ParamSpecBuilderExt};
+        use glib::{prelude::*, subclass::prelude::*};
         use std::cell::Cell;
 
         #[derive(Default, glib::Properties)]
