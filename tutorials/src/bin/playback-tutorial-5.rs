@@ -145,7 +145,7 @@ fn tutorial_main() -> Result<(), Error> {
     let main_loop_clone = main_loop.clone();
     let bus = pipeline.bus().unwrap();
     let pipeline_weak = pipeline.downgrade();
-    bus.add_watch(move |_bus, message| {
+    let _bus_watch = bus.add_watch(move |_bus, message| {
         use gst::MessageView;
 
         let pipeline = match pipeline_weak.upgrade() {

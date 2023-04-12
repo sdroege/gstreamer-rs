@@ -92,7 +92,8 @@ impl Bus {
     }
 
     #[doc(alias = "gst_bus_remove_watch")]
-    pub fn remove_watch(&self) -> Result<(), glib::error::BoolError> {
+    #[allow(dead_code)]
+    pub(crate) fn remove_watch(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_bus_remove_watch(self.to_glib_none().0),

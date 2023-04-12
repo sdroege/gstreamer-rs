@@ -204,31 +204,32 @@ fn create_ui(app: &gtk::Application) {
         .expect("Unable to set the pipeline to the `Playing` state");
 
     let app_weak = app.downgrade();
-    bus.add_watch_local(move |_, msg| {
-        use gst::MessageView;
+    let _bus_watch = bus
+        .add_watch_local(move |_, msg| {
+            use gst::MessageView;
 
-        let app = match app_weak.upgrade() {
-            Some(app) => app,
-            None => return glib::Continue(false),
-        };
+            let app = match app_weak.upgrade() {
+                Some(app) => app,
+                None => return glib::Continue(false),
+            };
 
-        match msg.view() {
-            MessageView::Eos(..) => app.quit(),
-            MessageView::Error(err) => {
-                println!(
-                    "Error from {:?}: {} ({:?})",
-                    err.src().map(|s| s.path_string()),
-                    err.error(),
-                    err.debug()
-                );
-                app.quit();
-            }
-            _ => (),
-        };
+            match msg.view() {
+                MessageView::Eos(..) => app.quit(),
+                MessageView::Error(err) => {
+                    println!(
+                        "Error from {:?}: {} ({:?})",
+                        err.src().map(|s| s.path_string()),
+                        err.error(),
+                        err.debug()
+                    );
+                    app.quit();
+                }
+                _ => (),
+            };
 
-        glib::Continue(true)
-    })
-    .expect("Failed to add bus watch");
+            glib::Continue(true)
+        })
+        .expect("Failed to add bus watch");
 
     // Pipeline reference is owned by the closure below, so will be
     // destroyed once the app is destroyed
@@ -250,7 +251,6 @@ fn create_ui(app: &gtk::Application) {
             pipeline
                 .set_state(gst::State::Null)
                 .expect("Unable to set the pipeline to the `Null` state");
-            pipeline.bus().unwrap().remove_watch().unwrap();
         }
 
         if let Some(timeout_id) = timeout_id.borrow_mut().take() {

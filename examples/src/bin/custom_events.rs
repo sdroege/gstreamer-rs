@@ -133,33 +133,34 @@ fn example_main() {
     // Every message from the bus is passed through this function. Its returnvalue determines
     // whether the handler wants to be called again. If glib::Continue(false) is returned, the
     // handler is removed and will never be called again. The mainloop still runs though.
-    bus.add_watch(move |_, msg| {
-        use gst::MessageView;
+    let _bus_watch = bus
+        .add_watch(move |_, msg| {
+            use gst::MessageView;
 
-        let main_loop = &main_loop_clone;
-        match msg.view() {
-            MessageView::Eos(..) => {
-                println!("received eos");
-                // An EndOfStream event was sent to the pipeline, so we tell our main loop
-                // to stop execution here.
-                main_loop.quit()
-            }
-            MessageView::Error(err) => {
-                println!(
-                    "Error from {:?}: {} ({:?})",
-                    err.src().map(|s| s.path_string()),
-                    err.error(),
-                    err.debug()
-                );
-                main_loop.quit();
-            }
-            _ => (),
-        };
+            let main_loop = &main_loop_clone;
+            match msg.view() {
+                MessageView::Eos(..) => {
+                    println!("received eos");
+                    // An EndOfStream event was sent to the pipeline, so we tell our main loop
+                    // to stop execution here.
+                    main_loop.quit()
+                }
+                MessageView::Error(err) => {
+                    println!(
+                        "Error from {:?}: {} ({:?})",
+                        err.src().map(|s| s.path_string()),
+                        err.error(),
+                        err.debug()
+                    );
+                    main_loop.quit();
+                }
+                _ => (),
+            };
 
-        // Tell the mainloop to continue executing this callback.
-        glib::Continue(true)
-    })
-    .expect("Failed to add bus watch");
+            // Tell the mainloop to continue executing this callback.
+            glib::Continue(true)
+        })
+        .expect("Failed to add bus watch");
 
     // Operate GStreamer's bus, facilitating GLib's mainloop here.
     // This function call will block until you tell the mainloop to quit
@@ -169,11 +170,6 @@ fn example_main() {
     pipeline
         .set_state(gst::State::Null)
         .expect("Unable to set the pipeline to the `Null` state");
-
-    // Remove the watch function from the bus.
-    // Again: There can always only be one watch function.
-    // Thus we don't have to tell him which function to remove.
-    bus.remove_watch().unwrap();
 }
 
 fn main() {

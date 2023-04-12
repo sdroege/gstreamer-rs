@@ -586,6 +586,7 @@ final_type = true
 
     [[object.function]]
     name = "remove_watch"
+    visibility = "crate"
         [object.function.return]
         bool_return_is_error = "Bus has no event source"
 

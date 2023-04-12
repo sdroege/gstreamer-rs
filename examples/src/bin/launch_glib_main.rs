@@ -35,38 +35,34 @@ fn example_main() {
 
     //bus.add_signal_watch();
     //bus.connect_message(None, move |_, msg| {
-    bus.add_watch(move |_, msg| {
-        use gst::MessageView;
+    let _bus_watch = bus
+        .add_watch(move |_, msg| {
+            use gst::MessageView;
 
-        let main_loop = &main_loop_clone;
-        match msg.view() {
-            MessageView::Eos(..) => main_loop.quit(),
-            MessageView::Error(err) => {
-                println!(
-                    "Error from {:?}: {} ({:?})",
-                    err.src().map(|s| s.path_string()),
-                    err.error(),
-                    err.debug()
-                );
-                main_loop.quit();
-            }
-            _ => (),
-        };
+            let main_loop = &main_loop_clone;
+            match msg.view() {
+                MessageView::Eos(..) => main_loop.quit(),
+                MessageView::Error(err) => {
+                    println!(
+                        "Error from {:?}: {} ({:?})",
+                        err.src().map(|s| s.path_string()),
+                        err.error(),
+                        err.debug()
+                    );
+                    main_loop.quit();
+                }
+                _ => (),
+            };
 
-        glib::Continue(true)
-    })
-    .expect("Failed to add bus watch");
+            glib::Continue(true)
+        })
+        .expect("Failed to add bus watch");
 
     main_loop.run();
 
     pipeline
         .set_state(gst::State::Null)
         .expect("Unable to set the pipeline to the `Null` state");
-
-    // Here we remove the bus watch we added above. This avoids a memory leak, that might
-    // otherwise happen because we moved a strong reference (clone of main_loop) into the
-    // callback closure above.
-    bus.remove_watch().unwrap();
 }
 
 fn main() {

@@ -140,7 +140,7 @@ fn tutorial_main() -> Result<(), Error> {
     let playbin_clone = playbin.clone();
     let main_loop_clone = main_loop.clone();
     let bus = playbin.bus().unwrap();
-    bus.add_watch(move |_bus, message| {
+    let _bus_watch = bus.add_watch(move |_bus, message| {
         use gst::MessageView;
         match message.view() {
             MessageView::Error(err) => {

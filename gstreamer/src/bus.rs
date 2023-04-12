@@ -13,7 +13,7 @@ use futures_util::{stream::FusedStream, StreamExt};
 use glib::{
     ffi::{gboolean, gpointer},
     prelude::*,
-    source::{Continue, Priority, SourceId},
+    source::{Continue, Priority},
     translate::*,
 };
 
@@ -135,7 +135,7 @@ impl Bus {
 
     #[doc(alias = "gst_bus_add_watch")]
     #[doc(alias = "gst_bus_add_watch_full")]
-    pub fn add_watch<F>(&self, func: F) -> Result<SourceId, glib::BoolError>
+    pub fn add_watch<F>(&self, func: F) -> Result<BusWatchGuard, glib::BoolError>
     where
         F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
     {
@@ -151,14 +151,14 @@ impl Bus {
             if res == 0 {
                 Err(glib::bool_error!("Bus already has a watch"))
             } else {
-                Ok(from_glib(res))
+                Ok(BusWatchGuard { bus: self.clone() })
             }
         }
     }
 
     #[doc(alias = "gst_bus_add_watch")]
     #[doc(alias = "gst_bus_add_watch_full")]
-    pub fn add_watch_local<F>(&self, func: F) -> Result<SourceId, glib::BoolError>
+    pub fn add_watch_local<F>(&self, func: F) -> Result<BusWatchGuard, glib::BoolError>
     where
         F: FnMut(&Bus, &Message) -> Continue + 'static,
     {
@@ -179,7 +179,7 @@ impl Bus {
             if res == 0 {
                 Err(glib::bool_error!("Bus already has a watch"))
             } else {
-                Ok(from_glib(res))
+                Ok(BusWatchGuard { bus: self.clone() })
             }
         }
     }
@@ -375,6 +375,22 @@ impl Stream for BusStream {
 impl FusedStream for BusStream {
     fn is_terminated(&self) -> bool {
         self.receiver.is_terminated()
+    }
+}
+
+// rustdoc-stripper-ignore-next
+/// Manages ownership of the bus watch added to a bus with [`Bus::add_watch`] or [`Bus::add_watch_local`]
+///
+/// When dropped the bus watch is removed from the bus.
+#[derive(Debug)]
+#[must_use = "if unused the bus watch will immediately be removed"]
+pub struct BusWatchGuard {
+    bus: Bus,
+}
+
+impl Drop for BusWatchGuard {
+    fn drop(&mut self) {
+        let _ = self.bus.remove_watch();
     }
 }
 

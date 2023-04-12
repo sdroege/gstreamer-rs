@@ -94,27 +94,28 @@ fn example_main() {
     let main_loop_clone = main_loop.clone();
     //bus.add_signal_watch();
     //bus.connect_message(None, move |_, msg| {
-    bus.add_watch(move |_, msg| {
-        use gst::MessageView;
+    let _bus_watch = bus
+        .add_watch(move |_, msg| {
+            use gst::MessageView;
 
-        let main_loop = &main_loop_clone;
-        match msg.view() {
-            MessageView::Eos(..) => main_loop.quit(),
-            MessageView::Error(err) => {
-                println!(
-                    "Error from {:?}: {} ({:?})",
-                    err.src().map(|s| s.path_string()),
-                    err.error(),
-                    err.debug()
-                );
-                main_loop.quit();
-            }
-            _ => (),
-        };
+            let main_loop = &main_loop_clone;
+            match msg.view() {
+                MessageView::Eos(..) => main_loop.quit(),
+                MessageView::Error(err) => {
+                    println!(
+                        "Error from {:?}: {} ({:?})",
+                        err.src().map(|s| s.path_string()),
+                        err.error(),
+                        err.debug()
+                    );
+                    main_loop.quit();
+                }
+                _ => (),
+            };
 
-        glib::Continue(true)
-    })
-    .expect("Failed to add bus watch");
+            glib::Continue(true)
+        })
+        .expect("Failed to add bus watch");
 
     main_loop.run();
 
@@ -122,7 +123,6 @@ fn example_main() {
         .set_state(gst::State::Null)
         .expect("Unable to set the pipeline to the `Null` state");
 
-    bus.remove_watch().unwrap();
     timeout_id.remove();
 }
 

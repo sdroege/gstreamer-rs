@@ -52,54 +52,55 @@ fn tutorial_main() -> Result<(), Error> {
     let main_loop_clone = main_loop.clone();
     let pipeline_weak = pipeline.downgrade();
     let bus = pipeline.bus().unwrap();
-    bus.add_watch(move |_, msg| {
-        use gst::MessageView;
+    let _bus_watch = bus
+        .add_watch(move |_, msg| {
+            use gst::MessageView;
 
-        let buffering_level = &buffering_level_clone;
-        let pipeline = match pipeline_weak.upgrade() {
-            Some(pipeline) => pipeline,
-            None => return glib::Continue(false),
-        };
-        let main_loop = &main_loop_clone;
-        match msg.view() {
-            MessageView::Error(err) => {
-                println!(
-                    "Error from {:?}: {} ({:?})",
-                    err.src().map(|s| s.path_string()),
-                    err.error(),
-                    err.debug()
-                );
-                main_loop.quit();
-            }
-            MessageView::Eos(..) => {
-                main_loop.quit();
-            }
-            MessageView::Buffering(buffering) => {
-                // If the stream is live, we do not care about buffering.
-                if is_live {
-                    return glib::Continue(true);
+            let buffering_level = &buffering_level_clone;
+            let pipeline = match pipeline_weak.upgrade() {
+                Some(pipeline) => pipeline,
+                None => return glib::Continue(false),
+            };
+            let main_loop = &main_loop_clone;
+            match msg.view() {
+                MessageView::Error(err) => {
+                    println!(
+                        "Error from {:?}: {} ({:?})",
+                        err.src().map(|s| s.path_string()),
+                        err.error(),
+                        err.debug()
+                    );
+                    main_loop.quit();
                 }
+                MessageView::Eos(..) => {
+                    main_loop.quit();
+                }
+                MessageView::Buffering(buffering) => {
+                    // If the stream is live, we do not care about buffering.
+                    if is_live {
+                        return glib::Continue(true);
+                    }
 
-                // Wait until buffering is complete before start/resume playing.
-                let percent = buffering.percent();
-                if percent < 100 {
+                    // Wait until buffering is complete before start/resume playing.
+                    let percent = buffering.percent();
+                    if percent < 100 {
+                        let _ = pipeline.set_state(gst::State::Paused);
+                    } else {
+                        let _ = pipeline.set_state(gst::State::Playing);
+                    }
+                    *buffering_level.lock().unwrap() = percent;
+                }
+                MessageView::ClockLost(_) => {
+                    // Get a new clock.
                     let _ = pipeline.set_state(gst::State::Paused);
-                } else {
                     let _ = pipeline.set_state(gst::State::Playing);
                 }
-                *buffering_level.lock().unwrap() = percent;
-            }
-            MessageView::ClockLost(_) => {
-                // Get a new clock.
-                let _ = pipeline.set_state(gst::State::Paused);
-                let _ = pipeline.set_state(gst::State::Playing);
-            }
-            _ => (),
-        };
+                _ => (),
+            };
 
-        glib::Continue(true)
-    })
-    .expect("Failed to add bus watch");
+            glib::Continue(true)
+        })
+        .expect("Failed to add bus watch");
 
     pipeline.connect("deep-notify::temp-location", false, |args| {
         let download_buffer = args[1].get::<gst::Object>().unwrap();
@@ -177,7 +178,6 @@ fn tutorial_main() -> Result<(), Error> {
     // Shutdown pipeline
     pipeline.set_state(gst::State::Null)?;
 
-    bus.remove_watch()?;
     timeout_id.remove();
 
     Ok(())

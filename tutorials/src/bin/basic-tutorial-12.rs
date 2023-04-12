@@ -23,62 +23,62 @@ fn tutorial_main() -> Result<(), Error> {
     let main_loop_clone = main_loop.clone();
     let pipeline_weak = pipeline.downgrade();
     let bus = pipeline.bus().expect("Pipeline has no bus");
-    bus.add_watch(move |_, msg| {
-        let pipeline = match pipeline_weak.upgrade() {
-            Some(pipeline) => pipeline,
-            None => return glib::Continue(true),
-        };
-        let main_loop = &main_loop_clone;
-        match msg.view() {
-            gst::MessageView::Error(err) => {
-                println!(
-                    "Error from {:?}: {} ({:?})",
-                    err.src().map(|s| s.path_string()),
-                    err.error(),
-                    err.debug()
-                );
-                let _ = pipeline.set_state(gst::State::Ready);
-                main_loop.quit();
-            }
-            gst::MessageView::Eos(..) => {
-                // end-of-stream
-                let _ = pipeline.set_state(gst::State::Ready);
-                main_loop.quit();
-            }
-            gst::MessageView::Buffering(buffering) => {
-                // If the stream is live, we do not care about buffering
-                if is_live {
-                    return glib::Continue(true);
+    let _bus_watch = bus
+        .add_watch(move |_, msg| {
+            let pipeline = match pipeline_weak.upgrade() {
+                Some(pipeline) => pipeline,
+                None => return glib::Continue(true),
+            };
+            let main_loop = &main_loop_clone;
+            match msg.view() {
+                gst::MessageView::Error(err) => {
+                    println!(
+                        "Error from {:?}: {} ({:?})",
+                        err.src().map(|s| s.path_string()),
+                        err.error(),
+                        err.debug()
+                    );
+                    let _ = pipeline.set_state(gst::State::Ready);
+                    main_loop.quit();
                 }
+                gst::MessageView::Eos(..) => {
+                    // end-of-stream
+                    let _ = pipeline.set_state(gst::State::Ready);
+                    main_loop.quit();
+                }
+                gst::MessageView::Buffering(buffering) => {
+                    // If the stream is live, we do not care about buffering
+                    if is_live {
+                        return glib::Continue(true);
+                    }
 
-                let percent = buffering.percent();
-                print!("Buffering ({percent}%)\r");
-                match std::io::stdout().flush() {
-                    Ok(_) => {}
-                    Err(err) => eprintln!("Failed: {err}"),
-                };
+                    let percent = buffering.percent();
+                    print!("Buffering ({percent}%)\r");
+                    match std::io::stdout().flush() {
+                        Ok(_) => {}
+                        Err(err) => eprintln!("Failed: {err}"),
+                    };
 
-                // Wait until buffering is complete before start/resume playing
-                if percent < 100 {
+                    // Wait until buffering is complete before start/resume playing
+                    if percent < 100 {
+                        let _ = pipeline.set_state(gst::State::Paused);
+                    } else {
+                        let _ = pipeline.set_state(gst::State::Playing);
+                    }
+                }
+                gst::MessageView::ClockLost(_) => {
+                    // Get a new clock
                     let _ = pipeline.set_state(gst::State::Paused);
-                } else {
                     let _ = pipeline.set_state(gst::State::Playing);
                 }
+                _ => (),
             }
-            gst::MessageView::ClockLost(_) => {
-                // Get a new clock
-                let _ = pipeline.set_state(gst::State::Paused);
-                let _ = pipeline.set_state(gst::State::Playing);
-            }
-            _ => (),
-        }
-        glib::Continue(true)
-    })
-    .expect("Failed to add bus watch");
+            glib::Continue(true)
+        })
+        .expect("Failed to add bus watch");
 
     main_loop.run();
 
-    bus.remove_watch()?;
     pipeline.set_state(gst::State::Null)?;
 
     Ok(())

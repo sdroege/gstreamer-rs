@@ -329,30 +329,31 @@ fn main() -> Result<()> {
 
     let main_loop_clone = main_loop.clone();
     let bus = playbin.bus().unwrap();
-    bus.add_watch(move |_, msg| {
-        use gst::MessageView;
+    let _bus_watch = bus
+        .add_watch(move |_, msg| {
+            use gst::MessageView;
 
-        let main_loop = &main_loop_clone;
-        match msg.view() {
-            MessageView::Eos(..) => {
-                println!("received eos");
-                main_loop.quit()
-            }
-            MessageView::Error(err) => {
-                println!(
-                    "Error from {:?}: {} ({:?})",
-                    err.src().map(|s| s.path_string()),
-                    err.error(),
-                    err.debug()
-                );
-                main_loop.quit();
-            }
-            _ => (),
-        };
+            let main_loop = &main_loop_clone;
+            match msg.view() {
+                MessageView::Eos(..) => {
+                    println!("received eos");
+                    main_loop.quit()
+                }
+                MessageView::Error(err) => {
+                    println!(
+                        "Error from {:?}: {} ({:?})",
+                        err.src().map(|s| s.path_string()),
+                        err.error(),
+                        err.debug()
+                    );
+                    main_loop.quit();
+                }
+                _ => (),
+            };
 
-        glib::Continue(true)
-    })
-    .unwrap();
+            glib::Continue(true)
+        })
+        .unwrap();
 
     playbin.set_state(gst::State::Playing).unwrap();
 
