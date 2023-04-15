@@ -608,6 +608,16 @@ macro_rules! mini_object_wrapper (
 
         // Can't have SetValue/SetValueOptional impls as otherwise one could use it to get
         // immutable references from a mutable reference without borrowing via the value
+
+        impl $crate::glib::HasParamSpec for $name {
+            type ParamSpec = $crate::glib::ParamSpecBoxed;
+            type SetValue = Self;
+            type BuilderFn = fn(&str) -> $crate::glib::ParamSpecBoxedBuilder<Self>;
+
+            fn param_spec_builder() -> Self::BuilderFn {
+                |name| Self::ParamSpec::builder(name)
+            }
+        }
     };
 );
 
