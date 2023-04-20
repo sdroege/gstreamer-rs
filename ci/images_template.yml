@@ -1,4 +1,4 @@
 variables:
-  GST_RS_IMG_TAG: "2023-04-76.0"
-  GST_RS_STABLE: "1.68.2"
+  GST_RS_IMG_TAG: "2023-04-20.0"
+  GST_RS_STABLE: "1.69.0"
   GST_RS_MSRV: "1.66.0"
