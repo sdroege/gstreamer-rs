@@ -104,7 +104,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_min_upstream_latency(&self, min_upstream_latency: gst::ClockTime) {
         self.as_ref()
-            .set_property("min-upstream-latency", &min_upstream_latency);
+            .set_property("min-upstream-latency", min_upstream_latency);
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]

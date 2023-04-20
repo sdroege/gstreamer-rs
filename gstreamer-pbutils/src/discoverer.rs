@@ -12,7 +12,7 @@ use crate::auto::Discoverer;
 
 impl Discoverer {
     pub fn set_timeout(&self, timeout: gst::ClockTime) {
-        self.set_property("timeout", &timeout);
+        self.set_property("timeout", timeout);
     }
 
     pub fn timeout(&self) -> gst::ClockTime {
