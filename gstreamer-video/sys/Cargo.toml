@@ -51,7 +51,7 @@ license = "MIT"
 name = "gstreamer-video-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
-version = "0.20.4"
+version = "0.20.5"
 edition = "2021"
 rust-version = "1.64"
 
