@@ -26,7 +26,7 @@ fn tutorial_main() -> Result<(), Error> {
 
     // Set the download flag
     let flags = pipeline.property_value("flags");
-    let flags_class = FlagsClass::new(flags.type_()).unwrap();
+    let flags_class = FlagsClass::with_type(flags.type_()).unwrap();
     let flags = flags_class
         .builder_with_value(flags)
         .unwrap()

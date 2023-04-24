@@ -12,7 +12,7 @@ macro_rules! bitflags_serialize_impl {
             where
                 S: serde::Serializer,
             {
-                let class = FlagsClass::new(Self::static_type()).unwrap();
+                let class = FlagsClass::with_type(Self::static_type()).unwrap();
                 let this = self.to_value();
 
                 let mut handled = Self::empty().to_value();
@@ -49,7 +49,7 @@ macro_rules! bitflags_serialize_impl {
                 let mut res = String::new();
 
                 static SORTED_VALUES: Lazy<Vec<(u32, String)>> = Lazy::new(|| {
-                    let class = FlagsClass::new(<$type>::static_type()).unwrap();
+                    let class = FlagsClass::with_type(<$type>::static_type()).unwrap();
                     let mut sorted_values: Vec<(u32, String)> =
                         class.values().iter()
                             .map(|f| (f.value(), f.nick().to_owned()))
@@ -114,7 +114,7 @@ macro_rules! bitflags_deserialize_impl {
 
                         let mut gvalue = unsafe { glib::Value::from_type_unchecked(Self::Value::static_type()) };
                         let tokens = value.split('+');
-                        let class = FlagsClass::new(Self::Value::static_type()).unwrap();
+                        let class = FlagsClass::with_type(Self::Value::static_type()).unwrap();
 
                         for token in tokens {
                             gvalue = class.set_by_nick(gvalue, token).map_err(|_| {

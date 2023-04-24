@@ -114,7 +114,7 @@ fn tutorial_main() -> Result<(), Error> {
 
     // Set flags to show Audio and Video but ignore Subtitles
     let flags = playbin.property_value("flags");
-    let flags_class = FlagsClass::new(flags.type_()).unwrap();
+    let flags_class = FlagsClass::with_type(flags.type_()).unwrap();
 
     let flags = flags_class
         .builder_with_value(flags)
