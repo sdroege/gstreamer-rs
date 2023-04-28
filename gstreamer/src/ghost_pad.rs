@@ -53,63 +53,93 @@ impl GhostPad {
         }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Creates a new [`GhostPad`] object with a default name.
+    ///
+    /// Use [`GhostPad::builder()`] to get a [`PadBuilder`] and then define a specific name.
     #[doc(alias = "gst_ghost_pad_new_no_target")]
-    pub fn new(name: Option<&str>, direction: crate::PadDirection) -> Self {
+    pub fn new(direction: crate::PadDirection) -> Self {
         skip_assert_initialized!();
-        Self::builder(name, direction).build()
+        Self::builder(direction).build()
     }
 
     #[doc(alias = "gst_ghost_pad_new_no_target")]
-    pub fn builder(name: Option<&str>, direction: crate::PadDirection) -> PadBuilder<Self> {
+    pub fn builder(direction: crate::PadDirection) -> PadBuilder<Self> {
         skip_assert_initialized!();
-        PadBuilder::new(name, direction)
+        PadBuilder::new(direction)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates a new [`GhostPad`] object from the [`StaticPadTemplate`](crate::StaticPadTemplate) with a default name.
+    ///
+    /// Use [`GhostPad::builder_from_static_template()`] to get a [`PadBuilder`] and then define a specific name.
+    #[doc(alias = "gst_ghost_pad_new_no_target_from_static_template")]
+    pub fn from_static_template(templ: &StaticPadTemplate) -> Self {
+        skip_assert_initialized!();
+        Self::builder_from_static_template(templ).build()
     }
 
     #[doc(alias = "gst_ghost_pad_new_no_target_from_static_template")]
-    pub fn from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Self {
+    pub fn builder_from_static_template(templ: &StaticPadTemplate) -> PadBuilder<Self> {
         skip_assert_initialized!();
-        Self::builder_with_static_template(templ, name).build()
+        PadBuilder::from_static_template(templ)
     }
 
-    #[doc(alias = "gst_ghost_pad_new_no_target_from_static_template")]
-    pub fn builder_with_static_template(
-        templ: &StaticPadTemplate,
-        name: Option<&str>,
-    ) -> PadBuilder<Self> {
+    // rustdoc-stripper-ignore-next
+    /// Creates a new [`GhostPad`] object from the [`PadTemplate`](crate::PadTemplate) with a default name.
+    ///
+    /// Use [`GhostPad::builder_from_template()`] to get a [`PadBuilder`] and then define a specific name.
+    #[doc(alias = "gst_ghost_pad_new_no_target_from_template")]
+    pub fn from_template(templ: &crate::PadTemplate) -> Self {
         skip_assert_initialized!();
-        PadBuilder::from_static_template(templ, name)
+        Self::builder_from_template(templ).build()
     }
 
     #[doc(alias = "gst_ghost_pad_new_no_target_from_template")]
-    pub fn from_template(templ: &crate::PadTemplate, name: Option<&str>) -> Self {
+    pub fn builder_from_template(templ: &crate::PadTemplate) -> PadBuilder<Self> {
         skip_assert_initialized!();
-        Self::builder_with_template(templ, name).build()
+        PadBuilder::from_template(templ)
     }
 
-    #[doc(alias = "gst_ghost_pad_new_no_target_from_template")]
-    pub fn builder_with_template(
-        templ: &crate::PadTemplate,
-        name: Option<&str>,
-    ) -> PadBuilder<Self> {
-        skip_assert_initialized!();
-        PadBuilder::from_template(templ, name)
-    }
-
+    // rustdoc-stripper-ignore-next
+    /// Creates a new [`GhostPad`] object from the specified `target` `Pad` and a default name.
+    ///
+    /// Use [`GhostPad::builder_with_target()`] to get a [`PadBuilder`] and then define a specific name.
     #[doc(alias = "gst_ghost_pad_new")]
-    pub fn with_target<P: IsA<Pad>>(
-        name: Option<&str>,
-        target: &P,
-    ) -> Result<Self, glib::BoolError> {
+    pub fn with_target<P: IsA<Pad>>(target: &P) -> Result<Self, glib::BoolError> {
         skip_assert_initialized!();
-        Self::builder(name, target.direction()).build_with_target(target)
+        Ok(Self::builder_with_target(target)?.build())
     }
 
+    #[doc(alias = "gst_ghost_pad_new_no_target_from_template")]
+    pub fn builder_with_target<P: IsA<Pad>>(
+        target: &P,
+    ) -> Result<PadBuilder<Self>, glib::BoolError> {
+        skip_assert_initialized!();
+        Self::builder(target.direction()).with_target(target)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates a new [`GhostPad`] object from the [`PadTemplate`](crate::PadTemplate)
+    /// with the specified `target` `Pad` and a default name.
+    ///
+    /// Returns `Err(_)` if the `PadTemplate` and the `target` directions differ.
+    ///
+    /// Use [`GhostPad::builder_from_template_with_target()`] to get a [`PadBuilder`] and then define a specific name.
     #[doc(alias = "gst_ghost_pad_new_from_template")]
     pub fn from_template_with_target<P: IsA<Pad>>(
         templ: &crate::PadTemplate,
-        name: Option<&str>,
         target: &P,
     ) -> Result<Self, glib::BoolError> {
+        skip_assert_initialized!();
+        Ok(Self::builder_from_template_with_target(templ, target)?.build())
+    }
+
+    #[doc(alias = "gst_ghost_pad_new_from_template")]
+    pub fn builder_from_template_with_target<P: IsA<Pad>>(
+        templ: &crate::PadTemplate,
+        target: &P,
+    ) -> Result<PadBuilder<Self>, glib::BoolError> {
         skip_assert_initialized!();
 
         if target.direction() != templ.direction() {
@@ -118,7 +148,7 @@ impl GhostPad {
             ));
         }
 
-        Self::builder_with_template(templ, name).build_with_target(target)
+        Self::builder_from_template(templ).with_target(target)
     }
 }
 
@@ -380,11 +410,107 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
-    pub fn build_with_target<P: IsA<Pad>>(self, target: &P) -> Result<T, glib::BoolError> {
+    pub fn with_target<P: IsA<Pad>>(self, target: &P) -> Result<Self, glib::BoolError> {
         assert_eq!(self.0.direction(), target.direction());
 
         self.0.set_target(Some(target))?;
 
-        Ok(self.0)
+        Ok(self)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn from_template() {
+        crate::init().unwrap();
+
+        let caps = crate::Caps::new_any();
+        let templ = crate::PadTemplate::new(
+            "sink",
+            crate::PadDirection::Sink,
+            crate::PadPresence::Always,
+            &caps,
+        )
+        .unwrap();
+
+        let ghost_pad = GhostPad::from_template(&templ);
+        assert!(ghost_pad.name().starts_with("ghostpad"));
+
+        let ghost_pad = GhostPad::builder_from_template(&templ).build();
+        assert!(ghost_pad.name().starts_with("ghostpad"));
+
+        let ghost_pad = GhostPad::builder_from_template(&templ).name("sink").build();
+        assert_eq!(ghost_pad.name(), "sink");
+    }
+
+    #[test]
+    fn with_target() {
+        crate::init().unwrap();
+
+        let caps = crate::Caps::new_any();
+        let templ = crate::PadTemplate::new(
+            "sink",
+            crate::PadDirection::Sink,
+            crate::PadPresence::Always,
+            &caps,
+        )
+        .unwrap();
+
+        let target = crate::Pad::from_template(&templ);
+        let ghost_pad = GhostPad::with_target(&target).unwrap();
+        assert!(ghost_pad.name().starts_with("ghostpad"));
+
+        let target = crate::Pad::from_template(&templ);
+        let ghost_pad = GhostPad::builder_with_target(&target).unwrap().build();
+        assert!(ghost_pad.name().starts_with("ghostpad"));
+
+        let target = crate::Pad::from_template(&templ);
+        let ghost_pad = GhostPad::builder_with_target(&target)
+            .unwrap()
+            .name("sink")
+            .build();
+        assert_eq!(ghost_pad.name(), "sink");
+    }
+
+    #[test]
+    fn from_template_with_target() {
+        crate::init().unwrap();
+
+        let caps = crate::Caps::new_any();
+        let templ = crate::PadTemplate::new(
+            "sink",
+            crate::PadDirection::Sink,
+            crate::PadPresence::Always,
+            &caps,
+        )
+        .unwrap();
+
+        let ghost_templ = crate::PadTemplate::new(
+            "sink",
+            crate::PadDirection::Sink,
+            crate::PadPresence::Request,
+            &caps,
+        )
+        .unwrap();
+
+        let target = crate::Pad::from_template(&templ);
+        let ghost_pad = GhostPad::from_template_with_target(&ghost_templ, &target).unwrap();
+        assert!(ghost_pad.name().starts_with("ghostpad"));
+
+        let target = crate::Pad::from_template(&templ);
+        let ghost_pad = GhostPad::builder_from_template_with_target(&ghost_templ, &target)
+            .unwrap()
+            .build();
+        assert!(ghost_pad.name().starts_with("ghostpad"));
+
+        let target = crate::Pad::from_template(&templ);
+        let ghost_pad = GhostPad::builder_from_template_with_target(&ghost_templ, &target)
+            .unwrap()
+            .name("sink")
+            .build();
+        assert_eq!(ghost_pad.name(), "sink");
     }
 }

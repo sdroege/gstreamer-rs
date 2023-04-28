@@ -141,7 +141,7 @@ mod tests {
 
         assert_eq!(pad.name(), "test");
 
-        let otherpad = Pad::new(Some("other-test"), PadDirection::Sink);
+        let otherpad = Pad::builder(PadDirection::Sink).name("other-test").build();
         pad.link(&otherpad).unwrap();
         pad.unlink(&otherpad).unwrap();
 

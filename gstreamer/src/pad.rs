@@ -1518,46 +1518,52 @@ unsafe extern "C" fn destroy_closure<F>(ptr: gpointer) {
 }
 
 impl Pad {
+    // rustdoc-stripper-ignore-next
+    /// Creates a new [`Pad`] object with a default name.
+    ///
+    /// Use [`Pad::builder()`] to get a [`PadBuilder`] and then define a specific name.
     #[doc(alias = "gst_pad_new")]
-    pub fn new(name: Option<&str>, direction: crate::PadDirection) -> Self {
+    pub fn new(direction: crate::PadDirection) -> Self {
         skip_assert_initialized!();
-        Self::builder(name, direction).build()
+        Self::builder(direction).build()
     }
 
     #[doc(alias = "gst_pad_new")]
-    pub fn builder(name: Option<&str>, direction: crate::PadDirection) -> PadBuilder<Self> {
+    pub fn builder(direction: crate::PadDirection) -> PadBuilder<Self> {
         skip_assert_initialized!();
-        PadBuilder::new(name, direction)
+        PadBuilder::new(direction)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates a new [`Pad`] object from the [`StaticPadTemplate`](crate::StaticPadTemplate) with a default name.
+    ///
+    /// Use [`Pad::builder_from_static_template()`] to get a [`PadBuilder`] and then define a specific name.
+    #[doc(alias = "gst_pad_new_from_static_template")]
+    pub fn from_static_template(templ: &StaticPadTemplate) -> Self {
+        skip_assert_initialized!();
+        Self::builder_from_static_template(templ).build()
     }
 
     #[doc(alias = "gst_pad_new_from_static_template")]
-    pub fn from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Self {
+    pub fn builder_from_static_template(templ: &StaticPadTemplate) -> PadBuilder<Self> {
         skip_assert_initialized!();
-        Self::builder_with_static_template(templ, name).build()
+        PadBuilder::from_static_template(templ)
     }
 
-    #[doc(alias = "gst_pad_new_from_static_template")]
-    pub fn builder_with_static_template(
-        templ: &StaticPadTemplate,
-        name: Option<&str>,
-    ) -> PadBuilder<Self> {
+    // rustdoc-stripper-ignore-next
+    /// Creates a new [`Pad`] object from the [`PadTemplate`](crate::PadTemplate) with a default name.
+    ///
+    /// Use [`Pad::builder_from_template()`] to get a [`PadBuilder`] and then define a specific name.
+    #[doc(alias = "gst_pad_new_from_template")]
+    pub fn from_template(templ: &crate::PadTemplate) -> Self {
         skip_assert_initialized!();
-        PadBuilder::from_static_template(templ, name)
+        Self::builder_from_template(templ).build()
     }
 
     #[doc(alias = "gst_pad_new_from_template")]
-    pub fn from_template(templ: &crate::PadTemplate, name: Option<&str>) -> Self {
+    pub fn builder_from_template(templ: &crate::PadTemplate) -> PadBuilder<Self> {
         skip_assert_initialized!();
-        Self::builder_with_template(templ, name).build()
-    }
-
-    #[doc(alias = "gst_pad_new_from_template")]
-    pub fn builder_with_template(
-        templ: &crate::PadTemplate,
-        name: Option<&str>,
-    ) -> PadBuilder<Self> {
-        skip_assert_initialized!();
-        PadBuilder::from_template(templ, name)
+        PadBuilder::from_template(templ)
     }
 
     #[doc(alias = "gst_pad_query_default")]
@@ -1611,11 +1617,10 @@ impl Pad {
 pub struct PadBuilder<T>(pub(crate) T);
 
 impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
-    pub fn new(name: Option<&str>, direction: crate::PadDirection) -> Self {
+    pub fn new(direction: crate::PadDirection) -> Self {
         assert_initialized_main_thread!();
 
         let pad = glib::Object::builder::<T>()
-            .property("name", name)
             .property("direction", direction)
             .build();
 
@@ -1631,14 +1636,14 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         PadBuilder(pad)
     }
 
-    pub fn from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Self {
+    pub fn from_static_template(templ: &StaticPadTemplate) -> Self {
         skip_assert_initialized!();
 
         let templ = templ.get();
-        Self::from_template(&templ, name)
+        Self::from_template(&templ)
     }
 
-    pub fn from_template(templ: &crate::PadTemplate, name: Option<&str>) -> Self {
+    pub fn from_template(templ: &crate::PadTemplate) -> Self {
         assert_initialized_main_thread!();
 
         let mut type_ = T::static_type();
@@ -1661,7 +1666,6 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         }
 
         let mut properties = [
-            ("name", name.map(glib::GString::from).into()),
             ("direction", templ.direction().into()),
             ("template", templ.into()),
         ];
@@ -1679,6 +1683,12 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         }
 
         PadBuilder(pad)
+    }
+
+    pub fn name(self, name: impl Into<glib::GString>) -> Self {
+        self.0.set_property("name", name.into());
+
+        self
     }
 
     #[doc(alias = "gst_pad_set_activate_function")]
@@ -1867,7 +1877,8 @@ mod tests {
         let events_clone = events.clone();
         let buffers = Arc::new(Mutex::new(Vec::new()));
         let buffers_clone = buffers.clone();
-        let pad = crate::Pad::builder(Some("sink"), crate::PadDirection::Sink)
+        let pad = crate::Pad::builder(crate::PadDirection::Sink)
+            .name("sink")
             .event_function(move |_, _, event| {
                 let mut events = events_clone.lock().unwrap();
                 events.push(event);
@@ -1910,7 +1921,8 @@ mod tests {
     fn test_getrange_function() {
         crate::init().unwrap();
 
-        let pad = crate::Pad::builder(Some("src"), crate::PadDirection::Src)
+        let pad = crate::Pad::builder(crate::PadDirection::Src)
+            .name("src")
             .activate_function(|pad, _parent| {
                 pad.activate_mode(crate::PadMode::Pull, true)
                     .map_err(|err| err.into())
@@ -1936,7 +1948,8 @@ mod tests {
         pad.set_active(false).unwrap();
         drop(pad);
 
-        let pad = crate::Pad::builder(Some("src"), crate::PadDirection::Src)
+        let pad = crate::Pad::builder(crate::PadDirection::Src)
+            .name("src")
             .activate_function(|pad, _parent| {
                 pad.activate_mode(crate::PadMode::Pull, true)
                     .map_err(|err| err.into())
@@ -1969,7 +1982,9 @@ mod tests {
     fn test_task() {
         crate::init().unwrap();
 
-        let pad = crate::Pad::new(Some("sink"), crate::PadDirection::Sink);
+        let pad = crate::Pad::builder(crate::PadDirection::Sink)
+            .name("sink")
+            .build();
         let (sender, receiver) = channel();
 
         let mut i = 0;
@@ -1990,8 +2005,11 @@ mod tests {
     fn test_remove_probe_from_probe() {
         crate::init().unwrap();
 
-        let src_pad = crate::Pad::new(Some("src"), crate::PadDirection::Src);
-        let sink_pad = crate::Pad::builder(Some("sink"), crate::PadDirection::Sink)
+        let src_pad = crate::Pad::builder(crate::PadDirection::Src)
+            .name("src")
+            .build();
+        let sink_pad = crate::Pad::builder(crate::PadDirection::Sink)
+            .name("sink")
             .chain_function(|_pad, _parent, _buffer| Ok(crate::FlowSuccess::Ok))
             .build();
 
@@ -2027,7 +2045,9 @@ mod tests {
         crate::init().unwrap();
 
         let (major, minor, micro, _) = crate::version();
-        let pad = crate::Pad::new(Some("src"), crate::PadDirection::Src);
+        let pad = crate::Pad::builder(crate::PadDirection::Src)
+            .name("src")
+            .build();
         let events = Arc::new(Mutex::new(Vec::new()));
         let buffers = Arc::new(Mutex::new(Vec::new()));
 
@@ -2123,7 +2143,9 @@ mod tests {
     fn test_sticky_events() {
         crate::init().unwrap();
 
-        let pad = crate::Pad::builder(Some("sink"), crate::PadDirection::Sink).build();
+        let pad = crate::Pad::builder(crate::PadDirection::Sink)
+            .name("sink")
+            .build();
         pad.set_active(true).unwrap();
 
         // Send some sticky events
@@ -2149,7 +2171,9 @@ mod tests {
     fn test_sticky_events_foreach() {
         crate::init().unwrap();
 
-        let pad = crate::Pad::builder(Some("sink"), crate::PadDirection::Sink).build();
+        let pad = crate::Pad::builder(crate::PadDirection::Sink)
+            .name("sink")
+            .build();
         pad.set_active(true).unwrap();
 
         // Send some sticky events
@@ -2247,5 +2271,28 @@ mod tests {
             sticky_events4[2].as_ref() as *const _,
             sticky_events5[1].as_ref() as *const _
         );
+    }
+
+    #[test]
+    fn from_template() {
+        crate::init().unwrap();
+
+        let caps = crate::Caps::new_any();
+        let templ = crate::PadTemplate::new(
+            "sink",
+            crate::PadDirection::Sink,
+            crate::PadPresence::Always,
+            &caps,
+        )
+        .unwrap();
+
+        let pad = Pad::from_template(&templ);
+        assert!(pad.name().starts_with("pad"));
+
+        let pad = Pad::builder_from_template(&templ).build();
+        assert!(pad.name().starts_with("pad"));
+
+        let pad = Pad::builder_from_template(&templ).name("sink").build();
+        assert_eq!(pad.name(), "sink");
     }
 }
