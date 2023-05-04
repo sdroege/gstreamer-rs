@@ -518,8 +518,9 @@ docs:
     - PATH=~/.cargo/bin/:$PATH ./generator.py --gir-files-directories gir-files gst-gir-files --embed-docs --no-fmt
     - |
       RUSTDOCFLAGS="$RUST_DOCS_FLAGS"
+      RUSTFLAGS="--cfg docsrs"
       eval $(./gir-rustdoc.py pre-docs)
-      cargo +nightly doc --workspace --exclude examples --exclude tutorials --color=always --features=dox --no-deps
+      cargo +nightly doc --workspace --exclude examples --exclude tutorials --color=always --no-deps
     - mv target/doc docs
   artifacts:
     paths:
