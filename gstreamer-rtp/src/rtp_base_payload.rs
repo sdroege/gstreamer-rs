@@ -5,8 +5,8 @@ use glib::{object::IsA, translate::*};
 use crate::RTPBasePayload;
 
 pub trait RTPBasePayloadExtManual: 'static {
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_rtp_base_payload_set_outcaps_structure")]
     #[doc(alias = "gst_rtp_base_payload_set_outcaps")]
     fn set_outcaps(&self, s: Option<&gst::StructureRef>) -> Result<(), glib::error::BoolError>;
@@ -17,8 +17,8 @@ pub trait RTPBasePayloadExtManual: 'static {
 }
 
 impl<O: IsA<RTPBasePayload>> RTPBasePayloadExtManual for O {
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn set_outcaps(&self, s: Option<&gst::StructureRef>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(

@@ -421,8 +421,8 @@ impl CapsRef {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_caps_set_features_simple")]
     pub fn set_features_simple(&mut self, features: Option<CapsFeatures>) {
         unsafe {
@@ -591,8 +591,8 @@ impl CapsRef {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_caps_serialize")]
     pub fn serialize(&self, flags: crate::SerializeFlags) -> glib::GString {
         unsafe { from_glib_full(ffi::gst_caps_serialize(&self.0, flags.into_glib())) }

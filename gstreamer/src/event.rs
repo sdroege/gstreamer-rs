@@ -258,7 +258,7 @@ impl EventRef {
                 ffi::GST_EVENT_PROTECTION => Protection::view(self),
                 ffi::GST_EVENT_SEGMENT_DONE => SegmentDone::view(self),
                 ffi::GST_EVENT_GAP => Gap::view(self),
-                #[cfg(any(feature = "v1_18", feature = "dox"))]
+                #[cfg(feature = "v1_18")]
                 ffi::GST_EVENT_INSTANT_RATE_CHANGE => InstantRateChange::view(self),
                 ffi::GST_EVENT_QOS => Qos::view(self),
                 ffi::GST_EVENT_SEEK => Seek::view(self),
@@ -268,7 +268,7 @@ impl EventRef {
                 ffi::GST_EVENT_RECONFIGURE => Reconfigure::view(self),
                 ffi::GST_EVENT_TOC_SELECT => TocSelect::view(self),
                 ffi::GST_EVENT_SELECT_STREAMS => SelectStreams::view(self),
-                #[cfg(any(feature = "v1_18", feature = "dox"))]
+                #[cfg(feature = "v1_18")]
                 ffi::GST_EVENT_INSTANT_RATE_SYNC_TIME => InstantRateSyncTime::view(self),
                 ffi::GST_EVENT_CUSTOM_UPSTREAM => CustomUpstream::view(self),
                 ffi::GST_EVENT_CUSTOM_DOWNSTREAM => CustomDownstream::view(self),
@@ -323,8 +323,8 @@ pub enum EventView<'a> {
     Protection(&'a Protection),
     SegmentDone(&'a SegmentDone),
     Gap(&'a Gap),
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     InstantRateChange(&'a InstantRateChange),
     Qos(&'a Qos),
     Seek(&'a Seek),
@@ -334,8 +334,8 @@ pub enum EventView<'a> {
     Reconfigure(&'a Reconfigure),
     TocSelect(&'a TocSelect),
     SelectStreams(&'a SelectStreams),
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     InstantRateSyncTime(&'a InstantRateSyncTime),
     CustomUpstream(&'a CustomUpstream),
     CustomDownstream(&'a CustomDownstream),
@@ -953,8 +953,8 @@ impl Gap {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_event_parse_gap_flags")]
     pub fn gap_flags(&self) -> crate::GapFlags {
         unsafe {
@@ -965,11 +965,11 @@ impl Gap {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 declare_concrete_event!(@sticky InstantRateChange, T);
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl InstantRateChange<Event> {
     #[doc(alias = "gst_event_new_instant_rate_change")]
     #[allow(clippy::new_ret_no_self)]
@@ -987,8 +987,8 @@ impl InstantRateChange<Event> {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl InstantRateChange {
     #[doc(alias = "gst_event_parse_instant_rate_change")]
     pub fn get(&self) -> (f64, crate::SegmentFlags) {
@@ -1137,8 +1137,8 @@ impl Seek {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "get_trickmode_interval")]
     #[doc(alias = "gst_event_parse_seek_trickmode_interval")]
     pub fn trickmode_interval(&self) -> Option<ClockTime> {
@@ -1323,11 +1323,11 @@ impl SelectStreams {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 declare_concrete_event!(InstantRateSyncTime, T);
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl InstantRateSyncTime<Event> {
     #[doc(alias = "gst_event_new_instant_rate_sync_time")]
     #[allow(clippy::new_ret_no_self)]
@@ -1350,8 +1350,8 @@ impl InstantRateSyncTime<Event> {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl InstantRateSyncTime {
     #[doc(alias = "parse_instant_rate_sync_time")]
     #[doc(alias = "gst_event_parse_instant_rate_sync_time")]
@@ -1722,8 +1722,8 @@ impl<'a> StreamCollectionBuilder<'a> {
     });
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[must_use = "The builder must be built to be used"]
 pub struct InstantRateSyncTimeBuilder<'a> {
     builder: EventBuilder<'a>,
@@ -1732,8 +1732,8 @@ pub struct InstantRateSyncTimeBuilder<'a> {
     upstream_running_time: ClockTime,
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl<'a> InstantRateSyncTimeBuilder<'a> {
     fn new(
         rate_multiplier: f64,
@@ -1949,7 +1949,7 @@ pub struct GapBuilder<'a> {
     builder: EventBuilder<'a>,
     timestamp: ClockTime,
     duration: Option<ClockTime>,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg(feature = "v1_20")]
     gap_flags: Option<crate::GapFlags>,
 }
 
@@ -1960,13 +1960,13 @@ impl<'a> GapBuilder<'a> {
             builder: EventBuilder::new(),
             timestamp,
             duration: None,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             gap_flags: None,
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gap_flags(mut self, flags: crate::GapFlags) -> Self {
         self.gap_flags = Some(flags);
         self
@@ -1981,7 +1981,7 @@ impl<'a> GapBuilder<'a> {
         #[allow(clippy::let_and_return)]
         let ev = ffi::gst_event_new_gap(s.timestamp.into_glib(), s.duration.into_glib());
 
-        #[cfg(any(feature = "v1_20", feature = "dox"))]
+        #[cfg(feature = "v1_20")]
         if let Some(ref flags) = s.gap_flags {
             ffi::gst_event_set_gap_flags(ev, flags.into_glib());
         }
@@ -1990,8 +1990,8 @@ impl<'a> GapBuilder<'a> {
     });
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[must_use = "The builder must be built to be used"]
 pub struct InstantRateChangeBuilder<'a> {
     builder: EventBuilder<'a>,
@@ -1999,8 +1999,8 @@ pub struct InstantRateChangeBuilder<'a> {
     new_flags: crate::SegmentFlags,
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl<'a> InstantRateChangeBuilder<'a> {
     fn new(multiplier: f64, new_flags: crate::SegmentFlags) -> Self {
         skip_assert_initialized!();
@@ -2104,7 +2104,7 @@ impl<'a> SeekBuilder<'a> {
                 s.stop.value(),
             );
 
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             if let Some(trickmode_interval) = s.trickmode_interval {
                 ffi::gst_event_set_seek_trickmode_interval(ev, trickmode_interval.into_glib());
             }

@@ -4,8 +4,8 @@ use std::ptr;
 
 use glib::{prelude::*, translate::*};
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::Tracer;
 use crate::{
     auto::functions::parse_bin_from_description, Bin, Element, Object, ParseContext, ParseFlags,
@@ -166,8 +166,8 @@ pub fn calculate_linear_regression(
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[doc(alias = "gst_tracing_get_active_tracers")]
 pub fn active_tracers() -> glib::List<Tracer> {
     assert_initialized_main_thread!();

@@ -33,8 +33,8 @@ impl PadTemplate {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_pad_template_get_documentation_caps")]
     #[doc(alias = "get_documentation_caps")]
     pub fn documentation_caps(&self) -> &Caps {
@@ -91,8 +91,8 @@ impl PadTemplate {
             presence,
             caps,
             gtype: None,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
-            #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+            #[cfg(feature = "v1_18")]
+            #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
             documentation_caps: None,
         }
     }
@@ -106,8 +106,8 @@ pub struct PadTemplateBuilder<'a> {
     presence: PadPresence,
     caps: &'a Caps,
     gtype: Option<glib::Type>,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     documentation_caps: Option<&'a Caps>,
 }
 
@@ -119,8 +119,8 @@ impl<'a> PadTemplateBuilder<'a> {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn documentation_caps(self, documentation_caps: &'a Caps) -> Self {
         PadTemplateBuilder {
             documentation_caps: Some(documentation_caps),
@@ -141,8 +141,8 @@ impl<'a> PadTemplateBuilder<'a> {
             PadTemplate::new(self.name_template, self.direction, self.presence, self.caps)?
         };
 
-        #[cfg(any(feature = "v1_18", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+        #[cfg(feature = "v1_18")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
         if let Some(documentation_caps) = self.documentation_caps {
             unsafe {
                 ffi::gst_pad_template_set_documentation_caps(

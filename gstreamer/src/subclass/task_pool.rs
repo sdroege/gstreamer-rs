@@ -53,7 +53,7 @@ unsafe impl<T: TaskPoolImpl> IsSubclassable<T> for TaskPool {
         klass.push = Some(task_pool_push::<T>);
         klass.join = Some(task_pool_join::<T>);
 
-        #[cfg(any(feature = "v1_20", feature = "dox"))]
+        #[cfg(feature = "v1_20")]
         {
             klass.dispose_handle = Some(task_pool_dispose_handle::<T>);
         }
@@ -119,8 +119,8 @@ unsafe extern "C" fn task_pool_join<T: TaskPoolImpl>(ptr: *mut ffi::GstTaskPool,
     handle.join();
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 unsafe extern "C" fn task_pool_dispose_handle<T: TaskPoolImpl>(
     ptr: *mut ffi::GstTaskPool,
     id: gpointer,

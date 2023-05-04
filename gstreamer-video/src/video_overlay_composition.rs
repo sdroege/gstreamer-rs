@@ -262,7 +262,7 @@ impl VideoOverlayComposition {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 impl Default for VideoOverlayComposition {
     fn default() -> Self {
         assert_initialized_main_thread!();
@@ -361,7 +361,7 @@ impl<'a> From<&'a VideoOverlayRectangle> for VideoOverlayComposition {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 impl<const N: usize> From<[VideoOverlayRectangle; N]> for VideoOverlayComposition {
     fn from(value: [VideoOverlayRectangle; N]) -> Self {
         assert_initialized_main_thread!();
@@ -384,7 +384,7 @@ impl<const N: usize> From<[VideoOverlayRectangle; N]> for VideoOverlayCompositio
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 impl<'a, const N: usize> From<[&'a VideoOverlayRectangle; N]> for VideoOverlayComposition {
     fn from(value: [&'a VideoOverlayRectangle; N]) -> Self {
         assert_initialized_main_thread!();
@@ -407,7 +407,7 @@ impl<'a, const N: usize> From<[&'a VideoOverlayRectangle; N]> for VideoOverlayCo
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 impl std::iter::FromIterator<VideoOverlayRectangle> for VideoOverlayComposition {
     fn from_iter<T: IntoIterator<Item = VideoOverlayRectangle>>(iter: T) -> Self {
         assert_initialized_main_thread!();
@@ -430,7 +430,7 @@ impl std::iter::FromIterator<VideoOverlayRectangle> for VideoOverlayComposition 
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 impl<'a> std::iter::FromIterator<&'a VideoOverlayRectangle> for VideoOverlayComposition {
     fn from_iter<T: IntoIterator<Item = &'a VideoOverlayRectangle>>(iter: T) -> Self {
         assert_initialized_main_thread!();

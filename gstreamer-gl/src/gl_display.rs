@@ -4,8 +4,8 @@ use glib::prelude::*;
 use glib::translate::*;
 
 pub trait GLDisplayExtManual: 'static {
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_gl_display_ensure_context")]
     fn ensure_context(
         &self,
@@ -15,8 +15,8 @@ pub trait GLDisplayExtManual: 'static {
 }
 
 impl<O: IsA<GLDisplay>> GLDisplayExtManual for O {
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     fn ensure_context(
         &self,
         other_context: Option<&impl IsA<GLContext>>,
@@ -99,8 +99,8 @@ impl GLDisplay {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_gl_display_remove_context")]
     pub fn remove_context(
         display: &gst::ObjectLockGuard<GLDisplay>,

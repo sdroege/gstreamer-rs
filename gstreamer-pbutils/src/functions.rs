@@ -127,8 +127,8 @@ pub fn codec_utils_h264_caps_set_level_and_profile(
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(alias = "gst_codec_utils_h264_get_profile_flags_level")]
 pub fn codec_utils_h264_get_profile_flags_level(
     codec_data: &[u8],
@@ -404,8 +404,8 @@ pub fn codec_utils_opus_parse_header(
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(alias = "gst_codec_utils_caps_get_mime_codec")]
 pub fn codec_utils_caps_get_mime_codec(
     caps: &gst::CapsRef,
@@ -419,8 +419,8 @@ pub fn codec_utils_caps_get_mime_codec(
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(alias = "gst_pb_utils_get_caps_description_flags")]
 pub fn pb_utils_get_caps_description_flags(
     caps: &gst::CapsRef,
@@ -429,8 +429,8 @@ pub fn pb_utils_get_caps_description_flags(
     unsafe { from_glib(ffi::gst_pb_utils_get_caps_description_flags(caps.as_ptr())) }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(alias = "gst_pb_utils_get_file_extension_from_caps")]
 pub fn pb_utils_get_file_extension_from_caps(caps: &gst::CapsRef) -> Option<glib::GString> {
     assert_initialized_main_thread!();

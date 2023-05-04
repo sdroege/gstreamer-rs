@@ -107,8 +107,8 @@ impl AppSinkCallbacksBuilder {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn new_event<F: FnMut(&AppSink) -> bool + Send + 'static>(self, new_event: F) -> Self {
         Self {
             new_event: Some(Box::new(new_event)),
@@ -116,8 +116,8 @@ impl AppSinkCallbacksBuilder {
         }
     }
 
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn propose_allocation<
         F: FnMut(&AppSink, &mut gst::query::Allocation) -> bool + Send + 'static,
     >(
@@ -432,8 +432,8 @@ impl AppSink {
     }
 
     #[doc(alias = "processing-deadline")]
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_base_sink_get_processing_deadline")]
     pub fn processing_deadline(&self) -> gst::ClockTime {
         unsafe {
@@ -455,8 +455,8 @@ impl AppSink {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_base_sink_get_stats")]
     pub fn stats(&self) -> gst::Structure {
         unsafe {
@@ -579,8 +579,8 @@ impl AppSink {
     }
 
     #[doc(alias = "processing-deadline")]
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_base_sink_set_processing_deadline")]
     pub fn set_processing_deadline(&self, processing_deadline: gst::ClockTime) {
         unsafe {
@@ -812,8 +812,8 @@ impl AppSink {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "processing-deadline")]
     pub fn connect_processing_deadline_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -896,8 +896,8 @@ impl AppSink {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "stats")]
     pub fn connect_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -1122,8 +1122,8 @@ impl AppSinkBuilder {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn processing_deadline(self, processing_deadline: i64) -> Self {
         Self {
             builder: self

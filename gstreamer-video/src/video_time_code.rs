@@ -97,8 +97,8 @@ impl VideoTimeCode {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_video_time_code_init_from_date_time_full")]
     pub fn from_date_time(
         fps: gst::Fraction,
@@ -220,7 +220,7 @@ impl ValidVideoTimeCode {
         }
     }
 
-    //    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     //    pub fn from_date_time(
     //        fps: gst::Fraction,
     //        dt: &glib::DateTime,

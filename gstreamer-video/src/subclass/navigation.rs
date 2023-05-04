@@ -7,8 +7,8 @@ use crate::Navigation;
 pub trait NavigationImpl: ObjectImpl {
     fn send_event(&self, structure: gst::Structure);
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn send_event_simple(&self, event: gst::Event) {
         if let Some(structure) = event.structure() {
             self.send_event(structure.to_owned());
@@ -19,8 +19,8 @@ pub trait NavigationImpl: ObjectImpl {
 pub trait NavigationImplExt: ObjectSubclass {
     fn parent_send_event(&self, structure: gst::Structure);
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn parent_send_event_simple(&self, event: gst::Event) {
         if let Some(structure) = event.structure() {
             self.parent_send_event(structure.to_owned());
@@ -47,8 +47,8 @@ impl<T: NavigationImpl> NavigationImplExt for T {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn parent_send_event_simple(&self, event: gst::Event) {
         unsafe {
             let type_data = Self::type_data();
@@ -69,15 +69,15 @@ impl<T: NavigationImpl> NavigationImplExt for T {
 }
 
 unsafe impl<T: NavigationImpl> IsImplementable<T> for Navigation {
-    #[cfg(not(any(feature = "v1_22", feature = "dox")))]
+    #[cfg(not(any(feature = "v1_22", docsrs)))]
     fn interface_init(iface: &mut glib::Interface<Self>) {
         let iface = iface.as_mut();
 
         iface.send_event = Some(navigation_send_event::<T>);
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn interface_init(iface: &mut glib::Interface<Self>) {
         let iface = iface.as_mut();
 
@@ -96,8 +96,8 @@ unsafe extern "C" fn navigation_send_event<T: NavigationImpl>(
     imp.send_event(from_glib_full(structure));
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 unsafe extern "C" fn navigation_send_event_simple<T: NavigationImpl>(
     nav: *mut ffi::GstNavigation,
     event: *mut gst::ffi::GstEvent,

@@ -14,7 +14,7 @@ pub trait RTSPSessionExtManual: 'static {
 
 impl<O: IsA<RTSPSession>> RTSPSessionExtManual for O {
     fn media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32) {
-        #[cfg(any(feature = "v1_20", feature = "dox"))]
+        #[cfg(feature = "v1_20")]
         unsafe {
             let mut matched = mem::MaybeUninit::uninit();
             let ret = from_glib_full(ffi::gst_rtsp_session_dup_media(
@@ -24,7 +24,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExtManual for O {
             ));
             (ret, matched.assume_init())
         }
-        #[cfg(not(any(feature = "v1_20", feature = "dox")))]
+        #[cfg(not(any(feature = "v1_20", docsrs)))]
         unsafe {
             let mut matched = mem::MaybeUninit::uninit();
             let ret = from_glib_none(ffi::gst_rtsp_session_get_media(

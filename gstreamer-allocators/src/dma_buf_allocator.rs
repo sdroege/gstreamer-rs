@@ -6,8 +6,8 @@ use std::{
 use glib::{translate::*, Cast};
 use gst::{Memory, MemoryRef};
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 use crate::FdMemoryFlags;
 use crate::{DmaBufAllocator, FdMemory, FdMemoryRef};
 
@@ -58,8 +58,8 @@ impl DmaBufAllocator {
         .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_dmabuf_allocator_alloc_with_flags")]
     pub unsafe fn alloc_with_flags(
         &self,

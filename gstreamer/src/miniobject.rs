@@ -621,10 +621,10 @@ macro_rules! mini_object_wrapper (
     };
 );
 
-#[cfg(not(any(feature = "v1_20", feature = "dox")))]
+#[cfg(not(any(feature = "v1_20", docsrs)))]
 mini_object_wrapper!(MiniObject, MiniObjectRef, ffi::GstMiniObject);
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 mini_object_wrapper!(MiniObject, MiniObjectRef, ffi::GstMiniObject, || {
     ffi::gst_mini_object_get_type()
 });

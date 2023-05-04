@@ -28,7 +28,6 @@ gir-format-check = "0.1"
 [features]
 v1_22 = ["gst/v1_22", "gst-video/v1_22", "ffi/v1_22"]
 v1_24 = ["gst/v1_24", "gst-video/v1_24", "ffi/v1_24", "v1_22"]
-dox = ["ffi/dox", "glib/dox", "gst/dox", "gst-video/dox"]
 
 [package.metadata.docs.rs]
-features = ["dox"]
+rustdoc-args = ["--cfg", "docsrs"]

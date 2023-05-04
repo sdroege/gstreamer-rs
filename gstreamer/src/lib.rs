@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 #![recursion_limit = "256"]
 #![allow(clippy::missing_safety_doc)]
 #![allow(clippy::manual_range_contains)]
@@ -100,8 +100,8 @@ pub use crate::tags::{
 mod tags_serde;
 
 pub mod meta;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 pub use crate::meta::MetaSeqnum;
 pub use crate::meta::{
     Meta, MetaAPI, MetaRef, MetaRefMut, ParentBufferMeta, ProtectionMeta, ReferenceTimestampMeta,
@@ -160,9 +160,9 @@ mod tracer;
 mod tracer_factory;
 
 // OS dependent Bus extensions (also import the other platform mod for doc)
-#[cfg(any(unix, feature = "dox"))]
+#[cfg(any(unix, docsrs))]
 mod bus_unix;
-#[cfg(any(windows, feature = "dox"))]
+#[cfg(any(windows, docsrs))]
 mod bus_windows;
 
 mod child_proxy;
@@ -247,7 +247,7 @@ pub use crate::functions::*;
 mod utils;
 pub use crate::utils::ObjectLockGuard;
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg(feature = "v1_18")]
 mod gtype;
 
 use std::ptr;
@@ -287,9 +287,9 @@ pub const PARAM_FLAG_CONTROLLABLE: glib::ParamFlags = glib::ParamFlags::USER_1;
 pub const PARAM_FLAG_MUTABLE_READY: glib::ParamFlags = glib::ParamFlags::USER_2;
 pub const PARAM_FLAG_MUTABLE_PAUSED: glib::ParamFlags = glib::ParamFlags::USER_3;
 pub const PARAM_FLAG_MUTABLE_PLAYING: glib::ParamFlags = glib::ParamFlags::USER_4;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg(feature = "v1_18")]
 pub const PARAM_FLAG_DOC_SHOW_DEFAULT: glib::ParamFlags = glib::ParamFlags::USER_5;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg(feature = "v1_18")]
 pub const PARAM_FLAG_CONDITIONALLY_AVAILABLE: glib::ParamFlags = glib::ParamFlags::USER_6;
 
 // Re-export all the traits in a prelude module, so that applications
@@ -301,11 +301,11 @@ pub mod prelude {
     pub use opt_ops::prelude::*;
 
     // OS dependent Bus extensions (also import the other platform trait for doc)
-    #[cfg(any(unix, feature = "dox"))]
+    #[cfg(any(unix, docsrs))]
     pub use crate::bus_unix::UnixBusExtManual;
-    #[cfg(any(windows, feature = "dox"))]
+    #[cfg(any(windows, docsrs))]
     pub use crate::bus_windows::WindowsBusExtManual;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg(feature = "v1_18")]
     pub use crate::gtype::PluginApiExt;
     pub use crate::{
         auto::traits::*,

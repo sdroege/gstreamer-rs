@@ -23,8 +23,8 @@ pub fn audio_buffer_clip(
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(alias = "gst_audio_buffer_truncate")]
 pub fn audio_buffer_truncate(
     buffer: gst::Buffer,

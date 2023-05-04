@@ -96,8 +96,8 @@ pub trait VideoDecoderImpl: VideoDecoderImplExt + ElementImpl {
         self.parent_decide_allocation(query)
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn handle_missing_data(
         &self,
         timestamp: gst::ClockTime,
@@ -161,8 +161,8 @@ pub trait VideoDecoderImplExt: ObjectSubclass {
         query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError>;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn parent_handle_missing_data(
         &self,
         timestamp: gst::ClockTime,
@@ -560,8 +560,8 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn parent_handle_missing_data(
         &self,
         timestamp: gst::ClockTime,
@@ -609,7 +609,7 @@ unsafe impl<T: VideoDecoderImpl> IsSubclassable<T> for VideoDecoder {
         klass.src_query = Some(video_decoder_src_query::<T>);
         klass.propose_allocation = Some(video_decoder_propose_allocation::<T>);
         klass.decide_allocation = Some(video_decoder_decide_allocation::<T>);
-        #[cfg(any(feature = "v1_20", feature = "dox"))]
+        #[cfg(feature = "v1_20")]
         {
             klass.handle_missing_data = Some(video_decoder_handle_missing_data::<T>);
         }
@@ -901,7 +901,7 @@ unsafe extern "C" fn video_decoder_decide_allocation<T: VideoDecoderImpl>(
     .into_glib()
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 unsafe extern "C" fn video_decoder_handle_missing_data<T: VideoDecoderImpl>(
     ptr: *mut ffi::GstVideoDecoder,
     timestamp: gst::ffi::GstClockTime,

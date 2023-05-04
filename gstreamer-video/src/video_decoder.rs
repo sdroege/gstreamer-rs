@@ -4,8 +4,8 @@ use std::{mem, ptr};
 
 use glib::{prelude::*, translate::*};
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 use crate::VideoInterlaceMode;
 use crate::{
     utils::HasStreamLock,
@@ -62,8 +62,8 @@ pub trait VideoDecoderExtManual: 'static {
         height: u32,
         reference: Option<&VideoCodecState<Readable>>,
     ) -> Result<VideoCodecState<InNegotiation>, gst::FlowError>;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn set_interlaced_output_state(
         &self,
         fmt: VideoFormat,
@@ -246,8 +246,8 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_video_decoder_set_interlaced_output_state")]
     fn set_interlaced_output_state(
         &self,

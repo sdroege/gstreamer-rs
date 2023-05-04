@@ -61,8 +61,8 @@ impl TaskPool {
         ffi::gst_task_pool_join(self.to_glib_none().0, id.as_ptr())
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     unsafe fn dispose_handle(&self, id: ptr::NonNull<libc::c_void>) {
         ffi::gst_task_pool_dispose_handle(self.to_glib_none().0, id.as_ptr())
     }
@@ -91,7 +91,7 @@ impl TaskHandle for std::convert::Infallible {
 ///
 /// If the `v1_20` feature is enabled, requests the task pool to dispose of the handle when it is
 /// dropped. Otherwise, needs to be `join`ed to avoid a leak.
-#[cfg_attr(not(any(feature = "v1_20", feature = "dox")), must_use)]
+#[cfg_attr(not(any(feature = "v1_20", docsrs)), must_use)]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct TaskPoolTaskHandle {
     handle: ptr::NonNull<libc::c_void>,
@@ -112,7 +112,7 @@ impl Drop for TaskPoolTaskHandle {
     fn drop(&mut self) {
         if let Some(task_pool) = self.task_pool.take() {
             cfg_if::cfg_if! {
-                if #[cfg(any(feature = "v1_20", feature = "dox"))] {
+                if #[cfg(feature = "v1_20")] {
                     unsafe { task_pool.dispose_handle(self.handle) }
                 } else {
                     crate::warning!(crate::CAT_RUST, obj: &task_pool, "Leaked task handle");

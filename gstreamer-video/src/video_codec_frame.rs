@@ -218,16 +218,16 @@ impl<'a> VideoCodecFrame<'a> {
         unsafe { from_glib((*self.to_glib_none().0).deadline) }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_video_decoder_get_processed_subframe_index")]
     #[inline]
     pub fn subframes_processed(&self) -> u32 {
         unsafe { (*self.to_glib_none().0).abidata.ABI.subframes_processed }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_video_decoder_get_input_subframe_index")]
     #[inline]
     pub fn num_subframes(&self) -> u32 {

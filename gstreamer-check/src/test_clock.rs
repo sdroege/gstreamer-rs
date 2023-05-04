@@ -33,8 +33,8 @@ impl TestClock {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_test_clock_process_id")]
     pub fn process_id(&self, pending_id: &gst::ClockId) -> bool {
         unsafe {
@@ -86,8 +86,8 @@ impl TestClock {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_test_clock_timed_wait_for_multiple_pending_ids")]
     pub fn timed_wait_for_multiple_pending_ids(
         &self,

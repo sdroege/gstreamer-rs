@@ -439,8 +439,8 @@ impl AppSrcBuilder {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn handle_segment_change(self, handle_segment_change: bool) -> Self {
         Self {
             builder: self
@@ -457,8 +457,8 @@ impl AppSrcBuilder {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn leaky_type(self, leaky_type: crate::AppLeakyType) -> Self {
         Self {
             builder: self.builder.property("leaky-type", leaky_type),
@@ -466,8 +466,8 @@ impl AppSrcBuilder {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn max_buffers(self, max_buffers: u64) -> Self {
         Self {
             builder: self.builder.property("max-buffers", max_buffers),
@@ -489,8 +489,8 @@ impl AppSrcBuilder {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn max_time(self, max_time: Option<gst::ClockTime>) -> Self {
         Self {
             builder: self.builder.property("max-time", max_time),

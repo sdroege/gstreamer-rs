@@ -3,12 +3,12 @@
 use gst::CapsFeatures;
 use once_cell::sync::Lazy;
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 pub static CAPS_FEATURE_FORMAT_INTERLACED: &glib::GStr =
     unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_CAPS_FEATURE_FORMAT_INTERLACED) };
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 pub static CAPS_FEATURES_FORMAT_INTERLACED: Lazy<CapsFeatures> =
     Lazy::new(|| CapsFeatures::new([CAPS_FEATURE_FORMAT_INTERLACED]));
 

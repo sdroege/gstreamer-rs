@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 #![allow(clippy::missing_safety_doc)]
 #![doc = include_str!("../README.md")]
 
@@ -30,9 +30,9 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use crate::auto::{functions::*, *};
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 mod element_properties;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 pub use crate::element_properties::{ElementProperties, ElementPropertiesMapItem};
 
 #[cfg(feature = "serde")]

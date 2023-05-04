@@ -144,8 +144,8 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
         self.parent_pre_record_request(ctx)
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn adjust_error_code(
         &self,
         ctx: &crate::RTSPContext,
@@ -241,8 +241,8 @@ pub trait RTSPClientImplExt: ObjectSubclass {
 
     fn parent_pre_record_request(&self, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPStatusCode;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn parent_adjust_error_code(
         &self,
         ctx: &crate::RTSPContext,
@@ -710,8 +710,8 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn parent_adjust_error_code(
         &self,
         ctx: &crate::RTSPContext,
@@ -996,8 +996,8 @@ unsafe impl<T: RTSPClientImpl> IsSubclassable<T> for RTSPClient {
         klass.pre_get_parameter_request = Some(client_pre_get_parameter_request::<T>);
         klass.pre_announce_request = Some(client_pre_announce_request::<T>);
         klass.pre_record_request = Some(client_pre_record_request::<T>);
-        #[cfg(any(feature = "v1_22", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+        #[cfg(feature = "v1_22")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
         {
             klass.adjust_error_code = Some(client_adjust_error_code::<T>);
         }
@@ -1330,8 +1330,8 @@ unsafe extern "C" fn client_pre_record_request<T: RTSPClientImpl>(
     imp.pre_record_request(&from_glib_borrow(ctx)).into_glib()
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 unsafe extern "C" fn client_adjust_error_code<T: RTSPClientImpl>(
     ptr: *mut ffi::GstRTSPClient,
     ctx: *mut ffi::GstRTSPContext,

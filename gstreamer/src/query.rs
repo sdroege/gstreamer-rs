@@ -83,9 +83,9 @@ impl QueryRef {
                 ffi::GST_QUERY_CAPS => Caps::view(self),
                 ffi::GST_QUERY_DRAIN => Drain::view(self),
                 ffi::GST_QUERY_CONTEXT => Context::view(self),
-                #[cfg(any(feature = "v1_16", feature = "dox"))]
+                #[cfg(feature = "v1_16")]
                 ffi::GST_QUERY_BITRATE => Bitrate::view(self),
-                #[cfg(any(feature = "v1_22", feature = "dox"))]
+                #[cfg(feature = "v1_22")]
                 ffi::GST_QUERY_SELECTABLE => Selectable::view(self),
                 _ => Other::view(self),
             }
@@ -113,9 +113,9 @@ impl QueryRef {
                 ffi::GST_QUERY_CAPS => Caps::view_mut(self),
                 ffi::GST_QUERY_DRAIN => Drain::view_mut(self),
                 ffi::GST_QUERY_CONTEXT => Context::view_mut(self),
-                #[cfg(any(feature = "v1_16", feature = "dox"))]
+                #[cfg(feature = "v1_16")]
                 ffi::GST_QUERY_BITRATE => Bitrate::view_mut(self),
-                #[cfg(any(feature = "v1_22", feature = "dox"))]
+                #[cfg(feature = "v1_22")]
                 ffi::GST_QUERY_SELECTABLE => Selectable::view_mut(self),
                 _ => Other::view_mut(self),
             }
@@ -161,11 +161,11 @@ pub enum QueryView<'a> {
     Caps(&'a Caps),
     Drain(&'a Drain),
     Context(&'a Context),
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     Bitrate(&'a Bitrate),
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     Selectable(&'a Selectable),
     Other(&'a Other),
 }
@@ -189,11 +189,11 @@ pub enum QueryViewMut<'a> {
     Caps(&'a mut Caps),
     Drain(&'a mut Drain),
     Context(&'a mut Context),
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     Bitrate(&'a mut Bitrate),
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     Selectable(&'a mut Selectable),
     Other(&'a mut Other),
 }
@@ -1578,12 +1578,12 @@ impl Context {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 declare_concrete_query!(Bitrate, T);
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl Bitrate<Query> {
     #[doc(alias = "gst_query_new_bitrate")]
     pub fn new() -> Self {
@@ -1592,16 +1592,16 @@ impl Bitrate<Query> {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl Default for Bitrate<Query> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl Bitrate {
     #[doc(alias = "get_bitrate")]
     #[doc(alias = "gst_query_parse_bitrate")]
@@ -1621,12 +1621,12 @@ impl Bitrate {
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 declare_concrete_query!(Selectable, T);
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 impl Selectable<Query> {
     #[doc(alias = "gst_query_new_selectable")]
     pub fn new() -> Self {
@@ -1635,16 +1635,16 @@ impl Selectable<Query> {
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 impl Default for Selectable<Query> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 impl Selectable {
     #[doc(alias = "get_selectable")]
     #[doc(alias = "gst_query_parse_selectable")]

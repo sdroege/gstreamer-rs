@@ -413,7 +413,7 @@ pub trait GstParamSpecBuilderExt<'a>: glib::prelude::ParamSpecBuilderExt<'a> {
         self.flags(flags)
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg(feature = "v1_18")]
     // rustdoc-stripper-ignore-next
     /// Mark the property for showing the default value in the docs
     fn doc_show_default(self) -> Self {
@@ -421,7 +421,7 @@ pub trait GstParamSpecBuilderExt<'a>: glib::prelude::ParamSpecBuilderExt<'a> {
         self.flags(flags)
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg(feature = "v1_18")]
     // rustdoc-stripper-ignore-next
     /// Mark the property for being only conditionally available
     fn conditionally_available(self) -> Self {

@@ -53,5 +53,4 @@ shell-words = "1.0.0"
 tempfile = "3"
 
 [features]
-dox = ["glib/dox", "gio/dox", "gobject/dox", "gst/dox"]
 v1_24 = []

@@ -88,8 +88,8 @@ impl Harness {
         pad.add_probe(mask, func);
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_harness_add_propose_allocation_meta")]
     pub fn add_propose_allocation_meta(
         &mut self,
@@ -268,8 +268,8 @@ impl Harness {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_harness_pull_until_eos")]
     pub fn pull_until_eos(&mut self) -> Result<Option<gst::Buffer>, glib::BoolError> {
         unsafe {
@@ -399,8 +399,8 @@ impl Harness {
     }
 
     #[doc(alias = "gst_harness_set_live")]
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn set_live(&mut self, is_live: bool) {
         unsafe { ffi::gst_harness_set_live(self.0.as_ptr(), is_live.into_glib()) }
     }

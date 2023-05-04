@@ -6,7 +6,7 @@ cfg_if::cfg_if! {
 
         use std::mem;
         use std::os::unix;
-    } else if #[cfg(feature = "dox")] {
+    } else if #[cfg(docsrs)] {
         // Declare a fake RawFd for doc generation on windows
         pub mod unix {
             pub mod io {
@@ -34,7 +34,7 @@ impl UnixBusExtManual for Bus {
             pollfd.fd
         }
 
-        #[cfg(all(not(unix), feature = "dox"))]
+        #[cfg(all(not(unix), docsrs))]
         unix::io::RawFd {}
     }
 }

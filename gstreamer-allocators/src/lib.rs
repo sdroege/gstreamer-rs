@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 #![allow(clippy::missing_safety_doc)]
 #![doc = include_str!("../README.md")]
 
@@ -30,18 +30,18 @@ pub use crate::caps_features::CAPS_FEATURES_MEMORY_DMABUF;
 mod fd_allocator;
 pub use fd_allocator::*;
 
-#[cfg(any(target_os = "linux", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(target_os = "linux")))]
+#[cfg(any(target_os = "linux", docsrs))]
+#[cfg_attr(docsrs, doc(cfg(target_os = "linux")))]
 mod dma_buf_allocator;
-#[cfg(any(target_os = "linux", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(target_os = "linux")))]
+#[cfg(any(target_os = "linux", docsrs))]
+#[cfg_attr(docsrs, doc(cfg(target_os = "linux")))]
 pub use dma_buf_allocator::*;
 
-#[cfg(any(all(feature = "v1_24", target_os = "linux"), feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(all(feature = "v1_24", target_os = "linux"))))]
+#[cfg(any(all(feature = "v1_24", target_os = "linux"), docsrs))]
+#[cfg_attr(docsrs, doc(cfg(all(feature = "v1_24", target_os = "linux"))))]
 mod drm_dumb_allocator;
-#[cfg(any(all(feature = "v1_24", target_os = "linux"), feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(all(feature = "v1_24", target_os = "linux"))))]
+#[cfg(any(all(feature = "v1_24", target_os = "linux"), docsrs))]
+#[cfg_attr(docsrs, doc(cfg(all(feature = "v1_24", target_os = "linux"))))]
 pub use drm_dumb_allocator::*;
 
 mod phys_memory;

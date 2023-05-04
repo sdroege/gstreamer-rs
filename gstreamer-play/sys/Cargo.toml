@@ -27,7 +27,6 @@ tempfile = "3"
 [features]
 v1_22 = []
 v1_24 = ["v1_22"]
-dox = ["glib/dox", "gobject/dox", "gst/dox", "gst_video/dox"]
 
 [lib]
 name = "gstreamer_play_sys"

@@ -133,8 +133,8 @@ impl VideoFormatInfo {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_PALETTE != 0
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[inline]
     pub fn has_subtiles(&self) -> bool {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_SUBTILES != 0
@@ -347,8 +347,8 @@ impl VideoFormatInfo {
         (offset, scale)
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_video_format_info_extrapolate_stride")]
     pub fn extrapolate_stride(&self, plane: u32, stride: u32) -> u32 {
         assert!(plane < self.n_planes());
@@ -362,8 +362,8 @@ impl VideoFormatInfo {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn tile_info(&self, plane: u32) -> &VideoTileInfo {
         assert!(plane < self.n_planes());
 
@@ -498,7 +498,7 @@ impl fmt::Debug for VideoFormatInfo {
             .field("tile-ws", &self.tile_ws())
             .field("tile-hs", &self.tile_hs());
 
-        #[cfg(any(feature = "v1_22", feature = "dox"))]
+        #[cfg(feature = "v1_22")]
         {
             fmt.field(
                 "tile-info",
@@ -572,14 +572,14 @@ impl glib::translate::FromGlibPtrNone<*const ffi::GstVideoFormatInfo> for VideoF
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 #[repr(transparent)]
 #[doc(alias = "GstVideoTileInfo")]
 pub struct VideoTileInfo(ffi::GstVideoTileInfo);
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 impl fmt::Debug for VideoTileInfo {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoTileInfo")
@@ -591,8 +591,8 @@ impl fmt::Debug for VideoTileInfo {
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 impl VideoTileInfo {
     #[inline]
     pub fn width(&self) -> u32 {

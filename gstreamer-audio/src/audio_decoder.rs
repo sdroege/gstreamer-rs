@@ -23,8 +23,8 @@ extern "C" {
 pub trait AudioDecoderExtManual: 'static {
     fn negotiate(&self) -> Result<(), gst::FlowError>;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn set_output_caps(&self, caps: &gst::Caps) -> Result<(), gst::FlowError>;
 
     fn set_output_format(&self, info: &AudioInfo) -> Result<(), gst::FlowError>;
@@ -64,8 +64,8 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_audio_decoder_set_output_caps")]
     fn set_output_caps(&self, caps: &gst::Caps) -> Result<(), gst::FlowError> {
         unsafe {

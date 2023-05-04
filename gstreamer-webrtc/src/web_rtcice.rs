@@ -8,8 +8,8 @@ pub trait WebRTCICEExtManual: 'static {
     #[doc(alias = "gst_webrtc_ice_add_candidate")]
     fn add_candidate(&self, stream: &impl IsA<WebRTCICEStream>, candidate: &str);
 
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_webrtc_ice_add_candidate")]
     fn add_candidate_full(
         &self,
@@ -59,8 +59,8 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExtManual for O {
         }
     }
 
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     fn add_candidate_full(
         &self,
         stream: &impl IsA<WebRTCICEStream>,

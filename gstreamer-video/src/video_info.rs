@@ -134,8 +134,8 @@ impl VideoColorimetry {
         unsafe { from_glib(self.0.primaries) }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_video_colorimetry_is_equivalent")]
     pub fn is_equivalent(&self, bitdepth: u32, other: &Self, other_bitdepth: u32) -> bool {
         unsafe {
@@ -621,8 +621,8 @@ impl VideoInfo {
         self.0.height as u32
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[inline]
     pub fn field_height(&self) -> u32 {
         if self.0.interlace_mode == ffi::GST_VIDEO_INTERLACE_MODE_ALTERNATE {
@@ -713,8 +713,8 @@ impl VideoInfo {
         gst::Fraction::new(self.0.fps_n, self.0.fps_d)
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[inline]
     pub fn field_rate(&self) -> gst::Fraction {
         if self.interlace_mode() == crate::VideoInterlaceMode::Alternate {
@@ -850,8 +850,8 @@ impl VideoInfo {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_info_align_full")]
     pub fn align_full(
         &mut self,

@@ -6,7 +6,7 @@ cfg_if::cfg_if! {
 
         use std::mem;
         use std::os::windows;
-    } else if #[cfg(feature = "dox")] {
+    } else if #[cfg(docsrs)] {
         // Declare a fake RawHandle for doc generation on unix
         pub mod windows {
             pub mod io {
@@ -34,7 +34,7 @@ impl WindowsBusExtManual for Bus {
             pollfd.fd as *mut _
         }
 
-        #[cfg(all(not(windows), feature = "dox"))]
+        #[cfg(all(not(windows), docsrs))]
         windows::io::RawHandle {}
     }
 }

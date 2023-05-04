@@ -16,8 +16,8 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
         self.parent_clip(aggregator_pad, buffer)
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn finish_buffer_list(
         &self,
         buffer_list: gst::BufferList,
@@ -33,8 +33,8 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
         self.parent_sink_event(aggregator_pad, event)
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn sink_event_pre_queue(
         &self,
         aggregator_pad: &AggregatorPad,
@@ -47,8 +47,8 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
         self.parent_sink_query(aggregator_pad, query)
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn sink_query_pre_queue(
         &self,
         aggregator_pad: &AggregatorPad,
@@ -122,14 +122,14 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
         self.parent_decide_allocation(query)
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn negotiate(&self) -> bool {
         self.parent_negotiate()
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn peek_next_sample(&self, pad: &AggregatorPad) -> Option<gst::Sample> {
         self.parent_peek_next_sample(pad)
     }
@@ -147,8 +147,8 @@ pub trait AggregatorImplExt: ObjectSubclass {
     fn parent_finish_buffer(&self, buffer: gst::Buffer)
         -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn parent_finish_buffer_list(
         &self,
         buffer_list: gst::BufferList,
@@ -156,8 +156,8 @@ pub trait AggregatorImplExt: ObjectSubclass {
 
     fn parent_sink_event(&self, aggregator_pad: &AggregatorPad, event: gst::Event) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn parent_sink_event_pre_queue(
         &self,
         aggregator_pad: &AggregatorPad,
@@ -166,8 +166,8 @@ pub trait AggregatorImplExt: ObjectSubclass {
 
     fn parent_sink_query(&self, aggregator_pad: &AggregatorPad, query: &mut gst::QueryRef) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn parent_sink_query_pre_queue(
         &self,
         aggregator_pad: &AggregatorPad,
@@ -217,12 +217,12 @@ pub trait AggregatorImplExt: ObjectSubclass {
         query: &mut gst::query::Allocation,
     ) -> Result<(), gst::LoggableError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn parent_negotiate(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn parent_peek_next_sample(&self, pad: &AggregatorPad) -> Option<gst::Sample>;
 }
 
@@ -280,8 +280,8 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn parent_finish_buffer_list(
         &self,
         buffer_list: gst::BufferList,
@@ -314,8 +314,8 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn parent_sink_event_pre_queue(
         &self,
         aggregator_pad: &AggregatorPad,
@@ -350,8 +350,8 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn parent_sink_query_pre_queue(
         &self,
         aggregator_pad: &AggregatorPad,
@@ -630,8 +630,8 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn parent_negotiate(&self) -> bool {
         unsafe {
             let data = Self::type_data();
@@ -649,8 +649,8 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn parent_peek_next_sample(&self, pad: &AggregatorPad) -> Option<gst::Sample> {
         unsafe {
             let data = Self::type_data();
@@ -690,7 +690,7 @@ unsafe impl<T: AggregatorImpl> IsSubclassable<T> for Aggregator {
         klass.negotiated_src_caps = Some(aggregator_negotiated_src_caps::<T>);
         klass.propose_allocation = Some(aggregator_propose_allocation::<T>);
         klass.decide_allocation = Some(aggregator_decide_allocation::<T>);
-        #[cfg(any(feature = "v1_18", feature = "dox"))]
+        #[cfg(feature = "v1_18")]
         {
             klass.sink_event_pre_queue = Some(aggregator_sink_event_pre_queue::<T>);
             klass.sink_query_pre_queue = Some(aggregator_sink_query_pre_queue::<T>);
@@ -738,8 +738,8 @@ unsafe extern "C" fn aggregator_finish_buffer<T: AggregatorImpl>(
     .into_glib()
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 unsafe extern "C" fn aggregator_finish_buffer_list<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     buffer_list: *mut gst::ffi::GstBufferList,
@@ -767,8 +767,8 @@ unsafe extern "C" fn aggregator_sink_event<T: AggregatorImpl>(
     .into_glib()
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 unsafe extern "C" fn aggregator_sink_event_pre_queue<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     aggregator_pad: *mut ffi::GstAggregatorPad,
@@ -801,8 +801,8 @@ unsafe extern "C" fn aggregator_sink_query<T: AggregatorImpl>(
     .into_glib()
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 unsafe extern "C" fn aggregator_sink_query_pre_queue<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     aggregator_pad: *mut ffi::GstAggregatorPad,
@@ -1054,8 +1054,8 @@ unsafe extern "C" fn aggregator_decide_allocation<T: AggregatorImpl>(
     .into_glib()
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 unsafe extern "C" fn aggregator_negotiate<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
 ) -> glib::ffi::gboolean {
@@ -1065,8 +1065,8 @@ unsafe extern "C" fn aggregator_negotiate<T: AggregatorImpl>(
     gst::panic_to_error!(imp, false, { imp.negotiate() }).into_glib()
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 unsafe extern "C" fn aggregator_peek_next_sample<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     pad: *mut ffi::GstAggregatorPad,

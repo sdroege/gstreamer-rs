@@ -28,8 +28,8 @@ pub fn type_find_helper_for_data(
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(alias = "gst_type_find_helper_for_data_with_extension")]
 pub fn type_find_helper_for_data_with_extension(
     obj: Option<&impl IsA<gst::Object>>,
@@ -77,8 +77,8 @@ pub fn type_find_helper_for_buffer<P: IsA<gst::Object>>(
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(alias = "gst_type_find_helper_for_buffer_with_extension")]
 pub fn type_find_helper_for_buffer_with_extension<P: IsA<gst::Object>>(
     obj: Option<&P>,
@@ -102,8 +102,8 @@ pub fn type_find_helper_for_buffer_with_extension<P: IsA<gst::Object>>(
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 #[doc(alias = "gst_type_find_helper_for_buffer_with_caps")]
 pub fn type_find_helper_for_buffer_with_caps(
     obj: Option<&impl IsA<gst::Object>>,
@@ -123,8 +123,8 @@ pub fn type_find_helper_for_buffer_with_caps(
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 #[doc(alias = "gst_type_find_helper_for_data_with_caps")]
 pub fn type_find_helper_for_data_with_caps(
     obj: Option<&impl IsA<gst::Object>>,
@@ -146,8 +146,8 @@ pub fn type_find_helper_for_data_with_caps(
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 #[doc(alias = "gst_type_find_list_factories_for_caps")]
 pub fn type_find_list_factories_for_caps(
     obj: Option<&impl IsA<gst::Object>>,

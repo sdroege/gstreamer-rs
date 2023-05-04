@@ -1237,8 +1237,8 @@ pub trait GstValueExt: Sized {
     fn serialize(&self) -> Result<glib::GString, glib::BoolError>;
     #[doc(alias = "gst_value_deserialize")]
     fn deserialize(s: &str, type_: glib::Type) -> Result<glib::Value, glib::BoolError>;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_value_deserialize_with_pspec")]
     fn deserialize_with_pspec(
         s: &str,
@@ -1400,8 +1400,8 @@ impl GstValueExt for glib::Value {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn deserialize_with_pspec(
         s: &str,
         pspec: &glib::ParamSpec,

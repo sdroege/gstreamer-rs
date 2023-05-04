@@ -5,8 +5,8 @@ macro_rules! bitflags_serialize_impl {
     // this implementation serializes only flags using only one bit,
     // ignoring all other flags
     ($type:ty, single_bit_flags$(, $feature:expr)?) => {
-        $(#[cfg(any(feature = $feature, feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = $feature)))])?
+        $(#[cfg(any(feature = $feature, docsrs))]
+        #[cfg_attr(docsrs, doc(cfg(feature = $feature)))])?
         impl serde::Serialize for $type {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -36,8 +36,8 @@ macro_rules! bitflags_serialize_impl {
 
     // considers the flags using the most bits first
     ($type:ty, by_ones_decreasing$(, $feature:expr)?) => {
-        $(#[cfg(any(feature = $feature, feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = $feature)))])?
+        $(#[cfg(any(feature = $feature, docsrs))]
+        #[cfg_attr(docsrs, doc(cfg(feature = $feature)))])?
         impl serde::Serialize for $type {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -85,8 +85,8 @@ macro_rules! bitflags_serialize_impl {
 #[macro_export]
 macro_rules! bitflags_deserialize_impl {
     ($type:ty$(, $feature:expr)?) => {
-        $(#[cfg(any(feature = $feature, feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = $feature)))])?
+        $(#[cfg(any(feature = $feature, docsrs))]
+        #[cfg_attr(docsrs, doc(cfg(feature = $feature)))])?
         impl<'de> serde::Deserialize<'de> for $type {
             fn deserialize<D: serde::de::Deserializer<'de>>(
                 deserializer: D,

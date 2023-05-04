@@ -125,9 +125,9 @@ impl MessageRef {
                 ffi::GST_MESSAGE_PROPERTY_NOTIFY => PropertyNotify::view(self),
                 ffi::GST_MESSAGE_STREAM_COLLECTION => StreamCollection::view(self),
                 ffi::GST_MESSAGE_STREAMS_SELECTED => StreamsSelected::view(self),
-                #[cfg(any(feature = "v1_16", feature = "dox"))]
+                #[cfg(feature = "v1_16")]
                 ffi::GST_MESSAGE_DEVICE_CHANGED => DeviceChanged::view(self),
-                #[cfg(any(feature = "v1_18", feature = "dox"))]
+                #[cfg(feature = "v1_18")]
                 ffi::GST_MESSAGE_INSTANT_RATE_REQUEST => InstantRateRequest::view(self),
                 _ => MessageView::Other,
             }
@@ -221,11 +221,11 @@ pub enum MessageView<'a> {
     StreamCollection(&'a StreamCollection),
     StreamsSelected(&'a StreamsSelected),
     Redirect(&'a Redirect),
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     DeviceChanged(&'a DeviceChanged),
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     InstantRateRequest(&'a InstantRateRequest),
     Other,
 }
@@ -1715,11 +1715,11 @@ impl Redirect {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 declare_concrete_message!(DeviceChanged, T);
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl DeviceChanged {
     #[doc(alias = "gst_message_new_device_changed")]
     #[allow(clippy::new_ret_no_self)]
@@ -1754,11 +1754,11 @@ impl DeviceChanged {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 declare_concrete_message!(InstantRateRequest, T);
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl InstantRateRequest {
     #[doc(alias = "gst_message_new_instant_rate_request")]
     #[allow(clippy::new_ret_no_self)]
@@ -3027,8 +3027,8 @@ impl<'a> RedirectBuilder<'a> {
     });
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[must_use = "The builder must be built to be used"]
 pub struct DeviceChangedBuilder<'a> {
     builder: MessageBuilder<'a>,
@@ -3036,8 +3036,8 @@ pub struct DeviceChangedBuilder<'a> {
     changed_device: &'a crate::Device,
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl<'a> DeviceChangedBuilder<'a> {
     fn new(device: &'a crate::Device, changed_device: &'a crate::Device) -> Self {
         skip_assert_initialized!();
@@ -3055,16 +3055,16 @@ impl<'a> DeviceChangedBuilder<'a> {
     ));
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[must_use = "The builder must be built to be used"]
 pub struct InstantRateRequestBuilder<'a> {
     builder: MessageBuilder<'a>,
     rate_multiplier: f64,
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl<'a> InstantRateRequestBuilder<'a> {
     fn new(rate_multiplier: f64) -> Self {
         skip_assert_initialized!();

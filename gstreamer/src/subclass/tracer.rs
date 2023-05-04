@@ -58,17 +58,17 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
     fn pad_pull_range_pre(&self, ts: u64, pad: &Pad, offset: u64, size: u32) {}
     fn pad_push_event_post(&self, ts: u64, pad: &Pad, success: bool) {}
     fn pad_push_event_pre(&self, ts: u64, pad: &Pad, event: &Event) {}
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn pad_chain_list_post(&self, ts: u64, pad: &Pad, result: Result<FlowSuccess, FlowError>) {}
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn pad_chain_list_pre(&self, ts: u64, pad: &Pad, buffer_list: &BufferList) {}
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn pad_chain_post(&self, ts: u64, pad: &Pad, result: Result<FlowSuccess, FlowError>) {}
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn pad_chain_pre(&self, ts: u64, pad: &Pad, buffer: &Buffer) {}
     fn pad_push_list_post(&self, ts: u64, pad: &Pad, result: Result<FlowSuccess, FlowError>) {}
     fn pad_push_list_pre(&self, ts: u64, pad: &Pad, buffer_list: &BufferList) {}
@@ -78,8 +78,8 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
     fn pad_query_pre(&self, ts: u64, pad: &Pad, query: &QueryRef) {}
     fn pad_unlink_post(&self, ts: u64, src: &Pad, sink: &Pad, success: bool) {}
     fn pad_unlink_pre(&self, ts: u64, src: &Pad, sink: &Pad) {}
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn plugin_feature_loaded(&self, ts: u64, feature: &crate::PluginFeature) {}
 }
 
@@ -278,27 +278,27 @@ define_tracer_hooks! {
         let b = Buffer::from_glib_borrow(b);
         this.pad_push_pre(ts, &p, &b)
     };
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     PadChainListPost("pad-chain-list-post") = |this, ts, p: *mut ffi::GstPad, r: ffi::GstFlowReturn| {
         let p = Pad::from_glib_borrow(p);
         this.pad_chain_list_post(ts, &p, try_from_glib(r))
     };
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     PadChainListPre("pad-chain-list-pre") = |this, ts, p: *mut ffi::GstPad, bl: *mut ffi::GstBufferList| {
         let p = Pad::from_glib_borrow(p);
         let bl = BufferList::from_glib_borrow(bl);
         this.pad_chain_list_pre(ts, &p, &bl)
     };
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     PadChainPost("pad-chain-post") = |this, ts, p: *mut ffi::GstPad, r: ffi::GstFlowReturn| {
         let p = Pad::from_glib_borrow(p);
         this.pad_chain_post(ts, &p, try_from_glib(r))
     };
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     PadChainPre("pad-chain-pre") = |this, ts, p: *mut ffi::GstPad, b: *mut ffi::GstBuffer| {
         let p = Pad::from_glib_borrow(p);
         let b = Buffer::from_glib_borrow(b);
@@ -324,8 +324,8 @@ define_tracer_hooks! {
         let sink = Pad::from_glib_borrow(sink);
         this.pad_unlink_pre(ts, &src, &sink)
     };
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     PluginFeatureLoaded("plugin-feature-loaded") = |this, ts, feature: *mut ffi::GstPluginFeature| {
         let feature = crate::PluginFeature::from_glib_borrow(feature);
         this.plugin_feature_loaded(ts, &feature)

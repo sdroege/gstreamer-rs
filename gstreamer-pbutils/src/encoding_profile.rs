@@ -5,20 +5,20 @@ use glib::{prelude::*, translate::*};
 use crate::auto::{
     EncodingAudioProfile, EncodingContainerProfile, EncodingProfile, EncodingVideoProfile,
 };
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 use crate::ElementProperties;
 
 pub trait EncodingProfileExtManual {
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_encoding_profile_get_element_properties")]
     #[doc(alias = "get_element_properties")]
     fn element_properties(&self) -> Option<ElementProperties>;
 }
 
 impl<O: IsA<EncodingProfile>> EncodingProfileExtManual for O {
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn element_properties(&self) -> Option<ElementProperties> {
         unsafe {
             from_glib_full::<_, Option<_>>(ffi::gst_encoding_profile_get_element_properties(

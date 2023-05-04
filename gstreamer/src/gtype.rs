@@ -5,10 +5,10 @@ use std::ffi::c_void;
 use glib::translate::*;
 
 pub trait PluginApiExt {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_type_mark_as_plugin_api")]
     fn mark_as_plugin_api(self, flags: crate::PluginAPIFlags);
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_type_is_plugin_api")]
     fn plugin_api_flags(self) -> Option<crate::PluginAPIFlags>;
     #[doc(alias = "gst_element_type_set_skip_documentation")]

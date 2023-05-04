@@ -33,8 +33,8 @@ impl DebugMessage {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_debug_message_get_id")]
     #[inline]
     pub fn id(&self) -> Option<&glib::GStr> {
@@ -343,8 +343,8 @@ impl DebugCategory {
         });
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[inline]
     #[doc(alias = "gst_debug_log_id")]
     pub fn log_id(
@@ -363,8 +363,8 @@ impl DebugCategory {
         self.log_id_unfiltered_internal(id.as_ref(), level, file, function, line, args);
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[inline]
     #[doc(alias = "gst_debug_log_id_literal")]
     pub fn log_id_literal(
@@ -383,8 +383,8 @@ impl DebugCategory {
         self.log_id_literal_unfiltered_internal(id.as_ref(), level, file, function, line, msg);
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     // rustdoc-stripper-ignore-next
     /// Logs without checking the log level.
     #[inline]
@@ -401,8 +401,8 @@ impl DebugCategory {
         self.log_id_unfiltered_internal(id.as_ref(), level, file, function, line, args)
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     // rustdoc-stripper-ignore-next
     /// Logs without checking the log level.
     #[inline]
@@ -419,7 +419,7 @@ impl DebugCategory {
         self.log_id_literal_unfiltered_internal(id.as_ref(), level, file, function, line, msg)
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg(feature = "v1_22")]
     #[inline(never)]
     fn log_id_unfiltered_internal(
         self,
@@ -442,7 +442,7 @@ impl DebugCategory {
         });
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
+    #[cfg(feature = "v1_22")]
     #[inline(never)]
     fn log_id_literal_unfiltered_internal(
         self,
@@ -478,8 +478,8 @@ impl DebugCategory {
         unsafe { glib::SList::from_glib_container(ffi::gst_debug_get_all_categories()) }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_debug_log_get_line")]
     #[inline]
     pub fn get_line(
