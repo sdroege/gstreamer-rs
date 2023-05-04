@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -57,11 +57,11 @@ pub const GST_WEBRTC_ERROR_HARDWARE_ENCODER_NOT_AVAILABLE: GstWebRTCError = 5;
 pub const GST_WEBRTC_ERROR_ENCODER_ERROR: GstWebRTCError = 6;
 pub const GST_WEBRTC_ERROR_INVALID_STATE: GstWebRTCError = 7;
 pub const GST_WEBRTC_ERROR_INTERNAL_FAILURE: GstWebRTCError = 8;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_WEBRTC_ERROR_INVALID_MODIFICATION: GstWebRTCError = 9;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_WEBRTC_ERROR_TYPE_ERROR: GstWebRTCError = 10;
 
 pub type GstWebRTCFECType = c_int;
@@ -560,8 +560,8 @@ extern "C" {
     //=========================================================================
     // GstWebRTCBundlePolicy
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_webrtc_bundle_policy_get_type() -> GType;
 
     //=========================================================================
@@ -577,25 +577,25 @@ extern "C" {
     //=========================================================================
     // GstWebRTCDataChannelState
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_webrtc_data_channel_state_get_type() -> GType;
 
     //=========================================================================
     // GstWebRTCError
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_webrtc_error_get_type() -> GType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_webrtc_error_quark() -> glib::GQuark;
 
     //=========================================================================
     // GstWebRTCFECType
     //=========================================================================
-    #[cfg(any(feature = "v1_14_1", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+    #[cfg(feature = "v1_14_1")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
     pub fn gst_webrtc_fec_type_get_type() -> GType;
 
     //=========================================================================
@@ -621,15 +621,15 @@ extern "C" {
     //=========================================================================
     // GstWebRTCICETransportPolicy
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_webrtc_ice_transport_policy_get_type() -> GType;
 
     //=========================================================================
     // GstWebRTCKind
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_webrtc_kind_get_type() -> GType;
 
     //=========================================================================
@@ -640,8 +640,8 @@ extern "C" {
     //=========================================================================
     // GstWebRTCPriorityType
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_webrtc_priority_type_get_type() -> GType;
 
     //=========================================================================
@@ -652,8 +652,8 @@ extern "C" {
     //=========================================================================
     // GstWebRTCSCTPTransportState
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_webrtc_sctp_transport_state_get_type() -> GType;
 
     //=========================================================================
@@ -675,16 +675,16 @@ extern "C" {
     //=========================================================================
     // GstWebRTCICECandidateStats
     //=========================================================================
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_candidate_stats_get_type() -> GType;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_candidate_stats_copy(
         stats: *mut GstWebRTCICECandidateStats,
     ) -> *mut GstWebRTCICECandidateStats;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_candidate_stats_free(stats: *mut GstWebRTCICECandidateStats);
 
     //=========================================================================
@@ -708,33 +708,33 @@ extern "C" {
     //=========================================================================
     // GstWebRTCDataChannel
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_webrtc_data_channel_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_webrtc_data_channel_close(channel: *mut GstWebRTCDataChannel);
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_webrtc_data_channel_send_data(
         channel: *mut GstWebRTCDataChannel,
         data: *mut glib::GBytes,
     );
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_data_channel_send_data_full(
         channel: *mut GstWebRTCDataChannel,
         data: *mut glib::GBytes,
         error: *mut *mut glib::GError,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_webrtc_data_channel_send_string(
         channel: *mut GstWebRTCDataChannel,
         str: *const c_char,
     );
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_data_channel_send_string_full(
         channel: *mut GstWebRTCDataChannel,
         str: *const c_char,
@@ -744,132 +744,132 @@ extern "C" {
     //=========================================================================
     // GstWebRTCICE
     //=========================================================================
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_get_type() -> GType;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_add_candidate(
         ice: *mut GstWebRTCICE,
         stream: *mut GstWebRTCICEStream,
         candidate: *const c_char,
         promise: *mut gst::GstPromise,
     );
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_add_stream(
         ice: *mut GstWebRTCICE,
         session_id: c_uint,
     ) -> *mut GstWebRTCICEStream;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_add_turn_server(ice: *mut GstWebRTCICE, uri: *const c_char) -> gboolean;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_find_transport(
         ice: *mut GstWebRTCICE,
         stream: *mut GstWebRTCICEStream,
         component: GstWebRTCICEComponent,
     ) -> *mut GstWebRTCICETransport;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_gather_candidates(
         ice: *mut GstWebRTCICE,
         stream: *mut GstWebRTCICEStream,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_get_http_proxy(ice: *mut GstWebRTCICE) -> *mut c_char;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_get_is_controller(ice: *mut GstWebRTCICE) -> gboolean;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_get_local_candidates(
         ice: *mut GstWebRTCICE,
         stream: *mut GstWebRTCICEStream,
     ) -> *mut *mut GstWebRTCICECandidateStats;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_get_remote_candidates(
         ice: *mut GstWebRTCICE,
         stream: *mut GstWebRTCICEStream,
     ) -> *mut *mut GstWebRTCICECandidateStats;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_get_selected_pair(
         ice: *mut GstWebRTCICE,
         stream: *mut GstWebRTCICEStream,
         local_stats: *mut *mut GstWebRTCICECandidateStats,
         remote_stats: *mut *mut GstWebRTCICECandidateStats,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_get_stun_server(ice: *mut GstWebRTCICE) -> *mut c_char;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_get_turn_server(ice: *mut GstWebRTCICE) -> *mut c_char;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_set_force_relay(ice: *mut GstWebRTCICE, force_relay: gboolean);
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_set_http_proxy(ice: *mut GstWebRTCICE, uri: *const c_char);
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_set_is_controller(ice: *mut GstWebRTCICE, controller: gboolean);
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_set_local_credentials(
         ice: *mut GstWebRTCICE,
         stream: *mut GstWebRTCICEStream,
         ufrag: *const c_char,
         pwd: *const c_char,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_set_on_ice_candidate(
         ice: *mut GstWebRTCICE,
         func: GstWebRTCICEOnCandidateFunc,
         user_data: gpointer,
         notify: glib::GDestroyNotify,
     );
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_set_remote_credentials(
         ice: *mut GstWebRTCICE,
         stream: *mut GstWebRTCICEStream,
         ufrag: *const c_char,
         pwd: *const c_char,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_set_stun_server(ice: *mut GstWebRTCICE, uri: *const c_char);
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_set_tos(
         ice: *mut GstWebRTCICE,
         stream: *mut GstWebRTCICEStream,
         tos: c_uint,
     );
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_set_turn_server(ice: *mut GstWebRTCICE, uri: *const c_char);
 
     //=========================================================================
     // GstWebRTCICEStream
     //=========================================================================
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_stream_get_type() -> GType;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_stream_find_transport(
         stream: *mut GstWebRTCICEStream,
         component: GstWebRTCICEComponent,
     ) -> *mut GstWebRTCICETransport;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_stream_gather_candidates(ice: *mut GstWebRTCICEStream) -> gboolean;
 
     //=========================================================================
@@ -901,8 +901,8 @@ extern "C" {
     // GstWebRTCRTPSender
     //=========================================================================
     pub fn gst_webrtc_rtp_sender_get_type() -> GType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_webrtc_rtp_sender_set_priority(
         sender: *mut GstWebRTCRTPSender,
         priority: GstWebRTCPriorityType,
@@ -916,8 +916,8 @@ extern "C" {
     //=========================================================================
     // GstWebRTCSCTPTransport
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_webrtc_sctp_transport_get_type() -> GType;
 
 }

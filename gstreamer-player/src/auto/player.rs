@@ -144,8 +144,8 @@ impl Player {
         unsafe { from_glib_full(ffi::gst_player_get_subtitle_uri(self.to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_player_get_subtitle_video_offset")]
     #[doc(alias = "get_subtitle_video_offset")]
     pub fn subtitle_video_offset(&self) -> i64 {
@@ -273,8 +273,8 @@ impl Player {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_player_set_subtitle_video_offset")]
     pub fn set_subtitle_video_offset(&self, offset: i64) {
         unsafe {
@@ -934,8 +934,8 @@ impl Player {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "subtitle-video-offset")]
     pub fn connect_subtitle_video_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,

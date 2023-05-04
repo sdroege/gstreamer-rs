@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -49,26 +49,26 @@ pub const GST_RTCP_SDES_LOC: GstRTCPSDESType = 5;
 pub const GST_RTCP_SDES_TOOL: GstRTCPSDESType = 6;
 pub const GST_RTCP_SDES_NOTE: GstRTCPSDESType = 7;
 pub const GST_RTCP_SDES_PRIV: GstRTCPSDESType = 8;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_RTCP_SDES_H323_CADDR: GstRTCPSDESType = 9;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_RTCP_SDES_APSI: GstRTCPSDESType = 10;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_RTCP_SDES_RGRP: GstRTCPSDESType = 11;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_RTCP_SDES_RTP_STREAM_ID: GstRTCPSDESType = 12;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_RTCP_SDES_REPAIRED_RTP_STREAM_ID: GstRTCPSDESType = 13;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_RTCP_SDES_CCID: GstRTCPSDESType = 14;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_RTCP_SDES_MID: GstRTCPSDESType = 15;
 
 pub type GstRTCPType = c_int;
@@ -610,8 +610,8 @@ extern "C" {
     //=========================================================================
     // GstRTCPXRType
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcpxr_type_get_type() -> GType;
 
     //=========================================================================
@@ -637,15 +637,15 @@ extern "C" {
     //=========================================================================
     // GstRTPHeaderExtensionDirection
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_direction_get_type() -> GType;
 
     //=========================================================================
     // GstRTPHeaderExtensionFlags
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_flags_get_type() -> GType;
 
     //=========================================================================
@@ -811,17 +811,17 @@ extern "C" {
         packet_count: u32,
         octet_count: u32,
     );
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_first_rb(packet: *mut GstRTCPPacket) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_block_length(packet: *mut GstRTCPPacket) -> u16;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_block_type(packet: *mut GstRTCPPacket) -> GstRTCPXRType;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_dlrr_block(
         packet: *mut GstRTCPPacket,
         nth: c_uint,
@@ -829,15 +829,15 @@ extern "C" {
         last_rr: *mut u32,
         delay: *mut u32,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_prt_by_seq(
         packet: *mut GstRTCPPacket,
         seq: u16,
         receipt_time: *mut u32,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_prt_info(
         packet: *mut GstRTCPPacket,
         ssrc: *mut u32,
@@ -845,8 +845,8 @@ extern "C" {
         begin_seq: *mut u16,
         end_seq: *mut u16,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_rle_info(
         packet: *mut GstRTCPPacket,
         ssrc: *mut u32,
@@ -855,29 +855,29 @@ extern "C" {
         end_seq: *mut u16,
         chunk_count: *mut u32,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_rle_nth_chunk(
         packet: *mut GstRTCPPacket,
         nth: c_uint,
         chunk: *mut u16,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_rrt(packet: *mut GstRTCPPacket, timestamp: *mut u64) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_ssrc(packet: *mut GstRTCPPacket) -> u32;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_summary_info(
         packet: *mut GstRTCPPacket,
         ssrc: *mut u32,
         begin_seq: *mut u16,
         end_seq: *mut u16,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_summary_jitter(
         packet: *mut GstRTCPPacket,
         min_jitter: *mut u32,
@@ -885,15 +885,15 @@ extern "C" {
         mean_jitter: *mut u32,
         dev_jitter: *mut u32,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_summary_pkt(
         packet: *mut GstRTCPPacket,
         lost_packets: *mut u32,
         dup_packets: *mut u32,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_summary_ttl(
         packet: *mut GstRTCPPacket,
         is_ipv4: *mut gboolean,
@@ -902,8 +902,8 @@ extern "C" {
         mean_ttl: *mut u8,
         dev_ttl: *mut u8,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_voip_burst_metrics(
         packet: *mut GstRTCPPacket,
         burst_density: *mut u8,
@@ -911,43 +911,43 @@ extern "C" {
         burst_duration: *mut u16,
         gap_duration: *mut u16,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_voip_configuration_params(
         packet: *mut GstRTCPPacket,
         gmin: *mut u8,
         rx_config: *mut u8,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_voip_delay_metrics(
         packet: *mut GstRTCPPacket,
         roundtrip_delay: *mut u16,
         end_system_delay: *mut u16,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_voip_jitter_buffer_params(
         packet: *mut GstRTCPPacket,
         jb_nominal: *mut u16,
         jb_maximum: *mut u16,
         jb_abs_max: *mut u16,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_voip_metrics_ssrc(
         packet: *mut GstRTCPPacket,
         ssrc: *mut u32,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_voip_packet_metrics(
         packet: *mut GstRTCPPacket,
         loss_rate: *mut u8,
         discard_rate: *mut u8,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_voip_quality_metrics(
         packet: *mut GstRTCPPacket,
         r_factor: *mut u8,
@@ -955,8 +955,8 @@ extern "C" {
         mos_lq: *mut u8,
         mos_cq: *mut u8,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_get_voip_signal_metrics(
         packet: *mut GstRTCPPacket,
         signal_level: *mut u8,
@@ -964,8 +964,8 @@ extern "C" {
         rerl: *mut u8,
         gmin: *mut u8,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtcp_packet_xr_next_rb(packet: *mut GstRTCPPacket) -> gboolean;
 
     //=========================================================================
@@ -1031,8 +1031,8 @@ extern "C" {
     pub fn gst_rtp_buffer_get_timestamp(rtp: *mut GstRTPBuffer) -> u32;
     pub fn gst_rtp_buffer_get_version(rtp: *mut GstRTPBuffer) -> u8;
     pub fn gst_rtp_buffer_pad_to(rtp: *mut GstRTPBuffer, len: c_uint);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_buffer_remove_extension_data(rtp: *mut GstRTPBuffer);
     pub fn gst_rtp_buffer_set_csrc(rtp: *mut GstRTPBuffer, idx: u8, csrc: u32);
     pub fn gst_rtp_buffer_set_extension(rtp: *mut GstRTPBuffer, extension: gboolean);
@@ -1070,8 +1070,8 @@ extern "C" {
     pub fn gst_rtp_buffer_compare_seqnum(seqnum1: u16, seqnum2: u16) -> c_int;
     pub fn gst_rtp_buffer_default_clock_rate(payload_type: u8) -> u32;
     pub fn gst_rtp_buffer_ext_timestamp(exttimestamp: *mut u64, timestamp: u32) -> u64;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtp_buffer_get_extension_onebyte_header_from_bytes(
         bytes: *mut glib::GBytes,
         bit_pattern: u16,
@@ -1101,8 +1101,8 @@ extern "C" {
     //=========================================================================
     // GstRTPHeaderExtensionClass
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_class_set_uri(
         klass: *mut GstRTPHeaderExtensionClass,
         uri: *const c_char,
@@ -1120,21 +1120,21 @@ extern "C" {
     //=========================================================================
     // GstRTPSourceMeta
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtp_source_meta_append_csrc(
         meta: *mut GstRTPSourceMeta,
         csrc: *const u32,
         csrc_count: c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtp_source_meta_get_source_count(meta: *const GstRTPSourceMeta) -> c_uint;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtp_source_meta_set_ssrc(meta: *mut GstRTPSourceMeta, ssrc: *mut u32) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtp_source_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
@@ -1179,8 +1179,8 @@ extern "C" {
     // GstRTPBaseDepayload
     //=========================================================================
     pub fn gst_rtp_base_depayload_get_type() -> GType;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtp_base_depayload_is_source_info_enabled(
         depayload: *mut GstRTPBaseDepayload,
     ) -> gboolean;
@@ -1192,8 +1192,8 @@ extern "C" {
         filter: *mut GstRTPBaseDepayload,
         out_list: *mut gst::GstBufferList,
     ) -> gst::GstFlowReturn;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtp_base_depayload_set_source_info_enabled(
         depayload: *mut GstRTPBaseDepayload,
         enable: gboolean,
@@ -1203,16 +1203,16 @@ extern "C" {
     // GstRTPBasePayload
     //=========================================================================
     pub fn gst_rtp_base_payload_get_type() -> GType;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtp_base_payload_allocate_output_buffer(
         payload: *mut GstRTPBasePayload,
         payload_len: c_uint,
         pad_len: u8,
         csrc_count: u8,
     ) -> *mut gst::GstBuffer;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtp_base_payload_get_source_count(
         payload: *mut GstRTPBasePayload,
         buffer: *mut gst::GstBuffer,
@@ -1222,8 +1222,8 @@ extern "C" {
         size: c_uint,
         duration: gst::GstClockTime,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtp_base_payload_is_source_info_enabled(payload: *mut GstRTPBasePayload)
         -> gboolean;
     pub fn gst_rtp_base_payload_push(
@@ -1246,14 +1246,14 @@ extern "C" {
         fieldname: *const c_char,
         ...
     ) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_base_payload_set_outcaps_structure(
         payload: *mut GstRTPBasePayload,
         s: *mut gst::GstStructure,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtp_base_payload_set_source_info_enabled(
         payload: *mut GstRTPBasePayload,
         enable: gboolean,
@@ -1262,43 +1262,43 @@ extern "C" {
     //=========================================================================
     // GstRTPHeaderExtension
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_get_type() -> GType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_create_from_uri(
         uri: *const c_char,
     ) -> *mut GstRTPHeaderExtension;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_get_direction(
         ext: *mut GstRTPHeaderExtension,
     ) -> GstRTPHeaderExtensionDirection;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_get_id(ext: *mut GstRTPHeaderExtension) -> c_uint;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_get_max_size(
         ext: *mut GstRTPHeaderExtension,
         input_meta: *const gst::GstBuffer,
     ) -> size_t;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_get_sdp_caps_field_name(
         ext: *mut GstRTPHeaderExtension,
     ) -> *mut c_char;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_get_supported_flags(
         ext: *mut GstRTPHeaderExtension,
     ) -> GstRTPHeaderExtensionFlags;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_get_uri(ext: *mut GstRTPHeaderExtension) -> *const c_char;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_read(
         ext: *mut GstRTPHeaderExtension,
         read_flags: GstRTPHeaderExtensionFlags,
@@ -1306,59 +1306,59 @@ extern "C" {
         size: size_t,
         buffer: *mut gst::GstBuffer,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_set_attributes_from_caps(
         ext: *mut GstRTPHeaderExtension,
         caps: *const gst::GstCaps,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_set_caps_from_attributes(
         ext: *mut GstRTPHeaderExtension,
         caps: *mut gst::GstCaps,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_set_caps_from_attributes_helper(
         ext: *mut GstRTPHeaderExtension,
         caps: *mut gst::GstCaps,
         attributes: *const c_char,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_set_direction(
         ext: *mut GstRTPHeaderExtension,
         direction: GstRTPHeaderExtensionDirection,
     );
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_set_id(ext: *mut GstRTPHeaderExtension, ext_id: c_uint);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_set_non_rtp_sink_caps(
         ext: *mut GstRTPHeaderExtension,
         caps: *const gst::GstCaps,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_set_wants_update_non_rtp_src_caps(
         ext: *mut GstRTPHeaderExtension,
         state: gboolean,
     );
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_update_non_rtp_src_caps(
         ext: *mut GstRTPHeaderExtension,
         caps: *mut gst::GstCaps,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_wants_update_non_rtp_src_caps(
         ext: *mut GstRTPHeaderExtension,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_header_extension_write(
         ext: *mut GstRTPHeaderExtension,
         input_meta: *const gst::GstBuffer,
@@ -1371,30 +1371,30 @@ extern "C" {
     //=========================================================================
     // Other functions
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_buffer_add_rtp_source_meta(
         buffer: *mut gst::GstBuffer,
         ssrc: *const u32,
         csrc: *const u32,
         csrc_count: c_uint,
     ) -> *mut GstRTPSourceMeta;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_buffer_get_rtp_source_meta(buffer: *mut gst::GstBuffer) -> *mut GstRTPSourceMeta;
     pub fn gst_rtcp_ntp_to_unix(ntptime: u64) -> u64;
     pub fn gst_rtcp_sdes_name_to_type(name: *const c_char) -> GstRTCPSDESType;
     pub fn gst_rtcp_sdes_type_to_name(type_: GstRTCPSDESType) -> *const c_char;
     pub fn gst_rtcp_unix_to_ntp(unixtime: u64) -> u64;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtp_get_header_extension_list() -> *mut glib::GList;
     pub fn gst_rtp_hdrext_get_ntp_56(data: gpointer, size: c_uint, ntptime: *mut u64) -> gboolean;
     pub fn gst_rtp_hdrext_get_ntp_64(data: gpointer, size: c_uint, ntptime: *mut u64) -> gboolean;
     pub fn gst_rtp_hdrext_set_ntp_56(data: gpointer, size: c_uint, ntptime: u64) -> gboolean;
     pub fn gst_rtp_hdrext_set_ntp_64(data: gpointer, size: c_uint, ntptime: u64) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtp_source_meta_api_get_type() -> GType;
 
 }

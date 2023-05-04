@@ -59,8 +59,8 @@ impl AppSink {
         unsafe { from_glib(ffi::gst_app_sink_is_eos(self.to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_sink_pull_object")]
     pub fn pull_object(&self) -> Result<gst::MiniObject, glib::BoolError> {
         unsafe {
@@ -128,8 +128,8 @@ impl AppSink {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_sink_try_pull_object")]
     pub fn try_pull_object(
         &self,

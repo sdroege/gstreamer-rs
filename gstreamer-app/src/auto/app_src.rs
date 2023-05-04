@@ -3,8 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 use crate::AppLeakyType;
 use crate::AppStreamType;
 use glib::{
@@ -35,8 +35,8 @@ impl AppSrc {
         unsafe { from_glib_full(ffi::gst_app_src_get_caps(self.to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_get_current_level_buffers")]
     #[doc(alias = "get_current_level_buffers")]
     pub fn current_level_buffers(&self) -> u64 {
@@ -49,8 +49,8 @@ impl AppSrc {
         unsafe { ffi::gst_app_src_get_current_level_bytes(self.to_glib_none().0) }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_get_current_level_time")]
     #[doc(alias = "get_current_level_time")]
     pub fn current_level_time(&self) -> Option<gst::ClockTime> {
@@ -67,16 +67,16 @@ impl AppSrc {
         unsafe { from_glib(ffi::gst_app_src_get_duration(self.to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_get_leaky_type")]
     #[doc(alias = "get_leaky_type")]
     pub fn leaky_type(&self) -> AppLeakyType {
         unsafe { from_glib(ffi::gst_app_src_get_leaky_type(self.to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_get_max_buffers")]
     #[doc(alias = "get_max_buffers")]
     pub fn max_buffers(&self) -> u64 {
@@ -89,8 +89,8 @@ impl AppSrc {
         unsafe { ffi::gst_app_src_get_max_bytes(self.to_glib_none().0) }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_get_max_time")]
     #[doc(alias = "get_max_time")]
     pub fn max_time(&self) -> Option<gst::ClockTime> {
@@ -161,8 +161,8 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_set_leaky_type")]
     pub fn set_leaky_type(&self, leaky: AppLeakyType) {
         unsafe {
@@ -170,8 +170,8 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_set_max_buffers")]
     pub fn set_max_buffers(&self, max: u64) {
         unsafe {
@@ -186,8 +186,8 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_set_max_time")]
     pub fn set_max_time(&self, max: impl Into<Option<gst::ClockTime>>) {
         unsafe {
@@ -225,15 +225,15 @@ impl AppSrc {
         glib::ObjectExt::set_property(self, "format", format)
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "handle-segment-change")]
     pub fn is_handle_segment_change(&self) -> bool {
         glib::ObjectExt::property(self, "handle-segment-change")
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "handle-segment-change")]
     pub fn set_handle_segment_change(&self, handle_segment_change: bool) {
         glib::ObjectExt::set_property(self, "handle-segment-change", handle_segment_change)
@@ -331,8 +331,8 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "current-level-buffers")]
     pub fn connect_current_level_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -389,8 +389,8 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "current-level-time")]
     pub fn connect_current_level_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -471,8 +471,8 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "handle-segment-change")]
     pub fn connect_handle_segment_change_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -527,8 +527,8 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "leaky-type")]
     pub fn connect_leaky_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -557,8 +557,8 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "max-buffers")]
     pub fn connect_max_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -641,8 +641,8 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "max-time")]
     pub fn connect_max_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,

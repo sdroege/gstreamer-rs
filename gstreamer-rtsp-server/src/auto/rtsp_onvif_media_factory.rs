@@ -48,8 +48,8 @@ pub trait RTSPOnvifMediaFactoryExt: 'static {
     #[doc(alias = "gst_rtsp_onvif_media_factory_has_backchannel_support")]
     fn has_backchannel_support(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_onvif_media_factory_has_replay_support")]
     fn has_replay_support(&self) -> bool;
 
@@ -59,8 +59,8 @@ pub trait RTSPOnvifMediaFactoryExt: 'static {
     #[doc(alias = "gst_rtsp_onvif_media_factory_set_backchannel_launch")]
     fn set_backchannel_launch(&self, launch: Option<&str>);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_onvif_media_factory_set_replay_support")]
     fn set_replay_support(&self, has_replay_support: bool);
 }
@@ -90,8 +90,8 @@ impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn has_replay_support(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_onvif_media_factory_has_replay_support(
@@ -118,8 +118,8 @@ impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_replay_support(&self, has_replay_support: bool) {
         unsafe {
             ffi::gst_rtsp_onvif_media_factory_set_replay_support(

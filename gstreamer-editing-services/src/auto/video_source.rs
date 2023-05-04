@@ -5,11 +5,11 @@
 
 use crate::{Extractable, MetaContainer, Source, TimelineElement, TrackElement};
 use glib::prelude::*;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use glib::translate::*;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use std::mem;
 
 glib::wrapper! {
@@ -26,16 +26,16 @@ impl VideoSource {
 }
 
 pub trait VideoSourceExt: 'static {
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_video_source_get_natural_size")]
     #[doc(alias = "get_natural_size")]
     fn natural_size(&self) -> Option<(i32, i32)>;
 }
 
 impl<O: IsA<VideoSource>> VideoSourceExt for O {
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn natural_size(&self) -> Option<(i32, i32)> {
         unsafe {
             let mut width = mem::MaybeUninit::uninit();

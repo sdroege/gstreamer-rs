@@ -3,18 +3,18 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 use crate::WebRTCDTLSTransport;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
@@ -27,14 +27,14 @@ glib::wrapper! {
 }
 
 impl WebRTCRTPReceiver {
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn transport(&self) -> Option<WebRTCDTLSTransport> {
         glib::ObjectExt::property(self, "transport")
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "transport")]
     pub fn connect_transport_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,

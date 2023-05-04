@@ -48,8 +48,8 @@ pub use self::enums::DiscovererResult;
 
 mod flags;
 pub use self::flags::DiscovererSerializeFlags;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::flags::PbUtilsCapsDescriptionFlags;
 
 pub mod functions;

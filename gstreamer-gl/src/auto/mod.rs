@@ -9,11 +9,11 @@ pub use self::gl_base_filter::GLBaseFilter;
 mod gl_base_memory_allocator;
 pub use self::gl_base_memory_allocator::GLBaseMemoryAllocator;
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 mod gl_base_src;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 pub use self::gl_base_src::GLBaseSrc;
 
 mod gl_buffer_pool;
@@ -62,8 +62,8 @@ mod gl_video_allocation_params;
 pub use self::gl_video_allocation_params::GLVideoAllocationParams;
 
 mod enums;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::enums::GLConfigCaveat;
 pub use self::enums::GLContextError;
 pub use self::enums::GLFormat;
@@ -76,8 +76,8 @@ pub use self::enums::GLUploadReturn;
 pub use self::enums::GLWindowError;
 
 mod flags;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::flags::GLConfigSurfaceType;
 pub use self::flags::GLDisplayType;
 pub use self::flags::GLPlatform;
@@ -101,8 +101,8 @@ pub use self::constants::GL_BASE_MEMORY_ALLOCATOR_NAME;
 pub use self::constants::GL_BUFFER_ALLOCATOR_NAME;
 pub use self::constants::GL_COLOR_CONVERT_EXT_FORMATS;
 pub use self::constants::GL_COLOR_CONVERT_VIDEO_CAPS;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::constants::GL_CONFIG_STRUCTURE_NAME;
 pub use self::constants::GL_CONTEXT_TYPE_CGL;
 pub use self::constants::GL_CONTEXT_TYPE_EAGL;
@@ -121,8 +121,8 @@ pub use self::constants::GL_TEXTURE_TARGET_RECTANGLE_STR;
 #[doc(hidden)]
 pub mod traits {
     pub use super::gl_base_filter::GLBaseFilterExt;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub use super::gl_base_src::GLBaseSrcExt;
     pub use super::gl_buffer_pool::GLBufferPoolExt;
     pub use super::gl_context::GLContextExt;

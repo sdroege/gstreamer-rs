@@ -49,8 +49,8 @@ pub static GL_COLOR_CONVERT_EXT_FORMATS: &GStr =
 #[doc(alias = "GST_GL_COLOR_CONVERT_VIDEO_CAPS")]
 pub static GL_COLOR_CONVERT_VIDEO_CAPS: &GStr =
     unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_GL_COLOR_CONVERT_VIDEO_CAPS) };
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(alias = "GST_GL_CONFIG_STRUCTURE_NAME")]
 pub static GL_CONFIG_STRUCTURE_NAME: &GStr =
     unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_GL_CONFIG_STRUCTURE_NAME) };

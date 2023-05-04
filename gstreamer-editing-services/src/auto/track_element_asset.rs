@@ -9,8 +9,8 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use std::mem;
 use std::{boxed::Box as Box_, mem::transmute};
 
@@ -28,8 +28,8 @@ impl TrackElementAsset {
 }
 
 pub trait TrackElementAssetExt: 'static {
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_element_asset_get_natural_framerate")]
     #[doc(alias = "get_natural_framerate")]
     fn natural_framerate(&self) -> Option<(i32, i32)>;
@@ -46,8 +46,8 @@ pub trait TrackElementAssetExt: 'static {
 }
 
 impl<O: IsA<TrackElementAsset>> TrackElementAssetExt for O {
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn natural_framerate(&self) -> Option<(i32, i32)> {
         unsafe {
             let mut framerate_n = mem::MaybeUninit::uninit();

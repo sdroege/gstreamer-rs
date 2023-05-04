@@ -9,19 +9,19 @@ pub use self::rtp_base_depayload::RTPBaseDepayload;
 mod rtp_base_payload;
 pub use self::rtp_base_payload::RTPBasePayload;
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 mod rtp_header_extension;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::rtp_header_extension::RTPHeaderExtension;
 
 mod enums;
 pub use self::enums::RTCPFBType;
 pub use self::enums::RTCPSDESType;
 pub use self::enums::RTCPType;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 pub use self::enums::RTCPXRType;
 pub use self::enums::RTPPayload;
 pub use self::enums::RTPProfile;
@@ -29,24 +29,24 @@ pub use self::enums::RTPProfile;
 mod flags;
 pub use self::flags::RTPBufferFlags;
 pub use self::flags::RTPBufferMapFlags;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::flags::RTPHeaderExtensionDirection;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::flags::RTPHeaderExtensionFlags;
 
 pub mod functions;
 
 mod constants;
 pub use self::constants::RTP_HDREXT_BASE;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::constants::RTP_HDREXT_ELEMENT_CLASS;
 pub use self::constants::RTP_HDREXT_NTP_56;
 pub use self::constants::RTP_HDREXT_NTP_64;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::constants::RTP_HEADER_EXTENSION_URI_METADATA_KEY;
 pub use self::constants::RTP_PAYLOAD_1016_STRING;
 pub use self::constants::RTP_PAYLOAD_CELLB_STRING;
@@ -84,7 +84,7 @@ pub use self::constants::RTP_PAYLOAD_TS48_STRING;
 pub mod traits {
     pub use super::rtp_base_depayload::RTPBaseDepayloadExt;
     pub use super::rtp_base_payload::RTPBasePayloadExt;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub use super::rtp_header_extension::RTPHeaderExtensionExt;
 }

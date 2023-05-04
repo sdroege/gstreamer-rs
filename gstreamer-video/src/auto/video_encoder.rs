@@ -38,8 +38,8 @@ pub trait VideoEncoderExt: 'static {
     #[doc(alias = "get_max_encode_time")]
     fn max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_encoder_get_min_force_key_unit_interval")]
     #[doc(alias = "get_min_force_key_unit_interval")]
     fn min_force_key_unit_interval(&self) -> Option<gst::ClockTime>;
@@ -53,8 +53,8 @@ pub trait VideoEncoderExt: 'static {
     #[doc(alias = "gst_video_encoder_proxy_getcaps")]
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_encoder_set_min_force_key_unit_interval")]
     fn set_min_force_key_unit_interval(&self, interval: impl Into<Option<gst::ClockTime>>);
 
@@ -68,8 +68,8 @@ pub trait VideoEncoderExt: 'static {
 
     fn set_qos(&self, qos: bool);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "min-force-key-unit-interval")]
     fn connect_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -108,8 +108,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn min_force_key_unit_interval(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_video_encoder_get_min_force_key_unit_interval(
@@ -146,8 +146,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_min_force_key_unit_interval(&self, interval: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::gst_video_encoder_set_min_force_key_unit_interval(
@@ -183,8 +183,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "qos", qos)
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

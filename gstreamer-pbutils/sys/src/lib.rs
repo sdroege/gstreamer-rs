@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -87,8 +87,8 @@ pub const GST_PBUTILS_CAPS_DESCRIPTION_FLAG_IMAGE: GstPbUtilsCapsDescriptionFlag
 pub const GST_PBUTILS_CAPS_DESCRIPTION_FLAG_SUBTITLE: GstPbUtilsCapsDescriptionFlags = 16;
 pub const GST_PBUTILS_CAPS_DESCRIPTION_FLAG_TAG: GstPbUtilsCapsDescriptionFlags = 32;
 pub const GST_PBUTILS_CAPS_DESCRIPTION_FLAG_GENERIC: GstPbUtilsCapsDescriptionFlags = 64;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_PBUTILS_CAPS_DESCRIPTION_FLAG_METADATA: GstPbUtilsCapsDescriptionFlags = 128;
 
 // Callbacks
@@ -424,8 +424,8 @@ extern "C" {
     //=========================================================================
     // GstPbUtilsCapsDescriptionFlags
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_pb_utils_caps_description_flags_get_type() -> GType;
 
     //=========================================================================
@@ -499,8 +499,8 @@ extern "C" {
     pub fn gst_discoverer_container_info_get_streams(
         info: *mut GstDiscovererContainerInfo,
     ) -> *mut glib::GList;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_discoverer_container_info_get_tags(
         info: *const GstDiscovererContainerInfo,
     ) -> *const gst::GstTagList;
@@ -565,8 +565,8 @@ extern "C" {
     pub fn gst_discoverer_stream_info_get_stream_id(
         info: *mut GstDiscovererStreamInfo,
     ) -> *const c_char;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_discoverer_stream_info_get_stream_number(
         info: *mut GstDiscovererStreamInfo,
     ) -> c_int;
@@ -660,8 +660,8 @@ extern "C" {
         profile: *mut GstEncodingProfile,
     ) -> gboolean;
     pub fn gst_encoding_profile_get_description(profile: *mut GstEncodingProfile) -> *const c_char;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_encoding_profile_get_element_properties(
         self_: *mut GstEncodingProfile,
     ) -> *mut gst::GstStructure;
@@ -679,8 +679,8 @@ extern "C" {
     pub fn gst_encoding_profile_get_restriction(
         profile: *mut GstEncodingProfile,
     ) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_encoding_profile_get_single_segment(profile: *mut GstEncodingProfile) -> gboolean;
     pub fn gst_encoding_profile_get_type_nick(profile: *mut GstEncodingProfile) -> *const c_char;
     pub fn gst_encoding_profile_is_enabled(profile: *mut GstEncodingProfile) -> gboolean;
@@ -696,8 +696,8 @@ extern "C" {
         profile: *mut GstEncodingProfile,
         description: *const c_char,
     );
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_encoding_profile_set_element_properties(
         self_: *mut GstEncodingProfile,
         element_properties: *mut gst::GstStructure,
@@ -718,8 +718,8 @@ extern "C" {
         profile: *mut GstEncodingProfile,
         restriction: *mut gst::GstCaps,
     );
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_encoding_profile_set_single_segment(
         profile: *mut GstEncodingProfile,
         single_segment: gboolean,
@@ -751,8 +751,8 @@ extern "C" {
     pub fn gst_encoding_target_get_category(target: *mut GstEncodingTarget) -> *const c_char;
     pub fn gst_encoding_target_get_description(target: *mut GstEncodingTarget) -> *const c_char;
     pub fn gst_encoding_target_get_name(target: *mut GstEncodingTarget) -> *const c_char;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_encoding_target_get_path(target: *mut GstEncodingTarget) -> *const c_char;
     pub fn gst_encoding_target_get_profile(
         target: *mut GstEncodingTarget,
@@ -803,11 +803,11 @@ extern "C" {
     pub fn gst_codec_utils_aac_get_profile(audio_config: *const u8, len: c_uint) -> *const c_char;
     pub fn gst_codec_utils_aac_get_sample_rate(audio_config: *const u8, len: c_uint) -> c_uint;
     pub fn gst_codec_utils_aac_get_sample_rate_from_index(sr_idx: c_uint) -> c_uint;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_codec_utils_caps_from_mime_codec(codecs_field: *const c_char) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_codec_utils_caps_get_mime_codec(caps: *mut gst::GstCaps) -> *mut c_char;
     pub fn gst_codec_utils_h264_caps_set_level_and_profile(
         caps: *mut gst::GstCaps,
@@ -817,8 +817,8 @@ extern "C" {
     pub fn gst_codec_utils_h264_get_level(sps: *const u8, len: c_uint) -> *const c_char;
     pub fn gst_codec_utils_h264_get_level_idc(level: *const c_char) -> u8;
     pub fn gst_codec_utils_h264_get_profile(sps: *const u8, len: c_uint) -> *const c_char;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_codec_utils_h264_get_profile_flags_level(
         codec_data: *const u8,
         len: c_uint,
@@ -952,8 +952,8 @@ extern "C" {
         codec_tag: *const c_char,
         caps: *const gst::GstCaps,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_pb_utils_get_caps_description_flags(
         caps: *const gst::GstCaps,
     ) -> GstPbUtilsCapsDescriptionFlags;
@@ -961,8 +961,8 @@ extern "C" {
     pub fn gst_pb_utils_get_decoder_description(caps: *const gst::GstCaps) -> *mut c_char;
     pub fn gst_pb_utils_get_element_description(factory_name: *const c_char) -> *mut c_char;
     pub fn gst_pb_utils_get_encoder_description(caps: *const gst::GstCaps) -> *mut c_char;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_pb_utils_get_file_extension_from_caps(caps: *const gst::GstCaps) -> *mut c_char;
     pub fn gst_pb_utils_get_sink_description(protocol: *const c_char) -> *mut c_char;
     pub fn gst_pb_utils_get_source_description(protocol: *const c_char) -> *mut c_char;

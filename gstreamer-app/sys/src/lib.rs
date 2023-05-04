@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -197,8 +197,8 @@ extern "C" {
     //=========================================================================
     // GstAppLeakyType
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_app_leaky_type_get_type() -> GType;
 
     //=========================================================================
@@ -217,8 +217,8 @@ extern "C" {
     pub fn gst_app_sink_get_max_buffers(appsink: *mut GstAppSink) -> c_uint;
     pub fn gst_app_sink_get_wait_on_eos(appsink: *mut GstAppSink) -> gboolean;
     pub fn gst_app_sink_is_eos(appsink: *mut GstAppSink) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_app_sink_pull_object(appsink: *mut GstAppSink) -> *mut gst::GstMiniObject;
     pub fn gst_app_sink_pull_preroll(appsink: *mut GstAppSink) -> *mut gst::GstSample;
     pub fn gst_app_sink_pull_sample(appsink: *mut GstAppSink) -> *mut gst::GstSample;
@@ -234,8 +234,8 @@ extern "C" {
     pub fn gst_app_sink_set_emit_signals(appsink: *mut GstAppSink, emit: gboolean);
     pub fn gst_app_sink_set_max_buffers(appsink: *mut GstAppSink, max: c_uint);
     pub fn gst_app_sink_set_wait_on_eos(appsink: *mut GstAppSink, wait: gboolean);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_app_sink_try_pull_object(
         appsink: *mut GstAppSink,
         timeout: gst::GstClockTime,
@@ -255,25 +255,25 @@ extern "C" {
     pub fn gst_app_src_get_type() -> GType;
     pub fn gst_app_src_end_of_stream(appsrc: *mut GstAppSrc) -> gst::GstFlowReturn;
     pub fn gst_app_src_get_caps(appsrc: *mut GstAppSrc) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_app_src_get_current_level_buffers(appsrc: *mut GstAppSrc) -> u64;
     pub fn gst_app_src_get_current_level_bytes(appsrc: *mut GstAppSrc) -> u64;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_app_src_get_current_level_time(appsrc: *mut GstAppSrc) -> gst::GstClockTime;
     pub fn gst_app_src_get_duration(appsrc: *mut GstAppSrc) -> gst::GstClockTime;
     pub fn gst_app_src_get_emit_signals(appsrc: *mut GstAppSrc) -> gboolean;
     pub fn gst_app_src_get_latency(appsrc: *mut GstAppSrc, min: *mut u64, max: *mut u64);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_app_src_get_leaky_type(appsrc: *mut GstAppSrc) -> GstAppLeakyType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_app_src_get_max_buffers(appsrc: *mut GstAppSrc) -> u64;
     pub fn gst_app_src_get_max_bytes(appsrc: *mut GstAppSrc) -> u64;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_app_src_get_max_time(appsrc: *mut GstAppSrc) -> gst::GstClockTime;
     pub fn gst_app_src_get_size(appsrc: *mut GstAppSrc) -> i64;
     pub fn gst_app_src_get_stream_type(appsrc: *mut GstAppSrc) -> GstAppStreamType;
@@ -299,15 +299,15 @@ extern "C" {
     pub fn gst_app_src_set_duration(appsrc: *mut GstAppSrc, duration: gst::GstClockTime);
     pub fn gst_app_src_set_emit_signals(appsrc: *mut GstAppSrc, emit: gboolean);
     pub fn gst_app_src_set_latency(appsrc: *mut GstAppSrc, min: u64, max: u64);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_app_src_set_leaky_type(appsrc: *mut GstAppSrc, leaky: GstAppLeakyType);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_app_src_set_max_buffers(appsrc: *mut GstAppSrc, max: u64);
     pub fn gst_app_src_set_max_bytes(appsrc: *mut GstAppSrc, max: u64);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_app_src_set_max_time(appsrc: *mut GstAppSrc, max: gst::GstClockTime);
     pub fn gst_app_src_set_size(appsrc: *mut GstAppSrc, size: i64);
     pub fn gst_app_src_set_stream_type(appsrc: *mut GstAppSrc, type_: GstAppStreamType);

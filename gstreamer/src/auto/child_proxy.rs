@@ -44,8 +44,8 @@ pub trait ChildProxyExt: 'static {
     #[doc(alias = "get_child_by_name")]
     fn child_by_name(&self, name: &str) -> Option<glib::Object>;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_child_proxy_get_child_by_name_recurse")]
     #[doc(alias = "get_child_by_name_recurse")]
     fn child_by_name_recurse(&self, name: &str) -> Option<glib::Object>;
@@ -120,8 +120,8 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn child_by_name_recurse(&self, name: &str) -> Option<glib::Object> {
         unsafe {
             from_glib_full(ffi::gst_child_proxy_get_child_by_name_recurse(

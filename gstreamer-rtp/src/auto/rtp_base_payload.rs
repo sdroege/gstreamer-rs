@@ -3,8 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 use crate::RTPHeaderExtension;
 use glib::{
     prelude::*,
@@ -30,13 +30,13 @@ unsafe impl Send for RTPBasePayload {}
 unsafe impl Sync for RTPBasePayload {}
 
 pub trait RTPBasePayloadExt: 'static {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtp_base_payload_allocate_output_buffer")]
     fn allocate_output_buffer(&self, payload_len: u32, pad_len: u8, csrc_count: u8) -> gst::Buffer;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtp_base_payload_get_source_count")]
     #[doc(alias = "get_source_count")]
     fn source_count(&self, buffer: &gst::Buffer) -> u32;
@@ -44,8 +44,8 @@ pub trait RTPBasePayloadExt: 'static {
     #[doc(alias = "gst_rtp_base_payload_is_filled")]
     fn is_filled(&self, size: u32, duration: impl Into<Option<gst::ClockTime>>) -> bool;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtp_base_payload_is_source_info_enabled")]
     fn is_source_info_enabled(&self) -> bool;
 
@@ -58,18 +58,18 @@ pub trait RTPBasePayloadExt: 'static {
     #[doc(alias = "gst_rtp_base_payload_set_options")]
     fn set_options(&self, media: &str, dynamic: bool, encoding_name: &str, clock_rate: u32);
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtp_base_payload_set_source_info_enabled")]
     fn set_source_info_enabled(&self, enable: bool);
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "auto-header-extension")]
     fn is_auto_header_extension(&self) -> bool;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "auto-header-extension")]
     fn set_auto_header_extension(&self, auto_header_extension: bool);
 
@@ -89,13 +89,13 @@ pub trait RTPBasePayloadExt: 'static {
 
     fn set_mtu(&self, mtu: u32);
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "onvif-no-rate-control")]
     fn is_onvif_no_rate_control(&self) -> bool;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "onvif-no-rate-control")]
     fn set_onvif_no_rate_control(&self, onvif_no_rate_control: bool);
 
@@ -115,13 +115,13 @@ pub trait RTPBasePayloadExt: 'static {
     #[doc(alias = "ptime-multiple")]
     fn set_ptime_multiple(&self, ptime_multiple: i64);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "scale-rtptime")]
     fn is_scale_rtptime(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "scale-rtptime")]
     fn set_scale_rtptime(&self, scale_rtptime: bool);
 
@@ -133,13 +133,13 @@ pub trait RTPBasePayloadExt: 'static {
     #[doc(alias = "seqnum-offset")]
     fn set_seqnum_offset(&self, seqnum_offset: i32);
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "source-info")]
     fn is_source_info(&self) -> bool;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "source-info")]
     fn set_source_info(&self, source_info: bool);
 
@@ -157,32 +157,32 @@ pub trait RTPBasePayloadExt: 'static {
     #[doc(alias = "timestamp-offset")]
     fn set_timestamp_offset(&self, timestamp_offset: u32);
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "add-extension")]
     fn connect_add_extension<F: Fn(&Self, &RTPHeaderExtension) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn emit_add_extension(&self, ext: &RTPHeaderExtension);
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "clear-extensions")]
     fn connect_clear_extensions<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn emit_clear_extensions(&self);
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "request-extension")]
     fn connect_request_extension<
         F: Fn(&Self, u32, &str) -> Option<RTPHeaderExtension> + Send + Sync + 'static,
@@ -191,8 +191,8 @@ pub trait RTPBasePayloadExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "auto-header-extension")]
     fn connect_auto_header_extension_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -214,8 +214,8 @@ pub trait RTPBasePayloadExt: 'static {
     #[doc(alias = "mtu")]
     fn connect_mtu_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "onvif-no-rate-control")]
     fn connect_onvif_no_rate_control_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -237,8 +237,8 @@ pub trait RTPBasePayloadExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "scale-rtptime")]
     fn connect_scale_rtptime_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -254,8 +254,8 @@ pub trait RTPBasePayloadExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "source-info")]
     fn connect_source_info_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -282,8 +282,8 @@ pub trait RTPBasePayloadExt: 'static {
 }
 
 impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn allocate_output_buffer(&self, payload_len: u32, pad_len: u8, csrc_count: u8) -> gst::Buffer {
         unsafe {
             from_glib_full(ffi::gst_rtp_base_payload_allocate_output_buffer(
@@ -295,8 +295,8 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn source_count(&self, buffer: &gst::Buffer) -> u32 {
         unsafe {
             ffi::gst_rtp_base_payload_get_source_count(
@@ -316,8 +316,8 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn is_source_info_enabled(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_base_payload_is_source_info_enabled(
@@ -356,8 +356,8 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn set_source_info_enabled(&self, enable: bool) {
         unsafe {
             ffi::gst_rtp_base_payload_set_source_info_enabled(
@@ -367,14 +367,14 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn is_auto_header_extension(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "auto-header-extension")
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn set_auto_header_extension(&self, auto_header_extension: bool) {
         glib::ObjectExt::set_property(
             self.as_ref(),
@@ -407,14 +407,14 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "mtu", mtu)
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn is_onvif_no_rate_control(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "onvif-no-rate-control")
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn set_onvif_no_rate_control(&self, onvif_no_rate_control: bool) {
         glib::ObjectExt::set_property(
             self.as_ref(),
@@ -447,14 +447,14 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "ptime-multiple", ptime_multiple)
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn is_scale_rtptime(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "scale-rtptime")
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_scale_rtptime(&self, scale_rtptime: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "scale-rtptime", scale_rtptime)
     }
@@ -471,14 +471,14 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "seqnum-offset", seqnum_offset)
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn is_source_info(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "source-info")
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn set_source_info(&self, source_info: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "source-info", source_info)
     }
@@ -507,8 +507,8 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "timestamp-offset", timestamp_offset)
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn connect_add_extension<F: Fn(&Self, &RTPHeaderExtension) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -540,14 +540,14 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn emit_add_extension(&self, ext: &RTPHeaderExtension) {
         self.emit_by_name::<()>("add-extension", &[&ext]);
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn connect_clear_extensions<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -575,14 +575,14 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn emit_clear_extensions(&self) {
         self.emit_by_name::<()>("clear-extensions", &[]);
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn connect_request_extension<
         F: Fn(&Self, u32, &str) -> Option<RTPHeaderExtension> + Send + Sync + 'static,
     >(
@@ -619,8 +619,8 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn connect_auto_header_extension_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -730,8 +730,8 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn connect_onvif_no_rate_control_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -841,8 +841,8 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_scale_rtptime_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -924,8 +924,8 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn connect_source_info_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

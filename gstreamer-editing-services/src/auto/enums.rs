@@ -3,12 +3,12 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 use glib::GStr;
 use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
@@ -122,8 +122,8 @@ pub enum Edge {
 }
 
 impl Edge {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn name<'a>(self) -> &'a GStr {
         unsafe {
             GStr::from_ptr(
@@ -135,8 +135,8 @@ impl Edge {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl fmt::Display for Edge {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -248,8 +248,8 @@ pub enum EditMode {
 }
 
 impl EditMode {
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn name<'a>(self) -> &'a GStr {
         unsafe {
             GStr::from_ptr(
@@ -261,8 +261,8 @@ impl EditMode {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl fmt::Display for EditMode {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -793,8 +793,8 @@ pub enum VideoStandardTransitionType {
     WindshieldH,
     #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_CROSSFADE")]
     Crossfade,
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_FADE_IN")]
     FadeIn,
     #[doc(hidden)]
@@ -879,7 +879,7 @@ impl IntoGlib for VideoStandardTransitionType {
             Self::WindshieldV => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_V,
             Self::WindshieldH => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_H,
             Self::Crossfade => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_CROSSFADE,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             Self::FadeIn => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_FADE_IN,
             Self::__Unknown(value) => value,
         }
@@ -964,7 +964,7 @@ impl FromGlib<ffi::GESVideoStandardTransitionType> for VideoStandardTransitionTy
             ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_V => Self::WindshieldV,
             ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_H => Self::WindshieldH,
             ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_CROSSFADE => Self::Crossfade,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_FADE_IN => Self::FadeIn,
             value => Self::__Unknown(value),
         }

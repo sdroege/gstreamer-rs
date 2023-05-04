@@ -3,22 +3,22 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(target_os = "linux", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(target_os = "linux")))]
-#[cfg(any(feature = "v1_24", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+#[cfg(target_os = "linux")]
+#[cfg_attr(docsrs, doc(cfg(target_os = "linux")))]
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 mod drm_dumb_allocator;
-#[cfg(any(target_os = "linux", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(target_os = "linux")))]
-#[cfg(any(feature = "v1_24", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+#[cfg(target_os = "linux")]
+#[cfg_attr(docsrs, doc(cfg(target_os = "linux")))]
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 pub use self::drm_dumb_allocator::DRMDumbAllocator;
 
-#[cfg(any(target_os = "linux", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(target_os = "linux")))]
+#[cfg(target_os = "linux")]
+#[cfg_attr(docsrs, doc(cfg(target_os = "linux")))]
 mod dma_buf_allocator;
-#[cfg(any(target_os = "linux", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(target_os = "linux")))]
+#[cfg(target_os = "linux")]
+#[cfg_attr(docsrs, doc(cfg(target_os = "linux")))]
 pub use self::dma_buf_allocator::DmaBufAllocator;
 
 mod fd_allocator;

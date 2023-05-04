@@ -30,16 +30,16 @@ pub trait AggregatorPadExt: 'static {
     #[doc(alias = "gst_aggregator_pad_drop_buffer")]
     fn drop_buffer(&self) -> bool;
 
-    #[cfg(any(feature = "v1_14_1", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+    #[cfg(feature = "v1_14_1")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
     #[doc(alias = "gst_aggregator_pad_has_buffer")]
     fn has_buffer(&self) -> bool;
 
     #[doc(alias = "gst_aggregator_pad_is_eos")]
     fn is_eos(&self) -> bool;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_aggregator_pad_is_inactive")]
     fn is_inactive(&self) -> bool;
 
@@ -49,13 +49,13 @@ pub trait AggregatorPadExt: 'static {
     #[doc(alias = "gst_aggregator_pad_pop_buffer")]
     fn pop_buffer(&self) -> Option<gst::Buffer>;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "emit-signals")]
     fn emits_signals(&self) -> bool;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "emit-signals")]
     fn set_emit_signals(&self, emit_signals: bool);
 
@@ -65,8 +65,8 @@ pub trait AggregatorPadExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "emit-signals")]
     fn connect_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -83,8 +83,8 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14_1", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+    #[cfg(feature = "v1_14_1")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
     fn has_buffer(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_aggregator_pad_has_buffer(
@@ -101,8 +101,8 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn is_inactive(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_aggregator_pad_is_inactive(
@@ -127,14 +127,14 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn emits_signals(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "emit-signals")
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn set_emit_signals(&self, emit_signals: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "emit-signals", emit_signals)
     }
@@ -170,8 +170,8 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn connect_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

@@ -38,8 +38,8 @@ pub trait AudioDecoderExt: 'static {
         frames: i32,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_audio_decoder_finish_subframe")]
     fn finish_subframe(&self, buf: Option<gst::Buffer>)
         -> Result<gst::FlowSuccess, gst::FlowError>;
@@ -131,8 +131,8 @@ pub trait AudioDecoderExt: 'static {
     #[doc(alias = "gst_audio_decoder_set_use_default_pad_acceptcaps")]
     fn set_use_default_pad_acceptcaps(&self, use_: bool);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "max-errors")]
     fn connect_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -179,8 +179,8 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn finish_subframe(
         &self,
         buf: Option<gst::Buffer>,
@@ -396,8 +396,8 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

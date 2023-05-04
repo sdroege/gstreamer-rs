@@ -3,14 +3,14 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 use glib::{error::ErrorDomain, Quark};
 use glib::{translate::*, value::FromValue, value::ToValue, GStr, StaticType, Type};
 use std::fmt;
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCBundlePolicy")]
@@ -27,8 +27,8 @@ pub enum WebRTCBundlePolicy {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl IntoGlib for WebRTCBundlePolicy {
     type GlibType = ffi::GstWebRTCBundlePolicy;
@@ -45,8 +45,8 @@ impl IntoGlib for WebRTCBundlePolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCBundlePolicy> for WebRTCBundlePolicy {
     #[inline]
@@ -63,8 +63,8 @@ impl FromGlib<ffi::GstWebRTCBundlePolicy> for WebRTCBundlePolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCBundlePolicy {
     #[inline]
     fn static_type() -> Type {
@@ -72,8 +72,8 @@ impl StaticType for WebRTCBundlePolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::HasParamSpec for WebRTCBundlePolicy {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -84,14 +84,14 @@ impl glib::HasParamSpec for WebRTCBundlePolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::value::ValueType for WebRTCBundlePolicy {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 unsafe impl<'a> FromValue<'a> for WebRTCBundlePolicy {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -102,8 +102,8 @@ unsafe impl<'a> FromValue<'a> for WebRTCBundlePolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl ToValue for WebRTCBundlePolicy {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -120,8 +120,8 @@ impl ToValue for WebRTCBundlePolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl From<WebRTCBundlePolicy> for glib::Value {
     #[inline]
     fn from(v: WebRTCBundlePolicy) -> Self {
@@ -340,8 +340,8 @@ impl From<WebRTCDTLSTransportState> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCDataChannelState")]
@@ -358,8 +358,8 @@ pub enum WebRTCDataChannelState {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl IntoGlib for WebRTCDataChannelState {
     type GlibType = ffi::GstWebRTCDataChannelState;
@@ -376,8 +376,8 @@ impl IntoGlib for WebRTCDataChannelState {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCDataChannelState> for WebRTCDataChannelState {
     #[inline]
@@ -394,8 +394,8 @@ impl FromGlib<ffi::GstWebRTCDataChannelState> for WebRTCDataChannelState {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCDataChannelState {
     #[inline]
     fn static_type() -> Type {
@@ -403,8 +403,8 @@ impl StaticType for WebRTCDataChannelState {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::HasParamSpec for WebRTCDataChannelState {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -415,14 +415,14 @@ impl glib::HasParamSpec for WebRTCDataChannelState {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::value::ValueType for WebRTCDataChannelState {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 unsafe impl<'a> FromValue<'a> for WebRTCDataChannelState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -433,8 +433,8 @@ unsafe impl<'a> FromValue<'a> for WebRTCDataChannelState {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl ToValue for WebRTCDataChannelState {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -451,8 +451,8 @@ impl ToValue for WebRTCDataChannelState {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl From<WebRTCDataChannelState> for glib::Value {
     #[inline]
     fn from(v: WebRTCDataChannelState) -> Self {
@@ -461,8 +461,8 @@ impl From<WebRTCDataChannelState> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCError")]
@@ -485,20 +485,20 @@ pub enum WebRTCError {
     InvalidState,
     #[doc(alias = "GST_WEBRTC_ERROR_INTERNAL_FAILURE")]
     InternalFailure,
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GST_WEBRTC_ERROR_INVALID_MODIFICATION")]
     InvalidModification,
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GST_WEBRTC_ERROR_TYPE_ERROR")]
     TypeError,
     #[doc(hidden)]
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl IntoGlib for WebRTCError {
     type GlibType = ffi::GstWebRTCError;
@@ -517,17 +517,17 @@ impl IntoGlib for WebRTCError {
             Self::EncoderError => ffi::GST_WEBRTC_ERROR_ENCODER_ERROR,
             Self::InvalidState => ffi::GST_WEBRTC_ERROR_INVALID_STATE,
             Self::InternalFailure => ffi::GST_WEBRTC_ERROR_INTERNAL_FAILURE,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             Self::InvalidModification => ffi::GST_WEBRTC_ERROR_INVALID_MODIFICATION,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             Self::TypeError => ffi::GST_WEBRTC_ERROR_TYPE_ERROR,
             Self::__Unknown(value) => value,
         }
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCError> for WebRTCError {
     #[inline]
@@ -546,17 +546,17 @@ impl FromGlib<ffi::GstWebRTCError> for WebRTCError {
             ffi::GST_WEBRTC_ERROR_ENCODER_ERROR => Self::EncoderError,
             ffi::GST_WEBRTC_ERROR_INVALID_STATE => Self::InvalidState,
             ffi::GST_WEBRTC_ERROR_INTERNAL_FAILURE => Self::InternalFailure,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             ffi::GST_WEBRTC_ERROR_INVALID_MODIFICATION => Self::InvalidModification,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             ffi::GST_WEBRTC_ERROR_TYPE_ERROR => Self::TypeError,
             value => Self::__Unknown(value),
         }
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl ErrorDomain for WebRTCError {
     #[inline]
     fn domain() -> Quark {
@@ -580,8 +580,8 @@ impl ErrorDomain for WebRTCError {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for WebRTCError {
     #[inline]
     fn static_type() -> Type {
@@ -589,8 +589,8 @@ impl StaticType for WebRTCError {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::HasParamSpec for WebRTCError {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -601,14 +601,14 @@ impl glib::HasParamSpec for WebRTCError {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for WebRTCError {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 unsafe impl<'a> FromValue<'a> for WebRTCError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -619,8 +619,8 @@ unsafe impl<'a> FromValue<'a> for WebRTCError {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl ToValue for WebRTCError {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -637,8 +637,8 @@ impl ToValue for WebRTCError {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl From<WebRTCError> for glib::Value {
     #[inline]
     fn from(v: WebRTCError) -> Self {
@@ -647,8 +647,8 @@ impl From<WebRTCError> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_14_1", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+#[cfg(feature = "v1_14_1")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCFECType")]
@@ -661,8 +661,8 @@ pub enum WebRTCFECType {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_14_1", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+#[cfg(feature = "v1_14_1")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
 #[doc(hidden)]
 impl IntoGlib for WebRTCFECType {
     type GlibType = ffi::GstWebRTCFECType;
@@ -677,8 +677,8 @@ impl IntoGlib for WebRTCFECType {
     }
 }
 
-#[cfg(any(feature = "v1_14_1", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+#[cfg(feature = "v1_14_1")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCFECType> for WebRTCFECType {
     #[inline]
@@ -693,8 +693,8 @@ impl FromGlib<ffi::GstWebRTCFECType> for WebRTCFECType {
     }
 }
 
-#[cfg(any(feature = "v1_14_1", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+#[cfg(feature = "v1_14_1")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
 impl StaticType for WebRTCFECType {
     #[inline]
     fn static_type() -> Type {
@@ -702,8 +702,8 @@ impl StaticType for WebRTCFECType {
     }
 }
 
-#[cfg(any(feature = "v1_14_1", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+#[cfg(feature = "v1_14_1")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
 impl glib::HasParamSpec for WebRTCFECType {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -714,14 +714,14 @@ impl glib::HasParamSpec for WebRTCFECType {
     }
 }
 
-#[cfg(any(feature = "v1_14_1", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+#[cfg(feature = "v1_14_1")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
 impl glib::value::ValueType for WebRTCFECType {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_14_1", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+#[cfg(feature = "v1_14_1")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
 unsafe impl<'a> FromValue<'a> for WebRTCFECType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -732,8 +732,8 @@ unsafe impl<'a> FromValue<'a> for WebRTCFECType {
     }
 }
 
-#[cfg(any(feature = "v1_14_1", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+#[cfg(feature = "v1_14_1")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
 impl ToValue for WebRTCFECType {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -750,8 +750,8 @@ impl ToValue for WebRTCFECType {
     }
 }
 
-#[cfg(any(feature = "v1_14_1", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+#[cfg(feature = "v1_14_1")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
 impl From<WebRTCFECType> for glib::Value {
     #[inline]
     fn from(v: WebRTCFECType) -> Self {
@@ -1164,8 +1164,8 @@ impl From<WebRTCICERole> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCICETransportPolicy")]
@@ -1178,8 +1178,8 @@ pub enum WebRTCICETransportPolicy {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl IntoGlib for WebRTCICETransportPolicy {
     type GlibType = ffi::GstWebRTCICETransportPolicy;
@@ -1194,8 +1194,8 @@ impl IntoGlib for WebRTCICETransportPolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCICETransportPolicy> for WebRTCICETransportPolicy {
     #[inline]
@@ -1210,8 +1210,8 @@ impl FromGlib<ffi::GstWebRTCICETransportPolicy> for WebRTCICETransportPolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCICETransportPolicy {
     #[inline]
     fn static_type() -> Type {
@@ -1219,8 +1219,8 @@ impl StaticType for WebRTCICETransportPolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::HasParamSpec for WebRTCICETransportPolicy {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -1231,14 +1231,14 @@ impl glib::HasParamSpec for WebRTCICETransportPolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::value::ValueType for WebRTCICETransportPolicy {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 unsafe impl<'a> FromValue<'a> for WebRTCICETransportPolicy {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -1249,8 +1249,8 @@ unsafe impl<'a> FromValue<'a> for WebRTCICETransportPolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl ToValue for WebRTCICETransportPolicy {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -1267,8 +1267,8 @@ impl ToValue for WebRTCICETransportPolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl From<WebRTCICETransportPolicy> for glib::Value {
     #[inline]
     fn from(v: WebRTCICETransportPolicy) -> Self {
@@ -1277,8 +1277,8 @@ impl From<WebRTCICETransportPolicy> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCKind")]
@@ -1293,8 +1293,8 @@ pub enum WebRTCKind {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl IntoGlib for WebRTCKind {
     type GlibType = ffi::GstWebRTCKind;
@@ -1310,8 +1310,8 @@ impl IntoGlib for WebRTCKind {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCKind> for WebRTCKind {
     #[inline]
@@ -1327,8 +1327,8 @@ impl FromGlib<ffi::GstWebRTCKind> for WebRTCKind {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for WebRTCKind {
     #[inline]
     fn static_type() -> Type {
@@ -1336,8 +1336,8 @@ impl StaticType for WebRTCKind {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::HasParamSpec for WebRTCKind {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -1348,14 +1348,14 @@ impl glib::HasParamSpec for WebRTCKind {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for WebRTCKind {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 unsafe impl<'a> FromValue<'a> for WebRTCKind {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -1366,8 +1366,8 @@ unsafe impl<'a> FromValue<'a> for WebRTCKind {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl ToValue for WebRTCKind {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -1384,8 +1384,8 @@ impl ToValue for WebRTCKind {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl From<WebRTCKind> for glib::Value {
     #[inline]
     fn from(v: WebRTCKind) -> Self {
@@ -1505,8 +1505,8 @@ impl From<WebRTCPeerConnectionState> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCPriorityType")]
@@ -1523,8 +1523,8 @@ pub enum WebRTCPriorityType {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl IntoGlib for WebRTCPriorityType {
     type GlibType = ffi::GstWebRTCPriorityType;
@@ -1541,8 +1541,8 @@ impl IntoGlib for WebRTCPriorityType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCPriorityType> for WebRTCPriorityType {
     #[inline]
@@ -1559,8 +1559,8 @@ impl FromGlib<ffi::GstWebRTCPriorityType> for WebRTCPriorityType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCPriorityType {
     #[inline]
     fn static_type() -> Type {
@@ -1568,8 +1568,8 @@ impl StaticType for WebRTCPriorityType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::HasParamSpec for WebRTCPriorityType {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -1580,14 +1580,14 @@ impl glib::HasParamSpec for WebRTCPriorityType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::value::ValueType for WebRTCPriorityType {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 unsafe impl<'a> FromValue<'a> for WebRTCPriorityType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -1598,8 +1598,8 @@ unsafe impl<'a> FromValue<'a> for WebRTCPriorityType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl ToValue for WebRTCPriorityType {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -1616,8 +1616,8 @@ impl ToValue for WebRTCPriorityType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl From<WebRTCPriorityType> for glib::Value {
     #[inline]
     fn from(v: WebRTCPriorityType) -> Self {
@@ -1733,8 +1733,8 @@ impl From<WebRTCRTPTransceiverDirection> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCSCTPTransportState")]
@@ -1751,8 +1751,8 @@ pub enum WebRTCSCTPTransportState {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl IntoGlib for WebRTCSCTPTransportState {
     type GlibType = ffi::GstWebRTCSCTPTransportState;
@@ -1769,8 +1769,8 @@ impl IntoGlib for WebRTCSCTPTransportState {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCSCTPTransportState> for WebRTCSCTPTransportState {
     #[inline]
@@ -1787,8 +1787,8 @@ impl FromGlib<ffi::GstWebRTCSCTPTransportState> for WebRTCSCTPTransportState {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCSCTPTransportState {
     #[inline]
     fn static_type() -> Type {
@@ -1796,8 +1796,8 @@ impl StaticType for WebRTCSCTPTransportState {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::HasParamSpec for WebRTCSCTPTransportState {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -1808,14 +1808,14 @@ impl glib::HasParamSpec for WebRTCSCTPTransportState {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::value::ValueType for WebRTCSCTPTransportState {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 unsafe impl<'a> FromValue<'a> for WebRTCSCTPTransportState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -1826,8 +1826,8 @@ unsafe impl<'a> FromValue<'a> for WebRTCSCTPTransportState {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl ToValue for WebRTCSCTPTransportState {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -1844,8 +1844,8 @@ impl ToValue for WebRTCSCTPTransportState {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl From<WebRTCSCTPTransportState> for glib::Value {
     #[inline]
     fn from(v: WebRTCSCTPTransportState) -> Self {

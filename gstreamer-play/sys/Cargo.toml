@@ -48,7 +48,7 @@ edition = "2021"
 rust-version = "1.66"
 
 [package.metadata.docs.rs]
-features = ["dox"]
+features = []
 
 [package.metadata.system-deps.gstreamer_play_1_0]
 name = "gstreamer-play-1.0"

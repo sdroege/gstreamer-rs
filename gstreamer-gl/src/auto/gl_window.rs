@@ -34,8 +34,8 @@ unsafe impl Send for GLWindow {}
 unsafe impl Sync for GLWindow {}
 
 pub trait GLWindowExt: 'static {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_window_controls_viewport")]
     fn controls_viewport(&self) -> bool;
 
@@ -53,8 +53,8 @@ pub trait GLWindowExt: 'static {
     #[doc(alias = "gst_gl_window_handle_events")]
     fn handle_events(&self, handle_events: bool);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_gl_window_has_output_surface")]
     fn has_output_surface(&self) -> bool;
 
@@ -76,8 +76,8 @@ pub trait GLWindowExt: 'static {
     #[doc(alias = "gst_gl_window_send_mouse_event")]
     fn send_mouse_event(&self, event_type: &str, button: i32, posx: f64, posy: f64);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_gl_window_send_scroll_event")]
     fn send_scroll_event(&self, posx: f64, posy: f64, delta_x: f64, delta_y: f64);
 
@@ -108,16 +108,16 @@ pub trait GLWindowExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "scroll-event")]
     fn connect_scroll_event<F: Fn(&Self, f64, f64, f64, f64) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "window-handle-changed")]
     fn connect_window_handle_changed<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -126,8 +126,8 @@ pub trait GLWindowExt: 'static {
 }
 
 impl<O: IsA<GLWindow>> GLWindowExt for O {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn controls_viewport(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_window_controls_viewport(
@@ -172,8 +172,8 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn has_output_surface(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_window_has_output_surface(
@@ -228,8 +228,8 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn send_scroll_event(&self, posx: f64, posy: f64, delta_x: f64, delta_y: f64) {
         unsafe {
             ffi::gst_gl_window_send_scroll_event(
@@ -345,8 +345,8 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_scroll_event<F: Fn(&Self, f64, f64, f64, f64) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -384,8 +384,8 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn connect_window_handle_changed<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

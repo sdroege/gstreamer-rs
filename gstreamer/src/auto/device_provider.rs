@@ -34,8 +34,8 @@ pub trait DeviceProviderExt: 'static {
     #[doc(alias = "gst_device_provider_device_add")]
     fn device_add(&self, device: &impl IsA<Device>);
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_device_provider_device_changed")]
     fn device_changed(&self, device: &impl IsA<Device>, changed_device: &impl IsA<Device>);
 
@@ -57,8 +57,8 @@ pub trait DeviceProviderExt: 'static {
     #[doc(alias = "gst_device_provider_hide_provider")]
     fn hide_provider(&self, name: &str);
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_device_provider_is_started")]
     fn is_started(&self) -> bool;
 
@@ -102,8 +102,8 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn device_changed(&self, device: &impl IsA<Device>, changed_device: &impl IsA<Device>) {
         unsafe {
             ffi::gst_device_provider_device_changed(
@@ -156,8 +156,8 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn is_started(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_device_provider_is_started(

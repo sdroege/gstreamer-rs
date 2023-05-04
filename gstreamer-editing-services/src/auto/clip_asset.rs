@@ -3,8 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::FrameNumber;
 use crate::{Asset, MetaContainer, TrackType};
 use glib::{
@@ -12,8 +12,8 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use std::mem;
 use std::{boxed::Box as Box_, mem::transmute};
 
@@ -31,14 +31,14 @@ impl ClipAsset {
 }
 
 pub trait ClipAssetExt: 'static {
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_asset_get_frame_time")]
     #[doc(alias = "get_frame_time")]
     fn frame_time(&self, frame_number: FrameNumber) -> Option<gst::ClockTime>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_asset_get_natural_framerate")]
     #[doc(alias = "get_natural_framerate")]
     fn natural_framerate(&self) -> Option<(i32, i32)>;
@@ -55,8 +55,8 @@ pub trait ClipAssetExt: 'static {
 }
 
 impl<O: IsA<ClipAsset>> ClipAssetExt for O {
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn frame_time(&self, frame_number: FrameNumber) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_clip_asset_get_frame_time(
@@ -66,8 +66,8 @@ impl<O: IsA<ClipAsset>> ClipAssetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn natural_framerate(&self) -> Option<(i32, i32)> {
         unsafe {
             let mut framerate_n = mem::MaybeUninit::uninit();

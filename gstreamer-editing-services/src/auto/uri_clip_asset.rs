@@ -3,8 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::SourceClipAsset;
 use crate::{Asset, ClipAsset, MetaContainer, UriSourceAsset};
 use glib::{
@@ -14,8 +14,8 @@ use glib::{
 };
 use std::{boxed::Box as Box_, mem::transmute, ptr};
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 glib::wrapper! {
     #[doc(alias = "GESUriClipAsset")]
     pub struct UriClipAsset(Object<ffi::GESUriClipAsset, ffi::GESUriClipAssetClass>) @extends SourceClipAsset, ClipAsset, Asset, @implements MetaContainer;
@@ -25,7 +25,7 @@ glib::wrapper! {
     }
 }
 
-#[cfg(not(any(feature = "v1_18", feature = "dox")))]
+#[cfg(not(any(feature = "v1_18")))]
 glib::wrapper! {
     #[doc(alias = "GESUriClipAsset")]
     pub struct UriClipAsset(Object<ffi::GESUriClipAsset, ffi::GESUriClipAssetClass>) @extends ClipAsset, Asset, @implements MetaContainer;
@@ -38,8 +38,8 @@ glib::wrapper! {
 impl UriClipAsset {
     pub const NONE: Option<&'static UriClipAsset> = None;
 
-    //#[cfg(any(feature = "v1_16", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //#[cfg(feature = "v1_16")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     //#[doc(alias = "ges_uri_clip_asset_finish")]
     //pub fn finish(res: /*Ignored*/&gio::AsyncResult) -> Result<UriClipAsset, glib::Error> {
     //    unsafe { TODO: call ffi:ges_uri_clip_asset_finish() }
@@ -74,8 +74,8 @@ pub trait UriClipAssetExt: 'static {
     #[doc(alias = "get_info")]
     fn info(&self) -> gst_pbutils::DiscovererInfo;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_uri_clip_asset_get_max_duration")]
     #[doc(alias = "get_max_duration")]
     fn max_duration(&self) -> Option<gst::ClockTime>;
@@ -84,23 +84,23 @@ pub trait UriClipAssetExt: 'static {
     #[doc(alias = "get_stream_assets")]
     fn stream_assets(&self) -> Vec<UriSourceAsset>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_uri_clip_asset_is_image")]
     fn is_image(&self) -> bool;
 
     fn set_duration(&self, duration: u64);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "is-nested-timeline")]
     fn is_nested_timeline(&self) -> bool;
 
     #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "is-nested-timeline")]
     fn connect_is_nested_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -122,8 +122,8 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn max_duration(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_uri_clip_asset_get_max_duration(
@@ -140,8 +140,8 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn is_image(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_uri_clip_asset_is_image(
@@ -154,8 +154,8 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "duration", duration)
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn is_nested_timeline(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "is-nested-timeline")
     }
@@ -185,8 +185,8 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_is_nested_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_is_nested_timeline_trampoline<
             P: IsA<UriClipAsset>,

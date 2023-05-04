@@ -7,9 +7,9 @@ use bitflags::bitflags;
 use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 use std::fmt;
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
+#[cfg(feature = "v1_22")]
 bitflags! {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GstNavigationModifierType")]
     pub struct NavigationModifierType: u32 {
         #[doc(alias = "GST_NAVIGATION_MODIFIER_SHIFT_MASK")]
@@ -47,8 +47,8 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 #[doc(hidden)]
 impl IntoGlib for NavigationModifierType {
     type GlibType = ffi::GstNavigationModifierType;
@@ -59,8 +59,8 @@ impl IntoGlib for NavigationModifierType {
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstNavigationModifierType> for NavigationModifierType {
     #[inline]
@@ -70,8 +70,8 @@ impl FromGlib<ffi::GstNavigationModifierType> for NavigationModifierType {
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 impl StaticType for NavigationModifierType {
     #[inline]
     fn static_type() -> Type {
@@ -79,8 +79,8 @@ impl StaticType for NavigationModifierType {
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 impl glib::HasParamSpec for NavigationModifierType {
     type ParamSpec = glib::ParamSpecFlags;
     type SetValue = Self;
@@ -91,14 +91,14 @@ impl glib::HasParamSpec for NavigationModifierType {
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 impl glib::value::ValueType for NavigationModifierType {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 unsafe impl<'a> FromValue<'a> for NavigationModifierType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -109,8 +109,8 @@ unsafe impl<'a> FromValue<'a> for NavigationModifierType {
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 impl ToValue for NavigationModifierType {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -127,8 +127,8 @@ impl ToValue for NavigationModifierType {
     }
 }
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 impl From<NavigationModifierType> for glib::Value {
     #[inline]
     fn from(v: NavigationModifierType) -> Self {
@@ -152,16 +152,16 @@ bitflags! {
         const MULTIPLE_VIEW = ffi::GST_VIDEO_BUFFER_FLAG_MULTIPLE_VIEW as _;
         #[doc(alias = "GST_VIDEO_BUFFER_FLAG_FIRST_IN_BUNDLE")]
         const FIRST_IN_BUNDLE = ffi::GST_VIDEO_BUFFER_FLAG_FIRST_IN_BUNDLE as _;
-        #[cfg(any(feature = "v1_16", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+        #[cfg(feature = "v1_16")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
         #[doc(alias = "GST_VIDEO_BUFFER_FLAG_TOP_FIELD")]
         const TOP_FIELD = ffi::GST_VIDEO_BUFFER_FLAG_TOP_FIELD as _;
-        #[cfg(any(feature = "v1_16", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+        #[cfg(feature = "v1_16")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
         #[doc(alias = "GST_VIDEO_BUFFER_FLAG_BOTTOM_FIELD")]
         const BOTTOM_FIELD = ffi::GST_VIDEO_BUFFER_FLAG_BOTTOM_FIELD as _;
-        #[cfg(any(feature = "v1_18", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+        #[cfg(feature = "v1_18")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
         #[doc(alias = "GST_VIDEO_BUFFER_FLAG_MARKER")]
         const MARKER = ffi::GST_VIDEO_BUFFER_FLAG_MARKER as _;
     }
@@ -264,8 +264,8 @@ bitflags! {
 }
 
 impl VideoChromaSite {
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_video_chroma_site_from_string")]
     pub fn from_string(s: &str) -> VideoChromaSite {
         assert_initialized_main_thread!();
@@ -365,8 +365,8 @@ bitflags! {
         const FORCE_KEYFRAME = ffi::GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME as _;
         #[doc(alias = "GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME_HEADERS")]
         const FORCE_KEYFRAME_HEADERS = ffi::GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME_HEADERS as _;
-        #[cfg(any(feature = "v1_20", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+        #[cfg(feature = "v1_20")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
         #[doc(alias = "GST_VIDEO_CODEC_FRAME_FLAG_CORRUPTED")]
         const CORRUPTED = ffi::GST_VIDEO_CODEC_FRAME_FLAG_CORRUPTED as _;
     }
@@ -391,8 +391,8 @@ impl FromGlib<ffi::GstVideoCodecFrameFlags> for VideoCodecFrameFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for VideoCodecFrameFlags {
     #[inline]
     fn static_type() -> Type {
@@ -400,8 +400,8 @@ impl StaticType for VideoCodecFrameFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::HasParamSpec for VideoCodecFrameFlags {
     type ParamSpec = glib::ParamSpecFlags;
     type SetValue = Self;
@@ -412,14 +412,14 @@ impl glib::HasParamSpec for VideoCodecFrameFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for VideoCodecFrameFlags {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 unsafe impl<'a> FromValue<'a> for VideoCodecFrameFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -430,8 +430,8 @@ unsafe impl<'a> FromValue<'a> for VideoCodecFrameFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl ToValue for VideoCodecFrameFlags {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -448,8 +448,8 @@ impl ToValue for VideoCodecFrameFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl From<VideoCodecFrameFlags> for glib::Value {
     #[inline]
     fn from(v: VideoCodecFrameFlags) -> Self {
@@ -458,9 +458,9 @@ impl From<VideoCodecFrameFlags> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 bitflags! {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstVideoDecoderRequestSyncPointFlags")]
     pub struct VideoDecoderRequestSyncPointFlags: u32 {
         #[doc(alias = "GST_VIDEO_DECODER_REQUEST_SYNC_POINT_DISCARD_INPUT")]
@@ -470,8 +470,8 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl IntoGlib for VideoDecoderRequestSyncPointFlags {
     type GlibType = ffi::GstVideoDecoderRequestSyncPointFlags;
@@ -482,8 +482,8 @@ impl IntoGlib for VideoDecoderRequestSyncPointFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoDecoderRequestSyncPointFlags> for VideoDecoderRequestSyncPointFlags {
     #[inline]
@@ -493,8 +493,8 @@ impl FromGlib<ffi::GstVideoDecoderRequestSyncPointFlags> for VideoDecoderRequest
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for VideoDecoderRequestSyncPointFlags {
     #[inline]
     fn static_type() -> Type {
@@ -502,8 +502,8 @@ impl StaticType for VideoDecoderRequestSyncPointFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::HasParamSpec for VideoDecoderRequestSyncPointFlags {
     type ParamSpec = glib::ParamSpecFlags;
     type SetValue = Self;
@@ -514,14 +514,14 @@ impl glib::HasParamSpec for VideoDecoderRequestSyncPointFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for VideoDecoderRequestSyncPointFlags {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 unsafe impl<'a> FromValue<'a> for VideoDecoderRequestSyncPointFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -532,8 +532,8 @@ unsafe impl<'a> FromValue<'a> for VideoDecoderRequestSyncPointFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl ToValue for VideoDecoderRequestSyncPointFlags {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -550,8 +550,8 @@ impl ToValue for VideoDecoderRequestSyncPointFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl From<VideoDecoderRequestSyncPointFlags> for glib::Value {
     #[inline]
     fn from(v: VideoDecoderRequestSyncPointFlags) -> Self {
@@ -665,8 +665,8 @@ bitflags! {
         const UNPACK = ffi::GST_VIDEO_FORMAT_FLAG_UNPACK as _;
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_TILED")]
         const TILED = ffi::GST_VIDEO_FORMAT_FLAG_TILED as _;
-        #[cfg(any(feature = "v1_22", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+        #[cfg(feature = "v1_22")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_SUBTILES")]
         const SUBTILES = ffi::GST_VIDEO_FORMAT_FLAG_SUBTILES as _;
     }
@@ -761,12 +761,12 @@ bitflags! {
         const MULTIPLE_VIEW = ffi::GST_VIDEO_FRAME_FLAG_MULTIPLE_VIEW as _;
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_FIRST_IN_BUNDLE")]
         const FIRST_IN_BUNDLE = ffi::GST_VIDEO_FRAME_FLAG_FIRST_IN_BUNDLE as _;
-        #[cfg(any(feature = "v1_16", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+        #[cfg(feature = "v1_16")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_TOP_FIELD")]
         const TOP_FIELD = ffi::GST_VIDEO_FRAME_FLAG_TOP_FIELD as _;
-        #[cfg(any(feature = "v1_16", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+        #[cfg(feature = "v1_16")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_BOTTOM_FIELD")]
         const BOTTOM_FIELD = ffi::GST_VIDEO_FRAME_FLAG_BOTTOM_FIELD as _;
     }
@@ -969,8 +969,8 @@ impl FromGlib<ffi::GstVideoOverlayFormatFlags> for VideoOverlayFormatFlags {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for VideoOverlayFormatFlags {
     #[inline]
     fn static_type() -> Type {
@@ -978,8 +978,8 @@ impl StaticType for VideoOverlayFormatFlags {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::HasParamSpec for VideoOverlayFormatFlags {
     type ParamSpec = glib::ParamSpecFlags;
     type SetValue = Self;
@@ -990,14 +990,14 @@ impl glib::HasParamSpec for VideoOverlayFormatFlags {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::value::ValueType for VideoOverlayFormatFlags {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 unsafe impl<'a> FromValue<'a> for VideoOverlayFormatFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -1008,8 +1008,8 @@ unsafe impl<'a> FromValue<'a> for VideoOverlayFormatFlags {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl ToValue for VideoOverlayFormatFlags {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -1026,8 +1026,8 @@ impl ToValue for VideoOverlayFormatFlags {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl From<VideoOverlayFormatFlags> for glib::Value {
     #[inline]
     fn from(v: VideoOverlayFormatFlags) -> Self {
@@ -1149,8 +1149,8 @@ impl FromGlib<ffi::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoTimeCodeFlags {
     #[inline]
     fn static_type() -> Type {
@@ -1158,8 +1158,8 @@ impl StaticType for VideoTimeCodeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl glib::HasParamSpec for VideoTimeCodeFlags {
     type ParamSpec = glib::ParamSpecFlags;
     type SetValue = Self;
@@ -1170,14 +1170,14 @@ impl glib::HasParamSpec for VideoTimeCodeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl glib::value::ValueType for VideoTimeCodeFlags {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 unsafe impl<'a> FromValue<'a> for VideoTimeCodeFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -1188,8 +1188,8 @@ unsafe impl<'a> FromValue<'a> for VideoTimeCodeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl ToValue for VideoTimeCodeFlags {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -1206,8 +1206,8 @@ impl ToValue for VideoTimeCodeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl From<VideoTimeCodeFlags> for glib::Value {
     #[inline]
     fn from(v: VideoTimeCodeFlags) -> Self {

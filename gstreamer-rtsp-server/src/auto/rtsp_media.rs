@@ -12,8 +12,8 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use std::mem;
 use std::{boxed::Box as Box_, mem::transmute};
 
@@ -72,14 +72,14 @@ pub trait RTSPMediaExt: 'static {
     #[doc(alias = "get_clock")]
     fn clock(&self) -> Option<gst::Clock>;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_media_get_do_retransmission")]
     #[doc(alias = "get_do_retransmission")]
     fn does_retransmission(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_media_get_dscp_qos")]
     #[doc(alias = "get_dscp_qos")]
     fn dscp_qos(&self) -> i32;
@@ -92,8 +92,8 @@ pub trait RTSPMediaExt: 'static {
     #[doc(alias = "get_latency")]
     fn latency(&self) -> u32;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_media_get_max_mcast_ttl")]
     #[doc(alias = "get_max_mcast_ttl")]
     fn max_mcast_ttl(&self) -> u32;
@@ -122,14 +122,14 @@ pub trait RTSPMediaExt: 'static {
     #[doc(alias = "get_range_string")]
     fn range_string(&self, play: bool, unit: gst_rtsp::RTSPRangeUnit) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_media_get_rate_control")]
     #[doc(alias = "get_rate_control")]
     fn is_rate_control(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_media_get_rates")]
     #[doc(alias = "get_rates")]
     fn rates(&self) -> Option<(f64, f64)>;
@@ -161,21 +161,21 @@ pub trait RTSPMediaExt: 'static {
     //#[doc(alias = "gst_rtsp_media_handle_sdp")]
     //fn handle_sdp(&self, sdp: /*Ignored*/&mut gst_sdp::SDPMessage) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_media_has_completed_sender")]
     fn has_completed_sender(&self) -> bool;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_media_is_bind_mcast_address")]
     fn is_bind_mcast_address(&self) -> bool;
 
     #[doc(alias = "gst_rtsp_media_is_eos_shutdown")]
     fn is_eos_shutdown(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_media_is_receive_only")]
     fn is_receive_only(&self) -> bool;
 
@@ -191,8 +191,8 @@ pub trait RTSPMediaExt: 'static {
     #[doc(alias = "gst_rtsp_media_is_time_provider")]
     fn is_time_provider(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_media_lock")]
     fn lock(&self);
 
@@ -205,13 +205,13 @@ pub trait RTSPMediaExt: 'static {
     //#[doc(alias = "gst_rtsp_media_seek")]
     //fn seek(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange) -> bool;
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[cfg(feature = "v1_18")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     //#[doc(alias = "gst_rtsp_media_seek_full")]
     //fn seek_full(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags) -> bool;
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[cfg(feature = "v1_18")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     //#[doc(alias = "gst_rtsp_media_seek_trickmode")]
     //fn seek_trickmode(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags, rate: f64, trickmode_interval: impl Into<Option<gst::ClockTime>>) -> bool;
 
@@ -221,8 +221,8 @@ pub trait RTSPMediaExt: 'static {
     #[doc(alias = "gst_rtsp_media_set_address_pool")]
     fn set_address_pool(&self, pool: Option<&impl IsA<RTSPAddressPool>>);
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_media_set_bind_mcast_address")]
     fn set_bind_mcast_address(&self, bind_mcast_addr: bool);
 
@@ -232,13 +232,13 @@ pub trait RTSPMediaExt: 'static {
     #[doc(alias = "gst_rtsp_media_set_clock")]
     fn set_clock(&self, clock: Option<&impl IsA<gst::Clock>>);
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_media_set_do_retransmission")]
     fn set_do_retransmission(&self, do_retransmission: bool);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_media_set_dscp_qos")]
     fn set_dscp_qos(&self, dscp_qos: i32);
 
@@ -248,8 +248,8 @@ pub trait RTSPMediaExt: 'static {
     #[doc(alias = "gst_rtsp_media_set_latency")]
     fn set_latency(&self, latency: u32);
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_media_set_max_mcast_ttl")]
     fn set_max_mcast_ttl(&self, ttl: u32) -> bool;
 
@@ -271,8 +271,8 @@ pub trait RTSPMediaExt: 'static {
     #[doc(alias = "gst_rtsp_media_set_publish_clock_mode")]
     fn set_publish_clock_mode(&self, mode: RTSPPublishClockMode);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_media_set_rate_control")]
     fn set_rate_control(&self, enabled: bool);
 
@@ -303,8 +303,8 @@ pub trait RTSPMediaExt: 'static {
     #[doc(alias = "gst_rtsp_media_suspend")]
     fn suspend(&self) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_media_unlock")]
     fn unlock(&self);
 
@@ -338,8 +338,8 @@ pub trait RTSPMediaExt: 'static {
     #[doc(alias = "time-provider")]
     fn set_time_provider(&self, time_provider: bool);
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "handle-message")]
     fn connect_handle_message<F: Fn(&Self, &gst::Message) -> bool + Send + Sync + 'static>(
         &self,
@@ -520,8 +520,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn does_retransmission(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_get_do_retransmission(
@@ -530,8 +530,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn dscp_qos(&self) -> i32 {
         unsafe { ffi::gst_rtsp_media_get_dscp_qos(self.as_ref().to_glib_none().0) }
     }
@@ -548,8 +548,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         unsafe { ffi::gst_rtsp_media_get_latency(self.as_ref().to_glib_none().0) }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn max_mcast_ttl(&self) -> u32 {
         unsafe { ffi::gst_rtsp_media_get_max_mcast_ttl(self.as_ref().to_glib_none().0) }
     }
@@ -600,8 +600,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn is_rate_control(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_get_rate_control(
@@ -610,8 +610,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn rates(&self) -> Option<(f64, f64)> {
         unsafe {
             let mut rate = mem::MaybeUninit::uninit();
@@ -684,8 +684,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_media_handle_sdp() }
     //}
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn has_completed_sender(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_has_completed_sender(
@@ -694,8 +694,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn is_bind_mcast_address(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_is_bind_mcast_address(
@@ -712,8 +712,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn is_receive_only(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_is_receive_only(
@@ -754,8 +754,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn lock(&self) {
         unsafe {
             ffi::gst_rtsp_media_lock(self.as_ref().to_glib_none().0);
@@ -779,14 +779,14 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_media_seek() }
     //}
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[cfg(feature = "v1_18")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     //fn seek_full(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags) -> bool {
     //    unsafe { TODO: call ffi:gst_rtsp_media_seek_full() }
     //}
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[cfg(feature = "v1_18")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     //fn seek_trickmode(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags, rate: f64, trickmode_interval: impl Into<Option<gst::ClockTime>>) -> bool {
     //    unsafe { TODO: call ffi:gst_rtsp_media_seek_trickmode() }
     //}
@@ -804,8 +804,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn set_bind_mcast_address(&self, bind_mcast_addr: bool) {
         unsafe {
             ffi::gst_rtsp_media_set_bind_mcast_address(
@@ -830,8 +830,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn set_do_retransmission(&self, do_retransmission: bool) {
         unsafe {
             ffi::gst_rtsp_media_set_do_retransmission(
@@ -841,8 +841,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_dscp_qos(&self, dscp_qos: i32) {
         unsafe {
             ffi::gst_rtsp_media_set_dscp_qos(self.as_ref().to_glib_none().0, dscp_qos);
@@ -864,8 +864,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn set_max_mcast_ttl(&self, ttl: u32) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_set_max_mcast_ttl(
@@ -921,8 +921,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_rate_control(&self, enabled: bool) {
         unsafe {
             ffi::gst_rtsp_media_set_rate_control(
@@ -1000,8 +1000,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn unlock(&self) {
         unsafe {
             ffi::gst_rtsp_media_unlock(self.as_ref().to_glib_none().0);
@@ -1063,8 +1063,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "time-provider", time_provider)
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn connect_handle_message<F: Fn(&Self, &gst::Message) -> bool + Send + Sync + 'static>(
         &self,
         detail: Option<&str>,

@@ -113,23 +113,23 @@ pub trait WebRTCICEExt: 'static {
     #[doc(alias = "gst_webrtc_ice_set_turn_server")]
     fn set_turn_server(&self, uri: Option<&str>);
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "max-rtp-port")]
     fn max_rtp_port(&self) -> u32;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "max-rtp-port")]
     fn set_max_rtp_port(&self, max_rtp_port: u32);
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "min-rtp-port")]
     fn min_rtp_port(&self) -> u32;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "min-rtp-port")]
     fn set_min_rtp_port(&self, min_rtp_port: u32);
 
@@ -141,16 +141,16 @@ pub trait WebRTCICEExt: 'static {
 
     fn emit_add_local_ip_address(&self, address: &str) -> bool;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "max-rtp-port")]
     fn connect_max_rtp_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "min-rtp-port")]
     fn connect_min_rtp_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -392,26 +392,26 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn max_rtp_port(&self) -> u32 {
         glib::ObjectExt::property(self.as_ref(), "max-rtp-port")
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn set_max_rtp_port(&self, max_rtp_port: u32) {
         glib::ObjectExt::set_property(self.as_ref(), "max-rtp-port", max_rtp_port)
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn min_rtp_port(&self) -> u32 {
         glib::ObjectExt::property(self.as_ref(), "min-rtp-port")
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn set_min_rtp_port(&self, min_rtp_port: u32) {
         glib::ObjectExt::set_property(self.as_ref(), "min-rtp-port", min_rtp_port)
     }
@@ -452,8 +452,8 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         self.emit_by_name("add-local-ip-address", &[&address])
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn connect_max_rtp_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -482,8 +482,8 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn connect_min_rtp_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

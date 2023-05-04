@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -382,8 +382,8 @@ extern "C" {
     pub fn gst_player_get_position(player: *mut GstPlayer) -> gst::GstClockTime;
     pub fn gst_player_get_rate(player: *mut GstPlayer) -> c_double;
     pub fn gst_player_get_subtitle_uri(player: *mut GstPlayer) -> *mut c_char;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_player_get_subtitle_video_offset(player: *mut GstPlayer) -> i64;
     pub fn gst_player_get_uri(player: *mut GstPlayer) -> *mut c_char;
     pub fn gst_player_get_video_snapshot(
@@ -421,8 +421,8 @@ extern "C" {
     pub fn gst_player_set_subtitle_track(player: *mut GstPlayer, stream_index: c_int) -> gboolean;
     pub fn gst_player_set_subtitle_track_enabled(player: *mut GstPlayer, enabled: gboolean);
     pub fn gst_player_set_subtitle_uri(player: *mut GstPlayer, uri: *const c_char);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_player_set_subtitle_video_offset(player: *mut GstPlayer, offset: i64);
     pub fn gst_player_set_uri(player: *mut GstPlayer, uri: *const c_char);
     pub fn gst_player_set_video_track(player: *mut GstPlayer, stream_index: c_int) -> gboolean;

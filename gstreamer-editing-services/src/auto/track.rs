@@ -9,8 +9,8 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use std::ptr;
 use std::{boxed::Box as Box_, mem::transmute};
 
@@ -37,8 +37,8 @@ pub trait GESTrackExt: 'static {
     #[doc(alias = "ges_track_add_element")]
     fn add_element(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_add_element_full")]
     fn add_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error>;
 
@@ -57,8 +57,8 @@ pub trait GESTrackExt: 'static {
     #[doc(alias = "get_mixing")]
     fn is_mixing(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_get_restriction_caps")]
     #[doc(alias = "get_restriction_caps")]
     fn restriction_caps(&self) -> Option<gst::Caps>;
@@ -71,8 +71,8 @@ pub trait GESTrackExt: 'static {
     fn remove_element(&self, object: &impl IsA<TrackElement>)
         -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_remove_element_full")]
     fn remove_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error>;
 
@@ -93,12 +93,12 @@ pub trait GESTrackExt: 'static {
 
     fn duration(&self) -> u64;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn id(&self) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_id(&self, id: Option<&str>);
 
     #[doc(alias = "restriction-caps")]
@@ -125,8 +125,8 @@ pub trait GESTrackExt: 'static {
     #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "id")]
     fn connect_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -150,8 +150,8 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn add_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -189,8 +189,8 @@ impl<O: IsA<Track>> GESTrackExt for O {
         unsafe { from_glib(ffi::ges_track_get_mixing(self.as_ref().to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn restriction_caps(&self) -> Option<gst::Caps> {
         unsafe {
             from_glib_full(ffi::ges_track_get_restriction_caps(
@@ -218,8 +218,8 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn remove_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -278,14 +278,14 @@ impl<O: IsA<Track>> GESTrackExt for O {
         glib::ObjectExt::property(self.as_ref(), "duration")
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn id(&self) -> Option<glib::GString> {
         glib::ObjectExt::property(self.as_ref(), "id")
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_id(&self, id: Option<&str>) {
         glib::ObjectExt::set_property(self.as_ref(), "id", id)
     }
@@ -403,8 +403,8 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_id_trampoline<P: IsA<Track>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrack,

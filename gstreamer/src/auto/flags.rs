@@ -861,9 +861,9 @@ impl From<EventTypeFlags> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 bitflags! {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstGapFlags")]
     pub struct GapFlags: u32 {
         #[doc(alias = "GST_GAP_FLAG_MISSING_DATA")]
@@ -871,8 +871,8 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl IntoGlib for GapFlags {
     type GlibType = ffi::GstGapFlags;
@@ -883,8 +883,8 @@ impl IntoGlib for GapFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstGapFlags> for GapFlags {
     #[inline]
@@ -894,8 +894,8 @@ impl FromGlib<ffi::GstGapFlags> for GapFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for GapFlags {
     #[inline]
     fn static_type() -> Type {
@@ -903,8 +903,8 @@ impl StaticType for GapFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::HasParamSpec for GapFlags {
     type ParamSpec = glib::ParamSpecFlags;
     type SetValue = Self;
@@ -915,14 +915,14 @@ impl glib::HasParamSpec for GapFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for GapFlags {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 unsafe impl<'a> FromValue<'a> for GapFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -933,8 +933,8 @@ unsafe impl<'a> FromValue<'a> for GapFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl ToValue for GapFlags {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -951,8 +951,8 @@ impl ToValue for GapFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl From<GapFlags> for glib::Value {
     #[inline]
     fn from(v: GapFlags) -> Self {
@@ -1707,9 +1707,9 @@ impl From<PipelineFlags> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg(feature = "v1_18")]
 bitflags! {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GstPluginAPIFlags")]
     pub struct PluginAPIFlags: u32 {
         #[doc(alias = "GST_PLUGIN_API_FLAG_IGNORE_ENUM_MEMBERS")]
@@ -1717,8 +1717,8 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl IntoGlib for PluginAPIFlags {
     type GlibType = ffi::GstPluginAPIFlags;
@@ -1729,8 +1729,8 @@ impl IntoGlib for PluginAPIFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstPluginAPIFlags> for PluginAPIFlags {
     #[inline]
@@ -1740,8 +1740,8 @@ impl FromGlib<ffi::GstPluginAPIFlags> for PluginAPIFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl StaticType for PluginAPIFlags {
     #[inline]
     fn static_type() -> Type {
@@ -1749,8 +1749,8 @@ impl StaticType for PluginAPIFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl glib::HasParamSpec for PluginAPIFlags {
     type ParamSpec = glib::ParamSpecFlags;
     type SetValue = Self;
@@ -1761,14 +1761,14 @@ impl glib::HasParamSpec for PluginAPIFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl glib::value::ValueType for PluginAPIFlags {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 unsafe impl<'a> FromValue<'a> for PluginAPIFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -1779,8 +1779,8 @@ unsafe impl<'a> FromValue<'a> for PluginAPIFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl ToValue for PluginAPIFlags {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -1797,8 +1797,8 @@ impl ToValue for PluginAPIFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl From<PluginAPIFlags> for glib::Value {
     #[inline]
     fn from(v: PluginAPIFlags) -> Self {
@@ -2092,12 +2092,12 @@ bitflags! {
         const TRICKMODE_KEY_UNITS = ffi::GST_SEEK_FLAG_TRICKMODE_KEY_UNITS as _;
         #[doc(alias = "GST_SEEK_FLAG_TRICKMODE_NO_AUDIO")]
         const TRICKMODE_NO_AUDIO = ffi::GST_SEEK_FLAG_TRICKMODE_NO_AUDIO as _;
-        #[cfg(any(feature = "v1_18", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+        #[cfg(feature = "v1_18")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
         #[doc(alias = "GST_SEEK_FLAG_TRICKMODE_FORWARD_PREDICTED")]
         const TRICKMODE_FORWARD_PREDICTED = ffi::GST_SEEK_FLAG_TRICKMODE_FORWARD_PREDICTED as _;
-        #[cfg(any(feature = "v1_18", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+        #[cfg(feature = "v1_18")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
         #[doc(alias = "GST_SEEK_FLAG_INSTANT_RATE_CHANGE")]
         const INSTANT_RATE_CHANGE = ffi::GST_SEEK_FLAG_INSTANT_RATE_CHANGE as _;
     }
@@ -2190,8 +2190,8 @@ bitflags! {
         const SEGMENT = ffi::GST_SEGMENT_FLAG_SEGMENT as _;
         #[doc(alias = "GST_SEGMENT_FLAG_TRICKMODE_KEY_UNITS")]
         const TRICKMODE_KEY_UNITS = ffi::GST_SEGMENT_FLAG_TRICKMODE_KEY_UNITS as _;
-        #[cfg(any(feature = "v1_18", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+        #[cfg(feature = "v1_18")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
         #[doc(alias = "GST_SEGMENT_FLAG_TRICKMODE_FORWARD_PREDICTED")]
         const TRICKMODE_FORWARD_PREDICTED = ffi::GST_SEGMENT_FLAG_TRICKMODE_FORWARD_PREDICTED as _;
         #[doc(alias = "GST_SEGMENT_FLAG_TRICKMODE_NO_AUDIO")]
@@ -2273,9 +2273,9 @@ impl From<SegmentFlags> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 bitflags! {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstSerializeFlags")]
     pub struct SerializeFlags: u32 {
         #[doc(alias = "GST_SERIALIZE_FLAG_NONE")]
@@ -2285,8 +2285,8 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl IntoGlib for SerializeFlags {
     type GlibType = ffi::GstSerializeFlags;
@@ -2297,8 +2297,8 @@ impl IntoGlib for SerializeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstSerializeFlags> for SerializeFlags {
     #[inline]
@@ -2308,8 +2308,8 @@ impl FromGlib<ffi::GstSerializeFlags> for SerializeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for SerializeFlags {
     #[inline]
     fn static_type() -> Type {
@@ -2317,8 +2317,8 @@ impl StaticType for SerializeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::HasParamSpec for SerializeFlags {
     type ParamSpec = glib::ParamSpecFlags;
     type SetValue = Self;
@@ -2329,14 +2329,14 @@ impl glib::HasParamSpec for SerializeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for SerializeFlags {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 unsafe impl<'a> FromValue<'a> for SerializeFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -2347,8 +2347,8 @@ unsafe impl<'a> FromValue<'a> for SerializeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl ToValue for SerializeFlags {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -2365,8 +2365,8 @@ impl ToValue for SerializeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl From<SerializeFlags> for glib::Value {
     #[inline]
     fn from(v: SerializeFlags) -> Self {

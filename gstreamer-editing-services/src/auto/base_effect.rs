@@ -5,8 +5,8 @@
 
 use crate::{Extractable, MetaContainer, Operation, TimelineElement, TrackElement};
 use glib::prelude::*;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use glib::translate::*;
 
 glib::wrapper! {
@@ -23,20 +23,20 @@ impl BaseEffect {
 }
 
 pub trait BaseEffectExt: 'static {
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_base_effect_is_time_effect")]
     fn is_time_effect(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_base_effect_register_time_property")]
     fn register_time_property(&self, child_property_name: &str) -> bool;
 }
 
 impl<O: IsA<BaseEffect>> BaseEffectExt for O {
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn is_time_effect(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_base_effect_is_time_effect(
@@ -45,8 +45,8 @@ impl<O: IsA<BaseEffect>> BaseEffectExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn register_time_property(&self, child_property_name: &str) -> bool {
         unsafe {
             from_glib(ffi::ges_base_effect_register_time_property(

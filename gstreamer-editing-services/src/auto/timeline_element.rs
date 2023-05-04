@@ -4,8 +4,8 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::{Edge, EditMode, Layer};
 use crate::{Extractable, MetaContainer, Timeline, TrackType};
 use glib::{
@@ -40,8 +40,8 @@ pub trait TimelineElementExt: 'static {
     #[must_use]
     fn copy(&self, deep: bool) -> TimelineElement;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_timeline_element_edit")]
     fn edit(
         &self,
@@ -52,8 +52,8 @@ pub trait TimelineElementExt: 'static {
         position: u64,
     ) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_timeline_element_edit_full")]
     fn edit_full(
         &self,
@@ -87,8 +87,8 @@ pub trait TimelineElementExt: 'static {
     #[doc(alias = "get_inpoint")]
     fn inpoint(&self) -> gst::ClockTime;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "ges_timeline_element_get_layer_priority")]
     #[doc(alias = "get_layer_priority")]
     fn layer_priority(&self) -> u32;
@@ -101,8 +101,8 @@ pub trait TimelineElementExt: 'static {
     #[doc(alias = "get_name")]
     fn name(&self) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_timeline_element_get_natural_framerate")]
     #[doc(alias = "get_natural_framerate")]
     fn natural_framerate(&self) -> Option<(i32, i32)>;
@@ -173,8 +173,8 @@ pub trait TimelineElementExt: 'static {
     #[doc(alias = "ges_timeline_element_set_child_property_by_pspec")]
     fn set_child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>, value: &glib::Value);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_timeline_element_set_child_property_full")]
     fn set_child_property_full(
         &self,
@@ -224,16 +224,16 @@ pub trait TimelineElementExt: 'static {
 
     fn set_serialize(&self, serialize: bool);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "child-property-added")]
     fn connect_child_property_added<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "child-property-removed")]
     fn connect_child_property_removed<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
         &self,
@@ -303,8 +303,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn edit(
         &self,
         layers: &[Layer],
@@ -325,8 +325,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn edit_full(
         &self,
         new_layer_priority: i64,
@@ -407,8 +407,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn layer_priority(&self) -> u32 {
         unsafe { ffi::ges_timeline_element_get_layer_priority(self.as_ref().to_glib_none().0) }
     }
@@ -429,8 +429,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn natural_framerate(&self) -> Option<(i32, i32)> {
         unsafe {
             let mut framerate_n = mem::MaybeUninit::uninit();
@@ -623,8 +623,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_child_property_full(
         &self,
         property_name: &str,
@@ -758,8 +758,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "serialize", serialize)
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_child_property_added<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
         &self,
         f: F,
@@ -793,8 +793,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_child_property_removed<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
         &self,
         f: F,

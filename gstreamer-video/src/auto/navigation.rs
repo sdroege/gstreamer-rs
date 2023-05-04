@@ -39,8 +39,8 @@ pub trait NavigationExt: 'static {
     #[doc(alias = "gst_navigation_send_event")]
     fn send_event(&self, structure: gst::Structure);
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_navigation_send_event_simple")]
     fn send_event_simple(&self, event: gst::Event);
 
@@ -50,8 +50,8 @@ pub trait NavigationExt: 'static {
     #[doc(alias = "gst_navigation_send_mouse_event")]
     fn send_mouse_event(&self, event: &str, button: i32, x: f64, y: f64);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_navigation_send_mouse_scroll_event")]
     fn send_mouse_scroll_event(&self, x: f64, y: f64, delta_x: f64, delta_y: f64);
 }
@@ -72,8 +72,8 @@ impl<O: IsA<Navigation>> NavigationExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn send_event_simple(&self, event: gst::Event) {
         unsafe {
             ffi::gst_navigation_send_event_simple(
@@ -105,8 +105,8 @@ impl<O: IsA<Navigation>> NavigationExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn send_mouse_scroll_event(&self, x: f64, y: f64, delta_x: f64, delta_y: f64) {
         unsafe {
             ffi::gst_navigation_send_mouse_scroll_event(

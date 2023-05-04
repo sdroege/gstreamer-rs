@@ -4,8 +4,8 @@
 // DO NOT EDIT
 
 use crate::{GLContext, GLSLStage};
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 use crate::{GLSLProfile, GLSLVersion};
 use glib::{
     prelude::*,
@@ -370,8 +370,8 @@ impl GLShader {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_shader_string_fragment_external_oes_get_default")]
     pub fn string_fragment_external_oes_get_default(
         context: &impl IsA<GLContext>,
@@ -388,8 +388,8 @@ impl GLShader {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_shader_string_fragment_get_default")]
     pub fn string_fragment_get_default(
         context: &impl IsA<GLContext>,
@@ -406,8 +406,8 @@ impl GLShader {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_shader_string_get_highest_precision")]
     pub fn string_get_highest_precision(
         context: &impl IsA<GLContext>,

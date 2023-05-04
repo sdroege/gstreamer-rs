@@ -4,8 +4,8 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::Track;
 use crate::{Asset, Clip, Extractable, MetaContainer, Timeline, TrackType};
 use glib::{
@@ -13,8 +13,8 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use std::ptr;
 use std::{boxed::Box as Box_, mem::transmute};
 
@@ -54,8 +54,8 @@ pub trait LayerExt: 'static {
         track_types: TrackType,
     ) -> Result<Clip, glib::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_layer_add_asset_full")]
     fn add_asset_full(
         &self,
@@ -69,13 +69,13 @@ pub trait LayerExt: 'static {
     #[doc(alias = "ges_layer_add_clip")]
     fn add_clip(&self, clip: &impl IsA<Clip>) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_layer_add_clip_full")]
     fn add_clip_full(&self, clip: &impl IsA<Clip>) -> Result<(), glib::Error>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_layer_get_active_for_track")]
     #[doc(alias = "get_active_for_track")]
     fn is_active_for_track(&self, track: &impl IsA<Track>) -> bool;
@@ -114,8 +114,8 @@ pub trait LayerExt: 'static {
     #[doc(alias = "ges_layer_remove_clip")]
     fn remove_clip(&self, clip: &impl IsA<Clip>) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_layer_set_active_for_tracks")]
     fn set_active_for_tracks(&self, active: bool, tracks: &[Track]) -> bool;
 
@@ -130,8 +130,8 @@ pub trait LayerExt: 'static {
     #[doc(alias = "ges_layer_set_timeline")]
     fn set_timeline(&self, timeline: &impl IsA<Timeline>);
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[cfg(feature = "v1_18")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     //#[doc(alias = "active-changed")]
     //fn connect_active_changed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
@@ -171,8 +171,8 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn add_asset_full(
         &self,
         asset: &impl IsA<Asset>,
@@ -212,8 +212,8 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn add_clip_full(&self, clip: &impl IsA<Clip>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -231,8 +231,8 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn is_active_for_track(&self, track: &impl IsA<Track>) -> bool {
         unsafe {
             from_glib(ffi::ges_layer_get_active_for_track(
@@ -303,8 +303,8 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_active_for_tracks(&self, active: bool, tracks: &[Track]) -> bool {
         unsafe {
             from_glib(ffi::ges_layer_set_active_for_tracks(
@@ -340,8 +340,8 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[cfg(feature = "v1_18")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     //fn connect_active_changed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Empty ctype tracks: *.PtrArray TypeId { ns_id: 1, id: 17 }
     //}

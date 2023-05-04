@@ -10,8 +10,8 @@ use glib::{
 };
 use std::mem;
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstGLConfigCaveat")]
@@ -26,8 +26,8 @@ pub enum GLConfigCaveat {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl GLConfigCaveat {
     #[doc(alias = "gst_gl_config_caveat_to_string")]
     #[doc(alias = "to_string")]
@@ -37,8 +37,8 @@ impl GLConfigCaveat {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl IntoGlib for GLConfigCaveat {
     type GlibType = ffi::GstGLConfigCaveat;
@@ -54,8 +54,8 @@ impl IntoGlib for GLConfigCaveat {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLConfigCaveat> for GLConfigCaveat {
     #[inline]
@@ -71,8 +71,8 @@ impl FromGlib<ffi::GstGLConfigCaveat> for GLConfigCaveat {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for GLConfigCaveat {
     #[inline]
     fn static_type() -> Type {
@@ -80,8 +80,8 @@ impl StaticType for GLConfigCaveat {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::HasParamSpec for GLConfigCaveat {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -92,14 +92,14 @@ impl glib::HasParamSpec for GLConfigCaveat {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for GLConfigCaveat {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 unsafe impl<'a> FromValue<'a> for GLConfigCaveat {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -110,8 +110,8 @@ unsafe impl<'a> FromValue<'a> for GLConfigCaveat {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl ToValue for GLConfigCaveat {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -128,8 +128,8 @@ impl ToValue for GLConfigCaveat {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl From<GLConfigCaveat> for glib::Value {
     #[inline]
     fn from(v: GLConfigCaveat) -> Self {
@@ -336,8 +336,8 @@ impl GLFormat {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_format_is_supported")]
     pub fn is_supported(context: &impl IsA<GLContext>, format: GLFormat) -> bool {
         skip_assert_initialized!();
@@ -349,8 +349,8 @@ impl GLFormat {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_format_type_from_sized_gl_format")]
     pub fn type_from_sized_gl_format(self) -> (GLFormat, u32) {
         assert_initialized_main_thread!();

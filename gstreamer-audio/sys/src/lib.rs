@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -1532,8 +1532,8 @@ extern "C" {
     //=========================================================================
     // GstAudioBuffer
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_audio_buffer_unmap(buffer: *mut GstAudioBuffer);
     pub fn gst_audio_buffer_clip(
         buffer: *mut gst::GstBuffer,
@@ -1541,8 +1541,8 @@ extern "C" {
         rate: c_int,
         bpf: c_int,
     ) -> *mut gst::GstBuffer;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_audio_buffer_map(
         buffer: *mut GstAudioBuffer,
         info: *const GstAudioInfo,
@@ -1556,8 +1556,8 @@ extern "C" {
         from: *const GstAudioChannelPosition,
         to: *const GstAudioChannelPosition,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_audio_buffer_truncate(
         buffer: *mut gst::GstBuffer,
         bpf: c_int,
@@ -1630,8 +1630,8 @@ extern "C" {
         convert: *mut GstAudioConverter,
         in_frames: size_t,
     ) -> size_t;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_audio_converter_is_passthrough(convert: *mut GstAudioConverter) -> gboolean;
     pub fn gst_audio_converter_reset(convert: *mut GstAudioConverter);
     pub fn gst_audio_converter_samples(
@@ -1666,8 +1666,8 @@ extern "C" {
     //=========================================================================
     // GstAudioFormatInfo
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_audio_format_info_fill_silence(
         info: *const GstAudioFormatInfo,
         dest: gpointer,
@@ -1679,8 +1679,8 @@ extern "C" {
     //=========================================================================
     pub fn gst_audio_info_get_type() -> GType;
     pub fn gst_audio_info_new() -> *mut GstAudioInfo;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_audio_info_new_from_caps(caps: *const gst::GstCaps) -> *mut GstAudioInfo;
     pub fn gst_audio_info_convert(
         info: *const GstAudioInfo,
@@ -1710,15 +1710,15 @@ extern "C" {
     //=========================================================================
     // GstAudioLevelMeta
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_audio_level_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
     // GstAudioMeta
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_audio_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
@@ -1949,8 +1949,8 @@ extern "C" {
         buf: *mut gst::GstBuffer,
         frames: c_int,
     ) -> gst::GstFlowReturn;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_audio_decoder_finish_subframe(
         dec: *mut GstAudioDecoder,
         buf: *mut gst::GstBuffer,
@@ -2005,8 +2005,8 @@ extern "C" {
     pub fn gst_audio_decoder_set_max_errors(dec: *mut GstAudioDecoder, num: c_int);
     pub fn gst_audio_decoder_set_min_latency(dec: *mut GstAudioDecoder, num: gst::GstClockTime);
     pub fn gst_audio_decoder_set_needs_format(dec: *mut GstAudioDecoder, enabled: gboolean);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_audio_decoder_set_output_caps(
         dec: *mut GstAudioDecoder,
         caps: *mut gst::GstCaps,
@@ -2245,8 +2245,8 @@ extern "C" {
     pub fn gst_audio_clipping_meta_api_get_type() -> GType;
     pub fn gst_audio_downmix_meta_api_get_type() -> GType;
     pub fn gst_audio_format_info_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_audio_formats_raw(len: *mut c_uint) -> *const GstAudioFormat;
     pub fn gst_audio_get_channel_reorder_map(
         channels: c_int,
@@ -2263,18 +2263,18 @@ extern "C" {
         spec: *const GstAudioRingBufferSpec,
         endianness: c_int,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_audio_level_meta_api_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_audio_make_raw_caps(
         formats: *const GstAudioFormat,
         len: c_uint,
         layout: GstAudioLayout,
     ) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_audio_meta_api_get_type() -> GType;
     pub fn gst_audio_reorder_channels(
         data: gpointer,
@@ -2298,15 +2298,15 @@ extern "C" {
         to_channels: c_int,
         matrix: *mut *const c_float,
     ) -> *mut GstAudioDownmixMeta;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_buffer_add_audio_level_meta(
         buffer: *mut gst::GstBuffer,
         level: u8,
         voice_activity: gboolean,
     ) -> *mut GstAudioLevelMeta;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_buffer_add_audio_meta(
         buffer: *mut gst::GstBuffer,
         info: *const GstAudioInfo,
@@ -2318,8 +2318,8 @@ extern "C" {
         to_position: *const GstAudioChannelPosition,
         to_channels: c_int,
     ) -> *mut GstAudioDownmixMeta;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_buffer_get_audio_level_meta(buffer: *mut gst::GstBuffer) -> *mut GstAudioLevelMeta;
 
 }

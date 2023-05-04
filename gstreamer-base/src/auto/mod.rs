@@ -28,8 +28,8 @@ mod push_src;
 pub use self::push_src::PushSrc;
 
 mod enums;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 pub use self::enums::AggregatorStartTimeSelection;
 
 mod flags;

@@ -4,8 +4,8 @@
 // DO NOT EDIT
 
 use crate::RTSPClient;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -20,8 +20,8 @@ glib::wrapper! {
 impl RTSPOnvifClient {
     pub const NONE: Option<&'static RTSPOnvifClient> = None;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_onvif_client_new")]
     pub fn new() -> RTSPOnvifClient {
         assert_initialized_main_thread!();
@@ -29,8 +29,8 @@ impl RTSPOnvifClient {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl Default for RTSPOnvifClient {
     fn default() -> Self {
         Self::new()

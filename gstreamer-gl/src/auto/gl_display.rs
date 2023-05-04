@@ -29,8 +29,8 @@ impl GLDisplay {
         unsafe { from_glib_full(ffi::gst_gl_display_new()) }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_gl_display_new_with_type")]
     #[doc(alias = "new_with_type")]
     pub fn with_type(type_: GLDisplayType) -> Option<GLDisplay> {
@@ -70,8 +70,8 @@ pub trait GLDisplayExt: 'static {
     #[doc(alias = "gst_gl_display_remove_window")]
     fn remove_window(&self, window: &impl IsA<GLWindow>) -> Result<(), glib::error::BoolError>;
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[cfg(feature = "v1_18")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     //#[doc(alias = "gst_gl_display_retrieve_window")]
     //fn retrieve_window(&self, data: /*Unimplemented*/Option<Basic: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Basic: Pointer>) -> i32) -> Option<GLWindow>;
 
@@ -136,8 +136,8 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[cfg(feature = "v1_18")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     //fn retrieve_window(&self, data: /*Unimplemented*/Option<Basic: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Basic: Pointer>) -> i32) -> Option<GLWindow> {
     //    unsafe { TODO: call ffi:gst_gl_display_retrieve_window() }
     //}

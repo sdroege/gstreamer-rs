@@ -3,12 +3,12 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstAggregatorStartTimeSelection")]
@@ -23,8 +23,8 @@ pub enum AggregatorStartTimeSelection {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl IntoGlib for AggregatorStartTimeSelection {
     type GlibType = ffi::GstAggregatorStartTimeSelection;
@@ -40,8 +40,8 @@ impl IntoGlib for AggregatorStartTimeSelection {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstAggregatorStartTimeSelection> for AggregatorStartTimeSelection {
     #[inline]
@@ -57,8 +57,8 @@ impl FromGlib<ffi::GstAggregatorStartTimeSelection> for AggregatorStartTimeSelec
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl StaticType for AggregatorStartTimeSelection {
     #[inline]
     fn static_type() -> Type {
@@ -66,8 +66,8 @@ impl StaticType for AggregatorStartTimeSelection {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl glib::HasParamSpec for AggregatorStartTimeSelection {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -78,14 +78,14 @@ impl glib::HasParamSpec for AggregatorStartTimeSelection {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl glib::value::ValueType for AggregatorStartTimeSelection {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 unsafe impl<'a> FromValue<'a> for AggregatorStartTimeSelection {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -96,8 +96,8 @@ unsafe impl<'a> FromValue<'a> for AggregatorStartTimeSelection {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl ToValue for AggregatorStartTimeSelection {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -114,8 +114,8 @@ impl ToValue for AggregatorStartTimeSelection {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl From<AggregatorStartTimeSelection> for glib::Value {
     #[inline]
     fn from(v: AggregatorStartTimeSelection) -> Self {

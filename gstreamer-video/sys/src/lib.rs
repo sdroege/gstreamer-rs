@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -51,23 +51,23 @@ pub const GST_NAVIGATION_EVENT_MOUSE_BUTTON_PRESS: GstNavigationEventType = 3;
 pub const GST_NAVIGATION_EVENT_MOUSE_BUTTON_RELEASE: GstNavigationEventType = 4;
 pub const GST_NAVIGATION_EVENT_MOUSE_MOVE: GstNavigationEventType = 5;
 pub const GST_NAVIGATION_EVENT_COMMAND: GstNavigationEventType = 6;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 pub const GST_NAVIGATION_EVENT_MOUSE_SCROLL: GstNavigationEventType = 7;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_NAVIGATION_EVENT_TOUCH_DOWN: GstNavigationEventType = 8;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_NAVIGATION_EVENT_TOUCH_MOTION: GstNavigationEventType = 9;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_NAVIGATION_EVENT_TOUCH_UP: GstNavigationEventType = 10;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_NAVIGATION_EVENT_TOUCH_FRAME: GstNavigationEventType = 11;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_NAVIGATION_EVENT_TOUCH_CANCEL: GstNavigationEventType = 12;
 
 pub type GstNavigationMessageType = c_int;
@@ -280,53 +280,53 @@ pub const GST_VIDEO_FORMAT_Y212_BE: GstVideoFormat = 93;
 pub const GST_VIDEO_FORMAT_Y212_LE: GstVideoFormat = 94;
 pub const GST_VIDEO_FORMAT_Y412_BE: GstVideoFormat = 95;
 pub const GST_VIDEO_FORMAT_Y412_LE: GstVideoFormat = 96;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 pub const GST_VIDEO_FORMAT_NV12_4L4: GstVideoFormat = 97;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 pub const GST_VIDEO_FORMAT_NV12_32L32: GstVideoFormat = 98;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_VIDEO_FORMAT_RGBP: GstVideoFormat = 99;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_VIDEO_FORMAT_BGRP: GstVideoFormat = 100;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_VIDEO_FORMAT_AV12: GstVideoFormat = 101;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_VIDEO_FORMAT_ARGB64_LE: GstVideoFormat = 102;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_VIDEO_FORMAT_ARGB64_BE: GstVideoFormat = 103;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_VIDEO_FORMAT_RGBA64_LE: GstVideoFormat = 104;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_VIDEO_FORMAT_RGBA64_BE: GstVideoFormat = 105;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_VIDEO_FORMAT_BGRA64_LE: GstVideoFormat = 106;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_VIDEO_FORMAT_BGRA64_BE: GstVideoFormat = 107;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_VIDEO_FORMAT_ABGR64_LE: GstVideoFormat = 108;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_VIDEO_FORMAT_ABGR64_BE: GstVideoFormat = 109;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_VIDEO_FORMAT_NV12_16L32S: GstVideoFormat = 110;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_VIDEO_FORMAT_NV12_8L128: GstVideoFormat = 111;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_VIDEO_FORMAT_NV12_10BE_8L128: GstVideoFormat = 112;
 
 pub type GstVideoGLTextureOrientation = c_int;
@@ -416,8 +416,8 @@ pub const GST_VIDEO_RESAMPLER_METHOD_LANCZOS: GstVideoResamplerMethod = 4;
 pub type GstVideoTileMode = c_int;
 pub const GST_VIDEO_TILE_MODE_UNKNOWN: GstVideoTileMode = 0;
 pub const GST_VIDEO_TILE_MODE_ZFLIPZ_2X2: GstVideoTileMode = 65536;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 pub const GST_VIDEO_TILE_MODE_LINEAR: GstVideoTileMode = 131072;
 
 pub type GstVideoTileType = c_int;
@@ -440,8 +440,8 @@ pub const GST_VIDEO_TRANSFER_ADOBERGB: GstVideoTransferFunction = 12;
 pub const GST_VIDEO_TRANSFER_BT2020_10: GstVideoTransferFunction = 13;
 pub const GST_VIDEO_TRANSFER_SMPTE2084: GstVideoTransferFunction = 14;
 pub const GST_VIDEO_TRANSFER_ARIB_STD_B67: GstVideoTransferFunction = 15;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 pub const GST_VIDEO_TRANSFER_BT601: GstVideoTransferFunction = 16;
 
 pub type GstVideoVBIParserResult = c_int;
@@ -584,8 +584,8 @@ pub const GST_VIDEO_CODEC_FRAME_FLAG_DECODE_ONLY: GstVideoCodecFrameFlags = 1;
 pub const GST_VIDEO_CODEC_FRAME_FLAG_SYNC_POINT: GstVideoCodecFrameFlags = 2;
 pub const GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME: GstVideoCodecFrameFlags = 4;
 pub const GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME_HEADERS: GstVideoCodecFrameFlags = 8;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_VIDEO_CODEC_FRAME_FLAG_CORRUPTED: GstVideoCodecFrameFlags = 16;
 
 pub type GstVideoDecoderRequestSyncPointFlags = c_uint;
@@ -614,8 +614,8 @@ pub const GST_VIDEO_FORMAT_FLAG_PALETTE: GstVideoFormatFlags = 32;
 pub const GST_VIDEO_FORMAT_FLAG_COMPLEX: GstVideoFormatFlags = 64;
 pub const GST_VIDEO_FORMAT_FLAG_UNPACK: GstVideoFormatFlags = 128;
 pub const GST_VIDEO_FORMAT_FLAG_TILED: GstVideoFormatFlags = 256;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_VIDEO_FORMAT_FLAG_SUBTILES: GstVideoFormatFlags = 512;
 
 pub type GstVideoFrameFlags = c_uint;
@@ -2471,15 +2471,15 @@ extern "C" {
     //=========================================================================
     // GstVideoAFDSpec
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_afd_spec_get_type() -> GType;
 
     //=========================================================================
     // GstVideoAFDValue
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_afd_value_get_type() -> GType;
 
     //=========================================================================
@@ -2490,28 +2490,28 @@ extern "C" {
     //=========================================================================
     // GstVideoAncillaryDID
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_ancillary_did_get_type() -> GType;
 
     //=========================================================================
     // GstVideoAncillaryDID16
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_ancillary_di_d16_get_type() -> GType;
 
     //=========================================================================
     // GstVideoCaptionType
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_caption_type_get_type() -> GType;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_caption_type_from_caps(caps: *const gst::GstCaps) -> GstVideoCaptionType;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_caption_type_to_caps(type_: GstVideoCaptionType) -> *mut gst::GstCaps;
 
     //=========================================================================
@@ -2528,36 +2528,36 @@ extern "C" {
     // GstVideoColorMatrix
     //=========================================================================
     pub fn gst_video_color_matrix_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_color_matrix_from_iso(value: c_uint) -> GstVideoColorMatrix;
     pub fn gst_video_color_matrix_get_Kr_Kb(
         matrix: GstVideoColorMatrix,
         Kr: *mut c_double,
         Kb: *mut c_double,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_color_matrix_to_iso(matrix: GstVideoColorMatrix) -> c_uint;
 
     //=========================================================================
     // GstVideoColorPrimaries
     //=========================================================================
     pub fn gst_video_color_primaries_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_color_primaries_from_iso(value: c_uint) -> GstVideoColorPrimaries;
     pub fn gst_video_color_primaries_get_info(
         primaries: GstVideoColorPrimaries,
     ) -> *const GstVideoColorPrimariesInfo;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_video_color_primaries_is_equivalent(
         primaries: GstVideoColorPrimaries,
         other: GstVideoColorPrimaries,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_color_primaries_to_iso(primaries: GstVideoColorPrimaries) -> c_uint;
 
     //=========================================================================
@@ -2607,15 +2607,15 @@ extern "C" {
     //=========================================================================
     // GstVideoGLTextureOrientation
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_gl_texture_orientation_get_type() -> GType;
 
     //=========================================================================
     // GstVideoGLTextureType
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_gl_texture_type_get_type() -> GType;
 
     //=========================================================================
@@ -2680,45 +2680,45 @@ extern "C" {
     // GstVideoTransferFunction
     //=========================================================================
     pub fn gst_video_transfer_function_get_type() -> GType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_transfer_function_decode(
         func: GstVideoTransferFunction,
         val: c_double,
     ) -> c_double;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_transfer_function_encode(
         func: GstVideoTransferFunction,
         val: c_double,
     ) -> c_double;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_transfer_function_from_iso(value: c_uint) -> GstVideoTransferFunction;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_transfer_function_is_equivalent(
         from_func: GstVideoTransferFunction,
         from_bpp: c_uint,
         to_func: GstVideoTransferFunction,
         to_bpp: c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_transfer_function_to_iso(func: GstVideoTransferFunction) -> c_uint;
 
     //=========================================================================
     // GstVideoVBIParserResult
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_vbi_parser_result_get_type() -> GType;
 
     //=========================================================================
     // GstNavigationModifierType
     //=========================================================================
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_modifier_type_get_type() -> GType;
 
     //=========================================================================
@@ -2735,25 +2735,25 @@ extern "C" {
     // GstVideoChromaSite
     //=========================================================================
     pub fn gst_video_chroma_site_get_type() -> GType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_chroma_site_from_string(s: *const c_char) -> GstVideoChromaSite;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_chroma_site_to_string(site: GstVideoChromaSite) -> *mut c_char;
 
     //=========================================================================
     // GstVideoCodecFrameFlags
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_codec_frame_flags_get_type() -> GType;
 
     //=========================================================================
     // GstVideoDecoderRequestSyncPointFlags
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_decoder_request_sync_point_flags_get_type() -> GType;
 
     //=========================================================================
@@ -2789,8 +2789,8 @@ extern "C" {
     //=========================================================================
     // GstVideoOverlayFormatFlags
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_overlay_format_flags_get_type() -> GType;
 
     //=========================================================================
@@ -2811,15 +2811,15 @@ extern "C" {
     //=========================================================================
     // GstVideoTimeCodeFlags
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_time_code_flags_get_type() -> GType;
 
     //=========================================================================
     // GstVideoAFDMeta
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_afd_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
@@ -2839,15 +2839,15 @@ extern "C" {
     //=========================================================================
     // GstVideoBarMeta
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_bar_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
     // GstVideoCaptionMeta
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_caption_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
@@ -2871,8 +2871,8 @@ extern "C" {
     //=========================================================================
     // GstVideoCodecAlphaMeta
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_codec_alpha_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
@@ -2906,8 +2906,8 @@ extern "C" {
         cinfo: *const GstVideoColorimetry,
         other: *const GstVideoColorimetry,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_video_colorimetry_is_equivalent(
         cinfo: *const GstVideoColorimetry,
         bitdepth: c_uint,
@@ -2923,35 +2923,35 @@ extern "C" {
     //=========================================================================
     // GstVideoContentLightLevel
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_content_light_level_add_to_caps(
         linfo: *const GstVideoContentLightLevel,
         caps: *mut gst::GstCaps,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_content_light_level_from_caps(
         linfo: *mut GstVideoContentLightLevel,
         caps: *const gst::GstCaps,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_content_light_level_from_string(
         linfo: *mut GstVideoContentLightLevel,
         level: *const c_char,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_content_light_level_init(linfo: *mut GstVideoContentLightLevel);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_content_light_level_is_equal(
         linfo: *const GstVideoContentLightLevel,
         other: *const GstVideoContentLightLevel,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_content_light_level_to_string(
         linfo: *const GstVideoContentLightLevel,
     ) -> *mut c_char;
@@ -2964,18 +2964,18 @@ extern "C" {
         src: *const GstVideoFrame,
         dest: *mut GstVideoFrame,
     );
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_converter_frame_finish(convert: *mut GstVideoConverter);
     pub fn gst_video_converter_free(convert: *mut GstVideoConverter);
     pub fn gst_video_converter_get_config(
         convert: *mut GstVideoConverter,
     ) -> *const gst::GstStructure;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_video_converter_get_in_info(convert: *mut GstVideoConverter) -> *const GstVideoInfo;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_video_converter_get_out_info(convert: *mut GstVideoConverter)
         -> *const GstVideoInfo;
     pub fn gst_video_converter_set_config(
@@ -2987,8 +2987,8 @@ extern "C" {
         out_info: *const GstVideoInfo,
         config: *mut gst::GstStructure,
     ) -> *mut GstVideoConverter;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_converter_new_with_pool(
         in_info: *const GstVideoInfo,
         out_info: *const GstVideoInfo,
@@ -3023,15 +3023,15 @@ extern "C" {
     //=========================================================================
     // GstVideoFormatInfo
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_format_info_component(
         info: *const GstVideoFormatInfo,
         plane: c_uint,
         components: *mut c_int,
     );
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_video_format_info_extrapolate_stride(
         finfo: *const GstVideoFormatInfo,
         plane: c_int,
@@ -3076,13 +3076,13 @@ extern "C" {
     //=========================================================================
     pub fn gst_video_info_get_type() -> GType;
     pub fn gst_video_info_new() -> *mut GstVideoInfo;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_info_new_from_caps(caps: *const gst::GstCaps) -> *mut GstVideoInfo;
     pub fn gst_video_info_align(info: *mut GstVideoInfo, align: *mut GstVideoAlignment)
         -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_info_align_full(
         info: *mut GstVideoInfo,
         align: *mut GstVideoAlignment,
@@ -3107,8 +3107,8 @@ extern "C" {
         width: c_uint,
         height: c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_info_set_interlaced_format(
         info: *mut GstVideoInfo,
         format: GstVideoFormat,
@@ -3124,65 +3124,65 @@ extern "C" {
     //=========================================================================
     // GstVideoInfoDmaDrm
     //=========================================================================
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_info_dma_drm_get_type() -> GType;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_info_dma_drm_new() -> *mut GstVideoInfoDmaDrm;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_info_dma_drm_new_from_caps(
         caps: *const gst::GstCaps,
     ) -> *mut GstVideoInfoDmaDrm;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_info_dma_drm_free(drm_info: *mut GstVideoInfoDmaDrm);
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_info_dma_drm_to_caps(drm_info: *const GstVideoInfoDmaDrm)
         -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_info_dma_drm_from_caps(
         drm_info: *mut GstVideoInfoDmaDrm,
         caps: *const gst::GstCaps,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_info_dma_drm_init(drm_info: *mut GstVideoInfoDmaDrm);
 
     //=========================================================================
     // GstVideoMasteringDisplayInfo
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_mastering_display_info_add_to_caps(
         minfo: *const GstVideoMasteringDisplayInfo,
         caps: *mut gst::GstCaps,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_mastering_display_info_from_caps(
         minfo: *mut GstVideoMasteringDisplayInfo,
         caps: *const gst::GstCaps,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_mastering_display_info_init(minfo: *mut GstVideoMasteringDisplayInfo);
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_mastering_display_info_is_equal(
         minfo: *const GstVideoMasteringDisplayInfo,
         other: *const GstVideoMasteringDisplayInfo,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_mastering_display_info_to_string(
         minfo: *const GstVideoMasteringDisplayInfo,
     ) -> *mut c_char;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_mastering_display_info_from_string(
         minfo: *mut GstVideoMasteringDisplayInfo,
         mastering: *const c_char,
@@ -3191,14 +3191,14 @@ extern "C" {
     //=========================================================================
     // GstVideoMeta
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_meta_get_plane_height(
         meta: *mut GstVideoMeta,
         plane_height: *mut [c_uint; 4],
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_meta_get_plane_size(
         meta: *mut GstVideoMeta,
         plane_size: *mut [size_t; 4],
@@ -3211,8 +3211,8 @@ extern "C" {
         stride: *mut c_int,
         flags: gst::GstMapFlags,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_meta_set_alignment(
         meta: *mut GstVideoMeta,
         alignment: GstVideoAlignment,
@@ -3365,8 +3365,8 @@ extern "C" {
     //=========================================================================
     // GstVideoSEIUserDataUnregisteredMeta
     //=========================================================================
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_video_sei_user_data_unregistered_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
@@ -3447,8 +3447,8 @@ extern "C" {
         flags: GstVideoTimeCodeFlags,
         field_count: c_uint,
     ) -> *mut GstVideoTimeCode;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_time_code_new_from_date_time_full(
         fps_n: c_uint,
         fps_d: c_uint,
@@ -3491,8 +3491,8 @@ extern "C" {
         flags: GstVideoTimeCodeFlags,
         field_count: c_uint,
     );
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_time_code_init_from_date_time_full(
         tc: *mut GstVideoTimeCode,
         fps_n: c_uint,
@@ -3540,17 +3540,17 @@ extern "C" {
     //=========================================================================
     // GstVideoVBIEncoder
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_vbi_encoder_get_type() -> GType;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_vbi_encoder_new(
         format: GstVideoFormat,
         pixel_width: u32,
     ) -> *mut GstVideoVBIEncoder;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_vbi_encoder_add_ancillary(
         encoder: *mut GstVideoVBIEncoder,
         composite: gboolean,
@@ -3559,41 +3559,41 @@ extern "C" {
         data: *const u8,
         data_count: c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_vbi_encoder_copy(
         encoder: *const GstVideoVBIEncoder,
     ) -> *mut GstVideoVBIEncoder;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_vbi_encoder_free(encoder: *mut GstVideoVBIEncoder);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_vbi_encoder_write_line(encoder: *mut GstVideoVBIEncoder, data: *mut u8);
 
     //=========================================================================
     // GstVideoVBIParser
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_vbi_parser_get_type() -> GType;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_vbi_parser_new(
         format: GstVideoFormat,
         pixel_width: u32,
     ) -> *mut GstVideoVBIParser;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_vbi_parser_add_line(parser: *mut GstVideoVBIParser, data: *const u8);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_vbi_parser_copy(parser: *const GstVideoVBIParser) -> *mut GstVideoVBIParser;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_vbi_parser_free(parser: *mut GstVideoVBIParser);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_vbi_parser_get_ancillary(
         parser: *mut GstVideoVBIParser,
         anc: *mut GstVideoAncillary,
@@ -3607,11 +3607,11 @@ extern "C" {
     //=========================================================================
     // GstVideoAggregator
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_aggregator_get_type() -> GType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_aggregator_get_execution_task_pool(
         vagg: *mut GstVideoAggregator,
     ) -> *mut gst::GstTaskPool;
@@ -3619,11 +3619,11 @@ extern "C" {
     //=========================================================================
     // GstVideoAggregatorConvertPad
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_aggregator_convert_pad_get_type() -> GType;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_aggregator_convert_pad_update_conversion_info(
         pad: *mut GstVideoAggregatorConvertPad,
     );
@@ -3631,25 +3631,25 @@ extern "C" {
     //=========================================================================
     // GstVideoAggregatorPad
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_aggregator_pad_get_type() -> GType;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_aggregator_pad_get_current_buffer(
         pad: *mut GstVideoAggregatorPad,
     ) -> *mut gst::GstBuffer;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_aggregator_pad_get_prepared_frame(
         pad: *mut GstVideoAggregatorPad,
     ) -> *mut GstVideoFrame;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_aggregator_pad_has_current_buffer(pad: *mut GstVideoAggregatorPad)
         -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_aggregator_pad_set_needs_alpha(
         pad: *mut GstVideoAggregatorPad,
         needs_alpha: gboolean,
@@ -3658,8 +3658,8 @@ extern "C" {
     //=========================================================================
     // GstVideoAggregatorParallelConvertPad
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_aggregator_parallel_convert_pad_get_type() -> GType;
 
     //=========================================================================
@@ -3689,8 +3689,8 @@ extern "C" {
         dec: *mut GstVideoDecoder,
         frame: *mut GstVideoCodecFrame,
     ) -> gst::GstFlowReturn;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_decoder_drop_subframe(
         dec: *mut GstVideoDecoder,
         frame: *mut GstVideoCodecFrame,
@@ -3699,8 +3699,8 @@ extern "C" {
         decoder: *mut GstVideoDecoder,
         frame: *mut GstVideoCodecFrame,
     ) -> gst::GstFlowReturn;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_decoder_finish_subframe(
         decoder: *mut GstVideoDecoder,
         frame: *mut GstVideoCodecFrame,
@@ -3719,8 +3719,8 @@ extern "C" {
         frame_number: c_int,
     ) -> *mut GstVideoCodecFrame;
     pub fn gst_video_decoder_get_frames(decoder: *mut GstVideoDecoder) -> *mut glib::GList;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_decoder_get_input_subframe_index(
         decoder: *mut GstVideoDecoder,
         frame: *mut GstVideoCodecFrame,
@@ -3736,8 +3736,8 @@ extern "C" {
     ) -> gst::GstClockTimeDiff;
     pub fn gst_video_decoder_get_max_errors(dec: *mut GstVideoDecoder) -> c_int;
     pub fn gst_video_decoder_get_needs_format(dec: *mut GstVideoDecoder) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_decoder_get_needs_sync_point(dec: *mut GstVideoDecoder) -> gboolean;
     pub fn gst_video_decoder_get_oldest_frame(
         decoder: *mut GstVideoDecoder,
@@ -3747,19 +3747,19 @@ extern "C" {
     ) -> *mut GstVideoCodecState;
     pub fn gst_video_decoder_get_packetized(decoder: *mut GstVideoDecoder) -> gboolean;
     pub fn gst_video_decoder_get_pending_frame_size(decoder: *mut GstVideoDecoder) -> size_t;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_decoder_get_processed_subframe_index(
         decoder: *mut GstVideoDecoder,
         frame: *mut GstVideoCodecFrame,
     ) -> c_uint;
     pub fn gst_video_decoder_get_qos_proportion(decoder: *mut GstVideoDecoder) -> c_double;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_decoder_get_subframe_mode(decoder: *mut GstVideoDecoder) -> gboolean;
     pub fn gst_video_decoder_have_frame(decoder: *mut GstVideoDecoder) -> gst::GstFlowReturn;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_decoder_have_last_subframe(
         decoder: *mut GstVideoDecoder,
         frame: *mut GstVideoCodecFrame,
@@ -3779,16 +3779,16 @@ extern "C" {
         dec: *mut GstVideoDecoder,
         frame: *mut GstVideoCodecFrame,
     );
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_decoder_request_sync_point(
         dec: *mut GstVideoDecoder,
         frame: *mut GstVideoCodecFrame,
         flags: GstVideoDecoderRequestSyncPointFlags,
     );
     pub fn gst_video_decoder_set_estimate_rate(dec: *mut GstVideoDecoder, enabled: gboolean);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_decoder_set_interlaced_output_state(
         decoder: *mut GstVideoDecoder,
         fmt: GstVideoFormat,
@@ -3804,8 +3804,8 @@ extern "C" {
     );
     pub fn gst_video_decoder_set_max_errors(dec: *mut GstVideoDecoder, num: c_int);
     pub fn gst_video_decoder_set_needs_format(dec: *mut GstVideoDecoder, enabled: gboolean);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_decoder_set_needs_sync_point(dec: *mut GstVideoDecoder, enabled: gboolean);
     pub fn gst_video_decoder_set_output_state(
         decoder: *mut GstVideoDecoder,
@@ -3815,8 +3815,8 @@ extern "C" {
         reference: *mut GstVideoCodecState,
     ) -> *mut GstVideoCodecState;
     pub fn gst_video_decoder_set_packetized(decoder: *mut GstVideoDecoder, packetized: gboolean);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_decoder_set_subframe_mode(
         decoder: *mut GstVideoDecoder,
         subframe_mode: gboolean,
@@ -3843,8 +3843,8 @@ extern "C" {
         encoder: *mut GstVideoEncoder,
         frame: *mut GstVideoCodecFrame,
     ) -> gst::GstFlowReturn;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_encoder_finish_subframe(
         encoder: *mut GstVideoEncoder,
         frame: *mut GstVideoCodecFrame,
@@ -3868,8 +3868,8 @@ extern "C" {
         encoder: *mut GstVideoEncoder,
         frame: *mut GstVideoCodecFrame,
     ) -> gst::GstClockTimeDiff;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_encoder_get_min_force_key_unit_interval(
         encoder: *mut GstVideoEncoder,
     ) -> gst::GstClockTime;
@@ -3897,8 +3897,8 @@ extern "C" {
         min_latency: gst::GstClockTime,
         max_latency: gst::GstClockTime,
     );
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_encoder_set_min_force_key_unit_interval(
         encoder: *mut GstVideoEncoder,
         interval: gst::GstClockTime,
@@ -3958,54 +3958,54 @@ extern "C" {
     // GstNavigation
     //=========================================================================
     pub fn gst_navigation_get_type() -> GType;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_get_coordinates(
         event: *mut gst::GstEvent,
         x: *mut c_double,
         y: *mut c_double,
     ) -> gboolean;
     pub fn gst_navigation_event_get_type(event: *mut gst::GstEvent) -> GstNavigationEventType;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_new_command(command: GstNavigationCommand) -> *mut gst::GstEvent;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_new_key_press(
         key: *const c_char,
         state: GstNavigationModifierType,
     ) -> *mut gst::GstEvent;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_new_key_release(
         key: *const c_char,
         state: GstNavigationModifierType,
     ) -> *mut gst::GstEvent;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_new_mouse_button_press(
         button: c_int,
         x: c_double,
         y: c_double,
         state: GstNavigationModifierType,
     ) -> *mut gst::GstEvent;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_new_mouse_button_release(
         button: c_int,
         x: c_double,
         y: c_double,
         state: GstNavigationModifierType,
     ) -> *mut gst::GstEvent;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_new_mouse_move(
         x: c_double,
         y: c_double,
         state: GstNavigationModifierType,
     ) -> *mut gst::GstEvent;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_new_mouse_scroll(
         x: c_double,
         y: c_double,
@@ -4013,13 +4013,13 @@ extern "C" {
         delta_y: c_double,
         state: GstNavigationModifierType,
     ) -> *mut gst::GstEvent;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_new_touch_cancel(
         state: GstNavigationModifierType,
     ) -> *mut gst::GstEvent;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_new_touch_down(
         identifier: c_uint,
         x: c_double,
@@ -4027,13 +4027,13 @@ extern "C" {
         pressure: c_double,
         state: GstNavigationModifierType,
     ) -> *mut gst::GstEvent;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_new_touch_frame(
         state: GstNavigationModifierType,
     ) -> *mut gst::GstEvent;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_new_touch_motion(
         identifier: c_uint,
         x: c_double,
@@ -4041,8 +4041,8 @@ extern "C" {
         pressure: c_double,
         state: GstNavigationModifierType,
     ) -> *mut gst::GstEvent;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_new_touch_up(
         identifier: c_uint,
         x: c_double,
@@ -4057,8 +4057,8 @@ extern "C" {
         event: *mut gst::GstEvent,
         key: *mut *const c_char,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_parse_modifier_state(
         event: *mut gst::GstEvent,
         state: *mut GstNavigationModifierType,
@@ -4074,8 +4074,8 @@ extern "C" {
         x: *mut c_double,
         y: *mut c_double,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_navigation_event_parse_mouse_scroll_event(
         event: *mut gst::GstEvent,
         x: *mut c_double,
@@ -4083,8 +4083,8 @@ extern "C" {
         delta_x: *mut c_double,
         delta_y: *mut c_double,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_parse_touch_event(
         event: *mut gst::GstEvent,
         identifier: *mut c_uint,
@@ -4092,16 +4092,16 @@ extern "C" {
         y: *mut c_double,
         pressure: *mut c_double,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_parse_touch_up_event(
         event: *mut gst::GstEvent,
         identifier: *mut c_uint,
         x: *mut c_double,
         y: *mut c_double,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_set_coordinates(
         event: *mut gst::GstEvent,
         x: c_double,
@@ -4175,8 +4175,8 @@ extern "C" {
         navigation: *mut GstNavigation,
         structure: *mut gst::GstStructure,
     );
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_send_event_simple(
         navigation: *mut GstNavigation,
         event: *mut gst::GstEvent,
@@ -4193,8 +4193,8 @@ extern "C" {
         x: c_double,
         y: c_double,
     );
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_navigation_send_mouse_scroll_event(
         navigation: *mut GstNavigation,
         x: c_double,
@@ -4212,8 +4212,8 @@ extern "C" {
     // GstVideoOrientation
     //=========================================================================
     pub fn gst_video_orientation_get_type() -> GType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_orientation_from_tag(
         taglist: *mut gst::GstTagList,
         method: *mut GstVideoOrientationMethod,
@@ -4281,8 +4281,8 @@ extern "C" {
     //=========================================================================
     // Other functions
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_buffer_add_video_afd_meta(
         buffer: *mut gst::GstBuffer,
         field: u8,
@@ -4292,8 +4292,8 @@ extern "C" {
     pub fn gst_buffer_add_video_affine_transformation_meta(
         buffer: *mut gst::GstBuffer,
     ) -> *mut GstVideoAffineTransformationMeta;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_buffer_add_video_bar_meta(
         buffer: *mut gst::GstBuffer,
         field: u8,
@@ -4301,16 +4301,16 @@ extern "C" {
         bar_data1: c_uint,
         bar_data2: c_uint,
     ) -> *mut GstVideoBarMeta;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_buffer_add_video_caption_meta(
         buffer: *mut gst::GstBuffer,
         caption_type: GstVideoCaptionType,
         data: *const u8,
         size: size_t,
     ) -> *mut GstVideoCaptionMeta;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_buffer_add_video_codec_alpha_meta(
         buffer: *mut gst::GstBuffer,
         alpha_buffer: *mut gst::GstBuffer,
@@ -4362,8 +4362,8 @@ extern "C" {
         w: c_uint,
         h: c_uint,
     ) -> *mut GstVideoRegionOfInterestMeta;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_buffer_add_video_sei_user_data_unregistered_meta(
         buffer: *mut gst::GstBuffer,
         uuid: *mut u8,
@@ -4406,12 +4406,12 @@ extern "C" {
     pub fn gst_is_video_overlay_prepare_window_handle_message(
         msg: *mut gst::GstMessage,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_afd_meta_api_get_type() -> GType;
     pub fn gst_video_affine_transformation_meta_api_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_bar_meta_api_get_type() -> GType;
     pub fn gst_video_blend(
         dest: *mut GstVideoFrame,
@@ -4438,11 +4438,11 @@ extern "C" {
         display_par_n: c_uint,
         display_par_d: c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_caption_meta_api_get_type() -> GType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_center_rect(
         src: *const GstVideoRectangle,
         dst: *const GstVideoRectangle,
@@ -4456,8 +4456,8 @@ extern "C" {
         width: c_int,
     );
     pub fn gst_video_chroma_to_string(site: GstVideoChromaSite) -> *const c_char;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_codec_alpha_meta_api_get_type() -> GType;
     pub fn gst_video_color_transfer_decode(
         func: GstVideoTransferFunction,
@@ -4482,20 +4482,20 @@ extern "C" {
         destroy_notify: glib::GDestroyNotify,
     );
     pub fn gst_video_crop_meta_api_get_type() -> GType;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_dma_drm_fourcc_from_format(format: GstVideoFormat) -> u32;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_dma_drm_fourcc_from_string(
         format_str: *const c_char,
         modifier: *mut u64,
     ) -> u32;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_dma_drm_fourcc_to_format(fourcc: u32) -> GstVideoFormat;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_dma_drm_fourcc_to_string(fourcc: u32, modifier: u64) -> *mut c_char;
     pub fn gst_video_event_is_force_key_unit(event: *mut gst::GstEvent) -> gboolean;
     pub fn gst_video_event_new_downstream_force_key_unit(
@@ -4529,8 +4529,8 @@ extern "C" {
         all_headers: *mut gboolean,
         count: *mut c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_formats_raw(len: *mut c_uint) -> *const GstVideoFormat;
     pub fn gst_video_gl_texture_upload_meta_api_get_type() -> GType;
     pub fn gst_video_guess_framerate(
@@ -4538,25 +4538,25 @@ extern "C" {
         dest_n: *mut c_int,
         dest_d: *mut c_int,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_video_is_common_aspect_ratio(
         width: c_int,
         height: c_int,
         par_n: c_int,
         par_d: c_int,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_is_dma_drm_caps(caps: *const gst::GstCaps) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_make_raw_caps(
         formats: *const GstVideoFormat,
         len: c_uint,
     ) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_make_raw_caps_with_features(
         formats: *const GstVideoFormat,
         len: c_uint,
@@ -4582,11 +4582,11 @@ extern "C" {
     );
     pub fn gst_video_overlay_composition_meta_api_get_type() -> GType;
     pub fn gst_video_region_of_interest_meta_api_get_type() -> GType;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_video_sei_user_data_unregistered_meta_api_get_type() -> GType;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_video_sei_user_data_unregistered_parse_precision_time_stamp(
         user_data: *mut GstVideoSEIUserDataUnregisteredMeta,
         status: *mut u8,

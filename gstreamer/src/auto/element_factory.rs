@@ -42,8 +42,8 @@ impl ElementFactory {
         unsafe { ffi::gst_element_factory_get_num_pad_templates(self.to_glib_none().0) }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_element_factory_get_skip_documentation")]
     #[doc(alias = "get_skip_documentation")]
     pub fn skips_documentation(&self) -> bool {

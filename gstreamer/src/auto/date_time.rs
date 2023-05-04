@@ -46,8 +46,8 @@ impl DateTime {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_date_time_new_from_unix_epoch_local_time_usecs")]
     #[doc(alias = "new_from_unix_epoch_local_time_usecs")]
     pub fn from_unix_epoch_local_time_usecs(usecs: i64) -> Result<DateTime, glib::BoolError> {
@@ -70,8 +70,8 @@ impl DateTime {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_date_time_new_from_unix_epoch_utc_usecs")]
     #[doc(alias = "new_from_unix_epoch_utc_usecs")]
     pub fn from_unix_epoch_utc_usecs(usecs: i64) -> Result<DateTime, glib::BoolError> {

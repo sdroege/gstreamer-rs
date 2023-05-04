@@ -3,8 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::Formatter;
 use crate::{Asset, MetaContainer, Timeline};
 use glib::{
@@ -43,8 +43,8 @@ pub trait ProjectExt: 'static {
         profile: &impl IsA<gst_pbutils::EncodingProfile>,
     ) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_project_add_formatter")]
     fn add_formatter(&self, formatter: &impl IsA<Formatter>);
 
@@ -100,8 +100,8 @@ pub trait ProjectExt: 'static {
     #[doc(alias = "asset-removed")]
     fn connect_asset_removed<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "error-loading")]
     fn connect_error_loading<F: Fn(&Self, &Timeline, &glib::Error) + 'static>(
         &self,
@@ -117,8 +117,8 @@ pub trait ProjectExt: 'static {
     #[doc(alias = "loaded")]
     fn connect_loaded<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "loading")]
     fn connect_loading<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -154,8 +154,8 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn add_formatter(&self, formatter: &impl IsA<Formatter>) {
         unsafe {
             ffi::ges_project_add_formatter(
@@ -374,8 +374,8 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_error_loading<F: Fn(&Self, &Timeline, &glib::Error) + 'static>(
         &self,
         f: F,
@@ -471,8 +471,8 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_loading<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn loading_trampoline<P: IsA<Project>, F: Fn(&P, &Timeline) + 'static>(
             this: *mut ffi::GESProject,

@@ -45,8 +45,8 @@ pub trait TaskExt: 'static {
     #[doc(alias = "gst_task_pause")]
     fn pause(&self) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_task_resume")]
     fn resume(&self) -> Result<(), glib::error::BoolError>;
 
@@ -90,8 +90,8 @@ impl<O: IsA<Task>> TaskExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn resume(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(

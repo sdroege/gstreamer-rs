@@ -3,8 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 use crate::GLAllocationParams;
 use crate::GLContext;
 use glib::{prelude::*, translate::*};
@@ -37,16 +37,16 @@ unsafe impl Send for GLBufferPool {}
 unsafe impl Sync for GLBufferPool {}
 
 pub trait GLBufferPoolExt: 'static {
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_gl_buffer_pool_get_gl_allocation_params")]
     #[doc(alias = "get_gl_allocation_params")]
     fn gl_allocation_params(&self) -> Option<GLAllocationParams>;
 }
 
 impl<O: IsA<GLBufferPool>> GLBufferPoolExt for O {
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn gl_allocation_params(&self) -> Option<GLAllocationParams> {
         unsafe {
             from_glib_full(ffi::gst_gl_buffer_pool_get_gl_allocation_params(

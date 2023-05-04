@@ -14,7 +14,7 @@ edition = "2021"
 rust-version = "1.57"
 
 [package.metadata.docs.rs]
-features = ["dox"]
+features = []
 
 [package.metadata.system-deps.gstreamer_validate_1_0]
 name = "gstreamer-validate-1.0"

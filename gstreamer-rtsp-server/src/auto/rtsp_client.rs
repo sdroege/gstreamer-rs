@@ -3,8 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::RTSPStreamTransport;
 use crate::{
     RTSPAuth, RTSPContext, RTSPFilterResult, RTSPMountPoints, RTSPSession, RTSPSessionPool,
@@ -57,8 +57,8 @@ pub trait RTSPClientExt: 'static {
     //#[doc(alias = "get_connection")]
     //fn connection(&self) -> /*Ignored*/Option<gst_rtsp::RTSPConnection>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_client_get_content_length_limit")]
     #[doc(alias = "get_content_length_limit")]
     fn content_length_limit(&self) -> u32;
@@ -71,8 +71,8 @@ pub trait RTSPClientExt: 'static {
     #[doc(alias = "get_session_pool")]
     fn session_pool(&self) -> Option<RTSPSessionPool>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_client_get_stream_transport")]
     #[doc(alias = "get_stream_transport")]
     fn stream_transport(&self, channel: u8) -> Option<RTSPStreamTransport>;
@@ -99,16 +99,16 @@ pub trait RTSPClientExt: 'static {
     //#[doc(alias = "gst_rtsp_client_set_connection")]
     //fn set_connection(&self, conn: /*Ignored*/gst_rtsp::RTSPConnection) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_client_set_content_length_limit")]
     fn set_content_length_limit(&self, limit: u32);
 
     #[doc(alias = "gst_rtsp_client_set_mount_points")]
     fn set_mount_points(&self, mounts: Option<&impl IsA<RTSPMountPoints>>);
 
-    //#[cfg(any(feature = "v1_16", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //#[cfg(feature = "v1_16")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     //#[doc(alias = "gst_rtsp_client_set_send_messages_func")]
     //fn set_send_messages_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, u32, bool) -> bool, user_data: /*Unimplemented*/Option<Basic: Pointer>);
 
@@ -335,8 +335,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_client_get_connection() }
     //}
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn content_length_limit(&self) -> u32 {
         unsafe { ffi::gst_rtsp_client_get_content_length_limit(self.as_ref().to_glib_none().0) }
     }
@@ -357,8 +357,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn stream_transport(&self, channel: u8) -> Option<RTSPStreamTransport> {
         unsafe {
             from_glib_none(ffi::gst_rtsp_client_get_stream_transport(
@@ -438,8 +438,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_client_set_connection() }
     //}
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_content_length_limit(&self, limit: u32) {
         unsafe {
             ffi::gst_rtsp_client_set_content_length_limit(self.as_ref().to_glib_none().0, limit);
@@ -455,8 +455,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v1_16", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //#[cfg(feature = "v1_16")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     //fn set_send_messages_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, u32, bool) -> bool, user_data: /*Unimplemented*/Option<Basic: Pointer>) {
     //    unsafe { TODO: call ffi:gst_rtsp_client_set_send_messages_func() }
     //}

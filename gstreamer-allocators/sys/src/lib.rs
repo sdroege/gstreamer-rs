@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -155,19 +155,19 @@ extern "C" {
     //=========================================================================
     // GstDRMDumbAllocator
     //=========================================================================
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_drm_dumb_allocator_get_type() -> GType;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_drm_dumb_allocator_new_with_device_path(
         drm_device_path: *const c_char,
     ) -> *mut gst::GstAllocator;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_drm_dumb_allocator_new_with_fd(drm_fd: c_int) -> *mut gst::GstAllocator;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_drm_dumb_allocator_alloc(
         allocator: *mut GstDRMDumbAllocator,
         drm_fourcc: u32,
@@ -175,8 +175,8 @@ extern "C" {
         height: u32,
         out_pitch: *mut u32,
     ) -> *mut gst::GstMemory;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_drm_dumb_allocator_has_prime_export(allocator: *mut GstDRMDumbAllocator)
         -> gboolean;
 
@@ -190,8 +190,8 @@ extern "C" {
         fd: c_int,
         size: size_t,
     ) -> *mut gst::GstMemory;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_dmabuf_allocator_alloc_with_flags(
         allocator: *mut gst::GstAllocator,
         fd: c_int,
@@ -220,16 +220,16 @@ extern "C" {
     // Other functions
     //=========================================================================
     pub fn gst_dmabuf_memory_get_fd(mem: *mut gst::GstMemory) -> c_int;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_drm_dumb_memory_export_dmabuf(mem: *mut gst::GstMemory) -> *mut gst::GstMemory;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_drm_dumb_memory_get_handle(mem: *mut gst::GstMemory) -> u32;
     pub fn gst_fd_memory_get_fd(mem: *mut gst::GstMemory) -> c_int;
     pub fn gst_is_dmabuf_memory(mem: *mut gst::GstMemory) -> gboolean;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_is_drm_dumb_memory(mem: *mut gst::GstMemory) -> gboolean;
     pub fn gst_is_fd_memory(mem: *mut gst::GstMemory) -> gboolean;
     pub fn gst_is_phys_memory(mem: *mut gst::GstMemory) -> gboolean;

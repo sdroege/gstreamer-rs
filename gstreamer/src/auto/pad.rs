@@ -103,8 +103,8 @@ pub trait PadExt: 'static {
     #[must_use]
     fn peer(&self) -> Option<Pad>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_pad_get_single_internal_link")]
     #[doc(alias = "get_single_internal_link")]
     #[must_use]
@@ -383,8 +383,8 @@ impl<O: IsA<Pad>> PadExt for O {
         unsafe { from_glib_full(ffi::gst_pad_get_peer(self.as_ref().to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn single_internal_link(&self) -> Option<Pad> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_single_internal_link(

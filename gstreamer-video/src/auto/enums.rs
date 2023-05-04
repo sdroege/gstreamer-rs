@@ -265,28 +265,28 @@ pub enum NavigationEventType {
     MouseMove,
     #[doc(alias = "GST_NAVIGATION_EVENT_COMMAND")]
     Command,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_NAVIGATION_EVENT_MOUSE_SCROLL")]
     MouseScroll,
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GST_NAVIGATION_EVENT_TOUCH_DOWN")]
     TouchDown,
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GST_NAVIGATION_EVENT_TOUCH_MOTION")]
     TouchMotion,
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GST_NAVIGATION_EVENT_TOUCH_UP")]
     TouchUp,
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GST_NAVIGATION_EVENT_TOUCH_FRAME")]
     TouchFrame,
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GST_NAVIGATION_EVENT_TOUCH_CANCEL")]
     TouchCancel,
     #[doc(hidden)]
@@ -306,17 +306,17 @@ impl IntoGlib for NavigationEventType {
             Self::MouseButtonRelease => ffi::GST_NAVIGATION_EVENT_MOUSE_BUTTON_RELEASE,
             Self::MouseMove => ffi::GST_NAVIGATION_EVENT_MOUSE_MOVE,
             Self::Command => ffi::GST_NAVIGATION_EVENT_COMMAND,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::MouseScroll => ffi::GST_NAVIGATION_EVENT_MOUSE_SCROLL,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             Self::TouchDown => ffi::GST_NAVIGATION_EVENT_TOUCH_DOWN,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             Self::TouchMotion => ffi::GST_NAVIGATION_EVENT_TOUCH_MOTION,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             Self::TouchUp => ffi::GST_NAVIGATION_EVENT_TOUCH_UP,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             Self::TouchFrame => ffi::GST_NAVIGATION_EVENT_TOUCH_FRAME,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             Self::TouchCancel => ffi::GST_NAVIGATION_EVENT_TOUCH_CANCEL,
             Self::__Unknown(value) => value,
         }
@@ -336,17 +336,17 @@ impl FromGlib<ffi::GstNavigationEventType> for NavigationEventType {
             ffi::GST_NAVIGATION_EVENT_MOUSE_BUTTON_RELEASE => Self::MouseButtonRelease,
             ffi::GST_NAVIGATION_EVENT_MOUSE_MOVE => Self::MouseMove,
             ffi::GST_NAVIGATION_EVENT_COMMAND => Self::Command,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_NAVIGATION_EVENT_MOUSE_SCROLL => Self::MouseScroll,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             ffi::GST_NAVIGATION_EVENT_TOUCH_DOWN => Self::TouchDown,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             ffi::GST_NAVIGATION_EVENT_TOUCH_MOTION => Self::TouchMotion,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             ffi::GST_NAVIGATION_EVENT_TOUCH_UP => Self::TouchUp,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             ffi::GST_NAVIGATION_EVENT_TOUCH_FRAME => Self::TouchFrame,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             ffi::GST_NAVIGATION_EVENT_TOUCH_CANCEL => Self::TouchCancel,
             value => Self::__Unknown(value),
         }
@@ -614,8 +614,8 @@ impl From<NavigationQueryType> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoAFDSpec")]
@@ -630,8 +630,8 @@ pub enum VideoAFDSpec {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl IntoGlib for VideoAFDSpec {
     type GlibType = ffi::GstVideoAFDSpec;
@@ -647,8 +647,8 @@ impl IntoGlib for VideoAFDSpec {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoAFDSpec> for VideoAFDSpec {
     #[inline]
@@ -664,8 +664,8 @@ impl FromGlib<ffi::GstVideoAFDSpec> for VideoAFDSpec {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoAFDSpec {
     #[inline]
     fn static_type() -> Type {
@@ -673,8 +673,8 @@ impl StaticType for VideoAFDSpec {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl glib::HasParamSpec for VideoAFDSpec {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -685,14 +685,14 @@ impl glib::HasParamSpec for VideoAFDSpec {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl glib::value::ValueType for VideoAFDSpec {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 unsafe impl<'a> FromValue<'a> for VideoAFDSpec {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -703,8 +703,8 @@ unsafe impl<'a> FromValue<'a> for VideoAFDSpec {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl ToValue for VideoAFDSpec {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -721,8 +721,8 @@ impl ToValue for VideoAFDSpec {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl From<VideoAFDSpec> for glib::Value {
     #[inline]
     fn from(v: VideoAFDSpec) -> Self {
@@ -731,8 +731,8 @@ impl From<VideoAFDSpec> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoAFDValue")]
@@ -763,8 +763,8 @@ pub enum VideoAFDValue {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl IntoGlib for VideoAFDValue {
     type GlibType = ffi::GstVideoAFDValue;
@@ -788,8 +788,8 @@ impl IntoGlib for VideoAFDValue {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoAFDValue> for VideoAFDValue {
     #[inline]
@@ -813,8 +813,8 @@ impl FromGlib<ffi::GstVideoAFDValue> for VideoAFDValue {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoAFDValue {
     #[inline]
     fn static_type() -> Type {
@@ -822,8 +822,8 @@ impl StaticType for VideoAFDValue {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl glib::HasParamSpec for VideoAFDValue {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -834,14 +834,14 @@ impl glib::HasParamSpec for VideoAFDValue {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl glib::value::ValueType for VideoAFDValue {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 unsafe impl<'a> FromValue<'a> for VideoAFDValue {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -852,8 +852,8 @@ unsafe impl<'a> FromValue<'a> for VideoAFDValue {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl ToValue for VideoAFDValue {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -870,8 +870,8 @@ impl ToValue for VideoAFDValue {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl From<VideoAFDValue> for glib::Value {
     #[inline]
     fn from(v: VideoAFDValue) -> Self {
@@ -979,8 +979,8 @@ impl From<VideoAlphaMode> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoCaptionType")]
@@ -999,8 +999,8 @@ pub enum VideoCaptionType {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl VideoCaptionType {
     #[doc(alias = "gst_video_caption_type_to_caps")]
     pub fn to_caps(self) -> gst::Caps {
@@ -1009,8 +1009,8 @@ impl VideoCaptionType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl IntoGlib for VideoCaptionType {
     type GlibType = ffi::GstVideoCaptionType;
@@ -1028,8 +1028,8 @@ impl IntoGlib for VideoCaptionType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoCaptionType> for VideoCaptionType {
     #[inline]
@@ -1047,8 +1047,8 @@ impl FromGlib<ffi::GstVideoCaptionType> for VideoCaptionType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for VideoCaptionType {
     #[inline]
     fn static_type() -> Type {
@@ -1056,8 +1056,8 @@ impl StaticType for VideoCaptionType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::HasParamSpec for VideoCaptionType {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -1068,14 +1068,14 @@ impl glib::HasParamSpec for VideoCaptionType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::value::ValueType for VideoCaptionType {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 unsafe impl<'a> FromValue<'a> for VideoCaptionType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -1086,8 +1086,8 @@ unsafe impl<'a> FromValue<'a> for VideoCaptionType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl ToValue for VideoCaptionType {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -1104,8 +1104,8 @@ impl ToValue for VideoCaptionType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl From<VideoCaptionType> for glib::Value {
     #[inline]
     fn from(v: VideoCaptionType) -> Self {
@@ -1240,16 +1240,16 @@ pub enum VideoColorMatrix {
 }
 
 impl VideoColorMatrix {
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_color_matrix_from_iso")]
     pub fn from_iso(value: u32) -> VideoColorMatrix {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_video_color_matrix_from_iso(value)) }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_color_matrix_to_iso")]
     pub fn to_iso(self) -> u32 {
         assert_initialized_main_thread!();
@@ -1372,20 +1372,20 @@ pub enum VideoColorPrimaries {
     Bt2020,
     #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_ADOBERGB")]
     Adobergb,
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_SMPTEST428")]
     Smptest428,
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_SMPTERP431")]
     Smpterp431,
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_SMPTEEG432")]
     Smpteeg432,
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_EBU3213")]
     Ebu3213,
     #[doc(hidden)]
@@ -1393,8 +1393,8 @@ pub enum VideoColorPrimaries {
 }
 
 impl VideoColorPrimaries {
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_color_primaries_from_iso")]
     pub fn from_iso(value: u32) -> VideoColorPrimaries {
         assert_initialized_main_thread!();
@@ -1407,8 +1407,8 @@ impl VideoColorPrimaries {
     //    unsafe { TODO: call ffi:gst_video_color_primaries_get_info() }
     //}
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_video_color_primaries_is_equivalent")]
     pub fn is_equivalent(self, other: VideoColorPrimaries) -> bool {
         assert_initialized_main_thread!();
@@ -1420,8 +1420,8 @@ impl VideoColorPrimaries {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_color_primaries_to_iso")]
     pub fn to_iso(self) -> u32 {
         assert_initialized_main_thread!();
@@ -1444,13 +1444,13 @@ impl IntoGlib for VideoColorPrimaries {
             Self::Film => ffi::GST_VIDEO_COLOR_PRIMARIES_FILM,
             Self::Bt2020 => ffi::GST_VIDEO_COLOR_PRIMARIES_BT2020,
             Self::Adobergb => ffi::GST_VIDEO_COLOR_PRIMARIES_ADOBERGB,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             Self::Smptest428 => ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTEST428,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             Self::Smpterp431 => ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTERP431,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             Self::Smpteeg432 => ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTEEG432,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             Self::Ebu3213 => ffi::GST_VIDEO_COLOR_PRIMARIES_EBU3213,
             Self::__Unknown(value) => value,
         }
@@ -1472,13 +1472,13 @@ impl FromGlib<ffi::GstVideoColorPrimaries> for VideoColorPrimaries {
             ffi::GST_VIDEO_COLOR_PRIMARIES_FILM => Self::Film,
             ffi::GST_VIDEO_COLOR_PRIMARIES_BT2020 => Self::Bt2020,
             ffi::GST_VIDEO_COLOR_PRIMARIES_ADOBERGB => Self::Adobergb,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTEST428 => Self::Smptest428,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTERP431 => Self::Smpterp431,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTEEG432 => Self::Smpteeg432,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             ffi::GST_VIDEO_COLOR_PRIMARIES_EBU3213 => Self::Ebu3213,
             value => Self::__Unknown(value),
         }
@@ -1931,132 +1931,132 @@ pub enum VideoFormat {
     Nv1210le32,
     #[doc(alias = "GST_VIDEO_FORMAT_NV16_10LE32")]
     Nv1610le32,
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "GST_VIDEO_FORMAT_NV12_10LE40")]
     Nv1210le40,
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "GST_VIDEO_FORMAT_Y210")]
     Y210,
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "GST_VIDEO_FORMAT_Y410")]
     Y410,
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "GST_VIDEO_FORMAT_VUYA")]
     Vuya,
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "GST_VIDEO_FORMAT_BGR10A2_LE")]
     Bgr10a2Le,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_FORMAT_RGB10A2_LE")]
     Rgb10a2Le,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_FORMAT_Y444_16BE")]
     Y44416be,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_FORMAT_Y444_16LE")]
     Y44416le,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_FORMAT_P016_BE")]
     P016Be,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_FORMAT_P016_LE")]
     P016Le,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_FORMAT_P012_BE")]
     P012Be,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_FORMAT_P012_LE")]
     P012Le,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_FORMAT_Y212_BE")]
     Y212Be,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_FORMAT_Y212_LE")]
     Y212Le,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_FORMAT_Y412_BE")]
     Y412Be,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_FORMAT_Y412_LE")]
     Y412Le,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_FORMAT_NV12_4L4")]
     Nv124l4,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_FORMAT_NV12_32L32")]
     Nv1232l32,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_VIDEO_FORMAT_RGBP")]
     Rgbp,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_VIDEO_FORMAT_BGRP")]
     Bgrp,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_VIDEO_FORMAT_AV12")]
     Av12,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_VIDEO_FORMAT_ARGB64_LE")]
     Argb64Le,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_VIDEO_FORMAT_ARGB64_BE")]
     Argb64Be,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_VIDEO_FORMAT_RGBA64_LE")]
     Rgba64Le,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_VIDEO_FORMAT_RGBA64_BE")]
     Rgba64Be,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_VIDEO_FORMAT_BGRA64_LE")]
     Bgra64Le,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_VIDEO_FORMAT_BGRA64_BE")]
     Bgra64Be,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_VIDEO_FORMAT_ABGR64_LE")]
     Abgr64Le,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_VIDEO_FORMAT_ABGR64_BE")]
     Abgr64Be,
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GST_VIDEO_FORMAT_NV12_16L32S")]
     Nv1216l32s,
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GST_VIDEO_FORMAT_NV12_8L128")]
     Nv128l128,
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GST_VIDEO_FORMAT_NV12_10BE_8L128")]
     Nv1210be8l128,
     #[doc(hidden)]
@@ -2183,69 +2183,69 @@ impl IntoGlib for VideoFormat {
             Self::Gray10Le32 => ffi::GST_VIDEO_FORMAT_GRAY10_LE32,
             Self::Nv1210le32 => ffi::GST_VIDEO_FORMAT_NV12_10LE32,
             Self::Nv1610le32 => ffi::GST_VIDEO_FORMAT_NV16_10LE32,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             Self::Nv1210le40 => ffi::GST_VIDEO_FORMAT_NV12_10LE40,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             Self::Y210 => ffi::GST_VIDEO_FORMAT_Y210,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             Self::Y410 => ffi::GST_VIDEO_FORMAT_Y410,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             Self::Vuya => ffi::GST_VIDEO_FORMAT_VUYA,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             Self::Bgr10a2Le => ffi::GST_VIDEO_FORMAT_BGR10A2_LE,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::Rgb10a2Le => ffi::GST_VIDEO_FORMAT_RGB10A2_LE,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::Y44416be => ffi::GST_VIDEO_FORMAT_Y444_16BE,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::Y44416le => ffi::GST_VIDEO_FORMAT_Y444_16LE,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::P016Be => ffi::GST_VIDEO_FORMAT_P016_BE,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::P016Le => ffi::GST_VIDEO_FORMAT_P016_LE,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::P012Be => ffi::GST_VIDEO_FORMAT_P012_BE,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::P012Le => ffi::GST_VIDEO_FORMAT_P012_LE,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::Y212Be => ffi::GST_VIDEO_FORMAT_Y212_BE,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::Y212Le => ffi::GST_VIDEO_FORMAT_Y212_LE,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::Y412Be => ffi::GST_VIDEO_FORMAT_Y412_BE,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::Y412Le => ffi::GST_VIDEO_FORMAT_Y412_LE,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::Nv124l4 => ffi::GST_VIDEO_FORMAT_NV12_4L4,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::Nv1232l32 => ffi::GST_VIDEO_FORMAT_NV12_32L32,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Rgbp => ffi::GST_VIDEO_FORMAT_RGBP,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Bgrp => ffi::GST_VIDEO_FORMAT_BGRP,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Av12 => ffi::GST_VIDEO_FORMAT_AV12,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Argb64Le => ffi::GST_VIDEO_FORMAT_ARGB64_LE,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Argb64Be => ffi::GST_VIDEO_FORMAT_ARGB64_BE,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Rgba64Le => ffi::GST_VIDEO_FORMAT_RGBA64_LE,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Rgba64Be => ffi::GST_VIDEO_FORMAT_RGBA64_BE,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Bgra64Le => ffi::GST_VIDEO_FORMAT_BGRA64_LE,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Bgra64Be => ffi::GST_VIDEO_FORMAT_BGRA64_BE,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Abgr64Le => ffi::GST_VIDEO_FORMAT_ABGR64_LE,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Abgr64Be => ffi::GST_VIDEO_FORMAT_ABGR64_BE,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             Self::Nv1216l32s => ffi::GST_VIDEO_FORMAT_NV12_16L32S,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             Self::Nv128l128 => ffi::GST_VIDEO_FORMAT_NV12_8L128,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             Self::Nv1210be8l128 => ffi::GST_VIDEO_FORMAT_NV12_10BE_8L128,
             Self::__Unknown(value) => value,
         }
@@ -2339,69 +2339,69 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
             ffi::GST_VIDEO_FORMAT_GRAY10_LE32 => Self::Gray10Le32,
             ffi::GST_VIDEO_FORMAT_NV12_10LE32 => Self::Nv1210le32,
             ffi::GST_VIDEO_FORMAT_NV16_10LE32 => Self::Nv1610le32,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             ffi::GST_VIDEO_FORMAT_NV12_10LE40 => Self::Nv1210le40,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             ffi::GST_VIDEO_FORMAT_Y210 => Self::Y210,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             ffi::GST_VIDEO_FORMAT_Y410 => Self::Y410,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             ffi::GST_VIDEO_FORMAT_VUYA => Self::Vuya,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             ffi::GST_VIDEO_FORMAT_BGR10A2_LE => Self::Bgr10a2Le,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_FORMAT_RGB10A2_LE => Self::Rgb10a2Le,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_FORMAT_Y444_16BE => Self::Y44416be,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_FORMAT_Y444_16LE => Self::Y44416le,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_FORMAT_P016_BE => Self::P016Be,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_FORMAT_P016_LE => Self::P016Le,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_FORMAT_P012_BE => Self::P012Be,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_FORMAT_P012_LE => Self::P012Le,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_FORMAT_Y212_BE => Self::Y212Be,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_FORMAT_Y212_LE => Self::Y212Le,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_FORMAT_Y412_BE => Self::Y412Be,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_FORMAT_Y412_LE => Self::Y412Le,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_FORMAT_NV12_4L4 => Self::Nv124l4,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_FORMAT_NV12_32L32 => Self::Nv1232l32,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_VIDEO_FORMAT_RGBP => Self::Rgbp,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_VIDEO_FORMAT_BGRP => Self::Bgrp,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_VIDEO_FORMAT_AV12 => Self::Av12,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_VIDEO_FORMAT_ARGB64_LE => Self::Argb64Le,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_VIDEO_FORMAT_ARGB64_BE => Self::Argb64Be,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_VIDEO_FORMAT_RGBA64_LE => Self::Rgba64Le,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_VIDEO_FORMAT_RGBA64_BE => Self::Rgba64Be,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_VIDEO_FORMAT_BGRA64_LE => Self::Bgra64Le,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_VIDEO_FORMAT_BGRA64_BE => Self::Bgra64Be,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_VIDEO_FORMAT_ABGR64_LE => Self::Abgr64Le,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_VIDEO_FORMAT_ABGR64_BE => Self::Abgr64Be,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             ffi::GST_VIDEO_FORMAT_NV12_16L32S => Self::Nv1216l32s,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             ffi::GST_VIDEO_FORMAT_NV12_8L128 => Self::Nv128l128,
-            #[cfg(any(feature = "v1_22", feature = "dox"))]
+            #[cfg(feature = "v1_22")]
             ffi::GST_VIDEO_FORMAT_NV12_10BE_8L128 => Self::Nv1210be8l128,
             value => Self::__Unknown(value),
         }
@@ -2570,8 +2570,8 @@ pub enum VideoInterlaceMode {
     Mixed,
     #[doc(alias = "GST_VIDEO_INTERLACE_MODE_FIELDS")]
     Fields,
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "GST_VIDEO_INTERLACE_MODE_ALTERNATE")]
     Alternate,
     #[doc(hidden)]
@@ -2618,7 +2618,7 @@ impl IntoGlib for VideoInterlaceMode {
             Self::Interleaved => ffi::GST_VIDEO_INTERLACE_MODE_INTERLEAVED,
             Self::Mixed => ffi::GST_VIDEO_INTERLACE_MODE_MIXED,
             Self::Fields => ffi::GST_VIDEO_INTERLACE_MODE_FIELDS,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             Self::Alternate => ffi::GST_VIDEO_INTERLACE_MODE_ALTERNATE,
             Self::__Unknown(value) => value,
         }
@@ -2636,7 +2636,7 @@ impl FromGlib<ffi::GstVideoInterlaceMode> for VideoInterlaceMode {
             ffi::GST_VIDEO_INTERLACE_MODE_INTERLEAVED => Self::Interleaved,
             ffi::GST_VIDEO_INTERLACE_MODE_MIXED => Self::Mixed,
             ffi::GST_VIDEO_INTERLACE_MODE_FIELDS => Self::Fields,
-            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            #[cfg(feature = "v1_16")]
             ffi::GST_VIDEO_INTERLACE_MODE_ALTERNATE => Self::Alternate,
             value => Self::__Unknown(value),
         }
@@ -3432,8 +3432,8 @@ pub enum VideoTileMode {
     Unknown,
     #[doc(alias = "GST_VIDEO_TILE_MODE_ZFLIPZ_2X2")]
     Zflipz2x2,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_TILE_MODE_LINEAR")]
     Linear,
     #[doc(hidden)]
@@ -3449,7 +3449,7 @@ impl IntoGlib for VideoTileMode {
         match self {
             Self::Unknown => ffi::GST_VIDEO_TILE_MODE_UNKNOWN,
             Self::Zflipz2x2 => ffi::GST_VIDEO_TILE_MODE_ZFLIPZ_2X2,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::Linear => ffi::GST_VIDEO_TILE_MODE_LINEAR,
             Self::__Unknown(value) => value,
         }
@@ -3465,7 +3465,7 @@ impl FromGlib<ffi::GstVideoTileMode> for VideoTileMode {
         match value {
             ffi::GST_VIDEO_TILE_MODE_UNKNOWN => Self::Unknown,
             ffi::GST_VIDEO_TILE_MODE_ZFLIPZ_2X2 => Self::Zflipz2x2,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_TILE_MODE_LINEAR => Self::Linear,
             value => Self::__Unknown(value),
         }
@@ -3557,20 +3557,20 @@ pub enum VideoTransferFunction {
     Bt202012,
     #[doc(alias = "GST_VIDEO_TRANSFER_ADOBERGB")]
     Adobergb,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_TRANSFER_BT2020_10")]
     Bt202010,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_TRANSFER_SMPTE2084")]
     Smpte2084,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_TRANSFER_ARIB_STD_B67")]
     AribStdB67,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_TRANSFER_BT601")]
     Bt601,
     #[doc(hidden)]
@@ -3578,32 +3578,32 @@ pub enum VideoTransferFunction {
 }
 
 impl VideoTransferFunction {
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_video_transfer_function_decode")]
     pub fn decode(self, val: f64) -> f64 {
         assert_initialized_main_thread!();
         unsafe { ffi::gst_video_transfer_function_decode(self.into_glib(), val) }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_video_transfer_function_encode")]
     pub fn encode(self, val: f64) -> f64 {
         assert_initialized_main_thread!();
         unsafe { ffi::gst_video_transfer_function_encode(self.into_glib(), val) }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_transfer_function_from_iso")]
     pub fn from_iso(value: u32) -> VideoTransferFunction {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_video_transfer_function_from_iso(value)) }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_transfer_function_is_equivalent")]
     pub fn is_equivalent(self, from_bpp: u32, to_func: VideoTransferFunction, to_bpp: u32) -> bool {
         assert_initialized_main_thread!();
@@ -3617,8 +3617,8 @@ impl VideoTransferFunction {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_transfer_function_to_iso")]
     pub fn to_iso(self) -> u32 {
         assert_initialized_main_thread!();
@@ -3645,13 +3645,13 @@ impl IntoGlib for VideoTransferFunction {
             Self::Log316 => ffi::GST_VIDEO_TRANSFER_LOG316,
             Self::Bt202012 => ffi::GST_VIDEO_TRANSFER_BT2020_12,
             Self::Adobergb => ffi::GST_VIDEO_TRANSFER_ADOBERGB,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::Bt202010 => ffi::GST_VIDEO_TRANSFER_BT2020_10,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::Smpte2084 => ffi::GST_VIDEO_TRANSFER_SMPTE2084,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::AribStdB67 => ffi::GST_VIDEO_TRANSFER_ARIB_STD_B67,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::Bt601 => ffi::GST_VIDEO_TRANSFER_BT601,
             Self::__Unknown(value) => value,
         }
@@ -3677,13 +3677,13 @@ impl FromGlib<ffi::GstVideoTransferFunction> for VideoTransferFunction {
             ffi::GST_VIDEO_TRANSFER_LOG316 => Self::Log316,
             ffi::GST_VIDEO_TRANSFER_BT2020_12 => Self::Bt202012,
             ffi::GST_VIDEO_TRANSFER_ADOBERGB => Self::Adobergb,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_TRANSFER_BT2020_10 => Self::Bt202010,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_TRANSFER_SMPTE2084 => Self::Smpte2084,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_TRANSFER_ARIB_STD_B67 => Self::AribStdB67,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_VIDEO_TRANSFER_BT601 => Self::Bt601,
             value => Self::__Unknown(value),
         }

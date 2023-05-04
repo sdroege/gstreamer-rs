@@ -92,9 +92,9 @@ impl From<DiscovererSerializeFlags> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 bitflags! {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstPbUtilsCapsDescriptionFlags")]
     pub struct PbUtilsCapsDescriptionFlags: u32 {
         #[doc(alias = "GST_PBUTILS_CAPS_DESCRIPTION_FLAG_CONTAINER")]
@@ -111,15 +111,15 @@ bitflags! {
         const TAG = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_TAG as _;
         #[doc(alias = "GST_PBUTILS_CAPS_DESCRIPTION_FLAG_GENERIC")]
         const GENERIC = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_GENERIC as _;
-        #[cfg(any(feature = "v1_22", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+        #[cfg(feature = "v1_22")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
         #[doc(alias = "GST_PBUTILS_CAPS_DESCRIPTION_FLAG_METADATA")]
         const METADATA = ffi::GST_PBUTILS_CAPS_DESCRIPTION_FLAG_METADATA as _;
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl IntoGlib for PbUtilsCapsDescriptionFlags {
     type GlibType = ffi::GstPbUtilsCapsDescriptionFlags;
@@ -130,8 +130,8 @@ impl IntoGlib for PbUtilsCapsDescriptionFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstPbUtilsCapsDescriptionFlags> for PbUtilsCapsDescriptionFlags {
     #[inline]
@@ -141,8 +141,8 @@ impl FromGlib<ffi::GstPbUtilsCapsDescriptionFlags> for PbUtilsCapsDescriptionFla
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for PbUtilsCapsDescriptionFlags {
     #[inline]
     fn static_type() -> Type {
@@ -150,8 +150,8 @@ impl StaticType for PbUtilsCapsDescriptionFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::HasParamSpec for PbUtilsCapsDescriptionFlags {
     type ParamSpec = glib::ParamSpecFlags;
     type SetValue = Self;
@@ -162,14 +162,14 @@ impl glib::HasParamSpec for PbUtilsCapsDescriptionFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for PbUtilsCapsDescriptionFlags {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 unsafe impl<'a> FromValue<'a> for PbUtilsCapsDescriptionFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -180,8 +180,8 @@ unsafe impl<'a> FromValue<'a> for PbUtilsCapsDescriptionFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl ToValue for PbUtilsCapsDescriptionFlags {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -198,8 +198,8 @@ impl ToValue for PbUtilsCapsDescriptionFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl From<PbUtilsCapsDescriptionFlags> for glib::Value {
     #[inline]
     fn from(v: PbUtilsCapsDescriptionFlags) -> Self {

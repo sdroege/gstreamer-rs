@@ -172,9 +172,9 @@ impl From<RTPBufferMapFlags> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 bitflags! {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstRTPHeaderExtensionDirection")]
     pub struct RTPHeaderExtensionDirection: u32 {
         #[doc(alias = "GST_RTP_HEADER_EXTENSION_DIRECTION_INACTIVE")]
@@ -190,8 +190,8 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl IntoGlib for RTPHeaderExtensionDirection {
     type GlibType = ffi::GstRTPHeaderExtensionDirection;
@@ -202,8 +202,8 @@ impl IntoGlib for RTPHeaderExtensionDirection {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTPHeaderExtensionDirection> for RTPHeaderExtensionDirection {
     #[inline]
@@ -213,8 +213,8 @@ impl FromGlib<ffi::GstRTPHeaderExtensionDirection> for RTPHeaderExtensionDirecti
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for RTPHeaderExtensionDirection {
     #[inline]
     fn static_type() -> Type {
@@ -222,8 +222,8 @@ impl StaticType for RTPHeaderExtensionDirection {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::HasParamSpec for RTPHeaderExtensionDirection {
     type ParamSpec = glib::ParamSpecFlags;
     type SetValue = Self;
@@ -234,14 +234,14 @@ impl glib::HasParamSpec for RTPHeaderExtensionDirection {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for RTPHeaderExtensionDirection {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 unsafe impl<'a> FromValue<'a> for RTPHeaderExtensionDirection {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -252,8 +252,8 @@ unsafe impl<'a> FromValue<'a> for RTPHeaderExtensionDirection {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl ToValue for RTPHeaderExtensionDirection {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -270,8 +270,8 @@ impl ToValue for RTPHeaderExtensionDirection {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl From<RTPHeaderExtensionDirection> for glib::Value {
     #[inline]
     fn from(v: RTPHeaderExtensionDirection) -> Self {
@@ -280,9 +280,9 @@ impl From<RTPHeaderExtensionDirection> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 bitflags! {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstRTPHeaderExtensionFlags")]
     pub struct RTPHeaderExtensionFlags: u32 {
         #[doc(alias = "GST_RTP_HEADER_EXTENSION_ONE_BYTE")]
@@ -292,8 +292,8 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl IntoGlib for RTPHeaderExtensionFlags {
     type GlibType = ffi::GstRTPHeaderExtensionFlags;
@@ -304,8 +304,8 @@ impl IntoGlib for RTPHeaderExtensionFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTPHeaderExtensionFlags> for RTPHeaderExtensionFlags {
     #[inline]
@@ -315,8 +315,8 @@ impl FromGlib<ffi::GstRTPHeaderExtensionFlags> for RTPHeaderExtensionFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for RTPHeaderExtensionFlags {
     #[inline]
     fn static_type() -> Type {
@@ -324,8 +324,8 @@ impl StaticType for RTPHeaderExtensionFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::HasParamSpec for RTPHeaderExtensionFlags {
     type ParamSpec = glib::ParamSpecFlags;
     type SetValue = Self;
@@ -336,14 +336,14 @@ impl glib::HasParamSpec for RTPHeaderExtensionFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for RTPHeaderExtensionFlags {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 unsafe impl<'a> FromValue<'a> for RTPHeaderExtensionFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -354,8 +354,8 @@ unsafe impl<'a> FromValue<'a> for RTPHeaderExtensionFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl ToValue for RTPHeaderExtensionFlags {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -372,8 +372,8 @@ impl ToValue for RTPHeaderExtensionFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl From<RTPHeaderExtensionFlags> for glib::Value {
     #[inline]
     fn from(v: RTPHeaderExtensionFlags) -> Self {

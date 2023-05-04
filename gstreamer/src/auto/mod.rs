@@ -162,8 +162,8 @@ pub use self::flags::DebugColorFlags;
 pub use self::flags::DebugGraphDetails;
 pub use self::flags::ElementFlags;
 pub use self::flags::EventTypeFlags;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::flags::GapFlags;
 pub use self::flags::MemoryFlags;
 pub use self::flags::MetaFlags;
@@ -173,16 +173,16 @@ pub use self::flags::PadLinkCheck;
 pub use self::flags::PadProbeType;
 pub use self::flags::ParseFlags;
 pub use self::flags::PipelineFlags;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 pub use self::flags::PluginAPIFlags;
 pub use self::flags::PluginDependencyFlags;
 pub use self::flags::PluginFlags;
 pub use self::flags::SchedulingFlags;
 pub use self::flags::SeekFlags;
 pub use self::flags::SegmentFlags;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::flags::SerializeFlags;
 pub use self::flags::StackTraceFlags;
 pub use self::flags::StreamFlags;

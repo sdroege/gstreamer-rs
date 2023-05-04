@@ -6,15 +6,15 @@
 use crate::RTCPSDESType;
 use glib::translate::*;
 
-//#[cfg(any(feature = "v1_16", feature = "dox"))]
-//#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+//#[cfg(feature = "v1_16")]
+//#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 //#[doc(alias = "gst_buffer_add_rtp_source_meta")]
 //pub fn buffer_add_rtp_source_meta(buffer: &gst::Buffer, ssrc: u32, csrc: &[u32]) -> /*Ignored*/RTPSourceMeta {
 //    unsafe { TODO: call ffi:gst_buffer_add_rtp_source_meta() }
 //}
 
-//#[cfg(any(feature = "v1_16", feature = "dox"))]
-//#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+//#[cfg(feature = "v1_16")]
+//#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 //#[doc(alias = "gst_buffer_get_rtp_source_meta")]
 //pub fn buffer_get_rtp_source_meta(buffer: &gst::Buffer) -> /*Ignored*/Option<RTPSourceMeta> {
 //    unsafe { TODO: call ffi:gst_buffer_get_rtp_source_meta() }
@@ -44,8 +44,8 @@ pub fn rtcp_unix_to_ntp(unixtime: u64) -> u64 {
     unsafe { ffi::gst_rtcp_unix_to_ntp(unixtime) }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(alias = "gst_rtp_get_header_extension_list")]
 pub fn rtp_get_header_extension_list() -> Vec<gst::ElementFactory> {
     assert_initialized_main_thread!();

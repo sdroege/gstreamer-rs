@@ -4,8 +4,8 @@
 // DO NOT EDIT
 
 use crate::{Clip, Container, Extractable, MetaContainer, TimelineElement};
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use glib::translate::*;
 
 glib::wrapper! {
@@ -20,8 +20,8 @@ glib::wrapper! {
 impl SourceClip {
     pub const NONE: Option<&'static SourceClip> = None;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_source_clip_new_time_overlay")]
     pub fn new_time_overlay() -> Option<SourceClip> {
         assert_initialized_main_thread!();

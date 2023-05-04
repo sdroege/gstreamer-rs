@@ -3,8 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::{AggregatorPad, AggregatorStartTimeSelection};
 use glib::{
     prelude::*,
@@ -33,8 +33,8 @@ pub trait AggregatorExt: 'static {
     #[doc(alias = "gst_aggregator_finish_buffer")]
     fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_aggregator_finish_buffer_list")]
     fn finish_buffer_list(
         &self,
@@ -45,14 +45,14 @@ pub trait AggregatorExt: 'static {
     #[doc(alias = "get_buffer_pool")]
     fn buffer_pool(&self) -> Option<gst::BufferPool>;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_aggregator_get_force_live")]
     #[doc(alias = "get_force_live")]
     fn is_force_live(&self) -> bool;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_aggregator_get_ignore_inactive_pads")]
     #[doc(alias = "get_ignore_inactive_pads")]
     fn ignores_inactive_pads(&self) -> bool;
@@ -61,23 +61,23 @@ pub trait AggregatorExt: 'static {
     #[doc(alias = "get_latency")]
     fn latency(&self) -> Option<gst::ClockTime>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_aggregator_negotiate")]
     fn negotiate(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_aggregator_peek_next_sample")]
     fn peek_next_sample(&self, pad: &impl IsA<AggregatorPad>) -> Option<gst::Sample>;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_aggregator_set_force_live")]
     fn set_force_live(&self, force_live: bool);
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_aggregator_set_ignore_inactive_pads")]
     fn set_ignore_inactive_pads(&self, ignore: bool);
 
@@ -91,18 +91,18 @@ pub trait AggregatorExt: 'static {
     #[doc(alias = "gst_aggregator_set_src_caps")]
     fn set_src_caps(&self, caps: &gst::Caps);
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_aggregator_simple_get_next_time")]
     fn simple_get_next_time(&self) -> Option<gst::ClockTime>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "emit-signals")]
     fn emits_signals(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "emit-signals")]
     fn set_emit_signals(&self, emit_signals: bool);
 
@@ -112,18 +112,18 @@ pub trait AggregatorExt: 'static {
     #[doc(alias = "start-time")]
     fn set_start_time(&self, start_time: u64);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "start-time-selection")]
     fn start_time_selection(&self) -> AggregatorStartTimeSelection;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "start-time-selection")]
     fn set_start_time_selection(&self, start_time_selection: AggregatorStartTimeSelection);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "emit-signals")]
     fn connect_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -140,8 +140,8 @@ pub trait AggregatorExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "start-time-selection")]
     fn connect_start_time_selection_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -159,8 +159,8 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn finish_buffer_list(
         &self,
         bufferlist: gst::BufferList,
@@ -181,8 +181,8 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn is_force_live(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_aggregator_get_force_live(
@@ -191,8 +191,8 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn ignores_inactive_pads(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_aggregator_get_ignore_inactive_pads(
@@ -209,8 +209,8 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn negotiate(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_aggregator_negotiate(
@@ -219,8 +219,8 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn peek_next_sample(&self, pad: &impl IsA<AggregatorPad>) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::gst_aggregator_peek_next_sample(
@@ -230,8 +230,8 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn set_force_live(&self, force_live: bool) {
         unsafe {
             ffi::gst_aggregator_set_force_live(
@@ -241,8 +241,8 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn set_ignore_inactive_pads(&self, ignore: bool) {
         unsafe {
             ffi::gst_aggregator_set_ignore_inactive_pads(
@@ -272,8 +272,8 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn simple_get_next_time(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_aggregator_simple_get_next_time(
@@ -282,14 +282,14 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn emits_signals(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "emit-signals")
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_emit_signals(&self, emit_signals: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "emit-signals", emit_signals)
     }
@@ -302,20 +302,20 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "start-time", start_time)
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn start_time_selection(&self) -> AggregatorStartTimeSelection {
         glib::ObjectExt::property(self.as_ref(), "start-time-selection")
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_start_time_selection(&self, start_time_selection: AggregatorStartTimeSelection) {
         glib::ObjectExt::set_property(self.as_ref(), "start-time-selection", start_time_selection)
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -400,8 +400,8 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_start_time_selection_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

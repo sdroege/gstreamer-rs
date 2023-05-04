@@ -6,25 +6,25 @@
 mod web_rtcdtls_transport;
 pub use self::web_rtcdtls_transport::WebRTCDTLSTransport;
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 mod web_rtc_data_channel;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 pub use self::web_rtc_data_channel::WebRTCDataChannel;
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 mod web_rtcice;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub use self::web_rtcice::WebRTCICE;
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 mod web_rtcice_stream;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub use self::web_rtcice_stream::WebRTCICEStream;
 
 mod web_rtcice_transport;
@@ -39,55 +39,55 @@ pub use self::web_rtcrtp_sender::WebRTCRTPSender;
 mod web_rtcrtp_transceiver;
 pub use self::web_rtcrtp_transceiver::WebRTCRTPTransceiver;
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 mod web_rtcsctp_transport;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::web_rtcsctp_transport::WebRTCSCTPTransport;
 
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 mod web_rtcice_candidate_stats;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub use self::web_rtcice_candidate_stats::WebRTCICECandidateStats;
 
 mod web_rtc_session_description;
 pub use self::web_rtc_session_description::WebRTCSessionDescription;
 
 mod enums;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 pub use self::enums::WebRTCBundlePolicy;
 pub use self::enums::WebRTCDTLSSetup;
 pub use self::enums::WebRTCDTLSTransportState;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 pub use self::enums::WebRTCDataChannelState;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::enums::WebRTCError;
-#[cfg(any(feature = "v1_14_1", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+#[cfg(feature = "v1_14_1")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
 pub use self::enums::WebRTCFECType;
 pub use self::enums::WebRTCICEComponent;
 pub use self::enums::WebRTCICEConnectionState;
 pub use self::enums::WebRTCICEGatheringState;
 pub use self::enums::WebRTCICERole;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 pub use self::enums::WebRTCICETransportPolicy;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::enums::WebRTCKind;
 pub use self::enums::WebRTCPeerConnectionState;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 pub use self::enums::WebRTCPriorityType;
 pub use self::enums::WebRTCRTPTransceiverDirection;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 pub use self::enums::WebRTCSCTPTransportState;
 pub use self::enums::WebRTCSDPType;
 pub use self::enums::WebRTCSignalingState;
@@ -95,10 +95,10 @@ pub use self::enums::WebRTCStatsType;
 
 #[doc(hidden)]
 pub mod traits {
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub use super::web_rtcice::WebRTCICEExt;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub use super::web_rtcice_stream::WebRTCICEStreamExt;
 }

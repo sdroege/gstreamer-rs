@@ -9,8 +9,8 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 use std::ptr;
 use std::{boxed::Box as Box_, mem::transmute};
 
@@ -38,8 +38,8 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_data_channel_send_data_full")]
     pub fn send_data_full(&self, data: Option<&glib::Bytes>) -> Result<(), glib::Error> {
         unsafe {
@@ -65,8 +65,8 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_webrtc_data_channel_send_string_full")]
     pub fn send_string_full(&self, str: Option<&str>) -> Result<(), glib::Error> {
         unsafe {

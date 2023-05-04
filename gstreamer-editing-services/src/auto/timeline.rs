@@ -7,8 +7,8 @@
 use crate::{
     Asset, Extractable, Group, Layer, MetaContainer, TimelineElement, Track, TrackElement,
 };
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::{Clip, FrameNumber};
 use glib::{
     prelude::*,
@@ -81,13 +81,13 @@ pub trait TimelineExt: 'static {
     #[doc(alias = "ges_timeline_commit_sync")]
     fn commit_sync(&self) -> bool;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "ges_timeline_disable_edit_apis")]
     fn disable_edit_apis(&self, disable_edit_apis: bool);
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "ges_timeline_freeze_commit")]
     fn freeze_commit(&self);
 
@@ -99,8 +99,8 @@ pub trait TimelineExt: 'static {
     #[doc(alias = "get_duration")]
     fn duration(&self) -> gst::ClockTime;
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "ges_timeline_get_edit_apis_disabled")]
     #[doc(alias = "get_edit_apis_disabled")]
     fn is_edit_apis_disabled(&self) -> bool;
@@ -109,14 +109,14 @@ pub trait TimelineExt: 'static {
     #[doc(alias = "get_element")]
     fn element(&self, name: &str) -> Option<TimelineElement>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_timeline_get_frame_at")]
     #[doc(alias = "get_frame_at")]
     fn frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_timeline_get_frame_time")]
     #[doc(alias = "get_frame_time")]
     fn frame_time(&self, frame_number: FrameNumber) -> Option<gst::ClockTime>;
@@ -155,8 +155,8 @@ pub trait TimelineExt: 'static {
     #[doc(alias = "ges_timeline_load_from_uri")]
     fn load_from_uri(&self, uri: &str) -> Result<(), glib::Error>;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "ges_timeline_move_layer")]
     fn move_layer(
         &self,
@@ -192,8 +192,8 @@ pub trait TimelineExt: 'static {
     #[doc(alias = "ges_timeline_set_snapping_distance")]
     fn set_snapping_distance(&self, snapping_distance: gst::ClockTime);
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "ges_timeline_thaw_commit")]
     fn thaw_commit(&self);
 
@@ -212,8 +212,8 @@ pub trait TimelineExt: 'static {
     #[doc(alias = "layer-removed")]
     fn connect_layer_removed<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "select-element-track")]
     fn connect_select_element_track<F: Fn(&Self, &Clip, &TrackElement) -> Option<Track> + 'static>(
         &self,
@@ -297,8 +297,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn disable_edit_apis(&self, disable_edit_apis: bool) {
         unsafe {
             ffi::ges_timeline_disable_edit_apis(
@@ -308,8 +308,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn freeze_commit(&self) {
         unsafe {
             ffi::ges_timeline_freeze_commit(self.as_ref().to_glib_none().0);
@@ -333,8 +333,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     fn is_edit_apis_disabled(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_get_edit_apis_disabled(
@@ -352,16 +352,16 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber {
         unsafe {
             ffi::ges_timeline_get_frame_at(self.as_ref().to_glib_none().0, timestamp.into_glib())
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn frame_time(&self, frame_number: FrameNumber) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_timeline_get_frame_time(
@@ -451,8 +451,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn move_layer(
         &self,
         layer: &impl IsA<Layer>,
@@ -552,8 +552,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn thaw_commit(&self) {
         unsafe {
             ffi::ges_timeline_thaw_commit(self.as_ref().to_glib_none().0);
@@ -669,8 +669,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_select_element_track<
         F: Fn(&Self, &Clip, &TrackElement) -> Option<Track> + 'static,
     >(

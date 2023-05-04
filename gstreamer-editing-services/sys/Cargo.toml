@@ -55,7 +55,7 @@ edition = "2021"
 rust-version = "1.66"
 
 [package.metadata.docs.rs]
-features = ["dox"]
+features = []
 
 [package.metadata.system-deps.gst_editing_services_1_0]
 name = "gst-editing-services-1.0"

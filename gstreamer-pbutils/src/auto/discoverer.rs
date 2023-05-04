@@ -76,15 +76,15 @@ impl Discoverer {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "use-cache")]
     pub fn uses_cache(&self) -> bool {
         glib::ObjectExt::property(self, "use-cache")
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "use-cache")]
     pub fn set_use_cache(&self, use_cache: bool) {
         glib::ObjectExt::set_property(self, "use-cache", use_cache)
@@ -199,8 +199,8 @@ impl Discoverer {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "use-cache")]
     pub fn connect_use_cache_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,

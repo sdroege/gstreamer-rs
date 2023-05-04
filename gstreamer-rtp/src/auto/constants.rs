@@ -8,8 +8,8 @@ use glib::GStr;
 #[doc(alias = "GST_RTP_HDREXT_BASE")]
 pub static RTP_HDREXT_BASE: &GStr =
     unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_HDREXT_BASE) };
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(alias = "GST_RTP_HDREXT_ELEMENT_CLASS")]
 pub static RTP_HDREXT_ELEMENT_CLASS: &GStr =
     unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_HDREXT_ELEMENT_CLASS) };
@@ -19,8 +19,8 @@ pub static RTP_HDREXT_NTP_56: &GStr =
 #[doc(alias = "GST_RTP_HDREXT_NTP_64")]
 pub static RTP_HDREXT_NTP_64: &GStr =
     unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_HDREXT_NTP_64) };
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(alias = "GST_RTP_HEADER_EXTENSION_URI_METADATA_KEY")]
 pub static RTP_HEADER_EXTENSION_URI_METADATA_KEY: &GStr =
     unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_RTP_HEADER_EXTENSION_URI_METADATA_KEY) };

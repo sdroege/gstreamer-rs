@@ -37,8 +37,8 @@ pub fn type_find_helper_for_extension(
 //    unsafe { TODO: call ffi:gst_type_find_helper_get_range() }
 //}
 
-//#[cfg(any(feature = "v1_14_3", feature = "dox"))]
-//#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_3")))]
+//#[cfg(feature = "v1_14_3")]
+//#[cfg_attr(docsrs, doc(cfg(feature = "v1_14_3")))]
 //#[doc(alias = "gst_type_find_helper_get_range_full")]
 //pub fn type_find_helper_get_range_full<P: FnMut(&gst::Object, Option<&gst::Object>, u64, u32) -> Result<gst::FlowSuccess, gst::FlowError>>(obj: &impl IsA<gst::Object>, parent: Option<&impl IsA<gst::Object>>, func: P, size: u64, extension: Option<&str>) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::Caps, gst::TypeFindProbability) {
 //    unsafe { TODO: call ffi:gst_type_find_helper_get_range_full() }

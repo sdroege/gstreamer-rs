@@ -28,13 +28,13 @@ unsafe impl Send for GLBaseFilter {}
 unsafe impl Sync for GLBaseFilter {}
 
 pub trait GLBaseFilterExt: 'static {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_base_filter_find_gl_context")]
     fn find_gl_context(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_gl_base_filter_get_gl_context")]
     #[doc(alias = "get_gl_context")]
     fn gl_context(&self) -> Option<GLContext>;
@@ -47,8 +47,8 @@ pub trait GLBaseFilterExt: 'static {
 }
 
 impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn find_gl_context(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_base_filter_find_gl_context(
@@ -57,8 +57,8 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn gl_context(&self) -> Option<GLContext> {
         unsafe {
             from_glib_full(ffi::gst_gl_base_filter_get_gl_context(

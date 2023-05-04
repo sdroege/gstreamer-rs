@@ -83,8 +83,8 @@ pub trait GLContextExt: 'static {
     #[doc(alias = "gst_gl_context_fill_info")]
     fn fill_info(&self) -> Result<(), glib::Error>;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_gl_context_get_config")]
     #[doc(alias = "get_config")]
     fn config(&self) -> Option<gst::Structure>;
@@ -116,8 +116,8 @@ pub trait GLContextExt: 'static {
     #[doc(alias = "gst_gl_context_is_shared")]
     fn is_shared(&self) -> bool;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_gl_context_request_config")]
     fn request_config(&self, gl_config: Option<gst::Structure>) -> bool;
 
@@ -130,13 +130,13 @@ pub trait GLContextExt: 'static {
     #[doc(alias = "gst_gl_context_supports_glsl_profile_version")]
     fn supports_glsl_profile_version(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_context_supports_precision")]
     fn supports_precision(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_context_supports_precision_highp")]
     fn supports_precision_highp(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
 
@@ -240,8 +240,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn config(&self) -> Option<gst::Structure> {
         unsafe {
             from_glib_full(ffi::gst_gl_context_get_config(
@@ -316,8 +316,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn request_config(&self, gl_config: Option<gst::Structure>) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_context_request_config(
@@ -358,8 +358,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn supports_precision(&self, version: GLSLVersion, profile: GLSLProfile) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_context_supports_precision(
@@ -370,8 +370,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn supports_precision_highp(&self, version: GLSLVersion, profile: GLSLProfile) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_context_supports_precision_highp(

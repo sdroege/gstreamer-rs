@@ -26,8 +26,8 @@ impl DiscovererContainerInfo {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_discoverer_container_info_get_tags")]
     #[doc(alias = "get_tags")]
     pub fn tags(&self) -> Option<gst::TagList> {

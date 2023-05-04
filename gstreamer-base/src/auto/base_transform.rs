@@ -37,8 +37,8 @@ pub trait BaseTransformExt: 'static {
     #[doc(alias = "gst_base_transform_is_passthrough")]
     fn is_passthrough(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_base_transform_reconfigure")]
     fn reconfigure(&self) -> bool;
 
@@ -99,8 +99,8 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn reconfigure(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_base_transform_reconfigure(

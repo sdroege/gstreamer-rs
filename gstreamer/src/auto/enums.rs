@@ -510,8 +510,8 @@ pub enum ClockType {
     Monotonic,
     #[doc(alias = "GST_CLOCK_TYPE_OTHER")]
     Other,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_CLOCK_TYPE_TAI")]
     Tai,
     #[doc(hidden)]
@@ -528,7 +528,7 @@ impl IntoGlib for ClockType {
             Self::Realtime => ffi::GST_CLOCK_TYPE_REALTIME,
             Self::Monotonic => ffi::GST_CLOCK_TYPE_MONOTONIC,
             Self::Other => ffi::GST_CLOCK_TYPE_OTHER,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::Tai => ffi::GST_CLOCK_TYPE_TAI,
             Self::__Unknown(value) => value,
         }
@@ -545,7 +545,7 @@ impl FromGlib<ffi::GstClockType> for ClockType {
             ffi::GST_CLOCK_TYPE_REALTIME => Self::Realtime,
             ffi::GST_CLOCK_TYPE_MONOTONIC => Self::Monotonic,
             ffi::GST_CLOCK_TYPE_OTHER => Self::Other,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_CLOCK_TYPE_TAI => Self::Tai,
             value => Self::__Unknown(value),
         }
@@ -950,8 +950,8 @@ pub enum EventType {
     SegmentDone,
     #[doc(alias = "GST_EVENT_GAP")]
     Gap,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_EVENT_INSTANT_RATE_CHANGE")]
     InstantRateChange,
     #[doc(alias = "GST_EVENT_QOS")]
@@ -970,8 +970,8 @@ pub enum EventType {
     TocSelect,
     #[doc(alias = "GST_EVENT_SELECT_STREAMS")]
     SelectStreams,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_EVENT_INSTANT_RATE_SYNC_TIME")]
     InstantRateSyncTime,
     #[doc(alias = "GST_EVENT_CUSTOM_UPSTREAM")]
@@ -1044,7 +1044,7 @@ impl IntoGlib for EventType {
             Self::Protection => ffi::GST_EVENT_PROTECTION,
             Self::SegmentDone => ffi::GST_EVENT_SEGMENT_DONE,
             Self::Gap => ffi::GST_EVENT_GAP,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::InstantRateChange => ffi::GST_EVENT_INSTANT_RATE_CHANGE,
             Self::Qos => ffi::GST_EVENT_QOS,
             Self::Seek => ffi::GST_EVENT_SEEK,
@@ -1054,7 +1054,7 @@ impl IntoGlib for EventType {
             Self::Reconfigure => ffi::GST_EVENT_RECONFIGURE,
             Self::TocSelect => ffi::GST_EVENT_TOC_SELECT,
             Self::SelectStreams => ffi::GST_EVENT_SELECT_STREAMS,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             Self::InstantRateSyncTime => ffi::GST_EVENT_INSTANT_RATE_SYNC_TIME,
             Self::CustomUpstream => ffi::GST_EVENT_CUSTOM_UPSTREAM,
             Self::CustomDownstream => ffi::GST_EVENT_CUSTOM_DOWNSTREAM,
@@ -1089,7 +1089,7 @@ impl FromGlib<ffi::GstEventType> for EventType {
             ffi::GST_EVENT_PROTECTION => Self::Protection,
             ffi::GST_EVENT_SEGMENT_DONE => Self::SegmentDone,
             ffi::GST_EVENT_GAP => Self::Gap,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_EVENT_INSTANT_RATE_CHANGE => Self::InstantRateChange,
             ffi::GST_EVENT_QOS => Self::Qos,
             ffi::GST_EVENT_SEEK => Self::Seek,
@@ -1099,7 +1099,7 @@ impl FromGlib<ffi::GstEventType> for EventType {
             ffi::GST_EVENT_RECONFIGURE => Self::Reconfigure,
             ffi::GST_EVENT_TOC_SELECT => Self::TocSelect,
             ffi::GST_EVENT_SELECT_STREAMS => Self::SelectStreams,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(feature = "v1_18")]
             ffi::GST_EVENT_INSTANT_RATE_SYNC_TIME => Self::InstantRateSyncTime,
             ffi::GST_EVENT_CUSTOM_UPSTREAM => Self::CustomUpstream,
             ffi::GST_EVENT_CUSTOM_DOWNSTREAM => Self::CustomDownstream,

@@ -74,8 +74,8 @@ pub trait ElementExt: 'static {
     #[doc(alias = "gst_element_create_all_pads")]
     fn create_all_pads(&self);
 
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_element_decorate_stream_id")]
     fn decorate_stream_id(&self, stream_id: &str) -> glib::GString;
 
@@ -259,8 +259,8 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     fn decorate_stream_id(&self, stream_id: &str) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_element_decorate_stream_id(

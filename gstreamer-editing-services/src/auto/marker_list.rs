@@ -4,8 +4,8 @@
 // DO NOT EDIT
 
 use crate::Marker;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 use crate::MarkerFlags;
 use glib::{
     prelude::*,
@@ -77,20 +77,20 @@ impl MarkerList {
         unsafe { ffi::ges_marker_list_size(self.to_glib_none().0) }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn flags(&self) -> MarkerFlags {
         glib::ObjectExt::property(self, "flags")
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn set_flags(&self, flags: MarkerFlags) {
         glib::ObjectExt::set_property(self, "flags", flags)
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "marker-added")]
     pub fn connect_marker_added<F: Fn(&Self, u64, &Marker) + 'static>(
         &self,
@@ -118,8 +118,8 @@ impl MarkerList {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "marker-moved")]
     pub fn connect_marker_moved<F: Fn(&Self, u64, u64, &Marker) + 'static>(
         &self,
@@ -155,8 +155,8 @@ impl MarkerList {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "marker-removed")]
     pub fn connect_marker_removed<F: Fn(&Self, &Marker) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn marker_removed_trampoline<F: Fn(&MarkerList, &Marker) + 'static>(
@@ -180,8 +180,8 @@ impl MarkerList {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "flags")]
     pub fn connect_flags_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_flags_trampoline<F: Fn(&MarkerList) + 'static>(
@@ -206,8 +206,8 @@ impl MarkerList {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl Default for MarkerList {
     fn default() -> Self {
         Self::new()

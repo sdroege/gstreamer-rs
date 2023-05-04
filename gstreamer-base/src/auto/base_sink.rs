@@ -54,8 +54,8 @@ pub trait BaseSinkExt: 'static {
     #[doc(alias = "get_max_lateness")]
     fn max_lateness(&self) -> i64;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_base_sink_get_processing_deadline")]
     #[doc(alias = "get_processing_deadline")]
     fn processing_deadline(&self) -> gst::ClockTime;
@@ -64,8 +64,8 @@ pub trait BaseSinkExt: 'static {
     #[doc(alias = "get_render_delay")]
     fn render_delay(&self) -> gst::ClockTime;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_base_sink_get_stats")]
     #[doc(alias = "get_stats")]
     fn stats(&self) -> gst::Structure;
@@ -94,8 +94,8 @@ pub trait BaseSinkExt: 'static {
     #[doc(alias = "gst_base_sink_set_max_lateness")]
     fn set_max_lateness(&self, max_lateness: i64);
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_base_sink_set_processing_deadline")]
     fn set_processing_deadline(&self, processing_deadline: gst::ClockTime);
 
@@ -178,8 +178,8 @@ pub trait BaseSinkExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "processing-deadline")]
     fn connect_processing_deadline_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -195,8 +195,8 @@ pub trait BaseSinkExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "stats")]
     fn connect_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -258,8 +258,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         unsafe { ffi::gst_base_sink_get_max_lateness(self.as_ref().to_glib_none().0) }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn processing_deadline(&self) -> gst::ClockTime {
         unsafe {
             try_from_glib(ffi::gst_base_sink_get_processing_deadline(
@@ -278,8 +278,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn stats(&self) -> gst::Structure {
         unsafe { from_glib_full(ffi::gst_base_sink_get_stats(self.as_ref().to_glib_none().0)) }
     }
@@ -323,8 +323,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn set_processing_deadline(&self, processing_deadline: gst::ClockTime) {
         unsafe {
             ffi::gst_base_sink_set_processing_deadline(
@@ -588,8 +588,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn connect_processing_deadline_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -671,8 +671,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_stats_trampoline<
             P: IsA<BaseSink>,

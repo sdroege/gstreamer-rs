@@ -55,7 +55,7 @@ edition = "2021"
 rust-version = "1.66"
 
 [package.metadata.docs.rs]
-features = ["dox"]
+features = []
 
 [package.metadata.system-deps.gstreamer_rtsp_1_0]
 name = "gstreamer-rtsp-1.0"

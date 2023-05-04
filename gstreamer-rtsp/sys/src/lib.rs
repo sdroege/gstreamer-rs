@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -799,8 +799,8 @@ extern "C" {
         conn: *mut GstRTSPConnection,
         timeout: *mut glib::GTimeVal,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_connection_connect_usec(
         conn: *mut GstRTSPConnection,
         timeout: i64,
@@ -810,8 +810,8 @@ extern "C" {
         timeout: *mut glib::GTimeVal,
         response: *mut GstRTSPMessage,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_connection_connect_with_response_usec(
         conn: *mut GstRTSPConnection,
         timeout: i64,
@@ -826,8 +826,8 @@ extern "C" {
         flush: gboolean,
     ) -> GstRTSPResult;
     pub fn gst_rtsp_connection_free(conn: *mut GstRTSPConnection) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtsp_connection_get_ignore_x_server_reply(
         conn: *const GstRTSPConnection,
     ) -> gboolean;
@@ -858,8 +858,8 @@ extern "C" {
         conn: *mut GstRTSPConnection,
         timeout: *mut glib::GTimeVal,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_connection_next_timeout_usec(conn: *mut GstRTSPConnection) -> i64;
     pub fn gst_rtsp_connection_poll(
         conn: *mut GstRTSPConnection,
@@ -867,8 +867,8 @@ extern "C" {
         revents: *mut GstRTSPEvent,
         timeout: *mut glib::GTimeVal,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_connection_poll_usec(
         conn: *mut GstRTSPConnection,
         events: GstRTSPEvent,
@@ -881,8 +881,8 @@ extern "C" {
         size: c_uint,
         timeout: *mut glib::GTimeVal,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_connection_read_usec(
         conn: *mut GstRTSPConnection,
         data: *mut u8,
@@ -894,8 +894,8 @@ extern "C" {
         message: *mut GstRTSPMessage,
         timeout: *mut glib::GTimeVal,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_connection_receive_usec(
         conn: *mut GstRTSPConnection,
         message: *mut GstRTSPMessage,
@@ -907,24 +907,24 @@ extern "C" {
         message: *mut GstRTSPMessage,
         timeout: *mut glib::GTimeVal,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_connection_send_messages(
         conn: *mut GstRTSPConnection,
         messages: *mut GstRTSPMessage,
         n_messages: c_uint,
         timeout: *mut glib::GTimeVal,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_connection_send_messages_usec(
         conn: *mut GstRTSPConnection,
         messages: *mut GstRTSPMessage,
         n_messages: c_uint,
         timeout: i64,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_connection_send_usec(
         conn: *mut GstRTSPConnection,
         message: *mut GstRTSPMessage,
@@ -947,15 +947,15 @@ extern "C" {
         param: *const c_char,
         value: *const c_char,
     );
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_connection_set_content_length_limit(
         conn: *mut GstRTSPConnection,
         limit: c_uint,
     );
     pub fn gst_rtsp_connection_set_http_mode(conn: *mut GstRTSPConnection, enable: gboolean);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtsp_connection_set_ignore_x_server_reply(
         conn: *mut GstRTSPConnection,
         ignore: gboolean,
@@ -993,8 +993,8 @@ extern "C" {
         size: c_uint,
         timeout: *mut glib::GTimeVal,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_connection_write_usec(
         conn: *mut GstRTSPConnection,
         data: *const u8,
@@ -1047,8 +1047,8 @@ extern "C" {
         data: *mut *mut u8,
         size: *mut c_uint,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_message_get_body_buffer(
         msg: *const GstRTSPMessage,
         buffer: *mut *mut gst::GstBuffer,
@@ -1066,8 +1066,8 @@ extern "C" {
         index: c_int,
     ) -> GstRTSPResult;
     pub fn gst_rtsp_message_get_type(msg: *mut GstRTSPMessage) -> GstRTSPMsgType;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_message_has_body_buffer(msg: *const GstRTSPMessage) -> gboolean;
     pub fn gst_rtsp_message_init(msg: *mut GstRTSPMessage) -> GstRTSPResult;
     pub fn gst_rtsp_message_init_data(msg: *mut GstRTSPMessage, channel: u8) -> GstRTSPResult;
@@ -1115,8 +1115,8 @@ extern "C" {
         data: *const u8,
         size: c_uint,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_message_set_body_buffer(
         msg: *mut GstRTSPMessage,
         buffer: *mut gst::GstBuffer,
@@ -1126,8 +1126,8 @@ extern "C" {
         data: *mut *mut u8,
         size: *mut c_uint,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_message_steal_body_buffer(
         msg: *mut GstRTSPMessage,
         buffer: *mut *mut gst::GstBuffer,
@@ -1137,8 +1137,8 @@ extern "C" {
         data: *mut u8,
         size: c_uint,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_message_take_body_buffer(
         msg: *mut GstRTSPMessage,
         buffer: *mut gst::GstBuffer,
@@ -1208,8 +1208,8 @@ extern "C" {
     pub fn gst_rtsp_url_free(url: *mut GstRTSPUrl);
     pub fn gst_rtsp_url_get_port(url: *const GstRTSPUrl, port: *mut u16) -> GstRTSPResult;
     pub fn gst_rtsp_url_get_request_uri(url: *const GstRTSPUrl) -> *mut c_char;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_url_get_request_uri_with_control(
         url: *const GstRTSPUrl,
         control_path: *const c_char,
@@ -1235,8 +1235,8 @@ extern "C" {
         message: *mut GstRTSPMessage,
         id: *mut c_uint,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_watch_send_messages(
         watch: *mut GstRTSPWatch,
         messages: *mut GstRTSPMessage,
@@ -1254,8 +1254,8 @@ extern "C" {
         watch: *mut GstRTSPWatch,
         timeout: *mut glib::GTimeVal,
     ) -> GstRTSPResult;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_watch_wait_backlog_usec(
         watch: *mut GstRTSPWatch,
         timeout: i64,
@@ -1337,8 +1337,8 @@ extern "C" {
         uri: *const c_char,
         nonce: *const c_char,
     ) -> *mut c_char;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_generate_digest_auth_response_from_md5(
         algorithm: *const c_char,
         method: *const c_char,

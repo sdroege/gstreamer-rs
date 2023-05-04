@@ -47,7 +47,7 @@ rust-version = "1.66"
 version = "0.21.0"
 
 [package.metadata.docs.rs]
-features = ["dox"]
+features = []
 
 [package.metadata.system-deps.gstreamer_allocators_1_0]
 name = "gstreamer-allocators-1.0"

@@ -72,8 +72,8 @@ pub trait RTSPAuthExt: 'static {
     #[doc(alias = "get_default_token")]
     fn default_token(&self) -> Option<RTSPToken>;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_auth_get_realm")]
     #[doc(alias = "get_realm")]
     fn realm(&self) -> Option<glib::GString>;
@@ -94,8 +94,8 @@ pub trait RTSPAuthExt: 'static {
     #[doc(alias = "get_tls_database")]
     fn tls_database(&self) -> Option<gio::TlsDatabase>;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_auth_parse_htdigest")]
     fn parse_htdigest(&self, path: impl AsRef<std::path::Path>, token: &RTSPToken) -> bool;
 
@@ -105,8 +105,8 @@ pub trait RTSPAuthExt: 'static {
     #[doc(alias = "gst_rtsp_auth_remove_digest")]
     fn remove_digest(&self, user: &str);
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_auth_set_realm")]
     fn set_realm(&self, realm: Option<&str>);
 
@@ -164,8 +164,8 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn realm(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::gst_rtsp_auth_get_realm(self.as_ref().to_glib_none().0)) }
     }
@@ -202,8 +202,8 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn parse_htdigest(&self, path: impl AsRef<std::path::Path>, token: &RTSPToken) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_auth_parse_htdigest(
@@ -226,8 +226,8 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn set_realm(&self, realm: Option<&str>) {
         unsafe {
             ffi::gst_rtsp_auth_set_realm(self.as_ref().to_glib_none().0, realm.to_glib_none().0);

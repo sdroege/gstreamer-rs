@@ -7,9 +7,9 @@ use bitflags::bitflags;
 use glib::{translate::*, value::FromValue, value::ToValue, GStr, StaticType, Type};
 use std::fmt;
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 bitflags! {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GESMarkerFlags")]
     pub struct MarkerFlags: u32 {
         #[doc(alias = "GES_MARKER_FLAG_NONE")]
@@ -19,8 +19,8 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl IntoGlib for MarkerFlags {
     type GlibType = ffi::GESMarkerFlags;
@@ -31,8 +31,8 @@ impl IntoGlib for MarkerFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GESMarkerFlags> for MarkerFlags {
     #[inline]
@@ -42,8 +42,8 @@ impl FromGlib<ffi::GESMarkerFlags> for MarkerFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for MarkerFlags {
     #[inline]
     fn static_type() -> Type {
@@ -51,8 +51,8 @@ impl StaticType for MarkerFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::HasParamSpec for MarkerFlags {
     type ParamSpec = glib::ParamSpecFlags;
     type SetValue = Self;
@@ -63,14 +63,14 @@ impl glib::HasParamSpec for MarkerFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for MarkerFlags {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 unsafe impl<'a> FromValue<'a> for MarkerFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -81,8 +81,8 @@ unsafe impl<'a> FromValue<'a> for MarkerFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl ToValue for MarkerFlags {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -99,8 +99,8 @@ impl ToValue for MarkerFlags {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl From<MarkerFlags> for glib::Value {
     #[inline]
     fn from(v: MarkerFlags) -> Self {

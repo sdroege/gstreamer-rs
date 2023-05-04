@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -1260,8 +1260,8 @@ extern "C" {
     //=========================================================================
     // GstAggregatorStartTimeSelection
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_aggregator_start_time_selection_get_type() -> GType;
 
     //=========================================================================
@@ -1333,101 +1333,101 @@ extern "C" {
     //=========================================================================
     // GstBitWriter
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_align_bytes(bitwriter: *mut GstBitWriter, trailing_bit: u8) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_free(bitwriter: *mut GstBitWriter);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_free_and_get_buffer(bitwriter: *mut GstBitWriter) -> *mut gst::GstBuffer;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_free_and_get_data(bitwriter: *mut GstBitWriter) -> *mut u8;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_get_data(bitwriter: *const GstBitWriter) -> *mut u8;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_get_remaining(bitwriter: *const GstBitWriter) -> c_uint;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_get_size(bitwriter: *const GstBitWriter) -> c_uint;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_init(bitwriter: *mut GstBitWriter);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_init_with_data(
         bitwriter: *mut GstBitWriter,
         data: *mut u8,
         size: c_uint,
         initialized: gboolean,
     );
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_init_with_size(bitwriter: *mut GstBitWriter, size: u32, fixed: gboolean);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_put_bits_uint16(
         bitwriter: *mut GstBitWriter,
         value: u16,
         nbits: c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_put_bits_uint32(
         bitwriter: *mut GstBitWriter,
         value: u32,
         nbits: c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_put_bits_uint64(
         bitwriter: *mut GstBitWriter,
         value: u64,
         nbits: c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_put_bits_uint8(
         bitwriter: *mut GstBitWriter,
         value: u8,
         nbits: c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_put_bytes(
         bitwriter: *mut GstBitWriter,
         data: *const u8,
         nbytes: c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_reset(bitwriter: *mut GstBitWriter);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_reset_and_get_buffer(bitwriter: *mut GstBitWriter)
         -> *mut gst::GstBuffer;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_reset_and_get_data(bitwriter: *mut GstBitWriter) -> *mut u8;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_set_pos(bitwriter: *mut GstBitWriter, pos: c_uint) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_new() -> *mut GstBitWriter;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_new_with_data(
         data: *mut u8,
         size: c_uint,
         initialized: gboolean,
     ) -> *mut GstBitWriter;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_new_with_size(size: u32, fixed: gboolean) -> *mut GstBitWriter;
 
     //=========================================================================
@@ -1675,8 +1675,8 @@ extern "C" {
     //=========================================================================
     // GstQueueArray
     //=========================================================================
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_queue_array_clear(array: *mut GstQueueArray);
     pub fn gst_queue_array_drop_element(array: *mut GstQueueArray, idx: c_uint) -> gpointer;
     pub fn gst_queue_array_drop_struct(
@@ -1694,11 +1694,11 @@ extern "C" {
     pub fn gst_queue_array_is_empty(array: *mut GstQueueArray) -> gboolean;
     pub fn gst_queue_array_peek_head(array: *mut GstQueueArray) -> gpointer;
     pub fn gst_queue_array_peek_head_struct(array: *mut GstQueueArray) -> gpointer;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_queue_array_peek_nth(array: *mut GstQueueArray, idx: c_uint) -> gpointer;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_queue_array_peek_nth_struct(array: *mut GstQueueArray, idx: c_uint) -> gpointer;
     pub fn gst_queue_array_peek_tail(array: *mut GstQueueArray) -> gpointer;
     pub fn gst_queue_array_peek_tail_struct(array: *mut GstQueueArray) -> gpointer;
@@ -1708,8 +1708,8 @@ extern "C" {
     pub fn gst_queue_array_pop_tail_struct(array: *mut GstQueueArray) -> gpointer;
     pub fn gst_queue_array_push_tail(array: *mut GstQueueArray, data: gpointer);
     pub fn gst_queue_array_push_tail_struct(array: *mut GstQueueArray, p_struct: gpointer);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_queue_array_set_clear_func(
         array: *mut GstQueueArray,
         clear_func: glib::GDestroyNotify,
@@ -1723,22 +1723,22 @@ extern "C" {
     //=========================================================================
     // GstTypeFindData
     //=========================================================================
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_type_find_data_free(data: *mut GstTypeFindData);
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_type_find_data_get_caps(data: *mut GstTypeFindData) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_type_find_data_get_probability(
         data: *mut GstTypeFindData,
     ) -> gst::GstTypeFindProbability;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_type_find_data_get_typefind(data: *mut GstTypeFindData) -> *mut gst::GstTypeFind;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_type_find_data_new(
         obj: *mut gst::GstObject,
         data: *const u8,
@@ -1826,8 +1826,8 @@ extern "C" {
         aggregator: *mut GstAggregator,
         buffer: *mut gst::GstBuffer,
     ) -> gst::GstFlowReturn;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_aggregator_finish_buffer_list(
         aggregator: *mut GstAggregator,
         bufferlist: *mut gst::GstBufferList,
@@ -1838,24 +1838,24 @@ extern "C" {
         params: *mut gst::GstAllocationParams,
     );
     pub fn gst_aggregator_get_buffer_pool(self_: *mut GstAggregator) -> *mut gst::GstBufferPool;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_aggregator_get_force_live(self_: *mut GstAggregator) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_aggregator_get_ignore_inactive_pads(self_: *mut GstAggregator) -> gboolean;
     pub fn gst_aggregator_get_latency(self_: *mut GstAggregator) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_aggregator_negotiate(self_: *mut GstAggregator) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_aggregator_peek_next_sample(
         self_: *mut GstAggregator,
         pad: *mut GstAggregatorPad,
     ) -> *mut gst::GstSample;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_aggregator_selected_samples(
         self_: *mut GstAggregator,
         pts: gst::GstClockTime,
@@ -1863,11 +1863,11 @@ extern "C" {
         duration: gst::GstClockTime,
         info: *mut gst::GstStructure,
     );
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_aggregator_set_force_live(self_: *mut GstAggregator, force_live: gboolean);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_aggregator_set_ignore_inactive_pads(self_: *mut GstAggregator, ignore: gboolean);
     pub fn gst_aggregator_set_latency(
         self_: *mut GstAggregator,
@@ -1875,11 +1875,11 @@ extern "C" {
         max_latency: gst::GstClockTime,
     );
     pub fn gst_aggregator_set_src_caps(self_: *mut GstAggregator, caps: *mut gst::GstCaps);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_aggregator_simple_get_next_time(self_: *mut GstAggregator) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_aggregator_update_segment(
         self_: *mut GstAggregator,
         segment: *const gst::GstSegment,
@@ -1890,12 +1890,12 @@ extern "C" {
     //=========================================================================
     pub fn gst_aggregator_pad_get_type() -> GType;
     pub fn gst_aggregator_pad_drop_buffer(pad: *mut GstAggregatorPad) -> gboolean;
-    #[cfg(any(feature = "v1_14_1", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+    #[cfg(feature = "v1_14_1")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
     pub fn gst_aggregator_pad_has_buffer(pad: *mut GstAggregatorPad) -> gboolean;
     pub fn gst_aggregator_pad_is_eos(pad: *mut GstAggregatorPad) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_aggregator_pad_is_inactive(pad: *mut GstAggregatorPad) -> gboolean;
     pub fn gst_aggregator_pad_peek_buffer(pad: *mut GstAggregatorPad) -> *mut gst::GstBuffer;
     pub fn gst_aggregator_pad_pop_buffer(pad: *mut GstAggregatorPad) -> *mut gst::GstBuffer;
@@ -1977,12 +1977,12 @@ extern "C" {
     pub fn gst_base_sink_get_latency(sink: *mut GstBaseSink) -> gst::GstClockTime;
     pub fn gst_base_sink_get_max_bitrate(sink: *mut GstBaseSink) -> u64;
     pub fn gst_base_sink_get_max_lateness(sink: *mut GstBaseSink) -> i64;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_base_sink_get_processing_deadline(sink: *mut GstBaseSink) -> gst::GstClockTime;
     pub fn gst_base_sink_get_render_delay(sink: *mut GstBaseSink) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_base_sink_get_stats(sink: *mut GstBaseSink) -> *mut gst::GstStructure;
     pub fn gst_base_sink_get_sync(sink: *mut GstBaseSink) -> gboolean;
     pub fn gst_base_sink_get_throttle_time(sink: *mut GstBaseSink) -> u64;
@@ -2006,8 +2006,8 @@ extern "C" {
     pub fn gst_base_sink_set_last_sample_enabled(sink: *mut GstBaseSink, enabled: gboolean);
     pub fn gst_base_sink_set_max_bitrate(sink: *mut GstBaseSink, max_bitrate: u64);
     pub fn gst_base_sink_set_max_lateness(sink: *mut GstBaseSink, max_lateness: i64);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_base_sink_set_processing_deadline(
         sink: *mut GstBaseSink,
         processing_deadline: gst::GstClockTime,
@@ -2043,8 +2043,8 @@ extern "C" {
     pub fn gst_base_src_get_do_timestamp(src: *mut GstBaseSrc) -> gboolean;
     pub fn gst_base_src_is_async(src: *mut GstBaseSrc) -> gboolean;
     pub fn gst_base_src_is_live(src: *mut GstBaseSrc) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_base_src_negotiate(src: *mut GstBaseSrc) -> gboolean;
     pub fn gst_base_src_new_seamless_segment(
         src: *mut GstBaseSrc,
@@ -2052,14 +2052,14 @@ extern "C" {
         stop: i64,
         time: i64,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_base_src_new_segment(
         src: *mut GstBaseSrc,
         segment: *const gst::GstSegment,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_base_src_push_segment(
         src: *mut GstBaseSrc,
         segment: *const gst::GstSegment,
@@ -2101,8 +2101,8 @@ extern "C" {
     pub fn gst_base_transform_is_in_place(trans: *mut GstBaseTransform) -> gboolean;
     pub fn gst_base_transform_is_passthrough(trans: *mut GstBaseTransform) -> gboolean;
     pub fn gst_base_transform_is_qos_enabled(trans: *mut GstBaseTransform) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_base_transform_reconfigure(trans: *mut GstBaseTransform) -> gboolean;
     pub fn gst_base_transform_reconfigure_sink(trans: *mut GstBaseTransform);
     pub fn gst_base_transform_reconfigure_src(trans: *mut GstBaseTransform);
@@ -2278,16 +2278,16 @@ extern "C" {
         buf: *mut gst::GstBuffer,
         prob: *mut gst::GstTypeFindProbability,
     ) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_type_find_helper_for_buffer_with_caps(
         obj: *mut gst::GstObject,
         buf: *mut gst::GstBuffer,
         caps: *mut gst::GstCaps,
         prob: *mut gst::GstTypeFindProbability,
     ) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_type_find_helper_for_buffer_with_extension(
         obj: *mut gst::GstObject,
         buf: *mut gst::GstBuffer,
@@ -2300,8 +2300,8 @@ extern "C" {
         size: size_t,
         prob: *mut gst::GstTypeFindProbability,
     ) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_type_find_helper_for_data_with_caps(
         obj: *mut gst::GstObject,
         data: *const u8,
@@ -2309,8 +2309,8 @@ extern "C" {
         caps: *mut gst::GstCaps,
         prob: *mut gst::GstTypeFindProbability,
     ) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_type_find_helper_for_data_with_extension(
         obj: *mut gst::GstObject,
         data: *const u8,
@@ -2330,8 +2330,8 @@ extern "C" {
         extension: *const c_char,
         prob: *mut gst::GstTypeFindProbability,
     ) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_14_3", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_3")))]
+    #[cfg(feature = "v1_14_3")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_14_3")))]
     pub fn gst_type_find_helper_get_range_full(
         obj: *mut gst::GstObject,
         parent: *mut gst::GstObject,
@@ -2341,8 +2341,8 @@ extern "C" {
         caps: *mut *mut gst::GstCaps,
         prob: *mut gst::GstTypeFindProbability,
     ) -> gst::GstFlowReturn;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_type_find_list_factories_for_caps(
         obj: *mut gst::GstObject,
         caps: *mut gst::GstCaps,

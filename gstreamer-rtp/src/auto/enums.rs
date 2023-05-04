@@ -152,32 +152,32 @@ pub enum RTCPSDESType {
     Note,
     #[doc(alias = "GST_RTCP_SDES_PRIV")]
     Priv,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_RTCP_SDES_H323_CADDR")]
     H323Caddr,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_RTCP_SDES_APSI")]
     Apsi,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_RTCP_SDES_RGRP")]
     Rgrp,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_RTCP_SDES_RTP_STREAM_ID")]
     RtpStreamId,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_RTCP_SDES_REPAIRED_RTP_STREAM_ID")]
     RepairedRtpStreamId,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_RTCP_SDES_CCID")]
     Ccid,
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GST_RTCP_SDES_MID")]
     Mid,
     #[doc(hidden)]
@@ -200,19 +200,19 @@ impl IntoGlib for RTCPSDESType {
             Self::Tool => ffi::GST_RTCP_SDES_TOOL,
             Self::Note => ffi::GST_RTCP_SDES_NOTE,
             Self::Priv => ffi::GST_RTCP_SDES_PRIV,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::H323Caddr => ffi::GST_RTCP_SDES_H323_CADDR,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Apsi => ffi::GST_RTCP_SDES_APSI,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Rgrp => ffi::GST_RTCP_SDES_RGRP,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::RtpStreamId => ffi::GST_RTCP_SDES_RTP_STREAM_ID,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::RepairedRtpStreamId => ffi::GST_RTCP_SDES_REPAIRED_RTP_STREAM_ID,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Ccid => ffi::GST_RTCP_SDES_CCID,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             Self::Mid => ffi::GST_RTCP_SDES_MID,
             Self::__Unknown(value) => value,
         }
@@ -235,19 +235,19 @@ impl FromGlib<ffi::GstRTCPSDESType> for RTCPSDESType {
             ffi::GST_RTCP_SDES_TOOL => Self::Tool,
             ffi::GST_RTCP_SDES_NOTE => Self::Note,
             ffi::GST_RTCP_SDES_PRIV => Self::Priv,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_RTCP_SDES_H323_CADDR => Self::H323Caddr,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_RTCP_SDES_APSI => Self::Apsi,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_RTCP_SDES_RGRP => Self::Rgrp,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_RTCP_SDES_RTP_STREAM_ID => Self::RtpStreamId,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_RTCP_SDES_REPAIRED_RTP_STREAM_ID => Self::RepairedRtpStreamId,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_RTCP_SDES_CCID => Self::Ccid,
-            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            #[cfg(feature = "v1_20")]
             ffi::GST_RTCP_SDES_MID => Self::Mid,
             value => Self::__Unknown(value),
         }
@@ -432,8 +432,8 @@ impl From<RTCPType> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstRTCPXRType")]
@@ -458,8 +458,8 @@ pub enum RTCPXRType {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl IntoGlib for RTCPXRType {
     type GlibType = ffi::GstRTCPXRType;
@@ -480,8 +480,8 @@ impl IntoGlib for RTCPXRType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTCPXRType> for RTCPXRType {
     #[inline]
@@ -502,8 +502,8 @@ impl FromGlib<ffi::GstRTCPXRType> for RTCPXRType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for RTCPXRType {
     #[inline]
     fn static_type() -> Type {
@@ -511,8 +511,8 @@ impl StaticType for RTCPXRType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::HasParamSpec for RTCPXRType {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -523,14 +523,14 @@ impl glib::HasParamSpec for RTCPXRType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl glib::value::ValueType for RTCPXRType {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 unsafe impl<'a> FromValue<'a> for RTCPXRType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -541,8 +541,8 @@ unsafe impl<'a> FromValue<'a> for RTCPXRType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl ToValue for RTCPXRType {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -559,8 +559,8 @@ impl ToValue for RTCPXRType {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl From<RTCPXRType> for glib::Value {
     #[inline]
     fn from(v: RTCPXRType) -> Self {

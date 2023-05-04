@@ -58,8 +58,8 @@ impl EncodingTarget {
         unsafe { from_glib_none(ffi::gst_encoding_target_get_name(self.to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_encoding_target_get_path")]
     #[doc(alias = "get_path")]
     pub fn path(&self) -> Option<std::path::PathBuf> {

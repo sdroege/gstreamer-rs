@@ -34,7 +34,7 @@ version = "1.22"
 version = "1.23"
 
 [package.metadata.docs.rs]
-features = ["dox"]
+features = []
 
 [lib]
 name = "gstreamer_gl_egl_sys"

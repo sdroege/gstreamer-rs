@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -148,8 +148,8 @@ pub const GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_U: GESVideoStandardTrans
 pub const GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_V: GESVideoStandardTransitionType = 263;
 pub const GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_H: GESVideoStandardTransitionType = 264;
 pub const GES_VIDEO_STANDARD_TRANSITION_TYPE_CROSSFADE: GESVideoStandardTransitionType = 512;
-#[cfg(any(feature = "v1_22", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GES_VIDEO_STANDARD_TRANSITION_TYPE_FADE_IN: GESVideoStandardTransitionType = 513;
 
 pub type GESVideoTestPattern = c_int;
@@ -2790,16 +2790,16 @@ extern "C" {
     // GESEdge
     //=========================================================================
     pub fn ges_edge_get_type() -> GType;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn ges_edge_name(edge: GESEdge) -> *const c_char;
 
     //=========================================================================
     // GESEditMode
     //=========================================================================
     pub fn ges_edit_mode_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_edit_mode_name(mode: GESEditMode) -> *const c_char;
 
     //=========================================================================
@@ -2825,8 +2825,8 @@ extern "C" {
     //=========================================================================
     // GESMarkerFlags
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn ges_marker_flags_get_type() -> GType;
 
     //=========================================================================
@@ -2944,17 +2944,17 @@ extern "C" {
     // GESBaseEffect
     //=========================================================================
     pub fn ges_base_effect_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_base_effect_is_time_effect(effect: *mut GESBaseEffect) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_base_effect_register_time_property(
         effect: *mut GESBaseEffect,
         child_property_name: *const c_char,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_base_effect_set_time_translation_funcs(
         effect: *mut GESBaseEffect,
         source_to_sink_func: GESBaseEffectTimeTranslationFunc,
@@ -2983,16 +2983,16 @@ extern "C" {
     //=========================================================================
     pub fn ges_clip_get_type() -> GType;
     pub fn ges_clip_add_asset(clip: *mut GESClip, asset: *mut GESAsset) -> *mut GESTrackElement;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_clip_add_child_to_track(
         clip: *mut GESClip,
         child: *mut GESTrackElement,
         track: *mut GESTrack,
         error: *mut *mut glib::GError,
     ) -> *mut GESTrackElement;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_clip_add_top_effect(
         clip: *mut GESClip,
         effect: *mut GESBaseEffect,
@@ -3010,11 +3010,11 @@ extern "C" {
         track_type: GESTrackType,
         type_: GType,
     ) -> *mut glib::GList;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_clip_get_duration_limit(clip: *mut GESClip) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_clip_get_internal_time_from_timeline_time(
         clip: *mut GESClip,
         child: *mut GESTrackElement,
@@ -3023,16 +3023,16 @@ extern "C" {
     ) -> gst::GstClockTime;
     pub fn ges_clip_get_layer(clip: *mut GESClip) -> *mut GESLayer;
     pub fn ges_clip_get_supported_formats(clip: *mut GESClip) -> GESTrackType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_clip_get_timeline_time_from_internal_time(
         clip: *mut GESClip,
         child: *mut GESTrackElement,
         internal_time: gst::GstClockTime,
         error: *mut *mut glib::GError,
     ) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_clip_get_timeline_time_from_source_frame(
         clip: *mut GESClip,
         frame_number: GESFrameNumber,
@@ -3045,15 +3045,15 @@ extern "C" {
     ) -> c_int;
     pub fn ges_clip_get_top_effects(clip: *mut GESClip) -> *mut glib::GList;
     pub fn ges_clip_move_to_layer(clip: *mut GESClip, layer: *mut GESLayer) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_clip_move_to_layer_full(
         clip: *mut GESClip,
         layer: *mut GESLayer,
         error: *mut *mut glib::GError,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_clip_remove_top_effect(
         clip: *mut GESClip,
         effect: *mut GESBaseEffect,
@@ -3065,8 +3065,8 @@ extern "C" {
         effect: *mut GESBaseEffect,
         newindex: c_uint,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_clip_set_top_effect_index_full(
         clip: *mut GESClip,
         effect: *mut GESBaseEffect,
@@ -3079,8 +3079,8 @@ extern "C" {
         newpriority: c_uint,
     ) -> gboolean;
     pub fn ges_clip_split(clip: *mut GESClip, position: u64) -> *mut GESClip;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_clip_split_full(
         clip: *mut GESClip,
         position: u64,
@@ -3091,14 +3091,14 @@ extern "C" {
     // GESClipAsset
     //=========================================================================
     pub fn ges_clip_asset_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_clip_asset_get_frame_time(
         self_: *mut GESClipAsset,
         frame_number: GESFrameNumber,
     ) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_clip_asset_get_natural_framerate(
         self_: *mut GESClipAsset,
         framerate_n: *mut c_int,
@@ -3221,8 +3221,8 @@ extern "C" {
         duration: gst::GstClockTime,
         track_types: GESTrackType,
     ) -> *mut GESClip;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_layer_add_asset_full(
         layer: *mut GESLayer,
         asset: *mut GESAsset,
@@ -3233,15 +3233,15 @@ extern "C" {
         error: *mut *mut glib::GError,
     ) -> *mut GESClip;
     pub fn ges_layer_add_clip(layer: *mut GESLayer, clip: *mut GESClip) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_layer_add_clip_full(
         layer: *mut GESLayer,
         clip: *mut GESClip,
         error: *mut *mut glib::GError,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_layer_get_active_for_track(layer: *mut GESLayer, track: *mut GESTrack) -> gboolean;
     pub fn ges_layer_get_auto_transition(layer: *mut GESLayer) -> gboolean;
     pub fn ges_layer_get_clips(layer: *mut GESLayer) -> *mut glib::GList;
@@ -3255,8 +3255,8 @@ extern "C" {
     pub fn ges_layer_get_timeline(layer: *mut GESLayer) -> *mut GESTimeline;
     pub fn ges_layer_is_empty(layer: *mut GESLayer) -> gboolean;
     pub fn ges_layer_remove_clip(layer: *mut GESLayer, clip: *mut GESClip) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_layer_set_active_for_tracks(
         layer: *mut GESLayer,
         active: gboolean,
@@ -3269,40 +3269,40 @@ extern "C" {
     //=========================================================================
     // GESMarker
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_marker_get_type() -> GType;
 
     //=========================================================================
     // GESMarkerList
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_marker_list_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_marker_list_new() -> *mut GESMarkerList;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_marker_list_add(
         list: *mut GESMarkerList,
         position: gst::GstClockTime,
     ) -> *mut GESMarker;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_marker_list_get_markers(list: *mut GESMarkerList) -> *mut glib::GList;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_marker_list_move(
         list: *mut GESMarkerList,
         marker: *mut GESMarker,
         position: gst::GstClockTime,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_marker_list_remove(list: *mut GESMarkerList, marker: *mut GESMarker) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_marker_list_size(list: *mut GESMarkerList) -> c_uint;
 
     //=========================================================================
@@ -3380,8 +3380,8 @@ extern "C" {
         project: *mut GESProject,
         profile: *mut gst_pbutils::GstEncodingProfile,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_project_add_formatter(project: *mut GESProject, formatter: *mut GESFormatter);
     pub fn ges_project_create_asset(
         project: *mut GESProject,
@@ -3427,15 +3427,15 @@ extern "C" {
     // GESSourceClip
     //=========================================================================
     pub fn ges_source_clip_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_source_clip_new_time_overlay() -> *mut GESSourceClip;
 
     //=========================================================================
     // GESSourceClipAsset
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_source_clip_asset_get_type() -> GType;
 
     //=========================================================================
@@ -3511,29 +3511,29 @@ extern "C" {
     pub fn ges_timeline_append_layer(timeline: *mut GESTimeline) -> *mut GESLayer;
     pub fn ges_timeline_commit(timeline: *mut GESTimeline) -> gboolean;
     pub fn ges_timeline_commit_sync(timeline: *mut GESTimeline) -> gboolean;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn ges_timeline_disable_edit_apis(self_: *mut GESTimeline, disable_edit_apis: gboolean);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn ges_timeline_freeze_commit(timeline: *mut GESTimeline);
     pub fn ges_timeline_get_auto_transition(timeline: *mut GESTimeline) -> gboolean;
     pub fn ges_timeline_get_duration(timeline: *mut GESTimeline) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn ges_timeline_get_edit_apis_disabled(self_: *mut GESTimeline) -> gboolean;
     pub fn ges_timeline_get_element(
         timeline: *mut GESTimeline,
         name: *const c_char,
     ) -> *mut GESTimelineElement;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_timeline_get_frame_at(
         self_: *mut GESTimeline,
         timestamp: gst::GstClockTime,
     ) -> GESFrameNumber;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_timeline_get_frame_time(
         self_: *mut GESTimeline,
         frame_number: GESFrameNumber,
@@ -3557,8 +3557,8 @@ extern "C" {
         uri: *const c_char,
         error: *mut *mut glib::GError,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn ges_timeline_move_layer(
         timeline: *mut GESTimeline,
         layer: *mut GESLayer,
@@ -3584,8 +3584,8 @@ extern "C" {
         timeline: *mut GESTimeline,
         snapping_distance: gst::GstClockTime,
     );
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn ges_timeline_thaw_commit(timeline: *mut GESTimeline);
 
     //=========================================================================
@@ -3601,8 +3601,8 @@ extern "C" {
         self_: *mut GESTimelineElement,
         deep: gboolean,
     ) -> *mut GESTimelineElement;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_timeline_element_edit(
         self_: *mut GESTimelineElement,
         layers: *mut glib::GList,
@@ -3611,8 +3611,8 @@ extern "C" {
         edge: GESEdge,
         position: u64,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_timeline_element_edit_full(
         self_: *mut GESTimelineElement,
         new_layer_priority: i64,
@@ -3639,15 +3639,15 @@ extern "C" {
     //pub fn ges_timeline_element_get_child_property_valist(self_: *mut GESTimelineElement, first_property_name: *const c_char, var_args: /*Unimplemented*/va_list);
     pub fn ges_timeline_element_get_duration(self_: *mut GESTimelineElement) -> gst::GstClockTime;
     pub fn ges_timeline_element_get_inpoint(self_: *mut GESTimelineElement) -> gst::GstClockTime;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn ges_timeline_element_get_layer_priority(self_: *mut GESTimelineElement) -> u32;
     pub fn ges_timeline_element_get_max_duration(
         self_: *mut GESTimelineElement,
     ) -> gst::GstClockTime;
     pub fn ges_timeline_element_get_name(self_: *mut GESTimelineElement) -> *mut c_char;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_timeline_element_get_natural_framerate(
         self_: *mut GESTimelineElement,
         framerate_n: *mut c_int,
@@ -3712,8 +3712,8 @@ extern "C" {
         pspec: *mut gobject::GParamSpec,
         value: *const gobject::GValue,
     );
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_timeline_element_set_child_property_full(
         self_: *mut GESTimelineElement,
         property_name: *const c_char,
@@ -3807,8 +3807,8 @@ extern "C" {
     pub fn ges_track_get_type() -> GType;
     pub fn ges_track_new(type_: GESTrackType, caps: *mut gst::GstCaps) -> *mut GESTrack;
     pub fn ges_track_add_element(track: *mut GESTrack, object: *mut GESTrackElement) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_track_add_element_full(
         track: *mut GESTrack,
         object: *mut GESTrackElement,
@@ -3818,14 +3818,14 @@ extern "C" {
     pub fn ges_track_get_caps(track: *mut GESTrack) -> *const gst::GstCaps;
     pub fn ges_track_get_elements(track: *mut GESTrack) -> *mut glib::GList;
     pub fn ges_track_get_mixing(track: *mut GESTrack) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_track_get_restriction_caps(track: *mut GESTrack) -> *mut gst::GstCaps;
     pub fn ges_track_get_timeline(track: *mut GESTrack) -> *const GESTimeline;
     pub fn ges_track_remove_element(track: *mut GESTrack, object: *mut GESTrackElement)
         -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_track_remove_element_full(
         track: *mut GESTrack,
         object: *mut GESTrackElement,
@@ -3851,8 +3851,8 @@ extern "C" {
         blacklist: *mut *const c_char,
         whitelist: *mut *const c_char,
     );
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_track_element_clamp_control_source(
         object: *mut GESTrackElement,
         property_name: *const c_char,
@@ -3867,8 +3867,8 @@ extern "C" {
     pub fn ges_track_element_get_all_control_bindings(
         trackelement: *mut GESTrackElement,
     ) -> *mut glib::GHashTable;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_track_element_get_auto_clamp_control_sources(
         object: *mut GESTrackElement,
     ) -> gboolean;
@@ -3897,12 +3897,12 @@ extern "C" {
     pub fn ges_track_element_get_nleobject(object: *mut GESTrackElement) -> *mut gst::GstElement;
     pub fn ges_track_element_get_track(object: *mut GESTrackElement) -> *mut GESTrack;
     pub fn ges_track_element_get_track_type(object: *mut GESTrackElement) -> GESTrackType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_track_element_has_internal_source(object: *mut GESTrackElement) -> gboolean;
     pub fn ges_track_element_is_active(object: *mut GESTrackElement) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_track_element_is_core(object: *mut GESTrackElement) -> gboolean;
     pub fn ges_track_element_list_children_properties(
         object: *mut GESTrackElement,
@@ -3920,8 +3920,8 @@ extern "C" {
     ) -> gboolean;
     pub fn ges_track_element_set_active(object: *mut GESTrackElement, active: gboolean)
         -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_track_element_set_auto_clamp_control_sources(
         object: *mut GESTrackElement,
         auto_clamp: gboolean,
@@ -3948,8 +3948,8 @@ extern "C" {
         property_name: *const c_char,
         binding_type: *const c_char,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_track_element_set_has_internal_source(
         object: *mut GESTrackElement,
         has_internal_source: gboolean,
@@ -3960,8 +3960,8 @@ extern "C" {
     // GESTrackElementAsset
     //=========================================================================
     pub fn ges_track_element_asset_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_track_element_asset_get_natural_framerate(
         self_: *mut GESTrackElementAsset,
         framerate_n: *mut c_int,
@@ -4002,8 +4002,8 @@ extern "C" {
     // GESUriClipAsset
     //=========================================================================
     pub fn ges_uri_clip_asset_get_type() -> GType;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn ges_uri_clip_asset_finish(
         res: *mut gio::GAsyncResult,
         error: *mut *mut glib::GError,
@@ -4022,12 +4022,12 @@ extern "C" {
     pub fn ges_uri_clip_asset_get_info(
         self_: *const GESUriClipAsset,
     ) -> *mut gst_pbutils::GstDiscovererInfo;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_uri_clip_asset_get_max_duration(self_: *mut GESUriClipAsset) -> gst::GstClockTime;
     pub fn ges_uri_clip_asset_get_stream_assets(self_: *mut GESUriClipAsset) -> *const glib::GList;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_uri_clip_asset_is_image(self_: *mut GESUriClipAsset) -> gboolean;
 
     //=========================================================================
@@ -4041,16 +4041,16 @@ extern "C" {
         asset: *mut GESUriSourceAsset,
     ) -> *mut gst_pbutils::GstDiscovererStreamInfo;
     pub fn ges_uri_source_asset_get_stream_uri(asset: *mut GESUriSourceAsset) -> *const c_char;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_uri_source_asset_is_image(asset: *mut GESUriSourceAsset) -> gboolean;
 
     //=========================================================================
     // GESVideoSource
     //=========================================================================
     pub fn ges_video_source_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_video_source_get_natural_size(
         self_: *mut GESVideoSource,
         width: *mut c_int,
@@ -4164,8 +4164,8 @@ extern "C" {
         meta_item: *const c_char,
         dest: *mut i64,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_meta_container_get_marker_list(
         container: *mut GESMetaContainer,
         key: *const c_char,
@@ -4255,8 +4255,8 @@ extern "C" {
         meta_item: *const c_char,
         value: u64,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_meta_container_register_static_meta(
         container: *mut GESMetaContainer,
         flags: GESMetaFlag,
@@ -4298,8 +4298,8 @@ extern "C" {
         meta_item: *const c_char,
         value: i64,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_meta_container_set_marker_list(
         container: *mut GESMetaContainer,
         meta_item: *const c_char,
@@ -4331,8 +4331,8 @@ extern "C" {
     //=========================================================================
     pub fn ges_add_missing_uri_relocation_uri(uri: *const c_char, recurse: gboolean) -> gboolean;
     pub fn ges_deinit();
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_find_formatter_for_uri(uri: *const c_char) -> *mut GESAsset;
     pub fn ges_init() -> gboolean;
     pub fn ges_init_check(
@@ -4341,8 +4341,8 @@ extern "C" {
         error: *mut *mut glib::GError,
     ) -> gboolean;
     pub fn ges_init_get_option_group() -> *mut glib::GOptionGroup;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn ges_is_initialized() -> gboolean;
     pub fn ges_list_assets(filter: GType) -> *mut glib::GList;
     pub fn ges_play_sink_convert_frame(

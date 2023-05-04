@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -139,8 +139,8 @@ extern "C" {
         user_data: gpointer,
         destroy_data: glib::GDestroyNotify,
     );
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_harness_add_propose_allocation_meta(
         h: *mut GstHarness,
         api: GType,
@@ -192,8 +192,8 @@ extern "C" {
     pub fn gst_harness_play(h: *mut GstHarness);
     pub fn gst_harness_pull(h: *mut GstHarness) -> *mut gst::GstBuffer;
     pub fn gst_harness_pull_event(h: *mut GstHarness) -> *mut gst::GstEvent;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_harness_pull_until_eos(
         h: *mut GstHarness,
         buf: *mut *mut gst::GstBuffer,
@@ -223,8 +223,8 @@ extern "C" {
     pub fn gst_harness_set_caps_str(h: *mut GstHarness, in_: *const c_char, out: *const c_char);
     pub fn gst_harness_set_drop_buffers(h: *mut GstHarness, drop_buffers: gboolean);
     pub fn gst_harness_set_forwarding(h: *mut GstHarness, forwarding: gboolean);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_harness_set_live(h: *mut GstHarness, is_live: gboolean);
     pub fn gst_harness_set_propose_allocator(
         h: *mut GstHarness,
@@ -370,8 +370,8 @@ extern "C" {
         test_clock: *mut GstTestClock,
         pending_id: *mut gst::GstClockID,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_test_clock_process_id(
         test_clock: *mut GstTestClock,
         pending_id: gst::GstClockID,
@@ -382,8 +382,8 @@ extern "C" {
     ) -> c_uint;
     pub fn gst_test_clock_process_next_clock_id(test_clock: *mut GstTestClock) -> gst::GstClockID;
     pub fn gst_test_clock_set_time(test_clock: *mut GstTestClock, new_time: gst::GstClockTime);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_test_clock_timed_wait_for_multiple_pending_ids(
         test_clock: *mut GstTestClock,
         count: c_uint,

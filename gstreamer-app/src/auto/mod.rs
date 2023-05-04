@@ -10,7 +10,7 @@ mod app_src;
 pub use self::app_src::AppSrc;
 
 mod enums;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::enums::AppLeakyType;
 pub use self::enums::AppStreamType;

@@ -117,9 +117,9 @@ impl From<GLAPI> for glib::Value {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg(feature = "v1_20")]
 bitflags! {
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "GstGLConfigSurfaceType")]
     pub struct GLConfigSurfaceType: u32 {
         #[doc(alias = "GST_GL_CONFIG_SURFACE_TYPE_NONE")]
@@ -133,8 +133,8 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl GLConfigSurfaceType {
     #[doc(alias = "gst_gl_config_surface_type_to_string")]
     #[doc(alias = "to_string")]
@@ -144,8 +144,8 @@ impl GLConfigSurfaceType {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl IntoGlib for GLConfigSurfaceType {
     type GlibType = ffi::GstGLConfigSurfaceType;
@@ -156,8 +156,8 @@ impl IntoGlib for GLConfigSurfaceType {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLConfigSurfaceType> for GLConfigSurfaceType {
     #[inline]
@@ -167,8 +167,8 @@ impl FromGlib<ffi::GstGLConfigSurfaceType> for GLConfigSurfaceType {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for GLConfigSurfaceType {
     #[inline]
     fn static_type() -> Type {
@@ -176,8 +176,8 @@ impl StaticType for GLConfigSurfaceType {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::HasParamSpec for GLConfigSurfaceType {
     type ParamSpec = glib::ParamSpecFlags;
     type SetValue = Self;
@@ -188,14 +188,14 @@ impl glib::HasParamSpec for GLConfigSurfaceType {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for GLConfigSurfaceType {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 unsafe impl<'a> FromValue<'a> for GLConfigSurfaceType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -206,8 +206,8 @@ unsafe impl<'a> FromValue<'a> for GLConfigSurfaceType {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl ToValue for GLConfigSurfaceType {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -224,8 +224,8 @@ impl ToValue for GLConfigSurfaceType {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl From<GLConfigSurfaceType> for glib::Value {
     #[inline]
     fn from(v: GLConfigSurfaceType) -> Self {
@@ -253,20 +253,20 @@ bitflags! {
         const VIV_FB = ffi::GST_GL_DISPLAY_TYPE_VIV_FB as _;
         #[doc(alias = "GST_GL_DISPLAY_TYPE_GBM")]
         const GBM = ffi::GST_GL_DISPLAY_TYPE_GBM as _;
-        #[cfg(any(feature = "v1_18", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+        #[cfg(feature = "v1_18")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
         #[doc(alias = "GST_GL_DISPLAY_TYPE_EGL_DEVICE")]
         const EGL_DEVICE = ffi::GST_GL_DISPLAY_TYPE_EGL_DEVICE as _;
-        #[cfg(any(feature = "v1_20", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+        #[cfg(feature = "v1_20")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
         #[doc(alias = "GST_GL_DISPLAY_TYPE_EAGL")]
         const EAGL = ffi::GST_GL_DISPLAY_TYPE_EAGL as _;
-        #[cfg(any(feature = "v1_20", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+        #[cfg(feature = "v1_20")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
         #[doc(alias = "GST_GL_DISPLAY_TYPE_WINRT")]
         const WINRT = ffi::GST_GL_DISPLAY_TYPE_WINRT as _;
-        #[cfg(any(feature = "v1_20", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+        #[cfg(feature = "v1_20")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
         #[doc(alias = "GST_GL_DISPLAY_TYPE_ANDROID")]
         const ANDROID = ffi::GST_GL_DISPLAY_TYPE_ANDROID as _;
     }

@@ -5,8 +5,8 @@
 
 use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstAppLeakyType")]
@@ -21,8 +21,8 @@ pub enum AppLeakyType {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl IntoGlib for AppLeakyType {
     type GlibType = ffi::GstAppLeakyType;
@@ -38,8 +38,8 @@ impl IntoGlib for AppLeakyType {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstAppLeakyType> for AppLeakyType {
     #[inline]
@@ -55,8 +55,8 @@ impl FromGlib<ffi::GstAppLeakyType> for AppLeakyType {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for AppLeakyType {
     #[inline]
     fn static_type() -> Type {
@@ -64,8 +64,8 @@ impl StaticType for AppLeakyType {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::HasParamSpec for AppLeakyType {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
@@ -76,14 +76,14 @@ impl glib::HasParamSpec for AppLeakyType {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl glib::value::ValueType for AppLeakyType {
     type Type = Self;
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 unsafe impl<'a> FromValue<'a> for AppLeakyType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
@@ -94,8 +94,8 @@ unsafe impl<'a> FromValue<'a> for AppLeakyType {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl ToValue for AppLeakyType {
     #[inline]
     fn to_value(&self) -> glib::Value {
@@ -112,8 +112,8 @@ impl ToValue for AppLeakyType {
     }
 }
 
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl From<AppLeakyType> for glib::Value {
     #[inline]
     fn from(v: AppLeakyType) -> Self {

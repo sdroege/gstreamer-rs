@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -1322,8 +1322,8 @@ extern "C" {
     //=========================================================================
     pub fn gst_rtsp_context_pop_current(ctx: *mut GstRTSPContext);
     pub fn gst_rtsp_context_push_current(ctx: *mut GstRTSPContext);
-    #[cfg(any(feature = "v1_22", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_22")))]
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_rtsp_context_set_token(ctx: *mut GstRTSPContext, token: *mut GstRTSPToken);
     pub fn gst_rtsp_context_get_current() -> *mut GstRTSPContext;
 
@@ -1449,8 +1449,8 @@ extern "C" {
         token: *mut GstRTSPToken,
     );
     pub fn gst_rtsp_auth_get_default_token(auth: *mut GstRTSPAuth) -> *mut GstRTSPToken;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_auth_get_realm(auth: *mut GstRTSPAuth) -> *mut c_char;
     pub fn gst_rtsp_auth_get_supported_methods(
         auth: *mut GstRTSPAuth,
@@ -1460,8 +1460,8 @@ extern "C" {
     ) -> gio::GTlsAuthenticationMode;
     pub fn gst_rtsp_auth_get_tls_certificate(auth: *mut GstRTSPAuth) -> *mut gio::GTlsCertificate;
     pub fn gst_rtsp_auth_get_tls_database(auth: *mut GstRTSPAuth) -> *mut gio::GTlsDatabase;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_auth_parse_htdigest(
         auth: *mut GstRTSPAuth,
         path: *const c_char,
@@ -1470,8 +1470,8 @@ extern "C" {
     pub fn gst_rtsp_auth_remove_basic(auth: *mut GstRTSPAuth, basic: *const c_char);
     pub fn gst_rtsp_auth_remove_digest(auth: *mut GstRTSPAuth, user: *const c_char);
     pub fn gst_rtsp_auth_set_default_token(auth: *mut GstRTSPAuth, token: *mut GstRTSPToken);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_auth_set_realm(auth: *mut GstRTSPAuth, realm: *const c_char);
     pub fn gst_rtsp_auth_set_supported_methods(
         auth: *mut GstRTSPAuth,
@@ -1501,13 +1501,13 @@ extern "C" {
     pub fn gst_rtsp_client_get_connection(
         client: *mut GstRTSPClient,
     ) -> *mut gst_rtsp::GstRTSPConnection;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_client_get_content_length_limit(client: *mut GstRTSPClient) -> c_uint;
     pub fn gst_rtsp_client_get_mount_points(client: *mut GstRTSPClient) -> *mut GstRTSPMountPoints;
     pub fn gst_rtsp_client_get_session_pool(client: *mut GstRTSPClient) -> *mut GstRTSPSessionPool;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_client_get_stream_transport(
         client: *mut GstRTSPClient,
         channel: u8,
@@ -1532,8 +1532,8 @@ extern "C" {
         client: *mut GstRTSPClient,
         conn: *mut gst_rtsp::GstRTSPConnection,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_client_set_content_length_limit(client: *mut GstRTSPClient, limit: c_uint);
     pub fn gst_rtsp_client_set_mount_points(
         client: *mut GstRTSPClient,
@@ -1545,8 +1545,8 @@ extern "C" {
         user_data: gpointer,
         notify: glib::GDestroyNotify,
     );
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_client_set_send_messages_func(
         client: *mut GstRTSPClient,
         func: GstRTSPClientSendMessagesFunc,
@@ -1585,16 +1585,16 @@ extern "C" {
     pub fn gst_rtsp_media_get_base_time(media: *mut GstRTSPMedia) -> gst::GstClockTime;
     pub fn gst_rtsp_media_get_buffer_size(media: *mut GstRTSPMedia) -> c_uint;
     pub fn gst_rtsp_media_get_clock(media: *mut GstRTSPMedia) -> *mut gst::GstClock;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_media_get_do_retransmission(media: *mut GstRTSPMedia) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_get_dscp_qos(media: *mut GstRTSPMedia) -> c_int;
     pub fn gst_rtsp_media_get_element(media: *mut GstRTSPMedia) -> *mut gst::GstElement;
     pub fn gst_rtsp_media_get_latency(media: *mut GstRTSPMedia) -> c_uint;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_media_get_max_mcast_ttl(media: *mut GstRTSPMedia) -> c_uint;
     pub fn gst_rtsp_media_get_multicast_iface(media: *mut GstRTSPMedia) -> *mut c_char;
     pub fn gst_rtsp_media_get_permissions(media: *mut GstRTSPMedia) -> *mut GstRTSPPermissions;
@@ -1608,11 +1608,11 @@ extern "C" {
         play: gboolean,
         unit: gst_rtsp::GstRTSPRangeUnit,
     ) -> *mut c_char;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_get_rate_control(media: *mut GstRTSPMedia) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_get_rates(
         media: *mut GstRTSPMedia,
         rate: *mut c_double,
@@ -1632,22 +1632,22 @@ extern "C" {
         media: *mut GstRTSPMedia,
         sdp: *mut gst_sdp::GstSDPMessage,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_has_completed_sender(media: *mut GstRTSPMedia) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_media_is_bind_mcast_address(media: *mut GstRTSPMedia) -> gboolean;
     pub fn gst_rtsp_media_is_eos_shutdown(media: *mut GstRTSPMedia) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_is_receive_only(media: *mut GstRTSPMedia) -> gboolean;
     pub fn gst_rtsp_media_is_reusable(media: *mut GstRTSPMedia) -> gboolean;
     pub fn gst_rtsp_media_is_shared(media: *mut GstRTSPMedia) -> gboolean;
     pub fn gst_rtsp_media_is_stop_on_disconnect(media: *mut GstRTSPMedia) -> gboolean;
     pub fn gst_rtsp_media_is_time_provider(media: *mut GstRTSPMedia) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_lock(media: *mut GstRTSPMedia);
     pub fn gst_rtsp_media_n_streams(media: *mut GstRTSPMedia) -> c_uint;
     pub fn gst_rtsp_media_prepare(media: *mut GstRTSPMedia, thread: *mut GstRTSPThread)
@@ -1656,15 +1656,15 @@ extern "C" {
         media: *mut GstRTSPMedia,
         range: *mut gst_rtsp::GstRTSPTimeRange,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_seek_full(
         media: *mut GstRTSPMedia,
         range: *mut gst_rtsp::GstRTSPTimeRange,
         flags: gst::GstSeekFlags,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_seek_trickmode(
         media: *mut GstRTSPMedia,
         range: *mut gst_rtsp::GstRTSPTimeRange,
@@ -1674,27 +1674,27 @@ extern "C" {
     ) -> gboolean;
     pub fn gst_rtsp_media_seekable(media: *mut GstRTSPMedia) -> gst::GstClockTimeDiff;
     pub fn gst_rtsp_media_set_address_pool(media: *mut GstRTSPMedia, pool: *mut GstRTSPAddressPool);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_media_set_bind_mcast_address(
         media: *mut GstRTSPMedia,
         bind_mcast_addr: gboolean,
     );
     pub fn gst_rtsp_media_set_buffer_size(media: *mut GstRTSPMedia, size: c_uint);
     pub fn gst_rtsp_media_set_clock(media: *mut GstRTSPMedia, clock: *mut gst::GstClock);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_media_set_do_retransmission(
         media: *mut GstRTSPMedia,
         do_retransmission: gboolean,
     );
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_set_dscp_qos(media: *mut GstRTSPMedia, dscp_qos: c_int);
     pub fn gst_rtsp_media_set_eos_shutdown(media: *mut GstRTSPMedia, eos_shutdown: gboolean);
     pub fn gst_rtsp_media_set_latency(media: *mut GstRTSPMedia, latency: c_uint);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_media_set_max_mcast_ttl(media: *mut GstRTSPMedia, ttl: c_uint) -> gboolean;
     pub fn gst_rtsp_media_set_multicast_iface(
         media: *mut GstRTSPMedia,
@@ -1717,8 +1717,8 @@ extern "C" {
         media: *mut GstRTSPMedia,
         mode: GstRTSPPublishClockMode,
     );
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_set_rate_control(media: *mut GstRTSPMedia, enabled: gboolean);
     pub fn gst_rtsp_media_set_retransmission_time(
         media: *mut GstRTSPMedia,
@@ -1744,8 +1744,8 @@ extern "C" {
     ) -> gboolean;
     pub fn gst_rtsp_media_suspend(media: *mut GstRTSPMedia) -> gboolean;
     pub fn gst_rtsp_media_take_pipeline(media: *mut GstRTSPMedia, pipeline: *mut gst::GstPipeline);
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_unlock(media: *mut GstRTSPMedia);
     pub fn gst_rtsp_media_unprepare(media: *mut GstRTSPMedia) -> gboolean;
     pub fn gst_rtsp_media_unsuspend(media: *mut GstRTSPMedia) -> gboolean;
@@ -1781,18 +1781,18 @@ extern "C" {
     pub fn gst_rtsp_media_factory_get_clock(
         factory: *mut GstRTSPMediaFactory,
     ) -> *mut gst::GstClock;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_media_factory_get_do_retransmission(
         factory: *mut GstRTSPMediaFactory,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_factory_get_dscp_qos(factory: *mut GstRTSPMediaFactory) -> c_int;
     pub fn gst_rtsp_media_factory_get_latency(factory: *mut GstRTSPMediaFactory) -> c_uint;
     pub fn gst_rtsp_media_factory_get_launch(factory: *mut GstRTSPMediaFactory) -> *mut c_char;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_media_factory_get_max_mcast_ttl(factory: *mut GstRTSPMediaFactory) -> c_uint;
     pub fn gst_rtsp_media_factory_get_media_gtype(factory: *mut GstRTSPMediaFactory) -> GType;
     pub fn gst_rtsp_media_factory_get_multicast_iface(
@@ -1819,13 +1819,13 @@ extern "C" {
     pub fn gst_rtsp_media_factory_get_transport_mode(
         factory: *mut GstRTSPMediaFactory,
     ) -> GstRTSPTransportMode;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_media_factory_is_bind_mcast_address(
         factory: *mut GstRTSPMediaFactory,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtsp_media_factory_is_enable_rtcp(factory: *mut GstRTSPMediaFactory) -> gboolean;
     pub fn gst_rtsp_media_factory_is_eos_shutdown(factory: *mut GstRTSPMediaFactory) -> gboolean;
     pub fn gst_rtsp_media_factory_is_shared(factory: *mut GstRTSPMediaFactory) -> gboolean;
@@ -1836,8 +1836,8 @@ extern "C" {
         factory: *mut GstRTSPMediaFactory,
         pool: *mut GstRTSPAddressPool,
     );
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_media_factory_set_bind_mcast_address(
         factory: *mut GstRTSPMediaFactory,
         bind_mcast_addr: gboolean,
@@ -1847,17 +1847,17 @@ extern "C" {
         factory: *mut GstRTSPMediaFactory,
         clock: *mut gst::GstClock,
     );
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_media_factory_set_do_retransmission(
         factory: *mut GstRTSPMediaFactory,
         do_retransmission: gboolean,
     );
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_factory_set_dscp_qos(factory: *mut GstRTSPMediaFactory, dscp_qos: c_int);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtsp_media_factory_set_enable_rtcp(
         factory: *mut GstRTSPMediaFactory,
         enable: gboolean,
@@ -1871,8 +1871,8 @@ extern "C" {
         factory: *mut GstRTSPMediaFactory,
         launch: *const c_char,
     );
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_media_factory_set_max_mcast_ttl(
         factory: *mut GstRTSPMediaFactory,
         ttl: c_uint,
@@ -1958,8 +1958,8 @@ extern "C" {
     // GstRTSPOnvifClient
     //=========================================================================
     pub fn gst_rtsp_onvif_client_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_onvif_client_new() -> *mut GstRTSPClient;
 
     //=========================================================================
@@ -1991,8 +1991,8 @@ extern "C" {
     pub fn gst_rtsp_onvif_media_factory_has_backchannel_support(
         factory: *mut GstRTSPOnvifMediaFactory,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_onvif_media_factory_has_replay_support(
         factory: *mut GstRTSPOnvifMediaFactory,
     ) -> gboolean;
@@ -2004,8 +2004,8 @@ extern "C" {
         factory: *mut GstRTSPOnvifMediaFactory,
         launch: *const c_char,
     );
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_onvif_media_factory_set_replay_support(
         factory: *mut GstRTSPOnvifMediaFactory,
         has_replay_support: gboolean,
@@ -2050,8 +2050,8 @@ extern "C" {
     pub fn gst_rtsp_server_get_auth(server: *mut GstRTSPServer) -> *mut GstRTSPAuth;
     pub fn gst_rtsp_server_get_backlog(server: *mut GstRTSPServer) -> c_int;
     pub fn gst_rtsp_server_get_bound_port(server: *mut GstRTSPServer) -> c_int;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_server_get_content_length_limit(server: *mut GstRTSPServer) -> c_uint;
     pub fn gst_rtsp_server_get_mount_points(server: *mut GstRTSPServer) -> *mut GstRTSPMountPoints;
     pub fn gst_rtsp_server_get_service(server: *mut GstRTSPServer) -> *mut c_char;
@@ -2060,8 +2060,8 @@ extern "C" {
     pub fn gst_rtsp_server_set_address(server: *mut GstRTSPServer, address: *const c_char);
     pub fn gst_rtsp_server_set_auth(server: *mut GstRTSPServer, auth: *mut GstRTSPAuth);
     pub fn gst_rtsp_server_set_backlog(server: *mut GstRTSPServer, backlog: c_int);
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_server_set_content_length_limit(server: *mut GstRTSPServer, limit: c_uint);
     pub fn gst_rtsp_server_set_mount_points(
         server: *mut GstRTSPServer,
@@ -2090,8 +2090,8 @@ extern "C" {
     pub fn gst_rtsp_session_get_type() -> GType;
     pub fn gst_rtsp_session_new(sessionid: *const c_char) -> *mut GstRTSPSession;
     pub fn gst_rtsp_session_allow_expire(session: *mut GstRTSPSession);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtsp_session_dup_media(
         sess: *mut GstRTSPSession,
         path: *const c_char,
@@ -2213,8 +2213,8 @@ extern "C" {
         payloader: *mut gst::GstElement,
         pad: *mut gst::GstPad,
     ) -> *mut GstRTSPStream;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_add_multicast_client_address(
         stream: *mut GstRTSPStream,
         destination: *const c_char,
@@ -2244,16 +2244,16 @@ extern "C" {
     pub fn gst_rtsp_stream_get_dscp_qos(stream: *mut GstRTSPStream) -> c_int;
     pub fn gst_rtsp_stream_get_index(stream: *mut GstRTSPStream) -> c_uint;
     pub fn gst_rtsp_stream_get_joined_bin(stream: *mut GstRTSPStream) -> *mut gst::GstBin;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_get_max_mcast_ttl(stream: *mut GstRTSPStream) -> c_uint;
     pub fn gst_rtsp_stream_get_mtu(stream: *mut GstRTSPStream) -> c_uint;
     pub fn gst_rtsp_stream_get_multicast_address(
         stream: *mut GstRTSPStream,
         family: gio::GSocketFamily,
     ) -> *mut GstRTSPAddress;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_get_multicast_client_addresses(
         stream: *mut GstRTSPStream,
     ) -> *mut c_char;
@@ -2265,11 +2265,11 @@ extern "C" {
     pub fn gst_rtsp_stream_get_publish_clock_mode(
         stream: *mut GstRTSPStream,
     ) -> GstRTSPPublishClockMode;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_stream_get_rate_control(stream: *mut GstRTSPStream) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_stream_get_rates(
         stream: *mut GstRTSPStream,
         rate: *mut c_double,
@@ -2312,14 +2312,14 @@ extern "C" {
     pub fn gst_rtsp_stream_get_srtp_encoder(stream: *mut GstRTSPStream) -> *mut gst::GstElement;
     pub fn gst_rtsp_stream_get_ssrc(stream: *mut GstRTSPStream, ssrc: *mut c_uint);
     pub fn gst_rtsp_stream_get_ulpfec_enabled(stream: *mut GstRTSPStream) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_get_ulpfec_percentage(stream: *mut GstRTSPStream) -> c_uint;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_get_ulpfec_pt(stream: *mut GstRTSPStream) -> c_uint;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_handle_keymgmt(
         stream: *mut GstRTSPStream,
         keymgmt: *const c_char,
@@ -2328,8 +2328,8 @@ extern "C" {
         stream: *mut GstRTSPStream,
         control: *const c_char,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_is_bind_mcast_address(stream: *mut GstRTSPStream) -> gboolean;
     pub fn gst_rtsp_stream_is_blocking(stream: *mut GstRTSPStream) -> gboolean;
     pub fn gst_rtsp_stream_is_client_side(stream: *mut GstRTSPStream) -> gboolean;
@@ -2368,8 +2368,8 @@ extern "C" {
         stream: *mut GstRTSPStream,
         trans: *mut GstRTSPStreamTransport,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_request_aux_receiver(
         stream: *mut GstRTSPStream,
         sessid: c_uint,
@@ -2378,15 +2378,15 @@ extern "C" {
         stream: *mut GstRTSPStream,
         sessid: c_uint,
     ) -> *mut gst::GstElement;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_request_ulpfec_decoder(
         stream: *mut GstRTSPStream,
         rtpbin: *mut gst::GstElement,
         sessid: c_uint,
     ) -> *mut gst::GstElement;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_request_ulpfec_encoder(
         stream: *mut GstRTSPStream,
         sessid: c_uint,
@@ -2403,8 +2403,8 @@ extern "C" {
         stream: *mut GstRTSPStream,
         pool: *mut GstRTSPAddressPool,
     );
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_set_bind_mcast_address(
         stream: *mut GstRTSPStream,
         bind_mcast_addr: gboolean,
@@ -2414,8 +2414,8 @@ extern "C" {
     pub fn gst_rtsp_stream_set_client_side(stream: *mut GstRTSPStream, client_side: gboolean);
     pub fn gst_rtsp_stream_set_control(stream: *mut GstRTSPStream, control: *const c_char);
     pub fn gst_rtsp_stream_set_dscp_qos(stream: *mut GstRTSPStream, dscp_qos: c_int);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_set_max_mcast_ttl(stream: *mut GstRTSPStream, ttl: c_uint) -> gboolean;
     pub fn gst_rtsp_stream_set_mtu(stream: *mut GstRTSPStream, mtu: c_uint);
     pub fn gst_rtsp_stream_set_multicast_iface(
@@ -2439,8 +2439,8 @@ extern "C" {
         stream: *mut GstRTSPStream,
         mode: GstRTSPPublishClockMode,
     );
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_stream_set_rate_control(stream: *mut GstRTSPStream, enabled: gboolean);
     pub fn gst_rtsp_stream_set_retransmission_pt(stream: *mut GstRTSPStream, rtx_pt: c_uint);
     pub fn gst_rtsp_stream_set_retransmission_time(
@@ -2448,11 +2448,11 @@ extern "C" {
         time: gst::GstClockTime,
     );
     pub fn gst_rtsp_stream_set_seqnum_offset(stream: *mut GstRTSPStream, seqnum: u16);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_set_ulpfec_percentage(stream: *mut GstRTSPStream, percentage: c_uint);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_set_ulpfec_pt(stream: *mut GstRTSPStream, pt: c_uint);
     pub fn gst_rtsp_stream_transport_filter(
         stream: *mut GstRTSPStream,
@@ -2460,16 +2460,16 @@ extern "C" {
         user_data: gpointer,
     ) -> *mut glib::GList;
     pub fn gst_rtsp_stream_unblock_linked(stream: *mut GstRTSPStream) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtsp_stream_unblock_rtcp(stream: *mut GstRTSPStream);
     pub fn gst_rtsp_stream_update_crypto(
         stream: *mut GstRTSPStream,
         ssrc: c_uint,
         crypto: *mut gst::GstCaps,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_verify_mcast_ttl(stream: *mut GstRTSPStream, ttl: c_uint) -> gboolean;
 
     //=========================================================================
@@ -2495,8 +2495,8 @@ extern "C" {
     ) -> *const gst_rtsp::GstRTSPUrl;
     pub fn gst_rtsp_stream_transport_is_timed_out(trans: *mut GstRTSPStreamTransport) -> gboolean;
     pub fn gst_rtsp_stream_transport_keep_alive(trans: *mut GstRTSPStreamTransport);
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_transport_message_sent(trans: *mut GstRTSPStreamTransport);
     pub fn gst_rtsp_stream_transport_recv_data(
         trans: *mut GstRTSPStreamTransport,
@@ -2507,8 +2507,8 @@ extern "C" {
         trans: *mut GstRTSPStreamTransport,
         buffer: *mut gst::GstBuffer,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_transport_send_rtcp_list(
         trans: *mut GstRTSPStreamTransport,
         buffer_list: *mut gst::GstBufferList,
@@ -2517,8 +2517,8 @@ extern "C" {
         trans: *mut GstRTSPStreamTransport,
         buffer: *mut gst::GstBuffer,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_transport_send_rtp_list(
         trans: *mut GstRTSPStreamTransport,
         buffer_list: *mut gst::GstBufferList,
@@ -2540,8 +2540,8 @@ extern "C" {
         user_data: gpointer,
         notify: glib::GDestroyNotify,
     );
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtsp_stream_transport_set_list_callbacks(
         trans: *mut GstRTSPStreamTransport,
         send_rtp_list: GstRTSPSendListFunc,
@@ -2555,8 +2555,8 @@ extern "C" {
         user_data: gpointer,
         notify: glib::GDestroyNotify,
     );
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_stream_transport_set_message_sent_full(
         trans: *mut GstRTSPStreamTransport,
         message_sent: GstRTSPMessageSentFuncFull,

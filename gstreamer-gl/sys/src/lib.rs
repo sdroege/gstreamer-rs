@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 mod manual;
 
@@ -187,17 +187,17 @@ pub const GST_GL_DISPLAY_TYPE_DISPMANX: GstGLDisplayType = 16;
 pub const GST_GL_DISPLAY_TYPE_EGL: GstGLDisplayType = 32;
 pub const GST_GL_DISPLAY_TYPE_VIV_FB: GstGLDisplayType = 64;
 pub const GST_GL_DISPLAY_TYPE_GBM: GstGLDisplayType = 128;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 pub const GST_GL_DISPLAY_TYPE_EGL_DEVICE: GstGLDisplayType = 256;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_GL_DISPLAY_TYPE_EAGL: GstGLDisplayType = 512;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_GL_DISPLAY_TYPE_WINRT: GstGLDisplayType = 1024;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_GL_DISPLAY_TYPE_ANDROID: GstGLDisplayType = 2048;
 pub const GST_GL_DISPLAY_TYPE_ANY: GstGLDisplayType = 4294967295;
 
@@ -1504,11 +1504,11 @@ extern "C" {
     //=========================================================================
     // GstGLConfigCaveat
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_config_caveat_get_type() -> GType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_config_caveat_to_string(caveat: GstGLConfigCaveat) -> *const c_char;
 
     //=========================================================================
@@ -1526,11 +1526,11 @@ extern "C" {
         vinfo: *const gst_video::GstVideoInfo,
         plane: c_uint,
     ) -> GstGLFormat;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_gl_format_is_supported(context: *mut GstGLContext, format: GstGLFormat) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_gl_format_type_from_sized_gl_format(
         format: GstGLFormat,
         unsized_format: *mut GstGLFormat,
@@ -1607,11 +1607,11 @@ extern "C" {
     //=========================================================================
     // GstGLConfigSurfaceType
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_config_surface_type_get_type() -> GType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_config_surface_type_to_string(
         surface_type: GstGLConfigSurfaceType,
     ) -> *const c_char;
@@ -1716,8 +1716,8 @@ extern "C" {
     //=========================================================================
     // GstGLBuffer
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_buffer_get_type() -> GType;
     pub fn gst_gl_buffer_init_once();
 
@@ -1736,8 +1736,8 @@ extern "C" {
     //=========================================================================
     // GstGLMemory
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_memory_get_type() -> GType;
     pub fn gst_gl_memory_copy_into(
         gl_mem: *mut GstGLMemory,
@@ -1790,8 +1790,8 @@ extern "C" {
     //=========================================================================
     // GstGLMemoryPBO
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_memory_pbo_get_type() -> GType;
     pub fn gst_gl_memory_pbo_copy_into_texture(
         gl_mem: *mut GstGLMemoryPBO,
@@ -1834,8 +1834,8 @@ extern "C" {
     //=========================================================================
     // GstGLRenderbuffer
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_renderbuffer_get_type() -> GType;
     pub fn gst_gl_renderbuffer_get_format(gl_mem: *mut GstGLRenderbuffer) -> GstGLFormat;
     pub fn gst_gl_renderbuffer_get_height(gl_mem: *mut GstGLRenderbuffer) -> c_int;
@@ -1953,11 +1953,11 @@ extern "C" {
     // GstGLBaseFilter
     //=========================================================================
     pub fn gst_gl_base_filter_get_type() -> GType;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_gl_base_filter_find_gl_context(filter: *mut GstGLBaseFilter) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_gl_base_filter_get_gl_context(filter: *mut GstGLBaseFilter) -> *mut GstGLContext;
 
     //=========================================================================
@@ -1968,8 +1968,8 @@ extern "C" {
     //=========================================================================
     // GstGLBaseSrc
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_gl_base_src_get_type() -> GType;
 
     //=========================================================================
@@ -1982,8 +1982,8 @@ extern "C" {
     //=========================================================================
     pub fn gst_gl_buffer_pool_get_type() -> GType;
     pub fn gst_gl_buffer_pool_new(context: *mut GstGLContext) -> *mut gst::GstBufferPool;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_buffer_pool_get_gl_allocation_params(
         pool: *mut GstGLBufferPool,
     ) -> *mut GstGLAllocationParams;
@@ -2077,8 +2077,8 @@ extern "C" {
         context: *mut GstGLContext,
         error: *mut *mut glib::GError,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_context_get_config(context: *mut GstGLContext) -> *mut gst::GstStructure;
     pub fn gst_gl_context_get_display(context: *mut GstGLContext) -> *mut GstGLDisplay;
     pub fn gst_gl_context_get_gl_api(context: *mut GstGLContext) -> GstGLAPI;
@@ -2101,8 +2101,8 @@ extern "C" {
     pub fn gst_gl_context_get_thread(context: *mut GstGLContext) -> *mut glib::GThread;
     pub fn gst_gl_context_get_window(context: *mut GstGLContext) -> *mut GstGLWindow;
     pub fn gst_gl_context_is_shared(context: *mut GstGLContext) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_context_request_config(
         context: *mut GstGLContext,
         gl_config: *mut gst::GstStructure,
@@ -2117,15 +2117,15 @@ extern "C" {
         version: GstGLSLVersion,
         profile: GstGLSLProfile,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_gl_context_supports_precision(
         context: *mut GstGLContext,
         version: GstGLSLVersion,
         profile: GstGLSLProfile,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_gl_context_supports_precision_highp(
         context: *mut GstGLContext,
         version: GstGLSLVersion,
@@ -2143,8 +2143,8 @@ extern "C" {
     //=========================================================================
     pub fn gst_gl_display_get_type() -> GType;
     pub fn gst_gl_display_new() -> *mut GstGLDisplay;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_display_new_with_type(type_: GstGLDisplayType) -> *mut GstGLDisplay;
     pub fn gst_gl_display_add_context(
         display: *mut GstGLDisplay,
@@ -2157,8 +2157,8 @@ extern "C" {
         error: *mut *mut glib::GError,
     ) -> gboolean;
     pub fn gst_gl_display_create_window(display: *mut GstGLDisplay) -> *mut GstGLWindow;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_gl_display_ensure_context(
         display: *mut GstGLDisplay,
         other_context: *mut GstGLContext,
@@ -2179,15 +2179,15 @@ extern "C" {
     ) -> *mut GstGLContext;
     pub fn gst_gl_display_get_handle(display: *mut GstGLDisplay) -> uintptr_t;
     pub fn gst_gl_display_get_handle_type(display: *mut GstGLDisplay) -> GstGLDisplayType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_gl_display_remove_context(display: *mut GstGLDisplay, context: *mut GstGLContext);
     pub fn gst_gl_display_remove_window(
         display: *mut GstGLDisplay,
         window: *mut GstGLWindow,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_gl_display_retrieve_window(
         display: *mut GstGLDisplay,
         data: gpointer,
@@ -2337,22 +2337,22 @@ extern "C" {
         error: *mut *mut glib::GError,
         ...
     ) -> *mut GstGLShader;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_gl_shader_string_fragment_external_oes_get_default(
         context: *mut GstGLContext,
         version: GstGLSLVersion,
         profile: GstGLSLProfile,
     ) -> *mut c_char;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_gl_shader_string_fragment_get_default(
         context: *mut GstGLContext,
         version: GstGLSLVersion,
         profile: GstGLSLProfile,
     ) -> *mut c_char;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_gl_shader_string_get_highest_precision(
         context: *mut GstGLContext,
         version: GstGLSLVersion,
@@ -2635,8 +2635,8 @@ extern "C" {
     //=========================================================================
     pub fn gst_gl_window_get_type() -> GType;
     pub fn gst_gl_window_new(display: *mut GstGLDisplay) -> *mut GstGLWindow;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_gl_window_controls_viewport(window: *mut GstGLWindow) -> gboolean;
     pub fn gst_gl_window_draw(window: *mut GstGLWindow);
     pub fn gst_gl_window_get_context(window: *mut GstGLWindow) -> *mut GstGLContext;
@@ -2648,8 +2648,8 @@ extern "C" {
     );
     pub fn gst_gl_window_get_window_handle(window: *mut GstGLWindow) -> uintptr_t;
     pub fn gst_gl_window_handle_events(window: *mut GstGLWindow, handle_events: gboolean);
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_gl_window_has_output_surface(window: *mut GstGLWindow) -> gboolean;
     pub fn gst_gl_window_queue_resize(window: *mut GstGLWindow);
     pub fn gst_gl_window_quit(window: *mut GstGLWindow);
@@ -2678,8 +2678,8 @@ extern "C" {
         posx: c_double,
         posy: c_double,
     );
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_gl_window_send_scroll_event(
         window: *mut GstGLWindow,
         posx: c_double,
@@ -2750,8 +2750,8 @@ extern "C" {
         display_ptr: *mut *mut GstGLDisplay,
         other_context_ptr: *mut *mut GstGLContext,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_get_affine_transformation_meta_as_ndc(
         meta: *mut gst_video::GstVideoAffineTransformationMeta,
         matrix: *mut [c_float; 16],
@@ -2780,15 +2780,15 @@ extern "C" {
         other_context: *mut *mut GstGLContext,
     ) -> gboolean;
     pub fn gst_gl_insert_debug_marker(context: *mut GstGLContext, format: *const c_char, ...);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_multiply_matrix4(
         a: *const [c_float; 16],
         b: *const [c_float; 16],
         result: *mut [c_float; 16],
     );
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_gl_set_affine_transformation_meta_from_ndc(
         meta: *mut gst_video::GstVideoAffineTransformationMeta,
         matrix: *const [c_float; 16],

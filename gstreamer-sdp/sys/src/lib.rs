@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -1092,8 +1092,8 @@ extern "C" {
     pub fn gst_sdp_message_as_uri(scheme: *const c_char, msg: *const GstSDPMessage) -> *mut c_char;
     pub fn gst_sdp_message_init(msg: *mut GstSDPMessage) -> GstSDPResult;
     pub fn gst_sdp_message_new(msg: *mut *mut GstSDPMessage) -> GstSDPResult;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_sdp_message_new_from_text(
         text: *const c_char,
         msg: *mut *mut GstSDPMessage,

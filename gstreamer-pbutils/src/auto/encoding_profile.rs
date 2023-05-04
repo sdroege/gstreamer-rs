@@ -4,12 +4,12 @@
 // DO NOT EDIT
 
 use crate::DiscovererInfo;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 use glib::signal::{connect_raw, SignalHandlerId};
 use glib::{prelude::*, translate::*};
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 use std::{boxed::Box as Box_, mem::transmute};
 
 glib::wrapper! {
@@ -98,8 +98,8 @@ pub trait EncodingProfileExt: 'static {
     #[doc(alias = "get_preset_name")]
     fn preset_name(&self) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_encoding_profile_get_single_segment")]
     #[doc(alias = "get_single_segment")]
     fn is_single_segment(&self) -> bool;
@@ -114,8 +114,8 @@ pub trait EncodingProfileExt: 'static {
     #[doc(alias = "gst_encoding_profile_is_equal")]
     fn is_equal(&self, b: &impl IsA<EncodingProfile>) -> bool;
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "element-properties")]
     fn connect_element_properties_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -200,8 +200,8 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn is_single_segment(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_encoding_profile_get_single_segment(
@@ -235,8 +235,8 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn connect_element_properties_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

@@ -3,8 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(feature = "v1_18")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::MarkerList;
 use crate::MetaFlag;
 use glib::{
@@ -65,8 +65,8 @@ pub trait MetaContainerExt: 'static {
     #[doc(alias = "get_int64")]
     fn int64(&self, meta_item: &str) -> Option<i64>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_meta_container_get_marker_list")]
     #[doc(alias = "get_marker_list")]
     fn marker_list(&self, key: &str) -> Option<MarkerList>;
@@ -128,8 +128,8 @@ pub trait MetaContainerExt: 'static {
     #[doc(alias = "ges_meta_container_register_meta_uint64")]
     fn register_meta_uint64(&self, flags: MetaFlag, meta_item: &str, value: u64) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_meta_container_register_static_meta")]
     fn register_static_meta(
         &self,
@@ -159,8 +159,8 @@ pub trait MetaContainerExt: 'static {
     #[doc(alias = "ges_meta_container_set_int64")]
     fn set_int64(&self, meta_item: &str, value: i64) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_meta_container_set_marker_list")]
     fn set_marker_list(&self, meta_item: &str, list: &MarkerList) -> bool;
 
@@ -352,8 +352,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn marker_list(&self, key: &str) -> Option<MarkerList> {
         unsafe {
             from_glib_full(ffi::ges_meta_container_get_marker_list(
@@ -547,8 +547,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn register_static_meta(
         &self,
         flags: MetaFlag,
@@ -635,8 +635,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_marker_list(&self, meta_item: &str, list: &MarkerList) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_set_marker_list(

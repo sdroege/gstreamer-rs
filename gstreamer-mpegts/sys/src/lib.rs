@@ -10,7 +10,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -191,8 +191,8 @@ pub const GST_MTS_DESC_EXT_DVB_VIDEO_DEPTH_RANGE: GstMpegtsDVBExtendedDescriptor
 pub const GST_MTS_DESC_EXT_DVB_T2MI: GstMpegtsDVBExtendedDescriptorType = 17;
 pub const GST_MTS_DESC_EXT_DVB_URI_LINKAGE: GstMpegtsDVBExtendedDescriptorType = 19;
 pub const GST_MTS_DESC_EXT_DVB_AC4: GstMpegtsDVBExtendedDescriptorType = 21;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_MTS_DESC_EXT_DVB_AUDIO_PRESELECTION: GstMpegtsDVBExtendedDescriptorType = 25;
 
 pub type GstMpegtsDVBLinkageHandOverType = c_int;
@@ -378,17 +378,17 @@ pub const GST_MPEGTS_AUDIO_TYPE_HEARING_IMPAIRED: GstMpegtsIso639AudioType = 2;
 pub const GST_MPEGTS_AUDIO_TYPE_VISUAL_IMPAIRED_COMMENTARY: GstMpegtsIso639AudioType = 3;
 
 pub type GstMpegtsMetadataFormat = c_int;
-#[cfg(any(feature = "v1_24", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 pub const GST_MPEGTS_METADATA_FORMAT_TEM: GstMpegtsMetadataFormat = 16;
-#[cfg(any(feature = "v1_24", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 pub const GST_MPEGTS_METADATA_FORMAT_BIM: GstMpegtsMetadataFormat = 17;
-#[cfg(any(feature = "v1_24", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 pub const GST_MPEGTS_METADATA_FORMAT_APPLICATION_FORMAT: GstMpegtsMetadataFormat = 63;
-#[cfg(any(feature = "v1_24", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 pub const GST_MPEGTS_METADATA_FORMAT_IDENTIFIER_FIELD: GstMpegtsMetadataFormat = 255;
 
 pub type GstMpegtsMiscDescriptorType = c_int;
@@ -477,8 +477,8 @@ pub const GST_MTS_TABLE_ID_ATSC_CHANNEL_OR_EVENT_EXTENDED_TEXT: GstMpegtsSection
 pub const GST_MTS_TABLE_ID_ATSC_SYSTEM_TIME: GstMpegtsSectionATSCTableID = 205;
 pub const GST_MTS_TABLE_ID_ATSC_DATA_EVENT: GstMpegtsSectionATSCTableID = 206;
 pub const GST_MTS_TABLE_ID_ATSC_DATA_SERVICE: GstMpegtsSectionATSCTableID = 207;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_MTS_TABLE_ID_ATSC_PROGRAM_IDENTIFIER: GstMpegtsSectionATSCTableID = 208;
 pub const GST_MTS_TABLE_ID_ATSC_NETWORK_RESOURCE: GstMpegtsSectionATSCTableID = 209;
 pub const GST_MTS_TABLE_ID_ATSC_LONG_TERM_SERVICE: GstMpegtsSectionATSCTableID = 210;
@@ -496,11 +496,11 @@ pub const GST_MTS_TABLE_ID_NETWORK_INFORMATION_OTHER_NETWORK: GstMpegtsSectionDV
 pub const GST_MTS_TABLE_ID_SERVICE_DESCRIPTION_ACTUAL_TS: GstMpegtsSectionDVBTableID = 66;
 pub const GST_MTS_TABLE_ID_SERVICE_DESCRIPTION_OTHER_TS: GstMpegtsSectionDVBTableID = 70;
 pub const GST_MTS_TABLE_ID_BOUQUET_ASSOCIATION: GstMpegtsSectionDVBTableID = 74;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_MTS_TABLE_ID_UPDATE_NOTIFICATION: GstMpegtsSectionDVBTableID = 75;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_MTS_TABLE_ID_DOWNLOADABLE_FONT_INFO: GstMpegtsSectionDVBTableID = 76;
 pub const GST_MTS_TABLE_ID_EVENT_INFORMATION_ACTUAL_TS_PRESENT: GstMpegtsSectionDVBTableID = 78;
 pub const GST_MTS_TABLE_ID_EVENT_INFORMATION_OTHER_TS_PRESENT: GstMpegtsSectionDVBTableID = 79;
@@ -519,8 +519,8 @@ pub const GST_MTS_TABLE_ID_CONTENT_IDENTIFIER: GstMpegtsSectionDVBTableID = 119;
 pub const GST_MTS_TABLE_ID_MPE_FEC: GstMpegtsSectionDVBTableID = 120;
 pub const GST_MTS_TABLE_ID_RESOLUTION_NOTIFICATION: GstMpegtsSectionDVBTableID = 121;
 pub const GST_MTS_TABLE_ID_MPE_IFEC: GstMpegtsSectionDVBTableID = 122;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_MTS_TABLE_ID_PROTECTION_MESSAGE: GstMpegtsSectionDVBTableID = 123;
 pub const GST_MTS_TABLE_ID_DISCONTINUITY_INFORMATION: GstMpegtsSectionDVBTableID = 126;
 pub const GST_MTS_TABLE_ID_SELECTION_INFORMATION: GstMpegtsSectionDVBTableID = 127;
@@ -557,14 +557,14 @@ pub const GST_MTS_TABLE_ID_14496_SCENE_DESCRIPTION: GstMpegtsSectionTableID = 4;
 pub const GST_MTS_TABLE_ID_14496_OBJET_DESCRIPTOR: GstMpegtsSectionTableID = 5;
 pub const GST_MTS_TABLE_ID_METADATA: GstMpegtsSectionTableID = 6;
 pub const GST_MTS_TABLE_ID_IPMP_CONTROL_INFORMATION: GstMpegtsSectionTableID = 7;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_MTS_TABLE_ID_14496_SECTION: GstMpegtsSectionTableID = 8;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_MTS_TABLE_ID_23001_11_SECTION: GstMpegtsSectionTableID = 9;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_MTS_TABLE_ID_23001_10_SECTION: GstMpegtsSectionTableID = 10;
 pub const GST_MTS_TABLE_ID_DSM_CC_MULTIPROTO_ENCAPSULATED_DATA: GstMpegtsSectionTableID = 58;
 pub const GST_MTS_TABLE_ID_DSM_CC_U_N_MESSAGES: GstMpegtsSectionTableID = 59;
@@ -586,8 +586,8 @@ pub const GST_MPEGTS_SECTION_BAT: GstMpegtsSectionType = 7;
 pub const GST_MPEGTS_SECTION_SDT: GstMpegtsSectionType = 8;
 pub const GST_MPEGTS_SECTION_TDT: GstMpegtsSectionType = 9;
 pub const GST_MPEGTS_SECTION_TOT: GstMpegtsSectionType = 10;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_MPEGTS_SECTION_SIT: GstMpegtsSectionType = 11;
 pub const GST_MPEGTS_SECTION_ATSC_TVCT: GstMpegtsSectionType = 12;
 pub const GST_MPEGTS_SECTION_ATSC_CVCT: GstMpegtsSectionType = 13;
@@ -637,8 +637,8 @@ pub const GST_MPEGTS_STREAM_TYPE_VIDEO_MPEG2_STEREO_ADDITIONAL_VIEW: GstMpegtsSt
 pub const GST_MPEGTS_STREAM_TYPE_VIDEO_H264_STEREO_ADDITIONAL_VIEW: GstMpegtsStreamType = 35;
 pub const GST_MPEGTS_STREAM_TYPE_VIDEO_HEVC: GstMpegtsStreamType = 36;
 pub const GST_MPEGTS_STREAM_TYPE_IPMP_STREAM: GstMpegtsStreamType = 127;
-#[cfg(any(feature = "v1_20", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[cfg(feature = "v1_20")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_MPEGTS_STREAM_TYPE_USER_PRIVATE_EA: GstMpegtsStreamType = 234;
 
 pub type GstMpegtsTerrestrialGuardInterval = c_int;
@@ -2081,31 +2081,31 @@ extern "C" {
     //=========================================================================
     // GstMpegtsAtscRRT
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_mpegts_atsc_rrt_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_mpegts_atsc_rrt_new() -> *mut GstMpegtsAtscRRT;
 
     //=========================================================================
     // GstMpegtsAtscRRTDimension
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_mpegts_atsc_rrt_dimension_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_mpegts_atsc_rrt_dimension_new() -> *mut GstMpegtsAtscRRTDimension;
 
     //=========================================================================
     // GstMpegtsAtscRRTDimensionValue
     //=========================================================================
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_mpegts_atsc_rrt_dimension_value_get_type() -> GType;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_mpegts_atsc_rrt_dimension_value_new() -> *mut GstMpegtsAtscRRTDimensionValue;
 
     //=========================================================================
@@ -2222,8 +2222,8 @@ extern "C" {
     //=========================================================================
     pub fn gst_mpegts_descriptor_get_type() -> GType;
     pub fn gst_mpegts_descriptor_free(desc: *mut GstMpegtsDescriptor);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_descriptor_parse_audio_preselection_list(
         descriptor: *const GstMpegtsDescriptor,
         list: *mut *mut glib::GPtrArray,
@@ -2380,22 +2380,22 @@ extern "C" {
         descriptor: *const GstMpegtsDescriptor,
         res: *mut GstMpegtsLogicalChannelDescriptor,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_mpegts_descriptor_parse_metadata(
         descriptor: *const GstMpegtsDescriptor,
         res: *mut *mut GstMpegtsMetadataDescriptor,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_mpegts_descriptor_parse_metadata_std(
         descriptor: *const GstMpegtsDescriptor,
         metadata_input_leak_rate: *mut u32,
         metadata_buffer_size: *mut u32,
         metadata_output_leak_rate: *mut u32,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_descriptor_parse_registration(
         descriptor: *mut GstMpegtsDescriptor,
         registration_id: *mut u32,
@@ -2415,8 +2415,8 @@ extern "C" {
         data: *const u8,
         length: size_t,
     ) -> *mut GstMpegtsDescriptor;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_descriptor_from_custom_with_extension(
         tag: u8,
         tag_extension: u8,
@@ -2445,13 +2445,13 @@ extern "C" {
         additional_info: *mut u8,
         additional_info_length: size_t,
     ) -> *mut GstMpegtsDescriptor;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_descriptor_parse_audio_preselection_dump(
         source: *mut GstMpegtsAudioPreselectionDescriptor,
     );
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_descriptor_parse_audio_preselection_free(
         source: *mut GstMpegtsAudioPreselectionDescriptor,
     );
@@ -2518,8 +2518,8 @@ extern "C" {
     //=========================================================================
     // GstMpegtsMetadataDescriptor
     //=========================================================================
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_mpegts_metadata_descriptor_get_type() -> GType;
 
     //=========================================================================
@@ -2537,8 +2537,8 @@ extern "C" {
     //=========================================================================
     // GstMpegtsPESMetadataMeta
     //=========================================================================
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_mpegts_pes_metadata_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
@@ -2562,31 +2562,31 @@ extern "C" {
     //=========================================================================
     // GstMpegtsSCTESIT
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_scte_sit_get_type() -> GType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_scte_sit_new() -> *mut GstMpegtsSCTESIT;
 
     //=========================================================================
     // GstMpegtsSCTESpliceComponent
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_scte_splice_component_get_type() -> GType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_scte_splice_component_new(tag: u8) -> *mut GstMpegtsSCTESpliceComponent;
 
     //=========================================================================
     // GstMpegtsSCTESpliceEvent
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_scte_splice_event_get_type() -> GType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_scte_splice_event_new() -> *mut GstMpegtsSCTESpliceEvent;
 
     //=========================================================================
@@ -2604,15 +2604,15 @@ extern "C" {
     //=========================================================================
     // GstMpegtsSIT
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_sit_get_type() -> GType;
 
     //=========================================================================
     // GstMpegtsSITService
     //=========================================================================
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_sit_service_get_type() -> GType;
 
     //=========================================================================
@@ -2641,8 +2641,8 @@ extern "C" {
     pub fn gst_mpegts_section_get_atsc_mgt(
         section: *mut GstMpegtsSection,
     ) -> *const GstMpegtsAtscMGT;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_mpegts_section_get_atsc_rrt(
         section: *mut GstMpegtsSection,
     ) -> *const GstMpegtsAtscRRT;
@@ -2659,14 +2659,14 @@ extern "C" {
     pub fn gst_mpegts_section_get_nit(section: *mut GstMpegtsSection) -> *const GstMpegtsNIT;
     pub fn gst_mpegts_section_get_pat(section: *mut GstMpegtsSection) -> *mut glib::GPtrArray;
     pub fn gst_mpegts_section_get_pmt(section: *mut GstMpegtsSection) -> *const GstMpegtsPMT;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_section_get_scte_sit(
         section: *mut GstMpegtsSection,
     ) -> *const GstMpegtsSCTESIT;
     pub fn gst_mpegts_section_get_sdt(section: *mut GstMpegtsSection) -> *const GstMpegtsSDT;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_section_get_sit(section: *mut GstMpegtsSection) -> *const GstMpegtsSIT;
     pub fn gst_mpegts_section_get_tdt(section: *mut GstMpegtsSection) -> *mut gst::GstDateTime;
     pub fn gst_mpegts_section_get_tot(section: *mut GstMpegtsSection) -> *const GstMpegtsTOT;
@@ -2679,11 +2679,11 @@ extern "C" {
         section: *mut GstMpegtsSection,
         element: *mut gst::GstElement,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_mpegts_section_from_atsc_mgt(mgt: *mut GstMpegtsAtscMGT) -> *mut GstMpegtsSection;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_mpegts_section_from_atsc_rrt(rrt: *mut GstMpegtsAtscRRT) -> *mut GstMpegtsSection;
     pub fn gst_mpegts_section_from_atsc_stt(stt: *mut GstMpegtsAtscSTT) -> *mut GstMpegtsSection;
     pub fn gst_mpegts_section_from_nit(nit: *mut GstMpegtsNIT) -> *mut GstMpegtsSection;
@@ -2692,8 +2692,8 @@ extern "C" {
         ts_id: u16,
     ) -> *mut GstMpegtsSection;
     pub fn gst_mpegts_section_from_pmt(pmt: *mut GstMpegtsPMT, pid: u16) -> *mut GstMpegtsSection;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_section_from_scte_sit(
         sit: *mut GstMpegtsSCTESIT,
         pid: u16,
@@ -2731,22 +2731,22 @@ extern "C" {
     //=========================================================================
     // Other functions
     //=========================================================================
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_buffer_add_mpegts_pes_metadata_meta(
         buffer: *mut gst::GstBuffer,
     ) -> *mut GstMpegtsPESMetadataMeta;
     pub fn gst_mpegts_dvb_component_descriptor_free(source: *mut GstMpegtsComponentDescriptor);
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_event_new_mpegts_section(section: *mut GstMpegtsSection) -> *mut gst::GstEvent;
     pub fn gst_event_parse_mpegts_section(event: *mut gst::GstEvent) -> *mut GstMpegtsSection;
     pub fn gst_mpegts_find_descriptor(
         descriptors: *mut glib::GPtrArray,
         tag: u8,
     ) -> *const GstMpegtsDescriptor;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_find_descriptor_with_extension(
         descriptors: *mut glib::GPtrArray,
         tag: u8,
@@ -2761,23 +2761,23 @@ extern "C" {
         -> *mut GstMpegtsSection;
     pub fn gst_mpegts_parse_descriptors(buffer: *mut u8, buf_len: size_t) -> *mut glib::GPtrArray;
     pub fn gst_mpegts_pat_new() -> *mut glib::GPtrArray;
-    #[cfg(any(feature = "v1_24", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_24")))]
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_mpegts_pes_metadata_meta_api_get_type() -> GType;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_scte_cancel_new(event_id: u32) -> *mut GstMpegtsSCTESIT;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_scte_null_new() -> *mut GstMpegtsSCTESIT;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_scte_splice_in_new(
         event_id: u32,
         splice_time: gst::GstClockTime,
     ) -> *mut GstMpegtsSCTESIT;
-    #[cfg(any(feature = "v1_20", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_mpegts_scte_splice_out_new(
         event_id: u32,
         splice_time: gst::GstClockTime,
