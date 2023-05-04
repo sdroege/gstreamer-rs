@@ -95,18 +95,6 @@ impl AppSinkCallbacksBuilder {
         }
     }
 
-    pub fn new_propose_allocation<
-        F: FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
-    >(
-        self,
-        new_sample: F,
-    ) -> Self {
-        Self {
-            new_sample: Some(Box::new(new_sample)),
-            ..self
-        }
-    }
-
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn new_event<F: FnMut(&AppSink) -> bool + Send + 'static>(self, new_event: F) -> Self {
