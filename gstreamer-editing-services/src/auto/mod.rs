@@ -45,6 +45,13 @@ pub use self::command_line_formatter::CommandLineFormatter;
 mod container;
 pub use self::container::Container;
 
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+mod discoverer_manager;
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub use self::discoverer_manager::DiscovererManager;
+
 mod effect;
 pub use self::effect::Effect;
 

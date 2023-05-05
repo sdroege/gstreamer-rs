@@ -181,6 +181,10 @@ trait_name = "GESContainerExt"
         bool_return_is_error = "Failed to edit container"
 
 [[object]]
+name = "GES.DiscovererManager"
+status = "generate"
+
+[[object]]
 name = "GES.Effect"
 status = "generate"
     [[object.function]]
