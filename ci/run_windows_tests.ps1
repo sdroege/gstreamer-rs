@@ -38,10 +38,10 @@
 # "" is the default build, no flags appended
 [string[]] $features_matrix = @(
     # "--no-default-features",
-    # "--features=v1_18,",
-    # "--features=v1_20,",
+    # "--features=v1_18",
+    # "--features=v1_20",
     "",
-    "--features=v1_24,"
+    "--all-features"
 )
 
 foreach($features in $features_matrix) {
@@ -54,10 +54,6 @@ foreach($features in $features_matrix) {
         # Don't append feature flags if the string is null/empty
         # Or when we want to build without default features
         if ($env:LocalFeatures -and ($env:LocalFeatures -ne '--no-default-features')) {
-            if ($crate -eq 'gstreamer') {
-                $env:LocalFeatures += "serde,"
-            }
-
             if ($crate -eq 'examples') {
                 # FIXME: We can do --all-features for examples once we have gtk3 installed in the image
                 $env:LocalFeatures = "--features=rtsp-server,rtsp-server-record,pango-cairo,overlay-composition,gst-play,gst-player,ges,image,cairo-rs,gst-video/v1_18,windows"
