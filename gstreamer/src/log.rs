@@ -728,6 +728,7 @@ macro_rules! log_with_level(
             // directly pass it as `&GStr` forward
 
             let obj = unsafe { $obj.unsafe_cast_ref::<$crate::glib::Object>() };
+            let function_name = $crate::glib::function_name!();
 
             // Check if formatting is necessary or not
             // FIXME: This needs to be a closure because the return value of format_args!() can't
@@ -739,7 +740,7 @@ macro_rules! log_with_level(
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        $crate::glib::function_name!(),
+                        function_name,
                         line!(),
                         $crate::glib::gstr!($msg),
                     )
@@ -749,7 +750,7 @@ macro_rules! log_with_level(
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        $crate::glib::function_name!(),
+                        function_name,
                         line!(),
                         args,
                     )
@@ -792,6 +793,7 @@ macro_rules! log_with_level(
 
             let obj = $imp.obj();
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
+            let function_name = $crate::glib::function_name!();
 
             // Check if formatting is necessary or not
             // FIXME: This needs to be a closure because the return value of format_args!() can't
@@ -803,7 +805,7 @@ macro_rules! log_with_level(
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        $crate::glib::function_name!(),
+                        function_name,
                         line!(),
                         $crate::glib::gstr!($msg),
                     )
@@ -813,7 +815,7 @@ macro_rules! log_with_level(
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        $crate::glib::function_name!(),
+                        function_name,
                         line!(),
                         args,
                     )
@@ -853,6 +855,8 @@ macro_rules! log_with_level(
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
+            let function_name = $crate::glib::function_name!();
+
             // Check if formatting is necessary or not
             // FIXME: This needs to be a closure because the return value of format_args!() can't
             // be assigned to a variable
@@ -863,7 +867,7 @@ macro_rules! log_with_level(
                         $crate::glib::gstr!($id),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        $crate::glib::function_name!(),
+                        function_name,
                         line!(),
                         $crate::glib::gstr!($msg),
                     )
@@ -873,7 +877,7 @@ macro_rules! log_with_level(
                         $crate::glib::gstr!($id),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        $crate::glib::function_name!(),
+                        function_name,
                         line!(),
                         args,
                     )
@@ -909,6 +913,8 @@ macro_rules! log_with_level(
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
+            let function_name = $crate::glib::function_name!();
+
             // Check if formatting is necessary or not
             // FIXME: This needs to be a closure because the return value of format_args!() can't
             // be assigned to a variable
@@ -919,7 +925,7 @@ macro_rules! log_with_level(
                         $id,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        $crate::glib::function_name!(),
+                        function_name,
                         line!(),
                         $crate::glib::gstr!($msg),
                     )
@@ -929,7 +935,7 @@ macro_rules! log_with_level(
                         $id,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        $crate::glib::function_name!(),
+                        function_name,
                         line!(),
                         args,
                     )
@@ -965,6 +971,8 @@ macro_rules! log_with_level(
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
+            let function_name = $crate::glib::function_name!();
+
             // Check if formatting is necessary or not
             // FIXME: This needs to be a closure because the return value of format_args!() can't
             // be assigned to a variable
@@ -975,7 +983,7 @@ macro_rules! log_with_level(
                         None as Option<&$crate::glib::Object>,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        $crate::glib::function_name!(),
+                        function_name,
                         line!(),
                         $crate::glib::gstr!($msg),
                     )
@@ -985,7 +993,7 @@ macro_rules! log_with_level(
                         None as Option<&$crate::glib::Object>,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                        $crate::glib::function_name!(),
+                        function_name,
                         line!(),
                         args,
                     )
