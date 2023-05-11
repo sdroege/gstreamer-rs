@@ -48,6 +48,9 @@ impl Scenario {
     }
 }
 
+unsafe impl Send for Scenario {}
+unsafe impl Sync for Scenario {}
+
 mod sealed {
     pub trait Sealed {}
     impl<T: super::IsA<super::Scenario>> Sealed for T {}
@@ -105,10 +108,13 @@ pub trait ScenarioExt: IsA<Scenario> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "action-done")]
-    fn connect_action_done<F: Fn(&Self, &Action) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_action_done<F: Fn(&Self, &Action) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
         unsafe extern "C" fn action_done_trampoline<
             P: IsA<Scenario>,
-            F: Fn(&P, &Action) + 'static,
+            F: Fn(&P, &Action) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstValidateScenario,
             action: *mut ffi::GstValidateAction,
@@ -134,8 +140,11 @@ pub trait ScenarioExt: IsA<Scenario> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "done")]
-    fn connect_done<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn done_trampoline<P: IsA<Scenario>, F: Fn(&P) + 'static>(
+    fn connect_done<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn done_trampoline<
+            P: IsA<Scenario>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GstValidateScenario,
             f: glib::ffi::gpointer,
         ) {
@@ -156,10 +165,13 @@ pub trait ScenarioExt: IsA<Scenario> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "execute-on-idle")]
-    fn connect_execute_on_idle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_execute_on_idle_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
         unsafe extern "C" fn notify_execute_on_idle_trampoline<
             P: IsA<Scenario>,
-            F: Fn(&P) + 'static,
+            F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstValidateScenario,
             _param_spec: glib::ffi::gpointer,
@@ -182,10 +194,13 @@ pub trait ScenarioExt: IsA<Scenario> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "handles-states")]
-    fn connect_handles_states_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_handles_states_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
         unsafe extern "C" fn notify_handles_states_trampoline<
             P: IsA<Scenario>,
-            F: Fn(&P) + 'static,
+            F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstValidateScenario,
             _param_spec: glib::ffi::gpointer,

@@ -30,6 +30,7 @@ workspace = true
 all-features = true
 rustc-args = ["--cfg", "docsrs"]
 rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
+features = []
 
 [package.metadata.system-deps.gstreamer_validate_1_0]
 name = "gstreamer-validate-1.0"

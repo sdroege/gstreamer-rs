@@ -55,4 +55,3 @@ manual = [
 [[object]]
 name = "GstValidate.Scenario"
 status = "generate"
-concurrency = "none"

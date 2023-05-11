@@ -366,6 +366,7 @@ impl<'a> ActionTypeBuilder<'a> {
 }
 
 pub trait ActionTypeExtManual: 'static {
+    #[doc(alias = "gst_validate_get_action_type")]
     fn find(name: &str) -> Option<crate::ActionType>;
 }
 
