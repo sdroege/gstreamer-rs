@@ -9,7 +9,7 @@ SHELL ["powershell","-NoLogo", "-NonInteractive", "-Command"]
 ARG DEFAULT_BRANCH="main"
 ARG RUST_VERSION="invalid"
 
-RUN choco install -y pkgconfiglite nasm llvm
+RUN choco install -y pkgconfiglite nasm llvm openssl
 
 # https://stackoverflow.com/a/50716450
 RUN setx PATH '%PATH%;C:\Program Files\NASM;C:\gst-install\bin'
