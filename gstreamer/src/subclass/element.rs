@@ -585,7 +585,6 @@ mod tests {
             fn with_class(klass: &Self::Class) -> Self {
                 let templ = klass.pad_template("sink").unwrap();
                 let sinkpad = crate::Pad::builder_from_template(&templ)
-                    .name("sink")
                     .chain_function(|pad, parent, buffer| {
                         TestElement::catch_panic_pad_function(
                             parent,
@@ -611,7 +610,6 @@ mod tests {
 
                 let templ = klass.pad_template("src").unwrap();
                 let srcpad = crate::Pad::builder_from_template(&templ)
-                    .name("src")
                     .event_function(|pad, parent, event| {
                         TestElement::catch_panic_pad_function(
                             parent,

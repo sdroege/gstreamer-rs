@@ -34,10 +34,7 @@ fn tutorial_main() -> Result<(), Error> {
     let pad = equalizer
         .static_pad("sink")
         .expect("Failed to get a static pad from equalizer.");
-    let ghost_pad = gst::GhostPad::builder_with_target(&pad)
-        .unwrap()
-        .name("sink")
-        .build();
+    let ghost_pad = gst::GhostPad::builder_with_target(&pad).unwrap().build();
     ghost_pad.set_active(true)?;
     bin.add_pad(&ghost_pad)?;
 

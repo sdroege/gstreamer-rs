@@ -1519,15 +1519,21 @@ unsafe extern "C" fn destroy_closure<F>(ptr: gpointer) {
 
 impl Pad {
     // rustdoc-stripper-ignore-next
-    /// Creates a new [`Pad`] object with a default name.
+    /// Creates a new [`Pad`] with the specified [`PadDirection`](crate::PadDirection).
     ///
-    /// Use [`Pad::builder()`] to get a [`PadBuilder`] and then define a specific name.
+    /// An automatically generated name will be assigned.
+    ///
+    /// Use [`Pad::builder()`] to get a [`PadBuilder`] and define options.
     #[doc(alias = "gst_pad_new")]
     pub fn new(direction: crate::PadDirection) -> Self {
         skip_assert_initialized!();
         Self::builder(direction).build()
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Creates a [`PadBuilder`] with the specified [`PadDirection`](crate::PadDirection).
+    ///
+    /// An automatically generated name will be assigned.
     #[doc(alias = "gst_pad_new")]
     pub fn builder(direction: crate::PadDirection) -> PadBuilder<Self> {
         skip_assert_initialized!();
@@ -1535,15 +1541,31 @@ impl Pad {
     }
 
     // rustdoc-stripper-ignore-next
-    /// Creates a new [`Pad`] object from the [`StaticPadTemplate`](crate::StaticPadTemplate) with a default name.
+    /// Creates a new [`Pad`] from the [`StaticPadTemplate`](crate::StaticPadTemplate).
     ///
-    /// Use [`Pad::builder_from_static_template()`] to get a [`PadBuilder`] and then define a specific name.
+    /// If the [`StaticPadTemplate`](crate::StaticPadTemplate) has a specific `name_template`,
+    /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
+    /// the `Pad` will automatically be named after the `name_template`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the `name_template` is a wildcard-name.
+    ///
+    /// Use [`Pad::builder_from_static_template()`] to get a [`PadBuilder`] and define options.
     #[doc(alias = "gst_pad_new_from_static_template")]
     pub fn from_static_template(templ: &StaticPadTemplate) -> Self {
         skip_assert_initialized!();
         Self::builder_from_static_template(templ).build()
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Creates a new [`PadBuilder`] from the [`StaticPadTemplate`](crate::StaticPadTemplate).
+    ///
+    /// If the [`StaticPadTemplate`](crate::StaticPadTemplate) has a specific `name_template`,
+    /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
+    /// the `Pad` will automatically be named after the `name_template`.
+    ///
+    /// Use [`PadBuilder::name`] or [`PadBuilder::maybe_name`] to specify a different name.
     #[doc(alias = "gst_pad_new_from_static_template")]
     pub fn builder_from_static_template(templ: &StaticPadTemplate) -> PadBuilder<Self> {
         skip_assert_initialized!();
@@ -1551,15 +1573,31 @@ impl Pad {
     }
 
     // rustdoc-stripper-ignore-next
-    /// Creates a new [`Pad`] object from the [`PadTemplate`](crate::PadTemplate) with a default name.
+    /// Creates a new [`Pad`] from the [`PadTemplate`](crate::PadTemplate).
     ///
-    /// Use [`Pad::builder_from_template()`] to get a [`PadBuilder`] and then define a specific name.
+    /// If the [`PadTemplate`](crate::PadTemplate) has a specific `name_template`,
+    /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
+    /// the `Pad` will automatically be named after the `name_template`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the `name_template` is a wildcard-name.
+    ///
+    /// Use [`Pad::builder_from_template()`] to get a [`PadBuilder`] and define options.
     #[doc(alias = "gst_pad_new_from_template")]
     pub fn from_template(templ: &crate::PadTemplate) -> Self {
         skip_assert_initialized!();
         Self::builder_from_template(templ).build()
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Creates a new [`PadBuilder`] from the [`PadTemplate`](crate::PadTemplate).
+    ///
+    /// If the [`PadTemplate`](crate::PadTemplate) has a specific `name_template`,
+    /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
+    /// the `Pad` will automatically be named after the `name_template`.
+    ///
+    /// Use [`PadBuilder::name`] or [`PadBuilder::maybe_name`] to specify a different name.
     #[doc(alias = "gst_pad_new_from_template")]
     pub fn builder_from_template(templ: &crate::PadTemplate) -> PadBuilder<Self> {
         skip_assert_initialized!();
@@ -1614,9 +1652,17 @@ impl Pad {
 }
 
 #[must_use = "The builder must be built to be used"]
-pub struct PadBuilder<T>(pub(crate) T);
+pub struct PadBuilder<T> {
+    pub(crate) pad: T,
+    pub(crate) needs_specific_name: bool,
+}
 
 impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
+    // rustdoc-stripper-ignore-next
+    /// Creates a `PadBuilder` with the specified [`PadDirection`](crate::PadDirection).
+    ///
+    /// An automatically generated name will be assigned. Use [`PadBuilder::name`] or
+    /// [`PadBuilder::maybe_name`] to define a specific name.
     pub fn new(direction: crate::PadDirection) -> Self {
         assert_initialized_main_thread!();
 
@@ -1633,9 +1679,20 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             }
         }
 
-        PadBuilder(pad)
+        PadBuilder {
+            pad,
+            needs_specific_name: false,
+        }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Creates a `PadBuilder` from the specified [`StaticPadTemplate`](crate::StaticPadTemplate).
+    ///
+    /// If the [`StaticPadTemplate`](crate::StaticPadTemplate) has a specific `name_template`,
+    /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
+    /// the `Pad` will automatically be named after the `name_template`.
+    ///
+    /// Use [`PadBuilder::name`] or [`PadBuilder::maybe_name`] to specify a different name.
     pub fn from_static_template(templ: &StaticPadTemplate) -> Self {
         skip_assert_initialized!();
 
@@ -1643,6 +1700,14 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         Self::from_template(&templ)
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Creates a `PadBuilder` from the specified [`PadTemplate`](crate::PadTemplate).
+    ///
+    /// If the [`PadTemplate`](crate::PadTemplate) has a specific `name_template`,
+    /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
+    /// the `Pad` will automatically be named after the `name_template`.
+    ///
+    /// Use [`PadBuilder::name`] or [`PadBuilder::maybe_name`] to specify a different name.
     pub fn from_template(templ: &crate::PadTemplate) -> Self {
         assert_initialized_main_thread!();
 
@@ -1682,13 +1747,40 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             }
         }
 
-        PadBuilder(pad)
+        let needs_specific_name = if templ.name().find('%').is_some() {
+            // Pad needs a specific name
+            true
+        } else {
+            pad.set_property("name", templ.name());
+            false
+        };
+
+        PadBuilder {
+            pad,
+            needs_specific_name,
+        }
     }
 
-    pub fn name(self, name: impl Into<glib::GString>) -> Self {
-        self.0.set_property("name", name.into());
+    // rustdoc-stripper-ignore-next
+    /// Sets the name of the Pad.
+    pub fn name(mut self, name: impl glib::IntoGStr) -> Self {
+        name.run_with_gstr(|name| self.pad.set_property("name", name));
+        self.needs_specific_name = false;
 
         self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Optionally sets the name of the Pad.
+    ///
+    /// This method is convenient when the `name` is provided as an `Option`.
+    /// If the `name` is `None`, this has no effect.
+    pub fn maybe_name<N: glib::IntoGStr>(self, name: Option<N>) -> Self {
+        if let Some(name) = name {
+            self.name(name)
+        } else {
+            self
+        }
     }
 
     #[doc(alias = "gst_pad_set_activate_function")]
@@ -1697,7 +1789,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         F: Fn(&T, Option<&crate::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
     {
         unsafe {
-            self.0.set_activate_function(func);
+            self.pad.set_activate_function(func);
         }
 
         self
@@ -1712,7 +1804,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             + 'static,
     {
         unsafe {
-            self.0.set_activatemode_function(func);
+            self.pad.set_activatemode_function(func);
         }
 
         self
@@ -1727,7 +1819,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             + 'static,
     {
         unsafe {
-            self.0.set_chain_function(func);
+            self.pad.set_chain_function(func);
         }
 
         self
@@ -1742,7 +1834,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             + 'static,
     {
         unsafe {
-            self.0.set_chain_list_function(func);
+            self.pad.set_chain_list_function(func);
         }
 
         self
@@ -1754,7 +1846,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         F: Fn(&T, Option<&crate::Object>, crate::Event) -> bool + Send + Sync + 'static,
     {
         unsafe {
-            self.0.set_event_function(func);
+            self.pad.set_event_function(func);
         }
 
         self
@@ -1769,7 +1861,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             + 'static,
     {
         unsafe {
-            self.0.set_event_full_function(func);
+            self.pad.set_event_full_function(func);
         }
 
         self
@@ -1790,7 +1882,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             + 'static,
     {
         unsafe {
-            self.0.set_getrange_function(func);
+            self.pad.set_getrange_function(func);
         }
 
         self
@@ -1802,7 +1894,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         F: Fn(&T, Option<&crate::Object>) -> crate::Iterator<Pad> + Send + Sync + 'static,
     {
         unsafe {
-            self.0.set_iterate_internal_links_function(func);
+            self.pad.set_iterate_internal_links_function(func);
         }
 
         self
@@ -1821,7 +1913,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             + 'static,
     {
         unsafe {
-            self.0.set_link_function(func);
+            self.pad.set_link_function(func);
         }
 
         self
@@ -1833,7 +1925,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         F: Fn(&T, Option<&crate::Object>, &mut crate::QueryRef) -> bool + Send + Sync + 'static,
     {
         unsafe {
-            self.0.set_query_function(func);
+            self.pad.set_query_function(func);
         }
 
         self
@@ -1845,21 +1937,40 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         F: Fn(&T, Option<&crate::Object>) + Send + Sync + 'static,
     {
         unsafe {
-            self.0.set_unlink_function(func);
+            self.pad.set_unlink_function(func);
         }
 
         self
     }
 
     pub fn flags(self, flags: PadFlags) -> Self {
-        self.0.set_pad_flags(flags);
+        self.pad.set_pad_flags(flags);
 
         self
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Builds the [`Pad`].
+    ///
+    /// # Panics
+    ///
+    /// Panics if the [`Pad`] was built from a [`PadTemplate`](crate::PadTemplate)
+    /// with a wildcard-name `name_template` (i.e. containing `%u`, `%s` or `%d`)
+    /// and no specific `name` was provided using [`PadBuilder::name`]
+    /// or [`PadBuilder::maybe_name`], or for [`GhostPad`s](crate::GhostPad),
+    /// by defining a `target`.
     #[must_use = "Building the pad without using it has no effect"]
+    #[track_caller]
     pub fn build(self) -> T {
-        self.0
+        if self.needs_specific_name {
+            panic!(concat!(
+                "Attempt to build a Pad from a wildcard-name template",
+                " or with a target Pad with an incompatible name.",
+                " Make sure to define a specific name using PadBuilder.",
+            ));
+        }
+
+        self.pad
     }
 }
 
@@ -2274,8 +2385,42 @@ mod tests {
     }
 
     #[test]
-    fn from_template() {
+    fn naming() {
         crate::init().unwrap();
+
+        let pad = crate::Pad::builder(crate::PadDirection::Sink).build();
+        assert!(pad.name().starts_with("pad"));
+
+        let pad = crate::Pad::builder(crate::PadDirection::Src).build();
+        assert!(pad.name().starts_with("pad"));
+
+        let pad = crate::Pad::builder(crate::PadDirection::Unknown).build();
+        assert!(pad.name().starts_with("pad"));
+
+        let pad = crate::Pad::builder(crate::PadDirection::Unknown)
+            .maybe_name(None::<&str>)
+            .build();
+        assert!(pad.name().starts_with("pad"));
+
+        let pad = crate::Pad::builder(crate::PadDirection::Sink)
+            .name("sink_0")
+            .build();
+        assert_eq!(pad.name(), "sink_0");
+
+        let pad = crate::Pad::builder(crate::PadDirection::Src)
+            .name("src_0")
+            .build();
+        assert_eq!(pad.name(), "src_0");
+
+        let pad = crate::Pad::builder(crate::PadDirection::Unknown)
+            .name("test")
+            .build();
+        assert_eq!(pad.name(), "test");
+
+        let pad = crate::Pad::builder(crate::PadDirection::Unknown)
+            .maybe_name(Some("test"))
+            .build();
+        assert_eq!(pad.name(), "test");
 
         let caps = crate::Caps::new_any();
         let templ = crate::PadTemplate::new(
@@ -2287,12 +2432,41 @@ mod tests {
         .unwrap();
 
         let pad = Pad::from_template(&templ);
-        assert!(pad.name().starts_with("pad"));
+        assert!(pad.name().starts_with("sink"));
 
-        let pad = Pad::builder_from_template(&templ).build();
-        assert!(pad.name().starts_with("pad"));
+        let pad = Pad::builder_from_template(&templ)
+            .name("audio_sink")
+            .build();
+        assert!(pad.name().starts_with("audio_sink"));
 
-        let pad = Pad::builder_from_template(&templ).name("sink").build();
-        assert_eq!(pad.name(), "sink");
+        let templ = crate::PadTemplate::new(
+            "audio_%u",
+            crate::PadDirection::Sink,
+            crate::PadPresence::Request,
+            &caps,
+        )
+        .unwrap();
+
+        let pad = Pad::builder_from_template(&templ).name("audio_0").build();
+        assert!(pad.name().starts_with("audio_0"));
+    }
+
+    #[test]
+    #[should_panic]
+    fn missing_name() {
+        crate::init().unwrap();
+
+        let caps = crate::Caps::new_any();
+        let templ = crate::PadTemplate::new(
+            "audio_%u",
+            crate::PadDirection::Sink,
+            crate::PadPresence::Request,
+            &caps,
+        )
+        .unwrap();
+
+        // Panic: attempt to build from a wildcard-named template
+        //        without providing a name.
+        let _pad = Pad::from_template(&templ);
     }
 }
