@@ -723,11 +723,13 @@ macro_rules! memdump(
 #[macro_export]
 macro_rules! log_with_level(
     ($cat:expr, level: $level:expr, obj: $obj:expr, $msg:literal) => { {
+        let cat = $cat.clone();
+
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         #[allow(clippy::redundant_closure_call)]
-        if $cat.above_threshold($level) {
+        if cat.above_threshold($level) {
             use $crate::glib::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
@@ -742,7 +744,7 @@ macro_rules! log_with_level(
             (|args: std::fmt::Arguments| {
                 if args.as_str().is_some() {
                     $crate::DebugCategory::log_literal_unfiltered(
-                        $cat.clone(),
+                        cat,
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -752,7 +754,7 @@ macro_rules! log_with_level(
                     )
                 } else {
                     $crate::DebugCategory::log_unfiltered(
-                        $cat.clone(),
+                        cat,
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -765,10 +767,12 @@ macro_rules! log_with_level(
         }
     }};
     ($cat:expr, level: $level:expr, obj: $obj:expr, $($args:tt)*) => { {
+        let cat = $cat.clone();
+
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $cat.above_threshold($level) {
+        if cat.above_threshold($level) {
             use $crate::glib::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
@@ -776,7 +780,7 @@ macro_rules! log_with_level(
 
             let obj = unsafe { $obj.unsafe_cast_ref::<$crate::glib::Object>() };
             $crate::DebugCategory::log_unfiltered(
-                $cat.clone(),
+                cat,
                 Some(obj),
                 $level,
                 unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -787,11 +791,13 @@ macro_rules! log_with_level(
         }
     }};
     ($cat:expr, level: $level:expr, imp: $imp:expr, $msg:literal) => { {
+        let cat = $cat.clone();
+
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         #[allow(clippy::redundant_closure_call)]
-        if $cat.above_threshold($level) {
+        if cat.above_threshold($level) {
             use $crate::glib::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
@@ -807,7 +813,7 @@ macro_rules! log_with_level(
             (|args: std::fmt::Arguments| {
                 if args.as_str().is_some() {
                     $crate::DebugCategory::log_literal_unfiltered(
-                        $cat.clone(),
+                        cat,
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -817,7 +823,7 @@ macro_rules! log_with_level(
                     )
                 } else {
                     $crate::DebugCategory::log_unfiltered(
-                        $cat.clone(),
+                        cat,
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -830,10 +836,12 @@ macro_rules! log_with_level(
         }
     }};
     ($cat:expr, level: $level:expr, imp: $imp:expr, $($args:tt)*) => { {
+        let cat = $cat.clone();
+
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $cat.above_threshold($level) {
+        if cat.above_threshold($level) {
             use $crate::glib::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
@@ -842,7 +850,7 @@ macro_rules! log_with_level(
             let obj = $imp.obj();
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
             $crate::DebugCategory::log_unfiltered(
-                $cat.clone(),
+                cat,
                 Some(obj),
                 $level,
                 unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -853,11 +861,13 @@ macro_rules! log_with_level(
         }
     }};
     ($cat:expr, level: $level:expr, id: $id:literal, $msg:literal) => { {
+        let cat = $cat.clone();
+
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         #[allow(clippy::redundant_closure_call)]
-        if $cat.above_threshold($level) {
+        if cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
@@ -869,7 +879,7 @@ macro_rules! log_with_level(
             (|args: std::fmt::Arguments| {
                 if args.as_str().is_some() {
                     $crate::DebugCategory::log_id_literal_unfiltered(
-                        $cat.clone(),
+                        cat,
                         $crate::glib::gstr!($id),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -879,7 +889,7 @@ macro_rules! log_with_level(
                     )
                 } else {
                     $crate::DebugCategory::log_id_unfiltered(
-                        $cat.clone(),
+                        cat,
                         $crate::glib::gstr!($id),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -892,15 +902,17 @@ macro_rules! log_with_level(
         }
     }};
     ($cat:expr, level: $level:expr, id: $id:literal, $($args:tt)*) => { {
+        let cat = $cat.clone();
+
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $cat.above_threshold($level) {
+        if cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
             $crate::DebugCategory::log_id_unfiltered(
-                $cat.clone(),
+                cat,
                 $crate::glib::gstr!($id),
                 $level,
                 unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -911,11 +923,13 @@ macro_rules! log_with_level(
         }
     }};
     ($cat:expr, level: $level:expr, id: $id:expr, $msg:literal) => { {
+        let cat = $cat.clone();
+
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         #[allow(clippy::redundant_closure_call)]
-        if $cat.above_threshold($level) {
+        if cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
@@ -927,7 +941,7 @@ macro_rules! log_with_level(
             (|args: std::fmt::Arguments| {
                 if args.as_str().is_some() {
                     $crate::DebugCategory::log_id_literal_unfiltered(
-                        $cat.clone(),
+                        cat,
                         $id,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -937,7 +951,7 @@ macro_rules! log_with_level(
                     )
                 } else {
                     $crate::DebugCategory::log_id_unfiltered(
-                        $cat.clone(),
+                        cat,
                         $id,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -950,15 +964,17 @@ macro_rules! log_with_level(
         }
     }};
     ($cat:expr, level: $level:expr, id: $id:expr, $($args:tt)*) => { {
+        let cat = $cat.clone();
+
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $cat.above_threshold($level) {
+        if cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
             $crate::DebugCategory::log_id_unfiltered(
-                $cat.clone(),
+                cat,
                 $id,
                 $level,
                 unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -969,11 +985,13 @@ macro_rules! log_with_level(
         }
     }};
     ($cat:expr, level: $level:expr, $msg:literal) => { {
+        let cat = $cat.clone();
+
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         #[allow(clippy::redundant_closure_call)]
-        if $cat.above_threshold($level) {
+        if cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
@@ -985,7 +1003,7 @@ macro_rules! log_with_level(
             (|args: std::fmt::Arguments| {
                 if args.as_str().is_some() {
                     $crate::DebugCategory::log_literal_unfiltered(
-                        $cat.clone(),
+                        cat,
                         None as Option<&$crate::glib::Object>,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -995,7 +1013,7 @@ macro_rules! log_with_level(
                     )
                 } else {
                     $crate::DebugCategory::log_unfiltered(
-                        $cat.clone(),
+                        cat,
                         None as Option<&$crate::glib::Object>,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -1008,15 +1026,17 @@ macro_rules! log_with_level(
         }
     }};
     ($cat:expr, level: $level:expr, $($args:tt)*) => { {
+        let cat = $cat.clone();
+
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if $cat.above_threshold($level) {
+        if cat.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
             $crate::DebugCategory::log_unfiltered(
-                $cat.clone(),
+                cat,
                 None as Option<&$crate::glib::Object>,
                 $level,
                 unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
