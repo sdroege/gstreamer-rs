@@ -595,128 +595,128 @@ declare_debug_category_from_name!(CAT_CONTEXT, "GST_CONTEXT");
 #[macro_export]
 macro_rules! error(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Error, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Error, obj: $obj, $($args)*)
     }};
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Error, imp: $imp, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Error, imp: $imp, $($args)*)
     }};
     ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Error, id: $id, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Error, id: $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Error, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Error, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! warning(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Warning, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Warning, obj: $obj, $($args)*)
     }};
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Warning, imp: $imp, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Warning, imp: $imp, $($args)*)
     }};
     ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Warning, id: $id, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Warning, id: $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Warning, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Warning, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! fixme(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Fixme, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Fixme, obj: $obj, $($args)*)
     }};
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Fixme, imp: $imp, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Fixme, imp: $imp, $($args)*)
     }};
     ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Fixme, id: $id, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Fixme, id: $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Fixme, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Fixme, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! info(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Info, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Info, obj: $obj, $($args)*)
     }};
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Info, imp: $imp, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Info, imp: $imp, $($args)*)
     }};
     ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Info, id: $id, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Info, id: $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Info, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Info, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! debug(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Debug, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Debug, obj: $obj, $($args)*)
     }};
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Debug, imp: $imp, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Debug, imp: $imp, $($args)*)
     }};
     ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Debug, id: $id, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Debug, id: $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Debug, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Debug, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! log(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Log, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Log, obj: $obj, $($args)*)
     }};
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Log, imp: $imp, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Log, imp: $imp, $($args)*)
     }};
     ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Log, id: $id, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Log, id: $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Log, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Log, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! trace(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Trace, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Trace, obj: $obj, $($args)*)
     }};
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Trace, imp: $imp, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Trace, imp: $imp, $($args)*)
     }};
     ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Trace, id: $id, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Trace, id: $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Trace, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Trace, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! memdump(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Memdump, obj: $obj, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Memdump, obj: $obj, $($args)*)
     }};
     ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Memdump, imp: $imp, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Memdump, imp: $imp, $($args)*)
     }};
     ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Memdump, id: $id, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Memdump, id: $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat.clone(), level: $crate::DebugLevel::Memdump, $($args)*)
+        $crate::log_with_level!($cat, level: $crate::DebugLevel::Memdump, $($args)*)
     }};
 );
 
