@@ -2,7 +2,7 @@
 
 use std::{borrow::Cow, ffi::CStr, fmt, ptr};
 
-use glib::{ffi::gpointer, prelude::*, translate::*, IntoGStr};
+use glib::{ffi::gpointer, prelude::*, translate::*, IntoGStr, IntoOptionalGStr};
 use libc::c_char;
 use once_cell::sync::Lazy;
 
@@ -75,11 +75,16 @@ impl DebugCategory {
 
         // Gets the category if it exists already
         unsafe {
-            let ptr = _gst_debug_category_new(
-                name.to_glib_none().0,
-                color.into_glib(),
-                description.to_glib_none().0,
-            );
+            let ptr = name.run_with_gstr(|name| {
+                description.run_with_gstr(|description| {
+                    _gst_debug_category_new(
+                        name.to_glib_none().0,
+                        color.into_glib(),
+                        description.to_glib_none().0,
+                    )
+                })
+            });
+
             // Can be NULL if the debug system is compiled out
             DebugCategory(ptr::NonNull::new(ptr))
         }
@@ -94,7 +99,7 @@ impl DebugCategory {
                 fn _gst_debug_get_category(name: *const c_char) -> *mut ffi::GstDebugCategory;
             }
 
-            let cat = _gst_debug_get_category(name.to_glib_none().0);
+            let cat = name.run_with_gstr(|name| _gst_debug_get_category(name.to_glib_none().0));
 
             if cat.is_null() {
                 None
