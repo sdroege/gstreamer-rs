@@ -52,6 +52,7 @@ impl DebugMessage {
 
 #[derive(PartialEq, Eq, Clone, Copy)]
 #[doc(alias = "GstDebugCategory")]
+#[repr(transparent)]
 pub struct DebugCategory(Option<ptr::NonNull<ffi::GstDebugCategory>>);
 
 impl DebugCategory {
