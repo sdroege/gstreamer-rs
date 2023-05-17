@@ -60,5 +60,6 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst::prelude::*;
 
+    pub use crate::action_type::ActionTypeExtManual;
     pub use crate::auto::traits::*;
 }

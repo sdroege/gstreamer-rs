@@ -365,6 +365,25 @@ impl<'a> ActionTypeBuilder<'a> {
     }
 }
 
+pub trait ActionTypeExtManual: 'static {
+    fn find(name: &str) -> Option<crate::ActionType>;
+}
+
+impl ActionTypeExtManual for crate::ActionType {
+    fn find(name: &str) -> Option<crate::ActionType> {
+        assert_initialized_main_thread!();
+        unsafe {
+            let action_type = ffi::gst_validate_get_action_type(name.to_glib_none().0);
+
+            if action_type.is_null() {
+                None
+            } else {
+                Some(from_glib_full(action_type))
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::{
@@ -375,6 +394,7 @@ mod tests {
     #[test]
     fn test_action_types() {
         gst::init().unwrap();
+        use crate::prelude::*;
         crate::init();
 
         let failling_action_type = crate::ActionTypeBuilder::new("fails", |_, action| {
@@ -441,5 +461,7 @@ mod tests {
             .default_value("true")
             .add_possible_variable("position")
             .build();
+
+        crate::ActionType::find("succeeds").expect("Failed to find action type");
     }
 }
