@@ -25,6 +25,15 @@ impl ActionRef {
             gst::StructureRef::from_glib_borrow_mut((*action).structure)
         }
     }
+
+    #[doc(alias = "gst_validate_action_set_done")]
+    pub fn set_done(&self) {
+        unsafe {
+            let action = self.as_mut_ptr();
+
+            ffi::gst_validate_action_set_done(action);
+        }
+    }
 }
 
 impl Action {
