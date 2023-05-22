@@ -200,7 +200,6 @@ pub enum QueryViewMut<'a> {
 
 macro_rules! declare_concrete_query(
     ($name:ident, $param:ident) => {
-        #[derive(Debug)]
         #[repr(transparent)]
         pub struct $name<$param = QueryRef>($param);
 
@@ -351,6 +350,16 @@ impl Position {
     }
 }
 
+impl std::fmt::Debug for Position {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Position")
+            .field("structure", &self.query().structure())
+            .field("result", &self.result())
+            .field("format", &self.format())
+            .finish()
+    }
+}
+
 declare_concrete_query!(Duration, T);
 impl Duration<Query> {
     #[doc(alias = "gst_query_new_duration")]
@@ -396,6 +405,16 @@ impl Duration {
                 dur.into_raw_value(),
             );
         }
+    }
+}
+
+impl std::fmt::Debug for Duration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Duration")
+            .field("structure", &self.query().structure())
+            .field("result", &self.result())
+            .field("format", &self.format())
+            .finish()
     }
 }
 
@@ -453,6 +472,15 @@ impl Latency {
                 max.into().into_glib(),
             );
         }
+    }
+}
+
+impl std::fmt::Debug for Latency {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Latency")
+            .field("structure", &self.query().structure())
+            .field("result", &self.result())
+            .finish()
     }
 }
 
@@ -529,6 +557,16 @@ impl Seeking {
     }
 }
 
+impl std::fmt::Debug for Seeking {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Seeking")
+            .field("structure", &self.query().structure())
+            .field("result", &self.result())
+            .field("format", &self.format())
+            .finish()
+    }
+}
+
 declare_concrete_query!(Segment, T);
 impl Segment<Query> {
     #[doc(alias = "gst_query_new_segment")]
@@ -598,6 +636,16 @@ impl Segment {
                 stop.into_raw_value(),
             );
         }
+    }
+}
+
+impl std::fmt::Debug for Segment {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Segment")
+            .field("structure", &self.query().structure())
+            .field("result", &self.result())
+            .field("format", &self.format())
+            .finish()
     }
 }
 
@@ -675,6 +723,18 @@ impl Convert {
     }
 }
 
+impl std::fmt::Debug for Convert {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let (source, dest) = self.result();
+
+        f.debug_struct("Convert")
+            .field("structure", &self.query().structure())
+            .field("source", &source)
+            .field("dest", &dest)
+            .finish()
+    }
+}
+
 declare_concrete_query!(Formats, T);
 impl Formats<Query> {
     #[doc(alias = "gst_query_new_formats")]
@@ -718,6 +778,15 @@ impl Formats {
             let v: Vec<_> = formats.iter().map(|f| f.into_glib()).collect();
             ffi::gst_query_set_formatsv(self.as_mut_ptr(), v.len() as i32, v.as_ptr() as *mut _);
         }
+    }
+}
+
+impl std::fmt::Debug for Formats {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Formats")
+            .field("structure", &self.query().structure())
+            .field("result", &self.result())
+            .finish()
     }
 }
 
@@ -927,6 +996,17 @@ impl Buffering {
     }
 }
 
+impl std::fmt::Debug for Buffering {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Buffering")
+            .field("structure", &self.query().structure())
+            .field("format", &self.format())
+            .field("percent", &self.percent())
+            .field("range", &self.range())
+            .finish()
+    }
+}
+
 declare_concrete_query!(Custom, T);
 impl Custom<Query> {
     #[doc(alias = "gst_query_new_custom")]
@@ -938,6 +1018,14 @@ impl Custom<Query> {
                 structure.into_glib_ptr(),
             )))
         }
+    }
+}
+
+impl std::fmt::Debug for Custom {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Custom")
+            .field("structure", &self.query().structure())
+            .finish()
     }
 }
 
@@ -1013,6 +1101,18 @@ impl Uri {
                 permanent.into_glib(),
             );
         }
+    }
+}
+
+impl std::fmt::Debug for Uri {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let (redirection, permanent) = self.redirection();
+        f.debug_struct("Uri")
+            .field("structure", &self.query().structure())
+            .field("uri", &self.uri())
+            .field("redirection", &redirection)
+            .field("redirection-permanent", &permanent)
+            .finish()
     }
 }
 
@@ -1279,6 +1379,20 @@ impl Allocation {
     }
 }
 
+impl std::fmt::Debug for Allocation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let (caps, need_pool) = self.get();
+        f.debug_struct("Allocation")
+            .field("structure", &self.query().structure())
+            .field("caps", &caps)
+            .field("need-pool", &need_pool)
+            .field("allocation-params", &self.allocation_params())
+            .field("allocation-pools", &self.allocation_pools())
+            .field("allocation-metas", &self.allocation_metas())
+            .finish()
+    }
+}
+
 declare_concrete_query!(Scheduling, T);
 impl Scheduling<Query> {
     #[doc(alias = "gst_query_new_scheduling")]
@@ -1387,6 +1501,16 @@ impl Scheduling {
     }
 }
 
+impl std::fmt::Debug for Scheduling {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Scheduling")
+            .field("structure", &self.query().structure())
+            .field("result", &self.result())
+            .field("scheduling-modes", &self.scheduling_modes())
+            .finish()
+    }
+}
+
 declare_concrete_query!(AcceptCaps, T);
 impl AcceptCaps<Query> {
     #[doc(alias = "gst_query_new_accept_caps")]
@@ -1432,6 +1556,16 @@ impl AcceptCaps {
         unsafe {
             ffi::gst_query_set_accept_caps_result(self.as_mut_ptr(), accepted.into_glib());
         }
+    }
+}
+
+impl std::fmt::Debug for AcceptCaps {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("AcceptCaps")
+            .field("structure", &self.query().structure())
+            .field("result", &self.result())
+            .field("caps", &self.caps())
+            .finish()
     }
 }
 
@@ -1502,6 +1636,16 @@ impl Caps {
     }
 }
 
+impl std::fmt::Debug for Caps {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Caps")
+            .field("structure", &self.query().structure())
+            .field("result", &self.result())
+            .field("filter", &self.filter())
+            .finish()
+    }
+}
+
 declare_concrete_query!(Drain, T);
 impl Drain<Query> {
     #[doc(alias = "gst_query_new_drain")]
@@ -1514,6 +1658,14 @@ impl Drain<Query> {
 impl Default for Drain<Query> {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl std::fmt::Debug for Drain {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Drain")
+            .field("structure", &self.query().structure())
+            .finish()
     }
 }
 
@@ -1578,6 +1730,16 @@ impl Context {
     }
 }
 
+impl std::fmt::Debug for Context {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Context")
+            .field("structure", &self.query().structure())
+            .field("context", &self.context())
+            .field("context-type", &self.context_type())
+            .finish()
+    }
+}
+
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 declare_concrete_query!(Bitrate, T);
@@ -1618,6 +1780,16 @@ impl Bitrate {
         unsafe {
             ffi::gst_query_set_bitrate(self.as_mut_ptr(), bitrate);
         }
+    }
+}
+
+#[cfg(feature = "v1_16")]
+impl std::fmt::Debug for Bitrate {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Bitrate")
+            .field("structure", &self.query().structure())
+            .field("bitrate", &self.bitrate())
+            .finish()
     }
 }
 
@@ -1664,7 +1836,25 @@ impl Selectable {
     }
 }
 
+#[cfg(feature = "v1_22")]
+impl std::fmt::Debug for Selectable {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Selectable")
+            .field("structure", &self.query().structure())
+            .field("selectable", &self.selectable())
+            .finish()
+    }
+}
+
 declare_concrete_query!(Other, T);
+
+impl std::fmt::Debug for Other {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Other")
+            .field("structure", &self.query().structure())
+            .finish()
+    }
+}
 
 #[cfg(test)]
 mod tests {
