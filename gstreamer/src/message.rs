@@ -232,7 +232,6 @@ pub enum MessageView<'a> {
 
 macro_rules! declare_concrete_message(
     ($name:ident, $param:ident) => {
-        #[derive(Debug)]
         #[repr(transparent)]
         pub struct $name<$param = MessageRef>($param);
 
@@ -319,6 +318,14 @@ impl Eos {
     }
 }
 
+impl std::fmt::Debug for Eos {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Eos")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .finish()
+    }
+}
+
 declare_concrete_message!(Error, T);
 impl Error {
     #[doc(alias = "gst_message_new_error")]
@@ -391,6 +398,17 @@ impl Error {
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.error())
+    }
+}
+
+impl std::fmt::Debug for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Error")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("error", &self.error())
+            .field("debug", &self.debug())
+            .field("details", &self.details())
+            .finish()
     }
 }
 
@@ -470,6 +488,17 @@ impl std::fmt::Display for Warning {
     }
 }
 
+impl std::fmt::Debug for Warning {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Warning")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("error", &self.error())
+            .field("debug", &self.debug())
+            .field("details", &self.details())
+            .finish()
+    }
+}
+
 declare_concrete_message!(Info, T);
 impl Info {
     #[doc(alias = "gst_message_new_info")]
@@ -546,6 +575,17 @@ impl std::fmt::Display for Info {
     }
 }
 
+impl std::fmt::Debug for Info {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Info")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("error", &self.error())
+            .field("debug", &self.debug())
+            .field("details", &self.details())
+            .finish()
+    }
+}
+
 declare_concrete_message!(Tag, T);
 impl Tag {
     #[doc(alias = "gst_message_new_tag")]
@@ -568,6 +608,15 @@ impl Tag {
             ffi::gst_message_parse_tag(self.as_mut_ptr(), &mut tags);
             from_glib_full(tags)
         }
+    }
+}
+
+impl std::fmt::Debug for Tag {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Tag")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("tags", &self.tags())
+            .finish()
     }
 }
 
@@ -619,6 +668,16 @@ impl Buffering {
                 buffering_left.assume_init(),
             )
         }
+    }
+}
+
+impl std::fmt::Debug for Buffering {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Buffering")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("percent", &self.percent())
+            .field("buffering-stats", &self.buffering_stats())
+            .finish()
     }
 }
 
@@ -692,6 +751,17 @@ impl StateChanged {
     }
 }
 
+impl std::fmt::Debug for StateChanged {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("StateChanged")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("old", &self.old())
+            .field("current", &self.current())
+            .field("pending", &self.pending())
+            .finish()
+    }
+}
+
 declare_concrete_message!(StateDirty, T);
 impl StateDirty {
     #[doc(alias = "gst_message_new_state_dirty")]
@@ -704,6 +774,14 @@ impl StateDirty {
     pub fn builder<'a>() -> StateDirtyBuilder<'a> {
         assert_initialized_main_thread!();
         StateDirtyBuilder::new()
+    }
+}
+
+impl std::fmt::Debug for StateDirty {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("StateDirty")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .finish()
     }
 }
 
@@ -788,6 +866,21 @@ impl StepDone {
     }
 }
 
+impl std::fmt::Debug for StepDone {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let (format, rate, flush, intermediate, duration, eos) = self.get();
+        f.debug_struct("StepDone")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("format", &format)
+            .field("rate", &rate)
+            .field("flush", &flush)
+            .field("intermediate", &intermediate)
+            .field("duration", &duration)
+            .field("eos", &eos)
+            .finish()
+    }
+}
+
 declare_concrete_message!(ClockProvide, T);
 impl ClockProvide {
     #[doc(alias = "gst_message_new_clock_provide")]
@@ -831,6 +924,16 @@ impl ClockProvide {
     }
 }
 
+impl std::fmt::Debug for ClockProvide {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ClockProvide")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("clock", &self.clock())
+            .field("is-ready", &self.is_ready())
+            .finish()
+    }
+}
+
 declare_concrete_message!(ClockLost, T);
 impl ClockLost {
     #[doc(alias = "gst_message_new_clock_lost")]
@@ -858,6 +961,15 @@ impl ClockLost {
     }
 }
 
+impl std::fmt::Debug for ClockLost {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ClockLost")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("clock", &self.clock())
+            .finish()
+    }
+}
+
 declare_concrete_message!(NewClock, T);
 impl NewClock {
     #[doc(alias = "gst_message_new_new_clock")]
@@ -882,6 +994,15 @@ impl NewClock {
 
             from_glib_none(clock)
         }
+    }
+}
+
+impl std::fmt::Debug for NewClock {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("NewClock")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("clock", &self.clock())
+            .finish()
     }
 }
 
@@ -926,6 +1047,19 @@ impl StructureChange {
     }
 }
 
+impl std::fmt::Debug for StructureChange {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let (type_, owner, busy) = self.get();
+
+        f.debug_struct("StructureChange")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("type", &type_)
+            .field("owner", &owner)
+            .field("busy", &busy)
+            .finish()
+    }
+}
+
 declare_concrete_message!(StreamStatus, T);
 impl StreamStatus {
     #[doc(alias = "gst_message_new_stream_status")]
@@ -963,6 +1097,15 @@ impl StreamStatus {
     }
 }
 
+impl std::fmt::Debug for StreamStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("StreamStatus")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("status", &self.stream_status_object())
+            .finish()
+    }
+}
+
 declare_concrete_message!(Application, T);
 impl Application {
     #[doc(alias = "gst_message_new_application")]
@@ -978,6 +1121,14 @@ impl Application {
     }
 }
 
+impl std::fmt::Debug for Application {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Application")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .finish()
+    }
+}
+
 declare_concrete_message!(Element, T);
 impl Element {
     #[doc(alias = "gst_message_new_element")]
@@ -990,6 +1141,14 @@ impl Element {
     pub fn builder<'a>(structure: crate::Structure) -> ElementBuilder<'a> {
         assert_initialized_main_thread!();
         ElementBuilder::new(structure)
+    }
+}
+
+impl std::fmt::Debug for Element {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Element")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .finish()
     }
 }
 
@@ -1024,6 +1183,15 @@ impl SegmentStart {
     }
 }
 
+impl std::fmt::Debug for SegmentStart {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("SegmentStart")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("segment", &self.get())
+            .finish()
+    }
+}
+
 declare_concrete_message!(SegmentDone, T);
 impl SegmentDone {
     #[doc(alias = "gst_message_new_segment_done")]
@@ -1055,6 +1223,15 @@ impl SegmentDone {
     }
 }
 
+impl std::fmt::Debug for SegmentDone {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("SegmentDone")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("segment", &self.get())
+            .finish()
+    }
+}
+
 declare_concrete_message!(DurationChanged, T);
 impl DurationChanged {
     #[doc(alias = "gst_message_new_duration_changed")]
@@ -1067,6 +1244,14 @@ impl DurationChanged {
     pub fn builder<'a>() -> DurationChangedBuilder<'a> {
         assert_initialized_main_thread!();
         DurationChangedBuilder::new()
+    }
+}
+
+impl std::fmt::Debug for DurationChanged {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("DurationChanged")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .finish()
     }
 }
 
@@ -1085,6 +1270,14 @@ impl Latency {
     }
 }
 
+impl std::fmt::Debug for Latency {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Latency")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .finish()
+    }
+}
+
 declare_concrete_message!(AsyncStart, T);
 impl AsyncStart {
     #[doc(alias = "gst_message_new_async_start")]
@@ -1097,6 +1290,14 @@ impl AsyncStart {
     pub fn builder<'a>() -> AsyncStartBuilder<'a> {
         assert_initialized_main_thread!();
         AsyncStartBuilder::new()
+    }
+}
+
+impl std::fmt::Debug for AsyncStart {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("AsyncStart")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .finish()
     }
 }
 
@@ -1127,6 +1328,15 @@ impl AsyncDone {
     }
 }
 
+impl std::fmt::Debug for AsyncDone {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("AsyncDone")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("running-time", &self.running_time())
+            .finish()
+    }
+}
+
 declare_concrete_message!(RequestState, T);
 impl RequestState {
     #[doc(alias = "gst_message_new_request_state")]
@@ -1151,6 +1361,15 @@ impl RequestState {
 
             from_glib(state.assume_init())
         }
+    }
+}
+
+impl std::fmt::Debug for RequestState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("RequestState")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("requested-state", &self.requested_state())
+            .finish()
     }
 }
 
@@ -1211,6 +1430,20 @@ impl StepStart {
                 from_glib(intermediate.assume_init()),
             )
         }
+    }
+}
+
+impl std::fmt::Debug for StepStart {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let (active, amount, rate, flush, intermediate) = self.get();
+        f.debug_struct("StepStart")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("active", &active)
+            .field("amount", &amount)
+            .field("rate", &rate)
+            .field("flush", &flush)
+            .field("intermediate", &intermediate)
+            .finish()
     }
 }
 
@@ -1327,6 +1560,28 @@ impl Qos {
     }
 }
 
+impl std::fmt::Debug for Qos {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let (live, running_time, stream_time, timestamp, duration) = self.get();
+        let (jitter, proportion, quality) = self.values();
+        let (processed, dropped) = self.stats();
+
+        f.debug_struct("Qos")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("live", &live)
+            .field("running-time", &running_time)
+            .field("stream-time", &stream_time)
+            .field("timestamp", &timestamp)
+            .field("duration", &duration)
+            .field("jitter", &jitter)
+            .field("proportion", &proportion)
+            .field("quality", &quality)
+            .field("processed", &processed)
+            .field("dropped", &dropped)
+            .finish()
+    }
+}
+
 declare_concrete_message!(Progress, T);
 impl Progress {
     #[doc(alias = "gst_message_new_progress")]
@@ -1367,6 +1622,18 @@ impl Progress {
     }
 }
 
+impl std::fmt::Debug for Progress {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let (type_, code, text) = self.get();
+        f.debug_struct("Progress")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("type", &type_)
+            .field("code", &code)
+            .field("text", &text)
+            .finish()
+    }
+}
+
 declare_concrete_message!(Toc, T);
 impl Toc {
     // FIXME could use false for updated as default
@@ -1395,6 +1662,15 @@ impl Toc {
     }
 }
 
+impl std::fmt::Debug for Toc {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Toc")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("toc", &self.toc())
+            .finish()
+    }
+}
+
 declare_concrete_message!(ResetTime, T);
 impl ResetTime {
     #[doc(alias = "gst_message_new_reset_time")]
@@ -1419,6 +1695,15 @@ impl ResetTime {
 
             try_from_glib(running_time.assume_init()).expect("undefined running_time")
         }
+    }
+}
+
+impl std::fmt::Debug for ResetTime {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ResetTime")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("running-time", &self.running_time())
+            .finish()
     }
 }
 
@@ -1459,6 +1744,15 @@ impl StreamStart {
     }
 }
 
+impl std::fmt::Debug for StreamStart {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("StreamStart")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("group-id", &self.group_id())
+            .finish()
+    }
+}
+
 declare_concrete_message!(NeedContext, T);
 impl NeedContext {
     #[doc(alias = "gst_message_new_need_context")]
@@ -1486,6 +1780,15 @@ impl NeedContext {
     }
 }
 
+impl std::fmt::Debug for NeedContext {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("NeedContext")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("context-type", &self.context_type())
+            .finish()
+    }
+}
+
 declare_concrete_message!(HaveContext, T);
 impl HaveContext {
     #[doc(alias = "gst_message_new_have_context")]
@@ -1508,6 +1811,15 @@ impl HaveContext {
             ffi::gst_message_parse_have_context(self.as_mut_ptr(), &mut context);
             from_glib_full(context)
         }
+    }
+}
+
+impl std::fmt::Debug for HaveContext {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("HaveContext")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("context", &self.context())
+            .finish()
     }
 }
 
@@ -1538,6 +1850,15 @@ impl DeviceAdded {
     }
 }
 
+impl std::fmt::Debug for DeviceAdded {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("DeviceAdded")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("device", &self.device())
+            .finish()
+    }
+}
+
 declare_concrete_message!(DeviceRemoved, T);
 impl DeviceRemoved {
     #[doc(alias = "gst_message_new_device_removed")]
@@ -1562,6 +1883,15 @@ impl DeviceRemoved {
 
             from_glib_full(device)
         }
+    }
+}
+
+impl std::fmt::Debug for DeviceRemoved {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("DeviceRemoved")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("device", &self.device())
+            .finish()
     }
 }
 
@@ -1609,6 +1939,18 @@ impl PropertyNotify {
     }
 }
 
+impl std::fmt::Debug for PropertyNotify {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let (object, property_name, value) = self.get();
+        f.debug_struct("PropertyNotify")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("object", &object)
+            .field("property-name", &property_name)
+            .field("value", &value)
+            .finish()
+    }
+}
+
 declare_concrete_message!(StreamCollection, T);
 impl StreamCollection {
     #[doc(alias = "gst_message_new_stream_collection")]
@@ -1633,6 +1975,15 @@ impl StreamCollection {
 
             from_glib_full(collection)
         }
+    }
+}
+
+impl std::fmt::Debug for StreamCollection {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("StreamCollection")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("stream-collection", &self.stream_collection())
+            .finish()
     }
 }
 
@@ -1678,6 +2029,16 @@ impl StreamsSelected {
                 })
                 .collect()
         }
+    }
+}
+
+impl std::fmt::Debug for StreamsSelected {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("StreamsSelected")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("stream-collection", &self.stream_collection())
+            .field("streams", &self.streams())
+            .finish()
     }
 }
 
@@ -1733,6 +2094,15 @@ impl Redirect {
     }
 }
 
+impl std::fmt::Debug for Redirect {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Redirect")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("entries", &self.entries())
+            .finish()
+    }
+}
+
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 declare_concrete_message!(DeviceChanged, T);
@@ -1772,6 +2142,16 @@ impl DeviceChanged {
     }
 }
 
+#[cfg(feature = "v1_16")]
+impl std::fmt::Debug for DeviceChanged {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("DeviceChanged")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("device-changed", &self.device_changed())
+            .finish()
+    }
+}
+
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 declare_concrete_message!(InstantRateRequest, T);
@@ -1803,6 +2183,16 @@ impl InstantRateRequest {
 
             rate_multiplier.assume_init()
         }
+    }
+}
+
+#[cfg(feature = "v1_18")]
+impl std::fmt::Debug for InstantRateRequest {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("InstantRateRequest")
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("rate-multiplier", &self.rate_multiplier())
+            .finish()
     }
 }
 
