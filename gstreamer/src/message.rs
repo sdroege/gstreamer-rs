@@ -388,6 +388,12 @@ impl Error {
     }
 }
 
+impl std::fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.error())
+    }
+}
+
 declare_concrete_message!(Warning, T);
 impl Warning {
     #[doc(alias = "gst_message_new_warning")]
@@ -458,6 +464,12 @@ impl Warning {
     }
 }
 
+impl std::fmt::Display for Warning {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.error())
+    }
+}
+
 declare_concrete_message!(Info, T);
 impl Info {
     #[doc(alias = "gst_message_new_info")]
@@ -525,6 +537,12 @@ impl Info {
                 Some(StructureRef::from_glib_borrow(details))
             }
         }
+    }
+}
+
+impl std::fmt::Display for Info {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.error())
     }
 }
 
