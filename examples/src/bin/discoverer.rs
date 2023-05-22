@@ -37,7 +37,11 @@ fn print_tags(info: &DiscovererInfo) {
 
 fn print_stream_info(stream: &DiscovererStreamInfo) {
     println!("Stream: ");
-    println!("  Stream id: {}", stream.stream_id());
+
+    if let Some(stream_id) = stream.stream_id() {
+        println!("  Stream id: {}", stream_id);
+    }
+
     let caps_str = match stream.caps() {
         Some(caps) => caps.to_string(),
         None => String::from("--"),
