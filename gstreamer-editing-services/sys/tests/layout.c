@@ -38,6 +38,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GESCommandLineFormatterClass", sizeof(GESCommandLineFormatterClass), alignof(GESCommandLineFormatterClass));
     printf("%s;%zu;%zu\n", "GESContainer", sizeof(GESContainer), alignof(GESContainer));
     printf("%s;%zu;%zu\n", "GESContainerClass", sizeof(GESContainerClass), alignof(GESContainerClass));
+    printf("%s;%zu;%zu\n", "GESDiscovererManagerClass", sizeof(GESDiscovererManagerClass), alignof(GESDiscovererManagerClass));
     printf("%s;%zu;%zu\n", "GESEdge", sizeof(GESEdge), alignof(GESEdge));
     printf("%s;%zu;%zu\n", "GESEditMode", sizeof(GESEditMode), alignof(GESEditMode));
     printf("%s;%zu;%zu\n", "GESEffect", sizeof(GESEffect), alignof(GESEffect));

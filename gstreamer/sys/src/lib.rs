@@ -6225,7 +6225,7 @@ extern "C" {
     ) -> *mut GstSample;
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
-    pub fn gst_sample_copy(buf: *const GstSample) -> *mut GstSample;
+    pub fn gst_sample_copy(sample: *const GstSample) -> *mut GstSample;
     pub fn gst_sample_get_buffer(sample: *mut GstSample) -> *mut GstBuffer;
     pub fn gst_sample_get_buffer_list(sample: *mut GstSample) -> *mut GstBufferList;
     pub fn gst_sample_get_caps(sample: *mut GstSample) -> *mut GstCaps;
@@ -8844,6 +8844,9 @@ extern "C" {
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_clear_query(query_ptr: *mut *mut GstQuery);
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_clear_sample(sample_ptr: *mut *mut GstSample);
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_clear_structure(structure_ptr: *mut *mut GstStructure);

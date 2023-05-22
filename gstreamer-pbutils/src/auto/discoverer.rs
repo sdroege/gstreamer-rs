@@ -149,6 +149,42 @@ impl Discoverer {
         }
     }
 
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "load-serialized-info")]
+    pub fn connect_load_serialized_info<
+        F: Fn(&Self, &str) -> Option<DiscovererInfo> + Send + Sync + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn load_serialized_info_trampoline<
+            F: Fn(&Discoverer, &str) -> Option<DiscovererInfo> + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstDiscoverer,
+            uri: *mut libc::c_char,
+            f: glib::ffi::gpointer,
+        ) -> *mut ffi::GstDiscovererInfo {
+            let f: &F = &*(f as *const F);
+            f(
+                &from_glib_borrow(this),
+                &glib::GString::from_glib_borrow(uri),
+            )
+            .to_glib_full()
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"load-serialized-info\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    load_serialized_info_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "source-setup")]
     pub fn connect_source_setup<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(
         &self,

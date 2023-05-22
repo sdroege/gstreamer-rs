@@ -104,6 +104,11 @@ pub const GST_VALIDATE_MEDIA_DESCRIPTOR_WRITER_FLAGS_FULL: GstValidateMediaDescr
 pub const GST_VALIDATE_MEDIA_DESCRIPTOR_WRITER_FLAGS_HANDLE_GLOGS:
     GstValidateMediaDescriptorWriterFlags = 8;
 
+pub type GstValidateObjectSetPropertyFlags = c_uint;
+pub const GST_VALIDATE_OBJECT_SET_PROPERTY_FLAGS_OPTIONAL: GstValidateObjectSetPropertyFlags = 1;
+pub const GST_VALIDATE_OBJECT_SET_PROPERTY_FLAGS_NO_VALUE_CHECK: GstValidateObjectSetPropertyFlags =
+    2;
+
 pub type GstValidateStructureResolveVariablesFlags = c_uint;
 pub const GST_VALIDATE_STRUCTURE_RESOLVE_VARIABLES_ALL: GstValidateStructureResolveVariablesFlags =
     0;
@@ -998,6 +1003,13 @@ extern "C" {
     pub fn gst_validate_media_descriptor_writer_flags_get_type() -> GType;
 
     //=========================================================================
+    // GstValidateObjectSetPropertyFlags
+    //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_validate_object_set_property_flags_get_type() -> GType;
+
+    //=========================================================================
     // GstValidateStructureResolveVariablesFlags
     //=========================================================================
     pub fn gst_validate_structure_resolve_variables_flags_get_type() -> GType;
@@ -1569,6 +1581,15 @@ extern "C" {
         property: *const c_char,
         value: *const gobject::GValue,
         optional: gboolean,
+    ) -> GstValidateActionReturn;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_validate_object_set_property_full(
+        reporter: *mut GstValidateReporter,
+        object: *mut gobject::GObject,
+        property: *const c_char,
+        value: *const gobject::GValue,
+        flags: GstValidateObjectSetPropertyFlags,
     ) -> GstValidateActionReturn;
     pub fn gst_validate_plugin_get_config(plugin: *mut gst::GstPlugin) -> *mut glib::GList;
     pub fn gst_validate_print_action(action: *mut GstValidateAction, message: *const c_char);

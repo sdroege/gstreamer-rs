@@ -409,6 +409,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GESDiscovererManagerClass",
+        Layout {
+            size: size_of::<GESDiscovererManagerClass>(),
+            alignment: align_of::<GESDiscovererManagerClass>(),
+        },
+    ),
+    (
         "GESEdge",
         Layout {
             size: size_of::<GESEdge>(),

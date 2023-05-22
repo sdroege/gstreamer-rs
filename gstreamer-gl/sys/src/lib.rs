@@ -404,6 +404,50 @@ impl ::std::fmt::Debug for GstGLBaseMemoryAllocatorClass {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstGLBaseMixerClass {
+    pub parent_class: gst_video::GstVideoAggregatorClass,
+    pub supported_gl_api: GstGLAPI,
+    pub gl_start: Option<unsafe extern "C" fn(*mut GstGLBaseMixer) -> gboolean>,
+    pub gl_stop: Option<unsafe extern "C" fn(*mut GstGLBaseMixer)>,
+    pub _padding: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstGLBaseMixerClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstGLBaseMixerClass @ {self:p}"))
+            .field("parent_class", &self.parent_class)
+            .field("supported_gl_api", &self.supported_gl_api)
+            .field("gl_start", &self.gl_start)
+            .field("gl_stop", &self.gl_stop)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstGLBaseMixerPadClass {
+    pub parent_class: gst_video::GstVideoAggregatorPadClass,
+    pub _padding: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstGLBaseMixerPadClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstGLBaseMixerPadClass @ {self:p}"))
+            .field("parent_class", &self.parent_class)
+            .finish()
+    }
+}
+
+#[repr(C)]
+pub struct _GstGLBaseMixerPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstGLBaseMixerPrivate = *mut _GstGLBaseMixerPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstGLBaseSrcClass {
     pub parent_class: gst_base::GstPushSrcClass,
     pub supported_gl_api: GstGLAPI,
@@ -780,6 +824,50 @@ impl ::std::fmt::Debug for GstGLMemoryPBOAllocatorClass {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstGLMixerClass {
+    pub parent_class: GstGLBaseMixerClass,
+    pub process_buffers:
+        Option<unsafe extern "C" fn(*mut GstGLMixer, *mut gst::GstBuffer) -> gboolean>,
+    pub process_textures:
+        Option<unsafe extern "C" fn(*mut GstGLMixer, *mut GstGLMemory) -> gboolean>,
+    pub _padding: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstGLMixerClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstGLMixerClass @ {self:p}"))
+            .field("parent_class", &self.parent_class)
+            .field("process_buffers", &self.process_buffers)
+            .field("process_textures", &self.process_textures)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstGLMixerPadClass {
+    pub parent_class: GstGLBaseMixerPadClass,
+    pub _padding: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstGLMixerPadClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstGLMixerPadClass @ {self:p}"))
+            .field("parent_class", &self.parent_class)
+            .finish()
+    }
+}
+
+#[repr(C)]
+pub struct _GstGLMixerPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstGLMixerPrivate = *mut _GstGLMixerPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstGLOverlayCompositorClass {
     pub object_class: gst::GstObjectClass,
     pub _padding: [gpointer; 4],
@@ -1128,6 +1216,41 @@ impl ::std::fmt::Debug for GstGLBaseMemoryAllocator {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstGLBaseMixer {
+    pub parent: gst_video::GstVideoAggregator,
+    pub display: *mut GstGLDisplay,
+    pub context: *mut GstGLContext,
+    pub _padding: [gpointer; 4],
+    pub priv_: *mut GstGLBaseMixerPrivate,
+}
+
+impl ::std::fmt::Debug for GstGLBaseMixer {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstGLBaseMixer @ {self:p}"))
+            .field("parent", &self.parent)
+            .field("display", &self.display)
+            .field("context", &self.context)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstGLBaseMixerPad {
+    pub parent: gst_video::GstVideoAggregatorPad,
+    pub _padding: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstGLBaseMixerPad {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstGLBaseMixerPad @ {self:p}"))
+            .field("parent", &self.parent)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstGLBaseSrc {
     pub parent: gst_base::GstPushSrc,
     pub display: *mut GstGLDisplay,
@@ -1326,6 +1449,41 @@ impl ::std::fmt::Debug for GstGLMemoryPBOAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLMemoryPBOAllocator @ {self:p}"))
             .field("parent", &self.parent)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstGLMixer {
+    pub parent: GstGLBaseMixer,
+    pub out_caps: *mut gst::GstCaps,
+    pub priv_: *mut GstGLMixerPrivate,
+    pub _padding: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstGLMixer {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstGLMixer @ {self:p}"))
+            .field("parent", &self.parent)
+            .field("out_caps", &self.out_caps)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstGLMixerPad {
+    pub parent: GstGLBaseMixerPad,
+    pub current_texture: c_uint,
+    pub _padding: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstGLMixerPad {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstGLMixerPad @ {self:p}"))
+            .field("parent", &self.parent)
+            .field("current_texture", &self.current_texture)
             .finish()
     }
 }
@@ -1808,6 +1966,13 @@ extern "C" {
     pub fn gst_gl_memory_pbo_init_once();
 
     //=========================================================================
+    // GstGLMixerClass
+    //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_mixer_class_add_rgba_pad_templates(klass: *mut GstGLMixerClass);
+
+    //=========================================================================
     // GstGLQuery
     //=========================================================================
     pub fn gst_gl_query_counter(query: *mut GstGLQuery);
@@ -1964,6 +2129,23 @@ extern "C" {
     // GstGLBaseMemoryAllocator
     //=========================================================================
     pub fn gst_gl_base_memory_allocator_get_type() -> GType;
+
+    //=========================================================================
+    // GstGLBaseMixer
+    //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_base_mixer_get_type() -> GType;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_base_mixer_get_gl_context(mix: *mut GstGLBaseMixer) -> *mut GstGLContext;
+
+    //=========================================================================
+    // GstGLBaseMixerPad
+    //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_base_mixer_pad_get_type() -> GType;
 
     //=========================================================================
     // GstGLBaseSrc
@@ -2260,6 +2442,29 @@ extern "C" {
     // GstGLMemoryPBOAllocator
     //=========================================================================
     pub fn gst_gl_memory_pbo_allocator_get_type() -> GType;
+
+    //=========================================================================
+    // GstGLMixer
+    //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_mixer_get_type() -> GType;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_mixer_get_framebuffer(mix: *mut GstGLMixer) -> *mut GstGLFramebuffer;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_mixer_process_textures(
+        mix: *mut GstGLMixer,
+        outbuf: *mut gst::GstBuffer,
+    ) -> gboolean;
+
+    //=========================================================================
+    // GstGLMixerPad
+    //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_mixer_pad_get_type() -> GType;
 
     //=========================================================================
     // GstGLOverlayCompositor

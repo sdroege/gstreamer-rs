@@ -1567,6 +1567,9 @@ extern "C" {
     //=========================================================================
     pub fn gst_rtsp_media_get_type() -> GType;
     pub fn gst_rtsp_media_new(element: *mut gst::GstElement) -> *mut GstRTSPMedia;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtsp_media_can_be_shared(media: *mut GstRTSPMedia) -> gboolean;
     pub fn gst_rtsp_media_collect_streams(media: *mut GstRTSPMedia);
     pub fn gst_rtsp_media_complete_pipeline(
         media: *mut GstRTSPMedia,

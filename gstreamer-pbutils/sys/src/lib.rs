@@ -147,7 +147,9 @@ pub struct GstDiscovererClass {
         unsafe extern "C" fn(*mut GstDiscoverer, *mut GstDiscovererInfo, *const glib::GError),
     >,
     pub source_setup: Option<unsafe extern "C" fn(*mut GstDiscoverer, *mut gst::GstElement)>,
-    pub _reserved: [gpointer; 4],
+    pub load_serialize_info:
+        Option<unsafe extern "C" fn(*mut GstDiscoverer, *mut c_char) -> *mut GstDiscovererInfo>,
+    pub _reserved: [gpointer; 3],
 }
 
 impl ::std::fmt::Debug for GstDiscovererClass {
@@ -158,6 +160,7 @@ impl ::std::fmt::Debug for GstDiscovererClass {
             .field("starting", &self.starting)
             .field("discovered", &self.discovered)
             .field("source_setup", &self.source_setup)
+            .field("load_serialize_info", &self.load_serialize_info)
             .field("_reserved", &self._reserved)
             .finish()
     }

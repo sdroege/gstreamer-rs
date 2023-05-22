@@ -702,6 +702,28 @@ pub type GESContainerPrivate = *mut _GESContainerPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GESDiscovererManagerClass {
+    pub parent_class: gobject::GObjectClass,
+}
+
+impl ::std::fmt::Debug for GESDiscovererManagerClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GESDiscovererManagerClass @ {self:p}"))
+            .field("parent_class", &self.parent_class)
+            .finish()
+    }
+}
+
+#[repr(C)]
+pub struct _GESDiscovererManagerPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GESDiscovererManagerPrivate = *mut _GESDiscovererManagerPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GESEffectAssetClass {
     pub parent_class: GESTrackElementAssetClass,
     pub _ges_reserved: [gpointer; 4],
@@ -2100,6 +2122,19 @@ impl ::std::fmt::Debug for GESContainer {
     }
 }
 
+#[repr(C)]
+pub struct GESDiscovererManager {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GESDiscovererManager {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GESDiscovererManager @ {self:p}"))
+            .finish()
+    }
+}
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GESEffect {
@@ -3149,6 +3184,36 @@ extern "C" {
         container: *mut GESContainer,
         recursive: gboolean,
     ) -> *mut glib::GList;
+
+    //=========================================================================
+    // GESDiscovererManager
+    //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn ges_discoverer_manager_get_type() -> GType;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn ges_discoverer_manager_get_default() -> *mut GESDiscovererManager;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn ges_discoverer_manager_get_timeout(
+        self_: *mut GESDiscovererManager,
+    ) -> gst::GstClockTime;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn ges_discoverer_manager_get_use_cache(self_: *mut GESDiscovererManager) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn ges_discoverer_manager_set_timeout(
+        self_: *mut GESDiscovererManager,
+        timeout: gst::GstClockTime,
+    );
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn ges_discoverer_manager_set_use_cache(
+        self_: *mut GESDiscovererManager,
+        use_cache: gboolean,
+    );
 
     //=========================================================================
     // GESEffect

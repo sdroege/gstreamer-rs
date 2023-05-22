@@ -32,6 +32,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstValidateMediaInfo", sizeof(GstValidateMediaInfo), alignof(GstValidateMediaInfo));
     printf("%s;%zu;%zu\n", "GstValidateMonitor", sizeof(GstValidateMonitor), alignof(GstValidateMonitor));
     printf("%s;%zu;%zu\n", "GstValidateMonitorClass", sizeof(GstValidateMonitorClass), alignof(GstValidateMonitorClass));
+    printf("%s;%zu;%zu\n", "GstValidateObjectSetPropertyFlags", sizeof(GstValidateObjectSetPropertyFlags), alignof(GstValidateObjectSetPropertyFlags));
     printf("%s;%zu;%zu\n", "GstValidateOverride", sizeof(GstValidateOverride), alignof(GstValidateOverride));
     printf("%s;%zu;%zu\n", "GstValidateOverrideClass", sizeof(GstValidateOverrideClass), alignof(GstValidateOverrideClass));
     printf("%s;%zu;%zu\n", "GstValidateOverrideRegistry", sizeof(GstValidateOverrideRegistry), alignof(GstValidateOverrideRegistry));

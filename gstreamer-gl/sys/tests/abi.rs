@@ -269,6 +269,34 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstGLBaseMixer",
+        Layout {
+            size: size_of::<GstGLBaseMixer>(),
+            alignment: align_of::<GstGLBaseMixer>(),
+        },
+    ),
+    (
+        "GstGLBaseMixerClass",
+        Layout {
+            size: size_of::<GstGLBaseMixerClass>(),
+            alignment: align_of::<GstGLBaseMixerClass>(),
+        },
+    ),
+    (
+        "GstGLBaseMixerPad",
+        Layout {
+            size: size_of::<GstGLBaseMixerPad>(),
+            alignment: align_of::<GstGLBaseMixerPad>(),
+        },
+    ),
+    (
+        "GstGLBaseMixerPadClass",
+        Layout {
+            size: size_of::<GstGLBaseMixerPadClass>(),
+            alignment: align_of::<GstGLBaseMixerPadClass>(),
+        },
+    ),
+    (
         "GstGLBaseSrc",
         Layout {
             size: size_of::<GstGLBaseSrc>(),
@@ -469,6 +497,34 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<GstGLMemoryPBOAllocatorClass>(),
             alignment: align_of::<GstGLMemoryPBOAllocatorClass>(),
+        },
+    ),
+    (
+        "GstGLMixer",
+        Layout {
+            size: size_of::<GstGLMixer>(),
+            alignment: align_of::<GstGLMixer>(),
+        },
+    ),
+    (
+        "GstGLMixerClass",
+        Layout {
+            size: size_of::<GstGLMixerClass>(),
+            alignment: align_of::<GstGLMixerClass>(),
+        },
+    ),
+    (
+        "GstGLMixerPad",
+        Layout {
+            size: size_of::<GstGLMixerPad>(),
+            alignment: align_of::<GstGLMixerPad>(),
+        },
+    ),
+    (
+        "GstGLMixerPadClass",
+        Layout {
+            size: size_of::<GstGLMixerPadClass>(),
+            alignment: align_of::<GstGLMixerPadClass>(),
         },
     ),
     (

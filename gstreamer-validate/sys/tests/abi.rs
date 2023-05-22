@@ -367,6 +367,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstValidateObjectSetPropertyFlags",
+        Layout {
+            size: size_of::<GstValidateObjectSetPropertyFlags>(),
+            alignment: align_of::<GstValidateObjectSetPropertyFlags>(),
+        },
+    ),
+    (
         "GstValidateOverride",
         Layout {
             size: size_of::<GstValidateOverride>(),
@@ -541,6 +548,14 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     (
         "(guint) GST_VALIDATE_MEDIA_DESCRIPTOR_WRITER_FLAGS_NO_PARSER",
         "2",
+    ),
+    (
+        "(guint) GST_VALIDATE_OBJECT_SET_PROPERTY_FLAGS_NO_VALUE_CHECK",
+        "2",
+    ),
+    (
+        "(guint) GST_VALIDATE_OBJECT_SET_PROPERTY_FLAGS_OPTIONAL",
+        "1",
     ),
     ("(guint) GST_VALIDATE_PRINT_CRITICALS", "32"),
     ("(guint) GST_VALIDATE_PRINT_ISSUES", "8"),

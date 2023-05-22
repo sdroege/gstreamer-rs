@@ -18,6 +18,10 @@ int main() {
     printf("%s;%zu;%zu\n", "GstGLBaseMemoryAllocatorClass", sizeof(GstGLBaseMemoryAllocatorClass), alignof(GstGLBaseMemoryAllocatorClass));
     printf("%s;%zu;%zu\n", "GstGLBaseMemoryError", sizeof(GstGLBaseMemoryError), alignof(GstGLBaseMemoryError));
     printf("%s;%zu;%zu\n", "GstGLBaseMemoryTransfer", sizeof(GstGLBaseMemoryTransfer), alignof(GstGLBaseMemoryTransfer));
+    printf("%s;%zu;%zu\n", "GstGLBaseMixer", sizeof(GstGLBaseMixer), alignof(GstGLBaseMixer));
+    printf("%s;%zu;%zu\n", "GstGLBaseMixerClass", sizeof(GstGLBaseMixerClass), alignof(GstGLBaseMixerClass));
+    printf("%s;%zu;%zu\n", "GstGLBaseMixerPad", sizeof(GstGLBaseMixerPad), alignof(GstGLBaseMixerPad));
+    printf("%s;%zu;%zu\n", "GstGLBaseMixerPadClass", sizeof(GstGLBaseMixerPadClass), alignof(GstGLBaseMixerPadClass));
     printf("%s;%zu;%zu\n", "GstGLBaseSrc", sizeof(GstGLBaseSrc), alignof(GstGLBaseSrc));
     printf("%s;%zu;%zu\n", "GstGLBaseSrcClass", sizeof(GstGLBaseSrcClass), alignof(GstGLBaseSrcClass));
     printf("%s;%zu;%zu\n", "GstGLBuffer", sizeof(GstGLBuffer), alignof(GstGLBuffer));
@@ -47,6 +51,10 @@ int main() {
     printf("%s;%zu;%zu\n", "GstGLMemoryPBO", sizeof(GstGLMemoryPBO), alignof(GstGLMemoryPBO));
     printf("%s;%zu;%zu\n", "GstGLMemoryPBOAllocator", sizeof(GstGLMemoryPBOAllocator), alignof(GstGLMemoryPBOAllocator));
     printf("%s;%zu;%zu\n", "GstGLMemoryPBOAllocatorClass", sizeof(GstGLMemoryPBOAllocatorClass), alignof(GstGLMemoryPBOAllocatorClass));
+    printf("%s;%zu;%zu\n", "GstGLMixer", sizeof(GstGLMixer), alignof(GstGLMixer));
+    printf("%s;%zu;%zu\n", "GstGLMixerClass", sizeof(GstGLMixerClass), alignof(GstGLMixerClass));
+    printf("%s;%zu;%zu\n", "GstGLMixerPad", sizeof(GstGLMixerPad), alignof(GstGLMixerPad));
+    printf("%s;%zu;%zu\n", "GstGLMixerPadClass", sizeof(GstGLMixerPadClass), alignof(GstGLMixerPadClass));
     printf("%s;%zu;%zu\n", "GstGLOverlayCompositor", sizeof(GstGLOverlayCompositor), alignof(GstGLOverlayCompositor));
     printf("%s;%zu;%zu\n", "GstGLOverlayCompositorClass", sizeof(GstGLOverlayCompositorClass), alignof(GstGLOverlayCompositorClass));
     printf("%s;%zu;%zu\n", "GstGLPlatform", sizeof(GstGLPlatform), alignof(GstGLPlatform));

@@ -40,6 +40,11 @@ unsafe impl Send for RTSPMedia {}
 unsafe impl Sync for RTSPMedia {}
 
 pub trait RTSPMediaExt: 'static {
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_rtsp_media_can_be_shared")]
+    fn can_be_shared(&self) -> bool;
+
     #[doc(alias = "gst_rtsp_media_collect_streams")]
     fn collect_streams(&self);
 
@@ -459,6 +464,16 @@ pub trait RTSPMediaExt: 'static {
 }
 
 impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    fn can_be_shared(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_rtsp_media_can_be_shared(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     fn collect_streams(&self) {
         unsafe {
             ffi::gst_rtsp_media_collect_streams(self.as_ref().to_glib_none().0);

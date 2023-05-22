@@ -1018,6 +1018,9 @@ extern "C" {
     pub fn gst_sdp_message_remove_attribute(msg: *mut GstSDPMessage, idx: c_uint) -> GstSDPResult;
     pub fn gst_sdp_message_remove_bandwidth(msg: *mut GstSDPMessage, idx: c_uint) -> GstSDPResult;
     pub fn gst_sdp_message_remove_email(msg: *mut GstSDPMessage, idx: c_uint) -> GstSDPResult;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_sdp_message_remove_media(msg: *mut GstSDPMessage, idx: c_uint) -> GstSDPResult;
     pub fn gst_sdp_message_remove_phone(msg: *mut GstSDPMessage, idx: c_uint) -> GstSDPResult;
     pub fn gst_sdp_message_remove_time(msg: *mut GstSDPMessage, idx: c_uint) -> GstSDPResult;
     pub fn gst_sdp_message_remove_zone(msg: *mut GstSDPMessage, idx: c_uint) -> GstSDPResult;
