@@ -321,6 +321,7 @@ impl Eos {
 impl std::fmt::Debug for Eos {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Eos")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .finish()
     }
@@ -404,6 +405,7 @@ impl std::fmt::Display for Error {
 impl std::fmt::Debug for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Error")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("error", &self.error())
             .field("debug", &self.debug())
@@ -491,6 +493,7 @@ impl std::fmt::Display for Warning {
 impl std::fmt::Debug for Warning {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Warning")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("error", &self.error())
             .field("debug", &self.debug())
@@ -578,6 +581,7 @@ impl std::fmt::Display for Info {
 impl std::fmt::Debug for Info {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Info")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("error", &self.error())
             .field("debug", &self.debug())
@@ -614,6 +618,7 @@ impl Tag {
 impl std::fmt::Debug for Tag {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Tag")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("tags", &self.tags())
             .finish()
@@ -674,6 +679,7 @@ impl Buffering {
 impl std::fmt::Debug for Buffering {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Buffering")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("percent", &self.percent())
             .field("buffering-stats", &self.buffering_stats())
@@ -754,6 +760,7 @@ impl StateChanged {
 impl std::fmt::Debug for StateChanged {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("StateChanged")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("old", &self.old())
             .field("current", &self.current())
@@ -780,6 +787,7 @@ impl StateDirty {
 impl std::fmt::Debug for StateDirty {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("StateDirty")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .finish()
     }
@@ -870,6 +878,7 @@ impl std::fmt::Debug for StepDone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let (format, rate, flush, intermediate, duration, eos) = self.get();
         f.debug_struct("StepDone")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("format", &format)
             .field("rate", &rate)
@@ -927,6 +936,7 @@ impl ClockProvide {
 impl std::fmt::Debug for ClockProvide {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("ClockProvide")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("clock", &self.clock())
             .field("is-ready", &self.is_ready())
@@ -964,6 +974,7 @@ impl ClockLost {
 impl std::fmt::Debug for ClockLost {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("ClockLost")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("clock", &self.clock())
             .finish()
@@ -1000,6 +1011,7 @@ impl NewClock {
 impl std::fmt::Debug for NewClock {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("NewClock")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("clock", &self.clock())
             .finish()
@@ -1052,6 +1064,7 @@ impl std::fmt::Debug for StructureChange {
         let (type_, owner, busy) = self.get();
 
         f.debug_struct("StructureChange")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("type", &type_)
             .field("owner", &owner)
@@ -1100,6 +1113,7 @@ impl StreamStatus {
 impl std::fmt::Debug for StreamStatus {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("StreamStatus")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("status", &self.stream_status_object())
             .finish()
@@ -1124,6 +1138,7 @@ impl Application {
 impl std::fmt::Debug for Application {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Application")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .finish()
     }
@@ -1147,6 +1162,7 @@ impl Element {
 impl std::fmt::Debug for Element {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Element")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .finish()
     }
@@ -1186,6 +1202,7 @@ impl SegmentStart {
 impl std::fmt::Debug for SegmentStart {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("SegmentStart")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("segment", &self.get())
             .finish()
@@ -1226,6 +1243,7 @@ impl SegmentDone {
 impl std::fmt::Debug for SegmentDone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("SegmentDone")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("segment", &self.get())
             .finish()
@@ -1250,6 +1268,7 @@ impl DurationChanged {
 impl std::fmt::Debug for DurationChanged {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("DurationChanged")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .finish()
     }
@@ -1273,6 +1292,7 @@ impl Latency {
 impl std::fmt::Debug for Latency {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Latency")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .finish()
     }
@@ -1296,6 +1316,7 @@ impl AsyncStart {
 impl std::fmt::Debug for AsyncStart {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("AsyncStart")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .finish()
     }
@@ -1331,6 +1352,7 @@ impl AsyncDone {
 impl std::fmt::Debug for AsyncDone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("AsyncDone")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("running-time", &self.running_time())
             .finish()
@@ -1367,6 +1389,7 @@ impl RequestState {
 impl std::fmt::Debug for RequestState {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("RequestState")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("requested-state", &self.requested_state())
             .finish()
@@ -1437,6 +1460,7 @@ impl std::fmt::Debug for StepStart {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let (active, amount, rate, flush, intermediate) = self.get();
         f.debug_struct("StepStart")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("active", &active)
             .field("amount", &amount)
@@ -1567,6 +1591,7 @@ impl std::fmt::Debug for Qos {
         let (processed, dropped) = self.stats();
 
         f.debug_struct("Qos")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("live", &live)
             .field("running-time", &running_time)
@@ -1626,6 +1651,7 @@ impl std::fmt::Debug for Progress {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let (type_, code, text) = self.get();
         f.debug_struct("Progress")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("type", &type_)
             .field("code", &code)
@@ -1665,6 +1691,7 @@ impl Toc {
 impl std::fmt::Debug for Toc {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Toc")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("toc", &self.toc())
             .finish()
@@ -1701,6 +1728,7 @@ impl ResetTime {
 impl std::fmt::Debug for ResetTime {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("ResetTime")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("running-time", &self.running_time())
             .finish()
@@ -1747,6 +1775,7 @@ impl StreamStart {
 impl std::fmt::Debug for StreamStart {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("StreamStart")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("group-id", &self.group_id())
             .finish()
@@ -1783,6 +1812,7 @@ impl NeedContext {
 impl std::fmt::Debug for NeedContext {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("NeedContext")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("context-type", &self.context_type())
             .finish()
@@ -1817,6 +1847,7 @@ impl HaveContext {
 impl std::fmt::Debug for HaveContext {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("HaveContext")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("context", &self.context())
             .finish()
@@ -1853,6 +1884,7 @@ impl DeviceAdded {
 impl std::fmt::Debug for DeviceAdded {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("DeviceAdded")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("device", &self.device())
             .finish()
@@ -1889,6 +1921,7 @@ impl DeviceRemoved {
 impl std::fmt::Debug for DeviceRemoved {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("DeviceRemoved")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("device", &self.device())
             .finish()
@@ -1943,6 +1976,7 @@ impl std::fmt::Debug for PropertyNotify {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let (object, property_name, value) = self.get();
         f.debug_struct("PropertyNotify")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("object", &object)
             .field("property-name", &property_name)
@@ -1981,6 +2015,7 @@ impl StreamCollection {
 impl std::fmt::Debug for StreamCollection {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("StreamCollection")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("stream-collection", &self.stream_collection())
             .finish()
@@ -2035,6 +2070,7 @@ impl StreamsSelected {
 impl std::fmt::Debug for StreamsSelected {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("StreamsSelected")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("stream-collection", &self.stream_collection())
             .field("streams", &self.streams())
@@ -2097,6 +2133,7 @@ impl Redirect {
 impl std::fmt::Debug for Redirect {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Redirect")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("entries", &self.entries())
             .finish()
@@ -2146,6 +2183,7 @@ impl DeviceChanged {
 impl std::fmt::Debug for DeviceChanged {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("DeviceChanged")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("device-changed", &self.device_changed())
             .finish()
@@ -2190,6 +2228,7 @@ impl InstantRateRequest {
 impl std::fmt::Debug for InstantRateRequest {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("InstantRateRequest")
+            .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("rate-multiplier", &self.rate_multiplier())
             .finish()
