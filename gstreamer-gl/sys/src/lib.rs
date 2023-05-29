@@ -139,8 +139,6 @@ pub const GST_GL_API_OPENGL3_NAME: &[u8] = b"opengl3\0";
 pub const GST_GL_API_OPENGL_NAME: &[u8] = b"opengl\0";
 pub const GST_GL_BASE_MEMORY_ALLOCATOR_NAME: &[u8] = b"GLBaseMemory\0";
 pub const GST_GL_BUFFER_ALLOCATOR_NAME: &[u8] = b"GLBuffer\0";
-pub const GST_GL_COLOR_CONVERT_EXT_FORMATS: &[u8] =
-    b", BGR10A2_LE, RGB10A2_LE, P010_10LE, P012_LE, P016_LE, Y212_LE, Y412_LE\0";
 pub const GST_GL_CONFIG_STRUCTURE_NAME: &[u8] = b"gst-gl-context-config\0";
 pub const GST_GL_CONTEXT_TYPE_CGL: &[u8] = b"gst.gl.context.CGL\0";
 pub const GST_GL_CONTEXT_TYPE_EAGL: &[u8] = b"gst.gl.context.EAGL\0";
@@ -150,8 +148,6 @@ pub const GST_GL_CONTEXT_TYPE_WGL: &[u8] = b"gst.gl.context.WGL\0";
 pub const GST_GL_DISPLAY_CONTEXT_TYPE: &[u8] = b"gst.gl.GLDisplay\0";
 pub const GST_GL_MEMORY_ALLOCATOR_NAME: &[u8] = b"GLMemory\0";
 pub const GST_GL_MEMORY_PBO_ALLOCATOR_NAME: &[u8] = b"GLMemoryPBO\0";
-pub const GST_GL_MEMORY_VIDEO_EXT_FORMATS: &[u8] =
-    b", BGR10A2_LE, RGB10A2_LE, P010_10LE, P012_LE, P016_LE, Y212_LE, Y412_LE\0";
 pub const GST_GL_RENDERBUFFER_ALLOCATOR_NAME: &[u8] = b"GLRenderbuffer\0";
 pub const GST_GL_TEXTURE_TARGET_2D_STR: &[u8] = b"2D\0";
 pub const GST_GL_TEXTURE_TARGET_EXTERNAL_OES_STR: &[u8] = b"external-oes\0";

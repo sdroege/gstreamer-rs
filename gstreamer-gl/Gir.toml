@@ -180,7 +180,13 @@ status = "generate"
     name = "GL_COLOR_CONVERT_FORMATS"
     ignore = true
     [[object.constant]]
+    name = "GL_COLOR_CONVERT_EXT_FORMATS"
+    ignore = true
+    [[object.constant]]
     name = "GL_MEMORY_VIDEO_FORMATS_STR"
+    ignore = true
+    [[object.constant]]
+    name = "GL_MEMORY_VIDEO_EXT_FORMATS"
     ignore = true
 
     # the below need manual bindings

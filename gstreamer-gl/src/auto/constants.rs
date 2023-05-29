@@ -43,9 +43,6 @@ pub static GL_BASE_MEMORY_ALLOCATOR_NAME: &GStr =
 #[doc(alias = "GST_GL_BUFFER_ALLOCATOR_NAME")]
 pub static GL_BUFFER_ALLOCATOR_NAME: &GStr =
     unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_GL_BUFFER_ALLOCATOR_NAME) };
-#[doc(alias = "GST_GL_COLOR_CONVERT_EXT_FORMATS")]
-pub static GL_COLOR_CONVERT_EXT_FORMATS: &GStr =
-    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_GL_COLOR_CONVERT_EXT_FORMATS) };
 #[doc(alias = "GST_GL_COLOR_CONVERT_VIDEO_CAPS")]
 pub static GL_COLOR_CONVERT_VIDEO_CAPS: &GStr =
     unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_GL_COLOR_CONVERT_VIDEO_CAPS) };
@@ -78,9 +75,6 @@ pub static GL_MEMORY_ALLOCATOR_NAME: &GStr =
 #[doc(alias = "GST_GL_MEMORY_PBO_ALLOCATOR_NAME")]
 pub static GL_MEMORY_PBO_ALLOCATOR_NAME: &GStr =
     unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_GL_MEMORY_PBO_ALLOCATOR_NAME) };
-#[doc(alias = "GST_GL_MEMORY_VIDEO_EXT_FORMATS")]
-pub static GL_MEMORY_VIDEO_EXT_FORMATS: &GStr =
-    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_GL_MEMORY_VIDEO_EXT_FORMATS) };
 #[doc(alias = "GST_GL_RENDERBUFFER_ALLOCATOR_NAME")]
 pub static GL_RENDERBUFFER_ALLOCATOR_NAME: &GStr =
     unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_GL_RENDERBUFFER_ALLOCATOR_NAME) };

@@ -796,10 +796,6 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ),
     ("(guint) GST_GL_BASE_MEMORY_TRANSFER_NEED_UPLOAD", "2097152"),
     ("GST_GL_BUFFER_ALLOCATOR_NAME", "GLBuffer"),
-    (
-        "GST_GL_COLOR_CONVERT_EXT_FORMATS",
-        ", BGR10A2_LE, RGB10A2_LE, P010_10LE, P012_LE, P016_LE, Y212_LE, Y412_LE",
-    ),
     ("(gint) GST_GL_CONFIG_CAVEAT_NONE", "0"),
     ("(gint) GST_GL_CONFIG_CAVEAT_NON_CONFORMANT", "2"),
     ("(gint) GST_GL_CONFIG_CAVEAT_SLOW", "1"),
@@ -840,10 +836,6 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_GL_LUMINANCE_ALPHA", "6410"),
     ("GST_GL_MEMORY_ALLOCATOR_NAME", "GLMemory"),
     ("GST_GL_MEMORY_PBO_ALLOCATOR_NAME", "GLMemoryPBO"),
-    (
-        "GST_GL_MEMORY_VIDEO_EXT_FORMATS",
-        ", BGR10A2_LE, RGB10A2_LE, P010_10LE, P012_LE, P016_LE, Y212_LE, Y412_LE",
-    ),
     ("(guint) GST_GL_PLATFORM_ANY", "4294967295"),
     ("(guint) GST_GL_PLATFORM_CGL", "8"),
     ("(guint) GST_GL_PLATFORM_EAGL", "16"),

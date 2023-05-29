@@ -17,7 +17,9 @@ extra_versions = [
 ignore = [
     "GstGL.GL_COLOR_CONVERT_VIDEO_CAPS",
     "GstGL.GL_COLOR_CONVERT_FORMATS",
+    "GstGL.GL_COLOR_CONVERT_EXT_FORMATS",
     "GstGL.GL_MEMORY_VIDEO_FORMATS_STR",
+    "GstGL.GL_MEMORY_VIDEO_EXT_FORMATS",
 ]
 
 external_libraries = [

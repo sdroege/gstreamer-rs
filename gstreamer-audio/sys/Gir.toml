@@ -38,6 +38,52 @@ status = "generate"
     version = "1.0"
 
 [[object]]
+name = "GstAudio.AudioFormat"
+status = "generate"
+    [[object.member]]
+    name = "f32"
+    alias = true
+    [[object.member]]
+    name = "f64"
+    alias = true
+    [[object.member]]
+    name = "s16"
+    alias = true
+    [[object.member]]
+    name = "s18"
+    alias = true
+    [[object.member]]
+    name = "s20"
+    alias = true
+    [[object.member]]
+    name = "s24"
+    alias = true
+    [[object.member]]
+    name = "s24_32"
+    alias = true
+    [[object.member]]
+    name = "s32"
+    alias = true
+    [[object.member]]
+    name = "u16"
+    alias = true
+    [[object.member]]
+    name = "u18"
+    alias = true
+    [[object.member]]
+    name = "u20"
+    alias = true
+    [[object.member]]
+    name = "u24"
+    alias = true
+    [[object.member]]
+    name = "u24_32"
+    alias = true
+    [[object.member]]
+    name = "u32"
+    alias = true
+
+[[object]]
 name = "GstAudio.*"
 status = "generate"
     [[object.function]]

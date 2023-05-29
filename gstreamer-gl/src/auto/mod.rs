@@ -99,7 +99,6 @@ pub use self::constants::GL_API_OPENGL3_NAME;
 pub use self::constants::GL_API_OPENGL_NAME;
 pub use self::constants::GL_BASE_MEMORY_ALLOCATOR_NAME;
 pub use self::constants::GL_BUFFER_ALLOCATOR_NAME;
-pub use self::constants::GL_COLOR_CONVERT_EXT_FORMATS;
 pub use self::constants::GL_COLOR_CONVERT_VIDEO_CAPS;
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
@@ -112,7 +111,6 @@ pub use self::constants::GL_CONTEXT_TYPE_WGL;
 pub use self::constants::GL_DISPLAY_CONTEXT_TYPE;
 pub use self::constants::GL_MEMORY_ALLOCATOR_NAME;
 pub use self::constants::GL_MEMORY_PBO_ALLOCATOR_NAME;
-pub use self::constants::GL_MEMORY_VIDEO_EXT_FORMATS;
 pub use self::constants::GL_RENDERBUFFER_ALLOCATOR_NAME;
 pub use self::constants::GL_TEXTURE_TARGET_2D_STR;
 pub use self::constants::GL_TEXTURE_TARGET_EXTERNAL_OES_STR;
