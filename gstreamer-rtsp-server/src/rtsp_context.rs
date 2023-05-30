@@ -1,11 +1,16 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{marker::PhantomData, ptr};
+use std::{
+    marker::PhantomData,
+    ptr::{self, addr_of},
+};
 
 use glib::translate::*;
+use gst_rtsp::RTSPUrl;
 
 #[derive(Debug, PartialEq, Eq)]
 #[doc(alias = "GstRTSPContext")]
+#[repr(transparent)]
 pub struct RTSPContext(ptr::NonNull<ffi::GstRTSPContext>);
 
 impl RTSPContext {
@@ -22,7 +27,22 @@ impl RTSPContext {
         }
     }
 
-    // TODO: Add various getters for all the contained fields as needed
+    #[inline]
+    pub fn uri(&self) -> Option<&RTSPUrl> {
+        unsafe {
+            let ptr = self.0.as_ptr();
+            if (*ptr).uri.is_null() {
+                None
+            } else {
+                let uri = RTSPUrl::from_glib_ptr_borrow(
+                    addr_of!((*ptr).uri) as *const *const gst_rtsp::ffi::GstRTSPUrl
+                );
+                Some(uri)
+            }
+        }
+    }
+
+    // TODO: Add additional getters for all the contained fields as needed
 }
 
 #[doc(hidden)]

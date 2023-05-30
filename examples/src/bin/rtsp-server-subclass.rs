@@ -303,6 +303,12 @@ mod client {
                 self.parent_closed();
                 println!("Client {client:?} closed");
             }
+
+            fn describe_request(&self, ctx: &gst_rtsp_server::RTSPContext) {
+                self.parent_describe_request(ctx);
+                let request_uri = ctx.uri().unwrap().request_uri();
+                println!("Describe request for uri: {request_uri:?}");
+            }
         }
     }
 
