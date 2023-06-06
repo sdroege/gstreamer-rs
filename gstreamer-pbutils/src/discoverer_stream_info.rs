@@ -1,5 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use glib::translate::*;
+
 use crate::{prelude::*, DiscovererStreamInfo};
 
 #[derive(Debug)]
@@ -40,6 +42,18 @@ impl DiscovererStreamInfo {
         Iter {
             stream_info: self.previous(),
             direction_forward: false,
+        }
+    }
+
+    fn stream_id(&self) -> glib::GString {
+        unsafe {
+            let ptr = ffi::gst_discoverer_stream_info_get_stream_id(self.as_ref().to_glib_none().0);
+
+            if ptr.is_null() {
+                glib::GString::new()
+            } else {
+                from_glib_none(ptr)
+            }
         }
     }
 }

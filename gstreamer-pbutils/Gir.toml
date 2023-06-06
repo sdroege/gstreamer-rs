@@ -279,6 +279,10 @@ final_type = false
     name = "list_free"
     ignore = true
 
+    [[object.function]]
+    name = "get_stream_id"
+    manual = true
+
 [[object]]
 name = "GstPbutils.DiscovererSubtitleInfo"
 status = "generate"

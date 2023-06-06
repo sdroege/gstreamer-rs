@@ -40,10 +40,6 @@ pub trait DiscovererStreamInfoExt: 'static {
     #[must_use]
     fn previous(&self) -> Option<DiscovererStreamInfo>;
 
-    #[doc(alias = "gst_discoverer_stream_info_get_stream_id")]
-    #[doc(alias = "get_stream_id")]
-    fn stream_id(&self) -> glib::GString;
-
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_discoverer_stream_info_get_stream_number")]
@@ -91,14 +87,6 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
     fn previous(&self) -> Option<DiscovererStreamInfo> {
         unsafe {
             from_glib_full(ffi::gst_discoverer_stream_info_get_previous(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn stream_id(&self) -> glib::GString {
-        unsafe {
-            from_glib_none(ffi::gst_discoverer_stream_info_get_stream_id(
                 self.as_ref().to_glib_none().0,
             ))
         }
