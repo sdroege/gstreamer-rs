@@ -28,20 +28,25 @@ impl Iterator for Iter {
     }
 }
 
-impl DiscovererStreamInfo {
-    pub fn next_iter(&self) -> Iter {
+impl std::iter::FusedIterator for Iter {}
+
+pub trait DiscovererStreamInfoExtManual: 'static {
+    fn next_iter(&self) -> Iter;
+    fn previous_iter(&self) -> Iter;
+}
+
+impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExtManual for O {
+    fn next_iter(&self) -> Iter {
         Iter {
             stream_info: self.next(),
             direction_forward: true,
         }
     }
 
-    pub fn previous_iter(&self) -> Iter {
+    fn previous_iter(&self) -> Iter {
         Iter {
             stream_info: self.previous(),
             direction_forward: false,
         }
     }
 }
-
-impl std::iter::FusedIterator for Iter {}

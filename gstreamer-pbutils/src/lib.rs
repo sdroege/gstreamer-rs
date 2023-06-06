@@ -62,6 +62,7 @@ pub mod prelude {
     pub use crate::{
         audio_visualizer::*,
         auto::traits::*,
+        discoverer_stream_info::DiscovererStreamInfoExtManual,
         encoding_profile::{
             EncodingProfileBuilder, EncodingProfileExtManual, EncodingProfileHasRestrictionGetter,
         },
