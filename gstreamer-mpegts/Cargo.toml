@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-mpegts"
-version = "0.20.5"
+version = "0.20.6"
 authors = ["Sebastian Dröge <sebastian@centricular.com>", "Rafael Caricio <rafael@caricio.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer MpegTs library"

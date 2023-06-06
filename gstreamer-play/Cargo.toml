@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-play"
-version = "0.20.5"
+version = "0.20.6"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Play library"
