@@ -176,7 +176,10 @@ impl<'a> ActionParameterBuilder<'a> {
     }
 }
 
-type ActionFunction = dyn Fn(&crate::Scenario, &mut crate::ActionRef) -> Result<crate::ActionSuccess, crate::ActionError>
+type ActionFunction = dyn Fn(
+        &crate::Scenario,
+        glib::translate::Borrowed<crate::Action>,
+    ) -> Result<crate::ActionSuccess, crate::ActionError>
     + Sync
     + Send
     + 'static;
@@ -198,7 +201,7 @@ impl<'a> ActionTypeBuilder<'a> {
     pub fn new<
         F: Fn(
                 &crate::Scenario,
-                &mut crate::ActionRef,
+                glib::translate::Borrowed<crate::Action>,
             ) -> Result<crate::ActionSuccess, crate::ActionError>
             + Send
             + Sync
@@ -322,7 +325,7 @@ impl<'a> ActionTypeBuilder<'a> {
         ) -> c_int {
             let action_type = ffi::gst_validate_get_action_type((*action).type_);
             let scenario = from_glib_borrow(scenario);
-            let action = crate::ActionRef::from_mut_ptr(action);
+            let action = crate::Action::from_glib_borrow(action);
 
             let func: &ActionFunction = &*(gst::ffi::gst_mini_object_get_qdata(
                 action_type as *mut gst::ffi::GstMiniObject,
@@ -389,7 +392,7 @@ impl ActionTypeExtManual for crate::ActionType {
 mod tests {
     use std::{
         io::Write,
-        sync::{Arc, Mutex},
+        sync::{Arc, Condvar, Mutex},
     };
 
     #[test]
@@ -398,21 +401,29 @@ mod tests {
         use crate::prelude::*;
         crate::init();
 
-        let failling_action_type = crate::ActionTypeBuilder::new("fails", |_, action| {
-            action.structure_mut().set("called", true);
+        let fails_called = Arc::new(Mutex::new(false));
+        let failling_action_type = crate::ActionTypeBuilder::new(
+            "fails",
+            glib::clone!(
+                #[strong]
+                fails_called,
+                move |_, _action| {
+                    *fails_called.lock().unwrap() = true;
 
-            Err(crate::ActionError::Error)
-        })
+                    Err(crate::ActionError::Error)
+                }
+            ),
+        )
         .build();
 
-        let called = Arc::new(Mutex::new(false));
+        let succeeds_called = Arc::new(Mutex::new(false));
         let succeeding_action_type = crate::ActionTypeBuilder::new(
             "succeeds",
             glib::clone!(
                 #[strong]
-                called,
+                succeeds_called,
                 move |_, _action| {
-                    *called.lock().unwrap() = true;
+                    *succeeds_called.lock().unwrap() = true;
 
                     Ok(crate::ActionSuccess::Ok)
                 }
@@ -443,9 +454,9 @@ mod tests {
             false,
         );
 
-        assert!(!*called.lock().unwrap());
+        assert!(!*succeeds_called.lock().unwrap());
         action.execute().expect("Failed to execute action");
-        assert!(*called.lock().unwrap());
+        assert!(*succeeds_called.lock().unwrap());
 
         let action = crate::Action::new(
             Some(&scenario),
@@ -454,15 +465,67 @@ mod tests {
             false,
         );
 
-        assert!(action.structure().get::<bool>("called").is_err());
+        assert!(!*fails_called.lock().unwrap());
         action.execute().expect_err("Action should have failed");
-        assert_eq!(action.structure().get::<bool>("called"), Ok(true));
+        assert!(*fails_called.lock().unwrap());
 
-        crate::ActionParameterBuilder::new("unused", "Verify unused param are properly cleaned")
+        crate::ActionParameterBuilder::new("async", "Verify unused param are properly cleaned")
             .default_value("true")
             .add_possible_variable("position")
             .build();
 
-        crate::ActionType::find("succeeds").expect("Failed to find action type");
+        let async_called = Arc::new((Mutex::new(false), Condvar::new()));
+        crate::ActionTypeBuilder::new(
+            "async",
+            glib::clone!(
+                #[strong]
+                async_called,
+                move |_, _action| {
+                    std::thread::spawn(glib::clone!(
+                        #[strong]
+                        async_called,
+                        #[strong]
+                        action,
+                        move || {
+                            *async_called.0.lock().unwrap() = true;
+                            action.set_done();
+                        }
+                    ));
+
+                    Ok(crate::ActionSuccess::Async)
+                }
+            ),
+        )
+        .build();
+
+        let async_type = crate::ActionType::find("async").expect("Failed to find action type");
+        let action = crate::Action::new(
+            Some(&scenario),
+            &async_type,
+            gst::Structure::builder("async").build().as_ref(),
+            false,
+        );
+
+        scenario.connect_action_done(glib::clone!(
+            #[strong]
+            async_called,
+            move |_, action| {
+                async_called.1.notify_one();
+            }
+        ));
+
+        {
+            let called = async_called.0.lock().unwrap();
+            match action.execute() {
+                Ok(crate::ActionSuccess::Async) => (),
+                _ => panic!("Action should have returned Async"),
+            }
+            assert!(!*called);
+        }
+
+        let mut called = async_called.0.lock().unwrap();
+        while !*called {
+            called = async_called.1.wait(called).unwrap();
+        }
     }
 }
