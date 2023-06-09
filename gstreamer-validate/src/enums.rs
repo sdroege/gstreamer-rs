@@ -35,11 +35,10 @@ impl IntoGlib for ActionSuccess {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[repr(i32)]
 pub enum ActionError {
-    Error = ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR,
-    ErrorReported = ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR_REPORTED,
+    Error(String),
     None = ffi::GST_VALIDATE_EXECUTE_ACTION_NONE,
 }
 
@@ -47,10 +46,11 @@ impl ActionError {
     pub fn from_value(value: impl Into<i32>) -> Self {
         skip_assert_initialized!();
         match value.into() {
-            ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR => ActionError::Error,
-            ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR_REPORTED => ActionError::ErrorReported,
+            ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR => {
+                ActionError::Error("Execution failed".to_string())
+            }
             ffi::GST_VALIDATE_EXECUTE_ACTION_NONE => ActionError::None,
-            _ => ActionError::Error,
+            _ => ActionError::Error("Unknown error".to_string()),
         }
     }
 }
@@ -60,7 +60,10 @@ impl IntoGlib for ActionError {
 
     #[inline]
     fn into_glib(self) -> ffi::GstValidateActionReturn {
-        self as ffi::GstValidateActionReturn
+        match self {
+            ActionError::Error(_) => ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR,
+            ActionError::None => ffi::GST_VALIDATE_EXECUTE_ACTION_NONE,
+        }
     }
 }
 
@@ -129,9 +132,10 @@ impl ActionReturn {
     #[inline]
     pub fn into_result(self) -> Result<ActionSuccess, ActionError> {
         match self {
-            Self::Error | Self::ErrorReported | Self::None => {
-                Err(unsafe { std::mem::transmute::<ActionReturn, ActionError>(self) })
+            Self::Error | Self::ErrorReported => {
+                Err(ActionError::Error("Execution failed".to_string()))
             }
+            Self::None => Err(ActionError::None),
             _ => Ok(unsafe { std::mem::transmute::<ActionReturn, ActionSuccess>(self) }),
         }
     }
@@ -139,7 +143,11 @@ impl ActionReturn {
     #[inline]
     pub fn from_error(v: ActionError) -> Self {
         skip_assert_initialized!();
-        unsafe { std::mem::transmute::<ActionError, ActionReturn>(v) }
+
+        match v {
+            ActionError::Error(_) => Self::Error,
+            ActionError::None => Self::None,
+        }
     }
 
     #[inline]

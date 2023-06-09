@@ -1,7 +1,7 @@
 use std::{ffi::c_int, ptr};
 
 use crate::ffi;
-use glib::translate::*;
+use glib::{object::Cast, translate::*};
 
 #[derive(Debug)]
 #[repr(transparent)]
@@ -325,14 +325,29 @@ impl<'a> ActionTypeBuilder<'a> {
         ) -> c_int {
             let action_type = ffi::gst_validate_get_action_type((*action).type_);
             let scenario = from_glib_borrow(scenario);
-            let action = crate::Action::from_glib_borrow(action);
+            let raction = from_glib_borrow(action);
 
             let func: &ActionFunction = &*(gst::ffi::gst_mini_object_get_qdata(
                 action_type as *mut gst::ffi::GstMiniObject,
                 QUARK_ACTION_TYPE_FUNC.get().unwrap().into_glib(),
             ) as *const Box<ActionFunction>);
 
-            (*func)(&scenario, action).into_glib()
+            let res = (*func)(&scenario, raction);
+
+            if let Err(crate::ActionError::Error(ref err)) = res {
+                scenario
+                    .dynamic_cast_ref::<crate::Reporter>()
+                    .unwrap()
+                    .report_action(
+                        &crate::Action::from_glib_none(action),
+                        glib::Quark::from_str("scenario::execution-error"),
+                        err,
+                    );
+
+                return ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR_REPORTED;
+            }
+
+            res.into_glib()
         }
 
         unsafe {
@@ -391,6 +406,7 @@ impl ActionTypeExtManual for crate::ActionType {
 #[cfg(test)]
 mod tests {
     use std::{
+        env,
         io::Write,
         sync::{Arc, Condvar, Mutex},
     };
@@ -399,6 +415,8 @@ mod tests {
     fn test_action_types() {
         gst::init().unwrap();
         use crate::prelude::*;
+        // Validate should not exit process on criticals
+        env::set_var("GST_VALIDATE", "");
         crate::init();
 
         let fails_called = Arc::new(Mutex::new(false));
@@ -410,7 +428,9 @@ mod tests {
                 move |_, _action| {
                     *fails_called.lock().unwrap() = true;
 
-                    Err(crate::ActionError::Error)
+                    Err(crate::ActionError::Error(
+                        "the `fails` action seems to fail".into(),
+                    ))
                 }
             ),
         )
@@ -509,7 +529,7 @@ mod tests {
         scenario.connect_action_done(glib::clone!(
             #[strong]
             async_called,
-            move |_, action| {
+            move |_, _| {
                 async_called.1.notify_one();
             }
         ));
