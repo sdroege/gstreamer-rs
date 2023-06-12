@@ -27,35 +27,6 @@ multiple-versions = "deny"
 wildcards = "allow"
 highlight = "all"
 
-# Various crates depend on an older version of windows-sys
-[[bans.skip]]
-name = "windows-sys"
-version = "0.45"
-[[bans.skip]]
-name = "windows_x86_64_msvc"
-version = "0.42"
-[[bans.skip]]
-name = "windows_x86_64_gnullvm"
-version = "0.42"
-[[bans.skip]]
-name = "windows_x86_64_gnu"
-version = "0.42"
-[[bans.skip]]
-name = "windows_i686_msvc"
-version = "0.42"
-[[bans.skip]]
-name = "windows_i686_gnu"
-version = "0.42"
-[[bans.skip]]
-name = "windows_aarch64_msvc"
-version = "0.42"
-[[bans.skip]]
-name = "windows_aarch64_gnullvm"
-version = "0.42"
-[[bans.skip]]
-name = "windows-targets"
-version = "0.42"
-
 # Various cocoa crates are in the middle of updating to newer versions
 [[bans.skip]]
 name = "foreign-types"
