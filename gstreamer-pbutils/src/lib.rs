@@ -41,7 +41,10 @@ mod flag_serde;
 mod discoverer;
 pub use crate::discoverer::*;
 
+mod discoverer_audio_info;
+mod discoverer_container_info;
 pub mod discoverer_stream_info;
+mod discoverer_subtitle_info;
 mod discoverer_video_info;
 
 pub mod encoding_profile;
