@@ -54,7 +54,9 @@ macro_rules! skip_assert_initialized {
 #[allow(deprecated)]
 #[allow(unused_imports)]
 mod auto;
+mod formatter;
 pub use crate::auto::*;
+pub mod subclass;
 
 #[cfg(feature = "serde")]
 mod flag_serde;
@@ -65,9 +67,12 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gio::prelude::*;
     #[doc(hidden)]
+    pub use glib::prelude::*;
+    #[doc(hidden)]
     pub use gst_base::prelude::*;
     #[doc(hidden)]
     pub use gst_pbutils::prelude::*;
 
     pub use crate::auto::traits::*;
+    pub use crate::formatter::FormatterExtManual;
 }
