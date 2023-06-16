@@ -65,6 +65,9 @@ impl UriClipAsset {
     }
 }
 
+unsafe impl Send for UriClipAsset {}
+unsafe impl Sync for UriClipAsset {}
+
 pub trait UriClipAssetExt: 'static {
     #[doc(alias = "ges_uri_clip_asset_get_duration")]
     #[doc(alias = "get_duration")]
@@ -97,12 +100,18 @@ pub trait UriClipAssetExt: 'static {
     fn is_nested_timeline(&self) -> bool;
 
     #[doc(alias = "duration")]
-    fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_duration_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "is-nested-timeline")]
-    fn connect_is_nested_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_is_nested_timeline_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
@@ -160,10 +169,13 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         glib::ObjectExt::property(self.as_ref(), "is-nested-timeline")
     }
 
-    fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_duration_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_trampoline<
             P: IsA<UriClipAsset>,
-            F: Fn(&P) + 'static,
+            F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GESUriClipAsset,
             _param_spec: glib::ffi::gpointer,
@@ -187,10 +199,13 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn connect_is_nested_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_is_nested_timeline_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
         unsafe extern "C" fn notify_is_nested_timeline_trampoline<
             P: IsA<UriClipAsset>,
-            F: Fn(&P) + 'static,
+            F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GESUriClipAsset,
             _param_spec: glib::ffi::gpointer,

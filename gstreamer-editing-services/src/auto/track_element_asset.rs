@@ -27,6 +27,9 @@ impl TrackElementAsset {
     pub const NONE: Option<&'static TrackElementAsset> = None;
 }
 
+unsafe impl Send for TrackElementAsset {}
+unsafe impl Sync for TrackElementAsset {}
+
 pub trait TrackElementAssetExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -42,7 +45,10 @@ pub trait TrackElementAssetExt: 'static {
     fn set_track_type(&self, type_: TrackType);
 
     #[doc(alias = "track-type")]
-    fn connect_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_track_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<TrackElementAsset>> TrackElementAssetExt for O {
@@ -82,10 +88,13 @@ impl<O: IsA<TrackElementAsset>> TrackElementAssetExt for O {
         }
     }
 
-    fn connect_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_track_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
         unsafe extern "C" fn notify_track_type_trampoline<
             P: IsA<TrackElementAsset>,
-            F: Fn(&P) + 'static,
+            F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GESTrackElementAsset,
             _param_spec: glib::ffi::gpointer,

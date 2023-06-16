@@ -19,6 +19,9 @@ impl UriSourceAsset {
     pub const NONE: Option<&'static UriSourceAsset> = None;
 }
 
+unsafe impl Send for UriSourceAsset {}
+unsafe impl Sync for UriSourceAsset {}
+
 pub trait UriSourceAssetExt: 'static {
     #[doc(alias = "ges_uri_source_asset_get_filesource_asset")]
     #[doc(alias = "get_filesource_asset")]

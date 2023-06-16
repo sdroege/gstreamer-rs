@@ -67,7 +67,7 @@ impl<O: IsA<crate::Formatter>> FormatterExtManual for O {
                 caps.to_glib_none().0,
                 version,
                 rank.into_glib(),
-            );
+            )
         }
     }
 }

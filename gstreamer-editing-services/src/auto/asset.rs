@@ -126,6 +126,9 @@ impl Asset {
     }
 }
 
+unsafe impl Send for Asset {}
+unsafe impl Sync for Asset {}
+
 pub trait AssetExt: 'static {
     #[doc(alias = "ges_asset_extract")]
     fn extract(&self) -> Result<Extractable, glib::Error>;
@@ -162,10 +165,13 @@ pub trait AssetExt: 'static {
     fn unproxy(&self, proxy: &impl IsA<Asset>) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "proxy")]
-    fn connect_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_proxy_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[doc(alias = "proxy-target")]
-    fn connect_proxy_target_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_proxy_target_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<Asset>> AssetExt for O {
@@ -241,8 +247,11 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
-    fn connect_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_proxy_trampoline<P: IsA<Asset>, F: Fn(&P) + 'static>(
+    fn connect_proxy_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_proxy_trampoline<
+            P: IsA<Asset>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GESAsset,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
@@ -263,8 +272,14 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
-    fn connect_proxy_target_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_proxy_target_trampoline<P: IsA<Asset>, F: Fn(&P) + 'static>(
+    fn connect_proxy_target_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_proxy_target_trampoline<
+            P: IsA<Asset>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
             this: *mut ffi::GESAsset,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
