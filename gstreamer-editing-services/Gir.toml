@@ -59,11 +59,9 @@ generate = [
     "GES.BaseTransitionClip",
     "GES.BaseXmlFormatter",
     "GES.ChildrenControlMode",
-    "GES.ClipAsset",
     "GES.CommandLineFormatter",
     "GES.Edge",
     "GES.EditMode",
-    "GES.EffectAsset",
     "GES.EffectClip",
     "GES.Error",
     "GES.ExtractableCheckId",
@@ -83,7 +81,6 @@ generate = [
     "GES.PipelineFlags",
     "GES.Source",
     "GES.SourceClip",
-    "GES.SourceClipAsset",
     "GES.TestClip",
     "GES.TextHAlign",
     "GES.TextOverlay",
@@ -91,12 +88,9 @@ generate = [
     "GES.TextVAlign",
     "GES.TitleClip",
     "GES.TitleSource",
-    "GES.TrackElementAsset",
     "GES.TrackType",
     "GES.Transition",
     "GES.TransitionClip",
-    "GES.UriClipAsset",
-    "GES.UriSourceAsset",
     "GES.VideoSource",
     "GES.VideoStandardTransitionType",
     "GES.VideoTestPattern",
@@ -110,6 +104,7 @@ generate = [
 [[object]]
 name = "GES.Asset"
 status = "generate"
+concurrency = "send+sync"
     [[object.function]]
     name = "set_proxy"
         [object.function.return]
@@ -162,6 +157,11 @@ status = "generate"
         nullable_return_is_error = "Failed to split clip"
 
 [[object]]
+name = "GES.ClipAsset"
+status = "generate"
+concurrency = "send+sync"
+
+[[object]]
 name = "GES.Container"
 status = "generate"
 trait_name = "GESContainerExt"
@@ -191,6 +191,11 @@ status = "generate"
     name = "new"
         [object.function.return]
         nullable_return_is_error = "Failed to create effect from description"
+
+[[object]]
+name = "GES.EffectAsset"
+status = "generate"
+concurrency = "send+sync"
 
 [[object]]
 name = "GES.Extractable"
@@ -259,6 +264,11 @@ status = "generate"
     name = "remove_asset"
         [object.function.return]
         bool_return_is_error = "Failed to remove asset"
+
+[[object]]
+name = "GES.SourceClipAsset"
+status = "generate"
+concurrency = "send+sync"
 
 [[object]]
 name = "GES.Timeline"
@@ -467,12 +477,27 @@ status = "generate"
         const = true
 
 [[object]]
+name = "GES.TrackElementAsset"
+status = "generate"
+concurrency = "send+sync"
+
+[[object]]
 name = "GES.UriClip"
 status = "generate"
     [[object.function]]
     name = "new"
         [object.function.return]
         nullable_return_is_error = "Failed to create Uri clip from Uri"
+
+[[object]]
+name = "GES.UriClipAsset"
+status = "generate"
+concurrency = "send+sync"
+
+[[object]]
+name = "GES.UriSourceAsset"
+status = "generate"
+concurrency = "send+sync"
 
 [[object]]
 name = "Gst.Buffer"

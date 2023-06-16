@@ -17,3 +17,6 @@ glib::wrapper! {
 impl SourceClipAsset {
     pub const NONE: Option<&'static SourceClipAsset> = None;
 }
+
+unsafe impl Send for SourceClipAsset {}
+unsafe impl Sync for SourceClipAsset {}

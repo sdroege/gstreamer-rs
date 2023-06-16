@@ -30,6 +30,9 @@ impl ClipAsset {
     pub const NONE: Option<&'static ClipAsset> = None;
 }
 
+unsafe impl Send for ClipAsset {}
+unsafe impl Sync for ClipAsset {}
+
 pub trait ClipAssetExt: 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
@@ -51,7 +54,10 @@ pub trait ClipAssetExt: 'static {
     fn set_supported_formats(&self, supportedformats: TrackType);
 
     #[doc(alias = "supported-formats")]
-    fn connect_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_supported_formats_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<ClipAsset>> ClipAssetExt for O {
@@ -102,10 +108,13 @@ impl<O: IsA<ClipAsset>> ClipAssetExt for O {
         }
     }
 
-    fn connect_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_supported_formats_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
         unsafe extern "C" fn notify_supported_formats_trampoline<
             P: IsA<ClipAsset>,
-            F: Fn(&P) + 'static,
+            F: Fn(&P) + Send + Sync + 'static,
         >(
             this: *mut ffi::GESClipAsset,
             _param_spec: glib::ffi::gpointer,

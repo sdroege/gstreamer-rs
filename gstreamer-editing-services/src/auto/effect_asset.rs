@@ -17,3 +17,6 @@ glib::wrapper! {
 impl EffectAsset {
     pub const NONE: Option<&'static EffectAsset> = None;
 }
+
+unsafe impl Send for EffectAsset {}
+unsafe impl Sync for EffectAsset {}
