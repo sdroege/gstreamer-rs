@@ -33,7 +33,7 @@ paste = "1.0"
 pretty-hex = "0.3"
 thiserror = "1"
 smallvec = { version = "1.0", features = ["write"] }
-itertools = "0.10"
+itertools = "0.11"
 
 [dev-dependencies]
 ron = "0.8"
