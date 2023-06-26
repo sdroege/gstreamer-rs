@@ -20,7 +20,7 @@ anyhow = "1"
 termion = { version = "2", optional = true }
 
 [target.'cfg(target_os = "macos")'.dependencies]
-cocoa = "0.24"
+cocoa = "0.25"
 objc = "0.2.7"
 
 [features]
