@@ -1090,7 +1090,7 @@ impl AppSinkBuilder {
 
     pub fn wait_on_eos(self, wait_on_eos: bool) -> Self {
         Self {
-            builder: self.builder.property("wait_on_eos", wait_on_eos),
+            builder: self.builder.property("wait-on-eos", wait_on_eos),
             ..self
         }
     }
