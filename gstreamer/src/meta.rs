@@ -15,6 +15,23 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
     #[doc(alias = "get_meta_api")]
     fn meta_api() -> glib::Type;
 
+    fn has_tag(&self, tag: glib::Quark) -> bool {
+        unsafe {
+            from_glib(ffi::gst_meta_api_type_has_tag(
+                Self::meta_api().into_glib(),
+                tag.into_glib(),
+            ))
+        }
+    }
+
+    fn tags(&self) -> &[glib::GStringPtr] {
+        unsafe {
+            glib::StrV::from_glib_borrow(ffi::gst_meta_api_type_get_tags(
+                Self::meta_api().into_glib(),
+            ))
+        }
+    }
+
     #[inline]
     unsafe fn from_ptr(buffer: &BufferRef, ptr: *const Self::GstType) -> MetaRef<Self> {
         debug_assert!(!ptr.is_null());
@@ -758,6 +775,9 @@ mod tests {
                 .collect::<Vec<_>>();
             assert_eq!(metas.len(), 1);
             assert_eq!(metas[0].parent().as_ptr(), parent.as_ptr());
+            assert!(!metas[0].has_tag(glib::Quark::from_str("video")));
+            assert!(metas[0].has_tag(glib::Quark::from_str("memory-reference")));
+            assert_eq!(metas[0].tags().len(), 1);
         }
 
         {
