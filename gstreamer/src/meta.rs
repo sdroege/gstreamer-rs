@@ -14,7 +14,17 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
 
     #[doc(alias = "get_meta_api")]
     fn meta_api() -> glib::Type;
+}
 
+pub trait MetaAPIExt: MetaAPI {
+    unsafe fn from_ptr(buffer: &BufferRef, ptr: *const Self::GstType) -> MetaRef<Self>;
+    unsafe fn from_mut_ptr<T>(
+        buffer: &mut BufferRef,
+        ptr: *mut Self::GstType,
+    ) -> MetaRefMut<Self, T>;
+}
+
+impl<A: MetaAPI> MetaAPIExt for A {
     #[inline]
     unsafe fn from_ptr(buffer: &BufferRef, ptr: *const Self::GstType) -> MetaRef<Self> {
         debug_assert!(!ptr.is_null());
