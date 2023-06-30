@@ -104,7 +104,8 @@ pub mod meta;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 pub use crate::meta::MetaSeqnum;
 pub use crate::meta::{
-    Meta, MetaAPI, MetaRef, MetaRefMut, ParentBufferMeta, ProtectionMeta, ReferenceTimestampMeta,
+    Meta, MetaAPI, MetaAPIExt, MetaRef, MetaRefMut, ParentBufferMeta, ProtectionMeta,
+    ReferenceTimestampMeta,
 };
 pub mod buffer;
 pub use crate::buffer::{
@@ -322,7 +323,7 @@ pub mod prelude {
         gobject::GObjectExtManualGst,
         memory::MemoryType,
         message::MessageErrorDomain,
-        meta::MetaAPI,
+        meta::{MetaAPI, MetaAPIExt},
         miniobject::IsMiniObject,
         object::GstObjectExtManual,
         pad::PadExtManual,
