@@ -574,6 +574,13 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                             PrepareOutputBufferSuccess::Buffer(from_glib_full(outbuf))
                         }
                     })
+                    .map_err(|err| {
+                        if outbuf != buf as *mut _ {
+                            drop(Option::<gst::Buffer>::from_glib_full(outbuf));
+                        }
+
+                        err
+                    })
                 })
                 .unwrap_or(Err(gst::FlowError::NotSupported))
         }
@@ -1143,6 +1150,8 @@ unsafe extern "C" fn base_transform_prepare_output_buffer<T: BaseTransformImpl>(
         false => InputBuffer::Readable(gst::BufferRef::from_ptr(inbuf)),
         true => InputBuffer::Writable(gst::BufferRef::from_mut_ptr(inbuf)),
     };
+
+    *outbuf = ptr::null_mut();
 
     gst::panic_to_error!(imp, gst::FlowReturn::Error, {
         match imp.prepare_output_buffer(buffer) {
