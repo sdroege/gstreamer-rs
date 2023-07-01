@@ -23,11 +23,15 @@ tracing = "0.1.0"
 tracing-core = "0.1.17"
 gstreamer = "0.20"
 thread_local = "1.0.0"
+tracing-chrome = "0.7.0"
+tracing-subscriber = "0.3"
 
 [dev-dependencies]
 tracing = "0.1.0"
-tracing-subscriber = "0.3"
 tracing-tracy = "0.10"
 
 [package.metadata.docs.rs]
 rustdoc-args = ["--cfg", "tracing_gstreamer_docs"]
+
+[features]
+tracing-chrome = []

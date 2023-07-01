@@ -1,14 +1,13 @@
 use crate::callsite::GstCallsiteKind;
-use glib::subclass::basic;
 use gstreamer::{
     glib,
-    prelude::PadExtManual,
+    prelude::*,
     subclass::prelude::*,
     traits::{GstObjectExt, PadExt},
     Buffer, FlowError, FlowSuccess, Object, Pad, Tracer,
 };
-use std::cell::RefCell;
-use tracing::{span::Attributes, Callsite, Dispatch, Id};
+use std::{cell::RefCell, str::FromStr};
+use tracing::{error, info, span::Attributes, Callsite, Dispatch, Id};
 
 struct EnteredSpan {
     id: Id,
@@ -90,8 +89,6 @@ glib::wrapper! {
 impl ObjectSubclass for TracingTracerPriv {
     const NAME: &'static str = "TracingTracer";
     type Type = TracingTracer;
-    type Class = basic::ClassStruct<Self>;
-    type Instance = basic::InstanceStruct<Self>;
     type ParentType = Tracer;
     type Interfaces = ();
 
@@ -101,9 +98,36 @@ impl ObjectSubclass for TracingTracerPriv {
         }
     }
 }
+pub(crate) trait TracingTracerImpl: TracerImpl {}
+
+unsafe impl<T: TracingTracerImpl> IsSubclassable<T> for TracingTracer {
+    fn class_init(class: &mut glib::Class<Self>) {
+        Self::parent_class_init::<T>(class);
+    }
+}
 
 impl ObjectImpl for TracingTracerPriv {
     fn constructed(&self) {
+        if let Some(params) = self.obj().property::<Option<String>>("params") {
+            let tmp = format!("params,{}", params);
+            info!("{:?} params: {:?}", self.obj(), tmp);
+            let structure = gstreamer::Structure::from_str(&tmp).unwrap_or_else(|e| {
+                error!("Invalid params string: {:?}: {e:?}", tmp);
+                gstreamer::Structure::new_empty("params")
+            });
+
+            if let Ok(gst_logs_level) = structure
+                .get::<String>("log-level")
+                .or_else(|_| structure.get::<i32>("log-level").map(|l| l.to_string()))
+            {
+                info!("Integrating `{gst_logs_level}` GStreamer logs as part of our tracing");
+
+                crate::integrate_events();
+                gstreamer::debug_remove_default_log_function();
+                gstreamer::debug_set_threshold_from_string(&gst_logs_level, true);
+            }
+        }
+
         self.parent_constructed();
         self.register_hook(TracerHook::PadPushPost);
         self.register_hook(TracerHook::PadPushPre);

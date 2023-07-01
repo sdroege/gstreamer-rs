@@ -110,3 +110,73 @@ Similar results can be achieved with some other subscribers as well.
 
 [gsttracing]: https://gstreamer.freedesktop.org/documentation/additional/design/tracing.html
 [`tracing`]: tracing_core
+
+
+### The GStreamer tracers
+
+Several GStreamer tracers are also available so the integration of GStreamer
+tracing and logging into the Rust tracing system is possible without modifying
+the application that uses GStreamer.
+
+For GStreamer to find the tracer you need to ensure that the
+`libtracing_gstreamer.so` is installed as GStreamer plugin (you can also set
+`GST_PLUGIN_PATH` for example with `export
+GST_PLUGIN_PATH=$PWD/target/debug/:$GST_PLUGIN_PATH`).
+
+Currently 2 tracers are available:
+
+* `chrometracing`: This tracer will output the tracing events in the Chrome json
+  tracing format. This will create a `trace-XXX.json` in the current directory
+  that can be opened in [perfetto](https://ui.perfetto.dev/). This is useful to
+  analyze GStreamer performance in a graphical way.
+
+* `fmttracing`: Use the `tracing-subscriber::fmt` subscriber to format the
+  tracing events. This is useful to get a human readable output. To actually get
+  output you also need to set `RUST_LOG=<loglevel>`
+
+> Note that only *one* of those tracer can be used at a time, and the application
+> itself should never activate any other tracing_subscriber.
+
+#### Tracers parameters
+
+The tracer has the following parameters:
+
+* `log-level`: String in the same form as the GST_DEBUG environment variable
+  defining which GStreamer log level and category should be logged into the
+  tracing system. This implies that the usual GStreamer log system will be
+  disabled and the rust one will be used instead.
+
+#### Examples
+
+You can, for example, profile a GStreamer pipeline using [`gst-launch-1.0`]
+with the following command:
+
+##### Using the `chrometracing` tracer
+
+
+``` sh
+# Builds the tracer plugin and make sure GStreamer finds it.
+# Enable the tracer with the chrome tracing output and activating GStreamer info logs
+cargo build && \
+  GST_PLUGIN_PATH=$PWD/target/debug/:$GST_PLUGIN_PATH \
+  GST_TRACERS="chrometracing(log-level=4)" \
+  gst-launch-1.0 playbin3 uri="https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm"
+```
+
+A new `trace-XXX.json` file will be created in the current directory. You can
+then open it in [perfetto](https://ui.perfetto.dev/) to analyze them.
+
+
+##### Using the `fmttracing` tracer
+
+
+``` sh
+# Builds the tracer plugin and make sure GStreamer finds it.
+# Enable the tracer with the fmt tracing output and activating GStreamer info logs
+# Logs will be output on stderr in the `tracing-subscriber::fmt` format
+cargo build && \
+  GST_PLUGIN_PATH=$PWD/target/debug/:$GST_PLUGIN_PATH \
+  RUST_LOG=debug GST_TRACERS="fmttracing(log-level=4)" \
+  gst-launch-1.0 playbin3 uri="https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm"
+```
+
