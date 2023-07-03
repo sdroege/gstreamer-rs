@@ -835,7 +835,7 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
 ## [0.15.5] - 2020-05-03
 ### Fixed
 - Revert: Allow logging any `glib::Object` and not just `gst::Object`. This
-  broke API in subtile ways and needs to wait until 0.16
+  broke API in subtle ways and needs to wait until 0.16
 - Replace `%` in log output with `%%` to prevent accidental C formatting
 - Add missing manual traits to the documentation
 

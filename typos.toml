@@ -5,6 +5,7 @@ inout = "inout"
 seeked = "seeked"
 BA = "BA" # sdp_message.rs
 UE = "UE" # rtsp-server-record.rs
+subtiles = "subtiles"
 
 [default]
 extend-ignore-identifiers-re = [

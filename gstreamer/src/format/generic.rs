@@ -452,7 +452,7 @@ mod tests {
     #[test]
     #[allow(clippy::eq_op, clippy::op_ref)]
     fn other() {
-        // Check a few ops on `Other`, better converage for
+        // Check a few ops on `Other`, better coverage for
         // the macro ops impl ensured as part of the `clock_time` module.
 
         use opt_ops::prelude::*;
