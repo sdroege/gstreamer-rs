@@ -121,14 +121,52 @@ impl VideoInfoDmaDrm {
     #[doc(alias = "gst_video_info_dma_drm_to_caps")]
     pub fn to_caps(&self) -> Result<gst::Caps, glib::error::BoolError> {
         unsafe {
-            let result = from_glib_full(ffi::gst_video_info_dma_drm_to_caps(
-                &self.0 as *const _ as *mut _,
-            ));
+            let result = from_glib_full(ffi::gst_video_info_dma_drm_to_caps(mut_override(&self.0)));
             match result {
                 Some(c) => Ok(c),
                 None => Err(glib::bool_error!(
                     "Failed to create caps from VideoInfoDmaDrm"
                 )),
+            }
+        }
+    }
+
+    #[doc(alias = "gst_video_info_dma_drm_from_video_info")]
+    pub fn from_video_info(
+        video_info: &crate::VideoInfo,
+        modifier: u64,
+    ) -> Result<Self, glib::error::BoolError> {
+        skip_assert_initialized!();
+
+        unsafe {
+            let mut info = mem::MaybeUninit::uninit();
+            if from_glib(ffi::gst_video_info_dma_drm_from_video_info(
+                info.as_mut_ptr(),
+                video_info.to_glib_none().0,
+                modifier,
+            )) {
+                Ok(Self(info.assume_init()))
+            } else {
+                Err(glib::bool_error!(
+                    "Failed to create VideoInfoDmaDrm from VideoInfo"
+                ))
+            }
+        }
+    }
+
+    #[doc(alias = "gst_video_info_dma_drm_to_video_info")]
+    pub fn to_video_info(&self) -> Result<crate::VideoInfo, glib::error::BoolError> {
+        unsafe {
+            let mut video_info = mem::MaybeUninit::uninit();
+            if from_glib(ffi::gst_video_info_dma_drm_to_video_info(
+                mut_override(&self.0),
+                video_info.as_mut_ptr(),
+            )) {
+                Ok(crate::VideoInfo(video_info.assume_init()))
+            } else {
+                Err(glib::bool_error!(
+                    "Failed to create VideoInfo from VideoInfoDmaDrm"
+                ))
             }
         }
     }
