@@ -598,6 +598,27 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstDsdFormat",
+        Layout {
+            size: size_of::<GstDsdFormat>(),
+            alignment: align_of::<GstDsdFormat>(),
+        },
+    ),
+    (
+        "GstDsdInfo",
+        Layout {
+            size: size_of::<GstDsdInfo>(),
+            alignment: align_of::<GstDsdInfo>(),
+        },
+    ),
+    (
+        "GstDsdPlaneOffsetMeta",
+        Layout {
+            size: size_of::<GstDsdPlaneOffsetMeta>(),
+            alignment: align_of::<GstDsdPlaneOffsetMeta>(),
+        },
+    ),
+    (
         "GstStreamVolumeFormat",
         Layout {
             size: size_of::<GstStreamVolumeFormat>(),
@@ -856,6 +877,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_AUDIO_RESAMPLER_QUALITY_MIN", "0"),
     ("(gint) GST_AUDIO_RING_BUFFER_FORMAT_TYPE_AC3", "7"),
     ("(gint) GST_AUDIO_RING_BUFFER_FORMAT_TYPE_A_LAW", "2"),
+    ("(gint) GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DSD", "15"),
     ("(gint) GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DTS", "9"),
     ("(gint) GST_AUDIO_RING_BUFFER_FORMAT_TYPE_EAC3", "8"),
     ("(gint) GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC", "14"),
@@ -879,9 +901,25 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_AUDIO_RING_BUFFER_STATE_PAUSED", "1"),
     ("(gint) GST_AUDIO_RING_BUFFER_STATE_STARTED", "2"),
     ("(gint) GST_AUDIO_RING_BUFFER_STATE_STOPPED", "0"),
+    (
+        "GST_DSD_FORMATS_ALL",
+        "{ DSDU32BE, DSDU16BE, DSDU8, DSDU32LE, DSDU16LE }",
+    ),
+    ("(gint) GST_DSD_FORMAT_U16", "2"),
+    ("(gint) GST_DSD_FORMAT_U16BE", "3"),
+    ("(gint) GST_DSD_FORMAT_U16LE", "2"),
+    ("(gint) GST_DSD_FORMAT_U32", "4"),
+    ("(gint) GST_DSD_FORMAT_U32BE", "5"),
+    ("(gint) GST_DSD_FORMAT_U32LE", "4"),
+    ("(gint) GST_DSD_FORMAT_U8", "1"),
+    ("(gint) GST_DSD_FORMAT_UNKNOWN", "0"),
+    ("GST_DSD_MEDIA_TYPE", "audio/x-dsd"),
+    ("GST_DSD_SILENCE_PATTERN_BYTE", "105"),
     ("GST_META_TAG_AUDIO_CHANNELS_STR", "channels"),
     ("GST_META_TAG_AUDIO_RATE_STR", "rate"),
     ("GST_META_TAG_AUDIO_STR", "audio"),
+    ("GST_META_TAG_DSD_PLANE_OFFSETS_STR", "dsdplaneoffsets"),
+    ("(gint) GST_NUM_DSD_FORMATS", "6"),
     ("(gint) GST_STREAM_VOLUME_FORMAT_CUBIC", "1"),
     ("(gint) GST_STREAM_VOLUME_FORMAT_DB", "2"),
     ("(gint) GST_STREAM_VOLUME_FORMAT_LINEAR", "0"),

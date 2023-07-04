@@ -328,6 +328,9 @@ pub const GST_VIDEO_FORMAT_NV12_8L128: GstVideoFormat = 111;
 #[cfg(feature = "v1_22")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_VIDEO_FORMAT_NV12_10BE_8L128: GstVideoFormat = 112;
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub const GST_VIDEO_FORMAT_NV12_10LE40_4L4: GstVideoFormat = 113;
 
 pub type GstVideoGLTextureOrientation = c_int;
 pub const GST_VIDEO_GL_TEXTURE_ORIENTATION_X_NORMAL_Y_NORMAL: GstVideoGLTextureOrientation = 0;
@@ -3144,9 +3147,22 @@ extern "C" {
         -> *mut gst::GstCaps;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_info_dma_drm_to_video_info(
+        drm_info: *const GstVideoInfoDmaDrm,
+        info: *mut GstVideoInfo,
+    ) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_info_dma_drm_from_caps(
         drm_info: *mut GstVideoInfoDmaDrm,
         caps: *const gst::GstCaps,
+    ) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_info_dma_drm_from_video_info(
+        drm_info: *mut GstVideoInfoDmaDrm,
+        info: *const GstVideoInfo,
+        modifier: u64,
     ) -> gboolean;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]

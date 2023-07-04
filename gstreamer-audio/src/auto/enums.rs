@@ -680,6 +680,10 @@ pub enum AudioRingBufferFormatType {
     Mpeg4AacRaw,
     #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC")]
     Flac,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DSD")]
+    Dsd,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -705,6 +709,8 @@ impl IntoGlib for AudioRingBufferFormatType {
             Self::Mpeg2AacRaw => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC_RAW,
             Self::Mpeg4AacRaw => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC_RAW,
             Self::Flac => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC,
+            #[cfg(feature = "v1_24")]
+            Self::Dsd => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DSD,
             Self::__Unknown(value) => value,
         }
     }
@@ -731,6 +737,8 @@ impl FromGlib<ffi::GstAudioRingBufferFormatType> for AudioRingBufferFormatType {
             ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC_RAW => Self::Mpeg2AacRaw,
             ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC_RAW => Self::Mpeg4AacRaw,
             ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC => Self::Flac,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DSD => Self::Dsd,
             value => Self::__Unknown(value),
         }
     }

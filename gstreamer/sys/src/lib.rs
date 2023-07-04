@@ -9153,6 +9153,14 @@ extern "C" {
         array: *const gobject::GValueArray,
     ) -> gboolean;
     pub fn gst_util_set_value_from_string(value: *mut gobject::GValue, value_str: *const c_char);
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_util_simplify_fraction(
+        numerator: *mut c_int,
+        denominator: *mut c_int,
+        n_terms: c_uint,
+        threshold: c_uint,
+    );
     pub fn gst_util_uint64_scale(val: u64, num: u64, denom: u64) -> u64;
     pub fn gst_util_uint64_scale_ceil(val: u64, num: u64, denom: u64) -> u64;
     pub fn gst_util_uint64_scale_int(val: u64, num: c_int, denom: c_int) -> u64;

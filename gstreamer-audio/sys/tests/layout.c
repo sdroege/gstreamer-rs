@@ -65,6 +65,9 @@ int main() {
     printf("%s;%zu;%zu\n", "GstAudioSinkClassExtension", sizeof(GstAudioSinkClassExtension), alignof(GstAudioSinkClassExtension));
     printf("%s;%zu;%zu\n", "GstAudioSrc", sizeof(GstAudioSrc), alignof(GstAudioSrc));
     printf("%s;%zu;%zu\n", "GstAudioSrcClass", sizeof(GstAudioSrcClass), alignof(GstAudioSrcClass));
+    printf("%s;%zu;%zu\n", "GstDsdFormat", sizeof(GstDsdFormat), alignof(GstDsdFormat));
+    printf("%s;%zu;%zu\n", "GstDsdInfo", sizeof(GstDsdInfo), alignof(GstDsdInfo));
+    printf("%s;%zu;%zu\n", "GstDsdPlaneOffsetMeta", sizeof(GstDsdPlaneOffsetMeta), alignof(GstDsdPlaneOffsetMeta));
     printf("%s;%zu;%zu\n", "GstStreamVolumeFormat", sizeof(GstStreamVolumeFormat), alignof(GstStreamVolumeFormat));
     printf("%s;%zu;%zu\n", "GstStreamVolumeInterface", sizeof(GstStreamVolumeInterface), alignof(GstStreamVolumeInterface));
     return 0;

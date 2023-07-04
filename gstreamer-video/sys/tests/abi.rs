@@ -1349,6 +1349,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_VIDEO_FORMAT_NV12_10BE_8L128", "112"),
     ("(gint) GST_VIDEO_FORMAT_NV12_10LE32", "79"),
     ("(gint) GST_VIDEO_FORMAT_NV12_10LE40", "81"),
+    ("(gint) GST_VIDEO_FORMAT_NV12_10LE40_4L4", "113"),
     ("(gint) GST_VIDEO_FORMAT_NV12_16L32S", "110"),
     ("(gint) GST_VIDEO_FORMAT_NV12_32L32", "98"),
     ("(gint) GST_VIDEO_FORMAT_NV12_4L4", "97"),

@@ -163,12 +163,24 @@ pub const GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC: GstAudioRingBufferFormatT
 pub const GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC_RAW: GstAudioRingBufferFormatType = 12;
 pub const GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC_RAW: GstAudioRingBufferFormatType = 13;
 pub const GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC: GstAudioRingBufferFormatType = 14;
+pub const GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DSD: GstAudioRingBufferFormatType = 15;
 
 pub type GstAudioRingBufferState = c_int;
 pub const GST_AUDIO_RING_BUFFER_STATE_STOPPED: GstAudioRingBufferState = 0;
 pub const GST_AUDIO_RING_BUFFER_STATE_PAUSED: GstAudioRingBufferState = 1;
 pub const GST_AUDIO_RING_BUFFER_STATE_STARTED: GstAudioRingBufferState = 2;
 pub const GST_AUDIO_RING_BUFFER_STATE_ERROR: GstAudioRingBufferState = 3;
+
+pub type GstDsdFormat = c_int;
+pub const GST_DSD_FORMAT_UNKNOWN: GstDsdFormat = 0;
+pub const GST_DSD_FORMAT_U8: GstDsdFormat = 1;
+pub const GST_DSD_FORMAT_U16LE: GstDsdFormat = 2;
+pub const GST_DSD_FORMAT_U16BE: GstDsdFormat = 3;
+pub const GST_DSD_FORMAT_U32LE: GstDsdFormat = 4;
+pub const GST_DSD_FORMAT_U32BE: GstDsdFormat = 5;
+pub const GST_NUM_DSD_FORMATS: GstDsdFormat = 6;
+pub const GST_DSD_FORMAT_U16: GstDsdFormat = 2;
+pub const GST_DSD_FORMAT_U32: GstDsdFormat = 4;
 
 pub type GstStreamVolumeFormat = c_int;
 pub const GST_STREAM_VOLUME_FORMAT_LINEAR: GstStreamVolumeFormat = 0;
@@ -212,9 +224,13 @@ pub const GST_AUDIO_RESAMPLER_OPT_TRANSITION_BANDWIDTH: &[u8] =
 pub const GST_AUDIO_RESAMPLER_QUALITY_DEFAULT: c_int = 4;
 pub const GST_AUDIO_RESAMPLER_QUALITY_MAX: c_int = 10;
 pub const GST_AUDIO_RESAMPLER_QUALITY_MIN: c_int = 0;
+pub const GST_DSD_FORMATS_ALL: &[u8] = b"{ DSDU32BE, DSDU16BE, DSDU8, DSDU32LE, DSDU16LE }\0";
+pub const GST_DSD_MEDIA_TYPE: &[u8] = b"audio/x-dsd\0";
+pub const GST_DSD_SILENCE_PATTERN_BYTE: c_int = 105;
 pub const GST_META_TAG_AUDIO_CHANNELS_STR: &[u8] = b"channels\0";
 pub const GST_META_TAG_AUDIO_RATE_STR: &[u8] = b"rate\0";
 pub const GST_META_TAG_AUDIO_STR: &[u8] = b"audio\0";
+pub const GST_META_TAG_DSD_PLANE_OFFSETS_STR: &[u8] = b"dsdplaneoffsets\0";
 
 // Flags
 pub type GstAudioChannelMixerFlags = c_uint;
@@ -253,6 +269,22 @@ pub const GST_AUDIO_RESAMPLER_FLAG_NONE: GstAudioResamplerFlags = 0;
 pub const GST_AUDIO_RESAMPLER_FLAG_NON_INTERLEAVED_IN: GstAudioResamplerFlags = 1;
 pub const GST_AUDIO_RESAMPLER_FLAG_NON_INTERLEAVED_OUT: GstAudioResamplerFlags = 2;
 pub const GST_AUDIO_RESAMPLER_FLAG_VARIABLE_RATE: GstAudioResamplerFlags = 4;
+
+// Unions
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub union GstAudioRingBufferSpec_ABI {
+    pub abi: GstAudioRingBufferSpec_ABI_abi,
+    pub _gst_reserved: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstAudioRingBufferSpec_ABI {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAudioRingBufferSpec_ABI @ {self:p}"))
+            .field("abi", unsafe { &self.abi })
+            .finish()
+    }
+}
 
 // Callbacks
 pub type GstAudioBaseSinkCustomSlavingCallback = Option<
@@ -955,7 +987,7 @@ pub struct GstAudioRingBufferSpec {
     pub segsize: c_int,
     pub segtotal: c_int,
     pub seglatency: c_int,
-    pub _gst_reserved: [gpointer; 4],
+    pub ABI: GstAudioRingBufferSpec_ABI,
 }
 
 impl ::std::fmt::Debug for GstAudioRingBufferSpec {
@@ -969,6 +1001,21 @@ impl ::std::fmt::Debug for GstAudioRingBufferSpec {
             .field("segsize", &self.segsize)
             .field("segtotal", &self.segtotal)
             .field("seglatency", &self.seglatency)
+            .field("ABI", &self.ABI)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstAudioRingBufferSpec_ABI_abi {
+    pub dsd_format: GstDsdFormat,
+}
+
+impl ::std::fmt::Debug for GstAudioRingBufferSpec_ABI_abi {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAudioRingBufferSpec_ABI_abi @ {self:p}"))
+            .field("dsd_format", &self.dsd_format)
             .finish()
     }
 }
@@ -1065,6 +1112,54 @@ pub struct GstAudioStreamAlign {
 impl ::std::fmt::Debug for GstAudioStreamAlign {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioStreamAlign @ {self:p}"))
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstDsdInfo {
+    pub format: GstDsdFormat,
+    pub rate: c_int,
+    pub channels: c_int,
+    pub layout: GstAudioLayout,
+    pub reversed_bytes: gboolean,
+    pub positions: [GstAudioChannelPosition; 64],
+    pub flags: GstAudioFlags,
+    pub _gst_reserved: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstDsdInfo {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstDsdInfo @ {self:p}"))
+            .field("format", &self.format)
+            .field("rate", &self.rate)
+            .field("channels", &self.channels)
+            .field("layout", &self.layout)
+            .field("reversed_bytes", &self.reversed_bytes)
+            .field("flags", &self.flags)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstDsdPlaneOffsetMeta {
+    pub meta: gst::GstMeta,
+    pub num_channels: c_int,
+    pub num_bytes_per_channel: size_t,
+    pub offsets: *mut size_t,
+    pub priv_offsets_arr: [size_t; 8],
+    pub _gst_reserved: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstDsdPlaneOffsetMeta {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstDsdPlaneOffsetMeta @ {self:p}"))
+            .field("meta", &self.meta)
+            .field("num_channels", &self.num_channels)
+            .field("num_bytes_per_channel", &self.num_bytes_per_channel)
+            .field("offsets", &self.offsets)
             .finish()
     }
 }
@@ -1481,6 +1576,22 @@ extern "C" {
     pub fn gst_audio_ring_buffer_state_get_type() -> GType;
 
     //=========================================================================
+    // GstDsdFormat
+    //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_format_get_type() -> GType;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_format_from_string(str: *const c_char) -> GstDsdFormat;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_format_get_width(format: GstDsdFormat) -> c_uint;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_format_to_string(format: GstDsdFormat) -> *const c_char;
+
+    //=========================================================================
     // GstAudioChannelMixerFlags
     //=========================================================================
     pub fn gst_audio_channel_mixer_flags_get_type() -> GType;
@@ -1816,6 +1927,53 @@ extern "C" {
         discont_wait: gst::GstClockTime,
     );
     pub fn gst_audio_stream_align_set_rate(align: *mut GstAudioStreamAlign, rate: c_int);
+
+    //=========================================================================
+    // GstDsdInfo
+    //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_info_get_type() -> GType;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_info_new() -> *mut GstDsdInfo;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_info_new_from_caps(caps: *const gst::GstCaps) -> *mut GstDsdInfo;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_info_copy(info: *const GstDsdInfo) -> *mut GstDsdInfo;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_info_free(info: *mut GstDsdInfo);
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_info_is_equal(info: *const GstDsdInfo, other: *const GstDsdInfo) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_info_set_format(
+        info: *mut GstDsdInfo,
+        format: GstDsdFormat,
+        rate: c_int,
+        channels: c_int,
+        positions: *const GstAudioChannelPosition,
+    );
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_info_to_caps(info: *const GstDsdInfo) -> *mut gst::GstCaps;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_info_from_caps(info: *mut GstDsdInfo, caps: *const gst::GstCaps) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_info_init(info: *mut GstDsdInfo);
+
+    //=========================================================================
+    // GstDsdPlaneOffsetMeta
+    //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_plane_offset_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
     // GstAudioAggregator
@@ -2299,6 +2457,14 @@ extern "C" {
         samples: size_t,
         offsets: *mut size_t,
     ) -> *mut GstAudioMeta;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_buffer_add_dsd_plane_offset_meta(
+        buffer: *mut gst::GstBuffer,
+        num_channels: c_int,
+        num_bytes_per_channel: size_t,
+        offsets: *mut size_t,
+    ) -> *mut GstDsdPlaneOffsetMeta;
     pub fn gst_buffer_get_audio_downmix_meta_for_channels(
         buffer: *mut gst::GstBuffer,
         to_position: *const GstAudioChannelPosition,
@@ -2307,5 +2473,21 @@ extern "C" {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_buffer_get_audio_level_meta(buffer: *mut gst::GstBuffer) -> *mut GstAudioLevelMeta;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_dsd_convert(
+        input_data: *const u8,
+        output_data: *mut u8,
+        input_format: GstDsdFormat,
+        output_format: GstDsdFormat,
+        input_layout: GstAudioLayout,
+        output_layout: GstAudioLayout,
+        input_plane_offsets: *const size_t,
+        output_plane_offsets: *const size_t,
+        num_dsd_bytes: size_t,
+        num_channels: c_int,
+        reverse_bytes: gboolean,
+    );
+    pub fn gst_dsd_plane_offset_meta_api_get_type() -> GType;
 
 }
