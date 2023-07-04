@@ -34,6 +34,19 @@ impl Fraction {
     pub fn denom(&self) -> i32 {
         *self.0.denom()
     }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_util_simplify_fraction")]
+    pub fn simplify(&mut self, n_terms: u32, threshold: u32) {
+        skip_assert_initialized!();
+        unsafe {
+            let mut num = self.numer();
+            let mut den = self.denom();
+            ffi::gst_util_simplify_fraction(&mut num, &mut den, n_terms, threshold);
+            *self = Self::new(num, den);
+        }
+    }
 }
 
 impl fmt::Display for Fraction {

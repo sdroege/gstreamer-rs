@@ -113,6 +113,10 @@ status = "generate"
     ignore = true
 
     [[object.function]]
+    name = "util_simplify_fraction"
+    ignore = true
+
+    [[object.function]]
     pattern = "util_greatest_.*"
     ignore = true
 
