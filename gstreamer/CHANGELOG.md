@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.20.7] - 2023-07-05
+### Fixed
+- Fix `wait-for-eos` property name string in `appsink`.
+- Fix various memory leaks in `BaseTransform` subclassing bindings.
+- Mark some GES APIs as `Send+Sync`.
+
+### Added
+- Implement `DiscovererInfo::debug()` and on related structs.
++ Add subclassing bindings for `GESFormatter`.
+
 ## [0.20.6] - 2023-06-06
 ### Added
 - Getter for the `gst_rtsp_server::RTSPContext` URI field.
