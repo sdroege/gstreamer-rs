@@ -21,17 +21,12 @@ pub trait ChildProxyImpl: GstObjectImpl + Send + Sync {
     }
 }
 
-pub trait ChildProxyImplExt: ObjectSubclass {
-    fn parent_child_by_name(&self, name: &str) -> Option<glib::Object>;
-
-    fn parent_child_by_index(&self, index: u32) -> Option<glib::Object>;
-    fn parent_children_count(&self) -> u32;
-
-    fn parent_child_added(&self, _child: &glib::Object, _name: &str);
-    fn parent_child_removed(&self, _child: &glib::Object, _name: &str);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::ChildProxyImplExt> Sealed for T {}
 }
 
-impl<T: ChildProxyImpl> ChildProxyImplExt for T {
+pub trait ChildProxyImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_child_by_name(&self, name: &str) -> Option<glib::Object> {
         unsafe {
             let type_data = Self::type_data();
@@ -111,6 +106,8 @@ impl<T: ChildProxyImpl> ChildProxyImplExt for T {
         }
     }
 }
+
+impl<T: ChildProxyImpl> ChildProxyImplExt for T {}
 
 unsafe impl<T: ChildProxyImpl> IsImplementable<T> for ChildProxy {
     fn interface_init(iface: &mut glib::Interface<Self>) {

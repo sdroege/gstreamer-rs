@@ -4,21 +4,16 @@ use glib::{object::IsA, translate::*};
 
 use crate::RTPBasePayload;
 
-pub trait RTPBasePayloadExtManual: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTPBasePayload>> Sealed for T {}
+}
+
+pub trait RTPBasePayloadExtManual: sealed::Sealed + IsA<RTPBasePayload> + 'static {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_rtp_base_payload_set_outcaps_structure")]
     #[doc(alias = "gst_rtp_base_payload_set_outcaps")]
-    fn set_outcaps(&self, s: Option<&gst::StructureRef>) -> Result<(), glib::error::BoolError>;
-
-    fn sink_pad(&self) -> &gst::Pad;
-
-    fn src_pad(&self) -> &gst::Pad;
-}
-
-impl<O: IsA<RTPBasePayload>> RTPBasePayloadExtManual for O {
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn set_outcaps(&self, s: Option<&gst::StructureRef>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -47,3 +42,5 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExtManual for O {
         }
     }
 }
+
+impl<O: IsA<RTPBasePayload>> RTPBasePayloadExtManual for O {}

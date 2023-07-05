@@ -46,28 +46,12 @@ pub trait GLFilterImpl: GLFilterImplExt + GLBaseFilterImpl {
     }
 }
 
-pub trait GLFilterImplExt: ObjectSubclass {
-    fn parent_set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError>;
-
-    fn parent_filter(&self, input: &Buffer, output: &Buffer) -> Result<(), LoggableError>;
-
-    fn parent_filter_texture(
-        &self,
-        input: &GLMemory,
-        output: &GLMemory,
-    ) -> Result<(), LoggableError>;
-
-    fn parent_init_fbo(&self) -> Result<(), LoggableError>;
-
-    fn parent_transform_internal_caps(
-        &self,
-        direction: PadDirection,
-        caps: &Caps,
-        filter_caps: Option<&Caps>,
-    ) -> Option<Caps>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::GLFilterImplExt> Sealed for T {}
 }
 
-impl<T: GLFilterImpl> GLFilterImplExt for T {
+pub trait GLFilterImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
@@ -178,6 +162,8 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
         }
     }
 }
+
+impl<T: GLFilterImpl> GLFilterImplExt for T {}
 
 unsafe impl<T: GLFilterImpl> IsSubclassable<T> for GLFilter {
     fn class_init(klass: &mut glib::Class<Self>) {

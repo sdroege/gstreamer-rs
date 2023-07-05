@@ -108,61 +108,12 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
     }
 }
 
-pub trait BaseSrcImplExt: ObjectSubclass {
-    fn parent_start(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_stop(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_is_seekable(&self) -> bool;
-
-    fn parent_size(&self) -> Option<u64>;
-
-    fn parent_times(
-        &self,
-        buffer: &gst::BufferRef,
-    ) -> (Option<gst::ClockTime>, Option<gst::ClockTime>);
-
-    fn parent_fill(
-        &self,
-        offset: u64,
-        length: u32,
-        buffer: &mut gst::BufferRef,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_alloc(&self, offset: u64, length: u32) -> Result<gst::Buffer, gst::FlowError>;
-
-    fn parent_create(
-        &self,
-        offset: u64,
-        buffer: Option<&mut gst::BufferRef>,
-        length: u32,
-    ) -> Result<CreateSuccess, gst::FlowError>;
-
-    fn parent_do_seek(&self, segment: &mut gst::Segment) -> bool;
-
-    fn parent_query(&self, query: &mut gst::QueryRef) -> bool;
-
-    fn parent_event(&self, event: &gst::Event) -> bool;
-
-    fn parent_caps(&self, filter: Option<&gst::Caps>) -> Option<gst::Caps>;
-
-    fn parent_negotiate(&self) -> Result<(), gst::LoggableError>;
-
-    fn parent_set_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError>;
-
-    fn parent_fixate(&self, caps: gst::Caps) -> gst::Caps;
-
-    fn parent_unlock(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_unlock_stop(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_decide_allocation(
-        &self,
-        query: &mut gst::query::Allocation,
-    ) -> Result<(), gst::LoggableError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::BaseSrcImplExt> Sealed for T {}
 }
 
-impl<T: BaseSrcImpl> BaseSrcImplExt for T {
+pub trait BaseSrcImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_start(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
@@ -606,6 +557,8 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         }
     }
 }
+
+impl<T: BaseSrcImpl> BaseSrcImplExt for T {}
 
 unsafe impl<T: BaseSrcImpl> IsSubclassable<T> for BaseSrc {
     fn class_init(klass: &mut glib::Class<Self>) {

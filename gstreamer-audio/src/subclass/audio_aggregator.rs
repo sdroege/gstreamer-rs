@@ -26,22 +26,12 @@ pub trait AudioAggregatorImpl: AudioAggregatorImplExt + AggregatorImpl {
     }
 }
 
-pub trait AudioAggregatorImplExt: ObjectSubclass {
-    fn parent_create_output_buffer(&self, num_frames: u32) -> Option<gst::Buffer>;
-
-    #[allow(clippy::too_many_arguments)]
-    fn parent_aggregate_one_buffer(
-        &self,
-        pad: &AudioAggregatorPad,
-        inbuf: &gst::BufferRef,
-        in_offset: u32,
-        outbuf: &mut gst::BufferRef,
-        out_offset: u32,
-        num_frames: u32,
-    ) -> bool;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::AudioAggregatorImplExt> Sealed for T {}
 }
 
-impl<T: AudioAggregatorImpl> AudioAggregatorImplExt for T {
+pub trait AudioAggregatorImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_create_output_buffer(&self, num_frames: u32) -> Option<gst::Buffer> {
         unsafe {
             let data = Self::type_data();
@@ -91,6 +81,8 @@ impl<T: AudioAggregatorImpl> AudioAggregatorImplExt for T {
         }
     }
 }
+
+impl<T: AudioAggregatorImpl> AudioAggregatorImplExt for T {}
 
 unsafe impl<T: AudioAggregatorImpl> IsSubclassable<T> for AudioAggregator {
     fn class_init(klass: &mut glib::Class<Self>) {

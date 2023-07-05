@@ -39,20 +39,12 @@ pub trait AudioSrcImpl: AudioSrcImplExt + AudioBaseSrcImpl {
     }
 }
 
-pub trait AudioSrcImplExt: ObjectSubclass {
-    fn parent_close(&self) -> Result<(), LoggableError>;
-    fn parent_delay(&self) -> u32;
-    fn parent_open(&self) -> Result<(), LoggableError>;
-    fn parent_prepare(&self, spec: &mut AudioRingBufferSpec) -> Result<(), LoggableError>;
-    fn parent_unprepare(&self) -> Result<(), LoggableError>;
-    fn parent_read(
-        &self,
-        audio_data: &mut [u8],
-    ) -> Result<(u32, Option<gst::ClockTime>), LoggableError>;
-    fn parent_reset(&self);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::AudioSrcImplExt> Sealed for T {}
 }
 
-impl<T: AudioSrcImpl> AudioSrcImplExt for T {
+pub trait AudioSrcImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_close(&self) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
@@ -177,6 +169,8 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
         }
     }
 }
+
+impl<T: AudioSrcImpl> AudioSrcImplExt for T {}
 
 unsafe impl<T: AudioSrcImpl> IsSubclassable<T> for AudioSrc {
     fn class_init(klass: &mut glib::Class<Self>) {

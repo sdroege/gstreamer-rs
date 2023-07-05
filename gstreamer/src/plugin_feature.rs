@@ -7,17 +7,14 @@ use glib::{
 
 use crate::{PluginFeature, Rank};
 
-pub trait PluginFeatureExtManual: Sized + 'static {
-    #[doc(alias = "get_rank")]
-    #[doc(alias = "gst_plugin_feature_get_rank")]
-    fn rank(&self) -> Rank;
-    #[doc(alias = "gst_plugin_feature_set_rank")]
-    fn set_rank(&self, rank: Rank);
-    #[doc(alias = "gst_plugin_feature_load")]
-    fn load(&self) -> Result<Self, glib::BoolError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::PluginFeature>> Sealed for T {}
 }
 
-impl<O: IsA<PluginFeature>> PluginFeatureExtManual for O {
+pub trait PluginFeatureExtManual: sealed::Sealed + IsA<PluginFeature> + Sized + 'static {
+    #[doc(alias = "get_rank")]
+    #[doc(alias = "gst_plugin_feature_get_rank")]
     fn rank(&self) -> Rank {
         unsafe {
             let rank = ffi::gst_plugin_feature_get_rank(self.as_ref().to_glib_none().0);
@@ -25,6 +22,7 @@ impl<O: IsA<PluginFeature>> PluginFeatureExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_plugin_feature_set_rank")]
     fn set_rank(&self, rank: Rank) {
         unsafe {
             ffi::gst_plugin_feature_set_rank(
@@ -34,6 +32,7 @@ impl<O: IsA<PluginFeature>> PluginFeatureExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_plugin_feature_load")]
     fn load(&self) -> Result<Self, glib::BoolError> {
         unsafe {
             let loaded = Option::<PluginFeature>::from_glib_full(ffi::gst_plugin_feature_load(
@@ -44,6 +43,8 @@ impl<O: IsA<PluginFeature>> PluginFeatureExtManual for O {
         }
     }
 }
+
+impl<O: IsA<PluginFeature>> PluginFeatureExtManual for O {}
 
 #[cfg(test)]
 mod tests {

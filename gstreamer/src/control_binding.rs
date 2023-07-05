@@ -4,18 +4,14 @@ use glib::{prelude::*, translate::*};
 
 use crate::{ClockTime, ControlBinding};
 
-pub trait ControlBindingExtManual: 'static {
-    #[doc(alias = "get_g_value_array")]
-    #[doc(alias = "gst_control_binding_get_g_value_array")]
-    fn g_value_array(
-        &self,
-        timestamp: ClockTime,
-        interval: ClockTime,
-        values: &mut [glib::Value],
-    ) -> Result<(), glib::error::BoolError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ControlBinding>> Sealed for T {}
 }
 
-impl<O: IsA<ControlBinding>> ControlBindingExtManual for O {
+pub trait ControlBindingExtManual: sealed::Sealed + IsA<ControlBinding> + 'static {
+    #[doc(alias = "get_g_value_array")]
+    #[doc(alias = "gst_control_binding_get_g_value_array")]
     fn g_value_array(
         &self,
         timestamp: ClockTime,
@@ -37,3 +33,5 @@ impl<O: IsA<ControlBinding>> ControlBindingExtManual for O {
         }
     }
 }
+
+impl<O: IsA<ControlBinding>> ControlBindingExtManual for O {}

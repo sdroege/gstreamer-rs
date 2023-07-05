@@ -36,26 +36,12 @@ pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
     }
 }
 
-pub trait BaseParseImplExt: ObjectSubclass {
-    fn parent_start(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_stop(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_set_sink_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError>;
-
-    fn parent_handle_frame(
-        &self,
-        frame: BaseParseFrame,
-    ) -> Result<(gst::FlowSuccess, u32), gst::FlowError>;
-
-    fn parent_convert(
-        &self,
-        src_val: impl gst::format::FormattedValue,
-        dest_format: gst::Format,
-    ) -> Option<gst::GenericFormattedValue>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::BaseParseImplExt> Sealed for T {}
 }
 
-impl<T: BaseParseImpl> BaseParseImplExt for T {
+pub trait BaseParseImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_start(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
@@ -179,6 +165,8 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
         }
     }
 }
+
+impl<T: BaseParseImpl> BaseParseImplExt for T {}
 
 unsafe impl<T: BaseParseImpl> IsSubclassable<T> for BaseParse {
     fn class_init(klass: &mut glib::Class<Self>) {

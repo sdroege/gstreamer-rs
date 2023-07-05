@@ -11,11 +11,12 @@ pub trait RTSPMountPointsImpl: RTSPMountPointsImplExt + ObjectImpl + Send + Sync
     }
 }
 
-pub trait RTSPMountPointsImplExt: ObjectSubclass {
-    fn parent_make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::RTSPMountPointsImplExt> Sealed for T {}
 }
 
-impl<T: RTSPMountPointsImpl> RTSPMountPointsImplExt for T {
+pub trait RTSPMountPointsImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString> {
         unsafe {
             let data = Self::type_data();
@@ -33,6 +34,8 @@ impl<T: RTSPMountPointsImpl> RTSPMountPointsImplExt for T {
         }
     }
 }
+
+impl<T: RTSPMountPointsImpl> RTSPMountPointsImplExt for T {}
 
 unsafe impl<T: RTSPMountPointsImpl> IsSubclassable<T> for RTSPMountPoints {
     fn class_init(klass: &mut glib::Class<Self>) {

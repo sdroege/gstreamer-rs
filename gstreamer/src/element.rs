@@ -101,203 +101,13 @@ impl FromGlib<libc::c_ulong> for NotifyWatchId {
     }
 }
 
-pub trait ElementExtManual: 'static {
-    #[doc(alias = "get_element_class")]
-    fn element_class(&self) -> &glib::Class<Element>;
-
-    #[doc(alias = "get_current_state")]
-    fn current_state(&self) -> State;
-
-    #[doc(alias = "get_pending_state")]
-    fn pending_state(&self) -> State;
-
-    #[doc(alias = "gst_element_query")]
-    fn query(&self, query: &mut QueryRef) -> bool;
-
-    #[doc(alias = "gst_element_send_event")]
-    fn send_event(&self, event: impl Into<Event>) -> bool;
-
-    #[doc(alias = "get_metadata")]
-    fn metadata<'a>(&self, key: &str) -> Option<&'a str>;
-
-    #[doc(alias = "get_pad_template")]
-    fn pad_template(&self, name: &str) -> Option<PadTemplate>;
-    #[doc(alias = "get_pad_template_list")]
-    fn pad_template_list(&self) -> glib::List<PadTemplate>;
-
-    #[allow(clippy::too_many_arguments)]
-    #[doc(alias = "gst_element_message_full")]
-    fn message_full<T: crate::MessageErrorDomain>(
-        &self,
-        type_: ElementMessageType,
-        code: T,
-        message: Option<&str>,
-        debug: Option<&str>,
-        file: &str,
-        function: &str,
-        line: u32,
-    );
-
-    fn set_element_flags(&self, flags: ElementFlags);
-
-    fn unset_element_flags(&self, flags: ElementFlags);
-
-    #[doc(alias = "get_element_flags")]
-    fn element_flags(&self) -> ElementFlags;
-
-    #[allow(clippy::too_many_arguments)]
-    #[doc(alias = "gst_element_message_full_with_details")]
-    fn message_full_with_details<T: crate::MessageErrorDomain>(
-        &self,
-        type_: ElementMessageType,
-        code: T,
-        message: Option<&str>,
-        debug: Option<&str>,
-        file: &str,
-        function: &str,
-        line: u32,
-        structure: crate::Structure,
-    );
-
-    fn post_error_message(&self, msg: crate::ErrorMessage);
-
-    #[doc(alias = "gst_element_iterate_pads")]
-    fn iterate_pads(&self) -> crate::Iterator<Pad>;
-    #[doc(alias = "gst_element_iterate_sink_pads")]
-    fn iterate_sink_pads(&self) -> crate::Iterator<Pad>;
-    #[doc(alias = "gst_element_iterate_src_pads")]
-    fn iterate_src_pads(&self) -> crate::Iterator<Pad>;
-
-    #[doc(alias = "get_pads")]
-    #[doc(alias = "gst_element_foreach_pad")]
-    fn pads(&self) -> Vec<Pad>;
-    #[doc(alias = "get_sink_pads")]
-    #[doc(alias = "gst_element_foreach_sink_pad")]
-    fn sink_pads(&self) -> Vec<Pad>;
-    #[doc(alias = "get_src_pads")]
-    #[doc(alias = "gst_element_foreach_src_pad")]
-    fn src_pads(&self) -> Vec<Pad>;
-
-    fn num_pads(&self) -> u16;
-    fn num_sink_pads(&self) -> u16;
-    fn num_src_pads(&self) -> u16;
-
-    #[doc(alias = "gst_element_add_property_deep_notify_watch")]
-    fn add_property_deep_notify_watch(
-        &self,
-        property_name: Option<&str>,
-        include_value: bool,
-    ) -> NotifyWatchId;
-
-    #[doc(alias = "gst_element_add_property_notify_watch")]
-    fn add_property_notify_watch(
-        &self,
-        property_name: Option<&str>,
-        include_value: bool,
-    ) -> NotifyWatchId;
-
-    #[doc(alias = "gst_element_remove_property_notify_watch")]
-    fn remove_property_notify_watch(&self, watch_id: NotifyWatchId);
-
-    #[doc(alias = "gst_element_query_convert")]
-    fn query_convert<U: SpecificFormattedValueFullRange>(
-        &self,
-        src_val: impl FormattedValue,
-    ) -> Option<U>;
-    fn query_convert_generic(
-        &self,
-        src_val: impl FormattedValue,
-        dest_format: Format,
-    ) -> Option<GenericFormattedValue>;
-
-    #[doc(alias = "gst_element_query_duration")]
-    fn query_duration<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T>;
-    #[doc(alias = "gst_element_query_duration")]
-    fn query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue>;
-
-    #[doc(alias = "gst_element_query_position")]
-    fn query_position<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T>;
-    #[doc(alias = "gst_element_query_position")]
-    fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
-
-    #[doc(alias = "gst_element_seek")]
-    fn seek<V: FormattedValue>(
-        &self,
-        rate: f64,
-        flags: crate::SeekFlags,
-        start_type: crate::SeekType,
-        start: V,
-        stop_type: crate::SeekType,
-        stop: impl CompatibleFormattedValue<V>,
-    ) -> Result<(), glib::error::BoolError>;
-    #[doc(alias = "gst_element_seek_simple")]
-    fn seek_simple(
-        &self,
-        seek_flags: crate::SeekFlags,
-        seek_pos: impl FormattedValue,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_element_call_async")]
-    fn call_async<F>(&self, func: F)
-    where
-        F: FnOnce(&Self) + Send + 'static;
-
-    fn call_async_future<F, T>(&self, func: F) -> Pin<Box<dyn Future<Output = T> + Send + 'static>>
-    where
-        F: FnOnce(&Self) -> T + Send + 'static,
-        T: Send + 'static;
-
-    #[doc(alias = "get_current_running_time")]
-    #[doc(alias = "gst_element_get_current_running_time")]
-    fn current_running_time(&self) -> Option<crate::ClockTime>;
-
-    #[doc(alias = "get_current_clock_time")]
-    #[doc(alias = "gst_element_get_current_clock_time")]
-    fn current_clock_time(&self) -> Option<crate::ClockTime>;
-
-    #[doc(alias = "gst_element_get_request_pad")]
-    #[doc(alias = "get_request_pad")]
-    #[doc(alias = "gst_element_request_pad_simple")]
-    fn request_pad_simple(&self, name: &str) -> Option<Pad>;
-
-    #[doc(alias = "gst_element_link")]
-    fn link(&self, dest: &impl IsA<Element>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_element_link_filtered")]
-    fn link_filtered(
-        &self,
-        dest: &impl IsA<Element>,
-        filter: &crate::Caps,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_element_link_pads")]
-    fn link_pads(
-        &self,
-        srcpadname: Option<&str>,
-        dest: &impl IsA<Element>,
-        destpadname: Option<&str>,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_element_link_pads_filtered")]
-    fn link_pads_filtered(
-        &self,
-        srcpadname: Option<&str>,
-        dest: &impl IsA<Element>,
-        destpadname: Option<&str>,
-        filter: &crate::Caps,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_element_link_pads_full")]
-    fn link_pads_full(
-        &self,
-        srcpadname: Option<&str>,
-        dest: &impl IsA<Element>,
-        destpadname: Option<&str>,
-        flags: crate::PadLinkCheck,
-    ) -> Result<(), glib::error::BoolError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Element>> Sealed for T {}
 }
 
-impl<O: IsA<Element>> ElementExtManual for O {
+pub trait ElementExtManual: sealed::Sealed + IsA<Element> + 'static {
+    #[doc(alias = "get_element_class")]
     #[inline]
     fn element_class(&self) -> &glib::Class<Element> {
         unsafe {
@@ -307,14 +117,17 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "get_current_state")]
     fn current_state(&self) -> State {
         self.state(Some(ClockTime::ZERO)).1
     }
 
+    #[doc(alias = "get_pending_state")]
     fn pending_state(&self) -> State {
         self.state(Some(ClockTime::ZERO)).2
     }
 
+    #[doc(alias = "gst_element_query")]
     fn query(&self, query: &mut QueryRef) -> bool {
         unsafe {
             from_glib(ffi::gst_element_query(
@@ -324,6 +137,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_send_event")]
     fn send_event(&self, event: impl Into<Event>) -> bool {
         unsafe {
             from_glib(ffi::gst_element_send_event(
@@ -333,42 +147,26 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "get_metadata")]
+    #[doc(alias = "gst_element_class_get_metadata")]
     fn metadata<'a>(&self, key: &str) -> Option<&'a str> {
         self.element_class().metadata(key)
     }
 
+    #[doc(alias = "get_pad_template")]
+    #[doc(alias = "gst_element_class_get_pad_template")]
     fn pad_template(&self, name: &str) -> Option<PadTemplate> {
         self.element_class().pad_template(name)
     }
 
+    #[doc(alias = "get_pad_template_list")]
+    #[doc(alias = "gst_element_class_get_pad_template_list")]
     fn pad_template_list(&self) -> glib::List<PadTemplate> {
         self.element_class().pad_template_list()
     }
 
-    fn set_element_flags(&self, flags: ElementFlags) {
-        unsafe {
-            let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = self.as_ref().object_lock();
-            (*ptr).flags |= flags.into_glib();
-        }
-    }
-
-    fn unset_element_flags(&self, flags: ElementFlags) {
-        unsafe {
-            let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = self.as_ref().object_lock();
-            (*ptr).flags &= !flags.into_glib();
-        }
-    }
-
-    fn element_flags(&self) -> ElementFlags {
-        unsafe {
-            let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
-            let _guard = self.as_ref().object_lock();
-            from_glib((*ptr).flags)
-        }
-    }
-
+    #[allow(clippy::too_many_arguments)]
+    #[doc(alias = "gst_element_message_full")]
     fn message_full<T: crate::MessageErrorDomain>(
         &self,
         type_: ElementMessageType,
@@ -400,6 +198,33 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    fn set_element_flags(&self, flags: ElementFlags) {
+        unsafe {
+            let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
+            let _guard = self.as_ref().object_lock();
+            (*ptr).flags |= flags.into_glib();
+        }
+    }
+
+    fn unset_element_flags(&self, flags: ElementFlags) {
+        unsafe {
+            let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
+            let _guard = self.as_ref().object_lock();
+            (*ptr).flags &= !flags.into_glib();
+        }
+    }
+
+    #[doc(alias = "get_element_flags")]
+    fn element_flags(&self) -> ElementFlags {
+        unsafe {
+            let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
+            let _guard = self.as_ref().object_lock();
+            from_glib((*ptr).flags)
+        }
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    #[doc(alias = "gst_element_message_full_with_details")]
     fn message_full_with_details<T: crate::MessageErrorDomain>(
         &self,
         type_: ElementMessageType,
@@ -459,6 +284,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_iterate_pads")]
     fn iterate_pads(&self) -> crate::Iterator<Pad> {
         unsafe {
             from_glib_full(ffi::gst_element_iterate_pads(
@@ -467,6 +293,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_iterate_sink_pads")]
     fn iterate_sink_pads(&self) -> crate::Iterator<Pad> {
         unsafe {
             from_glib_full(ffi::gst_element_iterate_sink_pads(
@@ -475,6 +302,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_iterate_src_pads")]
     fn iterate_src_pads(&self) -> crate::Iterator<Pad> {
         unsafe {
             from_glib_full(ffi::gst_element_iterate_src_pads(
@@ -483,6 +311,8 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "get_pads")]
+    #[doc(alias = "gst_element_foreach_pad")]
     fn pads(&self) -> Vec<Pad> {
         unsafe {
             let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
@@ -491,6 +321,8 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "get_sink_pads")]
+    #[doc(alias = "gst_element_foreach_sink_pad")]
     fn sink_pads(&self) -> Vec<Pad> {
         unsafe {
             let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
@@ -499,6 +331,8 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "get_src_pads")]
+    #[doc(alias = "gst_element_foreach_src_pad")]
     fn src_pads(&self) -> Vec<Pad> {
         unsafe {
             let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
@@ -531,6 +365,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_add_property_deep_notify_watch")]
     fn add_property_deep_notify_watch(
         &self,
         property_name: Option<&str>,
@@ -546,6 +381,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_add_property_notify_watch")]
     fn add_property_notify_watch(
         &self,
         property_name: Option<&str>,
@@ -561,6 +397,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_remove_property_notify_watch")]
     fn remove_property_notify_watch(&self, watch_id: NotifyWatchId) {
         unsafe {
             ffi::gst_element_remove_property_notify_watch(
@@ -570,6 +407,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_query_convert")]
     fn query_convert<U: SpecificFormattedValueFullRange>(
         &self,
         src_val: impl FormattedValue,
@@ -591,6 +429,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_query_convert")]
     fn query_convert_generic(
         &self,
         src_val: impl FormattedValue,
@@ -616,6 +455,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_query_duration")]
     fn query_duration<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T> {
         unsafe {
             let mut duration = mem::MaybeUninit::uninit();
@@ -632,6 +472,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_query_duration")]
     fn query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue> {
         unsafe {
             let mut duration = mem::MaybeUninit::uninit();
@@ -648,6 +489,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_query_position")]
     fn query_position<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T> {
         unsafe {
             let mut cur = mem::MaybeUninit::uninit();
@@ -664,6 +506,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_query_position")]
     fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue> {
         unsafe {
             let mut cur = mem::MaybeUninit::uninit();
@@ -680,6 +523,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_seek")]
     fn seek<V: FormattedValue>(
         &self,
         rate: f64,
@@ -708,6 +552,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_seek_simple")]
     fn seek_simple(
         &self,
         seek_flags: crate::SeekFlags,
@@ -726,6 +571,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_call_async")]
     fn call_async<F>(&self, func: F)
     where
         F: FnOnce(&Self) + Send + 'static,
@@ -774,6 +620,8 @@ impl<O: IsA<Element>> ElementExtManual for O {
         Box::pin(async move { receiver.await.expect("sender dropped") })
     }
 
+    #[doc(alias = "get_current_running_time")]
+    #[doc(alias = "gst_element_get_current_running_time")]
     fn current_running_time(&self) -> Option<crate::ClockTime> {
         let base_time = self.base_time();
         let clock_time = self.current_clock_time();
@@ -783,6 +631,8 @@ impl<O: IsA<Element>> ElementExtManual for O {
             .and_then(|(ct, bt)| ct.checked_sub(bt))
     }
 
+    #[doc(alias = "get_current_clock_time")]
+    #[doc(alias = "gst_element_get_current_clock_time")]
     fn current_clock_time(&self) -> Option<crate::ClockTime> {
         if let Some(clock) = self.clock() {
             clock.time()
@@ -791,6 +641,9 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_get_request_pad")]
+    #[doc(alias = "get_request_pad")]
+    #[doc(alias = "gst_element_request_pad_simple")]
     fn request_pad_simple(&self, name: &str) -> Option<Pad> {
         unsafe {
             #[cfg(feature = "v1_20")]
@@ -810,6 +663,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_link")]
     fn link(&self, dest: &impl IsA<Element>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -824,6 +678,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_link_filtered")]
     fn link_filtered(
         &self,
         dest: &impl IsA<Element>,
@@ -844,6 +699,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_link_pads")]
     fn link_pads(
         &self,
         srcpadname: Option<&str>,
@@ -873,6 +729,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_link_pads_filtered")]
     fn link_pads_filtered(
         &self,
         srcpadname: Option<&str>,
@@ -905,6 +762,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_element_link_pads_full")]
     fn link_pads_full(
         &self,
         srcpadname: Option<&str>,
@@ -937,6 +795,8 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 }
+
+impl<O: IsA<Element>> ElementExtManual for O {}
 
 pub unsafe trait ElementClassExt {
     #[doc(alias = "get_metadata")]

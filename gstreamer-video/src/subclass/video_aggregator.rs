@@ -30,25 +30,12 @@ pub trait VideoAggregatorImpl: VideoAggregatorImplExt + AggregatorImpl {
         self.parent_find_best_format(downstream_caps)
     }
 }
-
-pub trait VideoAggregatorImplExt: ObjectSubclass {
-    fn parent_update_caps(&self, caps: &gst::Caps) -> Result<gst::Caps, gst::LoggableError>;
-
-    fn parent_aggregate_frames(
-        &self,
-        token: &AggregateFramesToken,
-        outbuf: &mut gst::BufferRef,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_create_output_buffer(&self) -> Result<Option<gst::Buffer>, gst::FlowError>;
-
-    fn parent_find_best_format(
-        &self,
-        downstream_caps: &gst::Caps,
-    ) -> Option<(crate::VideoInfo, bool)>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::VideoAggregatorImplExt> Sealed for T {}
 }
 
-impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
+pub trait VideoAggregatorImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_update_caps(&self, caps: &gst::Caps) -> Result<gst::Caps, gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
@@ -154,6 +141,8 @@ impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {
         }
     }
 }
+
+impl<T: VideoAggregatorImpl> VideoAggregatorImplExt for T {}
 
 unsafe impl<T: VideoAggregatorImpl> IsSubclassable<T> for VideoAggregator {
     fn class_init(klass: &mut glib::Class<Self>) {

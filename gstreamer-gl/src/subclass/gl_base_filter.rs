@@ -19,15 +19,12 @@ pub trait GLBaseFilterImpl: GLBaseFilterImplExt + BaseTransformImpl {
     }
 }
 
-pub trait GLBaseFilterImplExt: ObjectSubclass {
-    fn parent_gl_set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError>;
-
-    fn parent_gl_start(&self) -> Result<(), LoggableError>;
-
-    fn parent_gl_stop(&self);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::GLBaseFilterImplExt> Sealed for T {}
 }
 
-impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {
+pub trait GLBaseFilterImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_gl_set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
@@ -90,6 +87,8 @@ impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {
         }
     }
 }
+
+impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {}
 
 unsafe impl<T: GLBaseFilterImpl> IsSubclassable<T> for GLBaseFilter {
     fn class_init(klass: &mut glib::Class<Self>) {

@@ -42,70 +42,13 @@ impl Bin {
     }
 }
 
-pub trait GstBinExtManual: 'static {
-    #[doc(alias = "gst_bin_add_many")]
-    fn add_many(
-        &self,
-        elements: impl IntoIterator<Item = impl AsRef<Element>>,
-    ) -> Result<(), glib::BoolError>;
-
-    #[doc(alias = "gst_bin_remove_many")]
-    fn remove_many(
-        &self,
-        elements: impl IntoIterator<Item = impl AsRef<Element>>,
-    ) -> Result<(), glib::BoolError>;
-
-    #[doc(alias = "do-latency")]
-    fn connect_do_latency<F: Fn(&Self) -> Result<(), LoggableError> + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_bin_iterate_all_by_element_factory_name")]
-    fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> crate::Iterator<Element>;
-    #[doc(alias = "gst_bin_iterate_all_by_interface")]
-    fn iterate_all_by_interface(&self, iface: glib::types::Type) -> crate::Iterator<Element>;
-    #[doc(alias = "gst_bin_iterate_elements")]
-    fn iterate_elements(&self) -> crate::Iterator<Element>;
-    #[doc(alias = "gst_bin_iterate_recurse")]
-    fn iterate_recurse(&self) -> crate::Iterator<Element>;
-    #[doc(alias = "gst_bin_iterate_sinks")]
-    fn iterate_sinks(&self) -> crate::Iterator<Element>;
-    #[doc(alias = "gst_bin_iterate_sorted")]
-    fn iterate_sorted(&self) -> crate::Iterator<Element>;
-    #[doc(alias = "gst_bin_iterate_sources")]
-    fn iterate_sources(&self) -> crate::Iterator<Element>;
-    #[doc(alias = "get_children")]
-    fn children(&self) -> Vec<Element>;
-
-    #[doc(alias = "gst_debug_bin_to_dot_data")]
-    fn debug_to_dot_data(&self, details: crate::DebugGraphDetails) -> GString;
-    #[doc(alias = "GST_DEBUG_BIN_TO_DOT_FILE")]
-    #[doc(alias = "gst_debug_bin_to_dot_file")]
-    fn debug_to_dot_file(
-        &self,
-        details: crate::DebugGraphDetails,
-        file_name: impl AsRef<path::Path>,
-    );
-    #[doc(alias = "GST_DEBUG_BIN_TO_DOT_FILE_WITH_TS")]
-    #[doc(alias = "gst_debug_bin_to_dot_file_with_ts")]
-    fn debug_to_dot_file_with_ts(
-        &self,
-        details: crate::DebugGraphDetails,
-        file_name: impl AsRef<path::Path>,
-    );
-
-    fn set_bin_flags(&self, flags: BinFlags);
-
-    fn unset_bin_flags(&self, flags: BinFlags);
-
-    #[doc(alias = "get_bin_flags")]
-    fn bin_flags(&self) -> BinFlags;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Bin>> Sealed for T {}
 }
 
-impl<O: IsA<Bin>> GstBinExtManual for O {
+pub trait GstBinExtManual: sealed::Sealed + IsA<Bin> + 'static {
+    #[doc(alias = "gst_bin_add_many")]
     fn add_many(
         &self,
         elements: impl IntoIterator<Item = impl AsRef<Element>>,
@@ -122,6 +65,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         Ok(())
     }
 
+    #[doc(alias = "gst_bin_remove_many")]
     fn remove_many(
         &self,
         elements: impl IntoIterator<Item = impl AsRef<Element>>,
@@ -141,6 +85,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         Ok(())
     }
 
+    #[doc(alias = "do-latency")]
     fn connect_do_latency<F: Fn(&Self) -> Result<(), LoggableError> + Send + Sync + 'static>(
         &self,
         f: F,
@@ -160,6 +105,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_bin_iterate_all_by_element_factory_name")]
     fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> crate::Iterator<Element> {
         unsafe {
             from_glib_full(ffi::gst_bin_iterate_all_by_element_factory_name(
@@ -168,7 +114,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
             ))
         }
     }
-
+    #[doc(alias = "gst_bin_iterate_all_by_interface")]
     fn iterate_all_by_interface(&self, iface: glib::types::Type) -> crate::Iterator<Element> {
         unsafe {
             from_glib_full(ffi::gst_bin_iterate_all_by_interface(
@@ -178,6 +124,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_bin_iterate_elements")]
     fn iterate_elements(&self) -> crate::Iterator<Element> {
         unsafe {
             from_glib_full(ffi::gst_bin_iterate_elements(
@@ -186,22 +133,27 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_bin_iterate_recurse")]
     fn iterate_recurse(&self) -> crate::Iterator<Element> {
         unsafe { from_glib_full(ffi::gst_bin_iterate_recurse(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_bin_iterate_sinks")]
     fn iterate_sinks(&self) -> crate::Iterator<Element> {
         unsafe { from_glib_full(ffi::gst_bin_iterate_sinks(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_bin_iterate_sorted")]
     fn iterate_sorted(&self) -> crate::Iterator<Element> {
         unsafe { from_glib_full(ffi::gst_bin_iterate_sorted(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_bin_iterate_sources")]
     fn iterate_sources(&self) -> crate::Iterator<Element> {
         unsafe { from_glib_full(ffi::gst_bin_iterate_sources(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "get_children")]
     fn children(&self) -> Vec<Element> {
         unsafe {
             let bin: &ffi::GstBin = &*(self.as_ptr() as *const _);
@@ -210,10 +162,13 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_debug_bin_to_dot_data")]
     fn debug_to_dot_data(&self, details: crate::DebugGraphDetails) -> GString {
         crate::debug_bin_to_dot_data(self, details)
     }
 
+    #[doc(alias = "GST_DEBUG_BIN_TO_DOT_FILE")]
+    #[doc(alias = "gst_debug_bin_to_dot_file")]
     fn debug_to_dot_file(
         &self,
         details: crate::DebugGraphDetails,
@@ -222,6 +177,8 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         crate::debug_bin_to_dot_file(self, details, file_name)
     }
 
+    #[doc(alias = "GST_DEBUG_BIN_TO_DOT_FILE_WITH_TS")]
+    #[doc(alias = "gst_debug_bin_to_dot_file_with_ts")]
     fn debug_to_dot_file_with_ts(
         &self,
         details: crate::DebugGraphDetails,
@@ -246,6 +203,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         }
     }
 
+    #[doc(alias = "get_bin_flags")]
     fn bin_flags(&self) -> BinFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
@@ -254,6 +212,8 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         }
     }
 }
+
+impl<O: IsA<Bin>> GstBinExtManual for O {}
 
 impl Default for Bin {
     fn default() -> Self {

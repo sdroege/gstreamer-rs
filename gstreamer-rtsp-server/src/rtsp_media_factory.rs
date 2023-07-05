@@ -4,12 +4,13 @@ use glib::{prelude::*, translate::*};
 
 use crate::RTSPMediaFactory;
 
-pub trait RTSPMediaFactoryExtManual: 'static {
-    #[doc(alias = "gst_rtsp_media_factory_add_role_from_structure")]
-    fn add_role_from_structure(&self, structure: &gst::StructureRef);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPMediaFactory>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExtManual for O {
+pub trait RTSPMediaFactoryExtManual: sealed::Sealed + IsA<RTSPMediaFactory> + 'static {
+    #[doc(alias = "gst_rtsp_media_factory_add_role_from_structure")]
     fn add_role_from_structure(&self, structure: &gst::StructureRef) {
         unsafe {
             ffi::gst_rtsp_media_factory_add_role_from_structure(
@@ -19,3 +20,5 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExtManual for O {
         }
     }
 }
+
+impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExtManual for O {}

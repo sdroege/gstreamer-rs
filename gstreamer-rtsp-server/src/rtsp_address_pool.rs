@@ -6,18 +6,13 @@ use glib::{prelude::*, translate::*};
 
 use crate::{RTSPAddress, RTSPAddressPool, RTSPAddressPoolResult};
 
-pub trait RTSPAddressPoolExtManual: 'static {
-    #[doc(alias = "gst_rtsp_address_pool_reserve_address")]
-    fn reserve_address(
-        &self,
-        ip_address: &str,
-        port: u32,
-        n_ports: u32,
-        ttl: u32,
-    ) -> Result<RTSPAddress, RTSPAddressPoolResult>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPAddressPool>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPAddressPool>> RTSPAddressPoolExtManual for O {
+pub trait RTSPAddressPoolExtManual: sealed::Sealed + IsA<RTSPAddressPool> + 'static {
+    #[doc(alias = "gst_rtsp_address_pool_reserve_address")]
     fn reserve_address(
         &self,
         ip_address: &str,
@@ -42,3 +37,5 @@ impl<O: IsA<RTSPAddressPool>> RTSPAddressPoolExtManual for O {
         }
     }
 }
+
+impl<O: IsA<RTSPAddressPool>> RTSPAddressPoolExtManual for O {}

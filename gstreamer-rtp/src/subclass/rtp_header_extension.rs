@@ -55,39 +55,12 @@ pub trait RTPHeaderExtensionImpl: RTPHeaderExtensionImplExt + ElementImpl {
     }
 }
 
-pub trait RTPHeaderExtensionImplExt: ObjectSubclass {
-    fn parent_supported_flags(&self) -> crate::RTPHeaderExtensionFlags;
-    fn parent_max_size(&self, input: &gst::BufferRef) -> usize;
-    fn parent_write(
-        &self,
-        input: &gst::BufferRef,
-        write_flags: crate::RTPHeaderExtensionFlags,
-        output: &mut gst::BufferRef,
-        output_data: &mut [u8],
-    ) -> Result<usize, gst::LoggableError>;
-    fn parent_read(
-        &self,
-        read_flags: crate::RTPHeaderExtensionFlags,
-        input_data: &[u8],
-        output: &mut gst::BufferRef,
-    ) -> Result<(), gst::LoggableError>;
-    fn parent_set_non_rtp_sink_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError>;
-    fn parent_update_non_rtp_src_caps(
-        &self,
-        caps: &mut gst::CapsRef,
-    ) -> Result<(), gst::LoggableError>;
-    fn parent_set_attributes(
-        &self,
-        direction: crate::RTPHeaderExtensionDirection,
-        attributes: &str,
-    ) -> Result<(), gst::LoggableError>;
-    fn parent_set_caps_from_attributes(
-        &self,
-        caps: &mut gst::CapsRef,
-    ) -> Result<(), gst::LoggableError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::RTPHeaderExtensionImplExt> Sealed for T {}
 }
 
-impl<T: RTPHeaderExtensionImpl> RTPHeaderExtensionImplExt for T {
+pub trait RTPHeaderExtensionImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_supported_flags(&self) -> crate::RTPHeaderExtensionFlags {
         unsafe {
             let data = Self::type_data();
@@ -286,6 +259,8 @@ impl<T: RTPHeaderExtensionImpl> RTPHeaderExtensionImplExt for T {
         }
     }
 }
+
+impl<T: RTPHeaderExtensionImpl> RTPHeaderExtensionImplExt for T {}
 
 unsafe impl<T: RTPHeaderExtensionImpl> IsSubclassable<T> for crate::RTPHeaderExtension {
     fn class_init(klass: &mut glib::Class<Self>) {

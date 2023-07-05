@@ -9,69 +9,13 @@ use crate::{
     video_codec_state::{InNegotiation, Readable, VideoCodecState, VideoCodecStateContext},
     VideoCodecFrame, VideoEncoder,
 };
-
-pub trait VideoEncoderExtManual: 'static {
-    #[doc(alias = "gst_video_encoder_allocate_output_frame")]
-    fn allocate_output_frame(
-        &self,
-        frame: &mut VideoCodecFrame,
-        size: usize,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    #[doc(alias = "get_frame")]
-    #[doc(alias = "gst_video_encoder_get_frame")]
-    fn frame(&self, frame_number: i32) -> Option<VideoCodecFrame>;
-    #[doc(alias = "get_frames")]
-    #[doc(alias = "gst_video_encoder_get_frames")]
-    fn frames(&self) -> Vec<VideoCodecFrame>;
-    #[doc(alias = "get_oldest_frame")]
-    #[doc(alias = "gst_video_encoder_get_oldest_frame")]
-    fn oldest_frame(&self) -> Option<VideoCodecFrame>;
-
-    #[doc(alias = "get_allocator")]
-    #[doc(alias = "gst_video_encoder_get_allocator")]
-    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_video_encoder_finish_subframe")]
-    fn finish_subframe(&self, frame: &VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    #[doc(alias = "get_latency")]
-    #[doc(alias = "gst_video_encoder_get_latency")]
-    fn latency(&self) -> (gst::ClockTime, Option<gst::ClockTime>);
-    #[doc(alias = "gst_video_encoder_set_latency")]
-    fn set_latency(
-        &self,
-        min_latency: gst::ClockTime,
-        max_latency: impl Into<Option<gst::ClockTime>>,
-    );
-
-    #[doc(alias = "get_output_state")]
-    #[doc(alias = "gst_video_encoder_get_output_state")]
-    fn output_state(&self) -> Option<VideoCodecState<'static, Readable>>;
-    #[doc(alias = "gst_video_encoder_set_output_state")]
-    fn set_output_state(
-        &self,
-        caps: gst::Caps,
-        reference: Option<&VideoCodecState<Readable>>,
-    ) -> Result<VideoCodecState<InNegotiation>, gst::FlowError>;
-
-    #[doc(alias = "gst_video_encoder_negotiate")]
-    fn negotiate<'a>(
-        &'a self,
-        output_state: VideoCodecState<'a, InNegotiation<'a>>,
-    ) -> Result<(), gst::FlowError>;
-
-    #[doc(alias = "gst_video_encoder_set_headers")]
-    fn set_headers(&self, headers: impl IntoIterator<Item = gst::Buffer>);
-
-    fn sink_pad(&self) -> &gst::Pad;
-
-    fn src_pad(&self) -> &gst::Pad;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoEncoder>> Sealed for T {}
 }
 
-impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
+pub trait VideoEncoderExtManual: sealed::Sealed + IsA<VideoEncoder> + 'static {
+    #[doc(alias = "gst_video_encoder_allocate_output_frame")]
     fn allocate_output_frame(
         &self,
         frame: &mut VideoCodecFrame,
@@ -86,62 +30,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         }
     }
 
-    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
-        unsafe {
-            let mut allocator = ptr::null_mut();
-            let mut params = mem::MaybeUninit::uninit();
-            ffi::gst_video_encoder_get_allocator(
-                self.as_ref().to_glib_none().0,
-                &mut allocator,
-                params.as_mut_ptr(),
-            );
-            (from_glib_full(allocator), params.assume_init().into())
-        }
-    }
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    fn finish_subframe(&self, frame: &VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            try_from_glib(ffi::gst_video_encoder_finish_subframe(
-                self.as_ref().to_glib_none().0,
-                frame.to_glib_none().0,
-            ))
-        }
-    }
-
-    fn latency(&self) -> (gst::ClockTime, Option<gst::ClockTime>) {
-        let mut min_latency = gst::ffi::GST_CLOCK_TIME_NONE;
-        let mut max_latency = gst::ffi::GST_CLOCK_TIME_NONE;
-
-        unsafe {
-            ffi::gst_video_encoder_get_latency(
-                self.as_ref().to_glib_none().0,
-                &mut min_latency,
-                &mut max_latency,
-            );
-
-            (
-                try_from_glib(min_latency).expect("undefined min_latency"),
-                from_glib(max_latency),
-            )
-        }
-    }
-
-    fn set_latency(
-        &self,
-        min_latency: gst::ClockTime,
-        max_latency: impl Into<Option<gst::ClockTime>>,
-    ) {
-        unsafe {
-            ffi::gst_video_encoder_set_latency(
-                self.as_ref().to_glib_none().0,
-                min_latency.into_glib(),
-                max_latency.into().into_glib(),
-            );
-        }
-    }
-
+    #[doc(alias = "get_frame")]
+    #[doc(alias = "gst_video_encoder_get_frame")]
     fn frame(&self, frame_number: i32) -> Option<VideoCodecFrame> {
         let frame = unsafe {
             ffi::gst_video_encoder_get_frame(self.as_ref().to_glib_none().0, frame_number)
@@ -154,6 +44,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         }
     }
 
+    #[doc(alias = "get_frames")]
+    #[doc(alias = "gst_video_encoder_get_frames")]
     fn frames(&self) -> Vec<VideoCodecFrame> {
         unsafe {
             let frames = ffi::gst_video_encoder_get_frames(self.as_ref().to_glib_none().0);
@@ -173,6 +65,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         }
     }
 
+    #[doc(alias = "get_oldest_frame")]
+    #[doc(alias = "gst_video_encoder_get_oldest_frame")]
     fn oldest_frame(&self) -> Option<VideoCodecFrame> {
         let frame =
             unsafe { ffi::gst_video_encoder_get_oldest_frame(self.as_ref().to_glib_none().0) };
@@ -184,6 +78,69 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         }
     }
 
+    #[doc(alias = "get_allocator")]
+    #[doc(alias = "gst_video_encoder_get_allocator")]
+    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
+        unsafe {
+            let mut allocator = ptr::null_mut();
+            let mut params = mem::MaybeUninit::uninit();
+            ffi::gst_video_encoder_get_allocator(
+                self.as_ref().to_glib_none().0,
+                &mut allocator,
+                params.as_mut_ptr(),
+            );
+            (from_glib_full(allocator), params.assume_init().into())
+        }
+    }
+
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_encoder_finish_subframe")]
+    fn finish_subframe(&self, frame: &VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            try_from_glib(ffi::gst_video_encoder_finish_subframe(
+                self.as_ref().to_glib_none().0,
+                frame.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "get_latency")]
+    #[doc(alias = "gst_video_encoder_get_latency")]
+    fn latency(&self) -> (gst::ClockTime, Option<gst::ClockTime>) {
+        let mut min_latency = gst::ffi::GST_CLOCK_TIME_NONE;
+        let mut max_latency = gst::ffi::GST_CLOCK_TIME_NONE;
+
+        unsafe {
+            ffi::gst_video_encoder_get_latency(
+                self.as_ref().to_glib_none().0,
+                &mut min_latency,
+                &mut max_latency,
+            );
+
+            (
+                try_from_glib(min_latency).expect("undefined min_latency"),
+                from_glib(max_latency),
+            )
+        }
+    }
+
+    #[doc(alias = "gst_video_encoder_set_latency")]
+    fn set_latency(
+        &self,
+        min_latency: gst::ClockTime,
+        max_latency: impl Into<Option<gst::ClockTime>>,
+    ) {
+        unsafe {
+            ffi::gst_video_encoder_set_latency(
+                self.as_ref().to_glib_none().0,
+                min_latency.into_glib(),
+                max_latency.into().into_glib(),
+            );
+        }
+    }
+    #[doc(alias = "get_output_state")]
+    #[doc(alias = "gst_video_encoder_get_output_state")]
     fn output_state(&self) -> Option<VideoCodecState<'static, Readable>> {
         let state =
             unsafe { ffi::gst_video_encoder_get_output_state(self.as_ref().to_glib_none().0) };
@@ -195,6 +152,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_encoder_set_output_state")]
     fn set_output_state(
         &self,
         caps: gst::Caps,
@@ -219,6 +177,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_encoder_negotiate")]
     fn negotiate<'a>(
         &'a self,
         output_state: VideoCodecState<'a, InNegotiation<'a>>,
@@ -239,6 +198,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_encoder_set_headers")]
     fn set_headers(&self, headers: impl IntoIterator<Item = gst::Buffer>) {
         unsafe {
             ffi::gst_video_encoder_set_headers(
@@ -265,6 +225,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         }
     }
 }
+
+impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {}
 
 impl HasStreamLock for VideoEncoder {
     fn stream_lock(&self) -> *mut glib::ffi::GRecMutex {

@@ -7,37 +7,13 @@ use gst::format::{FormattedValue, SpecificFormattedValueFullRange};
 
 use crate::{BaseParse, BaseParseFrame};
 
-pub trait BaseParseExtManual: 'static {
-    #[doc(alias = "get_sink_pad")]
-    fn sink_pad(&self) -> &gst::Pad;
-    #[doc(alias = "get_src_pad")]
-    fn src_pad(&self) -> &gst::Pad;
-
-    #[doc(alias = "gst_base_parse_set_duration")]
-    fn set_duration(&self, duration: impl FormattedValue, interval: u32);
-    #[doc(alias = "gst_base_parse_set_frame_rate")]
-    fn set_frame_rate(&self, fps: gst::Fraction, lead_in: u32, lead_out: u32);
-
-    #[doc(alias = "gst_base_parse_convert_default")]
-    fn convert_default<U: SpecificFormattedValueFullRange>(
-        &self,
-        src_val: impl FormattedValue,
-    ) -> Option<U>;
-    fn convert_default_generic(
-        &self,
-        src_val: impl FormattedValue,
-        dest_format: gst::Format,
-    ) -> Option<gst::GenericFormattedValue>;
-
-    #[doc(alias = "gst_base_parse_finish_frame")]
-    fn finish_frame(
-        &self,
-        frame: BaseParseFrame,
-        size: u32,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::BaseParse>> Sealed for T {}
 }
 
-impl<O: IsA<BaseParse>> BaseParseExtManual for O {
+pub trait BaseParseExtManual: sealed::Sealed + IsA<BaseParse> + 'static {
+    #[doc(alias = "get_sink_pad")]
     fn sink_pad(&self) -> &gst::Pad {
         unsafe {
             let elt = &*(self.as_ptr() as *const ffi::GstBaseParse);
@@ -45,6 +21,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         }
     }
 
+    #[doc(alias = "get_src_pad")]
     fn src_pad(&self) -> &gst::Pad {
         unsafe {
             let elt = &*(self.as_ptr() as *const ffi::GstBaseParse);
@@ -52,6 +29,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_base_parse_set_duration")]
     fn set_duration(&self, duration: impl FormattedValue, interval: u32) {
         unsafe {
             ffi::gst_base_parse_set_duration(
@@ -63,6 +41,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_base_parse_set_frame_rate")]
     fn set_frame_rate(&self, fps: gst::Fraction, lead_in: u32, lead_out: u32) {
         let (fps_num, fps_den) = fps.into();
         unsafe {
@@ -76,6 +55,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_base_parse_convert_default")]
     fn convert_default<U: SpecificFormattedValueFullRange>(
         &self,
         src_val: impl FormattedValue,
@@ -122,6 +102,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_base_parse_finish_frame")]
     fn finish_frame(
         &self,
         frame: BaseParseFrame,
@@ -136,3 +117,5 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         }
     }
 }
+
+impl<O: IsA<BaseParse>> BaseParseExtManual for O {}

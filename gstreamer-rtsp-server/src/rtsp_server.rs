@@ -4,15 +4,13 @@ use glib::{prelude::*, source::SourceId, translate::*};
 
 use crate::RTSPServer;
 
-pub trait RTSPServerExtManual: 'static {
-    #[doc(alias = "gst_rtsp_server_attach")]
-    fn attach(
-        &self,
-        context: Option<&glib::MainContext>,
-    ) -> Result<SourceId, glib::error::BoolError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPServer>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPServer>> RTSPServerExtManual for O {
+pub trait RTSPServerExtManual: sealed::Sealed + IsA<RTSPServer> + 'static {
+    #[doc(alias = "gst_rtsp_server_attach")]
     fn attach(
         &self,
         context: Option<&glib::MainContext>,
@@ -30,3 +28,5 @@ impl<O: IsA<RTSPServer>> RTSPServerExtManual for O {
         }
     }
 }
+
+impl<O: IsA<RTSPServer>> RTSPServerExtManual for O {}

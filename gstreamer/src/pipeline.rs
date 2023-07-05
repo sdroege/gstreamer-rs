@@ -40,16 +40,12 @@ impl Pipeline {
     }
 }
 
-pub trait GstPipelineExtManual: 'static {
-    fn set_pipeline_flags(&self, flags: PipelineFlags);
-
-    fn unset_pipeline_flags(&self, flags: PipelineFlags);
-
-    #[doc(alias = "get_pipeline_flags")]
-    fn pipeline_flags(&self) -> PipelineFlags;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Pipeline>> Sealed for T {}
 }
 
-impl<O: IsA<crate::Pipeline>> GstPipelineExtManual for O {
+pub trait GstPipelineExtManual: sealed::Sealed + IsA<Pipeline> + 'static {
     fn set_pipeline_flags(&self, flags: PipelineFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
@@ -66,6 +62,7 @@ impl<O: IsA<crate::Pipeline>> GstPipelineExtManual for O {
         }
     }
 
+    #[doc(alias = "get_pipeline_flags")]
     fn pipeline_flags(&self) -> PipelineFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
@@ -74,6 +71,8 @@ impl<O: IsA<crate::Pipeline>> GstPipelineExtManual for O {
         }
     }
 }
+
+impl<O: IsA<Pipeline>> GstPipelineExtManual for O {}
 
 impl Default for Pipeline {
     fn default() -> Self {

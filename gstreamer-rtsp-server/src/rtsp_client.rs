@@ -4,12 +4,13 @@ use glib::{prelude::*, source::SourceId, translate::*};
 
 use crate::RTSPClient;
 
-pub trait RTSPClientExtManual: 'static {
-    #[doc(alias = "gst_rtsp_client_attach")]
-    fn attach(&self, context: Option<&glib::MainContext>) -> SourceId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPClient>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPClient>> RTSPClientExtManual for O {
+pub trait RTSPClientExtManual: sealed::Sealed + IsA<RTSPClient> + 'static {
+    #[doc(alias = "gst_rtsp_client_attach")]
     fn attach(&self, context: Option<&glib::MainContext>) -> SourceId {
         unsafe {
             from_glib(ffi::gst_rtsp_client_attach(
@@ -19,3 +20,5 @@ impl<O: IsA<RTSPClient>> RTSPClientExtManual for O {
         }
     }
 }
+
+impl<O: IsA<RTSPClient>> RTSPClientExtManual for O {}

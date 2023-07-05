@@ -135,98 +135,12 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
     }
 }
 
-pub trait AggregatorImplExt: ObjectSubclass {
-    fn parent_flush(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_clip(
-        &self,
-        aggregator_pad: &AggregatorPad,
-        buffer: gst::Buffer,
-    ) -> Option<gst::Buffer>;
-
-    fn parent_finish_buffer(&self, buffer: gst::Buffer)
-        -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    fn parent_finish_buffer_list(
-        &self,
-        buffer_list: gst::BufferList,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_sink_event(&self, aggregator_pad: &AggregatorPad, event: gst::Event) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    fn parent_sink_event_pre_queue(
-        &self,
-        aggregator_pad: &AggregatorPad,
-        event: gst::Event,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_sink_query(&self, aggregator_pad: &AggregatorPad, query: &mut gst::QueryRef) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    fn parent_sink_query_pre_queue(
-        &self,
-        aggregator_pad: &AggregatorPad,
-        query: &mut gst::QueryRef,
-    ) -> bool;
-
-    fn parent_src_event(&self, event: gst::Event) -> bool;
-
-    fn parent_src_query(&self, query: &mut gst::QueryRef) -> bool;
-
-    fn parent_src_activate(
-        &self,
-        mode: gst::PadMode,
-        active: bool,
-    ) -> Result<(), gst::LoggableError>;
-
-    fn parent_aggregate(&self, timeout: bool) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_start(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_stop(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_next_time(&self) -> Option<gst::ClockTime>;
-
-    fn parent_create_new_pad(
-        &self,
-        templ: &gst::PadTemplate,
-        req_name: Option<&str>,
-        caps: Option<&gst::Caps>,
-    ) -> Option<AggregatorPad>;
-
-    fn parent_update_src_caps(&self, caps: &gst::Caps) -> Result<gst::Caps, gst::FlowError>;
-
-    fn parent_fixate_src_caps(&self, caps: gst::Caps) -> gst::Caps;
-
-    fn parent_negotiated_src_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError>;
-
-    fn parent_propose_allocation(
-        &self,
-        pad: &AggregatorPad,
-        decide_query: Option<&gst::query::Allocation>,
-        query: &mut gst::query::Allocation,
-    ) -> Result<(), gst::LoggableError>;
-
-    fn parent_decide_allocation(
-        &self,
-        query: &mut gst::query::Allocation,
-    ) -> Result<(), gst::LoggableError>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    fn parent_negotiate(&self) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    fn parent_peek_next_sample(&self, pad: &AggregatorPad) -> Option<gst::Sample>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::AggregatorImplExt> Sealed for T {}
 }
 
-impl<T: AggregatorImpl> AggregatorImplExt for T {
+pub trait AggregatorImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_flush(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = Self::type_data();
@@ -667,6 +581,8 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         }
     }
 }
+
+impl<T: AggregatorImpl> AggregatorImplExt for T {}
 
 unsafe impl<T: AggregatorImpl> IsSubclassable<T> for Aggregator {
     fn class_init(klass: &mut glib::Class<Self>) {

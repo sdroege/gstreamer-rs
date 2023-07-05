@@ -82,15 +82,12 @@ pub trait DeviceProviderImpl: DeviceProviderImplExt + GstObjectImpl + Send + Syn
     }
 }
 
-pub trait DeviceProviderImplExt: ObjectSubclass {
-    fn parent_probe(&self) -> Vec<Device>;
-
-    fn parent_start(&self) -> Result<(), LoggableError>;
-
-    fn parent_stop(&self);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::DeviceProviderImplExt> Sealed for T {}
 }
 
-impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {
+pub trait DeviceProviderImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_probe(&self) -> Vec<Device> {
         unsafe {
             let data = Self::type_data();
@@ -140,6 +137,8 @@ impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {
         }
     }
 }
+
+impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {}
 
 unsafe impl<T: DeviceProviderImpl> IsSubclassable<T> for DeviceProvider {
     fn class_init(klass: &mut glib::Class<Self>) {

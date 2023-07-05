@@ -22,18 +22,12 @@ pub trait PushSrcImpl: PushSrcImplExt + BaseSrcImpl {
     }
 }
 
-pub trait PushSrcImplExt: ObjectSubclass {
-    fn parent_fill(&self, buffer: &mut gst::BufferRef) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_alloc(&self) -> Result<gst::Buffer, gst::FlowError>;
-
-    fn parent_create(
-        &self,
-        buffer: Option<&mut gst::BufferRef>,
-    ) -> Result<CreateSuccess, gst::FlowError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::PushSrcImplExt> Sealed for T {}
 }
 
-impl<T: PushSrcImpl> PushSrcImplExt for T {
+pub trait PushSrcImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_fill(&self, buffer: &mut gst::BufferRef) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = Self::type_data();
@@ -185,6 +179,8 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
         }
     }
 }
+
+impl<T: PushSrcImpl> PushSrcImplExt for T {}
 
 unsafe impl<T: PushSrcImpl> IsSubclassable<T> for PushSrc {
     fn class_init(klass: &mut glib::Class<Self>) {

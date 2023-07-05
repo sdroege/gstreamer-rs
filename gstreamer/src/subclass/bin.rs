@@ -23,17 +23,12 @@ pub trait BinImpl: BinImplExt + ElementImpl {
     }
 }
 
-pub trait BinImplExt: ObjectSubclass {
-    fn parent_add_element(&self, element: &Element) -> Result<(), LoggableError>;
-
-    fn parent_remove_element(&self, element: &Element) -> Result<(), LoggableError>;
-
-    fn parent_do_latency(&self) -> Result<(), LoggableError>;
-
-    fn parent_handle_message(&self, message: Message);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::BinImplExt> Sealed for T {}
 }
 
-impl<T: BinImpl> BinImplExt for T {
+pub trait BinImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_add_element(&self, element: &Element) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
@@ -107,6 +102,8 @@ impl<T: BinImpl> BinImplExt for T {
         }
     }
 }
+
+impl<T: BinImpl> BinImplExt for T {}
 
 unsafe impl<T: BinImpl> IsSubclassable<T> for Bin {
     fn class_init(klass: &mut glib::Class<Self>) {

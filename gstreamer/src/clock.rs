@@ -420,37 +420,13 @@ impl Clock {
     }
 }
 
-pub trait ClockExtManual: 'static {
-    #[doc(alias = "gst_clock_new_periodic_id")]
-    fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> PeriodicClockId;
-
-    #[doc(alias = "gst_clock_periodic_id_reinit")]
-    fn periodic_id_reinit(
-        &self,
-        id: &PeriodicClockId,
-        start_time: ClockTime,
-        interval: ClockTime,
-    ) -> Result<(), glib::BoolError>;
-
-    #[doc(alias = "gst_clock_new_single_shot_id")]
-    fn new_single_shot_id(&self, time: ClockTime) -> SingleShotClockId;
-
-    #[doc(alias = "gst_clock_single_shot_id_reinit")]
-    fn single_shot_id_reinit(
-        &self,
-        id: &SingleShotClockId,
-        time: ClockTime,
-    ) -> Result<(), glib::BoolError>;
-
-    fn set_clock_flags(&self, flags: ClockFlags);
-
-    fn unset_clock_flags(&self, flags: ClockFlags);
-
-    #[doc(alias = "get_clock_flags")]
-    fn clock_flags(&self) -> ClockFlags;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Clock>> Sealed for T {}
 }
 
-impl<O: IsA<Clock>> ClockExtManual for O {
+pub trait ClockExtManual: sealed::Sealed + IsA<Clock> + 'static {
+    #[doc(alias = "gst_clock_new_periodic_id")]
     fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> PeriodicClockId {
         assert_ne!(interval, ClockTime::ZERO);
 
@@ -463,6 +439,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_clock_periodic_id_reinit")]
     fn periodic_id_reinit(
         &self,
         id: &PeriodicClockId,
@@ -484,6 +461,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_clock_new_single_shot_id")]
     fn new_single_shot_id(&self, time: ClockTime) -> SingleShotClockId {
         unsafe {
             SingleShotClockId(from_glib_full(ffi::gst_clock_new_single_shot_id(
@@ -493,6 +471,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_clock_single_shot_id_reinit")]
     fn single_shot_id_reinit(
         &self,
         id: &SingleShotClockId,
@@ -528,6 +507,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
         }
     }
 
+    #[doc(alias = "get_clock_flags")]
     fn clock_flags(&self) -> ClockFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
@@ -536,6 +516,8 @@ impl<O: IsA<Clock>> ClockExtManual for O {
         }
     }
 }
+
+impl<O: IsA<Clock>> ClockExtManual for O {}
 
 #[cfg(test)]
 mod tests {

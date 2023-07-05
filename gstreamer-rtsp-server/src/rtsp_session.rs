@@ -6,13 +6,14 @@ use glib::{prelude::*, translate::*};
 
 use crate::{RTSPSession, RTSPSessionMedia};
 
-pub trait RTSPSessionExtManual: 'static {
-    #[doc(alias = "gst_rtsp_session_dup_media")]
-    #[doc(alias = "gst_rtsp_session_get_media")]
-    fn media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPSession>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPSession>> RTSPSessionExtManual for O {
+pub trait RTSPSessionExtManual: sealed::Sealed + IsA<super::RTSPSession> + 'static {
+    #[doc(alias = "gst_rtsp_session_dup_media")]
+    #[doc(alias = "gst_rtsp_session_get_media")]
     fn media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32) {
         #[cfg(feature = "v1_20")]
         unsafe {
@@ -36,3 +37,5 @@ impl<O: IsA<RTSPSession>> RTSPSessionExtManual for O {
         }
     }
 }
+
+impl<O: IsA<RTSPSession>> RTSPSessionExtManual for O {}

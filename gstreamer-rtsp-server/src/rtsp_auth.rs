@@ -10,27 +10,13 @@ use glib::{
 
 use crate::{RTSPAuth, RTSPToken};
 
-pub trait RTSPAuthExtManual: 'static {
-    #[doc(alias = "gst_rtsp_auth_set_default_token")]
-    fn set_default_token(&self, token: Option<&mut RTSPToken>);
-
-    fn connect_accept_certificate<
-        F: Fn(
-                &Self,
-                &gio::TlsConnection,
-                &gio::TlsCertificate,
-                gio::TlsCertificateFlags,
-            ) -> Result<(), gst::LoggableError>
-            + Send
-            + Sync
-            + 'static,
-    >(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPAuth>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPAuth>> RTSPAuthExtManual for O {
+pub trait RTSPAuthExtManual: sealed::Sealed + IsA<RTSPAuth> + 'static {
+    #[doc(alias = "gst_rtsp_auth_set_default_token")]
     fn set_default_token(&self, mut token: Option<&mut RTSPToken>) {
         unsafe {
             ffi::gst_rtsp_auth_set_default_token(
@@ -67,6 +53,8 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExtManual for O {
         }
     }
 }
+
+impl<O: IsA<RTSPAuth>> RTSPAuthExtManual for O {}
 
 unsafe extern "C" fn accept_certificate_trampoline<
     P,

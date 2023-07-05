@@ -82,50 +82,12 @@ pub trait AudioEncoderImpl: AudioEncoderImplExt + ElementImpl {
     }
 }
 
-pub trait AudioEncoderImplExt: ObjectSubclass {
-    fn parent_open(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_close(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_start(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_stop(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_set_format(&self, info: &AudioInfo) -> Result<(), gst::LoggableError>;
-
-    fn parent_handle_frame(
-        &self,
-        buffer: Option<&gst::Buffer>,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_pre_push(&self, buffer: gst::Buffer) -> Result<Option<gst::Buffer>, gst::FlowError>;
-
-    fn parent_flush(&self);
-
-    fn parent_negotiate(&self) -> Result<(), gst::LoggableError>;
-
-    fn parent_caps(&self, filter: Option<&gst::Caps>) -> gst::Caps;
-
-    fn parent_sink_event(&self, event: gst::Event) -> bool;
-
-    fn parent_sink_query(&self, query: &mut gst::QueryRef) -> bool;
-
-    fn parent_src_event(&self, event: gst::Event) -> bool;
-
-    fn parent_src_query(&self, query: &mut gst::QueryRef) -> bool;
-
-    fn parent_propose_allocation(
-        &self,
-        query: &mut gst::query::Allocation,
-    ) -> Result<(), gst::LoggableError>;
-
-    fn parent_decide_allocation(
-        &self,
-        query: &mut gst::query::Allocation,
-    ) -> Result<(), gst::LoggableError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::AudioEncoderImplExt> Sealed for T {}
 }
 
-impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
+pub trait AudioEncoderImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_open(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
@@ -474,6 +436,8 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
         }
     }
 }
+
+impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {}
 
 unsafe impl<T: AudioEncoderImpl> IsSubclassable<T> for AudioEncoder {
     fn class_init(klass: &mut glib::Class<Self>) {

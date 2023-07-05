@@ -7,20 +7,14 @@ use gst::prelude::*;
 
 use crate::BaseTransform;
 
-pub trait BaseTransformExtManual: 'static {
-    #[doc(alias = "get_allocator")]
-    #[doc(alias = "gst_base_transform_get_allocator")]
-    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
-
-    #[doc(alias = "get_segment")]
-    fn segment(&self) -> gst::Segment;
-
-    fn sink_pad(&self) -> &gst::Pad;
-
-    fn src_pad(&self) -> &gst::Pad;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::BaseTransform>> Sealed for T {}
 }
 
-impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
+pub trait BaseTransformExtManual: sealed::Sealed + IsA<BaseTransform> + 'static {
+    #[doc(alias = "get_allocator")]
+    #[doc(alias = "gst_base_transform_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();
@@ -34,6 +28,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
         }
     }
 
+    #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment {
         unsafe {
             let trans: &ffi::GstBaseTransform = &*(self.as_ptr() as *const _);
@@ -56,3 +51,5 @@ impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
         }
     }
 }
+
+impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {}

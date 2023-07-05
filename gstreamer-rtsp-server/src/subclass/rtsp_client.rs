@@ -155,102 +155,12 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     }
 }
 
-pub trait RTSPClientImplExt: ObjectSubclass {
-    fn parent_create_sdp(&self, media: &crate::RTSPMedia) -> Option<gst_sdp::SDPMessage>;
-
-    fn parent_configure_client_media(
-        &self,
-        media: &crate::RTSPMedia,
-        stream: &crate::RTSPStream,
-        ctx: &crate::RTSPContext,
-    ) -> Result<(), gst::LoggableError>;
-
-    // TODO: configure_client_transport
-
-    fn parent_params_set(&self, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPResult;
-
-    fn parent_params_get(&self, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPResult;
-
-    fn parent_make_path_from_uri(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString>;
-
-    fn parent_closed(&self);
-
-    fn parent_new_session(&self, session: &crate::RTSPSession);
-
-    fn parent_options_request(&self, ctx: &crate::RTSPContext);
-
-    fn parent_describe_request(&self, ctx: &crate::RTSPContext);
-
-    fn parent_setup_request(&self, ctx: &crate::RTSPContext);
-
-    fn parent_play_request(&self, ctx: &crate::RTSPContext);
-
-    fn parent_pause_request(&self, ctx: &crate::RTSPContext);
-
-    fn parent_teardown_request(&self, ctx: &crate::RTSPContext);
-
-    fn parent_set_parameter_request(&self, ctx: &crate::RTSPContext);
-
-    fn parent_parameter_request(&self, ctx: &crate::RTSPContext);
-
-    fn parent_announce_request(&self, ctx: &crate::RTSPContext);
-
-    fn parent_record_request(&self, ctx: &crate::RTSPContext);
-
-    fn parent_handle_response(&self, ctx: &crate::RTSPContext);
-
-    // TODO: tunnel_http_response
-    // TODO: send_message
-
-    fn parent_handle_sdp(
-        &self,
-        ctx: &crate::RTSPContext,
-        media: &crate::RTSPMedia,
-        sdp: &gst_sdp::SDPMessageRef,
-    ) -> Result<(), gst::LoggableError>;
-
-    fn parent_check_requirements(
-        &self,
-        ctx: &crate::RTSPContext,
-        arr: &[String],
-    ) -> Option<glib::GString>;
-
-    fn parent_pre_options_request(&self, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPStatusCode;
-
-    fn parent_pre_describe_request(&self, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPStatusCode;
-
-    fn parent_pre_setup_request(&self, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPStatusCode;
-
-    fn parent_pre_play_request(&self, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPStatusCode;
-
-    fn parent_pre_pause_request(&self, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPStatusCode;
-
-    fn parent_pre_teardown_request(&self, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPStatusCode;
-
-    fn parent_pre_set_parameter_request(
-        &self,
-        ctx: &crate::RTSPContext,
-    ) -> gst_rtsp::RTSPStatusCode;
-
-    fn parent_pre_get_parameter_request(
-        &self,
-        ctx: &crate::RTSPContext,
-    ) -> gst_rtsp::RTSPStatusCode;
-
-    fn parent_pre_announce_request(&self, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPStatusCode;
-
-    fn parent_pre_record_request(&self, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPStatusCode;
-
-    #[cfg(feature = "v1_22")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
-    fn parent_adjust_error_code(
-        &self,
-        ctx: &crate::RTSPContext,
-        status_code: gst_rtsp::RTSPStatusCode,
-    ) -> gst_rtsp::RTSPStatusCode;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::RTSPClientImplExt> Sealed for T {}
 }
 
-impl<T: RTSPClientImpl> RTSPClientImplExt for T {
+pub trait RTSPClientImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_create_sdp(&self, media: &crate::RTSPMedia) -> Option<gst_sdp::SDPMessage> {
         unsafe {
             let data = Self::type_data();
@@ -732,6 +642,9 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 }
+
+impl<T: RTSPClientImpl> RTSPClientImplExt for T {}
+
 unsafe impl<T: RTSPClientImpl> IsSubclassable<T> for RTSPClient {
     fn class_init(klass: &mut glib::Class<Self>) {
         Self::parent_class_init::<T>(klass);

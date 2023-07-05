@@ -3,23 +3,13 @@ use gst::prelude::*;
 
 use crate::{auto::VideoAggregatorPad, subclass::AggregateFramesToken};
 
-pub trait VideoAggregatorPadExtManual: 'static {
-    #[doc(alias = "gst_video_aggregator_pad_has_current_buffer")]
-    fn has_current_buffer(&self, token: &AggregateFramesToken) -> bool;
-
-    #[doc(alias = "gst_video_aggregator_pad_get_current_buffer")]
-    fn current_buffer(&self, token: &AggregateFramesToken) -> Option<gst::Buffer>;
-
-    #[doc(alias = "gst_video_aggregator_pad_get_prepared_frame")]
-    fn prepared_frame<'a>(
-        &self,
-        token: &'a AggregateFramesToken,
-    ) -> Option<crate::VideoFrameRef<&'a gst::BufferRef>>;
-
-    fn video_info(&self) -> Option<crate::VideoInfo>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoAggregatorPad>> Sealed for T {}
 }
 
-impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExtManual for O {
+pub trait VideoAggregatorPadExtManual: sealed::Sealed + IsA<VideoAggregatorPad> + 'static {
+    #[doc(alias = "gst_video_aggregator_pad_has_current_buffer")]
     fn has_current_buffer(&self, _token: &AggregateFramesToken) -> bool {
         unsafe {
             from_glib(ffi::gst_video_aggregator_pad_has_current_buffer(
@@ -28,6 +18,7 @@ impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_aggregator_pad_get_current_buffer")]
     fn current_buffer(&self, _token: &AggregateFramesToken) -> Option<gst::Buffer> {
         unsafe {
             from_glib_none(ffi::gst_video_aggregator_pad_get_current_buffer(
@@ -36,6 +27,7 @@ impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_video_aggregator_pad_get_prepared_frame")]
     fn prepared_frame<'a>(
         &self,
         _token: &'a AggregateFramesToken,
@@ -69,3 +61,5 @@ impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExtManual for O {
         }
     }
 }
+
+impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExtManual for O {}

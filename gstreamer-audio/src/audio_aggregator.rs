@@ -10,33 +10,13 @@ use gst::prelude::*;
 
 use crate::auto::{AudioAggregator, AudioAggregatorPad};
 
-pub trait AudioAggregatorExtManual: 'static {
-    #[doc(alias = "gst_audio_aggregator_set_sink_caps")]
-    fn set_sink_caps(&self, pad: &impl IsA<AudioAggregatorPad>, caps: &gst::CapsRef);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "output-buffer-duration-fraction")]
-    fn output_buffer_duration_fraction(&self) -> gst::Fraction;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "output-buffer-duration-fraction")]
-    fn set_output_buffer_duration_fraction(&self, output_buffer_duration_fraction: gst::Fraction);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "output-buffer-duration-fraction")]
-    fn connect_output_buffer_duration_fraction_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn current_caps(&self) -> Option<gst::Caps>;
-    fn current_audio_info(&self) -> Option<crate::AudioInfo>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AudioAggregator>> Sealed for T {}
 }
 
-impl<O: IsA<AudioAggregator>> AudioAggregatorExtManual for O {
+pub trait AudioAggregatorExtManual: sealed::Sealed + IsA<AudioAggregator> + 'static {
+    #[doc(alias = "gst_audio_aggregator_set_sink_caps")]
     fn set_sink_caps(&self, pad: &impl IsA<AudioAggregatorPad>, caps: &gst::CapsRef) {
         unsafe {
             ffi::gst_audio_aggregator_set_sink_caps(
@@ -49,12 +29,14 @@ impl<O: IsA<AudioAggregator>> AudioAggregatorExtManual for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "output-buffer-duration-fraction")]
     fn output_buffer_duration_fraction(&self) -> gst::Fraction {
         glib::ObjectExt::property(self.as_ref(), "output-buffer-duration-fraction")
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "output-buffer-duration-fraction")]
     fn set_output_buffer_duration_fraction(&self, output_buffer_duration_fraction: gst::Fraction) {
         glib::ObjectExt::set_property(
             self.as_ref(),
@@ -65,6 +47,7 @@ impl<O: IsA<AudioAggregator>> AudioAggregatorExtManual for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "output-buffer-duration-fraction")]
     fn connect_output_buffer_duration_fraction_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -106,3 +89,5 @@ impl<O: IsA<AudioAggregator>> AudioAggregatorExtManual for O {
             .and_then(|caps| crate::AudioInfo::from_caps(&caps).ok())
     }
 }
+
+impl<O: IsA<AudioAggregator>> AudioAggregatorExtManual for O {}

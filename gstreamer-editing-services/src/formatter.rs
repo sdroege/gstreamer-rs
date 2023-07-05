@@ -1,22 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
-use crate::prelude::*;
+use crate::{prelude::*, Formatter};
 use gst::glib::translate::*;
 
-pub trait FormatterExtManual: 'static {
-    fn can_load_uri(&self, uri: &str) -> Result<(), glib::Error>;
-    #[doc(alias = "ges_formatter_class_register_metas")]
-    fn register(
-        type_: glib::types::Type,
-        name: &str,
-        description: Option<&str>,
-        extensions: Option<&str>,
-        caps: Option<&str>,
-        version: f64,
-        rank: gst::Rank,
-    );
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Formatter>> Sealed for T {}
 }
 
-impl<O: IsA<crate::Formatter>> FormatterExtManual for O {
+pub trait FormatterExtManual: sealed::Sealed + IsA<Formatter> + 'static {
     fn can_load_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let klass = self.class_of::<crate::Formatter>().unwrap();
@@ -71,3 +62,5 @@ impl<O: IsA<crate::Formatter>> FormatterExtManual for O {
         }
     }
 }
+
+impl<O: IsA<Formatter>> FormatterExtManual for O {}

@@ -13,11 +13,12 @@ pub trait AudioFilterImpl: AudioFilterImplExt + BaseTransformImpl {
     }
 }
 
-pub trait AudioFilterImplExt: ObjectSubclass {
-    fn parent_setup(&self, info: &AudioInfo) -> Result<(), gst::LoggableError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::AudioFilterImplExt> Sealed for T {}
 }
 
-impl<T: AudioFilterImpl> AudioFilterImplExt for T {
+pub trait AudioFilterImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_setup(&self, info: &AudioInfo) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
@@ -38,6 +39,8 @@ impl<T: AudioFilterImpl> AudioFilterImplExt for T {
         }
     }
 }
+
+impl<T: AudioFilterImpl> AudioFilterImplExt for T {}
 
 unsafe impl<T: AudioFilterImpl> IsSubclassable<T> for AudioFilter {
     fn class_init(klass: &mut glib::Class<Self>) {

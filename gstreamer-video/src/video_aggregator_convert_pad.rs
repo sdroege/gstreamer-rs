@@ -9,26 +9,21 @@ use glib::{
 
 use crate::auto::VideoAggregatorConvertPad;
 
-pub trait VideoAggregatorConvertPadExtManual: 'static {
-    #[doc(alias = "converter-config")]
-    fn converter_config(&self) -> Option<crate::VideoConverterConfig>;
-
-    #[doc(alias = "converter-config")]
-    fn set_converter_config(&self, converter_config: Option<&crate::VideoConverterConfig>);
-
-    #[doc(alias = "converter-config")]
-    fn connect_converter_config_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoAggregatorConvertPad>> Sealed for T {}
 }
 
-impl<O: IsA<VideoAggregatorConvertPad>> VideoAggregatorConvertPadExtManual for O {
+pub trait VideoAggregatorConvertPadExtManual:
+    sealed::Sealed + IsA<VideoAggregatorConvertPad> + 'static
+{
+    #[doc(alias = "converter-config")]
     fn converter_config(&self) -> Option<crate::VideoConverterConfig> {
         glib::ObjectExt::property::<Option<gst::Structure>>(self.as_ref(), "converter-config")
             .map(|c| c.try_into().unwrap())
     }
 
+    #[doc(alias = "converter-config")]
     fn set_converter_config(&self, converter_config: Option<&crate::VideoConverterConfig>) {
         glib::ObjectExt::set_property(
             self.as_ref(),
@@ -37,6 +32,7 @@ impl<O: IsA<VideoAggregatorConvertPad>> VideoAggregatorConvertPadExtManual for O
         )
     }
 
+    #[doc(alias = "converter-config")]
     fn connect_converter_config_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -65,3 +61,5 @@ impl<O: IsA<VideoAggregatorConvertPad>> VideoAggregatorConvertPadExtManual for O
         }
     }
 }
+
+impl<O: IsA<VideoAggregatorConvertPad>> VideoAggregatorConvertPadExtManual for O {}

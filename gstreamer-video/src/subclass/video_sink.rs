@@ -11,11 +11,12 @@ pub trait VideoSinkImpl: VideoSinkImplExt + BaseSinkImpl + ElementImpl {
     }
 }
 
-pub trait VideoSinkImplExt: ObjectSubclass {
-    fn parent_show_frame(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::VideoSinkImplExt> Sealed for T {}
 }
 
-impl<T: VideoSinkImpl> VideoSinkImplExt for T {
+pub trait VideoSinkImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_show_frame(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = Self::type_data();
@@ -32,6 +33,8 @@ impl<T: VideoSinkImpl> VideoSinkImplExt for T {
         }
     }
 }
+
+impl<T: VideoSinkImpl> VideoSinkImplExt for T {}
 
 unsafe impl<T: VideoSinkImpl> IsSubclassable<T> for VideoSink {
     fn class_init(klass: &mut glib::Class<Self>) {

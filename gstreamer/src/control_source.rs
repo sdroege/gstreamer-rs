@@ -4,18 +4,14 @@ use glib::{prelude::*, translate::*};
 
 use crate::{ClockTime, ControlSource};
 
-pub trait ControlSourceExtManual: 'static {
-    #[doc(alias = "get_value_array")]
-    #[doc(alias = "gst_control_source_get_value_array")]
-    fn value_array(
-        &self,
-        timestamp: ClockTime,
-        interval: ClockTime,
-        values: &mut [f64],
-    ) -> Result<(), glib::error::BoolError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ControlSource>> Sealed for T {}
 }
 
-impl<O: IsA<ControlSource>> ControlSourceExtManual for O {
+pub trait ControlSourceExtManual: sealed::Sealed + IsA<ControlSource> + 'static {
+    #[doc(alias = "get_value_array")]
+    #[doc(alias = "gst_control_source_get_value_array")]
     fn value_array(
         &self,
         timestamp: ClockTime,
@@ -37,3 +33,5 @@ impl<O: IsA<ControlSource>> ControlSourceExtManual for O {
         }
     }
 }
+
+impl<O: IsA<ControlSource>> ControlSourceExtManual for O {}

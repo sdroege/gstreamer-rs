@@ -17,17 +17,12 @@ pub trait AllocatorImpl: AllocatorImplExt + GstObjectImpl + Send + Sync {
     }
 }
 
-pub trait AllocatorImplExt: ObjectSubclass {
-    fn parent_alloc(
-        &self,
-        size: usize,
-        params: Option<&AllocationParams>,
-    ) -> Result<Memory, BoolError>;
-
-    fn parent_free(&self, memory: Memory);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::AllocatorImplExt> Sealed for T {}
 }
 
-impl<T: AllocatorImpl> AllocatorImplExt for T {
+pub trait AllocatorImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_alloc(
         &self,
         size: usize,
@@ -64,6 +59,8 @@ impl<T: AllocatorImpl> AllocatorImplExt for T {
         }
     }
 }
+
+impl<T: AllocatorImpl> AllocatorImplExt for T {}
 
 unsafe impl<T: AllocatorImpl> IsSubclassable<T> for Allocator {
     fn class_init(klass: &mut glib::Class<Self>) {

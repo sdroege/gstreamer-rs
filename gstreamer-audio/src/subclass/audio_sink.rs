@@ -37,17 +37,12 @@ pub trait AudioSinkImpl: AudioSinkImplExt + AudioBaseSinkImpl {
     }
 }
 
-pub trait AudioSinkImplExt: ObjectSubclass {
-    fn parent_close(&self) -> Result<(), LoggableError>;
-    fn parent_delay(&self) -> u32;
-    fn parent_open(&self) -> Result<(), LoggableError>;
-    fn parent_prepare(&self, spec: &mut AudioRingBufferSpec) -> Result<(), LoggableError>;
-    fn parent_unprepare(&self) -> Result<(), LoggableError>;
-    fn parent_write(&self, audio_data: &[u8]) -> Result<i32, LoggableError>;
-    fn parent_reset(&self);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::AudioSinkImplExt> Sealed for T {}
 }
 
-impl<T: AudioSinkImpl> AudioSinkImplExt for T {
+pub trait AudioSinkImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_close(&self) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
@@ -167,6 +162,8 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
         }
     }
 }
+
+impl<T: AudioSinkImpl> AudioSinkImplExt for T {}
 
 unsafe impl<T: AudioSinkImpl> IsSubclassable<T> for AudioSink {
     fn class_init(klass: &mut glib::Class<Self>) {

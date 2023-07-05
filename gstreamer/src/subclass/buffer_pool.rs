@@ -64,35 +64,12 @@ pub trait BufferPoolImpl: BufferPoolImplExt + GstObjectImpl + Send + Sync {
     }
 }
 
-pub trait BufferPoolImplExt: ObjectSubclass {
-    fn parent_acquire_buffer(
-        &self,
-        params: Option<&BufferPoolAcquireParams>,
-    ) -> Result<crate::Buffer, crate::FlowError>;
-
-    fn parent_alloc_buffer(
-        &self,
-        params: Option<&BufferPoolAcquireParams>,
-    ) -> Result<crate::Buffer, crate::FlowError>;
-
-    fn parent_free_buffer(&self, buffer: crate::Buffer);
-
-    fn parent_release_buffer(&self, buffer: crate::Buffer);
-
-    fn parent_reset_buffer(&self, buffer: &mut crate::BufferRef);
-
-    fn parent_start(&self) -> bool;
-
-    fn parent_stop(&self) -> bool;
-
-    fn parent_set_config(&self, config: &mut BufferPoolConfigRef) -> bool;
-
-    fn parent_flush_start(&self);
-
-    fn parent_flush_stop(&self);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::BufferPoolImplExt> Sealed for T {}
 }
 
-impl<T: BufferPoolImpl> BufferPoolImplExt for T {
+pub trait BufferPoolImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_acquire_buffer(
         &self,
         params: Option<&BufferPoolAcquireParams>,
@@ -279,6 +256,8 @@ impl<T: BufferPoolImpl> BufferPoolImplExt for T {
         }
     }
 }
+
+impl<T: BufferPoolImpl> BufferPoolImplExt for T {}
 
 unsafe impl<T: BufferPoolImpl> IsSubclassable<T> for BufferPool {
     fn class_init(klass: &mut glib::Class<Self>) {

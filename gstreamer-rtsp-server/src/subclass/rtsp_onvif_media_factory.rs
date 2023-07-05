@@ -13,11 +13,12 @@ pub trait RTSPOnvifMediaFactoryImpl:
     }
 }
 
-pub trait RTSPOnvifMediaFactoryImplExt: ObjectSubclass {
-    fn parent_has_backchannel_support(&self) -> bool;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::RTSPOnvifMediaFactoryImplExt> Sealed for T {}
 }
 
-impl<T: RTSPOnvifMediaFactoryImpl> RTSPOnvifMediaFactoryImplExt for T {
+pub trait RTSPOnvifMediaFactoryImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_has_backchannel_support(&self) -> bool {
         unsafe {
             let data = Self::type_data();
@@ -36,6 +37,8 @@ impl<T: RTSPOnvifMediaFactoryImpl> RTSPOnvifMediaFactoryImplExt for T {
         }
     }
 }
+
+impl<T: RTSPOnvifMediaFactoryImpl> RTSPOnvifMediaFactoryImplExt for T {}
 
 unsafe impl<T: RTSPOnvifMediaFactoryImpl> IsSubclassable<T> for RTSPOnvifMediaFactory {
     fn class_init(klass: &mut glib::Class<Self>) {

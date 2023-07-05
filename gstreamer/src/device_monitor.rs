@@ -26,25 +26,13 @@ impl FromGlib<libc::c_uint> for DeviceMonitorFilterId {
         DeviceMonitorFilterId(NonZeroU32::new_unchecked(val))
     }
 }
-
-pub trait DeviceMonitorExtManual: 'static {
-    #[doc(alias = "gst_device_monitor_add_filter")]
-    fn add_filter(
-        &self,
-        classes: Option<&str>,
-        caps: Option<&Caps>,
-    ) -> Option<DeviceMonitorFilterId>;
-
-    #[doc(alias = "gst_device_monitor_remove_filter")]
-    fn remove_filter(&self, filter_id: DeviceMonitorFilterId)
-        -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_device_monitor_get_devices")]
-    #[doc(alias = "get_devices")]
-    fn devices(&self) -> glib::List<crate::Device>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::DeviceMonitor>> Sealed for T {}
 }
 
-impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {
+pub trait DeviceMonitorExtManual: sealed::Sealed + IsA<DeviceMonitor> + 'static {
+    #[doc(alias = "gst_device_monitor_add_filter")]
     fn add_filter(
         &self,
         classes: Option<&str>,
@@ -65,6 +53,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_device_monitor_remove_filter")]
     fn remove_filter(
         &self,
         filter_id: DeviceMonitorFilterId,
@@ -80,6 +69,8 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_device_monitor_get_devices")]
+    #[doc(alias = "get_devices")]
     fn devices(&self) -> glib::List<crate::Device> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_device_monitor_get_devices(
@@ -88,3 +79,5 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {
         }
     }
 }
+
+impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {}

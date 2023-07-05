@@ -10,16 +10,13 @@ unsafe extern "C" fn task_pool_trampoline<P: FnOnce() + Send + 'static>(data: gp
     let func = Box::from_raw(data as *mut P);
     func()
 }
-
-pub trait TaskPoolExtManual: 'static {
-    #[doc(alias = "gst_task_pool_push")]
-    fn push<P: FnOnce() + Send + 'static>(
-        &self,
-        func: P,
-    ) -> Result<Option<TaskPoolTaskHandle>, glib::Error>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::TaskPool>> Sealed for T {}
 }
 
-impl<O: IsA<TaskPool>> TaskPoolExtManual for O {
+pub trait TaskPoolExtManual: sealed::Sealed + IsA<TaskPool> + 'static {
+    #[doc(alias = "gst_task_pool_push")]
     fn push<P: FnOnce() + Send + 'static>(
         &self,
         func: P,
@@ -55,6 +52,8 @@ impl<O: IsA<TaskPool>> TaskPoolExtManual for O {
         }
     }
 }
+
+impl<O: IsA<TaskPool>> TaskPoolExtManual for O {}
 
 impl TaskPool {
     unsafe fn join(&self, id: ptr::NonNull<libc::c_void>) {

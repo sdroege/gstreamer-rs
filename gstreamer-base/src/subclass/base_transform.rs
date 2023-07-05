@@ -154,117 +154,12 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
     }
 }
 
-pub trait BaseTransformImplExt: ObjectSubclass {
-    fn parent_start(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_stop(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_transform_caps(
-        &self,
-        direction: gst::PadDirection,
-        caps: &gst::Caps,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps>;
-
-    fn parent_fixate_caps(
-        &self,
-        direction: gst::PadDirection,
-        caps: &gst::Caps,
-        othercaps: gst::Caps,
-    ) -> gst::Caps;
-
-    fn parent_set_caps(
-        &self,
-        incaps: &gst::Caps,
-        outcaps: &gst::Caps,
-    ) -> Result<(), gst::LoggableError>;
-
-    fn parent_accept_caps(&self, direction: gst::PadDirection, caps: &gst::Caps) -> bool;
-
-    fn parent_query(&self, direction: gst::PadDirection, query: &mut gst::QueryRef) -> bool;
-
-    fn parent_transform_size(
-        &self,
-        direction: gst::PadDirection,
-        caps: &gst::Caps,
-        size: usize,
-        othercaps: &gst::Caps,
-    ) -> Option<usize>;
-
-    fn parent_unit_size(&self, caps: &gst::Caps) -> Option<usize>;
-
-    fn parent_sink_event(&self, event: gst::Event) -> bool;
-
-    fn parent_src_event(&self, event: gst::Event) -> bool;
-
-    fn parent_prepare_output_buffer(
-        &self,
-        inbuf: InputBuffer,
-    ) -> Result<PrepareOutputBufferSuccess, gst::FlowError>;
-
-    fn parent_transform(
-        &self,
-        inbuf: &gst::Buffer,
-        outbuf: &mut gst::BufferRef,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_transform_ip(
-        &self,
-        buf: &mut gst::BufferRef,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_transform_ip_passthrough(
-        &self,
-        buf: &gst::Buffer,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_propose_allocation(
-        &self,
-        decide_query: Option<&gst::query::Allocation>,
-        query: &mut gst::query::Allocation,
-    ) -> Result<(), gst::LoggableError>;
-
-    fn parent_decide_allocation(
-        &self,
-        query: &mut gst::query::Allocation,
-    ) -> Result<(), gst::LoggableError>;
-
-    fn parent_copy_metadata(
-        &self,
-        inbuf: &gst::BufferRef,
-        outbuf: &mut gst::BufferRef,
-    ) -> Result<(), gst::LoggableError>;
-
-    fn parent_transform_meta<'a>(
-        &self,
-        outbuf: &mut gst::BufferRef,
-        meta: gst::MetaRef<'a, gst::Meta>,
-        inbuf: &'a gst::BufferRef,
-    ) -> bool;
-
-    fn parent_before_transform(&self, inbuf: &gst::BufferRef);
-
-    fn parent_submit_input_buffer(
-        &self,
-        is_discont: bool,
-        inbuf: gst::Buffer,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_generate_output(&self) -> Result<GenerateOutputSuccess, gst::FlowError>;
-
-    fn take_queued_buffer(&self) -> Option<gst::Buffer>
-    where
-        Self: ObjectSubclass,
-        <Self as ObjectSubclass>::ParentType: IsA<BaseTransform>;
-
-    #[doc(alias = "get_queued_buffer")]
-    fn queued_buffer(&self) -> Option<gst::Buffer>
-    where
-        Self: ObjectSubclass,
-        <Self as ObjectSubclass>::ParentType: IsA<BaseTransform>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::BaseTransformImplExt> Sealed for T {}
 }
 
-impl<T: BaseTransformImpl> BaseTransformImplExt for T {
+pub trait BaseTransformImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_start(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
@@ -886,6 +781,8 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         }
     }
 }
+
+impl<T: BaseTransformImpl> BaseTransformImplExt for T {}
 
 unsafe impl<T: BaseTransformImpl> IsSubclassable<T> for BaseTransform {
     fn class_init(klass: &mut glib::Class<Self>) {

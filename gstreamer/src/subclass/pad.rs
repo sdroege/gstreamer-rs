@@ -15,13 +15,12 @@ pub trait PadImpl: PadImplExt + GstObjectImpl + Send + Sync {
     }
 }
 
-pub trait PadImplExt: ObjectSubclass {
-    fn parent_linked(&self, peer: &Pad);
-
-    fn parent_unlinked(&self, peer: &Pad);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::PadImplExt> Sealed for T {}
 }
 
-impl<T: PadImpl> PadImplExt for T {
+pub trait PadImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_linked(&self, peer: &Pad) {
         unsafe {
             let data = Self::type_data();
@@ -56,6 +55,8 @@ impl<T: PadImpl> PadImplExt for T {
         }
     }
 }
+
+impl<T: PadImpl> PadImplExt for T {}
 
 unsafe impl<T: PadImpl> IsSubclassable<T> for Pad {
     fn class_init(klass: &mut glib::Class<Self>) {

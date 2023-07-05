@@ -15,13 +15,12 @@ pub trait AggregatorPadImpl: AggregatorPadImplExt + PadImpl {
     }
 }
 
-pub trait AggregatorPadImplExt: ObjectSubclass {
-    fn parent_flush(&self, aggregator: &Aggregator) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_skip_buffer(&self, aggregator: &Aggregator, buffer: &gst::Buffer) -> bool;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::AggregatorPadImplExt> Sealed for T {}
 }
 
-impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
+pub trait AggregatorPadImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_flush(&self, aggregator: &Aggregator) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = Self::type_data();
@@ -61,6 +60,8 @@ impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
         }
     }
 }
+
+impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {}
 unsafe impl<T: AggregatorPadImpl> IsSubclassable<T> for AggregatorPad {
     fn class_init(klass: &mut glib::Class<Self>) {
         Self::parent_class_init::<T>(klass);

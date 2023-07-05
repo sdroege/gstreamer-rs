@@ -5,12 +5,12 @@ use libc::uintptr_t;
 
 use crate::VideoOverlay;
 
-pub trait VideoOverlayExtManual: 'static {
-    unsafe fn set_window_handle(&self, handle: uintptr_t);
-    unsafe fn got_window_handle(&self, handle: uintptr_t);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoOverlay>> Sealed for T {}
 }
 
-impl<O: IsA<VideoOverlay>> VideoOverlayExtManual for O {
+pub trait VideoOverlayExtManual: sealed::Sealed + IsA<VideoOverlay> + 'static {
     unsafe fn set_window_handle(&self, handle: uintptr_t) {
         ffi::gst_video_overlay_set_window_handle(self.as_ref().to_glib_none().0, handle)
     }
@@ -19,6 +19,8 @@ impl<O: IsA<VideoOverlay>> VideoOverlayExtManual for O {
         ffi::gst_video_overlay_got_window_handle(self.as_ref().to_glib_none().0, handle)
     }
 }
+
+impl<O: IsA<VideoOverlay>> VideoOverlayExtManual for O {}
 
 #[doc(alias = "gst_is_video_overlay_prepare_window_handle_message")]
 pub fn is_video_overlay_prepare_window_handle_message(msg: &gst::MessageRef) -> bool {

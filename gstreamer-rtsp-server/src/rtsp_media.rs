@@ -4,12 +4,13 @@ use glib::{prelude::*, translate::*};
 
 use crate::RTSPMedia;
 
-pub trait RTSPMediaExtManual: 'static {
-    #[doc(alias = "gst_rtsp_media_take_pipeline")]
-    fn take_pipeline(&self, pipeline: impl IsA<gst::Pipeline>);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPMedia>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPMedia>> RTSPMediaExtManual for O {
+pub trait RTSPMediaExtManual: sealed::Sealed + IsA<RTSPMedia> + 'static {
+    #[doc(alias = "gst_rtsp_media_take_pipeline")]
     fn take_pipeline(&self, pipeline: impl IsA<gst::Pipeline>) {
         unsafe {
             let pipeline = pipeline.upcast().into_glib_ptr();
@@ -22,3 +23,5 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExtManual for O {
         }
     }
 }
+
+impl<O: IsA<RTSPMedia>> RTSPMediaExtManual for O {}

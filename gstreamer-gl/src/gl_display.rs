@@ -3,20 +3,15 @@ use crate::{GLContext, GLDisplay};
 use glib::prelude::*;
 use glib::translate::*;
 
-pub trait GLDisplayExtManual: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::GLDisplay>> Sealed for T {}
+}
+
+pub trait GLDisplayExtManual: sealed::Sealed + IsA<GLDisplay> + 'static {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_gl_display_ensure_context")]
-    fn ensure_context(
-        &self,
-        other_context: Option<&impl IsA<GLContext>>,
-        context: &mut Option<GLContext>,
-    ) -> Result<(), glib::Error>;
-}
-
-impl<O: IsA<GLDisplay>> GLDisplayExtManual for O {
-    #[cfg(feature = "v1_24")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     fn ensure_context(
         &self,
         other_context: Option<&impl IsA<GLContext>>,
@@ -42,6 +37,8 @@ impl<O: IsA<GLDisplay>> GLDisplayExtManual for O {
         }
     }
 }
+
+impl<O: IsA<GLDisplay>> GLDisplayExtManual for O {}
 
 impl GLDisplay {
     #[doc(alias = "gst_gl_display_get_gl_context_for_thread")]

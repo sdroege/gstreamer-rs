@@ -21,15 +21,12 @@ pub trait GLBaseSrcImpl: GLBaseSrcImplExt + PushSrcImpl {
     }
 }
 
-pub trait GLBaseSrcImplExt: ObjectSubclass {
-    fn parent_gl_start(&self) -> Result<(), LoggableError>;
-
-    fn parent_gl_stop(&self);
-
-    fn parent_fill_gl_memory(&self, memory: &GLMemory) -> Result<(), LoggableError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::GLBaseSrcImplExt> Sealed for T {}
 }
 
-impl<T: GLBaseSrcImpl> GLBaseSrcImplExt for T {
+pub trait GLBaseSrcImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_gl_start(&self) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
@@ -80,6 +77,8 @@ impl<T: GLBaseSrcImpl> GLBaseSrcImplExt for T {
         }
     }
 }
+
+impl<T: GLBaseSrcImpl> GLBaseSrcImplExt for T {}
 
 unsafe impl<T: GLBaseSrcImpl> IsSubclassable<T> for GLBaseSrc {
     fn class_init(klass: &mut glib::Class<Self>) {

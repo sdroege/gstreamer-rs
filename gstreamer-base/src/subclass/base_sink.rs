@@ -68,46 +68,12 @@ pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl {
     }
 }
 
-pub trait BaseSinkImplExt: ObjectSubclass {
-    fn parent_start(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_stop(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_render(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_prepare(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_render_list(
-        &self,
-        list: &gst::BufferList,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_prepare_list(
-        &self,
-        list: &gst::BufferList,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_query(&self, query: &mut gst::QueryRef) -> bool;
-
-    fn parent_event(&self, event: gst::Event) -> bool;
-
-    fn parent_caps(&self, filter: Option<&gst::Caps>) -> Option<gst::Caps>;
-
-    fn parent_set_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError>;
-
-    fn parent_fixate(&self, caps: gst::Caps) -> gst::Caps;
-
-    fn parent_unlock(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_unlock_stop(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_propose_allocation(
-        &self,
-        query: &mut gst::query::Allocation,
-    ) -> Result<(), gst::LoggableError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::BaseSinkImplExt> Sealed for T {}
 }
 
-impl<T: BaseSinkImpl> BaseSinkImplExt for T {
+pub trait BaseSinkImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_start(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
@@ -183,50 +149,12 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
     fn parent_render_list(
         &self,
         list: &gst::BufferList,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            let data = Self::type_data();
-            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
-            (*parent_class)
-                .render_list
-                .map(|f| {
-                    try_from_glib(f(
-                        self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0,
-                        list.to_glib_none().0,
-                    ))
-                })
-                .unwrap_or_else(|| {
-                    for buffer in list.iter() {
-                        self.render(&from_glib_borrow(buffer.as_ptr()))?;
-                    }
-                    Ok(gst::FlowSuccess::Ok)
-                })
-        }
-    }
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_prepare_list(
         &self,
         list: &gst::BufferList,
-    ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unsafe {
-            let data = Self::type_data();
-            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
-            (*parent_class)
-                .prepare_list
-                .map(|f| {
-                    try_from_glib(f(
-                        self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0,
-                        list.to_glib_none().0,
-                    ))
-                })
-                .unwrap_or_else(|| {
-                    for buffer in list.iter() {
-                        self.prepare(&from_glib_borrow(buffer.as_ptr()))?;
-                    }
-                    Ok(gst::FlowSuccess::Ok)
-                })
-        }
-    }
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_query(&self, query: &mut gst::QueryRef) -> bool {
         unsafe {
@@ -372,6 +300,56 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                     )
                 })
                 .unwrap_or(Ok(()))
+        }
+    }
+}
+
+impl<T: BaseSinkImpl> BaseSinkImplExt for T {
+    fn parent_render_list(
+        &self,
+        list: &gst::BufferList,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
+            (*parent_class)
+                .render_list
+                .map(|f| {
+                    try_from_glib(f(
+                        self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0,
+                        list.to_glib_none().0,
+                    ))
+                })
+                .unwrap_or_else(|| {
+                    for buffer in list.iter() {
+                        self.render(&from_glib_borrow(buffer.as_ptr()))?;
+                    }
+                    Ok(gst::FlowSuccess::Ok)
+                })
+        }
+    }
+
+    fn parent_prepare_list(
+        &self,
+        list: &gst::BufferList,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
+            (*parent_class)
+                .prepare_list
+                .map(|f| {
+                    try_from_glib(f(
+                        self.obj().unsafe_cast_ref::<BaseSink>().to_glib_none().0,
+                        list.to_glib_none().0,
+                    ))
+                })
+                .unwrap_or_else(|| {
+                    for buffer in list.iter() {
+                        self.prepare(&from_glib_borrow(buffer.as_ptr()))?;
+                    }
+                    Ok(gst::FlowSuccess::Ok)
+                })
         }
     }
 }

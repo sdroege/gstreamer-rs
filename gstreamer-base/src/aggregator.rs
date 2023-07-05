@@ -17,71 +17,14 @@ use gst::{format::FormattedValue, prelude::*};
 use crate::Aggregator;
 use crate::AggregatorPad;
 
-pub trait AggregatorExtManual: 'static {
-    #[doc(alias = "get_allocator")]
-    #[doc(alias = "gst_aggregator_get_allocator")]
-    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "min-upstream-latency")]
-    fn min_upstream_latency(&self) -> gst::ClockTime;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "min-upstream-latency")]
-    fn set_min_upstream_latency(&self, min_upstream_latency: gst::ClockTime);
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "min-upstream-latency")]
-    fn connect_min_upstream_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_aggregator_update_segment")]
-    fn update_segment<F: gst::format::FormattedValueIntrinsic>(
-        &self,
-        segment: &gst::FormattedSegment<F>,
-    );
-
-    fn set_position(&self, position: impl FormattedValue);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_aggregator_selected_samples")]
-    fn selected_samples(
-        &self,
-        pts: impl Into<Option<gst::ClockTime>>,
-        dts: impl Into<Option<gst::ClockTime>>,
-        duration: impl Into<Option<gst::ClockTime>>,
-        info: Option<&gst::StructureRef>,
-    );
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    fn connect_samples_selected<
-        F: Fn(
-                &Self,
-                &gst::Segment,
-                Option<gst::ClockTime>,
-                Option<gst::ClockTime>,
-                Option<gst::ClockTime>,
-                Option<&gst::StructureRef>,
-            ) + Send
-            + 'static,
-    >(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn src_pad(&self) -> &AggregatorPad;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Aggregator>> Sealed for T {}
 }
 
-impl<O: IsA<Aggregator>> AggregatorExtManual for O {
+pub trait AggregatorExtManual: sealed::Sealed + IsA<Aggregator> + 'static {
+    #[doc(alias = "get_allocator")]
+    #[doc(alias = "gst_aggregator_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();
@@ -97,12 +40,14 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "min-upstream-latency")]
     fn min_upstream_latency(&self) -> gst::ClockTime {
         self.as_ref().property("min-upstream-latency")
     }
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "min-upstream-latency")]
     fn set_min_upstream_latency(&self, min_upstream_latency: gst::ClockTime) {
         self.as_ref()
             .set_property("min-upstream-latency", min_upstream_latency);
@@ -110,6 +55,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "min-upstream-latency")]
     fn connect_min_upstream_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -126,8 +72,10 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
             )
         }
     }
+
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_aggregator_update_segment")]
     fn update_segment<F: gst::format::FormattedValueIntrinsic>(
         &self,
         segment: &gst::FormattedSegment<F>,
@@ -157,6 +105,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_aggregator_selected_samples")]
     fn selected_samples(
         &self,
         pts: impl Into<Option<gst::ClockTime>>,
@@ -177,8 +126,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         }
     }
 
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn connect_samples_selected<
         F: Fn(
                 &Self,
@@ -250,6 +198,8 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         }
     }
 }
+
+impl<O: IsA<Aggregator>> AggregatorExtManual for O {}
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]

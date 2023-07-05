@@ -31,22 +31,12 @@ pub trait RTPBasePayloadImpl: RTPBasePayloadImplExt + ElementImpl {
     }
 }
 
-pub trait RTPBasePayloadImplExt: ObjectSubclass {
-    fn parent_caps(&self, pad: &gst::Pad, filter: Option<&gst::Caps>) -> gst::Caps;
-
-    fn parent_set_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError>;
-
-    fn parent_handle_buffer(&self, buffer: gst::Buffer)
-        -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_query(&self, pad: &gst::Pad, query: &mut gst::QueryRef) -> bool;
-
-    fn parent_sink_event(&self, event: gst::Event) -> bool;
-
-    fn parent_src_event(&self, event: gst::Event) -> bool;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::RTPBasePayloadImplExt> Sealed for T {}
 }
 
-impl<T: RTPBasePayloadImpl> RTPBasePayloadImplExt for T {
+pub trait RTPBasePayloadImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_caps(&self, pad: &gst::Pad, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
             let data = Self::type_data();
@@ -174,6 +164,8 @@ impl<T: RTPBasePayloadImpl> RTPBasePayloadImplExt for T {
         }
     }
 }
+
+impl<T: RTPBasePayloadImpl> RTPBasePayloadImplExt for T {}
 
 unsafe impl<T: RTPBasePayloadImpl> IsSubclassable<T> for RTPBasePayload {
     fn class_init(klass: &mut glib::Class<Self>) {

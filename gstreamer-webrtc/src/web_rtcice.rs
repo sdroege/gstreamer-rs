@@ -4,22 +4,13 @@ use glib::{prelude::*, translate::*};
 
 use crate::{WebRTCICE, WebRTCICEStream};
 
-pub trait WebRTCICEExtManual: 'static {
-    #[doc(alias = "gst_webrtc_ice_add_candidate")]
-    fn add_candidate(&self, stream: &impl IsA<WebRTCICEStream>, candidate: &str);
-
-    #[cfg(feature = "v1_24")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-    #[doc(alias = "gst_webrtc_ice_add_candidate")]
-    fn add_candidate_full(
-        &self,
-        stream: &impl IsA<WebRTCICEStream>,
-        candidate: &str,
-        promise: Option<&gst::Promise>,
-    );
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::WebRTCICE>> Sealed for T {}
 }
 
-impl<O: IsA<WebRTCICE>> WebRTCICEExtManual for O {
+pub trait WebRTCICEExtManual: sealed::Sealed + IsA<WebRTCICE> + 'static {
+    #[doc(alias = "gst_webrtc_ice_add_candidate")]
     fn add_candidate(&self, stream: &impl IsA<WebRTCICEStream>, candidate: &str) {
         #[cfg(not(feature = "v1_24"))]
         unsafe {
@@ -61,6 +52,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExtManual for O {
 
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_webrtc_ice_add_candidate")]
     fn add_candidate_full(
         &self,
         stream: &impl IsA<WebRTCICEStream>,
@@ -77,3 +69,5 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExtManual for O {
         }
     }
 }
+
+impl<O: IsA<WebRTCICE>> WebRTCICEExtManual for O {}

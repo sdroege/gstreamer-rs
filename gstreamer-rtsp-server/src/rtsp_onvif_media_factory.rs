@@ -4,12 +4,15 @@ use glib::{prelude::*, translate::*};
 
 use crate::{RTSPContext, RTSPOnvifMediaFactory};
 
-pub trait RTSPOnvifMediaFactoryExtManual: 'static {
-    #[doc(alias = "gst_rtsp_onvif_media_factory_requires_backchannel")]
-    fn requires_backchannel(&self, ctx: &RTSPContext) -> bool;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPOnvifMediaFactory>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExtManual for O {
+pub trait RTSPOnvifMediaFactoryExtManual:
+    sealed::Sealed + IsA<RTSPOnvifMediaFactory> + 'static
+{
+    #[doc(alias = "gst_rtsp_onvif_media_factory_requires_backchannel")]
     fn requires_backchannel(&self, ctx: &RTSPContext) -> bool {
         skip_assert_initialized!();
         unsafe {
@@ -23,3 +26,5 @@ impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExtManual for O {
         }
     }
 }
+
+impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExtManual for O {}

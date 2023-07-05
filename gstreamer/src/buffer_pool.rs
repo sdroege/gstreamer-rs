@@ -345,23 +345,14 @@ impl FromGlibPtrNone<*mut ffi::GstBufferPoolAcquireParams> for BufferPoolAcquire
     }
 }
 
-pub trait BufferPoolExtManual: 'static {
-    #[doc(alias = "get_config")]
-    #[doc(alias = "gst_buffer_pool_get_config")]
-    fn config(&self) -> BufferPoolConfig;
-    #[doc(alias = "gst_buffer_pool_set_config")]
-    fn set_config(&self, config: BufferPoolConfig) -> Result<(), glib::error::BoolError>;
-
-    fn is_flushing(&self) -> bool;
-
-    #[doc(alias = "gst_buffer_pool_acquire_buffer")]
-    fn acquire_buffer(
-        &self,
-        params: Option<&BufferPoolAcquireParams>,
-    ) -> Result<crate::Buffer, crate::FlowError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::BufferPool>> Sealed for T {}
 }
 
-impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
+pub trait BufferPoolExtManual: sealed::Sealed + IsA<BufferPool> + 'static {
+    #[doc(alias = "get_config")]
+    #[doc(alias = "gst_buffer_pool_get_config")]
     fn config(&self) -> BufferPoolConfig {
         unsafe {
             let ptr = ffi::gst_buffer_pool_get_config(self.as_ref().to_glib_none().0);
@@ -369,6 +360,7 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_buffer_pool_set_config")]
     fn set_config(&self, config: BufferPoolConfig) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -390,6 +382,7 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_buffer_pool_acquire_buffer")]
     fn acquire_buffer(
         &self,
         params: Option<&BufferPoolAcquireParams>,
@@ -407,6 +400,8 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
         }
     }
 }
+
+impl<O: IsA<BufferPool>> BufferPoolExtManual for O {}
 
 #[cfg(test)]
 mod tests {

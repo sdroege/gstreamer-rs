@@ -98,33 +98,12 @@ pub trait RTSPMediaImpl: RTSPMediaImplExt + ObjectImpl + Send + Sync {
     }
 }
 
-pub trait RTSPMediaImplExt: ObjectSubclass {
-    fn parent_handle_message(&self, message: &gst::MessageRef) -> bool;
-    fn parent_prepare(&self, thread: &RTSPThread) -> Result<(), gst::LoggableError>;
-    fn parent_unprepare(&self) -> Result<(), gst::LoggableError>;
-    fn parent_suspend(&self) -> Result<(), gst::LoggableError>;
-    fn parent_unsuspend(&self) -> Result<(), gst::LoggableError>;
-    // TODO missing: convert_range
-
-    fn parent_query_position(&self) -> Option<gst::ClockTime>;
-    fn parent_query_stop(&self) -> Option<gst::ClockTime>;
-    fn parent_create_rtpbin(&self) -> Option<gst::Element>;
-    fn parent_setup_rtpbin(&self, rtpbin: &gst::Element) -> Result<(), gst::LoggableError>;
-    fn parent_setup_sdp(
-        &self,
-        sdp: &mut gst_sdp::SDPMessageRef,
-        info: &SDPInfo,
-    ) -> Result<(), gst::LoggableError>;
-    fn parent_new_stream(&self, stream: &crate::RTSPStream);
-    fn parent_removed_stream(&self, stream: &crate::RTSPStream);
-    fn parent_prepared(&self);
-    fn parent_unprepared(&self);
-    fn parent_target_state(&self, state: gst::State);
-    fn parent_new_state(&self, state: gst::State);
-    fn parent_handle_sdp(&self, sdp: &gst_sdp::SDPMessageRef) -> Result<(), gst::LoggableError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::RTSPMediaImplExt> Sealed for T {}
 }
 
-impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
+pub trait RTSPMediaImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_handle_message(&self, message: &gst::MessageRef) -> bool {
         unsafe {
             let data = Self::type_data();
@@ -208,7 +187,6 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
     }
 
     // TODO missing: convert_range
-
     fn parent_query_position(&self) -> Option<gst::ClockTime> {
         unsafe {
             use std::mem;
@@ -419,6 +397,9 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
         }
     }
 }
+
+impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {}
+
 unsafe impl<T: RTSPMediaImpl> IsSubclassable<T> for RTSPMedia {
     fn class_init(klass: &mut glib::Class<Self>) {
         Self::parent_class_init::<T>(klass);

@@ -7,19 +7,13 @@ use gst::prelude::*;
 
 use crate::BaseSink;
 
-pub trait BaseSinkExtManual: 'static {
-    #[doc(alias = "get_segment")]
-    fn segment(&self) -> gst::Segment;
-
-    #[doc(alias = "gst_base_sink_query_latency")]
-    fn query_latency(
-        &self,
-    ) -> Result<(bool, bool, Option<gst::ClockTime>, Option<gst::ClockTime>), glib::BoolError>;
-
-    fn sink_pad(&self) -> &gst::Pad;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::BaseSink>> Sealed for T {}
 }
 
-impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
+pub trait BaseSinkExtManual: sealed::Sealed + IsA<BaseSink> + 'static {
+    #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment {
         unsafe {
             let sink: &ffi::GstBaseSink = &*(self.as_ptr() as *const _);
@@ -28,6 +22,7 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_base_sink_query_latency")]
     fn query_latency(
         &self,
     ) -> Result<(bool, bool, Option<gst::ClockTime>, Option<gst::ClockTime>), glib::BoolError> {
@@ -67,3 +62,5 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
         }
     }
 }
+
+impl<O: IsA<BaseSink>> BaseSinkExtManual for O {}

@@ -16,19 +16,12 @@ pub trait NavigationImpl: ObjectImpl {
     }
 }
 
-pub trait NavigationImplExt: ObjectSubclass {
-    fn parent_send_event(&self, structure: gst::Structure);
-
-    #[cfg(feature = "v1_22")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
-    fn parent_send_event_simple(&self, event: gst::Event) {
-        if let Some(structure) = event.structure() {
-            self.parent_send_event(structure.to_owned());
-        }
-    }
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::NavigationImplExt> Sealed for T {}
 }
 
-impl<T: NavigationImpl> NavigationImplExt for T {
+pub trait NavigationImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_send_event(&self, structure: gst::Structure) {
         unsafe {
             let type_data = Self::type_data();
@@ -67,6 +60,8 @@ impl<T: NavigationImpl> NavigationImplExt for T {
         }
     }
 }
+
+impl<T: NavigationImpl> NavigationImplExt for T {}
 
 unsafe impl<T: NavigationImpl> IsImplementable<T> for Navigation {
     #[cfg(not(any(feature = "v1_22", docsrs)))]

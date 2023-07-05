@@ -5,22 +5,16 @@ use gst::prelude::*;
 
 use crate::{auto::AudioVisualizer, subclass::AudioVisualizerSetupToken};
 
-pub trait AudioVisualizerExtManual: 'static {
-    // rustdoc-stripper-ignore-next
-    /// Returns the number of samples per frame required before calling the render method
-    fn req_spf(&self) -> u32;
-
-    // rustdoc-stripper-ignore-next
-    /// Modify the request of samples per frame required to be present in buffer before calling
-    /// the render method
-    fn set_req_spf(&self, spf: u32, token: &AudioVisualizerSetupToken);
-
-    fn audio_info(&self) -> gst_audio::AudioInfo;
-
-    fn video_info(&self) -> gst_video::VideoInfo;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AudioVisualizer>> Sealed for T {}
 }
 
-impl<O: IsA<AudioVisualizer> + ElementExt> AudioVisualizerExtManual for O {
+pub trait AudioVisualizerExtManual:
+    sealed::Sealed + IsA<AudioVisualizer> + IsA<gst::Element> + 'static
+{
+    // rustdoc-stripper-ignore-next
+    /// Returns the number of samples per frame required before calling the render method
     fn req_spf(&self) -> u32 {
         let sinkpad = self.static_pad("sink").expect("sink pad presence");
         let _stream_lock = sinkpad.stream_lock();
@@ -29,6 +23,9 @@ impl<O: IsA<AudioVisualizer> + ElementExt> AudioVisualizerExtManual for O {
         unsafe { (*ptr).req_spf }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Modify the request of samples per frame required to be present in buffer before calling
+    /// the render method
     fn set_req_spf(&self, spf: u32, token: &AudioVisualizerSetupToken) {
         assert_eq!(
             self.as_ptr() as *mut ffi::GstAudioVisualizer,
@@ -70,3 +67,5 @@ impl<O: IsA<AudioVisualizer> + ElementExt> AudioVisualizerExtManual for O {
         }
     }
 }
+
+impl<O: IsA<AudioVisualizer> + IsA<gst::Element>> AudioVisualizerExtManual for O {}

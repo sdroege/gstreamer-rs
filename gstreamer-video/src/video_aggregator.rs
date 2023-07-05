@@ -3,11 +3,12 @@ use gst::prelude::*;
 
 use crate::auto::VideoAggregator;
 
-pub trait VideoAggregatorExtManual: 'static {
-    fn video_info(&self) -> Option<crate::VideoInfo>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoAggregator>> Sealed for T {}
 }
 
-impl<O: IsA<VideoAggregator>> VideoAggregatorExtManual for O {
+pub trait VideoAggregatorExtManual: sealed::Sealed + IsA<VideoAggregator> + 'static {
     fn video_info(&self) -> Option<crate::VideoInfo> {
         unsafe {
             let ptr = self.as_ptr() as *mut ffi::GstVideoAggregator;
@@ -25,3 +26,5 @@ impl<O: IsA<VideoAggregator>> VideoAggregatorExtManual for O {
         }
     }
 }
+
+impl<O: IsA<VideoAggregator>> VideoAggregatorExtManual for O {}

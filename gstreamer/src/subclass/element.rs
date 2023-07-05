@@ -121,47 +121,12 @@ pub trait ElementImpl: ElementImplExt + GstObjectImpl + Send + Sync {
     }
 }
 
-pub trait ElementImplExt: ObjectSubclass {
-    fn parent_change_state(
-        &self,
-        transition: StateChange,
-    ) -> Result<StateChangeSuccess, StateChangeError>;
-
-    fn parent_request_new_pad(
-        &self,
-        templ: &crate::PadTemplate,
-        name: Option<&str>,
-        caps: Option<&crate::Caps>,
-    ) -> Option<crate::Pad>;
-
-    fn parent_release_pad(&self, pad: &crate::Pad);
-
-    fn parent_send_event(&self, event: Event) -> bool;
-
-    fn parent_query(&self, query: &mut QueryRef) -> bool;
-
-    fn parent_set_context(&self, context: &crate::Context);
-
-    fn parent_set_clock(&self, clock: Option<&crate::Clock>) -> bool;
-
-    fn parent_provide_clock(&self) -> Option<crate::Clock>;
-
-    fn parent_post_message(&self, msg: crate::Message) -> bool;
-
-    fn panicked(&self) -> &atomic::AtomicBool;
-
-    fn catch_panic<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R>(&self, fallback: G, f: F) -> R;
-
-    fn catch_panic_pad_function<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R>(
-        parent: Option<&crate::Object>,
-        fallback: G,
-        f: F,
-    ) -> R;
-
-    fn post_error_message(&self, msg: crate::ErrorMessage);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::ElementImplExt> Sealed for T {}
 }
 
-impl<T: ElementImpl> ElementImplExt for T {
+pub trait ElementImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_change_state(
         &self,
         transition: StateChange,
@@ -348,6 +313,8 @@ impl<T: ElementImpl> ElementImplExt for T {
         }
     }
 }
+
+impl<T: ElementImpl> ElementImplExt for T {}
 
 unsafe impl<T: ElementImpl> IsSubclassable<T> for Element {
     fn class_init(klass: &mut glib::Class<Self>) {

@@ -16,11 +16,12 @@ unsafe impl<T: PlayVideoRendererImpl> IsImplementable<T> for PlayVideoRenderer {
     }
 }
 
-pub trait PlayVideoRendererImplExt: ObjectSubclass {
-    fn parent_create_video_sink(&self, play: &Play) -> gst::Element;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::PlayVideoRendererImplExt> Sealed for T {}
 }
 
-impl<T: PlayVideoRendererImpl> PlayVideoRendererImplExt for T {
+pub trait PlayVideoRendererImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_create_video_sink(&self, play: &Play) -> gst::Element {
         unsafe {
             let type_data = Self::type_data();
@@ -41,6 +42,8 @@ impl<T: PlayVideoRendererImpl> PlayVideoRendererImplExt for T {
         }
     }
 }
+
+impl<T: PlayVideoRendererImpl> PlayVideoRendererImplExt for T {}
 
 unsafe extern "C" fn video_renderer_create_video_sink<T: PlayVideoRendererImpl>(
     video_renderer: *mut ffi::GstPlayVideoRenderer,

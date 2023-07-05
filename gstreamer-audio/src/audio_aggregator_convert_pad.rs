@@ -9,26 +9,21 @@ use glib::{
 
 use crate::auto::AudioAggregatorConvertPad;
 
-pub trait AudioAggregatorConvertPadExtManual: 'static {
-    #[doc(alias = "converter-config")]
-    fn converter_config(&self) -> Option<crate::AudioConverterConfig>;
-
-    #[doc(alias = "converter-config")]
-    fn set_converter_config(&self, converter_config: Option<&crate::AudioConverterConfig>);
-
-    #[doc(alias = "converter-config")]
-    fn connect_converter_config_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AudioAggregatorConvertPad>> Sealed for T {}
 }
 
-impl<O: IsA<AudioAggregatorConvertPad>> AudioAggregatorConvertPadExtManual for O {
+pub trait AudioAggregatorConvertPadExtManual:
+    sealed::Sealed + IsA<AudioAggregatorConvertPad> + 'static
+{
+    #[doc(alias = "converter-config")]
     fn converter_config(&self) -> Option<crate::AudioConverterConfig> {
         glib::ObjectExt::property::<Option<gst::Structure>>(self.as_ref(), "converter-config")
             .map(|c| c.try_into().unwrap())
     }
 
+    #[doc(alias = "converter-config")]
     fn set_converter_config(&self, converter_config: Option<&crate::AudioConverterConfig>) {
         glib::ObjectExt::set_property(
             self.as_ref(),
@@ -37,6 +32,7 @@ impl<O: IsA<AudioAggregatorConvertPad>> AudioAggregatorConvertPadExtManual for O
         )
     }
 
+    #[doc(alias = "converter-config")]
     fn connect_converter_config_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -65,3 +61,5 @@ impl<O: IsA<AudioAggregatorConvertPad>> AudioAggregatorConvertPadExtManual for O
         }
     }
 }
+
+impl<O: IsA<AudioAggregatorConvertPad>> AudioAggregatorConvertPadExtManual for O {}

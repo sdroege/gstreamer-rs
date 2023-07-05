@@ -14,7 +14,12 @@ pub trait RTSPServerImpl: RTSPServerImplExt + ObjectImpl + Send + Sync {
     }
 }
 
-pub trait RTSPServerImplExt: ObjectSubclass {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::RTSPServerImplExt> Sealed for T {}
+}
+
+pub trait RTSPServerImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_create_client(&self) -> Option<crate::RTSPClient>;
 
     fn parent_client_connected(&self, client: &crate::RTSPClient);

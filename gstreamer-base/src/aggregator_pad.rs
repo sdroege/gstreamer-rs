@@ -5,12 +5,13 @@ use gst::prelude::*;
 
 use crate::AggregatorPad;
 
-pub trait AggregatorPadExtManual: 'static {
-    #[doc(alias = "get_segment")]
-    fn segment(&self) -> gst::Segment;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AggregatorPad>> Sealed for T {}
 }
 
-impl<O: IsA<AggregatorPad>> AggregatorPadExtManual for O {
+pub trait AggregatorPadExtManual: sealed::Sealed + IsA<AggregatorPad> + 'static {
+    #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment {
         unsafe {
             let ptr: &ffi::GstAggregatorPad = &*(self.as_ptr() as *const _);
@@ -19,3 +20,5 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExtManual for O {
         }
     }
 }
+
+impl<O: IsA<AggregatorPad>> AggregatorPadExtManual for O {}

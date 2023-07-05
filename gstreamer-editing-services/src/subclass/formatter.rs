@@ -23,24 +23,12 @@ pub trait FormatterImpl: FormatterImplExt + ObjectImpl + Send + Sync {
     }
 }
 
-pub trait FormatterImplExt: ObjectSubclass {
-    fn parent_can_load_uri(&self, uri: &str) -> Result<(), glib::Error>;
-
-    fn parent_load_from_uri(
-        &self,
-        timeline: &crate::Timeline,
-        uri: &str,
-    ) -> Result<(), glib::Error>;
-
-    fn parent_save_to_uri(
-        &self,
-        timeline: &crate::Timeline,
-        uri: &str,
-        overwrite: bool,
-    ) -> Result<(), glib::Error>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::FormatterImplExt> Sealed for T {}
 }
 
-impl<T: FormatterImpl> FormatterImplExt for T {
+pub trait FormatterImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_can_load_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let data = Self::type_data();
@@ -160,6 +148,8 @@ impl<T: FormatterImpl> FormatterImplExt for T {
         }
     }
 }
+
+impl<T: FormatterImpl> FormatterImplExt for T {}
 
 unsafe impl<T: FormatterImpl> IsSubclassable<T> for Formatter {
     fn class_init(klass: &mut glib::Class<Self>) {

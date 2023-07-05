@@ -28,22 +28,12 @@ pub trait AudioVisualizerImpl: AudioVisualizerImplExt + ElementImpl {
     }
 }
 
-pub trait AudioVisualizerImplExt: ObjectSubclass {
-    fn parent_setup(&self, token: &AudioVisualizerSetupToken) -> Result<(), LoggableError>;
-
-    fn parent_render(
-        &self,
-        audio_buffer: &gst::BufferRef,
-        video_frame: &mut gst_video::VideoFrameRef<&mut gst::BufferRef>,
-    ) -> Result<(), LoggableError>;
-
-    fn parent_decide_allocation(
-        &self,
-        query: &mut gst::query::Allocation,
-    ) -> Result<(), gst::LoggableError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::AudioVisualizerImplExt> Sealed for T {}
 }
 
-impl<T: AudioVisualizerImpl> AudioVisualizerImplExt for T {
+pub trait AudioVisualizerImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_setup(&self, token: &AudioVisualizerSetupToken) -> Result<(), LoggableError> {
         assert_eq!(
             self.obj().as_ptr() as *mut ffi::GstAudioVisualizer,
@@ -124,6 +114,8 @@ impl<T: AudioVisualizerImpl> AudioVisualizerImplExt for T {
         }
     }
 }
+
+impl<T: AudioVisualizerImpl> AudioVisualizerImplExt for T {}
 
 unsafe impl<T: AudioVisualizerImpl> IsSubclassable<T> for AudioVisualizer {
     fn class_init(klass: &mut glib::Class<Self>) {

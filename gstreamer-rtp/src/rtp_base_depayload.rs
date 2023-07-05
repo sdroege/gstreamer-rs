@@ -2,13 +2,12 @@ use glib::object::IsA;
 
 use crate::RTPBaseDepayload;
 
-pub trait RTPBaseDepayloadExtManual: 'static {
-    fn sink_pad(&self) -> &gst::Pad;
-
-    fn src_pad(&self) -> &gst::Pad;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTPBaseDepayload>> Sealed for T {}
 }
 
-impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExtManual for O {
+pub trait RTPBaseDepayloadExtManual: sealed::Sealed + IsA<RTPBaseDepayload> + 'static {
     fn sink_pad(&self) -> &gst::Pad {
         unsafe {
             let elt = &*(self.as_ptr() as *const ffi::GstRTPBaseDepayload);
@@ -23,3 +22,5 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExtManual for O {
         }
     }
 }
+
+impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExtManual for O {}

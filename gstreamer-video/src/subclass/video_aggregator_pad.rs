@@ -31,25 +31,12 @@ pub trait VideoAggregatorPadImpl: VideoAggregatorPadImplExt + AggregatorPadImpl 
     }
 }
 
-pub trait VideoAggregatorPadImplExt: ObjectSubclass {
-    fn parent_update_conversion_info(&self);
-
-    fn parent_prepare_frame(
-        &self,
-        aggregator: &crate::VideoAggregator,
-        token: &AggregateFramesToken,
-        buffer: &gst::Buffer,
-    ) -> Option<crate::VideoFrame<crate::video_frame::Readable>>;
-
-    fn parent_clean_frame(
-        &self,
-        aggregator: &crate::VideoAggregator,
-        token: &AggregateFramesToken,
-        frame: Option<crate::VideoFrame<crate::video_frame::Readable>>,
-    );
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::VideoAggregatorPadImplExt> Sealed for T {}
 }
 
-impl<T: VideoAggregatorPadImpl> VideoAggregatorPadImplExt for T {
+pub trait VideoAggregatorPadImplExt: ObjectSubclass {
     fn parent_update_conversion_info(&self) {
         unsafe {
             let data = Self::type_data();
@@ -136,6 +123,8 @@ impl<T: VideoAggregatorPadImpl> VideoAggregatorPadImplExt for T {
         }
     }
 }
+
+impl<T: VideoAggregatorPadImpl> VideoAggregatorPadImplExt for T {}
 
 unsafe impl<T: VideoAggregatorPadImpl> IsSubclassable<T> for VideoAggregatorPad {
     fn class_init(klass: &mut glib::Class<Self>) {

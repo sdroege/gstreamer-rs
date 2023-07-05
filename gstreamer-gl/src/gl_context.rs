@@ -45,21 +45,20 @@ impl GLContext {
     }
 }
 
-pub trait GLContextExtManual: 'static {
-    #[doc(alias = "get_gl_context")]
-    #[doc(alias = "gst_gl_context_get_gl_context")]
-    fn gl_context(&self) -> uintptr_t;
-
-    #[doc(alias = "get_proc_address")]
-    #[doc(alias = "gst_gl_context_get_proc_address")]
-    fn proc_address(&self, name: &str) -> uintptr_t;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::GLContext>> Sealed for T {}
 }
 
-impl<O: IsA<GLContext>> GLContextExtManual for O {
+pub trait GLContextExtManual: sealed::Sealed + IsA<GLContext> + 'static {
+    #[doc(alias = "get_gl_context")]
+    #[doc(alias = "gst_gl_context_get_gl_context")]
     fn gl_context(&self) -> uintptr_t {
         unsafe { ffi::gst_gl_context_get_gl_context(self.as_ref().to_glib_none().0) as uintptr_t }
     }
 
+    #[doc(alias = "get_proc_address")]
+    #[doc(alias = "gst_gl_context_get_proc_address")]
     fn proc_address(&self, name: &str) -> uintptr_t {
         unsafe {
             ffi::gst_gl_context_get_proc_address(
@@ -69,3 +68,5 @@ impl<O: IsA<GLContext>> GLContextExtManual for O {
         }
     }
 }
+
+impl<O: IsA<GLContext>> GLContextExtManual for O {}

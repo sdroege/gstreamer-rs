@@ -20,36 +20,12 @@ extern "C" {
     ) -> gst::ffi::GstFlowReturn;
 }
 
-pub trait AudioDecoderExtManual: 'static {
-    fn negotiate(&self) -> Result<(), gst::FlowError>;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    fn set_output_caps(&self, caps: &gst::Caps) -> Result<(), gst::FlowError>;
-
-    fn set_output_format(&self, info: &AudioInfo) -> Result<(), gst::FlowError>;
-
-    #[doc(alias = "get_allocator")]
-    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
-
-    #[allow(clippy::too_many_arguments)]
-    fn error<T: gst::MessageErrorDomain>(
-        &self,
-        weight: i32,
-        code: T,
-        message: Option<&str>,
-        debug: Option<&str>,
-        file: &str,
-        function: &str,
-        line: u32,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn sink_pad(&self) -> &gst::Pad;
-
-    fn src_pad(&self) -> &gst::Pad;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AudioDecoder>> Sealed for T {}
 }
 
-impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
+pub trait AudioDecoderExtManual: sealed::Sealed + IsA<AudioDecoder> + 'static {
     #[doc(alias = "gst_audio_decoder_negotiate")]
     fn negotiate(&self) -> Result<(), gst::FlowError> {
         unsafe {
@@ -96,6 +72,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "get_allocator")]
     #[doc(alias = "gst_audio_decoder_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
@@ -110,6 +87,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     fn error<T: gst::MessageErrorDomain>(
         &self,
         weight: i32,
@@ -149,6 +127,8 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
         }
     }
 }
+
+impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {}
 
 #[macro_export]
 macro_rules! audio_decoder_error(

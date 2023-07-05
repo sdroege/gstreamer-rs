@@ -24,18 +24,12 @@ pub trait AudioAggregatorPadImpl: AudioAggregatorPadImplExt + AggregatorPadImpl 
     }
 }
 
-pub trait AudioAggregatorPadImplExt: ObjectSubclass {
-    fn parent_update_conversion_info(&self);
-
-    fn parent_convert_buffer(
-        &self,
-        in_info: &crate::AudioInfo,
-        out_info: &crate::AudioInfo,
-        buffer: &gst::Buffer,
-    ) -> Option<gst::Buffer>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::AudioAggregatorPadImplExt> Sealed for T {}
 }
 
-impl<T: AudioAggregatorPadImpl> AudioAggregatorPadImplExt for T {
+pub trait AudioAggregatorPadImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_update_conversion_info(&self) {
         unsafe {
             let data = Self::type_data();
@@ -74,6 +68,8 @@ impl<T: AudioAggregatorPadImpl> AudioAggregatorPadImplExt for T {
         }
     }
 }
+
+impl<T: AudioAggregatorPadImpl> AudioAggregatorPadImplExt for T {}
 
 unsafe impl<T: AudioAggregatorPadImpl> IsSubclassable<T> for AudioAggregatorPad {
     fn class_init(klass: &mut glib::Class<Self>) {

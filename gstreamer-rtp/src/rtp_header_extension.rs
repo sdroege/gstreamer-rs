@@ -2,35 +2,13 @@ use glib::{object::IsA, translate::*};
 
 use crate::{RTPHeaderExtension, RTPHeaderExtensionFlags};
 
-pub trait RTPHeaderExtensionExtManual: 'static {
-    #[doc(alias = "gst_rtp_header_extension_read")]
-    fn read(
-        &self,
-        read_flags: RTPHeaderExtensionFlags,
-        data: &[u8],
-        buffer: &mut gst::BufferRef,
-    ) -> bool;
-
-    #[doc(alias = "gst_rtp_header_extension_write")]
-    fn write(
-        &self,
-        input_meta: &gst::Buffer,
-        write_flags: RTPHeaderExtensionFlags,
-        output: &mut gst::BufferRef,
-        data: &mut [u8],
-    ) -> Result<usize, glib::BoolError>;
-
-    #[doc(alias = "gst_rtp_header_extension_set_caps_from_attributes")]
-    fn set_caps_from_attributes(&self, caps: &mut gst::CapsRef) -> bool;
-
-    #[doc(alias = "gst_rtp_header_extension_set_caps_from_attributes_helper")]
-    fn set_caps_from_attributes_helper(&self, caps: &mut gst::CapsRef, attributes: &str) -> bool;
-
-    #[doc(alias = "gst_rtp_header_extension_update_non_rtp_src_caps")]
-    fn update_non_rtp_src_caps(&self, caps: &mut gst::CapsRef) -> bool;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTPHeaderExtension>> Sealed for T {}
 }
 
-impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExtManual for O {
+pub trait RTPHeaderExtensionExtManual: sealed::Sealed + IsA<RTPHeaderExtension> + 'static {
+    #[doc(alias = "gst_rtp_header_extension_read")]
     fn read(
         &self,
         read_flags: RTPHeaderExtensionFlags,
@@ -49,6 +27,7 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_write")]
     fn write(
         &self,
         input_meta: &gst::Buffer,
@@ -75,6 +54,7 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_set_caps_from_attributes")]
     fn set_caps_from_attributes(&self, caps: &mut gst::CapsRef) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_header_extension_set_caps_from_attributes(
@@ -84,6 +64,7 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_set_caps_from_attributes_helper")]
     fn set_caps_from_attributes_helper(&self, caps: &mut gst::CapsRef, attributes: &str) -> bool {
         unsafe {
             from_glib(
@@ -96,6 +77,7 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_update_non_rtp_src_caps")]
     fn update_non_rtp_src_caps(&self, caps: &mut gst::CapsRef) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_header_extension_update_non_rtp_src_caps(
@@ -105,3 +87,5 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExtManual for O {
         }
     }
 }
+
+impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExtManual for O {}

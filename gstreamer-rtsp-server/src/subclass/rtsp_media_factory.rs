@@ -36,22 +36,12 @@ pub trait RTSPMediaFactoryImpl: RTSPMediaFactoryImplExt + ObjectImpl + Send + Sy
     }
 }
 
-pub trait RTSPMediaFactoryImplExt: ObjectSubclass {
-    fn parent_gen_key(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString>;
-
-    fn parent_create_element(&self, url: &gst_rtsp::RTSPUrl) -> Option<gst::Element>;
-
-    fn parent_construct(&self, url: &gst_rtsp::RTSPUrl) -> Option<crate::RTSPMedia>;
-
-    fn parent_create_pipeline(&self, media: &crate::RTSPMedia) -> Option<gst::Pipeline>;
-
-    fn parent_configure(&self, media: &crate::RTSPMedia);
-
-    fn parent_media_constructed(&self, media: &crate::RTSPMedia);
-    fn parent_media_configure(&self, media: &crate::RTSPMedia);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::RTSPMediaFactoryImplExt> Sealed for T {}
 }
 
-impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
+pub trait RTSPMediaFactoryImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_gen_key(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString> {
         unsafe {
             let data = Self::type_data();
@@ -182,6 +172,8 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
         }
     }
 }
+
+impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {}
 unsafe impl<T: RTSPMediaFactoryImpl> IsSubclassable<T> for RTSPMediaFactory {
     fn class_init(klass: &mut glib::Class<Self>) {
         Self::parent_class_init::<T>(klass);

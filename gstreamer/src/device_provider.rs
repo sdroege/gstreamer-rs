@@ -29,17 +29,14 @@ impl DeviceProvider {
     }
 }
 
-pub trait DeviceProviderExtManual: 'static {
-    #[doc(alias = "get_metadata")]
-    #[doc(alias = "gst_device_provider_class_get_metadata")]
-    fn metadata<'a>(&self, key: &str) -> Option<&'a str>;
-
-    #[doc(alias = "gst_device_provider_get_devices")]
-    #[doc(alias = "get_devices")]
-    fn devices(&self) -> glib::List<crate::Device>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::DeviceProvider>> Sealed for T {}
 }
 
-impl<O: IsA<DeviceProvider>> DeviceProviderExtManual for O {
+pub trait DeviceProviderExtManual: sealed::Sealed + IsA<DeviceProvider> + 'static {
+    #[doc(alias = "get_metadata")]
+    #[doc(alias = "gst_device_provider_class_get_metadata")]
     fn metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
             let klass = (*(self.as_ptr() as *mut glib::gobject_ffi::GTypeInstance)).g_class
@@ -55,6 +52,8 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_device_provider_get_devices")]
+    #[doc(alias = "get_devices")]
     fn devices(&self) -> glib::List<crate::Device> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_device_provider_get_devices(
@@ -63,3 +62,5 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExtManual for O {
         }
     }
 }
+
+impl<O: IsA<DeviceProvider>> DeviceProviderExtManual for O {}

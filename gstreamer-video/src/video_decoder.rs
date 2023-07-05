@@ -27,75 +27,12 @@ extern "C" {
     ) -> gst::ffi::GstFlowReturn;
 }
 
-pub trait VideoDecoderExtManual: 'static {
-    #[doc(alias = "gst_video_decoder_allocate_output_frame")]
-    fn allocate_output_frame(
-        &self,
-        frame: &mut VideoCodecFrame,
-        params: Option<&gst::BufferPoolAcquireParams>,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    #[doc(alias = "get_frame")]
-    fn frame(&self, frame_number: i32) -> Option<VideoCodecFrame>;
-    #[doc(alias = "get_frames")]
-    fn frames(&self) -> Vec<VideoCodecFrame>;
-    #[doc(alias = "get_oldest_frame")]
-    fn oldest_frame(&self) -> Option<VideoCodecFrame>;
-
-    #[doc(alias = "get_allocator")]
-    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
-
-    #[doc(alias = "get_latency")]
-    fn latency(&self) -> (gst::ClockTime, Option<gst::ClockTime>);
-    fn set_latency(
-        &self,
-        min_latency: gst::ClockTime,
-        max_latency: impl Into<Option<gst::ClockTime>>,
-    );
-
-    #[doc(alias = "get_output_state")]
-    fn output_state(&self) -> Option<VideoCodecState<'static, Readable>>;
-    fn set_output_state(
-        &self,
-        fmt: VideoFormat,
-        width: u32,
-        height: u32,
-        reference: Option<&VideoCodecState<Readable>>,
-    ) -> Result<VideoCodecState<InNegotiation>, gst::FlowError>;
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    fn set_interlaced_output_state(
-        &self,
-        fmt: VideoFormat,
-        mode: VideoInterlaceMode,
-        width: u32,
-        height: u32,
-        reference: Option<&VideoCodecState<Readable>>,
-    ) -> Result<VideoCodecState<InNegotiation>, gst::FlowError>;
-
-    fn negotiate<'a>(
-        &'a self,
-        output_state: VideoCodecState<'a, InNegotiation<'a>>,
-    ) -> Result<(), gst::FlowError>;
-
-    #[allow(clippy::too_many_arguments)]
-    fn error<T: gst::MessageErrorDomain>(
-        &self,
-        weight: i32,
-        code: T,
-        message: Option<&str>,
-        debug: Option<&str>,
-        file: &str,
-        function: &str,
-        line: u32,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn sink_pad(&self) -> &gst::Pad;
-
-    fn src_pad(&self) -> &gst::Pad;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoDecoder>> Sealed for T {}
 }
 
-impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
+pub trait VideoDecoderExtManual: sealed::Sealed + IsA<VideoDecoder> + 'static {
     #[doc(alias = "gst_video_decoder_allocate_output_frame")]
     fn allocate_output_frame(
         &self,
@@ -112,6 +49,55 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
+    #[doc(alias = "get_frame")]
+    #[doc(alias = "gst_video_decoder_get_frame")]
+    fn frame(&self, frame_number: i32) -> Option<VideoCodecFrame> {
+        let frame = unsafe {
+            ffi::gst_video_decoder_get_frame(self.as_ref().to_glib_none().0, frame_number)
+        };
+
+        if frame.is_null() {
+            None
+        } else {
+            unsafe { Some(VideoCodecFrame::new(frame, self.as_ref())) }
+        }
+    }
+
+    #[doc(alias = "get_frames")]
+    #[doc(alias = "gst_video_decoder_get_frames")]
+    fn frames(&self) -> Vec<VideoCodecFrame> {
+        unsafe {
+            let frames = ffi::gst_video_decoder_get_frames(self.as_ref().to_glib_none().0);
+            let mut iter: *const glib::ffi::GList = frames;
+            let mut vec = Vec::new();
+
+            while !iter.is_null() {
+                let frame_ptr = Ptr::from((*iter).data);
+                /* transfer ownership of the frame */
+                let frame = VideoCodecFrame::new(frame_ptr, self.as_ref());
+                vec.push(frame);
+                iter = (*iter).next;
+            }
+
+            glib::ffi::g_list_free(frames);
+            vec
+        }
+    }
+
+    #[doc(alias = "get_oldest_frame")]
+    #[doc(alias = "gst_video_decoder_get_oldest_frame")]
+    fn oldest_frame(&self) -> Option<VideoCodecFrame> {
+        let frame =
+            unsafe { ffi::gst_video_decoder_get_oldest_frame(self.as_ref().to_glib_none().0) };
+
+        if frame.is_null() {
+            None
+        } else {
+            unsafe { Some(VideoCodecFrame::new(frame, self.as_ref())) }
+        }
+    }
+
+    #[doc(alias = "get_allocator")]
     #[doc(alias = "gst_video_decoder_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
@@ -125,7 +111,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
             (from_glib_full(allocator), params.assume_init().into())
         }
     }
-
+    #[doc(alias = "get_latency")]
     #[doc(alias = "gst_video_decoder_get_latency")]
     fn latency(&self) -> (gst::ClockTime, Option<gst::ClockTime>) {
         let mut min_latency = gst::ffi::GST_CLOCK_TIME_NONE;
@@ -160,51 +146,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
-    #[doc(alias = "gst_video_decoder_get_frame")]
-    fn frame(&self, frame_number: i32) -> Option<VideoCodecFrame> {
-        let frame = unsafe {
-            ffi::gst_video_decoder_get_frame(self.as_ref().to_glib_none().0, frame_number)
-        };
-
-        if frame.is_null() {
-            None
-        } else {
-            unsafe { Some(VideoCodecFrame::new(frame, self.as_ref())) }
-        }
-    }
-
-    #[doc(alias = "gst_video_decoder_get_frames")]
-    fn frames(&self) -> Vec<VideoCodecFrame> {
-        unsafe {
-            let frames = ffi::gst_video_decoder_get_frames(self.as_ref().to_glib_none().0);
-            let mut iter: *const glib::ffi::GList = frames;
-            let mut vec = Vec::new();
-
-            while !iter.is_null() {
-                let frame_ptr = Ptr::from((*iter).data);
-                /* transfer ownership of the frame */
-                let frame = VideoCodecFrame::new(frame_ptr, self.as_ref());
-                vec.push(frame);
-                iter = (*iter).next;
-            }
-
-            glib::ffi::g_list_free(frames);
-            vec
-        }
-    }
-
-    #[doc(alias = "gst_video_decoder_get_oldest_frame")]
-    fn oldest_frame(&self) -> Option<VideoCodecFrame> {
-        let frame =
-            unsafe { ffi::gst_video_decoder_get_oldest_frame(self.as_ref().to_glib_none().0) };
-
-        if frame.is_null() {
-            None
-        } else {
-            unsafe { Some(VideoCodecFrame::new(frame, self.as_ref())) }
-        }
-    }
-
+    #[doc(alias = "get_output_state")]
     #[doc(alias = "gst_video_decoder_get_output_state")]
     fn output_state(&self) -> Option<VideoCodecState<'static, Readable>> {
         let state =
@@ -299,6 +241,8 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
             Err(gst::FlowError::NotNegotiated)
         }
     }
+
+    #[allow(clippy::too_many_arguments)]
     fn error<T: gst::MessageErrorDomain>(
         &self,
         weight: i32,
@@ -338,6 +282,8 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 }
+
+impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {}
 
 impl HasStreamLock for VideoDecoder {
     fn stream_lock(&self) -> *mut glib::ffi::GRecMutex {

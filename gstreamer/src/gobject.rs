@@ -4,12 +4,13 @@ use glib::prelude::*;
 
 use crate::value::GstValueExt;
 
-pub trait GObjectExtManualGst: 'static {
-    #[doc(alias = "gst_util_set_object_arg")]
-    fn set_property_from_str(&self, name: &str, value: &str);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<glib::Object>> Sealed for T {}
 }
 
-impl<O: IsA<glib::Object>> GObjectExtManualGst for O {
+pub trait GObjectExtManualGst: sealed::Sealed + IsA<glib::Object> + 'static {
+    #[doc(alias = "gst_util_set_object_arg")]
     #[track_caller]
     fn set_property_from_str(&self, name: &str, value: &str) {
         let pspec = self.find_property(name).unwrap_or_else(|| {
@@ -48,6 +49,8 @@ impl<O: IsA<glib::Object>> GObjectExtManualGst for O {
         self.set_property(name, value)
     }
 }
+
+impl<O: IsA<glib::Object>> GObjectExtManualGst for O {}
 
 #[cfg(test)]
 mod tests {

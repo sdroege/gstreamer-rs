@@ -28,20 +28,12 @@ pub trait RTPBaseDepayloadImpl: RTPBaseDepayloadImplExt + ElementImpl {
     }
 }
 
-pub trait RTPBaseDepayloadImplExt: ObjectSubclass {
-    fn parent_set_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError>;
-
-    fn parent_handle_event(&self, event: gst::Event) -> bool;
-
-    fn parent_packet_lost(&self, event: &gst::EventRef) -> bool;
-
-    fn parent_process_rtp_packet(
-        &self,
-        rtp_buffer: &crate::RTPBuffer<crate::rtp_buffer::Readable>,
-    ) -> Option<gst::Buffer>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::RTPBaseDepayloadImplExt> Sealed for T {}
 }
 
-impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
+pub trait RTPBaseDepayloadImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_set_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
@@ -125,6 +117,8 @@ impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {
         }
     }
 }
+
+impl<T: RTPBaseDepayloadImpl> RTPBaseDepayloadImplExt for T {}
 
 unsafe impl<T: RTPBaseDepayloadImpl> IsSubclassable<T> for RTPBaseDepayload {
     fn class_init(klass: &mut glib::Class<Self>) {

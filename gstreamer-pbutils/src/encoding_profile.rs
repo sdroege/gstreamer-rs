@@ -8,17 +8,16 @@ use crate::auto::{
 #[cfg(feature = "v1_20")]
 use crate::ElementProperties;
 
-pub trait EncodingProfileExtManual {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::EncodingProfile>> Sealed for T {}
+}
+
+pub trait EncodingProfileExtManual: sealed::Sealed + IsA<EncodingProfile> + 'static {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_encoding_profile_get_element_properties")]
     #[doc(alias = "get_element_properties")]
-    fn element_properties(&self) -> Option<ElementProperties>;
-}
-
-impl<O: IsA<EncodingProfile>> EncodingProfileExtManual for O {
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn element_properties(&self) -> Option<ElementProperties> {
         unsafe {
             from_glib_full::<_, Option<_>>(ffi::gst_encoding_profile_get_element_properties(
@@ -28,6 +27,8 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExtManual for O {
         }
     }
 }
+
+impl<O: IsA<EncodingProfile>> EncodingProfileExtManual for O {}
 
 trait EncodingProfileBuilderCommon {
     fn set_allow_dynamic_output(&self, allow_dynamic_output: bool);

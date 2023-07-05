@@ -39,33 +39,12 @@ pub trait VideoFilterImpl: VideoFilterImplExt + BaseTransformImpl {
     }
 }
 
-pub trait VideoFilterImplExt: ObjectSubclass {
-    fn parent_set_info(
-        &self,
-        incaps: &gst::Caps,
-        in_info: &VideoInfo,
-        outcaps: &gst::Caps,
-        out_info: &VideoInfo,
-    ) -> Result<(), gst::LoggableError>;
-
-    fn parent_transform_frame(
-        &self,
-        inframe: &VideoFrameRef<&gst::BufferRef>,
-        outframe: &mut VideoFrameRef<&mut gst::BufferRef>,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_transform_frame_ip(
-        &self,
-        frame: &mut VideoFrameRef<&mut gst::BufferRef>,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_transform_frame_ip_passthrough(
-        &self,
-        frame: &VideoFrameRef<&gst::BufferRef>,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::VideoFilterImplExt> Sealed for T {}
 }
 
-impl<T: VideoFilterImpl> VideoFilterImplExt for T {
+pub trait VideoFilterImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_set_info(
         &self,
         incaps: &gst::Caps,
@@ -191,6 +170,8 @@ impl<T: VideoFilterImpl> VideoFilterImplExt for T {
         }
     }
 }
+
+impl<T: VideoFilterImpl> VideoFilterImplExt for T {}
 
 unsafe impl<T: VideoFilterImpl> IsSubclassable<T> for VideoFilter {
     fn class_init(klass: &mut glib::Class<Self>) {

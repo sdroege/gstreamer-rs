@@ -6,26 +6,13 @@ use glib::{prelude::*, translate::*};
 
 use crate::AudioEncoder;
 
-pub trait AudioEncoderExtManual: 'static {
-    #[doc(alias = "gst_audio_encoder_negotiate")]
-    fn negotiate(&self) -> Result<(), gst::FlowError>;
-
-    #[doc(alias = "gst_audio_encoder_set_output_format")]
-    fn set_output_format(&self, caps: &gst::Caps) -> Result<(), gst::FlowError>;
-
-    #[doc(alias = "get_allocator")]
-    #[doc(alias = "gst_audio_encoder_get_allocator")]
-    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
-
-    #[doc(alias = "gst_audio_encoder_set_headers")]
-    fn set_headers(&self, headers: impl IntoIterator<Item = gst::Buffer>);
-
-    fn sink_pad(&self) -> &gst::Pad;
-
-    fn src_pad(&self) -> &gst::Pad;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AudioEncoder>> Sealed for T {}
 }
 
-impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
+pub trait AudioEncoderExtManual: sealed::Sealed + IsA<AudioEncoder> + 'static {
+    #[doc(alias = "gst_audio_encoder_negotiate")]
     fn negotiate(&self) -> Result<(), gst::FlowError> {
         unsafe {
             let ret = from_glib(ffi::gst_audio_encoder_negotiate(
@@ -39,6 +26,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_audio_encoder_set_output_format")]
     fn set_output_format(&self, caps: &gst::Caps) -> Result<(), gst::FlowError> {
         unsafe {
             let ret = from_glib(ffi::gst_audio_encoder_set_output_format(
@@ -53,6 +41,8 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
         }
     }
 
+    #[doc(alias = "get_allocator")]
+    #[doc(alias = "gst_audio_encoder_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();
@@ -66,6 +56,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_audio_encoder_set_headers")]
     fn set_headers(&self, headers: impl IntoIterator<Item = gst::Buffer>) {
         unsafe {
             ffi::gst_audio_encoder_set_headers(
@@ -92,3 +83,5 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
         }
     }
 }
+
+impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {}

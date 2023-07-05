@@ -7,23 +7,14 @@ use gst::prelude::*;
 
 use crate::BaseSrc;
 
-pub trait BaseSrcExtManual: 'static {
-    #[doc(alias = "get_allocator")]
-    #[doc(alias = "gst_base_src_get_allocator")]
-    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
-
-    #[doc(alias = "get_segment")]
-    fn segment(&self) -> gst::Segment;
-
-    #[doc(alias = "gst_base_src_query_latency")]
-    fn query_latency(
-        &self,
-    ) -> Result<(bool, Option<gst::ClockTime>, Option<gst::ClockTime>), glib::BoolError>;
-
-    fn src_pad(&self) -> &gst::Pad;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::BaseSrc>> Sealed for T {}
 }
 
-impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
+pub trait BaseSrcExtManual: sealed::Sealed + IsA<BaseSrc> + 'static {
+    #[doc(alias = "get_allocator")]
+    #[doc(alias = "gst_base_src_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();
@@ -37,6 +28,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
         }
     }
 
+    #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment {
         unsafe {
             let src: &ffi::GstBaseSrc = &*(self.as_ptr() as *const _);
@@ -45,6 +37,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
         }
     }
 
+    #[doc(alias = "gst_base_src_query_latency")]
     fn query_latency(
         &self,
     ) -> Result<(bool, Option<gst::ClockTime>, Option<gst::ClockTime>), glib::BoolError> {
@@ -80,3 +73,5 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
         }
     }
 }
+
+impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {}

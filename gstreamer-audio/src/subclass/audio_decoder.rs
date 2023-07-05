@@ -86,52 +86,12 @@ pub trait AudioDecoderImpl: AudioDecoderImplExt + ElementImpl {
     }
 }
 
-pub trait AudioDecoderImplExt: ObjectSubclass {
-    fn parent_open(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_close(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_start(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_stop(&self) -> Result<(), gst::ErrorMessage>;
-
-    fn parent_set_format(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError>;
-
-    fn parent_parse(&self, adapter: &gst_base::Adapter) -> Result<(u32, u32), gst::FlowError>;
-
-    fn parent_handle_frame(
-        &self,
-        buffer: Option<&gst::Buffer>,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn parent_pre_push(&self, buffer: gst::Buffer) -> Result<Option<gst::Buffer>, gst::FlowError>;
-
-    fn parent_flush(&self, hard: bool);
-
-    fn parent_negotiate(&self) -> Result<(), gst::LoggableError>;
-
-    fn parent_caps(&self, filter: Option<&gst::Caps>) -> gst::Caps;
-
-    fn parent_sink_event(&self, event: gst::Event) -> bool;
-
-    fn parent_sink_query(&self, query: &mut gst::QueryRef) -> bool;
-
-    fn parent_src_event(&self, event: gst::Event) -> bool;
-
-    fn parent_src_query(&self, query: &mut gst::QueryRef) -> bool;
-
-    fn parent_propose_allocation(
-        &self,
-        query: &mut gst::query::Allocation,
-    ) -> Result<(), gst::LoggableError>;
-
-    fn parent_decide_allocation(
-        &self,
-        query: &mut gst::query::Allocation,
-    ) -> Result<(), gst::LoggableError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::AudioDecoderImplExt> Sealed for T {}
 }
 
-impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
+pub trait AudioDecoderImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_open(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();
@@ -512,6 +472,8 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
         }
     }
 }
+
+impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {}
 
 unsafe impl<T: AudioDecoderImpl> IsSubclassable<T> for AudioDecoder {
     fn class_init(klass: &mut glib::Class<Self>) {

@@ -17,13 +17,12 @@ pub trait DeviceImpl: DeviceImplExt + GstObjectImpl + Send + Sync {
     }
 }
 
-pub trait DeviceImplExt: ObjectSubclass {
-    fn parent_create_element(&self, name: Option<&str>) -> Result<Element, LoggableError>;
-
-    fn parent_reconfigure_element(&self, element: &Element) -> Result<(), LoggableError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::DeviceImplExt> Sealed for T {}
 }
 
-impl<T: DeviceImpl> DeviceImplExt for T {
+pub trait DeviceImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_create_element(&self, name: Option<&str>) -> Result<Element, LoggableError> {
         unsafe {
             let data = Self::type_data();
@@ -71,6 +70,8 @@ impl<T: DeviceImpl> DeviceImplExt for T {
         }
     }
 }
+
+impl<T: DeviceImpl> DeviceImplExt for T {}
 
 unsafe impl<T: DeviceImpl> IsSubclassable<T> for Device {
     fn class_init(klass: &mut glib::Class<Self>) {

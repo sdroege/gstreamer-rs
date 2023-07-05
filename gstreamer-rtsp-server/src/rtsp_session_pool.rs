@@ -33,14 +33,13 @@ fn into_raw_watch<F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static>(func:
     Box::into_raw(func) as gpointer
 }
 
-pub trait RTSPSessionPoolExtManual: 'static {
-    #[doc(alias = "gst_rtsp_session_pool_create_watch")]
-    fn create_watch<F>(&self, name: Option<&str>, priority: Priority, func: F) -> glib::Source
-    where
-        F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPSessionPool>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExtManual for O {
+pub trait RTSPSessionPoolExtManual: sealed::Sealed + IsA<RTSPSessionPool> + 'static {
+    #[doc(alias = "gst_rtsp_session_pool_create_watch")]
     fn create_watch<F>(&self, name: Option<&str>, priority: Priority, func: F) -> glib::Source
     where
         F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static,
@@ -67,3 +66,5 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExtManual for O {
         }
     }
 }
+
+impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExtManual for O {}

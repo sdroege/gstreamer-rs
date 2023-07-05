@@ -2,37 +2,15 @@
 
 use glib::{prelude::*, signal::SignalHandlerId, translate::*};
 
-use crate::{ClockTime, ObjectFlags};
+use crate::{ClockTime, Object, ObjectFlags};
 
-pub trait GstObjectExtManual: 'static {
-    #[doc(alias = "deep-notify")]
-    fn connect_deep_notify<F: Fn(&Self, &crate::Object, &glib::ParamSpec) + Send + Sync + 'static>(
-        &self,
-        name: Option<&str>,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn set_object_flags(&self, flags: ObjectFlags);
-
-    fn unset_object_flags(&self, flags: ObjectFlags);
-
-    #[doc(alias = "get_object_flags")]
-    fn object_flags(&self) -> ObjectFlags;
-
-    #[doc(alias = "get_g_value_array")]
-    #[doc(alias = "gst_object_get_g_value_array")]
-    fn g_value_array(
-        &self,
-        property_name: &str,
-        timestamp: ClockTime,
-        interval: ClockTime,
-        values: &mut [glib::Value],
-    ) -> Result<(), glib::error::BoolError>;
-
-    fn object_lock(&self) -> crate::utils::ObjectLockGuard<Self>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Object>> Sealed for T {}
 }
 
-impl<O: IsA<crate::Object>> GstObjectExtManual for O {
+pub trait GstObjectExtManual: sealed::Sealed + IsA<Object> + 'static {
+    #[doc(alias = "deep-notify")]
     fn connect_deep_notify<
         F: Fn(&Self, &crate::Object, &glib::ParamSpec) + Send + Sync + 'static,
     >(
@@ -53,7 +31,7 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
             // It would be nice to display the actual signal name in the panic messages below,
             // but that would require to copy `signal_name` so as to move it into the closure
             // which seems too much for the messages of development errors
-            let obj: O = unsafe {
+            let obj: Self = unsafe {
                 values[0]
                     .get::<crate::Object>()
                     .unwrap_or_else(|err| panic!("Object signal \"deep-notify\": values[0]: {err}"))
@@ -90,6 +68,7 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
         }
     }
 
+    #[doc(alias = "get_object_flags")]
     fn object_flags(&self) -> ObjectFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
@@ -97,6 +76,9 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
             from_glib((*ptr).flags)
         }
     }
+
+    #[doc(alias = "get_g_value_array")]
+    #[doc(alias = "gst_object_get_g_value_array")]
 
     fn g_value_array(
         &self,
@@ -126,6 +108,8 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
         crate::utils::ObjectLockGuard::acquire(self)
     }
 }
+
+impl<O: IsA<Object>> GstObjectExtManual for O {}
 
 #[cfg(test)]
 mod tests {

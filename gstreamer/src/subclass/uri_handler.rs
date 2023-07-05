@@ -13,13 +13,12 @@ pub trait URIHandlerImpl: super::element::ElementImpl {
     fn set_uri(&self, uri: &str) -> Result<(), glib::Error>;
 }
 
-pub trait URIHandlerImplExt: ObjectSubclass {
-    fn parent_protocols() -> Vec<String>;
-    fn parent_uri(&self) -> Option<String>;
-    fn parent_set_uri(&self, uri: &str) -> Result<(), glib::Error>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::URIHandlerImplExt> Sealed for T {}
 }
 
-impl<T: URIHandlerImpl> URIHandlerImplExt for T {
+pub trait URIHandlerImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_protocols() -> Vec<String> {
         unsafe {
             let type_data = Self::type_data();
@@ -73,6 +72,8 @@ impl<T: URIHandlerImpl> URIHandlerImplExt for T {
         }
     }
 }
+
+impl<T: URIHandlerImpl> URIHandlerImplExt for T {}
 
 unsafe impl<T: URIHandlerImpl> IsImplementable<T> for URIHandler {
     fn interface_init(iface: &mut glib::Interface<Self>) {
