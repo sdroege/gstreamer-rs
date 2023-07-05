@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-allocators"
-version = "0.20.6"
+version = "0.20.7"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Allocators library"
