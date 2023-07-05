@@ -1,6 +1,6 @@
 [submodule "gir"]
 	path = gir
-	url = https://github.com/sdroege/gir
+	url = https://github.com/gtk-rs/gir
 	update = none
 [submodule "gir-files"]
 	path = gir-files
