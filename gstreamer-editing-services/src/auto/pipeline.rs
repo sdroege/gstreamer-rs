@@ -36,103 +36,20 @@ impl Default for Pipeline {
     }
 }
 
-pub trait GESPipelineExt: 'static {
-    #[doc(alias = "ges_pipeline_get_mode")]
-    #[doc(alias = "get_mode")]
-    fn mode(&self) -> PipelineFlags;
-
-    #[doc(alias = "ges_pipeline_get_thumbnail")]
-    #[doc(alias = "get_thumbnail")]
-    fn thumbnail(&self, caps: &gst::Caps) -> Option<gst::Sample>;
-
-    #[doc(alias = "ges_pipeline_get_thumbnail_rgb24")]
-    #[doc(alias = "get_thumbnail_rgb24")]
-    fn thumbnail_rgb24(&self, width: i32, height: i32) -> Option<gst::Sample>;
-
-    #[doc(alias = "ges_pipeline_preview_get_audio_sink")]
-    fn preview_get_audio_sink(&self) -> Option<gst::Element>;
-
-    #[doc(alias = "ges_pipeline_preview_get_video_sink")]
-    fn preview_get_video_sink(&self) -> Option<gst::Element>;
-
-    #[doc(alias = "ges_pipeline_preview_set_audio_sink")]
-    fn preview_set_audio_sink(&self, sink: Option<&impl IsA<gst::Element>>);
-
-    #[doc(alias = "ges_pipeline_preview_set_video_sink")]
-    fn preview_set_video_sink(&self, sink: Option<&impl IsA<gst::Element>>);
-
-    #[doc(alias = "ges_pipeline_save_thumbnail")]
-    fn save_thumbnail(
-        &self,
-        width: i32,
-        height: i32,
-        format: &str,
-        location: &str,
-    ) -> Result<(), glib::Error>;
-
-    #[doc(alias = "ges_pipeline_set_mode")]
-    fn set_mode(&self, mode: PipelineFlags) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_pipeline_set_render_settings")]
-    fn set_render_settings(
-        &self,
-        output_uri: &str,
-        profile: &impl IsA<gst_pbutils::EncodingProfile>,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_pipeline_set_timeline")]
-    fn set_timeline(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "audio-filter")]
-    fn audio_filter(&self) -> Option<gst::Element>;
-
-    #[doc(alias = "audio-filter")]
-    fn set_audio_filter<P: IsA<gst::Element>>(&self, audio_filter: Option<&P>);
-
-    #[doc(alias = "audio-sink")]
-    fn audio_sink(&self) -> Option<gst::Element>;
-
-    #[doc(alias = "audio-sink")]
-    fn set_audio_sink<P: IsA<gst::Element>>(&self, audio_sink: Option<&P>);
-
-    fn timeline(&self) -> Option<Timeline>;
-
-    #[doc(alias = "video-filter")]
-    fn video_filter(&self) -> Option<gst::Element>;
-
-    #[doc(alias = "video-filter")]
-    fn set_video_filter<P: IsA<gst::Element>>(&self, video_filter: Option<&P>);
-
-    #[doc(alias = "video-sink")]
-    fn video_sink(&self) -> Option<gst::Element>;
-
-    #[doc(alias = "video-sink")]
-    fn set_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>);
-
-    #[doc(alias = "audio-filter")]
-    fn connect_audio_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "audio-sink")]
-    fn connect_audio_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "mode")]
-    fn connect_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "timeline")]
-    fn connect_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "video-filter")]
-    fn connect_video_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "video-sink")]
-    fn connect_video_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Pipeline>> Sealed for T {}
 }
 
-impl<O: IsA<Pipeline>> GESPipelineExt for O {
+pub trait GESPipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_pipeline_get_mode")]
+    #[doc(alias = "get_mode")]
     fn mode(&self) -> PipelineFlags {
         unsafe { from_glib(ffi::ges_pipeline_get_mode(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_pipeline_get_thumbnail")]
+    #[doc(alias = "get_thumbnail")]
     fn thumbnail(&self, caps: &gst::Caps) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::ges_pipeline_get_thumbnail(
@@ -142,6 +59,8 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_pipeline_get_thumbnail_rgb24")]
+    #[doc(alias = "get_thumbnail_rgb24")]
     fn thumbnail_rgb24(&self, width: i32, height: i32) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::ges_pipeline_get_thumbnail_rgb24(
@@ -152,6 +71,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_pipeline_preview_get_audio_sink")]
     fn preview_get_audio_sink(&self) -> Option<gst::Element> {
         unsafe {
             from_glib_full(ffi::ges_pipeline_preview_get_audio_sink(
@@ -160,6 +80,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_pipeline_preview_get_video_sink")]
     fn preview_get_video_sink(&self) -> Option<gst::Element> {
         unsafe {
             from_glib_full(ffi::ges_pipeline_preview_get_video_sink(
@@ -168,6 +89,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_pipeline_preview_set_audio_sink")]
     fn preview_set_audio_sink(&self, sink: Option<&impl IsA<gst::Element>>) {
         unsafe {
             ffi::ges_pipeline_preview_set_audio_sink(
@@ -177,6 +99,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_pipeline_preview_set_video_sink")]
     fn preview_set_video_sink(&self, sink: Option<&impl IsA<gst::Element>>) {
         unsafe {
             ffi::ges_pipeline_preview_set_video_sink(
@@ -186,6 +109,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_pipeline_save_thumbnail")]
     fn save_thumbnail(
         &self,
         width: i32,
@@ -212,6 +136,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_pipeline_set_mode")]
     fn set_mode(&self, mode: PipelineFlags) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -221,6 +146,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_pipeline_set_render_settings")]
     fn set_render_settings(
         &self,
         output_uri: &str,
@@ -238,6 +164,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_pipeline_set_timeline")]
     fn set_timeline(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -250,18 +177,22 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "audio-filter")]
     fn audio_filter(&self) -> Option<gst::Element> {
         glib::ObjectExt::property(self.as_ref(), "audio-filter")
     }
 
+    #[doc(alias = "audio-filter")]
     fn set_audio_filter<P: IsA<gst::Element>>(&self, audio_filter: Option<&P>) {
         glib::ObjectExt::set_property(self.as_ref(), "audio-filter", audio_filter)
     }
 
+    #[doc(alias = "audio-sink")]
     fn audio_sink(&self) -> Option<gst::Element> {
         glib::ObjectExt::property(self.as_ref(), "audio-sink")
     }
 
+    #[doc(alias = "audio-sink")]
     fn set_audio_sink<P: IsA<gst::Element>>(&self, audio_sink: Option<&P>) {
         glib::ObjectExt::set_property(self.as_ref(), "audio-sink", audio_sink)
     }
@@ -270,22 +201,27 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         glib::ObjectExt::property(self.as_ref(), "timeline")
     }
 
+    #[doc(alias = "video-filter")]
     fn video_filter(&self) -> Option<gst::Element> {
         glib::ObjectExt::property(self.as_ref(), "video-filter")
     }
 
+    #[doc(alias = "video-filter")]
     fn set_video_filter<P: IsA<gst::Element>>(&self, video_filter: Option<&P>) {
         glib::ObjectExt::set_property(self.as_ref(), "video-filter", video_filter)
     }
 
+    #[doc(alias = "video-sink")]
     fn video_sink(&self) -> Option<gst::Element> {
         glib::ObjectExt::property(self.as_ref(), "video-sink")
     }
 
+    #[doc(alias = "video-sink")]
     fn set_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>) {
         glib::ObjectExt::set_property(self.as_ref(), "video-sink", video_sink)
     }
 
+    #[doc(alias = "audio-filter")]
     fn connect_audio_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_audio_filter_trampoline<
             P: IsA<Pipeline>,
@@ -311,6 +247,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "audio-sink")]
     fn connect_audio_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_audio_sink_trampoline<P: IsA<Pipeline>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESPipeline,
@@ -333,6 +270,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "mode")]
     fn connect_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mode_trampoline<P: IsA<Pipeline>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESPipeline,
@@ -355,6 +293,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "timeline")]
     fn connect_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_timeline_trampoline<P: IsA<Pipeline>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESPipeline,
@@ -377,6 +316,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "video-filter")]
     fn connect_video_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_video_filter_trampoline<
             P: IsA<Pipeline>,
@@ -402,6 +342,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
+    #[doc(alias = "video-sink")]
     fn connect_video_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_video_sink_trampoline<P: IsA<Pipeline>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESPipeline,
@@ -424,3 +365,5 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 }
+
+impl<O: IsA<Pipeline>> GESPipelineExt for O {}

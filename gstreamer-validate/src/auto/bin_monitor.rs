@@ -43,22 +43,14 @@ impl BinMonitor {
 unsafe impl Send for BinMonitor {}
 unsafe impl Sync for BinMonitor {}
 
-pub trait BinMonitorExt: 'static {
-    #[doc(alias = "gst_validate_bin_monitor_get_scenario")]
-    #[doc(alias = "get_scenario")]
-    fn scenario(&self) -> Option<Scenario>;
-
-    #[doc(alias = "handles-states")]
-    fn is_handles_states(&self) -> bool;
-
-    #[doc(alias = "handles-states")]
-    fn connect_handles_states_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::BinMonitor>> Sealed for T {}
 }
 
-impl<O: IsA<BinMonitor>> BinMonitorExt for O {
+pub trait BinMonitorExt: IsA<BinMonitor> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_validate_bin_monitor_get_scenario")]
+    #[doc(alias = "get_scenario")]
     fn scenario(&self) -> Option<Scenario> {
         unsafe {
             from_glib_full(ffi::gst_validate_bin_monitor_get_scenario(
@@ -67,10 +59,12 @@ impl<O: IsA<BinMonitor>> BinMonitorExt for O {
         }
     }
 
+    #[doc(alias = "handles-states")]
     fn is_handles_states(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "handles-states")
     }
 
+    #[doc(alias = "handles-states")]
     fn connect_handles_states_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -99,3 +93,5 @@ impl<O: IsA<BinMonitor>> BinMonitorExt for O {
         }
     }
 }
+
+impl<O: IsA<BinMonitor>> BinMonitorExt for O {}

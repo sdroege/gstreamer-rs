@@ -22,19 +22,13 @@ impl RTSPOnvifMedia {
 unsafe impl Send for RTSPOnvifMedia {}
 unsafe impl Sync for RTSPOnvifMedia {}
 
-pub trait RTSPOnvifMediaExt: 'static {
-    #[doc(alias = "gst_rtsp_onvif_media_collect_backchannel")]
-    fn collect_backchannel(&self) -> bool;
-
-    #[doc(alias = "gst_rtsp_onvif_media_get_backchannel_bandwidth")]
-    #[doc(alias = "get_backchannel_bandwidth")]
-    fn backchannel_bandwidth(&self) -> u32;
-
-    #[doc(alias = "gst_rtsp_onvif_media_set_backchannel_bandwidth")]
-    fn set_backchannel_bandwidth(&self, bandwidth: u32);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPOnvifMedia>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPOnvifMedia>> RTSPOnvifMediaExt for O {
+pub trait RTSPOnvifMediaExt: IsA<RTSPOnvifMedia> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_rtsp_onvif_media_collect_backchannel")]
     fn collect_backchannel(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_onvif_media_collect_backchannel(
@@ -43,12 +37,15 @@ impl<O: IsA<RTSPOnvifMedia>> RTSPOnvifMediaExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_onvif_media_get_backchannel_bandwidth")]
+    #[doc(alias = "get_backchannel_bandwidth")]
     fn backchannel_bandwidth(&self) -> u32 {
         unsafe {
             ffi::gst_rtsp_onvif_media_get_backchannel_bandwidth(self.as_ref().to_glib_none().0)
         }
     }
 
+    #[doc(alias = "gst_rtsp_onvif_media_set_backchannel_bandwidth")]
     fn set_backchannel_bandwidth(&self, bandwidth: u32) {
         unsafe {
             ffi::gst_rtsp_onvif_media_set_backchannel_bandwidth(
@@ -58,3 +55,5 @@ impl<O: IsA<RTSPOnvifMedia>> RTSPOnvifMediaExt for O {
         }
     }
 }
+
+impl<O: IsA<RTSPOnvifMedia>> RTSPOnvifMediaExt for O {}

@@ -30,62 +30,20 @@ impl TextOverlay {
     }
 }
 
-pub trait TextOverlayExt: 'static {
-    #[doc(alias = "ges_text_overlay_get_color")]
-    #[doc(alias = "get_color")]
-    fn color(&self) -> u32;
-
-    #[doc(alias = "ges_text_overlay_get_font_desc")]
-    #[doc(alias = "get_font_desc")]
-    fn font_desc(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "ges_text_overlay_get_halignment")]
-    #[doc(alias = "get_halignment")]
-    fn halignment(&self) -> TextHAlign;
-
-    #[doc(alias = "ges_text_overlay_get_text")]
-    #[doc(alias = "get_text")]
-    fn text(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "ges_text_overlay_get_valignment")]
-    #[doc(alias = "get_valignment")]
-    fn valignment(&self) -> TextVAlign;
-
-    #[doc(alias = "ges_text_overlay_get_xpos")]
-    #[doc(alias = "get_xpos")]
-    fn xpos(&self) -> f64;
-
-    #[doc(alias = "ges_text_overlay_get_ypos")]
-    #[doc(alias = "get_ypos")]
-    fn ypos(&self) -> f64;
-
-    #[doc(alias = "ges_text_overlay_set_color")]
-    fn set_color(&self, color: u32);
-
-    #[doc(alias = "ges_text_overlay_set_font_desc")]
-    fn set_font_desc(&self, font_desc: Option<&str>);
-
-    #[doc(alias = "ges_text_overlay_set_halignment")]
-    fn set_halignment(&self, halign: TextHAlign);
-
-    #[doc(alias = "ges_text_overlay_set_text")]
-    fn set_text(&self, text: Option<&str>);
-
-    #[doc(alias = "ges_text_overlay_set_valignment")]
-    fn set_valignment(&self, valign: TextVAlign);
-
-    #[doc(alias = "ges_text_overlay_set_xpos")]
-    fn set_xpos(&self, position: f64);
-
-    #[doc(alias = "ges_text_overlay_set_ypos")]
-    fn set_ypos(&self, position: f64);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::TextOverlay>> Sealed for T {}
 }
 
-impl<O: IsA<TextOverlay>> TextOverlayExt for O {
+pub trait TextOverlayExt: IsA<TextOverlay> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_text_overlay_get_color")]
+    #[doc(alias = "get_color")]
     fn color(&self) -> u32 {
         unsafe { ffi::ges_text_overlay_get_color(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "ges_text_overlay_get_font_desc")]
+    #[doc(alias = "get_font_desc")]
     fn font_desc(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::ges_text_overlay_get_font_desc(
@@ -94,6 +52,8 @@ impl<O: IsA<TextOverlay>> TextOverlayExt for O {
         }
     }
 
+    #[doc(alias = "ges_text_overlay_get_halignment")]
+    #[doc(alias = "get_halignment")]
     fn halignment(&self) -> TextHAlign {
         unsafe {
             from_glib(ffi::ges_text_overlay_get_halignment(
@@ -102,6 +62,8 @@ impl<O: IsA<TextOverlay>> TextOverlayExt for O {
         }
     }
 
+    #[doc(alias = "ges_text_overlay_get_text")]
+    #[doc(alias = "get_text")]
     fn text(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::ges_text_overlay_get_text(
@@ -110,6 +72,8 @@ impl<O: IsA<TextOverlay>> TextOverlayExt for O {
         }
     }
 
+    #[doc(alias = "ges_text_overlay_get_valignment")]
+    #[doc(alias = "get_valignment")]
     fn valignment(&self) -> TextVAlign {
         unsafe {
             from_glib(ffi::ges_text_overlay_get_valignment(
@@ -118,20 +82,26 @@ impl<O: IsA<TextOverlay>> TextOverlayExt for O {
         }
     }
 
+    #[doc(alias = "ges_text_overlay_get_xpos")]
+    #[doc(alias = "get_xpos")]
     fn xpos(&self) -> f64 {
         unsafe { ffi::ges_text_overlay_get_xpos(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "ges_text_overlay_get_ypos")]
+    #[doc(alias = "get_ypos")]
     fn ypos(&self) -> f64 {
         unsafe { ffi::ges_text_overlay_get_ypos(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "ges_text_overlay_set_color")]
     fn set_color(&self, color: u32) {
         unsafe {
             ffi::ges_text_overlay_set_color(self.as_ref().to_glib_none().0, color);
         }
     }
 
+    #[doc(alias = "ges_text_overlay_set_font_desc")]
     fn set_font_desc(&self, font_desc: Option<&str>) {
         unsafe {
             ffi::ges_text_overlay_set_font_desc(
@@ -141,6 +111,7 @@ impl<O: IsA<TextOverlay>> TextOverlayExt for O {
         }
     }
 
+    #[doc(alias = "ges_text_overlay_set_halignment")]
     fn set_halignment(&self, halign: TextHAlign) {
         unsafe {
             ffi::ges_text_overlay_set_halignment(
@@ -150,12 +121,14 @@ impl<O: IsA<TextOverlay>> TextOverlayExt for O {
         }
     }
 
+    #[doc(alias = "ges_text_overlay_set_text")]
     fn set_text(&self, text: Option<&str>) {
         unsafe {
             ffi::ges_text_overlay_set_text(self.as_ref().to_glib_none().0, text.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "ges_text_overlay_set_valignment")]
     fn set_valignment(&self, valign: TextVAlign) {
         unsafe {
             ffi::ges_text_overlay_set_valignment(
@@ -165,15 +138,19 @@ impl<O: IsA<TextOverlay>> TextOverlayExt for O {
         }
     }
 
+    #[doc(alias = "ges_text_overlay_set_xpos")]
     fn set_xpos(&self, position: f64) {
         unsafe {
             ffi::ges_text_overlay_set_xpos(self.as_ref().to_glib_none().0, position);
         }
     }
 
+    #[doc(alias = "ges_text_overlay_set_ypos")]
     fn set_ypos(&self, position: f64) {
         unsafe {
             ffi::ges_text_overlay_set_ypos(self.as_ref().to_glib_none().0, position);
         }
     }
 }
+
+impl<O: IsA<TextOverlay>> TextOverlayExt for O {}

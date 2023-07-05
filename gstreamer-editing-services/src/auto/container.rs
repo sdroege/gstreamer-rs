@@ -31,51 +31,13 @@ impl Container {
     }
 }
 
-pub trait GESContainerExt: 'static {
-    #[doc(alias = "ges_container_add")]
-    fn add(&self, child: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError>;
-
-    #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_container_edit")]
-    fn edit(
-        &self,
-        layers: &[Layer],
-        new_layer_priority: i32,
-        mode: EditMode,
-        edge: Edge,
-        position: u64,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_container_get_children")]
-    #[doc(alias = "get_children")]
-    fn children(&self, recursive: bool) -> Vec<TimelineElement>;
-
-    #[doc(alias = "ges_container_remove")]
-    fn remove(&self, child: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_container_ungroup")]
-    fn ungroup(self, recursive: bool) -> Vec<Container>;
-
-    fn height(&self) -> u32;
-
-    #[doc(alias = "child-added")]
-    fn connect_child_added<F: Fn(&Self, &TimelineElement) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "child-removed")]
-    fn connect_child_removed<F: Fn(&Self, &TimelineElement) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "height")]
-    fn connect_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Container>> Sealed for T {}
 }
 
-impl<O: IsA<Container>> GESContainerExt for O {
+pub trait GESContainerExt: IsA<Container> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_container_add")]
     fn add(&self, child: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -88,7 +50,9 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
+    #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[allow(deprecated)]
+    #[doc(alias = "ges_container_edit")]
     fn edit(
         &self,
         layers: &[Layer],
@@ -112,6 +76,8 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_container_get_children")]
+    #[doc(alias = "get_children")]
     fn children(&self, recursive: bool) -> Vec<TimelineElement> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_container_get_children(
@@ -121,6 +87,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_container_remove")]
     fn remove(&self, child: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -133,6 +100,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_container_ungroup")]
     fn ungroup(self, recursive: bool) -> Vec<Container> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_container_ungroup(
@@ -146,6 +114,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         glib::ObjectExt::property(self.as_ref(), "height")
     }
 
+    #[doc(alias = "child-added")]
     fn connect_child_added<F: Fn(&Self, &TimelineElement) + 'static>(
         &self,
         f: F,
@@ -177,6 +146,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
+    #[doc(alias = "child-removed")]
     fn connect_child_removed<F: Fn(&Self, &TimelineElement) + 'static>(
         &self,
         f: F,
@@ -208,6 +178,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
+    #[doc(alias = "height")]
     fn connect_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_height_trampoline<P: IsA<Container>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESContainer,
@@ -230,3 +201,5 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 }
+
+impl<O: IsA<Container>> GESContainerExt for O {}

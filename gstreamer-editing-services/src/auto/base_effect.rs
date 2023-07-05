@@ -22,21 +22,15 @@ impl BaseEffect {
     pub const NONE: Option<&'static BaseEffect> = None;
 }
 
-pub trait BaseEffectExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::BaseEffect>> Sealed for T {}
+}
+
+pub trait BaseEffectExt: IsA<BaseEffect> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_base_effect_is_time_effect")]
-    fn is_time_effect(&self) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_base_effect_register_time_property")]
-    fn register_time_property(&self, child_property_name: &str) -> bool;
-}
-
-impl<O: IsA<BaseEffect>> BaseEffectExt for O {
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn is_time_effect(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_base_effect_is_time_effect(
@@ -47,6 +41,7 @@ impl<O: IsA<BaseEffect>> BaseEffectExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_base_effect_register_time_property")]
     fn register_time_property(&self, child_property_name: &str) -> bool {
         unsafe {
             from_glib(ffi::ges_base_effect_register_time_property(
@@ -56,3 +51,5 @@ impl<O: IsA<BaseEffect>> BaseEffectExt for O {
         }
     }
 }
+
+impl<O: IsA<BaseEffect>> BaseEffectExt for O {}

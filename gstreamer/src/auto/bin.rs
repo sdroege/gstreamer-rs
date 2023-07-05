@@ -27,91 +27,13 @@ impl Bin {
 unsafe impl Send for Bin {}
 unsafe impl Sync for Bin {}
 
-pub trait GstBinExt: 'static {
-    #[doc(alias = "gst_bin_add")]
-    fn add(&self, element: &impl IsA<Element>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_bin_find_unlinked_pad")]
-    fn find_unlinked_pad(&self, direction: PadDirection) -> Option<Pad>;
-
-    #[doc(alias = "gst_bin_get_by_interface")]
-    #[doc(alias = "get_by_interface")]
-    fn by_interface(&self, iface: glib::types::Type) -> Option<Element>;
-
-    #[doc(alias = "gst_bin_get_by_name")]
-    #[doc(alias = "get_by_name")]
-    fn by_name(&self, name: &str) -> Option<Element>;
-
-    #[doc(alias = "gst_bin_get_by_name_recurse_up")]
-    #[doc(alias = "get_by_name_recurse_up")]
-    fn by_name_recurse_up(&self, name: &str) -> Option<Element>;
-
-    #[doc(alias = "gst_bin_get_suppressed_flags")]
-    #[doc(alias = "get_suppressed_flags")]
-    fn suppressed_flags(&self) -> ElementFlags;
-
-    #[doc(alias = "gst_bin_recalculate_latency")]
-    fn recalculate_latency(&self) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_bin_remove")]
-    fn remove(&self, element: &impl IsA<Element>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_bin_set_suppressed_flags")]
-    fn set_suppressed_flags(&self, flags: ElementFlags);
-
-    #[doc(alias = "gst_bin_sync_children_states")]
-    fn sync_children_states(&self) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "async-handling")]
-    fn is_async_handling(&self) -> bool;
-
-    #[doc(alias = "async-handling")]
-    fn set_async_handling(&self, async_handling: bool);
-
-    #[doc(alias = "message-forward")]
-    fn is_message_forward(&self) -> bool;
-
-    #[doc(alias = "message-forward")]
-    fn set_message_forward(&self, message_forward: bool);
-
-    #[doc(alias = "deep-element-added")]
-    fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "deep-element-removed")]
-    fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "element-added")]
-    fn connect_element_added<F: Fn(&Self, &Element) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "element-removed")]
-    fn connect_element_removed<F: Fn(&Self, &Element) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "async-handling")]
-    fn connect_async_handling_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "message-forward")]
-    fn connect_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Bin>> Sealed for T {}
 }
 
-impl<O: IsA<Bin>> GstBinExt for O {
+pub trait GstBinExt: IsA<Bin> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_bin_add")]
     fn add(&self, element: &impl IsA<Element>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -124,6 +46,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "gst_bin_find_unlinked_pad")]
     fn find_unlinked_pad(&self, direction: PadDirection) -> Option<Pad> {
         unsafe {
             from_glib_full(ffi::gst_bin_find_unlinked_pad(
@@ -133,6 +56,8 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "gst_bin_get_by_interface")]
+    #[doc(alias = "get_by_interface")]
     fn by_interface(&self, iface: glib::types::Type) -> Option<Element> {
         unsafe {
             from_glib_full(ffi::gst_bin_get_by_interface(
@@ -142,6 +67,8 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "gst_bin_get_by_name")]
+    #[doc(alias = "get_by_name")]
     fn by_name(&self, name: &str) -> Option<Element> {
         unsafe {
             from_glib_full(ffi::gst_bin_get_by_name(
@@ -151,6 +78,8 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "gst_bin_get_by_name_recurse_up")]
+    #[doc(alias = "get_by_name_recurse_up")]
     fn by_name_recurse_up(&self, name: &str) -> Option<Element> {
         unsafe {
             from_glib_full(ffi::gst_bin_get_by_name_recurse_up(
@@ -160,6 +89,8 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "gst_bin_get_suppressed_flags")]
+    #[doc(alias = "get_suppressed_flags")]
     fn suppressed_flags(&self) -> ElementFlags {
         unsafe {
             from_glib(ffi::gst_bin_get_suppressed_flags(
@@ -168,6 +99,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "gst_bin_recalculate_latency")]
     fn recalculate_latency(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -177,6 +109,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "gst_bin_remove")]
     fn remove(&self, element: &impl IsA<Element>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -189,12 +122,14 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "gst_bin_set_suppressed_flags")]
     fn set_suppressed_flags(&self, flags: ElementFlags) {
         unsafe {
             ffi::gst_bin_set_suppressed_flags(self.as_ref().to_glib_none().0, flags.into_glib());
         }
     }
 
+    #[doc(alias = "gst_bin_sync_children_states")]
     fn sync_children_states(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -204,22 +139,27 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "async-handling")]
     fn is_async_handling(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "async-handling")
     }
 
+    #[doc(alias = "async-handling")]
     fn set_async_handling(&self, async_handling: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "async-handling", async_handling)
     }
 
+    #[doc(alias = "message-forward")]
     fn is_message_forward(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "message-forward")
     }
 
+    #[doc(alias = "message-forward")]
     fn set_message_forward(&self, message_forward: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "message-forward", message_forward)
     }
 
+    #[doc(alias = "deep-element-added")]
     fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -253,6 +193,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "deep-element-removed")]
     fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -286,6 +227,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "element-added")]
     fn connect_element_added<F: Fn(&Self, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -317,6 +259,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "element-removed")]
     fn connect_element_removed<F: Fn(&Self, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -348,6 +291,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "async-handling")]
     fn connect_async_handling_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -376,6 +320,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
+    #[doc(alias = "message-forward")]
     fn connect_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -404,3 +349,5 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 }
+
+impl<O: IsA<Bin>> GstBinExt for O {}

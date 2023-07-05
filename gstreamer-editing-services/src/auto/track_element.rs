@@ -25,180 +25,13 @@ impl TrackElement {
     pub const NONE: Option<&'static TrackElement> = None;
 }
 
-pub trait TrackElementExt: 'static {
-    #[doc(alias = "ges_track_element_add_children_props")]
-    fn add_children_props(
-        &self,
-        element: &impl IsA<gst::Element>,
-        wanted_categories: &[&str],
-        blacklist: &[&str],
-        whitelist: &[&str],
-    );
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_track_element_clamp_control_source")]
-    fn clamp_control_source(&self, property_name: &str);
-
-    #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_track_element_edit")]
-    fn edit(
-        &self,
-        layers: &[Layer],
-        mode: EditMode,
-        edge: Edge,
-        position: u64,
-    ) -> Result<(), glib::error::BoolError>;
-
-    //#[doc(alias = "ges_track_element_get_all_control_bindings")]
-    //#[doc(alias = "get_all_control_bindings")]
-    //fn all_control_bindings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 87 };
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_track_element_get_auto_clamp_control_sources")]
-    #[doc(alias = "get_auto_clamp_control_sources")]
-    fn is_auto_clamp_control_sources(&self) -> bool;
-
-    //#[doc(alias = "ges_track_element_get_child_properties")]
-    //#[doc(alias = "get_child_properties")]
-    //fn child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs);
-
-    #[doc(alias = "ges_track_element_get_child_property")]
-    #[doc(alias = "get_child_property")]
-    fn child_property(&self, property_name: &str) -> Option<glib::Value>;
-
-    #[doc(alias = "ges_track_element_get_child_property_by_pspec")]
-    #[doc(alias = "get_child_property_by_pspec")]
-    fn child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>) -> glib::Value;
-
-    //#[doc(alias = "ges_track_element_get_child_property_valist")]
-    //#[doc(alias = "get_child_property_valist")]
-    //fn child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
-
-    #[doc(alias = "ges_track_element_get_control_binding")]
-    #[doc(alias = "get_control_binding")]
-    fn control_binding(&self, property_name: &str) -> Option<gst::ControlBinding>;
-
-    #[doc(alias = "ges_track_element_get_element")]
-    #[doc(alias = "get_element")]
-    fn element(&self) -> Option<gst::Element>;
-
-    #[doc(alias = "ges_track_element_get_gnlobject")]
-    #[doc(alias = "get_gnlobject")]
-    fn gnlobject(&self) -> gst::Element;
-
-    #[doc(alias = "ges_track_element_get_nleobject")]
-    #[doc(alias = "get_nleobject")]
-    fn nleobject(&self) -> gst::Element;
-
-    #[doc(alias = "ges_track_element_get_track")]
-    #[doc(alias = "get_track")]
-    fn track(&self) -> Option<Track>;
-
-    #[doc(alias = "ges_track_element_get_track_type")]
-    #[doc(alias = "get_track_type")]
-    fn track_type(&self) -> TrackType;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_track_element_has_internal_source")]
-    fn has_internal_source(&self) -> bool;
-
-    #[doc(alias = "ges_track_element_is_active")]
-    fn is_active(&self) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_track_element_is_core")]
-    fn is_core(&self) -> bool;
-
-    #[doc(alias = "ges_track_element_list_children_properties")]
-    fn list_children_properties(&self) -> Vec<glib::ParamSpec>;
-
-    #[doc(alias = "ges_track_element_lookup_child")]
-    fn lookup_child(&self, prop_name: &str) -> Option<(gst::Element, glib::ParamSpec)>;
-
-    #[doc(alias = "ges_track_element_remove_control_binding")]
-    fn remove_control_binding(&self, property_name: &str) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_track_element_set_active")]
-    fn set_active(&self, active: bool) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_track_element_set_auto_clamp_control_sources")]
-    fn set_auto_clamp_control_sources(&self, auto_clamp: bool);
-
-    //#[doc(alias = "ges_track_element_set_child_properties")]
-    //fn set_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs);
-
-    #[doc(alias = "ges_track_element_set_child_property")]
-    fn set_child_property(
-        &self,
-        property_name: &str,
-        value: &glib::Value,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_track_element_set_child_property_by_pspec")]
-    fn set_child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>, value: &glib::Value);
-
-    //#[doc(alias = "ges_track_element_set_child_property_valist")]
-    //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
-
-    #[doc(alias = "ges_track_element_set_control_source")]
-    fn set_control_source(
-        &self,
-        source: &impl IsA<gst::ControlSource>,
-        property_name: &str,
-        binding_type: &str,
-    ) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_track_element_set_has_internal_source")]
-    fn set_has_internal_source(&self, has_internal_source: bool) -> bool;
-
-    #[doc(alias = "ges_track_element_set_track_type")]
-    fn set_track_type(&self, type_: TrackType);
-
-    #[doc(alias = "control-binding-added")]
-    fn connect_control_binding_added<F: Fn(&Self, &gst::ControlBinding) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "control-binding-removed")]
-    fn connect_control_binding_removed<F: Fn(&Self, &gst::ControlBinding) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "active")]
-    fn connect_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "auto-clamp-control-sources")]
-    fn connect_auto_clamp_control_sources_notify<F: Fn(&Self) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "has-internal-source")]
-    fn connect_has_internal_source_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "track")]
-    fn connect_track_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "track-type")]
-    fn connect_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::TrackElement>> Sealed for T {}
 }
 
-impl<O: IsA<TrackElement>> TrackElementExt for O {
+pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_track_element_add_children_props")]
     fn add_children_props(
         &self,
         element: &impl IsA<gst::Element>,
@@ -219,6 +52,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_element_clamp_control_source")]
     fn clamp_control_source(&self, property_name: &str) {
         unsafe {
             ffi::ges_track_element_clamp_control_source(
@@ -228,7 +62,9 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[allow(deprecated)]
+    #[doc(alias = "ges_track_element_edit")]
     fn edit(
         &self,
         layers: &[Layer],
@@ -250,12 +86,16 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    //#[doc(alias = "ges_track_element_get_all_control_bindings")]
+    //#[doc(alias = "get_all_control_bindings")]
     //fn all_control_bindings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 87 } {
     //    unsafe { TODO: call ffi:ges_track_element_get_all_control_bindings() }
     //}
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_element_get_auto_clamp_control_sources")]
+    #[doc(alias = "get_auto_clamp_control_sources")]
     fn is_auto_clamp_control_sources(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_track_element_get_auto_clamp_control_sources(
@@ -264,10 +104,14 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    //#[doc(alias = "ges_track_element_get_child_properties")]
+    //#[doc(alias = "get_child_properties")]
     //fn child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
     //    unsafe { TODO: call ffi:ges_track_element_get_child_properties() }
     //}
 
+    #[doc(alias = "ges_track_element_get_child_property")]
+    #[doc(alias = "get_child_property")]
     fn child_property(&self, property_name: &str) -> Option<glib::Value> {
         unsafe {
             let mut value = glib::Value::uninitialized();
@@ -284,6 +128,8 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_get_child_property_by_pspec")]
+    #[doc(alias = "get_child_property_by_pspec")]
     fn child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>) -> glib::Value {
         unsafe {
             let mut value = glib::Value::uninitialized();
@@ -296,10 +142,14 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    //#[doc(alias = "ges_track_element_get_child_property_valist")]
+    //#[doc(alias = "get_child_property_valist")]
     //fn child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi:ges_track_element_get_child_property_valist() }
     //}
 
+    #[doc(alias = "ges_track_element_get_control_binding")]
+    #[doc(alias = "get_control_binding")]
     fn control_binding(&self, property_name: &str) -> Option<gst::ControlBinding> {
         unsafe {
             from_glib_none(ffi::ges_track_element_get_control_binding(
@@ -309,6 +159,8 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_get_element")]
+    #[doc(alias = "get_element")]
     fn element(&self) -> Option<gst::Element> {
         unsafe {
             from_glib_none(ffi::ges_track_element_get_element(
@@ -317,6 +169,8 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_get_gnlobject")]
+    #[doc(alias = "get_gnlobject")]
     fn gnlobject(&self) -> gst::Element {
         unsafe {
             from_glib_none(ffi::ges_track_element_get_gnlobject(
@@ -325,6 +179,8 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_get_nleobject")]
+    #[doc(alias = "get_nleobject")]
     fn nleobject(&self) -> gst::Element {
         unsafe {
             from_glib_none(ffi::ges_track_element_get_nleobject(
@@ -333,6 +189,8 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_get_track")]
+    #[doc(alias = "get_track")]
     fn track(&self) -> Option<Track> {
         unsafe {
             from_glib_none(ffi::ges_track_element_get_track(
@@ -341,6 +199,8 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_get_track_type")]
+    #[doc(alias = "get_track_type")]
     fn track_type(&self) -> TrackType {
         unsafe {
             from_glib(ffi::ges_track_element_get_track_type(
@@ -351,6 +211,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_element_has_internal_source")]
     fn has_internal_source(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_track_element_has_internal_source(
@@ -359,6 +220,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_is_active")]
     fn is_active(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_track_element_is_active(
@@ -369,6 +231,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_element_is_core")]
     fn is_core(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_track_element_is_core(
@@ -377,6 +240,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_list_children_properties")]
     fn list_children_properties(&self) -> Vec<glib::ParamSpec> {
         unsafe {
             let mut n_properties = mem::MaybeUninit::uninit();
@@ -391,6 +255,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_lookup_child")]
     fn lookup_child(&self, prop_name: &str) -> Option<(gst::Element, glib::ParamSpec)> {
         unsafe {
             let mut element = ptr::null_mut();
@@ -409,6 +274,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_remove_control_binding")]
     fn remove_control_binding(&self, property_name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -421,6 +287,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_set_active")]
     fn set_active(&self, active: bool) -> bool {
         unsafe {
             from_glib(ffi::ges_track_element_set_active(
@@ -432,6 +299,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_element_set_auto_clamp_control_sources")]
     fn set_auto_clamp_control_sources(&self, auto_clamp: bool) {
         unsafe {
             ffi::ges_track_element_set_auto_clamp_control_sources(
@@ -441,10 +309,12 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    //#[doc(alias = "ges_track_element_set_child_properties")]
     //fn set_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
     //    unsafe { TODO: call ffi:ges_track_element_set_child_properties() }
     //}
 
+    #[doc(alias = "ges_track_element_set_child_property")]
     fn set_child_property(
         &self,
         property_name: &str,
@@ -462,6 +332,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_set_child_property_by_pspec")]
     fn set_child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>, value: &glib::Value) {
         unsafe {
             ffi::ges_track_element_set_child_property_by_pspec(
@@ -472,10 +343,12 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    //#[doc(alias = "ges_track_element_set_child_property_valist")]
     //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi:ges_track_element_set_child_property_valist() }
     //}
 
+    #[doc(alias = "ges_track_element_set_control_source")]
     fn set_control_source(
         &self,
         source: &impl IsA<gst::ControlSource>,
@@ -494,6 +367,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_element_set_has_internal_source")]
     fn set_has_internal_source(&self, has_internal_source: bool) -> bool {
         unsafe {
             from_glib(ffi::ges_track_element_set_has_internal_source(
@@ -503,6 +377,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_set_track_type")]
     fn set_track_type(&self, type_: TrackType) {
         unsafe {
             ffi::ges_track_element_set_track_type(
@@ -512,6 +387,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "control-binding-added")]
     fn connect_control_binding_added<F: Fn(&Self, &gst::ControlBinding) + 'static>(
         &self,
         f: F,
@@ -543,6 +419,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "control-binding-removed")]
     fn connect_control_binding_removed<F: Fn(&Self, &gst::ControlBinding) + 'static>(
         &self,
         f: F,
@@ -574,6 +451,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "active")]
     fn connect_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_active_trampoline<P: IsA<TrackElement>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrackElement,
@@ -598,6 +476,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "auto-clamp-control-sources")]
     fn connect_auto_clamp_control_sources_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -628,6 +507,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "has-internal-source")]
     fn connect_has_internal_source_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_has_internal_source_trampoline<
             P: IsA<TrackElement>,
@@ -653,6 +533,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "track")]
     fn connect_track_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_track_trampoline<P: IsA<TrackElement>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrackElement,
@@ -675,6 +556,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[doc(alias = "track-type")]
     fn connect_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_track_type_trampoline<
             P: IsA<TrackElement>,
@@ -700,3 +582,5 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 }
+
+impl<O: IsA<TrackElement>> TrackElementExt for O {}

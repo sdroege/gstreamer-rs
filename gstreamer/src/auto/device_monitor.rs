@@ -39,42 +39,14 @@ impl Default for DeviceMonitor {
 unsafe impl Send for DeviceMonitor {}
 unsafe impl Sync for DeviceMonitor {}
 
-pub trait DeviceMonitorExt: 'static {
-    #[doc(alias = "gst_device_monitor_get_bus")]
-    #[doc(alias = "get_bus")]
-    fn bus(&self) -> Bus;
-
-    #[doc(alias = "gst_device_monitor_get_providers")]
-    #[doc(alias = "get_providers")]
-    fn providers(&self) -> Vec<glib::GString>;
-
-    #[doc(alias = "gst_device_monitor_get_show_all_devices")]
-    #[doc(alias = "get_show_all_devices")]
-    fn shows_all_devices(&self) -> bool;
-
-    #[doc(alias = "gst_device_monitor_set_show_all_devices")]
-    fn set_show_all_devices(&self, show_all: bool);
-
-    #[doc(alias = "gst_device_monitor_start")]
-    fn start(&self) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_device_monitor_stop")]
-    fn stop(&self);
-
-    #[doc(alias = "show-all")]
-    fn shows_all(&self) -> bool;
-
-    #[doc(alias = "show-all")]
-    fn set_show_all(&self, show_all: bool);
-
-    #[doc(alias = "show-all")]
-    fn connect_show_all_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::DeviceMonitor>> Sealed for T {}
 }
 
-impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
+pub trait DeviceMonitorExt: IsA<DeviceMonitor> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_device_monitor_get_bus")]
+    #[doc(alias = "get_bus")]
     fn bus(&self) -> Bus {
         unsafe {
             from_glib_full(ffi::gst_device_monitor_get_bus(
@@ -83,6 +55,8 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_monitor_get_providers")]
+    #[doc(alias = "get_providers")]
     fn providers(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_device_monitor_get_providers(
@@ -91,6 +65,8 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_monitor_get_show_all_devices")]
+    #[doc(alias = "get_show_all_devices")]
     fn shows_all_devices(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_device_monitor_get_show_all_devices(
@@ -99,6 +75,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_monitor_set_show_all_devices")]
     fn set_show_all_devices(&self, show_all: bool) {
         unsafe {
             ffi::gst_device_monitor_set_show_all_devices(
@@ -108,6 +85,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_monitor_start")]
     fn start(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -117,20 +95,24 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_monitor_stop")]
     fn stop(&self) {
         unsafe {
             ffi::gst_device_monitor_stop(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "show-all")]
     fn shows_all(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "show-all")
     }
 
+    #[doc(alias = "show-all")]
     fn set_show_all(&self, show_all: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "show-all", show_all)
     }
 
+    #[doc(alias = "show-all")]
     fn connect_show_all_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -159,3 +141,5 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 }
+
+impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {}

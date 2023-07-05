@@ -27,138 +27,13 @@ impl WebRTCICE {
 unsafe impl Send for WebRTCICE {}
 unsafe impl Sync for WebRTCICE {}
 
-pub trait WebRTCICEExt: 'static {
-    #[doc(alias = "gst_webrtc_ice_add_stream")]
-    fn add_stream(&self, session_id: u32) -> Option<WebRTCICEStream>;
-
-    #[doc(alias = "gst_webrtc_ice_add_turn_server")]
-    fn add_turn_server(&self, uri: &str) -> bool;
-
-    #[doc(alias = "gst_webrtc_ice_find_transport")]
-    fn find_transport(
-        &self,
-        stream: &impl IsA<WebRTCICEStream>,
-        component: WebRTCICEComponent,
-    ) -> Option<WebRTCICETransport>;
-
-    #[doc(alias = "gst_webrtc_ice_gather_candidates")]
-    fn gather_candidates(&self, stream: &impl IsA<WebRTCICEStream>) -> bool;
-
-    #[doc(alias = "gst_webrtc_ice_get_http_proxy")]
-    #[doc(alias = "get_http_proxy")]
-    fn http_proxy(&self) -> glib::GString;
-
-    #[doc(alias = "gst_webrtc_ice_get_is_controller")]
-    #[doc(alias = "get_is_controller")]
-    fn is_controller(&self) -> bool;
-
-    #[doc(alias = "gst_webrtc_ice_get_local_candidates")]
-    #[doc(alias = "get_local_candidates")]
-    fn local_candidates(&self, stream: &impl IsA<WebRTCICEStream>) -> Vec<WebRTCICECandidateStats>;
-
-    #[doc(alias = "gst_webrtc_ice_get_remote_candidates")]
-    #[doc(alias = "get_remote_candidates")]
-    fn remote_candidates(&self, stream: &impl IsA<WebRTCICEStream>)
-        -> Vec<WebRTCICECandidateStats>;
-
-    #[doc(alias = "gst_webrtc_ice_get_selected_pair")]
-    #[doc(alias = "get_selected_pair")]
-    fn selected_pair(
-        &self,
-        stream: &impl IsA<WebRTCICEStream>,
-    ) -> Option<(WebRTCICECandidateStats, WebRTCICECandidateStats)>;
-
-    #[doc(alias = "gst_webrtc_ice_get_stun_server")]
-    #[doc(alias = "get_stun_server")]
-    fn stun_server(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_webrtc_ice_get_turn_server")]
-    #[doc(alias = "get_turn_server")]
-    fn turn_server(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_webrtc_ice_set_force_relay")]
-    fn set_force_relay(&self, force_relay: bool);
-
-    #[doc(alias = "gst_webrtc_ice_set_http_proxy")]
-    fn set_http_proxy(&self, uri: &str);
-
-    #[doc(alias = "gst_webrtc_ice_set_is_controller")]
-    fn set_is_controller(&self, controller: bool);
-
-    #[doc(alias = "gst_webrtc_ice_set_local_credentials")]
-    fn set_local_credentials(
-        &self,
-        stream: &impl IsA<WebRTCICEStream>,
-        ufrag: &str,
-        pwd: &str,
-    ) -> bool;
-
-    #[doc(alias = "gst_webrtc_ice_set_on_ice_candidate")]
-    fn set_on_ice_candidate<P: Fn(&WebRTCICE, u32, &str) + Send + Sync + 'static>(&self, func: P);
-
-    #[doc(alias = "gst_webrtc_ice_set_remote_credentials")]
-    fn set_remote_credentials(
-        &self,
-        stream: &impl IsA<WebRTCICEStream>,
-        ufrag: &str,
-        pwd: &str,
-    ) -> bool;
-
-    #[doc(alias = "gst_webrtc_ice_set_stun_server")]
-    fn set_stun_server(&self, uri: Option<&str>);
-
-    #[doc(alias = "gst_webrtc_ice_set_tos")]
-    fn set_tos(&self, stream: &impl IsA<WebRTCICEStream>, tos: u32);
-
-    #[doc(alias = "gst_webrtc_ice_set_turn_server")]
-    fn set_turn_server(&self, uri: Option<&str>);
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "max-rtp-port")]
-    fn max_rtp_port(&self) -> u32;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "max-rtp-port")]
-    fn set_max_rtp_port(&self, max_rtp_port: u32);
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "min-rtp-port")]
-    fn min_rtp_port(&self) -> u32;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "min-rtp-port")]
-    fn set_min_rtp_port(&self, min_rtp_port: u32);
-
-    #[doc(alias = "add-local-ip-address")]
-    fn connect_add_local_ip_address<F: Fn(&Self, &str) -> bool + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn emit_add_local_ip_address(&self, address: &str) -> bool;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "max-rtp-port")]
-    fn connect_max_rtp_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "min-rtp-port")]
-    fn connect_min_rtp_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::WebRTCICE>> Sealed for T {}
 }
 
-impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
+pub trait WebRTCICEExt: IsA<WebRTCICE> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_webrtc_ice_add_stream")]
     fn add_stream(&self, session_id: u32) -> Option<WebRTCICEStream> {
         unsafe {
             from_glib_full(ffi::gst_webrtc_ice_add_stream(
@@ -168,6 +43,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_add_turn_server")]
     fn add_turn_server(&self, uri: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_webrtc_ice_add_turn_server(
@@ -177,6 +53,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_find_transport")]
     fn find_transport(
         &self,
         stream: &impl IsA<WebRTCICEStream>,
@@ -191,6 +68,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_gather_candidates")]
     fn gather_candidates(&self, stream: &impl IsA<WebRTCICEStream>) -> bool {
         unsafe {
             from_glib(ffi::gst_webrtc_ice_gather_candidates(
@@ -200,6 +78,8 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_get_http_proxy")]
+    #[doc(alias = "get_http_proxy")]
     fn http_proxy(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_webrtc_ice_get_http_proxy(
@@ -208,6 +88,8 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_get_is_controller")]
+    #[doc(alias = "get_is_controller")]
     fn is_controller(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_webrtc_ice_get_is_controller(
@@ -216,6 +98,8 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_get_local_candidates")]
+    #[doc(alias = "get_local_candidates")]
     fn local_candidates(&self, stream: &impl IsA<WebRTCICEStream>) -> Vec<WebRTCICECandidateStats> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_webrtc_ice_get_local_candidates(
@@ -225,6 +109,8 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_get_remote_candidates")]
+    #[doc(alias = "get_remote_candidates")]
     fn remote_candidates(
         &self,
         stream: &impl IsA<WebRTCICEStream>,
@@ -237,6 +123,8 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_get_selected_pair")]
+    #[doc(alias = "get_selected_pair")]
     fn selected_pair(
         &self,
         stream: &impl IsA<WebRTCICEStream>,
@@ -258,6 +146,8 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_get_stun_server")]
+    #[doc(alias = "get_stun_server")]
     fn stun_server(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_webrtc_ice_get_stun_server(
@@ -266,6 +156,8 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_get_turn_server")]
+    #[doc(alias = "get_turn_server")]
     fn turn_server(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_webrtc_ice_get_turn_server(
@@ -274,6 +166,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_set_force_relay")]
     fn set_force_relay(&self, force_relay: bool) {
         unsafe {
             ffi::gst_webrtc_ice_set_force_relay(
@@ -283,6 +176,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_set_http_proxy")]
     fn set_http_proxy(&self, uri: &str) {
         unsafe {
             ffi::gst_webrtc_ice_set_http_proxy(
@@ -292,6 +186,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_set_is_controller")]
     fn set_is_controller(&self, controller: bool) {
         unsafe {
             ffi::gst_webrtc_ice_set_is_controller(
@@ -301,6 +196,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_set_local_credentials")]
     fn set_local_credentials(
         &self,
         stream: &impl IsA<WebRTCICEStream>,
@@ -317,6 +213,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_set_on_ice_candidate")]
     fn set_on_ice_candidate<P: Fn(&WebRTCICE, u32, &str) + Send + Sync + 'static>(&self, func: P) {
         let func_data: Box_<P> = Box_::new(func);
         unsafe extern "C" fn func_func<P: Fn(&WebRTCICE, u32, &str) + Send + Sync + 'static>(
@@ -348,6 +245,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_set_remote_credentials")]
     fn set_remote_credentials(
         &self,
         stream: &impl IsA<WebRTCICEStream>,
@@ -364,6 +262,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_set_stun_server")]
     fn set_stun_server(&self, uri: Option<&str>) {
         unsafe {
             ffi::gst_webrtc_ice_set_stun_server(
@@ -373,6 +272,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_set_tos")]
     fn set_tos(&self, stream: &impl IsA<WebRTCICEStream>, tos: u32) {
         unsafe {
             ffi::gst_webrtc_ice_set_tos(
@@ -383,6 +283,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_set_turn_server")]
     fn set_turn_server(&self, uri: Option<&str>) {
         unsafe {
             ffi::gst_webrtc_ice_set_turn_server(
@@ -394,28 +295,33 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "max-rtp-port")]
     fn max_rtp_port(&self) -> u32 {
         glib::ObjectExt::property(self.as_ref(), "max-rtp-port")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "max-rtp-port")]
     fn set_max_rtp_port(&self, max_rtp_port: u32) {
         glib::ObjectExt::set_property(self.as_ref(), "max-rtp-port", max_rtp_port)
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "min-rtp-port")]
     fn min_rtp_port(&self) -> u32 {
         glib::ObjectExt::property(self.as_ref(), "min-rtp-port")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "min-rtp-port")]
     fn set_min_rtp_port(&self, min_rtp_port: u32) {
         glib::ObjectExt::set_property(self.as_ref(), "min-rtp-port", min_rtp_port)
     }
 
+    #[doc(alias = "add-local-ip-address")]
     fn connect_add_local_ip_address<F: Fn(&Self, &str) -> bool + Send + Sync + 'static>(
         &self,
         f: F,
@@ -454,6 +360,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "max-rtp-port")]
     fn connect_max_rtp_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -484,6 +391,7 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "min-rtp-port")]
     fn connect_min_rtp_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -512,3 +420,5 @@ impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {
         }
     }
 }
+
+impl<O: IsA<WebRTCICE>> WebRTCICEExt for O {}

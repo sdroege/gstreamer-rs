@@ -27,60 +27,13 @@ impl VideoEncoder {
 unsafe impl Send for VideoEncoder {}
 unsafe impl Sync for VideoEncoder {}
 
-pub trait VideoEncoderExt: 'static {
-    #[doc(alias = "gst_video_encoder_allocate_output_buffer")]
-    fn allocate_output_buffer(&self, size: usize) -> gst::Buffer;
-
-    #[doc(alias = "gst_video_encoder_finish_frame")]
-    fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    #[doc(alias = "gst_video_encoder_get_max_encode_time")]
-    #[doc(alias = "get_max_encode_time")]
-    fn max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_video_encoder_get_min_force_key_unit_interval")]
-    #[doc(alias = "get_min_force_key_unit_interval")]
-    fn min_force_key_unit_interval(&self) -> Option<gst::ClockTime>;
-
-    #[doc(alias = "gst_video_encoder_is_qos_enabled")]
-    fn is_qos_enabled(&self) -> bool;
-
-    #[doc(alias = "gst_video_encoder_merge_tags")]
-    fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
-
-    #[doc(alias = "gst_video_encoder_proxy_getcaps")]
-    fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_video_encoder_set_min_force_key_unit_interval")]
-    fn set_min_force_key_unit_interval(&self, interval: impl Into<Option<gst::ClockTime>>);
-
-    #[doc(alias = "gst_video_encoder_set_min_pts")]
-    fn set_min_pts(&self, min_pts: impl Into<Option<gst::ClockTime>>);
-
-    #[doc(alias = "gst_video_encoder_set_qos_enabled")]
-    fn set_qos_enabled(&self, enabled: bool);
-
-    fn is_qos(&self) -> bool;
-
-    fn set_qos(&self, qos: bool);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "min-force-key-unit-interval")]
-    fn connect_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "qos")]
-    fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoEncoder>> Sealed for T {}
 }
 
-impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
+pub trait VideoEncoderExt: IsA<VideoEncoder> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_video_encoder_allocate_output_buffer")]
     fn allocate_output_buffer(&self, size: usize) -> gst::Buffer {
         unsafe {
             from_glib_full(ffi::gst_video_encoder_allocate_output_buffer(
@@ -90,6 +43,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_encoder_finish_frame")]
     fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             try_from_glib(ffi::gst_video_encoder_finish_frame(
@@ -99,6 +53,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_encoder_get_max_encode_time")]
+    #[doc(alias = "get_max_encode_time")]
     fn max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff {
         unsafe {
             ffi::gst_video_encoder_get_max_encode_time(
@@ -110,6 +66,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_encoder_get_min_force_key_unit_interval")]
+    #[doc(alias = "get_min_force_key_unit_interval")]
     fn min_force_key_unit_interval(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_video_encoder_get_min_force_key_unit_interval(
@@ -118,6 +76,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_encoder_is_qos_enabled")]
     fn is_qos_enabled(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_video_encoder_is_qos_enabled(
@@ -126,6 +85,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_encoder_merge_tags")]
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode) {
         unsafe {
             ffi::gst_video_encoder_merge_tags(
@@ -136,6 +96,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_encoder_proxy_getcaps")]
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
             from_glib_full(ffi::gst_video_encoder_proxy_getcaps(
@@ -148,6 +109,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_encoder_set_min_force_key_unit_interval")]
     fn set_min_force_key_unit_interval(&self, interval: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::gst_video_encoder_set_min_force_key_unit_interval(
@@ -157,6 +119,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_encoder_set_min_pts")]
     fn set_min_pts(&self, min_pts: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::gst_video_encoder_set_min_pts(
@@ -166,6 +129,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_encoder_set_qos_enabled")]
     fn set_qos_enabled(&self, enabled: bool) {
         unsafe {
             ffi::gst_video_encoder_set_qos_enabled(
@@ -185,6 +149,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "min-force-key-unit-interval")]
     fn connect_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -213,6 +178,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
+    #[doc(alias = "qos")]
     fn connect_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_qos_trampoline<
             P: IsA<VideoEncoder>,
@@ -238,3 +204,5 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 }
+
+impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {}

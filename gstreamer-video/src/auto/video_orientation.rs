@@ -22,37 +22,14 @@ impl VideoOrientation {
 unsafe impl Send for VideoOrientation {}
 unsafe impl Sync for VideoOrientation {}
 
-pub trait VideoOrientationExt: 'static {
-    #[doc(alias = "gst_video_orientation_get_hcenter")]
-    #[doc(alias = "get_hcenter")]
-    fn hcenter(&self) -> Option<i32>;
-
-    #[doc(alias = "gst_video_orientation_get_hflip")]
-    #[doc(alias = "get_hflip")]
-    fn hflip(&self) -> Option<bool>;
-
-    #[doc(alias = "gst_video_orientation_get_vcenter")]
-    #[doc(alias = "get_vcenter")]
-    fn vcenter(&self) -> Option<i32>;
-
-    #[doc(alias = "gst_video_orientation_get_vflip")]
-    #[doc(alias = "get_vflip")]
-    fn vflip(&self) -> Option<bool>;
-
-    #[doc(alias = "gst_video_orientation_set_hcenter")]
-    fn set_hcenter(&self, center: i32) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_video_orientation_set_hflip")]
-    fn set_hflip(&self, flip: bool) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_video_orientation_set_vcenter")]
-    fn set_vcenter(&self, center: i32) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_video_orientation_set_vflip")]
-    fn set_vflip(&self, flip: bool) -> Result<(), glib::error::BoolError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoOrientation>> Sealed for T {}
 }
 
-impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
+pub trait VideoOrientationExt: IsA<VideoOrientation> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_video_orientation_get_hcenter")]
+    #[doc(alias = "get_hcenter")]
     fn hcenter(&self) -> Option<i32> {
         unsafe {
             let mut center = mem::MaybeUninit::uninit();
@@ -68,6 +45,8 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_orientation_get_hflip")]
+    #[doc(alias = "get_hflip")]
     fn hflip(&self) -> Option<bool> {
         unsafe {
             let mut flip = mem::MaybeUninit::uninit();
@@ -83,6 +62,8 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_orientation_get_vcenter")]
+    #[doc(alias = "get_vcenter")]
     fn vcenter(&self) -> Option<i32> {
         unsafe {
             let mut center = mem::MaybeUninit::uninit();
@@ -98,6 +79,8 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_orientation_get_vflip")]
+    #[doc(alias = "get_vflip")]
     fn vflip(&self) -> Option<bool> {
         unsafe {
             let mut flip = mem::MaybeUninit::uninit();
@@ -113,6 +96,7 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_orientation_set_hcenter")]
     fn set_hcenter(&self, center: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -122,6 +106,7 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_orientation_set_hflip")]
     fn set_hflip(&self, flip: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -134,6 +119,7 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_orientation_set_vcenter")]
     fn set_vcenter(&self, center: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -143,6 +129,7 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_orientation_set_vflip")]
     fn set_vflip(&self, flip: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -155,3 +142,5 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
         }
     }
 }
+
+impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {}

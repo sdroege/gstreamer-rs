@@ -33,101 +33,15 @@ impl GLWindow {
 unsafe impl Send for GLWindow {}
 unsafe impl Sync for GLWindow {}
 
-pub trait GLWindowExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::GLWindow>> Sealed for T {}
+}
+
+pub trait GLWindowExt: IsA<GLWindow> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_window_controls_viewport")]
-    fn controls_viewport(&self) -> bool;
-
-    #[doc(alias = "gst_gl_window_draw")]
-    fn draw(&self);
-
-    #[doc(alias = "gst_gl_window_get_context")]
-    #[doc(alias = "get_context")]
-    fn context(&self) -> GLContext;
-
-    #[doc(alias = "gst_gl_window_get_surface_dimensions")]
-    #[doc(alias = "get_surface_dimensions")]
-    fn surface_dimensions(&self) -> (u32, u32);
-
-    #[doc(alias = "gst_gl_window_handle_events")]
-    fn handle_events(&self, handle_events: bool);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_gl_window_has_output_surface")]
-    fn has_output_surface(&self) -> bool;
-
-    #[doc(alias = "gst_gl_window_queue_resize")]
-    fn queue_resize(&self);
-
-    #[doc(alias = "gst_gl_window_quit")]
-    fn quit(&self);
-
-    #[doc(alias = "gst_gl_window_resize")]
-    fn resize(&self, width: u32, height: u32);
-
-    #[doc(alias = "gst_gl_window_run")]
-    fn run(&self);
-
-    #[doc(alias = "gst_gl_window_send_key_event")]
-    fn send_key_event(&self, event_type: &str, key_str: &str);
-
-    #[doc(alias = "gst_gl_window_send_mouse_event")]
-    fn send_mouse_event(&self, event_type: &str, button: i32, posx: f64, posy: f64);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_gl_window_send_scroll_event")]
-    fn send_scroll_event(&self, posx: f64, posy: f64, delta_x: f64, delta_y: f64);
-
-    #[doc(alias = "gst_gl_window_set_preferred_size")]
-    fn set_preferred_size(&self, width: i32, height: i32);
-
-    #[doc(alias = "gst_gl_window_set_render_rectangle")]
-    fn set_render_rectangle(
-        &self,
-        x: i32,
-        y: i32,
-        width: i32,
-        height: i32,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_gl_window_show")]
-    fn show(&self);
-
-    #[doc(alias = "key-event")]
-    fn connect_key_event<F: Fn(&Self, &str, &str) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "mouse-event")]
-    fn connect_mouse_event<F: Fn(&Self, &str, i32, f64, f64) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "scroll-event")]
-    fn connect_scroll_event<F: Fn(&Self, f64, f64, f64, f64) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "window-handle-changed")]
-    fn connect_window_handle_changed<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-}
-
-impl<O: IsA<GLWindow>> GLWindowExt for O {
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn controls_viewport(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_window_controls_viewport(
@@ -136,12 +50,15 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_window_draw")]
     fn draw(&self) {
         unsafe {
             ffi::gst_gl_window_draw(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_gl_window_get_context")]
+    #[doc(alias = "get_context")]
     fn context(&self) -> GLContext {
         unsafe {
             from_glib_full(ffi::gst_gl_window_get_context(
@@ -150,6 +67,8 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_window_get_surface_dimensions")]
+    #[doc(alias = "get_surface_dimensions")]
     fn surface_dimensions(&self) -> (u32, u32) {
         unsafe {
             let mut width = mem::MaybeUninit::uninit();
@@ -163,6 +82,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_window_handle_events")]
     fn handle_events(&self, handle_events: bool) {
         unsafe {
             ffi::gst_gl_window_handle_events(
@@ -174,6 +94,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_gl_window_has_output_surface")]
     fn has_output_surface(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_window_has_output_surface(
@@ -182,30 +103,35 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_window_queue_resize")]
     fn queue_resize(&self) {
         unsafe {
             ffi::gst_gl_window_queue_resize(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_gl_window_quit")]
     fn quit(&self) {
         unsafe {
             ffi::gst_gl_window_quit(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_gl_window_resize")]
     fn resize(&self, width: u32, height: u32) {
         unsafe {
             ffi::gst_gl_window_resize(self.as_ref().to_glib_none().0, width, height);
         }
     }
 
+    #[doc(alias = "gst_gl_window_run")]
     fn run(&self) {
         unsafe {
             ffi::gst_gl_window_run(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_gl_window_send_key_event")]
     fn send_key_event(&self, event_type: &str, key_str: &str) {
         unsafe {
             ffi::gst_gl_window_send_key_event(
@@ -216,6 +142,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_window_send_mouse_event")]
     fn send_mouse_event(&self, event_type: &str, button: i32, posx: f64, posy: f64) {
         unsafe {
             ffi::gst_gl_window_send_mouse_event(
@@ -230,6 +157,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_gl_window_send_scroll_event")]
     fn send_scroll_event(&self, posx: f64, posy: f64, delta_x: f64, delta_y: f64) {
         unsafe {
             ffi::gst_gl_window_send_scroll_event(
@@ -242,12 +170,14 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_window_set_preferred_size")]
     fn set_preferred_size(&self, width: i32, height: i32) {
         unsafe {
             ffi::gst_gl_window_set_preferred_size(self.as_ref().to_glib_none().0, width, height);
         }
     }
 
+    #[doc(alias = "gst_gl_window_set_render_rectangle")]
     fn set_render_rectangle(
         &self,
         x: i32,
@@ -269,12 +199,14 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_window_show")]
     fn show(&self) {
         unsafe {
             ffi::gst_gl_window_show(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "key-event")]
     fn connect_key_event<F: Fn(&Self, &str, &str) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -308,6 +240,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
+    #[doc(alias = "mouse-event")]
     fn connect_mouse_event<F: Fn(&Self, &str, i32, f64, f64) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -347,6 +280,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "scroll-event")]
     fn connect_scroll_event<F: Fn(&Self, f64, f64, f64, f64) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -386,6 +320,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "window-handle-changed")]
     fn connect_window_handle_changed<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -413,3 +348,5 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 }
+
+impl<O: IsA<GLWindow>> GLWindowExt for O {}

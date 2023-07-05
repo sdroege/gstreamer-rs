@@ -28,255 +28,13 @@ impl TimelineElement {
     pub const NONE: Option<&'static TimelineElement> = None;
 }
 
-pub trait TimelineElementExt: 'static {
-    #[doc(alias = "ges_timeline_element_add_child_property")]
-    fn add_child_property(
-        &self,
-        pspec: impl AsRef<glib::ParamSpec>,
-        child: &impl IsA<glib::Object>,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_timeline_element_copy")]
-    #[must_use]
-    fn copy(&self, deep: bool) -> TimelineElement;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_timeline_element_edit")]
-    fn edit(
-        &self,
-        layers: &[Layer],
-        new_layer_priority: i64,
-        mode: EditMode,
-        edge: Edge,
-        position: u64,
-    ) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_timeline_element_edit_full")]
-    fn edit_full(
-        &self,
-        new_layer_priority: i64,
-        mode: EditMode,
-        edge: Edge,
-        position: u64,
-    ) -> Result<(), glib::Error>;
-
-    //#[doc(alias = "ges_timeline_element_get_child_properties")]
-    //#[doc(alias = "get_child_properties")]
-    //fn child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs);
-
-    #[doc(alias = "ges_timeline_element_get_child_property")]
-    #[doc(alias = "get_child_property")]
-    fn child_property(&self, property_name: &str) -> Option<glib::Value>;
-
-    #[doc(alias = "ges_timeline_element_get_child_property_by_pspec")]
-    #[doc(alias = "get_child_property_by_pspec")]
-    fn child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>) -> glib::Value;
-
-    //#[doc(alias = "ges_timeline_element_get_child_property_valist")]
-    //#[doc(alias = "get_child_property_valist")]
-    //fn child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
-
-    #[doc(alias = "ges_timeline_element_get_duration")]
-    #[doc(alias = "get_duration")]
-    fn duration(&self) -> gst::ClockTime;
-
-    #[doc(alias = "ges_timeline_element_get_inpoint")]
-    #[doc(alias = "get_inpoint")]
-    fn inpoint(&self) -> gst::ClockTime;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "ges_timeline_element_get_layer_priority")]
-    #[doc(alias = "get_layer_priority")]
-    fn layer_priority(&self) -> u32;
-
-    #[doc(alias = "ges_timeline_element_get_max_duration")]
-    #[doc(alias = "get_max_duration")]
-    fn max_duration(&self) -> Option<gst::ClockTime>;
-
-    #[doc(alias = "ges_timeline_element_get_name")]
-    #[doc(alias = "get_name")]
-    fn name(&self) -> Option<glib::GString>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_timeline_element_get_natural_framerate")]
-    #[doc(alias = "get_natural_framerate")]
-    fn natural_framerate(&self) -> Option<(i32, i32)>;
-
-    #[doc(alias = "ges_timeline_element_get_parent")]
-    #[doc(alias = "get_parent")]
-    #[must_use]
-    fn parent(&self) -> Option<TimelineElement>;
-
-    #[doc(alias = "ges_timeline_element_get_priority")]
-    #[doc(alias = "get_priority")]
-    fn priority(&self) -> u32;
-
-    #[doc(alias = "ges_timeline_element_get_start")]
-    #[doc(alias = "get_start")]
-    fn start(&self) -> gst::ClockTime;
-
-    #[doc(alias = "ges_timeline_element_get_timeline")]
-    #[doc(alias = "get_timeline")]
-    fn timeline(&self) -> Option<Timeline>;
-
-    #[doc(alias = "ges_timeline_element_get_toplevel_parent")]
-    #[doc(alias = "get_toplevel_parent")]
-    #[must_use]
-    fn toplevel_parent(&self) -> TimelineElement;
-
-    #[doc(alias = "ges_timeline_element_get_track_types")]
-    #[doc(alias = "get_track_types")]
-    fn track_types(&self) -> TrackType;
-
-    #[doc(alias = "ges_timeline_element_list_children_properties")]
-    fn list_children_properties(&self) -> Vec<glib::ParamSpec>;
-
-    #[doc(alias = "ges_timeline_element_lookup_child")]
-    fn lookup_child(&self, prop_name: &str) -> Option<(glib::Object, glib::ParamSpec)>;
-
-    #[doc(alias = "ges_timeline_element_paste")]
-    fn paste(&self, paste_position: gst::ClockTime) -> Result<TimelineElement, glib::BoolError>;
-
-    #[doc(alias = "ges_timeline_element_remove_child_property")]
-    fn remove_child_property(
-        &self,
-        pspec: impl AsRef<glib::ParamSpec>,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_timeline_element_ripple")]
-    fn ripple(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_timeline_element_ripple_end")]
-    fn ripple_end(&self, end: gst::ClockTime) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_timeline_element_roll_end")]
-    fn roll_end(&self, end: gst::ClockTime) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_timeline_element_roll_start")]
-    fn roll_start(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError>;
-
-    //#[doc(alias = "ges_timeline_element_set_child_properties")]
-    //fn set_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs);
-
-    #[doc(alias = "ges_timeline_element_set_child_property")]
-    fn set_child_property(
-        &self,
-        property_name: &str,
-        value: &glib::Value,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_timeline_element_set_child_property_by_pspec")]
-    fn set_child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>, value: &glib::Value);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_timeline_element_set_child_property_full")]
-    fn set_child_property_full(
-        &self,
-        property_name: &str,
-        value: &glib::Value,
-    ) -> Result<(), glib::Error>;
-
-    //#[doc(alias = "ges_timeline_element_set_child_property_valist")]
-    //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
-
-    #[doc(alias = "ges_timeline_element_set_duration")]
-    fn set_duration(&self, duration: impl Into<Option<gst::ClockTime>>) -> bool;
-
-    #[doc(alias = "ges_timeline_element_set_inpoint")]
-    fn set_inpoint(&self, inpoint: gst::ClockTime) -> bool;
-
-    #[doc(alias = "ges_timeline_element_set_max_duration")]
-    fn set_max_duration(&self, maxduration: impl Into<Option<gst::ClockTime>>) -> bool;
-
-    #[doc(alias = "ges_timeline_element_set_name")]
-    fn set_name(&self, name: Option<&str>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_timeline_element_set_parent")]
-    fn set_parent(&self, parent: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError>;
-
-    #[deprecated = "Since 1.10"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_timeline_element_set_priority")]
-    fn set_priority(&self, priority: u32) -> bool;
-
-    #[doc(alias = "ges_timeline_element_set_start")]
-    fn set_start(&self, start: gst::ClockTime) -> bool;
-
-    #[doc(alias = "ges_timeline_element_set_timeline")]
-    fn set_timeline(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_timeline_element_trim")]
-    fn trim(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "in-point")]
-    fn in_point(&self) -> u64;
-
-    #[doc(alias = "in-point")]
-    fn set_in_point(&self, in_point: u64);
-
-    fn is_serialize(&self) -> bool;
-
-    fn set_serialize(&self, serialize: bool);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "child-property-added")]
-    fn connect_child_property_added<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "child-property-removed")]
-    fn connect_child_property_removed<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "deep-notify")]
-    fn connect_deep_notify<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
-        &self,
-        detail: Option<&str>,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "duration")]
-    fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "in-point")]
-    fn connect_in_point_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "max-duration")]
-    fn connect_max_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "name")]
-    fn connect_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "parent")]
-    fn connect_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[deprecated = "Since 1.10"]
-    #[doc(alias = "priority")]
-    fn connect_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "serialize")]
-    fn connect_serialize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "start")]
-    fn connect_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "timeline")]
-    fn connect_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::TimelineElement>> Sealed for T {}
 }
 
-impl<O: IsA<TimelineElement>> TimelineElementExt for O {
+pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_timeline_element_add_child_property")]
     fn add_child_property(
         &self,
         pspec: impl AsRef<glib::ParamSpec>,
@@ -294,6 +52,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_copy")]
+    #[must_use]
     fn copy(&self, deep: bool) -> TimelineElement {
         unsafe {
             from_glib_none(ffi::ges_timeline_element_copy(
@@ -305,6 +65,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_timeline_element_edit")]
     fn edit(
         &self,
         layers: &[Layer],
@@ -327,6 +88,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_timeline_element_edit_full")]
     fn edit_full(
         &self,
         new_layer_priority: i64,
@@ -353,10 +115,14 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    //#[doc(alias = "ges_timeline_element_get_child_properties")]
+    //#[doc(alias = "get_child_properties")]
     //fn child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
     //    unsafe { TODO: call ffi:ges_timeline_element_get_child_properties() }
     //}
 
+    #[doc(alias = "ges_timeline_element_get_child_property")]
+    #[doc(alias = "get_child_property")]
     fn child_property(&self, property_name: &str) -> Option<glib::Value> {
         unsafe {
             let mut value = glib::Value::uninitialized();
@@ -373,6 +139,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_get_child_property_by_pspec")]
+    #[doc(alias = "get_child_property_by_pspec")]
     fn child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>) -> glib::Value {
         unsafe {
             let mut value = glib::Value::uninitialized();
@@ -385,10 +153,14 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    //#[doc(alias = "ges_timeline_element_get_child_property_valist")]
+    //#[doc(alias = "get_child_property_valist")]
     //fn child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi:ges_timeline_element_get_child_property_valist() }
     //}
 
+    #[doc(alias = "ges_timeline_element_get_duration")]
+    #[doc(alias = "get_duration")]
     fn duration(&self) -> gst::ClockTime {
         unsafe {
             try_from_glib(ffi::ges_timeline_element_get_duration(
@@ -398,6 +170,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_get_inpoint")]
+    #[doc(alias = "get_inpoint")]
     fn inpoint(&self) -> gst::ClockTime {
         unsafe {
             try_from_glib(ffi::ges_timeline_element_get_inpoint(
@@ -409,10 +183,14 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "ges_timeline_element_get_layer_priority")]
+    #[doc(alias = "get_layer_priority")]
     fn layer_priority(&self) -> u32 {
         unsafe { ffi::ges_timeline_element_get_layer_priority(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "ges_timeline_element_get_max_duration")]
+    #[doc(alias = "get_max_duration")]
     fn max_duration(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_timeline_element_get_max_duration(
@@ -421,6 +199,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_get_name")]
+    #[doc(alias = "get_name")]
     fn name(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::ges_timeline_element_get_name(
@@ -431,6 +211,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_timeline_element_get_natural_framerate")]
+    #[doc(alias = "get_natural_framerate")]
     fn natural_framerate(&self) -> Option<(i32, i32)> {
         unsafe {
             let mut framerate_n = mem::MaybeUninit::uninit();
@@ -448,6 +230,9 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_get_parent")]
+    #[doc(alias = "get_parent")]
+    #[must_use]
     fn parent(&self) -> Option<TimelineElement> {
         unsafe {
             from_glib_full(ffi::ges_timeline_element_get_parent(
@@ -456,10 +241,14 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_get_priority")]
+    #[doc(alias = "get_priority")]
     fn priority(&self) -> u32 {
         unsafe { ffi::ges_timeline_element_get_priority(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "ges_timeline_element_get_start")]
+    #[doc(alias = "get_start")]
     fn start(&self) -> gst::ClockTime {
         unsafe {
             try_from_glib(ffi::ges_timeline_element_get_start(
@@ -469,6 +258,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_get_timeline")]
+    #[doc(alias = "get_timeline")]
     fn timeline(&self) -> Option<Timeline> {
         unsafe {
             from_glib_full(ffi::ges_timeline_element_get_timeline(
@@ -477,6 +268,9 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_get_toplevel_parent")]
+    #[doc(alias = "get_toplevel_parent")]
+    #[must_use]
     fn toplevel_parent(&self) -> TimelineElement {
         unsafe {
             from_glib_full(ffi::ges_timeline_element_get_toplevel_parent(
@@ -485,6 +279,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_get_track_types")]
+    #[doc(alias = "get_track_types")]
     fn track_types(&self) -> TrackType {
         unsafe {
             from_glib(ffi::ges_timeline_element_get_track_types(
@@ -493,6 +289,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_list_children_properties")]
     fn list_children_properties(&self) -> Vec<glib::ParamSpec> {
         unsafe {
             let mut n_properties = mem::MaybeUninit::uninit();
@@ -507,6 +304,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_lookup_child")]
     fn lookup_child(&self, prop_name: &str) -> Option<(glib::Object, glib::ParamSpec)> {
         unsafe {
             let mut child = ptr::null_mut();
@@ -525,6 +323,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_paste")]
     fn paste(&self, paste_position: gst::ClockTime) -> Result<TimelineElement, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::ges_timeline_element_paste(
@@ -535,6 +334,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_remove_child_property")]
     fn remove_child_property(
         &self,
         pspec: impl AsRef<glib::ParamSpec>,
@@ -550,6 +350,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_ripple")]
     fn ripple(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -559,6 +360,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_ripple_end")]
     fn ripple_end(&self, end: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -571,6 +373,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_roll_end")]
     fn roll_end(&self, end: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -580,6 +383,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_roll_start")]
     fn roll_start(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -592,10 +396,12 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    //#[doc(alias = "ges_timeline_element_set_child_properties")]
     //fn set_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
     //    unsafe { TODO: call ffi:ges_timeline_element_set_child_properties() }
     //}
 
+    #[doc(alias = "ges_timeline_element_set_child_property")]
     fn set_child_property(
         &self,
         property_name: &str,
@@ -613,6 +419,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_set_child_property_by_pspec")]
     fn set_child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>, value: &glib::Value) {
         unsafe {
             ffi::ges_timeline_element_set_child_property_by_pspec(
@@ -625,6 +432,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_timeline_element_set_child_property_full")]
     fn set_child_property_full(
         &self,
         property_name: &str,
@@ -647,10 +455,12 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    //#[doc(alias = "ges_timeline_element_set_child_property_valist")]
     //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi:ges_timeline_element_set_child_property_valist() }
     //}
 
+    #[doc(alias = "ges_timeline_element_set_duration")]
     fn set_duration(&self, duration: impl Into<Option<gst::ClockTime>>) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_duration(
@@ -660,6 +470,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_set_inpoint")]
     fn set_inpoint(&self, inpoint: gst::ClockTime) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_inpoint(
@@ -669,6 +480,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_set_max_duration")]
     fn set_max_duration(&self, maxduration: impl Into<Option<gst::ClockTime>>) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_max_duration(
@@ -678,6 +490,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_set_name")]
     fn set_name(&self, name: Option<&str>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -690,6 +503,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_set_parent")]
     fn set_parent(&self, parent: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -702,7 +516,9 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[deprecated = "Since 1.10"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_timeline_element_set_priority")]
     fn set_priority(&self, priority: u32) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_priority(
@@ -712,6 +528,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_set_start")]
     fn set_start(&self, start: gst::ClockTime) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_start(
@@ -721,6 +538,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_set_timeline")]
     fn set_timeline(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -733,6 +551,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_element_trim")]
     fn trim(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -742,10 +561,12 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "in-point")]
     fn in_point(&self) -> u64 {
         glib::ObjectExt::property(self.as_ref(), "in-point")
     }
 
+    #[doc(alias = "in-point")]
     fn set_in_point(&self, in_point: u64) {
         glib::ObjectExt::set_property(self.as_ref(), "in-point", in_point)
     }
@@ -760,6 +581,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "child-property-added")]
     fn connect_child_property_added<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
         &self,
         f: F,
@@ -795,6 +617,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "child-property-removed")]
     fn connect_child_property_removed<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
         &self,
         f: F,
@@ -828,6 +651,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "deep-notify")]
     fn connect_deep_notify<F: Fn(&Self, &glib::Object, &glib::ParamSpec) + 'static>(
         &self,
         detail: Option<&str>,
@@ -866,6 +690,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_trampoline<
             P: IsA<TimelineElement>,
@@ -891,6 +716,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "in-point")]
     fn connect_in_point_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_in_point_trampoline<
             P: IsA<TimelineElement>,
@@ -916,6 +742,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "max-duration")]
     fn connect_max_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_max_duration_trampoline<
             P: IsA<TimelineElement>,
@@ -941,6 +768,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "name")]
     fn connect_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_name_trampoline<
             P: IsA<TimelineElement>,
@@ -966,6 +794,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "parent")]
     fn connect_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_parent_trampoline<
             P: IsA<TimelineElement>,
@@ -991,6 +820,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[deprecated = "Since 1.10"]
+    #[doc(alias = "priority")]
     fn connect_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_priority_trampoline<
             P: IsA<TimelineElement>,
@@ -1016,6 +847,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "serialize")]
     fn connect_serialize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_serialize_trampoline<
             P: IsA<TimelineElement>,
@@ -1041,6 +873,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "start")]
     fn connect_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_start_trampoline<
             P: IsA<TimelineElement>,
@@ -1066,6 +899,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[doc(alias = "timeline")]
     fn connect_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_timeline_trampoline<
             P: IsA<TimelineElement>,
@@ -1091,3 +925,5 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 }
+
+impl<O: IsA<TimelineElement>> TimelineElementExt for O {}

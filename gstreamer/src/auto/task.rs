@@ -30,48 +30,25 @@ impl Task {
 unsafe impl Send for Task {}
 unsafe impl Sync for Task {}
 
-pub trait TaskExt: 'static {
-    #[doc(alias = "gst_task_get_pool")]
-    #[doc(alias = "get_pool")]
-    fn pool(&self) -> TaskPool;
-
-    #[doc(alias = "gst_task_get_state")]
-    #[doc(alias = "get_state")]
-    fn state(&self) -> TaskState;
-
-    #[doc(alias = "gst_task_join")]
-    fn join(&self) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_task_pause")]
-    fn pause(&self) -> Result<(), glib::error::BoolError>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_task_resume")]
-    fn resume(&self) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_task_set_pool")]
-    fn set_pool(&self, pool: &impl IsA<TaskPool>);
-
-    #[doc(alias = "gst_task_set_state")]
-    fn set_state(&self, state: TaskState) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_task_start")]
-    fn start(&self) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_task_stop")]
-    fn stop(&self) -> Result<(), glib::error::BoolError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Task>> Sealed for T {}
 }
 
-impl<O: IsA<Task>> TaskExt for O {
+pub trait TaskExt: IsA<Task> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_task_get_pool")]
+    #[doc(alias = "get_pool")]
     fn pool(&self) -> TaskPool {
         unsafe { from_glib_full(ffi::gst_task_get_pool(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_task_get_state")]
+    #[doc(alias = "get_state")]
     fn state(&self) -> TaskState {
         unsafe { from_glib(ffi::gst_task_get_state(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_task_join")]
     fn join(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -81,6 +58,7 @@ impl<O: IsA<Task>> TaskExt for O {
         }
     }
 
+    #[doc(alias = "gst_task_pause")]
     fn pause(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -92,6 +70,7 @@ impl<O: IsA<Task>> TaskExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_task_resume")]
     fn resume(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -101,6 +80,7 @@ impl<O: IsA<Task>> TaskExt for O {
         }
     }
 
+    #[doc(alias = "gst_task_set_pool")]
     fn set_pool(&self, pool: &impl IsA<TaskPool>) {
         unsafe {
             ffi::gst_task_set_pool(
@@ -110,6 +90,7 @@ impl<O: IsA<Task>> TaskExt for O {
         }
     }
 
+    #[doc(alias = "gst_task_set_state")]
     fn set_state(&self, state: TaskState) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -119,6 +100,7 @@ impl<O: IsA<Task>> TaskExt for O {
         }
     }
 
+    #[doc(alias = "gst_task_start")]
     fn start(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -128,6 +110,7 @@ impl<O: IsA<Task>> TaskExt for O {
         }
     }
 
+    #[doc(alias = "gst_task_stop")]
     fn stop(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -137,3 +120,5 @@ impl<O: IsA<Task>> TaskExt for O {
         }
     }
 }
+
+impl<O: IsA<Task>> TaskExt for O {}

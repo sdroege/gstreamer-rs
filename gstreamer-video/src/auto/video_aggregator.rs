@@ -21,18 +21,19 @@ impl VideoAggregator {
 unsafe impl Send for VideoAggregator {}
 unsafe impl Sync for VideoAggregator {}
 
-pub trait VideoAggregatorExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoAggregator>> Sealed for T {}
+}
+
+pub trait VideoAggregatorExt: IsA<VideoAggregator> + sealed::Sealed + 'static {
     //#[cfg(feature = "v1_20")]
     //#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     //#[doc(alias = "gst_video_aggregator_get_execution_task_pool")]
     //#[doc(alias = "get_execution_task_pool")]
-    //fn execution_task_pool(&self) -> /*Ignored*/gst::TaskPool;
-}
-
-impl<O: IsA<VideoAggregator>> VideoAggregatorExt for O {
-    //#[cfg(feature = "v1_20")]
-    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     //fn execution_task_pool(&self) -> /*Ignored*/gst::TaskPool {
     //    unsafe { TODO: call ffi:gst_video_aggregator_get_execution_task_pool() }
     //}
 }
+
+impl<O: IsA<VideoAggregator>> VideoAggregatorExt for O {}

@@ -36,36 +36,14 @@ impl Default for RTSPOnvifMediaFactory {
 unsafe impl Send for RTSPOnvifMediaFactory {}
 unsafe impl Sync for RTSPOnvifMediaFactory {}
 
-pub trait RTSPOnvifMediaFactoryExt: 'static {
-    #[doc(alias = "gst_rtsp_onvif_media_factory_get_backchannel_bandwidth")]
-    #[doc(alias = "get_backchannel_bandwidth")]
-    fn backchannel_bandwidth(&self) -> u32;
-
-    #[doc(alias = "gst_rtsp_onvif_media_factory_get_backchannel_launch")]
-    #[doc(alias = "get_backchannel_launch")]
-    fn backchannel_launch(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_rtsp_onvif_media_factory_has_backchannel_support")]
-    fn has_backchannel_support(&self) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_rtsp_onvif_media_factory_has_replay_support")]
-    fn has_replay_support(&self) -> bool;
-
-    #[doc(alias = "gst_rtsp_onvif_media_factory_set_backchannel_bandwidth")]
-    fn set_backchannel_bandwidth(&self, bandwidth: u32);
-
-    #[doc(alias = "gst_rtsp_onvif_media_factory_set_backchannel_launch")]
-    fn set_backchannel_launch(&self, launch: Option<&str>);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_rtsp_onvif_media_factory_set_replay_support")]
-    fn set_replay_support(&self, has_replay_support: bool);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPOnvifMediaFactory>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExt for O {
+pub trait RTSPOnvifMediaFactoryExt: IsA<RTSPOnvifMediaFactory> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_rtsp_onvif_media_factory_get_backchannel_bandwidth")]
+    #[doc(alias = "get_backchannel_bandwidth")]
     fn backchannel_bandwidth(&self) -> u32 {
         unsafe {
             ffi::gst_rtsp_onvif_media_factory_get_backchannel_bandwidth(
@@ -74,6 +52,8 @@ impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_onvif_media_factory_get_backchannel_launch")]
+    #[doc(alias = "get_backchannel_launch")]
     fn backchannel_launch(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_onvif_media_factory_get_backchannel_launch(
@@ -82,6 +62,7 @@ impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_onvif_media_factory_has_backchannel_support")]
     fn has_backchannel_support(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_onvif_media_factory_has_backchannel_support(
@@ -92,6 +73,7 @@ impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_rtsp_onvif_media_factory_has_replay_support")]
     fn has_replay_support(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_onvif_media_factory_has_replay_support(
@@ -100,6 +82,7 @@ impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_onvif_media_factory_set_backchannel_bandwidth")]
     fn set_backchannel_bandwidth(&self, bandwidth: u32) {
         unsafe {
             ffi::gst_rtsp_onvif_media_factory_set_backchannel_bandwidth(
@@ -109,6 +92,7 @@ impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_onvif_media_factory_set_backchannel_launch")]
     fn set_backchannel_launch(&self, launch: Option<&str>) {
         unsafe {
             ffi::gst_rtsp_onvif_media_factory_set_backchannel_launch(
@@ -120,6 +104,7 @@ impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_rtsp_onvif_media_factory_set_replay_support")]
     fn set_replay_support(&self, has_replay_support: bool) {
         unsafe {
             ffi::gst_rtsp_onvif_media_factory_set_replay_support(
@@ -129,3 +114,5 @@ impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExt for O {
         }
     }
 }
+
+impl<O: IsA<RTSPOnvifMediaFactory>> RTSPOnvifMediaFactoryExt for O {}

@@ -26,15 +26,13 @@ impl ColorBalanceChannel {
 unsafe impl Send for ColorBalanceChannel {}
 unsafe impl Sync for ColorBalanceChannel {}
 
-pub trait ColorBalanceChannelExt: 'static {
-    #[doc(alias = "value-changed")]
-    fn connect_value_changed<F: Fn(&Self, i32) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ColorBalanceChannel>> Sealed for T {}
 }
 
-impl<O: IsA<ColorBalanceChannel>> ColorBalanceChannelExt for O {
+pub trait ColorBalanceChannelExt: IsA<ColorBalanceChannel> + sealed::Sealed + 'static {
+    #[doc(alias = "value-changed")]
     fn connect_value_changed<F: Fn(&Self, i32) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -66,3 +64,5 @@ impl<O: IsA<ColorBalanceChannel>> ColorBalanceChannelExt for O {
         }
     }
 }
+
+impl<O: IsA<ColorBalanceChannel>> ColorBalanceChannelExt for O {}

@@ -27,43 +27,13 @@ impl Device {
 unsafe impl Send for Device {}
 unsafe impl Sync for Device {}
 
-pub trait DeviceExt: 'static {
-    #[doc(alias = "gst_device_create_element")]
-    fn create_element(&self, name: Option<&str>) -> Result<Element, glib::BoolError>;
-
-    #[doc(alias = "gst_device_get_caps")]
-    #[doc(alias = "get_caps")]
-    fn caps(&self) -> Option<Caps>;
-
-    #[doc(alias = "gst_device_get_device_class")]
-    #[doc(alias = "get_device_class")]
-    fn device_class(&self) -> glib::GString;
-
-    #[doc(alias = "gst_device_get_display_name")]
-    #[doc(alias = "get_display_name")]
-    fn display_name(&self) -> glib::GString;
-
-    #[doc(alias = "gst_device_get_properties")]
-    #[doc(alias = "get_properties")]
-    fn properties(&self) -> Option<Structure>;
-
-    #[doc(alias = "gst_device_has_classes")]
-    fn has_classes(&self, classes: &str) -> bool;
-
-    #[doc(alias = "gst_device_has_classesv")]
-    fn has_classesv(&self, classes: &[&str]) -> bool;
-
-    #[doc(alias = "gst_device_reconfigure_element")]
-    fn reconfigure_element(
-        &self,
-        element: &impl IsA<Element>,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "removed")]
-    fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Device>> Sealed for T {}
 }
 
-impl<O: IsA<Device>> DeviceExt for O {
+pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_device_create_element")]
     fn create_element(&self, name: Option<&str>) -> Result<Element, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_none(ffi::gst_device_create_element(
@@ -74,10 +44,14 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_get_caps")]
+    #[doc(alias = "get_caps")]
     fn caps(&self) -> Option<Caps> {
         unsafe { from_glib_full(ffi::gst_device_get_caps(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_device_get_device_class")]
+    #[doc(alias = "get_device_class")]
     fn device_class(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_device_get_device_class(
@@ -86,6 +60,8 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_get_display_name")]
+    #[doc(alias = "get_display_name")]
     fn display_name(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_device_get_display_name(
@@ -94,6 +70,8 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_get_properties")]
+    #[doc(alias = "get_properties")]
     fn properties(&self) -> Option<Structure> {
         unsafe {
             from_glib_full(ffi::gst_device_get_properties(
@@ -102,6 +80,7 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_has_classes")]
     fn has_classes(&self, classes: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_device_has_classes(
@@ -111,6 +90,7 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_has_classesv")]
     fn has_classesv(&self, classes: &[&str]) -> bool {
         unsafe {
             from_glib(ffi::gst_device_has_classesv(
@@ -120,6 +100,7 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_reconfigure_element")]
     fn reconfigure_element(
         &self,
         element: &impl IsA<Element>,
@@ -135,6 +116,7 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
+    #[doc(alias = "removed")]
     fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn removed_trampoline<
             P: IsA<Device>,
@@ -159,3 +141,5 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 }
+
+impl<O: IsA<Device>> DeviceExt for O {}

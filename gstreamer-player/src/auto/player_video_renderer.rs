@@ -21,6 +21,11 @@ impl PlayerVideoRenderer {
 unsafe impl Send for PlayerVideoRenderer {}
 unsafe impl Sync for PlayerVideoRenderer {}
 
-pub trait PlayerVideoRendererExt: 'static {}
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::PlayerVideoRenderer>> Sealed for T {}
+}
+
+pub trait PlayerVideoRendererExt: IsA<PlayerVideoRenderer> + sealed::Sealed + 'static {}
 
 impl<O: IsA<PlayerVideoRenderer>> PlayerVideoRendererExt for O {}

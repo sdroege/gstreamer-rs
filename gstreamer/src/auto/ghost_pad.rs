@@ -22,16 +22,14 @@ impl GhostPad {
 unsafe impl Send for GhostPad {}
 unsafe impl Sync for GhostPad {}
 
-pub trait GhostPadExt: 'static {
-    #[doc(alias = "gst_ghost_pad_get_target")]
-    #[doc(alias = "get_target")]
-    fn target(&self) -> Option<Pad>;
-
-    #[doc(alias = "gst_ghost_pad_set_target")]
-    fn set_target(&self, newtarget: Option<&impl IsA<Pad>>) -> Result<(), glib::error::BoolError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::GhostPad>> Sealed for T {}
 }
 
-impl<O: IsA<GhostPad>> GhostPadExt for O {
+pub trait GhostPadExt: IsA<GhostPad> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_ghost_pad_get_target")]
+    #[doc(alias = "get_target")]
     fn target(&self) -> Option<Pad> {
         unsafe {
             from_glib_full(ffi::gst_ghost_pad_get_target(
@@ -40,6 +38,7 @@ impl<O: IsA<GhostPad>> GhostPadExt for O {
         }
     }
 
+    #[doc(alias = "gst_ghost_pad_set_target")]
     fn set_target(&self, newtarget: Option<&impl IsA<Pad>>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -52,3 +51,5 @@ impl<O: IsA<GhostPad>> GhostPadExt for O {
         }
     }
 }
+
+impl<O: IsA<GhostPad>> GhostPadExt for O {}

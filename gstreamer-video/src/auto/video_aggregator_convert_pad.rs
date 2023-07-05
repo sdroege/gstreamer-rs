@@ -22,12 +22,15 @@ impl VideoAggregatorConvertPad {
 unsafe impl Send for VideoAggregatorConvertPad {}
 unsafe impl Sync for VideoAggregatorConvertPad {}
 
-pub trait VideoAggregatorConvertPadExt: 'static {
-    #[doc(alias = "gst_video_aggregator_convert_pad_update_conversion_info")]
-    fn update_conversion_info(&self);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoAggregatorConvertPad>> Sealed for T {}
 }
 
-impl<O: IsA<VideoAggregatorConvertPad>> VideoAggregatorConvertPadExt for O {
+pub trait VideoAggregatorConvertPadExt:
+    IsA<VideoAggregatorConvertPad> + sealed::Sealed + 'static
+{
+    #[doc(alias = "gst_video_aggregator_convert_pad_update_conversion_info")]
     fn update_conversion_info(&self) {
         unsafe {
             ffi::gst_video_aggregator_convert_pad_update_conversion_info(
@@ -36,3 +39,5 @@ impl<O: IsA<VideoAggregatorConvertPad>> VideoAggregatorConvertPadExt for O {
         }
     }
 }
+
+impl<O: IsA<VideoAggregatorConvertPad>> VideoAggregatorConvertPadExt for O {}

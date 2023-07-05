@@ -48,43 +48,13 @@ impl Default for GLDisplay {
 unsafe impl Send for GLDisplay {}
 unsafe impl Sync for GLDisplay {}
 
-pub trait GLDisplayExt: 'static {
-    #[doc(alias = "gst_gl_display_create_window")]
-    fn create_window(&self) -> Result<GLWindow, glib::BoolError>;
-
-    #[doc(alias = "gst_gl_display_filter_gl_api")]
-    fn filter_gl_api(&self, gl_api: GLAPI);
-
-    #[doc(alias = "gst_gl_display_get_gl_api")]
-    #[doc(alias = "get_gl_api")]
-    fn gl_api(&self) -> GLAPI;
-
-    #[doc(alias = "gst_gl_display_get_gl_api_unlocked")]
-    #[doc(alias = "get_gl_api_unlocked")]
-    fn gl_api_unlocked(&self) -> GLAPI;
-
-    #[doc(alias = "gst_gl_display_get_handle_type")]
-    #[doc(alias = "get_handle_type")]
-    fn handle_type(&self) -> GLDisplayType;
-
-    #[doc(alias = "gst_gl_display_remove_window")]
-    fn remove_window(&self, window: &impl IsA<GLWindow>) -> Result<(), glib::error::BoolError>;
-
-    //#[cfg(feature = "v1_18")]
-    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    //#[doc(alias = "gst_gl_display_retrieve_window")]
-    //fn retrieve_window(&self, data: /*Unimplemented*/Option<Basic: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Basic: Pointer>) -> i32) -> Option<GLWindow>;
-
-    #[doc(alias = "create-context")]
-    fn connect_create_context<
-        F: Fn(&Self, &GLContext) -> Option<GLContext> + Send + Sync + 'static,
-    >(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::GLDisplay>> Sealed for T {}
 }
 
-impl<O: IsA<GLDisplay>> GLDisplayExt for O {
+pub trait GLDisplayExt: IsA<GLDisplay> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_gl_display_create_window")]
     fn create_window(&self) -> Result<GLWindow, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_gl_display_create_window(
@@ -94,12 +64,15 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_display_filter_gl_api")]
     fn filter_gl_api(&self, gl_api: GLAPI) {
         unsafe {
             ffi::gst_gl_display_filter_gl_api(self.as_ref().to_glib_none().0, gl_api.into_glib());
         }
     }
 
+    #[doc(alias = "gst_gl_display_get_gl_api")]
+    #[doc(alias = "get_gl_api")]
     fn gl_api(&self) -> GLAPI {
         unsafe {
             from_glib(ffi::gst_gl_display_get_gl_api(
@@ -108,6 +81,8 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_display_get_gl_api_unlocked")]
+    #[doc(alias = "get_gl_api_unlocked")]
     fn gl_api_unlocked(&self) -> GLAPI {
         unsafe {
             from_glib(ffi::gst_gl_display_get_gl_api_unlocked(
@@ -116,6 +91,8 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_display_get_handle_type")]
+    #[doc(alias = "get_handle_type")]
     fn handle_type(&self) -> GLDisplayType {
         unsafe {
             from_glib(ffi::gst_gl_display_get_handle_type(
@@ -124,6 +101,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_display_remove_window")]
     fn remove_window(&self, window: &impl IsA<GLWindow>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -138,10 +116,12 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
 
     //#[cfg(feature = "v1_18")]
     //#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    //#[doc(alias = "gst_gl_display_retrieve_window")]
     //fn retrieve_window(&self, data: /*Unimplemented*/Option<Basic: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Basic: Pointer>) -> i32) -> Option<GLWindow> {
     //    unsafe { TODO: call ffi:gst_gl_display_retrieve_window() }
     //}
 
+    #[doc(alias = "create-context")]
     fn connect_create_context<
         F: Fn(&Self, &GLContext) -> Option<GLContext> + Send + Sync + 'static,
     >(
@@ -176,3 +156,5 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 }
+
+impl<O: IsA<GLDisplay>> GLDisplayExt for O {}

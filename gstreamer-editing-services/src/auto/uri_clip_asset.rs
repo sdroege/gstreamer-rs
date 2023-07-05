@@ -68,53 +68,14 @@ impl UriClipAsset {
 unsafe impl Send for UriClipAsset {}
 unsafe impl Sync for UriClipAsset {}
 
-pub trait UriClipAssetExt: 'static {
-    #[doc(alias = "ges_uri_clip_asset_get_duration")]
-    #[doc(alias = "get_duration")]
-    fn duration(&self) -> Option<gst::ClockTime>;
-
-    #[doc(alias = "ges_uri_clip_asset_get_info")]
-    #[doc(alias = "get_info")]
-    fn info(&self) -> gst_pbutils::DiscovererInfo;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_uri_clip_asset_get_max_duration")]
-    #[doc(alias = "get_max_duration")]
-    fn max_duration(&self) -> Option<gst::ClockTime>;
-
-    #[doc(alias = "ges_uri_clip_asset_get_stream_assets")]
-    #[doc(alias = "get_stream_assets")]
-    fn stream_assets(&self) -> Vec<UriSourceAsset>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_uri_clip_asset_is_image")]
-    fn is_image(&self) -> bool;
-
-    fn set_duration(&self, duration: u64);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "is-nested-timeline")]
-    fn is_nested_timeline(&self) -> bool;
-
-    #[doc(alias = "duration")]
-    fn connect_duration_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "is-nested-timeline")]
-    fn connect_is_nested_timeline_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::UriClipAsset>> Sealed for T {}
 }
 
-impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
+pub trait UriClipAssetExt: IsA<UriClipAsset> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_uri_clip_asset_get_duration")]
+    #[doc(alias = "get_duration")]
     fn duration(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_uri_clip_asset_get_duration(
@@ -123,6 +84,8 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
+    #[doc(alias = "ges_uri_clip_asset_get_info")]
+    #[doc(alias = "get_info")]
     fn info(&self) -> gst_pbutils::DiscovererInfo {
         unsafe {
             from_glib_none(ffi::ges_uri_clip_asset_get_info(const_override(
@@ -133,6 +96,8 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_uri_clip_asset_get_max_duration")]
+    #[doc(alias = "get_max_duration")]
     fn max_duration(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_uri_clip_asset_get_max_duration(
@@ -141,6 +106,8 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
+    #[doc(alias = "ges_uri_clip_asset_get_stream_assets")]
+    #[doc(alias = "get_stream_assets")]
     fn stream_assets(&self) -> Vec<UriSourceAsset> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::ges_uri_clip_asset_get_stream_assets(
@@ -151,6 +118,7 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_uri_clip_asset_is_image")]
     fn is_image(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_uri_clip_asset_is_image(
@@ -165,10 +133,12 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "is-nested-timeline")]
     fn is_nested_timeline(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "is-nested-timeline")
     }
 
+    #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -199,6 +169,7 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "is-nested-timeline")]
     fn connect_is_nested_timeline_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -227,3 +198,5 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 }
+
+impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {}

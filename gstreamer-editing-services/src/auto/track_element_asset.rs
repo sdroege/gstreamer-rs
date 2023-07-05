@@ -30,30 +30,16 @@ impl TrackElementAsset {
 unsafe impl Send for TrackElementAsset {}
 unsafe impl Sync for TrackElementAsset {}
 
-pub trait TrackElementAssetExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::TrackElementAsset>> Sealed for T {}
+}
+
+pub trait TrackElementAssetExt: IsA<TrackElementAsset> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_element_asset_get_natural_framerate")]
     #[doc(alias = "get_natural_framerate")]
-    fn natural_framerate(&self) -> Option<(i32, i32)>;
-
-    #[doc(alias = "ges_track_element_asset_get_track_type")]
-    #[doc(alias = "get_track_type")]
-    fn track_type(&self) -> TrackType;
-
-    #[doc(alias = "ges_track_element_asset_set_track_type")]
-    fn set_track_type(&self, type_: TrackType);
-
-    #[doc(alias = "track-type")]
-    fn connect_track_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-}
-
-impl<O: IsA<TrackElementAsset>> TrackElementAssetExt for O {
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn natural_framerate(&self) -> Option<(i32, i32)> {
         unsafe {
             let mut framerate_n = mem::MaybeUninit::uninit();
@@ -71,6 +57,8 @@ impl<O: IsA<TrackElementAsset>> TrackElementAssetExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_asset_get_track_type")]
+    #[doc(alias = "get_track_type")]
     fn track_type(&self) -> TrackType {
         unsafe {
             from_glib(ffi::ges_track_element_asset_get_track_type(
@@ -79,6 +67,7 @@ impl<O: IsA<TrackElementAsset>> TrackElementAssetExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_element_asset_set_track_type")]
     fn set_track_type(&self, type_: TrackType) {
         unsafe {
             ffi::ges_track_element_asset_set_track_type(
@@ -88,6 +77,7 @@ impl<O: IsA<TrackElementAsset>> TrackElementAssetExt for O {
         }
     }
 
+    #[doc(alias = "track-type")]
     fn connect_track_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -116,3 +106,5 @@ impl<O: IsA<TrackElementAsset>> TrackElementAssetExt for O {
         }
     }
 }
+
+impl<O: IsA<TrackElementAsset>> TrackElementAssetExt for O {}

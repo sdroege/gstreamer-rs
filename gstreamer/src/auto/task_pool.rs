@@ -35,21 +35,20 @@ impl Default for TaskPool {
 unsafe impl Send for TaskPool {}
 unsafe impl Sync for TaskPool {}
 
-pub trait TaskPoolExt: 'static {
-    #[doc(alias = "gst_task_pool_cleanup")]
-    fn cleanup(&self);
-
-    #[doc(alias = "gst_task_pool_prepare")]
-    fn prepare(&self) -> Result<(), glib::Error>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::TaskPool>> Sealed for T {}
 }
 
-impl<O: IsA<TaskPool>> TaskPoolExt for O {
+pub trait TaskPoolExt: IsA<TaskPool> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_task_pool_cleanup")]
     fn cleanup(&self) {
         unsafe {
             ffi::gst_task_pool_cleanup(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_task_pool_prepare")]
     fn prepare(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -62,3 +61,5 @@ impl<O: IsA<TaskPool>> TaskPoolExt for O {
         }
     }
 }
+
+impl<O: IsA<TaskPool>> TaskPoolExt for O {}

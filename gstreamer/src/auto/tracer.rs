@@ -27,16 +27,12 @@ impl Tracer {
 unsafe impl Send for Tracer {}
 unsafe impl Sync for Tracer {}
 
-pub trait TracerExt: 'static {
-    fn params(&self) -> Option<glib::GString>;
-
-    fn set_params(&self, params: Option<&str>);
-
-    #[doc(alias = "params")]
-    fn connect_params_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Tracer>> Sealed for T {}
 }
 
-impl<O: IsA<Tracer>> TracerExt for O {
+pub trait TracerExt: IsA<Tracer> + sealed::Sealed + 'static {
     fn params(&self) -> Option<glib::GString> {
         glib::ObjectExt::property(self.as_ref(), "params")
     }
@@ -45,6 +41,7 @@ impl<O: IsA<Tracer>> TracerExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "params", params)
     }
 
+    #[doc(alias = "params")]
     fn connect_params_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_params_trampoline<
             P: IsA<Tracer>,
@@ -70,3 +67,5 @@ impl<O: IsA<Tracer>> TracerExt for O {
         }
     }
 }
+
+impl<O: IsA<Tracer>> TracerExt for O {}

@@ -41,19 +41,12 @@ impl Default for TriggerControlSource {
 unsafe impl Send for TriggerControlSource {}
 unsafe impl Sync for TriggerControlSource {}
 
-pub trait TriggerControlSourceExt: 'static {
-    fn tolerance(&self) -> i64;
-
-    fn set_tolerance(&self, tolerance: i64);
-
-    #[doc(alias = "tolerance")]
-    fn connect_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::TriggerControlSource>> Sealed for T {}
 }
 
-impl<O: IsA<TriggerControlSource>> TriggerControlSourceExt for O {
+pub trait TriggerControlSourceExt: IsA<TriggerControlSource> + sealed::Sealed + 'static {
     fn tolerance(&self) -> i64 {
         glib::ObjectExt::property(self.as_ref(), "tolerance")
     }
@@ -62,6 +55,7 @@ impl<O: IsA<TriggerControlSource>> TriggerControlSourceExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "tolerance", tolerance)
     }
 
+    #[doc(alias = "tolerance")]
     fn connect_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -90,3 +84,5 @@ impl<O: IsA<TriggerControlSource>> TriggerControlSourceExt for O {
         }
     }
 }
+
+impl<O: IsA<TriggerControlSource>> TriggerControlSourceExt for O {}

@@ -21,49 +21,14 @@ impl DiscovererStreamInfo {
 unsafe impl Send for DiscovererStreamInfo {}
 unsafe impl Sync for DiscovererStreamInfo {}
 
-pub trait DiscovererStreamInfoExt: 'static {
-    #[doc(alias = "gst_discoverer_stream_info_get_caps")]
-    #[doc(alias = "get_caps")]
-    fn caps(&self) -> Option<gst::Caps>;
-
-    #[doc(alias = "gst_discoverer_stream_info_get_misc")]
-    #[doc(alias = "get_misc")]
-    fn misc(&self) -> Option<gst::Structure>;
-
-    #[doc(alias = "gst_discoverer_stream_info_get_next")]
-    #[doc(alias = "get_next")]
-    #[must_use]
-    fn next(&self) -> Option<DiscovererStreamInfo>;
-
-    #[doc(alias = "gst_discoverer_stream_info_get_previous")]
-    #[doc(alias = "get_previous")]
-    #[must_use]
-    fn previous(&self) -> Option<DiscovererStreamInfo>;
-
-    #[doc(alias = "gst_discoverer_stream_info_get_stream_id")]
-    #[doc(alias = "get_stream_id")]
-    fn stream_id(&self) -> Option<glib::GString>;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_discoverer_stream_info_get_stream_number")]
-    #[doc(alias = "get_stream_number")]
-    fn stream_number(&self) -> i32;
-
-    #[doc(alias = "gst_discoverer_stream_info_get_stream_type_nick")]
-    #[doc(alias = "get_stream_type_nick")]
-    fn stream_type_nick(&self) -> glib::GString;
-
-    #[doc(alias = "gst_discoverer_stream_info_get_tags")]
-    #[doc(alias = "get_tags")]
-    fn tags(&self) -> Option<gst::TagList>;
-
-    #[doc(alias = "gst_discoverer_stream_info_get_toc")]
-    #[doc(alias = "get_toc")]
-    fn toc(&self) -> Option<gst::Toc>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::DiscovererStreamInfo>> Sealed for T {}
 }
 
-impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
+pub trait DiscovererStreamInfoExt: IsA<DiscovererStreamInfo> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_discoverer_stream_info_get_caps")]
+    #[doc(alias = "get_caps")]
     fn caps(&self) -> Option<gst::Caps> {
         unsafe {
             from_glib_full(ffi::gst_discoverer_stream_info_get_caps(
@@ -72,6 +37,8 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
         }
     }
 
+    #[doc(alias = "gst_discoverer_stream_info_get_misc")]
+    #[doc(alias = "get_misc")]
     fn misc(&self) -> Option<gst::Structure> {
         unsafe {
             from_glib_none(ffi::gst_discoverer_stream_info_get_misc(
@@ -80,6 +47,9 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
         }
     }
 
+    #[doc(alias = "gst_discoverer_stream_info_get_next")]
+    #[doc(alias = "get_next")]
+    #[must_use]
     fn next(&self) -> Option<DiscovererStreamInfo> {
         unsafe {
             from_glib_full(ffi::gst_discoverer_stream_info_get_next(
@@ -88,6 +58,9 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
         }
     }
 
+    #[doc(alias = "gst_discoverer_stream_info_get_previous")]
+    #[doc(alias = "get_previous")]
+    #[must_use]
     fn previous(&self) -> Option<DiscovererStreamInfo> {
         unsafe {
             from_glib_full(ffi::gst_discoverer_stream_info_get_previous(
@@ -96,6 +69,8 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
         }
     }
 
+    #[doc(alias = "gst_discoverer_stream_info_get_stream_id")]
+    #[doc(alias = "get_stream_id")]
     fn stream_id(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_discoverer_stream_info_get_stream_id(
@@ -106,10 +81,14 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_discoverer_stream_info_get_stream_number")]
+    #[doc(alias = "get_stream_number")]
     fn stream_number(&self) -> i32 {
         unsafe { ffi::gst_discoverer_stream_info_get_stream_number(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_discoverer_stream_info_get_stream_type_nick")]
+    #[doc(alias = "get_stream_type_nick")]
     fn stream_type_nick(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::gst_discoverer_stream_info_get_stream_type_nick(
@@ -118,6 +97,8 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
         }
     }
 
+    #[doc(alias = "gst_discoverer_stream_info_get_tags")]
+    #[doc(alias = "get_tags")]
     fn tags(&self) -> Option<gst::TagList> {
         unsafe {
             from_glib_none(ffi::gst_discoverer_stream_info_get_tags(
@@ -126,6 +107,8 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
         }
     }
 
+    #[doc(alias = "gst_discoverer_stream_info_get_toc")]
+    #[doc(alias = "get_toc")]
     fn toc(&self) -> Option<gst::Toc> {
         unsafe {
             from_glib_none(ffi::gst_discoverer_stream_info_get_toc(
@@ -134,3 +117,5 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
         }
     }
 }
+
+impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {}

@@ -129,52 +129,13 @@ impl Asset {
 unsafe impl Send for Asset {}
 unsafe impl Sync for Asset {}
 
-pub trait AssetExt: 'static {
-    #[doc(alias = "ges_asset_extract")]
-    fn extract(&self) -> Result<Extractable, glib::Error>;
-
-    #[doc(alias = "ges_asset_get_error")]
-    #[doc(alias = "get_error")]
-    fn error(&self) -> Option<glib::Error>;
-
-    #[doc(alias = "ges_asset_get_extractable_type")]
-    #[doc(alias = "get_extractable_type")]
-    fn extractable_type(&self) -> glib::types::Type;
-
-    #[doc(alias = "ges_asset_get_id")]
-    #[doc(alias = "get_id")]
-    fn id(&self) -> glib::GString;
-
-    #[doc(alias = "ges_asset_get_proxy")]
-    #[doc(alias = "get_proxy")]
-    #[must_use]
-    fn proxy(&self) -> Option<Asset>;
-
-    #[doc(alias = "ges_asset_get_proxy_target")]
-    #[doc(alias = "get_proxy_target")]
-    #[must_use]
-    fn proxy_target(&self) -> Option<Asset>;
-
-    #[doc(alias = "ges_asset_list_proxies")]
-    fn list_proxies(&self) -> Vec<Asset>;
-
-    #[doc(alias = "ges_asset_set_proxy")]
-    fn set_proxy(&self, proxy: Option<&impl IsA<Asset>>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_asset_unproxy")]
-    fn unproxy(&self, proxy: &impl IsA<Asset>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "proxy")]
-    fn connect_proxy_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "proxy-target")]
-    fn connect_proxy_target_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Asset>> Sealed for T {}
 }
 
-impl<O: IsA<Asset>> AssetExt for O {
+pub trait AssetExt: IsA<Asset> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_asset_extract")]
     fn extract(&self) -> Result<Extractable, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -187,10 +148,14 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
+    #[doc(alias = "ges_asset_get_error")]
+    #[doc(alias = "get_error")]
     fn error(&self) -> Option<glib::Error> {
         unsafe { from_glib_none(ffi::ges_asset_get_error(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_asset_get_extractable_type")]
+    #[doc(alias = "get_extractable_type")]
     fn extractable_type(&self) -> glib::types::Type {
         unsafe {
             from_glib(ffi::ges_asset_get_extractable_type(
@@ -199,14 +164,22 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
+    #[doc(alias = "ges_asset_get_id")]
+    #[doc(alias = "get_id")]
     fn id(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::ges_asset_get_id(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_asset_get_proxy")]
+    #[doc(alias = "get_proxy")]
+    #[must_use]
     fn proxy(&self) -> Option<Asset> {
         unsafe { from_glib_none(ffi::ges_asset_get_proxy(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_asset_get_proxy_target")]
+    #[doc(alias = "get_proxy_target")]
+    #[must_use]
     fn proxy_target(&self) -> Option<Asset> {
         unsafe {
             from_glib_none(ffi::ges_asset_get_proxy_target(
@@ -215,6 +188,7 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
+    #[doc(alias = "ges_asset_list_proxies")]
     fn list_proxies(&self) -> Vec<Asset> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::ges_asset_list_proxies(
@@ -223,6 +197,7 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
+    #[doc(alias = "ges_asset_set_proxy")]
     fn set_proxy(&self, proxy: Option<&impl IsA<Asset>>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -235,6 +210,7 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
+    #[doc(alias = "ges_asset_unproxy")]
     fn unproxy(&self, proxy: &impl IsA<Asset>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -247,6 +223,7 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
+    #[doc(alias = "proxy")]
     fn connect_proxy_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_proxy_trampoline<
             P: IsA<Asset>,
@@ -272,6 +249,7 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
+    #[doc(alias = "proxy-target")]
     fn connect_proxy_target_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -300,3 +278,5 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 }
+
+impl<O: IsA<Asset>> AssetExt for O {}

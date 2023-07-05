@@ -22,20 +22,13 @@ impl PluginFeature {
 unsafe impl Send for PluginFeature {}
 unsafe impl Sync for PluginFeature {}
 
-pub trait PluginFeatureExt: 'static {
-    #[doc(alias = "gst_plugin_feature_check_version")]
-    fn check_version(&self, min_major: u32, min_minor: u32, min_micro: u32) -> bool;
-
-    #[doc(alias = "gst_plugin_feature_get_plugin")]
-    #[doc(alias = "get_plugin")]
-    fn plugin(&self) -> Option<Plugin>;
-
-    #[doc(alias = "gst_plugin_feature_get_plugin_name")]
-    #[doc(alias = "get_plugin_name")]
-    fn plugin_name(&self) -> Option<glib::GString>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::PluginFeature>> Sealed for T {}
 }
 
-impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
+pub trait PluginFeatureExt: IsA<PluginFeature> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_plugin_feature_check_version")]
     fn check_version(&self, min_major: u32, min_minor: u32, min_micro: u32) -> bool {
         unsafe {
             from_glib(ffi::gst_plugin_feature_check_version(
@@ -47,6 +40,8 @@ impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
         }
     }
 
+    #[doc(alias = "gst_plugin_feature_get_plugin")]
+    #[doc(alias = "get_plugin")]
     fn plugin(&self) -> Option<Plugin> {
         unsafe {
             from_glib_full(ffi::gst_plugin_feature_get_plugin(
@@ -55,6 +50,8 @@ impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
         }
     }
 
+    #[doc(alias = "gst_plugin_feature_get_plugin_name")]
+    #[doc(alias = "get_plugin_name")]
     fn plugin_name(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_plugin_feature_get_plugin_name(
@@ -63,3 +60,5 @@ impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
         }
     }
 }
+
+impl<O: IsA<PluginFeature>> PluginFeatureExt for O {}

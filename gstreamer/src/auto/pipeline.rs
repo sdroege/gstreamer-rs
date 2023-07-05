@@ -27,59 +27,21 @@ impl Pipeline {
 unsafe impl Send for Pipeline {}
 unsafe impl Sync for Pipeline {}
 
-pub trait PipelineExt: 'static {
-    #[doc(alias = "gst_pipeline_auto_clock")]
-    fn auto_clock(&self);
-
-    #[doc(alias = "gst_pipeline_get_auto_flush_bus")]
-    #[doc(alias = "get_auto_flush_bus")]
-    fn is_auto_flush_bus(&self) -> bool;
-
-    #[doc(alias = "gst_pipeline_get_delay")]
-    #[doc(alias = "get_delay")]
-    fn delay(&self) -> ClockTime;
-
-    #[doc(alias = "gst_pipeline_get_latency")]
-    #[doc(alias = "get_latency")]
-    fn latency(&self) -> Option<ClockTime>;
-
-    #[doc(alias = "gst_pipeline_get_pipeline_clock")]
-    #[doc(alias = "get_pipeline_clock")]
-    fn pipeline_clock(&self) -> Clock;
-
-    #[doc(alias = "gst_pipeline_set_auto_flush_bus")]
-    fn set_auto_flush_bus(&self, auto_flush: bool);
-
-    #[doc(alias = "gst_pipeline_set_delay")]
-    fn set_delay(&self, delay: ClockTime);
-
-    #[doc(alias = "gst_pipeline_set_latency")]
-    fn set_latency(&self, latency: impl Into<Option<ClockTime>>);
-
-    #[doc(alias = "gst_pipeline_use_clock")]
-    fn use_clock(&self, clock: Option<&impl IsA<Clock>>);
-
-    #[doc(alias = "auto-flush-bus")]
-    fn connect_auto_flush_bus_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "delay")]
-    fn connect_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "latency")]
-    fn connect_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
-        -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Pipeline>> Sealed for T {}
 }
 
-impl<O: IsA<Pipeline>> PipelineExt for O {
+pub trait PipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_pipeline_auto_clock")]
     fn auto_clock(&self) {
         unsafe {
             ffi::gst_pipeline_auto_clock(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_pipeline_get_auto_flush_bus")]
+    #[doc(alias = "get_auto_flush_bus")]
     fn is_auto_flush_bus(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_pipeline_get_auto_flush_bus(
@@ -88,6 +50,8 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
+    #[doc(alias = "gst_pipeline_get_delay")]
+    #[doc(alias = "get_delay")]
     fn delay(&self) -> ClockTime {
         unsafe {
             try_from_glib(ffi::gst_pipeline_get_delay(self.as_ref().to_glib_none().0))
@@ -95,6 +59,8 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
+    #[doc(alias = "gst_pipeline_get_latency")]
+    #[doc(alias = "get_latency")]
     fn latency(&self) -> Option<ClockTime> {
         unsafe {
             from_glib(ffi::gst_pipeline_get_latency(
@@ -103,6 +69,8 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
+    #[doc(alias = "gst_pipeline_get_pipeline_clock")]
+    #[doc(alias = "get_pipeline_clock")]
     fn pipeline_clock(&self) -> Clock {
         unsafe {
             from_glib_full(ffi::gst_pipeline_get_pipeline_clock(
@@ -111,6 +79,7 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
+    #[doc(alias = "gst_pipeline_set_auto_flush_bus")]
     fn set_auto_flush_bus(&self, auto_flush: bool) {
         unsafe {
             ffi::gst_pipeline_set_auto_flush_bus(
@@ -120,12 +89,14 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
+    #[doc(alias = "gst_pipeline_set_delay")]
     fn set_delay(&self, delay: ClockTime) {
         unsafe {
             ffi::gst_pipeline_set_delay(self.as_ref().to_glib_none().0, delay.into_glib());
         }
     }
 
+    #[doc(alias = "gst_pipeline_set_latency")]
     fn set_latency(&self, latency: impl Into<Option<ClockTime>>) {
         unsafe {
             ffi::gst_pipeline_set_latency(
@@ -135,6 +106,7 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
+    #[doc(alias = "gst_pipeline_use_clock")]
     fn use_clock(&self, clock: Option<&impl IsA<Clock>>) {
         unsafe {
             ffi::gst_pipeline_use_clock(
@@ -144,6 +116,7 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
+    #[doc(alias = "auto-flush-bus")]
     fn connect_auto_flush_bus_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -172,6 +145,7 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
+    #[doc(alias = "delay")]
     fn connect_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_delay_trampoline<
             P: IsA<Pipeline>,
@@ -197,6 +171,7 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
+    #[doc(alias = "latency")]
     fn connect_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -225,3 +200,5 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 }
+
+impl<O: IsA<Pipeline>> PipelineExt for O {}

@@ -23,24 +23,14 @@ impl URIHandler {
 unsafe impl Send for URIHandler {}
 unsafe impl Sync for URIHandler {}
 
-pub trait URIHandlerExt: 'static {
-    #[doc(alias = "gst_uri_handler_get_protocols")]
-    #[doc(alias = "get_protocols")]
-    fn protocols(&self) -> Vec<glib::GString>;
-
-    #[doc(alias = "gst_uri_handler_get_uri")]
-    #[doc(alias = "get_uri")]
-    fn uri(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_uri_handler_get_uri_type")]
-    #[doc(alias = "get_uri_type")]
-    fn uri_type(&self) -> URIType;
-
-    #[doc(alias = "gst_uri_handler_set_uri")]
-    fn set_uri(&self, uri: &str) -> Result<(), glib::Error>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::URIHandler>> Sealed for T {}
 }
 
-impl<O: IsA<URIHandler>> URIHandlerExt for O {
+pub trait URIHandlerExt: IsA<URIHandler> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_uri_handler_get_protocols")]
+    #[doc(alias = "get_protocols")]
     fn protocols(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_uri_handler_get_protocols(
@@ -49,10 +39,14 @@ impl<O: IsA<URIHandler>> URIHandlerExt for O {
         }
     }
 
+    #[doc(alias = "gst_uri_handler_get_uri")]
+    #[doc(alias = "get_uri")]
     fn uri(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::gst_uri_handler_get_uri(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_uri_handler_get_uri_type")]
+    #[doc(alias = "get_uri_type")]
     fn uri_type(&self) -> URIType {
         unsafe {
             from_glib(ffi::gst_uri_handler_get_uri_type(
@@ -61,6 +55,7 @@ impl<O: IsA<URIHandler>> URIHandlerExt for O {
         }
     }
 
+    #[doc(alias = "gst_uri_handler_set_uri")]
     fn set_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -78,3 +73,5 @@ impl<O: IsA<URIHandler>> URIHandlerExt for O {
         }
     }
 }
+
+impl<O: IsA<URIHandler>> URIHandlerExt for O {}

@@ -26,65 +26,38 @@ impl AudioAggregator {
 unsafe impl Send for AudioAggregator {}
 unsafe impl Sync for AudioAggregator {}
 
-pub trait AudioAggregatorExt: 'static {
-    #[doc(alias = "alignment-threshold")]
-    fn alignment_threshold(&self) -> u64;
-
-    #[doc(alias = "alignment-threshold")]
-    fn set_alignment_threshold(&self, alignment_threshold: u64);
-
-    #[doc(alias = "discont-wait")]
-    fn discont_wait(&self) -> u64;
-
-    #[doc(alias = "discont-wait")]
-    fn set_discont_wait(&self, discont_wait: u64);
-
-    #[doc(alias = "output-buffer-duration")]
-    fn output_buffer_duration(&self) -> u64;
-
-    #[doc(alias = "output-buffer-duration")]
-    fn set_output_buffer_duration(&self, output_buffer_duration: u64);
-
-    #[doc(alias = "alignment-threshold")]
-    fn connect_alignment_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "discont-wait")]
-    fn connect_discont_wait_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "output-buffer-duration")]
-    fn connect_output_buffer_duration_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AudioAggregator>> Sealed for T {}
 }
 
-impl<O: IsA<AudioAggregator>> AudioAggregatorExt for O {
+pub trait AudioAggregatorExt: IsA<AudioAggregator> + sealed::Sealed + 'static {
+    #[doc(alias = "alignment-threshold")]
     fn alignment_threshold(&self) -> u64 {
         glib::ObjectExt::property(self.as_ref(), "alignment-threshold")
     }
 
+    #[doc(alias = "alignment-threshold")]
     fn set_alignment_threshold(&self, alignment_threshold: u64) {
         glib::ObjectExt::set_property(self.as_ref(), "alignment-threshold", alignment_threshold)
     }
 
+    #[doc(alias = "discont-wait")]
     fn discont_wait(&self) -> u64 {
         glib::ObjectExt::property(self.as_ref(), "discont-wait")
     }
 
+    #[doc(alias = "discont-wait")]
     fn set_discont_wait(&self, discont_wait: u64) {
         glib::ObjectExt::set_property(self.as_ref(), "discont-wait", discont_wait)
     }
 
+    #[doc(alias = "output-buffer-duration")]
     fn output_buffer_duration(&self) -> u64 {
         glib::ObjectExt::property(self.as_ref(), "output-buffer-duration")
     }
 
+    #[doc(alias = "output-buffer-duration")]
     fn set_output_buffer_duration(&self, output_buffer_duration: u64) {
         glib::ObjectExt::set_property(
             self.as_ref(),
@@ -93,6 +66,7 @@ impl<O: IsA<AudioAggregator>> AudioAggregatorExt for O {
         )
     }
 
+    #[doc(alias = "alignment-threshold")]
     fn connect_alignment_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -121,6 +95,7 @@ impl<O: IsA<AudioAggregator>> AudioAggregatorExt for O {
         }
     }
 
+    #[doc(alias = "discont-wait")]
     fn connect_discont_wait_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -149,6 +124,7 @@ impl<O: IsA<AudioAggregator>> AudioAggregatorExt for O {
         }
     }
 
+    #[doc(alias = "output-buffer-duration")]
     fn connect_output_buffer_duration_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -177,3 +153,5 @@ impl<O: IsA<AudioAggregator>> AudioAggregatorExt for O {
         }
     }
 }
+
+impl<O: IsA<AudioAggregator>> AudioAggregatorExt for O {}

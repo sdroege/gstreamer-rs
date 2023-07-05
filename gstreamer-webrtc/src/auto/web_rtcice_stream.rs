@@ -22,18 +22,13 @@ impl WebRTCICEStream {
 unsafe impl Send for WebRTCICEStream {}
 unsafe impl Sync for WebRTCICEStream {}
 
-pub trait WebRTCICEStreamExt: 'static {
-    #[doc(alias = "gst_webrtc_ice_stream_find_transport")]
-    fn find_transport(&self, component: WebRTCICEComponent) -> Option<WebRTCICETransport>;
-
-    #[doc(alias = "gst_webrtc_ice_stream_gather_candidates")]
-    fn gather_candidates(&self) -> bool;
-
-    #[doc(alias = "stream-id")]
-    fn stream_id(&self) -> u32;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::WebRTCICEStream>> Sealed for T {}
 }
 
-impl<O: IsA<WebRTCICEStream>> WebRTCICEStreamExt for O {
+pub trait WebRTCICEStreamExt: IsA<WebRTCICEStream> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_webrtc_ice_stream_find_transport")]
     fn find_transport(&self, component: WebRTCICEComponent) -> Option<WebRTCICETransport> {
         unsafe {
             from_glib_full(ffi::gst_webrtc_ice_stream_find_transport(
@@ -43,6 +38,7 @@ impl<O: IsA<WebRTCICEStream>> WebRTCICEStreamExt for O {
         }
     }
 
+    #[doc(alias = "gst_webrtc_ice_stream_gather_candidates")]
     fn gather_candidates(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_webrtc_ice_stream_gather_candidates(
@@ -51,7 +47,10 @@ impl<O: IsA<WebRTCICEStream>> WebRTCICEStreamExt for O {
         }
     }
 
+    #[doc(alias = "stream-id")]
     fn stream_id(&self) -> u32 {
         glib::ObjectExt::property(self.as_ref(), "stream-id")
     }
 }
+
+impl<O: IsA<WebRTCICEStream>> WebRTCICEStreamExt for O {}

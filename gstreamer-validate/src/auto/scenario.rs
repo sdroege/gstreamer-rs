@@ -48,49 +48,19 @@ impl Scenario {
     }
 }
 
-pub trait ScenarioExt: 'static {
-    //#[doc(alias = "gst_validate_scenario_execute_seek")]
-    //fn execute_seek(&self, action: &Action, rate: f64, format: gst::Format, flags: gst::SeekFlags, start_type: gst::SeekType, start: /*Ignored*/gst::ClockTime, stop_type: gst::SeekType, stop: /*Ignored*/gst::ClockTime) -> i32;
-
-    #[doc(alias = "gst_validate_scenario_get_actions")]
-    #[doc(alias = "get_actions")]
-    fn actions(&self) -> Vec<Action>;
-
-    #[doc(alias = "gst_validate_scenario_get_pipeline")]
-    #[doc(alias = "get_pipeline")]
-    fn pipeline(&self) -> Option<gst::Element>;
-
-    #[doc(alias = "gst_validate_scenario_get_target_state")]
-    #[doc(alias = "get_target_state")]
-    fn target_state(&self) -> gst::State;
-
-    #[doc(alias = "execute-on-idle")]
-    fn is_execute_on_idle(&self) -> bool;
-
-    #[doc(alias = "execute-on-idle")]
-    fn set_execute_on_idle(&self, execute_on_idle: bool);
-
-    #[doc(alias = "handles-states")]
-    fn is_handles_states(&self) -> bool;
-
-    #[doc(alias = "action-done")]
-    fn connect_action_done<F: Fn(&Self, &Action) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "done")]
-    fn connect_done<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "execute-on-idle")]
-    fn connect_execute_on_idle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "handles-states")]
-    fn connect_handles_states_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Scenario>> Sealed for T {}
 }
 
-impl<O: IsA<Scenario>> ScenarioExt for O {
+pub trait ScenarioExt: IsA<Scenario> + sealed::Sealed + 'static {
+    //#[doc(alias = "gst_validate_scenario_execute_seek")]
     //fn execute_seek(&self, action: &Action, rate: f64, format: gst::Format, flags: gst::SeekFlags, start_type: gst::SeekType, start: /*Ignored*/gst::ClockTime, stop_type: gst::SeekType, stop: /*Ignored*/gst::ClockTime) -> i32 {
     //    unsafe { TODO: call ffi:gst_validate_scenario_execute_seek() }
     //}
 
+    #[doc(alias = "gst_validate_scenario_get_actions")]
+    #[doc(alias = "get_actions")]
     fn actions(&self) -> Vec<Action> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_validate_scenario_get_actions(
@@ -99,6 +69,8 @@ impl<O: IsA<Scenario>> ScenarioExt for O {
         }
     }
 
+    #[doc(alias = "gst_validate_scenario_get_pipeline")]
+    #[doc(alias = "get_pipeline")]
     fn pipeline(&self) -> Option<gst::Element> {
         unsafe {
             from_glib_full(ffi::gst_validate_scenario_get_pipeline(
@@ -107,6 +79,8 @@ impl<O: IsA<Scenario>> ScenarioExt for O {
         }
     }
 
+    #[doc(alias = "gst_validate_scenario_get_target_state")]
+    #[doc(alias = "get_target_state")]
     fn target_state(&self) -> gst::State {
         unsafe {
             from_glib(ffi::gst_validate_scenario_get_target_state(
@@ -115,18 +89,22 @@ impl<O: IsA<Scenario>> ScenarioExt for O {
         }
     }
 
+    #[doc(alias = "execute-on-idle")]
     fn is_execute_on_idle(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "execute-on-idle")
     }
 
+    #[doc(alias = "execute-on-idle")]
     fn set_execute_on_idle(&self, execute_on_idle: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "execute-on-idle", execute_on_idle)
     }
 
+    #[doc(alias = "handles-states")]
     fn is_handles_states(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "handles-states")
     }
 
+    #[doc(alias = "action-done")]
     fn connect_action_done<F: Fn(&Self, &Action) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn action_done_trampoline<
             P: IsA<Scenario>,
@@ -155,6 +133,7 @@ impl<O: IsA<Scenario>> ScenarioExt for O {
         }
     }
 
+    #[doc(alias = "done")]
     fn connect_done<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn done_trampoline<P: IsA<Scenario>, F: Fn(&P) + 'static>(
             this: *mut ffi::GstValidateScenario,
@@ -176,6 +155,7 @@ impl<O: IsA<Scenario>> ScenarioExt for O {
         }
     }
 
+    #[doc(alias = "execute-on-idle")]
     fn connect_execute_on_idle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_execute_on_idle_trampoline<
             P: IsA<Scenario>,
@@ -201,6 +181,7 @@ impl<O: IsA<Scenario>> ScenarioExt for O {
         }
     }
 
+    #[doc(alias = "handles-states")]
     fn connect_handles_states_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_handles_states_trampoline<
             P: IsA<Scenario>,
@@ -226,3 +207,5 @@ impl<O: IsA<Scenario>> ScenarioExt for O {
         }
     }
 }
+
+impl<O: IsA<Scenario>> ScenarioExt for O {}

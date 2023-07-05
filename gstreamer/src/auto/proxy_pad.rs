@@ -27,14 +27,15 @@ impl ProxyPad {
 unsafe impl Send for ProxyPad {}
 unsafe impl Sync for ProxyPad {}
 
-pub trait ProxyPadExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ProxyPad>> Sealed for T {}
+}
+
+pub trait ProxyPadExt: IsA<ProxyPad> + sealed::Sealed + 'static {
     #[doc(alias = "gst_proxy_pad_get_internal")]
     #[doc(alias = "get_internal")]
     #[must_use]
-    fn internal(&self) -> Option<ProxyPad>;
-}
-
-impl<O: IsA<ProxyPad>> ProxyPadExt for O {
     fn internal(&self) -> Option<ProxyPad> {
         unsafe {
             from_glib_full(ffi::gst_proxy_pad_get_internal(
@@ -43,3 +44,5 @@ impl<O: IsA<ProxyPad>> ProxyPadExt for O {
         }
     }
 }
+
+impl<O: IsA<ProxyPad>> ProxyPadExt for O {}

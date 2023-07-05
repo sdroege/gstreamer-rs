@@ -28,13 +28,16 @@ impl Effect {
     }
 }
 
-pub trait EffectExt: 'static {
-    #[doc(alias = "bin-description")]
-    fn bin_description(&self) -> Option<glib::GString>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Effect>> Sealed for T {}
 }
 
-impl<O: IsA<Effect>> EffectExt for O {
+pub trait EffectExt: IsA<Effect> + sealed::Sealed + 'static {
+    #[doc(alias = "bin-description")]
     fn bin_description(&self) -> Option<glib::GString> {
         glib::ObjectExt::property(self.as_ref(), "bin-description")
     }
 }
+
+impl<O: IsA<Effect>> EffectExt for O {}

@@ -40,44 +40,13 @@ impl Preset {
 unsafe impl Send for Preset {}
 unsafe impl Sync for Preset {}
 
-pub trait PresetExt: 'static {
-    #[doc(alias = "gst_preset_delete_preset")]
-    fn delete_preset(&self, name: &str) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_preset_get_meta")]
-    #[doc(alias = "get_meta")]
-    fn meta(&self, name: &str, tag: &str) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_preset_get_preset_names")]
-    #[doc(alias = "get_preset_names")]
-    fn preset_names(&self) -> Vec<glib::GString>;
-
-    #[doc(alias = "gst_preset_get_property_names")]
-    #[doc(alias = "get_property_names")]
-    fn property_names(&self) -> Vec<glib::GString>;
-
-    #[doc(alias = "gst_preset_is_editable")]
-    fn is_editable(&self) -> bool;
-
-    #[doc(alias = "gst_preset_load_preset")]
-    fn load_preset(&self, name: &str) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_preset_rename_preset")]
-    fn rename_preset(&self, old_name: &str, new_name: &str) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_preset_save_preset")]
-    fn save_preset(&self, name: &str) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_preset_set_meta")]
-    fn set_meta(
-        &self,
-        name: &str,
-        tag: &str,
-        value: Option<&str>,
-    ) -> Result<(), glib::error::BoolError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Preset>> Sealed for T {}
 }
 
-impl<O: IsA<Preset>> PresetExt for O {
+pub trait PresetExt: IsA<Preset> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_preset_delete_preset")]
     fn delete_preset(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -90,6 +59,8 @@ impl<O: IsA<Preset>> PresetExt for O {
         }
     }
 
+    #[doc(alias = "gst_preset_get_meta")]
+    #[doc(alias = "get_meta")]
     fn meta(&self, name: &str, tag: &str) -> Option<glib::GString> {
         unsafe {
             let mut value = ptr::null_mut();
@@ -107,6 +78,8 @@ impl<O: IsA<Preset>> PresetExt for O {
         }
     }
 
+    #[doc(alias = "gst_preset_get_preset_names")]
+    #[doc(alias = "get_preset_names")]
     fn preset_names(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_preset_get_preset_names(
@@ -115,6 +88,8 @@ impl<O: IsA<Preset>> PresetExt for O {
         }
     }
 
+    #[doc(alias = "gst_preset_get_property_names")]
+    #[doc(alias = "get_property_names")]
     fn property_names(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_preset_get_property_names(
@@ -123,10 +98,12 @@ impl<O: IsA<Preset>> PresetExt for O {
         }
     }
 
+    #[doc(alias = "gst_preset_is_editable")]
     fn is_editable(&self) -> bool {
         unsafe { from_glib(ffi::gst_preset_is_editable(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_preset_load_preset")]
     fn load_preset(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -136,6 +113,7 @@ impl<O: IsA<Preset>> PresetExt for O {
         }
     }
 
+    #[doc(alias = "gst_preset_rename_preset")]
     fn rename_preset(&self, old_name: &str, new_name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -149,6 +127,7 @@ impl<O: IsA<Preset>> PresetExt for O {
         }
     }
 
+    #[doc(alias = "gst_preset_save_preset")]
     fn save_preset(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -158,6 +137,7 @@ impl<O: IsA<Preset>> PresetExt for O {
         }
     }
 
+    #[doc(alias = "gst_preset_set_meta")]
     fn set_meta(
         &self,
         name: &str,
@@ -177,3 +157,5 @@ impl<O: IsA<Preset>> PresetExt for O {
         }
     }
 }
+
+impl<O: IsA<Preset>> PresetExt for O {}

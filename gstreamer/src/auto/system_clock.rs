@@ -41,29 +41,23 @@ impl SystemClock {
 unsafe impl Send for SystemClock {}
 unsafe impl Sync for SystemClock {}
 
-pub trait SystemClockExt: 'static {
-    #[doc(alias = "clock-type")]
-    fn clock_type(&self) -> ClockType;
-
-    #[doc(alias = "clock-type")]
-    fn set_clock_type(&self, clock_type: ClockType);
-
-    #[doc(alias = "clock-type")]
-    fn connect_clock_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::SystemClock>> Sealed for T {}
 }
 
-impl<O: IsA<SystemClock>> SystemClockExt for O {
+pub trait SystemClockExt: IsA<SystemClock> + sealed::Sealed + 'static {
+    #[doc(alias = "clock-type")]
     fn clock_type(&self) -> ClockType {
         glib::ObjectExt::property(self.as_ref(), "clock-type")
     }
 
+    #[doc(alias = "clock-type")]
     fn set_clock_type(&self, clock_type: ClockType) {
         glib::ObjectExt::set_property(self.as_ref(), "clock-type", clock_type)
     }
 
+    #[doc(alias = "clock-type")]
     fn connect_clock_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -92,3 +86,5 @@ impl<O: IsA<SystemClock>> SystemClockExt for O {
         }
     }
 }
+
+impl<O: IsA<SystemClock>> SystemClockExt for O {}

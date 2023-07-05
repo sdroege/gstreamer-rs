@@ -22,16 +22,14 @@ impl VideoTestSource {
     pub const NONE: Option<&'static VideoTestSource> = None;
 }
 
-pub trait VideoTestSourceExt: 'static {
-    #[doc(alias = "ges_video_test_source_get_pattern")]
-    #[doc(alias = "get_pattern")]
-    fn pattern(&self) -> VideoTestPattern;
-
-    #[doc(alias = "ges_video_test_source_set_pattern")]
-    fn set_pattern(&self, pattern: VideoTestPattern);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoTestSource>> Sealed for T {}
 }
 
-impl<O: IsA<VideoTestSource>> VideoTestSourceExt for O {
+pub trait VideoTestSourceExt: IsA<VideoTestSource> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_video_test_source_get_pattern")]
+    #[doc(alias = "get_pattern")]
     fn pattern(&self) -> VideoTestPattern {
         unsafe {
             from_glib(ffi::ges_video_test_source_get_pattern(
@@ -40,6 +38,7 @@ impl<O: IsA<VideoTestSource>> VideoTestSourceExt for O {
         }
     }
 
+    #[doc(alias = "ges_video_test_source_set_pattern")]
     fn set_pattern(&self, pattern: VideoTestPattern) {
         unsafe {
             ffi::ges_video_test_source_set_pattern(
@@ -49,3 +48,5 @@ impl<O: IsA<VideoTestSource>> VideoTestSourceExt for O {
         }
     }
 }
+
+impl<O: IsA<VideoTestSource>> VideoTestSourceExt for O {}

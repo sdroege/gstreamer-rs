@@ -42,16 +42,14 @@ impl Default for InterpolationControlSource {
 unsafe impl Send for InterpolationControlSource {}
 unsafe impl Sync for InterpolationControlSource {}
 
-pub trait InterpolationControlSourceExt: 'static {
-    fn mode(&self) -> InterpolationMode;
-
-    fn set_mode(&self, mode: InterpolationMode);
-
-    #[doc(alias = "mode")]
-    fn connect_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::InterpolationControlSource>> Sealed for T {}
 }
 
-impl<O: IsA<InterpolationControlSource>> InterpolationControlSourceExt for O {
+pub trait InterpolationControlSourceExt:
+    IsA<InterpolationControlSource> + sealed::Sealed + 'static
+{
     fn mode(&self) -> InterpolationMode {
         glib::ObjectExt::property(self.as_ref(), "mode")
     }
@@ -60,6 +58,7 @@ impl<O: IsA<InterpolationControlSource>> InterpolationControlSourceExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "mode", mode)
     }
 
+    #[doc(alias = "mode")]
     fn connect_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mode_trampoline<
             P: IsA<InterpolationControlSource>,
@@ -85,3 +84,5 @@ impl<O: IsA<InterpolationControlSource>> InterpolationControlSourceExt for O {
         }
     }
 }
+
+impl<O: IsA<InterpolationControlSource>> InterpolationControlSourceExt for O {}

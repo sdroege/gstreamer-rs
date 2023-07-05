@@ -22,26 +22,14 @@ impl UriSourceAsset {
 unsafe impl Send for UriSourceAsset {}
 unsafe impl Sync for UriSourceAsset {}
 
-pub trait UriSourceAssetExt: 'static {
-    #[doc(alias = "ges_uri_source_asset_get_filesource_asset")]
-    #[doc(alias = "get_filesource_asset")]
-    fn filesource_asset(&self) -> UriClipAsset;
-
-    #[doc(alias = "ges_uri_source_asset_get_stream_info")]
-    #[doc(alias = "get_stream_info")]
-    fn stream_info(&self) -> gst_pbutils::DiscovererStreamInfo;
-
-    #[doc(alias = "ges_uri_source_asset_get_stream_uri")]
-    #[doc(alias = "get_stream_uri")]
-    fn stream_uri(&self) -> glib::GString;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_uri_source_asset_is_image")]
-    fn is_image(&self) -> bool;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::UriSourceAsset>> Sealed for T {}
 }
 
-impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
+pub trait UriSourceAssetExt: IsA<UriSourceAsset> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_uri_source_asset_get_filesource_asset")]
+    #[doc(alias = "get_filesource_asset")]
     fn filesource_asset(&self) -> UriClipAsset {
         unsafe {
             from_glib_none(ffi::ges_uri_source_asset_get_filesource_asset(
@@ -50,6 +38,8 @@ impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
         }
     }
 
+    #[doc(alias = "ges_uri_source_asset_get_stream_info")]
+    #[doc(alias = "get_stream_info")]
     fn stream_info(&self) -> gst_pbutils::DiscovererStreamInfo {
         unsafe {
             from_glib_none(ffi::ges_uri_source_asset_get_stream_info(
@@ -58,6 +48,8 @@ impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
         }
     }
 
+    #[doc(alias = "ges_uri_source_asset_get_stream_uri")]
+    #[doc(alias = "get_stream_uri")]
     fn stream_uri(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::ges_uri_source_asset_get_stream_uri(
@@ -68,6 +60,7 @@ impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_uri_source_asset_is_image")]
     fn is_image(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_uri_source_asset_is_image(
@@ -76,3 +69,5 @@ impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
         }
     }
 }
+
+impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {}

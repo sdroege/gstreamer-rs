@@ -60,148 +60,13 @@ impl Default for RTSPServer {
 unsafe impl Send for RTSPServer {}
 unsafe impl Sync for RTSPServer {}
 
-pub trait RTSPServerExt: 'static {
-    #[doc(alias = "gst_rtsp_server_client_filter")]
-    fn client_filter(
-        &self,
-        func: Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)>,
-    ) -> Vec<RTSPClient>;
-
-    #[doc(alias = "gst_rtsp_server_create_socket")]
-    fn create_socket(
-        &self,
-        cancellable: Option<&impl IsA<gio::Cancellable>>,
-    ) -> Result<gio::Socket, glib::Error>;
-
-    #[doc(alias = "gst_rtsp_server_create_source")]
-    fn create_source(
-        &self,
-        cancellable: Option<&impl IsA<gio::Cancellable>>,
-    ) -> Result<glib::Source, glib::Error>;
-
-    #[doc(alias = "gst_rtsp_server_get_address")]
-    #[doc(alias = "get_address")]
-    fn address(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_rtsp_server_get_auth")]
-    #[doc(alias = "get_auth")]
-    fn auth(&self) -> Option<RTSPAuth>;
-
-    #[doc(alias = "gst_rtsp_server_get_backlog")]
-    #[doc(alias = "get_backlog")]
-    fn backlog(&self) -> i32;
-
-    #[doc(alias = "gst_rtsp_server_get_bound_port")]
-    #[doc(alias = "get_bound_port")]
-    fn bound_port(&self) -> i32;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_rtsp_server_get_content_length_limit")]
-    #[doc(alias = "get_content_length_limit")]
-    fn content_length_limit(&self) -> u32;
-
-    #[doc(alias = "gst_rtsp_server_get_mount_points")]
-    #[doc(alias = "get_mount_points")]
-    fn mount_points(&self) -> Option<RTSPMountPoints>;
-
-    #[doc(alias = "gst_rtsp_server_get_service")]
-    #[doc(alias = "get_service")]
-    fn service(&self) -> glib::GString;
-
-    #[doc(alias = "gst_rtsp_server_get_session_pool")]
-    #[doc(alias = "get_session_pool")]
-    fn session_pool(&self) -> Option<RTSPSessionPool>;
-
-    #[doc(alias = "gst_rtsp_server_get_thread_pool")]
-    #[doc(alias = "get_thread_pool")]
-    fn thread_pool(&self) -> Option<RTSPThreadPool>;
-
-    #[doc(alias = "gst_rtsp_server_set_address")]
-    fn set_address(&self, address: &str);
-
-    #[doc(alias = "gst_rtsp_server_set_auth")]
-    fn set_auth(&self, auth: Option<&impl IsA<RTSPAuth>>);
-
-    #[doc(alias = "gst_rtsp_server_set_backlog")]
-    fn set_backlog(&self, backlog: i32);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_rtsp_server_set_content_length_limit")]
-    fn set_content_length_limit(&self, limit: u32);
-
-    #[doc(alias = "gst_rtsp_server_set_mount_points")]
-    fn set_mount_points(&self, mounts: Option<&impl IsA<RTSPMountPoints>>);
-
-    #[doc(alias = "gst_rtsp_server_set_service")]
-    fn set_service(&self, service: &str);
-
-    #[doc(alias = "gst_rtsp_server_set_session_pool")]
-    fn set_session_pool(&self, pool: Option<&impl IsA<RTSPSessionPool>>);
-
-    #[doc(alias = "gst_rtsp_server_set_thread_pool")]
-    fn set_thread_pool(&self, pool: Option<&impl IsA<RTSPThreadPool>>);
-
-    #[doc(alias = "gst_rtsp_server_transfer_connection")]
-    fn transfer_connection(
-        &self,
-        socket: impl IsA<gio::Socket>,
-        ip: &str,
-        port: i32,
-        initial_buffer: Option<&str>,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "content-length-limit")]
-    fn get_property_content_length_limit(&self) -> u32;
-
-    #[doc(alias = "content-length-limit")]
-    fn set_property_content_length_limit(&self, content_length_limit: u32);
-
-    #[doc(alias = "client-connected")]
-    fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "address")]
-    fn connect_address_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
-        -> SignalHandlerId;
-
-    #[doc(alias = "backlog")]
-    fn connect_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
-        -> SignalHandlerId;
-
-    #[doc(alias = "bound-port")]
-    fn connect_bound_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "content-length-limit")]
-    fn connect_content_length_limit_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "mount-points")]
-    fn connect_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "service")]
-    fn connect_service_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
-        -> SignalHandlerId;
-
-    #[doc(alias = "session-pool")]
-    fn connect_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPServer>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPServer>> RTSPServerExt for O {
+pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_rtsp_server_client_filter")]
     fn client_filter(
         &self,
         func: Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)>,
@@ -243,6 +108,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_create_socket")]
     fn create_socket(
         &self,
         cancellable: Option<&impl IsA<gio::Cancellable>>,
@@ -262,6 +128,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_create_source")]
     fn create_source(
         &self,
         cancellable: Option<&impl IsA<gio::Cancellable>>,
@@ -281,6 +148,8 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_get_address")]
+    #[doc(alias = "get_address")]
     fn address(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_address(
@@ -289,6 +158,8 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_get_auth")]
+    #[doc(alias = "get_auth")]
     fn auth(&self) -> Option<RTSPAuth> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_auth(
@@ -297,20 +168,28 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_get_backlog")]
+    #[doc(alias = "get_backlog")]
     fn backlog(&self) -> i32 {
         unsafe { ffi::gst_rtsp_server_get_backlog(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_rtsp_server_get_bound_port")]
+    #[doc(alias = "get_bound_port")]
     fn bound_port(&self) -> i32 {
         unsafe { ffi::gst_rtsp_server_get_bound_port(self.as_ref().to_glib_none().0) }
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_rtsp_server_get_content_length_limit")]
+    #[doc(alias = "get_content_length_limit")]
     fn content_length_limit(&self) -> u32 {
         unsafe { ffi::gst_rtsp_server_get_content_length_limit(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_rtsp_server_get_mount_points")]
+    #[doc(alias = "get_mount_points")]
     fn mount_points(&self) -> Option<RTSPMountPoints> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_mount_points(
@@ -319,6 +198,8 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_get_service")]
+    #[doc(alias = "get_service")]
     fn service(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_service(
@@ -327,6 +208,8 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_get_session_pool")]
+    #[doc(alias = "get_session_pool")]
     fn session_pool(&self) -> Option<RTSPSessionPool> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_session_pool(
@@ -335,6 +218,8 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_get_thread_pool")]
+    #[doc(alias = "get_thread_pool")]
     fn thread_pool(&self) -> Option<RTSPThreadPool> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_thread_pool(
@@ -343,6 +228,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_set_address")]
     fn set_address(&self, address: &str) {
         unsafe {
             ffi::gst_rtsp_server_set_address(
@@ -352,6 +238,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_set_auth")]
     fn set_auth(&self, auth: Option<&impl IsA<RTSPAuth>>) {
         unsafe {
             ffi::gst_rtsp_server_set_auth(
@@ -361,6 +248,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_set_backlog")]
     fn set_backlog(&self, backlog: i32) {
         unsafe {
             ffi::gst_rtsp_server_set_backlog(self.as_ref().to_glib_none().0, backlog);
@@ -369,12 +257,14 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_rtsp_server_set_content_length_limit")]
     fn set_content_length_limit(&self, limit: u32) {
         unsafe {
             ffi::gst_rtsp_server_set_content_length_limit(self.as_ref().to_glib_none().0, limit);
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_set_mount_points")]
     fn set_mount_points(&self, mounts: Option<&impl IsA<RTSPMountPoints>>) {
         unsafe {
             ffi::gst_rtsp_server_set_mount_points(
@@ -384,6 +274,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_set_service")]
     fn set_service(&self, service: &str) {
         unsafe {
             ffi::gst_rtsp_server_set_service(
@@ -393,6 +284,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_set_session_pool")]
     fn set_session_pool(&self, pool: Option<&impl IsA<RTSPSessionPool>>) {
         unsafe {
             ffi::gst_rtsp_server_set_session_pool(
@@ -402,6 +294,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_set_thread_pool")]
     fn set_thread_pool(&self, pool: Option<&impl IsA<RTSPThreadPool>>) {
         unsafe {
             ffi::gst_rtsp_server_set_thread_pool(
@@ -411,6 +304,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_server_transfer_connection")]
     fn transfer_connection(
         &self,
         socket: impl IsA<gio::Socket>,
@@ -432,14 +326,17 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "content-length-limit")]
     fn get_property_content_length_limit(&self) -> u32 {
         glib::ObjectExt::property(self.as_ref(), "content-length-limit")
     }
 
+    #[doc(alias = "content-length-limit")]
     fn set_property_content_length_limit(&self, content_length_limit: u32) {
         glib::ObjectExt::set_property(self.as_ref(), "content-length-limit", content_length_limit)
     }
 
+    #[doc(alias = "client-connected")]
     fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -471,6 +368,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "address")]
     fn connect_address_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -499,6 +397,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "backlog")]
     fn connect_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -527,6 +426,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "bound-port")]
     fn connect_bound_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -555,6 +455,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "content-length-limit")]
     fn connect_content_length_limit_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -583,6 +484,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "mount-points")]
     fn connect_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -611,6 +513,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "service")]
     fn connect_service_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -639,6 +542,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[doc(alias = "session-pool")]
     fn connect_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -667,3 +571,5 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 }
+
+impl<O: IsA<RTSPServer>> RTSPServerExt for O {}

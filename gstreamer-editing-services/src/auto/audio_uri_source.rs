@@ -19,12 +19,15 @@ impl AudioUriSource {
     pub const NONE: Option<&'static AudioUriSource> = None;
 }
 
-pub trait AudioUriSourceExt: 'static {
-    fn uri(&self) -> Option<glib::GString>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AudioUriSource>> Sealed for T {}
 }
 
-impl<O: IsA<AudioUriSource>> AudioUriSourceExt for O {
+pub trait AudioUriSourceExt: IsA<AudioUriSource> + sealed::Sealed + 'static {
     fn uri(&self) -> Option<glib::GString> {
         glib::ObjectExt::property(self.as_ref(), "uri")
     }
 }
+
+impl<O: IsA<AudioUriSource>> AudioUriSourceExt for O {}

@@ -19,12 +19,15 @@ impl ImageSource {
     pub const NONE: Option<&'static ImageSource> = None;
 }
 
-pub trait ImageSourceExt: 'static {
-    fn uri(&self) -> Option<glib::GString>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ImageSource>> Sealed for T {}
 }
 
-impl<O: IsA<ImageSource>> ImageSourceExt for O {
+pub trait ImageSourceExt: IsA<ImageSource> + sealed::Sealed + 'static {
     fn uri(&self) -> Option<glib::GString> {
         glib::ObjectExt::property(self.as_ref(), "uri")
     }
 }
+
+impl<O: IsA<ImageSource>> ImageSourceExt for O {}

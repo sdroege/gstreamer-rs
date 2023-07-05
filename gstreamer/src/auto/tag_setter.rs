@@ -22,47 +22,29 @@ impl TagSetter {
 unsafe impl Send for TagSetter {}
 unsafe impl Sync for TagSetter {}
 
-pub trait TagSetterExt: 'static {
-    //#[doc(alias = "gst_tag_setter_add_tag_valist")]
-    //fn add_tag_valist(&self, mode: TagMergeMode, tag: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
-
-    //#[doc(alias = "gst_tag_setter_add_tag_valist_values")]
-    //fn add_tag_valist_values(&self, mode: TagMergeMode, tag: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
-
-    //#[doc(alias = "gst_tag_setter_add_tag_values")]
-    //fn add_tag_values(&self, mode: TagMergeMode, tag: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs);
-
-    #[doc(alias = "gst_tag_setter_get_tag_list")]
-    #[doc(alias = "get_tag_list")]
-    fn tag_list(&self) -> Option<TagList>;
-
-    #[doc(alias = "gst_tag_setter_get_tag_merge_mode")]
-    #[doc(alias = "get_tag_merge_mode")]
-    fn tag_merge_mode(&self) -> TagMergeMode;
-
-    #[doc(alias = "gst_tag_setter_merge_tags")]
-    fn merge_tags(&self, list: &TagList, mode: TagMergeMode);
-
-    #[doc(alias = "gst_tag_setter_reset_tags")]
-    fn reset_tags(&self);
-
-    #[doc(alias = "gst_tag_setter_set_tag_merge_mode")]
-    fn set_tag_merge_mode(&self, mode: TagMergeMode);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::TagSetter>> Sealed for T {}
 }
 
-impl<O: IsA<TagSetter>> TagSetterExt for O {
+pub trait TagSetterExt: IsA<TagSetter> + sealed::Sealed + 'static {
+    //#[doc(alias = "gst_tag_setter_add_tag_valist")]
     //fn add_tag_valist(&self, mode: TagMergeMode, tag: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi:gst_tag_setter_add_tag_valist() }
     //}
 
+    //#[doc(alias = "gst_tag_setter_add_tag_valist_values")]
     //fn add_tag_valist_values(&self, mode: TagMergeMode, tag: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi:gst_tag_setter_add_tag_valist_values() }
     //}
 
+    //#[doc(alias = "gst_tag_setter_add_tag_values")]
     //fn add_tag_values(&self, mode: TagMergeMode, tag: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
     //    unsafe { TODO: call ffi:gst_tag_setter_add_tag_values() }
     //}
 
+    #[doc(alias = "gst_tag_setter_get_tag_list")]
+    #[doc(alias = "get_tag_list")]
     fn tag_list(&self) -> Option<TagList> {
         unsafe {
             from_glib_none(ffi::gst_tag_setter_get_tag_list(
@@ -71,6 +53,8 @@ impl<O: IsA<TagSetter>> TagSetterExt for O {
         }
     }
 
+    #[doc(alias = "gst_tag_setter_get_tag_merge_mode")]
+    #[doc(alias = "get_tag_merge_mode")]
     fn tag_merge_mode(&self) -> TagMergeMode {
         unsafe {
             from_glib(ffi::gst_tag_setter_get_tag_merge_mode(
@@ -79,6 +63,7 @@ impl<O: IsA<TagSetter>> TagSetterExt for O {
         }
     }
 
+    #[doc(alias = "gst_tag_setter_merge_tags")]
     fn merge_tags(&self, list: &TagList, mode: TagMergeMode) {
         unsafe {
             ffi::gst_tag_setter_merge_tags(
@@ -89,12 +74,14 @@ impl<O: IsA<TagSetter>> TagSetterExt for O {
         }
     }
 
+    #[doc(alias = "gst_tag_setter_reset_tags")]
     fn reset_tags(&self) {
         unsafe {
             ffi::gst_tag_setter_reset_tags(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_tag_setter_set_tag_merge_mode")]
     fn set_tag_merge_mode(&self, mode: TagMergeMode) {
         unsafe {
             ffi::gst_tag_setter_set_tag_merge_mode(
@@ -104,3 +91,5 @@ impl<O: IsA<TagSetter>> TagSetterExt for O {
         }
     }
 }
+
+impl<O: IsA<TagSetter>> TagSetterExt for O {}

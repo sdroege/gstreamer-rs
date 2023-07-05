@@ -52,99 +52,13 @@ impl GLContext {
 unsafe impl Send for GLContext {}
 unsafe impl Sync for GLContext {}
 
-pub trait GLContextExt: 'static {
-    #[doc(alias = "gst_gl_context_activate")]
-    fn activate(&self, activate: bool) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_gl_context_can_share")]
-    fn can_share(&self, other_context: &impl IsA<GLContext>) -> bool;
-
-    #[doc(alias = "gst_gl_context_check_feature")]
-    fn check_feature(&self, feature: &str) -> bool;
-
-    #[doc(alias = "gst_gl_context_check_framebuffer_status")]
-    fn check_framebuffer_status(&self, fbo_target: u32) -> bool;
-
-    #[doc(alias = "gst_gl_context_check_gl_version")]
-    fn check_gl_version(&self, api: GLAPI, maj: i32, min: i32) -> bool;
-
-    #[doc(alias = "gst_gl_context_clear_framebuffer")]
-    fn clear_framebuffer(&self);
-
-    #[doc(alias = "gst_gl_context_clear_shader")]
-    fn clear_shader(&self);
-
-    #[doc(alias = "gst_gl_context_create")]
-    fn create(&self, other_context: Option<&impl IsA<GLContext>>) -> Result<(), glib::Error>;
-
-    #[doc(alias = "gst_gl_context_destroy")]
-    fn destroy(&self);
-
-    #[doc(alias = "gst_gl_context_fill_info")]
-    fn fill_info(&self) -> Result<(), glib::Error>;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_gl_context_get_config")]
-    #[doc(alias = "get_config")]
-    fn config(&self) -> Option<gst::Structure>;
-
-    #[doc(alias = "gst_gl_context_get_display")]
-    #[doc(alias = "get_display")]
-    fn display(&self) -> GLDisplay;
-
-    #[doc(alias = "gst_gl_context_get_gl_api")]
-    #[doc(alias = "get_gl_api")]
-    fn gl_api(&self) -> GLAPI;
-
-    #[doc(alias = "gst_gl_context_get_gl_platform")]
-    #[doc(alias = "get_gl_platform")]
-    fn gl_platform(&self) -> GLPlatform;
-
-    #[doc(alias = "gst_gl_context_get_gl_platform_version")]
-    #[doc(alias = "get_gl_platform_version")]
-    fn gl_platform_version(&self) -> (i32, i32);
-
-    #[doc(alias = "gst_gl_context_get_gl_version")]
-    #[doc(alias = "get_gl_version")]
-    fn gl_version(&self) -> (i32, i32);
-
-    #[doc(alias = "gst_gl_context_get_window")]
-    #[doc(alias = "get_window")]
-    fn window(&self) -> Option<GLWindow>;
-
-    #[doc(alias = "gst_gl_context_is_shared")]
-    fn is_shared(&self) -> bool;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_gl_context_request_config")]
-    fn request_config(&self, gl_config: Option<gst::Structure>) -> bool;
-
-    #[doc(alias = "gst_gl_context_set_shared_with")]
-    fn set_shared_with(&self, share: &impl IsA<GLContext>);
-
-    #[doc(alias = "gst_gl_context_set_window")]
-    fn set_window(&self, window: impl IsA<GLWindow>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_gl_context_supports_glsl_profile_version")]
-    fn supports_glsl_profile_version(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "gst_gl_context_supports_precision")]
-    fn supports_precision(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "gst_gl_context_supports_precision_highp")]
-    fn supports_precision_highp(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
-
-    #[doc(alias = "gst_gl_context_swap_buffers")]
-    fn swap_buffers(&self);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::GLContext>> Sealed for T {}
 }
 
-impl<O: IsA<GLContext>> GLContextExt for O {
+pub trait GLContextExt: IsA<GLContext> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_gl_context_activate")]
     fn activate(&self, activate: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -154,6 +68,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_can_share")]
     fn can_share(&self, other_context: &impl IsA<GLContext>) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_context_can_share(
@@ -163,6 +78,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_check_feature")]
     fn check_feature(&self, feature: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_context_check_feature(
@@ -172,6 +88,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_check_framebuffer_status")]
     fn check_framebuffer_status(&self, fbo_target: u32) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_context_check_framebuffer_status(
@@ -181,6 +98,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_check_gl_version")]
     fn check_gl_version(&self, api: GLAPI, maj: i32, min: i32) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_context_check_gl_version(
@@ -192,18 +110,21 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_clear_framebuffer")]
     fn clear_framebuffer(&self) {
         unsafe {
             ffi::gst_gl_context_clear_framebuffer(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_gl_context_clear_shader")]
     fn clear_shader(&self) {
         unsafe {
             ffi::gst_gl_context_clear_shader(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_gl_context_create")]
     fn create(&self, other_context: Option<&impl IsA<GLContext>>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -221,12 +142,14 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_destroy")]
     fn destroy(&self) {
         unsafe {
             ffi::gst_gl_context_destroy(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_gl_context_fill_info")]
     fn fill_info(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -242,6 +165,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_gl_context_get_config")]
+    #[doc(alias = "get_config")]
     fn config(&self) -> Option<gst::Structure> {
         unsafe {
             from_glib_full(ffi::gst_gl_context_get_config(
@@ -250,6 +175,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_get_display")]
+    #[doc(alias = "get_display")]
     fn display(&self) -> GLDisplay {
         unsafe {
             from_glib_full(ffi::gst_gl_context_get_display(
@@ -258,6 +185,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_get_gl_api")]
+    #[doc(alias = "get_gl_api")]
     fn gl_api(&self) -> GLAPI {
         unsafe {
             from_glib(ffi::gst_gl_context_get_gl_api(
@@ -266,6 +195,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_get_gl_platform")]
+    #[doc(alias = "get_gl_platform")]
     fn gl_platform(&self) -> GLPlatform {
         unsafe {
             from_glib(ffi::gst_gl_context_get_gl_platform(
@@ -274,6 +205,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_get_gl_platform_version")]
+    #[doc(alias = "get_gl_platform_version")]
     fn gl_platform_version(&self) -> (i32, i32) {
         unsafe {
             let mut major = mem::MaybeUninit::uninit();
@@ -287,6 +220,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_get_gl_version")]
+    #[doc(alias = "get_gl_version")]
     fn gl_version(&self) -> (i32, i32) {
         unsafe {
             let mut maj = mem::MaybeUninit::uninit();
@@ -300,6 +235,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_get_window")]
+    #[doc(alias = "get_window")]
     fn window(&self) -> Option<GLWindow> {
         unsafe {
             from_glib_full(ffi::gst_gl_context_get_window(
@@ -308,6 +245,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_is_shared")]
     fn is_shared(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_context_is_shared(
@@ -318,6 +256,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_gl_context_request_config")]
     fn request_config(&self, gl_config: Option<gst::Structure>) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_context_request_config(
@@ -327,6 +266,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_set_shared_with")]
     fn set_shared_with(&self, share: &impl IsA<GLContext>) {
         unsafe {
             ffi::gst_gl_context_set_shared_with(
@@ -336,6 +276,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_set_window")]
     fn set_window(&self, window: impl IsA<GLWindow>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -348,6 +289,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_supports_glsl_profile_version")]
     fn supports_glsl_profile_version(&self, version: GLSLVersion, profile: GLSLProfile) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_context_supports_glsl_profile_version(
@@ -360,6 +302,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_gl_context_supports_precision")]
     fn supports_precision(&self, version: GLSLVersion, profile: GLSLProfile) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_context_supports_precision(
@@ -372,6 +315,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_gl_context_supports_precision_highp")]
     fn supports_precision_highp(&self, version: GLSLVersion, profile: GLSLProfile) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_context_supports_precision_highp(
@@ -382,9 +326,12 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_context_swap_buffers")]
     fn swap_buffers(&self) {
         unsafe {
             ffi::gst_gl_context_swap_buffers(self.as_ref().to_glib_none().0);
         }
     }
 }
+
+impl<O: IsA<GLContext>> GLContextExt for O {}

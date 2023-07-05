@@ -27,32 +27,14 @@ impl ColorBalance {
 unsafe impl Send for ColorBalance {}
 unsafe impl Sync for ColorBalance {}
 
-pub trait ColorBalanceExt: 'static {
-    #[doc(alias = "gst_color_balance_get_balance_type")]
-    #[doc(alias = "get_balance_type")]
-    fn balance_type(&self) -> ColorBalanceType;
-
-    #[doc(alias = "gst_color_balance_get_value")]
-    #[doc(alias = "get_value")]
-    fn value(&self, channel: &impl IsA<ColorBalanceChannel>) -> i32;
-
-    #[doc(alias = "gst_color_balance_list_channels")]
-    fn list_channels(&self) -> Vec<ColorBalanceChannel>;
-
-    #[doc(alias = "gst_color_balance_set_value")]
-    fn set_value(&self, channel: &impl IsA<ColorBalanceChannel>, value: i32);
-
-    #[doc(alias = "gst_color_balance_value_changed")]
-    fn value_changed(&self, channel: &impl IsA<ColorBalanceChannel>, value: i32);
-
-    #[doc(alias = "value-changed")]
-    fn connect_value_changed<F: Fn(&Self, &ColorBalanceChannel, i32) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ColorBalance>> Sealed for T {}
 }
 
-impl<O: IsA<ColorBalance>> ColorBalanceExt for O {
+pub trait ColorBalanceExt: IsA<ColorBalance> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_color_balance_get_balance_type")]
+    #[doc(alias = "get_balance_type")]
     fn balance_type(&self) -> ColorBalanceType {
         unsafe {
             from_glib(ffi::gst_color_balance_get_balance_type(
@@ -61,6 +43,8 @@ impl<O: IsA<ColorBalance>> ColorBalanceExt for O {
         }
     }
 
+    #[doc(alias = "gst_color_balance_get_value")]
+    #[doc(alias = "get_value")]
     fn value(&self, channel: &impl IsA<ColorBalanceChannel>) -> i32 {
         unsafe {
             ffi::gst_color_balance_get_value(
@@ -70,6 +54,7 @@ impl<O: IsA<ColorBalance>> ColorBalanceExt for O {
         }
     }
 
+    #[doc(alias = "gst_color_balance_list_channels")]
     fn list_channels(&self) -> Vec<ColorBalanceChannel> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_color_balance_list_channels(
@@ -78,6 +63,7 @@ impl<O: IsA<ColorBalance>> ColorBalanceExt for O {
         }
     }
 
+    #[doc(alias = "gst_color_balance_set_value")]
     fn set_value(&self, channel: &impl IsA<ColorBalanceChannel>, value: i32) {
         unsafe {
             ffi::gst_color_balance_set_value(
@@ -88,6 +74,7 @@ impl<O: IsA<ColorBalance>> ColorBalanceExt for O {
         }
     }
 
+    #[doc(alias = "gst_color_balance_value_changed")]
     fn value_changed(&self, channel: &impl IsA<ColorBalanceChannel>, value: i32) {
         unsafe {
             ffi::gst_color_balance_value_changed(
@@ -98,6 +85,7 @@ impl<O: IsA<ColorBalance>> ColorBalanceExt for O {
         }
     }
 
+    #[doc(alias = "value-changed")]
     fn connect_value_changed<F: Fn(&Self, &ColorBalanceChannel, i32) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -131,3 +119,5 @@ impl<O: IsA<ColorBalance>> ColorBalanceExt for O {
         }
     }
 }
+
+impl<O: IsA<ColorBalance>> ColorBalanceExt for O {}

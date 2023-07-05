@@ -61,80 +61,13 @@ impl Default for RTSPAuth {
 unsafe impl Send for RTSPAuth {}
 unsafe impl Sync for RTSPAuth {}
 
-pub trait RTSPAuthExt: 'static {
-    #[doc(alias = "gst_rtsp_auth_add_basic")]
-    fn add_basic(&self, basic: &str, token: &RTSPToken);
-
-    #[doc(alias = "gst_rtsp_auth_add_digest")]
-    fn add_digest(&self, user: &str, pass: &str, token: &RTSPToken);
-
-    #[doc(alias = "gst_rtsp_auth_get_default_token")]
-    #[doc(alias = "get_default_token")]
-    fn default_token(&self) -> Option<RTSPToken>;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "gst_rtsp_auth_get_realm")]
-    #[doc(alias = "get_realm")]
-    fn realm(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_rtsp_auth_get_supported_methods")]
-    #[doc(alias = "get_supported_methods")]
-    fn supported_methods(&self) -> gst_rtsp::RTSPAuthMethod;
-
-    #[doc(alias = "gst_rtsp_auth_get_tls_authentication_mode")]
-    #[doc(alias = "get_tls_authentication_mode")]
-    fn tls_authentication_mode(&self) -> gio::TlsAuthenticationMode;
-
-    #[doc(alias = "gst_rtsp_auth_get_tls_certificate")]
-    #[doc(alias = "get_tls_certificate")]
-    fn tls_certificate(&self) -> Option<gio::TlsCertificate>;
-
-    #[doc(alias = "gst_rtsp_auth_get_tls_database")]
-    #[doc(alias = "get_tls_database")]
-    fn tls_database(&self) -> Option<gio::TlsDatabase>;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "gst_rtsp_auth_parse_htdigest")]
-    fn parse_htdigest(&self, path: impl AsRef<std::path::Path>, token: &RTSPToken) -> bool;
-
-    #[doc(alias = "gst_rtsp_auth_remove_basic")]
-    fn remove_basic(&self, basic: &str);
-
-    #[doc(alias = "gst_rtsp_auth_remove_digest")]
-    fn remove_digest(&self, user: &str);
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "gst_rtsp_auth_set_realm")]
-    fn set_realm(&self, realm: Option<&str>);
-
-    #[doc(alias = "gst_rtsp_auth_set_supported_methods")]
-    fn set_supported_methods(&self, methods: gst_rtsp::RTSPAuthMethod);
-
-    #[doc(alias = "gst_rtsp_auth_set_tls_authentication_mode")]
-    fn set_tls_authentication_mode(&self, mode: gio::TlsAuthenticationMode);
-
-    #[doc(alias = "gst_rtsp_auth_set_tls_certificate")]
-    fn set_tls_certificate(&self, cert: Option<&impl IsA<gio::TlsCertificate>>);
-
-    #[doc(alias = "gst_rtsp_auth_set_tls_database")]
-    fn set_tls_database(&self, database: Option<&impl IsA<gio::TlsDatabase>>);
-
-    #[doc(alias = "accept-certificate")]
-    fn connect_accept_certificate<
-        F: Fn(&Self, &gio::TlsConnection, &gio::TlsCertificate, gio::TlsCertificateFlags) -> bool
-            + Send
-            + Sync
-            + 'static,
-    >(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPAuth>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
+pub trait RTSPAuthExt: IsA<RTSPAuth> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_rtsp_auth_add_basic")]
     fn add_basic(&self, basic: &str, token: &RTSPToken) {
         unsafe {
             ffi::gst_rtsp_auth_add_basic(
@@ -145,6 +78,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_auth_add_digest")]
     fn add_digest(&self, user: &str, pass: &str, token: &RTSPToken) {
         unsafe {
             ffi::gst_rtsp_auth_add_digest(
@@ -156,6 +90,8 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_auth_get_default_token")]
+    #[doc(alias = "get_default_token")]
     fn default_token(&self) -> Option<RTSPToken> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_auth_get_default_token(
@@ -166,10 +102,14 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtsp_auth_get_realm")]
+    #[doc(alias = "get_realm")]
     fn realm(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::gst_rtsp_auth_get_realm(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_rtsp_auth_get_supported_methods")]
+    #[doc(alias = "get_supported_methods")]
     fn supported_methods(&self) -> gst_rtsp::RTSPAuthMethod {
         unsafe {
             from_glib(ffi::gst_rtsp_auth_get_supported_methods(
@@ -178,6 +118,8 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_auth_get_tls_authentication_mode")]
+    #[doc(alias = "get_tls_authentication_mode")]
     fn tls_authentication_mode(&self) -> gio::TlsAuthenticationMode {
         unsafe {
             from_glib(ffi::gst_rtsp_auth_get_tls_authentication_mode(
@@ -186,6 +128,8 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_auth_get_tls_certificate")]
+    #[doc(alias = "get_tls_certificate")]
     fn tls_certificate(&self) -> Option<gio::TlsCertificate> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_auth_get_tls_certificate(
@@ -194,6 +138,8 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_auth_get_tls_database")]
+    #[doc(alias = "get_tls_database")]
     fn tls_database(&self) -> Option<gio::TlsDatabase> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_auth_get_tls_database(
@@ -204,6 +150,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtsp_auth_parse_htdigest")]
     fn parse_htdigest(&self, path: impl AsRef<std::path::Path>, token: &RTSPToken) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_auth_parse_htdigest(
@@ -214,12 +161,14 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_auth_remove_basic")]
     fn remove_basic(&self, basic: &str) {
         unsafe {
             ffi::gst_rtsp_auth_remove_basic(self.as_ref().to_glib_none().0, basic.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_rtsp_auth_remove_digest")]
     fn remove_digest(&self, user: &str) {
         unsafe {
             ffi::gst_rtsp_auth_remove_digest(self.as_ref().to_glib_none().0, user.to_glib_none().0);
@@ -228,12 +177,14 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtsp_auth_set_realm")]
     fn set_realm(&self, realm: Option<&str>) {
         unsafe {
             ffi::gst_rtsp_auth_set_realm(self.as_ref().to_glib_none().0, realm.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_rtsp_auth_set_supported_methods")]
     fn set_supported_methods(&self, methods: gst_rtsp::RTSPAuthMethod) {
         unsafe {
             ffi::gst_rtsp_auth_set_supported_methods(
@@ -243,6 +194,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_auth_set_tls_authentication_mode")]
     fn set_tls_authentication_mode(&self, mode: gio::TlsAuthenticationMode) {
         unsafe {
             ffi::gst_rtsp_auth_set_tls_authentication_mode(
@@ -252,6 +204,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_auth_set_tls_certificate")]
     fn set_tls_certificate(&self, cert: Option<&impl IsA<gio::TlsCertificate>>) {
         unsafe {
             ffi::gst_rtsp_auth_set_tls_certificate(
@@ -261,6 +214,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_auth_set_tls_database")]
     fn set_tls_database(&self, database: Option<&impl IsA<gio::TlsDatabase>>) {
         unsafe {
             ffi::gst_rtsp_auth_set_tls_database(
@@ -270,6 +224,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
+    #[doc(alias = "accept-certificate")]
     fn connect_accept_certificate<
         F: Fn(&Self, &gio::TlsConnection, &gio::TlsCertificate, gio::TlsCertificateFlags) -> bool
             + Send
@@ -314,3 +269,5 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 }
+
+impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {}

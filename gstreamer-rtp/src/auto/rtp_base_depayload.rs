@@ -29,120 +29,15 @@ impl RTPBaseDepayload {
 unsafe impl Send for RTPBaseDepayload {}
 unsafe impl Sync for RTPBaseDepayload {}
 
-pub trait RTPBaseDepayloadExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTPBaseDepayload>> Sealed for T {}
+}
+
+pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtp_base_depayload_is_source_info_enabled")]
-    fn is_source_info_enabled(&self) -> bool;
-
-    #[doc(alias = "gst_rtp_base_depayload_push")]
-    fn push(&self, out_buf: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    #[doc(alias = "gst_rtp_base_depayload_push_list")]
-    fn push_list(&self, out_list: gst::BufferList) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "gst_rtp_base_depayload_set_source_info_enabled")]
-    fn set_source_info_enabled(&self, enable: bool);
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "auto-header-extension")]
-    fn is_auto_header_extension(&self) -> bool;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "auto-header-extension")]
-    fn set_auto_header_extension(&self, auto_header_extension: bool);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "max-reorder")]
-    fn max_reorder(&self) -> i32;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "max-reorder")]
-    fn set_max_reorder(&self, max_reorder: i32);
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "source-info")]
-    fn is_source_info(&self) -> bool;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "source-info")]
-    fn set_source_info(&self, source_info: bool);
-
-    fn stats(&self) -> Option<gst::Structure>;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "add-extension")]
-    fn connect_add_extension<F: Fn(&Self, &RTPHeaderExtension) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    fn emit_add_extension(&self, ext: &RTPHeaderExtension);
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "clear-extensions")]
-    fn connect_clear_extensions<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    fn emit_clear_extensions(&self);
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "request-extension")]
-    fn connect_request_extension<
-        F: Fn(&Self, u32, Option<&str>) -> Option<RTPHeaderExtension> + Send + Sync + 'static,
-    >(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "auto-header-extension")]
-    fn connect_auto_header_extension_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "max-reorder")]
-    fn connect_max_reorder_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "source-info")]
-    fn connect_source_info_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "stats")]
-    fn connect_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn is_source_info_enabled(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_base_depayload_is_source_info_enabled(
@@ -151,6 +46,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_base_depayload_push")]
     fn push(&self, out_buf: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             try_from_glib(ffi::gst_rtp_base_depayload_push(
@@ -160,6 +56,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_base_depayload_push_list")]
     fn push_list(&self, out_list: gst::BufferList) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             try_from_glib(ffi::gst_rtp_base_depayload_push_list(
@@ -171,6 +68,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtp_base_depayload_set_source_info_enabled")]
     fn set_source_info_enabled(&self, enable: bool) {
         unsafe {
             ffi::gst_rtp_base_depayload_set_source_info_enabled(
@@ -182,12 +80,14 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "auto-header-extension")]
     fn is_auto_header_extension(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "auto-header-extension")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "auto-header-extension")]
     fn set_auto_header_extension(&self, auto_header_extension: bool) {
         glib::ObjectExt::set_property(
             self.as_ref(),
@@ -198,24 +98,28 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "max-reorder")]
     fn max_reorder(&self) -> i32 {
         glib::ObjectExt::property(self.as_ref(), "max-reorder")
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "max-reorder")]
     fn set_max_reorder(&self, max_reorder: i32) {
         glib::ObjectExt::set_property(self.as_ref(), "max-reorder", max_reorder)
     }
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "source-info")]
     fn is_source_info(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "source-info")
     }
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "source-info")]
     fn set_source_info(&self, source_info: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "source-info", source_info)
     }
@@ -226,6 +130,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "add-extension")]
     fn connect_add_extension<F: Fn(&Self, &RTPHeaderExtension) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -265,6 +170,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "clear-extensions")]
     fn connect_clear_extensions<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -300,6 +206,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "request-extension")]
     fn connect_request_extension<
         F: Fn(&Self, u32, Option<&str>) -> Option<RTPHeaderExtension> + Send + Sync + 'static,
     >(
@@ -341,6 +248,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "auto-header-extension")]
     fn connect_auto_header_extension_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -371,6 +279,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "max-reorder")]
     fn connect_max_reorder_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -401,6 +310,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "source-info")]
     fn connect_source_info_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -429,6 +339,7 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
         }
     }
 
+    #[doc(alias = "stats")]
     fn connect_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_stats_trampoline<
             P: IsA<RTPBaseDepayload>,
@@ -454,3 +365,5 @@ impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {
         }
     }
 }
+
+impl<O: IsA<RTPBaseDepayload>> RTPBaseDepayloadExt for O {}

@@ -29,261 +29,15 @@ impl RTPBasePayload {
 unsafe impl Send for RTPBasePayload {}
 unsafe impl Sync for RTPBasePayload {}
 
-pub trait RTPBasePayloadExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTPBasePayload>> Sealed for T {}
+}
+
+pub trait RTPBasePayloadExt: IsA<RTPBasePayload> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtp_base_payload_allocate_output_buffer")]
-    fn allocate_output_buffer(&self, payload_len: u32, pad_len: u8, csrc_count: u8) -> gst::Buffer;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "gst_rtp_base_payload_get_source_count")]
-    #[doc(alias = "get_source_count")]
-    fn source_count(&self, buffer: &gst::Buffer) -> u32;
-
-    #[doc(alias = "gst_rtp_base_payload_is_filled")]
-    fn is_filled(&self, size: u32, duration: impl Into<Option<gst::ClockTime>>) -> bool;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "gst_rtp_base_payload_is_source_info_enabled")]
-    fn is_source_info_enabled(&self) -> bool;
-
-    #[doc(alias = "gst_rtp_base_payload_push")]
-    fn push(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    #[doc(alias = "gst_rtp_base_payload_push_list")]
-    fn push_list(&self, list: gst::BufferList) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    #[doc(alias = "gst_rtp_base_payload_set_options")]
-    fn set_options(&self, media: &str, dynamic: bool, encoding_name: &str, clock_rate: u32);
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "gst_rtp_base_payload_set_source_info_enabled")]
-    fn set_source_info_enabled(&self, enable: bool);
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "auto-header-extension")]
-    fn is_auto_header_extension(&self) -> bool;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "auto-header-extension")]
-    fn set_auto_header_extension(&self, auto_header_extension: bool);
-
-    #[doc(alias = "max-ptime")]
-    fn max_ptime(&self) -> i64;
-
-    #[doc(alias = "max-ptime")]
-    fn set_max_ptime(&self, max_ptime: i64);
-
-    #[doc(alias = "min-ptime")]
-    fn min_ptime(&self) -> i64;
-
-    #[doc(alias = "min-ptime")]
-    fn set_min_ptime(&self, min_ptime: i64);
-
-    fn mtu(&self) -> u32;
-
-    fn set_mtu(&self, mtu: u32);
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "onvif-no-rate-control")]
-    fn is_onvif_no_rate_control(&self) -> bool;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "onvif-no-rate-control")]
-    fn set_onvif_no_rate_control(&self, onvif_no_rate_control: bool);
-
-    #[doc(alias = "perfect-rtptime")]
-    fn is_perfect_rtptime(&self) -> bool;
-
-    #[doc(alias = "perfect-rtptime")]
-    fn set_perfect_rtptime(&self, perfect_rtptime: bool);
-
-    fn pt(&self) -> u32;
-
-    fn set_pt(&self, pt: u32);
-
-    #[doc(alias = "ptime-multiple")]
-    fn ptime_multiple(&self) -> i64;
-
-    #[doc(alias = "ptime-multiple")]
-    fn set_ptime_multiple(&self, ptime_multiple: i64);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "scale-rtptime")]
-    fn is_scale_rtptime(&self) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "scale-rtptime")]
-    fn set_scale_rtptime(&self, scale_rtptime: bool);
-
-    fn seqnum(&self) -> u32;
-
-    #[doc(alias = "seqnum-offset")]
-    fn seqnum_offset(&self) -> i32;
-
-    #[doc(alias = "seqnum-offset")]
-    fn set_seqnum_offset(&self, seqnum_offset: i32);
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "source-info")]
-    fn is_source_info(&self) -> bool;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "source-info")]
-    fn set_source_info(&self, source_info: bool);
-
-    fn ssrc(&self) -> u32;
-
-    fn set_ssrc(&self, ssrc: u32);
-
-    fn stats(&self) -> Option<gst::Structure>;
-
-    fn timestamp(&self) -> u32;
-
-    #[doc(alias = "timestamp-offset")]
-    fn timestamp_offset(&self) -> u32;
-
-    #[doc(alias = "timestamp-offset")]
-    fn set_timestamp_offset(&self, timestamp_offset: u32);
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "add-extension")]
-    fn connect_add_extension<F: Fn(&Self, &RTPHeaderExtension) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    fn emit_add_extension(&self, ext: &RTPHeaderExtension);
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "clear-extensions")]
-    fn connect_clear_extensions<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    fn emit_clear_extensions(&self);
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "request-extension")]
-    fn connect_request_extension<
-        F: Fn(&Self, u32, &str) -> Option<RTPHeaderExtension> + Send + Sync + 'static,
-    >(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "auto-header-extension")]
-    fn connect_auto_header_extension_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "max-ptime")]
-    fn connect_max_ptime_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "min-ptime")]
-    fn connect_min_ptime_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "mtu")]
-    fn connect_mtu_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "onvif-no-rate-control")]
-    fn connect_onvif_no_rate_control_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "perfect-rtptime")]
-    fn connect_perfect_rtptime_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "pt")]
-    fn connect_pt_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "ptime-multiple")]
-    fn connect_ptime_multiple_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "scale-rtptime")]
-    fn connect_scale_rtptime_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "seqnum")]
-    fn connect_seqnum_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "seqnum-offset")]
-    fn connect_seqnum_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "source-info")]
-    fn connect_source_info_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "ssrc")]
-    fn connect_ssrc_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "stats")]
-    fn connect_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "timestamp")]
-    fn connect_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "timestamp-offset")]
-    fn connect_timestamp_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-}
-
-impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn allocate_output_buffer(&self, payload_len: u32, pad_len: u8, csrc_count: u8) -> gst::Buffer {
         unsafe {
             from_glib_full(ffi::gst_rtp_base_payload_allocate_output_buffer(
@@ -297,6 +51,8 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtp_base_payload_get_source_count")]
+    #[doc(alias = "get_source_count")]
     fn source_count(&self, buffer: &gst::Buffer) -> u32 {
         unsafe {
             ffi::gst_rtp_base_payload_get_source_count(
@@ -306,6 +62,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_base_payload_is_filled")]
     fn is_filled(&self, size: u32, duration: impl Into<Option<gst::ClockTime>>) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_base_payload_is_filled(
@@ -318,6 +75,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtp_base_payload_is_source_info_enabled")]
     fn is_source_info_enabled(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_base_payload_is_source_info_enabled(
@@ -326,6 +84,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_base_payload_push")]
     fn push(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             try_from_glib(ffi::gst_rtp_base_payload_push(
@@ -335,6 +94,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_base_payload_push_list")]
     fn push_list(&self, list: gst::BufferList) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             try_from_glib(ffi::gst_rtp_base_payload_push_list(
@@ -344,6 +104,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_base_payload_set_options")]
     fn set_options(&self, media: &str, dynamic: bool, encoding_name: &str, clock_rate: u32) {
         unsafe {
             ffi::gst_rtp_base_payload_set_options(
@@ -358,6 +119,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtp_base_payload_set_source_info_enabled")]
     fn set_source_info_enabled(&self, enable: bool) {
         unsafe {
             ffi::gst_rtp_base_payload_set_source_info_enabled(
@@ -369,12 +131,14 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "auto-header-extension")]
     fn is_auto_header_extension(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "auto-header-extension")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "auto-header-extension")]
     fn set_auto_header_extension(&self, auto_header_extension: bool) {
         glib::ObjectExt::set_property(
             self.as_ref(),
@@ -383,18 +147,22 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         )
     }
 
+    #[doc(alias = "max-ptime")]
     fn max_ptime(&self) -> i64 {
         glib::ObjectExt::property(self.as_ref(), "max-ptime")
     }
 
+    #[doc(alias = "max-ptime")]
     fn set_max_ptime(&self, max_ptime: i64) {
         glib::ObjectExt::set_property(self.as_ref(), "max-ptime", max_ptime)
     }
 
+    #[doc(alias = "min-ptime")]
     fn min_ptime(&self) -> i64 {
         glib::ObjectExt::property(self.as_ref(), "min-ptime")
     }
 
+    #[doc(alias = "min-ptime")]
     fn set_min_ptime(&self, min_ptime: i64) {
         glib::ObjectExt::set_property(self.as_ref(), "min-ptime", min_ptime)
     }
@@ -409,12 +177,14 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "onvif-no-rate-control")]
     fn is_onvif_no_rate_control(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "onvif-no-rate-control")
     }
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "onvif-no-rate-control")]
     fn set_onvif_no_rate_control(&self, onvif_no_rate_control: bool) {
         glib::ObjectExt::set_property(
             self.as_ref(),
@@ -423,10 +193,12 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         )
     }
 
+    #[doc(alias = "perfect-rtptime")]
     fn is_perfect_rtptime(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "perfect-rtptime")
     }
 
+    #[doc(alias = "perfect-rtptime")]
     fn set_perfect_rtptime(&self, perfect_rtptime: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "perfect-rtptime", perfect_rtptime)
     }
@@ -439,22 +211,26 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "pt", pt)
     }
 
+    #[doc(alias = "ptime-multiple")]
     fn ptime_multiple(&self) -> i64 {
         glib::ObjectExt::property(self.as_ref(), "ptime-multiple")
     }
 
+    #[doc(alias = "ptime-multiple")]
     fn set_ptime_multiple(&self, ptime_multiple: i64) {
         glib::ObjectExt::set_property(self.as_ref(), "ptime-multiple", ptime_multiple)
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "scale-rtptime")]
     fn is_scale_rtptime(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "scale-rtptime")
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "scale-rtptime")]
     fn set_scale_rtptime(&self, scale_rtptime: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "scale-rtptime", scale_rtptime)
     }
@@ -463,22 +239,26 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         glib::ObjectExt::property(self.as_ref(), "seqnum")
     }
 
+    #[doc(alias = "seqnum-offset")]
     fn seqnum_offset(&self) -> i32 {
         glib::ObjectExt::property(self.as_ref(), "seqnum-offset")
     }
 
+    #[doc(alias = "seqnum-offset")]
     fn set_seqnum_offset(&self, seqnum_offset: i32) {
         glib::ObjectExt::set_property(self.as_ref(), "seqnum-offset", seqnum_offset)
     }
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "source-info")]
     fn is_source_info(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "source-info")
     }
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "source-info")]
     fn set_source_info(&self, source_info: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "source-info", source_info)
     }
@@ -499,16 +279,19 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         glib::ObjectExt::property(self.as_ref(), "timestamp")
     }
 
+    #[doc(alias = "timestamp-offset")]
     fn timestamp_offset(&self) -> u32 {
         glib::ObjectExt::property(self.as_ref(), "timestamp-offset")
     }
 
+    #[doc(alias = "timestamp-offset")]
     fn set_timestamp_offset(&self, timestamp_offset: u32) {
         glib::ObjectExt::set_property(self.as_ref(), "timestamp-offset", timestamp_offset)
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "add-extension")]
     fn connect_add_extension<F: Fn(&Self, &RTPHeaderExtension) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -548,6 +331,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "clear-extensions")]
     fn connect_clear_extensions<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -583,6 +367,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "request-extension")]
     fn connect_request_extension<
         F: Fn(&Self, u32, &str) -> Option<RTPHeaderExtension> + Send + Sync + 'static,
     >(
@@ -621,6 +406,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "auto-header-extension")]
     fn connect_auto_header_extension_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -649,6 +435,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "max-ptime")]
     fn connect_max_ptime_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -677,6 +464,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "min-ptime")]
     fn connect_min_ptime_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -705,6 +493,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "mtu")]
     fn connect_mtu_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mtu_trampoline<
             P: IsA<RTPBasePayload>,
@@ -732,6 +521,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "onvif-no-rate-control")]
     fn connect_onvif_no_rate_control_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -760,6 +550,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "perfect-rtptime")]
     fn connect_perfect_rtptime_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -788,6 +579,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "pt")]
     fn connect_pt_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_pt_trampoline<
             P: IsA<RTPBasePayload>,
@@ -813,6 +605,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "ptime-multiple")]
     fn connect_ptime_multiple_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -843,6 +636,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "scale-rtptime")]
     fn connect_scale_rtptime_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -871,6 +665,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "seqnum")]
     fn connect_seqnum_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_seqnum_trampoline<
             P: IsA<RTPBasePayload>,
@@ -896,6 +691,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "seqnum-offset")]
     fn connect_seqnum_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -926,6 +722,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "source-info")]
     fn connect_source_info_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -954,6 +751,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "ssrc")]
     fn connect_ssrc_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_ssrc_trampoline<
             P: IsA<RTPBasePayload>,
@@ -979,6 +777,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "stats")]
     fn connect_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_stats_trampoline<
             P: IsA<RTPBasePayload>,
@@ -1004,6 +803,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "timestamp")]
     fn connect_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1032,6 +832,7 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 
+    #[doc(alias = "timestamp-offset")]
     fn connect_timestamp_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -1060,3 +861,5 @@ impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {
         }
     }
 }
+
+impl<O: IsA<RTPBasePayload>> RTPBasePayloadExt for O {}

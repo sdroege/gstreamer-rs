@@ -34,141 +34,24 @@ impl TitleClip {
     }
 }
 
-pub trait TitleClipExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::TitleClip>> Sealed for T {}
+}
+
+pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
     #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
     #[doc(alias = "ges_title_clip_get_background_color")]
     #[doc(alias = "get_background_color")]
-    fn background_color(&self) -> u32;
+    fn background_color(&self) -> u32 {
+        unsafe { ffi::ges_title_clip_get_background_color(self.as_ref().to_glib_none().0) }
+    }
 
     #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
     #[doc(alias = "ges_title_clip_get_font_desc")]
     #[doc(alias = "get_font_desc")]
-    fn font_desc(&self) -> Option<glib::GString>;
-
-    #[deprecated = "Since 1.6"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_title_clip_get_halignment")]
-    #[doc(alias = "get_halignment")]
-    fn halignment(&self) -> TextHAlign;
-
-    #[deprecated = "Since 1.6"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_title_clip_get_text")]
-    #[doc(alias = "get_text")]
-    fn text(&self) -> Option<glib::GString>;
-
-    #[deprecated = "Since 1.6"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_title_clip_get_text_color")]
-    #[doc(alias = "get_text_color")]
-    fn text_color(&self) -> u32;
-
-    #[deprecated = "Since 1.6"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_title_clip_get_valignment")]
-    #[doc(alias = "get_valignment")]
-    fn valignment(&self) -> TextVAlign;
-
-    #[deprecated = "Since 1.6"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_title_clip_get_xpos")]
-    #[doc(alias = "get_xpos")]
-    fn xpos(&self) -> f64;
-
-    #[deprecated = "Since 1.6"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_title_clip_get_ypos")]
-    #[doc(alias = "get_ypos")]
-    fn ypos(&self) -> f64;
-
-    #[deprecated = "Since 1.6"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_title_clip_set_background")]
-    fn set_background(&self, background: u32);
-
-    #[deprecated = "Since 1.6"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_title_clip_set_color")]
-    fn set_color(&self, color: u32);
-
-    #[deprecated = "Since 1.6"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_title_clip_set_font_desc")]
-    fn set_font_desc(&self, font_desc: Option<&str>);
-
-    #[deprecated = "Since 1.6"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_title_clip_set_halignment")]
-    fn set_halignment(&self, halign: TextHAlign);
-
-    #[deprecated = "Since 1.6"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_title_clip_set_text")]
-    fn set_text(&self, text: Option<&str>);
-
-    #[deprecated = "Since 1.6"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_title_clip_set_valignment")]
-    fn set_valignment(&self, valign: TextVAlign);
-
-    #[deprecated = "Since 1.6"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_title_clip_set_xpos")]
-    fn set_xpos(&self, position: f64);
-
-    #[deprecated = "Since 1.6"]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_title_clip_set_ypos")]
-    fn set_ypos(&self, position: f64);
-
-    #[cfg_attr(feature = "v1_6", deprecated = "Since 1.6")]
-    fn background(&self) -> u32;
-
-    #[cfg_attr(feature = "v1_6", deprecated = "Since 1.6")]
-    fn color(&self) -> u32;
-
-    #[deprecated = "Since 1.6"]
-    #[doc(alias = "background")]
-    fn connect_background_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[deprecated = "Since 1.6"]
-    #[doc(alias = "color")]
-    fn connect_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[deprecated = "Since 1.6"]
-    #[doc(alias = "font-desc")]
-    fn connect_font_desc_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[deprecated = "Since 1.6"]
-    #[doc(alias = "halignment")]
-    fn connect_halignment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[deprecated = "Since 1.6"]
-    #[doc(alias = "text")]
-    fn connect_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[deprecated = "Since 1.6"]
-    #[doc(alias = "valignment")]
-    fn connect_valignment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[deprecated = "Since 1.6"]
-    #[doc(alias = "xpos")]
-    fn connect_xpos_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[deprecated = "Since 1.6"]
-    #[doc(alias = "ypos")]
-    fn connect_ypos_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<TitleClip>> TitleClipExt for O {
-    #[allow(deprecated)]
-    fn background_color(&self) -> u32 {
-        unsafe { ffi::ges_title_clip_get_background_color(self.as_ref().to_glib_none().0) }
-    }
-
-    #[allow(deprecated)]
     fn font_desc(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::ges_title_clip_get_font_desc(
@@ -177,7 +60,10 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
         }
     }
 
+    #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_title_clip_get_halignment")]
+    #[doc(alias = "get_halignment")]
     fn halignment(&self) -> TextHAlign {
         unsafe {
             from_glib(ffi::ges_title_clip_get_halignment(
@@ -186,17 +72,26 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
         }
     }
 
+    #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_title_clip_get_text")]
+    #[doc(alias = "get_text")]
     fn text(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::ges_title_clip_get_text(self.as_ref().to_glib_none().0)) }
     }
 
+    #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_title_clip_get_text_color")]
+    #[doc(alias = "get_text_color")]
     fn text_color(&self) -> u32 {
         unsafe { ffi::ges_title_clip_get_text_color(self.as_ref().to_glib_none().0) }
     }
 
+    #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_title_clip_get_valignment")]
+    #[doc(alias = "get_valignment")]
     fn valignment(&self) -> TextVAlign {
         unsafe {
             from_glib(ffi::ges_title_clip_get_valignment(
@@ -205,31 +100,43 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
         }
     }
 
+    #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_title_clip_get_xpos")]
+    #[doc(alias = "get_xpos")]
     fn xpos(&self) -> f64 {
         unsafe { ffi::ges_title_clip_get_xpos(self.as_ref().to_glib_none().0) }
     }
 
+    #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_title_clip_get_ypos")]
+    #[doc(alias = "get_ypos")]
     fn ypos(&self) -> f64 {
         unsafe { ffi::ges_title_clip_get_ypos(self.as_ref().to_glib_none().0) }
     }
 
+    #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_title_clip_set_background")]
     fn set_background(&self, background: u32) {
         unsafe {
             ffi::ges_title_clip_set_background(self.as_ref().to_glib_none().0, background);
         }
     }
 
+    #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_title_clip_set_color")]
     fn set_color(&self, color: u32) {
         unsafe {
             ffi::ges_title_clip_set_color(self.as_ref().to_glib_none().0, color);
         }
     }
 
+    #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_title_clip_set_font_desc")]
     fn set_font_desc(&self, font_desc: Option<&str>) {
         unsafe {
             ffi::ges_title_clip_set_font_desc(
@@ -239,49 +146,63 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
         }
     }
 
+    #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_title_clip_set_halignment")]
     fn set_halignment(&self, halign: TextHAlign) {
         unsafe {
             ffi::ges_title_clip_set_halignment(self.as_ref().to_glib_none().0, halign.into_glib());
         }
     }
 
+    #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_title_clip_set_text")]
     fn set_text(&self, text: Option<&str>) {
         unsafe {
             ffi::ges_title_clip_set_text(self.as_ref().to_glib_none().0, text.to_glib_none().0);
         }
     }
 
+    #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_title_clip_set_valignment")]
     fn set_valignment(&self, valign: TextVAlign) {
         unsafe {
             ffi::ges_title_clip_set_valignment(self.as_ref().to_glib_none().0, valign.into_glib());
         }
     }
 
+    #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_title_clip_set_xpos")]
     fn set_xpos(&self, position: f64) {
         unsafe {
             ffi::ges_title_clip_set_xpos(self.as_ref().to_glib_none().0, position);
         }
     }
 
+    #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
+    #[doc(alias = "ges_title_clip_set_ypos")]
     fn set_ypos(&self, position: f64) {
         unsafe {
             ffi::ges_title_clip_set_ypos(self.as_ref().to_glib_none().0, position);
         }
     }
 
+    #[cfg_attr(feature = "v1_6", deprecated = "Since 1.6")]
     fn background(&self) -> u32 {
         glib::ObjectExt::property(self.as_ref(), "background")
     }
 
+    #[cfg_attr(feature = "v1_6", deprecated = "Since 1.6")]
     fn color(&self) -> u32 {
         glib::ObjectExt::property(self.as_ref(), "color")
     }
 
+    #[deprecated = "Since 1.6"]
+    #[doc(alias = "background")]
     fn connect_background_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_background_trampoline<
             P: IsA<TitleClip>,
@@ -307,6 +228,8 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
         }
     }
 
+    #[deprecated = "Since 1.6"]
+    #[doc(alias = "color")]
     fn connect_color_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_color_trampoline<P: IsA<TitleClip>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTitleClip,
@@ -329,6 +252,8 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
         }
     }
 
+    #[deprecated = "Since 1.6"]
+    #[doc(alias = "font-desc")]
     fn connect_font_desc_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_font_desc_trampoline<P: IsA<TitleClip>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTitleClip,
@@ -351,6 +276,8 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
         }
     }
 
+    #[deprecated = "Since 1.6"]
+    #[doc(alias = "halignment")]
     fn connect_halignment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_halignment_trampoline<
             P: IsA<TitleClip>,
@@ -376,6 +303,8 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
         }
     }
 
+    #[deprecated = "Since 1.6"]
+    #[doc(alias = "text")]
     fn connect_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_text_trampoline<P: IsA<TitleClip>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTitleClip,
@@ -398,6 +327,8 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
         }
     }
 
+    #[deprecated = "Since 1.6"]
+    #[doc(alias = "valignment")]
     fn connect_valignment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_valignment_trampoline<
             P: IsA<TitleClip>,
@@ -423,6 +354,8 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
         }
     }
 
+    #[deprecated = "Since 1.6"]
+    #[doc(alias = "xpos")]
     fn connect_xpos_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_xpos_trampoline<P: IsA<TitleClip>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTitleClip,
@@ -445,6 +378,8 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
         }
     }
 
+    #[deprecated = "Since 1.6"]
+    #[doc(alias = "ypos")]
     fn connect_ypos_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_ypos_trampoline<P: IsA<TitleClip>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTitleClip,
@@ -467,3 +402,5 @@ impl<O: IsA<TitleClip>> TitleClipExt for O {
         }
     }
 }
+
+impl<O: IsA<TitleClip>> TitleClipExt for O {}

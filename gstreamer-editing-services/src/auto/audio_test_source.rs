@@ -19,40 +19,37 @@ impl AudioTestSource {
     pub const NONE: Option<&'static AudioTestSource> = None;
 }
 
-pub trait AudioTestSourceExt: 'static {
-    #[doc(alias = "ges_audio_test_source_get_freq")]
-    #[doc(alias = "get_freq")]
-    fn freq(&self) -> f64;
-
-    #[doc(alias = "ges_audio_test_source_get_volume")]
-    #[doc(alias = "get_volume")]
-    fn volume(&self) -> f64;
-
-    #[doc(alias = "ges_audio_test_source_set_freq")]
-    fn set_freq(&self, freq: f64);
-
-    #[doc(alias = "ges_audio_test_source_set_volume")]
-    fn set_volume(&self, volume: f64);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AudioTestSource>> Sealed for T {}
 }
 
-impl<O: IsA<AudioTestSource>> AudioTestSourceExt for O {
+pub trait AudioTestSourceExt: IsA<AudioTestSource> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_audio_test_source_get_freq")]
+    #[doc(alias = "get_freq")]
     fn freq(&self) -> f64 {
         unsafe { ffi::ges_audio_test_source_get_freq(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "ges_audio_test_source_get_volume")]
+    #[doc(alias = "get_volume")]
     fn volume(&self) -> f64 {
         unsafe { ffi::ges_audio_test_source_get_volume(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "ges_audio_test_source_set_freq")]
     fn set_freq(&self, freq: f64) {
         unsafe {
             ffi::ges_audio_test_source_set_freq(self.as_ref().to_glib_none().0, freq);
         }
     }
 
+    #[doc(alias = "ges_audio_test_source_set_volume")]
     fn set_volume(&self, volume: f64) {
         unsafe {
             ffi::ges_audio_test_source_set_volume(self.as_ref().to_glib_none().0, volume);
         }
     }
 }
+
+impl<O: IsA<AudioTestSource>> AudioTestSourceExt for O {}

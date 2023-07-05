@@ -43,58 +43,19 @@ impl Monitor {
 unsafe impl Send for Monitor {}
 unsafe impl Sync for Monitor {}
 
-pub trait MonitorExt: 'static {
-    //#[doc(alias = "gst_validate_monitor_attach_override")]
-    //fn attach_override(&self, override_: /*Ignored*/&Override);
-
-    #[doc(alias = "gst_validate_monitor_get_element")]
-    #[doc(alias = "get_element")]
-    fn element(&self) -> Option<gst::Element>;
-
-    #[doc(alias = "gst_validate_monitor_get_element_name")]
-    #[doc(alias = "get_element_name")]
-    fn element_name(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_validate_monitor_get_pipeline")]
-    #[doc(alias = "get_pipeline")]
-    fn pipeline(&self) -> Option<gst::Pipeline>;
-
-    #[doc(alias = "gst_validate_monitor_get_target")]
-    #[doc(alias = "get_target")]
-    fn target(&self) -> Option<gst::Object>;
-
-    //#[doc(alias = "gst_validate_monitor_set_media_descriptor")]
-    //fn set_media_descriptor(&self, media_descriptor: /*Ignored*/&MediaDescriptor);
-
-    fn object(&self) -> Option<glib::Object>;
-
-    fn set_pipeline<P: IsA<gst::Pipeline>>(&self, pipeline: Option<&P>);
-
-    #[doc(alias = "validate-parent")]
-    fn validate_parent(&self) -> Option<Monitor>;
-
-    //fn verbosity(&self) -> /*Ignored*/VerbosityFlags;
-
-    //fn set_verbosity(&self, verbosity: /*Ignored*/VerbosityFlags);
-
-    #[doc(alias = "pipeline")]
-    fn connect_pipeline_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "verbosity")]
-    fn connect_verbosity_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Monitor>> Sealed for T {}
 }
 
-impl<O: IsA<Monitor>> MonitorExt for O {
+pub trait MonitorExt: IsA<Monitor> + sealed::Sealed + 'static {
+    //#[doc(alias = "gst_validate_monitor_attach_override")]
     //fn attach_override(&self, override_: /*Ignored*/&Override) {
     //    unsafe { TODO: call ffi:gst_validate_monitor_attach_override() }
     //}
 
+    #[doc(alias = "gst_validate_monitor_get_element")]
+    #[doc(alias = "get_element")]
     fn element(&self) -> Option<gst::Element> {
         unsafe {
             from_glib_none(ffi::gst_validate_monitor_get_element(
@@ -103,6 +64,8 @@ impl<O: IsA<Monitor>> MonitorExt for O {
         }
     }
 
+    #[doc(alias = "gst_validate_monitor_get_element_name")]
+    #[doc(alias = "get_element_name")]
     fn element_name(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_validate_monitor_get_element_name(
@@ -111,6 +74,8 @@ impl<O: IsA<Monitor>> MonitorExt for O {
         }
     }
 
+    #[doc(alias = "gst_validate_monitor_get_pipeline")]
+    #[doc(alias = "get_pipeline")]
     fn pipeline(&self) -> Option<gst::Pipeline> {
         unsafe {
             from_glib_full(ffi::gst_validate_monitor_get_pipeline(
@@ -119,6 +84,8 @@ impl<O: IsA<Monitor>> MonitorExt for O {
         }
     }
 
+    #[doc(alias = "gst_validate_monitor_get_target")]
+    #[doc(alias = "get_target")]
     fn target(&self) -> Option<gst::Object> {
         unsafe {
             from_glib_full(ffi::gst_validate_monitor_get_target(
@@ -127,6 +94,7 @@ impl<O: IsA<Monitor>> MonitorExt for O {
         }
     }
 
+    //#[doc(alias = "gst_validate_monitor_set_media_descriptor")]
     //fn set_media_descriptor(&self, media_descriptor: /*Ignored*/&MediaDescriptor) {
     //    unsafe { TODO: call ffi:gst_validate_monitor_set_media_descriptor() }
     //}
@@ -139,6 +107,7 @@ impl<O: IsA<Monitor>> MonitorExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "pipeline", pipeline)
     }
 
+    #[doc(alias = "validate-parent")]
     fn validate_parent(&self) -> Option<Monitor> {
         glib::ObjectExt::property(self.as_ref(), "validate-parent")
     }
@@ -151,6 +120,7 @@ impl<O: IsA<Monitor>> MonitorExt for O {
     //    glib::ObjectExt::set_property(self.as_ref(),"verbosity", verbosity)
     //}
 
+    #[doc(alias = "pipeline")]
     fn connect_pipeline_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -179,6 +149,7 @@ impl<O: IsA<Monitor>> MonitorExt for O {
         }
     }
 
+    #[doc(alias = "verbosity")]
     fn connect_verbosity_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -207,3 +178,5 @@ impl<O: IsA<Monitor>> MonitorExt for O {
         }
     }
 }
+
+impl<O: IsA<Monitor>> MonitorExt for O {}

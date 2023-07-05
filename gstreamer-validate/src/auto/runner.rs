@@ -39,43 +39,13 @@ impl Default for Runner {
 unsafe impl Send for Runner {}
 unsafe impl Sync for Runner {}
 
-pub trait RunnerExt: 'static {
-    #[doc(alias = "gst_validate_runner_add_report")]
-    fn add_report(&self, report: &Report);
-
-    #[doc(alias = "gst_validate_runner_exit")]
-    fn exit(&self, print_result: bool) -> i32;
-
-    #[doc(alias = "gst_validate_runner_get_default_reporting_level")]
-    #[doc(alias = "get_default_reporting_level")]
-    fn default_reporting_level(&self) -> ReportingDetails;
-
-    #[doc(alias = "gst_validate_runner_get_reporting_level_for_name")]
-    #[doc(alias = "get_reporting_level_for_name")]
-    fn reporting_level_for_name(&self, name: &str) -> ReportingDetails;
-
-    #[doc(alias = "gst_validate_runner_get_reports")]
-    #[doc(alias = "get_reports")]
-    fn reports(&self) -> Vec<Report>;
-
-    #[doc(alias = "gst_validate_runner_get_reports_count")]
-    #[doc(alias = "get_reports_count")]
-    fn reports_count(&self) -> u32;
-
-    #[doc(alias = "gst_validate_runner_printf")]
-    fn printf(&self) -> i32;
-
-    #[doc(alias = "report-added")]
-    fn connect_report_added<F: Fn(&Self, &Report) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "stopping")]
-    fn connect_stopping<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Runner>> Sealed for T {}
 }
 
-impl<O: IsA<Runner>> RunnerExt for O {
+pub trait RunnerExt: IsA<Runner> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_validate_runner_add_report")]
     fn add_report(&self, report: &Report) {
         unsafe {
             ffi::gst_validate_runner_add_report(
@@ -85,12 +55,15 @@ impl<O: IsA<Runner>> RunnerExt for O {
         }
     }
 
+    #[doc(alias = "gst_validate_runner_exit")]
     fn exit(&self, print_result: bool) -> i32 {
         unsafe {
             ffi::gst_validate_runner_exit(self.as_ref().to_glib_none().0, print_result.into_glib())
         }
     }
 
+    #[doc(alias = "gst_validate_runner_get_default_reporting_level")]
+    #[doc(alias = "get_default_reporting_level")]
     fn default_reporting_level(&self) -> ReportingDetails {
         unsafe {
             from_glib(ffi::gst_validate_runner_get_default_reporting_level(
@@ -99,6 +72,8 @@ impl<O: IsA<Runner>> RunnerExt for O {
         }
     }
 
+    #[doc(alias = "gst_validate_runner_get_reporting_level_for_name")]
+    #[doc(alias = "get_reporting_level_for_name")]
     fn reporting_level_for_name(&self, name: &str) -> ReportingDetails {
         unsafe {
             from_glib(ffi::gst_validate_runner_get_reporting_level_for_name(
@@ -108,6 +83,8 @@ impl<O: IsA<Runner>> RunnerExt for O {
         }
     }
 
+    #[doc(alias = "gst_validate_runner_get_reports")]
+    #[doc(alias = "get_reports")]
     fn reports(&self) -> Vec<Report> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_validate_runner_get_reports(
@@ -116,14 +93,18 @@ impl<O: IsA<Runner>> RunnerExt for O {
         }
     }
 
+    #[doc(alias = "gst_validate_runner_get_reports_count")]
+    #[doc(alias = "get_reports_count")]
     fn reports_count(&self) -> u32 {
         unsafe { ffi::gst_validate_runner_get_reports_count(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_validate_runner_printf")]
     fn printf(&self) -> i32 {
         unsafe { ffi::gst_validate_runner_printf(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "report-added")]
     fn connect_report_added<F: Fn(&Self, &Report) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -155,6 +136,7 @@ impl<O: IsA<Runner>> RunnerExt for O {
         }
     }
 
+    #[doc(alias = "stopping")]
     fn connect_stopping<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn stopping_trampoline<
             P: IsA<Runner>,
@@ -179,3 +161,5 @@ impl<O: IsA<Runner>> RunnerExt for O {
         }
     }
 }
+
+impl<O: IsA<Runner>> RunnerExt for O {}

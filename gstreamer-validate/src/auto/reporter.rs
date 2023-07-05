@@ -22,58 +22,14 @@ impl Reporter {
 unsafe impl Send for Reporter {}
 unsafe impl Sync for Reporter {}
 
-pub trait ReporterExt: 'static {
-    #[doc(alias = "gst_validate_reporter_get_name")]
-    #[doc(alias = "get_name")]
-    fn name(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_validate_reporter_get_pipeline")]
-    #[doc(alias = "get_pipeline")]
-    fn pipeline(&self) -> Option<gst::Pipeline>;
-
-    //#[doc(alias = "gst_validate_reporter_get_report")]
-    //#[doc(alias = "get_report")]
-    //fn report(&self, issue_id: /*Ignored*/IssueId) -> Option<Report>;
-
-    #[doc(alias = "gst_validate_reporter_get_reporting_level")]
-    #[doc(alias = "get_reporting_level")]
-    fn reporting_level(&self) -> ReportingDetails;
-
-    #[doc(alias = "gst_validate_reporter_get_reports")]
-    #[doc(alias = "get_reports")]
-    fn reports(&self) -> Vec<Report>;
-
-    #[doc(alias = "gst_validate_reporter_get_reports_count")]
-    #[doc(alias = "get_reports_count")]
-    fn reports_count(&self) -> i32;
-
-    #[doc(alias = "gst_validate_reporter_get_runner")]
-    #[doc(alias = "get_runner")]
-    fn runner(&self) -> Option<Runner>;
-
-    #[doc(alias = "gst_validate_reporter_init")]
-    fn init(&self, name: &str);
-
-    #[doc(alias = "gst_validate_reporter_purge_reports")]
-    fn purge_reports(&self);
-
-    //#[doc(alias = "gst_validate_reporter_report_simple")]
-    //fn report_simple(&self, issue_id: /*Ignored*/IssueId, message: &str);
-
-    #[doc(alias = "gst_validate_reporter_set_handle_g_logs")]
-    fn set_handle_g_logs(&self);
-
-    #[doc(alias = "gst_validate_reporter_set_name")]
-    fn set_name(&self, name: Option<glib::GString>);
-
-    #[doc(alias = "gst_validate_reporter_set_runner")]
-    fn set_runner(&self, runner: &impl IsA<Runner>);
-
-    #[doc(alias = "validate-runner")]
-    fn validate_runner(&self) -> Option<Runner>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Reporter>> Sealed for T {}
 }
 
-impl<O: IsA<Reporter>> ReporterExt for O {
+pub trait ReporterExt: IsA<Reporter> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_validate_reporter_get_name")]
+    #[doc(alias = "get_name")]
     fn name(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_validate_reporter_get_name(
@@ -82,6 +38,8 @@ impl<O: IsA<Reporter>> ReporterExt for O {
         }
     }
 
+    #[doc(alias = "gst_validate_reporter_get_pipeline")]
+    #[doc(alias = "get_pipeline")]
     fn pipeline(&self) -> Option<gst::Pipeline> {
         unsafe {
             from_glib_full(ffi::gst_validate_reporter_get_pipeline(
@@ -90,10 +48,14 @@ impl<O: IsA<Reporter>> ReporterExt for O {
         }
     }
 
+    //#[doc(alias = "gst_validate_reporter_get_report")]
+    //#[doc(alias = "get_report")]
     //fn report(&self, issue_id: /*Ignored*/IssueId) -> Option<Report> {
     //    unsafe { TODO: call ffi:gst_validate_reporter_get_report() }
     //}
 
+    #[doc(alias = "gst_validate_reporter_get_reporting_level")]
+    #[doc(alias = "get_reporting_level")]
     fn reporting_level(&self) -> ReportingDetails {
         unsafe {
             from_glib(ffi::gst_validate_reporter_get_reporting_level(
@@ -102,6 +64,8 @@ impl<O: IsA<Reporter>> ReporterExt for O {
         }
     }
 
+    #[doc(alias = "gst_validate_reporter_get_reports")]
+    #[doc(alias = "get_reports")]
     fn reports(&self) -> Vec<Report> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_validate_reporter_get_reports(
@@ -110,10 +74,14 @@ impl<O: IsA<Reporter>> ReporterExt for O {
         }
     }
 
+    #[doc(alias = "gst_validate_reporter_get_reports_count")]
+    #[doc(alias = "get_reports_count")]
     fn reports_count(&self) -> i32 {
         unsafe { ffi::gst_validate_reporter_get_reports_count(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_validate_reporter_get_runner")]
+    #[doc(alias = "get_runner")]
     fn runner(&self) -> Option<Runner> {
         unsafe {
             from_glib_full(ffi::gst_validate_reporter_get_runner(
@@ -122,28 +90,33 @@ impl<O: IsA<Reporter>> ReporterExt for O {
         }
     }
 
+    #[doc(alias = "gst_validate_reporter_init")]
     fn init(&self, name: &str) {
         unsafe {
             ffi::gst_validate_reporter_init(self.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_validate_reporter_purge_reports")]
     fn purge_reports(&self) {
         unsafe {
             ffi::gst_validate_reporter_purge_reports(self.as_ref().to_glib_none().0);
         }
     }
 
+    //#[doc(alias = "gst_validate_reporter_report_simple")]
     //fn report_simple(&self, issue_id: /*Ignored*/IssueId, message: &str) {
     //    unsafe { TODO: call ffi:gst_validate_reporter_report_simple() }
     //}
 
+    #[doc(alias = "gst_validate_reporter_set_handle_g_logs")]
     fn set_handle_g_logs(&self) {
         unsafe {
             ffi::gst_validate_reporter_set_handle_g_logs(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_validate_reporter_set_name")]
     fn set_name(&self, name: Option<glib::GString>) {
         unsafe {
             ffi::gst_validate_reporter_set_name(
@@ -153,6 +126,7 @@ impl<O: IsA<Reporter>> ReporterExt for O {
         }
     }
 
+    #[doc(alias = "gst_validate_reporter_set_runner")]
     fn set_runner(&self, runner: &impl IsA<Runner>) {
         unsafe {
             ffi::gst_validate_reporter_set_runner(
@@ -162,7 +136,10 @@ impl<O: IsA<Reporter>> ReporterExt for O {
         }
     }
 
+    #[doc(alias = "validate-runner")]
     fn validate_runner(&self) -> Option<Runner> {
         glib::ObjectExt::property(self.as_ref(), "validate-runner")
     }
 }
+
+impl<O: IsA<Reporter>> ReporterExt for O {}

@@ -33,111 +33,13 @@ impl Track {
     }
 }
 
-pub trait GESTrackExt: 'static {
-    #[doc(alias = "ges_track_add_element")]
-    fn add_element(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::error::BoolError>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_track_add_element_full")]
-    fn add_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error>;
-
-    #[doc(alias = "ges_track_commit")]
-    fn commit(&self) -> bool;
-
-    #[doc(alias = "ges_track_get_caps")]
-    #[doc(alias = "get_caps")]
-    fn caps(&self) -> Option<gst::Caps>;
-
-    #[doc(alias = "ges_track_get_elements")]
-    #[doc(alias = "get_elements")]
-    fn elements(&self) -> Vec<TrackElement>;
-
-    #[doc(alias = "ges_track_get_mixing")]
-    #[doc(alias = "get_mixing")]
-    fn is_mixing(&self) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_track_get_restriction_caps")]
-    #[doc(alias = "get_restriction_caps")]
-    fn restriction_caps(&self) -> Option<gst::Caps>;
-
-    #[doc(alias = "ges_track_get_timeline")]
-    #[doc(alias = "get_timeline")]
-    fn timeline(&self) -> Option<Timeline>;
-
-    #[doc(alias = "ges_track_remove_element")]
-    fn remove_element(&self, object: &impl IsA<TrackElement>)
-        -> Result<(), glib::error::BoolError>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_track_remove_element_full")]
-    fn remove_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error>;
-
-    //#[doc(alias = "ges_track_set_create_element_for_gap_func")]
-    //fn set_create_element_for_gap_func<P: Fn() -> gst::Element + 'static>(&self, func: P);
-
-    #[doc(alias = "ges_track_set_mixing")]
-    fn set_mixing(&self, mixing: bool);
-
-    #[doc(alias = "ges_track_set_restriction_caps")]
-    fn set_restriction_caps(&self, caps: &gst::Caps);
-
-    #[doc(alias = "ges_track_set_timeline")]
-    fn set_timeline(&self, timeline: &impl IsA<Timeline>);
-
-    #[doc(alias = "ges_track_update_restriction_caps")]
-    fn update_restriction_caps(&self, caps: &gst::Caps);
-
-    fn duration(&self) -> u64;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    fn id(&self) -> Option<glib::GString>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    fn set_id(&self, id: Option<&str>);
-
-    #[doc(alias = "restriction-caps")]
-    fn get_property_restriction_caps(&self) -> Option<gst::Caps>;
-
-    #[doc(alias = "track-type")]
-    fn track_type(&self) -> TrackType;
-
-    #[doc(alias = "commited")]
-    fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "track-element-added")]
-    fn connect_track_element_added<F: Fn(&Self, &TrackElement) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "track-element-removed")]
-    fn connect_track_element_removed<F: Fn(&Self, &TrackElement) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "duration")]
-    fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "id")]
-    fn connect_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "mixing")]
-    fn connect_mixing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "restriction-caps")]
-    fn connect_restriction_caps_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Track>> Sealed for T {}
 }
 
-impl<O: IsA<Track>> GESTrackExt for O {
+pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_track_add_element")]
     fn add_element(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -152,6 +54,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_add_element_full")]
     fn add_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -169,14 +72,19 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_commit")]
     fn commit(&self) -> bool {
         unsafe { from_glib(ffi::ges_track_commit(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_track_get_caps")]
+    #[doc(alias = "get_caps")]
     fn caps(&self) -> Option<gst::Caps> {
         unsafe { from_glib_none(ffi::ges_track_get_caps(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_track_get_elements")]
+    #[doc(alias = "get_elements")]
     fn elements(&self) -> Vec<TrackElement> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_track_get_elements(
@@ -185,12 +93,16 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_get_mixing")]
+    #[doc(alias = "get_mixing")]
     fn is_mixing(&self) -> bool {
         unsafe { from_glib(ffi::ges_track_get_mixing(self.as_ref().to_glib_none().0)) }
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_get_restriction_caps")]
+    #[doc(alias = "get_restriction_caps")]
     fn restriction_caps(&self) -> Option<gst::Caps> {
         unsafe {
             from_glib_full(ffi::ges_track_get_restriction_caps(
@@ -199,10 +111,13 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_get_timeline")]
+    #[doc(alias = "get_timeline")]
     fn timeline(&self) -> Option<Timeline> {
         unsafe { from_glib_none(ffi::ges_track_get_timeline(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_track_remove_element")]
     fn remove_element(
         &self,
         object: &impl IsA<TrackElement>,
@@ -220,6 +135,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_remove_element_full")]
     fn remove_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -237,16 +153,19 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
+    //#[doc(alias = "ges_track_set_create_element_for_gap_func")]
     //fn set_create_element_for_gap_func<P: Fn() -> gst::Element + 'static>(&self, func: P) {
     //    unsafe { TODO: call ffi:ges_track_set_create_element_for_gap_func() }
     //}
 
+    #[doc(alias = "ges_track_set_mixing")]
     fn set_mixing(&self, mixing: bool) {
         unsafe {
             ffi::ges_track_set_mixing(self.as_ref().to_glib_none().0, mixing.into_glib());
         }
     }
 
+    #[doc(alias = "ges_track_set_restriction_caps")]
     fn set_restriction_caps(&self, caps: &gst::Caps) {
         unsafe {
             ffi::ges_track_set_restriction_caps(
@@ -256,6 +175,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_set_timeline")]
     fn set_timeline(&self, timeline: &impl IsA<Timeline>) {
         unsafe {
             ffi::ges_track_set_timeline(
@@ -265,6 +185,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
+    #[doc(alias = "ges_track_update_restriction_caps")]
     fn update_restriction_caps(&self, caps: &gst::Caps) {
         unsafe {
             ffi::ges_track_update_restriction_caps(
@@ -290,14 +211,17 @@ impl<O: IsA<Track>> GESTrackExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "id", id)
     }
 
+    #[doc(alias = "restriction-caps")]
     fn get_property_restriction_caps(&self) -> Option<gst::Caps> {
         glib::ObjectExt::property(self.as_ref(), "restriction-caps")
     }
 
+    #[doc(alias = "track-type")]
     fn track_type(&self) -> TrackType {
         glib::ObjectExt::property(self.as_ref(), "track-type")
     }
 
+    #[doc(alias = "commited")]
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn commited_trampoline<P: IsA<Track>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrack,
@@ -319,6 +243,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
+    #[doc(alias = "track-element-added")]
     fn connect_track_element_added<F: Fn(&Self, &TrackElement) + 'static>(
         &self,
         f: F,
@@ -350,6 +275,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
+    #[doc(alias = "track-element-removed")]
     fn connect_track_element_removed<F: Fn(&Self, &TrackElement) + 'static>(
         &self,
         f: F,
@@ -381,6 +307,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
+    #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_trampoline<P: IsA<Track>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrack,
@@ -405,6 +332,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "id")]
     fn connect_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_id_trampoline<P: IsA<Track>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrack,
@@ -427,6 +355,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
+    #[doc(alias = "mixing")]
     fn connect_mixing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mixing_trampoline<P: IsA<Track>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrack,
@@ -449,6 +378,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
+    #[doc(alias = "restriction-caps")]
     fn connect_restriction_caps_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_restriction_caps_trampoline<
             P: IsA<Track>,
@@ -474,3 +404,5 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 }
+
+impl<O: IsA<Track>> GESTrackExt for O {}

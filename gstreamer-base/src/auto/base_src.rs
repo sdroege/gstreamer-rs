@@ -27,118 +27,20 @@ impl BaseSrc {
 unsafe impl Send for BaseSrc {}
 unsafe impl Sync for BaseSrc {}
 
-pub trait BaseSrcExt: 'static {
-    #[doc(alias = "gst_base_src_get_blocksize")]
-    #[doc(alias = "get_blocksize")]
-    fn blocksize(&self) -> u32;
-
-    #[doc(alias = "gst_base_src_get_buffer_pool")]
-    #[doc(alias = "get_buffer_pool")]
-    fn buffer_pool(&self) -> Option<gst::BufferPool>;
-
-    #[doc(alias = "gst_base_src_get_do_timestamp")]
-    #[doc(alias = "get_do_timestamp")]
-    fn does_timestamp(&self) -> bool;
-
-    #[doc(alias = "gst_base_src_is_async")]
-    fn is_async(&self) -> bool;
-
-    #[doc(alias = "gst_base_src_is_live")]
-    fn is_live(&self) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_base_src_negotiate")]
-    fn negotiate(&self) -> bool;
-
-    #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
-    #[allow(deprecated)]
-    #[doc(alias = "gst_base_src_new_seamless_segment")]
-    fn new_seamless_segment(&self, start: i64, stop: i64, time: i64) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_base_src_new_segment")]
-    fn new_segment(&self, segment: &gst::Segment) -> Result<(), glib::error::BoolError>;
-
-    #[cfg(feature = "v1_24")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-    #[doc(alias = "gst_base_src_push_segment")]
-    fn push_segment(&self, segment: &gst::Segment) -> bool;
-
-    #[doc(alias = "gst_base_src_set_async")]
-    fn set_async(&self, async_: bool);
-
-    #[doc(alias = "gst_base_src_set_automatic_eos")]
-    fn set_automatic_eos(&self, automatic_eos: bool);
-
-    #[doc(alias = "gst_base_src_set_blocksize")]
-    fn set_blocksize(&self, blocksize: u32);
-
-    #[doc(alias = "gst_base_src_set_caps")]
-    fn set_caps(&self, caps: &gst::Caps) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_base_src_set_do_timestamp")]
-    fn set_do_timestamp(&self, timestamp: bool);
-
-    #[doc(alias = "gst_base_src_set_dynamic_size")]
-    fn set_dynamic_size(&self, dynamic: bool);
-
-    #[doc(alias = "gst_base_src_set_format")]
-    fn set_format(&self, format: gst::Format);
-
-    #[doc(alias = "gst_base_src_set_live")]
-    fn set_live(&self, live: bool);
-
-    #[doc(alias = "gst_base_src_start_complete")]
-    fn start_complete(&self, ret: impl Into<gst::FlowReturn>);
-
-    #[doc(alias = "gst_base_src_start_wait")]
-    fn start_wait(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    #[doc(alias = "gst_base_src_wait_playing")]
-    fn wait_playing(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    #[doc(alias = "num-buffers")]
-    fn num_buffers(&self) -> i32;
-
-    #[doc(alias = "num-buffers")]
-    fn set_num_buffers(&self, num_buffers: i32);
-
-    fn is_typefind(&self) -> bool;
-
-    fn set_typefind(&self, typefind: bool);
-
-    #[doc(alias = "blocksize")]
-    fn connect_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "do-timestamp")]
-    fn connect_do_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "num-buffers")]
-    fn connect_num_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "typefind")]
-    fn connect_typefind_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::BaseSrc>> Sealed for T {}
 }
 
-impl<O: IsA<BaseSrc>> BaseSrcExt for O {
+pub trait BaseSrcExt: IsA<BaseSrc> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_base_src_get_blocksize")]
+    #[doc(alias = "get_blocksize")]
     fn blocksize(&self) -> u32 {
         unsafe { ffi::gst_base_src_get_blocksize(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_base_src_get_buffer_pool")]
+    #[doc(alias = "get_buffer_pool")]
     fn buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
             from_glib_full(ffi::gst_base_src_get_buffer_pool(
@@ -147,6 +49,8 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
+    #[doc(alias = "gst_base_src_get_do_timestamp")]
+    #[doc(alias = "get_do_timestamp")]
     fn does_timestamp(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_base_src_get_do_timestamp(
@@ -155,21 +59,26 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
+    #[doc(alias = "gst_base_src_is_async")]
     fn is_async(&self) -> bool {
         unsafe { from_glib(ffi::gst_base_src_is_async(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_base_src_is_live")]
     fn is_live(&self) -> bool {
         unsafe { from_glib(ffi::gst_base_src_is_live(self.as_ref().to_glib_none().0)) }
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_base_src_negotiate")]
     fn negotiate(&self) -> bool {
         unsafe { from_glib(ffi::gst_base_src_negotiate(self.as_ref().to_glib_none().0)) }
     }
 
+    #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[allow(deprecated)]
+    #[doc(alias = "gst_base_src_new_seamless_segment")]
     fn new_seamless_segment(&self, start: i64, stop: i64, time: i64) -> bool {
         unsafe {
             from_glib(ffi::gst_base_src_new_seamless_segment(
@@ -183,6 +92,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_base_src_new_segment")]
     fn new_segment(&self, segment: &gst::Segment) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -197,6 +107,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
 
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_base_src_push_segment")]
     fn push_segment(&self, segment: &gst::Segment) -> bool {
         unsafe {
             from_glib(ffi::gst_base_src_push_segment(
@@ -206,12 +117,14 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
+    #[doc(alias = "gst_base_src_set_async")]
     fn set_async(&self, async_: bool) {
         unsafe {
             ffi::gst_base_src_set_async(self.as_ref().to_glib_none().0, async_.into_glib());
         }
     }
 
+    #[doc(alias = "gst_base_src_set_automatic_eos")]
     fn set_automatic_eos(&self, automatic_eos: bool) {
         unsafe {
             ffi::gst_base_src_set_automatic_eos(
@@ -221,12 +134,14 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
+    #[doc(alias = "gst_base_src_set_blocksize")]
     fn set_blocksize(&self, blocksize: u32) {
         unsafe {
             ffi::gst_base_src_set_blocksize(self.as_ref().to_glib_none().0, blocksize);
         }
     }
 
+    #[doc(alias = "gst_base_src_set_caps")]
     fn set_caps(&self, caps: &gst::Caps) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -236,6 +151,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
+    #[doc(alias = "gst_base_src_set_do_timestamp")]
     fn set_do_timestamp(&self, timestamp: bool) {
         unsafe {
             ffi::gst_base_src_set_do_timestamp(
@@ -245,24 +161,28 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
+    #[doc(alias = "gst_base_src_set_dynamic_size")]
     fn set_dynamic_size(&self, dynamic: bool) {
         unsafe {
             ffi::gst_base_src_set_dynamic_size(self.as_ref().to_glib_none().0, dynamic.into_glib());
         }
     }
 
+    #[doc(alias = "gst_base_src_set_format")]
     fn set_format(&self, format: gst::Format) {
         unsafe {
             ffi::gst_base_src_set_format(self.as_ref().to_glib_none().0, format.into_glib());
         }
     }
 
+    #[doc(alias = "gst_base_src_set_live")]
     fn set_live(&self, live: bool) {
         unsafe {
             ffi::gst_base_src_set_live(self.as_ref().to_glib_none().0, live.into_glib());
         }
     }
 
+    #[doc(alias = "gst_base_src_start_complete")]
     fn start_complete(&self, ret: impl Into<gst::FlowReturn>) {
         unsafe {
             ffi::gst_base_src_start_complete(
@@ -272,10 +192,12 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
+    #[doc(alias = "gst_base_src_start_wait")]
     fn start_wait(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe { try_from_glib(ffi::gst_base_src_start_wait(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_base_src_wait_playing")]
     fn wait_playing(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             try_from_glib(ffi::gst_base_src_wait_playing(
@@ -284,10 +206,12 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
+    #[doc(alias = "num-buffers")]
     fn num_buffers(&self) -> i32 {
         glib::ObjectExt::property(self.as_ref(), "num-buffers")
     }
 
+    #[doc(alias = "num-buffers")]
     fn set_num_buffers(&self, num_buffers: i32) {
         glib::ObjectExt::set_property(self.as_ref(), "num-buffers", num_buffers)
     }
@@ -300,6 +224,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "typefind", typefind)
     }
 
+    #[doc(alias = "blocksize")]
     fn connect_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -328,6 +253,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
+    #[doc(alias = "do-timestamp")]
     fn connect_do_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -356,6 +282,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
+    #[doc(alias = "num-buffers")]
     fn connect_num_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -384,6 +311,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
+    #[doc(alias = "typefind")]
     fn connect_typefind_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -412,3 +340,5 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 }
+
+impl<O: IsA<BaseSrc>> BaseSrcExt for O {}

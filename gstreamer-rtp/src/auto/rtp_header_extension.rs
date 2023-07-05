@@ -32,51 +32,14 @@ impl RTPHeaderExtension {
 unsafe impl Send for RTPHeaderExtension {}
 unsafe impl Sync for RTPHeaderExtension {}
 
-pub trait RTPHeaderExtensionExt: 'static {
-    #[doc(alias = "gst_rtp_header_extension_get_direction")]
-    #[doc(alias = "get_direction")]
-    fn direction(&self) -> RTPHeaderExtensionDirection;
-
-    #[doc(alias = "gst_rtp_header_extension_get_id")]
-    #[doc(alias = "get_id")]
-    fn id(&self) -> u32;
-
-    #[doc(alias = "gst_rtp_header_extension_get_max_size")]
-    #[doc(alias = "get_max_size")]
-    fn max_size(&self, input_meta: &gst::Buffer) -> usize;
-
-    #[doc(alias = "gst_rtp_header_extension_get_sdp_caps_field_name")]
-    #[doc(alias = "get_sdp_caps_field_name")]
-    fn sdp_caps_field_name(&self) -> glib::GString;
-
-    #[doc(alias = "gst_rtp_header_extension_get_supported_flags")]
-    #[doc(alias = "get_supported_flags")]
-    fn supported_flags(&self) -> RTPHeaderExtensionFlags;
-
-    #[doc(alias = "gst_rtp_header_extension_get_uri")]
-    #[doc(alias = "get_uri")]
-    fn uri(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_rtp_header_extension_set_attributes_from_caps")]
-    fn set_attributes_from_caps(&self, caps: &gst::Caps) -> bool;
-
-    #[doc(alias = "gst_rtp_header_extension_set_direction")]
-    fn set_direction(&self, direction: RTPHeaderExtensionDirection);
-
-    #[doc(alias = "gst_rtp_header_extension_set_id")]
-    fn set_id(&self, ext_id: u32);
-
-    #[doc(alias = "gst_rtp_header_extension_set_non_rtp_sink_caps")]
-    fn set_non_rtp_sink_caps(&self, caps: &gst::Caps) -> bool;
-
-    #[doc(alias = "gst_rtp_header_extension_set_wants_update_non_rtp_src_caps")]
-    fn set_wants_update_non_rtp_src_caps(&self, state: bool);
-
-    #[doc(alias = "gst_rtp_header_extension_wants_update_non_rtp_src_caps")]
-    fn wants_update_non_rtp_src_caps(&self) -> bool;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTPHeaderExtension>> Sealed for T {}
 }
 
-impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
+pub trait RTPHeaderExtensionExt: IsA<RTPHeaderExtension> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_rtp_header_extension_get_direction")]
+    #[doc(alias = "get_direction")]
     fn direction(&self) -> RTPHeaderExtensionDirection {
         unsafe {
             from_glib(ffi::gst_rtp_header_extension_get_direction(
@@ -85,10 +48,14 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_get_id")]
+    #[doc(alias = "get_id")]
     fn id(&self) -> u32 {
         unsafe { ffi::gst_rtp_header_extension_get_id(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_get_max_size")]
+    #[doc(alias = "get_max_size")]
     fn max_size(&self, input_meta: &gst::Buffer) -> usize {
         unsafe {
             ffi::gst_rtp_header_extension_get_max_size(
@@ -98,6 +65,8 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_get_sdp_caps_field_name")]
+    #[doc(alias = "get_sdp_caps_field_name")]
     fn sdp_caps_field_name(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_rtp_header_extension_get_sdp_caps_field_name(
@@ -106,6 +75,8 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_get_supported_flags")]
+    #[doc(alias = "get_supported_flags")]
     fn supported_flags(&self) -> RTPHeaderExtensionFlags {
         unsafe {
             from_glib(ffi::gst_rtp_header_extension_get_supported_flags(
@@ -114,6 +85,8 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_get_uri")]
+    #[doc(alias = "get_uri")]
     fn uri(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_rtp_header_extension_get_uri(
@@ -122,6 +95,7 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_set_attributes_from_caps")]
     fn set_attributes_from_caps(&self, caps: &gst::Caps) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_header_extension_set_attributes_from_caps(
@@ -131,6 +105,7 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_set_direction")]
     fn set_direction(&self, direction: RTPHeaderExtensionDirection) {
         unsafe {
             ffi::gst_rtp_header_extension_set_direction(
@@ -140,12 +115,14 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_set_id")]
     fn set_id(&self, ext_id: u32) {
         unsafe {
             ffi::gst_rtp_header_extension_set_id(self.as_ref().to_glib_none().0, ext_id);
         }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_set_non_rtp_sink_caps")]
     fn set_non_rtp_sink_caps(&self, caps: &gst::Caps) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_header_extension_set_non_rtp_sink_caps(
@@ -155,6 +132,7 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_set_wants_update_non_rtp_src_caps")]
     fn set_wants_update_non_rtp_src_caps(&self, state: bool) {
         unsafe {
             ffi::gst_rtp_header_extension_set_wants_update_non_rtp_src_caps(
@@ -164,6 +142,7 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtp_header_extension_wants_update_non_rtp_src_caps")]
     fn wants_update_non_rtp_src_caps(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_header_extension_wants_update_non_rtp_src_caps(
@@ -172,3 +151,5 @@ impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {
         }
     }
 }
+
+impl<O: IsA<RTPHeaderExtension>> RTPHeaderExtensionExt for O {}

@@ -60,35 +60,27 @@ impl DirectControlBinding {
 unsafe impl Send for DirectControlBinding {}
 unsafe impl Sync for DirectControlBinding {}
 
-pub trait DirectControlBindingExt: 'static {
-    fn is_absolute(&self) -> bool;
-
-    #[doc(alias = "control-source")]
-    fn control_source(&self) -> Option<gst::ControlSource>;
-
-    #[doc(alias = "control-source")]
-    fn set_control_source<P: IsA<gst::ControlSource>>(&self, control_source: Option<&P>);
-
-    #[doc(alias = "control-source")]
-    fn connect_control_source_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::DirectControlBinding>> Sealed for T {}
 }
 
-impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
+pub trait DirectControlBindingExt: IsA<DirectControlBinding> + sealed::Sealed + 'static {
     fn is_absolute(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "absolute")
     }
 
+    #[doc(alias = "control-source")]
     fn control_source(&self) -> Option<gst::ControlSource> {
         glib::ObjectExt::property(self.as_ref(), "control-source")
     }
 
+    #[doc(alias = "control-source")]
     fn set_control_source<P: IsA<gst::ControlSource>>(&self, control_source: Option<&P>) {
         glib::ObjectExt::set_property(self.as_ref(), "control-source", control_source)
     }
 
+    #[doc(alias = "control-source")]
     fn connect_control_source_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -117,3 +109,5 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
         }
     }
 }
+
+impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {}

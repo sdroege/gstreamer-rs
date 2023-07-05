@@ -40,58 +40,22 @@ impl Default for VideoTransition {
     }
 }
 
-pub trait VideoTransitionExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoTransition>> Sealed for T {}
+}
+
+pub trait VideoTransitionExt: IsA<VideoTransition> + sealed::Sealed + 'static {
     #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
     #[allow(deprecated)]
     #[doc(alias = "ges_video_transition_get_border")]
     #[doc(alias = "get_border")]
-    fn border(&self) -> i32;
-
-    #[doc(alias = "ges_video_transition_get_transition_type")]
-    #[doc(alias = "get_transition_type")]
-    fn transition_type(&self) -> VideoStandardTransitionType;
-
-    #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_video_transition_is_inverted")]
-    fn is_inverted(&self) -> bool;
-
-    #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_video_transition_set_border")]
-    fn set_border(&self, value: u32);
-
-    #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_video_transition_set_inverted")]
-    fn set_inverted(&self, inverted: bool);
-
-    #[doc(alias = "ges_video_transition_set_transition_type")]
-    fn set_transition_type(&self, type_: VideoStandardTransitionType) -> bool;
-
-    #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
-    fn inverts(&self) -> bool;
-
-    #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
-    fn set_invert(&self, invert: bool);
-
-    #[doc(alias = "border")]
-    fn connect_border_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
-    #[doc(alias = "invert")]
-    fn connect_invert_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "transition-type")]
-    fn connect_transition_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<VideoTransition>> VideoTransitionExt for O {
-    #[allow(deprecated)]
     fn border(&self) -> i32 {
         unsafe { ffi::ges_video_transition_get_border(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "ges_video_transition_get_transition_type")]
+    #[doc(alias = "get_transition_type")]
     fn transition_type(&self) -> VideoStandardTransitionType {
         unsafe {
             from_glib(ffi::ges_video_transition_get_transition_type(
@@ -100,7 +64,9 @@ impl<O: IsA<VideoTransition>> VideoTransitionExt for O {
         }
     }
 
+    #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
     #[allow(deprecated)]
+    #[doc(alias = "ges_video_transition_is_inverted")]
     fn is_inverted(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_video_transition_is_inverted(
@@ -109,14 +75,18 @@ impl<O: IsA<VideoTransition>> VideoTransitionExt for O {
         }
     }
 
+    #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
     #[allow(deprecated)]
+    #[doc(alias = "ges_video_transition_set_border")]
     fn set_border(&self, value: u32) {
         unsafe {
             ffi::ges_video_transition_set_border(self.as_ref().to_glib_none().0, value);
         }
     }
 
+    #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
     #[allow(deprecated)]
+    #[doc(alias = "ges_video_transition_set_inverted")]
     fn set_inverted(&self, inverted: bool) {
         unsafe {
             ffi::ges_video_transition_set_inverted(
@@ -126,6 +96,7 @@ impl<O: IsA<VideoTransition>> VideoTransitionExt for O {
         }
     }
 
+    #[doc(alias = "ges_video_transition_set_transition_type")]
     fn set_transition_type(&self, type_: VideoStandardTransitionType) -> bool {
         unsafe {
             from_glib(ffi::ges_video_transition_set_transition_type(
@@ -135,14 +106,17 @@ impl<O: IsA<VideoTransition>> VideoTransitionExt for O {
         }
     }
 
+    #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
     fn inverts(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "invert")
     }
 
+    #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
     fn set_invert(&self, invert: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "invert", invert)
     }
 
+    #[doc(alias = "border")]
     fn connect_border_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_border_trampoline<
             P: IsA<VideoTransition>,
@@ -168,6 +142,8 @@ impl<O: IsA<VideoTransition>> VideoTransitionExt for O {
         }
     }
 
+    #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
+    #[doc(alias = "invert")]
     fn connect_invert_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_invert_trampoline<
             P: IsA<VideoTransition>,
@@ -193,6 +169,7 @@ impl<O: IsA<VideoTransition>> VideoTransitionExt for O {
         }
     }
 
+    #[doc(alias = "transition-type")]
     fn connect_transition_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_transition_type_trampoline<
             P: IsA<VideoTransition>,
@@ -218,3 +195,5 @@ impl<O: IsA<VideoTransition>> VideoTransitionExt for O {
         }
     }
 }
+
+impl<O: IsA<VideoTransition>> VideoTransitionExt for O {}

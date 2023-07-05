@@ -19,20 +19,14 @@ impl Extractable {
     pub const NONE: Option<&'static Extractable> = None;
 }
 
-pub trait ExtractableExt: 'static {
-    #[doc(alias = "ges_extractable_get_asset")]
-    #[doc(alias = "get_asset")]
-    fn asset(&self) -> Option<Asset>;
-
-    #[doc(alias = "ges_extractable_get_id")]
-    #[doc(alias = "get_id")]
-    fn id(&self) -> glib::GString;
-
-    #[doc(alias = "ges_extractable_set_asset")]
-    fn set_asset(&self, asset: &impl IsA<Asset>) -> Result<(), glib::error::BoolError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Extractable>> Sealed for T {}
 }
 
-impl<O: IsA<Extractable>> ExtractableExt for O {
+pub trait ExtractableExt: IsA<Extractable> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_extractable_get_asset")]
+    #[doc(alias = "get_asset")]
     fn asset(&self) -> Option<Asset> {
         unsafe {
             from_glib_none(ffi::ges_extractable_get_asset(
@@ -41,10 +35,13 @@ impl<O: IsA<Extractable>> ExtractableExt for O {
         }
     }
 
+    #[doc(alias = "ges_extractable_get_id")]
+    #[doc(alias = "get_id")]
     fn id(&self) -> glib::GString {
         unsafe { from_glib_full(ffi::ges_extractable_get_id(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_extractable_set_asset")]
     fn set_asset(&self, asset: &impl IsA<Asset>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -57,3 +54,5 @@ impl<O: IsA<Extractable>> ExtractableExt for O {
         }
     }
 }
+
+impl<O: IsA<Extractable>> ExtractableExt for O {}

@@ -33,154 +33,13 @@ impl Clip {
     pub const NONE: Option<&'static Clip> = None;
 }
 
-pub trait ClipExt: 'static {
-    #[doc(alias = "ges_clip_add_asset")]
-    fn add_asset(&self, asset: &impl IsA<Asset>) -> Result<TrackElement, glib::BoolError>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_clip_add_child_to_track")]
-    fn add_child_to_track(
-        &self,
-        child: &impl IsA<TrackElement>,
-        track: &impl IsA<Track>,
-    ) -> Result<TrackElement, glib::Error>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_clip_add_top_effect")]
-    fn add_top_effect(&self, effect: &impl IsA<BaseEffect>, index: i32) -> Result<(), glib::Error>;
-
-    #[doc(alias = "ges_clip_find_track_element")]
-    fn find_track_element(
-        &self,
-        track: Option<&impl IsA<Track>>,
-        type_: glib::types::Type,
-    ) -> Option<TrackElement>;
-
-    #[doc(alias = "ges_clip_find_track_elements")]
-    fn find_track_elements(
-        &self,
-        track: Option<&impl IsA<Track>>,
-        track_type: TrackType,
-        type_: glib::types::Type,
-    ) -> Vec<TrackElement>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_clip_get_duration_limit")]
-    #[doc(alias = "get_duration_limit")]
-    fn duration_limit(&self) -> gst::ClockTime;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_clip_get_internal_time_from_timeline_time")]
-    #[doc(alias = "get_internal_time_from_timeline_time")]
-    fn internal_time_from_timeline_time(
-        &self,
-        child: &impl IsA<TrackElement>,
-        timeline_time: impl Into<Option<gst::ClockTime>>,
-    ) -> Result<Option<gst::ClockTime>, glib::Error>;
-
-    #[doc(alias = "ges_clip_get_layer")]
-    #[doc(alias = "get_layer")]
-    fn layer(&self) -> Option<Layer>;
-
-    #[doc(alias = "ges_clip_get_supported_formats")]
-    #[doc(alias = "get_supported_formats")]
-    fn supported_formats(&self) -> TrackType;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_clip_get_timeline_time_from_internal_time")]
-    #[doc(alias = "get_timeline_time_from_internal_time")]
-    fn timeline_time_from_internal_time(
-        &self,
-        child: &impl IsA<TrackElement>,
-        internal_time: impl Into<Option<gst::ClockTime>>,
-    ) -> Result<Option<gst::ClockTime>, glib::Error>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_clip_get_timeline_time_from_source_frame")]
-    #[doc(alias = "get_timeline_time_from_source_frame")]
-    fn timeline_time_from_source_frame(
-        &self,
-        frame_number: FrameNumber,
-    ) -> Result<Option<gst::ClockTime>, glib::Error>;
-
-    #[doc(alias = "ges_clip_get_top_effect_index")]
-    #[doc(alias = "get_top_effect_index")]
-    fn top_effect_index(&self, effect: &impl IsA<BaseEffect>) -> i32;
-
-    #[doc(alias = "ges_clip_get_top_effect_position")]
-    #[doc(alias = "get_top_effect_position")]
-    fn top_effect_position(&self, effect: &impl IsA<BaseEffect>) -> i32;
-
-    #[doc(alias = "ges_clip_get_top_effects")]
-    #[doc(alias = "get_top_effects")]
-    fn top_effects(&self) -> Vec<TrackElement>;
-
-    #[doc(alias = "ges_clip_move_to_layer")]
-    fn move_to_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_clip_move_to_layer_full")]
-    fn move_to_layer_full(&self, layer: &impl IsA<Layer>) -> Result<(), glib::Error>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_clip_remove_top_effect")]
-    fn remove_top_effect(&self, effect: &impl IsA<BaseEffect>) -> Result<(), glib::Error>;
-
-    #[doc(alias = "ges_clip_set_supported_formats")]
-    fn set_supported_formats(&self, supportedformats: TrackType);
-
-    #[doc(alias = "ges_clip_set_top_effect_index")]
-    fn set_top_effect_index(
-        &self,
-        effect: &impl IsA<BaseEffect>,
-        newindex: u32,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_clip_set_top_effect_index_full")]
-    fn set_top_effect_index_full(
-        &self,
-        effect: &impl IsA<BaseEffect>,
-        newindex: u32,
-    ) -> Result<(), glib::Error>;
-
-    #[doc(alias = "ges_clip_set_top_effect_priority")]
-    fn set_top_effect_priority(
-        &self,
-        effect: &impl IsA<BaseEffect>,
-        newpriority: u32,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_clip_split")]
-    fn split(&self, position: u64) -> Result<Clip, glib::BoolError>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_clip_split_full")]
-    fn split_full(&self, position: u64) -> Result<Option<Clip>, glib::Error>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "duration-limit")]
-    fn connect_duration_limit_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "layer")]
-    fn connect_layer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "supported-formats")]
-    fn connect_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Clip>> Sealed for T {}
 }
 
-impl<O: IsA<Clip>> ClipExt for O {
+pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_clip_add_asset")]
     fn add_asset(&self, asset: &impl IsA<Asset>) -> Result<TrackElement, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_none(ffi::ges_clip_add_asset(
@@ -193,6 +52,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_clip_add_child_to_track")]
     fn add_child_to_track(
         &self,
         child: &impl IsA<TrackElement>,
@@ -216,6 +76,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_clip_add_top_effect")]
     fn add_top_effect(&self, effect: &impl IsA<BaseEffect>, index: i32) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -234,6 +95,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[doc(alias = "ges_clip_find_track_element")]
     fn find_track_element(
         &self,
         track: Option<&impl IsA<Track>>,
@@ -248,6 +110,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[doc(alias = "ges_clip_find_track_elements")]
     fn find_track_elements(
         &self,
         track: Option<&impl IsA<Track>>,
@@ -266,6 +129,8 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_clip_get_duration_limit")]
+    #[doc(alias = "get_duration_limit")]
     fn duration_limit(&self) -> gst::ClockTime {
         unsafe {
             try_from_glib(ffi::ges_clip_get_duration_limit(
@@ -277,6 +142,8 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_clip_get_internal_time_from_timeline_time")]
+    #[doc(alias = "get_internal_time_from_timeline_time")]
     fn internal_time_from_timeline_time(
         &self,
         child: &impl IsA<TrackElement>,
@@ -298,10 +165,14 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[doc(alias = "ges_clip_get_layer")]
+    #[doc(alias = "get_layer")]
     fn layer(&self) -> Option<Layer> {
         unsafe { from_glib_full(ffi::ges_clip_get_layer(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_clip_get_supported_formats")]
+    #[doc(alias = "get_supported_formats")]
     fn supported_formats(&self) -> TrackType {
         unsafe {
             from_glib(ffi::ges_clip_get_supported_formats(
@@ -312,6 +183,8 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_clip_get_timeline_time_from_internal_time")]
+    #[doc(alias = "get_timeline_time_from_internal_time")]
     fn timeline_time_from_internal_time(
         &self,
         child: &impl IsA<TrackElement>,
@@ -335,6 +208,8 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_clip_get_timeline_time_from_source_frame")]
+    #[doc(alias = "get_timeline_time_from_source_frame")]
     fn timeline_time_from_source_frame(
         &self,
         frame_number: FrameNumber,
@@ -354,6 +229,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[doc(alias = "ges_clip_get_top_effect_index")]
+    #[doc(alias = "get_top_effect_index")]
     fn top_effect_index(&self, effect: &impl IsA<BaseEffect>) -> i32 {
         unsafe {
             ffi::ges_clip_get_top_effect_index(
@@ -363,6 +240,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[doc(alias = "ges_clip_get_top_effect_position")]
+    #[doc(alias = "get_top_effect_position")]
     fn top_effect_position(&self, effect: &impl IsA<BaseEffect>) -> i32 {
         unsafe {
             ffi::ges_clip_get_top_effect_position(
@@ -372,6 +251,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[doc(alias = "ges_clip_get_top_effects")]
+    #[doc(alias = "get_top_effects")]
     fn top_effects(&self) -> Vec<TrackElement> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_clip_get_top_effects(
@@ -380,6 +261,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[doc(alias = "ges_clip_move_to_layer")]
     fn move_to_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -394,6 +276,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_clip_move_to_layer_full")]
     fn move_to_layer_full(&self, layer: &impl IsA<Layer>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -413,6 +296,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_clip_remove_top_effect")]
     fn remove_top_effect(&self, effect: &impl IsA<BaseEffect>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -430,6 +314,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[doc(alias = "ges_clip_set_supported_formats")]
     fn set_supported_formats(&self, supportedformats: TrackType) {
         unsafe {
             ffi::ges_clip_set_supported_formats(
@@ -439,6 +324,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[doc(alias = "ges_clip_set_top_effect_index")]
     fn set_top_effect_index(
         &self,
         effect: &impl IsA<BaseEffect>,
@@ -458,6 +344,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_clip_set_top_effect_index_full")]
     fn set_top_effect_index_full(
         &self,
         effect: &impl IsA<BaseEffect>,
@@ -480,6 +367,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[doc(alias = "ges_clip_set_top_effect_priority")]
     fn set_top_effect_priority(
         &self,
         effect: &impl IsA<BaseEffect>,
@@ -497,6 +385,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[doc(alias = "ges_clip_split")]
     fn split(&self, position: u64) -> Result<Clip, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_none(ffi::ges_clip_split(
@@ -509,6 +398,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_clip_split_full")]
     fn split_full(&self, position: u64) -> Result<Option<Clip>, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -524,6 +414,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "duration-limit")]
     fn connect_duration_limit_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_limit_trampoline<P: IsA<Clip>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESClip,
@@ -546,6 +437,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[doc(alias = "layer")]
     fn connect_layer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_layer_trampoline<P: IsA<Clip>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESClip,
@@ -568,6 +460,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[doc(alias = "supported-formats")]
     fn connect_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_supported_formats_trampoline<
             P: IsA<Clip>,
@@ -593,3 +486,5 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 }
+
+impl<O: IsA<Clip>> ClipExt for O {}

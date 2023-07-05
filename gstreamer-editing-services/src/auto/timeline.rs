@@ -63,196 +63,15 @@ impl Default for Timeline {
     }
 }
 
-pub trait TimelineExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Timeline>> Sealed for T {}
+}
+
+pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[allow(deprecated)]
     #[doc(alias = "ges_timeline_add_layer")]
-    fn add_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_timeline_add_track")]
-    fn add_track(&self, track: &impl IsA<Track>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_timeline_append_layer")]
-    fn append_layer(&self) -> Layer;
-
-    #[doc(alias = "ges_timeline_commit")]
-    fn commit(&self) -> bool;
-
-    #[doc(alias = "ges_timeline_commit_sync")]
-    fn commit_sync(&self) -> bool;
-
-    #[cfg(feature = "v1_22")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
-    #[doc(alias = "ges_timeline_disable_edit_apis")]
-    fn disable_edit_apis(&self, disable_edit_apis: bool);
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "ges_timeline_freeze_commit")]
-    fn freeze_commit(&self);
-
-    #[doc(alias = "ges_timeline_get_auto_transition")]
-    #[doc(alias = "get_auto_transition")]
-    fn is_auto_transition(&self) -> bool;
-
-    #[doc(alias = "ges_timeline_get_duration")]
-    #[doc(alias = "get_duration")]
-    fn duration(&self) -> gst::ClockTime;
-
-    #[cfg(feature = "v1_22")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
-    #[doc(alias = "ges_timeline_get_edit_apis_disabled")]
-    #[doc(alias = "get_edit_apis_disabled")]
-    fn is_edit_apis_disabled(&self) -> bool;
-
-    #[doc(alias = "ges_timeline_get_element")]
-    #[doc(alias = "get_element")]
-    fn element(&self, name: &str) -> Option<TimelineElement>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_timeline_get_frame_at")]
-    #[doc(alias = "get_frame_at")]
-    fn frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_timeline_get_frame_time")]
-    #[doc(alias = "get_frame_time")]
-    fn frame_time(&self, frame_number: FrameNumber) -> Option<gst::ClockTime>;
-
-    #[doc(alias = "ges_timeline_get_groups")]
-    #[doc(alias = "get_groups")]
-    fn groups(&self) -> Vec<Group>;
-
-    #[doc(alias = "ges_timeline_get_layer")]
-    #[doc(alias = "get_layer")]
-    fn layer(&self, priority: u32) -> Option<Layer>;
-
-    #[doc(alias = "ges_timeline_get_layers")]
-    #[doc(alias = "get_layers")]
-    fn layers(&self) -> Vec<Layer>;
-
-    #[doc(alias = "ges_timeline_get_pad_for_track")]
-    #[doc(alias = "get_pad_for_track")]
-    fn pad_for_track(&self, track: &impl IsA<Track>) -> Option<gst::Pad>;
-
-    #[doc(alias = "ges_timeline_get_snapping_distance")]
-    #[doc(alias = "get_snapping_distance")]
-    fn snapping_distance(&self) -> Option<gst::ClockTime>;
-
-    #[doc(alias = "ges_timeline_get_track_for_pad")]
-    #[doc(alias = "get_track_for_pad")]
-    fn track_for_pad(&self, pad: &impl IsA<gst::Pad>) -> Option<Track>;
-
-    #[doc(alias = "ges_timeline_get_tracks")]
-    #[doc(alias = "get_tracks")]
-    fn tracks(&self) -> Vec<Track>;
-
-    #[doc(alias = "ges_timeline_is_empty")]
-    fn is_empty(&self) -> bool;
-
-    #[doc(alias = "ges_timeline_load_from_uri")]
-    fn load_from_uri(&self, uri: &str) -> Result<(), glib::Error>;
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "ges_timeline_move_layer")]
-    fn move_layer(
-        &self,
-        layer: &impl IsA<Layer>,
-        new_layer_priority: u32,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_timeline_paste_element")]
-    fn paste_element(
-        &self,
-        element: &impl IsA<TimelineElement>,
-        position: gst::ClockTime,
-        layer_priority: i32,
-    ) -> Option<TimelineElement>;
-
-    #[doc(alias = "ges_timeline_remove_layer")]
-    fn remove_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_timeline_remove_track")]
-    fn remove_track(&self, track: &impl IsA<Track>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_timeline_save_to_uri")]
-    fn save_to_uri(
-        &self,
-        uri: &str,
-        formatter_asset: Option<&impl IsA<Asset>>,
-        overwrite: bool,
-    ) -> Result<(), glib::Error>;
-
-    #[doc(alias = "ges_timeline_set_auto_transition")]
-    fn set_auto_transition(&self, auto_transition: bool);
-
-    #[doc(alias = "ges_timeline_set_snapping_distance")]
-    fn set_snapping_distance(&self, snapping_distance: gst::ClockTime);
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "ges_timeline_thaw_commit")]
-    fn thaw_commit(&self);
-
-    #[doc(alias = "commited")]
-    fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "group-added")]
-    fn connect_group_added<F: Fn(&Self, &Group) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    //#[doc(alias = "group-removed")]
-    //fn connect_group_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "layer-added")]
-    fn connect_layer_added<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "layer-removed")]
-    fn connect_layer_removed<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "select-element-track")]
-    fn connect_select_element_track<F: Fn(&Self, &Clip, &TrackElement) -> Option<Track> + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    //#[doc(alias = "select-tracks-for-object")]
-    //fn connect_select_tracks_for_object<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "snapping-ended")]
-    fn connect_snapping_ended<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "snapping-started")]
-    fn connect_snapping_started<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "track-added")]
-    fn connect_track_added<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "track-removed")]
-    fn connect_track_removed<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "auto-transition")]
-    fn connect_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "duration")]
-    fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "snapping-distance")]
-    fn connect_snapping_distance_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<Timeline>> TimelineExt for O {
-    #[allow(deprecated)]
     fn add_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -265,6 +84,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_add_track")]
     fn add_track(&self, track: &impl IsA<Track>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -277,6 +97,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_append_layer")]
     fn append_layer(&self) -> Layer {
         unsafe {
             from_glib_none(ffi::ges_timeline_append_layer(
@@ -285,10 +106,12 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_commit")]
     fn commit(&self) -> bool {
         unsafe { from_glib(ffi::ges_timeline_commit(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_timeline_commit_sync")]
     fn commit_sync(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_commit_sync(
@@ -299,6 +122,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "ges_timeline_disable_edit_apis")]
     fn disable_edit_apis(&self, disable_edit_apis: bool) {
         unsafe {
             ffi::ges_timeline_disable_edit_apis(
@@ -310,12 +134,15 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "ges_timeline_freeze_commit")]
     fn freeze_commit(&self) {
         unsafe {
             ffi::ges_timeline_freeze_commit(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "ges_timeline_get_auto_transition")]
+    #[doc(alias = "get_auto_transition")]
     fn is_auto_transition(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_get_auto_transition(
@@ -324,6 +151,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_get_duration")]
+    #[doc(alias = "get_duration")]
     fn duration(&self) -> gst::ClockTime {
         unsafe {
             try_from_glib(ffi::ges_timeline_get_duration(
@@ -335,6 +164,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "ges_timeline_get_edit_apis_disabled")]
+    #[doc(alias = "get_edit_apis_disabled")]
     fn is_edit_apis_disabled(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_get_edit_apis_disabled(
@@ -343,6 +174,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_get_element")]
+    #[doc(alias = "get_element")]
     fn element(&self, name: &str) -> Option<TimelineElement> {
         unsafe {
             from_glib_full(ffi::ges_timeline_get_element(
@@ -354,6 +187,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_timeline_get_frame_at")]
+    #[doc(alias = "get_frame_at")]
     fn frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber {
         unsafe {
             ffi::ges_timeline_get_frame_at(self.as_ref().to_glib_none().0, timestamp.into_glib())
@@ -362,6 +197,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_timeline_get_frame_time")]
+    #[doc(alias = "get_frame_time")]
     fn frame_time(&self, frame_number: FrameNumber) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_timeline_get_frame_time(
@@ -371,6 +208,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_get_groups")]
+    #[doc(alias = "get_groups")]
     fn groups(&self) -> Vec<Group> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::ges_timeline_get_groups(
@@ -379,6 +218,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_get_layer")]
+    #[doc(alias = "get_layer")]
     fn layer(&self, priority: u32) -> Option<Layer> {
         unsafe {
             from_glib_full(ffi::ges_timeline_get_layer(
@@ -388,6 +229,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_get_layers")]
+    #[doc(alias = "get_layers")]
     fn layers(&self) -> Vec<Layer> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_timeline_get_layers(
@@ -396,6 +239,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_get_pad_for_track")]
+    #[doc(alias = "get_pad_for_track")]
     fn pad_for_track(&self, track: &impl IsA<Track>) -> Option<gst::Pad> {
         unsafe {
             from_glib_none(ffi::ges_timeline_get_pad_for_track(
@@ -405,6 +250,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_get_snapping_distance")]
+    #[doc(alias = "get_snapping_distance")]
     fn snapping_distance(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_timeline_get_snapping_distance(
@@ -413,6 +260,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_get_track_for_pad")]
+    #[doc(alias = "get_track_for_pad")]
     fn track_for_pad(&self, pad: &impl IsA<gst::Pad>) -> Option<Track> {
         unsafe {
             from_glib_none(ffi::ges_timeline_get_track_for_pad(
@@ -422,6 +271,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_get_tracks")]
+    #[doc(alias = "get_tracks")]
     fn tracks(&self) -> Vec<Track> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_timeline_get_tracks(
@@ -430,10 +281,12 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_is_empty")]
     fn is_empty(&self) -> bool {
         unsafe { from_glib(ffi::ges_timeline_is_empty(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_timeline_load_from_uri")]
     fn load_from_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -453,6 +306,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "ges_timeline_move_layer")]
     fn move_layer(
         &self,
         layer: &impl IsA<Layer>,
@@ -470,6 +324,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_paste_element")]
     fn paste_element(
         &self,
         element: &impl IsA<TimelineElement>,
@@ -486,6 +341,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_remove_layer")]
     fn remove_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -498,6 +354,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_remove_track")]
     fn remove_track(&self, track: &impl IsA<Track>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -510,6 +367,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_save_to_uri")]
     fn save_to_uri(
         &self,
         uri: &str,
@@ -534,6 +392,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_set_auto_transition")]
     fn set_auto_transition(&self, auto_transition: bool) {
         unsafe {
             ffi::ges_timeline_set_auto_transition(
@@ -543,6 +402,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "ges_timeline_set_snapping_distance")]
     fn set_snapping_distance(&self, snapping_distance: gst::ClockTime) {
         unsafe {
             ffi::ges_timeline_set_snapping_distance(
@@ -554,12 +414,14 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "ges_timeline_thaw_commit")]
     fn thaw_commit(&self) {
         unsafe {
             ffi::ges_timeline_thaw_commit(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "commited")]
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn commited_trampoline<P: IsA<Timeline>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimeline,
@@ -581,6 +443,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "group-added")]
     fn connect_group_added<F: Fn(&Self, &Group) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn group_added_trampoline<
             P: IsA<Timeline>,
@@ -609,10 +472,12 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    //#[doc(alias = "group-removed")]
     //fn connect_group_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Empty ctype children: *.PtrArray TypeId { ns_id: 1, id: 54 }
     //}
 
+    #[doc(alias = "layer-added")]
     fn connect_layer_added<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn layer_added_trampoline<
             P: IsA<Timeline>,
@@ -641,6 +506,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "layer-removed")]
     fn connect_layer_removed<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn layer_removed_trampoline<
             P: IsA<Timeline>,
@@ -671,6 +537,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "select-element-track")]
     fn connect_select_element_track<
         F: Fn(&Self, &Clip, &TrackElement) -> Option<Track> + 'static,
     >(
@@ -707,10 +574,12 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    //#[doc(alias = "select-tracks-for-object")]
     //fn connect_select_tracks_for_object<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Empty ctype return value *.PtrArray TypeId { ns_id: 1, id: 17 }
     //}
 
+    #[doc(alias = "snapping-ended")]
     fn connect_snapping_ended<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(
         &self,
         f: F,
@@ -746,6 +615,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "snapping-started")]
     fn connect_snapping_started<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(
         &self,
         f: F,
@@ -781,6 +651,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "track-added")]
     fn connect_track_added<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn track_added_trampoline<
             P: IsA<Timeline>,
@@ -809,6 +680,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "track-removed")]
     fn connect_track_removed<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn track_removed_trampoline<
             P: IsA<Timeline>,
@@ -837,6 +709,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "auto-transition")]
     fn connect_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_auto_transition_trampoline<
             P: IsA<Timeline>,
@@ -862,6 +735,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "duration")]
     fn connect_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_trampoline<P: IsA<Timeline>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTimeline,
@@ -884,6 +758,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[doc(alias = "snapping-distance")]
     fn connect_snapping_distance_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_snapping_distance_trampoline<
             P: IsA<Timeline>,
@@ -909,3 +784,5 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 }
+
+impl<O: IsA<Timeline>> TimelineExt for O {}

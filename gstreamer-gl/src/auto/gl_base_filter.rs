@@ -27,28 +27,15 @@ impl GLBaseFilter {
 unsafe impl Send for GLBaseFilter {}
 unsafe impl Sync for GLBaseFilter {}
 
-pub trait GLBaseFilterExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::GLBaseFilter>> Sealed for T {}
+}
+
+pub trait GLBaseFilterExt: IsA<GLBaseFilter> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_base_filter_find_gl_context")]
-    fn find_gl_context(&self) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_gl_base_filter_get_gl_context")]
-    #[doc(alias = "get_gl_context")]
-    fn gl_context(&self) -> Option<GLContext>;
-
-    fn context(&self) -> Option<GLContext>;
-
-    #[doc(alias = "context")]
-    fn connect_context_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
-        -> SignalHandlerId;
-}
-
-impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     fn find_gl_context(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_base_filter_find_gl_context(
@@ -59,6 +46,8 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_gl_base_filter_get_gl_context")]
+    #[doc(alias = "get_gl_context")]
     fn gl_context(&self) -> Option<GLContext> {
         unsafe {
             from_glib_full(ffi::gst_gl_base_filter_get_gl_context(
@@ -71,6 +60,7 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
         glib::ObjectExt::property(self.as_ref(), "context")
     }
 
+    #[doc(alias = "context")]
     fn connect_context_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -99,3 +89,5 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
         }
     }
 }
+
+impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {}

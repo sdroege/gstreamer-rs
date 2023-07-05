@@ -27,29 +27,25 @@ impl AudioAggregatorConvertPad {
 unsafe impl Send for AudioAggregatorConvertPad {}
 unsafe impl Sync for AudioAggregatorConvertPad {}
 
-pub trait AudioAggregatorConvertPadExt: 'static {
-    //#[doc(alias = "converter-config")]
-    //fn converter_config(&self) -> /*Ignored*/Option<gst::Structure>;
-
-    //#[doc(alias = "converter-config")]
-    //fn set_converter_config(&self, converter_config: /*Ignored*/Option<&gst::Structure>);
-
-    #[doc(alias = "converter-config")]
-    fn connect_converter_config_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AudioAggregatorConvertPad>> Sealed for T {}
 }
 
-impl<O: IsA<AudioAggregatorConvertPad>> AudioAggregatorConvertPadExt for O {
+pub trait AudioAggregatorConvertPadExt:
+    IsA<AudioAggregatorConvertPad> + sealed::Sealed + 'static
+{
+    //#[doc(alias = "converter-config")]
     //fn converter_config(&self) -> /*Ignored*/Option<gst::Structure> {
     //    glib::ObjectExt::property(self.as_ref(), "converter-config")
     //}
 
+    //#[doc(alias = "converter-config")]
     //fn set_converter_config(&self, converter_config: /*Ignored*/Option<&gst::Structure>) {
     //    glib::ObjectExt::set_property(self.as_ref(),"converter-config", converter_config)
     //}
 
+    #[doc(alias = "converter-config")]
     fn connect_converter_config_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -78,3 +74,5 @@ impl<O: IsA<AudioAggregatorConvertPad>> AudioAggregatorConvertPadExt for O {
         }
     }
 }
+
+impl<O: IsA<AudioAggregatorConvertPad>> AudioAggregatorConvertPadExt for O {}

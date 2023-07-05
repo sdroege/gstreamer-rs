@@ -26,123 +26,19 @@ impl AudioBaseSink {
 unsafe impl Send for AudioBaseSink {}
 unsafe impl Sync for AudioBaseSink {}
 
-pub trait AudioBaseSinkExt: 'static {
-    //#[doc(alias = "gst_audio_base_sink_create_ringbuffer")]
-    //fn create_ringbuffer(&self) -> /*Ignored*/Option<AudioRingBuffer>;
-
-    #[doc(alias = "gst_audio_base_sink_get_alignment_threshold")]
-    #[doc(alias = "get_alignment_threshold")]
-    fn alignment_threshold(&self) -> gst::ClockTime;
-
-    #[doc(alias = "gst_audio_base_sink_get_discont_wait")]
-    #[doc(alias = "get_discont_wait")]
-    fn discont_wait(&self) -> gst::ClockTime;
-
-    #[doc(alias = "gst_audio_base_sink_get_drift_tolerance")]
-    #[doc(alias = "get_drift_tolerance")]
-    fn drift_tolerance(&self) -> i64;
-
-    #[doc(alias = "gst_audio_base_sink_get_provide_clock")]
-    #[doc(alias = "get_provide_clock")]
-    fn is_provide_clock(&self) -> bool;
-
-    //#[doc(alias = "gst_audio_base_sink_get_slave_method")]
-    //#[doc(alias = "get_slave_method")]
-    //fn slave_method(&self) -> /*Ignored*/AudioBaseSinkSlaveMethod;
-
-    #[doc(alias = "gst_audio_base_sink_report_device_failure")]
-    fn report_device_failure(&self);
-
-    #[doc(alias = "gst_audio_base_sink_set_alignment_threshold")]
-    fn set_alignment_threshold(&self, alignment_threshold: gst::ClockTime);
-
-    //#[doc(alias = "gst_audio_base_sink_set_custom_slaving_callback")]
-    //fn set_custom_slaving_callback(&self, callback: /*Unimplemented*/Fn(&AudioBaseSink, impl Into<Option<gst::ClockTime>>, impl Into<Option<gst::ClockTime>>, gst::ClockTimeDiff, /*Ignored*/AudioBaseSinkDiscontReason), user_data: /*Unimplemented*/Option<Basic: Pointer>);
-
-    #[doc(alias = "gst_audio_base_sink_set_discont_wait")]
-    fn set_discont_wait(&self, discont_wait: gst::ClockTime);
-
-    #[doc(alias = "gst_audio_base_sink_set_drift_tolerance")]
-    fn set_drift_tolerance(&self, drift_tolerance: i64);
-
-    #[doc(alias = "gst_audio_base_sink_set_provide_clock")]
-    fn set_provide_clock(&self, provide: bool);
-
-    //#[doc(alias = "gst_audio_base_sink_set_slave_method")]
-    //fn set_slave_method(&self, method: /*Ignored*/AudioBaseSinkSlaveMethod);
-
-    #[doc(alias = "buffer-time")]
-    fn buffer_time(&self) -> i64;
-
-    #[doc(alias = "buffer-time")]
-    fn set_buffer_time(&self, buffer_time: i64);
-
-    #[doc(alias = "can-activate-pull")]
-    fn can_activate_pull(&self) -> bool;
-
-    #[doc(alias = "can-activate-pull")]
-    fn set_can_activate_pull(&self, can_activate_pull: bool);
-
-    #[doc(alias = "latency-time")]
-    fn latency_time(&self) -> i64;
-
-    #[doc(alias = "latency-time")]
-    fn set_latency_time(&self, latency_time: i64);
-
-    #[doc(alias = "alignment-threshold")]
-    fn connect_alignment_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "buffer-time")]
-    fn connect_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "can-activate-pull")]
-    fn connect_can_activate_pull_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "discont-wait")]
-    fn connect_discont_wait_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "drift-tolerance")]
-    fn connect_drift_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "latency-time")]
-    fn connect_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "provide-clock")]
-    fn connect_provide_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "slave-method")]
-    fn connect_slave_method_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AudioBaseSink>> Sealed for T {}
 }
 
-impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
+pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
+    //#[doc(alias = "gst_audio_base_sink_create_ringbuffer")]
     //fn create_ringbuffer(&self) -> /*Ignored*/Option<AudioRingBuffer> {
     //    unsafe { TODO: call ffi:gst_audio_base_sink_create_ringbuffer() }
     //}
 
+    #[doc(alias = "gst_audio_base_sink_get_alignment_threshold")]
+    #[doc(alias = "get_alignment_threshold")]
     fn alignment_threshold(&self) -> gst::ClockTime {
         unsafe {
             try_from_glib(ffi::gst_audio_base_sink_get_alignment_threshold(
@@ -152,6 +48,8 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
+    #[doc(alias = "gst_audio_base_sink_get_discont_wait")]
+    #[doc(alias = "get_discont_wait")]
     fn discont_wait(&self) -> gst::ClockTime {
         unsafe {
             try_from_glib(ffi::gst_audio_base_sink_get_discont_wait(
@@ -161,10 +59,14 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
+    #[doc(alias = "gst_audio_base_sink_get_drift_tolerance")]
+    #[doc(alias = "get_drift_tolerance")]
     fn drift_tolerance(&self) -> i64 {
         unsafe { ffi::gst_audio_base_sink_get_drift_tolerance(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_audio_base_sink_get_provide_clock")]
+    #[doc(alias = "get_provide_clock")]
     fn is_provide_clock(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_audio_base_sink_get_provide_clock(
@@ -173,16 +75,20 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
+    //#[doc(alias = "gst_audio_base_sink_get_slave_method")]
+    //#[doc(alias = "get_slave_method")]
     //fn slave_method(&self) -> /*Ignored*/AudioBaseSinkSlaveMethod {
     //    unsafe { TODO: call ffi:gst_audio_base_sink_get_slave_method() }
     //}
 
+    #[doc(alias = "gst_audio_base_sink_report_device_failure")]
     fn report_device_failure(&self) {
         unsafe {
             ffi::gst_audio_base_sink_report_device_failure(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_audio_base_sink_set_alignment_threshold")]
     fn set_alignment_threshold(&self, alignment_threshold: gst::ClockTime) {
         unsafe {
             ffi::gst_audio_base_sink_set_alignment_threshold(
@@ -192,10 +98,12 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
+    //#[doc(alias = "gst_audio_base_sink_set_custom_slaving_callback")]
     //fn set_custom_slaving_callback(&self, callback: /*Unimplemented*/Fn(&AudioBaseSink, impl Into<Option<gst::ClockTime>>, impl Into<Option<gst::ClockTime>>, gst::ClockTimeDiff, /*Ignored*/AudioBaseSinkDiscontReason), user_data: /*Unimplemented*/Option<Basic: Pointer>) {
     //    unsafe { TODO: call ffi:gst_audio_base_sink_set_custom_slaving_callback() }
     //}
 
+    #[doc(alias = "gst_audio_base_sink_set_discont_wait")]
     fn set_discont_wait(&self, discont_wait: gst::ClockTime) {
         unsafe {
             ffi::gst_audio_base_sink_set_discont_wait(
@@ -205,6 +113,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
+    #[doc(alias = "gst_audio_base_sink_set_drift_tolerance")]
     fn set_drift_tolerance(&self, drift_tolerance: i64) {
         unsafe {
             ffi::gst_audio_base_sink_set_drift_tolerance(
@@ -214,6 +123,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
+    #[doc(alias = "gst_audio_base_sink_set_provide_clock")]
     fn set_provide_clock(&self, provide: bool) {
         unsafe {
             ffi::gst_audio_base_sink_set_provide_clock(
@@ -223,34 +133,42 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
+    //#[doc(alias = "gst_audio_base_sink_set_slave_method")]
     //fn set_slave_method(&self, method: /*Ignored*/AudioBaseSinkSlaveMethod) {
     //    unsafe { TODO: call ffi:gst_audio_base_sink_set_slave_method() }
     //}
 
+    #[doc(alias = "buffer-time")]
     fn buffer_time(&self) -> i64 {
         glib::ObjectExt::property(self.as_ref(), "buffer-time")
     }
 
+    #[doc(alias = "buffer-time")]
     fn set_buffer_time(&self, buffer_time: i64) {
         glib::ObjectExt::set_property(self.as_ref(), "buffer-time", buffer_time)
     }
 
+    #[doc(alias = "can-activate-pull")]
     fn can_activate_pull(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "can-activate-pull")
     }
 
+    #[doc(alias = "can-activate-pull")]
     fn set_can_activate_pull(&self, can_activate_pull: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "can-activate-pull", can_activate_pull)
     }
 
+    #[doc(alias = "latency-time")]
     fn latency_time(&self) -> i64 {
         glib::ObjectExt::property(self.as_ref(), "latency-time")
     }
 
+    #[doc(alias = "latency-time")]
     fn set_latency_time(&self, latency_time: i64) {
         glib::ObjectExt::set_property(self.as_ref(), "latency-time", latency_time)
     }
 
+    #[doc(alias = "alignment-threshold")]
     fn connect_alignment_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -279,6 +197,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
+    #[doc(alias = "buffer-time")]
     fn connect_buffer_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -307,6 +226,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
+    #[doc(alias = "can-activate-pull")]
     fn connect_can_activate_pull_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -335,6 +255,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
+    #[doc(alias = "discont-wait")]
     fn connect_discont_wait_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -363,6 +284,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
+    #[doc(alias = "drift-tolerance")]
     fn connect_drift_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -391,6 +313,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
+    #[doc(alias = "latency-time")]
     fn connect_latency_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -419,6 +342,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
+    #[doc(alias = "provide-clock")]
     fn connect_provide_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -447,6 +371,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
+    #[doc(alias = "slave-method")]
     fn connect_slave_method_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -475,3 +400,5 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 }
+
+impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {}

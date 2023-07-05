@@ -32,37 +32,20 @@ impl Navigation {
 unsafe impl Send for Navigation {}
 unsafe impl Sync for Navigation {}
 
-pub trait NavigationExt: 'static {
-    #[doc(alias = "gst_navigation_send_command")]
-    fn send_command(&self, command: NavigationCommand);
-
-    #[doc(alias = "gst_navigation_send_event")]
-    fn send_event(&self, structure: gst::Structure);
-
-    #[cfg(feature = "v1_22")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
-    #[doc(alias = "gst_navigation_send_event_simple")]
-    fn send_event_simple(&self, event: gst::Event);
-
-    #[doc(alias = "gst_navigation_send_key_event")]
-    fn send_key_event(&self, event: &str, key: &str);
-
-    #[doc(alias = "gst_navigation_send_mouse_event")]
-    fn send_mouse_event(&self, event: &str, button: i32, x: f64, y: f64);
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_navigation_send_mouse_scroll_event")]
-    fn send_mouse_scroll_event(&self, x: f64, y: f64, delta_x: f64, delta_y: f64);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Navigation>> Sealed for T {}
 }
 
-impl<O: IsA<Navigation>> NavigationExt for O {
+pub trait NavigationExt: IsA<Navigation> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_navigation_send_command")]
     fn send_command(&self, command: NavigationCommand) {
         unsafe {
             ffi::gst_navigation_send_command(self.as_ref().to_glib_none().0, command.into_glib());
         }
     }
 
+    #[doc(alias = "gst_navigation_send_event")]
     fn send_event(&self, structure: gst::Structure) {
         unsafe {
             ffi::gst_navigation_send_event(
@@ -74,6 +57,7 @@ impl<O: IsA<Navigation>> NavigationExt for O {
 
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "gst_navigation_send_event_simple")]
     fn send_event_simple(&self, event: gst::Event) {
         unsafe {
             ffi::gst_navigation_send_event_simple(
@@ -83,6 +67,7 @@ impl<O: IsA<Navigation>> NavigationExt for O {
         }
     }
 
+    #[doc(alias = "gst_navigation_send_key_event")]
     fn send_key_event(&self, event: &str, key: &str) {
         unsafe {
             ffi::gst_navigation_send_key_event(
@@ -93,6 +78,7 @@ impl<O: IsA<Navigation>> NavigationExt for O {
         }
     }
 
+    #[doc(alias = "gst_navigation_send_mouse_event")]
     fn send_mouse_event(&self, event: &str, button: i32, x: f64, y: f64) {
         unsafe {
             ffi::gst_navigation_send_mouse_event(
@@ -107,6 +93,7 @@ impl<O: IsA<Navigation>> NavigationExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_navigation_send_mouse_scroll_event")]
     fn send_mouse_scroll_event(&self, x: f64, y: f64, delta_x: f64, delta_y: f64) {
         unsafe {
             ffi::gst_navigation_send_mouse_scroll_event(
@@ -119,3 +106,5 @@ impl<O: IsA<Navigation>> NavigationExt for O {
         }
     }
 }
+
+impl<O: IsA<Navigation>> NavigationExt for O {}

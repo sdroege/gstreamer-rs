@@ -47,30 +47,20 @@ impl Default for RTSPThreadPool {
 unsafe impl Send for RTSPThreadPool {}
 unsafe impl Sync for RTSPThreadPool {}
 
-pub trait RTSPThreadPoolExt: 'static {
-    #[doc(alias = "gst_rtsp_thread_pool_get_max_threads")]
-    #[doc(alias = "get_max_threads")]
-    fn max_threads(&self) -> i32;
-
-    #[doc(alias = "gst_rtsp_thread_pool_get_thread")]
-    #[doc(alias = "get_thread")]
-    fn thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> Option<RTSPThread>;
-
-    #[doc(alias = "gst_rtsp_thread_pool_set_max_threads")]
-    fn set_max_threads(&self, max_threads: i32);
-
-    #[doc(alias = "max-threads")]
-    fn connect_max_threads_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPThreadPool>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
+pub trait RTSPThreadPoolExt: IsA<RTSPThreadPool> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_rtsp_thread_pool_get_max_threads")]
+    #[doc(alias = "get_max_threads")]
     fn max_threads(&self) -> i32 {
         unsafe { ffi::gst_rtsp_thread_pool_get_max_threads(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_rtsp_thread_pool_get_thread")]
+    #[doc(alias = "get_thread")]
     fn thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> Option<RTSPThread> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_thread_pool_get_thread(
@@ -81,12 +71,14 @@ impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_thread_pool_set_max_threads")]
     fn set_max_threads(&self, max_threads: i32) {
         unsafe {
             ffi::gst_rtsp_thread_pool_set_max_threads(self.as_ref().to_glib_none().0, max_threads);
         }
     }
 
+    #[doc(alias = "max-threads")]
     fn connect_max_threads_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -115,3 +107,5 @@ impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
         }
     }
 }
+
+impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {}

@@ -35,20 +35,21 @@ impl EffectClip {
     }
 }
 
-pub trait EffectClipExt: 'static {
-    #[doc(alias = "audio-bin-description")]
-    fn audio_bin_description(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "video-bin-description")]
-    fn video_bin_description(&self) -> Option<glib::GString>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::EffectClip>> Sealed for T {}
 }
 
-impl<O: IsA<EffectClip>> EffectClipExt for O {
+pub trait EffectClipExt: IsA<EffectClip> + sealed::Sealed + 'static {
+    #[doc(alias = "audio-bin-description")]
     fn audio_bin_description(&self) -> Option<glib::GString> {
         glib::ObjectExt::property(self.as_ref(), "audio-bin-description")
     }
 
+    #[doc(alias = "video-bin-description")]
     fn video_bin_description(&self) -> Option<glib::GString> {
         glib::ObjectExt::property(self.as_ref(), "video-bin-description")
     }
 }
+
+impl<O: IsA<EffectClip>> EffectClipExt for O {}

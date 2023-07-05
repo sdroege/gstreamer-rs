@@ -36,17 +36,16 @@ impl GLBufferPool {
 unsafe impl Send for GLBufferPool {}
 unsafe impl Sync for GLBufferPool {}
 
-pub trait GLBufferPoolExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::GLBufferPool>> Sealed for T {}
+}
+
+pub trait GLBufferPoolExt: IsA<GLBufferPool> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_gl_buffer_pool_get_gl_allocation_params")]
     #[doc(alias = "get_gl_allocation_params")]
-    fn gl_allocation_params(&self) -> Option<GLAllocationParams>;
-}
-
-impl<O: IsA<GLBufferPool>> GLBufferPoolExt for O {
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn gl_allocation_params(&self) -> Option<GLAllocationParams> {
         unsafe {
             from_glib_full(ffi::gst_gl_buffer_pool_get_gl_allocation_params(
@@ -55,3 +54,5 @@ impl<O: IsA<GLBufferPool>> GLBufferPoolExt for O {
         }
     }
 }
+
+impl<O: IsA<GLBufferPool>> GLBufferPoolExt for O {}

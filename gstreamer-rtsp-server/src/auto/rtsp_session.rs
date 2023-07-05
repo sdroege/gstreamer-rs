@@ -33,91 +33,20 @@ impl RTSPSession {
 unsafe impl Send for RTSPSession {}
 unsafe impl Sync for RTSPSession {}
 
-pub trait RTSPSessionExt: 'static {
-    #[doc(alias = "gst_rtsp_session_allow_expire")]
-    fn allow_expire(&self);
-
-    #[doc(alias = "gst_rtsp_session_filter")]
-    fn filter(
-        &self,
-        func: Option<&mut dyn (FnMut(&RTSPSession, &RTSPSessionMedia) -> RTSPFilterResult)>,
-    ) -> Vec<RTSPSessionMedia>;
-
-    #[doc(alias = "gst_rtsp_session_get_header")]
-    #[doc(alias = "get_header")]
-    fn header(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_rtsp_session_get_sessionid")]
-    #[doc(alias = "get_sessionid")]
-    fn sessionid(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_rtsp_session_get_timeout")]
-    #[doc(alias = "get_timeout")]
-    fn timeout(&self) -> u32;
-
-    //#[doc(alias = "gst_rtsp_session_is_expired")]
-    //fn is_expired(&self, now: /*Ignored*/&mut glib::TimeVal) -> bool;
-
-    #[doc(alias = "gst_rtsp_session_is_expired_usec")]
-    fn is_expired_usec(&self, now: i64) -> bool;
-
-    #[doc(alias = "gst_rtsp_session_manage_media")]
-    fn manage_media(&self, path: &str, media: impl IsA<RTSPMedia>) -> RTSPSessionMedia;
-
-    //#[doc(alias = "gst_rtsp_session_next_timeout")]
-    //fn next_timeout(&self, now: /*Ignored*/&mut glib::TimeVal) -> i32;
-
-    #[doc(alias = "gst_rtsp_session_next_timeout_usec")]
-    fn next_timeout_usec(&self, now: i64) -> i32;
-
-    #[doc(alias = "gst_rtsp_session_prevent_expire")]
-    fn prevent_expire(&self);
-
-    #[doc(alias = "gst_rtsp_session_release_media")]
-    fn release_media(&self, media: &impl IsA<RTSPSessionMedia>) -> bool;
-
-    #[doc(alias = "gst_rtsp_session_set_timeout")]
-    fn set_timeout(&self, timeout: u32);
-
-    #[doc(alias = "gst_rtsp_session_touch")]
-    fn touch(&self);
-
-    #[doc(alias = "extra-timeout")]
-    fn extra_timeout(&self) -> u32;
-
-    #[doc(alias = "extra-timeout")]
-    fn set_extra_timeout(&self, extra_timeout: u32);
-
-    #[doc(alias = "timeout-always-visible")]
-    fn is_timeout_always_visible(&self) -> bool;
-
-    #[doc(alias = "timeout-always-visible")]
-    fn set_timeout_always_visible(&self, timeout_always_visible: bool);
-
-    #[doc(alias = "extra-timeout")]
-    fn connect_extra_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "timeout")]
-    fn connect_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
-        -> SignalHandlerId;
-
-    #[doc(alias = "timeout-always-visible")]
-    fn connect_timeout_always_visible_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPSession>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
+pub trait RTSPSessionExt: IsA<RTSPSession> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_rtsp_session_allow_expire")]
     fn allow_expire(&self) {
         unsafe {
             ffi::gst_rtsp_session_allow_expire(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_rtsp_session_filter")]
     fn filter(
         &self,
         func: Option<&mut dyn (FnMut(&RTSPSession, &RTSPSessionMedia) -> RTSPFilterResult)>,
@@ -162,6 +91,8 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_session_get_header")]
+    #[doc(alias = "get_header")]
     fn header(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_session_get_header(
@@ -170,6 +101,8 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_session_get_sessionid")]
+    #[doc(alias = "get_sessionid")]
     fn sessionid(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_rtsp_session_get_sessionid(
@@ -178,14 +111,18 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_session_get_timeout")]
+    #[doc(alias = "get_timeout")]
     fn timeout(&self) -> u32 {
         unsafe { ffi::gst_rtsp_session_get_timeout(self.as_ref().to_glib_none().0) }
     }
 
+    //#[doc(alias = "gst_rtsp_session_is_expired")]
     //fn is_expired(&self, now: /*Ignored*/&mut glib::TimeVal) -> bool {
     //    unsafe { TODO: call ffi:gst_rtsp_session_is_expired() }
     //}
 
+    #[doc(alias = "gst_rtsp_session_is_expired_usec")]
     fn is_expired_usec(&self, now: i64) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_session_is_expired_usec(
@@ -195,6 +132,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_session_manage_media")]
     fn manage_media(&self, path: &str, media: impl IsA<RTSPMedia>) -> RTSPSessionMedia {
         unsafe {
             from_glib_none(ffi::gst_rtsp_session_manage_media(
@@ -205,20 +143,24 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
+    //#[doc(alias = "gst_rtsp_session_next_timeout")]
     //fn next_timeout(&self, now: /*Ignored*/&mut glib::TimeVal) -> i32 {
     //    unsafe { TODO: call ffi:gst_rtsp_session_next_timeout() }
     //}
 
+    #[doc(alias = "gst_rtsp_session_next_timeout_usec")]
     fn next_timeout_usec(&self, now: i64) -> i32 {
         unsafe { ffi::gst_rtsp_session_next_timeout_usec(self.as_ref().to_glib_none().0, now) }
     }
 
+    #[doc(alias = "gst_rtsp_session_prevent_expire")]
     fn prevent_expire(&self) {
         unsafe {
             ffi::gst_rtsp_session_prevent_expire(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_rtsp_session_release_media")]
     fn release_media(&self, media: &impl IsA<RTSPSessionMedia>) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_session_release_media(
@@ -228,30 +170,36 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_session_set_timeout")]
     fn set_timeout(&self, timeout: u32) {
         unsafe {
             ffi::gst_rtsp_session_set_timeout(self.as_ref().to_glib_none().0, timeout);
         }
     }
 
+    #[doc(alias = "gst_rtsp_session_touch")]
     fn touch(&self) {
         unsafe {
             ffi::gst_rtsp_session_touch(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "extra-timeout")]
     fn extra_timeout(&self) -> u32 {
         glib::ObjectExt::property(self.as_ref(), "extra-timeout")
     }
 
+    #[doc(alias = "extra-timeout")]
     fn set_extra_timeout(&self, extra_timeout: u32) {
         glib::ObjectExt::set_property(self.as_ref(), "extra-timeout", extra_timeout)
     }
 
+    #[doc(alias = "timeout-always-visible")]
     fn is_timeout_always_visible(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "timeout-always-visible")
     }
 
+    #[doc(alias = "timeout-always-visible")]
     fn set_timeout_always_visible(&self, timeout_always_visible: bool) {
         glib::ObjectExt::set_property(
             self.as_ref(),
@@ -260,6 +208,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         )
     }
 
+    #[doc(alias = "extra-timeout")]
     fn connect_extra_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -288,6 +237,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
+    #[doc(alias = "timeout")]
     fn connect_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -316,6 +266,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
+    #[doc(alias = "timeout-always-visible")]
     fn connect_timeout_always_visible_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -344,3 +295,5 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 }
+
+impl<O: IsA<RTSPSession>> RTSPSessionExt for O {}

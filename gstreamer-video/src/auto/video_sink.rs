@@ -27,29 +27,23 @@ impl VideoSink {
 unsafe impl Send for VideoSink {}
 unsafe impl Sync for VideoSink {}
 
-pub trait VideoSinkExt: 'static {
-    #[doc(alias = "show-preroll-frame")]
-    fn shows_preroll_frame(&self) -> bool;
-
-    #[doc(alias = "show-preroll-frame")]
-    fn set_show_preroll_frame(&self, show_preroll_frame: bool);
-
-    #[doc(alias = "show-preroll-frame")]
-    fn connect_show_preroll_frame_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoSink>> Sealed for T {}
 }
 
-impl<O: IsA<VideoSink>> VideoSinkExt for O {
+pub trait VideoSinkExt: IsA<VideoSink> + sealed::Sealed + 'static {
+    #[doc(alias = "show-preroll-frame")]
     fn shows_preroll_frame(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "show-preroll-frame")
     }
 
+    #[doc(alias = "show-preroll-frame")]
     fn set_show_preroll_frame(&self, show_preroll_frame: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "show-preroll-frame", show_preroll_frame)
     }
 
+    #[doc(alias = "show-preroll-frame")]
     fn connect_show_preroll_frame_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -78,3 +72,5 @@ impl<O: IsA<VideoSink>> VideoSinkExt for O {
         }
     }
 }
+
+impl<O: IsA<VideoSink>> VideoSinkExt for O {}

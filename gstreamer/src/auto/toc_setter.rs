@@ -22,32 +22,31 @@ impl TocSetter {
 unsafe impl Send for TocSetter {}
 unsafe impl Sync for TocSetter {}
 
-pub trait TocSetterExt: 'static {
-    #[doc(alias = "gst_toc_setter_get_toc")]
-    #[doc(alias = "get_toc")]
-    fn toc(&self) -> Option<Toc>;
-
-    #[doc(alias = "gst_toc_setter_reset")]
-    fn reset(&self);
-
-    #[doc(alias = "gst_toc_setter_set_toc")]
-    fn set_toc(&self, toc: Option<&Toc>);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::TocSetter>> Sealed for T {}
 }
 
-impl<O: IsA<TocSetter>> TocSetterExt for O {
+pub trait TocSetterExt: IsA<TocSetter> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_toc_setter_get_toc")]
+    #[doc(alias = "get_toc")]
     fn toc(&self) -> Option<Toc> {
         unsafe { from_glib_full(ffi::gst_toc_setter_get_toc(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_toc_setter_reset")]
     fn reset(&self) {
         unsafe {
             ffi::gst_toc_setter_reset(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_toc_setter_set_toc")]
     fn set_toc(&self, toc: Option<&Toc>) {
         unsafe {
             ffi::gst_toc_setter_set_toc(self.as_ref().to_glib_none().0, toc.to_glib_none().0);
         }
     }
 }
+
+impl<O: IsA<TocSetter>> TocSetterExt for O {}

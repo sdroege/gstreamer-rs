@@ -26,40 +26,25 @@ impl VideoOverlay {
 unsafe impl Send for VideoOverlay {}
 unsafe impl Sync for VideoOverlay {}
 
-pub trait VideoOverlayExt: 'static {
-    #[doc(alias = "gst_video_overlay_expose")]
-    fn expose(&self);
-
-    //#[doc(alias = "gst_video_overlay_got_window_handle")]
-    //fn got_window_handle(&self, handle: /*Unimplemented*/Basic: UIntPtr);
-
-    #[doc(alias = "gst_video_overlay_handle_events")]
-    fn handle_events(&self, handle_events: bool);
-
-    #[doc(alias = "gst_video_overlay_prepare_window_handle")]
-    fn prepare_window_handle(&self);
-
-    #[doc(alias = "gst_video_overlay_set_render_rectangle")]
-    fn set_render_rectangle(
-        &self,
-        x: i32,
-        y: i32,
-        width: i32,
-        height: i32,
-    ) -> Result<(), glib::error::BoolError>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoOverlay>> Sealed for T {}
 }
 
-impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
+pub trait VideoOverlayExt: IsA<VideoOverlay> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_video_overlay_expose")]
     fn expose(&self) {
         unsafe {
             ffi::gst_video_overlay_expose(self.as_ref().to_glib_none().0);
         }
     }
 
+    //#[doc(alias = "gst_video_overlay_got_window_handle")]
     //fn got_window_handle(&self, handle: /*Unimplemented*/Basic: UIntPtr) {
     //    unsafe { TODO: call ffi:gst_video_overlay_got_window_handle() }
     //}
 
+    #[doc(alias = "gst_video_overlay_handle_events")]
     fn handle_events(&self, handle_events: bool) {
         unsafe {
             ffi::gst_video_overlay_handle_events(
@@ -69,12 +54,14 @@ impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
         }
     }
 
+    #[doc(alias = "gst_video_overlay_prepare_window_handle")]
     fn prepare_window_handle(&self) {
         unsafe {
             ffi::gst_video_overlay_prepare_window_handle(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_video_overlay_set_render_rectangle")]
     fn set_render_rectangle(
         &self,
         x: i32,
@@ -96,3 +83,5 @@ impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
         }
     }
 }
+
+impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {}

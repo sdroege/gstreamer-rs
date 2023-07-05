@@ -35,22 +35,13 @@ impl Default for RTSPMountPoints {
 unsafe impl Send for RTSPMountPoints {}
 unsafe impl Sync for RTSPMountPoints {}
 
-pub trait RTSPMountPointsExt: 'static {
-    #[doc(alias = "gst_rtsp_mount_points_add_factory")]
-    fn add_factory(&self, path: &str, factory: impl IsA<RTSPMediaFactory>);
-
-    #[doc(alias = "gst_rtsp_mount_points_make_path")]
-    fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Result<glib::GString, glib::BoolError>;
-
-    #[doc(alias = "gst_rtsp_mount_points_match")]
-    #[doc(alias = "match")]
-    fn match_(&self, path: &str) -> (RTSPMediaFactory, i32);
-
-    #[doc(alias = "gst_rtsp_mount_points_remove_factory")]
-    fn remove_factory(&self, path: &str);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::RTSPMountPoints>> Sealed for T {}
 }
 
-impl<O: IsA<RTSPMountPoints>> RTSPMountPointsExt for O {
+pub trait RTSPMountPointsExt: IsA<RTSPMountPoints> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_rtsp_mount_points_add_factory")]
     fn add_factory(&self, path: &str, factory: impl IsA<RTSPMediaFactory>) {
         unsafe {
             ffi::gst_rtsp_mount_points_add_factory(
@@ -61,6 +52,7 @@ impl<O: IsA<RTSPMountPoints>> RTSPMountPointsExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_mount_points_make_path")]
     fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Result<glib::GString, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_rtsp_mount_points_make_path(
@@ -71,6 +63,8 @@ impl<O: IsA<RTSPMountPoints>> RTSPMountPointsExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_mount_points_match")]
+    #[doc(alias = "match")]
     fn match_(&self, path: &str) -> (RTSPMediaFactory, i32) {
         unsafe {
             let mut matched = mem::MaybeUninit::uninit();
@@ -83,6 +77,7 @@ impl<O: IsA<RTSPMountPoints>> RTSPMountPointsExt for O {
         }
     }
 
+    #[doc(alias = "gst_rtsp_mount_points_remove_factory")]
     fn remove_factory(&self, path: &str) {
         unsafe {
             ffi::gst_rtsp_mount_points_remove_factory(
@@ -92,3 +87,5 @@ impl<O: IsA<RTSPMountPoints>> RTSPMountPointsExt for O {
         }
     }
 }
+
+impl<O: IsA<RTSPMountPoints>> RTSPMountPointsExt for O {}

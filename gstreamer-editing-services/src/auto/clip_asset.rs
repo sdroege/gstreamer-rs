@@ -33,36 +33,16 @@ impl ClipAsset {
 unsafe impl Send for ClipAsset {}
 unsafe impl Sync for ClipAsset {}
 
-pub trait ClipAssetExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ClipAsset>> Sealed for T {}
+}
+
+pub trait ClipAssetExt: IsA<ClipAsset> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_asset_get_frame_time")]
     #[doc(alias = "get_frame_time")]
-    fn frame_time(&self, frame_number: FrameNumber) -> Option<gst::ClockTime>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_clip_asset_get_natural_framerate")]
-    #[doc(alias = "get_natural_framerate")]
-    fn natural_framerate(&self) -> Option<(i32, i32)>;
-
-    #[doc(alias = "ges_clip_asset_get_supported_formats")]
-    #[doc(alias = "get_supported_formats")]
-    fn supported_formats(&self) -> TrackType;
-
-    #[doc(alias = "ges_clip_asset_set_supported_formats")]
-    fn set_supported_formats(&self, supportedformats: TrackType);
-
-    #[doc(alias = "supported-formats")]
-    fn connect_supported_formats_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-}
-
-impl<O: IsA<ClipAsset>> ClipAssetExt for O {
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn frame_time(&self, frame_number: FrameNumber) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_clip_asset_get_frame_time(
@@ -74,6 +54,8 @@ impl<O: IsA<ClipAsset>> ClipAssetExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_clip_asset_get_natural_framerate")]
+    #[doc(alias = "get_natural_framerate")]
     fn natural_framerate(&self) -> Option<(i32, i32)> {
         unsafe {
             let mut framerate_n = mem::MaybeUninit::uninit();
@@ -91,6 +73,8 @@ impl<O: IsA<ClipAsset>> ClipAssetExt for O {
         }
     }
 
+    #[doc(alias = "ges_clip_asset_get_supported_formats")]
+    #[doc(alias = "get_supported_formats")]
     fn supported_formats(&self) -> TrackType {
         unsafe {
             from_glib(ffi::ges_clip_asset_get_supported_formats(
@@ -99,6 +83,7 @@ impl<O: IsA<ClipAsset>> ClipAssetExt for O {
         }
     }
 
+    #[doc(alias = "ges_clip_asset_set_supported_formats")]
     fn set_supported_formats(&self, supportedformats: TrackType) {
         unsafe {
             ffi::ges_clip_asset_set_supported_formats(
@@ -108,6 +93,7 @@ impl<O: IsA<ClipAsset>> ClipAssetExt for O {
         }
     }
 
+    #[doc(alias = "supported-formats")]
     fn connect_supported_formats_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -136,3 +122,5 @@ impl<O: IsA<ClipAsset>> ClipAssetExt for O {
         }
     }
 }
+
+impl<O: IsA<ClipAsset>> ClipAssetExt for O {}

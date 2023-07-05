@@ -33,55 +33,43 @@ impl UriClip {
     }
 }
 
-pub trait UriClipExt: 'static {
-    #[doc(alias = "ges_uri_clip_get_uri")]
-    #[doc(alias = "get_uri")]
-    fn uri(&self) -> glib::GString;
-
-    #[doc(alias = "ges_uri_clip_is_image")]
-    fn is_image(&self) -> bool;
-
-    #[doc(alias = "ges_uri_clip_is_muted")]
-    fn is_muted(&self) -> bool;
-
-    #[doc(alias = "ges_uri_clip_set_is_image")]
-    fn set_is_image(&self, is_image: bool);
-
-    #[doc(alias = "ges_uri_clip_set_mute")]
-    fn set_mute(&self, mute: bool);
-
-    #[doc(alias = "is-image")]
-    fn connect_is_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "mute")]
-    fn connect_mute_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::UriClip>> Sealed for T {}
 }
 
-impl<O: IsA<UriClip>> UriClipExt for O {
+pub trait UriClipExt: IsA<UriClip> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_uri_clip_get_uri")]
+    #[doc(alias = "get_uri")]
     fn uri(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::ges_uri_clip_get_uri(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_uri_clip_is_image")]
     fn is_image(&self) -> bool {
         unsafe { from_glib(ffi::ges_uri_clip_is_image(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_uri_clip_is_muted")]
     fn is_muted(&self) -> bool {
         unsafe { from_glib(ffi::ges_uri_clip_is_muted(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_uri_clip_set_is_image")]
     fn set_is_image(&self, is_image: bool) {
         unsafe {
             ffi::ges_uri_clip_set_is_image(self.as_ref().to_glib_none().0, is_image.into_glib());
         }
     }
 
+    #[doc(alias = "ges_uri_clip_set_mute")]
     fn set_mute(&self, mute: bool) {
         unsafe {
             ffi::ges_uri_clip_set_mute(self.as_ref().to_glib_none().0, mute.into_glib());
         }
     }
 
+    #[doc(alias = "is-image")]
     fn connect_is_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_is_image_trampoline<P: IsA<UriClip>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESUriClip,
@@ -104,6 +92,7 @@ impl<O: IsA<UriClip>> UriClipExt for O {
         }
     }
 
+    #[doc(alias = "mute")]
     fn connect_mute_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mute_trampoline<P: IsA<UriClip>, F: Fn(&P) + 'static>(
             this: *mut ffi::GESUriClip,
@@ -126,3 +115,5 @@ impl<O: IsA<UriClip>> UriClipExt for O {
         }
     }
 }
+
+impl<O: IsA<UriClip>> UriClipExt for O {}

@@ -33,29 +33,14 @@ impl StreamVolume {
 unsafe impl Send for StreamVolume {}
 unsafe impl Sync for StreamVolume {}
 
-pub trait StreamVolumeExt: 'static {
-    #[doc(alias = "gst_stream_volume_get_mute")]
-    #[doc(alias = "get_mute")]
-    fn is_muted(&self) -> bool;
-
-    #[doc(alias = "gst_stream_volume_get_volume")]
-    #[doc(alias = "get_volume")]
-    fn volume(&self, format: StreamVolumeFormat) -> f64;
-
-    #[doc(alias = "gst_stream_volume_set_mute")]
-    fn set_mute(&self, mute: bool);
-
-    #[doc(alias = "gst_stream_volume_set_volume")]
-    fn set_volume(&self, format: StreamVolumeFormat, val: f64);
-
-    #[doc(alias = "mute")]
-    fn connect_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "volume")]
-    fn connect_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::StreamVolume>> Sealed for T {}
 }
 
-impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
+pub trait StreamVolumeExt: IsA<StreamVolume> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_stream_volume_get_mute")]
+    #[doc(alias = "get_mute")]
     fn is_muted(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_stream_volume_get_mute(
@@ -64,18 +49,22 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
         }
     }
 
+    #[doc(alias = "gst_stream_volume_get_volume")]
+    #[doc(alias = "get_volume")]
     fn volume(&self, format: StreamVolumeFormat) -> f64 {
         unsafe {
             ffi::gst_stream_volume_get_volume(self.as_ref().to_glib_none().0, format.into_glib())
         }
     }
 
+    #[doc(alias = "gst_stream_volume_set_mute")]
     fn set_mute(&self, mute: bool) {
         unsafe {
             ffi::gst_stream_volume_set_mute(self.as_ref().to_glib_none().0, mute.into_glib());
         }
     }
 
+    #[doc(alias = "gst_stream_volume_set_volume")]
     fn set_volume(&self, format: StreamVolumeFormat, val: f64) {
         unsafe {
             ffi::gst_stream_volume_set_volume(
@@ -86,6 +75,7 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
         }
     }
 
+    #[doc(alias = "mute")]
     fn connect_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mute_trampoline<
             P: IsA<StreamVolume>,
@@ -111,6 +101,7 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
         }
     }
 
+    #[doc(alias = "volume")]
     fn connect_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_volume_trampoline<
             P: IsA<StreamVolume>,
@@ -136,3 +127,5 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
         }
     }
 }
+
+impl<O: IsA<StreamVolume>> StreamVolumeExt for O {}

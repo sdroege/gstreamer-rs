@@ -21,6 +21,14 @@ impl PlayerSignalDispatcher {
 unsafe impl Send for PlayerSignalDispatcher {}
 unsafe impl Sync for PlayerSignalDispatcher {}
 
-pub trait PlayerSignalDispatcherExt: 'static {}
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::PlayerSignalDispatcher>> Sealed for T {}
+}
+
+pub trait PlayerSignalDispatcherExt:
+    IsA<PlayerSignalDispatcher> + sealed::Sealed + 'static
+{
+}
 
 impl<O: IsA<PlayerSignalDispatcher>> PlayerSignalDispatcherExt for O {}

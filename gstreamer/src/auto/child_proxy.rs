@@ -26,58 +26,13 @@ impl ChildProxy {
 unsafe impl Send for ChildProxy {}
 unsafe impl Sync for ChildProxy {}
 
-pub trait ChildProxyExt: 'static {
-    #[doc(alias = "gst_child_proxy_child_added")]
-    fn child_added(&self, child: &impl IsA<glib::Object>, name: &str);
-
-    #[doc(alias = "gst_child_proxy_child_removed")]
-    fn child_removed(&self, child: &impl IsA<glib::Object>, name: &str);
-
-    //#[doc(alias = "gst_child_proxy_get")]
-    //fn get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs);
-
-    #[doc(alias = "gst_child_proxy_get_child_by_index")]
-    #[doc(alias = "get_child_by_index")]
-    fn child_by_index(&self, index: u32) -> Option<glib::Object>;
-
-    #[doc(alias = "gst_child_proxy_get_child_by_name")]
-    #[doc(alias = "get_child_by_name")]
-    fn child_by_name(&self, name: &str) -> Option<glib::Object>;
-
-    #[cfg(feature = "v1_22")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
-    #[doc(alias = "gst_child_proxy_get_child_by_name_recurse")]
-    #[doc(alias = "get_child_by_name_recurse")]
-    fn child_by_name_recurse(&self, name: &str) -> Option<glib::Object>;
-
-    #[doc(alias = "gst_child_proxy_get_children_count")]
-    #[doc(alias = "get_children_count")]
-    fn children_count(&self) -> u32;
-
-    //#[doc(alias = "gst_child_proxy_get_valist")]
-    //#[doc(alias = "get_valist")]
-    //fn valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
-
-    //#[doc(alias = "gst_child_proxy_set")]
-    //fn set(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs);
-
-    //#[doc(alias = "gst_child_proxy_set_valist")]
-    //fn set_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
-
-    #[doc(alias = "child-added")]
-    fn connect_child_added<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "child-removed")]
-    fn connect_child_removed<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ChildProxy>> Sealed for T {}
 }
 
-impl<O: IsA<ChildProxy>> ChildProxyExt for O {
+pub trait ChildProxyExt: IsA<ChildProxy> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_child_proxy_child_added")]
     fn child_added(&self, child: &impl IsA<glib::Object>, name: &str) {
         unsafe {
             ffi::gst_child_proxy_child_added(
@@ -88,6 +43,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         }
     }
 
+    #[doc(alias = "gst_child_proxy_child_removed")]
     fn child_removed(&self, child: &impl IsA<glib::Object>, name: &str) {
         unsafe {
             ffi::gst_child_proxy_child_removed(
@@ -98,10 +54,13 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         }
     }
 
+    //#[doc(alias = "gst_child_proxy_get")]
     //fn get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
     //    unsafe { TODO: call ffi:gst_child_proxy_get() }
     //}
 
+    #[doc(alias = "gst_child_proxy_get_child_by_index")]
+    #[doc(alias = "get_child_by_index")]
     fn child_by_index(&self, index: u32) -> Option<glib::Object> {
         unsafe {
             from_glib_full(ffi::gst_child_proxy_get_child_by_index(
@@ -111,6 +70,8 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         }
     }
 
+    #[doc(alias = "gst_child_proxy_get_child_by_name")]
+    #[doc(alias = "get_child_by_name")]
     fn child_by_name(&self, name: &str) -> Option<glib::Object> {
         unsafe {
             from_glib_full(ffi::gst_child_proxy_get_child_by_name(
@@ -122,6 +83,8 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
 
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "gst_child_proxy_get_child_by_name_recurse")]
+    #[doc(alias = "get_child_by_name_recurse")]
     fn child_by_name_recurse(&self, name: &str) -> Option<glib::Object> {
         unsafe {
             from_glib_full(ffi::gst_child_proxy_get_child_by_name_recurse(
@@ -131,22 +94,29 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         }
     }
 
+    #[doc(alias = "gst_child_proxy_get_children_count")]
+    #[doc(alias = "get_children_count")]
     fn children_count(&self) -> u32 {
         unsafe { ffi::gst_child_proxy_get_children_count(self.as_ref().to_glib_none().0) }
     }
 
+    //#[doc(alias = "gst_child_proxy_get_valist")]
+    //#[doc(alias = "get_valist")]
     //fn valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi:gst_child_proxy_get_valist() }
     //}
 
+    //#[doc(alias = "gst_child_proxy_set")]
     //fn set(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
     //    unsafe { TODO: call ffi:gst_child_proxy_set() }
     //}
 
+    //#[doc(alias = "gst_child_proxy_set_valist")]
     //fn set_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi:gst_child_proxy_set_valist() }
     //}
 
+    #[doc(alias = "child-added")]
     fn connect_child_added<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -180,6 +150,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         }
     }
 
+    #[doc(alias = "child-removed")]
     fn connect_child_removed<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -213,3 +184,5 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         }
     }
 }
+
+impl<O: IsA<ChildProxy>> ChildProxyExt for O {}

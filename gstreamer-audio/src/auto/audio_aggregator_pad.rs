@@ -30,41 +30,29 @@ impl AudioAggregatorPad {
 unsafe impl Send for AudioAggregatorPad {}
 unsafe impl Sync for AudioAggregatorPad {}
 
-pub trait AudioAggregatorPadExt: 'static {
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "qos-messages")]
-    fn is_qos_messages(&self) -> bool;
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "qos-messages")]
-    fn set_qos_messages(&self, qos_messages: bool);
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "qos-messages")]
-    fn connect_qos_messages_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AudioAggregatorPad>> Sealed for T {}
 }
 
-impl<O: IsA<AudioAggregatorPad>> AudioAggregatorPadExt for O {
+pub trait AudioAggregatorPadExt: IsA<AudioAggregatorPad> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "qos-messages")]
     fn is_qos_messages(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "qos-messages")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "qos-messages")]
     fn set_qos_messages(&self, qos_messages: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "qos-messages", qos_messages)
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "qos-messages")]
     fn connect_qos_messages_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -93,3 +81,5 @@ impl<O: IsA<AudioAggregatorPad>> AudioAggregatorPadExt for O {
         }
     }
 }
+
+impl<O: IsA<AudioAggregatorPad>> AudioAggregatorPadExt for O {}

@@ -59,25 +59,15 @@ impl Formatter {
     }
 }
 
-pub trait FormatterExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Formatter>> Sealed for T {}
+}
+
+pub trait FormatterExt: IsA<Formatter> + sealed::Sealed + 'static {
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[allow(deprecated)]
     #[doc(alias = "ges_formatter_load_from_uri")]
-    fn load_from_uri(&self, timeline: &impl IsA<Timeline>, uri: &str) -> Result<(), glib::Error>;
-
-    #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
-    #[allow(deprecated)]
-    #[doc(alias = "ges_formatter_save_to_uri")]
-    fn save_to_uri(
-        &self,
-        timeline: &impl IsA<Timeline>,
-        uri: &str,
-        overwrite: bool,
-    ) -> Result<(), glib::Error>;
-}
-
-impl<O: IsA<Formatter>> FormatterExt for O {
-    #[allow(deprecated)]
     fn load_from_uri(&self, timeline: &impl IsA<Timeline>, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -96,7 +86,9 @@ impl<O: IsA<Formatter>> FormatterExt for O {
         }
     }
 
+    #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[allow(deprecated)]
+    #[doc(alias = "ges_formatter_save_to_uri")]
     fn save_to_uri(
         &self,
         timeline: &impl IsA<Timeline>,
@@ -121,3 +113,5 @@ impl<O: IsA<Formatter>> FormatterExt for O {
         }
     }
 }
+
+impl<O: IsA<Formatter>> FormatterExt for O {}

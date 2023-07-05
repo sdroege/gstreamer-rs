@@ -28,19 +28,13 @@ impl Allocator {
 unsafe impl Send for Allocator {}
 unsafe impl Sync for Allocator {}
 
-pub trait AllocatorExt: 'static {
-    #[doc(alias = "gst_allocator_alloc")]
-    fn alloc(
-        &self,
-        size: usize,
-        params: Option<&AllocationParams>,
-    ) -> Result<Memory, glib::BoolError>;
-
-    #[doc(alias = "gst_allocator_set_default")]
-    fn set_default(self);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Allocator>> Sealed for T {}
 }
 
-impl<O: IsA<Allocator>> AllocatorExt for O {
+pub trait AllocatorExt: IsA<Allocator> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_allocator_alloc")]
     fn alloc(
         &self,
         size: usize,
@@ -56,9 +50,12 @@ impl<O: IsA<Allocator>> AllocatorExt for O {
         }
     }
 
+    #[doc(alias = "gst_allocator_set_default")]
     fn set_default(self) {
         unsafe {
             ffi::gst_allocator_set_default(self.upcast().into_glib_ptr());
         }
     }
 }
+
+impl<O: IsA<Allocator>> AllocatorExt for O {}

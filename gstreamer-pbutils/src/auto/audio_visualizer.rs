@@ -27,32 +27,18 @@ impl AudioVisualizer {
 unsafe impl Send for AudioVisualizer {}
 unsafe impl Sync for AudioVisualizer {}
 
-pub trait AudioVisualizerExt: 'static {
-    #[doc(alias = "shade-amount")]
-    fn shade_amount(&self) -> u32;
-
-    #[doc(alias = "shade-amount")]
-    fn set_shade_amount(&self, shade_amount: u32);
-
-    fn shader(&self) -> AudioVisualizerShader;
-
-    fn set_shader(&self, shader: AudioVisualizerShader);
-
-    #[doc(alias = "shade-amount")]
-    fn connect_shade_amount_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "shader")]
-    fn connect_shader_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::AudioVisualizer>> Sealed for T {}
 }
 
-impl<O: IsA<AudioVisualizer>> AudioVisualizerExt for O {
+pub trait AudioVisualizerExt: IsA<AudioVisualizer> + sealed::Sealed + 'static {
+    #[doc(alias = "shade-amount")]
     fn shade_amount(&self) -> u32 {
         glib::ObjectExt::property(self.as_ref(), "shade-amount")
     }
 
+    #[doc(alias = "shade-amount")]
     fn set_shade_amount(&self, shade_amount: u32) {
         glib::ObjectExt::set_property(self.as_ref(), "shade-amount", shade_amount)
     }
@@ -65,6 +51,7 @@ impl<O: IsA<AudioVisualizer>> AudioVisualizerExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "shader", shader)
     }
 
+    #[doc(alias = "shade-amount")]
     fn connect_shade_amount_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -93,6 +80,7 @@ impl<O: IsA<AudioVisualizer>> AudioVisualizerExt for O {
         }
     }
 
+    #[doc(alias = "shader")]
     fn connect_shader_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_shader_trampoline<
             P: IsA<AudioVisualizer>,
@@ -118,3 +106,5 @@ impl<O: IsA<AudioVisualizer>> AudioVisualizerExt for O {
         }
     }
 }
+
+impl<O: IsA<AudioVisualizer>> AudioVisualizerExt for O {}

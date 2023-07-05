@@ -34,28 +34,14 @@ impl Default for BufferPool {
 unsafe impl Send for BufferPool {}
 unsafe impl Sync for BufferPool {}
 
-pub trait BufferPoolExt: 'static {
-    #[doc(alias = "gst_buffer_pool_get_options")]
-    #[doc(alias = "get_options")]
-    fn options(&self) -> Vec<glib::GString>;
-
-    #[doc(alias = "gst_buffer_pool_has_option")]
-    fn has_option(&self, option: &str) -> bool;
-
-    #[doc(alias = "gst_buffer_pool_is_active")]
-    fn is_active(&self) -> bool;
-
-    #[doc(alias = "gst_buffer_pool_release_buffer")]
-    fn release_buffer(&self, buffer: Buffer);
-
-    #[doc(alias = "gst_buffer_pool_set_active")]
-    fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_buffer_pool_set_flushing")]
-    fn set_flushing(&self, flushing: bool);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::BufferPool>> Sealed for T {}
 }
 
-impl<O: IsA<BufferPool>> BufferPoolExt for O {
+pub trait BufferPoolExt: IsA<BufferPool> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_buffer_pool_get_options")]
+    #[doc(alias = "get_options")]
     fn options(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_buffer_pool_get_options(
@@ -64,6 +50,7 @@ impl<O: IsA<BufferPool>> BufferPoolExt for O {
         }
     }
 
+    #[doc(alias = "gst_buffer_pool_has_option")]
     fn has_option(&self, option: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_buffer_pool_has_option(
@@ -73,6 +60,7 @@ impl<O: IsA<BufferPool>> BufferPoolExt for O {
         }
     }
 
+    #[doc(alias = "gst_buffer_pool_is_active")]
     fn is_active(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_buffer_pool_is_active(
@@ -81,6 +69,7 @@ impl<O: IsA<BufferPool>> BufferPoolExt for O {
         }
     }
 
+    #[doc(alias = "gst_buffer_pool_release_buffer")]
     fn release_buffer(&self, buffer: Buffer) {
         unsafe {
             ffi::gst_buffer_pool_release_buffer(
@@ -90,6 +79,7 @@ impl<O: IsA<BufferPool>> BufferPoolExt for O {
         }
     }
 
+    #[doc(alias = "gst_buffer_pool_set_active")]
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -99,9 +89,12 @@ impl<O: IsA<BufferPool>> BufferPoolExt for O {
         }
     }
 
+    #[doc(alias = "gst_buffer_pool_set_flushing")]
     fn set_flushing(&self, flushing: bool) {
         unsafe {
             ffi::gst_buffer_pool_set_flushing(self.as_ref().to_glib_none().0, flushing.into_glib());
         }
     }
 }
+
+impl<O: IsA<BufferPool>> BufferPoolExt for O {}

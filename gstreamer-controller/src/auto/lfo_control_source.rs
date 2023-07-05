@@ -41,56 +41,12 @@ impl Default for LFOControlSource {
 unsafe impl Send for LFOControlSource {}
 unsafe impl Sync for LFOControlSource {}
 
-pub trait LFOControlSourceExt: 'static {
-    fn amplitude(&self) -> f64;
-
-    fn set_amplitude(&self, amplitude: f64);
-
-    fn frequency(&self) -> f64;
-
-    fn set_frequency(&self, frequency: f64);
-
-    fn offset(&self) -> f64;
-
-    fn set_offset(&self, offset: f64);
-
-    fn timeshift(&self) -> u64;
-
-    fn set_timeshift(&self, timeshift: u64);
-
-    fn waveform(&self) -> LFOWaveform;
-
-    fn set_waveform(&self, waveform: LFOWaveform);
-
-    #[doc(alias = "amplitude")]
-    fn connect_amplitude_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "frequency")]
-    fn connect_frequency_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "offset")]
-    fn connect_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "timeshift")]
-    fn connect_timeshift_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "waveform")]
-    fn connect_waveform_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::LFOControlSource>> Sealed for T {}
 }
 
-impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
+pub trait LFOControlSourceExt: IsA<LFOControlSource> + sealed::Sealed + 'static {
     fn amplitude(&self) -> f64 {
         glib::ObjectExt::property(self.as_ref(), "amplitude")
     }
@@ -131,6 +87,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "waveform", waveform)
     }
 
+    #[doc(alias = "amplitude")]
     fn connect_amplitude_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -159,6 +116,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
+    #[doc(alias = "frequency")]
     fn connect_frequency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -187,6 +145,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
+    #[doc(alias = "offset")]
     fn connect_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_offset_trampoline<
             P: IsA<LFOControlSource>,
@@ -212,6 +171,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
+    #[doc(alias = "timeshift")]
     fn connect_timeshift_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -240,6 +200,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
+    #[doc(alias = "waveform")]
     fn connect_waveform_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -268,3 +229,5 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 }
+
+impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {}

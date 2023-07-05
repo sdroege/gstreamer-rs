@@ -25,17 +25,16 @@ impl VideoSource {
     pub const NONE: Option<&'static VideoSource> = None;
 }
 
-pub trait VideoSourceExt: 'static {
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoSource>> Sealed for T {}
+}
+
+pub trait VideoSourceExt: IsA<VideoSource> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_video_source_get_natural_size")]
     #[doc(alias = "get_natural_size")]
-    fn natural_size(&self) -> Option<(i32, i32)>;
-}
-
-impl<O: IsA<VideoSource>> VideoSourceExt for O {
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn natural_size(&self) -> Option<(i32, i32)> {
         unsafe {
             let mut width = mem::MaybeUninit::uninit();
@@ -53,3 +52,5 @@ impl<O: IsA<VideoSource>> VideoSourceExt for O {
         }
     }
 }
+
+impl<O: IsA<VideoSource>> VideoSourceExt for O {}

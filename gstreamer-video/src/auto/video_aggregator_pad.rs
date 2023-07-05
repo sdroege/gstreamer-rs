@@ -26,43 +26,13 @@ impl VideoAggregatorPad {
 unsafe impl Send for VideoAggregatorPad {}
 unsafe impl Sync for VideoAggregatorPad {}
 
-pub trait VideoAggregatorPadExt: 'static {
-    #[doc(alias = "gst_video_aggregator_pad_set_needs_alpha")]
-    fn set_needs_alpha(&self, needs_alpha: bool);
-
-    #[doc(alias = "max-last-buffer-repeat")]
-    fn max_last_buffer_repeat(&self) -> u64;
-
-    #[doc(alias = "max-last-buffer-repeat")]
-    fn set_max_last_buffer_repeat(&self, max_last_buffer_repeat: u64);
-
-    #[doc(alias = "repeat-after-eos")]
-    fn is_repeat_after_eos(&self) -> bool;
-
-    #[doc(alias = "repeat-after-eos")]
-    fn set_repeat_after_eos(&self, repeat_after_eos: bool);
-
-    fn zorder(&self) -> u32;
-
-    fn set_zorder(&self, zorder: u32);
-
-    #[doc(alias = "max-last-buffer-repeat")]
-    fn connect_max_last_buffer_repeat_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "repeat-after-eos")]
-    fn connect_repeat_after_eos_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "zorder")]
-    fn connect_zorder_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::VideoAggregatorPad>> Sealed for T {}
 }
 
-impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExt for O {
+pub trait VideoAggregatorPadExt: IsA<VideoAggregatorPad> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_video_aggregator_pad_set_needs_alpha")]
     fn set_needs_alpha(&self, needs_alpha: bool) {
         unsafe {
             ffi::gst_video_aggregator_pad_set_needs_alpha(
@@ -72,10 +42,12 @@ impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExt for O {
         }
     }
 
+    #[doc(alias = "max-last-buffer-repeat")]
     fn max_last_buffer_repeat(&self) -> u64 {
         glib::ObjectExt::property(self.as_ref(), "max-last-buffer-repeat")
     }
 
+    #[doc(alias = "max-last-buffer-repeat")]
     fn set_max_last_buffer_repeat(&self, max_last_buffer_repeat: u64) {
         glib::ObjectExt::set_property(
             self.as_ref(),
@@ -84,10 +56,12 @@ impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExt for O {
         )
     }
 
+    #[doc(alias = "repeat-after-eos")]
     fn is_repeat_after_eos(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "repeat-after-eos")
     }
 
+    #[doc(alias = "repeat-after-eos")]
     fn set_repeat_after_eos(&self, repeat_after_eos: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "repeat-after-eos", repeat_after_eos)
     }
@@ -100,6 +74,7 @@ impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "zorder", zorder)
     }
 
+    #[doc(alias = "max-last-buffer-repeat")]
     fn connect_max_last_buffer_repeat_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -128,6 +103,7 @@ impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExt for O {
         }
     }
 
+    #[doc(alias = "repeat-after-eos")]
     fn connect_repeat_after_eos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -156,6 +132,7 @@ impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExt for O {
         }
     }
 
+    #[doc(alias = "zorder")]
     fn connect_zorder_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_zorder_trampoline<
             P: IsA<VideoAggregatorPad>,
@@ -181,3 +158,5 @@ impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExt for O {
         }
     }
 }
+
+impl<O: IsA<VideoAggregatorPad>> VideoAggregatorPadExt for O {}

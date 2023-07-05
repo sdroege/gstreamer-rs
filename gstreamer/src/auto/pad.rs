@@ -30,204 +30,13 @@ impl Pad {
 unsafe impl Send for Pad {}
 unsafe impl Sync for Pad {}
 
-pub trait PadExt: 'static {
-    #[doc(alias = "gst_pad_activate_mode")]
-    fn activate_mode(&self, mode: PadMode, active: bool) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_pad_can_link")]
-    fn can_link(&self, sinkpad: &impl IsA<Pad>) -> bool;
-
-    #[doc(alias = "gst_pad_chain")]
-    fn chain(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError>;
-
-    #[doc(alias = "gst_pad_chain_list")]
-    fn chain_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError>;
-
-    #[doc(alias = "gst_pad_check_reconfigure")]
-    fn check_reconfigure(&self) -> bool;
-
-    #[doc(alias = "gst_pad_create_stream_id")]
-    fn create_stream_id(
-        &self,
-        parent: &impl IsA<Element>,
-        stream_id: Option<&str>,
-    ) -> glib::GString;
-
-    //#[doc(alias = "gst_pad_create_stream_id_printf")]
-    //fn create_stream_id_printf(&self, parent: &impl IsA<Element>, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) -> glib::GString;
-
-    //#[doc(alias = "gst_pad_create_stream_id_printf_valist")]
-    //fn create_stream_id_printf_valist(&self, parent: &impl IsA<Element>, stream_id: Option<&str>, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> glib::GString;
-
-    #[doc(alias = "gst_pad_forward")]
-    fn forward<P: FnMut(&Pad) -> bool>(&self, forward: P) -> bool;
-
-    #[doc(alias = "gst_pad_get_allowed_caps")]
-    #[doc(alias = "get_allowed_caps")]
-    fn allowed_caps(&self) -> Option<Caps>;
-
-    #[doc(alias = "gst_pad_get_current_caps")]
-    #[doc(alias = "get_current_caps")]
-    fn current_caps(&self) -> Option<Caps>;
-
-    #[doc(alias = "gst_pad_get_direction")]
-    #[doc(alias = "get_direction")]
-    fn direction(&self) -> PadDirection;
-
-    //#[doc(alias = "gst_pad_get_element_private")]
-    //#[doc(alias = "get_element_private")]
-    //fn element_private(&self) -> /*Unimplemented*/Option<Basic: Pointer>;
-
-    #[doc(alias = "gst_pad_get_last_flow_return")]
-    #[doc(alias = "get_last_flow_return")]
-    fn last_flow_result(&self) -> Result<FlowSuccess, FlowError>;
-
-    #[doc(alias = "gst_pad_get_offset")]
-    #[doc(alias = "get_offset")]
-    fn offset(&self) -> i64;
-
-    #[doc(alias = "gst_pad_get_pad_template")]
-    #[doc(alias = "get_pad_template")]
-    fn pad_template(&self) -> Option<PadTemplate>;
-
-    #[doc(alias = "gst_pad_get_pad_template_caps")]
-    #[doc(alias = "get_pad_template_caps")]
-    fn pad_template_caps(&self) -> Caps;
-
-    #[doc(alias = "gst_pad_get_parent_element")]
-    #[doc(alias = "get_parent_element")]
-    fn parent_element(&self) -> Option<Element>;
-
-    #[doc(alias = "gst_pad_get_peer")]
-    #[doc(alias = "get_peer")]
-    #[must_use]
-    fn peer(&self) -> Option<Pad>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "gst_pad_get_single_internal_link")]
-    #[doc(alias = "get_single_internal_link")]
-    #[must_use]
-    fn single_internal_link(&self) -> Option<Pad>;
-
-    #[doc(alias = "gst_pad_get_stream")]
-    #[doc(alias = "get_stream")]
-    fn stream(&self) -> Option<Stream>;
-
-    #[doc(alias = "gst_pad_get_stream_id")]
-    #[doc(alias = "get_stream_id")]
-    fn stream_id(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_pad_get_task_state")]
-    #[doc(alias = "get_task_state")]
-    fn task_state(&self) -> TaskState;
-
-    #[doc(alias = "gst_pad_has_current_caps")]
-    fn has_current_caps(&self) -> bool;
-
-    #[doc(alias = "gst_pad_is_active")]
-    fn is_active(&self) -> bool;
-
-    #[doc(alias = "gst_pad_is_blocked")]
-    fn is_blocked(&self) -> bool;
-
-    #[doc(alias = "gst_pad_is_blocking")]
-    fn is_blocking(&self) -> bool;
-
-    #[doc(alias = "gst_pad_is_linked")]
-    fn is_linked(&self) -> bool;
-
-    //#[doc(alias = "gst_pad_iterate_internal_links")]
-    //fn iterate_internal_links(&self) -> /*Ignored*/Option<Iterator>;
-
-    //#[doc(alias = "gst_pad_iterate_internal_links_default")]
-    //fn iterate_internal_links_default(&self, parent: Option<&impl IsA<Object>>) -> /*Ignored*/Option<Iterator>;
-
-    #[doc(alias = "gst_pad_link")]
-    fn link(&self, sinkpad: &impl IsA<Pad>) -> Result<PadLinkSuccess, PadLinkError>;
-
-    #[doc(alias = "gst_pad_link_full")]
-    fn link_full(
-        &self,
-        sinkpad: &impl IsA<Pad>,
-        flags: PadLinkCheck,
-    ) -> Result<PadLinkSuccess, PadLinkError>;
-
-    #[doc(alias = "gst_pad_link_maybe_ghosting")]
-    fn link_maybe_ghosting(&self, sink: &impl IsA<Pad>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_pad_link_maybe_ghosting_full")]
-    fn link_maybe_ghosting_full(
-        &self,
-        sink: &impl IsA<Pad>,
-        flags: PadLinkCheck,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_pad_mark_reconfigure")]
-    fn mark_reconfigure(&self);
-
-    #[doc(alias = "gst_pad_needs_reconfigure")]
-    fn needs_reconfigure(&self) -> bool;
-
-    #[doc(alias = "gst_pad_pause_task")]
-    fn pause_task(&self) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_pad_peer_query_accept_caps")]
-    fn peer_query_accept_caps(&self, caps: &Caps) -> bool;
-
-    #[doc(alias = "gst_pad_peer_query_caps")]
-    fn peer_query_caps(&self, filter: Option<&Caps>) -> Caps;
-
-    #[doc(alias = "gst_pad_push")]
-    fn push(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError>;
-
-    #[doc(alias = "gst_pad_push_list")]
-    fn push_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError>;
-
-    #[doc(alias = "gst_pad_query_accept_caps")]
-    fn query_accept_caps(&self, caps: &Caps) -> bool;
-
-    #[doc(alias = "gst_pad_query_caps")]
-    fn query_caps(&self, filter: Option<&Caps>) -> Caps;
-
-    #[doc(alias = "gst_pad_set_active")]
-    fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError>;
-
-    //#[doc(alias = "gst_pad_set_element_private")]
-    //fn set_element_private(&self, priv_: /*Unimplemented*/Option<Basic: Pointer>);
-
-    #[doc(alias = "gst_pad_set_offset")]
-    fn set_offset(&self, offset: i64);
-
-    #[doc(alias = "gst_pad_stop_task")]
-    fn stop_task(&self) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_pad_store_sticky_event")]
-    fn store_sticky_event(&self, event: &Event) -> Result<FlowSuccess, FlowError>;
-
-    #[doc(alias = "gst_pad_unlink")]
-    fn unlink(&self, sinkpad: &impl IsA<Pad>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_pad_use_fixed_caps")]
-    fn use_fixed_caps(&self);
-
-    fn caps(&self) -> Option<Caps>;
-
-    #[doc(alias = "linked")]
-    fn connect_linked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "unlinked")]
-    fn connect_unlinked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F)
-        -> SignalHandlerId;
-
-    #[doc(alias = "caps")]
-    fn connect_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "offset")]
-    fn connect_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Pad>> Sealed for T {}
 }
 
-impl<O: IsA<Pad>> PadExt for O {
+pub trait PadExt: IsA<Pad> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_pad_activate_mode")]
     fn activate_mode(&self, mode: PadMode, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -241,6 +50,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_can_link")]
     fn can_link(&self, sinkpad: &impl IsA<Pad>) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_can_link(
@@ -250,6 +60,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_chain")]
     fn chain(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError> {
         unsafe {
             try_from_glib(ffi::gst_pad_chain(
@@ -259,6 +70,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_chain_list")]
     fn chain_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError> {
         unsafe {
             try_from_glib(ffi::gst_pad_chain_list(
@@ -268,6 +80,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_check_reconfigure")]
     fn check_reconfigure(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_check_reconfigure(
@@ -276,6 +89,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_create_stream_id")]
     fn create_stream_id(
         &self,
         parent: &impl IsA<Element>,
@@ -290,14 +104,17 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    //#[doc(alias = "gst_pad_create_stream_id_printf")]
     //fn create_stream_id_printf(&self, parent: &impl IsA<Element>, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) -> glib::GString {
     //    unsafe { TODO: call ffi:gst_pad_create_stream_id_printf() }
     //}
 
+    //#[doc(alias = "gst_pad_create_stream_id_printf_valist")]
     //fn create_stream_id_printf_valist(&self, parent: &impl IsA<Element>, stream_id: Option<&str>, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> glib::GString {
     //    unsafe { TODO: call ffi:gst_pad_create_stream_id_printf_valist() }
     //}
 
+    #[doc(alias = "gst_pad_forward")]
     fn forward<P: FnMut(&Pad) -> bool>(&self, forward: P) -> bool {
         let forward_data: P = forward;
         unsafe extern "C" fn forward_func<P: FnMut(&Pad) -> bool>(
@@ -319,6 +136,8 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_get_allowed_caps")]
+    #[doc(alias = "get_allowed_caps")]
     fn allowed_caps(&self) -> Option<Caps> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_allowed_caps(
@@ -327,6 +146,8 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_get_current_caps")]
+    #[doc(alias = "get_current_caps")]
     fn current_caps(&self) -> Option<Caps> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_current_caps(
@@ -335,14 +156,20 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_get_direction")]
+    #[doc(alias = "get_direction")]
     fn direction(&self) -> PadDirection {
         unsafe { from_glib(ffi::gst_pad_get_direction(self.as_ref().to_glib_none().0)) }
     }
 
+    //#[doc(alias = "gst_pad_get_element_private")]
+    //#[doc(alias = "get_element_private")]
     //fn element_private(&self) -> /*Unimplemented*/Option<Basic: Pointer> {
     //    unsafe { TODO: call ffi:gst_pad_get_element_private() }
     //}
 
+    #[doc(alias = "gst_pad_get_last_flow_return")]
+    #[doc(alias = "get_last_flow_return")]
     fn last_flow_result(&self) -> Result<FlowSuccess, FlowError> {
         unsafe {
             try_from_glib(ffi::gst_pad_get_last_flow_return(
@@ -351,10 +178,14 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_get_offset")]
+    #[doc(alias = "get_offset")]
     fn offset(&self) -> i64 {
         unsafe { ffi::gst_pad_get_offset(self.as_ref().to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_pad_get_pad_template")]
+    #[doc(alias = "get_pad_template")]
     fn pad_template(&self) -> Option<PadTemplate> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_pad_template(
@@ -363,6 +194,8 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_get_pad_template_caps")]
+    #[doc(alias = "get_pad_template_caps")]
     fn pad_template_caps(&self) -> Caps {
         unsafe {
             from_glib_full(ffi::gst_pad_get_pad_template_caps(
@@ -371,6 +204,8 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_get_parent_element")]
+    #[doc(alias = "get_parent_element")]
     fn parent_element(&self) -> Option<Element> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_parent_element(
@@ -379,12 +214,18 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_get_peer")]
+    #[doc(alias = "get_peer")]
+    #[must_use]
     fn peer(&self) -> Option<Pad> {
         unsafe { from_glib_full(ffi::gst_pad_get_peer(self.as_ref().to_glib_none().0)) }
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_pad_get_single_internal_link")]
+    #[doc(alias = "get_single_internal_link")]
+    #[must_use]
     fn single_internal_link(&self) -> Option<Pad> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_single_internal_link(
@@ -393,18 +234,25 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_get_stream")]
+    #[doc(alias = "get_stream")]
     fn stream(&self) -> Option<Stream> {
         unsafe { from_glib_full(ffi::gst_pad_get_stream(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_pad_get_stream_id")]
+    #[doc(alias = "get_stream_id")]
     fn stream_id(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::gst_pad_get_stream_id(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_pad_get_task_state")]
+    #[doc(alias = "get_task_state")]
     fn task_state(&self) -> TaskState {
         unsafe { from_glib(ffi::gst_pad_get_task_state(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_pad_has_current_caps")]
     fn has_current_caps(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_has_current_caps(
@@ -413,30 +261,37 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_is_active")]
     fn is_active(&self) -> bool {
         unsafe { from_glib(ffi::gst_pad_is_active(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_pad_is_blocked")]
     fn is_blocked(&self) -> bool {
         unsafe { from_glib(ffi::gst_pad_is_blocked(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_pad_is_blocking")]
     fn is_blocking(&self) -> bool {
         unsafe { from_glib(ffi::gst_pad_is_blocking(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_pad_is_linked")]
     fn is_linked(&self) -> bool {
         unsafe { from_glib(ffi::gst_pad_is_linked(self.as_ref().to_glib_none().0)) }
     }
 
+    //#[doc(alias = "gst_pad_iterate_internal_links")]
     //fn iterate_internal_links(&self) -> /*Ignored*/Option<Iterator> {
     //    unsafe { TODO: call ffi:gst_pad_iterate_internal_links() }
     //}
 
+    //#[doc(alias = "gst_pad_iterate_internal_links_default")]
     //fn iterate_internal_links_default(&self, parent: Option<&impl IsA<Object>>) -> /*Ignored*/Option<Iterator> {
     //    unsafe { TODO: call ffi:gst_pad_iterate_internal_links_default() }
     //}
 
+    #[doc(alias = "gst_pad_link")]
     fn link(&self, sinkpad: &impl IsA<Pad>) -> Result<PadLinkSuccess, PadLinkError> {
         unsafe {
             try_from_glib(ffi::gst_pad_link(
@@ -446,6 +301,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_link_full")]
     fn link_full(
         &self,
         sinkpad: &impl IsA<Pad>,
@@ -460,6 +316,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_link_maybe_ghosting")]
     fn link_maybe_ghosting(&self, sink: &impl IsA<Pad>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -472,6 +329,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_link_maybe_ghosting_full")]
     fn link_maybe_ghosting_full(
         &self,
         sink: &impl IsA<Pad>,
@@ -489,12 +347,14 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_mark_reconfigure")]
     fn mark_reconfigure(&self) {
         unsafe {
             ffi::gst_pad_mark_reconfigure(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_pad_needs_reconfigure")]
     fn needs_reconfigure(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_needs_reconfigure(
@@ -503,6 +363,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_pause_task")]
     fn pause_task(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -512,6 +373,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_peer_query_accept_caps")]
     fn peer_query_accept_caps(&self, caps: &Caps) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_peer_query_accept_caps(
@@ -521,6 +383,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_peer_query_caps")]
     fn peer_query_caps(&self, filter: Option<&Caps>) -> Caps {
         unsafe {
             from_glib_full(ffi::gst_pad_peer_query_caps(
@@ -530,6 +393,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_push")]
     fn push(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError> {
         unsafe {
             try_from_glib(ffi::gst_pad_push(
@@ -539,6 +403,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_push_list")]
     fn push_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError> {
         unsafe {
             try_from_glib(ffi::gst_pad_push_list(
@@ -548,6 +413,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_query_accept_caps")]
     fn query_accept_caps(&self, caps: &Caps) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_query_accept_caps(
@@ -557,6 +423,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_query_caps")]
     fn query_caps(&self, filter: Option<&Caps>) -> Caps {
         unsafe {
             from_glib_full(ffi::gst_pad_query_caps(
@@ -566,6 +433,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_set_active")]
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -575,16 +443,19 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    //#[doc(alias = "gst_pad_set_element_private")]
     //fn set_element_private(&self, priv_: /*Unimplemented*/Option<Basic: Pointer>) {
     //    unsafe { TODO: call ffi:gst_pad_set_element_private() }
     //}
 
+    #[doc(alias = "gst_pad_set_offset")]
     fn set_offset(&self, offset: i64) {
         unsafe {
             ffi::gst_pad_set_offset(self.as_ref().to_glib_none().0, offset);
         }
     }
 
+    #[doc(alias = "gst_pad_stop_task")]
     fn stop_task(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -594,6 +465,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_store_sticky_event")]
     fn store_sticky_event(&self, event: &Event) -> Result<FlowSuccess, FlowError> {
         unsafe {
             try_from_glib(ffi::gst_pad_store_sticky_event(
@@ -603,6 +475,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_unlink")]
     fn unlink(&self, sinkpad: &impl IsA<Pad>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -615,6 +488,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "gst_pad_use_fixed_caps")]
     fn use_fixed_caps(&self) {
         unsafe {
             ffi::gst_pad_use_fixed_caps(self.as_ref().to_glib_none().0);
@@ -625,6 +499,7 @@ impl<O: IsA<Pad>> PadExt for O {
         glib::ObjectExt::property(self.as_ref(), "caps")
     }
 
+    #[doc(alias = "linked")]
     fn connect_linked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn linked_trampoline<
             P: IsA<Pad>,
@@ -653,6 +528,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "unlinked")]
     fn connect_unlinked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -684,6 +560,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "caps")]
     fn connect_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_caps_trampoline<
             P: IsA<Pad>,
@@ -709,6 +586,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
+    #[doc(alias = "offset")]
     fn connect_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_offset_trampoline<
             P: IsA<Pad>,
@@ -734,3 +612,5 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 }
+
+impl<O: IsA<Pad>> PadExt for O {}

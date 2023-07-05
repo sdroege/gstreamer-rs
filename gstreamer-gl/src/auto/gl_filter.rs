@@ -22,36 +22,20 @@ impl GLFilter {
 unsafe impl Send for GLFilter {}
 unsafe impl Sync for GLFilter {}
 
-pub trait GLFilterExt: 'static {
-    #[doc(alias = "gst_gl_filter_draw_fullscreen_quad")]
-    fn draw_fullscreen_quad(&self);
-
-    #[doc(alias = "gst_gl_filter_filter_texture")]
-    fn filter_texture(
-        &self,
-        input: &gst::Buffer,
-        output: &gst::Buffer,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_gl_filter_render_to_target")]
-    fn render_to_target<P: FnMut(&GLFilter, &GLMemory) -> bool>(
-        &self,
-        input: &GLMemory,
-        output: &GLMemory,
-        func: P,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_gl_filter_render_to_target_with_shader")]
-    fn render_to_target_with_shader(&self, input: &GLMemory, output: &GLMemory, shader: &GLShader);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::GLFilter>> Sealed for T {}
 }
 
-impl<O: IsA<GLFilter>> GLFilterExt for O {
+pub trait GLFilterExt: IsA<GLFilter> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_gl_filter_draw_fullscreen_quad")]
     fn draw_fullscreen_quad(&self) {
         unsafe {
             ffi::gst_gl_filter_draw_fullscreen_quad(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_gl_filter_filter_texture")]
     fn filter_texture(
         &self,
         input: &gst::Buffer,
@@ -69,6 +53,7 @@ impl<O: IsA<GLFilter>> GLFilterExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_filter_render_to_target")]
     fn render_to_target<P: FnMut(&GLFilter, &GLMemory) -> bool>(
         &self,
         input: &GLMemory,
@@ -102,6 +87,7 @@ impl<O: IsA<GLFilter>> GLFilterExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_filter_render_to_target_with_shader")]
     fn render_to_target_with_shader(&self, input: &GLMemory, output: &GLMemory, shader: &GLShader) {
         unsafe {
             ffi::gst_gl_filter_render_to_target_with_shader(
@@ -113,3 +99,5 @@ impl<O: IsA<GLFilter>> GLFilterExt for O {
         }
     }
 }
+
+impl<O: IsA<GLFilter>> GLFilterExt for O {}

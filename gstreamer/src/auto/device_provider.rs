@@ -27,64 +27,13 @@ impl DeviceProvider {
 unsafe impl Send for DeviceProvider {}
 unsafe impl Sync for DeviceProvider {}
 
-pub trait DeviceProviderExt: 'static {
-    #[doc(alias = "gst_device_provider_can_monitor")]
-    fn can_monitor(&self) -> bool;
-
-    #[doc(alias = "gst_device_provider_device_add")]
-    fn device_add(&self, device: &impl IsA<Device>);
-
-    #[cfg(feature = "v1_16")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "gst_device_provider_device_changed")]
-    fn device_changed(&self, device: &impl IsA<Device>, changed_device: &impl IsA<Device>);
-
-    #[doc(alias = "gst_device_provider_device_remove")]
-    fn device_remove(&self, device: &impl IsA<Device>);
-
-    #[doc(alias = "gst_device_provider_get_bus")]
-    #[doc(alias = "get_bus")]
-    fn bus(&self) -> Bus;
-
-    #[doc(alias = "gst_device_provider_get_factory")]
-    #[doc(alias = "get_factory")]
-    fn factory(&self) -> Option<DeviceProviderFactory>;
-
-    #[doc(alias = "gst_device_provider_get_hidden_providers")]
-    #[doc(alias = "get_hidden_providers")]
-    fn hidden_providers(&self) -> Vec<glib::GString>;
-
-    #[doc(alias = "gst_device_provider_hide_provider")]
-    fn hide_provider(&self, name: &str);
-
-    #[cfg(feature = "v1_20")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    #[doc(alias = "gst_device_provider_is_started")]
-    fn is_started(&self) -> bool;
-
-    #[doc(alias = "gst_device_provider_start")]
-    fn start(&self) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_device_provider_stop")]
-    fn stop(&self);
-
-    #[doc(alias = "gst_device_provider_unhide_provider")]
-    fn unhide_provider(&self, name: &str);
-
-    #[doc(alias = "provider-hidden")]
-    fn connect_provider_hidden<F: Fn(&Self, &str) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "provider-unhidden")]
-    fn connect_provider_unhidden<F: Fn(&Self, &str) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::DeviceProvider>> Sealed for T {}
 }
 
-impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
+pub trait DeviceProviderExt: IsA<DeviceProvider> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_device_provider_can_monitor")]
     fn can_monitor(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_device_provider_can_monitor(
@@ -93,6 +42,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_provider_device_add")]
     fn device_add(&self, device: &impl IsA<Device>) {
         unsafe {
             ffi::gst_device_provider_device_add(
@@ -104,6 +54,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_device_provider_device_changed")]
     fn device_changed(&self, device: &impl IsA<Device>, changed_device: &impl IsA<Device>) {
         unsafe {
             ffi::gst_device_provider_device_changed(
@@ -114,6 +65,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_provider_device_remove")]
     fn device_remove(&self, device: &impl IsA<Device>) {
         unsafe {
             ffi::gst_device_provider_device_remove(
@@ -123,6 +75,8 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_provider_get_bus")]
+    #[doc(alias = "get_bus")]
     fn bus(&self) -> Bus {
         unsafe {
             from_glib_full(ffi::gst_device_provider_get_bus(
@@ -131,6 +85,8 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_provider_get_factory")]
+    #[doc(alias = "get_factory")]
     fn factory(&self) -> Option<DeviceProviderFactory> {
         unsafe {
             from_glib_none(ffi::gst_device_provider_get_factory(
@@ -139,6 +95,8 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_provider_get_hidden_providers")]
+    #[doc(alias = "get_hidden_providers")]
     fn hidden_providers(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_device_provider_get_hidden_providers(
@@ -147,6 +105,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_provider_hide_provider")]
     fn hide_provider(&self, name: &str) {
         unsafe {
             ffi::gst_device_provider_hide_provider(
@@ -158,6 +117,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_device_provider_is_started")]
     fn is_started(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_device_provider_is_started(
@@ -166,6 +126,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_provider_start")]
     fn start(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -175,12 +136,14 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
+    #[doc(alias = "gst_device_provider_stop")]
     fn stop(&self) {
         unsafe {
             ffi::gst_device_provider_stop(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_device_provider_unhide_provider")]
     fn unhide_provider(&self, name: &str) {
         unsafe {
             ffi::gst_device_provider_unhide_provider(
@@ -190,6 +153,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
+    #[doc(alias = "provider-hidden")]
     fn connect_provider_hidden<F: Fn(&Self, &str) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -221,6 +185,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
+    #[doc(alias = "provider-unhidden")]
     fn connect_provider_unhidden<F: Fn(&Self, &str) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -252,3 +217,5 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 }
+
+impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {}

@@ -76,111 +76,13 @@ impl Clock {
 unsafe impl Send for Clock {}
 unsafe impl Sync for Clock {}
 
-pub trait ClockExt: 'static {
-    #[doc(alias = "gst_clock_add_observation")]
-    fn add_observation(&self, slave: ClockTime, master: ClockTime) -> Option<f64>;
-
-    #[doc(alias = "gst_clock_add_observation_unapplied")]
-    fn add_observation_unapplied(
-        &self,
-        slave: ClockTime,
-        master: ClockTime,
-    ) -> Option<(f64, ClockTime, ClockTime, ClockTime, ClockTime)>;
-
-    #[doc(alias = "gst_clock_adjust_unlocked")]
-    fn adjust_unlocked(&self, internal: ClockTime) -> Option<ClockTime>;
-
-    #[doc(alias = "gst_clock_get_calibration")]
-    #[doc(alias = "get_calibration")]
-    fn calibration(&self) -> (ClockTime, ClockTime, ClockTime, ClockTime);
-
-    #[doc(alias = "gst_clock_get_internal_time")]
-    #[doc(alias = "get_internal_time")]
-    fn internal_time(&self) -> ClockTime;
-
-    #[doc(alias = "gst_clock_get_master")]
-    #[doc(alias = "get_master")]
-    #[must_use]
-    fn master(&self) -> Option<Clock>;
-
-    #[doc(alias = "gst_clock_get_resolution")]
-    #[doc(alias = "get_resolution")]
-    fn resolution(&self) -> ClockTime;
-
-    #[doc(alias = "gst_clock_get_time")]
-    #[doc(alias = "get_time")]
-    fn time(&self) -> Option<ClockTime>;
-
-    #[doc(alias = "gst_clock_get_timeout")]
-    #[doc(alias = "get_timeout")]
-    fn timeout(&self) -> Option<ClockTime>;
-
-    #[doc(alias = "gst_clock_is_synced")]
-    fn is_synced(&self) -> bool;
-
-    #[doc(alias = "gst_clock_set_calibration")]
-    fn set_calibration(
-        &self,
-        internal: ClockTime,
-        external: ClockTime,
-        rate_num: ClockTime,
-        rate_denom: ClockTime,
-    );
-
-    #[doc(alias = "gst_clock_set_master")]
-    fn set_master(&self, master: Option<&impl IsA<Clock>>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_clock_set_resolution")]
-    fn set_resolution(&self, resolution: ClockTime) -> ClockTime;
-
-    #[doc(alias = "gst_clock_set_synced")]
-    fn set_synced(&self, synced: bool);
-
-    #[doc(alias = "gst_clock_set_timeout")]
-    fn set_timeout(&self, timeout: impl Into<Option<ClockTime>>);
-
-    #[doc(alias = "gst_clock_unadjust_unlocked")]
-    fn unadjust_unlocked(&self, external: ClockTime) -> Option<ClockTime>;
-
-    #[doc(alias = "gst_clock_wait_for_sync")]
-    fn wait_for_sync(
-        &self,
-        timeout: impl Into<Option<ClockTime>>,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "window-size")]
-    fn window_size(&self) -> i32;
-
-    #[doc(alias = "window-size")]
-    fn set_window_size(&self, window_size: i32);
-
-    #[doc(alias = "window-threshold")]
-    fn window_threshold(&self) -> i32;
-
-    #[doc(alias = "window-threshold")]
-    fn set_window_threshold(&self, window_threshold: i32);
-
-    #[doc(alias = "synced")]
-    fn connect_synced<F: Fn(&Self, bool) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "timeout")]
-    fn connect_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F)
-        -> SignalHandlerId;
-
-    #[doc(alias = "window-size")]
-    fn connect_window_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "window-threshold")]
-    fn connect_window_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Clock>> Sealed for T {}
 }
 
-impl<O: IsA<Clock>> ClockExt for O {
+pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_clock_add_observation")]
     fn add_observation(&self, slave: ClockTime, master: ClockTime) -> Option<f64> {
         unsafe {
             let mut r_squared = mem::MaybeUninit::uninit();
@@ -198,6 +100,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "gst_clock_add_observation_unapplied")]
     fn add_observation_unapplied(
         &self,
         slave: ClockTime,
@@ -233,6 +136,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "gst_clock_adjust_unlocked")]
     fn adjust_unlocked(&self, internal: ClockTime) -> Option<ClockTime> {
         unsafe {
             from_glib(ffi::gst_clock_adjust_unlocked(
@@ -242,6 +146,8 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "gst_clock_get_calibration")]
+    #[doc(alias = "get_calibration")]
     fn calibration(&self) -> (ClockTime, ClockTime, ClockTime, ClockTime) {
         unsafe {
             let mut internal = mem::MaybeUninit::uninit();
@@ -264,6 +170,8 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "gst_clock_get_internal_time")]
+    #[doc(alias = "get_internal_time")]
     fn internal_time(&self) -> ClockTime {
         unsafe {
             try_from_glib(ffi::gst_clock_get_internal_time(
@@ -273,10 +181,15 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "gst_clock_get_master")]
+    #[doc(alias = "get_master")]
+    #[must_use]
     fn master(&self) -> Option<Clock> {
         unsafe { from_glib_full(ffi::gst_clock_get_master(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_clock_get_resolution")]
+    #[doc(alias = "get_resolution")]
     fn resolution(&self) -> ClockTime {
         unsafe {
             try_from_glib(ffi::gst_clock_get_resolution(
@@ -286,18 +199,24 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "gst_clock_get_time")]
+    #[doc(alias = "get_time")]
     fn time(&self) -> Option<ClockTime> {
         unsafe { from_glib(ffi::gst_clock_get_time(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_clock_get_timeout")]
+    #[doc(alias = "get_timeout")]
     fn timeout(&self) -> Option<ClockTime> {
         unsafe { from_glib(ffi::gst_clock_get_timeout(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_clock_is_synced")]
     fn is_synced(&self) -> bool {
         unsafe { from_glib(ffi::gst_clock_is_synced(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_clock_set_calibration")]
     fn set_calibration(
         &self,
         internal: ClockTime,
@@ -316,6 +235,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "gst_clock_set_master")]
     fn set_master(&self, master: Option<&impl IsA<Clock>>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -328,6 +248,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "gst_clock_set_resolution")]
     fn set_resolution(&self, resolution: ClockTime) -> ClockTime {
         unsafe {
             try_from_glib(ffi::gst_clock_set_resolution(
@@ -338,18 +259,21 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "gst_clock_set_synced")]
     fn set_synced(&self, synced: bool) {
         unsafe {
             ffi::gst_clock_set_synced(self.as_ref().to_glib_none().0, synced.into_glib());
         }
     }
 
+    #[doc(alias = "gst_clock_set_timeout")]
     fn set_timeout(&self, timeout: impl Into<Option<ClockTime>>) {
         unsafe {
             ffi::gst_clock_set_timeout(self.as_ref().to_glib_none().0, timeout.into().into_glib());
         }
     }
 
+    #[doc(alias = "gst_clock_unadjust_unlocked")]
     fn unadjust_unlocked(&self, external: ClockTime) -> Option<ClockTime> {
         unsafe {
             from_glib(ffi::gst_clock_unadjust_unlocked(
@@ -359,6 +283,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "gst_clock_wait_for_sync")]
     fn wait_for_sync(
         &self,
         timeout: impl Into<Option<ClockTime>>,
@@ -374,22 +299,27 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "window-size")]
     fn window_size(&self) -> i32 {
         glib::ObjectExt::property(self.as_ref(), "window-size")
     }
 
+    #[doc(alias = "window-size")]
     fn set_window_size(&self, window_size: i32) {
         glib::ObjectExt::set_property(self.as_ref(), "window-size", window_size)
     }
 
+    #[doc(alias = "window-threshold")]
     fn window_threshold(&self) -> i32 {
         glib::ObjectExt::property(self.as_ref(), "window-threshold")
     }
 
+    #[doc(alias = "window-threshold")]
     fn set_window_threshold(&self, window_threshold: i32) {
         glib::ObjectExt::set_property(self.as_ref(), "window-threshold", window_threshold)
     }
 
+    #[doc(alias = "synced")]
     fn connect_synced<F: Fn(&Self, bool) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn synced_trampoline<
             P: IsA<Clock>,
@@ -418,6 +348,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "timeout")]
     fn connect_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -446,6 +377,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "window-size")]
     fn connect_window_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -474,6 +406,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
+    #[doc(alias = "window-threshold")]
     fn connect_window_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -502,3 +435,5 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 }
+
+impl<O: IsA<Clock>> ClockExt for O {}

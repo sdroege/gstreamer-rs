@@ -54,169 +54,20 @@ impl Element {
 unsafe impl Send for Element {}
 unsafe impl Sync for Element {}
 
-pub trait ElementExt: 'static {
-    #[doc(alias = "gst_element_abort_state")]
-    fn abort_state(&self);
-
-    #[doc(alias = "gst_element_add_pad")]
-    fn add_pad(&self, pad: &impl IsA<Pad>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_element_change_state")]
-    fn change_state(&self, transition: StateChange)
-        -> Result<StateChangeSuccess, StateChangeError>;
-
-    #[doc(alias = "gst_element_continue_state")]
-    fn continue_state(
-        &self,
-        ret: impl Into<StateChangeReturn>,
-    ) -> Result<StateChangeSuccess, StateChangeError>;
-
-    #[doc(alias = "gst_element_create_all_pads")]
-    fn create_all_pads(&self);
-
-    #[cfg(feature = "v1_24")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-    #[doc(alias = "gst_element_decorate_stream_id")]
-    fn decorate_stream_id(&self, stream_id: &str) -> glib::GString;
-
-    #[doc(alias = "gst_element_foreach_pad")]
-    fn foreach_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
-
-    #[doc(alias = "gst_element_foreach_sink_pad")]
-    fn foreach_sink_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
-
-    #[doc(alias = "gst_element_foreach_src_pad")]
-    fn foreach_src_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
-
-    #[doc(alias = "gst_element_get_base_time")]
-    #[doc(alias = "get_base_time")]
-    fn base_time(&self) -> Option<ClockTime>;
-
-    #[doc(alias = "gst_element_get_bus")]
-    #[doc(alias = "get_bus")]
-    fn bus(&self) -> Option<Bus>;
-
-    #[doc(alias = "gst_element_get_clock")]
-    #[doc(alias = "get_clock")]
-    fn clock(&self) -> Option<Clock>;
-
-    #[doc(alias = "gst_element_get_compatible_pad")]
-    #[doc(alias = "get_compatible_pad")]
-    fn compatible_pad(&self, pad: &impl IsA<Pad>, caps: Option<&Caps>) -> Option<Pad>;
-
-    #[doc(alias = "gst_element_get_compatible_pad_template")]
-    #[doc(alias = "get_compatible_pad_template")]
-    fn compatible_pad_template(&self, compattempl: &PadTemplate) -> Option<PadTemplate>;
-
-    #[doc(alias = "gst_element_get_context")]
-    #[doc(alias = "get_context")]
-    fn context(&self, context_type: &str) -> Option<Context>;
-
-    #[doc(alias = "gst_element_get_contexts")]
-    #[doc(alias = "get_contexts")]
-    fn contexts(&self) -> Vec<Context>;
-
-    #[doc(alias = "gst_element_get_factory")]
-    #[doc(alias = "get_factory")]
-    fn factory(&self) -> Option<ElementFactory>;
-
-    #[doc(alias = "gst_element_get_start_time")]
-    #[doc(alias = "get_start_time")]
-    fn start_time(&self) -> Option<ClockTime>;
-
-    #[doc(alias = "gst_element_get_state")]
-    #[doc(alias = "get_state")]
-    fn state(
-        &self,
-        timeout: impl Into<Option<ClockTime>>,
-    ) -> (Result<StateChangeSuccess, StateChangeError>, State, State);
-
-    #[doc(alias = "gst_element_get_static_pad")]
-    #[doc(alias = "get_static_pad")]
-    fn static_pad(&self, name: &str) -> Option<Pad>;
-
-    #[doc(alias = "gst_element_is_locked_state")]
-    fn is_locked_state(&self) -> bool;
-
-    #[doc(alias = "gst_element_lost_state")]
-    fn lost_state(&self);
-
-    #[doc(alias = "gst_element_no_more_pads")]
-    fn no_more_pads(&self);
-
-    #[doc(alias = "gst_element_post_message")]
-    fn post_message(&self, message: Message) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_element_provide_clock")]
-    fn provide_clock(&self) -> Option<Clock>;
-
-    #[doc(alias = "gst_element_release_request_pad")]
-    fn release_request_pad(&self, pad: &impl IsA<Pad>);
-
-    #[doc(alias = "gst_element_remove_pad")]
-    fn remove_pad(&self, pad: &impl IsA<Pad>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_element_request_pad")]
-    fn request_pad(
-        &self,
-        templ: &PadTemplate,
-        name: Option<&str>,
-        caps: Option<&Caps>,
-    ) -> Option<Pad>;
-
-    #[doc(alias = "gst_element_set_base_time")]
-    fn set_base_time(&self, time: ClockTime);
-
-    #[doc(alias = "gst_element_set_bus")]
-    fn set_bus(&self, bus: Option<&Bus>);
-
-    #[doc(alias = "gst_element_set_clock")]
-    fn set_clock(&self, clock: Option<&impl IsA<Clock>>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_element_set_context")]
-    fn set_context(&self, context: &Context);
-
-    #[doc(alias = "gst_element_set_locked_state")]
-    fn set_locked_state(&self, locked_state: bool) -> bool;
-
-    #[doc(alias = "gst_element_set_start_time")]
-    fn set_start_time(&self, time: impl Into<Option<ClockTime>>);
-
-    #[doc(alias = "gst_element_set_state")]
-    fn set_state(&self, state: State) -> Result<StateChangeSuccess, StateChangeError>;
-
-    #[doc(alias = "gst_element_sync_state_with_parent")]
-    fn sync_state_with_parent(&self) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "gst_element_unlink")]
-    fn unlink(&self, dest: &impl IsA<Element>);
-
-    #[doc(alias = "gst_element_unlink_pads")]
-    fn unlink_pads(&self, srcpadname: &str, dest: &impl IsA<Element>, destpadname: &str);
-
-    #[doc(alias = "no-more-pads")]
-    fn connect_no_more_pads<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "pad-added")]
-    fn connect_pad_added<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "pad-removed")]
-    fn connect_pad_removed<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Element>> Sealed for T {}
 }
 
-impl<O: IsA<Element>> ElementExt for O {
+pub trait ElementExt: IsA<Element> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_element_abort_state")]
     fn abort_state(&self) {
         unsafe {
             ffi::gst_element_abort_state(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_element_add_pad")]
     fn add_pad(&self, pad: &impl IsA<Pad>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -229,6 +80,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_change_state")]
     fn change_state(
         &self,
         transition: StateChange,
@@ -241,6 +93,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_continue_state")]
     fn continue_state(
         &self,
         ret: impl Into<StateChangeReturn>,
@@ -253,6 +106,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_create_all_pads")]
     fn create_all_pads(&self) {
         unsafe {
             ffi::gst_element_create_all_pads(self.as_ref().to_glib_none().0);
@@ -261,6 +115,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_element_decorate_stream_id")]
     fn decorate_stream_id(&self, stream_id: &str) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_element_decorate_stream_id(
@@ -270,6 +125,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_foreach_pad")]
     fn foreach_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(
@@ -293,6 +149,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_foreach_sink_pad")]
     fn foreach_sink_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(
@@ -316,6 +173,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_foreach_src_pad")]
     fn foreach_src_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(
@@ -339,6 +197,8 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_get_base_time")]
+    #[doc(alias = "get_base_time")]
     fn base_time(&self) -> Option<ClockTime> {
         unsafe {
             from_glib(ffi::gst_element_get_base_time(
@@ -347,14 +207,20 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_get_bus")]
+    #[doc(alias = "get_bus")]
     fn bus(&self) -> Option<Bus> {
         unsafe { from_glib_full(ffi::gst_element_get_bus(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_element_get_clock")]
+    #[doc(alias = "get_clock")]
     fn clock(&self) -> Option<Clock> {
         unsafe { from_glib_full(ffi::gst_element_get_clock(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_element_get_compatible_pad")]
+    #[doc(alias = "get_compatible_pad")]
     fn compatible_pad(&self, pad: &impl IsA<Pad>, caps: Option<&Caps>) -> Option<Pad> {
         unsafe {
             from_glib_full(ffi::gst_element_get_compatible_pad(
@@ -365,6 +231,8 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_get_compatible_pad_template")]
+    #[doc(alias = "get_compatible_pad_template")]
     fn compatible_pad_template(&self, compattempl: &PadTemplate) -> Option<PadTemplate> {
         unsafe {
             from_glib_none(ffi::gst_element_get_compatible_pad_template(
@@ -374,6 +242,8 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_get_context")]
+    #[doc(alias = "get_context")]
     fn context(&self, context_type: &str) -> Option<Context> {
         unsafe {
             from_glib_full(ffi::gst_element_get_context(
@@ -383,6 +253,8 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_get_contexts")]
+    #[doc(alias = "get_contexts")]
     fn contexts(&self) -> Vec<Context> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_element_get_contexts(
@@ -391,10 +263,14 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_get_factory")]
+    #[doc(alias = "get_factory")]
     fn factory(&self) -> Option<ElementFactory> {
         unsafe { from_glib_none(ffi::gst_element_get_factory(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_element_get_start_time")]
+    #[doc(alias = "get_start_time")]
     fn start_time(&self) -> Option<ClockTime> {
         unsafe {
             from_glib(ffi::gst_element_get_start_time(
@@ -403,6 +279,8 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_get_state")]
+    #[doc(alias = "get_state")]
     fn state(
         &self,
         timeout: impl Into<Option<ClockTime>>,
@@ -424,6 +302,8 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_get_static_pad")]
+    #[doc(alias = "get_static_pad")]
     fn static_pad(&self, name: &str) -> Option<Pad> {
         unsafe {
             from_glib_full(ffi::gst_element_get_static_pad(
@@ -433,6 +313,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_is_locked_state")]
     fn is_locked_state(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_element_is_locked_state(
@@ -441,18 +322,21 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_lost_state")]
     fn lost_state(&self) {
         unsafe {
             ffi::gst_element_lost_state(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_element_no_more_pads")]
     fn no_more_pads(&self) {
         unsafe {
             ffi::gst_element_no_more_pads(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_element_post_message")]
     fn post_message(&self, message: Message) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -465,6 +349,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_provide_clock")]
     fn provide_clock(&self) -> Option<Clock> {
         unsafe {
             from_glib_full(ffi::gst_element_provide_clock(
@@ -473,6 +358,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_release_request_pad")]
     fn release_request_pad(&self, pad: &impl IsA<Pad>) {
         unsafe {
             ffi::gst_element_release_request_pad(
@@ -482,6 +368,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_remove_pad")]
     fn remove_pad(&self, pad: &impl IsA<Pad>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -494,6 +381,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_request_pad")]
     fn request_pad(
         &self,
         templ: &PadTemplate,
@@ -510,18 +398,21 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_set_base_time")]
     fn set_base_time(&self, time: ClockTime) {
         unsafe {
             ffi::gst_element_set_base_time(self.as_ref().to_glib_none().0, time.into_glib());
         }
     }
 
+    #[doc(alias = "gst_element_set_bus")]
     fn set_bus(&self, bus: Option<&Bus>) {
         unsafe {
             ffi::gst_element_set_bus(self.as_ref().to_glib_none().0, bus.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_element_set_clock")]
     fn set_clock(&self, clock: Option<&impl IsA<Clock>>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -534,12 +425,14 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_set_context")]
     fn set_context(&self, context: &Context) {
         unsafe {
             ffi::gst_element_set_context(self.as_ref().to_glib_none().0, context.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_element_set_locked_state")]
     fn set_locked_state(&self, locked_state: bool) -> bool {
         unsafe {
             from_glib(ffi::gst_element_set_locked_state(
@@ -549,6 +442,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_set_start_time")]
     fn set_start_time(&self, time: impl Into<Option<ClockTime>>) {
         unsafe {
             ffi::gst_element_set_start_time(
@@ -558,6 +452,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_set_state")]
     fn set_state(&self, state: State) -> Result<StateChangeSuccess, StateChangeError> {
         unsafe {
             try_from_glib(ffi::gst_element_set_state(
@@ -567,6 +462,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_sync_state_with_parent")]
     fn sync_state_with_parent(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -576,6 +472,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_unlink")]
     fn unlink(&self, dest: &impl IsA<Element>) {
         unsafe {
             ffi::gst_element_unlink(
@@ -585,6 +482,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "gst_element_unlink_pads")]
     fn unlink_pads(&self, srcpadname: &str, dest: &impl IsA<Element>, destpadname: &str) {
         unsafe {
             ffi::gst_element_unlink_pads(
@@ -596,6 +494,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "no-more-pads")]
     fn connect_no_more_pads<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn no_more_pads_trampoline<
             P: IsA<Element>,
@@ -620,6 +519,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "pad-added")]
     fn connect_pad_added<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -651,6 +551,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
+    #[doc(alias = "pad-removed")]
     fn connect_pad_removed<F: Fn(&Self, &Pad) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -682,3 +583,5 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 }
+
+impl<O: IsA<Element>> ElementExt for O {}

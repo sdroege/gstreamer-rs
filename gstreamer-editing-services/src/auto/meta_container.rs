@@ -27,164 +27,13 @@ impl MetaContainer {
     pub const NONE: Option<&'static MetaContainer> = None;
 }
 
-pub trait MetaContainerExt: 'static {
-    #[doc(alias = "ges_meta_container_add_metas_from_string")]
-    fn add_metas_from_string(&self, str: &str) -> bool;
-
-    #[doc(alias = "ges_meta_container_check_meta_registered")]
-    fn check_meta_registered(&self, meta_item: &str) -> Option<(MetaFlag, glib::types::Type)>;
-
-    #[doc(alias = "ges_meta_container_foreach")]
-    fn foreach<P: FnMut(&MetaContainer, &str, &glib::Value)>(&self, func: P);
-
-    #[doc(alias = "ges_meta_container_get_boolean")]
-    #[doc(alias = "get_boolean")]
-    fn boolean(&self, meta_item: &str) -> Option<bool>;
-
-    #[doc(alias = "ges_meta_container_get_date")]
-    #[doc(alias = "get_date")]
-    fn date(&self, meta_item: &str) -> Option<glib::Date>;
-
-    #[doc(alias = "ges_meta_container_get_date_time")]
-    #[doc(alias = "get_date_time")]
-    fn date_time(&self, meta_item: &str) -> Option<gst::DateTime>;
-
-    #[doc(alias = "ges_meta_container_get_double")]
-    #[doc(alias = "get_double")]
-    fn double(&self, meta_item: &str) -> Option<f64>;
-
-    #[doc(alias = "ges_meta_container_get_float")]
-    #[doc(alias = "get_float")]
-    fn float(&self, meta_item: &str) -> Option<f32>;
-
-    #[doc(alias = "ges_meta_container_get_int")]
-    #[doc(alias = "get_int")]
-    fn int(&self, meta_item: &str) -> Option<i32>;
-
-    #[doc(alias = "ges_meta_container_get_int64")]
-    #[doc(alias = "get_int64")]
-    fn int64(&self, meta_item: &str) -> Option<i64>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_meta_container_get_marker_list")]
-    #[doc(alias = "get_marker_list")]
-    fn marker_list(&self, key: &str) -> Option<MarkerList>;
-
-    #[doc(alias = "ges_meta_container_get_meta")]
-    #[doc(alias = "get_meta")]
-    fn meta(&self, key: &str) -> Option<glib::Value>;
-
-    #[doc(alias = "ges_meta_container_get_string")]
-    #[doc(alias = "get_string")]
-    fn string(&self, meta_item: &str) -> Option<glib::GString>;
-
-    #[doc(alias = "ges_meta_container_get_uint")]
-    #[doc(alias = "get_uint")]
-    fn uint(&self, meta_item: &str) -> Option<u32>;
-
-    #[doc(alias = "ges_meta_container_get_uint64")]
-    #[doc(alias = "get_uint64")]
-    fn uint64(&self, meta_item: &str) -> Option<u64>;
-
-    #[doc(alias = "ges_meta_container_metas_to_string")]
-    fn metas_to_string(&self) -> glib::GString;
-
-    #[doc(alias = "ges_meta_container_register_meta")]
-    fn register_meta(&self, flags: MetaFlag, meta_item: &str, value: &glib::Value) -> bool;
-
-    #[doc(alias = "ges_meta_container_register_meta_boolean")]
-    fn register_meta_boolean(&self, flags: MetaFlag, meta_item: &str, value: bool) -> bool;
-
-    #[doc(alias = "ges_meta_container_register_meta_date")]
-    fn register_meta_date(&self, flags: MetaFlag, meta_item: &str, value: &glib::Date) -> bool;
-
-    #[doc(alias = "ges_meta_container_register_meta_date_time")]
-    fn register_meta_date_time(
-        &self,
-        flags: MetaFlag,
-        meta_item: &str,
-        value: &gst::DateTime,
-    ) -> bool;
-
-    #[doc(alias = "ges_meta_container_register_meta_double")]
-    fn register_meta_double(&self, flags: MetaFlag, meta_item: &str, value: f64) -> bool;
-
-    #[doc(alias = "ges_meta_container_register_meta_float")]
-    fn register_meta_float(&self, flags: MetaFlag, meta_item: &str, value: f32) -> bool;
-
-    #[doc(alias = "ges_meta_container_register_meta_int")]
-    fn register_meta_int(&self, flags: MetaFlag, meta_item: &str, value: i32) -> bool;
-
-    #[doc(alias = "ges_meta_container_register_meta_int64")]
-    fn register_meta_int64(&self, flags: MetaFlag, meta_item: &str, value: i64) -> bool;
-
-    #[doc(alias = "ges_meta_container_register_meta_string")]
-    fn register_meta_string(&self, flags: MetaFlag, meta_item: &str, value: &str) -> bool;
-
-    #[doc(alias = "ges_meta_container_register_meta_uint")]
-    fn register_meta_uint(&self, flags: MetaFlag, meta_item: &str, value: u32) -> bool;
-
-    #[doc(alias = "ges_meta_container_register_meta_uint64")]
-    fn register_meta_uint64(&self, flags: MetaFlag, meta_item: &str, value: u64) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_meta_container_register_static_meta")]
-    fn register_static_meta(
-        &self,
-        flags: MetaFlag,
-        meta_item: &str,
-        type_: glib::types::Type,
-    ) -> bool;
-
-    #[doc(alias = "ges_meta_container_set_boolean")]
-    fn set_boolean(&self, meta_item: &str, value: bool) -> bool;
-
-    #[doc(alias = "ges_meta_container_set_date")]
-    fn set_date(&self, meta_item: &str, value: &glib::Date) -> bool;
-
-    #[doc(alias = "ges_meta_container_set_date_time")]
-    fn set_date_time(&self, meta_item: &str, value: &gst::DateTime) -> bool;
-
-    #[doc(alias = "ges_meta_container_set_double")]
-    fn set_double(&self, meta_item: &str, value: f64) -> bool;
-
-    #[doc(alias = "ges_meta_container_set_float")]
-    fn set_float(&self, meta_item: &str, value: f32) -> bool;
-
-    #[doc(alias = "ges_meta_container_set_int")]
-    fn set_int(&self, meta_item: &str, value: i32) -> bool;
-
-    #[doc(alias = "ges_meta_container_set_int64")]
-    fn set_int64(&self, meta_item: &str, value: i64) -> bool;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_meta_container_set_marker_list")]
-    fn set_marker_list(&self, meta_item: &str, list: &MarkerList) -> bool;
-
-    #[doc(alias = "ges_meta_container_set_meta")]
-    fn set_meta(&self, meta_item: &str, value: Option<&glib::Value>) -> bool;
-
-    #[doc(alias = "ges_meta_container_set_string")]
-    fn set_string(&self, meta_item: &str, value: &str) -> bool;
-
-    #[doc(alias = "ges_meta_container_set_uint")]
-    fn set_uint(&self, meta_item: &str, value: u32) -> bool;
-
-    #[doc(alias = "ges_meta_container_set_uint64")]
-    fn set_uint64(&self, meta_item: &str, value: u64) -> bool;
-
-    #[doc(alias = "notify-meta")]
-    fn connect_notify_meta<F: Fn(&Self, &str, Option<&glib::Value>) + 'static>(
-        &self,
-        detail: Option<&str>,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::MetaContainer>> Sealed for T {}
 }
 
-impl<O: IsA<MetaContainer>> MetaContainerExt for O {
+pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_meta_container_add_metas_from_string")]
     fn add_metas_from_string(&self, str: &str) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_add_metas_from_string(
@@ -194,6 +43,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_check_meta_registered")]
     fn check_meta_registered(&self, meta_item: &str) -> Option<(MetaFlag, glib::types::Type)> {
         unsafe {
             let mut flags = mem::MaybeUninit::uninit();
@@ -215,6 +65,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_foreach")]
     fn foreach<P: FnMut(&MetaContainer, &str, &glib::Value)>(&self, func: P) {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&MetaContainer, &str, &glib::Value)>(
@@ -240,6 +91,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_get_boolean")]
+    #[doc(alias = "get_boolean")]
     fn boolean(&self, meta_item: &str) -> Option<bool> {
         unsafe {
             let mut dest = mem::MaybeUninit::uninit();
@@ -256,6 +109,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_get_date")]
+    #[doc(alias = "get_date")]
     fn date(&self, meta_item: &str) -> Option<glib::Date> {
         unsafe {
             let mut dest = ptr::null_mut();
@@ -272,6 +127,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_get_date_time")]
+    #[doc(alias = "get_date_time")]
     fn date_time(&self, meta_item: &str) -> Option<gst::DateTime> {
         unsafe {
             let mut dest = ptr::null_mut();
@@ -288,6 +145,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_get_double")]
+    #[doc(alias = "get_double")]
     fn double(&self, meta_item: &str) -> Option<f64> {
         unsafe {
             let mut dest = mem::MaybeUninit::uninit();
@@ -304,6 +163,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_get_float")]
+    #[doc(alias = "get_float")]
     fn float(&self, meta_item: &str) -> Option<f32> {
         unsafe {
             let mut dest = mem::MaybeUninit::uninit();
@@ -320,6 +181,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_get_int")]
+    #[doc(alias = "get_int")]
     fn int(&self, meta_item: &str) -> Option<i32> {
         unsafe {
             let mut dest = mem::MaybeUninit::uninit();
@@ -336,6 +199,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_get_int64")]
+    #[doc(alias = "get_int64")]
     fn int64(&self, meta_item: &str) -> Option<i64> {
         unsafe {
             let mut dest = mem::MaybeUninit::uninit();
@@ -354,6 +219,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_meta_container_get_marker_list")]
+    #[doc(alias = "get_marker_list")]
     fn marker_list(&self, key: &str) -> Option<MarkerList> {
         unsafe {
             from_glib_full(ffi::ges_meta_container_get_marker_list(
@@ -363,6 +230,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_get_meta")]
+    #[doc(alias = "get_meta")]
     fn meta(&self, key: &str) -> Option<glib::Value> {
         unsafe {
             from_glib_none(ffi::ges_meta_container_get_meta(
@@ -372,6 +241,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_get_string")]
+    #[doc(alias = "get_string")]
     fn string(&self, meta_item: &str) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::ges_meta_container_get_string(
@@ -381,6 +252,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_get_uint")]
+    #[doc(alias = "get_uint")]
     fn uint(&self, meta_item: &str) -> Option<u32> {
         unsafe {
             let mut dest = mem::MaybeUninit::uninit();
@@ -397,6 +270,8 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_get_uint64")]
+    #[doc(alias = "get_uint64")]
     fn uint64(&self, meta_item: &str) -> Option<u64> {
         unsafe {
             let mut dest = mem::MaybeUninit::uninit();
@@ -413,6 +288,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_metas_to_string")]
     fn metas_to_string(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::ges_meta_container_metas_to_string(
@@ -421,6 +297,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_register_meta")]
     fn register_meta(&self, flags: MetaFlag, meta_item: &str, value: &glib::Value) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_register_meta(
@@ -432,6 +309,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_register_meta_boolean")]
     fn register_meta_boolean(&self, flags: MetaFlag, meta_item: &str, value: bool) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_register_meta_boolean(
@@ -443,6 +321,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_register_meta_date")]
     fn register_meta_date(&self, flags: MetaFlag, meta_item: &str, value: &glib::Date) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_register_meta_date(
@@ -454,6 +333,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_register_meta_date_time")]
     fn register_meta_date_time(
         &self,
         flags: MetaFlag,
@@ -470,6 +350,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_register_meta_double")]
     fn register_meta_double(&self, flags: MetaFlag, meta_item: &str, value: f64) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_register_meta_double(
@@ -481,6 +362,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_register_meta_float")]
     fn register_meta_float(&self, flags: MetaFlag, meta_item: &str, value: f32) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_register_meta_float(
@@ -492,6 +374,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_register_meta_int")]
     fn register_meta_int(&self, flags: MetaFlag, meta_item: &str, value: i32) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_register_meta_int(
@@ -503,6 +386,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_register_meta_int64")]
     fn register_meta_int64(&self, flags: MetaFlag, meta_item: &str, value: i64) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_register_meta_int64(
@@ -514,6 +398,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_register_meta_string")]
     fn register_meta_string(&self, flags: MetaFlag, meta_item: &str, value: &str) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_register_meta_string(
@@ -525,6 +410,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_register_meta_uint")]
     fn register_meta_uint(&self, flags: MetaFlag, meta_item: &str, value: u32) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_register_meta_uint(
@@ -536,6 +422,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_register_meta_uint64")]
     fn register_meta_uint64(&self, flags: MetaFlag, meta_item: &str, value: u64) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_register_meta_uint64(
@@ -549,6 +436,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_meta_container_register_static_meta")]
     fn register_static_meta(
         &self,
         flags: MetaFlag,
@@ -565,6 +453,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_set_boolean")]
     fn set_boolean(&self, meta_item: &str, value: bool) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_set_boolean(
@@ -575,6 +464,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_set_date")]
     fn set_date(&self, meta_item: &str, value: &glib::Date) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_set_date(
@@ -585,6 +475,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_set_date_time")]
     fn set_date_time(&self, meta_item: &str, value: &gst::DateTime) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_set_date_time(
@@ -595,6 +486,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_set_double")]
     fn set_double(&self, meta_item: &str, value: f64) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_set_double(
@@ -605,6 +497,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_set_float")]
     fn set_float(&self, meta_item: &str, value: f32) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_set_float(
@@ -615,6 +508,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_set_int")]
     fn set_int(&self, meta_item: &str, value: i32) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_set_int(
@@ -625,6 +519,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_set_int64")]
     fn set_int64(&self, meta_item: &str, value: i64) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_set_int64(
@@ -637,6 +532,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_meta_container_set_marker_list")]
     fn set_marker_list(&self, meta_item: &str, list: &MarkerList) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_set_marker_list(
@@ -647,6 +543,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_set_meta")]
     fn set_meta(&self, meta_item: &str, value: Option<&glib::Value>) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_set_meta(
@@ -657,6 +554,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_set_string")]
     fn set_string(&self, meta_item: &str, value: &str) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_set_string(
@@ -667,6 +565,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_set_uint")]
     fn set_uint(&self, meta_item: &str, value: u32) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_set_uint(
@@ -677,6 +576,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "ges_meta_container_set_uint64")]
     fn set_uint64(&self, meta_item: &str, value: u64) -> bool {
         unsafe {
             from_glib(ffi::ges_meta_container_set_uint64(
@@ -687,6 +587,7 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 
+    #[doc(alias = "notify-meta")]
     fn connect_notify_meta<F: Fn(&Self, &str, Option<&glib::Value>) + 'static>(
         &self,
         detail: Option<&str>,
@@ -727,3 +628,5 @@ impl<O: IsA<MetaContainer>> MetaContainerExt for O {
         }
     }
 }
+
+impl<O: IsA<MetaContainer>> MetaContainerExt for O {}

@@ -23,13 +23,14 @@ impl ControlSource {
 unsafe impl Send for ControlSource {}
 unsafe impl Sync for ControlSource {}
 
-pub trait ControlSourceExt: 'static {
-    #[doc(alias = "gst_control_source_get_value")]
-    #[doc(alias = "control_source_get_value")]
-    fn value(&self, timestamp: ClockTime) -> Option<f64>;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::ControlSource>> Sealed for T {}
 }
 
-impl<O: IsA<ControlSource>> ControlSourceExt for O {
+pub trait ControlSourceExt: IsA<ControlSource> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_control_source_get_value")]
+    #[doc(alias = "control_source_get_value")]
     fn value(&self, timestamp: ClockTime) -> Option<f64> {
         unsafe {
             let mut value = mem::MaybeUninit::uninit();
@@ -46,3 +47,5 @@ impl<O: IsA<ControlSource>> ControlSourceExt for O {
         }
     }
 }
+
+impl<O: IsA<ControlSource>> ControlSourceExt for O {}

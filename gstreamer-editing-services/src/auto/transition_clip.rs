@@ -40,16 +40,12 @@ impl TransitionClip {
     }
 }
 
-pub trait TransitionClipExt: 'static {
-    fn vtype(&self) -> VideoStandardTransitionType;
-
-    fn set_vtype(&self, vtype: VideoStandardTransitionType);
-
-    #[doc(alias = "vtype")]
-    fn connect_vtype_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::TransitionClip>> Sealed for T {}
 }
 
-impl<O: IsA<TransitionClip>> TransitionClipExt for O {
+pub trait TransitionClipExt: IsA<TransitionClip> + sealed::Sealed + 'static {
     fn vtype(&self) -> VideoStandardTransitionType {
         glib::ObjectExt::property(self.as_ref(), "vtype")
     }
@@ -58,6 +54,7 @@ impl<O: IsA<TransitionClip>> TransitionClipExt for O {
         glib::ObjectExt::set_property(self.as_ref(), "vtype", vtype)
     }
 
+    #[doc(alias = "vtype")]
     fn connect_vtype_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_vtype_trampoline<
             P: IsA<TransitionClip>,
@@ -83,3 +80,5 @@ impl<O: IsA<TransitionClip>> TransitionClipExt for O {
         }
     }
 }
+
+impl<O: IsA<TransitionClip>> TransitionClipExt for O {}

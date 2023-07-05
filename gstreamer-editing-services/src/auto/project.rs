@@ -33,103 +33,13 @@ impl Project {
     }
 }
 
-pub trait ProjectExt: 'static {
-    #[doc(alias = "ges_project_add_asset")]
-    fn add_asset(&self, asset: &impl IsA<Asset>) -> bool;
-
-    #[doc(alias = "ges_project_add_encoding_profile")]
-    fn add_encoding_profile(
-        &self,
-        profile: &impl IsA<gst_pbutils::EncodingProfile>,
-    ) -> Result<(), glib::error::BoolError>;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "ges_project_add_formatter")]
-    fn add_formatter(&self, formatter: &impl IsA<Formatter>);
-
-    #[doc(alias = "ges_project_create_asset")]
-    fn create_asset(&self, id: Option<&str>, extractable_type: glib::types::Type) -> bool;
-
-    #[doc(alias = "ges_project_create_asset_sync")]
-    fn create_asset_sync(
-        &self,
-        id: Option<&str>,
-        extractable_type: glib::types::Type,
-    ) -> Result<Option<Asset>, glib::Error>;
-
-    #[doc(alias = "ges_project_get_asset")]
-    #[doc(alias = "get_asset")]
-    fn asset(&self, id: &str, extractable_type: glib::types::Type) -> Option<Asset>;
-
-    #[doc(alias = "ges_project_get_loading_assets")]
-    #[doc(alias = "get_loading_assets")]
-    fn loading_assets(&self) -> Vec<Asset>;
-
-    #[doc(alias = "ges_project_get_uri")]
-    #[doc(alias = "get_uri")]
-    fn uri(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "ges_project_list_assets")]
-    fn list_assets(&self, filter: glib::types::Type) -> Vec<Asset>;
-
-    #[doc(alias = "ges_project_list_encoding_profiles")]
-    fn list_encoding_profiles(&self) -> Vec<gst_pbutils::EncodingProfile>;
-
-    #[doc(alias = "ges_project_load")]
-    fn load(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::Error>;
-
-    #[doc(alias = "ges_project_remove_asset")]
-    fn remove_asset(&self, asset: &impl IsA<Asset>) -> Result<(), glib::error::BoolError>;
-
-    #[doc(alias = "ges_project_save")]
-    fn save(
-        &self,
-        timeline: &impl IsA<Timeline>,
-        uri: &str,
-        formatter_asset: Option<impl IsA<Asset>>,
-        overwrite: bool,
-    ) -> Result<(), glib::Error>;
-
-    #[doc(alias = "asset-added")]
-    fn connect_asset_added<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "asset-loading")]
-    fn connect_asset_loading<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "asset-removed")]
-    fn connect_asset_removed<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "error-loading")]
-    fn connect_error_loading<F: Fn(&Self, &Timeline, &glib::Error) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "error-loading-asset")]
-    fn connect_error_loading_asset<F: Fn(&Self, &glib::Error, &str, glib::types::Type) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    #[doc(alias = "loaded")]
-    fn connect_loaded<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-    #[doc(alias = "loading")]
-    fn connect_loading<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "missing-uri")]
-    fn connect_missing_uri<F: Fn(&Self, &glib::Error, &Asset) -> Option<glib::GString> + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::Project>> Sealed for T {}
 }
 
-impl<O: IsA<Project>> ProjectExt for O {
+pub trait ProjectExt: IsA<Project> + sealed::Sealed + 'static {
+    #[doc(alias = "ges_project_add_asset")]
     fn add_asset(&self, asset: &impl IsA<Asset>) -> bool {
         unsafe {
             from_glib(ffi::ges_project_add_asset(
@@ -139,6 +49,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "ges_project_add_encoding_profile")]
     fn add_encoding_profile(
         &self,
         profile: &impl IsA<gst_pbutils::EncodingProfile>,
@@ -156,6 +67,7 @@ impl<O: IsA<Project>> ProjectExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_project_add_formatter")]
     fn add_formatter(&self, formatter: &impl IsA<Formatter>) {
         unsafe {
             ffi::ges_project_add_formatter(
@@ -165,6 +77,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "ges_project_create_asset")]
     fn create_asset(&self, id: Option<&str>, extractable_type: glib::types::Type) -> bool {
         unsafe {
             from_glib(ffi::ges_project_create_asset(
@@ -175,6 +88,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "ges_project_create_asset_sync")]
     fn create_asset_sync(
         &self,
         id: Option<&str>,
@@ -196,6 +110,8 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "ges_project_get_asset")]
+    #[doc(alias = "get_asset")]
     fn asset(&self, id: &str, extractable_type: glib::types::Type) -> Option<Asset> {
         unsafe {
             from_glib_full(ffi::ges_project_get_asset(
@@ -206,6 +122,8 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "ges_project_get_loading_assets")]
+    #[doc(alias = "get_loading_assets")]
     fn loading_assets(&self) -> Vec<Asset> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_project_get_loading_assets(
@@ -214,10 +132,13 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "ges_project_get_uri")]
+    #[doc(alias = "get_uri")]
     fn uri(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::ges_project_get_uri(self.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "ges_project_list_assets")]
     fn list_assets(&self, filter: glib::types::Type) -> Vec<Asset> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_project_list_assets(
@@ -227,6 +148,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "ges_project_list_encoding_profiles")]
     fn list_encoding_profiles(&self) -> Vec<gst_pbutils::EncodingProfile> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::ges_project_list_encoding_profiles(
@@ -235,6 +157,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "ges_project_load")]
     fn load(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -252,6 +175,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "ges_project_remove_asset")]
     fn remove_asset(&self, asset: &impl IsA<Asset>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -264,6 +188,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "ges_project_save")]
     fn save(
         &self,
         timeline: &impl IsA<Timeline>,
@@ -290,6 +215,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "asset-added")]
     fn connect_asset_added<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn asset_added_trampoline<
             P: IsA<Project>,
@@ -318,6 +244,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "asset-loading")]
     fn connect_asset_loading<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn asset_loading_trampoline<
             P: IsA<Project>,
@@ -346,6 +273,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "asset-removed")]
     fn connect_asset_removed<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn asset_removed_trampoline<
             P: IsA<Project>,
@@ -376,6 +304,7 @@ impl<O: IsA<Project>> ProjectExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "error-loading")]
     fn connect_error_loading<F: Fn(&Self, &Timeline, &glib::Error) + 'static>(
         &self,
         f: F,
@@ -409,6 +338,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "error-loading-asset")]
     fn connect_error_loading_asset<
         F: Fn(&Self, &glib::Error, &str, glib::types::Type) + 'static,
     >(
@@ -446,6 +376,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "loaded")]
     fn connect_loaded<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn loaded_trampoline<P: IsA<Project>, F: Fn(&P, &Timeline) + 'static>(
             this: *mut ffi::GESProject,
@@ -473,6 +404,7 @@ impl<O: IsA<Project>> ProjectExt for O {
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "loading")]
     fn connect_loading<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn loading_trampoline<P: IsA<Project>, F: Fn(&P, &Timeline) + 'static>(
             this: *mut ffi::GESProject,
@@ -498,6 +430,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[doc(alias = "missing-uri")]
     fn connect_missing_uri<
         F: Fn(&Self, &glib::Error, &Asset) -> Option<glib::GString> + 'static,
     >(
@@ -534,3 +467,5 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 }
+
+impl<O: IsA<Project>> ProjectExt for O {}

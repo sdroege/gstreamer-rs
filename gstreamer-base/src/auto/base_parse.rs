@@ -26,61 +26,13 @@ impl BaseParse {
 unsafe impl Send for BaseParse {}
 unsafe impl Sync for BaseParse {}
 
-pub trait BaseParseExt: 'static {
-    #[doc(alias = "gst_base_parse_add_index_entry")]
-    fn add_index_entry(&self, offset: u64, ts: gst::ClockTime, key: bool, force: bool) -> bool;
-
-    #[doc(alias = "gst_base_parse_drain")]
-    fn drain(&self);
-
-    #[doc(alias = "gst_base_parse_merge_tags")]
-    fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
-
-    #[doc(alias = "gst_base_parse_set_average_bitrate")]
-    fn set_average_bitrate(&self, bitrate: u32);
-
-    #[doc(alias = "gst_base_parse_set_has_timing_info")]
-    fn set_has_timing_info(&self, has_timing: bool);
-
-    #[doc(alias = "gst_base_parse_set_infer_ts")]
-    fn set_infer_ts(&self, infer_ts: bool);
-
-    #[doc(alias = "gst_base_parse_set_latency")]
-    fn set_latency(
-        &self,
-        min_latency: gst::ClockTime,
-        max_latency: impl Into<Option<gst::ClockTime>>,
-    );
-
-    #[doc(alias = "gst_base_parse_set_min_frame_size")]
-    fn set_min_frame_size(&self, min_size: u32);
-
-    #[doc(alias = "gst_base_parse_set_passthrough")]
-    fn set_passthrough(&self, passthrough: bool);
-
-    #[doc(alias = "gst_base_parse_set_pts_interpolation")]
-    fn set_pts_interpolation(&self, pts_interpolate: bool);
-
-    #[doc(alias = "gst_base_parse_set_syncable")]
-    fn set_syncable(&self, syncable: bool);
-
-    #[doc(alias = "gst_base_parse_set_ts_at_offset")]
-    fn set_ts_at_offset(&self, offset: usize);
-
-    #[doc(alias = "disable-passthrough")]
-    fn is_disable_passthrough(&self) -> bool;
-
-    #[doc(alias = "disable-passthrough")]
-    fn set_disable_passthrough(&self, disable_passthrough: bool);
-
-    #[doc(alias = "disable-passthrough")]
-    fn connect_disable_passthrough_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::BaseParse>> Sealed for T {}
 }
 
-impl<O: IsA<BaseParse>> BaseParseExt for O {
+pub trait BaseParseExt: IsA<BaseParse> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_base_parse_add_index_entry")]
     fn add_index_entry(&self, offset: u64, ts: gst::ClockTime, key: bool, force: bool) -> bool {
         unsafe {
             from_glib(ffi::gst_base_parse_add_index_entry(
@@ -93,12 +45,14 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 
+    #[doc(alias = "gst_base_parse_drain")]
     fn drain(&self) {
         unsafe {
             ffi::gst_base_parse_drain(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_base_parse_merge_tags")]
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode) {
         unsafe {
             ffi::gst_base_parse_merge_tags(
@@ -109,12 +63,14 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 
+    #[doc(alias = "gst_base_parse_set_average_bitrate")]
     fn set_average_bitrate(&self, bitrate: u32) {
         unsafe {
             ffi::gst_base_parse_set_average_bitrate(self.as_ref().to_glib_none().0, bitrate);
         }
     }
 
+    #[doc(alias = "gst_base_parse_set_has_timing_info")]
     fn set_has_timing_info(&self, has_timing: bool) {
         unsafe {
             ffi::gst_base_parse_set_has_timing_info(
@@ -124,12 +80,14 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 
+    #[doc(alias = "gst_base_parse_set_infer_ts")]
     fn set_infer_ts(&self, infer_ts: bool) {
         unsafe {
             ffi::gst_base_parse_set_infer_ts(self.as_ref().to_glib_none().0, infer_ts.into_glib());
         }
     }
 
+    #[doc(alias = "gst_base_parse_set_latency")]
     fn set_latency(
         &self,
         min_latency: gst::ClockTime,
@@ -144,12 +102,14 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 
+    #[doc(alias = "gst_base_parse_set_min_frame_size")]
     fn set_min_frame_size(&self, min_size: u32) {
         unsafe {
             ffi::gst_base_parse_set_min_frame_size(self.as_ref().to_glib_none().0, min_size);
         }
     }
 
+    #[doc(alias = "gst_base_parse_set_passthrough")]
     fn set_passthrough(&self, passthrough: bool) {
         unsafe {
             ffi::gst_base_parse_set_passthrough(
@@ -159,6 +119,7 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 
+    #[doc(alias = "gst_base_parse_set_pts_interpolation")]
     fn set_pts_interpolation(&self, pts_interpolate: bool) {
         unsafe {
             ffi::gst_base_parse_set_pts_interpolation(
@@ -168,26 +129,31 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 
+    #[doc(alias = "gst_base_parse_set_syncable")]
     fn set_syncable(&self, syncable: bool) {
         unsafe {
             ffi::gst_base_parse_set_syncable(self.as_ref().to_glib_none().0, syncable.into_glib());
         }
     }
 
+    #[doc(alias = "gst_base_parse_set_ts_at_offset")]
     fn set_ts_at_offset(&self, offset: usize) {
         unsafe {
             ffi::gst_base_parse_set_ts_at_offset(self.as_ref().to_glib_none().0, offset);
         }
     }
 
+    #[doc(alias = "disable-passthrough")]
     fn is_disable_passthrough(&self) -> bool {
         glib::ObjectExt::property(self.as_ref(), "disable-passthrough")
     }
 
+    #[doc(alias = "disable-passthrough")]
     fn set_disable_passthrough(&self, disable_passthrough: bool) {
         glib::ObjectExt::set_property(self.as_ref(), "disable-passthrough", disable_passthrough)
     }
 
+    #[doc(alias = "disable-passthrough")]
     fn connect_disable_passthrough_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -216,3 +182,5 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 }
+
+impl<O: IsA<BaseParse>> BaseParseExt for O {}

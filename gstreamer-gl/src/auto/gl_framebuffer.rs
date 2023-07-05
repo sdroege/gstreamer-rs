@@ -50,23 +50,13 @@ impl GLFramebuffer {
 unsafe impl Send for GLFramebuffer {}
 unsafe impl Sync for GLFramebuffer {}
 
-pub trait GLFramebufferExt: 'static {
-    #[doc(alias = "gst_gl_framebuffer_attach")]
-    unsafe fn attach(&self, attachment_point: u32, mem: &mut GLBaseMemory);
-
-    #[doc(alias = "gst_gl_framebuffer_bind")]
-    fn bind(&self);
-
-    #[doc(alias = "gst_gl_framebuffer_get_effective_dimensions")]
-    #[doc(alias = "get_effective_dimensions")]
-    fn effective_dimensions(&self) -> (u32, u32);
-
-    #[doc(alias = "gst_gl_framebuffer_get_id")]
-    #[doc(alias = "get_id")]
-    fn id(&self) -> u32;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::GLFramebuffer>> Sealed for T {}
 }
 
-impl<O: IsA<GLFramebuffer>> GLFramebufferExt for O {
+pub trait GLFramebufferExt: IsA<GLFramebuffer> + sealed::Sealed + 'static {
+    #[doc(alias = "gst_gl_framebuffer_attach")]
     unsafe fn attach(&self, attachment_point: u32, mem: &mut GLBaseMemory) {
         ffi::gst_gl_framebuffer_attach(
             self.as_ref().to_glib_none().0,
@@ -75,12 +65,15 @@ impl<O: IsA<GLFramebuffer>> GLFramebufferExt for O {
         );
     }
 
+    #[doc(alias = "gst_gl_framebuffer_bind")]
     fn bind(&self) {
         unsafe {
             ffi::gst_gl_framebuffer_bind(self.as_ref().to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_gl_framebuffer_get_effective_dimensions")]
+    #[doc(alias = "get_effective_dimensions")]
     fn effective_dimensions(&self) -> (u32, u32) {
         unsafe {
             let mut width = mem::MaybeUninit::uninit();
@@ -94,7 +87,11 @@ impl<O: IsA<GLFramebuffer>> GLFramebufferExt for O {
         }
     }
 
+    #[doc(alias = "gst_gl_framebuffer_get_id")]
+    #[doc(alias = "get_id")]
     fn id(&self) -> u32 {
         unsafe { ffi::gst_gl_framebuffer_get_id(self.as_ref().to_glib_none().0) }
     }
 }
+
+impl<O: IsA<GLFramebuffer>> GLFramebufferExt for O {}
