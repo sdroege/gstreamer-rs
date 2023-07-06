@@ -49,12 +49,12 @@ mod sealed {
 pub trait SystemClockExt: IsA<SystemClock> + sealed::Sealed + 'static {
     #[doc(alias = "clock-type")]
     fn clock_type(&self) -> ClockType {
-        glib::ObjectExt::property(self.as_ref(), "clock-type")
+        ObjectExt::property(self.as_ref(), "clock-type")
     }
 
     #[doc(alias = "clock-type")]
     fn set_clock_type(&self, clock_type: ClockType) {
-        glib::ObjectExt::set_property(self.as_ref(), "clock-type", clock_type)
+        ObjectExt::set_property(self.as_ref(), "clock-type", clock_type)
     }
 
     #[doc(alias = "clock-type")]

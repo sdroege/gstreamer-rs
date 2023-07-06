@@ -338,26 +338,26 @@ impl Player {
     }
 
     pub fn suburi(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self, "suburi")
+        ObjectExt::property(self, "suburi")
     }
 
     pub fn set_suburi(&self, suburi: Option<&str>) {
-        glib::ObjectExt::set_property(self, "suburi", suburi)
+        ObjectExt::set_property(self, "suburi", suburi)
     }
 
     #[doc(alias = "video-multiview-flags")]
     pub fn video_multiview_flags(&self) -> gst_video::VideoMultiviewFlags {
-        glib::ObjectExt::property(self, "video-multiview-flags")
+        ObjectExt::property(self, "video-multiview-flags")
     }
 
     #[doc(alias = "video-multiview-flags")]
     pub fn set_video_multiview_flags(&self, video_multiview_flags: gst_video::VideoMultiviewFlags) {
-        glib::ObjectExt::set_property(self, "video-multiview-flags", video_multiview_flags)
+        ObjectExt::set_property(self, "video-multiview-flags", video_multiview_flags)
     }
 
     #[doc(alias = "video-multiview-mode")]
     pub fn video_multiview_mode(&self) -> gst_video::VideoMultiviewFramePacking {
-        glib::ObjectExt::property(self, "video-multiview-mode")
+        ObjectExt::property(self, "video-multiview-mode")
     }
 
     #[doc(alias = "video-multiview-mode")]
@@ -365,12 +365,12 @@ impl Player {
         &self,
         video_multiview_mode: gst_video::VideoMultiviewFramePacking,
     ) {
-        glib::ObjectExt::set_property(self, "video-multiview-mode", video_multiview_mode)
+        ObjectExt::set_property(self, "video-multiview-mode", video_multiview_mode)
     }
 
     #[doc(alias = "video-renderer")]
     pub fn video_renderer(&self) -> Option<PlayerVideoRenderer> {
-        glib::ObjectExt::property(self, "video-renderer")
+        ObjectExt::property(self, "video-renderer")
     }
 
     #[doc(alias = "gst_player_get_audio_streams")]

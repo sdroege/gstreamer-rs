@@ -48,11 +48,11 @@ mod sealed {
 
 pub trait TriggerControlSourceExt: IsA<TriggerControlSource> + sealed::Sealed + 'static {
     fn tolerance(&self) -> i64 {
-        glib::ObjectExt::property(self.as_ref(), "tolerance")
+        ObjectExt::property(self.as_ref(), "tolerance")
     }
 
     fn set_tolerance(&self, tolerance: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "tolerance", tolerance)
+        ObjectExt::set_property(self.as_ref(), "tolerance", tolerance)
     }
 
     #[doc(alias = "tolerance")]

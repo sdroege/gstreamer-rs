@@ -133,14 +133,14 @@ pub trait RTPBasePayloadExt: IsA<RTPBasePayload> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "auto-header-extension")]
     fn is_auto_header_extension(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "auto-header-extension")
+        ObjectExt::property(self.as_ref(), "auto-header-extension")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "auto-header-extension")]
     fn set_auto_header_extension(&self, auto_header_extension: bool) {
-        glib::ObjectExt::set_property(
+        ObjectExt::set_property(
             self.as_ref(),
             "auto-header-extension",
             auto_header_extension,
@@ -149,44 +149,44 @@ pub trait RTPBasePayloadExt: IsA<RTPBasePayload> + sealed::Sealed + 'static {
 
     #[doc(alias = "max-ptime")]
     fn max_ptime(&self) -> i64 {
-        glib::ObjectExt::property(self.as_ref(), "max-ptime")
+        ObjectExt::property(self.as_ref(), "max-ptime")
     }
 
     #[doc(alias = "max-ptime")]
     fn set_max_ptime(&self, max_ptime: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "max-ptime", max_ptime)
+        ObjectExt::set_property(self.as_ref(), "max-ptime", max_ptime)
     }
 
     #[doc(alias = "min-ptime")]
     fn min_ptime(&self) -> i64 {
-        glib::ObjectExt::property(self.as_ref(), "min-ptime")
+        ObjectExt::property(self.as_ref(), "min-ptime")
     }
 
     #[doc(alias = "min-ptime")]
     fn set_min_ptime(&self, min_ptime: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "min-ptime", min_ptime)
+        ObjectExt::set_property(self.as_ref(), "min-ptime", min_ptime)
     }
 
     fn mtu(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "mtu")
+        ObjectExt::property(self.as_ref(), "mtu")
     }
 
     fn set_mtu(&self, mtu: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "mtu", mtu)
+        ObjectExt::set_property(self.as_ref(), "mtu", mtu)
     }
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "onvif-no-rate-control")]
     fn is_onvif_no_rate_control(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "onvif-no-rate-control")
+        ObjectExt::property(self.as_ref(), "onvif-no-rate-control")
     }
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "onvif-no-rate-control")]
     fn set_onvif_no_rate_control(&self, onvif_no_rate_control: bool) {
-        glib::ObjectExt::set_property(
+        ObjectExt::set_property(
             self.as_ref(),
             "onvif-no-rate-control",
             onvif_no_rate_control,
@@ -195,98 +195,98 @@ pub trait RTPBasePayloadExt: IsA<RTPBasePayload> + sealed::Sealed + 'static {
 
     #[doc(alias = "perfect-rtptime")]
     fn is_perfect_rtptime(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "perfect-rtptime")
+        ObjectExt::property(self.as_ref(), "perfect-rtptime")
     }
 
     #[doc(alias = "perfect-rtptime")]
     fn set_perfect_rtptime(&self, perfect_rtptime: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "perfect-rtptime", perfect_rtptime)
+        ObjectExt::set_property(self.as_ref(), "perfect-rtptime", perfect_rtptime)
     }
 
     fn pt(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "pt")
+        ObjectExt::property(self.as_ref(), "pt")
     }
 
     fn set_pt(&self, pt: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "pt", pt)
+        ObjectExt::set_property(self.as_ref(), "pt", pt)
     }
 
     #[doc(alias = "ptime-multiple")]
     fn ptime_multiple(&self) -> i64 {
-        glib::ObjectExt::property(self.as_ref(), "ptime-multiple")
+        ObjectExt::property(self.as_ref(), "ptime-multiple")
     }
 
     #[doc(alias = "ptime-multiple")]
     fn set_ptime_multiple(&self, ptime_multiple: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "ptime-multiple", ptime_multiple)
+        ObjectExt::set_property(self.as_ref(), "ptime-multiple", ptime_multiple)
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "scale-rtptime")]
     fn is_scale_rtptime(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "scale-rtptime")
+        ObjectExt::property(self.as_ref(), "scale-rtptime")
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "scale-rtptime")]
     fn set_scale_rtptime(&self, scale_rtptime: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "scale-rtptime", scale_rtptime)
+        ObjectExt::set_property(self.as_ref(), "scale-rtptime", scale_rtptime)
     }
 
     fn seqnum(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "seqnum")
+        ObjectExt::property(self.as_ref(), "seqnum")
     }
 
     #[doc(alias = "seqnum-offset")]
     fn seqnum_offset(&self) -> i32 {
-        glib::ObjectExt::property(self.as_ref(), "seqnum-offset")
+        ObjectExt::property(self.as_ref(), "seqnum-offset")
     }
 
     #[doc(alias = "seqnum-offset")]
     fn set_seqnum_offset(&self, seqnum_offset: i32) {
-        glib::ObjectExt::set_property(self.as_ref(), "seqnum-offset", seqnum_offset)
+        ObjectExt::set_property(self.as_ref(), "seqnum-offset", seqnum_offset)
     }
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "source-info")]
     fn is_source_info(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "source-info")
+        ObjectExt::property(self.as_ref(), "source-info")
     }
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "source-info")]
     fn set_source_info(&self, source_info: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "source-info", source_info)
+        ObjectExt::set_property(self.as_ref(), "source-info", source_info)
     }
 
     fn ssrc(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "ssrc")
+        ObjectExt::property(self.as_ref(), "ssrc")
     }
 
     fn set_ssrc(&self, ssrc: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "ssrc", ssrc)
+        ObjectExt::set_property(self.as_ref(), "ssrc", ssrc)
     }
 
     fn stats(&self) -> Option<gst::Structure> {
-        glib::ObjectExt::property(self.as_ref(), "stats")
+        ObjectExt::property(self.as_ref(), "stats")
     }
 
     fn timestamp(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "timestamp")
+        ObjectExt::property(self.as_ref(), "timestamp")
     }
 
     #[doc(alias = "timestamp-offset")]
     fn timestamp_offset(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "timestamp-offset")
+        ObjectExt::property(self.as_ref(), "timestamp-offset")
     }
 
     #[doc(alias = "timestamp-offset")]
     fn set_timestamp_offset(&self, timestamp_offset: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "timestamp-offset", timestamp_offset)
+        ObjectExt::set_property(self.as_ref(), "timestamp-offset", timestamp_offset)
     }
 
     #[cfg(feature = "v1_20")]

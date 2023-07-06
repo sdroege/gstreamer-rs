@@ -104,12 +104,12 @@ pub trait DeviceMonitorExt: IsA<DeviceMonitor> + sealed::Sealed + 'static {
 
     #[doc(alias = "show-all")]
     fn shows_all(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "show-all")
+        ObjectExt::property(self.as_ref(), "show-all")
     }
 
     #[doc(alias = "show-all")]
     fn set_show_all(&self, show_all: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "show-all", show_all)
+        ObjectExt::set_property(self.as_ref(), "show-all", show_all)
     }
 
     #[doc(alias = "show-all")]

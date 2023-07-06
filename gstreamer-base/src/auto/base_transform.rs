@@ -151,11 +151,11 @@ pub trait BaseTransformExt: IsA<BaseTransform> + sealed::Sealed + 'static {
     }
 
     fn is_qos(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "qos")
+        ObjectExt::property(self.as_ref(), "qos")
     }
 
     fn set_qos(&self, qos: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "qos", qos)
+        ObjectExt::set_property(self.as_ref(), "qos", qos)
     }
 
     #[doc(alias = "qos")]

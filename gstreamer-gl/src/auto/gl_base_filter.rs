@@ -57,7 +57,7 @@ pub trait GLBaseFilterExt: IsA<GLBaseFilter> + sealed::Sealed + 'static {
     }
 
     fn context(&self) -> Option<GLContext> {
-        glib::ObjectExt::property(self.as_ref(), "context")
+        ObjectExt::property(self.as_ref(), "context")
     }
 
     #[doc(alias = "context")]

@@ -253,30 +253,30 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
 
     #[doc(alias = "async")]
     fn is_async(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "async")
+        ObjectExt::property(self.as_ref(), "async")
     }
 
     #[doc(alias = "async")]
     fn set_async(&self, async_: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "async", async_)
+        ObjectExt::set_property(self.as_ref(), "async", async_)
     }
 
     #[doc(alias = "enable-last-sample")]
     fn enables_last_sample(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "enable-last-sample")
+        ObjectExt::property(self.as_ref(), "enable-last-sample")
     }
 
     #[doc(alias = "enable-last-sample")]
     fn set_enable_last_sample(&self, enable_last_sample: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "enable-last-sample", enable_last_sample)
+        ObjectExt::set_property(self.as_ref(), "enable-last-sample", enable_last_sample)
     }
 
     fn is_qos(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "qos")
+        ObjectExt::property(self.as_ref(), "qos")
     }
 
     fn set_qos(&self, qos: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "qos", qos)
+        ObjectExt::set_property(self.as_ref(), "qos", qos)
     }
 
     #[doc(alias = "async")]

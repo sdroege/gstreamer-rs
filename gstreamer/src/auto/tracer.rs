@@ -34,11 +34,11 @@ mod sealed {
 
 pub trait TracerExt: IsA<Tracer> + sealed::Sealed + 'static {
     fn params(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self.as_ref(), "params")
+        ObjectExt::property(self.as_ref(), "params")
     }
 
     fn set_params(&self, params: Option<&str>) {
-        glib::ObjectExt::set_property(self.as_ref(), "params", params)
+        ObjectExt::set_property(self.as_ref(), "params", params)
     }
 
     #[doc(alias = "params")]

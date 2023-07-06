@@ -81,17 +81,17 @@ impl TestClock {
 
     #[doc(alias = "clock-type")]
     pub fn clock_type(&self) -> gst::ClockType {
-        glib::ObjectExt::property(self, "clock-type")
+        ObjectExt::property(self, "clock-type")
     }
 
     #[doc(alias = "clock-type")]
     pub fn set_clock_type(&self, clock_type: gst::ClockType) {
-        glib::ObjectExt::set_property(self, "clock-type", clock_type)
+        ObjectExt::set_property(self, "clock-type", clock_type)
     }
 
     #[doc(alias = "start-time")]
     pub fn start_time(&self) -> u64 {
-        glib::ObjectExt::property(self, "start-time")
+        ObjectExt::property(self, "start-time")
     }
 
     //#[doc(alias = "gst_test_clock_id_list_get_latest_time")]

@@ -563,20 +563,20 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
 
     #[doc(alias = "in-point")]
     fn in_point(&self) -> u64 {
-        glib::ObjectExt::property(self.as_ref(), "in-point")
+        ObjectExt::property(self.as_ref(), "in-point")
     }
 
     #[doc(alias = "in-point")]
     fn set_in_point(&self, in_point: u64) {
-        glib::ObjectExt::set_property(self.as_ref(), "in-point", in_point)
+        ObjectExt::set_property(self.as_ref(), "in-point", in_point)
     }
 
     fn is_serialize(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "serialize")
+        ObjectExt::property(self.as_ref(), "serialize")
     }
 
     fn set_serialize(&self, serialize: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "serialize", serialize)
+        ObjectExt::set_property(self.as_ref(), "serialize", serialize)
     }
 
     #[cfg(feature = "v1_18")]

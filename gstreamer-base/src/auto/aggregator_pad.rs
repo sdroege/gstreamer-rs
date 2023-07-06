@@ -94,14 +94,14 @@ pub trait AggregatorPadExt: IsA<AggregatorPad> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "emit-signals")]
     fn emits_signals(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "emit-signals")
+        ObjectExt::property(self.as_ref(), "emit-signals")
     }
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "emit-signals")]
     fn set_emit_signals(&self, emit_signals: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "emit-signals", emit_signals)
+        ObjectExt::set_property(self.as_ref(), "emit-signals", emit_signals)
     }
 
     #[doc(alias = "buffer-consumed")]

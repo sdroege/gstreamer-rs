@@ -171,12 +171,12 @@ impl AppSink {
 
     #[doc(alias = "buffer-list")]
     pub fn is_buffer_list(&self) -> bool {
-        glib::ObjectExt::property(self, "buffer-list")
+        ObjectExt::property(self, "buffer-list")
     }
 
     #[doc(alias = "buffer-list")]
     pub fn set_buffer_list(&self, buffer_list: bool) {
-        glib::ObjectExt::set_property(self, "buffer-list", buffer_list)
+        ObjectExt::set_property(self, "buffer-list", buffer_list)
     }
 
     #[doc(alias = "buffer-list")]

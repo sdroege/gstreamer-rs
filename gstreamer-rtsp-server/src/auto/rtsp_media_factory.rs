@@ -495,37 +495,37 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + sealed::Sealed + 'static 
 
     #[doc(alias = "bind-mcast-address")]
     fn get_property_bind_mcast_address(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "bind-mcast-address")
+        ObjectExt::property(self.as_ref(), "bind-mcast-address")
     }
 
     #[doc(alias = "bind-mcast-address")]
     fn set_property_bind_mcast_address(&self, bind_mcast_address: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "bind-mcast-address", bind_mcast_address)
+        ObjectExt::set_property(self.as_ref(), "bind-mcast-address", bind_mcast_address)
     }
 
     #[doc(alias = "dscp-qos")]
     fn get_property_dscp_qos(&self) -> i32 {
-        glib::ObjectExt::property(self.as_ref(), "dscp-qos")
+        ObjectExt::property(self.as_ref(), "dscp-qos")
     }
 
     #[doc(alias = "dscp-qos")]
     fn set_property_dscp_qos(&self, dscp_qos: i32) {
-        glib::ObjectExt::set_property(self.as_ref(), "dscp-qos", dscp_qos)
+        ObjectExt::set_property(self.as_ref(), "dscp-qos", dscp_qos)
     }
 
     #[doc(alias = "max-mcast-ttl")]
     fn get_property_max_mcast_ttl(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "max-mcast-ttl")
+        ObjectExt::property(self.as_ref(), "max-mcast-ttl")
     }
 
     #[doc(alias = "max-mcast-ttl")]
     fn set_property_max_mcast_ttl(&self, max_mcast_ttl: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "max-mcast-ttl", max_mcast_ttl)
+        ObjectExt::set_property(self.as_ref(), "max-mcast-ttl", max_mcast_ttl)
     }
 
     #[doc(alias = "stop-on-disconnect")]
     fn is_stop_on_disconnect(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "stop-on-disconnect")
+        ObjectExt::property(self.as_ref(), "stop-on-disconnect")
     }
 
     #[doc(alias = "media-configure")]

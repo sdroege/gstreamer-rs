@@ -49,13 +49,13 @@ impl GLOverlayCompositor {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn is_yinvert(&self) -> bool {
-        glib::ObjectExt::property(self, "yinvert")
+        ObjectExt::property(self, "yinvert")
     }
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn set_yinvert(&self, yinvert: bool) {
-        glib::ObjectExt::set_property(self, "yinvert", yinvert)
+        ObjectExt::set_property(self, "yinvert", yinvert)
     }
 
     #[doc(alias = "gst_gl_overlay_compositor_add_caps")]

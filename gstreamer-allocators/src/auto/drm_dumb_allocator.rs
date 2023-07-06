@@ -45,14 +45,14 @@ impl DRMDumbAllocator {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "drm-device-path")]
     pub fn drm_device_path(&self) -> Option<std::path::PathBuf> {
-        glib::ObjectExt::property(self, "drm-device-path")
+        ObjectExt::property(self, "drm-device-path")
     }
 
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "drm-fd")]
     pub fn drm_fd(&self) -> i32 {
-        glib::ObjectExt::property(self, "drm-fd")
+        ObjectExt::property(self, "drm-fd")
     }
 }
 

@@ -44,12 +44,12 @@ pub trait VideoAggregatorPadExt: IsA<VideoAggregatorPad> + sealed::Sealed + 'sta
 
     #[doc(alias = "max-last-buffer-repeat")]
     fn max_last_buffer_repeat(&self) -> u64 {
-        glib::ObjectExt::property(self.as_ref(), "max-last-buffer-repeat")
+        ObjectExt::property(self.as_ref(), "max-last-buffer-repeat")
     }
 
     #[doc(alias = "max-last-buffer-repeat")]
     fn set_max_last_buffer_repeat(&self, max_last_buffer_repeat: u64) {
-        glib::ObjectExt::set_property(
+        ObjectExt::set_property(
             self.as_ref(),
             "max-last-buffer-repeat",
             max_last_buffer_repeat,
@@ -58,20 +58,20 @@ pub trait VideoAggregatorPadExt: IsA<VideoAggregatorPad> + sealed::Sealed + 'sta
 
     #[doc(alias = "repeat-after-eos")]
     fn is_repeat_after_eos(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "repeat-after-eos")
+        ObjectExt::property(self.as_ref(), "repeat-after-eos")
     }
 
     #[doc(alias = "repeat-after-eos")]
     fn set_repeat_after_eos(&self, repeat_after_eos: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "repeat-after-eos", repeat_after_eos)
+        ObjectExt::set_property(self.as_ref(), "repeat-after-eos", repeat_after_eos)
     }
 
     fn zorder(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "zorder")
+        ObjectExt::property(self.as_ref(), "zorder")
     }
 
     fn set_zorder(&self, zorder: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "zorder", zorder)
+        ObjectExt::set_property(self.as_ref(), "zorder", zorder)
     }
 
     #[doc(alias = "max-last-buffer-repeat")]

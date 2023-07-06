@@ -22,37 +22,37 @@ glib::wrapper! {
 
 impl WebRTCDTLSTransport {
     pub fn certificate(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self, "certificate")
+        ObjectExt::property(self, "certificate")
     }
 
     pub fn set_certificate(&self, certificate: Option<&str>) {
-        glib::ObjectExt::set_property(self, "certificate", certificate)
+        ObjectExt::set_property(self, "certificate", certificate)
     }
 
     pub fn is_client(&self) -> bool {
-        glib::ObjectExt::property(self, "client")
+        ObjectExt::property(self, "client")
     }
 
     pub fn set_client(&self, client: bool) {
-        glib::ObjectExt::set_property(self, "client", client)
+        ObjectExt::set_property(self, "client", client)
     }
 
     #[doc(alias = "remote-certificate")]
     pub fn remote_certificate(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self, "remote-certificate")
+        ObjectExt::property(self, "remote-certificate")
     }
 
     #[doc(alias = "session-id")]
     pub fn session_id(&self) -> u32 {
-        glib::ObjectExt::property(self, "session-id")
+        ObjectExt::property(self, "session-id")
     }
 
     pub fn state(&self) -> WebRTCDTLSTransportState {
-        glib::ObjectExt::property(self, "state")
+        ObjectExt::property(self, "state")
     }
 
     pub fn transport(&self) -> Option<WebRTCICETransport> {
-        glib::ObjectExt::property(self, "transport")
+        ObjectExt::property(self, "transport")
     }
 
     #[doc(alias = "certificate")]

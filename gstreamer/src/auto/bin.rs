@@ -141,22 +141,22 @@ pub trait GstBinExt: IsA<Bin> + sealed::Sealed + 'static {
 
     #[doc(alias = "async-handling")]
     fn is_async_handling(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "async-handling")
+        ObjectExt::property(self.as_ref(), "async-handling")
     }
 
     #[doc(alias = "async-handling")]
     fn set_async_handling(&self, async_handling: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "async-handling", async_handling)
+        ObjectExt::set_property(self.as_ref(), "async-handling", async_handling)
     }
 
     #[doc(alias = "message-forward")]
     fn is_message_forward(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "message-forward")
+        ObjectExt::property(self.as_ref(), "message-forward")
     }
 
     #[doc(alias = "message-forward")]
     fn set_message_forward(&self, message_forward: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "message-forward", message_forward)
+        ObjectExt::set_property(self.as_ref(), "message-forward", message_forward)
     }
 
     #[doc(alias = "deep-element-added")]

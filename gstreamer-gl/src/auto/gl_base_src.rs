@@ -34,12 +34,12 @@ mod sealed {
 pub trait GLBaseSrcExt: IsA<GLBaseSrc> + sealed::Sealed + 'static {
     #[doc(alias = "timestamp-offset")]
     fn timestamp_offset(&self) -> i64 {
-        glib::ObjectExt::property(self.as_ref(), "timestamp-offset")
+        ObjectExt::property(self.as_ref(), "timestamp-offset")
     }
 
     #[doc(alias = "timestamp-offset")]
     fn set_timestamp_offset(&self, timestamp_offset: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "timestamp-offset", timestamp_offset)
+        ObjectExt::set_property(self.as_ref(), "timestamp-offset", timestamp_offset)
     }
 
     #[doc(alias = "timestamp-offset")]

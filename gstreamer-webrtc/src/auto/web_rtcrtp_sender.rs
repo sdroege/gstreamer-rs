@@ -39,13 +39,13 @@ impl WebRTCRTPSender {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn priority(&self) -> WebRTCPriorityType {
-        glib::ObjectExt::property(self, "priority")
+        ObjectExt::property(self, "priority")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn transport(&self) -> Option<WebRTCDTLSTransport> {
-        glib::ObjectExt::property(self, "transport")
+        ObjectExt::property(self, "transport")
     }
 
     #[cfg(feature = "v1_20")]

@@ -145,12 +145,12 @@ pub trait BaseParseExt: IsA<BaseParse> + sealed::Sealed + 'static {
 
     #[doc(alias = "disable-passthrough")]
     fn is_disable_passthrough(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "disable-passthrough")
+        ObjectExt::property(self.as_ref(), "disable-passthrough")
     }
 
     #[doc(alias = "disable-passthrough")]
     fn set_disable_passthrough(&self, disable_passthrough: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "disable-passthrough", disable_passthrough)
+        ObjectExt::set_property(self.as_ref(), "disable-passthrough", disable_passthrough)
     }
 
     #[doc(alias = "disable-passthrough")]

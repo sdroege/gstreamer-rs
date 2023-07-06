@@ -32,57 +32,57 @@ impl WebRTCRTPTransceiver {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "codec-preferences")]
     pub fn codec_preferences(&self) -> Option<gst::Caps> {
-        glib::ObjectExt::property(self, "codec-preferences")
+        ObjectExt::property(self, "codec-preferences")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "codec-preferences")]
     pub fn set_codec_preferences(&self, codec_preferences: Option<&gst::Caps>) {
-        glib::ObjectExt::set_property(self, "codec-preferences", codec_preferences)
+        ObjectExt::set_property(self, "codec-preferences", codec_preferences)
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "current-direction")]
     pub fn current_direction(&self) -> WebRTCRTPTransceiverDirection {
-        glib::ObjectExt::property(self, "current-direction")
+        ObjectExt::property(self, "current-direction")
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn direction(&self) -> WebRTCRTPTransceiverDirection {
-        glib::ObjectExt::property(self, "direction")
+        ObjectExt::property(self, "direction")
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn set_direction(&self, direction: WebRTCRTPTransceiverDirection) {
-        glib::ObjectExt::set_property(self, "direction", direction)
+        ObjectExt::set_property(self, "direction", direction)
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn kind(&self) -> WebRTCKind {
-        glib::ObjectExt::property(self, "kind")
+        ObjectExt::property(self, "kind")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn mid(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self, "mid")
+        ObjectExt::property(self, "mid")
     }
 
     pub fn mlineindex(&self) -> u32 {
-        glib::ObjectExt::property(self, "mlineindex")
+        ObjectExt::property(self, "mlineindex")
     }
 
     pub fn receiver(&self) -> Option<WebRTCRTPReceiver> {
-        glib::ObjectExt::property(self, "receiver")
+        ObjectExt::property(self, "receiver")
     }
 
     pub fn sender(&self) -> Option<WebRTCRTPSender> {
-        glib::ObjectExt::property(self, "sender")
+        ObjectExt::property(self, "sender")
     }
 
     #[cfg(feature = "v1_20")]

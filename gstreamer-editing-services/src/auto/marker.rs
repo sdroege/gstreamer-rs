@@ -24,7 +24,7 @@ impl Marker {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn position(&self) -> u64 {
-        glib::ObjectExt::property(self, "position")
+        ObjectExt::property(self, "position")
     }
 
     #[cfg(feature = "v1_18")]

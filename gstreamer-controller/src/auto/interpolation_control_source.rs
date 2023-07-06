@@ -51,11 +51,11 @@ pub trait InterpolationControlSourceExt:
     IsA<InterpolationControlSource> + sealed::Sealed + 'static
 {
     fn mode(&self) -> InterpolationMode {
-        glib::ObjectExt::property(self.as_ref(), "mode")
+        ObjectExt::property(self.as_ref(), "mode")
     }
 
     fn set_mode(&self, mode: InterpolationMode) {
-        glib::ObjectExt::set_property(self.as_ref(), "mode", mode)
+        ObjectExt::set_property(self.as_ref(), "mode", mode)
     }
 
     #[doc(alias = "mode")]

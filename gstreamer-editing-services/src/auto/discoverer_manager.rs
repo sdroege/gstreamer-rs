@@ -59,12 +59,12 @@ impl DiscovererManager {
 
     #[doc(alias = "use-cache")]
     pub fn get_property_use_cache(&self) -> bool {
-        glib::ObjectExt::property(self, "use-cache")
+        ObjectExt::property(self, "use-cache")
     }
 
     #[doc(alias = "use-cache")]
     pub fn set_property_use_cache(&self, use_cache: bool) {
-        glib::ObjectExt::set_property(self, "use-cache", use_cache)
+        ObjectExt::set_property(self, "use-cache", use_cache)
     }
 
     #[doc(alias = "ges_discoverer_manager_get_default")]

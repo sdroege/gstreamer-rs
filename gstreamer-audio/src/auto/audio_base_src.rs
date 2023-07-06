@@ -70,32 +70,32 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + sealed::Sealed + 'static {
 
     #[doc(alias = "actual-buffer-time")]
     fn actual_buffer_time(&self) -> i64 {
-        glib::ObjectExt::property(self.as_ref(), "actual-buffer-time")
+        ObjectExt::property(self.as_ref(), "actual-buffer-time")
     }
 
     #[doc(alias = "actual-latency-time")]
     fn actual_latency_time(&self) -> i64 {
-        glib::ObjectExt::property(self.as_ref(), "actual-latency-time")
+        ObjectExt::property(self.as_ref(), "actual-latency-time")
     }
 
     #[doc(alias = "buffer-time")]
     fn buffer_time(&self) -> i64 {
-        glib::ObjectExt::property(self.as_ref(), "buffer-time")
+        ObjectExt::property(self.as_ref(), "buffer-time")
     }
 
     #[doc(alias = "buffer-time")]
     fn set_buffer_time(&self, buffer_time: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "buffer-time", buffer_time)
+        ObjectExt::set_property(self.as_ref(), "buffer-time", buffer_time)
     }
 
     #[doc(alias = "latency-time")]
     fn latency_time(&self) -> i64 {
-        glib::ObjectExt::property(self.as_ref(), "latency-time")
+        ObjectExt::property(self.as_ref(), "latency-time")
     }
 
     #[doc(alias = "latency-time")]
     fn set_latency_time(&self, latency_time: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "latency-time", latency_time)
+        ObjectExt::set_property(self.as_ref(), "latency-time", latency_time)
     }
 
     #[doc(alias = "actual-buffer-time")]

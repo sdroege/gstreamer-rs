@@ -4,10 +4,7 @@
 // DO NOT EDIT
 
 use crate::EventTypeFlags;
-use glib::{
-    error::ErrorDomain, translate::*, value::FromValue, value::ToValue, GStr, Quark, StaticType,
-    Type,
-};
+use glib::{prelude::*, translate::*, GStr};
 use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
@@ -60,7 +57,7 @@ impl FromGlib<ffi::GstBufferingMode> for BufferingMode {
 
 impl StaticType for BufferingMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_buffering_mode_get_type()) }
     }
 }
@@ -79,7 +76,7 @@ impl glib::value::ValueType for BufferingMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for BufferingMode {
+unsafe impl<'a> glib::value::FromValue<'a> for BufferingMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -148,7 +145,7 @@ impl FromGlib<ffi::GstBusSyncReply> for BusSyncReply {
 
 impl StaticType for BusSyncReply {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_bus_sync_reply_get_type()) }
     }
 }
@@ -167,7 +164,7 @@ impl glib::value::ValueType for BusSyncReply {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for BusSyncReply {
+unsafe impl<'a> glib::value::FromValue<'a> for BusSyncReply {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -243,7 +240,7 @@ impl FromGlib<ffi::GstCapsIntersectMode> for CapsIntersectMode {
 
 impl StaticType for CapsIntersectMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_caps_intersect_mode_get_type()) }
     }
 }
@@ -262,7 +259,7 @@ impl glib::value::ValueType for CapsIntersectMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for CapsIntersectMode {
+unsafe impl<'a> glib::value::FromValue<'a> for CapsIntersectMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -338,7 +335,7 @@ impl FromGlib<ffi::GstClockEntryType> for ClockEntryType {
 
 impl StaticType for ClockEntryType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_clock_entry_type_get_type()) }
     }
 }
@@ -357,7 +354,7 @@ impl glib::value::ValueType for ClockEntryType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for ClockEntryType {
+unsafe impl<'a> glib::value::FromValue<'a> for ClockEntryType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -447,7 +444,7 @@ impl FromGlib<ffi::GstClockReturn> for ClockReturn {
 
 impl StaticType for ClockReturn {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_clock_return_get_type()) }
     }
 }
@@ -466,7 +463,7 @@ impl glib::value::ValueType for ClockReturn {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for ClockReturn {
+unsafe impl<'a> glib::value::FromValue<'a> for ClockReturn {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -554,7 +551,7 @@ impl FromGlib<ffi::GstClockType> for ClockType {
 
 impl StaticType for ClockType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_clock_type_get_type()) }
     }
 }
@@ -573,7 +570,7 @@ impl glib::value::ValueType for ClockType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for ClockType {
+unsafe impl<'a> glib::value::FromValue<'a> for ClockType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -693,9 +690,9 @@ impl FromGlib<ffi::GstCoreError> for CoreError {
     }
 }
 
-impl ErrorDomain for CoreError {
+impl glib::error::ErrorDomain for CoreError {
     #[inline]
-    fn domain() -> Quark {
+    fn domain() -> glib::Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_core_error_quark()) }
@@ -719,7 +716,7 @@ impl ErrorDomain for CoreError {
 
 impl StaticType for CoreError {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_core_error_get_type()) }
     }
 }
@@ -738,7 +735,7 @@ impl glib::value::ValueType for CoreError {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for CoreError {
+unsafe impl<'a> glib::value::FromValue<'a> for CoreError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -861,7 +858,7 @@ impl FromGlib<ffi::GstDebugLevel> for DebugLevel {
 
 impl StaticType for DebugLevel {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_debug_level_get_type()) }
     }
 }
@@ -880,7 +877,7 @@ impl glib::value::ValueType for DebugLevel {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for DebugLevel {
+unsafe impl<'a> glib::value::FromValue<'a> for DebugLevel {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1114,7 +1111,7 @@ impl FromGlib<ffi::GstEventType> for EventType {
 
 impl StaticType for EventType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_event_type_get_type()) }
     }
 }
@@ -1133,7 +1130,7 @@ impl glib::value::ValueType for EventType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for EventType {
+unsafe impl<'a> glib::value::FromValue<'a> for EventType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1259,7 +1256,7 @@ impl FromGlib<ffi::GstFormat> for Format {
 
 impl StaticType for Format {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_format_get_type()) }
     }
 }
@@ -1278,7 +1275,7 @@ impl glib::value::ValueType for Format {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for Format {
+unsafe impl<'a> glib::value::FromValue<'a> for Format {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1368,9 +1365,9 @@ impl FromGlib<ffi::GstLibraryError> for LibraryError {
     }
 }
 
-impl ErrorDomain for LibraryError {
+impl glib::error::ErrorDomain for LibraryError {
     #[inline]
-    fn domain() -> Quark {
+    fn domain() -> glib::Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_library_error_quark()) }
@@ -1394,7 +1391,7 @@ impl ErrorDomain for LibraryError {
 
 impl StaticType for LibraryError {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_library_error_get_type()) }
     }
 }
@@ -1413,7 +1410,7 @@ impl glib::value::ValueType for LibraryError {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for LibraryError {
+unsafe impl<'a> glib::value::FromValue<'a> for LibraryError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1483,7 +1480,7 @@ impl FromGlib<ffi::GstPadDirection> for PadDirection {
 
 impl StaticType for PadDirection {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_pad_direction_get_type()) }
     }
 }
@@ -1502,7 +1499,7 @@ impl glib::value::ValueType for PadDirection {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for PadDirection {
+unsafe impl<'a> glib::value::FromValue<'a> for PadDirection {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1595,7 +1592,7 @@ impl FromGlib<ffi::GstPadMode> for PadMode {
 
 impl StaticType for PadMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_pad_mode_get_type()) }
     }
 }
@@ -1614,7 +1611,7 @@ impl glib::value::ValueType for PadMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for PadMode {
+unsafe impl<'a> glib::value::FromValue<'a> for PadMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1689,7 +1686,7 @@ impl FromGlib<ffi::GstPadPresence> for PadPresence {
 
 impl StaticType for PadPresence {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_pad_presence_get_type()) }
     }
 }
@@ -1708,7 +1705,7 @@ impl glib::value::ValueType for PadPresence {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for PadPresence {
+unsafe impl<'a> glib::value::FromValue<'a> for PadPresence {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1788,7 +1785,7 @@ impl FromGlib<ffi::GstPadProbeReturn> for PadProbeReturn {
 
 impl StaticType for PadProbeReturn {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_pad_probe_return_get_type()) }
     }
 }
@@ -1807,7 +1804,7 @@ impl glib::value::ValueType for PadProbeReturn {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for PadProbeReturn {
+unsafe impl<'a> glib::value::FromValue<'a> for PadProbeReturn {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1905,9 +1902,9 @@ impl FromGlib<ffi::GstParseError> for ParseError {
     }
 }
 
-impl ErrorDomain for ParseError {
+impl glib::error::ErrorDomain for ParseError {
     #[inline]
-    fn domain() -> Quark {
+    fn domain() -> glib::Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_parse_error_quark()) }
@@ -1930,7 +1927,7 @@ impl ErrorDomain for ParseError {
 
 impl StaticType for ParseError {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_parse_error_get_type()) }
     }
 }
@@ -1949,7 +1946,7 @@ impl glib::value::ValueType for ParseError {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for ParseError {
+unsafe impl<'a> glib::value::FromValue<'a> for ParseError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2027,9 +2024,9 @@ impl FromGlib<ffi::GstPluginError> for PluginError {
     }
 }
 
-impl ErrorDomain for PluginError {
+impl glib::error::ErrorDomain for PluginError {
     #[inline]
-    fn domain() -> Quark {
+    fn domain() -> glib::Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_plugin_error_quark()) }
@@ -2052,7 +2049,7 @@ impl ErrorDomain for PluginError {
 
 impl StaticType for PluginError {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_plugin_error_get_type()) }
     }
 }
@@ -2071,7 +2068,7 @@ impl glib::value::ValueType for PluginError {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for PluginError {
+unsafe impl<'a> glib::value::FromValue<'a> for PluginError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2159,7 +2156,7 @@ impl FromGlib<ffi::GstProgressType> for ProgressType {
 
 impl StaticType for ProgressType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_progress_type_get_type()) }
     }
 }
@@ -2178,7 +2175,7 @@ impl glib::value::ValueType for ProgressType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for ProgressType {
+unsafe impl<'a> glib::value::FromValue<'a> for ProgressType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2262,7 +2259,7 @@ impl FromGlib<ffi::GstPromiseResult> for PromiseResult {
 
 impl StaticType for PromiseResult {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_promise_result_get_type()) }
     }
 }
@@ -2281,7 +2278,7 @@ impl glib::value::ValueType for PromiseResult {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for PromiseResult {
+unsafe impl<'a> glib::value::FromValue<'a> for PromiseResult {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2361,7 +2358,7 @@ impl FromGlib<ffi::GstQOSType> for QOSType {
 
 impl StaticType for QOSType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_qos_type_get_type()) }
     }
 }
@@ -2380,7 +2377,7 @@ impl glib::value::ValueType for QOSType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for QOSType {
+unsafe impl<'a> glib::value::FromValue<'a> for QOSType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2465,7 +2462,7 @@ impl FromGlib<ffi::GstRank> for Rank {
 
 impl StaticType for Rank {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rank_get_type()) }
     }
 }
@@ -2484,7 +2481,7 @@ impl glib::value::ValueType for Rank {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for Rank {
+unsafe impl<'a> glib::value::FromValue<'a> for Rank {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2608,9 +2605,9 @@ impl FromGlib<ffi::GstResourceError> for ResourceError {
     }
 }
 
-impl ErrorDomain for ResourceError {
+impl glib::error::ErrorDomain for ResourceError {
     #[inline]
-    fn domain() -> Quark {
+    fn domain() -> glib::Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_resource_error_quark()) }
@@ -2634,7 +2631,7 @@ impl ErrorDomain for ResourceError {
 
 impl StaticType for ResourceError {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_resource_error_get_type()) }
     }
 }
@@ -2653,7 +2650,7 @@ impl glib::value::ValueType for ResourceError {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for ResourceError {
+unsafe impl<'a> glib::value::FromValue<'a> for ResourceError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2727,7 +2724,7 @@ impl FromGlib<ffi::GstSeekType> for SeekType {
 
 impl StaticType for SeekType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_seek_type_get_type()) }
     }
 }
@@ -2746,7 +2743,7 @@ impl glib::value::ValueType for SeekType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for SeekType {
+unsafe impl<'a> glib::value::FromValue<'a> for SeekType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2827,7 +2824,7 @@ impl FromGlib<ffi::GstState> for State {
 
 impl StaticType for State {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_state_get_type()) }
     }
 }
@@ -2846,7 +2843,7 @@ impl glib::value::ValueType for State {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for State {
+unsafe impl<'a> glib::value::FromValue<'a> for State {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2960,7 +2957,7 @@ impl FromGlib<ffi::GstStateChange> for StateChange {
 
 impl StaticType for StateChange {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_state_change_get_type()) }
     }
 }
@@ -2979,7 +2976,7 @@ impl glib::value::ValueType for StateChange {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for StateChange {
+unsafe impl<'a> glib::value::FromValue<'a> for StateChange {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3057,7 +3054,7 @@ impl FromGlib<ffi::GstStateChangeReturn> for StateChangeReturn {
 
 impl StaticType for StateChangeReturn {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_state_change_return_get_type()) }
     }
 }
@@ -3076,7 +3073,7 @@ impl glib::value::ValueType for StateChangeReturn {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for StateChangeReturn {
+unsafe impl<'a> glib::value::FromValue<'a> for StateChangeReturn {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3192,9 +3189,9 @@ impl FromGlib<ffi::GstStreamError> for StreamError {
     }
 }
 
-impl ErrorDomain for StreamError {
+impl glib::error::ErrorDomain for StreamError {
     #[inline]
-    fn domain() -> Quark {
+    fn domain() -> glib::Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_stream_error_quark()) }
@@ -3218,7 +3215,7 @@ impl ErrorDomain for StreamError {
 
 impl StaticType for StreamError {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_stream_error_get_type()) }
     }
 }
@@ -3237,7 +3234,7 @@ impl glib::value::ValueType for StreamError {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for StreamError {
+unsafe impl<'a> glib::value::FromValue<'a> for StreamError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3333,7 +3330,7 @@ impl FromGlib<ffi::GstStreamStatusType> for StreamStatusType {
 
 impl StaticType for StreamStatusType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_stream_status_type_get_type()) }
     }
 }
@@ -3352,7 +3349,7 @@ impl glib::value::ValueType for StreamStatusType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for StreamStatusType {
+unsafe impl<'a> glib::value::FromValue<'a> for StreamStatusType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3428,7 +3425,7 @@ impl FromGlib<ffi::GstStructureChangeType> for StructureChangeType {
 
 impl StaticType for StructureChangeType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_structure_change_type_get_type()) }
     }
 }
@@ -3447,7 +3444,7 @@ impl glib::value::ValueType for StructureChangeType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for StructureChangeType {
+unsafe impl<'a> glib::value::FromValue<'a> for StructureChangeType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3531,7 +3528,7 @@ impl FromGlib<ffi::GstTagFlag> for TagFlag {
 
 impl StaticType for TagFlag {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_tag_flag_get_type()) }
     }
 }
@@ -3550,7 +3547,7 @@ impl glib::value::ValueType for TagFlag {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for TagFlag {
+unsafe impl<'a> glib::value::FromValue<'a> for TagFlag {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3646,7 +3643,7 @@ impl FromGlib<ffi::GstTagMergeMode> for TagMergeMode {
 
 impl StaticType for TagMergeMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_tag_merge_mode_get_type()) }
     }
 }
@@ -3665,7 +3662,7 @@ impl glib::value::ValueType for TagMergeMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for TagMergeMode {
+unsafe impl<'a> glib::value::FromValue<'a> for TagMergeMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3742,7 +3739,7 @@ impl FromGlib<ffi::GstTagScope> for TagScope {
 
 impl StaticType for TagScope {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_tag_scope_get_type()) }
     }
 }
@@ -3761,7 +3758,7 @@ impl glib::value::ValueType for TagScope {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for TagScope {
+unsafe impl<'a> glib::value::FromValue<'a> for TagScope {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3841,7 +3838,7 @@ impl FromGlib<ffi::GstTaskState> for TaskState {
 
 impl StaticType for TaskState {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_task_state_get_type()) }
     }
 }
@@ -3860,7 +3857,7 @@ impl glib::value::ValueType for TaskState {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for TaskState {
+unsafe impl<'a> glib::value::FromValue<'a> for TaskState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3969,7 +3966,7 @@ impl FromGlib<ffi::GstTocEntryType> for TocEntryType {
 
 impl StaticType for TocEntryType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_toc_entry_type_get_type()) }
     }
 }
@@ -3988,7 +3985,7 @@ impl glib::value::ValueType for TocEntryType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for TocEntryType {
+unsafe impl<'a> glib::value::FromValue<'a> for TocEntryType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -4073,7 +4070,7 @@ impl FromGlib<ffi::GstTocLoopType> for TocLoopType {
 
 impl StaticType for TocLoopType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_toc_loop_type_get_type()) }
     }
 }
@@ -4092,7 +4089,7 @@ impl glib::value::ValueType for TocLoopType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for TocLoopType {
+unsafe impl<'a> glib::value::FromValue<'a> for TocLoopType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -4169,7 +4166,7 @@ impl FromGlib<ffi::GstTocScope> for TocScope {
 
 impl StaticType for TocScope {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_toc_scope_get_type()) }
     }
 }
@@ -4188,7 +4185,7 @@ impl glib::value::ValueType for TocScope {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for TocScope {
+unsafe impl<'a> glib::value::FromValue<'a> for TocScope {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -4280,7 +4277,7 @@ impl FromGlib<ffi::GstTypeFindProbability> for TypeFindProbability {
 
 impl StaticType for TypeFindProbability {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_type_find_probability_get_type()) }
     }
 }
@@ -4299,7 +4296,7 @@ impl glib::value::ValueType for TypeFindProbability {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for TypeFindProbability {
+unsafe impl<'a> glib::value::FromValue<'a> for TypeFindProbability {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -4381,9 +4378,9 @@ impl FromGlib<ffi::GstURIError> for URIError {
     }
 }
 
-impl ErrorDomain for URIError {
+impl glib::error::ErrorDomain for URIError {
     #[inline]
-    fn domain() -> Quark {
+    fn domain() -> glib::Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_uri_error_quark()) }
@@ -4406,7 +4403,7 @@ impl ErrorDomain for URIError {
 
 impl StaticType for URIError {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_uri_error_get_type()) }
     }
 }
@@ -4425,7 +4422,7 @@ impl glib::value::ValueType for URIError {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for URIError {
+unsafe impl<'a> glib::value::FromValue<'a> for URIError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -4495,7 +4492,7 @@ impl FromGlib<ffi::GstURIType> for URIType {
 
 impl StaticType for URIType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_uri_type_get_type()) }
     }
 }
@@ -4514,7 +4511,7 @@ impl glib::value::ValueType for URIType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for URIType {
+unsafe impl<'a> glib::value::FromValue<'a> for URIType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

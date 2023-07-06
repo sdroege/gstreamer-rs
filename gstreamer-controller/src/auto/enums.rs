@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{prelude::*, translate::*};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -55,7 +55,7 @@ impl FromGlib<ffi::GstInterpolationMode> for InterpolationMode {
 
 impl StaticType for InterpolationMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_interpolation_mode_get_type()) }
     }
 }
@@ -74,7 +74,7 @@ impl glib::value::ValueType for InterpolationMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for InterpolationMode {
+unsafe impl<'a> glib::value::FromValue<'a> for InterpolationMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -162,7 +162,7 @@ impl FromGlib<ffi::GstLFOWaveform> for LFOWaveform {
 
 impl StaticType for LFOWaveform {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_lfo_waveform_get_type()) }
     }
 }
@@ -181,7 +181,7 @@ impl glib::value::ValueType for LFOWaveform {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for LFOWaveform {
+unsafe impl<'a> glib::value::FromValue<'a> for LFOWaveform {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

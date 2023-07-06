@@ -67,12 +67,12 @@ impl PlayerVideoOverlayVideoRenderer {
 
     #[doc(alias = "video-sink")]
     pub fn video_sink(&self) -> Option<gst::Element> {
-        glib::ObjectExt::property(self, "video-sink")
+        ObjectExt::property(self, "video-sink")
     }
 
     #[doc(alias = "video-sink")]
     pub fn set_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>) {
-        glib::ObjectExt::set_property(self, "video-sink", video_sink)
+        ObjectExt::set_property(self, "video-sink", video_sink)
     }
 
     #[doc(alias = "video-sink")]

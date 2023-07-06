@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{prelude::*, translate::*};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -75,7 +75,7 @@ impl FromGlib<ffi::GstRTCPFBType> for RTCPFBType {
 
 impl StaticType for RTCPFBType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtcpfb_type_get_type()) }
     }
 }
@@ -94,7 +94,7 @@ impl glib::value::ValueType for RTCPFBType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTCPFBType {
+unsafe impl<'a> glib::value::FromValue<'a> for RTCPFBType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -256,7 +256,7 @@ impl FromGlib<ffi::GstRTCPSDESType> for RTCPSDESType {
 
 impl StaticType for RTCPSDESType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtcpsdes_type_get_type()) }
     }
 }
@@ -275,7 +275,7 @@ impl glib::value::ValueType for RTCPSDESType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTCPSDESType {
+unsafe impl<'a> glib::value::FromValue<'a> for RTCPSDESType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -379,7 +379,7 @@ impl FromGlib<ffi::GstRTCPType> for RTCPType {
 
 impl StaticType for RTCPType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtcp_type_get_type()) }
     }
 }
@@ -398,7 +398,7 @@ impl glib::value::ValueType for RTCPType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTCPType {
+unsafe impl<'a> glib::value::FromValue<'a> for RTCPType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -506,7 +506,7 @@ impl FromGlib<ffi::GstRTCPXRType> for RTCPXRType {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for RTCPXRType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtcpxr_type_get_type()) }
     }
 }
@@ -531,7 +531,7 @@ impl glib::value::ValueType for RTCPXRType {
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-unsafe impl<'a> FromValue<'a> for RTCPXRType {
+unsafe impl<'a> glib::value::FromValue<'a> for RTCPXRType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -705,7 +705,7 @@ impl FromGlib<ffi::GstRTPPayload> for RTPPayload {
 
 impl StaticType for RTPPayload {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtp_payload_get_type()) }
     }
 }
@@ -724,7 +724,7 @@ impl glib::value::ValueType for RTPPayload {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTPPayload {
+unsafe impl<'a> glib::value::FromValue<'a> for RTPPayload {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -812,7 +812,7 @@ impl FromGlib<ffi::GstRTPProfile> for RTPProfile {
 
 impl StaticType for RTPProfile {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtp_profile_get_type()) }
     }
 }
@@ -831,7 +831,7 @@ impl glib::value::ValueType for RTPProfile {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTPProfile {
+unsafe impl<'a> glib::value::FromValue<'a> for RTPProfile {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

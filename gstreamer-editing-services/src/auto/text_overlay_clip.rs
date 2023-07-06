@@ -159,11 +159,11 @@ pub trait TextOverlayClipExt: IsA<TextOverlayClip> + sealed::Sealed + 'static {
     }
 
     fn set_halignment(&self, halignment: TextHAlign) {
-        glib::ObjectExt::set_property(self.as_ref(), "halignment", halignment)
+        ObjectExt::set_property(self.as_ref(), "halignment", halignment)
     }
 
     fn set_valignment(&self, valignment: TextVAlign) {
-        glib::ObjectExt::set_property(self.as_ref(), "valignment", valignment)
+        ObjectExt::set_property(self.as_ref(), "valignment", valignment)
     }
 
     #[doc(alias = "color")]

@@ -67,17 +67,17 @@ mod sealed {
 
 pub trait DirectControlBindingExt: IsA<DirectControlBinding> + sealed::Sealed + 'static {
     fn is_absolute(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "absolute")
+        ObjectExt::property(self.as_ref(), "absolute")
     }
 
     #[doc(alias = "control-source")]
     fn control_source(&self) -> Option<gst::ControlSource> {
-        glib::ObjectExt::property(self.as_ref(), "control-source")
+        ObjectExt::property(self.as_ref(), "control-source")
     }
 
     #[doc(alias = "control-source")]
     fn set_control_source<P: IsA<gst::ControlSource>>(&self, control_source: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "control-source", control_source)
+        ObjectExt::set_property(self.as_ref(), "control-source", control_source)
     }
 
     #[doc(alias = "control-source")]

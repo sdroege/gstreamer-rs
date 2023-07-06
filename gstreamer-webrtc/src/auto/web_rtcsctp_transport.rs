@@ -23,20 +23,20 @@ glib::wrapper! {
 impl WebRTCSCTPTransport {
     #[doc(alias = "max-channels")]
     pub fn max_channels(&self) -> u32 {
-        glib::ObjectExt::property(self, "max-channels")
+        ObjectExt::property(self, "max-channels")
     }
 
     #[doc(alias = "max-message-size")]
     pub fn max_message_size(&self) -> u64 {
-        glib::ObjectExt::property(self, "max-message-size")
+        ObjectExt::property(self, "max-message-size")
     }
 
     pub fn state(&self) -> WebRTCSCTPTransportState {
-        glib::ObjectExt::property(self, "state")
+        ObjectExt::property(self, "state")
     }
 
     pub fn transport(&self) -> Option<WebRTCDTLSTransport> {
-        glib::ObjectExt::property(self, "transport")
+        ObjectExt::property(self, "transport")
     }
 
     #[doc(alias = "max-channels")]

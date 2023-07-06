@@ -301,22 +301,22 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
 
     #[doc(alias = "window-size")]
     fn window_size(&self) -> i32 {
-        glib::ObjectExt::property(self.as_ref(), "window-size")
+        ObjectExt::property(self.as_ref(), "window-size")
     }
 
     #[doc(alias = "window-size")]
     fn set_window_size(&self, window_size: i32) {
-        glib::ObjectExt::set_property(self.as_ref(), "window-size", window_size)
+        ObjectExt::set_property(self.as_ref(), "window-size", window_size)
     }
 
     #[doc(alias = "window-threshold")]
     fn window_threshold(&self) -> i32 {
-        glib::ObjectExt::property(self.as_ref(), "window-threshold")
+        ObjectExt::property(self.as_ref(), "window-threshold")
     }
 
     #[doc(alias = "window-threshold")]
     fn set_window_threshold(&self, window_threshold: i32) {
-        glib::ObjectExt::set_property(self.as_ref(), "window-threshold", window_threshold)
+        ObjectExt::set_property(self.as_ref(), "window-threshold", window_threshold)
     }
 
     #[doc(alias = "synced")]

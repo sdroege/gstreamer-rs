@@ -3,10 +3,10 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use bitflags::bitflags;
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{bitflags::bitflags, prelude::*, translate::*};
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstRTSPAddressFlags")]
     pub struct RTSPAddressFlags: u32 {
         #[doc(alias = "GST_RTSP_ADDRESS_FLAG_IPV4")]
@@ -42,6 +42,7 @@ impl FromGlib<ffi::GstRTSPAddressFlags> for RTSPAddressFlags {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstRTSPTransportMode")]
     pub struct RTSPTransportMode: u32 {
         #[doc(alias = "GST_RTSP_TRANSPORT_MODE_PLAY")]
@@ -72,7 +73,7 @@ impl FromGlib<ffi::GstRTSPTransportMode> for RTSPTransportMode {
 
 impl StaticType for RTSPTransportMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_transport_mode_get_type()) }
     }
 }
@@ -91,7 +92,7 @@ impl glib::value::ValueType for RTSPTransportMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPTransportMode {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPTransportMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

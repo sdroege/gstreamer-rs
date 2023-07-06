@@ -3,10 +3,10 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use bitflags::bitflags;
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{bitflags::bitflags, prelude::*, translate::*};
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstAudioFlags")]
     pub struct AudioFlags: u32 {
         #[doc(alias = "GST_AUDIO_FLAG_UNPOSITIONED")]
@@ -35,7 +35,7 @@ impl FromGlib<ffi::GstAudioFlags> for AudioFlags {
 
 impl StaticType for AudioFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_flags_get_type()) }
     }
 }
@@ -54,7 +54,7 @@ impl glib::value::ValueType for AudioFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for AudioFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for AudioFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -89,6 +89,7 @@ impl From<AudioFlags> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstAudioFormatFlags")]
     pub struct AudioFormatFlags: u32 {
         #[doc(alias = "GST_AUDIO_FORMAT_FLAG_INTEGER")]
@@ -125,7 +126,7 @@ impl FromGlib<ffi::GstAudioFormatFlags> for AudioFormatFlags {
 
 impl StaticType for AudioFormatFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_format_flags_get_type()) }
     }
 }
@@ -144,7 +145,7 @@ impl glib::value::ValueType for AudioFormatFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for AudioFormatFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for AudioFormatFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -179,6 +180,7 @@ impl From<AudioFormatFlags> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstAudioPackFlags")]
     pub struct AudioPackFlags: u32 {
         #[doc(alias = "GST_AUDIO_PACK_FLAG_TRUNCATE_RANGE")]
@@ -207,7 +209,7 @@ impl FromGlib<ffi::GstAudioPackFlags> for AudioPackFlags {
 
 impl StaticType for AudioPackFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_pack_flags_get_type()) }
     }
 }
@@ -226,7 +228,7 @@ impl glib::value::ValueType for AudioPackFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for AudioPackFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for AudioPackFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

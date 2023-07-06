@@ -208,20 +208,20 @@ pub trait BaseSrcExt: IsA<BaseSrc> + sealed::Sealed + 'static {
 
     #[doc(alias = "num-buffers")]
     fn num_buffers(&self) -> i32 {
-        glib::ObjectExt::property(self.as_ref(), "num-buffers")
+        ObjectExt::property(self.as_ref(), "num-buffers")
     }
 
     #[doc(alias = "num-buffers")]
     fn set_num_buffers(&self, num_buffers: i32) {
-        glib::ObjectExt::set_property(self.as_ref(), "num-buffers", num_buffers)
+        ObjectExt::set_property(self.as_ref(), "num-buffers", num_buffers)
     }
 
     fn is_typefind(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "typefind")
+        ObjectExt::property(self.as_ref(), "typefind")
     }
 
     fn set_typefind(&self, typefind: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "typefind", typefind)
+        ObjectExt::set_property(self.as_ref(), "typefind", typefind)
     }
 
     #[doc(alias = "blocksize")]

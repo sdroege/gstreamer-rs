@@ -3,10 +3,10 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use bitflags::bitflags;
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{bitflags::bitflags, prelude::*, translate::*};
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstRTPBufferFlags")]
     pub struct RTPBufferFlags: u32 {
         #[doc(alias = "GST_RTP_BUFFER_FLAG_RETRANSMISSION")]
@@ -37,7 +37,7 @@ impl FromGlib<ffi::GstRTPBufferFlags> for RTPBufferFlags {
 
 impl StaticType for RTPBufferFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtp_buffer_flags_get_type()) }
     }
 }
@@ -56,7 +56,7 @@ impl glib::value::ValueType for RTPBufferFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTPBufferFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for RTPBufferFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -91,6 +91,7 @@ impl From<RTPBufferFlags> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstRTPBufferMapFlags")]
     pub struct RTPBufferMapFlags: u32 {
         #[doc(alias = "GST_RTP_BUFFER_MAP_FLAG_SKIP_PADDING")]
@@ -119,7 +120,7 @@ impl FromGlib<ffi::GstRTPBufferMapFlags> for RTPBufferMapFlags {
 
 impl StaticType for RTPBufferMapFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtp_buffer_map_flags_get_type()) }
     }
 }
@@ -138,7 +139,7 @@ impl glib::value::ValueType for RTPBufferMapFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTPBufferMapFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for RTPBufferMapFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -175,6 +176,7 @@ impl From<RTPBufferMapFlags> for glib::Value {
 #[cfg(feature = "v1_20")]
 bitflags! {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstRTPHeaderExtensionDirection")]
     pub struct RTPHeaderExtensionDirection: u32 {
         #[doc(alias = "GST_RTP_HEADER_EXTENSION_DIRECTION_INACTIVE")]
@@ -217,7 +219,7 @@ impl FromGlib<ffi::GstRTPHeaderExtensionDirection> for RTPHeaderExtensionDirecti
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for RTPHeaderExtensionDirection {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtp_header_extension_direction_get_type()) }
     }
 }
@@ -242,7 +244,7 @@ impl glib::value::ValueType for RTPHeaderExtensionDirection {
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-unsafe impl<'a> FromValue<'a> for RTPHeaderExtensionDirection {
+unsafe impl<'a> glib::value::FromValue<'a> for RTPHeaderExtensionDirection {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -283,6 +285,7 @@ impl From<RTPHeaderExtensionDirection> for glib::Value {
 #[cfg(feature = "v1_20")]
 bitflags! {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstRTPHeaderExtensionFlags")]
     pub struct RTPHeaderExtensionFlags: u32 {
         #[doc(alias = "GST_RTP_HEADER_EXTENSION_ONE_BYTE")]
@@ -319,7 +322,7 @@ impl FromGlib<ffi::GstRTPHeaderExtensionFlags> for RTPHeaderExtensionFlags {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for RTPHeaderExtensionFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtp_header_extension_flags_get_type()) }
     }
 }
@@ -344,7 +347,7 @@ impl glib::value::ValueType for RTPHeaderExtensionFlags {
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-unsafe impl<'a> FromValue<'a> for RTPHeaderExtensionFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for RTPHeaderExtensionFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

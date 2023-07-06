@@ -108,12 +108,12 @@ pub trait VideoTransitionExt: IsA<VideoTransition> + sealed::Sealed + 'static {
 
     #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
     fn inverts(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "invert")
+        ObjectExt::property(self.as_ref(), "invert")
     }
 
     #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
     fn set_invert(&self, invert: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "invert", invert)
+        ObjectExt::set_property(self.as_ref(), "invert", invert)
     }
 
     #[doc(alias = "border")]

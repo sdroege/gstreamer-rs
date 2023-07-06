@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::{translate::*, value::FromValue, value::ToValue, GStr, StaticType, Type};
+use glib::{prelude::*, translate::*, GStr};
 use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
@@ -48,7 +48,7 @@ impl FromGlib<ffi::GstColorBalanceType> for ColorBalanceType {
 
 impl StaticType for ColorBalanceType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_color_balance_type_get_type()) }
     }
 }
@@ -67,7 +67,7 @@ impl glib::value::ValueType for ColorBalanceType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for ColorBalanceType {
+unsafe impl<'a> glib::value::FromValue<'a> for ColorBalanceType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -194,7 +194,7 @@ impl FromGlib<ffi::GstNavigationCommand> for NavigationCommand {
 
 impl StaticType for NavigationCommand {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_navigation_command_get_type()) }
     }
 }
@@ -213,7 +213,7 @@ impl glib::value::ValueType for NavigationCommand {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for NavigationCommand {
+unsafe impl<'a> glib::value::FromValue<'a> for NavigationCommand {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -355,7 +355,7 @@ impl FromGlib<ffi::GstNavigationEventType> for NavigationEventType {
 
 impl StaticType for NavigationEventType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_navigation_event_type_get_type()) }
     }
 }
@@ -374,7 +374,7 @@ impl glib::value::ValueType for NavigationEventType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for NavigationEventType {
+unsafe impl<'a> glib::value::FromValue<'a> for NavigationEventType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -462,7 +462,7 @@ impl FromGlib<ffi::GstNavigationMessageType> for NavigationMessageType {
 
 impl StaticType for NavigationMessageType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_navigation_message_type_get_type()) }
     }
 }
@@ -481,7 +481,7 @@ impl glib::value::ValueType for NavigationMessageType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for NavigationMessageType {
+unsafe impl<'a> glib::value::FromValue<'a> for NavigationMessageType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -561,7 +561,7 @@ impl FromGlib<ffi::GstNavigationQueryType> for NavigationQueryType {
 
 impl StaticType for NavigationQueryType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_navigation_query_type_get_type()) }
     }
 }
@@ -580,7 +580,7 @@ impl glib::value::ValueType for NavigationQueryType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for NavigationQueryType {
+unsafe impl<'a> glib::value::FromValue<'a> for NavigationQueryType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -668,7 +668,7 @@ impl FromGlib<ffi::GstVideoAFDSpec> for VideoAFDSpec {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoAFDSpec {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_afd_spec_get_type()) }
     }
 }
@@ -693,7 +693,7 @@ impl glib::value::ValueType for VideoAFDSpec {
 
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-unsafe impl<'a> FromValue<'a> for VideoAFDSpec {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoAFDSpec {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -817,7 +817,7 @@ impl FromGlib<ffi::GstVideoAFDValue> for VideoAFDValue {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoAFDValue {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_afd_value_get_type()) }
     }
 }
@@ -842,7 +842,7 @@ impl glib::value::ValueType for VideoAFDValue {
 
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-unsafe impl<'a> FromValue<'a> for VideoAFDValue {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoAFDValue {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -926,7 +926,7 @@ impl FromGlib<ffi::GstVideoAlphaMode> for VideoAlphaMode {
 
 impl StaticType for VideoAlphaMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_alpha_mode_get_type()) }
     }
 }
@@ -945,7 +945,7 @@ impl glib::value::ValueType for VideoAlphaMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoAlphaMode {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoAlphaMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1051,7 +1051,7 @@ impl FromGlib<ffi::GstVideoCaptionType> for VideoCaptionType {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for VideoCaptionType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_caption_type_get_type()) }
     }
 }
@@ -1076,7 +1076,7 @@ impl glib::value::ValueType for VideoCaptionType {
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-unsafe impl<'a> FromValue<'a> for VideoCaptionType {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoCaptionType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1164,7 +1164,7 @@ impl FromGlib<ffi::GstVideoChromaMode> for VideoChromaMode {
 
 impl StaticType for VideoChromaMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_chroma_mode_get_type()) }
     }
 }
@@ -1183,7 +1183,7 @@ impl glib::value::ValueType for VideoChromaMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoChromaMode {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoChromaMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1297,7 +1297,7 @@ impl FromGlib<ffi::GstVideoColorMatrix> for VideoColorMatrix {
 
 impl StaticType for VideoColorMatrix {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_color_matrix_get_type()) }
     }
 }
@@ -1316,7 +1316,7 @@ impl glib::value::ValueType for VideoColorMatrix {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoColorMatrix {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoColorMatrix {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1487,7 +1487,7 @@ impl FromGlib<ffi::GstVideoColorPrimaries> for VideoColorPrimaries {
 
 impl StaticType for VideoColorPrimaries {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_color_primaries_get_type()) }
     }
 }
@@ -1506,7 +1506,7 @@ impl glib::value::ValueType for VideoColorPrimaries {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoColorPrimaries {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoColorPrimaries {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1594,7 +1594,7 @@ impl FromGlib<ffi::GstVideoDitherMethod> for VideoDitherMethod {
 
 impl StaticType for VideoDitherMethod {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_dither_method_get_type()) }
     }
 }
@@ -1613,7 +1613,7 @@ impl glib::value::ValueType for VideoDitherMethod {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoDitherMethod {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoDitherMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1712,7 +1712,7 @@ impl FromGlib<ffi::GstVideoFieldOrder> for VideoFieldOrder {
 
 impl StaticType for VideoFieldOrder {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_field_order_get_type()) }
     }
 }
@@ -1731,7 +1731,7 @@ impl glib::value::ValueType for VideoFieldOrder {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoFieldOrder {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoFieldOrder {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2418,7 +2418,7 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
 
 impl StaticType for VideoFormat {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_format_get_type()) }
     }
 }
@@ -2437,7 +2437,7 @@ impl glib::value::ValueType for VideoFormat {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoFormat {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoFormat {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2513,7 +2513,7 @@ impl FromGlib<ffi::GstVideoGammaMode> for VideoGammaMode {
 
 impl StaticType for VideoGammaMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_gamma_mode_get_type()) }
     }
 }
@@ -2532,7 +2532,7 @@ impl glib::value::ValueType for VideoGammaMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoGammaMode {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoGammaMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2653,7 +2653,7 @@ impl FromGlib<ffi::GstVideoInterlaceMode> for VideoInterlaceMode {
 
 impl StaticType for VideoInterlaceMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_interlace_mode_get_type()) }
     }
 }
@@ -2672,7 +2672,7 @@ impl glib::value::ValueType for VideoInterlaceMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoInterlaceMode {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoInterlaceMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2756,7 +2756,7 @@ impl FromGlib<ffi::GstVideoMatrixMode> for VideoMatrixMode {
 
 impl StaticType for VideoMatrixMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_matrix_mode_get_type()) }
     }
 }
@@ -2775,7 +2775,7 @@ impl glib::value::ValueType for VideoMatrixMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoMatrixMode {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoMatrixMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2887,7 +2887,7 @@ impl FromGlib<ffi::GstVideoMultiviewFramePacking> for VideoMultiviewFramePacking
 
 impl StaticType for VideoMultiviewFramePacking {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_multiview_frame_packing_get_type()) }
     }
 }
@@ -2906,7 +2906,7 @@ impl glib::value::ValueType for VideoMultiviewFramePacking {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoMultiviewFramePacking {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoMultiviewFramePacking {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3046,7 +3046,7 @@ impl FromGlib<ffi::GstVideoMultiviewMode> for VideoMultiviewMode {
 
 impl StaticType for VideoMultiviewMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_multiview_mode_get_type()) }
     }
 }
@@ -3065,7 +3065,7 @@ impl glib::value::ValueType for VideoMultiviewMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoMultiviewMode {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoMultiviewMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3173,7 +3173,7 @@ impl FromGlib<ffi::GstVideoOrientationMethod> for VideoOrientationMethod {
 
 impl StaticType for VideoOrientationMethod {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_orientation_method_get_type()) }
     }
 }
@@ -3192,7 +3192,7 @@ impl glib::value::ValueType for VideoOrientationMethod {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoOrientationMethod {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoOrientationMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3272,7 +3272,7 @@ impl FromGlib<ffi::GstVideoPrimariesMode> for VideoPrimariesMode {
 
 impl StaticType for VideoPrimariesMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_primaries_mode_get_type()) }
     }
 }
@@ -3291,7 +3291,7 @@ impl glib::value::ValueType for VideoPrimariesMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoPrimariesMode {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoPrimariesMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3379,7 +3379,7 @@ impl FromGlib<ffi::GstVideoResamplerMethod> for VideoResamplerMethod {
 
 impl StaticType for VideoResamplerMethod {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_resampler_method_get_type()) }
     }
 }
@@ -3398,7 +3398,7 @@ impl glib::value::ValueType for VideoResamplerMethod {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoResamplerMethod {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoResamplerMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3482,7 +3482,7 @@ impl FromGlib<ffi::GstVideoTileMode> for VideoTileMode {
 
 impl StaticType for VideoTileMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_tile_mode_get_type()) }
     }
 }
@@ -3501,7 +3501,7 @@ impl glib::value::ValueType for VideoTileMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoTileMode {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoTileMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -3700,7 +3700,7 @@ impl FromGlib<ffi::GstVideoTransferFunction> for VideoTransferFunction {
 
 impl StaticType for VideoTransferFunction {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_transfer_function_get_type()) }
     }
 }
@@ -3719,7 +3719,7 @@ impl glib::value::ValueType for VideoTransferFunction {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoTransferFunction {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoTransferFunction {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

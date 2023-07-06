@@ -26,7 +26,7 @@ mod sealed {
 
 pub trait ImageSourceExt: IsA<ImageSource> + sealed::Sealed + 'static {
     fn uri(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self.as_ref(), "uri")
+        ObjectExt::property(self.as_ref(), "uri")
     }
 }
 

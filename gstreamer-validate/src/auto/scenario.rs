@@ -91,17 +91,17 @@ pub trait ScenarioExt: IsA<Scenario> + sealed::Sealed + 'static {
 
     #[doc(alias = "execute-on-idle")]
     fn is_execute_on_idle(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "execute-on-idle")
+        ObjectExt::property(self.as_ref(), "execute-on-idle")
     }
 
     #[doc(alias = "execute-on-idle")]
     fn set_execute_on_idle(&self, execute_on_idle: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "execute-on-idle", execute_on_idle)
+        ObjectExt::set_property(self.as_ref(), "execute-on-idle", execute_on_idle)
     }
 
     #[doc(alias = "handles-states")]
     fn is_handles_states(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "handles-states")
+        ObjectExt::property(self.as_ref(), "handles-states")
     }
 
     #[doc(alias = "action-done")]

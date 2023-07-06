@@ -61,16 +61,16 @@ impl WebRTCICETransport {
     }
 
     pub fn component(&self) -> WebRTCICEComponent {
-        glib::ObjectExt::property(self, "component")
+        ObjectExt::property(self, "component")
     }
 
     #[doc(alias = "gathering-state")]
     pub fn gathering_state(&self) -> WebRTCICEGatheringState {
-        glib::ObjectExt::property(self, "gathering-state")
+        ObjectExt::property(self, "gathering-state")
     }
 
     pub fn state(&self) -> WebRTCICEConnectionState {
-        glib::ObjectExt::property(self, "state")
+        ObjectExt::property(self, "state")
     }
 
     #[doc(alias = "on-new-candidate")]

@@ -140,11 +140,11 @@ pub trait VideoEncoderExt: IsA<VideoEncoder> + sealed::Sealed + 'static {
     }
 
     fn is_qos(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "qos")
+        ObjectExt::property(self.as_ref(), "qos")
     }
 
     fn set_qos(&self, qos: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "qos", qos)
+        ObjectExt::set_property(self.as_ref(), "qos", qos)
     }
 
     #[cfg(feature = "v1_18")]

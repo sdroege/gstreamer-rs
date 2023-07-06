@@ -138,7 +138,7 @@ pub trait ReporterExt: IsA<Reporter> + sealed::Sealed + 'static {
 
     #[doc(alias = "validate-runner")]
     fn validate_runner(&self) -> Option<Runner> {
-        glib::ObjectExt::property(self.as_ref(), "validate-runner")
+        ObjectExt::property(self.as_ref(), "validate-runner")
     }
 }
 

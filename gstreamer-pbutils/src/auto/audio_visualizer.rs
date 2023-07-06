@@ -35,20 +35,20 @@ mod sealed {
 pub trait AudioVisualizerExt: IsA<AudioVisualizer> + sealed::Sealed + 'static {
     #[doc(alias = "shade-amount")]
     fn shade_amount(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "shade-amount")
+        ObjectExt::property(self.as_ref(), "shade-amount")
     }
 
     #[doc(alias = "shade-amount")]
     fn set_shade_amount(&self, shade_amount: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "shade-amount", shade_amount)
+        ObjectExt::set_property(self.as_ref(), "shade-amount", shade_amount)
     }
 
     fn shader(&self) -> AudioVisualizerShader {
-        glib::ObjectExt::property(self.as_ref(), "shader")
+        ObjectExt::property(self.as_ref(), "shader")
     }
 
     fn set_shader(&self, shader: AudioVisualizerShader) {
-        glib::ObjectExt::set_property(self.as_ref(), "shader", shader)
+        ObjectExt::set_property(self.as_ref(), "shader", shader)
     }
 
     #[doc(alias = "shade-amount")]

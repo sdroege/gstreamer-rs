@@ -32,7 +32,7 @@ mod sealed {
 
 pub trait MultiFileSourceExt: IsA<MultiFileSource> + sealed::Sealed + 'static {
     fn uri(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self.as_ref(), "uri")
+        ObjectExt::property(self.as_ref(), "uri")
     }
 }
 

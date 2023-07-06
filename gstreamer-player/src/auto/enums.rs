@@ -3,10 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::{
-    error::ErrorDomain, translate::*, value::FromValue, value::ToValue, GStr, Quark, StaticType,
-    Type,
-};
+use glib::{prelude::*, translate::*, GStr};
 use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
@@ -78,7 +75,7 @@ impl FromGlib<ffi::GstPlayerColorBalanceType> for PlayerColorBalanceType {
 
 impl StaticType for PlayerColorBalanceType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_player_color_balance_type_get_type()) }
     }
 }
@@ -97,7 +94,7 @@ impl glib::value::ValueType for PlayerColorBalanceType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for PlayerColorBalanceType {
+unsafe impl<'a> glib::value::FromValue<'a> for PlayerColorBalanceType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -186,9 +183,9 @@ impl FromGlib<ffi::GstPlayerError> for PlayerError {
     }
 }
 
-impl ErrorDomain for PlayerError {
+impl glib::error::ErrorDomain for PlayerError {
     #[inline]
-    fn domain() -> Quark {
+    fn domain() -> glib::Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_player_error_quark()) }
@@ -212,7 +209,7 @@ impl ErrorDomain for PlayerError {
 
 impl StaticType for PlayerError {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_player_error_get_type()) }
     }
 }
@@ -231,7 +228,7 @@ impl glib::value::ValueType for PlayerError {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for PlayerError {
+unsafe impl<'a> glib::value::FromValue<'a> for PlayerError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -386,7 +383,7 @@ impl FromGlib<ffi::GstPlayerState> for PlayerState {
 
 impl StaticType for PlayerState {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_player_state_get_type()) }
     }
 }
@@ -405,7 +402,7 @@ impl glib::value::ValueType for PlayerState {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for PlayerState {
+unsafe impl<'a> glib::value::FromValue<'a> for PlayerState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

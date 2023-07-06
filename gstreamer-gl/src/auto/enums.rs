@@ -4,10 +4,7 @@
 // DO NOT EDIT
 
 use crate::{GLContext, GLSLProfile};
-use glib::{
-    error::ErrorDomain, prelude::*, translate::*, value::FromValue, value::ToValue, Quark,
-    StaticType, Type,
-};
+use glib::{prelude::*, translate::*};
 use std::mem;
 
 #[cfg(feature = "v1_20")]
@@ -75,7 +72,7 @@ impl FromGlib<ffi::GstGLConfigCaveat> for GLConfigCaveat {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for GLConfigCaveat {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_config_caveat_get_type()) }
     }
 }
@@ -100,7 +97,7 @@ impl glib::value::ValueType for GLConfigCaveat {
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-unsafe impl<'a> FromValue<'a> for GLConfigCaveat {
+unsafe impl<'a> glib::value::FromValue<'a> for GLConfigCaveat {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -194,9 +191,9 @@ impl FromGlib<ffi::GstGLContextError> for GLContextError {
     }
 }
 
-impl ErrorDomain for GLContextError {
+impl glib::error::ErrorDomain for GLContextError {
     #[inline]
-    fn domain() -> Quark {
+    fn domain() -> glib::Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_gl_context_error_quark()) }
@@ -220,7 +217,7 @@ impl ErrorDomain for GLContextError {
 
 impl StaticType for GLContextError {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_context_error_get_type()) }
     }
 }
@@ -239,7 +236,7 @@ impl glib::value::ValueType for GLContextError {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for GLContextError {
+unsafe impl<'a> glib::value::FromValue<'a> for GLContextError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -438,7 +435,7 @@ impl FromGlib<ffi::GstGLFormat> for GLFormat {
 
 impl StaticType for GLFormat {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_format_get_type()) }
     }
 }
@@ -457,7 +454,7 @@ impl glib::value::ValueType for GLFormat {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for GLFormat {
+unsafe impl<'a> glib::value::FromValue<'a> for GLFormat {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -537,7 +534,7 @@ impl FromGlib<ffi::GstGLQueryType> for GLQueryType {
 
 impl StaticType for GLQueryType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_query_type_get_type()) }
     }
 }
@@ -556,7 +553,7 @@ impl glib::value::ValueType for GLQueryType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for GLQueryType {
+unsafe impl<'a> glib::value::FromValue<'a> for GLQueryType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -634,9 +631,9 @@ impl FromGlib<ffi::GstGLSLError> for GLSLError {
     }
 }
 
-impl ErrorDomain for GLSLError {
+impl glib::error::ErrorDomain for GLSLError {
     #[inline]
-    fn domain() -> Quark {
+    fn domain() -> glib::Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_glsl_error_quark()) }
@@ -659,7 +656,7 @@ impl ErrorDomain for GLSLError {
 
 impl StaticType for GLSLError {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_glsl_error_get_type()) }
     }
 }
@@ -678,7 +675,7 @@ impl glib::value::ValueType for GLSLError {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for GLSLError {
+unsafe impl<'a> glib::value::FromValue<'a> for GLSLError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -860,7 +857,7 @@ impl FromGlib<ffi::GstGLSLVersion> for GLSLVersion {
 
 impl StaticType for GLSLVersion {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_glsl_version_get_type()) }
     }
 }
@@ -879,7 +876,7 @@ impl glib::value::ValueType for GLSLVersion {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for GLSLVersion {
+unsafe impl<'a> glib::value::FromValue<'a> for GLSLVersion {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -959,7 +956,7 @@ impl FromGlib<ffi::GstGLStereoDownmix> for GLStereoDownmix {
 
 impl StaticType for GLStereoDownmix {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_stereo_downmix_get_type()) }
     }
 }
@@ -978,7 +975,7 @@ impl glib::value::ValueType for GLStereoDownmix {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for GLStereoDownmix {
+unsafe impl<'a> glib::value::FromValue<'a> for GLStereoDownmix {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1099,7 +1096,7 @@ impl FromGlib<ffi::GstGLTextureTarget> for GLTextureTarget {
 
 impl StaticType for GLTextureTarget {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_texture_target_get_type()) }
     }
 }
@@ -1118,7 +1115,7 @@ impl glib::value::ValueType for GLTextureTarget {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for GLTextureTarget {
+unsafe impl<'a> glib::value::FromValue<'a> for GLTextureTarget {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1206,7 +1203,7 @@ impl FromGlib<ffi::GstGLUploadReturn> for GLUploadReturn {
 
 impl StaticType for GLUploadReturn {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_upload_return_get_type()) }
     }
 }
@@ -1225,7 +1222,7 @@ impl glib::value::ValueType for GLUploadReturn {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for GLUploadReturn {
+unsafe impl<'a> glib::value::FromValue<'a> for GLUploadReturn {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1303,9 +1300,9 @@ impl FromGlib<ffi::GstGLWindowError> for GLWindowError {
     }
 }
 
-impl ErrorDomain for GLWindowError {
+impl glib::error::ErrorDomain for GLWindowError {
     #[inline]
-    fn domain() -> Quark {
+    fn domain() -> glib::Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_gl_window_error_quark()) }
@@ -1329,7 +1326,7 @@ impl ErrorDomain for GLWindowError {
 
 impl StaticType for GLWindowError {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_window_error_get_type()) }
     }
 }
@@ -1348,7 +1345,7 @@ impl glib::value::ValueType for GLWindowError {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for GLWindowError {
+unsafe impl<'a> glib::value::FromValue<'a> for GLWindowError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

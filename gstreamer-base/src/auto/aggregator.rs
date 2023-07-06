@@ -188,38 +188,38 @@ pub trait AggregatorExt: IsA<Aggregator> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "emit-signals")]
     fn emits_signals(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "emit-signals")
+        ObjectExt::property(self.as_ref(), "emit-signals")
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "emit-signals")]
     fn set_emit_signals(&self, emit_signals: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "emit-signals", emit_signals)
+        ObjectExt::set_property(self.as_ref(), "emit-signals", emit_signals)
     }
 
     #[doc(alias = "start-time")]
     fn start_time(&self) -> u64 {
-        glib::ObjectExt::property(self.as_ref(), "start-time")
+        ObjectExt::property(self.as_ref(), "start-time")
     }
 
     #[doc(alias = "start-time")]
     fn set_start_time(&self, start_time: u64) {
-        glib::ObjectExt::set_property(self.as_ref(), "start-time", start_time)
+        ObjectExt::set_property(self.as_ref(), "start-time", start_time)
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "start-time-selection")]
     fn start_time_selection(&self) -> AggregatorStartTimeSelection {
-        glib::ObjectExt::property(self.as_ref(), "start-time-selection")
+        ObjectExt::property(self.as_ref(), "start-time-selection")
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "start-time-selection")]
     fn set_start_time_selection(&self, start_time_selection: AggregatorStartTimeSelection) {
-        glib::ObjectExt::set_property(self.as_ref(), "start-time-selection", start_time_selection)
+        ObjectExt::set_property(self.as_ref(), "start-time-selection", start_time_selection)
     }
 
     #[cfg(feature = "v1_18")]

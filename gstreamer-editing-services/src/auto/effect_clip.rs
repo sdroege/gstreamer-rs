@@ -43,12 +43,12 @@ mod sealed {
 pub trait EffectClipExt: IsA<EffectClip> + sealed::Sealed + 'static {
     #[doc(alias = "audio-bin-description")]
     fn audio_bin_description(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self.as_ref(), "audio-bin-description")
+        ObjectExt::property(self.as_ref(), "audio-bin-description")
     }
 
     #[doc(alias = "video-bin-description")]
     fn video_bin_description(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self.as_ref(), "video-bin-description")
+        ObjectExt::property(self.as_ref(), "video-bin-description")
     }
 }
 

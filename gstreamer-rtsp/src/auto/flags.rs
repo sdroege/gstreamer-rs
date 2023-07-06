@@ -3,10 +3,10 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use bitflags::bitflags;
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{bitflags::bitflags, prelude::*, translate::*};
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstRTSPEvent")]
     pub struct RTSPEvent: u32 {
         #[doc(alias = "GST_RTSP_EV_READ")]
@@ -37,7 +37,7 @@ impl FromGlib<ffi::GstRTSPEvent> for RTSPEvent {
 
 impl StaticType for RTSPEvent {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_event_get_type()) }
     }
 }
@@ -56,7 +56,7 @@ impl glib::value::ValueType for RTSPEvent {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPEvent {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPEvent {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -91,6 +91,7 @@ impl From<RTSPEvent> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstRTSPLowerTrans")]
     pub struct RTSPLowerTrans: u32 {
         #[doc(alias = "GST_RTSP_LOWER_TRANS_UDP")]
@@ -127,7 +128,7 @@ impl FromGlib<ffi::GstRTSPLowerTrans> for RTSPLowerTrans {
 
 impl StaticType for RTSPLowerTrans {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_lower_trans_get_type()) }
     }
 }
@@ -146,7 +147,7 @@ impl glib::value::ValueType for RTSPLowerTrans {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPLowerTrans {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPLowerTrans {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -181,6 +182,7 @@ impl From<RTSPLowerTrans> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstRTSPMethod")]
     pub struct RTSPMethod: u32 {
         #[doc(alias = "GST_RTSP_DESCRIBE")]
@@ -241,7 +243,7 @@ impl FromGlib<ffi::GstRTSPMethod> for RTSPMethod {
 
 impl StaticType for RTSPMethod {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_method_get_type()) }
     }
 }
@@ -260,7 +262,7 @@ impl glib::value::ValueType for RTSPMethod {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPMethod {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -295,6 +297,7 @@ impl From<RTSPMethod> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstRTSPProfile")]
     pub struct RTSPProfile: u32 {
         #[doc(alias = "GST_RTSP_PROFILE_AVP")]
@@ -329,7 +332,7 @@ impl FromGlib<ffi::GstRTSPProfile> for RTSPProfile {
 
 impl StaticType for RTSPProfile {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_profile_get_type()) }
     }
 }
@@ -348,7 +351,7 @@ impl glib::value::ValueType for RTSPProfile {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPProfile {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPProfile {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -383,6 +386,7 @@ impl From<RTSPProfile> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstRTSPTransMode")]
     pub struct RTSPTransMode: u32 {
         #[doc(alias = "GST_RTSP_TRANS_RTP")]
@@ -413,7 +417,7 @@ impl FromGlib<ffi::GstRTSPTransMode> for RTSPTransMode {
 
 impl StaticType for RTSPTransMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_trans_mode_get_type()) }
     }
 }
@@ -432,7 +436,7 @@ impl glib::value::ValueType for RTSPTransMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPTransMode {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPTransMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{prelude::*, translate::*};
 use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
@@ -56,7 +56,7 @@ impl FromGlib<ffi::GstAudioDitherMethod> for AudioDitherMethod {
 
 impl StaticType for AudioDitherMethod {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_dither_method_get_type()) }
     }
 }
@@ -75,7 +75,7 @@ impl glib::value::ValueType for AudioDitherMethod {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for AudioDitherMethod {
+unsafe impl<'a> glib::value::FromValue<'a> for AudioDitherMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -284,7 +284,7 @@ impl FromGlib<ffi::GstAudioFormat> for AudioFormat {
 
 impl StaticType for AudioFormat {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_format_get_type()) }
     }
 }
@@ -303,7 +303,7 @@ impl glib::value::ValueType for AudioFormat {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for AudioFormat {
+unsafe impl<'a> glib::value::FromValue<'a> for AudioFormat {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -379,7 +379,7 @@ impl FromGlib<ffi::GstAudioLayout> for AudioLayout {
 
 impl StaticType for AudioLayout {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_layout_get_type()) }
     }
 }
@@ -398,7 +398,7 @@ impl glib::value::ValueType for AudioLayout {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for AudioLayout {
+unsafe impl<'a> glib::value::FromValue<'a> for AudioLayout {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -486,7 +486,7 @@ impl FromGlib<ffi::GstAudioNoiseShapingMethod> for AudioNoiseShapingMethod {
 
 impl StaticType for AudioNoiseShapingMethod {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_noise_shaping_method_get_type()) }
     }
 }
@@ -505,7 +505,7 @@ impl glib::value::ValueType for AudioNoiseShapingMethod {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for AudioNoiseShapingMethod {
+unsafe impl<'a> glib::value::FromValue<'a> for AudioNoiseShapingMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -593,7 +593,7 @@ impl FromGlib<ffi::GstAudioResamplerMethod> for AudioResamplerMethod {
 
 impl StaticType for AudioResamplerMethod {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_resampler_method_get_type()) }
     }
 }
@@ -612,7 +612,7 @@ impl glib::value::ValueType for AudioResamplerMethod {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for AudioResamplerMethod {
+unsafe impl<'a> glib::value::FromValue<'a> for AudioResamplerMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -746,7 +746,7 @@ impl FromGlib<ffi::GstAudioRingBufferFormatType> for AudioRingBufferFormatType {
 
 impl StaticType for AudioRingBufferFormatType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_ring_buffer_format_type_get_type()) }
     }
 }
@@ -765,7 +765,7 @@ impl glib::value::ValueType for AudioRingBufferFormatType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for AudioRingBufferFormatType {
+unsafe impl<'a> glib::value::FromValue<'a> for AudioRingBufferFormatType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

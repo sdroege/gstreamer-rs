@@ -496,7 +496,7 @@ pub trait PadExt: IsA<Pad> + sealed::Sealed + 'static {
     }
 
     fn caps(&self) -> Option<Caps> {
-        glib::ObjectExt::property(self.as_ref(), "caps")
+        ObjectExt::property(self.as_ref(), "caps")
     }
 
     #[doc(alias = "linked")]

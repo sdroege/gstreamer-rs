@@ -82,14 +82,14 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + sealed::Sealed + 'static 
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "auto-header-extension")]
     fn is_auto_header_extension(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "auto-header-extension")
+        ObjectExt::property(self.as_ref(), "auto-header-extension")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "auto-header-extension")]
     fn set_auto_header_extension(&self, auto_header_extension: bool) {
-        glib::ObjectExt::set_property(
+        ObjectExt::set_property(
             self.as_ref(),
             "auto-header-extension",
             auto_header_extension,
@@ -100,32 +100,32 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + sealed::Sealed + 'static 
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "max-reorder")]
     fn max_reorder(&self) -> i32 {
-        glib::ObjectExt::property(self.as_ref(), "max-reorder")
+        ObjectExt::property(self.as_ref(), "max-reorder")
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "max-reorder")]
     fn set_max_reorder(&self, max_reorder: i32) {
-        glib::ObjectExt::set_property(self.as_ref(), "max-reorder", max_reorder)
+        ObjectExt::set_property(self.as_ref(), "max-reorder", max_reorder)
     }
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "source-info")]
     fn is_source_info(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "source-info")
+        ObjectExt::property(self.as_ref(), "source-info")
     }
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "source-info")]
     fn set_source_info(&self, source_info: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "source-info", source_info)
+        ObjectExt::set_property(self.as_ref(), "source-info", source_info)
     }
 
     fn stats(&self) -> Option<gst::Structure> {
-        glib::ObjectExt::property(self.as_ref(), "stats")
+        ObjectExt::property(self.as_ref(), "stats")
     }
 
     #[cfg(feature = "v1_20")]

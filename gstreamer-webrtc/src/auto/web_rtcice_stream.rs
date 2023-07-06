@@ -49,7 +49,7 @@ pub trait WebRTCICEStreamExt: IsA<WebRTCICEStream> + sealed::Sealed + 'static {
 
     #[doc(alias = "stream-id")]
     fn stream_id(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "stream-id")
+        ObjectExt::property(self.as_ref(), "stream-id")
     }
 }
 

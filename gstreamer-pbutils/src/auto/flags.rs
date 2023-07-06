@@ -3,10 +3,10 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use bitflags::bitflags;
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{bitflags::bitflags, prelude::*, translate::*};
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstDiscovererSerializeFlags")]
     pub struct DiscovererSerializeFlags: u32 {
         #[doc(alias = "GST_DISCOVERER_SERIALIZE_CAPS")]
@@ -39,7 +39,7 @@ impl FromGlib<ffi::GstDiscovererSerializeFlags> for DiscovererSerializeFlags {
 
 impl StaticType for DiscovererSerializeFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_discoverer_serialize_flags_get_type()) }
     }
 }
@@ -58,7 +58,7 @@ impl glib::value::ValueType for DiscovererSerializeFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for DiscovererSerializeFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for DiscovererSerializeFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -95,6 +95,7 @@ impl From<DiscovererSerializeFlags> for glib::Value {
 #[cfg(feature = "v1_20")]
 bitflags! {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstPbUtilsCapsDescriptionFlags")]
     pub struct PbUtilsCapsDescriptionFlags: u32 {
         #[doc(alias = "GST_PBUTILS_CAPS_DESCRIPTION_FLAG_CONTAINER")]
@@ -145,7 +146,7 @@ impl FromGlib<ffi::GstPbUtilsCapsDescriptionFlags> for PbUtilsCapsDescriptionFla
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for PbUtilsCapsDescriptionFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_pb_utils_caps_description_flags_get_type()) }
     }
 }
@@ -170,7 +171,7 @@ impl glib::value::ValueType for PbUtilsCapsDescriptionFlags {
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-unsafe impl<'a> FromValue<'a> for PbUtilsCapsDescriptionFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for PbUtilsCapsDescriptionFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

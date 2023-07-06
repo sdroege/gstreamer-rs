@@ -38,33 +38,33 @@ impl NetTimeProvider {
     }
 
     pub fn is_active(&self) -> bool {
-        glib::ObjectExt::property(self, "active")
+        ObjectExt::property(self, "active")
     }
 
     pub fn set_active(&self, active: bool) {
-        glib::ObjectExt::set_property(self, "active", active)
+        ObjectExt::set_property(self, "active", active)
     }
 
     pub fn address(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self, "address")
+        ObjectExt::property(self, "address")
     }
 
     pub fn clock(&self) -> Option<gst::Clock> {
-        glib::ObjectExt::property(self, "clock")
+        ObjectExt::property(self, "clock")
     }
 
     pub fn port(&self) -> i32 {
-        glib::ObjectExt::property(self, "port")
+        ObjectExt::property(self, "port")
     }
 
     #[doc(alias = "qos-dscp")]
     pub fn qos_dscp(&self) -> i32 {
-        glib::ObjectExt::property(self, "qos-dscp")
+        ObjectExt::property(self, "qos-dscp")
     }
 
     #[doc(alias = "qos-dscp")]
     pub fn set_qos_dscp(&self, qos_dscp: i32) {
-        glib::ObjectExt::set_property(self, "qos-dscp", qos_dscp)
+        ObjectExt::set_property(self, "qos-dscp", qos_dscp)
     }
 
     #[doc(alias = "active")]

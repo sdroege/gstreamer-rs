@@ -240,22 +240,22 @@ pub trait RTSPClientExt: IsA<RTSPClient> + sealed::Sealed + 'static {
 
     #[doc(alias = "drop-backlog")]
     fn is_drop_backlog(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "drop-backlog")
+        ObjectExt::property(self.as_ref(), "drop-backlog")
     }
 
     #[doc(alias = "drop-backlog")]
     fn set_drop_backlog(&self, drop_backlog: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "drop-backlog", drop_backlog)
+        ObjectExt::set_property(self.as_ref(), "drop-backlog", drop_backlog)
     }
 
     #[doc(alias = "post-session-timeout")]
     fn post_session_timeout(&self) -> i32 {
-        glib::ObjectExt::property(self.as_ref(), "post-session-timeout")
+        ObjectExt::property(self.as_ref(), "post-session-timeout")
     }
 
     #[doc(alias = "post-session-timeout")]
     fn set_post_session_timeout(&self, post_session_timeout: i32) {
-        glib::ObjectExt::set_property(self.as_ref(), "post-session-timeout", post_session_timeout)
+        ObjectExt::set_property(self.as_ref(), "post-session-timeout", post_session_timeout)
     }
 
     #[doc(alias = "announce-request")]

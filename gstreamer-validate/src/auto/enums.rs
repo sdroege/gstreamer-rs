@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::{translate::*, value::FromValue, value::ToValue, GStr, StaticType, Type};
+use glib::{prelude::*, translate::*, GStr};
 use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
@@ -97,7 +97,7 @@ impl FromGlib<ffi::GstValidateReportLevel> for ReportLevel {
 
 impl StaticType for ReportLevel {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_validate_report_level_get_type()) }
     }
 }
@@ -116,7 +116,7 @@ impl glib::value::ValueType for ReportLevel {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for ReportLevel {
+unsafe impl<'a> glib::value::FromValue<'a> for ReportLevel {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -216,7 +216,7 @@ impl FromGlib<ffi::GstValidateReportingDetails> for ReportingDetails {
 
 impl StaticType for ReportingDetails {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_validate_reporting_details_get_type()) }
     }
 }
@@ -235,7 +235,7 @@ impl glib::value::ValueType for ReportingDetails {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for ReportingDetails {
+unsafe impl<'a> glib::value::FromValue<'a> for ReportingDetails {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

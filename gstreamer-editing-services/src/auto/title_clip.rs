@@ -193,12 +193,12 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
 
     #[cfg_attr(feature = "v1_6", deprecated = "Since 1.6")]
     fn background(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "background")
+        ObjectExt::property(self.as_ref(), "background")
     }
 
     #[cfg_attr(feature = "v1_6", deprecated = "Since 1.6")]
     fn color(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "color")
+        ObjectExt::property(self.as_ref(), "color")
     }
 
     #[deprecated = "Since 1.6"]

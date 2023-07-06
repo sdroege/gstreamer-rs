@@ -128,14 +128,14 @@ pub trait UriClipAssetExt: IsA<UriClipAsset> + sealed::Sealed + 'static {
     }
 
     fn set_duration(&self, duration: u64) {
-        glib::ObjectExt::set_property(self.as_ref(), "duration", duration)
+        ObjectExt::set_property(self.as_ref(), "duration", duration)
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "is-nested-timeline")]
     fn is_nested_timeline(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "is-nested-timeline")
+        ObjectExt::property(self.as_ref(), "is-nested-timeline")
     }
 
     #[doc(alias = "duration")]

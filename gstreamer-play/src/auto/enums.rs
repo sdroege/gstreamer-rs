@@ -4,10 +4,7 @@
 // DO NOT EDIT
 
 use crate::PlayMediaInfo;
-use glib::{
-    error::ErrorDomain, translate::*, value::FromValue, value::ToValue, GStr, Quark, StaticType,
-    Type,
-};
+use glib::{prelude::*, translate::*, GStr};
 use std::{fmt, mem, ptr};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
@@ -79,7 +76,7 @@ impl FromGlib<ffi::GstPlayColorBalanceType> for PlayColorBalanceType {
 
 impl StaticType for PlayColorBalanceType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_play_color_balance_type_get_type()) }
     }
 }
@@ -98,7 +95,7 @@ impl glib::value::ValueType for PlayColorBalanceType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for PlayColorBalanceType {
+unsafe impl<'a> glib::value::FromValue<'a> for PlayColorBalanceType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -187,9 +184,9 @@ impl FromGlib<ffi::GstPlayError> for PlayError {
     }
 }
 
-impl ErrorDomain for PlayError {
+impl glib::error::ErrorDomain for PlayError {
     #[inline]
-    fn domain() -> Quark {
+    fn domain() -> glib::Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_play_error_quark()) }
@@ -213,7 +210,7 @@ impl ErrorDomain for PlayError {
 
 impl StaticType for PlayError {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_play_error_get_type()) }
     }
 }
@@ -232,7 +229,7 @@ impl glib::value::ValueType for PlayError {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for PlayError {
+unsafe impl<'a> glib::value::FromValue<'a> for PlayError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -495,7 +492,7 @@ impl FromGlib<ffi::GstPlayMessage> for PlayMessage {
 
 impl StaticType for PlayMessage {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_play_message_get_type()) }
     }
 }
@@ -514,7 +511,7 @@ impl glib::value::ValueType for PlayMessage {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for PlayMessage {
+unsafe impl<'a> glib::value::FromValue<'a> for PlayMessage {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -669,7 +666,7 @@ impl FromGlib<ffi::GstPlayState> for PlayState {
 
 impl StaticType for PlayState {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_play_state_get_type()) }
     }
 }
@@ -688,7 +685,7 @@ impl glib::value::ValueType for PlayState {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for PlayState {
+unsafe impl<'a> glib::value::FromValue<'a> for PlayState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

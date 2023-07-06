@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{prelude::*, translate::*};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -203,7 +203,7 @@ impl FromGlib<ffi::GstRTSPPublishClockMode> for RTSPPublishClockMode {
 
 impl StaticType for RTSPPublishClockMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_publish_clock_mode_get_type()) }
     }
 }
@@ -222,7 +222,7 @@ impl glib::value::ValueType for RTSPPublishClockMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPPublishClockMode {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPPublishClockMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -302,7 +302,7 @@ impl FromGlib<ffi::GstRTSPSuspendMode> for RTSPSuspendMode {
 
 impl StaticType for RTSPSuspendMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_suspend_mode_get_type()) }
     }
 }
@@ -321,7 +321,7 @@ impl glib::value::ValueType for RTSPSuspendMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPSuspendMode {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPSuspendMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

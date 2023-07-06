@@ -297,28 +297,28 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "max-rtp-port")]
     fn max_rtp_port(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "max-rtp-port")
+        ObjectExt::property(self.as_ref(), "max-rtp-port")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "max-rtp-port")]
     fn set_max_rtp_port(&self, max_rtp_port: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "max-rtp-port", max_rtp_port)
+        ObjectExt::set_property(self.as_ref(), "max-rtp-port", max_rtp_port)
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "min-rtp-port")]
     fn min_rtp_port(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "min-rtp-port")
+        ObjectExt::property(self.as_ref(), "min-rtp-port")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "min-rtp-port")]
     fn set_min_rtp_port(&self, min_rtp_port: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "min-rtp-port", min_rtp_port)
+        ObjectExt::set_property(self.as_ref(), "min-rtp-port", min_rtp_port)
     }
 
     #[doc(alias = "add-local-ip-address")]

@@ -100,24 +100,24 @@ pub trait MonitorExt: IsA<Monitor> + sealed::Sealed + 'static {
     //}
 
     fn object(&self) -> Option<glib::Object> {
-        glib::ObjectExt::property(self.as_ref(), "object")
+        ObjectExt::property(self.as_ref(), "object")
     }
 
     fn set_pipeline<P: IsA<gst::Pipeline>>(&self, pipeline: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "pipeline", pipeline)
+        ObjectExt::set_property(self.as_ref(), "pipeline", pipeline)
     }
 
     #[doc(alias = "validate-parent")]
     fn validate_parent(&self) -> Option<Monitor> {
-        glib::ObjectExt::property(self.as_ref(), "validate-parent")
+        ObjectExt::property(self.as_ref(), "validate-parent")
     }
 
     //fn verbosity(&self) -> /*Ignored*/VerbosityFlags {
-    //    glib::ObjectExt::property(self.as_ref(), "verbosity")
+    //    ObjectExt::property(self.as_ref(), "verbosity")
     //}
 
     //fn set_verbosity(&self, verbosity: /*Ignored*/VerbosityFlags) {
-    //    glib::ObjectExt::set_property(self.as_ref(),"verbosity", verbosity)
+    //    ObjectExt::set_property(self.as_ref(),"verbosity", verbosity)
     //}
 
     #[doc(alias = "pipeline")]

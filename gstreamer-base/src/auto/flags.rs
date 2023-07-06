@@ -3,10 +3,10 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use bitflags::bitflags;
-use glib::translate::*;
+use glib::{bitflags::bitflags, translate::*};
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstBaseParseFrameFlags")]
     pub struct BaseParseFrameFlags: u32 {
         #[doc(alias = "GST_BASE_PARSE_FRAME_FLAG_NEW_FRAME")]

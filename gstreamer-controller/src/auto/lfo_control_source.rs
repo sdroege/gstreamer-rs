@@ -48,43 +48,43 @@ mod sealed {
 
 pub trait LFOControlSourceExt: IsA<LFOControlSource> + sealed::Sealed + 'static {
     fn amplitude(&self) -> f64 {
-        glib::ObjectExt::property(self.as_ref(), "amplitude")
+        ObjectExt::property(self.as_ref(), "amplitude")
     }
 
     fn set_amplitude(&self, amplitude: f64) {
-        glib::ObjectExt::set_property(self.as_ref(), "amplitude", amplitude)
+        ObjectExt::set_property(self.as_ref(), "amplitude", amplitude)
     }
 
     fn frequency(&self) -> f64 {
-        glib::ObjectExt::property(self.as_ref(), "frequency")
+        ObjectExt::property(self.as_ref(), "frequency")
     }
 
     fn set_frequency(&self, frequency: f64) {
-        glib::ObjectExt::set_property(self.as_ref(), "frequency", frequency)
+        ObjectExt::set_property(self.as_ref(), "frequency", frequency)
     }
 
     fn offset(&self) -> f64 {
-        glib::ObjectExt::property(self.as_ref(), "offset")
+        ObjectExt::property(self.as_ref(), "offset")
     }
 
     fn set_offset(&self, offset: f64) {
-        glib::ObjectExt::set_property(self.as_ref(), "offset", offset)
+        ObjectExt::set_property(self.as_ref(), "offset", offset)
     }
 
     fn timeshift(&self) -> u64 {
-        glib::ObjectExt::property(self.as_ref(), "timeshift")
+        ObjectExt::property(self.as_ref(), "timeshift")
     }
 
     fn set_timeshift(&self, timeshift: u64) {
-        glib::ObjectExt::set_property(self.as_ref(), "timeshift", timeshift)
+        ObjectExt::set_property(self.as_ref(), "timeshift", timeshift)
     }
 
     fn waveform(&self) -> LFOWaveform {
-        glib::ObjectExt::property(self.as_ref(), "waveform")
+        ObjectExt::property(self.as_ref(), "waveform")
     }
 
     fn set_waveform(&self, waveform: LFOWaveform) {
-        glib::ObjectExt::set_property(self.as_ref(), "waveform", waveform)
+        ObjectExt::set_property(self.as_ref(), "waveform", waveform)
     }
 
     #[doc(alias = "amplitude")]

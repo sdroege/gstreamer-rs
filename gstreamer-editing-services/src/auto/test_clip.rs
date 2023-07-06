@@ -101,11 +101,11 @@ pub trait TestClipExt: IsA<TestClip> + sealed::Sealed + 'static {
     }
 
     fn freq(&self) -> f64 {
-        glib::ObjectExt::property(self.as_ref(), "freq")
+        ObjectExt::property(self.as_ref(), "freq")
     }
 
     fn set_freq(&self, freq: f64) {
-        glib::ObjectExt::set_property(self.as_ref(), "freq", freq)
+        ObjectExt::set_property(self.as_ref(), "freq", freq)
     }
 
     #[doc(alias = "freq")]

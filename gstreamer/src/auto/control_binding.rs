@@ -82,7 +82,7 @@ pub trait ControlBindingExt: IsA<ControlBinding> + sealed::Sealed + 'static {
     }
 
     fn object(&self) -> Option<Object> {
-        glib::ObjectExt::property(self.as_ref(), "object")
+        ObjectExt::property(self.as_ref(), "object")
     }
 }
 

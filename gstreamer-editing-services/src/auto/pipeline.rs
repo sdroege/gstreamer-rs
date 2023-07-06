@@ -179,46 +179,46 @@ pub trait GESPipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
 
     #[doc(alias = "audio-filter")]
     fn audio_filter(&self) -> Option<gst::Element> {
-        glib::ObjectExt::property(self.as_ref(), "audio-filter")
+        ObjectExt::property(self.as_ref(), "audio-filter")
     }
 
     #[doc(alias = "audio-filter")]
     fn set_audio_filter<P: IsA<gst::Element>>(&self, audio_filter: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "audio-filter", audio_filter)
+        ObjectExt::set_property(self.as_ref(), "audio-filter", audio_filter)
     }
 
     #[doc(alias = "audio-sink")]
     fn audio_sink(&self) -> Option<gst::Element> {
-        glib::ObjectExt::property(self.as_ref(), "audio-sink")
+        ObjectExt::property(self.as_ref(), "audio-sink")
     }
 
     #[doc(alias = "audio-sink")]
     fn set_audio_sink<P: IsA<gst::Element>>(&self, audio_sink: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "audio-sink", audio_sink)
+        ObjectExt::set_property(self.as_ref(), "audio-sink", audio_sink)
     }
 
     fn timeline(&self) -> Option<Timeline> {
-        glib::ObjectExt::property(self.as_ref(), "timeline")
+        ObjectExt::property(self.as_ref(), "timeline")
     }
 
     #[doc(alias = "video-filter")]
     fn video_filter(&self) -> Option<gst::Element> {
-        glib::ObjectExt::property(self.as_ref(), "video-filter")
+        ObjectExt::property(self.as_ref(), "video-filter")
     }
 
     #[doc(alias = "video-filter")]
     fn set_video_filter<P: IsA<gst::Element>>(&self, video_filter: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "video-filter", video_filter)
+        ObjectExt::set_property(self.as_ref(), "video-filter", video_filter)
     }
 
     #[doc(alias = "video-sink")]
     fn video_sink(&self) -> Option<gst::Element> {
-        glib::ObjectExt::property(self.as_ref(), "video-sink")
+        ObjectExt::property(self.as_ref(), "video-sink")
     }
 
     #[doc(alias = "video-sink")]
     fn set_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>) {
-        glib::ObjectExt::set_property(self.as_ref(), "video-sink", video_sink)
+        ObjectExt::set_property(self.as_ref(), "video-sink", video_sink)
     }
 
     #[doc(alias = "audio-filter")]

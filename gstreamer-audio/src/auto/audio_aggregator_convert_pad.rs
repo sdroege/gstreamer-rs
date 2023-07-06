@@ -37,12 +37,12 @@ pub trait AudioAggregatorConvertPadExt:
 {
     //#[doc(alias = "converter-config")]
     //fn converter_config(&self) -> /*Ignored*/Option<gst::Structure> {
-    //    glib::ObjectExt::property(self.as_ref(), "converter-config")
+    //    ObjectExt::property(self.as_ref(), "converter-config")
     //}
 
     //#[doc(alias = "converter-config")]
     //fn set_converter_config(&self, converter_config: /*Ignored*/Option<&gst::Structure>) {
-    //    glib::ObjectExt::set_property(self.as_ref(),"converter-config", converter_config)
+    //    ObjectExt::set_property(self.as_ref(),"converter-config", converter_config)
     //}
 
     #[doc(alias = "converter-config")]

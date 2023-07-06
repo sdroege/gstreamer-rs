@@ -87,17 +87,17 @@ impl WebRTCDataChannel {
 
     #[doc(alias = "buffered-amount")]
     pub fn buffered_amount(&self) -> u64 {
-        glib::ObjectExt::property(self, "buffered-amount")
+        ObjectExt::property(self, "buffered-amount")
     }
 
     #[doc(alias = "buffered-amount-low-threshold")]
     pub fn buffered_amount_low_threshold(&self) -> u64 {
-        glib::ObjectExt::property(self, "buffered-amount-low-threshold")
+        ObjectExt::property(self, "buffered-amount-low-threshold")
     }
 
     #[doc(alias = "buffered-amount-low-threshold")]
     pub fn set_buffered_amount_low_threshold(&self, buffered_amount_low_threshold: u64) {
-        glib::ObjectExt::set_property(
+        ObjectExt::set_property(
             self,
             "buffered-amount-low-threshold",
             buffered_amount_low_threshold,
@@ -105,42 +105,42 @@ impl WebRTCDataChannel {
     }
 
     pub fn id(&self) -> i32 {
-        glib::ObjectExt::property(self, "id")
+        ObjectExt::property(self, "id")
     }
 
     pub fn label(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self, "label")
+        ObjectExt::property(self, "label")
     }
 
     #[doc(alias = "max-packet-lifetime")]
     pub fn max_packet_lifetime(&self) -> i32 {
-        glib::ObjectExt::property(self, "max-packet-lifetime")
+        ObjectExt::property(self, "max-packet-lifetime")
     }
 
     #[doc(alias = "max-retransmits")]
     pub fn max_retransmits(&self) -> i32 {
-        glib::ObjectExt::property(self, "max-retransmits")
+        ObjectExt::property(self, "max-retransmits")
     }
 
     pub fn is_negotiated(&self) -> bool {
-        glib::ObjectExt::property(self, "negotiated")
+        ObjectExt::property(self, "negotiated")
     }
 
     pub fn is_ordered(&self) -> bool {
-        glib::ObjectExt::property(self, "ordered")
+        ObjectExt::property(self, "ordered")
     }
 
     pub fn priority(&self) -> WebRTCPriorityType {
-        glib::ObjectExt::property(self, "priority")
+        ObjectExt::property(self, "priority")
     }
 
     pub fn protocol(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self, "protocol")
+        ObjectExt::property(self, "protocol")
     }
 
     #[doc(alias = "ready-state")]
     pub fn ready_state(&self) -> WebRTCDataChannelState {
-        glib::ObjectExt::property(self, "ready-state")
+        ObjectExt::property(self, "ready-state")
     }
 
     #[doc(alias = "close")]

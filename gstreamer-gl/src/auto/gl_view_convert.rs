@@ -91,52 +91,52 @@ impl GLViewConvert {
 
     #[doc(alias = "downmix-mode")]
     pub fn downmix_mode(&self) -> GLStereoDownmix {
-        glib::ObjectExt::property(self, "downmix-mode")
+        ObjectExt::property(self, "downmix-mode")
     }
 
     #[doc(alias = "downmix-mode")]
     pub fn set_downmix_mode(&self, downmix_mode: GLStereoDownmix) {
-        glib::ObjectExt::set_property(self, "downmix-mode", downmix_mode)
+        ObjectExt::set_property(self, "downmix-mode", downmix_mode)
     }
 
     #[doc(alias = "input-flags-override")]
     pub fn input_flags_override(&self) -> gst_video::VideoMultiviewFlags {
-        glib::ObjectExt::property(self, "input-flags-override")
+        ObjectExt::property(self, "input-flags-override")
     }
 
     #[doc(alias = "input-flags-override")]
     pub fn set_input_flags_override(&self, input_flags_override: gst_video::VideoMultiviewFlags) {
-        glib::ObjectExt::set_property(self, "input-flags-override", input_flags_override)
+        ObjectExt::set_property(self, "input-flags-override", input_flags_override)
     }
 
     #[doc(alias = "input-mode-override")]
     pub fn input_mode_override(&self) -> gst_video::VideoMultiviewMode {
-        glib::ObjectExt::property(self, "input-mode-override")
+        ObjectExt::property(self, "input-mode-override")
     }
 
     #[doc(alias = "input-mode-override")]
     pub fn set_input_mode_override(&self, input_mode_override: gst_video::VideoMultiviewMode) {
-        glib::ObjectExt::set_property(self, "input-mode-override", input_mode_override)
+        ObjectExt::set_property(self, "input-mode-override", input_mode_override)
     }
 
     #[doc(alias = "output-flags-override")]
     pub fn output_flags_override(&self) -> gst_video::VideoMultiviewFlags {
-        glib::ObjectExt::property(self, "output-flags-override")
+        ObjectExt::property(self, "output-flags-override")
     }
 
     #[doc(alias = "output-flags-override")]
     pub fn set_output_flags_override(&self, output_flags_override: gst_video::VideoMultiviewFlags) {
-        glib::ObjectExt::set_property(self, "output-flags-override", output_flags_override)
+        ObjectExt::set_property(self, "output-flags-override", output_flags_override)
     }
 
     #[doc(alias = "output-mode-override")]
     pub fn output_mode_override(&self) -> gst_video::VideoMultiviewMode {
-        glib::ObjectExt::property(self, "output-mode-override")
+        ObjectExt::property(self, "output-mode-override")
     }
 
     #[doc(alias = "output-mode-override")]
     pub fn set_output_mode_override(&self, output_mode_override: gst_video::VideoMultiviewMode) {
-        glib::ObjectExt::set_property(self, "output-mode-override", output_mode_override)
+        ObjectExt::set_property(self, "output-mode-override", output_mode_override)
     }
 
     #[doc(alias = "downmix-mode")]

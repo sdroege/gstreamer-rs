@@ -196,29 +196,29 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
     }
 
     fn duration(&self) -> u64 {
-        glib::ObjectExt::property(self.as_ref(), "duration")
+        ObjectExt::property(self.as_ref(), "duration")
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn id(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self.as_ref(), "id")
+        ObjectExt::property(self.as_ref(), "id")
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_id(&self, id: Option<&str>) {
-        glib::ObjectExt::set_property(self.as_ref(), "id", id)
+        ObjectExt::set_property(self.as_ref(), "id", id)
     }
 
     #[doc(alias = "restriction-caps")]
     fn get_property_restriction_caps(&self) -> Option<gst::Caps> {
-        glib::ObjectExt::property(self.as_ref(), "restriction-caps")
+        ObjectExt::property(self.as_ref(), "restriction-caps")
     }
 
     #[doc(alias = "track-type")]
     fn track_type(&self) -> TrackType {
-        glib::ObjectExt::property(self.as_ref(), "track-type")
+        ObjectExt::property(self.as_ref(), "track-type")
     }
 
     #[doc(alias = "commited")]

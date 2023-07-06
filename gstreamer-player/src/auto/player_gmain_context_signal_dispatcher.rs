@@ -18,7 +18,7 @@ glib::wrapper! {
 impl PlayerGMainContextSignalDispatcher {
     #[doc(alias = "application-context")]
     pub fn application_context(&self) -> Option<glib::MainContext> {
-        glib::ObjectExt::property(self, "application-context")
+        ObjectExt::property(self, "application-context")
     }
 }
 

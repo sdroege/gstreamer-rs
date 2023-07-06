@@ -140,32 +140,32 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
 
     #[doc(alias = "buffer-time")]
     fn buffer_time(&self) -> i64 {
-        glib::ObjectExt::property(self.as_ref(), "buffer-time")
+        ObjectExt::property(self.as_ref(), "buffer-time")
     }
 
     #[doc(alias = "buffer-time")]
     fn set_buffer_time(&self, buffer_time: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "buffer-time", buffer_time)
+        ObjectExt::set_property(self.as_ref(), "buffer-time", buffer_time)
     }
 
     #[doc(alias = "can-activate-pull")]
     fn can_activate_pull(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "can-activate-pull")
+        ObjectExt::property(self.as_ref(), "can-activate-pull")
     }
 
     #[doc(alias = "can-activate-pull")]
     fn set_can_activate_pull(&self, can_activate_pull: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "can-activate-pull", can_activate_pull)
+        ObjectExt::set_property(self.as_ref(), "can-activate-pull", can_activate_pull)
     }
 
     #[doc(alias = "latency-time")]
     fn latency_time(&self) -> i64 {
-        glib::ObjectExt::property(self.as_ref(), "latency-time")
+        ObjectExt::property(self.as_ref(), "latency-time")
     }
 
     #[doc(alias = "latency-time")]
     fn set_latency_time(&self, latency_time: i64) {
-        glib::ObjectExt::set_property(self.as_ref(), "latency-time", latency_time)
+        ObjectExt::set_property(self.as_ref(), "latency-time", latency_time)
     }
 
     #[doc(alias = "alignment-threshold")]

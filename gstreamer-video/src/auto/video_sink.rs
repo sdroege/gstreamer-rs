@@ -35,12 +35,12 @@ mod sealed {
 pub trait VideoSinkExt: IsA<VideoSink> + sealed::Sealed + 'static {
     #[doc(alias = "show-preroll-frame")]
     fn shows_preroll_frame(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "show-preroll-frame")
+        ObjectExt::property(self.as_ref(), "show-preroll-frame")
     }
 
     #[doc(alias = "show-preroll-frame")]
     fn set_show_preroll_frame(&self, show_preroll_frame: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "show-preroll-frame", show_preroll_frame)
+        ObjectExt::set_property(self.as_ref(), "show-preroll-frame", show_preroll_frame)
     }
 
     #[doc(alias = "show-preroll-frame")]

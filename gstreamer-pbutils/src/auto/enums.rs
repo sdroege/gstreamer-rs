@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{prelude::*, translate::*};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -79,7 +79,7 @@ impl FromGlib<ffi::GstAudioVisualizerShader> for AudioVisualizerShader {
 
 impl StaticType for AudioVisualizerShader {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_visualizer_shader_get_type()) }
     }
 }
@@ -98,7 +98,7 @@ impl glib::value::ValueType for AudioVisualizerShader {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for AudioVisualizerShader {
+unsafe impl<'a> glib::value::FromValue<'a> for AudioVisualizerShader {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -190,7 +190,7 @@ impl FromGlib<ffi::GstDiscovererResult> for DiscovererResult {
 
 impl StaticType for DiscovererResult {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_discoverer_result_get_type()) }
     }
 }
@@ -209,7 +209,7 @@ impl glib::value::ValueType for DiscovererResult {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for DiscovererResult {
+unsafe impl<'a> glib::value::FromValue<'a> for DiscovererResult {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

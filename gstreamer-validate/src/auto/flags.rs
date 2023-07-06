@@ -3,10 +3,10 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use bitflags::bitflags;
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{bitflags::bitflags, prelude::*, translate::*};
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstValidateActionTypeFlags")]
     pub struct ActionTypeFlags: u32 {
         #[doc(alias = "GST_VALIDATE_ACTION_TYPE_NONE")]
@@ -57,7 +57,7 @@ impl FromGlib<ffi::GstValidateActionTypeFlags> for ActionTypeFlags {
 
 impl StaticType for ActionTypeFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_validate_action_type_flags_get_type()) }
     }
 }
@@ -76,7 +76,7 @@ impl glib::value::ValueType for ActionTypeFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for ActionTypeFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for ActionTypeFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -111,6 +111,7 @@ impl From<ActionTypeFlags> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstValidateIssueFlags")]
     pub struct IssueFlags: u32 {
         #[doc(alias = "GST_VALIDATE_ISSUE_FLAGS_NONE")]
@@ -145,7 +146,7 @@ impl FromGlib<ffi::GstValidateIssueFlags> for IssueFlags {
 
 impl StaticType for IssueFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_validate_issue_flags_get_type()) }
     }
 }
@@ -164,7 +165,7 @@ impl glib::value::ValueType for IssueFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for IssueFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for IssueFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

@@ -210,73 +210,73 @@ impl AppSrc {
     }
 
     pub fn is_block(&self) -> bool {
-        glib::ObjectExt::property(self, "block")
+        ObjectExt::property(self, "block")
     }
 
     pub fn set_block(&self, block: bool) {
-        glib::ObjectExt::set_property(self, "block", block)
+        ObjectExt::set_property(self, "block", block)
     }
 
     pub fn format(&self) -> gst::Format {
-        glib::ObjectExt::property(self, "format")
+        ObjectExt::property(self, "format")
     }
 
     pub fn set_format(&self, format: gst::Format) {
-        glib::ObjectExt::set_property(self, "format", format)
+        ObjectExt::set_property(self, "format", format)
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "handle-segment-change")]
     pub fn is_handle_segment_change(&self) -> bool {
-        glib::ObjectExt::property(self, "handle-segment-change")
+        ObjectExt::property(self, "handle-segment-change")
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "handle-segment-change")]
     pub fn set_handle_segment_change(&self, handle_segment_change: bool) {
-        glib::ObjectExt::set_property(self, "handle-segment-change", handle_segment_change)
+        ObjectExt::set_property(self, "handle-segment-change", handle_segment_change)
     }
 
     #[doc(alias = "is-live")]
     pub fn is_live(&self) -> bool {
-        glib::ObjectExt::property(self, "is-live")
+        ObjectExt::property(self, "is-live")
     }
 
     #[doc(alias = "is-live")]
     pub fn set_is_live(&self, is_live: bool) {
-        glib::ObjectExt::set_property(self, "is-live", is_live)
+        ObjectExt::set_property(self, "is-live", is_live)
     }
 
     #[doc(alias = "max-latency")]
     pub fn max_latency(&self) -> i64 {
-        glib::ObjectExt::property(self, "max-latency")
+        ObjectExt::property(self, "max-latency")
     }
 
     #[doc(alias = "max-latency")]
     pub fn set_max_latency(&self, max_latency: i64) {
-        glib::ObjectExt::set_property(self, "max-latency", max_latency)
+        ObjectExt::set_property(self, "max-latency", max_latency)
     }
 
     #[doc(alias = "min-latency")]
     pub fn min_latency(&self) -> i64 {
-        glib::ObjectExt::property(self, "min-latency")
+        ObjectExt::property(self, "min-latency")
     }
 
     #[doc(alias = "min-latency")]
     pub fn set_min_latency(&self, min_latency: i64) {
-        glib::ObjectExt::set_property(self, "min-latency", min_latency)
+        ObjectExt::set_property(self, "min-latency", min_latency)
     }
 
     #[doc(alias = "min-percent")]
     pub fn min_percent(&self) -> u32 {
-        glib::ObjectExt::property(self, "min-percent")
+        ObjectExt::property(self, "min-percent")
     }
 
     #[doc(alias = "min-percent")]
     pub fn set_min_percent(&self, min_percent: u32) {
-        glib::ObjectExt::set_property(self, "min-percent", min_percent)
+        ObjectExt::set_property(self, "min-percent", min_percent)
     }
 
     #[doc(alias = "block")]

@@ -67,12 +67,12 @@ pub trait RTSPMediaFactoryURIExt: IsA<RTSPMediaFactoryURI> + sealed::Sealed + 's
 
     #[doc(alias = "use-gstpay")]
     fn uses_gstpay(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "use-gstpay")
+        ObjectExt::property(self.as_ref(), "use-gstpay")
     }
 
     #[doc(alias = "use-gstpay")]
     fn set_use_gstpay(&self, use_gstpay: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "use-gstpay", use_gstpay)
+        ObjectExt::set_property(self.as_ref(), "use-gstpay", use_gstpay)
     }
 
     #[doc(alias = "uri")]

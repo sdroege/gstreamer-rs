@@ -5,7 +5,7 @@
 
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{prelude::*, translate::*};
 
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
@@ -61,7 +61,7 @@ impl FromGlib<ffi::GstAggregatorStartTimeSelection> for AggregatorStartTimeSelec
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl StaticType for AggregatorStartTimeSelection {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_aggregator_start_time_selection_get_type()) }
     }
 }
@@ -86,7 +86,7 @@ impl glib::value::ValueType for AggregatorStartTimeSelection {
 
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-unsafe impl<'a> FromValue<'a> for AggregatorStartTimeSelection {
+unsafe impl<'a> glib::value::FromValue<'a> for AggregatorStartTimeSelection {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

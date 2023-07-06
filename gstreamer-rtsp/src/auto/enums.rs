@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{prelude::*, translate::*};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -51,7 +51,7 @@ impl FromGlib<ffi::GstRTSPAuthMethod> for RTSPAuthMethod {
 
 impl StaticType for RTSPAuthMethod {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_auth_method_get_type()) }
     }
 }
@@ -70,7 +70,7 @@ impl glib::value::ValueType for RTSPAuthMethod {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPAuthMethod {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPAuthMethod {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -150,7 +150,7 @@ impl FromGlib<ffi::GstRTSPFamily> for RTSPFamily {
 
 impl StaticType for RTSPFamily {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_family_get_type()) }
     }
 }
@@ -169,7 +169,7 @@ impl glib::value::ValueType for RTSPFamily {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPFamily {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPFamily {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -595,7 +595,7 @@ impl FromGlib<ffi::GstRTSPHeaderField> for RTSPHeaderField {
 
 impl StaticType for RTSPHeaderField {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_header_field_get_type()) }
     }
 }
@@ -614,7 +614,7 @@ impl glib::value::ValueType for RTSPHeaderField {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPHeaderField {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPHeaderField {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -706,7 +706,7 @@ impl FromGlib<ffi::GstRTSPMsgType> for RTSPMsgType {
 
 impl StaticType for RTSPMsgType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_msg_type_get_type()) }
     }
 }
@@ -725,7 +725,7 @@ impl glib::value::ValueType for RTSPMsgType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPMsgType {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPMsgType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -813,7 +813,7 @@ impl FromGlib<ffi::GstRTSPRangeUnit> for RTSPRangeUnit {
 
 impl StaticType for RTSPRangeUnit {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_range_unit_get_type()) }
     }
 }
@@ -832,7 +832,7 @@ impl glib::value::ValueType for RTSPRangeUnit {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPRangeUnit {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPRangeUnit {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -970,7 +970,7 @@ impl FromGlib<ffi::GstRTSPResult> for RTSPResult {
 
 impl StaticType for RTSPResult {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_result_get_type()) }
     }
 }
@@ -989,7 +989,7 @@ impl glib::value::ValueType for RTSPResult {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPResult {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPResult {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1081,7 +1081,7 @@ impl FromGlib<ffi::GstRTSPState> for RTSPState {
 
 impl StaticType for RTSPState {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_state_get_type()) }
     }
 }
@@ -1100,7 +1100,7 @@ impl glib::value::ValueType for RTSPState {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPState {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1358,7 +1358,7 @@ impl FromGlib<ffi::GstRTSPStatusCode> for RTSPStatusCode {
 
 impl StaticType for RTSPStatusCode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_status_code_get_type()) }
     }
 }
@@ -1377,7 +1377,7 @@ impl glib::value::ValueType for RTSPStatusCode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPStatusCode {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPStatusCode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1465,7 +1465,7 @@ impl FromGlib<ffi::GstRTSPTimeType> for RTSPTimeType {
 
 impl StaticType for RTSPTimeType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_time_type_get_type()) }
     }
 }
@@ -1484,7 +1484,7 @@ impl glib::value::ValueType for RTSPTimeType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for RTSPTimeType {
+unsafe impl<'a> glib::value::FromValue<'a> for RTSPTimeType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

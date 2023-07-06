@@ -335,7 +335,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "automatic-request-sync-point-flags")]
     fn automatic_request_sync_point_flags(&self) -> VideoDecoderRequestSyncPointFlags {
-        glib::ObjectExt::property(self.as_ref(), "automatic-request-sync-point-flags")
+        ObjectExt::property(self.as_ref(), "automatic-request-sync-point-flags")
     }
 
     #[cfg(feature = "v1_20")]
@@ -345,7 +345,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
         &self,
         automatic_request_sync_point_flags: VideoDecoderRequestSyncPointFlags,
     ) {
-        glib::ObjectExt::set_property(
+        ObjectExt::set_property(
             self.as_ref(),
             "automatic-request-sync-point-flags",
             automatic_request_sync_point_flags,
@@ -356,14 +356,14 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "automatic-request-sync-points")]
     fn is_automatic_request_sync_points(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "automatic-request-sync-points")
+        ObjectExt::property(self.as_ref(), "automatic-request-sync-points")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "automatic-request-sync-points")]
     fn set_automatic_request_sync_points(&self, automatic_request_sync_points: bool) {
-        glib::ObjectExt::set_property(
+        ObjectExt::set_property(
             self.as_ref(),
             "automatic-request-sync-points",
             automatic_request_sync_points,
@@ -374,14 +374,14 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "discard-corrupted-frames")]
     fn is_discard_corrupted_frames(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "discard-corrupted-frames")
+        ObjectExt::property(self.as_ref(), "discard-corrupted-frames")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "discard-corrupted-frames")]
     fn set_discard_corrupted_frames(&self, discard_corrupted_frames: bool) {
-        glib::ObjectExt::set_property(
+        ObjectExt::set_property(
             self.as_ref(),
             "discard-corrupted-frames",
             discard_corrupted_frames,
@@ -392,14 +392,14 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "min-force-key-unit-interval")]
     fn min_force_key_unit_interval(&self) -> u64 {
-        glib::ObjectExt::property(self.as_ref(), "min-force-key-unit-interval")
+        ObjectExt::property(self.as_ref(), "min-force-key-unit-interval")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "min-force-key-unit-interval")]
     fn set_min_force_key_unit_interval(&self, min_force_key_unit_interval: u64) {
-        glib::ObjectExt::set_property(
+        ObjectExt::set_property(
             self.as_ref(),
             "min-force-key-unit-interval",
             min_force_key_unit_interval,
@@ -409,13 +409,13 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn is_qos(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "qos")
+        ObjectExt::property(self.as_ref(), "qos")
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn set_qos(&self, qos: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "qos", qos)
+        ObjectExt::set_property(self.as_ref(), "qos", qos)
     }
 
     #[cfg(feature = "v1_20")]

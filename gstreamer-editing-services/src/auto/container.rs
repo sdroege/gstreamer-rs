@@ -111,7 +111,7 @@ pub trait GESContainerExt: IsA<Container> + sealed::Sealed + 'static {
     }
 
     fn height(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "height")
+        ObjectExt::property(self.as_ref(), "height")
     }
 
     #[doc(alias = "child-added")]

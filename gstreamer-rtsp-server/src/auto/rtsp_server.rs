@@ -328,12 +328,12 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
 
     #[doc(alias = "content-length-limit")]
     fn get_property_content_length_limit(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "content-length-limit")
+        ObjectExt::property(self.as_ref(), "content-length-limit")
     }
 
     #[doc(alias = "content-length-limit")]
     fn set_property_content_length_limit(&self, content_length_limit: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "content-length-limit", content_length_limit)
+        ObjectExt::set_property(self.as_ref(), "content-length-limit", content_length_limit)
     }
 
     #[doc(alias = "client-connected")]

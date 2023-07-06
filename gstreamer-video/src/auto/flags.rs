@@ -3,13 +3,13 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use bitflags::bitflags;
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{bitflags::bitflags, prelude::*, translate::*};
 use std::fmt;
 
 #[cfg(feature = "v1_22")]
 bitflags! {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstNavigationModifierType")]
     pub struct NavigationModifierType: u32 {
         #[doc(alias = "GST_NAVIGATION_MODIFIER_SHIFT_MASK")]
@@ -74,7 +74,7 @@ impl FromGlib<ffi::GstNavigationModifierType> for NavigationModifierType {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 impl StaticType for NavigationModifierType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_navigation_modifier_type_get_type()) }
     }
 }
@@ -99,7 +99,7 @@ impl glib::value::ValueType for NavigationModifierType {
 
 #[cfg(feature = "v1_22")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
-unsafe impl<'a> FromValue<'a> for NavigationModifierType {
+unsafe impl<'a> glib::value::FromValue<'a> for NavigationModifierType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -138,6 +138,7 @@ impl From<NavigationModifierType> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstVideoBufferFlags")]
     pub struct VideoBufferFlags: u32 {
         #[doc(alias = "GST_VIDEO_BUFFER_FLAG_INTERLACED")]
@@ -188,7 +189,7 @@ impl FromGlib<ffi::GstVideoBufferFlags> for VideoBufferFlags {
 
 impl StaticType for VideoBufferFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_buffer_flags_get_type()) }
     }
 }
@@ -207,7 +208,7 @@ impl glib::value::ValueType for VideoBufferFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoBufferFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoBufferFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -242,6 +243,7 @@ impl From<VideoBufferFlags> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstVideoChromaSite")]
     pub struct VideoChromaSite: u32 {
         #[doc(alias = "GST_VIDEO_CHROMA_SITE_NONE")]
@@ -301,7 +303,7 @@ impl FromGlib<ffi::GstVideoChromaSite> for VideoChromaSite {
 
 impl StaticType for VideoChromaSite {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_chroma_site_get_type()) }
     }
 }
@@ -320,7 +322,7 @@ impl glib::value::ValueType for VideoChromaSite {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoChromaSite {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoChromaSite {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -355,6 +357,7 @@ impl From<VideoChromaSite> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstVideoCodecFrameFlags")]
     pub struct VideoCodecFrameFlags: u32 {
         #[doc(alias = "GST_VIDEO_CODEC_FRAME_FLAG_DECODE_ONLY")]
@@ -395,7 +398,7 @@ impl FromGlib<ffi::GstVideoCodecFrameFlags> for VideoCodecFrameFlags {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for VideoCodecFrameFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_codec_frame_flags_get_type()) }
     }
 }
@@ -420,7 +423,7 @@ impl glib::value::ValueType for VideoCodecFrameFlags {
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-unsafe impl<'a> FromValue<'a> for VideoCodecFrameFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoCodecFrameFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -461,6 +464,7 @@ impl From<VideoCodecFrameFlags> for glib::Value {
 #[cfg(feature = "v1_20")]
 bitflags! {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstVideoDecoderRequestSyncPointFlags")]
     pub struct VideoDecoderRequestSyncPointFlags: u32 {
         #[doc(alias = "GST_VIDEO_DECODER_REQUEST_SYNC_POINT_DISCARD_INPUT")]
@@ -497,7 +501,7 @@ impl FromGlib<ffi::GstVideoDecoderRequestSyncPointFlags> for VideoDecoderRequest
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for VideoDecoderRequestSyncPointFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_decoder_request_sync_point_flags_get_type()) }
     }
 }
@@ -522,7 +526,7 @@ impl glib::value::ValueType for VideoDecoderRequestSyncPointFlags {
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-unsafe impl<'a> FromValue<'a> for VideoDecoderRequestSyncPointFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoDecoderRequestSyncPointFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -561,6 +565,7 @@ impl From<VideoDecoderRequestSyncPointFlags> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstVideoFlags")]
     pub struct VideoFlags: u32 {
         #[doc(alias = "GST_VIDEO_FLAG_VARIABLE_FPS")]
@@ -591,7 +596,7 @@ impl FromGlib<ffi::GstVideoFlags> for VideoFlags {
 
 impl StaticType for VideoFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_flags_get_type()) }
     }
 }
@@ -610,7 +615,7 @@ impl glib::value::ValueType for VideoFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -645,6 +650,7 @@ impl From<VideoFlags> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstVideoFormatFlags")]
     pub struct VideoFormatFlags: u32 {
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_YUV")]
@@ -693,7 +699,7 @@ impl FromGlib<ffi::GstVideoFormatFlags> for VideoFormatFlags {
 
 impl StaticType for VideoFormatFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_format_flags_get_type()) }
     }
 }
@@ -712,7 +718,7 @@ impl glib::value::ValueType for VideoFormatFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoFormatFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoFormatFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -747,6 +753,7 @@ impl From<VideoFormatFlags> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstVideoFrameFlags")]
     pub struct VideoFrameFlags: u32 {
         #[doc(alias = "GST_VIDEO_FRAME_FLAG_INTERLACED")]
@@ -793,7 +800,7 @@ impl FromGlib<ffi::GstVideoFrameFlags> for VideoFrameFlags {
 
 impl StaticType for VideoFrameFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_frame_flags_get_type()) }
     }
 }
@@ -812,7 +819,7 @@ impl glib::value::ValueType for VideoFrameFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoFrameFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoFrameFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -847,6 +854,7 @@ impl From<VideoFrameFlags> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstVideoMultiviewFlags")]
     pub struct VideoMultiviewFlags: u32 {
         #[doc(alias = "GST_VIDEO_MULTIVIEW_FLAGS_RIGHT_VIEW_FIRST")]
@@ -887,7 +895,7 @@ impl FromGlib<ffi::GstVideoMultiviewFlags> for VideoMultiviewFlags {
 
 impl StaticType for VideoMultiviewFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_multiview_flags_get_type()) }
     }
 }
@@ -906,7 +914,7 @@ impl glib::value::ValueType for VideoMultiviewFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoMultiviewFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoMultiviewFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -941,6 +949,7 @@ impl From<VideoMultiviewFlags> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstVideoOverlayFormatFlags")]
     pub struct VideoOverlayFormatFlags: u32 {
         #[doc(alias = "GST_VIDEO_OVERLAY_FORMAT_FLAG_PREMULTIPLIED_ALPHA")]
@@ -973,7 +982,7 @@ impl FromGlib<ffi::GstVideoOverlayFormatFlags> for VideoOverlayFormatFlags {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for VideoOverlayFormatFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_overlay_format_flags_get_type()) }
     }
 }
@@ -998,7 +1007,7 @@ impl glib::value::ValueType for VideoOverlayFormatFlags {
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-unsafe impl<'a> FromValue<'a> for VideoOverlayFormatFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoOverlayFormatFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1037,6 +1046,7 @@ impl From<VideoOverlayFormatFlags> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstVideoPackFlags")]
     pub struct VideoPackFlags: u32 {
         #[doc(alias = "GST_VIDEO_PACK_FLAG_TRUNCATE_RANGE")]
@@ -1067,7 +1077,7 @@ impl FromGlib<ffi::GstVideoPackFlags> for VideoPackFlags {
 
 impl StaticType for VideoPackFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_pack_flags_get_type()) }
     }
 }
@@ -1086,7 +1096,7 @@ impl glib::value::ValueType for VideoPackFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoPackFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoPackFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1121,6 +1131,7 @@ impl From<VideoPackFlags> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstVideoTimeCodeFlags")]
     pub struct VideoTimeCodeFlags: u32 {
         #[doc(alias = "GST_VIDEO_TIME_CODE_FLAGS_DROP_FRAME")]
@@ -1153,7 +1164,7 @@ impl FromGlib<ffi::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoTimeCodeFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_time_code_flags_get_type()) }
     }
 }
@@ -1178,7 +1189,7 @@ impl glib::value::ValueType for VideoTimeCodeFlags {
 
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-unsafe impl<'a> FromValue<'a> for VideoTimeCodeFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoTimeCodeFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

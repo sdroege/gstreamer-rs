@@ -186,22 +186,22 @@ pub trait RTSPSessionExt: IsA<RTSPSession> + sealed::Sealed + 'static {
 
     #[doc(alias = "extra-timeout")]
     fn extra_timeout(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "extra-timeout")
+        ObjectExt::property(self.as_ref(), "extra-timeout")
     }
 
     #[doc(alias = "extra-timeout")]
     fn set_extra_timeout(&self, extra_timeout: u32) {
-        glib::ObjectExt::set_property(self.as_ref(), "extra-timeout", extra_timeout)
+        ObjectExt::set_property(self.as_ref(), "extra-timeout", extra_timeout)
     }
 
     #[doc(alias = "timeout-always-visible")]
     fn is_timeout_always_visible(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "timeout-always-visible")
+        ObjectExt::property(self.as_ref(), "timeout-always-visible")
     }
 
     #[doc(alias = "timeout-always-visible")]
     fn set_timeout_always_visible(&self, timeout_always_visible: bool) {
-        glib::ObjectExt::set_property(
+        ObjectExt::set_property(
             self.as_ref(),
             "timeout-always-visible",
             timeout_always_visible,

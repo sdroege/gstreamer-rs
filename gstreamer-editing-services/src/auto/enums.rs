@@ -6,7 +6,7 @@
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 use glib::GStr;
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{prelude::*, translate::*};
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 use std::fmt;
@@ -176,7 +176,7 @@ impl FromGlib<ffi::GESEdge> for Edge {
 
 impl StaticType for Edge {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_edge_get_type()) }
     }
 }
@@ -195,7 +195,7 @@ impl glib::value::ValueType for Edge {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for Edge {
+unsafe impl<'a> glib::value::FromValue<'a> for Edge {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -306,7 +306,7 @@ impl FromGlib<ffi::GESEditMode> for EditMode {
 
 impl StaticType for EditMode {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_edit_mode_get_type()) }
     }
 }
@@ -325,7 +325,7 @@ impl glib::value::ValueType for EditMode {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for EditMode {
+unsafe impl<'a> glib::value::FromValue<'a> for EditMode {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -481,7 +481,7 @@ impl FromGlib<ffi::GESTextHAlign> for TextHAlign {
 
 impl StaticType for TextHAlign {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_text_halign_get_type()) }
     }
 }
@@ -500,7 +500,7 @@ impl glib::value::ValueType for TextHAlign {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for TextHAlign {
+unsafe impl<'a> glib::value::FromValue<'a> for TextHAlign {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -592,7 +592,7 @@ impl FromGlib<ffi::GESTextVAlign> for TextVAlign {
 
 impl StaticType for TextVAlign {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_text_valign_get_type()) }
     }
 }
@@ -611,7 +611,7 @@ impl glib::value::ValueType for TextVAlign {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for TextVAlign {
+unsafe impl<'a> glib::value::FromValue<'a> for TextVAlign {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -973,7 +973,7 @@ impl FromGlib<ffi::GESVideoStandardTransitionType> for VideoStandardTransitionTy
 
 impl StaticType for VideoStandardTransitionType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_video_standard_transition_type_get_type()) }
     }
 }
@@ -992,7 +992,7 @@ impl glib::value::ValueType for VideoStandardTransitionType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoStandardTransitionType {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoStandardTransitionType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1130,7 +1130,7 @@ impl FromGlib<ffi::GESVideoTestPattern> for VideoTestPattern {
 
 impl StaticType for VideoTestPattern {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_video_test_pattern_get_type()) }
     }
 }
@@ -1149,7 +1149,7 @@ impl glib::value::ValueType for VideoTestPattern {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for VideoTestPattern {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoTestPattern {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

@@ -61,7 +61,7 @@ pub trait BinMonitorExt: IsA<BinMonitor> + sealed::Sealed + 'static {
 
     #[doc(alias = "handles-states")]
     fn is_handles_states(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "handles-states")
+        ObjectExt::property(self.as_ref(), "handles-states")
     }
 
     #[doc(alias = "handles-states")]

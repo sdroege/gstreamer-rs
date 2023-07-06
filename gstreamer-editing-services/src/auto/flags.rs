@@ -3,13 +3,13 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use bitflags::bitflags;
-use glib::{translate::*, value::FromValue, value::ToValue, GStr, StaticType, Type};
+use glib::{bitflags::bitflags, prelude::*, translate::*, GStr};
 use std::fmt;
 
 #[cfg(feature = "v1_20")]
 bitflags! {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GESMarkerFlags")]
     pub struct MarkerFlags: u32 {
         #[doc(alias = "GES_MARKER_FLAG_NONE")]
@@ -46,7 +46,7 @@ impl FromGlib<ffi::GESMarkerFlags> for MarkerFlags {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for MarkerFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_marker_flags_get_type()) }
     }
 }
@@ -71,7 +71,7 @@ impl glib::value::ValueType for MarkerFlags {
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-unsafe impl<'a> FromValue<'a> for MarkerFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for MarkerFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -110,6 +110,7 @@ impl From<MarkerFlags> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GESMetaFlag")]
     pub struct MetaFlag: u32 {
         #[doc(alias = "GES_META_READABLE")]
@@ -142,7 +143,7 @@ impl FromGlib<ffi::GESMetaFlag> for MetaFlag {
 
 impl StaticType for MetaFlag {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_meta_flag_get_type()) }
     }
 }
@@ -161,7 +162,7 @@ impl glib::value::ValueType for MetaFlag {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for MetaFlag {
+unsafe impl<'a> glib::value::FromValue<'a> for MetaFlag {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -196,6 +197,7 @@ impl From<MetaFlag> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GESPipelineFlags")]
     pub struct PipelineFlags: u32 {
         #[doc(alias = "GES_PIPELINE_MODE_PREVIEW_AUDIO")]
@@ -232,7 +234,7 @@ impl FromGlib<ffi::GESPipelineFlags> for PipelineFlags {
 
 impl StaticType for PipelineFlags {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_pipeline_flags_get_type()) }
     }
 }
@@ -251,7 +253,7 @@ impl glib::value::ValueType for PipelineFlags {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for PipelineFlags {
+unsafe impl<'a> glib::value::FromValue<'a> for PipelineFlags {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -286,6 +288,7 @@ impl From<PipelineFlags> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GESTrackType")]
     pub struct TrackType: u32 {
         #[doc(alias = "GES_TRACK_TYPE_UNKNOWN")]
@@ -341,7 +344,7 @@ impl FromGlib<ffi::GESTrackType> for TrackType {
 
 impl StaticType for TrackType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_track_type_get_type()) }
     }
 }
@@ -360,7 +363,7 @@ impl glib::value::ValueType for TrackType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for TrackType {
+unsafe impl<'a> glib::value::FromValue<'a> for TrackType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

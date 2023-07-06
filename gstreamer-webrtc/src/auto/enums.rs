@@ -3,10 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(feature = "v1_20")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-use glib::{error::ErrorDomain, Quark};
-use glib::{translate::*, value::FromValue, value::ToValue, GStr, StaticType, Type};
+use glib::{prelude::*, translate::*, GStr};
 use std::fmt;
 
 #[cfg(feature = "v1_16")]
@@ -67,7 +64,7 @@ impl FromGlib<ffi::GstWebRTCBundlePolicy> for WebRTCBundlePolicy {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCBundlePolicy {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_bundle_policy_get_type()) }
     }
 }
@@ -92,7 +89,7 @@ impl glib::value::ValueType for WebRTCBundlePolicy {
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-unsafe impl<'a> FromValue<'a> for WebRTCBundlePolicy {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCBundlePolicy {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -180,7 +177,7 @@ impl FromGlib<ffi::GstWebRTCDTLSSetup> for WebRTCDTLSSetup {
 
 impl StaticType for WebRTCDTLSSetup {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_dtls_setup_get_type()) }
     }
 }
@@ -199,7 +196,7 @@ impl glib::value::ValueType for WebRTCDTLSSetup {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for WebRTCDTLSSetup {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCDTLSSetup {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -287,7 +284,7 @@ impl FromGlib<ffi::GstWebRTCDTLSTransportState> for WebRTCDTLSTransportState {
 
 impl StaticType for WebRTCDTLSTransportState {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_dtls_transport_state_get_type()) }
     }
 }
@@ -306,7 +303,7 @@ impl glib::value::ValueType for WebRTCDTLSTransportState {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for WebRTCDTLSTransportState {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCDTLSTransportState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -398,7 +395,7 @@ impl FromGlib<ffi::GstWebRTCDataChannelState> for WebRTCDataChannelState {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCDataChannelState {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_data_channel_state_get_type()) }
     }
 }
@@ -423,7 +420,7 @@ impl glib::value::ValueType for WebRTCDataChannelState {
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-unsafe impl<'a> FromValue<'a> for WebRTCDataChannelState {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCDataChannelState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -557,9 +554,9 @@ impl FromGlib<ffi::GstWebRTCError> for WebRTCError {
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-impl ErrorDomain for WebRTCError {
+impl glib::error::ErrorDomain for WebRTCError {
     #[inline]
-    fn domain() -> Quark {
+    fn domain() -> glib::Quark {
         skip_assert_initialized!();
 
         unsafe { from_glib(ffi::gst_webrtc_error_quark()) }
@@ -584,7 +581,7 @@ impl ErrorDomain for WebRTCError {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for WebRTCError {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_error_get_type()) }
     }
 }
@@ -609,7 +606,7 @@ impl glib::value::ValueType for WebRTCError {
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-unsafe impl<'a> FromValue<'a> for WebRTCError {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCError {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -697,7 +694,7 @@ impl FromGlib<ffi::GstWebRTCFECType> for WebRTCFECType {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
 impl StaticType for WebRTCFECType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_fec_type_get_type()) }
     }
 }
@@ -722,7 +719,7 @@ impl glib::value::ValueType for WebRTCFECType {
 
 #[cfg(feature = "v1_14_1")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
-unsafe impl<'a> FromValue<'a> for WebRTCFECType {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCFECType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -802,7 +799,7 @@ impl FromGlib<ffi::GstWebRTCICEComponent> for WebRTCICEComponent {
 
 impl StaticType for WebRTCICEComponent {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_ice_component_get_type()) }
     }
 }
@@ -821,7 +818,7 @@ impl glib::value::ValueType for WebRTCICEComponent {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for WebRTCICEComponent {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCICEComponent {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -917,7 +914,7 @@ impl FromGlib<ffi::GstWebRTCICEConnectionState> for WebRTCICEConnectionState {
 
 impl StaticType for WebRTCICEConnectionState {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_ice_connection_state_get_type()) }
     }
 }
@@ -936,7 +933,7 @@ impl glib::value::ValueType for WebRTCICEConnectionState {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for WebRTCICEConnectionState {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCICEConnectionState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1016,7 +1013,7 @@ impl FromGlib<ffi::GstWebRTCICEGatheringState> for WebRTCICEGatheringState {
 
 impl StaticType for WebRTCICEGatheringState {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_ice_gathering_state_get_type()) }
     }
 }
@@ -1035,7 +1032,7 @@ impl glib::value::ValueType for WebRTCICEGatheringState {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for WebRTCICEGatheringState {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCICEGatheringState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1111,7 +1108,7 @@ impl FromGlib<ffi::GstWebRTCICERole> for WebRTCICERole {
 
 impl StaticType for WebRTCICERole {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_ice_role_get_type()) }
     }
 }
@@ -1130,7 +1127,7 @@ impl glib::value::ValueType for WebRTCICERole {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for WebRTCICERole {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCICERole {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1214,7 +1211,7 @@ impl FromGlib<ffi::GstWebRTCICETransportPolicy> for WebRTCICETransportPolicy {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCICETransportPolicy {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_ice_transport_policy_get_type()) }
     }
 }
@@ -1239,7 +1236,7 @@ impl glib::value::ValueType for WebRTCICETransportPolicy {
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-unsafe impl<'a> FromValue<'a> for WebRTCICETransportPolicy {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCICETransportPolicy {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1331,7 +1328,7 @@ impl FromGlib<ffi::GstWebRTCKind> for WebRTCKind {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for WebRTCKind {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_kind_get_type()) }
     }
 }
@@ -1356,7 +1353,7 @@ impl glib::value::ValueType for WebRTCKind {
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-unsafe impl<'a> FromValue<'a> for WebRTCKind {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCKind {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1452,7 +1449,7 @@ impl FromGlib<ffi::GstWebRTCPeerConnectionState> for WebRTCPeerConnectionState {
 
 impl StaticType for WebRTCPeerConnectionState {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_peer_connection_state_get_type()) }
     }
 }
@@ -1471,7 +1468,7 @@ impl glib::value::ValueType for WebRTCPeerConnectionState {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for WebRTCPeerConnectionState {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCPeerConnectionState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1563,7 +1560,7 @@ impl FromGlib<ffi::GstWebRTCPriorityType> for WebRTCPriorityType {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCPriorityType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_priority_type_get_type()) }
     }
 }
@@ -1588,7 +1585,7 @@ impl glib::value::ValueType for WebRTCPriorityType {
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-unsafe impl<'a> FromValue<'a> for WebRTCPriorityType {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCPriorityType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1680,7 +1677,7 @@ impl FromGlib<ffi::GstWebRTCRTPTransceiverDirection> for WebRTCRTPTransceiverDir
 
 impl StaticType for WebRTCRTPTransceiverDirection {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_rtp_transceiver_direction_get_type()) }
     }
 }
@@ -1699,7 +1696,7 @@ impl glib::value::ValueType for WebRTCRTPTransceiverDirection {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for WebRTCRTPTransceiverDirection {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCRTPTransceiverDirection {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1791,7 +1788,7 @@ impl FromGlib<ffi::GstWebRTCSCTPTransportState> for WebRTCSCTPTransportState {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCSCTPTransportState {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_sctp_transport_state_get_type()) }
     }
 }
@@ -1816,7 +1813,7 @@ impl glib::value::ValueType for WebRTCSCTPTransportState {
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-unsafe impl<'a> FromValue<'a> for WebRTCSCTPTransportState {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCSCTPTransportState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -1923,7 +1920,7 @@ impl FromGlib<ffi::GstWebRTCSDPType> for WebRTCSDPType {
 
 impl StaticType for WebRTCSDPType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_sdp_type_get_type()) }
     }
 }
@@ -1942,7 +1939,7 @@ impl glib::value::ValueType for WebRTCSDPType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for WebRTCSDPType {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCSDPType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2034,7 +2031,7 @@ impl FromGlib<ffi::GstWebRTCSignalingState> for WebRTCSignalingState {
 
 impl StaticType for WebRTCSignalingState {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_signaling_state_get_type()) }
     }
 }
@@ -2053,7 +2050,7 @@ impl glib::value::ValueType for WebRTCSignalingState {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for WebRTCSignalingState {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCSignalingState {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -2175,7 +2172,7 @@ impl FromGlib<ffi::GstWebRTCStatsType> for WebRTCStatsType {
 
 impl StaticType for WebRTCStatsType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_stats_type_get_type()) }
     }
 }
@@ -2194,7 +2191,7 @@ impl glib::value::ValueType for WebRTCStatsType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for WebRTCStatsType {
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCStatsType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

@@ -40,14 +40,14 @@ pub trait AudioAggregatorPadExt: IsA<AudioAggregatorPad> + sealed::Sealed + 'sta
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "qos-messages")]
     fn is_qos_messages(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "qos-messages")
+        ObjectExt::property(self.as_ref(), "qos-messages")
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "qos-messages")]
     fn set_qos_messages(&self, qos_messages: bool) {
-        glib::ObjectExt::set_property(self.as_ref(), "qos-messages", qos_messages)
+        ObjectExt::set_property(self.as_ref(), "qos-messages", qos_messages)
     }
 
     #[cfg(feature = "v1_20")]

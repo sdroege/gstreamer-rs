@@ -47,11 +47,11 @@ mod sealed {
 
 pub trait TransitionClipExt: IsA<TransitionClip> + sealed::Sealed + 'static {
     fn vtype(&self) -> VideoStandardTransitionType {
-        glib::ObjectExt::property(self.as_ref(), "vtype")
+        ObjectExt::property(self.as_ref(), "vtype")
     }
 
     fn set_vtype(&self, vtype: VideoStandardTransitionType) {
-        glib::ObjectExt::set_property(self.as_ref(), "vtype", vtype)
+        ObjectExt::set_property(self.as_ref(), "vtype", vtype)
     }
 
     #[doc(alias = "vtype")]

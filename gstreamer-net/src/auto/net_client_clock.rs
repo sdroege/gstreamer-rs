@@ -40,67 +40,67 @@ impl NetClientClock {
     }
 
     pub fn address(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self, "address")
+        ObjectExt::property(self, "address")
     }
 
     pub fn set_address(&self, address: Option<&str>) {
-        glib::ObjectExt::set_property(self, "address", address)
+        ObjectExt::set_property(self, "address", address)
     }
 
     #[doc(alias = "base-time")]
     pub fn base_time(&self) -> u64 {
-        glib::ObjectExt::property(self, "base-time")
+        ObjectExt::property(self, "base-time")
     }
 
     pub fn bus(&self) -> Option<gst::Bus> {
-        glib::ObjectExt::property(self, "bus")
+        ObjectExt::property(self, "bus")
     }
 
     pub fn set_bus<P: IsA<gst::Bus>>(&self, bus: Option<&P>) {
-        glib::ObjectExt::set_property(self, "bus", bus)
+        ObjectExt::set_property(self, "bus", bus)
     }
 
     #[doc(alias = "internal-clock")]
     pub fn internal_clock(&self) -> Option<gst::Clock> {
-        glib::ObjectExt::property(self, "internal-clock")
+        ObjectExt::property(self, "internal-clock")
     }
 
     #[doc(alias = "minimum-update-interval")]
     pub fn minimum_update_interval(&self) -> u64 {
-        glib::ObjectExt::property(self, "minimum-update-interval")
+        ObjectExt::property(self, "minimum-update-interval")
     }
 
     #[doc(alias = "minimum-update-interval")]
     pub fn set_minimum_update_interval(&self, minimum_update_interval: u64) {
-        glib::ObjectExt::set_property(self, "minimum-update-interval", minimum_update_interval)
+        ObjectExt::set_property(self, "minimum-update-interval", minimum_update_interval)
     }
 
     pub fn port(&self) -> i32 {
-        glib::ObjectExt::property(self, "port")
+        ObjectExt::property(self, "port")
     }
 
     pub fn set_port(&self, port: i32) {
-        glib::ObjectExt::set_property(self, "port", port)
+        ObjectExt::set_property(self, "port", port)
     }
 
     #[doc(alias = "qos-dscp")]
     pub fn qos_dscp(&self) -> i32 {
-        glib::ObjectExt::property(self, "qos-dscp")
+        ObjectExt::property(self, "qos-dscp")
     }
 
     #[doc(alias = "qos-dscp")]
     pub fn set_qos_dscp(&self, qos_dscp: i32) {
-        glib::ObjectExt::set_property(self, "qos-dscp", qos_dscp)
+        ObjectExt::set_property(self, "qos-dscp", qos_dscp)
     }
 
     #[doc(alias = "round-trip-limit")]
     pub fn round_trip_limit(&self) -> u64 {
-        glib::ObjectExt::property(self, "round-trip-limit")
+        ObjectExt::property(self, "round-trip-limit")
     }
 
     #[doc(alias = "round-trip-limit")]
     pub fn set_round_trip_limit(&self, round_trip_limit: u64) {
-        glib::ObjectExt::set_property(self, "round-trip-limit", round_trip_limit)
+        ObjectExt::set_property(self, "round-trip-limit", round_trip_limit)
     }
 
     #[doc(alias = "address")]

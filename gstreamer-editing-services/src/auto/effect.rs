@@ -36,7 +36,7 @@ mod sealed {
 pub trait EffectExt: IsA<Effect> + sealed::Sealed + 'static {
     #[doc(alias = "bin-description")]
     fn bin_description(&self) -> Option<glib::GString> {
-        glib::ObjectExt::property(self.as_ref(), "bin-description")
+        ObjectExt::property(self.as_ref(), "bin-description")
     }
 }
 

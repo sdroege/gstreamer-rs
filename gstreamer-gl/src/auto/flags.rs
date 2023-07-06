@@ -3,11 +3,11 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use bitflags::bitflags;
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{bitflags::bitflags, prelude::*, translate::*};
 use std::fmt;
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstGLAPI")]
     pub struct GLAPI: u32 {
         #[doc(alias = "GST_GL_API_OPENGL")]
@@ -64,7 +64,7 @@ impl FromGlib<ffi::GstGLAPI> for GLAPI {
 
 impl StaticType for GLAPI {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_api_get_type()) }
     }
 }
@@ -83,7 +83,7 @@ impl glib::value::ValueType for GLAPI {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for GLAPI {
+unsafe impl<'a> glib::value::FromValue<'a> for GLAPI {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -120,6 +120,7 @@ impl From<GLAPI> for glib::Value {
 #[cfg(feature = "v1_20")]
 bitflags! {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstGLConfigSurfaceType")]
     pub struct GLConfigSurfaceType: u32 {
         #[doc(alias = "GST_GL_CONFIG_SURFACE_TYPE_NONE")]
@@ -171,7 +172,7 @@ impl FromGlib<ffi::GstGLConfigSurfaceType> for GLConfigSurfaceType {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for GLConfigSurfaceType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_config_surface_type_get_type()) }
     }
 }
@@ -196,7 +197,7 @@ impl glib::value::ValueType for GLConfigSurfaceType {
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-unsafe impl<'a> FromValue<'a> for GLConfigSurfaceType {
+unsafe impl<'a> glib::value::FromValue<'a> for GLConfigSurfaceType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -235,6 +236,7 @@ impl From<GLConfigSurfaceType> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstGLDisplayType")]
     pub struct GLDisplayType: u32 {
         #[doc(alias = "GST_GL_DISPLAY_TYPE_X11")]
@@ -293,7 +295,7 @@ impl FromGlib<ffi::GstGLDisplayType> for GLDisplayType {
 
 impl StaticType for GLDisplayType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_display_type_get_type()) }
     }
 }
@@ -312,7 +314,7 @@ impl glib::value::ValueType for GLDisplayType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for GLDisplayType {
+unsafe impl<'a> glib::value::FromValue<'a> for GLDisplayType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -347,6 +349,7 @@ impl From<GLDisplayType> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstGLPlatform")]
     pub struct GLPlatform: u32 {
         #[doc(alias = "GST_GL_PLATFORM_EGL")]
@@ -409,7 +412,7 @@ impl FromGlib<ffi::GstGLPlatform> for GLPlatform {
 
 impl StaticType for GLPlatform {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_platform_get_type()) }
     }
 }
@@ -428,7 +431,7 @@ impl glib::value::ValueType for GLPlatform {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for GLPlatform {
+unsafe impl<'a> glib::value::FromValue<'a> for GLPlatform {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -463,6 +466,7 @@ impl From<GLPlatform> for glib::Value {
 }
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstGLSLProfile")]
     pub struct GLSLProfile: u32 {
         #[doc(alias = "GST_GLSL_PROFILE_ES")]
@@ -510,7 +514,7 @@ impl FromGlib<ffi::GstGLSLProfile> for GLSLProfile {
 
 impl StaticType for GLSLProfile {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_glsl_profile_get_type()) }
     }
 }
@@ -529,7 +533,7 @@ impl glib::value::ValueType for GLSLProfile {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for GLSLProfile {
+unsafe impl<'a> glib::value::FromValue<'a> for GLSLProfile {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

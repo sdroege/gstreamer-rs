@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use glib::{translate::*, value::FromValue, value::ToValue, StaticType, Type};
+use glib::{prelude::*, translate::*};
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
@@ -59,7 +59,7 @@ impl FromGlib<ffi::GstAppLeakyType> for AppLeakyType {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for AppLeakyType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_app_leaky_type_get_type()) }
     }
 }
@@ -84,7 +84,7 @@ impl glib::value::ValueType for AppLeakyType {
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-unsafe impl<'a> FromValue<'a> for AppLeakyType {
+unsafe impl<'a> glib::value::FromValue<'a> for AppLeakyType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]
@@ -168,7 +168,7 @@ impl FromGlib<ffi::GstAppStreamType> for AppStreamType {
 
 impl StaticType for AppStreamType {
     #[inline]
-    fn static_type() -> Type {
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_app_stream_type_get_type()) }
     }
 }
@@ -187,7 +187,7 @@ impl glib::value::ValueType for AppStreamType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for AppStreamType {
+unsafe impl<'a> glib::value::FromValue<'a> for AppStreamType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

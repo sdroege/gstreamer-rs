@@ -30,22 +30,22 @@ impl PtpClock {
     }
 
     pub fn domain(&self) -> u32 {
-        glib::ObjectExt::property(self, "domain")
+        ObjectExt::property(self, "domain")
     }
 
     #[doc(alias = "grandmaster-clock-id")]
     pub fn grandmaster_clock_id(&self) -> u64 {
-        glib::ObjectExt::property(self, "grandmaster-clock-id")
+        ObjectExt::property(self, "grandmaster-clock-id")
     }
 
     #[doc(alias = "internal-clock")]
     pub fn internal_clock(&self) -> Option<gst::Clock> {
-        glib::ObjectExt::property(self, "internal-clock")
+        ObjectExt::property(self, "internal-clock")
     }
 
     #[doc(alias = "master-clock-id")]
     pub fn master_clock_id(&self) -> u64 {
-        glib::ObjectExt::property(self, "master-clock-id")
+        ObjectExt::property(self, "master-clock-id")
     }
 
     #[doc(alias = "grandmaster-clock-id")]
