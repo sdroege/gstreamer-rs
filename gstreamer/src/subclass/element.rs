@@ -616,7 +616,7 @@ mod tests {
 
         impl ElementImpl for TestElement {
             fn metadata() -> Option<&'static ElementMetadata> {
-                use once_cell::sync::Lazy;
+                use glib::once_cell::sync::Lazy;
                 static ELEMENT_METADATA: Lazy<ElementMetadata> = Lazy::new(|| {
                     ElementMetadata::new(
                         "Test Element",
@@ -630,7 +630,7 @@ mod tests {
             }
 
             fn pad_templates() -> &'static [PadTemplate] {
-                use once_cell::sync::Lazy;
+                use glib::once_cell::sync::Lazy;
                 static PAD_TEMPLATES: Lazy<Vec<PadTemplate>> = Lazy::new(|| {
                     let caps = crate::Caps::new_any();
                     vec![

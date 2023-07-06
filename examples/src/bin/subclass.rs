@@ -17,8 +17,8 @@ mod examples_common;
 // Our custom FIR filter element is defined in this module
 mod fir_filter {
     use byte_slice_cast::*;
+    use glib::once_cell::sync::Lazy;
     use gst_base::subclass::prelude::*;
-    use once_cell::sync::Lazy;
 
     // The debug category we use below for our filter
     pub static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {

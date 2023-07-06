@@ -49,7 +49,7 @@ unsafe extern "C" fn video_renderer_create_video_sink<T: PlayVideoRendererImpl>(
     video_renderer: *mut ffi::GstPlayVideoRenderer,
     play: *mut ffi::GstPlay,
 ) -> *mut gst::ffi::GstElement {
-    use once_cell::sync::Lazy;
+    use glib::once_cell::sync::Lazy;
     static VIDEO_SINK_QUARK: Lazy<glib::Quark> =
         Lazy::new(|| glib::Quark::from_str("gstreamer-rs-play-video-sink"));
 

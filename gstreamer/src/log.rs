@@ -2,9 +2,9 @@
 
 use std::{borrow::Cow, ffi::CStr, fmt, ptr};
 
+use glib::once_cell::sync::Lazy;
 use glib::{ffi::gpointer, prelude::*, translate::*, IntoGStr, IntoOptionalGStr};
 use libc::c_char;
-use once_cell::sync::Lazy;
 
 use crate::DebugLevel;
 

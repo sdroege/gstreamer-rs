@@ -43,7 +43,7 @@ macro_rules! bitflags_serialize_impl {
             where
                 S: serde::Serializer,
             {
-                use once_cell::sync::Lazy;
+                use glib::once_cell::sync::Lazy;
 
                 let mut handled = Self::empty();
                 let mut res = String::new();

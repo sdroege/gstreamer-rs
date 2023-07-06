@@ -1310,7 +1310,7 @@ mod tests {
 
         impl ElementImpl for TestTransform {
             fn metadata() -> Option<&'static gst::subclass::ElementMetadata> {
-                use once_cell::sync::Lazy;
+                use glib::once_cell::sync::Lazy;
                 static ELEMENT_METADATA: Lazy<gst::subclass::ElementMetadata> = Lazy::new(|| {
                     gst::subclass::ElementMetadata::new(
                         "Test Transform",
@@ -1324,7 +1324,7 @@ mod tests {
             }
 
             fn pad_templates() -> &'static [gst::PadTemplate] {
-                use once_cell::sync::Lazy;
+                use glib::once_cell::sync::Lazy;
                 static PAD_TEMPLATES: Lazy<Vec<gst::PadTemplate>> = Lazy::new(|| {
                     let caps = gst::Caps::new_any();
                     vec![

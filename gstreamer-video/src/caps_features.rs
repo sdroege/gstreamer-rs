@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use glib::once_cell::sync::Lazy;
 use gst::CapsFeatures;
-use once_cell::sync::Lazy;
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]

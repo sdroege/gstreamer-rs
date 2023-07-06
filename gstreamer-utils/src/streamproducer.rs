@@ -4,8 +4,8 @@ use std::{
     sync::{atomic, Arc, Mutex},
 };
 
+use glib::once_cell::sync::Lazy;
 use gst::{glib, prelude::*};
-use once_cell::sync::Lazy;
 use thiserror::Error;
 
 static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {

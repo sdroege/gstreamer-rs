@@ -10,9 +10,9 @@ mod examples_common;
 
 // Our custom compositor element is defined in this module.
 mod cairo_compositor {
+    use glib::once_cell::sync::Lazy;
     use gst_base::subclass::prelude::*;
     use gst_video::{prelude::*, subclass::prelude::*};
-    use once_cell::sync::Lazy;
 
     // In the imp submodule we include the actual implementation of the compositor.
     mod imp {

@@ -192,7 +192,7 @@ impl Bus {
         F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static,
     {
         #[cfg(not(feature = "v1_18"))]
-        use once_cell::sync::Lazy;
+        use glib::once_cell::sync::Lazy;
         #[cfg(not(feature = "v1_18"))]
         static SET_ONCE_QUARK: Lazy<glib::Quark> =
             Lazy::new(|| glib::Quark::from_str("gstreamer-rs-sync-handler"));

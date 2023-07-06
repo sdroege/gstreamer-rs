@@ -30,13 +30,13 @@ void main () {
 mod mirror {
     use std::sync::Mutex;
 
+    use glib::once_cell::sync::Lazy;
     use gst_base::subclass::BaseTransformMode;
     use gst_gl::{
         prelude::*,
         subclass::{prelude::*, GLFilterMode},
         *,
     };
-    use once_cell::sync::Lazy;
 
     use super::{gl, FRAGMENT_SHADER};
 

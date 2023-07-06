@@ -71,8 +71,8 @@ mod custom_meta {
     mod imp {
         use std::{mem, ptr};
 
+        use glib::once_cell::sync::Lazy;
         use glib::translate::*;
-        use once_cell::sync::Lazy;
 
         pub(super) struct CustomMetaParams {
             pub label: String,

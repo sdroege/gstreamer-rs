@@ -224,7 +224,7 @@ unsafe extern "C" fn factory_create_pipeline<T: RTSPMediaFactoryImpl>(
     ptr: *mut ffi::GstRTSPMediaFactory,
     media: *mut ffi::GstRTSPMedia,
 ) -> *mut gst::ffi::GstElement {
-    use once_cell::sync::Lazy;
+    use glib::once_cell::sync::Lazy;
 
     static PIPELINE_QUARK: Lazy<glib::Quark> =
         Lazy::new(|| glib::Quark::from_str("gstreamer-rs-rtsp-media-pipeline"));

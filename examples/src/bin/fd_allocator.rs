@@ -361,11 +361,11 @@ mod video_filter {
         use std::{mem::ManuallyDrop, os::unix::prelude::FromRawFd};
 
         use anyhow::Error;
+        use glib::once_cell::sync::Lazy;
         use gst::{subclass::prelude::*, PadDirection, PadPresence, PadTemplate};
         use gst_app::gst_base::subclass::BaseTransformMode;
         use gst_video::{subclass::prelude::*, VideoFrameRef};
         use memmap2::MmapMut;
-        use once_cell::sync::Lazy;
 
         static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
             gst::DebugCategory::new(

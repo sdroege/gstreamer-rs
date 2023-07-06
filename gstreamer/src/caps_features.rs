@@ -9,8 +9,8 @@ use std::{
     ptr, str,
 };
 
+use glib::once_cell::sync::Lazy;
 use glib::{translate::*, IntoGStr, StaticType};
-use once_cell::sync::Lazy;
 
 #[doc(alias = "GstCapsFeatures")]
 #[repr(transparent)]

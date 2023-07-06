@@ -36,7 +36,6 @@ cairo-rs = { git = "https://github.com/gtk-rs/gtk-rs-core", features=["use_glib"
 pango = { git = "https://github.com/gtk-rs/gtk-rs-core", optional = true }
 pangocairo = { git = "https://github.com/gtk-rs/gtk-rs-core", optional = true }
 glutin = { version = "0.29", optional = true }
-once_cell = "1.0"
 image = { version = "0.24", optional = true, default-features = false, features = ["png", "jpeg"] }
 memmap2 = { version = "0.7", optional = true }
 memfd = { version = "0.6", optional = true }

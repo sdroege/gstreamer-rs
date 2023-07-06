@@ -351,7 +351,7 @@ impl AppSink {
     #[doc(alias = "gst_app_sink_set_callbacks")]
     pub fn set_callbacks(&self, callbacks: AppSinkCallbacks) {
         #[cfg(not(feature = "v1_18"))]
-        use once_cell::sync::Lazy;
+        use glib::once_cell::sync::Lazy;
         #[cfg(not(feature = "v1_18"))]
         static SET_ONCE_QUARK: Lazy<glib::Quark> =
             Lazy::new(|| glib::Quark::from_str("gstreamer-rs-app-sink-callbacks"));
