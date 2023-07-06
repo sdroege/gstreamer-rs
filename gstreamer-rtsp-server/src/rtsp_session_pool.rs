@@ -5,8 +5,9 @@ use std::mem::transmute;
 use glib::{
     ffi::{gboolean, gpointer},
     prelude::*,
-    source::{ControlFlow, Priority},
+    source::Priority,
     translate::*,
+    ControlFlow,
 };
 
 use crate::RTSPSessionPool;

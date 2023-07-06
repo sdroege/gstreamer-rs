@@ -13,8 +13,9 @@ use futures_util::{stream::FusedStream, StreamExt};
 use glib::{
     ffi::{gboolean, gpointer},
     prelude::*,
-    source::{ControlFlow, Priority},
+    source::Priority,
     translate::*,
+    ControlFlow,
 };
 
 use crate::{Bus, BusSyncReply, Message, MessageType};
