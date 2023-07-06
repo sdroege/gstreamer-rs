@@ -57,13 +57,13 @@ impl PtpClock {
     /// Add a PTP clock statistics callback
     #[doc(alias = "gst_ptp_statistics_callback_add")]
     pub fn add_statistics_callback<
-        F: Fn(u8, &gst::StructureRef) -> glib::Continue + 'static + Send + Sync,
+        F: Fn(u8, &gst::StructureRef) -> glib::ControlFlow + 'static + Send + Sync,
     >(
         func: F,
     ) -> PtpStatisticsCallback {
         unsafe {
             unsafe extern "C" fn trampoline<
-                F: Fn(u8, &gst::StructureRef) -> glib::Continue + 'static + Send + Sync,
+                F: Fn(u8, &gst::StructureRef) -> glib::ControlFlow + 'static + Send + Sync,
             >(
                 domain: u8,
                 stats: *const gst::ffi::GstStructure,
@@ -74,7 +74,7 @@ impl PtpClock {
             }
 
             unsafe extern "C" fn destroy<
-                F: Fn(u8, &gst::StructureRef) -> glib::Continue + 'static + Send + Sync,
+                F: Fn(u8, &gst::StructureRef) -> glib::ControlFlow + 'static + Send + Sync,
             >(
                 user_data: glib::ffi::gpointer,
             ) {

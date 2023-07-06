@@ -52,7 +52,7 @@ fn example_main() {
         // we moved into this callback.
         let pipeline = match pipeline_weak.upgrade() {
             Some(pipeline) => pipeline,
-            None => return glib::Continue(true),
+            None => return glib::ControlFlow::Continue,
         };
 
         //let pos = pipeline.query_position(gst::Format::Time).unwrap_or(-1);
@@ -87,7 +87,7 @@ fn example_main() {
 
         println!("{} / {}", pos.display(), dur.display());
 
-        glib::Continue(true)
+        glib::ControlFlow::Continue
     });
 
     // Need to move a new reference into the closure.
@@ -113,7 +113,7 @@ fn example_main() {
                 _ => (),
             };
 
-            glib::Continue(true)
+            glib::ControlFlow::Continue
         })
         .expect("Failed to add bus watch");
 

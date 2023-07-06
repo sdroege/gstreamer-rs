@@ -186,7 +186,7 @@ fn create_ui(app: &gtk::Application) {
         // we moved into this callback.
         let pipeline = match pipeline_weak.upgrade() {
             Some(pipeline) => pipeline,
-            None => return glib::Continue(false),
+            None => return glib::ControlFlow::Break,
         };
 
         // Query the current playing position from the underlying pipeline.
@@ -194,7 +194,7 @@ fn create_ui(app: &gtk::Application) {
         // Display the playing position in the gui.
         label.set_text(&format!("Position: {:.0}", position.display()));
         // Tell the timeout to continue calling this callback.
-        glib::Continue(true)
+        glib::ControlFlow::Continue
     });
 
     let bus = pipeline.bus().unwrap();
@@ -210,7 +210,7 @@ fn create_ui(app: &gtk::Application) {
 
             let app = match app_weak.upgrade() {
                 Some(app) => app,
-                None => return glib::Continue(false),
+                None => return glib::ControlFlow::Break,
             };
 
             match msg.view() {
@@ -227,7 +227,7 @@ fn create_ui(app: &gtk::Application) {
                 _ => (),
             };
 
-            glib::Continue(true)
+            glib::ControlFlow::Continue
         })
         .expect("Failed to add bus watch");
 

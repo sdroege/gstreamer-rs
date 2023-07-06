@@ -5,13 +5,15 @@ use std::mem::transmute;
 use glib::{
     ffi::{gboolean, gpointer},
     prelude::*,
-    source::{Continue, Priority},
+    source::{ControlFlow, Priority},
     translate::*,
 };
 
 use crate::RTSPSessionPool;
 
-unsafe extern "C" fn trampoline_watch<F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static>(
+unsafe extern "C" fn trampoline_watch<
+    F: FnMut(&RTSPSessionPool) -> ControlFlow + Send + 'static,
+>(
     pool: *mut ffi::GstRTSPSessionPool,
     func: gpointer,
 ) -> gboolean {
@@ -20,14 +22,14 @@ unsafe extern "C" fn trampoline_watch<F: FnMut(&RTSPSessionPool) -> Continue + S
 }
 
 unsafe extern "C" fn destroy_closure_watch<
-    F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static,
+    F: FnMut(&RTSPSessionPool) -> ControlFlow + Send + 'static,
 >(
     ptr: gpointer,
 ) {
     let _ = Box::<F>::from_raw(ptr as *mut _);
 }
 
-fn into_raw_watch<F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static>(func: F) -> gpointer {
+fn into_raw_watch<F: FnMut(&RTSPSessionPool) -> ControlFlow + Send + 'static>(func: F) -> gpointer {
     #[allow(clippy::type_complexity)]
     let func: Box<F> = Box::new(func);
     Box::into_raw(func) as gpointer
@@ -42,7 +44,7 @@ pub trait RTSPSessionPoolExtManual: sealed::Sealed + IsA<RTSPSessionPool> + 'sta
     #[doc(alias = "gst_rtsp_session_pool_create_watch")]
     fn create_watch<F>(&self, name: Option<&str>, priority: Priority, func: F) -> glib::Source
     where
-        F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static,
+        F: FnMut(&RTSPSessionPool) -> ControlFlow + Send + 'static,
     {
         skip_assert_initialized!();
         unsafe {

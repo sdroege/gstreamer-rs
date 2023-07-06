@@ -115,7 +115,7 @@ fn example_main() {
             // we moved into this callback.
             let pipeline = match pipeline_weak.upgrade() {
                 Some(pipeline) => pipeline,
-                None => return glib::Continue(false),
+                None => return glib::ControlFlow::Break,
             };
             println!("Sending custom event to the pipeline with send_eos={send_eos}");
             let ev = ExampleCustomEvent::new(*send_eos);
@@ -124,14 +124,14 @@ fn example_main() {
             }
             // Remove this handler, the pipeline will shutdown once our pad probe catches the custom
             // event and sends EOS
-            glib::Continue(false)
+            glib::ControlFlow::Break
         });
     }
 
     let main_loop_clone = main_loop.clone();
     // This sets the bus's signal handler (don't be mislead by the "add", there can only be one).
     // Every message from the bus is passed through this function. Its returnvalue determines
-    // whether the handler wants to be called again. If glib::Continue(false) is returned, the
+    // whether the handler wants to be called again. If glib::ControlFlow::Break is returned, the
     // handler is removed and will never be called again. The mainloop still runs though.
     let _bus_watch = bus
         .add_watch(move |_, msg| {
@@ -158,7 +158,7 @@ fn example_main() {
             };
 
             // Tell the mainloop to continue executing this callback.
-            glib::Continue(true)
+            glib::ControlFlow::Continue
         })
         .expect("Failed to add bus watch");
 

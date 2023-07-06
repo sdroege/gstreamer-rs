@@ -13,13 +13,13 @@ use futures_util::{stream::FusedStream, StreamExt};
 use glib::{
     ffi::{gboolean, gpointer},
     prelude::*,
-    source::{Continue, Priority},
+    source::{ControlFlow, Priority},
     translate::*,
 };
 
 use crate::{Bus, BusSyncReply, Message, MessageType};
 
-unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + Send + 'static>(
+unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> ControlFlow + Send + 'static>(
     bus: *mut ffi::GstBus,
     msg: *mut ffi::GstMessage,
     func: gpointer,
@@ -29,20 +29,20 @@ unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + Sen
 }
 
 unsafe extern "C" fn destroy_closure_watch<
-    F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
+    F: FnMut(&Bus, &Message) -> ControlFlow + Send + 'static,
 >(
     ptr: gpointer,
 ) {
     let _ = Box::<F>::from_raw(ptr as *mut _);
 }
 
-fn into_raw_watch<F: FnMut(&Bus, &Message) -> Continue + Send + 'static>(func: F) -> gpointer {
+fn into_raw_watch<F: FnMut(&Bus, &Message) -> ControlFlow + Send + 'static>(func: F) -> gpointer {
     #[allow(clippy::type_complexity)]
     let func: Box<F> = Box::new(func);
     Box::into_raw(func) as gpointer
 }
 
-unsafe extern "C" fn trampoline_watch_local<F: FnMut(&Bus, &Message) -> Continue + 'static>(
+unsafe extern "C" fn trampoline_watch_local<F: FnMut(&Bus, &Message) -> ControlFlow + 'static>(
     bus: *mut ffi::GstBus,
     msg: *mut ffi::GstMessage,
     func: gpointer,
@@ -52,13 +52,15 @@ unsafe extern "C" fn trampoline_watch_local<F: FnMut(&Bus, &Message) -> Continue
     (func.get_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib()
 }
 
-unsafe extern "C" fn destroy_closure_watch_local<F: FnMut(&Bus, &Message) -> Continue + 'static>(
+unsafe extern "C" fn destroy_closure_watch_local<
+    F: FnMut(&Bus, &Message) -> ControlFlow + 'static,
+>(
     ptr: gpointer,
 ) {
     let _ = Box::<glib::thread_guard::ThreadGuard<F>>::from_raw(ptr as *mut _);
 }
 
-fn into_raw_watch_local<F: FnMut(&Bus, &Message) -> Continue + 'static>(func: F) -> gpointer {
+fn into_raw_watch_local<F: FnMut(&Bus, &Message) -> ControlFlow + 'static>(func: F) -> gpointer {
     #[allow(clippy::type_complexity)]
     let func: Box<glib::thread_guard::ThreadGuard<F>> =
         Box::new(glib::thread_guard::ThreadGuard::new(func));
@@ -109,7 +111,7 @@ impl Bus {
     #[doc(alias = "gst_bus_create_watch")]
     pub fn create_watch<F>(&self, name: Option<&str>, priority: Priority, func: F) -> glib::Source
     where
-        F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
+        F: FnMut(&Bus, &Message) -> ControlFlow + Send + 'static,
     {
         skip_assert_initialized!();
         unsafe {
@@ -137,7 +139,7 @@ impl Bus {
     #[doc(alias = "gst_bus_add_watch_full")]
     pub fn add_watch<F>(&self, func: F) -> Result<BusWatchGuard, glib::BoolError>
     where
-        F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
+        F: FnMut(&Bus, &Message) -> ControlFlow + Send + 'static,
     {
         unsafe {
             let res = ffi::gst_bus_add_watch_full(
@@ -160,7 +162,7 @@ impl Bus {
     #[doc(alias = "gst_bus_add_watch_full")]
     pub fn add_watch_local<F>(&self, func: F) -> Result<BusWatchGuard, glib::BoolError>
     where
-        F: FnMut(&Bus, &Message) -> Continue + 'static,
+        F: FnMut(&Bus, &Message) -> ControlFlow + 'static,
     {
         unsafe {
             let ctx = glib::MainContext::ref_thread_default();

@@ -146,7 +146,7 @@ fn tutorial_main() -> Result<(), Error> {
                 );
                 eprintln!("Debugging information: {:?}", err.debug());
                 main_loop_clone.quit();
-                Continue(false)
+                glib::ControlFlow::Break
             }
             MessageView::StateChanged(state_changed) => {
                 if state_changed
@@ -157,14 +157,14 @@ fn tutorial_main() -> Result<(), Error> {
                 {
                     analyze_streams(&playbin_clone);
                 }
-                Continue(true)
+                glib::ControlFlow::Continue
             }
             MessageView::Eos(..) => {
                 println!("Reached end of stream");
                 main_loop_clone.quit();
-                Continue(false)
+                glib::ControlFlow::Break
             }
-            _ => Continue(true),
+            _ => glib::ControlFlow::Continue,
         }
     })?;
 

@@ -178,7 +178,7 @@ fn main() {
                     d.source_id = Some(glib::source::idle_add(move || {
                         let data = match data_weak.upgrade() {
                             Some(data) => data,
-                            None => return glib::Continue(false),
+                            None => return glib::ControlFlow::Break,
                         };
 
                         let (appsrc, buffer) = {
@@ -219,7 +219,7 @@ fn main() {
                             (data.appsrc.clone(), buffer)
                         };
 
-                        glib::Continue(appsrc.push_buffer(buffer).is_ok())
+                        glib::ControlFlow::from(appsrc.push_buffer(buffer).is_ok())
                     }));
                 }
             })

@@ -123,7 +123,7 @@ fn tutorial_main() -> Result<(), Error> {
     ready_rx.attach(Some(&main_loop.context()), move |command: Command| {
         let pipeline = match pipeline_weak.upgrade() {
             Some(pipeline) => pipeline,
-            None => return glib::Continue(true),
+            None => return glib::ControlFlow::Continue,
         };
 
         match command {
@@ -138,7 +138,7 @@ fn tutorial_main() -> Result<(), Error> {
                 main_loop_clone.quit();
             }
         }
-        glib::Continue(true)
+        glib::ControlFlow::Continue
     });
 
     // Handle bus errors / EOS correctly
@@ -150,7 +150,7 @@ fn tutorial_main() -> Result<(), Error> {
 
         let pipeline = match pipeline_weak.upgrade() {
             Some(pipeline) => pipeline,
-            None => return glib::Continue(true),
+            None => return glib::ControlFlow::Continue,
         };
 
         match message.view() {
@@ -162,7 +162,7 @@ fn tutorial_main() -> Result<(), Error> {
                 );
                 eprintln!("Debugging information: {:?}", err.debug());
                 main_loop_clone.quit();
-                Continue(false)
+                glib::ControlFlow::Break
             }
             MessageView::Eos(..) => {
                 println!("Reached end of stream");
@@ -170,9 +170,9 @@ fn tutorial_main() -> Result<(), Error> {
                     .set_state(gst::State::Ready)
                     .expect("Unable to set the pipeline to the `Ready` state");
                 main_loop_clone.quit();
-                Continue(false)
+                glib::ControlFlow::Break
             }
-            _ => Continue(true),
+            _ => glib::ControlFlow::Continue,
         }
     })?;
 

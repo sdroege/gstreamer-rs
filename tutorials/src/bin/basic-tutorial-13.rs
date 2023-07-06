@@ -139,7 +139,7 @@ USAGE: Choose one of the following options, then press enter:
     ready_rx.attach(Some(&main_loop.context()), move |command: Command| {
         let pipeline = match pipeline_weak.upgrade() {
             Some(pipeline) => pipeline,
-            None => return glib::Continue(true),
+            None => return glib::ControlFlow::Continue,
         };
         match command {
             Command::PlayPause => {
@@ -180,7 +180,7 @@ USAGE: Choose one of the following options, then press enter:
                 main_loop_clone.quit();
             }
         }
-        glib::Continue(true)
+        glib::ControlFlow::Continue
     });
 
     main_loop.run();

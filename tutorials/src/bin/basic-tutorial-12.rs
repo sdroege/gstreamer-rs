@@ -27,7 +27,7 @@ fn tutorial_main() -> Result<(), Error> {
         .add_watch(move |_, msg| {
             let pipeline = match pipeline_weak.upgrade() {
                 Some(pipeline) => pipeline,
-                None => return glib::Continue(true),
+                None => return glib::ControlFlow::Continue,
             };
             let main_loop = &main_loop_clone;
             match msg.view() {
@@ -49,7 +49,7 @@ fn tutorial_main() -> Result<(), Error> {
                 gst::MessageView::Buffering(buffering) => {
                     // If the stream is live, we do not care about buffering
                     if is_live {
-                        return glib::Continue(true);
+                        return glib::ControlFlow::Continue;
                     }
 
                     let percent = buffering.percent();
@@ -73,7 +73,7 @@ fn tutorial_main() -> Result<(), Error> {
                 }
                 _ => (),
             }
-            glib::Continue(true)
+            glib::ControlFlow::Continue
         })
         .expect("Failed to add bus watch");
 

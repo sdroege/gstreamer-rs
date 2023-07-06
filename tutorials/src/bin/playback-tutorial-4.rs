@@ -59,7 +59,7 @@ fn tutorial_main() -> Result<(), Error> {
             let buffering_level = &buffering_level_clone;
             let pipeline = match pipeline_weak.upgrade() {
                 Some(pipeline) => pipeline,
-                None => return glib::Continue(false),
+                None => return glib::ControlFlow::Break,
             };
             let main_loop = &main_loop_clone;
             match msg.view() {
@@ -78,7 +78,7 @@ fn tutorial_main() -> Result<(), Error> {
                 MessageView::Buffering(buffering) => {
                     // If the stream is live, we do not care about buffering.
                     if is_live {
-                        return glib::Continue(true);
+                        return glib::ControlFlow::Continue;
                     }
 
                     // Wait until buffering is complete before start/resume playing.
@@ -98,7 +98,7 @@ fn tutorial_main() -> Result<(), Error> {
                 _ => (),
             };
 
-            glib::Continue(true)
+            glib::ControlFlow::Continue
         })
         .expect("Failed to add bus watch");
 
@@ -119,7 +119,7 @@ fn tutorial_main() -> Result<(), Error> {
 
         let pipeline = match pipeline_weak_.upgrade() {
             Some(pipeline) => pipeline,
-            None => return glib::Continue(false),
+            None => return glib::ControlFlow::Break,
         };
         let mut graph = vec![b' '; GRAPH_LENGTH];
         let mut buffering = gst::query::Buffering::new(gst::Format::Percent);
@@ -170,7 +170,7 @@ fn tutorial_main() -> Result<(), Error> {
 
         std::io::stdout().flush().unwrap();
 
-        glib::Continue(true)
+        glib::ControlFlow::Continue
     });
 
     main_loop.run();

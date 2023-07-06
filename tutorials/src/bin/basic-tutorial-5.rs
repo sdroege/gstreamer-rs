@@ -145,7 +145,7 @@ mod tutorial5 {
                 }
             }
 
-            Continue(true)
+            glib::ControlFlow::Continue
         });
 
         let controls = gtk::Box::new(gtk::Orientation::Horizontal, 0);

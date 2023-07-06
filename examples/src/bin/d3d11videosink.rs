@@ -351,7 +351,7 @@ fn main() -> Result<()> {
                 _ => (),
             };
 
-            glib::Continue(true)
+            glib::ControlFlow::Continue
         })
         .unwrap();
 
