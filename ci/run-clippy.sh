@@ -34,7 +34,7 @@ done
 
 # Keep in sync with examples/Cargo.toml
 # List all features except windows/win32
-EXAMPLES_FEATURES="--features=gtksink,gtkvideooverlay,gtkvideooverlay-x11,gtkvideooverlay-quartz,rtsp-server,rtsp-server-record,pango-cairo,overlay-composition,gl,gst-gl-x11,gst-gl-wayland,gst-gl-egl,allocators,gst-play,gst-player,ges,image,cairo-rs,gst-video/v1_18"
+EXAMPLES_FEATURES="--features=rtsp-server,rtsp-server-record,pango-cairo,overlay-composition,gl,gst-gl-x11,gst-gl-wayland,gst-gl-egl,allocators,gst-play,gst-player,ges,image,cairo-rs,gst-video/v1_18"
 
 # And also run over all the examples/tutorials
 cargo clippy --locked --color=always --manifest-path examples/Cargo.toml --all-targets "$EXAMPLES_FEATURES" -- $CLIPPY_LINTS

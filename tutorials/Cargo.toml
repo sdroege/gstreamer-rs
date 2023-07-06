@@ -8,8 +8,6 @@ rust-version = "1.66"
 
 [dependencies]
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }
-gdk = { git = "https://github.com/gtk-rs/gtk3-rs", optional = true }
-gtk = { git = "https://github.com/gtk-rs/gtk3-rs", optional = true }
 gst = { package = "gstreamer", path = "../gstreamer" }
 gst-audio = { package = "gstreamer-audio", path = "../gstreamer-audio" }
 gst-video = { package = "gstreamer-video", path = "../gstreamer-video", optional = true }
@@ -22,11 +20,6 @@ termion = { version = "2", optional = true }
 [target.'cfg(target_os = "macos")'.dependencies]
 cocoa = "0.25"
 objc = "0.2.7"
-
-[features]
-tutorial5 = ["gtk", "gdk", "gst-video"]
-tutorial5-x11 = ["tutorial5"]
-tutorial5-quartz = ["tutorial5"]
 
 [[bin]]
 name = "basic-tutorial-13"
