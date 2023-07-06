@@ -15,7 +15,6 @@ rust-version = "1.66"
 
 [dependencies]
 libc = "0.2"
-bitflags = "1.0"
 ffi = { package = "gstreamer-allocators-sys", path = "sys" }
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }
 gst = { package = "gstreamer", path = "../gstreamer" }
