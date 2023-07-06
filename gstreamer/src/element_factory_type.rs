@@ -1,10 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use bitflags::bitflags;
-use glib::translate::*;
+use glib::{bitflags::bitflags, translate::*};
 
 bitflags! {
     #[doc(alias = "GstElementFactoryListType")]
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     pub struct ElementFactoryType: u64 {
         #[doc(alias = "GST_ELEMENT_FACTORY_TYPE_DECODER")]
         const DECODER          = ffi::GST_ELEMENT_FACTORY_TYPE_DECODER;
@@ -51,10 +51,10 @@ bitflags! {
         #[doc(alias = "GST_ELEMENT_FACTORY_TYPE_MEDIA_ANY")]
         const MEDIA_ANY        = ffi::GST_ELEMENT_FACTORY_TYPE_MEDIA_ANY;
 
-        const VIDEO_ENCODER    = Self::ENCODER.bits | Self::MEDIA_VIDEO.bits | Self::MEDIA_IMAGE.bits;
-        const AUDIO_ENCODER    = Self::ENCODER.bits | Self::MEDIA_AUDIO.bits;
-        const AUDIOVIDEO_SINKS = Self::SINK.bits | Self::MEDIA_AUDIO.bits | Self::MEDIA_VIDEO.bits | Self::MEDIA_IMAGE.bits;
-        const DECODABLE        = Self::DECODER.bits | Self::DEMUXER.bits | Self::DEPAYLOADER.bits | Self::PARSER.bits | Self::DECRYPTOR.bits;
+        const VIDEO_ENCODER    = Self::ENCODER.bits() | Self::MEDIA_VIDEO.bits() | Self::MEDIA_IMAGE.bits();
+        const AUDIO_ENCODER    = Self::ENCODER.bits() | Self::MEDIA_AUDIO.bits();
+        const AUDIOVIDEO_SINKS = Self::SINK.bits() | Self::MEDIA_AUDIO.bits() | Self::MEDIA_VIDEO.bits() | Self::MEDIA_IMAGE.bits();
+        const DECODABLE        = Self::DECODER.bits() | Self::DEMUXER.bits() | Self::DEPAYLOADER.bits() | Self::PARSER.bits() | Self::DECRYPTOR.bits();
     }
 }
 
