@@ -46,3 +46,8 @@ allow-git = [
 [[bans.skip]]
 name = "syn"
 version = "1.0"
+
+# Various crates depend on an older version of bitflags
+[[bans.skip]]
+name = "bitflags"
+version = "1.0"
