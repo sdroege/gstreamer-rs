@@ -35,7 +35,7 @@ pub trait AudioVisualizerExtManual:
         let sinkpad = self.static_pad("sink").expect("sink pad presence");
         let _stream_lock = sinkpad.stream_lock();
 
-        let mut ptr = self.as_ptr() as *mut ffi::GstAudioVisualizer;
+        let ptr = self.as_ptr() as *mut ffi::GstAudioVisualizer;
         unsafe {
             (*ptr).req_spf = spf;
         }
