@@ -38,4 +38,4 @@ v1_24 = ["gst/v1_24", "gst-sdp/v1_24", "gst-rtsp/v1_24", "gst-net/v1_24", "ffi/v
 serde = ["dep:serde", "gst/serde", "gst-rtsp/serde"]
 
 [package.metadata.docs.rs]
-rustdoc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]

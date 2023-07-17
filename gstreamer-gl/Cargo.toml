@@ -39,4 +39,4 @@ v1_24 = ["gst/v1_24", "gst-base/v1_24", "gst-video/v1_24", "ffi/v1_24", "v1_22"]
 serde = ["dep:serde", "gst/serde", "gst-video/serde"]
 
 [package.metadata.docs.rs]
-rustdoc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]

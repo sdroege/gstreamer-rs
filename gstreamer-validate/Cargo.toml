@@ -28,4 +28,4 @@ default = []
 v1_24 = ["gst/v1_24", "ffi/v1_24"]
 
 [package.metadata.docs.rs]
-rustdoc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
