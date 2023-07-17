@@ -9,6 +9,9 @@ cd gtk
 
 meson setup build \
     -D prefix=/usr/local \
+    -Ddemos=false  \
+    -Dbuild-testsuite=false  \
+    -Dbuild-examples=false  \
     -Dbuild-tests=false  \
     -Dwayland-protocols:tests=false
 meson compile -C build
