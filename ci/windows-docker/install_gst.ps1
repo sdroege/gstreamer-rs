@@ -1,30 +1,18 @@
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
+# Make sure powershell exits on errors
+$ErrorActionPreference = "Stop"
 
 # Download gstreamer and all its subprojects
 git clone -b $env:DEFAULT_BRANCH --depth 1 https://gitlab.freedesktop.org/gstreamer/gstreamer.git C:\gstreamer
-if (!$?) {
-  Write-Host "Failed to clone gstreamer"
-  Exit 1
-}
 
 Set-Location C:\gstreamer
 
 # Copy the cache we already have in the image to avoid massive redownloads
 Move-Item C:/subprojects/*  C:\gstreamer\subprojects
 
-if (!$?) {
-  Write-Host "Failed to copy subprojects cache"
-  Exit 1
-}
-
 # Update the subprojects cache
 Write-Output "Running meson subproject reset"
 meson subprojects update --reset
-
-if (!$?) {
-  Write-Host "Failed to reset subprojects state"
-  Exit 1
-}
 
 $env:MESON_ARGS = "--prefix=C:\gst-install\ " +
     "-Dglib:installed_tests=false " +
@@ -50,14 +38,6 @@ $env:MESON_ARGS = "--prefix=C:\gst-install\ " +
 Write-Output "Building gst"
 cmd.exe /C "C:\BuildTools\Common7\Tools\VsDevCmd.bat -host_arch=amd64 -arch=amd64 && meson setup _build $env:MESON_ARGS && meson compile -C _build && meson install -C _build"
 
-if (!$?) {
-  Write-Host "Failed to build and install gst"
-  Exit 1
-}
 
-cd C:\
-cmd /c rmdir /s /q  C:\gstreamer
-if (!$?) {
-  Write-Host "Failed to remove gst checkout"
-  Exit 1
-}
+cd c:\
+Remove-Item -LiteralPath "C:\gstreamer" -Force -Recurse
