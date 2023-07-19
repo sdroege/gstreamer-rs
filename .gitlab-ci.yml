@@ -151,7 +151,6 @@ trigger:
       libcsound64-dev llvm clang nasm libsodium-dev libwebp-dev
     FDO_DISTRIBUTION_EXEC: >-
       bash ci/install-gst.sh &&
-      bash ci/install-gtk4.sh &&
       bash ci/install-dav1d.sh &&
       pip3 install --break-system-packages git+http://gitlab.freedesktop.org/freedesktop/ci-templates &&
       pip3 install --break-system-packages tomli
@@ -505,6 +504,7 @@ pages:
 
 .windows rust docker build:
   stage: 'container-final'
+  timeout: '2h'
   needs: []
   variables:
     # Unlike the buildah/linux jobs, this file
