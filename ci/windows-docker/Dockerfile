@@ -23,3 +23,4 @@ RUN C:\install_dav1d.ps1
 
 RUN Invoke-WebRequest -Uri https://win.rustup.rs/x86_64 -OutFile C:\rustup-init.exe
 RUN C:\rustup-init.exe -y --profile minimal --default-toolchain $env:RUST_VERSION
+RUN cargo install cargo-c --version 0.9.21+cargo-0.71

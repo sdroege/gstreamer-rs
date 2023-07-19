@@ -134,25 +134,27 @@ trigger:
   stage: container-base
   variables:
     FDO_DISTRIBUTION_PACKAGES: >-
-      build-essential curl python3-setuptools liborc-0.4-dev libglib2.0-dev
-      libxml2-dev libdrm-dev libegl1-mesa-dev libgl1-mesa-dev libgbm-dev
-      libgles2-mesa-dev libgl1-mesa-dri libegl-dev libgl1-mesa-glx
-      libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates
-      ninja-build python3-pip flex bison libglib2.0-dev libx11-dev
-      libx11-xcb-dev libsoup2.4-dev libvorbis-dev libogg-dev libtheora-dev
-      libmatroska-dev libvpx-dev libopus-dev libgraphene-1.0-dev libjpeg-dev
-      libwayland-dev wayland-protocols python3-gi libavcodec-dev
-      libavformat-dev libavutil-dev libavfilter-dev libswscale-dev yasm
-      libx264-dev libfontconfig-dev libfreetype-dev libxkbcommon-dev libxi-dev
-      libxcb-render0-dev libxcb-shm0-dev libxcb1-dev libxext-dev
-      libxrender-dev libxrandr-dev libxcursor-dev libxdamage-dev libxfixes-dev
-      libxinerama-dev libgudev-1.0-dev libpango1.0-dev libcairo2-dev
-      libjson-glib-dev libgdk-pixbuf-2.0-dev libtiff-dev libpng-dev
-      libjpeg-dev libepoxy-dev libsass-dev
+      build-essential curl python3-setuptools libglib2.0-dev libxml2-dev
+      libdrm-dev libegl1-mesa-dev libgl1-mesa-dev libgbm-dev libgles2-mesa-dev
+      libgl1-mesa-dri libegl-dev libgl1-mesa-glx libwayland-egl1-mesa xz-utils
+      libssl-dev git wget ca-certificates ninja-build python3-pip flex bison
+      libglib2.0-dev libx11-dev libx11-xcb-dev libsoup2.4-dev libvorbis-dev
+      libogg-dev libtheora-dev libmatroska-dev libvpx-dev libopus-dev
+      libgraphene-1.0-dev libjpeg-dev libwayland-dev wayland-protocols
+      python3-gi libavcodec-dev libavformat-dev libavutil-dev libavfilter-dev
+      libswscale-dev yasm libx264-dev libfontconfig-dev libfreetype-dev
+      libxkbcommon-dev libxi-dev libxcb-render0-dev libxcb-shm0-dev
+      libxcb1-dev libxext-dev libxrender-dev libxrandr-dev libxcursor-dev
+      libxdamage-dev libxfixes-dev libxinerama-dev libgudev-1.0-dev
+      libpango1.0-dev libcairo2-dev libjson-glib-dev libgdk-pixbuf-2.0-dev
+      libtiff-dev libpng-dev libjpeg-dev libepoxy-dev libsass-dev sassc
+      libcsound64-dev llvm clang nasm libsodium-dev libwebp-dev
     FDO_DISTRIBUTION_EXEC: >-
       bash ci/install-gst.sh &&
       bash ci/install-gtk4.sh &&
-      pip3 install --break-system-packages git+http://gitlab.freedesktop.org/freedesktop/ci-templates
+      bash ci/install-dav1d.sh &&
+      pip3 install --break-system-packages git+http://gitlab.freedesktop.org/freedesktop/ci-templates &&
+      pip3 install --break-system-packages tomli
 
 .build-final-image:
   extends:
@@ -211,66 +213,6 @@ update-nightly:
   extends:
     - .debian:12-nightly
     - .dist-debian-container
-
-# GST_PLUGINS_RS_TOKEN is a variable of type 'Var' defined in gstreamer-rs CI
-# settings and containing a gst-plugins-rs pipeline trigger token
-.plugins-update:
-  stage: deploy
-  script:
-    - |
-    # FDO_DISTRIBUTION_IMAGE still has indirections
-    - echo $FDO_DISTRIBUTION_IMAGE
-    - DISTRO_IMAGE=$(eval echo ${FDO_DISTRIBUTION_IMAGE})
-    - echo $DISTRO_IMAGE
-    # retrieve the infos from the registry
-    - JSON_IMAGE=$(skopeo inspect docker://$DISTRO_IMAGE)
-    - IMAGE_PIPELINE_ID=$(echo $JSON_IMAGE | jq -r '.Labels["fdo.pipeline_id"]')
-    - echo $IMAGE_PIPELINE_ID
-    - echo $CI_PIPELINE_ID
-    - |
-      if [[ x"$IMAGE_PIPELINE_ID" == x"$CI_PIPELINE_ID" ]]; then
-        echo "Image has been updated, notify gst-plugins-rs"
-        curl -X POST -F "token=$GST_PLUGINS_RS_TOKEN" -F "ref=main" -F "variables[UPDATE_IMG]=$UPDATE_IMG" https://gitlab.freedesktop.org/api/v4/projects/1400/trigger/pipeline
-      else
-        echo "Image has not been updated, ignore"
-      fi
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "main" && $CI_PROJECT_PATH == "gstreamer/gstreamer-rs"'
-
-# Those jobs need to use another image as ours doesn't have 'skopeo'
-# and it's not easily installable in Debian stable for now.
-plugins-update-stable:
-  extends:
-    - .plugins-update
-    - .img-stable
-  image: quay.io/freedesktop.org/ci-templates:container-build-base-2021-07-29.0
-  needs:
-    - job: 'build-stable'
-      artifacts: false
-  variables:
-    UPDATE_IMG: "stable"
-
-plugins-update-msrv:
-  extends:
-    - .plugins-update
-    - .img-msrv
-  image: quay.io/freedesktop.org/ci-templates:container-build-base-2021-07-29.0
-  needs:
-    - job: 'build-msrv'
-      artifacts: false
-  variables:
-    UPDATE_IMG: "msrv"
-
-plugins-update-nightly:
-  extends:
-    - .plugins-update
-    - .img-nightly
-  image: quay.io/freedesktop.org/ci-templates:container-build-base-2021-07-29.0
-  needs:
-    - job: 'build-nightly'
-      artifacts: false
-  variables:
-    UPDATE_IMG: "nightly"
 
 .cargo_test_var: &cargo_test
     - ./ci/run-cargo-test.sh
