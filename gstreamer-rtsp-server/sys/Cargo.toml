@@ -59,7 +59,7 @@ readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 version = "0.21.0"
 edition = "2021"
-rust-version = "1.66"
+rust-version = "1.70"
 
 [package.metadata.docs.rs]
 features = []

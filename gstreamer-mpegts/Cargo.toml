@@ -11,7 +11,7 @@ homepage = "https://gstreamer.freedesktop.org"
 documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_mpegts/"
 keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
 edition = "2021"
-rust-version = "1.66"
+rust-version = "1.70"
 
 [dependencies]
 ffi = { package = "gstreamer-mpegts-sys", path = "sys" }
