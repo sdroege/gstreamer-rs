@@ -214,6 +214,22 @@ impl StreamProducer {
             .consumers
             .insert(consumer.clone(), stream_consumer);
 
+        // forward selected sticky events. We can send those now as appsrc will delay the events
+        // until stream-start, caps and segment are sent.
+        let events_to_forward = consumers.events_to_forward.clone();
+        // drop the lock before sending events
+        drop(consumers);
+
+        let appsink_pad = self.appsink.static_pad("sink").unwrap();
+        appsink_pad.sticky_events_foreach(|event| {
+            if events_to_forward.contains(&event.type_()) {
+                gst::debug!(CAT, obj: &self.appsink, "forward sticky event {:?}", event);
+                consumer.send_event(event.clone());
+            }
+
+            std::ops::ControlFlow::Continue(gst::EventForeachAction::Keep)
+        });
+
         Ok(())
     }
 
