@@ -189,7 +189,7 @@ fn example_main() -> Result<(), Error> {
 
                 // Request a sink pad from our encodebin, that can handle a raw videostream.
                 // The encodebin will then automatically create an internal pipeline, that encodes
-                // the audio stream in the format we specified in the EncodingProfile.
+                // the video stream in the format we specified in the EncodingProfile.
                 let enc_sink_pad = encodebin
                     .request_pad_simple("video_%u")
                     .expect("Could not get video pad from encodebin");
