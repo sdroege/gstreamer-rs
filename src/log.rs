@@ -7,11 +7,13 @@ use gstreamer::{
         GST_LEVEL_LOG, GST_LEVEL_MEMDUMP, GST_LEVEL_TRACE, GST_LEVEL_WARNING,
     },
     glib::{
-        gobject_ffi::{g_type_is_a, g_type_name},
-        translate::FromGlib,
+        gobject_ffi::{g_object_get_qdata, g_type_is_a, g_type_name},
+        translate::{FromGlib, IntoGlib},
     },
+    prelude::{IsA, ObjectExt},
 };
 use libc::{c_char, c_int, c_void};
+use once_cell::sync::OnceCell;
 use std::{convert::TryFrom, ffi::CStr};
 use tracing_core::{Callsite, Event, Level};
 
@@ -125,18 +127,48 @@ unsafe extern "C" fn log_callback(
                 )
             });
             let gobject_type_value = gobject_type_value.as_deref();
-            let gstobject_name = gobject_with_ty.and_then(|(obj, ty)| unsafe {
+            let gstobject = gobject_with_ty.and_then(|(obj, ty)| unsafe {
                 // SAFETY: g_type_is_a is provided valid types.
                 if bool::from_glib(g_type_is_a(ty, gst_object_get_type())) {
                     let gstobject = obj as *mut gstreamer::ffi::GstObject;
-                    // SAFETY: GstObject type has been verified above, `name` can be null and we
-                    // check for it. It "should" be valid null-terminated string if not null,
-                    // however.
-                    Some(CStr::from_ptr((*gstobject).name.as_ref()?).to_string_lossy())
+
+                    Some(gstobject)
                 } else {
                     None
                 }
             });
+
+            let gstobject_name = gstobject.as_ref().and_then(|gstobject| unsafe {
+                // SAFETY: GstObject type has been verified above, `name` can be null and we
+                // check for it. It "should" be valid null-terminated string if not null,
+                // however.
+                Some(CStr::from_ptr((*(*gstobject)).name.as_ref()?).to_string_lossy())
+            });
+
+            let user_span = gstobject.as_ref().and_then(|gstobject| unsafe {
+                let quark = span_quark().into_glib();
+                let mut obj = *gstobject;
+
+                let span = loop {
+                    // lookup object parents until one has a span associated
+                    let span = g_object_get_qdata(obj.cast(), quark);
+
+                    if span.is_null() {
+                        // do not call gst_object_get_parent() as it gets the OBJECT which could be already hold by the caller of the log
+                        obj = (*obj).parent;
+                        if obj.is_null() {
+                            break std::ptr::null();
+                        }
+                    } else {
+                        break span;
+                    }
+                };
+
+                let span = span.cast::<tracing::Span>().as_ref();
+
+                span
+            });
+
             let gstobject_name_value = gstobject_name.as_deref();
             let gstelement = gobject_with_ty.and_then(|(obj, ty)| unsafe {
                 // SAFETY: g_type_is_a is provided valid types.
@@ -206,7 +238,12 @@ unsafe extern "C" fn log_callback(
                 "gstpad.parent.pending_state" = gstpad_parent_pending_state_value;
             ];
             let valueset = fields.value_set(&values);
-            let event = Event::new(meta, &valueset);
+
+            let event = match user_span {
+                Some(user_span) => Event::new_child_of(user_span, meta, &valueset),
+                None => Event::new(meta, &valueset),
+            };
+
             dispatcher.event(&event);
         });
     })
@@ -224,5 +261,43 @@ pub(crate) fn debug_remove_log_function() {
     unsafe {
         // SAFETY: this function has no soundness invariants.
         gst_debug_remove_log_function(Some(log_callback));
+    }
+}
+
+
+#[inline]
+fn span_quark() -> &'static gstreamer::glib::Quark {
+    static ELEMENT_SPAN_QUARK: OnceCell<gstreamer::glib::Quark> = OnceCell::new();
+    // Generate a unique TypeId specifically for Span quark’s name. This gives some probabilistic
+    // security against users of this library overwriting our span with their own types, making
+    // attach_span unsound.
+    //
+    // We’re still going to be storing `tracing::Span` within the objects directly, because that’s
+    // just more convenient.
+    struct QDataTracingSpan(tracing::Span);
+
+    ELEMENT_SPAN_QUARK.get_or_init(|| {
+        let type_id = std::any::TypeId::of::<QDataTracingSpan>();
+        let mut hasher = std::collections::hash_map::DefaultHasher::new();
+        std::hash::Hash::hash(&type_id, &mut hasher);
+        let type_id_hash = std::hash::Hasher::finish(&hasher);
+        let key = format!("tracing-gstreamer:{}\0", type_id_hash);
+        let gstr = gstreamer::glib::GStr::from_utf8_with_nul(key.as_bytes()).unwrap();
+        gstreamer::glib::Quark::from_str(gstr)
+    })
+}
+
+pub(crate) fn attach_span<O: IsA<gstreamer::Object>>(object: &O, span: tracing::Span) {
+    unsafe {
+        // SAFETY:
+        //
+        // **Type safety**: We have given our best shot at making sure that no other random piece
+        // of code, either our own, or any other, interacting with this crate, overwrites our
+        // `qdata` with their own code. In that sense the only thing that might get stored is a
+        // `tracing::Span`.
+        //
+        // **Datarace safety**: TODO: this function can be still called in a loop in a separate
+        // thread to introduce a data race with a function that reads this data out.
+        object.set_qdata(*span_quark(), span);
     }
 }

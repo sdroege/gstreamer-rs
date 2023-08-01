@@ -4,6 +4,7 @@ use gstreamer as g;
 use gstreamer::glib::{translate::ToGlibPtr, Cast, ObjectType};
 use std::{
     collections::VecDeque,
+    sync::atomic::{AtomicU64, Ordering},
     sync::{Arc, Mutex},
 };
 use tracing::{
@@ -33,6 +34,7 @@ struct GstEvent {
     kvs: KV,
     level: Level,
     target: &'static str,
+    parent_id: Option<Id>,
 }
 
 impl Visit for GstEvent {
@@ -121,6 +123,7 @@ struct MockSubscriber {
     expected: Arc<Mutex<VecDeque<Expect>>>,
     filter: fn(&Metadata<'_>) -> bool,
     name: &'static str,
+    span_id_counter: AtomicU64,
 }
 
 impl MockSubscriber {
@@ -130,6 +133,7 @@ impl MockSubscriber {
             expected,
             name,
             filter,
+            span_id_counter: AtomicU64::new(99),
         }
     }
 
@@ -182,6 +186,14 @@ impl Subscriber for MockSubscriber {
                         expected.level,
                     );
                 }
+                if e.parent() != expected.parent_id.as_ref() {
+                    panic!(
+                        "[{}] event parent {:?} does not match expected {:?}",
+                        self.name,
+                        e.parent(),
+                        expected.parent_id
+                    );
+                }
                 e.record(&mut expected);
             }
         }
@@ -198,8 +210,9 @@ impl Subscriber for MockSubscriber {
     fn record(&self, _: &Id, _: &Record<'_>) {
         todo!()
     }
-    fn new_span(&self, _: &Attributes<'_>) -> Id {
-        todo!()
+    fn new_span(&self, attributes: &Attributes<'_>) -> Id {
+        println!("[{}] new_span: {:?}", self.name, attributes);
+        Id::from_u64(self.span_id_counter.fetch_add(1, Ordering::SeqCst))
     }
 }
 
@@ -226,6 +239,7 @@ fn test_simple_error() {
             kvs: Default::default(),
             level: Level::ERROR,
             target: "test_error_cat",
+            parent_id: None,
         })],
     );
 }
@@ -243,6 +257,7 @@ fn test_simple_warning() {
             kvs: Default::default(),
             level: Level::WARN,
             target: "test_simple_cat",
+            parent_id: None,
         })],
     );
 }
@@ -264,24 +279,28 @@ fn test_simple_events() {
                 kvs: Default::default(),
                 level: Level::WARN,
                 target: "test_simple_cat",
+                parent_id: None,
             }),
             Expect::GstEvent(GstEvent {
                 message: "simple info",
                 kvs: Default::default(),
                 level: Level::INFO,
                 target: "test_simple_cat",
+                parent_id: None,
             }),
             Expect::GstEvent(GstEvent {
                 message: "simple memdump",
                 kvs: Default::default(),
                 level: Level::TRACE,
                 target: "test_simple_cat",
+                parent_id: None,
             }),
             Expect::GstEvent(GstEvent {
                 message: "simple trace",
                 kvs: Default::default(),
                 level: Level::TRACE,
                 target: "test_simple_cat",
+                parent_id: None,
             }),
         ],
     );
@@ -291,10 +310,10 @@ fn test_with_object() {
     let p = g::Pipeline::new();
     let p_addr = p.as_object_ref().to_glib_none().0 as usize;
     MockSubscriber::with_expected(
-        |m| m.target() == "gstreamer::test_object_cat",
+        |m| m.target() == "gstreamer::test_with_object",
         "test_with_object",
         move || {
-            let cat = g::DebugCategory::new("test_object_cat", g::DebugColorFlags::empty(), None);
+            let cat = g::DebugCategory::new("test_with_object", g::DebugColorFlags::empty(), None);
             g::error!(cat, obj: &p, "with object");
         },
         vec![Expect::GstEvent(GstEvent {
@@ -308,7 +327,8 @@ fn test_with_object() {
                 ..Default::default()
             },
             level: Level::ERROR,
-            target: "test_object_cat",
+            target: "test_with_object",
+            parent_id: None,
         })],
     );
 }
@@ -317,10 +337,11 @@ fn test_with_upcast_object() {
     let obj: gstreamer::glib::Object = g::Bin::new().upcast();
     let obj_addr = obj.as_object_ref().to_glib_none().0 as usize;
     MockSubscriber::with_expected(
-        |m| m.target() == "gstreamer::test_object_cat",
+        |m| m.target() == "gstreamer::test_with_upcast_object",
         "test_with_upcast_object",
         move || {
-            let cat = g::DebugCategory::new("test_object_cat", g::DebugColorFlags::empty(), None);
+            let cat =
+                g::DebugCategory::new("test_with_upcast_object", g::DebugColorFlags::empty(), None);
             g::error!(cat, obj: &obj, "with upcast object");
         },
         vec![Expect::GstEvent(GstEvent {
@@ -334,7 +355,8 @@ fn test_with_upcast_object() {
                 ..Default::default()
             },
             level: Level::ERROR,
-            target: "test_object_cat",
+            target: "test_with_upcast_object",
+            parent_id: None,
         })],
     );
 }
@@ -367,6 +389,7 @@ fn test_with_pad() {
             },
             level: Level::ERROR,
             target: "test_pad_cat",
+            parent_id: None,
         })],
     );
 }
@@ -389,12 +412,14 @@ fn test_disintegration() {
                 kvs: Default::default(),
                 level: Level::ERROR,
                 target: "disintegration",
+                parent_id: None,
             }),
             Expect::GstEvent(GstEvent {
                 message: "chaenomeles",
                 kvs: Default::default(),
                 level: Level::ERROR,
                 target: "disintegration",
+                parent_id: None,
             }),
         ],
     );
@@ -413,6 +438,7 @@ fn test_formatting() {
             kvs: Default::default(),
             level: Level::WARN,
             target: "ANSWERS",
+            parent_id: None,
         })],
     );
 }
@@ -427,12 +453,14 @@ fn test_interests() {
                 kvs: Default::default(),
                 level: Level::WARN,
                 target: "INTERESTS",
+                parent_id: None,
             }),
             Expect::GstEvent(GstEvent {
                 message: "errors should be visible",
                 kvs: Default::default(),
                 level: Level::ERROR,
                 target: "INTERESTS",
+                parent_id: None,
             }),
         ],
     );
@@ -457,6 +485,40 @@ fn test_interests() {
     );
 }
 
+fn test_user_span() {
+    let p = g::Pipeline::new();
+    let p_addr = p.as_object_ref().to_glib_none().0 as usize;
+
+    MockSubscriber::with_expected(
+        |m| m.target() == "gstreamer::test_user_span",
+        "test_user_span",
+        move || {
+            let span = tracing::error_span!(
+                target: "gstreamer::test_user_span", "pipeline span", pipeline = true
+            );
+            assert_eq!(span.id().unwrap().into_u64(), 99);
+            unsafe { attach_span(&p, span) };
+
+            let cat = g::DebugCategory::new("test_user_span", g::DebugColorFlags::empty(), None);
+            g::error!(cat, obj: &p, "with object");
+        },
+        vec![Expect::GstEvent(GstEvent {
+            message: "with object",
+            kvs: KV {
+                gobject_address: Some(p_addr),
+                gobject_type: Some("GstPipeline"),
+                gstobject_name: Some("pipeline1"),
+                gstelement_state: Some("null"),
+                gstelement_pending_state: Some("void-pending"),
+                ..Default::default()
+            },
+            level: Level::ERROR,
+            target: "test_user_span",
+            parent_id: Some(Id::from_u64(99)),
+        })],
+    );
+}
+
 // NB: we aren't using the test harness here to allow us for the necessary gstreamer setup more
 // straightforwardly.
 pub(crate) fn run() {
@@ -473,5 +535,6 @@ pub(crate) fn run() {
     test_disintegration();
     test_formatting();
     test_interests();
+    test_user_span();
     disintegrate_events();
 }
