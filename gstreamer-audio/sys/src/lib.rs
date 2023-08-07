@@ -1956,7 +1956,7 @@ extern "C" {
         format: GstDsdFormat,
         rate: c_int,
         channels: c_int,
-        positions: *const GstAudioChannelPosition,
+        positions: *const [GstAudioChannelPosition; 64],
     );
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
@@ -2486,7 +2486,7 @@ extern "C" {
         output_plane_offsets: *const size_t,
         num_dsd_bytes: size_t,
         num_channels: c_int,
-        reverse_bytes: gboolean,
+        reverse_byte_bits: gboolean,
     );
     pub fn gst_dsd_plane_offset_meta_api_get_type() -> GType;
 

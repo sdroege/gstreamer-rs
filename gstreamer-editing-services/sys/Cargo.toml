@@ -55,6 +55,8 @@ rust-version = "1.70"
 
 [package.metadata.docs.rs]
 features = []
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
 
 [package.metadata.system-deps.gst_editing_services_1_0]
 name = "gst-editing-services-1.0"

@@ -47,6 +47,8 @@ version = "0.21.0"
 
 [package.metadata.docs.rs]
 features = []
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
 
 [package.metadata.system-deps.gstreamer_allocators_1_0]
 name = "gstreamer-allocators-1.0"

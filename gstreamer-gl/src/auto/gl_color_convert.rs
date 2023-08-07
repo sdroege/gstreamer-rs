@@ -44,6 +44,18 @@ impl GLColorConvert {
         }
     }
 
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_gl_color_convert_swizzle_shader_string")]
+    pub fn swizzle_shader_string(context: &impl IsA<GLContext>) -> glib::GString {
+        skip_assert_initialized!();
+        unsafe {
+            from_glib_full(ffi::gst_gl_color_convert_swizzle_shader_string(
+                context.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     #[doc(alias = "gst_gl_color_convert_transform_caps")]
     pub fn transform_caps(
         context: &impl IsA<GLContext>,
@@ -58,6 +70,18 @@ impl GLColorConvert {
                 direction.into_glib(),
                 caps.to_glib_none().0,
                 filter.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_gl_color_convert_yuv_to_rgb_shader_string")]
+    pub fn yuv_to_rgb_shader_string(context: &impl IsA<GLContext>) -> glib::GString {
+        skip_assert_initialized!();
+        unsafe {
+            from_glib_full(ffi::gst_gl_color_convert_yuv_to_rgb_shader_string(
+                context.as_ref().to_glib_none().0,
             ))
         }
     }

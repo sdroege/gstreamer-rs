@@ -2063,6 +2063,10 @@ pub enum VideoFormat {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "GST_VIDEO_FORMAT_NV12_10LE40_4L4")]
     Nv1210le404l4,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_DMA_DRM")]
+    DmaDrm,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -2253,6 +2257,8 @@ impl IntoGlib for VideoFormat {
             Self::Nv1210be8l128 => ffi::GST_VIDEO_FORMAT_NV12_10BE_8L128,
             #[cfg(feature = "v1_24")]
             Self::Nv1210le404l4 => ffi::GST_VIDEO_FORMAT_NV12_10LE40_4L4,
+            #[cfg(feature = "v1_24")]
+            Self::DmaDrm => ffi::GST_VIDEO_FORMAT_DMA_DRM,
             Self::__Unknown(value) => value,
         }
     }
@@ -2411,6 +2417,8 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
             ffi::GST_VIDEO_FORMAT_NV12_10BE_8L128 => Self::Nv1210be8l128,
             #[cfg(feature = "v1_24")]
             ffi::GST_VIDEO_FORMAT_NV12_10LE40_4L4 => Self::Nv1210le404l4,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_DMA_DRM => Self::DmaDrm,
             value => Self::__Unknown(value),
         }
     }

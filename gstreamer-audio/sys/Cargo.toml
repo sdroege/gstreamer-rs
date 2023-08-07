@@ -51,6 +51,8 @@ rust-version = "1.70"
 
 [package.metadata.docs.rs]
 features = []
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
 
 [package.metadata.system-deps.gstreamer_audio_1_0]
 name = "gstreamer-audio-1.0"

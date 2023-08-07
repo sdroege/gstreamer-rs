@@ -55,6 +55,8 @@ rust-version = "1.70"
 
 [package.metadata.docs.rs]
 features = []
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
 
 [package.metadata.system-deps.gstreamer_rtsp_1_0]
 name = "gstreamer-rtsp-1.0"

@@ -346,6 +346,14 @@ impl GLFormat {
         }
     }
 
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_gl_format_n_components")]
+    pub fn n_components(self) -> u32 {
+        assert_initialized_main_thread!();
+        unsafe { ffi::gst_gl_format_n_components(self.into_glib()) }
+    }
+
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_format_type_from_sized_gl_format")]

@@ -331,6 +331,9 @@ pub const GST_VIDEO_FORMAT_NV12_10BE_8L128: GstVideoFormat = 112;
 #[cfg(feature = "v1_24")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 pub const GST_VIDEO_FORMAT_NV12_10LE40_4L4: GstVideoFormat = 113;
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub const GST_VIDEO_FORMAT_DMA_DRM: GstVideoFormat = 114;
 
 pub type GstVideoGLTextureOrientation = c_int;
 pub const GST_VIDEO_GL_TEXTURE_ORIENTATION_X_NORMAL_Y_NORMAL: GstVideoGLTextureOrientation = 0;

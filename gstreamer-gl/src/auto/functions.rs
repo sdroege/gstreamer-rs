@@ -32,6 +32,20 @@ pub fn gl_element_propagate_display_context(
     }
 }
 
+//#[cfg(feature = "v1_24")]
+//#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+//#[doc(alias = "gst_gl_swizzle_invert")]
+//pub fn gl_swizzle_invert(swizzle: /*Unimplemented*/FixedArray TypeId { ns_id: 0, id: 14 }; 4, inversion: /*Unimplemented*/FixedArray TypeId { ns_id: 0, id: 14 }; 4) {
+//    unsafe { TODO: call ffi:gst_gl_swizzle_invert() }
+//}
+
+//#[cfg(feature = "v1_24")]
+//#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+//#[doc(alias = "gst_gl_video_format_swizzle")]
+//pub fn gl_video_format_swizzle(video_format: /*Ignored*/gst_video::VideoFormat, swizzle: /*Unimplemented*/FixedArray TypeId { ns_id: 0, id: 14 }; 4) -> bool {
+//    unsafe { TODO: call ffi:gst_gl_video_format_swizzle() }
+//}
+
 #[doc(alias = "gst_glsl_string_get_version_profile")]
 pub fn glsl_string_get_version_profile(s: &str) -> Option<(GLSLVersion, GLSLProfile)> {
     assert_initialized_main_thread!();

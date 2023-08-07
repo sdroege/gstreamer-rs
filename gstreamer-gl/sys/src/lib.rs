@@ -1683,6 +1683,9 @@ extern "C" {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_gl_format_is_supported(context: *mut GstGLContext, format: GstGLFormat) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_format_n_components(gl_format: GstGLFormat) -> c_uint;
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_gl_format_type_from_sized_gl_format(
@@ -2177,12 +2180,19 @@ extern "C" {
         caps: *mut gst::GstCaps,
         other: *mut gst::GstCaps,
     ) -> *mut gst::GstCaps;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_color_convert_swizzle_shader_string(context: *mut GstGLContext) -> *mut c_char;
     pub fn gst_gl_color_convert_transform_caps(
         context: *mut GstGLContext,
         direction: gst::GstPadDirection,
         caps: *mut gst::GstCaps,
         filter: *mut gst::GstCaps,
     ) -> *mut gst::GstCaps;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_color_convert_yuv_to_rgb_shader_string(context: *mut GstGLContext)
+        -> *mut c_char;
     pub fn gst_gl_color_convert_decide_allocation(
         convert: *mut GstGLColorConvert,
         query: *mut gst::GstQuery,
@@ -3000,6 +3010,9 @@ extern "C" {
         type_: c_uint,
     ) -> c_uint;
     pub fn gst_gl_stereo_downmix_mode_get_type() -> GType;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_swizzle_invert(swizzle: *mut [c_int; 4], inversion: *mut [c_int; 4]);
     pub fn gst_gl_sync_meta_api_get_type() -> GType;
     pub fn gst_gl_value_get_texture_target_mask(
         value: *const gobject::GValue,
@@ -3017,6 +3030,12 @@ extern "C" {
         maj: c_int,
         min: c_int,
     ) -> GstGLSLVersion;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_video_format_swizzle(
+        video_format: gst_video::GstVideoFormat,
+        swizzle: *mut [c_int; 4],
+    ) -> gboolean;
     pub fn gst_glsl_string_get_version_profile(
         s: *const c_char,
         version: *mut GstGLSLVersion,
