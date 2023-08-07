@@ -35,7 +35,7 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
   cargo install --force grcov
 fi
 
-cargo install cargo-c --version 0.9.21+cargo-0.71
+cargo install cargo-c --version 0.9.22+cargo-0.72
 
 if [ "$RUST_VERSION" = "nightly" ]; then
   rustup component add rustfmt --toolchain nightly
