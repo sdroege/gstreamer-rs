@@ -46,3 +46,39 @@ pub fn gl_handle_set_context(
         }
     }
 }
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+#[doc(alias = "gst_gl_swizzle_invert")]
+pub fn gl_swizzle_invert(swizzle: [i32; 4]) -> [i32; 4] {
+    unsafe {
+        use std::mem;
+
+        let mut inversion = mem::MaybeUninit::uninit();
+        ffi::gst_gl_swizzle_invert(
+            mut_override(swizzle.as_ptr() as *const _),
+            inversion.as_mut_ptr(),
+        );
+        inversion.assume_init()
+    }
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+#[doc(alias = "gst_gl_video_format_swizzle")]
+pub fn gl_video_format_swizzle(video_format: gst_video::VideoFormat) -> Option<[i32; 4]> {
+    unsafe {
+        use std::mem;
+
+        let mut swizzle = mem::MaybeUninit::uninit();
+        let res = from_glib(ffi::gst_gl_video_format_swizzle(
+            video_format.into_glib(),
+            swizzle.as_mut_ptr(),
+        ));
+        if res {
+            Some(swizzle.assume_init())
+        } else {
+            None
+        }
+    }
+}
