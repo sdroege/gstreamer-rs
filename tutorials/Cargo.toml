@@ -8,11 +8,11 @@ rust-version = "1.70"
 
 [dependencies]
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.18", version = "0.18" }
-gst = { package = "gstreamer", path = "../gstreamer" }
-gst-audio = { package = "gstreamer-audio", path = "../gstreamer-audio" }
-gst-video = { package = "gstreamer-video", path = "../gstreamer-video", optional = true }
-gst-app = { package = "gstreamer-app", path = "../gstreamer-app" }
-gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils" }
+gst = { package = "gstreamer", path = "../gstreamer", version = "0.21" }
+gst-audio = { package = "gstreamer-audio", path = "../gstreamer-audio", version = "0.21" }
+gst-video = { package = "gstreamer-video", path = "../gstreamer-video", version = "0.21", optional = true }
+gst-app = { package = "gstreamer-app", path = "../gstreamer-app", version = "0.21" }
+gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils", version = "0.21" }
 byte-slice-cast = "1"
 anyhow = "1"
 termion = { version = "2", optional = true }

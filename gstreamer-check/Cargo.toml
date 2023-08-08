@@ -14,9 +14,9 @@ edition = "2021"
 rust-version = "1.70"
 
 [dependencies]
-ffi = { package = "gstreamer-check-sys", path = "sys" }
+ffi = { package = "gstreamer-check-sys", path = "sys", version = "0.21" }
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.18", version = "0.18" }
-gst = { package = "gstreamer", path = "../gstreamer" }
+gst = { package = "gstreamer", path = "../gstreamer", version = "0.21" }
 
 [dev-dependencies]
 gir-format-check = "0.1"

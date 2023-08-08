@@ -20,6 +20,7 @@ version = "0.18"
 [dependencies.gst]
 package = "gstreamer-sys"
 path = "../../gstreamer/sys"
+version = "0.21"
 
 [dev-dependencies]
 shell-words = "1.0.0"

@@ -15,10 +15,10 @@ rust-version = "1.70"
 
 [dependencies]
 libc = "0.2"
-ffi = { package = "gstreamer-player-sys", path = "sys" }
+ffi = { package = "gstreamer-player-sys", path = "sys", version = "0.21" }
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.18", version = "0.18" }
-gst = { package = "gstreamer", path = "../gstreamer" }
-gst-video = { package = "gstreamer-video", path = "../gstreamer-video" }
+gst = { package = "gstreamer", path = "../gstreamer", version = "0.21" }
+gst-video = { package = "gstreamer-video", path = "../gstreamer-video", version = "0.21" }
 
 [dev-dependencies]
 gir-format-check = "0.1"

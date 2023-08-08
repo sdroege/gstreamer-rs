@@ -15,10 +15,10 @@ rust-version = "1.70"
 
 [dependencies]
 libc = "0.2"
-ffi = { package = "gstreamer-webrtc-sys", path = "sys" }
+ffi = { package = "gstreamer-webrtc-sys", path = "sys", version = "0.21" }
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.18", version = "0.18" }
-gst = { package = "gstreamer", path = "../gstreamer" }
-gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp" }
+gst = { package = "gstreamer", path = "../gstreamer", version = "0.21" }
+gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp", version = "0.21" }
 
 [dev-dependencies]
 gir-format-check = "0.1"
