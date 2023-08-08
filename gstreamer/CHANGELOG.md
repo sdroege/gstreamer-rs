@@ -5,6 +5,32 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.21.0] - 2023-08-08
+### Changed
+- Minimum supported Rust version is updated to 1.70.0.
+- Compatible with gtk-rs-core 0.18.
+- `gst::Bin::add_many()`, `remove_many()` and `gst::Element::link_many()`,
+  `unlink_many()` are more generic now.
+- `gst_base::Aggregator::src_pad()` returns an `AggregatorPad`.
+- `gst::Bus::add_watch()` now returns a guard value that automatically removes
+  the watch when it goes out of scope.
+- `gst::Bin`, `Pipeline` and `Pad` constructors don't take the optional name
+  parameter anymore but it can instead be provided via the builder API.
+- `gst::Pad` and `GhostPad` builders inherit name from the pad template (or
+  target) if possible and no other name is provided explicitly.
+- The preroll samples and selected sticky events are forwarded to `StreamProducer` consumers.
+
+### Added
+- Support for the upcoming GStreamer 1.24 APIs.
+- Support for inline variable names in format strings for error/warning/info
+  messages.
+- Methods for converting between floating point seconds and `gst::ClockTime`.
+- Various additions to the gst-validate bindings.
+- `Display` implementations for error/warning/info messages.
+- More useful `Debug` implementations for messages, events and queries and
+  `gst_pbutils::DiscovererInfo` related structs.
+- API for listing/checking `gst::Meta` tags.
+
 ## [0.20.7] - 2023-07-05
 ### Fixed
 - Fix `wait-for-eos` property name string in `appsink`.
@@ -1532,7 +1558,12 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.3...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.0...HEAD
+[0.21.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.7...0.21.0
+[0.20.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.6...0.20.7
+[0.20.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.5...0.20.6
+[0.20.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.4...0.20.5
+[0.20.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.3...0.20.4
 [0.20.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.2...0.20.3
 [0.20.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.1...0.20.2
 [0.20.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.0...0.20.1
