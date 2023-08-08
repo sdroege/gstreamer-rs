@@ -17,7 +17,7 @@ rust-version = "1.70"
 libc = "0.2"
 cfg-if = "1.0"
 ffi = { package = "gstreamer-audio-sys", path = "sys" }
-glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }
+glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.18", version = "0.18" }
 gst = { package = "gstreamer", path = "../gstreamer" }
 gst-base = { package = "gstreamer-base", path = "../gstreamer-base" }
 serde = { version = "1.0", optional = true }

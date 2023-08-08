@@ -16,7 +16,7 @@ rust-version = "1.70"
 [dependencies]
 libc = "0.2"
 ffi = { package = "gstreamer-rtp-sys", path = "sys" }
-glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }
+glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.18", version = "0.18" }
 gst = { package = "gstreamer", path = "../gstreamer" }
 serde = { version = "1.0", optional = true }
 

@@ -7,7 +7,7 @@ edition = "2021"
 rust-version = "1.70"
 
 [dependencies]
-glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }
+glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.18", version = "0.18" }
 gst = { package = "gstreamer", path = "../gstreamer" }
 gst-audio = { package = "gstreamer-audio", path = "../gstreamer-audio" }
 gst-video = { package = "gstreamer-video", path = "../gstreamer-video", optional = true }

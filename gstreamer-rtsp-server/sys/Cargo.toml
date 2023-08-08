@@ -7,14 +7,20 @@ libc = "0.2"
 [dependencies.gio]
 package = "gio-sys"
 git = "https://github.com/gtk-rs/gtk-rs-core"
+branch = "0.18"
+version = "0.18"
 
 [dependencies.glib]
 package = "glib-sys"
 git = "https://github.com/gtk-rs/gtk-rs-core"
+branch = "0.18"
+version = "0.18"
 
 [dependencies.gobject]
 package = "gobject-sys"
 git = "https://github.com/gtk-rs/gtk-rs-core"
+branch = "0.18"
+version = "0.18"
 
 [dependencies.gst_net]
 package = "gstreamer-net-sys"
