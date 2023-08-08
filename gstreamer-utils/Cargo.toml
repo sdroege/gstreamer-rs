@@ -28,3 +28,8 @@ futures = { version = "0.3", features = ["executor"] }
 default = []
 v1_22 = []
 v1_24 = ["v1_22"]
+
+[package.metadata.docs.rs]
+all-features = "true"
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]

@@ -34,4 +34,6 @@ v1_24 = ["gst/v1_24", "ffi/v1_24", "v1_22"]
 serde = ["dep:serde", "gst/serde"]
 
 [package.metadata.docs.rs]
+all-features = "true"
+rustc-args = ["--cfg", "docsrs"]
 rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
