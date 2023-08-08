@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-gl-x11"
-version = "0.21.0"
+version = "0.22.0"
 authors = [
     "Sebastian Dröge <sebastian@centricular.com>",
     "Víctor M. Jáquez L. <vjaquez@igalia.com>"

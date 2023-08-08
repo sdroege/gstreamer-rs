@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-rtsp-server"
-version = "0.21.0"
+version = "0.22.0"
 authors = ["Mathieu Duponchelle <mathieu@centricular.com>", "Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer RTSP Server library"
