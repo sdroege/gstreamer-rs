@@ -126,7 +126,8 @@ pub trait AggregatorExtManual: sealed::Sealed + IsA<Aggregator> + 'static {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn connect_samples_selected<
         F: Fn(
                 &Self,
