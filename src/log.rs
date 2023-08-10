@@ -264,7 +264,6 @@ pub(crate) fn debug_remove_log_function() {
     }
 }
 
-
 #[inline]
 fn span_quark() -> &'static gstreamer::glib::Quark {
     static ELEMENT_SPAN_QUARK: OnceCell<gstreamer::glib::Quark> = OnceCell::new();

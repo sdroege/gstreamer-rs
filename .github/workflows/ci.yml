@@ -12,69 +12,44 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        rust_toolchain: [1.64.0, ""]
+        rust_toolchain: [1.64.0, stable]
         test_flags: ["", "--no-default-features", "--all-features"]
     timeout-minutes: 5
     steps:
-      - run: 'sudo apt-get install libgstreamer1.0-dev'
+      - run: 'sudo apt-get install libunwind-dev libgstreamer1.0-dev'
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ matrix.rust_toolchain }}
-          profile: minimal
-          default: true
-      - uses: actions-rs/cargo@v1
-        with:
-          toolchain: ${{ matrix.rust_toolchain }}
-          command: test
-          args: ${{ matrix.test_flags }}
+      - run: rustup install ${{ matrix.rust_toolchain }} --profile=minimal
+      - run: rustup default ${{ matrix.rust_toolchain }}
+      - run: cargo test ${{ matrix.test_flags }}
         env:
           RUSTFLAGS: -Cdebuginfo=0
+          PKG_CONFIG_PATH: /usr/lib/x86_64-linux-gnu/pkgconfig/
 
   format:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          components: rustfmt
-          default: true
-      - uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: -- --check
+      - run: rustup default stable
+      - run: cargo fmt -- --check
 
   clippy:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - run: 'sudo apt-get install libgstreamer1.0-dev'
+      - run: 'sudo apt-get install libunwind-dev libgstreamer1.0-dev'
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          components: clippy
-          default: true
-      - uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: -- -Dclippy::all
+      - run: rustup default stable
+      - run: cargo clippy -- -Dclippy::all
 
   documentation:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - run: 'sudo apt-get install libgstreamer1.0-dev'
+      - run: 'sudo apt-get install libunwind-dev libgstreamer1.0-dev'
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          default: true
-      - uses: actions-rs/cargo@v1
-        with:
-          command: doc
+      - run: rustup default stable
+      - run: cargo doc
         env:
           RUSTDOCFLAGS: '-Drustdoc::broken_intra_doc_links --cfg tracing_gstreamer_docs'
           RUSTFLAGS: '--cfg tracing_gstreamer_docs'

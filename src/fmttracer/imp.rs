@@ -1,5 +1,5 @@
-use tracing::error;
 use gstreamer::{glib, subclass::prelude::*};
+use tracing::error;
 
 use crate::tracer::{TracingTracer, TracingTracerImpl};
 

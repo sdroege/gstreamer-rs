@@ -15,8 +15,8 @@
 // such as https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/-/issues/352
 #![deny(unsafe_op_in_unsafe_fn)]
 
-use tracing_core::field::Value;
 pub use log::attach_span;
+use tracing_core::field::Value;
 
 #[macro_use]
 mod macros;
