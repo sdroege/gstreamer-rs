@@ -288,7 +288,7 @@ fn test_simple_events() {
 }
 
 fn test_with_object() {
-    let p = g::Pipeline::new(None);
+    let p = g::Pipeline::new();
     let p_addr = p.as_object_ref().to_glib_none().0 as usize;
     MockSubscriber::with_expected(
         |m| m.target() == "gstreamer::test_object_cat",
@@ -314,7 +314,7 @@ fn test_with_object() {
 }
 
 fn test_with_upcast_object() {
-    let obj: gstreamer::glib::Object = g::Bin::new(None).upcast();
+    let obj: gstreamer::glib::Object = g::Bin::new().upcast();
     let obj_addr = obj.as_object_ref().to_glib_none().0 as usize;
     MockSubscriber::with_expected(
         |m| m.target() == "gstreamer::test_object_cat",
@@ -340,8 +340,10 @@ fn test_with_upcast_object() {
 }
 
 fn test_with_pad() {
-    let pad = g::Pad::new(Some("custom_pad_name"), gstreamer::PadDirection::Sink);
-    let parent = g::Bin::new(Some("custom_bin_name"));
+    let pad = g::Pad::builder(gstreamer::PadDirection::Sink)
+        .name("custom_pad_name")
+        .build();
+    let parent = g::Bin::builder().name("custom_bin_name").build();
     parent.add_pad(&pad).expect("add pad");
     let pad_addr = pad.as_object_ref().to_glib_none().0 as usize;
     MockSubscriber::with_expected(
