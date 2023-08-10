@@ -287,7 +287,34 @@ fn span_quark() -> &'static gstreamer::glib::Quark {
     })
 }
 
-pub(crate) fn attach_span<O: IsA<gstreamer::Object>>(object: &O, span: tracing::Span) {
+/// Attach a span to a GStreamer object.
+///
+/// All events logged for this object and its children will have the provided span as the parent.
+/// This can be used to associate extra context to a pipeline for example.
+///
+/// # Safety
+///
+/// This function is racy and must not be called when an element or any of its children may want to
+/// emit a log message. It is generally safe to call this function during early initialization of a
+/// pipeline, or when the code in calling this has exclusive control of the elements involved.
+///
+/// # Examples
+///
+/// ```
+/// gstreamer::init().unwrap();
+///
+/// let pipeline = gstreamer::Pipeline::new();
+/// let gst_log_span = tracing::info_span!(
+///     parent: None,
+///     "gst log",
+///     pipeline = "encoding",
+///     id = 42,
+/// );
+/// unsafe {
+///     tracing_gstreamer::attach_span(&pipeline, gst_log_span);
+/// }
+/// ```
+pub unsafe fn attach_span<O: IsA<gstreamer::Object>>(object: &O, span: tracing::Span) {
     unsafe {
         // SAFETY:
         //
