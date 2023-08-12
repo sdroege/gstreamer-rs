@@ -111,7 +111,8 @@ fn tutorial_main() -> Result<(), Error> {
 
     // Build the pipeline
     let pipeline = gst::parse_launch(
-        "playbin uri=https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm")?;
+        "playbin uri=https://gstreamer.freedesktop.org/data/media/sintel_trailer-480p.webm",
+    )?;
 
     let main_loop = glib::MainLoop::new(None, false);
     let main_loop_clone = main_loop.clone();

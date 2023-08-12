@@ -102,10 +102,8 @@ fn tutorial_main() -> Result<(), Error> {
     // Initialize GStreamer
     gst::init()?;
 
-    let uri =
-        "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.ogv";
-    let subtitle_uri =
-        "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer_gr.srt";
+    let uri = "https://gstreamer.freedesktop.org/data/media/sintel_trailer-480p.ogv";
+    let subtitle_uri = "https://gstreamer.freedesktop.org/data/media/sintel_trailer_gr.srt";
 
     // Create PlayBin element
     let playbin = gst::ElementFactory::make("playbin")

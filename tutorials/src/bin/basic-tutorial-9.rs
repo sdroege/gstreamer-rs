@@ -142,7 +142,7 @@ fn run_discoverer() -> Result<(), Error> {
     let uri: &str = if args.len() == 2 {
         args[1].as_ref()
     } else {
-        "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm"
+        "https://gstreamer.freedesktop.org/data/media/sintel_trailer-480p.webm"
     };
 
     println!("Discovering {uri}");

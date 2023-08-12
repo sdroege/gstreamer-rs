@@ -100,8 +100,7 @@ fn tutorial_main() -> Result<(), Error> {
     // Initialize GStreamer
     gst::init()?;
 
-    let uri =
-        "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_cropped_multilingual.webm";
+    let uri = "https://gstreamer.freedesktop.org/data/media/sintel_cropped_multilingual.webm";
 
     // Create PlayBin element
     let playbin = gst::ElementFactory::make("playbin")
