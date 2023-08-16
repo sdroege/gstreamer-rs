@@ -92,18 +92,18 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             DWriteCreateFactory::<IDWriteFactory>(DWRITE_FACTORY_TYPE_SHARED).unwrap();
         let text_format = dwrite_factory
             .CreateTextFormat(
-                windows::w!("Arial"),
+                windows::core::w!("Arial"),
                 None,
                 DWRITE_FONT_WEIGHT_BOLD,
                 DWRITE_FONT_STYLE_NORMAL,
                 DWRITE_FONT_STRETCH_NORMAL,
                 32f32,
-                windows::w!("en-us"),
+                windows::core::w!("en-us"),
             )
             .unwrap();
         let text_layout = dwrite_factory
             .CreateTextLayout(
-                windows::w!("GStreamer").as_wide(),
+                windows::core::w!("GStreamer").as_wide(),
                 &text_format,
                 // Size will be updated later on "caps-changed" signal
                 800f32,
