@@ -57,7 +57,6 @@ variables:
   # (only relevant on main branch)
   RELEASES:
     0.21=0.21
-    0.20=0.20
 
 stages:
   - "trigger"
