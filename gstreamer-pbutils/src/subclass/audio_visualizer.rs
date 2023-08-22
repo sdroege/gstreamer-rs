@@ -37,7 +37,7 @@ pub trait AudioVisualizerImplExt: sealed::Sealed + ObjectSubclass {
     fn parent_setup(&self, token: &AudioVisualizerSetupToken) -> Result<(), LoggableError> {
         assert_eq!(
             self.obj().as_ptr() as *mut ffi::GstAudioVisualizer,
-            token.0.as_ptr() as *mut ffi::GstAudioVisualizer
+            token.0.as_ptr()
         );
 
         unsafe {

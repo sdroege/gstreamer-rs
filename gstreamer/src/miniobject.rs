@@ -508,6 +508,7 @@ macro_rules! mini_object_wrapper (
             }
         }
 
+        #[allow(clippy::redundant_closure_call)]
         impl $crate::glib::types::StaticType for $ref_name {
             #[inline]
             fn static_type() -> $crate::glib::types::Type {

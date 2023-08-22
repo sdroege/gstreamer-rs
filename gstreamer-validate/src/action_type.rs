@@ -199,7 +199,7 @@ impl<'a> ActionTypeBuilder<'a> {
         ) -> c_int {
             let action_type = ffi::gst_validate_get_action_type((*action).type_);
             let scenario = from_glib_borrow(scenario);
-            let action = crate::ActionRef::from_mut_ptr(action as *mut ffi::GstValidateAction);
+            let action = crate::ActionRef::from_mut_ptr(action);
 
             let func: &ActionFunction = &*(gst::ffi::gst_mini_object_get_qdata(
                 action_type as *mut gst::ffi::GstMiniObject,

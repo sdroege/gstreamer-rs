@@ -58,8 +58,8 @@ pub trait VideoAggregatorPadImplExt: ObjectSubclass {
         buffer: &gst::Buffer,
     ) -> Option<crate::VideoFrame<crate::video_frame::Readable>> {
         assert_eq!(
-            aggregator.as_ptr() as *mut ffi::GstVideoAggregator,
-            token.0.as_ptr() as *mut ffi::GstVideoAggregator
+            aggregator.as_ptr(),
+            token.0.as_ptr()
         );
 
         unsafe {
@@ -97,8 +97,8 @@ pub trait VideoAggregatorPadImplExt: ObjectSubclass {
         frame: Option<crate::VideoFrame<crate::video_frame::Readable>>,
     ) {
         assert_eq!(
-            aggregator.as_ptr() as *mut ffi::GstVideoAggregator,
-            token.0.as_ptr() as *mut ffi::GstVideoAggregator
+            aggregator.as_ptr(),
+            token.0.as_ptr()
         );
 
         unsafe {

@@ -2,7 +2,7 @@
 
 use std::{fmt, ops::ControlFlow, ptr};
 
-use glib::translate::{from_glib, from_glib_full, from_glib_none, IntoGlib, IntoGlibPtr};
+use glib::translate::*;
 
 use crate::{Buffer, BufferRef};
 
@@ -140,9 +140,10 @@ impl BufferListRef {
         ) -> glib::ffi::gboolean {
             let func = user_data as *const _ as usize as *mut F;
             let res = (*func)(
-                Buffer::from_glib_full(
-                    ptr::replace(buffer, ptr::null_mut::<ffi::GstBuffer>()) as *mut ffi::GstBuffer
-                ),
+                Buffer::from_glib_full(ptr::replace(
+                    buffer as *mut *const ffi::GstBuffer,
+                    ptr::null_mut::<ffi::GstBuffer>(),
+                )),
                 idx,
             );
 
@@ -227,6 +228,7 @@ macro_rules! define_iter(
         }
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a> Iterator for $name<'a> {
         type Item = $styp;
 
@@ -271,6 +273,7 @@ macro_rules! define_iter(
         }
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a> DoubleEndedIterator for $name<'a> {
         fn next_back(&mut self) -> Option<Self::Item> {
             if self.idx == self.size {

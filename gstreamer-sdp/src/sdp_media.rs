@@ -659,6 +659,7 @@ macro_rules! define_iter(
     }
 
     impl<'a> $name<'a> {
+        #[allow(clippy::redundant_closure_call)]
         fn new(media: &'a SDPMediaRef) -> $name<'a> {
             skip_assert_initialized!();
             let len = $get_len(media);
@@ -671,6 +672,7 @@ macro_rules! define_iter(
         }
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a> Iterator for $name<'a> {
         type Item = $typ;
 
@@ -715,6 +717,7 @@ macro_rules! define_iter(
         }
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a> DoubleEndedIterator for $name<'a> {
         fn next_back(&mut self) -> Option<Self::Item> {
             if self.idx == self.len {

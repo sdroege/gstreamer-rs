@@ -98,7 +98,9 @@ macro_rules! define_seek_impl(
 );
 
 macro_rules! define_read_write_fn_impl(
-    ($self:ident, $data:ident, $data_type:ty, $get_buffer_ref:expr, $map_flags:path, $copy:expr, $split:expr) => {{
+    ($self:ident, $data:ident, $data_type:ty, $get_buffer_ref:expr, $map_flags:path, $copy:expr, $split:expr) => {
+        #[allow(clippy::redundant_closure_call)]
+        {
         let mut copied = 0;
 
         while !$data.is_empty() && $self.cur_mem_idx < $self.num_mem {

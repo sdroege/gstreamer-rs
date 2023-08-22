@@ -1145,7 +1145,7 @@ impl fmt::Display for LoggedObject {
                     let parent_name = if parent_ptr.is_null() {
                         "<null>"
                     } else {
-                        let name_ptr = (*(parent_ptr as *mut ffi::GstObject)).name;
+                        let name_ptr = (*(parent_ptr)).name;
                         if name_ptr.is_null() {
                             "<null>"
                         } else {

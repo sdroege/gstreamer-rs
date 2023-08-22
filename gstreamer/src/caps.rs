@@ -726,6 +726,7 @@ macro_rules! define_iter(
         }
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a> Iterator for $name<'a> {
         type Item = $styp;
 
@@ -775,6 +776,7 @@ macro_rules! define_iter(
         }
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a> DoubleEndedIterator for $name<'a> {
         fn next_back(&mut self) -> Option<Self::Item> {
             if self.idx == self.n_structures {
@@ -832,9 +834,7 @@ define_iter!(
         if ptr.is_null() {
             None
         } else {
-            Some(StructureRef::from_glib_borrow_mut(
-                ptr as *mut ffi::GstStructure,
-            ))
+            Some(StructureRef::from_glib_borrow_mut(ptr))
         }
     }
 );
@@ -849,8 +849,8 @@ define_iter!(
             None
         } else {
             Some((
-                StructureRef::from_glib_borrow(ptr1 as *const ffi::GstStructure),
-                CapsFeaturesRef::from_glib_borrow(ptr2 as *const ffi::GstCapsFeatures),
+                StructureRef::from_glib_borrow(ptr1),
+                CapsFeaturesRef::from_glib_borrow(ptr2),
             ))
         }
     }
@@ -866,8 +866,8 @@ define_iter!(
             None
         } else {
             Some((
-                StructureRef::from_glib_borrow_mut(ptr1 as *mut ffi::GstStructure),
-                CapsFeaturesRef::from_glib_borrow_mut(ptr2 as *mut ffi::GstCapsFeatures),
+                StructureRef::from_glib_borrow_mut(ptr1),
+                CapsFeaturesRef::from_glib_borrow_mut(ptr2),
             ))
         }
     }
