@@ -237,7 +237,7 @@ impl VideoFormatInfo {
         unsafe {
             use std::ptr;
 
-            let mut src_ptr = [ptr::null() as *const u8; ffi::GST_VIDEO_MAX_PLANES as usize];
+            let mut src_ptr = [ptr::null(); ffi::GST_VIDEO_MAX_PLANES as usize];
             for plane in 0..(self.n_planes()) {
                 src_ptr[plane as usize] = src[plane as usize].as_ptr();
             }
@@ -247,7 +247,7 @@ impl VideoFormatInfo {
                 flags.into_glib(),
                 dest.as_mut_ptr() as *mut _,
                 src_ptr.as_ptr() as *const _,
-                stride.as_ptr() as *const i32,
+                stride.as_ptr(),
                 x,
                 y,
                 width,
@@ -313,7 +313,7 @@ impl VideoFormatInfo {
         unsafe {
             use std::ptr;
 
-            let mut dest_ptr = [ptr::null_mut() as *mut u8; ffi::GST_VIDEO_MAX_PLANES as usize];
+            let mut dest_ptr = [ptr::null_mut(); ffi::GST_VIDEO_MAX_PLANES as usize];
             for plane in 0..(self.n_planes()) {
                 dest_ptr[plane as usize] = dest[plane as usize].as_mut_ptr();
             }
@@ -324,7 +324,7 @@ impl VideoFormatInfo {
                 src.as_ptr() as *mut _,
                 src_stride,
                 dest_ptr.as_mut_ptr() as *mut _,
-                dest_stride.as_ptr() as *const i32,
+                dest_stride.as_ptr(),
                 chroma_site.into_glib(),
                 y,
                 width,

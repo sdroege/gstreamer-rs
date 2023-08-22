@@ -2545,6 +2545,7 @@ macro_rules! message_builder_generic_impl {
         }
 
         #[must_use = "Building the message without using it has no effect"]
+        #[allow(clippy::redundant_closure_call)]
         pub fn build(mut self) -> Message {
             unsafe {
                 let src = self.builder.src.to_glib_none().0;

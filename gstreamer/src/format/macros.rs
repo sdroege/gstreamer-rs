@@ -1425,6 +1425,7 @@ macro_rules! impl_signed_extra_div_mul(
 
 macro_rules! impl_signed_div_mul_trait(
     ($typ:ty, $inner:ty, $signed_rhs:ty, $into_inner:expr) => {
+        #[allow(clippy::redundant_closure_call)]
         impl muldiv::MulDiv<$signed_rhs> for crate::Signed<$typ> {
             type Output = Self;
 
@@ -1480,6 +1481,7 @@ macro_rules! impl_signed_div_mul_trait(
             }
         }
 
+        #[allow(clippy::redundant_closure_call)]
         impl muldiv::MulDiv<$inner> for crate::Signed<$typ> {
             type Output = Self;
 
@@ -1802,6 +1804,7 @@ macro_rules! impl_signed_int_into_signed(
     };
 
     ($typ:ty, $inner:ty, $signed:ty, $into_inner:expr) => {
+        #[allow(clippy::redundant_closure_call)]
         impl TryFrom<crate::Signed<$typ>> for $signed {
             type Error = std::num::TryFromIntError;
 

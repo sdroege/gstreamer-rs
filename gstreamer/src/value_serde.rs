@@ -47,23 +47,24 @@ impl<'de> Deserialize<'de> for Fraction {
 }
 
 macro_rules! ser_some_value (
-    ($value:expr, $t:ty, $ser_closure:expr) => (
+    ($value:expr, $t:ty, $ser_closure:expr) => {
         {
             let value = $value.get::<$t>().expect("ser_some_value macro");
             $ser_closure(stringify!($t), value)
         }
-    );
+    }
 );
 macro_rules! ser_opt_value (
-    ($value:expr, $t:ty, $ser_closure:expr) => (
+    ($value:expr, $t:ty, $ser_closure:expr) => {
         {
             let value = $value.get::<Option<$t>>().expect("ser_opt_value macro");
             $ser_closure(stringify!($t), value)
         }
-    );
+    }
 );
 macro_rules! ser_value (
-    ($value:expr, $ser_closure:expr) => (
+    ($value:expr, $ser_closure:expr) => {
+        #[allow(clippy::redundant_closure_call)]
         match $value.type_() {
             glib::Type::I8 => ser_some_value!($value, i8, $ser_closure),
             glib::Type::U8 => ser_some_value!($value, u8, $ser_closure),
@@ -115,7 +116,7 @@ macro_rules! ser_value (
                 }
             }
         }
-    );
+    }
 );
 
 #[repr(transparent)]

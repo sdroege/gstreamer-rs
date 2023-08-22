@@ -64,7 +64,7 @@ pub trait VideoAggregatorImplExt: sealed::Sealed + ObjectSubclass {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         assert_eq!(
             self.obj().as_ptr() as *mut ffi::GstVideoAggregator,
-            token.0.as_ptr() as *mut ffi::GstVideoAggregator
+            token.0.as_ptr()
         );
 
         unsafe {

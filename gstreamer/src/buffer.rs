@@ -803,6 +803,7 @@ macro_rules! define_meta_iter(
         }
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a, T: MetaAPI> Iterator for $name<'a, T> {
         type Item = $mtyp;
 
@@ -875,6 +876,7 @@ macro_rules! define_iter(
         }
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a> Iterator for $name<'a> {
         type Item = $mtyp;
 
@@ -927,6 +929,7 @@ macro_rules! define_iter(
         }
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a> DoubleEndedIterator for $name<'a> {
         fn next_back(&mut self) -> Option<Self::Item> {
             if self.idx == self.n_memory {
@@ -984,7 +987,7 @@ define_iter!(
         if ptr.is_null() {
             None
         } else {
-            Some(MemoryRef::from_mut_ptr(ptr as *mut ffi::GstMemory))
+            Some(MemoryRef::from_mut_ptr(ptr))
         }
     }
 );
@@ -1149,7 +1152,7 @@ impl<'a, T> BufferMap<'a, T> {
         if self.map_info.size == 0 {
             return &[];
         }
-        unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
+        unsafe { slice::from_raw_parts(self.map_info.data, self.map_info.size) }
     }
 }
 
@@ -1159,7 +1162,7 @@ impl<'a> BufferMap<'a, Writable> {
         if self.map_info.size == 0 {
             return &mut [];
         }
-        unsafe { slice::from_raw_parts_mut(self.map_info.data as *mut u8, self.map_info.size) }
+        unsafe { slice::from_raw_parts_mut(self.map_info.data, self.map_info.size) }
     }
 }
 
@@ -1225,7 +1228,7 @@ impl<T> MappedBuffer<T> {
         if self.map_info.size == 0 {
             return &[];
         }
-        unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
+        unsafe { slice::from_raw_parts(self.map_info.data, self.map_info.size) }
     }
 
     #[doc(alias = "get_size")]
@@ -1258,7 +1261,7 @@ impl MappedBuffer<Writable> {
         if self.map_info.size == 0 {
             return &mut [];
         }
-        unsafe { slice::from_raw_parts_mut(self.map_info.data as *mut u8, self.map_info.size) }
+        unsafe { slice::from_raw_parts_mut(self.map_info.data, self.map_info.size) }
     }
 }
 

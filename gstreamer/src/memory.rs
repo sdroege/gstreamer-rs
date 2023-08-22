@@ -353,7 +353,7 @@ impl<'a, T> MemoryMap<'a, T> {
         if self.map_info.size == 0 {
             return &[];
         }
-        unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
+        unsafe { slice::from_raw_parts(self.map_info.data, self.map_info.size) }
     }
 }
 
@@ -363,7 +363,7 @@ impl<'a> MemoryMap<'a, Writable> {
         if self.map_info.size == 0 {
             return &mut [];
         }
-        unsafe { slice::from_raw_parts_mut(self.map_info.data as *mut u8, self.map_info.size) }
+        unsafe { slice::from_raw_parts_mut(self.map_info.data, self.map_info.size) }
     }
 }
 
@@ -429,7 +429,7 @@ impl<T> MappedMemory<T> {
         if self.map_info.size == 0 {
             return &[];
         }
-        unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
+        unsafe { slice::from_raw_parts(self.map_info.data, self.map_info.size) }
     }
 
     #[doc(alias = "get_size")]
@@ -462,7 +462,7 @@ impl MappedMemory<Writable> {
         if self.map_info.size == 0 {
             return &mut [];
         }
-        unsafe { slice::from_raw_parts_mut(self.map_info.data as *mut u8, self.map_info.size) }
+        unsafe { slice::from_raw_parts_mut(self.map_info.data, self.map_info.size) }
     }
 }
 
@@ -974,6 +974,6 @@ mod tests {
         let mem = crate::Memory::from_slice(vec![1, 2, 3, 4]);
         let v = mem.to_value();
         assert!(matches!(v.get::<Option<crate::Memory>>(), Ok(Some(_))));
-        assert!(matches!(v.get::<crate::Memory>(), Ok(_)));
+        assert!(v.get::<crate::Memory>().is_ok());
     }
 }

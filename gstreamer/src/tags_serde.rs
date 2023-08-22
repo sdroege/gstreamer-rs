@@ -52,6 +52,7 @@ impl<'a> TagValuesSer<'a> {
 }
 
 impl<'a> Serialize for TagValuesSer<'a> {
+    #[allow(clippy::redundant_closure_call)]
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         use std::ops::DerefMut;
 

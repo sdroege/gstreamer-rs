@@ -2111,6 +2111,7 @@ macro_rules! event_builder_generic_impl {
         }
 
         #[must_use = "Building the event without using it has no effect"]
+        #[allow(clippy::redundant_closure_call)]
         pub fn build(mut self) -> Event {
             unsafe {
                 let event = $new_fn(&mut self);

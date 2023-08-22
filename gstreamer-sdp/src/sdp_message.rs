@@ -190,7 +190,7 @@ impl SDPMessageRef {
     #[doc(alias = "gst_sdp_message_add_media")]
     pub fn add_media(&mut self, media: SDPMedia) {
         unsafe {
-            ffi::gst_sdp_message_add_media(&mut self.0, media.as_ptr() as *mut ffi::GstSDPMedia);
+            ffi::gst_sdp_message_add_media(&mut self.0, media.as_ptr());
         }
     }
 
@@ -1013,6 +1013,7 @@ macro_rules! define_iter(
         len: usize,
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a> $name<'a> {
         fn new(message: &'a SDPMessageRef) -> $name<'a> {
             skip_assert_initialized!();
@@ -1026,6 +1027,7 @@ macro_rules! define_iter(
         }
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a> Iterator for $name<'a> {
         type Item = $typ;
 
@@ -1069,6 +1071,7 @@ macro_rules! define_iter(
         }
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a> DoubleEndedIterator for $name<'a> {
         fn next_back(&mut self) -> Option<Self::Item> {
             if self.idx == self.len {
@@ -1106,6 +1109,7 @@ macro_rules! define_iter_mut(
         len: usize,
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a> $name<'a> {
         fn new(message: &'a mut SDPMessageRef) -> $name<'a> {
             skip_assert_initialized!();
@@ -1119,6 +1123,7 @@ macro_rules! define_iter_mut(
         }
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a> Iterator for $name<'a> {
         type Item = $typ;
 
@@ -1178,6 +1183,7 @@ macro_rules! define_iter_mut(
         }
     }
 
+    #[allow(clippy::redundant_closure_call)]
     impl<'a> DoubleEndedIterator for $name<'a> {
         fn next_back(&mut self) -> Option<Self::Item> {
             let message = unsafe {

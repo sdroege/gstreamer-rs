@@ -41,6 +41,7 @@ macro_rules! message_builder_generic_impl {
         }
 
         #[must_use = "Building the message without using it has no effect"]
+        #[allow(clippy::redundant_closure_call)]
         pub fn build(mut self) -> Message {
             skip_assert_initialized!();
             unsafe {

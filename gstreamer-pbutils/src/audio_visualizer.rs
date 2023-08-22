@@ -29,7 +29,7 @@ pub trait AudioVisualizerExtManual:
     fn set_req_spf(&self, spf: u32, token: &AudioVisualizerSetupToken) {
         assert_eq!(
             self.as_ptr() as *mut ffi::GstAudioVisualizer,
-            token.0.as_ptr() as *mut ffi::GstAudioVisualizer
+            token.0.as_ptr()
         );
 
         let sinkpad = self.static_pad("sink").expect("sink pad presence");
