@@ -57,10 +57,7 @@ pub trait VideoAggregatorPadImplExt: ObjectSubclass {
         token: &AggregateFramesToken,
         buffer: &gst::Buffer,
     ) -> Option<crate::VideoFrame<crate::video_frame::Readable>> {
-        assert_eq!(
-            aggregator.as_ptr(),
-            token.0.as_ptr()
-        );
+        assert_eq!(aggregator.as_ptr(), token.0.as_ptr());
 
         unsafe {
             let data = Self::type_data();
@@ -96,10 +93,7 @@ pub trait VideoAggregatorPadImplExt: ObjectSubclass {
         token: &AggregateFramesToken,
         frame: Option<crate::VideoFrame<crate::video_frame::Readable>>,
     ) {
-        assert_eq!(
-            aggregator.as_ptr(),
-            token.0.as_ptr()
-        );
+        assert_eq!(aggregator.as_ptr(), token.0.as_ptr());
 
         unsafe {
             let data = Self::type_data();
