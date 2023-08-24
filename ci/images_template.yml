@@ -1,4 +1,4 @@
 variables:
-  GST_RS_IMG_TAG: "2023-08-07.0"
-  GST_RS_STABLE: "1.71.1"
+  GST_RS_IMG_TAG: "2023-08-28.0"
+  GST_RS_STABLE: "1.72.0"
   GST_RS_MSRV: "1.70.0"
