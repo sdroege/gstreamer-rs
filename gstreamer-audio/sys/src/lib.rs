@@ -2317,6 +2317,9 @@ extern "C" {
         buf: *mut GstAudioRingBuffer,
         position: *const GstAudioChannelPosition,
     );
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_audio_ring_buffer_set_errored(buf: *mut GstAudioRingBuffer);
     pub fn gst_audio_ring_buffer_set_flushing(buf: *mut GstAudioRingBuffer, flushing: gboolean);
     pub fn gst_audio_ring_buffer_set_sample(buf: *mut GstAudioRingBuffer, sample: u64);
     pub fn gst_audio_ring_buffer_set_timestamp(

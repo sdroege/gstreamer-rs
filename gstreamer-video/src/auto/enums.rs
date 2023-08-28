@@ -2067,6 +2067,70 @@ pub enum VideoFormat {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "GST_VIDEO_FORMAT_DMA_DRM")]
     DmaDrm,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_MT2110T")]
+    Mt2110t,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_MT2110R")]
+    Mt2110r,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_A422")]
+    A422,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_A444")]
+    A444,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_A444_12LE")]
+    A44412le,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_A444_12BE")]
+    A44412be,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_A422_12LE")]
+    A42212le,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_A422_12BE")]
+    A42212be,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_A420_12LE")]
+    A42012le,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_A420_12BE")]
+    A42012be,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_A444_16LE")]
+    A44416le,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_A444_16BE")]
+    A44416be,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_A422_16LE")]
+    A42216le,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_A422_16BE")]
+    A42216be,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_A420_16LE")]
+    A42016le,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_A420_16BE")]
+    A42016be,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -2259,6 +2323,38 @@ impl IntoGlib for VideoFormat {
             Self::Nv1210le404l4 => ffi::GST_VIDEO_FORMAT_NV12_10LE40_4L4,
             #[cfg(feature = "v1_24")]
             Self::DmaDrm => ffi::GST_VIDEO_FORMAT_DMA_DRM,
+            #[cfg(feature = "v1_24")]
+            Self::Mt2110t => ffi::GST_VIDEO_FORMAT_MT2110T,
+            #[cfg(feature = "v1_24")]
+            Self::Mt2110r => ffi::GST_VIDEO_FORMAT_MT2110R,
+            #[cfg(feature = "v1_24")]
+            Self::A422 => ffi::GST_VIDEO_FORMAT_A422,
+            #[cfg(feature = "v1_24")]
+            Self::A444 => ffi::GST_VIDEO_FORMAT_A444,
+            #[cfg(feature = "v1_24")]
+            Self::A44412le => ffi::GST_VIDEO_FORMAT_A444_12LE,
+            #[cfg(feature = "v1_24")]
+            Self::A44412be => ffi::GST_VIDEO_FORMAT_A444_12BE,
+            #[cfg(feature = "v1_24")]
+            Self::A42212le => ffi::GST_VIDEO_FORMAT_A422_12LE,
+            #[cfg(feature = "v1_24")]
+            Self::A42212be => ffi::GST_VIDEO_FORMAT_A422_12BE,
+            #[cfg(feature = "v1_24")]
+            Self::A42012le => ffi::GST_VIDEO_FORMAT_A420_12LE,
+            #[cfg(feature = "v1_24")]
+            Self::A42012be => ffi::GST_VIDEO_FORMAT_A420_12BE,
+            #[cfg(feature = "v1_24")]
+            Self::A44416le => ffi::GST_VIDEO_FORMAT_A444_16LE,
+            #[cfg(feature = "v1_24")]
+            Self::A44416be => ffi::GST_VIDEO_FORMAT_A444_16BE,
+            #[cfg(feature = "v1_24")]
+            Self::A42216le => ffi::GST_VIDEO_FORMAT_A422_16LE,
+            #[cfg(feature = "v1_24")]
+            Self::A42216be => ffi::GST_VIDEO_FORMAT_A422_16BE,
+            #[cfg(feature = "v1_24")]
+            Self::A42016le => ffi::GST_VIDEO_FORMAT_A420_16LE,
+            #[cfg(feature = "v1_24")]
+            Self::A42016be => ffi::GST_VIDEO_FORMAT_A420_16BE,
             Self::__Unknown(value) => value,
         }
     }
@@ -2419,6 +2515,38 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
             ffi::GST_VIDEO_FORMAT_NV12_10LE40_4L4 => Self::Nv1210le404l4,
             #[cfg(feature = "v1_24")]
             ffi::GST_VIDEO_FORMAT_DMA_DRM => Self::DmaDrm,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_MT2110T => Self::Mt2110t,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_MT2110R => Self::Mt2110r,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_A422 => Self::A422,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_A444 => Self::A444,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_A444_12LE => Self::A44412le,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_A444_12BE => Self::A44412be,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_A422_12LE => Self::A42212le,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_A422_12BE => Self::A42212be,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_A420_12LE => Self::A42012le,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_A420_12BE => Self::A42012be,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_A444_16LE => Self::A44416le,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_A444_16BE => Self::A44416be,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_A422_16LE => Self::A42216le,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_A422_16BE => Self::A42216be,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_A420_16LE => Self::A42016le,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_A420_16BE => Self::A42016be,
             value => Self::__Unknown(value),
         }
     }

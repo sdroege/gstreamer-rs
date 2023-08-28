@@ -1179,6 +1179,23 @@ extern "C" {
     // GstRTPBaseDepayload
     //=========================================================================
     pub fn gst_rtp_base_depayload_get_type() -> GType;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtp_base_depayload_delayed(depayload: *mut GstRTPBaseDepayload);
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtp_base_depayload_dropped(depayload: *mut GstRTPBaseDepayload);
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtp_base_depayload_flush(
+        depayload: *mut GstRTPBaseDepayload,
+        keep_current: gboolean,
+    );
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtp_base_depayload_is_aggregate_hdrext_enabled(
+        depayload: *mut GstRTPBaseDepayload,
+    ) -> gboolean;
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtp_base_depayload_is_source_info_enabled(
@@ -1192,6 +1209,12 @@ extern "C" {
         filter: *mut GstRTPBaseDepayload,
         out_list: *mut gst::GstBufferList,
     ) -> gst::GstFlowReturn;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtp_base_depayload_set_aggregate_hdrext_enabled(
+        depayload: *mut GstRTPBaseDepayload,
+        enable: gboolean,
+    );
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_rtp_base_depayload_set_source_info_enabled(

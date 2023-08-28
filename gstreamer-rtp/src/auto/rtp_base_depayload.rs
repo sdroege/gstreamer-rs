@@ -35,6 +35,47 @@ mod sealed {
 }
 
 pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + sealed::Sealed + 'static {
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_rtp_base_depayload_delayed")]
+    fn delayed(&self) {
+        unsafe {
+            ffi::gst_rtp_base_depayload_delayed(self.as_ref().to_glib_none().0);
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_rtp_base_depayload_dropped")]
+    fn dropped(&self) {
+        unsafe {
+            ffi::gst_rtp_base_depayload_dropped(self.as_ref().to_glib_none().0);
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_rtp_base_depayload_flush")]
+    fn flush(&self, keep_current: bool) {
+        unsafe {
+            ffi::gst_rtp_base_depayload_flush(
+                self.as_ref().to_glib_none().0,
+                keep_current.into_glib(),
+            );
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_rtp_base_depayload_is_aggregate_hdrext_enabled")]
+    fn is_aggregate_hdrext_enabled(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_rtp_base_depayload_is_aggregate_hdrext_enabled(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtp_base_depayload_is_source_info_enabled")]
@@ -63,6 +104,18 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + sealed::Sealed + 'static 
                 self.as_ref().to_glib_none().0,
                 out_list.into_glib_ptr(),
             ))
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_rtp_base_depayload_set_aggregate_hdrext_enabled")]
+    fn set_aggregate_hdrext_enabled(&self, enable: bool) {
+        unsafe {
+            ffi::gst_rtp_base_depayload_set_aggregate_hdrext_enabled(
+                self.as_ref().to_glib_none().0,
+                enable.into_glib(),
+            );
         }
     }
 
